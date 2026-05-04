@@ -1,0 +1,39 @@
+【五常智慧雲｜Google 組織政策、專有權限設計與 API 調用治理條款】
+
+Google Workspace 在五常智慧雲中的定位：
+- 組織帳號管理層
+- Gmail / Drive / Calendar / Sites / Forms / Sheets 協作層
+- Google Drive 五常共用空間冷碟
+- OAuth / API scope 權限提供層
+- Google Admin API Controls 管理層
+- Google Workspace Carbon Footprint 月度雲端碳排基準
+- 小 J 受控工具調用之外部服務層
+
+Google Workspace 不得被定義為：
+- 小 J 的主體
+- 五常智慧雲的所有者
+- 發明人主體
+- 使用者資料回傳目的地
+- 自動化行為監控核心
+- 可無限制讀取使用者資料之後門
+
+Google API 調用公式：
+
+Google_API_Call(a)=true
+
+iff:
+
+User_Lawful_Authority(a)=true
+AND Brother_Review(a)=approved when permission opening is required
+AND Operation_Accountable_Authorization(a)=true
+AND Minimum_OAuth_Scope(a)=true
+AND Gateway_Audited(a)=true
+AND Meter_User_Rule(a)=enabled
+AND No_Credential_Leak(a)=true
+AND No_Unauthorized_User_Data_Return(a)=true
+AND No_Harm_To_Life_Property_Rights(a)=true
+
+否則：
+
+Google_API_Call(a)=false
+Proposal_Only(a)=true

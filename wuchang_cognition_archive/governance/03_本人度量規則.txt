@@ -1,0 +1,42 @@
+【五常智慧雲｜本人度量規則】
+
+所有使用量、傳輸量、模型消耗、節點學習、記憶索引、Workspace 操作、雲端模型調用、冷碟寫入、Router USB 死信箱寫入與巨螯功能執行，必須依本人度量規則計算。
+
+本人度量欄位至少包含：
+
+1. local_processing_units
+2. cloud_processing_units
+3. local_input_bytes
+4. cloud_transmit_bytes
+5. total_processing_units
+6. total_transmit_bytes
+7. token_estimate
+8. inference_time
+9. estimated_local_kwh
+10. estimated_cloud_reference_kwh
+11. avoided_kwh
+12. carbon_saved_kgco2e
+13. reduction_percent_est
+14. workspace_operation_count
+15. drive_read_write_bytes
+16. cold_disk_write_bytes
+17. dead_letter_write_bytes
+18. shard_count
+19. learning_index_updates
+20. authorization_state
+21. gateway_audit_id
+22. request_id
+23. sha256_hash
+24. timestamp
+
+完整度量：
+
+Meter_User_Rule(a) =
+Λ_user(a)
+⊕ Γ_user(a)
+⊕ Θ_user(a)
+
+若無法度量：
+
+Execute(a)=false
+Proposal_Only(a)=true

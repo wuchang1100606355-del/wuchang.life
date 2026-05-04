@@ -1,0 +1,42 @@
+【五常智慧雲｜Odoo 資料庫：管理資料與管理權限分家條款】
+
+核心原則：
+
+管理資料的人，不等於擁有權限的人。
+管理權限的人，不等於可以任意讀取資料的人。
+資料庫管理，不等於個資支配。
+系統超管，不等於使用者資料後門。
+
+Odoo 治理分為：
+
+Data_Management_Line:
+- 資料建檔
+- 分類
+- 去識別
+- 統計
+- 查詢
+- 封存
+- 備份
+- 欄位維護
+- 資料品質
+
+Permission_Management_Line:
+- 帳號
+- 角色
+- 群組
+- 存取層級
+- 審核流程
+- 權限開放
+- 撤權
+- 紀錄與稽核
+
+分離公式：
+
+Data_Admin ≠ Permission_Admin
+DBA ≠ Data_Owner
+Super_Admin ≠ Personal_Data_Access_By_Default
+Permission_Control ≠ Plaintext_Read_Right
+
+Odoo 管資料，但不讓資料管理者自動掌權。
+Odoo 管權限，但不讓權限管理者自動看資料。
+Odoo 可支援公益治理，但不得成為個資後門。

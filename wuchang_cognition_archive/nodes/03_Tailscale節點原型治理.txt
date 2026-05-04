@@ -1,0 +1,34 @@
+【五常智慧雲｜Tailscale 團體會員分散式算力節點原型條款】
+
+目前 Tailscale 節點為江政隆本人控制之始祖開發平台原型，可作為未來團體會員分散式算力節點制度母板。
+
+節點類型：
+1. 主系統節點：taiji01、msi、msi-win11-in
+2. 路由器節點：rt-be86u-7428
+3. 行動節點：drallion、iphone-11
+4. 邊緣 Linux 節點：penguin
+5. 雲端臨時節點：wuchang-us-free-node-*
+
+雲端臨時節點限制：
+- 不保存個人明文
+- 不保存會員身分資料
+- 不保存密鑰
+- 不保存長期 AI 海馬迴記憶
+- 不作主權冷碟
+- 不作使用者資料倉庫
+- 僅可用於測試、暫時推論、隔離任務或公開服務緩衝
+
+未來節點接入公式：
+
+Node_Join_WSC(n)=true
+
+iff:
+
+Organization_Member_or_Authorized_Owner(n)=true
+AND Node_Purpose_Defined(n)=true
+AND Device_Identity_Verified(n)=true
+AND Access_Scope_Defined(n)=true
+AND No_User_Data_Backdoor(n)=true
+AND Meter_User_Rule(n)=enabled
+AND Audit_Record(n)=true
+AND Isolation_Plan(n)=true
