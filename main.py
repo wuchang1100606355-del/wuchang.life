@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from core.event_test import run_event_test
 
 SYSTEM_NAME = "Wuchang Smart Cloud / Xiao J"
 MODE = "development-prototype / non-operational"
@@ -18,6 +19,7 @@ def main():
     print("Boundaries:")
     for item in BOUNDARIES:
         print(f"- {item}")
+    run_event_test()
 
 if __name__ == "__main__":
     main()
