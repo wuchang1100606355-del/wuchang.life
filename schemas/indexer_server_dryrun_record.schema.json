@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/indexer_server_dryrun_record.schema.json",
+  "title": "W7TP Indexer Server Dry-Run Record Template",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_version",
+    "domain",
+    "mode",
+    "target_host",
+    "operator",
+    "reviewed_at",
+    "artifacts_checked",
+    "linter_results",
+    "container_start_performed",
+    "ssh_performed",
+    "restart_performed",
+    "secrets_present",
+    "raw_pii_present",
+    "result_summary",
+    "sha256_proofs",
+    "decision"
+  ],
+  "properties": {
+    "record_version": {
+      "const": "W7TP-INDEXER-SERVER-DRYRUN-RECORD/0.1"
+    },
+    "domain": {
+      "const": "wuchang.life"
+    },
+    "mode": {
+      "const": "dryrun_record_template"
+    },
+    "target_host": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewed_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifacts_checked": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "linter_results": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "container_start_performed": {
+      "const": false
+    },
+    "ssh_performed": {
+      "const": false
+    },
+    "restart_performed": {
+      "const": false
+    },
+    "secrets_present": {
+      "const": false
+    },
+    "raw_pii_present": {
+      "const": false
+    },
+    "result_summary": {
+      "type": "string"
+    },
+    "sha256_proofs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision": {
+      "const": "pending_human_review"
+    }
+  }
+}
