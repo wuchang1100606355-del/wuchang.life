@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XiaoJ Converged Governance Architecture",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "domain",
+    "mode",
+    "authority",
+    "xiaoj_is_not_single_llm",
+    "architecture_type",
+    "eastern_ai_principle",
+    "dual_brain_unified_design",
+    "verification_ethics",
+    "forbidden_payload",
+    "forbidden_actions"
+  ],
+  "properties": {
+    "mode": { "const": "plan_only" },
+    "authority": { "const": "local_xiaoj_router" },
+    "xiaoj_is_not_single_llm": { "const": true },
+    "architecture_type": { "const": "local_first_intent_field" },
+    "forbidden_payload": { "type": "array", "items": { "type": "string" } },
+    "forbidden_actions": { "type": "array", "items": { "type": "string" } }
+  }
+}
