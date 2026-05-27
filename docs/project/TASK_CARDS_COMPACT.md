@@ -1,6 +1,6 @@
 # Task Cards Compact
 
-- Generated: `2026-05-27T05:25:02+00:00`
+- Generated: `2026-05-27T05:53:48+00:00`
 - Rule: completed items keep title/status/done/risk/commit only
 - Source: `docs/project/TASK_CARDS.md`
 
@@ -141,3 +141,9 @@
 - Done: `100%`
 - Risk: `medium`
 - Commit: `a603de5 Add indexer one-shot compose linter`
+
+## TASK_ID: M25_tri_party_7d_packet_and_cloud_provider_adapter_bri
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `39c3065 Add tri-party 7D packet language bridge`
