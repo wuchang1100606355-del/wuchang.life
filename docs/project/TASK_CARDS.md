@@ -1,1 +1,831 @@
-# Task Cards\n\n- Generated: `2026-05-27T03:09:28.962819+00:00`\n- Count: `20`\n\n## Rules\n\n```text\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n```\n\n## TASK_ID: M01_eamtp_7d_internal_intent_state_language\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `medium`\n- Commit: `244cea1 Add EAMTP-7D internal intent-state language`\n- Next: Keep as base packet language; extend only through compatible schemas.\n\n### Allowed files\n\n- docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md\n- schemas/eamtp_7d_packet.schema.json\n- runtime/router/eamtp_7d_translator.py\n- runtime/dead_letter/eamtp_policy_gate.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md \\n  schemas/eamtp_7d_packet.schema.json \\n  runtime/router/eamtp_7d_translator.py \\n  runtime/dead_letter/eamtp_policy_gate.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M01_eamtp_7d_internal_intent_state_language\n\n目標：\nEAMTP-7D internal intent-state language\n\n允許讀取 / 修改：\n- docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md\n- schemas/eamtp_7d_packet.schema.json\n- runtime/router/eamtp_7d_translator.py\n- runtime/dead_letter/eamtp_policy_gate.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M02_router_guard_dry_run_merlin_physical_boundary\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `medium`\n- Commit: `d4df60c Add EAMTP router guard dry-run and Merlin router boundary`\n- Next: Expose dry-run route only after gateway adapter review.\n\n### Allowed files\n\n- docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md\n- docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md\n- runtime/router/eamtp_router_guard_dryrun.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md \\n  docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md \\n  runtime/router/eamtp_router_guard_dryrun.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M02_router_guard_dry_run_merlin_physical_boundary\n\n目標：\nRouter Guard Dry-Run + Merlin physical boundary\n\n允許讀取 / 修改：\n- docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md\n- docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md\n- runtime/router/eamtp_router_guard_dryrun.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M03_merlin_intent_driver_plan_only\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `399724f Add Merlin intent driver plan-only governance`\n- Next: Add more intent classes only as plan-only tickets.\n\n### Allowed files\n\n- docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md\n- runtime/router/merlin_intent_driver.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md \\n  runtime/router/merlin_intent_driver.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M03_merlin_intent_driver_plan_only\n\n目標：\nMerlin Intent Driver plan-only\n\n允許讀取 / 修改：\n- docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md\n- runtime/router/merlin_intent_driver.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M04_merlin_apply_queue_human_review\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `4184356 Add Merlin apply queue human-review governance`\n- Next: Maintain ticket-only boundary; no router login.\n\n### Allowed files\n\n- docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md\n- runtime/router/merlin_apply_queue.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md \\n  runtime/router/merlin_apply_queue.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M04_merlin_apply_queue_human_review\n\n目標：\nMerlin Apply Queue human-review\n\n允許讀取 / 修改：\n- docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md\n- runtime/router/merlin_apply_queue.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M05_merlin_approval_gate_record_only\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `a914329 Add Merlin approval gate record-only governance`\n- Next: Use exact approval phrase; still no automatic execution.\n\n### Allowed files\n\n- docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md\n- runtime/router/merlin_approval_gate.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md \\n  runtime/router/merlin_approval_gate.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M05_merlin_approval_gate_record_only\n\n目標：\nMerlin Approval Gate record-only\n\n允許讀取 / 修改：\n- docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md\n- runtime/router/merlin_approval_gate.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M06_merlin_human_execution_checklist\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `f9f4e51 Add Merlin human execution checklist generator`\n- Next: Generate manual UI checklist for approved records only.\n\n### Allowed files\n\n- docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md\n- runtime/router/merlin_human_execution_checklist.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md \\n  runtime/router/merlin_human_execution_checklist.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M06_merlin_human_execution_checklist\n\n目標：\nMerlin Human Execution Checklist\n\n允許讀取 / 修改：\n- docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md\n- runtime/router/merlin_human_execution_checklist.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M07_merlin_execution_result_recorder\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `medium`\n- Commit: `47fe151 Add Merlin execution result recorder`\n- Next: Record completed / abandoned / failed / observation_only results.\n\n### Allowed files\n\n- docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md\n- runtime/router/merlin_execution_result_recorder.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md \\n  runtime/router/merlin_execution_result_recorder.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M07_merlin_execution_result_recorder\n\n目標：\nMerlin Execution Result Recorder\n\n允許讀取 / 修改：\n- docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md\n- runtime/router/merlin_execution_result_recorder.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M08_merlin_redacted_full_config_inventory\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `491b8ab Add Merlin router redacted config inventory spec`\n- Next: Keep local inventory untracked; validate before W7TP use.\n\n### Allowed files\n\n- docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md\n- configs/merlin/router_inventory_redacted.template.json\n- configs/merlin/README.md\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md \\n  configs/merlin/router_inventory_redacted.template.json \\n  configs/merlin/README.md\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M08_merlin_redacted_full_config_inventory\n\n目標：\nMerlin redacted full config inventory\n\n允許讀取 / 修改：\n- docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md\n- configs/merlin/router_inventory_redacted.template.json\n- configs/merlin/README.md\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M09_merlin_redacted_inventory_validator_eamtp_adapter\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `fa54950 Add Merlin redacted inventory validator`\n- Next: Convert only redacted local inventory into pending_review EAMTP.\n\n### Allowed files\n\n- docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md\n- tools/merlin_inventory_validator.py\n- docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md\n- tools/merlin_inventory_to_eamtp.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md \\n  tools/merlin_inventory_validator.py \\n  docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md \\n  tools/merlin_inventory_to_eamtp.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M09_merlin_redacted_inventory_validator_eamtp_adapter\n\n目標：\nMerlin redacted inventory validator + EAMTP adapter\n\n允許讀取 / 修改：\n- docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md\n- tools/merlin_inventory_validator.py\n- docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md\n- tools/merlin_inventory_to_eamtp.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M10_w7tp_ha_mesh_plan_only_governance\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `b899952 Add W7TP HA mesh plan-only governance`\n- Next: Analyze legacy HA scripts; never execute sudo/SSH/rsync/crontab/iptables.\n\n### Allowed files\n\n- docs/governance/W7TP_HA_MESH_PLAN_ONLY.md\n- docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md\n- configs/w7tp/ha_mesh_inventory.template.json\n- schemas/w7tp_ha_mesh_inventory.schema.json\n- tools/ha_mesh_script_analyzer.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/W7TP_HA_MESH_PLAN_ONLY.md \\n  docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md \\n  configs/w7tp/ha_mesh_inventory.template.json \\n  schemas/w7tp_ha_mesh_inventory.schema.json \\n  tools/ha_mesh_script_analyzer.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M10_w7tp_ha_mesh_plan_only_governance\n\n目標：\nW7TP HA Mesh plan-only governance\n\n允許讀取 / 修改：\n- docs/governance/W7TP_HA_MESH_PLAN_ONLY.md\n- docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md\n- configs/w7tp/ha_mesh_inventory.template.json\n- schemas/w7tp_ha_mesh_inventory.schema.json\n- tools/ha_mesh_script_analyzer.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M11_w7tp_causal_ledger_plan_only_layer\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `high`\n- Commit: `2338ad1 Add W7TP causal ledger plan-only layer`\n- Next: Use causal packets for audit links; no production finance or Odoo ledger writes.\n\n### Allowed files\n\n- docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md\n- schemas/w7tp_causal_event_packet.schema.json\n- runtime/router/w7tp_causal_event_builder.py\n- tools/causal_ledger_text_analyzer.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md \\n  schemas/w7tp_causal_event_packet.schema.json \\n  runtime/router/w7tp_causal_event_builder.py \\n  tools/causal_ledger_text_analyzer.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M11_w7tp_causal_ledger_plan_only_layer\n\n目標：\nW7TP Causal Ledger plan-only layer\n\n允許讀取 / 修改：\n- docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md\n- schemas/w7tp_causal_event_packet.schema.json\n- runtime/router/w7tp_causal_event_builder.py\n- tools/causal_ledger_text_analyzer.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M12_merlin_redacted_inventory_fill_helper\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `medium`\n- Commit: `9830277 Add Merlin redacted inventory fill helper`\n- Next: Use allowlisted --set updates for local redacted inventory; never commit local.json.\n\n### Allowed files\n\n- tools/merlin_inventory_fill_helper.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/merlin_inventory_fill_helper.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M12_merlin_redacted_inventory_fill_helper\n\n目標：\nMerlin redacted inventory fill helper\n\n允許讀取 / 修改：\n- tools/merlin_inventory_fill_helper.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M13_readonly_service_health_checker\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `low`\n- Commit: `60e656c Add readonly service health checker`\n- Next: Use GET-only health summaries before deciding whether a service needs action.\n\n### Allowed files\n\n- tools/service_health_readonly.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/service_health_readonly.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M13_readonly_service_health_checker\n\n目標：\nReadonly service health checker\n\n允許讀取 / 修改：\n- tools/service_health_readonly.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M14_runtime_shadow_inventory\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `low`\n- Commit: `5e6ff90 Add runtime shadow inventory tool`\n- Next: Use inventory-only reports before any cleanup or archive decision.\n\n### Allowed files\n\n- tools/runtime_shadow_inventory.py\n- docs/project/RUNTIME_SHADOW_INVENTORY.md\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/runtime_shadow_inventory.py \\n  docs/project/RUNTIME_SHADOW_INVENTORY.md\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M14_runtime_shadow_inventory\n\n目標：\nRuntime shadow inventory\n\n允許讀取 / 修改：\n- tools/runtime_shadow_inventory.py\n- docs/project/RUNTIME_SHADOW_INVENTORY.md\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M15_eamtp_packet_summarizer\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `low`\n- Commit: `7bb86c3 Add EAMTP packet summarizer`\n- Next: Use read-only packet summaries before router/gateway integration reviews.\n\n### Allowed files\n\n- tools/eamtp_packet_summarizer.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/eamtp_packet_summarizer.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M15_eamtp_packet_summarizer\n\n目標：\nEAMTP packet summarizer\n\n允許讀取 / 修改：\n- tools/eamtp_packet_summarizer.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M16_w7tp_smoke_all_checker\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `low`\n- Commit: `657a8a6 Add W7TP smoke all checker`\n- Next: Run before integration commits to verify mainline tools are still usable.\n\n### Allowed files\n\n- tools/w7tp_smoke_all.sh\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/w7tp_smoke_all.sh\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M16_w7tp_smoke_all_checker\n\n目標：\nW7TP smoke all checker\n\n允許讀取 / 修改：\n- tools/w7tp_smoke_all.sh\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M17_safe_git_stage_allowlist_tool\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `low`\n- Commit: `c14a9da Add safe git stage allowlist tool`\n- Next: Use before multi-agent commits to preview/stage only allowlisted canonical files.\n\n### Allowed files\n\n- tools/safe_git_stage.py\n- docs/project/git_stage_allowlist.txt\n- tests/test_safe_git_stage.py\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/safe_git_stage.py \\n  docs/project/git_stage_allowlist.txt \\n  tests/test_safe_git_stage.py\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M17_safe_git_stage_allowlist_tool\n\n目標：\nSafe git stage allowlist tool\n\n允許讀取 / 修改：\n- tools/safe_git_stage.py\n- docs/project/git_stage_allowlist.txt\n- tests/test_safe_git_stage.py\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M18_project_dashboard_html_generator\n\n- Status: `done_dirty`\n- Done: `100%`\n- Risk: `low`\n- Commit: `447f6c1 Add project dashboard generator`\n- Next: Open local dashboard to copy task commands and inspect mainline status.\n\n### Allowed files\n\n- tools/project_dashboard_generator.py\n- docs/project/PROJECT_DASHBOARD.html\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/project_dashboard_generator.py \\n  docs/project/PROJECT_DASHBOARD.html\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M18_project_dashboard_html_generator\n\n目標：\nProject dashboard HTML generator\n\n允許讀取 / 修改：\n- tools/project_dashboard_generator.py\n- docs/project/PROJECT_DASHBOARD.html\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M19_project_dashboard_launcher\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `low`\n- Commit: `59a2880 Add project dashboard launcher`\n- Next: Use this launcher to regenerate and open the local project dashboard.\n\n### Allowed files\n\n- tools/open_project_dashboard.sh\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/open_project_dashboard.sh\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M19_project_dashboard_launcher\n\n目標：\nProject dashboard launcher\n\n允許讀取 / 修改：\n- tools/open_project_dashboard.sh\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n\n## TASK_ID: M20_multi_agent_task_card_generator\n\n- Status: `done_clean`\n- Done: `100%`\n- Risk: `low`\n- Commit: `718208d Add multi-agent task card generator`\n- Next: Use generated task cards to delegate isolated work to code agents.\n\n### Allowed files\n\n- tools/task_card_generator.py\n- docs/project/TASK_CARDS.md\n\n### Git preview\n\n```bash\ncd /home/taiji_admin/Taiji_Hub || exit 1\ngit status --short -- \\n  tools/task_card_generator.py \\n  docs/project/TASK_CARDS.md\n```\n\n### Agent prompt\n\n```text\nTASK_ID: M20_multi_agent_task_card_generator\n\n目標：\nMulti-agent task card generator\n\n允許讀取 / 修改：\n- tools/task_card_generator.py\n- docs/project/TASK_CARDS.md\n\n規則：\n本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。\n\n完成後只回報 created files、modified files、smoke result、git preview。\n```\n
+# Task Cards
+
+- Generated: `2026-05-27T03:09:28.962819+00:00`
+- Count: `20`
+
+## Rules
+
+```text
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+```
+
+## TASK_ID: M01_eamtp_7d_internal_intent_state_language
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `244cea1 Add EAMTP-7D internal intent-state language`
+- Next: Keep as base packet language; extend only through compatible schemas.
+
+### Allowed files
+
+- docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md
+- schemas/eamtp_7d_packet.schema.json
+- runtime/router/eamtp_7d_translator.py
+- runtime/dead_letter/eamtp_policy_gate.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md \
+  schemas/eamtp_7d_packet.schema.json \
+  runtime/router/eamtp_7d_translator.py \
+  runtime/dead_letter/eamtp_policy_gate.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M01_eamtp_7d_internal_intent_state_language
+
+目標：
+EAMTP-7D internal intent-state language
+
+允許讀取 / 修改：
+- docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md
+- schemas/eamtp_7d_packet.schema.json
+- runtime/router/eamtp_7d_translator.py
+- runtime/dead_letter/eamtp_policy_gate.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M02_router_guard_dry_run_merlin_physical_boundary
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `d4df60c Add EAMTP router guard dry-run and Merlin router boundary`
+- Next: Expose dry-run route only after gateway adapter review.
+
+### Allowed files
+
+- docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md
+- docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md
+- runtime/router/eamtp_router_guard_dryrun.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md \
+  docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md \
+  runtime/router/eamtp_router_guard_dryrun.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M02_router_guard_dry_run_merlin_physical_boundary
+
+目標：
+Router Guard Dry-Run + Merlin physical boundary
+
+允許讀取 / 修改：
+- docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md
+- docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md
+- runtime/router/eamtp_router_guard_dryrun.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M03_merlin_intent_driver_plan_only
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `399724f Add Merlin intent driver plan-only governance`
+- Next: Add more intent classes only as plan-only tickets.
+
+### Allowed files
+
+- docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md
+- runtime/router/merlin_intent_driver.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md \
+  runtime/router/merlin_intent_driver.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M03_merlin_intent_driver_plan_only
+
+目標：
+Merlin Intent Driver plan-only
+
+允許讀取 / 修改：
+- docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md
+- runtime/router/merlin_intent_driver.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M04_merlin_apply_queue_human_review
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `4184356 Add Merlin apply queue human-review governance`
+- Next: Maintain ticket-only boundary; no router login.
+
+### Allowed files
+
+- docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md
+- runtime/router/merlin_apply_queue.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md \
+  runtime/router/merlin_apply_queue.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M04_merlin_apply_queue_human_review
+
+目標：
+Merlin Apply Queue human-review
+
+允許讀取 / 修改：
+- docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md
+- runtime/router/merlin_apply_queue.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M05_merlin_approval_gate_record_only
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `a914329 Add Merlin approval gate record-only governance`
+- Next: Use exact approval phrase; still no automatic execution.
+
+### Allowed files
+
+- docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md
+- runtime/router/merlin_approval_gate.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md \
+  runtime/router/merlin_approval_gate.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M05_merlin_approval_gate_record_only
+
+目標：
+Merlin Approval Gate record-only
+
+允許讀取 / 修改：
+- docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md
+- runtime/router/merlin_approval_gate.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M06_merlin_human_execution_checklist
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `f9f4e51 Add Merlin human execution checklist generator`
+- Next: Generate manual UI checklist for approved records only.
+
+### Allowed files
+
+- docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md
+- runtime/router/merlin_human_execution_checklist.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md \
+  runtime/router/merlin_human_execution_checklist.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M06_merlin_human_execution_checklist
+
+目標：
+Merlin Human Execution Checklist
+
+允許讀取 / 修改：
+- docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md
+- runtime/router/merlin_human_execution_checklist.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M07_merlin_execution_result_recorder
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `47fe151 Add Merlin execution result recorder`
+- Next: Record completed / abandoned / failed / observation_only results.
+
+### Allowed files
+
+- docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md
+- runtime/router/merlin_execution_result_recorder.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md \
+  runtime/router/merlin_execution_result_recorder.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M07_merlin_execution_result_recorder
+
+目標：
+Merlin Execution Result Recorder
+
+允許讀取 / 修改：
+- docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md
+- runtime/router/merlin_execution_result_recorder.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M08_merlin_redacted_full_config_inventory
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `491b8ab Add Merlin router redacted config inventory spec`
+- Next: Keep local inventory untracked; validate before W7TP use.
+
+### Allowed files
+
+- docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md
+- configs/merlin/router_inventory_redacted.template.json
+- configs/merlin/README.md
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md \
+  configs/merlin/router_inventory_redacted.template.json \
+  configs/merlin/README.md
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M08_merlin_redacted_full_config_inventory
+
+目標：
+Merlin redacted full config inventory
+
+允許讀取 / 修改：
+- docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md
+- configs/merlin/router_inventory_redacted.template.json
+- configs/merlin/README.md
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M09_merlin_redacted_inventory_validator_eamtp_adapter
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `fa54950 Add Merlin redacted inventory validator`
+- Next: Convert only redacted local inventory into pending_review EAMTP.
+
+### Allowed files
+
+- docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md
+- tools/merlin_inventory_validator.py
+- docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md
+- tools/merlin_inventory_to_eamtp.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md \
+  tools/merlin_inventory_validator.py \
+  docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md \
+  tools/merlin_inventory_to_eamtp.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M09_merlin_redacted_inventory_validator_eamtp_adapter
+
+目標：
+Merlin redacted inventory validator + EAMTP adapter
+
+允許讀取 / 修改：
+- docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md
+- tools/merlin_inventory_validator.py
+- docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md
+- tools/merlin_inventory_to_eamtp.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M10_w7tp_ha_mesh_plan_only_governance
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `b899952 Add W7TP HA mesh plan-only governance`
+- Next: Analyze legacy HA scripts; never execute sudo/SSH/rsync/crontab/iptables.
+
+### Allowed files
+
+- docs/governance/W7TP_HA_MESH_PLAN_ONLY.md
+- docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md
+- configs/w7tp/ha_mesh_inventory.template.json
+- schemas/w7tp_ha_mesh_inventory.schema.json
+- tools/ha_mesh_script_analyzer.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_HA_MESH_PLAN_ONLY.md \
+  docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md \
+  configs/w7tp/ha_mesh_inventory.template.json \
+  schemas/w7tp_ha_mesh_inventory.schema.json \
+  tools/ha_mesh_script_analyzer.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M10_w7tp_ha_mesh_plan_only_governance
+
+目標：
+W7TP HA Mesh plan-only governance
+
+允許讀取 / 修改：
+- docs/governance/W7TP_HA_MESH_PLAN_ONLY.md
+- docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md
+- configs/w7tp/ha_mesh_inventory.template.json
+- schemas/w7tp_ha_mesh_inventory.schema.json
+- tools/ha_mesh_script_analyzer.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M11_w7tp_causal_ledger_plan_only_layer
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `high`
+- Commit: `2338ad1 Add W7TP causal ledger plan-only layer`
+- Next: Use causal packets for audit links; no production finance or Odoo ledger writes.
+
+### Allowed files
+
+- docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md
+- schemas/w7tp_causal_event_packet.schema.json
+- runtime/router/w7tp_causal_event_builder.py
+- tools/causal_ledger_text_analyzer.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md \
+  schemas/w7tp_causal_event_packet.schema.json \
+  runtime/router/w7tp_causal_event_builder.py \
+  tools/causal_ledger_text_analyzer.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M11_w7tp_causal_ledger_plan_only_layer
+
+目標：
+W7TP Causal Ledger plan-only layer
+
+允許讀取 / 修改：
+- docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md
+- schemas/w7tp_causal_event_packet.schema.json
+- runtime/router/w7tp_causal_event_builder.py
+- tools/causal_ledger_text_analyzer.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M12_merlin_redacted_inventory_fill_helper
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `9830277 Add Merlin redacted inventory fill helper`
+- Next: Use allowlisted --set updates for local redacted inventory; never commit local.json.
+
+### Allowed files
+
+- tools/merlin_inventory_fill_helper.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/merlin_inventory_fill_helper.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M12_merlin_redacted_inventory_fill_helper
+
+目標：
+Merlin redacted inventory fill helper
+
+允許讀取 / 修改：
+- tools/merlin_inventory_fill_helper.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M13_readonly_service_health_checker
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Commit: `60e656c Add readonly service health checker`
+- Next: Use GET-only health summaries before deciding whether a service needs action.
+
+### Allowed files
+
+- tools/service_health_readonly.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/service_health_readonly.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M13_readonly_service_health_checker
+
+目標：
+Readonly service health checker
+
+允許讀取 / 修改：
+- tools/service_health_readonly.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M14_runtime_shadow_inventory
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Commit: `5e6ff90 Add runtime shadow inventory tool`
+- Next: Use inventory-only reports before any cleanup or archive decision.
+
+### Allowed files
+
+- tools/runtime_shadow_inventory.py
+- docs/project/RUNTIME_SHADOW_INVENTORY.md
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/runtime_shadow_inventory.py \
+  docs/project/RUNTIME_SHADOW_INVENTORY.md
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M14_runtime_shadow_inventory
+
+目標：
+Runtime shadow inventory
+
+允許讀取 / 修改：
+- tools/runtime_shadow_inventory.py
+- docs/project/RUNTIME_SHADOW_INVENTORY.md
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M15_eamtp_packet_summarizer
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Commit: `7bb86c3 Add EAMTP packet summarizer`
+- Next: Use read-only packet summaries before router/gateway integration reviews.
+
+### Allowed files
+
+- tools/eamtp_packet_summarizer.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/eamtp_packet_summarizer.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M15_eamtp_packet_summarizer
+
+目標：
+EAMTP packet summarizer
+
+允許讀取 / 修改：
+- tools/eamtp_packet_summarizer.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M16_w7tp_smoke_all_checker
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Commit: `657a8a6 Add W7TP smoke all checker`
+- Next: Run before integration commits to verify mainline tools are still usable.
+
+### Allowed files
+
+- tools/w7tp_smoke_all.sh
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/w7tp_smoke_all.sh
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M16_w7tp_smoke_all_checker
+
+目標：
+W7TP smoke all checker
+
+允許讀取 / 修改：
+- tools/w7tp_smoke_all.sh
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M17_safe_git_stage_allowlist_tool
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Commit: `c14a9da Add safe git stage allowlist tool`
+- Next: Use before multi-agent commits to preview/stage only allowlisted canonical files.
+
+### Allowed files
+
+- tools/safe_git_stage.py
+- docs/project/git_stage_allowlist.txt
+- tests/test_safe_git_stage.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/safe_git_stage.py \
+  docs/project/git_stage_allowlist.txt \
+  tests/test_safe_git_stage.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M17_safe_git_stage_allowlist_tool
+
+目標：
+Safe git stage allowlist tool
+
+允許讀取 / 修改：
+- tools/safe_git_stage.py
+- docs/project/git_stage_allowlist.txt
+- tests/test_safe_git_stage.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M18_project_dashboard_html_generator
+
+- Status: `done_dirty`
+- Done: `100%`
+- Risk: `low`
+- Commit: `447f6c1 Add project dashboard generator`
+- Next: Open local dashboard to copy task commands and inspect mainline status.
+
+### Allowed files
+
+- tools/project_dashboard_generator.py
+- docs/project/PROJECT_DASHBOARD.html
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/project_dashboard_generator.py \
+  docs/project/PROJECT_DASHBOARD.html
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M18_project_dashboard_html_generator
+
+目標：
+Project dashboard HTML generator
+
+允許讀取 / 修改：
+- tools/project_dashboard_generator.py
+- docs/project/PROJECT_DASHBOARD.html
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M19_project_dashboard_launcher
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Commit: `59a2880 Add project dashboard launcher`
+- Next: Use this launcher to regenerate and open the local project dashboard.
+
+### Allowed files
+
+- tools/open_project_dashboard.sh
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/open_project_dashboard.sh
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M19_project_dashboard_launcher
+
+目標：
+Project dashboard launcher
+
+允許讀取 / 修改：
+- tools/open_project_dashboard.sh
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M20_multi_agent_task_card_generator
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Commit: `718208d Add multi-agent task card generator`
+- Next: Use generated task cards to delegate isolated work to code agents.
+
+### Allowed files
+
+- tools/task_card_generator.py
+- docs/project/TASK_CARDS.md
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/task_card_generator.py \
+  docs/project/TASK_CARDS.md
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M20_multi_agent_task_card_generator
+
+目標：
+Multi-agent task card generator
+
+允許讀取 / 修改：
+- tools/task_card_generator.py
+- docs/project/TASK_CARDS.md
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
