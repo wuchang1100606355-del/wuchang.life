@@ -236,6 +236,18 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use generated task cards to delegate isolated work to code agents.",
     },
+    {
+        "id": "M21",
+        "name": "Container server offload plan-only",
+        "risk": "medium",
+        "files": [
+            "docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md",
+            "configs/containers/container_offload_registry.template.json",
+            "schemas/w7tp_container_offload_registry.schema.json",
+            "tools/container_offload_linter.py",
+        ],
+        "next": "Use offload registry and linter before moving background containers to pure Linux server nodes.",
+    },
 
 ]
 

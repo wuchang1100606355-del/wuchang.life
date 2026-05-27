@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T03:23:24.053039+00:00`
-- HEAD: `70ab9aa Fix task cards markdown newline generation`
+- Generated: `2026-05-27T04:34:24.860204+00:00`
+- HEAD: `c47df74 Harden indexer forbidden mount policy`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -27,9 +27,10 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M15 | EAMTP packet summarizer | done_clean | 100% | low | 7bb86c3 Add EAMTP packet summarizer | `tools/eamtp_packet_summarizer.py` | Use read-only packet summaries before router/gateway integration reviews. |
 | M16 | W7TP smoke all checker | done_clean | 100% | low | 657a8a6 Add W7TP smoke all checker | `tools/w7tp_smoke_all.sh` | Run before integration commits to verify mainline tools are still usable. |
 | M17 | Safe git stage allowlist tool | done_clean | 100% | low | c14a9da Add safe git stage allowlist tool | `tools/safe_git_stage.py`<br>`docs/project/git_stage_allowlist.txt`<br>`tests/test_safe_git_stage.py` | Use before multi-agent commits to preview/stage only allowlisted canonical files. |
-| M18 | Project dashboard HTML generator | done_dirty | 100% | low | 447f6c1 Add project dashboard generator | `tools/project_dashboard_generator.py`<br>`docs/project/PROJECT_DASHBOARD.html` | Open local dashboard to copy task commands and inspect mainline status. |
+| M18 | Project dashboard HTML generator | done_clean | 100% | low | 447f6c1 Add project dashboard generator | `tools/project_dashboard_generator.py`<br>`docs/project/PROJECT_DASHBOARD.html` | Open local dashboard to copy task commands and inspect mainline status. |
 | M19 | Project dashboard launcher | done_clean | 100% | low | 59a2880 Add project dashboard launcher | `tools/open_project_dashboard.sh` | Use this launcher to regenerate and open the local project dashboard. |
 | M20 | Multi-agent task card generator | done_clean | 100% | low | 70ab9aa Fix task cards markdown newline generation | `tools/task_card_generator.py`<br>`docs/project/TASK_CARDS.md` | Use generated task cards to delegate isolated work to code agents. |
+| M21 | Container server offload plan-only | done_clean | 100% | medium | 1528c34 Add container server offload plan skeleton | `docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md`<br>`configs/containers/container_offload_registry.template.json`<br>`schemas/w7tp_container_offload_registry.schema.json`<br>`tools/container_offload_linter.py` | Use offload registry and linter before moving background containers to pure Linux server nodes. |
 
 ## Integration Rules
 

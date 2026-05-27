@@ -103,7 +103,8 @@ def main():
     ]
     for row in rows:
         lines.append(render(row))
-    OUT.write_text("\\\n    # normalize accidental literal newline escapes in generated markdown\n    OUT.write_text(OUT.read_text(encoding="utf-8").replace("\\\\n", "\\n"), encoding="utf-8")\nn".join(lines), encoding="utf-8")
+    OUT.write_text("\n".join(lines), encoding="utf-8")
+    OUT.write_text(OUT.read_text(encoding="utf-8").replace("\\n", "\n"), encoding="utf-8")
     report = REPORTS / ("task_cards_" + dt.datetime.now().strftime("%Y%m%d_%H%M%S") + ".json")
     report.write_text(json.dumps({"count": len(rows), "output": str(OUT), "execution": False}, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"decision": "task_cards_generated", "count": len(rows), "markdown": str(OUT)}, ensure_ascii=False, indent=2))

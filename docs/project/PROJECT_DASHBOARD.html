@@ -74,9 +74,9 @@ a { color: #93c5fd; }
 <body>
 <header>
 <h1>W7TP / 小J Project Dashboard</h1>
-<div>Generated: <code>2026-05-27T03:23:24.624781+00:00</code></div>
-<div>HEAD: <code>70ab9aa Fix task cards markdown newline generation</code></div>
-<div>Items: <code>20</code></div>
+<div>Generated: <code>2026-05-27T04:34:25.592924+00:00</code></div>
+<div>HEAD: <code>c47df74 Harden indexer forbidden mount policy</code></div>
+<div>Items: <code>21</code></div>
 </header>
 <main>
 
@@ -584,7 +584,7 @@ git status --short -- tools/safe_git_stage.py docs/project/git_stage_allowlist.t
 <section class="card risk-low">
   <div class="row">
     <h2>M18｜Project dashboard HTML generator</h2>
-    <span class="badge">done_dirty · 100%</span>
+    <span class="badge">done_clean · 100%</span>
   </div>
   <p><b>Risk:</b> low</p>
   <p><b>Commit:</b> <code>447f6c1 Add project dashboard generator</code></p>
@@ -664,6 +664,37 @@ grep -n "M20" -A30 docs/project/WORKLINKS.md
 
 # Git preview
 git status --short -- tools/task_card_generator.py docs/project/TASK_CARDS.md</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M21｜Container server offload plan-only</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>1528c34 Add container server offload plan skeleton</code></p>
+  <p><b>Next:</b> Use offload registry and linter before moving background containers to pure Linux server nodes.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md</code></li><li><code>configs/containers/container_offload_registry.template.json</code></li><li><code>schemas/w7tp_container_offload_registry.schema.json</code></li><li><code>tools/container_offload_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md
+code configs/containers/container_offload_registry.template.json
+code schemas/w7tp_container_offload_registry.schema.json
+code tools/container_offload_linter.py
+
+
+# Worklink section
+grep -n "M21" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md configs/containers/container_offload_registry.template.json schemas/w7tp_container_offload_registry.schema.json tools/container_offload_linter.py</pre>
   </details>
 </section>
 

@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T03:23:24.600956+00:00`
+- Generated: `2026-05-27T04:34:25.568455+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -582,7 +582,7 @@ git status --short -- \
 
 ### M18｜Project dashboard HTML generator
 
-- Status: `done_dirty`
+- Status: `done_clean`
 - Done: `100%`
 - Risk: `low`
 - Latest Commit: `447f6c1 Add project dashboard generator`
@@ -674,6 +674,44 @@ cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/task_card_generator.py \
   docs/project/TASK_CARDS.md
+```
+
+### M21｜Container server offload plan-only
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Latest Commit: `1528c34 Add container server offload plan skeleton`
+- Next: Use offload registry and linter before moving background containers to pure Linux server nodes.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md
+code configs/containers/container_offload_registry.template.json
+code schemas/w7tp_container_offload_registry.schema.json
+code tools/container_offload_linter.py
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/container_offload_linter.py --file configs/containers/container_offload_registry.template.json
+docker ps -a --filter name=wuchang_os_indexer --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}'
+git status --short -- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md configs/containers/container_offload_registry.template.json schemas/w7tp_container_offload_registry.schema.json tools/container_offload_linter.py
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md \
+  configs/containers/container_offload_registry.template.json \
+  schemas/w7tp_container_offload_registry.schema.json \
+  tools/container_offload_linter.py
 ```
 
 ## Commit Safety

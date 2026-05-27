@@ -94,6 +94,11 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "python3 tools/task_card_generator.py",
         "code docs/project/TASK_CARDS.md"
     ],
+    "M21": [
+        "python3 tools/container_offload_linter.py --file configs/containers/container_offload_registry.template.json",
+        "docker ps -a --filter name=wuchang_os_indexer --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{.Ports}}'",
+        "git status --short -- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md configs/containers/container_offload_registry.template.json schemas/w7tp_container_offload_registry.schema.json tools/container_offload_linter.py"
+    ],
 
 }
 

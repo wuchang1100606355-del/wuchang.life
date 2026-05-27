@@ -1,7 +1,7 @@
 # Task Cards
 
-- Generated: `2026-05-27T03:09:28.962819+00:00`
-- Count: `20`
+- Generated: `2026-05-27T04:39:04.806481+00:00`
+- Count: `21`
 
 ## Rules
 
@@ -715,7 +715,7 @@ Safe git stage allowlist tool
 
 ## TASK_ID: M18_project_dashboard_html_generator
 
-- Status: `done_dirty`
+- Status: `done_clean`
 - Done: `100%`
 - Risk: `low`
 - Commit: `447f6c1 Add project dashboard generator`
@@ -795,7 +795,7 @@ Project dashboard launcher
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `low`
-- Commit: `718208d Add multi-agent task card generator`
+- Commit: `70ab9aa Fix task cards markdown newline generation`
 - Next: Use generated task cards to delegate isolated work to code agents.
 
 ### Allowed files
@@ -823,6 +823,52 @@ Multi-agent task card generator
 允許讀取 / 修改：
 - tools/task_card_generator.py
 - docs/project/TASK_CARDS.md
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M21_container_server_offload_plan_only
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `1528c34 Add container server offload plan skeleton`
+- Next: Use offload registry and linter before moving background containers to pure Linux server nodes.
+
+### Allowed files
+
+- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md
+- configs/containers/container_offload_registry.template.json
+- schemas/w7tp_container_offload_registry.schema.json
+- tools/container_offload_linter.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md \
+  configs/containers/container_offload_registry.template.json \
+  schemas/w7tp_container_offload_registry.schema.json \
+  tools/container_offload_linter.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M21_container_server_offload_plan_only
+
+目標：
+Container server offload plan-only
+
+允許讀取 / 修改：
+- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md
+- configs/containers/container_offload_registry.template.json
+- schemas/w7tp_container_offload_registry.schema.json
+- tools/container_offload_linter.py
 
 規則：
 本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
