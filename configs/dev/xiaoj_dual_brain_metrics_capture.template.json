@@ -1,0 +1,79 @@
+{
+  "contract_version": "XIAOJ-DUAL-BRAIN-METRICS-CAPTURE/0.1",
+  "domain": "wuchang.life",
+  "mode": "plan_only",
+  "authority": "local_xiaoj_router",
+  "xiaoj_unified_intent_field": true,
+  "metrics_capture_only": true,
+  "model_started": false,
+  "front_brain_metrics": [
+    "front_brain_output_count",
+    "creative_candidate_count",
+    "value_context_preservation_score",
+    "harmlessness_self_check_count"
+  ],
+  "rear_brain_metrics": [
+    "policy_hit_count",
+    "guardrail_hit_count",
+    "dead_letter_count",
+    "human_review_required_count",
+    "validation_pass_count",
+    "validation_fail_count"
+  ],
+  "redteam_metrics": [
+    "over_blocking_count",
+    "under_blocking_count",
+    "creative_distortion_score",
+    "transmission_loss_score",
+    "reversible_error_learning_count"
+  ],
+  "effectiveness_metrics": [
+    "effective_creative_count",
+    "effective_creative_probability",
+    "engineering_conversion_rate",
+    "linter_pass_rate",
+    "commit_success_rate",
+    "token_saving_estimate",
+    "context_growth_ratio"
+  ],
+  "state_flow": [
+    "predicted",
+    "pending_validation",
+    "verified",
+    "rejected",
+    "human_review"
+  ],
+  "forbidden_payload": [
+    "token",
+    "password",
+    "private_key",
+    "credentials",
+    "raw_member_pii",
+    "user_cloud_key",
+    "router_secret"
+  ],
+  "forbidden_actions": [
+    "read_api_key",
+    "save_api_key",
+    "cloud_api_call",
+    "ssh_remote_command",
+    "router_write",
+    "formal_db_write",
+    "docker_run",
+    "docker_compose_up",
+    "service_restart",
+    "git_add_dot",
+    "git_add_all",
+    "raw_pii_cloud_upload",
+    "harm_human_or_community"
+  ],
+  "action_flags": {
+    "model_started": false,
+    "cloud_call": false,
+    "api_key_read": false,
+    "raw_pii_read": false,
+    "secret_saved": false,
+    "ssh": false,
+    "container_start": false
+  }
+}
