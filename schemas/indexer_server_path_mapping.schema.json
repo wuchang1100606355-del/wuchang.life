@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/indexer_server_path_mapping.schema.json",
+  "title": "W7TP Indexer Server Path Mapping Template",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mapping_version",
+    "domain",
+    "mode",
+    "source_host",
+    "target_host",
+    "service",
+    "paths",
+    "forbidden_paths",
+    "transfer_allowed",
+    "ssh_allowed",
+    "container_start_allowed",
+    "human_review_required"
+  ],
+  "properties": {
+    "mapping_version": {
+      "const": "W7TP-INDEXER-SERVER-PATH-MAPPING/0.1"
+    },
+    "domain": {
+      "const": "wuchang.life"
+    },
+    "mode": {
+      "const": "plan_only"
+    },
+    "source_host": {
+      "const": "msi"
+    },
+    "target_host": {
+      "const": "pure_linux_server"
+    },
+    "service": {
+      "const": "wuchang_indexer_oneshot"
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_snapshot_ro",
+        "job_manifest_ro",
+        "result_output_rw",
+        "proof_output_rw"
+      ],
+      "properties": {
+        "project_snapshot_ro": {
+          "type": "string"
+        },
+        "job_manifest_ro": {
+          "type": "string"
+        },
+        "result_output_rw": {
+          "type": "string"
+        },
+        "proof_output_rw": {
+          "type": "string"
+        }
+      }
+    },
+    "forbidden_paths": {
+      "type": "array",
+      "uniqueItems": true,
+      "contains": {
+        "const": "/"
+      },
+      "minContains": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "transfer_allowed": {
+      "const": false
+    },
+    "ssh_allowed": {
+      "const": false
+    },
+    "container_start_allowed": {
+      "const": false
+    },
+    "human_review_required": {
+      "const": true
+    }
+  }
+}

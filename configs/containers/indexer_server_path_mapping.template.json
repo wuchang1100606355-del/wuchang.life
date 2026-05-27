@@ -1,0 +1,28 @@
+{
+  "mapping_version": "W7TP-INDEXER-SERVER-PATH-MAPPING/0.1",
+  "domain": "wuchang.life",
+  "mode": "plan_only",
+  "source_host": "msi",
+  "target_host": "pure_linux_server",
+  "service": "wuchang_indexer_oneshot",
+  "paths": {
+    "project_snapshot_ro": "<REVIEWED_PROJECT_SNAPSHOT_PATH>",
+    "job_manifest_ro": "<REVIEWED_JOB_MANIFEST_PATH>",
+    "result_output_rw": "<REVIEWED_RESULT_OUTPUT_PATH>",
+    "proof_output_rw": "<REVIEWED_PROOF_OUTPUT_PATH>"
+  },
+  "forbidden_paths": [
+    "/",
+    ".env",
+    "keys",
+    ".ssh",
+    "private_key",
+    "configs/merlin/router_inventory_redacted.local.json",
+    "Taiji_Odoo/postgres_data",
+    "raw_member_data"
+  ],
+  "transfer_allowed": false,
+  "ssh_allowed": false,
+  "container_start_allowed": false,
+  "human_review_required": true
+}
