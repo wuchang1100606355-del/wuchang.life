@@ -1,7 +1,8 @@
 # Task Cards Compact
 
-- Generated: `2026-05-27T04:41:52.591881+00:00`
-- Rule: completed items keep title/status/commit only
+- Generated: `2026-05-27T05:07:57.778893+00:00`
+- Rule: completed items keep title/status/done/risk/commit only
+- Source: `docs/project/TASK_CARDS.md`
 
 ## TASK_ID: M01_eamtp_7d_internal_intent_state_language
 - Status: `done_clean`
@@ -121,11 +122,17 @@
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `low`
-- Commit: `70ab9aa Fix task cards markdown newline generation`
+- Commit: `1db1351 Register container offload plan in project board`
 
 ## TASK_ID: M21_container_server_offload_plan_only
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `medium`
 - Commit: `1528c34 Add container server offload plan skeleton`
+
+## TASK_ID: M22_indexer_one_shot_server_job_package
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `63bbe53 Add indexer one-shot job template`
 
