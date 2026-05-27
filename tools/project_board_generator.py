@@ -168,6 +168,16 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use GET-only health summaries before deciding whether a service needs action.",
     },
+    {
+        "id": "M14",
+        "name": "Runtime shadow inventory",
+        "risk": "low",
+        "files": [
+            "tools/runtime_shadow_inventory.py",
+            "docs/project/RUNTIME_SHADOW_INVENTORY.md",
+        ],
+        "next": "Use inventory-only reports before any cleanup or archive decision.",
+    },
 
 ]
 

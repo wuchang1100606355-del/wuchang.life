@@ -70,6 +70,9 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
     "M13": [
         "python3 tools/service_health_readonly.py"
     ],
+    "M14": [
+        "python3 tools/runtime_shadow_inventory.py --no-doc --limit 20"
+    ],
 
 }
 

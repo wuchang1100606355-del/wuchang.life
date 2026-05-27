@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T02:31:04.616149+00:00`
-- HEAD: `60e656c Add readonly service health checker`
+- Generated: `2026-05-27T02:32:12.823120+00:00`
+- HEAD: `5e6ff90 Add runtime shadow inventory tool`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -23,6 +23,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M11 | W7TP Causal Ledger plan-only layer | done_clean | 100% | high | 2338ad1 Add W7TP causal ledger plan-only layer | `docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md`<br>`schemas/w7tp_causal_event_packet.schema.json`<br>`runtime/router/w7tp_causal_event_builder.py`<br>`tools/causal_ledger_text_analyzer.py` | Use causal packets for audit links; no production finance or Odoo ledger writes. |
 | M12 | Merlin redacted inventory fill helper | done_clean | 100% | medium | 9830277 Add Merlin redacted inventory fill helper | `tools/merlin_inventory_fill_helper.py` | Use allowlisted --set updates for local redacted inventory; never commit local.json. |
 | M13 | Readonly service health checker | done_clean | 100% | low | 60e656c Add readonly service health checker | `tools/service_health_readonly.py` | Use GET-only health summaries before deciding whether a service needs action. |
+| M14 | Runtime shadow inventory | done_clean | 100% | low | 5e6ff90 Add runtime shadow inventory tool | `tools/runtime_shadow_inventory.py`<br>`docs/project/RUNTIME_SHADOW_INVENTORY.md` | Use inventory-only reports before any cleanup or archive decision. |
 
 ## Integration Rules
 

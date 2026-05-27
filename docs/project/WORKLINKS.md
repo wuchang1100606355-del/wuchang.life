@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:31:05.369311+00:00`
+- Generated: `2026-05-27T02:32:13.305259+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -451,6 +451,38 @@ python3 tools/service_health_readonly.py
 cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/service_health_readonly.py
+```
+
+### M14｜Runtime shadow inventory
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `5e6ff90 Add runtime shadow inventory tool`
+- Next: Use inventory-only reports before any cleanup or archive decision.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/runtime_shadow_inventory.py
+code docs/project/RUNTIME_SHADOW_INVENTORY.md
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/runtime_shadow_inventory.py --no-doc --limit 20
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/runtime_shadow_inventory.py \
+  docs/project/RUNTIME_SHADOW_INVENTORY.md
 ```
 
 ## Commit Safety
