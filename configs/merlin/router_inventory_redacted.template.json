@@ -1,0 +1,85 @@
+{
+  "inventory_version": "MERLIN-REDACTED-INVENTORY/0.1",
+  "router_identity": {
+    "vendor": "ASUS",
+    "model": "RT-BE86U",
+    "firmware": "Asuswrt-Merlin",
+    "firmware_version": "",
+    "router_role": "MERLIN_PHYSICAL_ROUTER_FIELD"
+  },
+  "network_boundary": {
+    "lan_subnet": "",
+    "dhcp_range": "",
+    "wan_type": "",
+    "ddns_enabled": null,
+    "ddns_hostname_redacted": "",
+    "remote_admin_from_wan": null
+  },
+  "admin_surface": {
+    "web_admin_lan_only": null,
+    "ssh_enabled": null,
+    "ssh_scope": "disabled | lan_only | vpn_only | wan_exposed | unknown",
+    "ssh_port_forwarding_enabled": null,
+    "risk_note": ""
+  },
+  "wireless_fields": {
+    "main_ssids": [],
+    "guest_networks": [],
+    "wifi_passwords_stored": false,
+    "segmentation_note": ""
+  },
+  "device_fields": {
+    "trusted_lan_devices_count": null,
+    "guest_devices_count": null,
+    "merchant_devices_count": null,
+    "iot_devices_count": null,
+    "mac_addresses_redacted_or_hashed": true
+  },
+  "firewall_port_forwarding": {
+    "firewall_enabled": null,
+    "port_forwarding_rules": [],
+    "wan_exposed_services": [],
+    "msi_core_exposed_to_wan": false,
+    "risk_note": ""
+  },
+  "vpn": {
+    "vpn_enabled": null,
+    "vpn_types": [],
+    "peer_count": null,
+    "keys_or_secrets_stored": false,
+    "member_access_note": ""
+  },
+  "qos_traffic": {
+    "qos_enabled": null,
+    "traffic_analyzer_enabled": null,
+    "xiaoj_priority_plan": "",
+    "emergency_traffic_protection_note": ""
+  },
+  "usb_storage": {
+    "usb_attached": null,
+    "samba_enabled": null,
+    "ftp_enabled": null,
+    "media_server_enabled": null,
+    "credentials_stored": false
+  },
+  "aimesh": {
+    "enabled": null,
+    "node_count": null,
+    "nodes_redacted": []
+  },
+  "w7tp_mapping": {
+    "field": "MERLIN_PHYSICAL_ROUTER_FIELD",
+    "eamtp_allowed": true,
+    "cloud_allowed": false,
+    "control_mode": "human_review_only",
+    "dead_letter_for": [
+      "export_router_password",
+      "read_private_key",
+      "open_unrestricted_wan_ssh",
+      "disable_firewall",
+      "expose_msi_core_to_wan"
+    ]
+  },
+  "operator_notes": "",
+  "last_manual_review": ""
+}
