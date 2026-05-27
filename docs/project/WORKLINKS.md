@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T03:09:28.127952+00:00`
+- Generated: `2026-05-27T03:23:24.600956+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -648,7 +648,7 @@ git status --short -- \
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `low`
-- Latest Commit: `718208d Add multi-agent task card generator`
+- Latest Commit: `70ab9aa Fix task cards markdown newline generation`
 - Next: Use generated task cards to delegate isolated work to code agents.
 
 #### Open files in VS Code

@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T03:09:18.799261+00:00`
-- HEAD: `718208d Add multi-agent task card generator`
+- Generated: `2026-05-27T03:23:24.053039+00:00`
+- HEAD: `70ab9aa Fix task cards markdown newline generation`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -29,7 +29,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M17 | Safe git stage allowlist tool | done_clean | 100% | low | c14a9da Add safe git stage allowlist tool | `tools/safe_git_stage.py`<br>`docs/project/git_stage_allowlist.txt`<br>`tests/test_safe_git_stage.py` | Use before multi-agent commits to preview/stage only allowlisted canonical files. |
 | M18 | Project dashboard HTML generator | done_dirty | 100% | low | 447f6c1 Add project dashboard generator | `tools/project_dashboard_generator.py`<br>`docs/project/PROJECT_DASHBOARD.html` | Open local dashboard to copy task commands and inspect mainline status. |
 | M19 | Project dashboard launcher | done_clean | 100% | low | 59a2880 Add project dashboard launcher | `tools/open_project_dashboard.sh` | Use this launcher to regenerate and open the local project dashboard. |
-| M20 | Multi-agent task card generator | done_clean | 100% | low | 718208d Add multi-agent task card generator | `tools/task_card_generator.py`<br>`docs/project/TASK_CARDS.md` | Use generated task cards to delegate isolated work to code agents. |
+| M20 | Multi-agent task card generator | done_clean | 100% | low | 70ab9aa Fix task cards markdown newline generation | `tools/task_card_generator.py`<br>`docs/project/TASK_CARDS.md` | Use generated task cards to delegate isolated work to code agents. |
 
 ## Integration Rules
 
