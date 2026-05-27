@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:27:56.299129+00:00`
+- Generated: `2026-05-27T02:28:44.360117+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -389,6 +389,38 @@ git status --short -- \
   schemas/w7tp_causal_event_packet.schema.json \
   runtime/router/w7tp_causal_event_builder.py \
   tools/causal_ledger_text_analyzer.py
+```
+
+### M12｜Merlin redacted inventory fill helper
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Latest Commit: `9830277 Add Merlin redacted inventory fill helper`
+- Next: Use allowlisted --set updates for local redacted inventory; never commit local.json.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/merlin_inventory_fill_helper.py
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/merlin_inventory_fill_helper.py --dry-run --set router_identity.firmware_version=3006.102.7
+python3 tools/merlin_inventory_fill_helper.py --dry-run --set admin_surface.ssh_scope=lan_only
+python3 tools/merlin_inventory_validator.py --file configs/merlin/router_inventory_redacted.local.json || true
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/merlin_inventory_fill_helper.py
 ```
 
 ## Commit Safety

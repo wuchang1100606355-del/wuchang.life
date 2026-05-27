@@ -150,7 +150,16 @@ WORK_ITEMS: List[Dict[str, object]] = [
             "tools/causal_ledger_text_analyzer.py",
         ],
         "next": "Use causal packets for audit links; no production finance or Odoo ledger writes.",
+    },    {
+        "id": "M12",
+        "name": "Merlin redacted inventory fill helper",
+        "risk": "medium",
+        "files": [
+            "tools/merlin_inventory_fill_helper.py",
+        ],
+        "next": "Use allowlisted --set updates for local redacted inventory; never commit local.json.",
     },
+
 ]
 
 

@@ -62,7 +62,12 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
     ],
     "M11": [
         "python3 runtime/router/w7tp_causal_event_builder.py --summary 'worklink causal ledger smoke metadata only'"
+    ],    "M12": [
+        "python3 tools/merlin_inventory_fill_helper.py --dry-run --set router_identity.firmware_version=3006.102.7",
+        "python3 tools/merlin_inventory_fill_helper.py --dry-run --set admin_surface.ssh_scope=lan_only",
+        "python3 tools/merlin_inventory_validator.py --file configs/merlin/router_inventory_redacted.local.json || true"
     ],
+
 }
 
 

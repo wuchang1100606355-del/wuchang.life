@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T02:27:55.585205+00:00`
-- HEAD: `9830277 Add Merlin redacted inventory fill helper`
+- Generated: `2026-05-27T02:28:43.836531+00:00`
+- HEAD: `a0683e5 Add Merlin inventory fill helper to project board`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -21,6 +21,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M09 | Merlin redacted inventory validator + EAMTP adapter | done_clean | 100% | high | fa54950 Add Merlin redacted inventory validator | `docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md`<br>`tools/merlin_inventory_validator.py`<br>`docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md`<br>`tools/merlin_inventory_to_eamtp.py` | Convert only redacted local inventory into pending_review EAMTP. |
 | M10 | W7TP HA Mesh plan-only governance | done_clean | 100% | high | b899952 Add W7TP HA mesh plan-only governance | `docs/governance/W7TP_HA_MESH_PLAN_ONLY.md`<br>`docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md`<br>`configs/w7tp/ha_mesh_inventory.template.json`<br>`schemas/w7tp_ha_mesh_inventory.schema.json`<br>`tools/ha_mesh_script_analyzer.py` | Analyze legacy HA scripts; never execute sudo/SSH/rsync/crontab/iptables. |
 | M11 | W7TP Causal Ledger plan-only layer | done_clean | 100% | high | 2338ad1 Add W7TP causal ledger plan-only layer | `docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md`<br>`schemas/w7tp_causal_event_packet.schema.json`<br>`runtime/router/w7tp_causal_event_builder.py`<br>`tools/causal_ledger_text_analyzer.py` | Use causal packets for audit links; no production finance or Odoo ledger writes. |
+| M12 | Merlin redacted inventory fill helper | done_clean | 100% | medium | 9830277 Add Merlin redacted inventory fill helper | `tools/merlin_inventory_fill_helper.py` | Use allowlisted --set updates for local redacted inventory; never commit local.json. |
 
 ## Integration Rules
 
