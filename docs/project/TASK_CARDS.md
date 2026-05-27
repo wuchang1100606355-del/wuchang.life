@@ -1,7 +1,7 @@
 # Task Cards
 
-- Generated: `2026-05-27T05:05:40.016651+00:00`
-- Count: `22`
+- Generated: `2026-05-27T05:25:02+00:00`
+- Count: `23`
 
 ## Rules
 
@@ -912,6 +912,46 @@ Indexer one-shot server job package
 - configs/containers/wuchang_indexer_oneshot_job.template.json
 - docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md
 - tools/indexer_oneshot_job_linter.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M23_indexer_one_shot_compose_package
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `a603de5 Add indexer one-shot compose linter`
+- Next: Validate the plan-only compose template before any separately approved server execution.
+
+### Allowed files
+
+- configs/containers/wuchang_indexer_oneshot.compose.template.yml
+- tools/indexer_oneshot_compose_linter.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  configs/containers/wuchang_indexer_oneshot.compose.template.yml \
+  tools/indexer_oneshot_compose_linter.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M23_indexer_one_shot_compose_package
+
+目標：
+Indexer one-shot compose package
+
+允許讀取 / 修改：
+- configs/containers/wuchang_indexer_oneshot.compose.template.yml
+- tools/indexer_oneshot_compose_linter.py
 
 規則：
 本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。

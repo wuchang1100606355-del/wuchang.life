@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T05:05:39.958698+00:00`
+- Generated: `2026-05-27T05:25:02+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -749,6 +749,40 @@ git status --short -- \
   configs/containers/wuchang_indexer_oneshot_job.template.json \
   docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md \
   tools/indexer_oneshot_job_linter.py
+```
+
+### M23｜Indexer one-shot compose package
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Latest Commit: `a603de5 Add indexer one-shot compose linter`
+- Next: Validate the plan-only compose template before any separately approved server execution.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code configs/containers/wuchang_indexer_oneshot.compose.template.yml
+code tools/indexer_oneshot_compose_linter.py
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 -m py_compile tools/indexer_oneshot_compose_linter.py
+python3 tools/indexer_oneshot_compose_linter.py --file configs/containers/wuchang_indexer_oneshot.compose.template.yml
+git status --short -- configs/containers/wuchang_indexer_oneshot.compose.template.yml tools/indexer_oneshot_compose_linter.py
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  configs/containers/wuchang_indexer_oneshot.compose.template.yml \
+  tools/indexer_oneshot_compose_linter.py
 ```
 
 ## Commit Safety

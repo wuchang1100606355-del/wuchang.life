@@ -74,9 +74,9 @@ a { color: #93c5fd; }
 <body>
 <header>
 <h1>W7TP / 小J Project Dashboard</h1>
-<div>Generated: <code>2026-05-27T05:05:39.991229+00:00</code></div>
-<div>HEAD: <code>bec3611 Add indexer one-shot job linter</code></div>
-<div>Items: <code>22</code></div>
+<div>Generated: <code>2026-05-27T05:25:02+00:00</code></div>
+<div>HEAD: <code>a603de5 Add indexer one-shot compose linter</code></div>
+<div>Items: <code>23</code></div>
 </header>
 <main>
 
@@ -725,6 +725,35 @@ grep -n "M22" -A30 docs/project/WORKLINKS.md
 
 # Git preview
 git status --short -- configs/containers/wuchang_indexer_oneshot_job.template.json docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md tools/indexer_oneshot_job_linter.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M23｜Indexer one-shot compose package</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>a603de5 Add indexer one-shot compose linter</code></p>
+  <p><b>Next:</b> Validate the plan-only compose template before any separately approved server execution.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>configs/containers/wuchang_indexer_oneshot.compose.template.yml</code></li><li><code>tools/indexer_oneshot_compose_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code configs/containers/wuchang_indexer_oneshot.compose.template.yml
+code tools/indexer_oneshot_compose_linter.py
+
+
+# Worklink section
+grep -n "M23" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- configs/containers/wuchang_indexer_oneshot.compose.template.yml tools/indexer_oneshot_compose_linter.py</pre>
   </details>
 </section>
 
