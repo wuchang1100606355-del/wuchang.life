@@ -159,6 +159,15 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use allowlisted --set updates for local redacted inventory; never commit local.json.",
     },
+    {
+        "id": "M13",
+        "name": "Readonly service health checker",
+        "risk": "low",
+        "files": [
+            "tools/service_health_readonly.py",
+        ],
+        "next": "Use GET-only health summaries before deciding whether a service needs action.",
+    },
 
 ]
 

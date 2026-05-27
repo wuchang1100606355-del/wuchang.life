@@ -67,6 +67,9 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "python3 tools/merlin_inventory_fill_helper.py --dry-run --set admin_surface.ssh_scope=lan_only",
         "python3 tools/merlin_inventory_validator.py --file configs/merlin/router_inventory_redacted.local.json || true"
     ],
+    "M13": [
+        "python3 tools/service_health_readonly.py"
+    ],
 
 }
 

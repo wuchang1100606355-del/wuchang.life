@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:28:44.360117+00:00`
+- Generated: `2026-05-27T02:31:05.369311+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -421,6 +421,36 @@ python3 tools/merlin_inventory_validator.py --file configs/merlin/router_invento
 cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/merlin_inventory_fill_helper.py
+```
+
+### M13｜Readonly service health checker
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `60e656c Add readonly service health checker`
+- Next: Use GET-only health summaries before deciding whether a service needs action.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/service_health_readonly.py
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/service_health_readonly.py
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/service_health_readonly.py
 ```
 
 ## Commit Safety
