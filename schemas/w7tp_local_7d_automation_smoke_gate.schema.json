@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_local_7d_automation_smoke_gate.schema.json",
+  "title": "W7TP Local 7D Automation Smoke Gate",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "domain",
+    "mode",
+    "authority",
+    "local_only",
+    "push_allowed",
+    "remote_required",
+    "cloud_call_allowed",
+    "runtime_execution_allowed",
+    "contracts_to_validate",
+    "linter_paths",
+    "template_paths",
+    "success_decisions",
+    "forbidden_actions",
+    "action_flags"
+  ],
+  "properties": {
+    "mode": { "const": "plan_only" },
+    "authority": { "const": "local_xiaoj_router" },
+    "local_only": { "const": true },
+    "push_allowed": { "const": false },
+    "remote_required": { "const": false },
+    "cloud_call_allowed": { "const": false },
+    "runtime_execution_allowed": { "const": false }
+  }
+}
