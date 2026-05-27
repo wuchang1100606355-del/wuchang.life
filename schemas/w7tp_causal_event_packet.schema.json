@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_causal_event_packet.schema.json",
+  "title": "W7TP Causal Event Packet",
+  "type": "object",
+  "required": [
+    "packet_version",
+    "event_id",
+    "event_type",
+    "source_field",
+    "causal",
+    "privacy",
+    "risk",
+    "policy",
+    "ledger"
+  ],
+  "properties": {
+    "packet_version": {
+      "type": "string",
+      "const": "W7TP-CAUSAL-EVENT/0.1"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "eamtp_packet",
+        "router_guard_decision",
+        "merlin_ticket",
+        "approval_record",
+        "human_checklist",
+        "execution_result",
+        "odoo_event",
+        "pos_event",
+        "member_consent",
+        "node_status",
+        "ha_mesh_job",
+        "causal_audit"
+      ]
+    },
+    "source_field": {
+      "type": "string"
+    },
+    "causal": {
+      "type": "object",
+      "required": [
+        "parent_event_hashes",
+        "clock_mode",
+        "clock_payload_redacted",
+        "dag_append_only"
+      ],
+      "properties": {
+        "parent_event_hashes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "clock_mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "lamport",
+            "vector_clock_redacted",
+            "compressed_coprime_clock_plan",
+            "external_untrusted"
+          ]
+        },
+        "clock_payload_redacted": {
+          "type": "boolean",
+          "const": true
+        },
+        "dag_append_only": {
+          "type": "boolean",
+          "const": true
+        },
+        "crdt_mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "state_based_plan",
+            "operation_based_plan",
+            "byzantine_aware_plan",
+            "unsafe_lww_rejected"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["level", "cloud_allowed"],
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["public", "redacted", "pii", "sensitive"]
+        },
+        "cloud_allowed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "required": ["level", "reasons"],
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": ["decision", "human_review_required", "dead_letter_on_violation"],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": ["allow_low_risk", "pending_review", "dead_letter"]
+        },
+        "human_review_required": {
+          "type": "boolean"
+        },
+        "dead_letter_on_violation": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ledger": {
+      "type": "object",
+      "required": ["created_at", "event_hash", "append_only"],
+      "properties": {
+        "created_at": { "type": "string" },
+        "event_hash": { "type": "string" },
+        "append_only": { "type": "boolean", "const": true }
+      }
+    }
+  },
+  "additionalProperties": false
+}
