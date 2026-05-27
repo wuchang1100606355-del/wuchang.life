@@ -178,6 +178,15 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use inventory-only reports before any cleanup or archive decision.",
     },
+    {
+        "id": "M15",
+        "name": "EAMTP packet summarizer",
+        "risk": "low",
+        "files": [
+            "tools/eamtp_packet_summarizer.py",
+        ],
+        "next": "Use read-only packet summaries before router/gateway integration reviews.",
+    },
 
 ]
 

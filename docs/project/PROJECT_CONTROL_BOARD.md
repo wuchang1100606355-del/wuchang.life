@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T02:32:12.823120+00:00`
-- HEAD: `5e6ff90 Add runtime shadow inventory tool`
+- Generated: `2026-05-27T02:33:23.322881+00:00`
+- HEAD: `7bb86c3 Add EAMTP packet summarizer`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -24,6 +24,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M12 | Merlin redacted inventory fill helper | done_clean | 100% | medium | 9830277 Add Merlin redacted inventory fill helper | `tools/merlin_inventory_fill_helper.py` | Use allowlisted --set updates for local redacted inventory; never commit local.json. |
 | M13 | Readonly service health checker | done_clean | 100% | low | 60e656c Add readonly service health checker | `tools/service_health_readonly.py` | Use GET-only health summaries before deciding whether a service needs action. |
 | M14 | Runtime shadow inventory | done_clean | 100% | low | 5e6ff90 Add runtime shadow inventory tool | `tools/runtime_shadow_inventory.py`<br>`docs/project/RUNTIME_SHADOW_INVENTORY.md` | Use inventory-only reports before any cleanup or archive decision. |
+| M15 | EAMTP packet summarizer | done_clean | 100% | low | 7bb86c3 Add EAMTP packet summarizer | `tools/eamtp_packet_summarizer.py` | Use read-only packet summaries before router/gateway integration reviews. |
 
 ## Integration Rules
 

@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:32:13.305259+00:00`
+- Generated: `2026-05-27T02:33:23.772723+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -483,6 +483,36 @@ cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/runtime_shadow_inventory.py \
   docs/project/RUNTIME_SHADOW_INVENTORY.md
+```
+
+### M15｜EAMTP packet summarizer
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `7bb86c3 Add EAMTP packet summarizer`
+- Next: Use read-only packet summaries before router/gateway integration reviews.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/eamtp_packet_summarizer.py
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/eamtp_packet_summarizer.py
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/eamtp_packet_summarizer.py
 ```
 
 ## Commit Safety

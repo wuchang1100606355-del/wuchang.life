@@ -73,6 +73,9 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
     "M14": [
         "python3 tools/runtime_shadow_inventory.py --no-doc --limit 20"
     ],
+    "M15": [
+        "python3 tools/eamtp_packet_summarizer.py"
+    ],
 
 }
 
