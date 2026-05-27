@@ -1,6 +1,6 @@
 # Task Cards Compact
 
-- Generated: `2026-05-27T05:13:09.758698+00:00`
+- Generated: `2026-05-27T05:25:02+00:00`
 - Rule: completed items keep title/status/done/risk/commit only
 - Source: `docs/project/TASK_CARDS.md`
 
@@ -135,3 +135,9 @@
 - Done: `100%`
 - Risk: `medium`
 - Commit: `63bbe53 Add indexer one-shot job template`
+
+## TASK_ID: M23_indexer_one_shot_compose_package
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `a603de5 Add indexer one-shot compose linter`
