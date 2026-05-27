@@ -217,6 +217,15 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Open local dashboard to copy task commands and inspect mainline status.",
     },
+    {
+        "id": "M19",
+        "name": "Project dashboard launcher",
+        "risk": "low",
+        "files": [
+            "tools/open_project_dashboard.sh",
+        ],
+        "next": "Use this launcher to regenerate and open the local project dashboard.",
+    },
 
 ]
 

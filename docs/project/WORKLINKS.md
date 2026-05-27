@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:38:19.345368+00:00`
+- Generated: `2026-05-27T02:40:01.598864+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -611,6 +611,36 @@ cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/project_dashboard_generator.py \
   docs/project/PROJECT_DASHBOARD.html
+```
+
+### M19｜Project dashboard launcher
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `59a2880 Add project dashboard launcher`
+- Next: Use this launcher to regenerate and open the local project dashboard.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/open_project_dashboard.sh
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+tools/open_project_dashboard.sh
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/open_project_dashboard.sh
 ```
 
 ## Commit Safety

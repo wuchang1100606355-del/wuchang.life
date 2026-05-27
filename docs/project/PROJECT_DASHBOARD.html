@@ -74,9 +74,9 @@ a { color: #93c5fd; }
 <body>
 <header>
 <h1>W7TP / 小J Project Dashboard</h1>
-<div>Generated: <code>2026-05-27T02:40:00.493316+00:00</code></div>
-<div>HEAD: <code>ef4bbb8 Register project dashboard in project board</code></div>
-<div>Items: <code>18</code></div>
+<div>Generated: <code>2026-05-27T02:40:01.629570+00:00</code></div>
+<div>HEAD: <code>59a2880 Add project dashboard launcher</code></div>
+<div>Items: <code>19</code></div>
 </header>
 <main>
 
@@ -607,6 +607,34 @@ grep -n "M18" -A30 docs/project/WORKLINKS.md
 
 # Git preview
 git status --short -- tools/project_dashboard_generator.py docs/project/PROJECT_DASHBOARD.html</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M19｜Project dashboard launcher</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>59a2880 Add project dashboard launcher</code></p>
+  <p><b>Next:</b> Use this launcher to regenerate and open the local project dashboard.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/open_project_dashboard.sh</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/open_project_dashboard.sh
+
+
+# Worklink section
+grep -n "M19" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/open_project_dashboard.sh</pre>
   </details>
 </section>
 
