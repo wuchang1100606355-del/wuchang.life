@@ -1,6 +1,6 @@
 # Task Cards Compact
 
-- Generated: `2026-05-27T05:07:57.778893+00:00`
+- Generated: `2026-05-27T05:13:09.758698+00:00`
 - Rule: completed items keep title/status/done/risk/commit only
 - Source: `docs/project/TASK_CARDS.md`
 
@@ -135,4 +135,3 @@
 - Done: `100%`
 - Risk: `medium`
 - Commit: `63bbe53 Add indexer one-shot job template`
-
