@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_local_7d_automation_smoke_runner.schema.json",
+  "title": "W7TP Local 7D Automation Smoke Runner",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "domain",
+    "mode",
+    "authority",
+    "git_push_allowed",
+    "cloud_call_allowed",
+    "api_key_read_allowed",
+    "raw_pii_read_allowed",
+    "runtime_write_allowed",
+    "runner_targets",
+    "linter_jobs",
+    "forbidden_actions",
+    "action_flags"
+  ],
+  "properties": {
+    "mode": { "const": "local_smoke_only" },
+    "authority": { "const": "local_xiaoj_router" },
+    "git_push_allowed": { "const": false },
+    "cloud_call_allowed": { "const": false },
+    "api_key_read_allowed": { "const": false },
+    "raw_pii_read_allowed": { "const": false },
+    "runtime_write_allowed": { "const": false },
+    "runner_targets": { "type": "array", "items": { "type": "string" } },
+    "linter_jobs": { "type": "array" },
+    "forbidden_actions": { "type": "array", "items": { "type": "string" } },
+    "action_flags": { "type": "object" }
+  }
+}

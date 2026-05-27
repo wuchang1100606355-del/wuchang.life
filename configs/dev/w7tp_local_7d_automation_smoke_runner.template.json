@@ -1,0 +1,74 @@
+{
+  "contract_version": "W7TP-LOCAL-7D-AUTOMATION-SMOKE-RUNNER/0.1",
+  "domain": "wuchang.life",
+  "mode": "local_smoke_only",
+  "authority": "local_xiaoj_router",
+  "git_push_allowed": false,
+  "cloud_call_allowed": false,
+  "api_key_read_allowed": false,
+  "raw_pii_read_allowed": false,
+  "runtime_write_allowed": false,
+  "runner_targets": [
+    "M31A",
+    "M32A",
+    "M32B",
+    "M32C",
+    "M33A"
+  ],
+  "linter_jobs": [
+    {
+      "task_id": "M31A",
+      "linter": "tools/xiaoj_converged_governance_architecture_linter.py",
+      "template": "configs/dev/xiaoj_converged_governance_architecture.template.json",
+      "expected_decision": "safe_xiaoj_converged_governance_plan_only"
+    },
+    {
+      "task_id": "M32A",
+      "linter": "tools/w7tp_tri_party_7d_runtime_dryrun_linter.py",
+      "template": "configs/dev/w7tp_tri_party_7d_runtime_dryrun.template.json",
+      "expected_decision": "safe_tri_party_7d_runtime_dryrun"
+    },
+    {
+      "task_id": "M32B",
+      "linter": "tools/w7tp_nl_to_7d_task_packet_linter.py",
+      "template": "configs/dev/w7tp_nl_to_7d_task_packet.template.json",
+      "expected_decision": "safe_nl_to_7d_task_packet_plan_only"
+    },
+    {
+      "task_id": "M32C",
+      "linter": "tools/xiaoj_dual_brain_metrics_capture_linter.py",
+      "template": "configs/dev/xiaoj_dual_brain_metrics_capture.template.json",
+      "expected_decision": "safe_dual_brain_metrics_capture_plan_only"
+    },
+    {
+      "task_id": "M33A",
+      "linter": "tools/w7tp_local_7d_automation_smoke_gate_linter.py",
+      "template": "configs/dev/w7tp_local_7d_automation_smoke_gate.template.json",
+      "expected_decision": "safe_local_7d_automation_smoke_gate_plan_only"
+    }
+  ],
+  "forbidden_actions": [
+    "git_push",
+    "set_origin",
+    "git_add_dot",
+    "git_add_all",
+    "read_api_key",
+    "cloud_api_call",
+    "ssh_remote_command",
+    "docker_run",
+    "service_restart",
+    "formal_db_write",
+    "runtime_report_commit"
+  ],
+  "action_flags": {
+    "git_push": false,
+    "origin_set": false,
+    "cloud_call": false,
+    "api_key_read": false,
+    "raw_pii_read": false,
+    "ssh": false,
+    "container_start": false,
+    "service_restart": false,
+    "runtime_write": false
+  }
+}
