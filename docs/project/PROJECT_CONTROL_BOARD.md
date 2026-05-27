@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T02:33:23.322881+00:00`
-- HEAD: `7bb86c3 Add EAMTP packet summarizer`
+- Generated: `2026-05-27T02:34:34.208994+00:00`
+- HEAD: `657a8a6 Add W7TP smoke all checker`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -25,6 +25,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M13 | Readonly service health checker | done_clean | 100% | low | 60e656c Add readonly service health checker | `tools/service_health_readonly.py` | Use GET-only health summaries before deciding whether a service needs action. |
 | M14 | Runtime shadow inventory | done_clean | 100% | low | 5e6ff90 Add runtime shadow inventory tool | `tools/runtime_shadow_inventory.py`<br>`docs/project/RUNTIME_SHADOW_INVENTORY.md` | Use inventory-only reports before any cleanup or archive decision. |
 | M15 | EAMTP packet summarizer | done_clean | 100% | low | 7bb86c3 Add EAMTP packet summarizer | `tools/eamtp_packet_summarizer.py` | Use read-only packet summaries before router/gateway integration reviews. |
+| M16 | W7TP smoke all checker | done_clean | 100% | low | 657a8a6 Add W7TP smoke all checker | `tools/w7tp_smoke_all.sh` | Run before integration commits to verify mainline tools are still usable. |
 
 ## Integration Rules
 

@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:33:23.772723+00:00`
+- Generated: `2026-05-27T02:34:34.729819+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -513,6 +513,36 @@ python3 tools/eamtp_packet_summarizer.py
 cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/eamtp_packet_summarizer.py
+```
+
+### M16｜W7TP smoke all checker
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `657a8a6 Add W7TP smoke all checker`
+- Next: Run before integration commits to verify mainline tools are still usable.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/w7tp_smoke_all.sh
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+tools/w7tp_smoke_all.sh || true
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/w7tp_smoke_all.sh
 ```
 
 ## Commit Safety

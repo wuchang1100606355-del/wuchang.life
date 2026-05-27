@@ -76,6 +76,9 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
     "M15": [
         "python3 tools/eamtp_packet_summarizer.py"
     ],
+    "M16": [
+        "tools/w7tp_smoke_all.sh || true"
+    ],
 
 }
 

@@ -187,6 +187,15 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use read-only packet summaries before router/gateway integration reviews.",
     },
+    {
+        "id": "M16",
+        "name": "W7TP smoke all checker",
+        "risk": "low",
+        "files": [
+            "tools/w7tp_smoke_all.sh",
+        ],
+        "next": "Run before integration commits to verify mainline tools are still usable.",
+    },
 
 ]
 
