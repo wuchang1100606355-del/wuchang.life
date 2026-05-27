@@ -1,0 +1,71 @@
+{
+  "contract_version": "W7TP-NL-TO-7D-TASK-PACKET/0.1",
+  "domain": "wuchang.life",
+  "mode": "plan_only",
+  "authority": "local_xiaoj_router",
+  "model_call_allowed": false,
+  "cloud_call_allowed": false,
+  "generator_input": [
+    "natural_language_request",
+    "user_context_redacted",
+    "task_domain",
+    "risk_hint"
+  ],
+  "generator_output": [
+    "task_id",
+    "intent_summary",
+    "allowed_files",
+    "forbidden_actions",
+    "validation_commands",
+    "commit_message",
+    "focused_git_status",
+    "evidence_chain_required",
+    "risk_level",
+    "privacy_boundary",
+    "human_review_required"
+  ],
+  "packet_state": [
+    "predicted",
+    "pending_validation",
+    "verified",
+    "rejected",
+    "human_review"
+  ],
+  "prediction_policy": {
+    "prediction_first_allowed": true,
+    "prediction_must_not_claim_verified": true,
+    "validation_required_before_commit": true
+  },
+  "forbidden_payload": [
+    "token",
+    "password",
+    "private_key",
+    "credentials",
+    "raw_member_pii",
+    "user_cloud_key",
+    "router_secret"
+  ],
+  "forbidden_actions": [
+    "read_api_key",
+    "save_api_key",
+    "cloud_api_call",
+    "ssh_remote_command",
+    "router_write",
+    "formal_db_write",
+    "docker_run",
+    "docker_compose_up",
+    "service_restart",
+    "git_add_dot",
+    "git_add_all",
+    "raw_pii_cloud_upload"
+  ],
+  "action_flags": {
+    "model_started": false,
+    "cloud_call": false,
+    "api_key_read": false,
+    "raw_pii_read": false,
+    "secret_saved": false,
+    "ssh": false,
+    "container_start": false
+  }
+}
