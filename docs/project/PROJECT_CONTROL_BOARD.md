@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T05:25:02+00:00`
-- HEAD: `a603de5 Add indexer one-shot compose linter`
+- Generated: `2026-05-27T05:50:16.368881+00:00`
+- HEAD: `aba71a2 Add cloud provider adapter contract`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -32,7 +32,8 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M20 | Multi-agent task card generator | done_clean | 100% | low | 1db1351 Register container offload plan in project board | `tools/task_card_generator.py`<br>`docs/project/TASK_CARDS.md` | Use generated task cards to delegate isolated work to code agents. |
 | M21 | Container server offload plan-only | done_clean | 100% | medium | 1528c34 Add container server offload plan skeleton | `docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md`<br>`configs/containers/container_offload_registry.template.json`<br>`schemas/w7tp_container_offload_registry.schema.json`<br>`tools/container_offload_linter.py` | Use offload registry and linter before moving background containers to pure Linux server nodes. |
 | M22 | Indexer one-shot server job package | done_clean | 100% | medium | 63bbe53 Add indexer one-shot job template | `configs/containers/wuchang_indexer_oneshot_job.template.json`<br>`docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md`<br>`tools/indexer_oneshot_job_linter.py` | Use one-shot job template and linter before moving indexer workload to a pure Linux server. |
-| M23 | Indexer one-shot compose package | done_clean | 100% | medium | a603de5 Add indexer one-shot compose linter | `configs/containers/wuchang_indexer_oneshot.compose.template.yml`<br>`tools/indexer_oneshot_compose_linter.py` | Validate the plan-only compose template before any separately approved server execution. |
+| M23 | Indexer one-shot compose package | done_clean | 100% | medium | 8b9ec66 Add indexer one-shot compose template | `configs/containers/wuchang_indexer_oneshot.compose.template.yml`<br>`tools/indexer_oneshot_compose_linter.py` | Validate the plan-only compose template before any separately approved server execution. |
+| M25 | Tri-party 7D packet and cloud provider adapter bridge | done_clean | 100% | medium | 39c3065 Add tri-party 7D packet language bridge | `docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md`<br>`configs/packets/tri_party_7d_packet.template.json`<br>`schemas/w7tp_tri_party_7d_packet.schema.json`<br>`tools/tri_party_7d_packet_linter.py`<br>`docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md`<br>`configs/cloud/cloud_provider_adapter_contract.template.json`<br>`schemas/w7tp_cloud_provider_adapter_contract.schema.json`<br>`tools/cloud_provider_adapter_contract_linter.py` | Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation. |
 
 ## Integration Rules
 

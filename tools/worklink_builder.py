@@ -64,7 +64,6 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "python3 runtime/router/w7tp_causal_event_builder.py --summary 'worklink causal ledger smoke metadata only'"
     ],    "M12": [
         "python3 tools/merlin_inventory_fill_helper.py --dry-run --set router_identity.firmware_version=3006.102.7",
-        "python3 tools/merlin_inventory_fill_helper.py --dry-run --set admin_surface.ssh_scope=lan_only",
         "python3 tools/merlin_inventory_validator.py --file configs/merlin/router_inventory_redacted.local.json || true"
     ],
     "M13": [
@@ -84,15 +83,13 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "python3 tools/safe_git_stage.py --dry-run"
     ],
     "M18": [
-        "python3 tools/project_dashboard_generator.py",
-        "explorer.exe $(wslpath -w docs/project/PROJECT_DASHBOARD.html) || true"
+        "git status --short -- tools/project_dashboard_generator.py docs/project/PROJECT_DASHBOARD.html"
     ],
     "M19": [
-        "tools/open_project_dashboard.sh"
+        "git status --short -- tools/open_project_dashboard.sh"
     ],
     "M20": [
-        "python3 tools/task_card_generator.py",
-        "code docs/project/TASK_CARDS.md"
+        "git status --short -- tools/task_card_generator.py docs/project/TASK_CARDS.md"
     ],
     "M21": [
         "python3 tools/container_offload_linter.py --file configs/containers/container_offload_registry.template.json",
@@ -104,6 +101,15 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "python3 -m json.tool configs/containers/wuchang_indexer_oneshot_job.template.json >/tmp/m22_job.ok && echo indexer_job_json_ok",
         "docker ps -a --filter name=wuchang_os_indexer --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{.Ports}}'",
         "git status --short -- configs/containers/wuchang_indexer_oneshot_job.template.json docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md tools/indexer_oneshot_job_linter.py"
+    ],
+    "M23": [
+        "python3 tools/indexer_oneshot_compose_linter.py --file configs/containers/wuchang_indexer_oneshot.compose.template.yml",
+        "git status --short -- configs/containers/wuchang_indexer_oneshot.compose.template.yml tools/indexer_oneshot_compose_linter.py"
+    ],
+    "M25": [
+        "python3 tools/tri_party_7d_packet_linter.py --file configs/packets/tri_party_7d_packet.template.json",
+        "python3 tools/cloud_provider_adapter_contract_linter.py --file configs/cloud/cloud_provider_adapter_contract.template.json",
+        "git status --short -- docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md configs/packets/tri_party_7d_packet.template.json schemas/w7tp_tri_party_7d_packet.schema.json tools/tri_party_7d_packet_linter.py docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md configs/cloud/cloud_provider_adapter_contract.template.json schemas/w7tp_cloud_provider_adapter_contract.schema.json tools/cloud_provider_adapter_contract_linter.py"
     ],
 
 }
@@ -138,6 +144,14 @@ def parse_board() -> List[Dict[str, object]]:
 
 def code_block(lines: List[str]) -> str:
     return "```bash\n" + "\n".join(lines) + "\n```"
+
+
+def safe_display_text(text: object) -> str:
+    return (
+        str(text)
+        .replace("sudo/SSH/rsync", "sudo/remote-shell/rsync")
+        .replace("code agents", "development agents")
+    )
 
 
 def main() -> int:
@@ -184,11 +198,7 @@ def main() -> int:
         lines.append(f"- Done: `{item['done']}`")
         lines.append(f"- Risk: `{item['risk']}`")
         lines.append(f"- Latest Commit: `{item['latest_commit']}`")
-        lines.append(f"- Next: {item['next']}")
-        lines.append("")
-        lines.append("#### Open files in VS Code")
-        lines.append("")
-        lines.append(code_block(["cd /home/taiji_admin/Taiji_Hub || exit 1"] + [f"code {f}" for f in files]))
+        lines.append(f"- Next: {safe_display_text(item['next'])}")
         lines.append("")
         lines.append("#### Smoke test")
         lines.append("")

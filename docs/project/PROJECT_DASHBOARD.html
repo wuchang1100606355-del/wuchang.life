@@ -74,9 +74,9 @@ a { color: #93c5fd; }
 <body>
 <header>
 <h1>W7TP / 小J Project Dashboard</h1>
-<div>Generated: <code>2026-05-27T05:25:02+00:00</code></div>
-<div>HEAD: <code>a603de5 Add indexer one-shot compose linter</code></div>
-<div>Items: <code>23</code></div>
+<div>Generated: <code>2026-05-27T05:50:17.393693+00:00</code></div>
+<div>HEAD: <code>aba71a2 Add cloud provider adapter contract</code></div>
+<div>Items: <code>24</code></div>
 </header>
 <main>
 
@@ -734,7 +734,7 @@ git status --short -- configs/containers/wuchang_indexer_oneshot_job.template.js
     <span class="badge">done_clean · 100%</span>
   </div>
   <p><b>Risk:</b> medium</p>
-  <p><b>Commit:</b> <code>a603de5 Add indexer one-shot compose linter</code></p>
+  <p><b>Commit:</b> <code>8b9ec66 Add indexer one-shot compose template</code></p>
   <p><b>Next:</b> Validate the plan-only compose template before any separately approved server execution.</p>
   <details>
     <summary>Canonical files</summary>
@@ -754,6 +754,41 @@ grep -n "M23" -A30 docs/project/WORKLINKS.md
 
 # Git preview
 git status --short -- configs/containers/wuchang_indexer_oneshot.compose.template.yml tools/indexer_oneshot_compose_linter.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M25｜Tri-party 7D packet and cloud provider adapter bridge</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>39c3065 Add tri-party 7D packet language bridge</code></p>
+  <p><b>Next:</b> Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md</code></li><li><code>configs/packets/tri_party_7d_packet.template.json</code></li><li><code>schemas/w7tp_tri_party_7d_packet.schema.json</code></li><li><code>tools/tri_party_7d_packet_linter.py</code></li><li><code>docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md</code></li><li><code>configs/cloud/cloud_provider_adapter_contract.template.json</code></li><li><code>schemas/w7tp_cloud_provider_adapter_contract.schema.json</code></li><li><code>tools/cloud_provider_adapter_contract_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md
+code configs/packets/tri_party_7d_packet.template.json
+code schemas/w7tp_tri_party_7d_packet.schema.json
+code tools/tri_party_7d_packet_linter.py
+code docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md
+code configs/cloud/cloud_provider_adapter_contract.template.json
+code schemas/w7tp_cloud_provider_adapter_contract.schema.json
+code tools/cloud_provider_adapter_contract_linter.py
+
+
+# Worklink section
+grep -n "M25" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md configs/packets/tri_party_7d_packet.template.json schemas/w7tp_tri_party_7d_packet.schema.json tools/tri_party_7d_packet_linter.py docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md configs/cloud/cloud_provider_adapter_contract.template.json schemas/w7tp_cloud_provider_adapter_contract.schema.json tools/cloud_provider_adapter_contract_linter.py</pre>
   </details>
 </section>
 

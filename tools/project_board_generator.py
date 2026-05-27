@@ -259,6 +259,32 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use one-shot job template and linter before moving indexer workload to a pure Linux server.",
     },
+    {
+        "id": "M23",
+        "name": "Indexer one-shot compose package",
+        "risk": "medium",
+        "files": [
+            "configs/containers/wuchang_indexer_oneshot.compose.template.yml",
+            "tools/indexer_oneshot_compose_linter.py",
+        ],
+        "next": "Validate the plan-only compose template before any separately approved server execution.",
+    },
+    {
+        "id": "M25",
+        "name": "Tri-party 7D packet and cloud provider adapter bridge",
+        "risk": "medium",
+        "files": [
+            "docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md",
+            "configs/packets/tri_party_7d_packet.template.json",
+            "schemas/w7tp_tri_party_7d_packet.schema.json",
+            "tools/tri_party_7d_packet_linter.py",
+            "docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md",
+            "configs/cloud/cloud_provider_adapter_contract.template.json",
+            "schemas/w7tp_cloud_provider_adapter_contract.schema.json",
+            "tools/cloud_provider_adapter_contract_linter.py",
+        ],
+        "next": "Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation.",
+    },
 
 ]
 

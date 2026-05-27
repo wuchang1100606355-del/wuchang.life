@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T05:25:02+00:00`
+- Generated: `2026-05-27T05:52:20.057414+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -24,16 +24,6 @@ git diff --name-only
 - Risk: `medium`
 - Latest Commit: `244cea1 Add EAMTP-7D internal intent-state language`
 - Next: Keep as base packet language; extend only through compatible schemas.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md
-code schemas/eamtp_7d_packet.schema.json
-code runtime/router/eamtp_7d_translator.py
-code runtime/dead_letter/eamtp_policy_gate.py
-```
 
 #### Smoke test
 
@@ -61,15 +51,6 @@ git status --short -- \
 - Latest Commit: `d4df60c Add EAMTP router guard dry-run and Merlin router boundary`
 - Next: Expose dry-run route only after gateway adapter review.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md
-code docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md
-code runtime/router/eamtp_router_guard_dryrun.py
-```
-
 #### Smoke test
 
 ```bash
@@ -95,14 +76,6 @@ git status --short -- \
 - Latest Commit: `399724f Add Merlin intent driver plan-only governance`
 - Next: Add more intent classes only as plan-only tickets.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md
-code runtime/router/merlin_intent_driver.py
-```
-
 #### Smoke test
 
 ```bash
@@ -126,14 +99,6 @@ git status --short -- \
 - Risk: `high`
 - Latest Commit: `4184356 Add Merlin apply queue human-review governance`
 - Next: Maintain ticket-only boundary; no router login.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md
-code runtime/router/merlin_apply_queue.py
-```
 
 #### Smoke test
 
@@ -159,14 +124,6 @@ git status --short -- \
 - Latest Commit: `a914329 Add Merlin approval gate record-only governance`
 - Next: Use exact approval phrase; still no automatic execution.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md
-code runtime/router/merlin_approval_gate.py
-```
-
 #### Smoke test
 
 ```bash
@@ -190,14 +147,6 @@ git status --short -- \
 - Risk: `high`
 - Latest Commit: `f9f4e51 Add Merlin human execution checklist generator`
 - Next: Generate manual UI checklist for approved records only.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md
-code runtime/router/merlin_human_execution_checklist.py
-```
 
 #### Smoke test
 
@@ -223,14 +172,6 @@ git status --short -- \
 - Latest Commit: `47fe151 Add Merlin execution result recorder`
 - Next: Record completed / abandoned / failed / observation_only results.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md
-code runtime/router/merlin_execution_result_recorder.py
-```
-
 #### Smoke test
 
 ```bash
@@ -254,15 +195,6 @@ git status --short -- \
 - Risk: `high`
 - Latest Commit: `491b8ab Add Merlin router redacted config inventory spec`
 - Next: Keep local inventory untracked; validate before W7TP use.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md
-code configs/merlin/router_inventory_redacted.template.json
-code configs/merlin/README.md
-```
 
 #### Smoke test
 
@@ -289,16 +221,6 @@ git status --short -- \
 - Latest Commit: `fa54950 Add Merlin redacted inventory validator`
 - Next: Convert only redacted local inventory into pending_review EAMTP.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md
-code tools/merlin_inventory_validator.py
-code docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md
-code tools/merlin_inventory_to_eamtp.py
-```
-
 #### Smoke test
 
 ```bash
@@ -323,18 +245,7 @@ git status --short -- \
 - Done: `100%`
 - Risk: `high`
 - Latest Commit: `b899952 Add W7TP HA mesh plan-only governance`
-- Next: Analyze legacy HA scripts; never execute sudo/SSH/rsync/crontab/iptables.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/W7TP_HA_MESH_PLAN_ONLY.md
-code docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md
-code configs/w7tp/ha_mesh_inventory.template.json
-code schemas/w7tp_ha_mesh_inventory.schema.json
-code tools/ha_mesh_script_analyzer.py
-```
+- Next: Analyze legacy HA scripts; never execute sudo/remote-shell/rsync/crontab/iptables.
 
 #### Smoke test
 
@@ -363,16 +274,6 @@ git status --short -- \
 - Latest Commit: `2338ad1 Add W7TP causal ledger plan-only layer`
 - Next: Use causal packets for audit links; no production finance or Odoo ledger writes.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md
-code schemas/w7tp_causal_event_packet.schema.json
-code runtime/router/w7tp_causal_event_builder.py
-code tools/causal_ledger_text_analyzer.py
-```
-
 #### Smoke test
 
 ```bash
@@ -399,19 +300,11 @@ git status --short -- \
 - Latest Commit: `9830277 Add Merlin redacted inventory fill helper`
 - Next: Use allowlisted --set updates for local redacted inventory; never commit local.json.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/merlin_inventory_fill_helper.py
-```
-
 #### Smoke test
 
 ```bash
 cd /home/taiji_admin/Taiji_Hub || exit 1
 python3 tools/merlin_inventory_fill_helper.py --dry-run --set router_identity.firmware_version=3006.102.7
-python3 tools/merlin_inventory_fill_helper.py --dry-run --set admin_surface.ssh_scope=lan_only
 python3 tools/merlin_inventory_validator.py --file configs/merlin/router_inventory_redacted.local.json || true
 ```
 
@@ -430,13 +323,6 @@ git status --short -- \
 - Risk: `low`
 - Latest Commit: `60e656c Add readonly service health checker`
 - Next: Use GET-only health summaries before deciding whether a service needs action.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/service_health_readonly.py
-```
 
 #### Smoke test
 
@@ -460,14 +346,6 @@ git status --short -- \
 - Risk: `low`
 - Latest Commit: `5e6ff90 Add runtime shadow inventory tool`
 - Next: Use inventory-only reports before any cleanup or archive decision.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/runtime_shadow_inventory.py
-code docs/project/RUNTIME_SHADOW_INVENTORY.md
-```
 
 #### Smoke test
 
@@ -493,13 +371,6 @@ git status --short -- \
 - Latest Commit: `7bb86c3 Add EAMTP packet summarizer`
 - Next: Use read-only packet summaries before router/gateway integration reviews.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/eamtp_packet_summarizer.py
-```
-
 #### Smoke test
 
 ```bash
@@ -523,13 +394,6 @@ git status --short -- \
 - Latest Commit: `657a8a6 Add W7TP smoke all checker`
 - Next: Run before integration commits to verify mainline tools are still usable.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/w7tp_smoke_all.sh
-```
-
 #### Smoke test
 
 ```bash
@@ -552,15 +416,6 @@ git status --short -- \
 - Risk: `low`
 - Latest Commit: `c14a9da Add safe git stage allowlist tool`
 - Next: Use before multi-agent commits to preview/stage only allowlisted canonical files.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/safe_git_stage.py
-code docs/project/git_stage_allowlist.txt
-code tests/test_safe_git_stage.py
-```
 
 #### Smoke test
 
@@ -588,20 +443,11 @@ git status --short -- \
 - Latest Commit: `447f6c1 Add project dashboard generator`
 - Next: Open local dashboard to copy task commands and inspect mainline status.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/project_dashboard_generator.py
-code docs/project/PROJECT_DASHBOARD.html
-```
-
 #### Smoke test
 
 ```bash
 cd /home/taiji_admin/Taiji_Hub || exit 1
-python3 tools/project_dashboard_generator.py
-explorer.exe $(wslpath -w docs/project/PROJECT_DASHBOARD.html) || true
+git status --short -- tools/project_dashboard_generator.py docs/project/PROJECT_DASHBOARD.html
 ```
 
 #### Git preview for this item
@@ -621,18 +467,11 @@ git status --short -- \
 - Latest Commit: `59a2880 Add project dashboard launcher`
 - Next: Use this launcher to regenerate and open the local project dashboard.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/open_project_dashboard.sh
-```
-
 #### Smoke test
 
 ```bash
 cd /home/taiji_admin/Taiji_Hub || exit 1
-tools/open_project_dashboard.sh
+git status --short -- tools/open_project_dashboard.sh
 ```
 
 #### Git preview for this item
@@ -649,22 +488,13 @@ git status --short -- \
 - Done: `100%`
 - Risk: `low`
 - Latest Commit: `1db1351 Register container offload plan in project board`
-- Next: Use generated task cards to delegate isolated work to code agents.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code tools/task_card_generator.py
-code docs/project/TASK_CARDS.md
-```
+- Next: Use generated task cards to delegate isolated work to development agents.
 
 #### Smoke test
 
 ```bash
 cd /home/taiji_admin/Taiji_Hub || exit 1
-python3 tools/task_card_generator.py
-code docs/project/TASK_CARDS.md
+git status --short -- tools/task_card_generator.py docs/project/TASK_CARDS.md
 ```
 
 #### Git preview for this item
@@ -683,16 +513,6 @@ git status --short -- \
 - Risk: `medium`
 - Latest Commit: `1528c34 Add container server offload plan skeleton`
 - Next: Use offload registry and linter before moving background containers to pure Linux server nodes.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md
-code configs/containers/container_offload_registry.template.json
-code schemas/w7tp_container_offload_registry.schema.json
-code tools/container_offload_linter.py
-```
 
 #### Smoke test
 
@@ -722,15 +542,6 @@ git status --short -- \
 - Latest Commit: `63bbe53 Add indexer one-shot job template`
 - Next: Use one-shot job template and linter before moving indexer workload to a pure Linux server.
 
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code configs/containers/wuchang_indexer_oneshot_job.template.json
-code docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md
-code tools/indexer_oneshot_job_linter.py
-```
-
 #### Smoke test
 
 ```bash
@@ -756,22 +567,13 @@ git status --short -- \
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `medium`
-- Latest Commit: `a603de5 Add indexer one-shot compose linter`
+- Latest Commit: `8b9ec66 Add indexer one-shot compose template`
 - Next: Validate the plan-only compose template before any separately approved server execution.
-
-#### Open files in VS Code
-
-```bash
-cd /home/taiji_admin/Taiji_Hub || exit 1
-code configs/containers/wuchang_indexer_oneshot.compose.template.yml
-code tools/indexer_oneshot_compose_linter.py
-```
 
 #### Smoke test
 
 ```bash
 cd /home/taiji_admin/Taiji_Hub || exit 1
-python3 -m py_compile tools/indexer_oneshot_compose_linter.py
 python3 tools/indexer_oneshot_compose_linter.py --file configs/containers/wuchang_indexer_oneshot.compose.template.yml
 git status --short -- configs/containers/wuchang_indexer_oneshot.compose.template.yml tools/indexer_oneshot_compose_linter.py
 ```
@@ -783,6 +585,38 @@ cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   configs/containers/wuchang_indexer_oneshot.compose.template.yml \
   tools/indexer_oneshot_compose_linter.py
+```
+
+### M25｜Tri-party 7D packet and cloud provider adapter bridge
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Latest Commit: `39c3065 Add tri-party 7D packet language bridge`
+- Next: Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation.
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/tri_party_7d_packet_linter.py --file configs/packets/tri_party_7d_packet.template.json
+python3 tools/cloud_provider_adapter_contract_linter.py --file configs/cloud/cloud_provider_adapter_contract.template.json
+git status --short -- docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md configs/packets/tri_party_7d_packet.template.json schemas/w7tp_tri_party_7d_packet.schema.json tools/tri_party_7d_packet_linter.py docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md configs/cloud/cloud_provider_adapter_contract.template.json schemas/w7tp_cloud_provider_adapter_contract.schema.json tools/cloud_provider_adapter_contract_linter.py
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md \
+  configs/packets/tri_party_7d_packet.template.json \
+  schemas/w7tp_tri_party_7d_packet.schema.json \
+  tools/tri_party_7d_packet_linter.py \
+  docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md \
+  configs/cloud/cloud_provider_adapter_contract.template.json \
+  schemas/w7tp_cloud_provider_adapter_contract.schema.json \
+  tools/cloud_provider_adapter_contract_linter.py
 ```
 
 ## Commit Safety

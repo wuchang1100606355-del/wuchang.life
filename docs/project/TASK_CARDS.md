@@ -1,7 +1,7 @@
 # Task Cards
 
-- Generated: `2026-05-27T05:25:02+00:00`
-- Count: `23`
+- Generated: `2026-05-27T05:50:17.420913+00:00`
+- Count: `24`
 
 ## Rules
 
@@ -924,7 +924,7 @@ Indexer one-shot server job package
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `medium`
-- Commit: `a603de5 Add indexer one-shot compose linter`
+- Commit: `8b9ec66 Add indexer one-shot compose template`
 - Next: Validate the plan-only compose template before any separately approved server execution.
 
 ### Allowed files
@@ -952,6 +952,64 @@ Indexer one-shot compose package
 允許讀取 / 修改：
 - configs/containers/wuchang_indexer_oneshot.compose.template.yml
 - tools/indexer_oneshot_compose_linter.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M25_tri_party_7d_packet_and_cloud_provider_adapter_bri
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `39c3065 Add tri-party 7D packet language bridge`
+- Next: Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation.
+
+### Allowed files
+
+- docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md
+- configs/packets/tri_party_7d_packet.template.json
+- schemas/w7tp_tri_party_7d_packet.schema.json
+- tools/tri_party_7d_packet_linter.py
+- docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md
+- configs/cloud/cloud_provider_adapter_contract.template.json
+- schemas/w7tp_cloud_provider_adapter_contract.schema.json
+- tools/cloud_provider_adapter_contract_linter.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md \
+  configs/packets/tri_party_7d_packet.template.json \
+  schemas/w7tp_tri_party_7d_packet.schema.json \
+  tools/tri_party_7d_packet_linter.py \
+  docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md \
+  configs/cloud/cloud_provider_adapter_contract.template.json \
+  schemas/w7tp_cloud_provider_adapter_contract.schema.json \
+  tools/cloud_provider_adapter_contract_linter.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M25_tri_party_7d_packet_and_cloud_provider_adapter_bri
+
+目標：
+Tri-party 7D packet and cloud provider adapter bridge
+
+允許讀取 / 修改：
+- docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md
+- configs/packets/tri_party_7d_packet.template.json
+- schemas/w7tp_tri_party_7d_packet.schema.json
+- tools/tri_party_7d_packet_linter.py
+- docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md
+- configs/cloud/cloud_provider_adapter_contract.template.json
+- schemas/w7tp_cloud_provider_adapter_contract.schema.json
+- tools/cloud_provider_adapter_contract_linter.py
 
 規則：
 本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
