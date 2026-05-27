@@ -1,114 +1,145 @@
 {
-"registry_version": "W7TP-CONTAINER-OFFLOAD/0.1",
-"domain": "wuchang.life",
-"mode": "plan_only",
-"no_ssh": true,
-"no_restart": true,
-"no_container_move": true,
-"containers": [
-{
-"name": "wuchang_os_indexer",
-"image": "w7tp-indexer:latest",
-"current_host": "msi",
-"target_host": "taiji01_or_pure_linux_worker",
-"class": "server_preferred",
-"execution_mode": "one_shot_or_scheduled",
-"restart_policy_recommended": "no",
-"risk": "medium",
-"reason": "Observed restart loop with ExitCode 0 under unless-stopped. Should not run as always-on daemon unless watcher.py is redesigned.",
-"allowed_mounts": [
-"readonly project snapshot",
-"runtime/jobs:ro",
-"runtime/results:rw"
-],
-"forbidden_mounts": [
-"/",
-".env",
-"keys",
-"configs/merlin/router_inventory_redacted.local.json",
-"Taiji_Odoo/postgres_data",
-"raw_member_data"
-],
-"allowed_tasks": [
-"index_once",
-"readonly_scan",
-"summary_report"
-],
-"forbidden_tasks": [
-"git_commit",
-"router_write",
-"ssh_remote_command",
-"credential_read",
-"formal_db_write"
-]
-},
-{
-"name": "wuchang_os_odoo_18",
-"image": "odoo:18.0",
-"current_host": "msi",
-"target_host": "pure_linux_server_optional",
-"class": "always_on_server",
-"execution_mode": "daemon_staging",
-"restart_policy_recommended": "unless-stopped",
-"risk": "high",
-"reason": "Odoo staging can move later, but database and addons need backup and governance review first.",
-"allowed_tasks": [
-"staging_service"
-],
-"forbidden_tasks": [
-"production_write_without_review",
-"raw_member_pii_cloud",
-"credential_export"
-]
-},
-{
-"name": "wuchang_os_pg",
-"image": "postgres:15",
-"current_host": "msi",
-"target_host": "pure_linux_server_optional",
-"class": "always_on_server",
-"execution_mode": "daemon_staging",
-"restart_policy_recommended": "unless-stopped",
-"risk": "high",
-"reason": "Postgres can move only after backup and data boundary review.",
-"forbidden_tasks": [
-"unreviewed_data_migration",
-"raw_member_pii_remote",
-"credential_export"
-]
-},
-{
-"name": "wuchang_gpu_brain",
-"image": "ollama/ollama:latest",
-"current_host": "msi",
-"target_host": "local_or_gpu_worker",
-"class": "local_control_or_gpu_worker",
-"execution_mode": "attended_boost_or_model_service",
-"restart_policy_recommended": "unless-stopped",
-"risk": "medium",
-"reason": "MSI has RTX GPU and should remain available for attended boost. Server GPU worker can be added later."
-},
-{
-"name": "taiji_claw_safe",
-"image": "taiji_claw_safe-taiji_claw_safe",
-"current_host": "msi",
-"target_host": "local_only_for_now",
-"class": "local_control",
-"execution_mode": "safe_api",
-"restart_policy_recommended": "unless-stopped",
-"risk": "high",
-"reason": "Control-bound service. Keep local until boundary is audited."
-},
-{
-"name": "taiji_voice_gateway",
-"image": "taiji_voice_gateway:local",
-"current_host": "msi",
-"target_host": "server_optional",
-"class": "server_preferred_later",
-"execution_mode": "gateway_service",
-"restart_policy_recommended": "unless-stopped",
-"risk": "medium",
-"reason": "Can move later if voice/audio routing and privacy boundaries are defined."
-}
-]
+  "registry_version": "W7TP-CONTAINER-OFFLOAD/0.1",
+  "domain": "wuchang.life",
+  "mode": "plan_only",
+  "no_ssh": true,
+  "no_restart": true,
+  "no_container_move": true,
+  "containers": [
+    {
+      "name": "wuchang_os_indexer",
+      "image": "w7tp-indexer:latest",
+      "current_host": "msi",
+      "target_host": "taiji01_or_pure_linux_worker",
+      "class": "server_preferred",
+      "execution_mode": "one_shot_or_scheduled",
+      "restart_policy_recommended": "no",
+      "risk": "medium",
+      "reason": "Observed restart loop with ExitCode 0 under unless-stopped. Should not run as always-on daemon unless watcher.py is redesigned.",
+      "allowed_mounts": [
+        "readonly project snapshot",
+        "runtime/jobs:ro",
+        "runtime/results:rw"
+      ],
+      "forbidden_mounts": [
+        "/",
+        ".env",
+        "keys",
+        "configs/merlin/router_inventory_redacted.local.json",
+        "Taiji_Odoo/postgres_data",
+        "raw_member_data"
+      ],
+      "allowed_tasks": [
+        "index_once",
+        "readonly_scan",
+        "summary_report"
+      ],
+      "forbidden_tasks": [
+        "git_commit",
+        "router_write",
+        "ssh_remote_command",
+        "credential_read",
+        "formal_db_write"
+      ]
+    },
+    {
+      "name": "wuchang_os_odoo_18",
+      "image": "odoo:18.0",
+      "current_host": "msi",
+      "target_host": "pure_linux_server_optional",
+      "class": "always_on_server",
+      "execution_mode": "daemon_staging",
+      "restart_policy_recommended": "unless-stopped",
+      "risk": "high",
+      "reason": "Odoo staging can move later, but database and addons need backup and governance review first.",
+      "allowed_tasks": [
+        "staging_service"
+      ],
+      "forbidden_tasks": [
+        "production_write_without_review",
+        "raw_member_pii_cloud",
+        "credential_export",
+        "git_commit",
+        "router_write",
+        "ssh_remote_command",
+        "credential_read",
+        "formal_db_write"
+      ]
+    },
+    {
+      "name": "wuchang_os_pg",
+      "image": "postgres:15",
+      "current_host": "msi",
+      "target_host": "pure_linux_server_optional",
+      "class": "always_on_server",
+      "execution_mode": "daemon_staging",
+      "restart_policy_recommended": "unless-stopped",
+      "risk": "high",
+      "reason": "Postgres can move only after backup and data boundary review.",
+      "forbidden_tasks": [
+        "unreviewed_data_migration",
+        "raw_member_pii_remote",
+        "credential_export",
+        "git_commit",
+        "router_write",
+        "ssh_remote_command",
+        "credential_read",
+        "formal_db_write"
+      ]
+    },
+    {
+      "name": "wuchang_gpu_brain",
+      "image": "ollama/ollama:latest",
+      "current_host": "msi",
+      "target_host": "local_or_gpu_worker",
+      "class": "local_control_or_gpu_worker",
+      "execution_mode": "attended_boost_or_model_service",
+      "restart_policy_recommended": "unless-stopped",
+      "risk": "medium",
+      "reason": "MSI has RTX GPU and should remain available for attended boost. Server GPU worker can be added later.",
+      "forbidden_tasks": [
+        "git_commit",
+        "router_write",
+        "ssh_remote_command",
+        "credential_read",
+        "formal_db_write"
+      ]
+    },
+    {
+      "name": "taiji_claw_safe",
+      "image": "taiji_claw_safe-taiji_claw_safe",
+      "current_host": "msi",
+      "target_host": "local_only_for_now",
+      "class": "local_control",
+      "execution_mode": "safe_api",
+      "restart_policy_recommended": "unless-stopped",
+      "risk": "high",
+      "reason": "Control-bound service. Keep local until boundary is audited.",
+      "forbidden_tasks": [
+        "git_commit",
+        "router_write",
+        "ssh_remote_command",
+        "credential_read",
+        "formal_db_write"
+      ]
+    },
+    {
+      "name": "taiji_voice_gateway",
+      "image": "taiji_voice_gateway:local",
+      "current_host": "msi",
+      "target_host": "server_optional",
+      "class": "server_preferred_later",
+      "execution_mode": "gateway_service",
+      "restart_policy_recommended": "unless-stopped",
+      "risk": "medium",
+      "reason": "Can move later if voice/audio routing and privacy boundaries are defined.",
+      "forbidden_tasks": [
+        "git_commit",
+        "router_write",
+        "ssh_remote_command",
+        "credential_read",
+        "formal_db_write"
+      ]
+    }
+  ]
 }
