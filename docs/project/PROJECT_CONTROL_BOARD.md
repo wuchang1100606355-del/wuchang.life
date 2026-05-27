@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T05:50:16.368881+00:00`
-- HEAD: `aba71a2 Add cloud provider adapter contract`
+- Generated: `2026-05-27T06:01:22.675509+00:00`
+- HEAD: `1b4d24b Add local XiaoJ cloud API broker dry-run`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -34,6 +34,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M22 | Indexer one-shot server job package | done_clean | 100% | medium | 63bbe53 Add indexer one-shot job template | `configs/containers/wuchang_indexer_oneshot_job.template.json`<br>`docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md`<br>`tools/indexer_oneshot_job_linter.py` | Use one-shot job template and linter before moving indexer workload to a pure Linux server. |
 | M23 | Indexer one-shot compose package | done_clean | 100% | medium | 8b9ec66 Add indexer one-shot compose template | `configs/containers/wuchang_indexer_oneshot.compose.template.yml`<br>`tools/indexer_oneshot_compose_linter.py` | Validate the plan-only compose template before any separately approved server execution. |
 | M25 | Tri-party 7D packet and cloud provider adapter bridge | done_clean | 100% | medium | 39c3065 Add tri-party 7D packet language bridge | `docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md`<br>`configs/packets/tri_party_7d_packet.template.json`<br>`schemas/w7tp_tri_party_7d_packet.schema.json`<br>`tools/tri_party_7d_packet_linter.py`<br>`docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md`<br>`configs/cloud/cloud_provider_adapter_contract.template.json`<br>`schemas/w7tp_cloud_provider_adapter_contract.schema.json`<br>`tools/cloud_provider_adapter_contract_linter.py` | Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation. |
+| M26 | Local XiaoJ cloud API broker dry-run | done_clean | 100% | medium | 1b4d24b Add local XiaoJ cloud API broker dry-run | `docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md`<br>`configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json`<br>`schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json`<br>`tools/local_xiaoj_cloud_api_broker_dryrun_linter.py` | Use dry-run broker policy before any real cloud API call implementation. |
 
 ## Integration Rules
 

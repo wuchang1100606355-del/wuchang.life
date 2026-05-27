@@ -111,6 +111,11 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "python3 tools/cloud_provider_adapter_contract_linter.py --file configs/cloud/cloud_provider_adapter_contract.template.json",
         "git status --short -- docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md configs/packets/tri_party_7d_packet.template.json schemas/w7tp_tri_party_7d_packet.schema.json tools/tri_party_7d_packet_linter.py docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md configs/cloud/cloud_provider_adapter_contract.template.json schemas/w7tp_cloud_provider_adapter_contract.schema.json tools/cloud_provider_adapter_contract_linter.py"
     ],
+    "M26": [
+        "python3 tools/local_xiaoj_cloud_api_broker_dryrun_linter.py --file configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json",
+        "python3 tools/cloud_provider_adapter_contract_linter.py --file configs/cloud/cloud_provider_adapter_contract.template.json",
+        "git status --short -- docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json tools/local_xiaoj_cloud_api_broker_dryrun_linter.py"
+    ],
 
 }
 

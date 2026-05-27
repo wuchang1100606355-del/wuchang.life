@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T05:52:20.057414+00:00`
+- Generated: `2026-05-27T06:01:23.697491+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -617,6 +617,34 @@ git status --short -- \
   configs/cloud/cloud_provider_adapter_contract.template.json \
   schemas/w7tp_cloud_provider_adapter_contract.schema.json \
   tools/cloud_provider_adapter_contract_linter.py
+```
+
+### M26｜Local XiaoJ cloud API broker dry-run
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Latest Commit: `1b4d24b Add local XiaoJ cloud API broker dry-run`
+- Next: Use dry-run broker policy before any real cloud API call implementation.
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/local_xiaoj_cloud_api_broker_dryrun_linter.py --file configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json
+python3 tools/cloud_provider_adapter_contract_linter.py --file configs/cloud/cloud_provider_adapter_contract.template.json
+git status --short -- docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json tools/local_xiaoj_cloud_api_broker_dryrun_linter.py
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md \
+  configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json \
+  schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json \
+  tools/local_xiaoj_cloud_api_broker_dryrun_linter.py
 ```
 
 ## Commit Safety

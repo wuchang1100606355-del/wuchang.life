@@ -285,6 +285,18 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation.",
     },
+    {
+        "id": "M26",
+        "name": "Local XiaoJ cloud API broker dry-run",
+        "risk": "medium",
+        "files": [
+            "docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md",
+            "configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json",
+            "schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json",
+            "tools/local_xiaoj_cloud_api_broker_dryrun_linter.py",
+        ],
+        "next": "Use dry-run broker policy before any real cloud API call implementation.",
+    },
 
 ]
 

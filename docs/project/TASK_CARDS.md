@@ -1,7 +1,7 @@
 # Task Cards
 
-- Generated: `2026-05-27T05:50:17.420913+00:00`
-- Count: `24`
+- Generated: `2026-05-27T06:01:23.750159+00:00`
+- Count: `25`
 
 ## Rules
 
@@ -1010,6 +1010,52 @@ Tri-party 7D packet and cloud provider adapter bridge
 - configs/cloud/cloud_provider_adapter_contract.template.json
 - schemas/w7tp_cloud_provider_adapter_contract.schema.json
 - tools/cloud_provider_adapter_contract_linter.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M26_local_xiaoj_cloud_api_broker_dry_run
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `1b4d24b Add local XiaoJ cloud API broker dry-run`
+- Next: Use dry-run broker policy before any real cloud API call implementation.
+
+### Allowed files
+
+- docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md
+- configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json
+- schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json
+- tools/local_xiaoj_cloud_api_broker_dryrun_linter.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md \
+  configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json \
+  schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json \
+  tools/local_xiaoj_cloud_api_broker_dryrun_linter.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M26_local_xiaoj_cloud_api_broker_dry_run
+
+目標：
+Local XiaoJ cloud API broker dry-run
+
+允許讀取 / 修改：
+- docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md
+- configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json
+- schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json
+- tools/local_xiaoj_cloud_api_broker_dryrun_linter.py
 
 規則：
 本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
