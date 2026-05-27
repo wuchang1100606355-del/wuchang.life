@@ -74,9 +74,9 @@ a { color: #93c5fd; }
 <body>
 <header>
 <h1>W7TP / 小J Project Dashboard</h1>
-<div>Generated: <code>2026-05-27T02:38:18.701424+00:00</code></div>
-<div>HEAD: <code>d15a4ec Register safe git stage tool in project board</code></div>
-<div>Items: <code>17</code></div>
+<div>Generated: <code>2026-05-27T02:38:19.371588+00:00</code></div>
+<div>HEAD: <code>447f6c1 Add project dashboard generator</code></div>
+<div>Items: <code>18</code></div>
 </header>
 <main>
 
@@ -578,6 +578,35 @@ grep -n "M17" -A30 docs/project/WORKLINKS.md
 
 # Git preview
 git status --short -- tools/safe_git_stage.py docs/project/git_stage_allowlist.txt tests/test_safe_git_stage.py</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M18｜Project dashboard HTML generator</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>447f6c1 Add project dashboard generator</code></p>
+  <p><b>Next:</b> Open local dashboard to copy task commands and inspect mainline status.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/project_dashboard_generator.py</code></li><li><code>docs/project/PROJECT_DASHBOARD.html</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/project_dashboard_generator.py
+code docs/project/PROJECT_DASHBOARD.html
+
+
+# Worklink section
+grep -n "M18" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/project_dashboard_generator.py docs/project/PROJECT_DASHBOARD.html</pre>
   </details>
 </section>
 

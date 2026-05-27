@@ -207,6 +207,16 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use before multi-agent commits to preview/stage only allowlisted canonical files.",
     },
+    {
+        "id": "M18",
+        "name": "Project dashboard HTML generator",
+        "risk": "low",
+        "files": [
+            "tools/project_dashboard_generator.py",
+            "docs/project/PROJECT_DASHBOARD.html",
+        ],
+        "next": "Open local dashboard to copy task commands and inspect mainline status.",
+    },
 
 ]
 

@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:35:31.223598+00:00`
+- Generated: `2026-05-27T02:38:19.345368+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -578,6 +578,39 @@ git status --short -- \
   tools/safe_git_stage.py \
   docs/project/git_stage_allowlist.txt \
   tests/test_safe_git_stage.py
+```
+
+### M18｜Project dashboard HTML generator
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `447f6c1 Add project dashboard generator`
+- Next: Open local dashboard to copy task commands and inspect mainline status.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/project_dashboard_generator.py
+code docs/project/PROJECT_DASHBOARD.html
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/project_dashboard_generator.py
+explorer.exe $(wslpath -w docs/project/PROJECT_DASHBOARD.html) || true
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/project_dashboard_generator.py \
+  docs/project/PROJECT_DASHBOARD.html
 ```
 
 ## Commit Safety

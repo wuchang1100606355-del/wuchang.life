@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T02:35:30.635309+00:00`
-- HEAD: `c14a9da Add safe git stage allowlist tool`
+- Generated: `2026-05-27T02:38:18.815810+00:00`
+- HEAD: `447f6c1 Add project dashboard generator`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -27,6 +27,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M15 | EAMTP packet summarizer | done_clean | 100% | low | 7bb86c3 Add EAMTP packet summarizer | `tools/eamtp_packet_summarizer.py` | Use read-only packet summaries before router/gateway integration reviews. |
 | M16 | W7TP smoke all checker | done_clean | 100% | low | 657a8a6 Add W7TP smoke all checker | `tools/w7tp_smoke_all.sh` | Run before integration commits to verify mainline tools are still usable. |
 | M17 | Safe git stage allowlist tool | done_clean | 100% | low | c14a9da Add safe git stage allowlist tool | `tools/safe_git_stage.py`<br>`docs/project/git_stage_allowlist.txt`<br>`tests/test_safe_git_stage.py` | Use before multi-agent commits to preview/stage only allowlisted canonical files. |
+| M18 | Project dashboard HTML generator | done_clean | 100% | low | 447f6c1 Add project dashboard generator | `tools/project_dashboard_generator.py`<br>`docs/project/PROJECT_DASHBOARD.html` | Open local dashboard to copy task commands and inspect mainline status. |
 
 ## Integration Rules
 

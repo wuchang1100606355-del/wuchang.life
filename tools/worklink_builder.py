@@ -83,6 +83,10 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "python3 -m unittest tests/test_safe_git_stage.py -v",
         "python3 tools/safe_git_stage.py --dry-run"
     ],
+    "M18": [
+        "python3 tools/project_dashboard_generator.py",
+        "explorer.exe $(wslpath -w docs/project/PROJECT_DASHBOARD.html) || true"
+    ],
 
 }
 
