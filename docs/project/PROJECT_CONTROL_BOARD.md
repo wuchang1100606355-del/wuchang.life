@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T02:34:34.208994+00:00`
-- HEAD: `657a8a6 Add W7TP smoke all checker`
+- Generated: `2026-05-27T02:35:30.635309+00:00`
+- HEAD: `c14a9da Add safe git stage allowlist tool`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
@@ -26,6 +26,7 @@ Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 | M14 | Runtime shadow inventory | done_clean | 100% | low | 5e6ff90 Add runtime shadow inventory tool | `tools/runtime_shadow_inventory.py`<br>`docs/project/RUNTIME_SHADOW_INVENTORY.md` | Use inventory-only reports before any cleanup or archive decision. |
 | M15 | EAMTP packet summarizer | done_clean | 100% | low | 7bb86c3 Add EAMTP packet summarizer | `tools/eamtp_packet_summarizer.py` | Use read-only packet summaries before router/gateway integration reviews. |
 | M16 | W7TP smoke all checker | done_clean | 100% | low | 657a8a6 Add W7TP smoke all checker | `tools/w7tp_smoke_all.sh` | Run before integration commits to verify mainline tools are still usable. |
+| M17 | Safe git stage allowlist tool | done_clean | 100% | low | c14a9da Add safe git stage allowlist tool | `tools/safe_git_stage.py`<br>`docs/project/git_stage_allowlist.txt`<br>`tests/test_safe_git_stage.py` | Use before multi-agent commits to preview/stage only allowlisted canonical files. |
 
 ## Integration Rules
 

@@ -196,6 +196,17 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Run before integration commits to verify mainline tools are still usable.",
     },
+    {
+        "id": "M17",
+        "name": "Safe git stage allowlist tool",
+        "risk": "low",
+        "files": [
+            "tools/safe_git_stage.py",
+            "docs/project/git_stage_allowlist.txt",
+            "tests/test_safe_git_stage.py",
+        ],
+        "next": "Use before multi-agent commits to preview/stage only allowlisted canonical files.",
+    },
 
 ]
 

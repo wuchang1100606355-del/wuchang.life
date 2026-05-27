@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:34:34.729819+00:00`
+- Generated: `2026-05-27T02:35:31.223598+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -543,6 +543,41 @@ tools/w7tp_smoke_all.sh || true
 cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/w7tp_smoke_all.sh
+```
+
+### M17｜Safe git stage allowlist tool
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `c14a9da Add safe git stage allowlist tool`
+- Next: Use before multi-agent commits to preview/stage only allowlisted canonical files.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/safe_git_stage.py
+code docs/project/git_stage_allowlist.txt
+code tests/test_safe_git_stage.py
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 -m unittest tests/test_safe_git_stage.py -v
+python3 tools/safe_git_stage.py --dry-run
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/safe_git_stage.py \
+  docs/project/git_stage_allowlist.txt \
+  tests/test_safe_git_stage.py
 ```
 
 ## Commit Safety

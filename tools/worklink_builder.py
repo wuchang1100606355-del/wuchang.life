@@ -79,6 +79,10 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
     "M16": [
         "tools/w7tp_smoke_all.sh || true"
     ],
+    "M17": [
+        "python3 -m unittest tests/test_safe_git_stage.py -v",
+        "python3 tools/safe_git_stage.py --dry-run"
+    ],
 
 }
 
