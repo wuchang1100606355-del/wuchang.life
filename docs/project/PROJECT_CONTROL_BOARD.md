@@ -2,8 +2,8 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline anchors
 
-- Generated: `2026-05-27T02:21:15.647682+00:00`
-- HEAD: `2338ad1 Add W7TP causal ledger plan-only layer`
+- Generated: `2026-05-27T02:27:55.585205+00:00`
+- HEAD: `9830277 Add Merlin redacted inventory fill helper`
 - Rule: runtime reports/proofs/queues are not canonical commit targets.
 
 ## Mainline Board
