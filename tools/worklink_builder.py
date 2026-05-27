@@ -90,6 +90,10 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
     "M19": [
         "tools/open_project_dashboard.sh"
     ],
+    "M20": [
+        "python3 tools/task_card_generator.py",
+        "code docs/project/TASK_CARDS.md"
+    ],
 
 }
 

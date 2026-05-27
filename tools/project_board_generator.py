@@ -226,6 +226,16 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use this launcher to regenerate and open the local project dashboard.",
     },
+    {
+        "id": "M20",
+        "name": "Multi-agent task card generator",
+        "risk": "low",
+        "files": [
+            "tools/task_card_generator.py",
+            "docs/project/TASK_CARDS.md",
+        ],
+        "next": "Use generated task cards to delegate isolated work to code agents.",
+    },
 
 ]
 

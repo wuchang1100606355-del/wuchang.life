@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T02:40:01.598864+00:00`
+- Generated: `2026-05-27T03:09:28.127952+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -582,7 +582,7 @@ git status --short -- \
 
 ### M18｜Project dashboard HTML generator
 
-- Status: `done_clean`
+- Status: `done_dirty`
 - Done: `100%`
 - Risk: `low`
 - Latest Commit: `447f6c1 Add project dashboard generator`
@@ -641,6 +641,39 @@ tools/open_project_dashboard.sh
 cd /home/taiji_admin/Taiji_Hub || exit 1
 git status --short -- \
   tools/open_project_dashboard.sh
+```
+
+### M20｜Multi-agent task card generator
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `low`
+- Latest Commit: `718208d Add multi-agent task card generator`
+- Next: Use generated task cards to delegate isolated work to code agents.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code tools/task_card_generator.py
+code docs/project/TASK_CARDS.md
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/task_card_generator.py
+code docs/project/TASK_CARDS.md
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  tools/task_card_generator.py \
+  docs/project/TASK_CARDS.md
 ```
 
 ## Commit Safety

@@ -74,9 +74,9 @@ a { color: #93c5fd; }
 <body>
 <header>
 <h1>W7TP / 小J Project Dashboard</h1>
-<div>Generated: <code>2026-05-27T02:40:01.629570+00:00</code></div>
-<div>HEAD: <code>59a2880 Add project dashboard launcher</code></div>
-<div>Items: <code>19</code></div>
+<div>Generated: <code>2026-05-27T03:09:28.629109+00:00</code></div>
+<div>HEAD: <code>718208d Add multi-agent task card generator</code></div>
+<div>Items: <code>20</code></div>
 </header>
 <main>
 
@@ -584,7 +584,7 @@ git status --short -- tools/safe_git_stage.py docs/project/git_stage_allowlist.t
 <section class="card risk-low">
   <div class="row">
     <h2>M18｜Project dashboard HTML generator</h2>
-    <span class="badge">done_clean · 100%</span>
+    <span class="badge">done_dirty · 100%</span>
   </div>
   <p><b>Risk:</b> low</p>
   <p><b>Commit:</b> <code>447f6c1 Add project dashboard generator</code></p>
@@ -635,6 +635,35 @@ grep -n "M19" -A30 docs/project/WORKLINKS.md
 
 # Git preview
 git status --short -- tools/open_project_dashboard.sh</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M20｜Multi-agent task card generator</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>718208d Add multi-agent task card generator</code></p>
+  <p><b>Next:</b> Use generated task cards to delegate isolated work to code agents.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/task_card_generator.py</code></li><li><code>docs/project/TASK_CARDS.md</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/task_card_generator.py
+code docs/project/TASK_CARDS.md
+
+
+# Worklink section
+grep -n "M20" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/task_card_generator.py docs/project/TASK_CARDS.md</pre>
   </details>
 </section>
 
