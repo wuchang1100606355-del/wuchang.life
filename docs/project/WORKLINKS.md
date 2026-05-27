@@ -2,7 +2,7 @@
 
 Scope: Wuchang Smart Cloud / XiaoJ / W7TP mainline work entrypoints
 
-- Generated: `2026-05-27T04:34:25.568455+00:00`
+- Generated: `2026-05-27T05:05:39.958698+00:00`
 - Source: `/home/taiji_admin/Taiji_Hub/docs/project/PROJECT_CONTROL_BOARD.md`
 - Rule: copy one block at a time; do not run unrelated task blocks together.
 
@@ -648,7 +648,7 @@ git status --short -- \
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `low`
-- Latest Commit: `70ab9aa Fix task cards markdown newline generation`
+- Latest Commit: `1db1351 Register container offload plan in project board`
 - Next: Use generated task cards to delegate isolated work to code agents.
 
 #### Open files in VS Code
@@ -712,6 +712,43 @@ git status --short -- \
   configs/containers/container_offload_registry.template.json \
   schemas/w7tp_container_offload_registry.schema.json \
   tools/container_offload_linter.py
+```
+
+### M22｜Indexer one-shot server job package
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Latest Commit: `63bbe53 Add indexer one-shot job template`
+- Next: Use one-shot job template and linter before moving indexer workload to a pure Linux server.
+
+#### Open files in VS Code
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+code configs/containers/wuchang_indexer_oneshot_job.template.json
+code docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md
+code tools/indexer_oneshot_job_linter.py
+```
+
+#### Smoke test
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+python3 tools/indexer_oneshot_job_linter.py --file configs/containers/wuchang_indexer_oneshot_job.template.json
+python3 -m json.tool configs/containers/wuchang_indexer_oneshot_job.template.json >/tmp/m22_job.ok && echo indexer_job_json_ok
+docker ps -a --filter name=wuchang_os_indexer --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}'
+git status --short -- configs/containers/wuchang_indexer_oneshot_job.template.json docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md tools/indexer_oneshot_job_linter.py
+```
+
+#### Git preview for this item
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  configs/containers/wuchang_indexer_oneshot_job.template.json \
+  docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md \
+  tools/indexer_oneshot_job_linter.py
 ```
 
 ## Commit Safety

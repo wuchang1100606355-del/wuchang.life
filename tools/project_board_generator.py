@@ -248,6 +248,17 @@ WORK_ITEMS: List[Dict[str, object]] = [
         ],
         "next": "Use offload registry and linter before moving background containers to pure Linux server nodes.",
     },
+    {
+        "id": "M22",
+        "name": "Indexer one-shot server job package",
+        "risk": "medium",
+        "files": [
+            "configs/containers/wuchang_indexer_oneshot_job.template.json",
+            "docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md",
+            "tools/indexer_oneshot_job_linter.py",
+        ],
+        "next": "Use one-shot job template and linter before moving indexer workload to a pure Linux server.",
+    },
 
 ]
 

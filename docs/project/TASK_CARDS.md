@@ -1,7 +1,7 @@
 # Task Cards
 
-- Generated: `2026-05-27T04:39:04.806481+00:00`
-- Count: `21`
+- Generated: `2026-05-27T05:05:40.016651+00:00`
+- Count: `22`
 
 ## Rules
 
@@ -795,7 +795,7 @@ Project dashboard launcher
 - Status: `done_clean`
 - Done: `100%`
 - Risk: `low`
-- Commit: `70ab9aa Fix task cards markdown newline generation`
+- Commit: `1db1351 Register container offload plan in project board`
 - Next: Use generated task cards to delegate isolated work to code agents.
 
 ### Allowed files
@@ -869,6 +869,49 @@ Container server offload plan-only
 - configs/containers/container_offload_registry.template.json
 - schemas/w7tp_container_offload_registry.schema.json
 - tools/container_offload_linter.py
+
+規則：
+本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。
+
+完成後只回報 created files、modified files、smoke result、git preview。
+```
+
+## TASK_ID: M22_indexer_one_shot_server_job_package
+
+- Status: `done_clean`
+- Done: `100%`
+- Risk: `medium`
+- Commit: `63bbe53 Add indexer one-shot job template`
+- Next: Use one-shot job template and linter before moving indexer workload to a pure Linux server.
+
+### Allowed files
+
+- configs/containers/wuchang_indexer_oneshot_job.template.json
+- docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md
+- tools/indexer_oneshot_job_linter.py
+
+### Git preview
+
+```bash
+cd /home/taiji_admin/Taiji_Hub || exit 1
+git status --short -- \
+  configs/containers/wuchang_indexer_oneshot_job.template.json \
+  docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md \
+  tools/indexer_oneshot_job_linter.py
+```
+
+### Agent prompt
+
+```text
+TASK_ID: M22_indexer_one_shot_server_job_package
+
+目標：
+Indexer one-shot server job package
+
+允許讀取 / 修改：
+- configs/containers/wuchang_indexer_oneshot_job.template.json
+- docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md
+- tools/indexer_oneshot_job_linter.py
 
 規則：
 本機開發效率優先，但必須任務隔離；不得 git add .；不得 SSH；不得重啟服務；不得提交 runtime 產物或 local.json。

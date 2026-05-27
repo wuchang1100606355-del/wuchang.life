@@ -74,9 +74,9 @@ a { color: #93c5fd; }
 <body>
 <header>
 <h1>W7TP / 小J Project Dashboard</h1>
-<div>Generated: <code>2026-05-27T04:34:25.592924+00:00</code></div>
-<div>HEAD: <code>c47df74 Harden indexer forbidden mount policy</code></div>
-<div>Items: <code>21</code></div>
+<div>Generated: <code>2026-05-27T05:05:39.991229+00:00</code></div>
+<div>HEAD: <code>bec3611 Add indexer one-shot job linter</code></div>
+<div>Items: <code>22</code></div>
 </header>
 <main>
 
@@ -644,7 +644,7 @@ git status --short -- tools/open_project_dashboard.sh</pre>
     <span class="badge">done_clean · 100%</span>
   </div>
   <p><b>Risk:</b> low</p>
-  <p><b>Commit:</b> <code>70ab9aa Fix task cards markdown newline generation</code></p>
+  <p><b>Commit:</b> <code>1db1351 Register container offload plan in project board</code></p>
   <p><b>Next:</b> Use generated task cards to delegate isolated work to code agents.</p>
   <details>
     <summary>Canonical files</summary>
@@ -695,6 +695,36 @@ grep -n "M21" -A30 docs/project/WORKLINKS.md
 
 # Git preview
 git status --short -- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md configs/containers/container_offload_registry.template.json schemas/w7tp_container_offload_registry.schema.json tools/container_offload_linter.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M22｜Indexer one-shot server job package</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>63bbe53 Add indexer one-shot job template</code></p>
+  <p><b>Next:</b> Use one-shot job template and linter before moving indexer workload to a pure Linux server.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>configs/containers/wuchang_indexer_oneshot_job.template.json</code></li><li><code>docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md</code></li><li><code>tools/indexer_oneshot_job_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code configs/containers/wuchang_indexer_oneshot_job.template.json
+code docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md
+code tools/indexer_oneshot_job_linter.py
+
+
+# Worklink section
+grep -n "M22" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- configs/containers/wuchang_indexer_oneshot_job.template.json docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md tools/indexer_oneshot_job_linter.py</pre>
   </details>
 </section>
 

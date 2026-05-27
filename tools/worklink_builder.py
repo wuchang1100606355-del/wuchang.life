@@ -99,6 +99,12 @@ SMOKE_BY_ID: Dict[str, List[str]] = {
         "docker ps -a --filter name=wuchang_os_indexer --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{.Ports}}'",
         "git status --short -- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md configs/containers/container_offload_registry.template.json schemas/w7tp_container_offload_registry.schema.json tools/container_offload_linter.py"
     ],
+    "M22": [
+        "python3 tools/indexer_oneshot_job_linter.py --file configs/containers/wuchang_indexer_oneshot_job.template.json",
+        "python3 -m json.tool configs/containers/wuchang_indexer_oneshot_job.template.json >/tmp/m22_job.ok && echo indexer_job_json_ok",
+        "docker ps -a --filter name=wuchang_os_indexer --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{.Ports}}'",
+        "git status --short -- configs/containers/wuchang_indexer_oneshot_job.template.json docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md tools/indexer_oneshot_job_linter.py"
+    ],
 
 }
 
