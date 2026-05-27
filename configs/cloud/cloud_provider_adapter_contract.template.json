@@ -1,0 +1,59 @@
+{
+  "contract_version": "W7TP-CLOUD-PROVIDER-ADAPTER/0.1",
+  "domain": "wuchang.life",
+  "mode": "plan_only",
+  "authority": "local_xiaoj_router",
+  "cloud_is_compute_only": true,
+  "providers": [
+    "openai",
+    "gemini",
+    "google",
+    "custom"
+  ],
+  "provider_visible_fields": [
+    "provider_lane",
+    "redacted_intent_summary",
+    "provider_visible_summary",
+    "task_class",
+    "non_pii_constraints",
+    "output_format",
+    "audit_hash_required"
+  ],
+  "local_only_fields": [
+    "full_governance_packet",
+    "policy_gate",
+    "redaction_proof",
+    "private_evidence_chain",
+    "local_inventory",
+    "credential_store",
+    "formal_db_authority"
+  ],
+  "forbidden_payload": [
+    "token",
+    "password",
+    "private_key",
+    "credentials",
+    "raw_member_pii",
+    "member_plaintext",
+    "router_secret",
+    "local_inventory",
+    "formal_db_write_authority"
+  ],
+  "forbidden_actions": [
+    "cloud_git_commit",
+    "cloud_git_push",
+    "router_write",
+    "ssh_remote_command",
+    "formal_db_write",
+    "financial_settlement",
+    "emergency_broadcast_without_review",
+    "credential_export",
+    "raw_pii_cloud_upload"
+  ],
+  "response_must_return_to": [
+    "local_xiaoj_router"
+  ],
+  "direct_action_allowed": false,
+  "api_key_read_allowed": false,
+  "cloud_call_performed_by_this_contract": false
+}

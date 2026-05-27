@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_cloud_provider_adapter_contract.schema.json",
+  "title": "W7TP Cloud Provider Adapter Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "domain",
+    "mode",
+    "authority",
+    "cloud_is_compute_only",
+    "providers",
+    "provider_visible_fields",
+    "local_only_fields",
+    "forbidden_payload",
+    "forbidden_actions",
+    "response_must_return_to",
+    "direct_action_allowed",
+    "api_key_read_allowed",
+    "cloud_call_performed_by_this_contract"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "W7TP-CLOUD-PROVIDER-ADAPTER/0.1"
+    },
+    "domain": {
+      "const": "wuchang.life"
+    },
+    "mode": {
+      "const": "plan_only"
+    },
+    "authority": {
+      "const": "local_xiaoj_router"
+    },
+    "cloud_is_compute_only": {
+      "const": true
+    },
+    "providers": {
+      "type": "array",
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "contains": {
+            "const": "openai"
+          }
+        },
+        {
+          "contains": {
+            "const": "gemini"
+          }
+        },
+        {
+          "contains": {
+            "const": "google"
+          }
+        },
+        {
+          "contains": {
+            "const": "custom"
+          }
+        }
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "provider_visible_fields": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "local_only_fields": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_payload": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "response_must_return_to": {
+      "type": "array",
+      "contains": {
+        "const": "local_xiaoj_router"
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    "direct_action_allowed": {
+      "const": false
+    },
+    "api_key_read_allowed": {
+      "const": false
+    },
+    "cloud_call_performed_by_this_contract": {
+      "const": false
+    }
+  }
+}
