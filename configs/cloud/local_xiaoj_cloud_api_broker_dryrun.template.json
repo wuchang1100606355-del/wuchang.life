@@ -1,0 +1,63 @@
+{
+  "broker_version": "W7TP-LOCAL-XIAOJ-CLOUD-BROKER-DRYRUN/0.1",
+  "domain": "wuchang.life",
+  "mode": "dry_run_only",
+  "authority": "local_xiaoj_router",
+  "cloud_call_allowed": false,
+  "api_key_read_allowed": false,
+  "secret_saved": false,
+  "provider_lanes": [
+    "openai",
+    "gemini",
+    "google",
+    "custom"
+  ],
+  "dryrun_decision_inputs": [
+    "redacted_intent_summary",
+    "provider_visible_summary",
+    "task_class",
+    "privacy_level",
+    "risk_level",
+    "cloud_allowed",
+    "human_review_required",
+    "audit_hash_required"
+  ],
+  "routing_policy": [
+    "local_first",
+    "cloud_compute_only",
+    "deny_by_default",
+    "dead_letter_on_secret",
+    "dead_letter_on_raw_pii",
+    "dead_letter_on_high_risk_without_review"
+  ],
+  "forbidden_payload": [
+    "token",
+    "password",
+    "private_key",
+    "credentials",
+    "raw_member_pii",
+    "member_plaintext",
+    "router_secret",
+    "local_inventory",
+    "formal_db_write_authority"
+  ],
+  "forbidden_actions": [
+    "real_cloud_api_call",
+    "api_key_read",
+    "credential_export",
+    "raw_pii_cloud_upload",
+    "router_write",
+    "ssh_remote_command",
+    "formal_db_write",
+    "financial_settlement",
+    "emergency_broadcast_without_review"
+  ],
+  "dryrun_output": [
+    "selected_provider_lane",
+    "reason",
+    "redaction_required",
+    "human_review_required",
+    "dead_letter",
+    "audit_hash_required"
+  ]
+}

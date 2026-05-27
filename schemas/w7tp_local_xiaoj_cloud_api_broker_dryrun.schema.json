@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json",
+  "title": "W7TP Local XiaoJ Cloud API Broker Dry-Run",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "broker_version",
+    "domain",
+    "mode",
+    "authority",
+    "cloud_call_allowed",
+    "api_key_read_allowed",
+    "secret_saved",
+    "provider_lanes",
+    "dryrun_decision_inputs",
+    "routing_policy",
+    "forbidden_payload",
+    "forbidden_actions",
+    "dryrun_output"
+  ],
+  "properties": {
+    "broker_version": {
+      "const": "W7TP-LOCAL-XIAOJ-CLOUD-BROKER-DRYRUN/0.1"
+    },
+    "domain": {
+      "const": "wuchang.life"
+    },
+    "mode": {
+      "const": "dry_run_only"
+    },
+    "authority": {
+      "const": "local_xiaoj_router"
+    },
+    "cloud_call_allowed": {
+      "const": false
+    },
+    "api_key_read_allowed": {
+      "const": false
+    },
+    "secret_saved": {
+      "const": false
+    },
+    "provider_lanes": {
+      "type": "array",
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "contains": {
+            "const": "openai"
+          }
+        },
+        {
+          "contains": {
+            "const": "gemini"
+          }
+        },
+        {
+          "contains": {
+            "const": "google"
+          }
+        },
+        {
+          "contains": {
+            "const": "custom"
+          }
+        }
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "dryrun_decision_inputs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "routing_policy": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_payload": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "dryrun_output": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
