@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_ha_mesh_inventory.schema.json",
+  "title": "W7TP HA Mesh Inventory",
+  "type": "object",
+  "required": [
+    "inventory_version",
+    "mode",
+    "cloud_redacted_nodes",
+    "hybrid_edge_nodes",
+    "memory_fields",
+    "sync_policy",
+    "merlin_boundary",
+    "hardwall"
+  ],
+  "properties": {
+    "inventory_version": {
+      "type": "string",
+      "const": "W7TP-HA-MESH-INVENTORY/0.1"
+    },
+    "mode": {
+      "type": "string",
+      "const": "plan_only"
+    },
+    "cloud_redacted_nodes": {
+      "type": "array"
+    },
+    "hybrid_edge_nodes": {
+      "type": "array"
+    },
+    "memory_fields": {
+      "type": "object"
+    },
+    "sync_policy": {
+      "type": "object",
+      "required": [
+        "direct_rsync_allowed",
+        "delete_sync_requires_human_review",
+        "job_manifest_required",
+        "signed_result_required",
+        "cloud_allowed"
+      ],
+      "properties": {
+        "direct_rsync_allowed": { "type": "boolean", "const": false },
+        "delete_sync_requires_human_review": { "type": "boolean", "const": true },
+        "job_manifest_required": { "type": "boolean", "const": true },
+        "signed_result_required": { "type": "boolean", "const": true },
+        "cloud_allowed": { "type": "boolean", "const": false }
+      }
+    },
+    "merlin_boundary": {
+      "type": "object"
+    },
+    "hardwall": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

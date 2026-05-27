@@ -1,0 +1,71 @@
+{
+  "inventory_version": "W7TP-HA-MESH-INVENTORY/0.1",
+  "mode": "plan_only",
+  "cloud_redacted_nodes": [
+    {
+      "node_id": "cloud-node-1",
+      "role": "cloud_redacted_compute",
+      "address_redacted": true,
+      "preferred_path": "tailnet_ipv6",
+      "allowed_payload": "redacted_eamtp_only",
+      "raw_pii_allowed": false,
+      "credential_stored": false
+    }
+  ],
+  "hybrid_edge_nodes": [
+    {
+      "node_id": "local-msi",
+      "role": "local_dev_ops",
+      "preferred_path": "lan_ipv4",
+      "fallback_path": "tailnet_ipv6",
+      "address_redacted": true,
+      "raw_pii_allowed": false,
+      "credential_stored": false
+    },
+    {
+      "node_id": "customer-display-node",
+      "role": "edge_display_or_service_node",
+      "preferred_path": "lan_ipv4",
+      "fallback_path": "tailnet_ipv6",
+      "address_redacted": true,
+      "raw_pii_allowed": false,
+      "credential_stored": false
+    }
+  ],
+  "memory_fields": {
+    "hot_memory_field": {
+      "legacy_name": "RAM_CORE",
+      "execution_policy": "plan_only",
+      "auto_mount": false,
+      "fstab_write_allowed": false
+    },
+    "warm_state_field": {
+      "legacy_name": "HOT_DISK",
+      "sync_policy": "manifest_only",
+      "rsync_delete_allowed": false
+    }
+  },
+  "sync_policy": {
+    "direct_rsync_allowed": false,
+    "delete_sync_requires_human_review": true,
+    "job_manifest_required": true,
+    "signed_result_required": true,
+    "cloud_allowed": false
+  },
+  "merlin_boundary": {
+    "router_role": "MERLIN_PHYSICAL_ROUTER_FIELD",
+    "iptables_direct_apply_allowed": false,
+    "firewall_change_requires_human_review": true,
+    "qos_change_requires_human_review": true
+  },
+  "hardwall": [
+    "ssh_copy_id",
+    "root_ssh_trust",
+    "rsync_delete_auto",
+    "crontab_auto_write",
+    "fstab_auto_write",
+    "iptables_auto_apply",
+    "credential_export",
+    "raw_pii_to_cloud"
+  ]
+}
