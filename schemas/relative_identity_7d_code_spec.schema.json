@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/relative_identity_7d_code_spec.schema.json",
+  "title": "Relative Identity 7D Code Spec",
+  "type": "object",
+  "required": [
+    "setting_version",
+    "authority",
+    "purpose",
+    "identity_is_relative_not_absolute",
+    "raw_pii_required_for_daily_operation",
+    "dimensions",
+    "d8_trust_envelope",
+    "forbidden_payload"
+  ],
+  "properties": {
+    "authority": { "const": "local_xiaoj_router" },
+    "identity_is_relative_not_absolute": { "const": true },
+    "raw_pii_required_for_daily_operation": { "const": false },
+    "dimensions": { "type": "object" },
+    "d8_trust_envelope": { "type": "object" },
+    "forbidden_payload": { "type": "array", "items": { "type": "string" } }
+  }
+}
