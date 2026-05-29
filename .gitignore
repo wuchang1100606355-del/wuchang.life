@@ -1,0 +1,66 @@
+keys/
+.secrets/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.credentials
+*service-account*.json
+*service_account*.json
+*.db
+*.db-shm
+*.db-wal
+__pycache__/
+*.pyc
+*.log
+*.out
+taiji_env/
+jules_env/
+Taiji_Odoo/odoo_data/
+Taiji_Odoo/postgres_data/
+archive/
+runtime/ledger/
+.taiji_runtime/
+.taiji_runtime_v0_1_0/
+
+# local virtualenvs
+.venv*/
+venv*/
+*_env/
+
+# runtime / generated data
+open_webui_data/
+logs/
+backups/
+snapshots/
+runtime/reports/
+runtime/dead_letter/
+runtime/deadletter/
+runtime/checkpoints/
+runtime/snapshots/
+runtime/build/
+
+# databases / model / cache
+*.db
+*.sqlite
+*.sqlite3
+*.log
+*.pid
+__pycache__/
+.pytest_cache/
+*.swp
+
+# Odoo runtime data
+Taiji_Odoo/odoo_data/
+Taiji_Odoo/postgres_data/
+
+# local secrets / keys
+.env
+*.env
+*.pem
+*.key
+admin
+admin.pub
+.secrets/
