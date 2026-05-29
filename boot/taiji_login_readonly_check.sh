@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="${TAIJI_ROOT:-$HOME/Taiji_Hub}"
+LEDGER="$ROOT/runtime/ledger/login_readonly_check.jsonl"
+mkdir -p "$ROOT/runtime/ledger"
+
+check_url() {
+  local name="$1"
+  local url="$2"
+  if curl -fsS --max-time 2 "$url" >/dev/null 2>&1; then
+    status="running"
+  else
+    status="not_running"
+  fi
+  printf "[status] %-24s %s\n" "$name:" "$status"
+  printf '{"ts":"%s","check":"%s","url":"%s","status":"%s"}\n' \
+    "$(date -Is)" "$name" "$url" "$status" >> "$LEDGER"
+}
+
+check_port() {
+  local name="$1"
+  local port="$2"
+  if ss -ltn 2>/dev/null | grep -q ":$port "; then
+    status="listening"
+  else
+    status="not_listening"
+  fi
+  printf "[port]   %-24s %s\n" "$name $port:" "$status"
+  printf '{"ts":"%s","check":"%s","port":"%s","status":"%s"}\n' \
+    "$(date -Is)" "$name" "$port" "$status" >> "$LEDGER"
+}
+
+echo "======================================================"
+echo "     Taiji Login Readonly Check - CURRENT"
+echo "======================================================"
+echo "[workspace] canonical: $ROOT"
+echo "[guard] readonly only; no SSH, no process kill, no auto-start"
+
+check_url  "taiji_gateway"      "http://127.0.0.1:8081/health"
+check_url  "open_webui"         "http://127.0.0.1:8080"
+check_url  "openwebui_bridge"   "http://127.0.0.1:8098/v1/models"
+check_url  "ollama"             "http://127.0.0.1:11434/api/tags"
+check_url  "native_claw"        "http://127.0.0.1:9004/healthz"
+check_url  "xiaoj_intent_field" "http://127.0.0.1:9107/healthz"
+check_port "ssh_tunnel"         "2222"
+
+if command -v tailscale >/dev/null 2>&1; then
+  echo "[vpn] self_ip: $(tailscale ip -4 2>/dev/null | head -n 1 || true)"
+  tailscale status 2>/dev/null | awk 'NR<=12 {print "[vpn] " $0}' || true
+fi
+
+echo "[legacy] 8000 / 9090 / mu_0 / mu_2 are archived checks, not current boot targets"
+echo "======================================================"
