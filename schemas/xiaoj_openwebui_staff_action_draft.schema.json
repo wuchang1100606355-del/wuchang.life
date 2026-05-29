@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJOpenWebUIStaffActionDraft",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "action_id": {"type": "string"},
+    "source_card": {"type": "string", "enum": ["line_intent", "delivery_review", "dlq", "ordering", "repair", "coding_request", "other"]},
+    "actor_role": {"type": "string", "enum": ["staff", "volunteer", "committee", "merchant", "developer", "human_review"]},
+    "actor_hash": {"type": "string"},
+    "target_ref": {"type": "string"},
+    "decision": {"type": "string", "enum": ["approve_draft", "request_more_info", "send_to_human_review", "send_to_dlq", "reject", "close_as_plan_only"]},
+    "status_before": {"type": "string"},
+    "status_after": {"type": "string"},
+    "summary": {"type": "string", "maxLength": 500},
+    "risk_level": {"type": "string", "enum": ["L0", "L1", "L2", "L3", "DLQ"]},
+    "pii_visible_scope": {"type": "array", "items": {"type": "string"}},
+    "plan_only": {"const": true},
+    "odoo_write": {"const": false},
+    "raw_pii_to_cloud": {"const": false},
+    "human_confirmation_required": {"type": "boolean"},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["action_id", "source_card", "actor_role", "actor_hash", "target_ref", "decision", "status_before", "status_after", "summary", "risk_level", "pii_visible_scope", "plan_only", "odoo_write", "raw_pii_to_cloud", "human_confirmation_required", "created_at"]
+}

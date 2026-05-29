@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJThreeKeyCustodyRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "custody_id": {"type": "string"},
+    "custody_model": {"type": "string", "enum": ["three_usb_shards", "three_hardware_keys", "hybrid"]},
+    "key_holder_count": {"const": 3},
+    "threshold_modes_supported": {"type": "array", "items": {"type": "string", "enum": ["2_of_3", "3_of_3"]}},
+    "plaintext_master_key_stored": {"const": false},
+    "single_admin_decrypt_allowed": {"const": false},
+    "cloud_lane_decrypt_allowed": {"const": false},
+    "audit_required": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["custody_id", "custody_model", "key_holder_count", "threshold_modes_supported", "plaintext_master_key_stored", "single_admin_decrypt_allowed", "cloud_lane_decrypt_allowed", "audit_required", "created_at"]
+}

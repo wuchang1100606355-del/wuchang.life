@@ -1,0 +1,113 @@
+=== NODE DECISION ===
+{
+  "mode": "S1_WATCH",
+  "must_not_execute": [
+    "ssh",
+    "kill_process",
+    "auto_start",
+    "systemctl_start_stop_restart",
+    "docker_start_stop_restart",
+    "read_env_or_tokens"
+  ],
+  "node": {
+    "field_7d": {
+      "code": 50,
+      "direction": 30,
+      "earth": 75,
+      "heaven": 90,
+      "position": 60,
+      "state": 25,
+      "tendency": 20
+    },
+    "five_code_prefix": "d09c945ccecc",
+    "formation": "dui_comm_feedback",
+    "node_id": "taiji01",
+    "policy": {
+      "human_operator_required": true,
+      "no_auto_start": true,
+      "no_process_kill": true,
+      "no_secret_read": true,
+      "no_ssh": true,
+      "readonly_only": true
+    },
+    "risk_score": 26,
+    "role": "ollama_node",
+    "ts": 1779543391.5705051
+  },
+  "readonly_enforced": true,
+  "suggested_action": "OBSERVE_ONLY"
+}
+
+=== SNAPSHOT ===
+{
+  "edges": [
+    {
+      "allowed": true,
+      "dst": "openwebui_3000_closed",
+      "relation": "same_host_service_state",
+      "src": "taiji01",
+      "weight": 0.8
+    }
+  ],
+  "network": "wuchang_7d8z_5code_tensor",
+  "nodes": [
+    {
+      "field_7d": {
+        "code": 50,
+        "direction": 30,
+        "earth": 75,
+        "heaven": 90,
+        "position": 60,
+        "state": 25,
+        "tendency": 20
+      },
+      "five_code_prefix": "d09c945ccecc",
+      "formation": "dui_comm_feedback",
+      "node_id": "taiji01",
+      "policy": {
+        "human_operator_required": true,
+        "no_auto_start": true,
+        "no_process_kill": true,
+        "no_secret_read": true,
+        "no_ssh": true,
+        "readonly_only": true
+      },
+      "risk_score": 26,
+      "role": "ollama_node",
+      "ts": 1779543391.5705051
+    },
+    {
+      "field_7d": {
+        "code": 45,
+        "direction": 35,
+        "earth": 70,
+        "heaven": 95,
+        "position": 55,
+        "state": 55,
+        "tendency": 30
+      },
+      "five_code_prefix": "4e03b962a2c7",
+      "formation": "dui_comm_feedback",
+      "node_id": "openwebui_3000_closed",
+      "policy": {
+        "human_operator_required": true,
+        "no_auto_start": true,
+        "no_process_kill": true,
+        "no_secret_read": true,
+        "no_ssh": true,
+        "readonly_only": true
+      },
+      "risk_score": 33,
+      "role": "webui_state",
+      "ts": 1779543391.5705264
+    }
+  ],
+  "policy": {
+    "human_operator_required": true,
+    "no_auto_start": true,
+    "no_process_kill": true,
+    "no_secret_read": true,
+    "no_ssh": true,
+    "readonly_only": true
+  }
+}

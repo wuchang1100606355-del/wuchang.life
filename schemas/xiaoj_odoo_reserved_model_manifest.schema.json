@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJOdooReservedModelManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "manifest_id": {"type": "string"},
+    "module_name": {"type": "string"},
+    "mode": {"type": "string", "enum": ["DESIGN_ONLY"]},
+    "models": {"type": "array", "items": {"type": "string"}},
+    "views": {"type": "array", "items": {"type": "string"}},
+    "roles": {"type": "array", "items": {"type": "string"}},
+    "linked_w7tp_items": {"type": "array", "items": {"type": "string"}},
+    "odoo_write": {"const": false},
+    "db_connect": {"const": false},
+    "addon_create": {"const": false},
+    "raw_pii_to_cloud": {"const": false},
+    "plain_api_key_visible": {"const": false},
+    "single_admin_decrypt_allowed": {"const": false},
+    "plan_only": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["manifest_id", "module_name", "mode", "models", "views", "roles", "linked_w7tp_items", "odoo_write", "db_connect", "addon_create", "raw_pii_to_cloud", "plain_api_key_visible", "single_admin_decrypt_allowed", "plan_only", "created_at"]
+}

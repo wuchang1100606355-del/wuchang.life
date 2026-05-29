@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJVolunteerQualificationRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "volunteer_hash": {
+      "type": "string"
+    },
+    "volunteer_verified": {
+      "type": "boolean"
+    },
+    "staff_approved": {
+      "type": "boolean"
+    },
+    "renyi_store_staff_approved": {
+      "type": "boolean"
+    },
+    "renyi_store_staff_hash": {
+      "type": "string"
+    },
+    "renyi_store_staff_accompaniment_required": {
+      "const": true
+    },
+    "renyi_store_staff_accompaniment_confirmed": {
+      "type": "boolean"
+    },
+    "volunteer_self_accept_allowed": {
+      "const": false
+    },
+    "training_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed",
+        "waived_by_staff"
+      ]
+    },
+    "suspension_status": {
+      "type": "string",
+      "enum": [
+        "clear",
+        "suspended",
+        "under_review",
+        "revoked"
+      ]
+    },
+    "service_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_service_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "high_risk_service_allowed": {
+      "type": "boolean"
+    },
+    "pii_access_level": {
+      "type": "string",
+      "enum": [
+        "none",
+        "area_only",
+        "limited_task_scope"
+      ]
+    },
+    "last_reviewed_by": {
+      "type": "string"
+    },
+    "last_reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "plan_only": {
+      "const": true
+    },
+    "raw_pii_to_cloud": {
+      "const": false
+    },
+    "odoo_write": {
+      "const": false
+    },
+    "renyi_store_staff_caregiver_qualified": {
+      "const": true
+    },
+    "renyi_store_staff_safety_role": {
+      "type": "string",
+      "enum": [
+        "caregiver_qualified_safety_escort"
+      ]
+    }
+  },
+  "required": [
+    "volunteer_hash",
+    "volunteer_verified",
+    "staff_approved",
+    "renyi_store_staff_approved",
+    "renyi_store_staff_hash",
+    "renyi_store_staff_accompaniment_required",
+    "renyi_store_staff_accompaniment_confirmed",
+    "volunteer_self_accept_allowed",
+    "training_status",
+    "suspension_status",
+    "service_scope",
+    "allowed_service_types",
+    "high_risk_service_allowed",
+    "pii_access_level",
+    "last_reviewed_by",
+    "last_reviewed_at",
+    "plan_only",
+    "raw_pii_to_cloud",
+    "odoo_write",
+    "renyi_store_staff_caregiver_qualified",
+    "renyi_store_staff_safety_role"
+  ]
+}

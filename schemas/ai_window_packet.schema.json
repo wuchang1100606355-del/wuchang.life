@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Taiji AI Window Packet",
+  "type": "object",
+  "required": [
+    "window_id",
+    "accountable_natural_person",
+    "creator_accountability_anchor",
+    "tensor_state",
+    "authority_vector",
+    "topology_vector",
+    "audit_required",
+    "human_decision_required"
+  ],
+  "properties": {
+    "window_id": {
+      "type": "string",
+      "enum": [
+        "AIW-local-xiaoj",
+        "AIW-codex-engineering",
+        "AIW-cloud-reference",
+        "AIW-browser-action",
+        "AIW-gateway-policy",
+        "AIW-audit-replay",
+        "AIW-human-boundary"
+      ]
+    },
+    "accountable_natural_person": { "type": "string" },
+    "creator_accountability_anchor": { "const": true },
+    "creator_anchor_bypasses_gate": { "const": false },
+    "tensor_state": { "type": "object" },
+    "authority_vector": { "type": "object" },
+    "topology_vector": { "type": "object" },
+    "audit_required": { "const": true },
+    "human_decision_required": { "type": "boolean" },
+    "cloud_plaintext_allowed": { "const": false },
+    "secret_material_allowed": { "const": false },
+    "single_super_admin_ai_allowed": { "const": false }
+  }
+}

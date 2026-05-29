@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WuChang Task Force Dispatch",
+  "type": "object",
+  "required": [
+    "dispatch_id",
+    "task_type",
+    "schedule_window",
+    "call_group",
+    "on_duty_care_worker",
+    "risk_level",
+    "audit_required",
+    "physical_delete_allowed"
+  ],
+  "properties": {
+    "dispatch_id": {
+      "type": "string"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "food_delivery",
+        "community_service",
+        "health_visit",
+        "care_support",
+        "night_patrol",
+        "school_child_safety_support"
+      ]
+    },
+    "schedule_window": {
+      "type": "object",
+      "required": [
+        "start_at",
+        "end_at",
+        "timezone"
+      ],
+      "properties": {
+        "start_at": {
+          "type": "string"
+        },
+        "end_at": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string",
+          "default": "Asia/Taipei"
+        }
+      },
+      "additionalProperties": false
+    },
+    "call_group": {
+      "type": "object",
+      "required": [
+        "group_id",
+        "eligible_device_ids",
+        "挂牌_status_required",
+        "first_stop_wins"
+      ],
+      "properties": {
+        "group_id": {
+          "type": "string"
+        },
+        "eligible_device_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "挂牌_status_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "first_stop_wins": {
+          "type": "boolean",
+          "const": true
+        },
+        "claim_window_sec": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 300,
+          "default": 30
+        }
+      },
+      "additionalProperties": false
+    },
+    "winner": {
+      "type": "object",
+      "properties": {
+        "device_id": {
+          "type": "string"
+        },
+        "operator_ref": {
+          "type": "string"
+        },
+        "server_received_at": {
+          "type": "string"
+        },
+        "claim_sequence": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "on_duty_care_worker": {
+      "type": "object",
+      "required": [
+        "worker_ref",
+        "responsibility"
+      ],
+      "properties": {
+        "worker_ref": {
+          "type": "string"
+        },
+        "responsibility": {
+          "type": "string",
+          "enum": [
+            "duty_supervision",
+            "escort_required",
+            "human_confirmation_required",
+            "emergency_contact"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "L0",
+        "L1",
+        "L2",
+        "L3"
+      ]
+    },
+    "requires_human_confirmation": {
+      "type": "boolean"
+    },
+    "audit_required": {
+      "type": "boolean",
+      "const": true
+    },
+    "physical_delete_allowed": {
+      "type": "boolean",
+      "const": false
+    },
+    "member_plaintext_included": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "additionalProperties": false
+}

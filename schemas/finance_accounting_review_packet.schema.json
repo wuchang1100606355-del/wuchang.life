@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "taiji.finance_accounting_review_packet.v1",
+  "title": "Taiji Finance Accounting Review Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_id",
+    "event_type",
+    "node_scope",
+    "economy_unit",
+    "amount",
+    "visibility",
+    "subject_visible",
+    "summary_visible",
+    "detail_visible",
+    "voucher_visible",
+    "audit_required",
+    "physical_delete_allowed",
+    "created_at"
+  ],
+  "properties": {
+    "packet_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "resident_purchase_summary",
+        "community_revenue_share_draft",
+        "happiness_coin_issue_draft",
+        "merchant_ticket_credit_draft",
+        "fund_pool_retention_draft",
+        "fund_pool_retention_summary",
+        "labor_compensation_review",
+        "intellectual_contribution_review",
+        "wrong_entry_correction_review",
+        "public_account_summary_publish",
+        "zero_eps_esg_allocation_review",
+        "esg_metric_summary",
+        "payment_execute",
+        "refund_execute",
+        "private_profit_distribution",
+        "public_asset_private_conversion",
+        "physical_delete_accounting_record",
+        "credential_or_secret_access",
+        "cloud_plaintext_publish",
+        "business_secret_publication",
+        "member_plaintext_publication",
+        "ai_final_accounting_approval"
+      ]
+    },
+    "node_scope": {
+      "type": "string",
+      "enum": [
+        "association",
+        "renyi_store",
+        "reopen_store",
+        "group_member_merchant",
+        "property_management_cloud",
+        "business_cooperation_cloud",
+        "community_service_team",
+        "public_summary_board"
+      ]
+    },
+    "economy_unit": {
+      "type": "string",
+      "enum": ["twd", "happiness_coin", "merchant_ticket_credit", "service_hour", "audit_metric"]
+    },
+    "amount": { "type": "number" },
+    "visibility": {
+      "type": "string",
+      "enum": ["permissioned_auditable", "public_24h"]
+    },
+    "subject_visible": { "type": "boolean" },
+    "summary_visible": { "type": "boolean" },
+    "detail_visible": { "type": "boolean", "const": false },
+    "voucher_visible": { "type": "boolean", "const": false },
+    "reserve_ratio_after": { "type": "number", "minimum": 0 },
+    "fund_pool_survival_months": { "type": "number", "minimum": 0 },
+    "accounting_period": { "type": "string", "maxLength": 32 },
+    "sha256_baseline": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "payment_execution_requested": { "type": "boolean", "default": false },
+    "odoo_account_mutation_requested": { "type": "boolean", "default": false },
+    "physical_delete_requested": { "type": "boolean", "default": false },
+    "private_gain_distribution_requested": { "type": "boolean", "default": false },
+    "member_plaintext_included": { "type": "boolean", "default": false },
+    "secret_material_included": { "type": "boolean", "default": false },
+    "credential_material_included": { "type": "boolean", "default": false },
+    "individual_transaction_detail_public": { "type": "boolean", "default": false },
+    "business_secret_public": { "type": "boolean", "default": false },
+    "cloud_sync_requested": { "type": "boolean", "default": false },
+    "treated_as_legal_tender": { "type": "boolean", "default": false },
+    "investment_promise_included": { "type": "boolean", "default": false },
+    "ai_final_accounting_decision_requested": { "type": "boolean", "default": false },
+    "audit_required": { "type": "boolean", "const": true },
+    "physical_delete_allowed": { "type": "boolean", "const": false },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

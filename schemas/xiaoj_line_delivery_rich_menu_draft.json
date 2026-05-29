@@ -1,0 +1,18 @@
+{
+  "name": "xiaoj_delivery_rich_menu_draft",
+  "mode": "PLANONLY_DESIGN_ONLY",
+  "buttons": [
+    {"id": "delivery_apply", "label": "申請外送協助", "action": "open_delivery_draft"},
+    {"id": "delivery_status", "label": "查看申請進度", "action": "query_status"},
+    {"id": "delivery_cancel", "label": "取消申請", "action": "cancel_request"},
+    {"id": "contact_staff", "label": "聯絡協會人員", "action": "human_review"},
+    {"id": "volunteer_accept", "label": "志工接單入口", "action": "volunteer_entry"},
+    {"id": "help", "label": "使用說明", "action": "show_help"}
+  ],
+  "hardwall": {
+    "odoo_write": false,
+    "auto_dispatch": false,
+    "raw_pii_to_cloud": false,
+    "human_review_required_for_high_risk": true
+  }
+}

@@ -1,0 +1,32 @@
+===== PATENT V0.8 MULTI-NODE DISTRIBUTION LOCK RECORD =====
+CreatedAt: 2026-05-20T09:42:19+08:00
+
+Package:
+patent_v0_8_handoff_package.zip
+
+Package SHA256:
+c2bf70029a1725a0a18131ea8f1f8ac39ab32b9e6a788636fa781bbb1be4cadb
+
+Lock Record:
+patent_v0_8_handoff_lock_record.txt
+
+Lock Record SHA256:
+2727321b65cbcbf2c2af3317e07cb167887f8524e12087954cc8986f91fea847
+
+Source Node:
+MSI
+
+Verified Nodes:
+- MSI: SOURCE_LOCKED
+- taiji01: PUSHED_AND_VERIFIED_NODE_LOCAL_HASH
+- penguin: TAILDROP_RECEIVED_AND_VERIFIED
+
+Distribution Method:
+- MSI → taiji01: rsync over SSH, node-local SHA256 verified
+- MSI → penguin: Tailscale Taildrop, node-local SHA256 verified on penguin
+
+Core:
+候選意圖封包化 → 陣型工作區 → 策略閘道 → 跨系統受控連接器 → 稽核回放
+
+Status:
+PATENT_V0_8_HANDOFF_MULTINODE_DISTRIBUTION_LOCKED

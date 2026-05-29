@@ -1,0 +1,70 @@
+## df -h
+Filesystem      Size  Used Avail Use% Mounted on
+none            2.0G     0  2.0G   0% /usr/lib/modules/6.6.87.2-microsoft-standard-WSL2
+none            2.0G  4.0K  2.0G   1% /mnt/wsl
+drivers         926G  555G  372G  60% /usr/lib/wsl/drivers
+/dev/sdd       1007G  212G  745G  23% /
+none            2.0G  196K  2.0G   1% /mnt/wslg
+none            2.0G     0  2.0G   0% /usr/lib/wsl/lib
+rootfs          2.0G  2.7M  2.0G   1% /init
+none            2.0G  1.4M  2.0G   1% /run
+none            2.0G     0  2.0G   0% /run/lock
+none            2.0G  4.0K  2.0G   1% /run/shm
+none            2.0G   80K  2.0G   1% /mnt/wslg/versions.txt
+none            2.0G   80K  2.0G   1% /mnt/wslg/doc
+C:\             926G  555G  372G  60% /mnt/c
+snapfuse        128K  128K     0 100% /snap/bare/5
+snapfuse         67M   67M     0 100% /snap/core24/1587
+snapfuse         50M   50M     0 100% /snap/snapd/26865
+snapfuse         74M   74M     0 100% /snap/core22/2411
+snapfuse         92M   92M     0 100% /snap/gtk-common-themes/1535
+snapfuse        607M  607M     0 100% /snap/gnome-46-2404/153
+snapfuse        185M  185M     0 100% /snap/chromium/3416
+snapfuse        395M  395M     0 100% /snap/mesa-2404/1165
+snapfuse        185M  185M     0 100% /snap/chromium/3423
+snapfuse         50M   50M     0 100% /snap/cups/1183
+snapfuse         49M   49M     0 100% /snap/snapd/26382
+tmpfs           392M   24K  392M   1% /run/user/1000
+
+## lsblk
+NAME MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda    8:0    0 388.6M  1 disk 
+sdb    8:16   0   186M  1 disk 
+sdc    8:32   0     1G  0 disk [SWAP]
+sdd    8:48   0     1T  0 disk /var/lib/docker
+                               /snap
+                               /mnt/wslg/distro
+                               /
+
+## mount
+none on /mnt/wsl type tmpfs (rw,relatime)
+drivers on /usr/lib/wsl/drivers type 9p (ro,nosuid,nodev,noatime,aname=drivers;fmask=222;dmask=222,cache=5,access=client,msize=65536,trans=fd,rfd=8,wfd=8)
+none on /mnt/wslg type tmpfs (rw,relatime)
+/dev/sdd on /mnt/wslg/distro type ext4 (ro,relatime,discard,errors=remount-ro,data=ordered)
+none on /usr/lib/wsl/lib type overlay (rw,nosuid,nodev,noatime,lowerdir=/gpu_lib_packaged:/gpu_lib_inbox,upperdir=/gpu_lib/rw/upper,workdir=/gpu_lib/rw/work,uuid=on)
+none on /mnt/wslg/versions.txt type overlay (rw,relatime,lowerdir=/systemvhd,upperdir=/system/rw/upper,workdir=/system/rw/work,uuid=on)
+none on /mnt/wslg/doc type overlay (rw,relatime,lowerdir=/systemvhd,upperdir=/system/rw/upper,workdir=/system/rw/work,uuid=on)
+C:\ on /mnt/c type 9p (rw,noatime,aname=drvfs;path=C:\;uid=1000;gid=1000;symlinkroot=/mnt/,cache=5,access=client,msize=65536,trans=fd,rfd=6,wfd=6)
+/dev/sdd on /var/lib/docker type ext4 (rw,relatime,discard,errors=remount-ro,data=ordered)
+overlay on /var/lib/docker/rootfs/overlayfs/15ac960dd0b40b6282158f1184bc94eb1a288c18c7f3d853764a99ab82bf06b6 type overlay (rw,relatime,lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/277/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/274/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/273/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/261/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/260/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/250/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/249/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/248/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/278/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/278/work)
+overlay on /var/lib/docker/rootfs/overlayfs/88d24d1cd1875cdbb260b8d2b62b64163fdc0b61bb4dabebbca7237d56f323d2 type overlay (rw,relatime,lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/264/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/263/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/262/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/261/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/260/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/250/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/249/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/248/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/265/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/265/work)
+overlay on /var/lib/docker/rootfs/overlayfs/de89612cee06b368ea20c86c6f265bab5684607a9abd9df941d6a7192e712336 type overlay (rw,relatime,lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/285/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/284/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/273/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/261/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/260/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/250/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/249/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/248/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/1/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/286/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/286/work)
+overlay on /var/lib/docker/rootfs/overlayfs/2c722067232ea26894456afb0cbb730e448893809a11df48f3e74abc378058ef type overlay (rw,relatime,lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/241/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/120/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/119/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/118/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/15/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/242/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/242/work)
+nsfs on /run/docker/netns/e04d163de3bb type nsfs (rw)
+nsfs on /run/docker/netns/75f4f6c99a11 type nsfs (rw)
+nsfs on /run/docker/netns/ccc7cf518932 type nsfs (rw)
+nsfs on /run/docker/netns/52d2ed16033d type nsfs (rw)
+tmpfs on /mnt/wslg/run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=401176k,nr_inodes=100294,mode=700,uid=1000,gid=1000)
+overlay on /var/lib/docker/rootfs/overlayfs/ba974f93d4570bb819d6cc7b4a20fbe69e34656d0706058e0f0eda018f3d5836 type overlay (rw,relatime,lowerdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/243/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/115/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/114/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/113/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/112/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/111/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/110/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/109/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/108/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/107/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/106/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/105/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/104/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/103/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/102/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/101/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/100/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/99/fs:/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/98/fs,upperdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/244/fs,workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/244/work)
+nsfs on /run/docker/netns/5df4cd6bd2e1 type nsfs (rw)
+
+## Windows drives if available
+
+Name Used (GB) Free (GB) Provider   Root CurrentLocation
+---- --------- --------- --------   ---- ---------------
+C       554.16    371.67 FileSystem C:\                 
+D        55.91     60.57 FileSystem D:\                 
+G       572.74    353.09 FileSystem G:\                 
+J       572.74    353.09 FileSystem J:\                 
+
+

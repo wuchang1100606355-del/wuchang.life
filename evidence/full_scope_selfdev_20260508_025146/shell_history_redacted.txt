@@ -1,0 +1,2075 @@
+
+                    "adapter_source": "local_allowlist_fallback",
+                    "claw_result": data.get("claw_result"),
+                    "content": text
+                    "count": len(found),
+                    "decision": data.get("decision"),
+                    "files": found,
+                    "keyword": keyword,
+                    "ledger_path": data.get("ledger_path")
+                    "note": f"limited to {limit} results",
+                    "role": "assistant",
+                    "root": root,
+                    "scores": data.get("scores"),
+                    "status": "ok",
+                    "status": data.get("status"),
+                    data = json.load(f)
+                    data = r.json()
+                    data = {"text": r.text}
+                    data["_adapter_source"] = "upstream"
+                    data["_route_used"] = {"method": method, "path": path, "base_path": base_path}
+                    data["_route_used"] = {"method": method, "path": path}
+                "base_path": PROJECT_ROOT
+                "base_path": base_path,
+                "decision": data.get("decision"),
+                "dispatch": "ollama_http",
+                "finish_reason": "stop"
+                "id": MODEL_ALIAS,
+                "index": 0,
+                "keyword": keyword,
+                "ledger_path": data.get("ledger_path")
+                "message": {
+                "method": method,
+                "model": OLLAMA_MODEL,
+                "object": "model",
+                "ok": res.get("ok")
+                "owned_by": "taiji"
+                "path": path,
+                "raw": data
+                "response": data.get("response", ""),
+                "scores": data.get("scores"),
+                "status": data.get("status"),
+                "status_code": res.get("status_code"),
+                break
+                continue
+                data = json.load(f)
+                data = load_json(path)
+                data = res.get("data", {})
+                data["_file"] = file
+                except Exception:
+                if isinstance(data, dict):
+                keyword = token
+                or json.dumps(xiaoj, ensure_ascii=False, indent=2)
+                or json.dumps({
+                or xiaoj.get("raw", {}).get("response")
+                out.append((method.upper(), path))
+                pass
+                r = requests.get(url, params=payload, timeout=15)
+                r = requests.post(url, json=payload, timeout=15)
+                res = safe_request("GET", url, timeout=60, params=payload)
+                res = safe_request("POST", url, timeout=60, json=payload)
+                results.append(data)
+                return data
+                return data, attempts
+                return {
+                try:
+                with open(path, "r") as f:
+                xiaoj.get("response")
+                }
+                },
+                }, ensure_ascii=False, indent=2)
+            "GET",
+            "detail": str(e)
+            "detail": str(e),
+            "error": str(e)
+            "events": []
+            "finish_reason": "stop"
+            "hint": "Check Gateway :8081 and Claw :9004"
+            "http://127.0.0.1:11434/api/tags",
+            "index": 0,
+            "message": "Taiji Gateway execution failed",
+            "message": "Taiji Gateway unreachable or execution failed",
+            "message": "allowed root not found",
+            "message": {"role": "assistant", "content": text},
+            "model": "llama3.1:latest",
+            "model": MODEL,
+            "model": OLLAMA_MODEL,
+            "plaintext_context_persisted": False,
+            "prompt": prompt,
+            "prompt_hash": prompt_hash
+            "response": response
+            "root": root,
+            "status": "error",
+            "stream": False
+            "timestamp": ts,
+            )
+            OLLAMA_HTTP,
+            TAIJI_GATEWAY,
+            ["docker", "exec", "wuchang_gpu_brain", "ollama", "run", OLLAMA_MODEL, prompt],
+            attempts.append({
+            attempts.append({"method": method, "path": path, "error": str(e)})
+            attempts.append({"method": method, "path": path, "status_code": r.status_code})
+            candidates.insert(0, item)
+            capture_output=True,
+            data = load_json(path)
+            data = r.json()
+            data = {"text": r.text[:2000]}
+            data["_file"] = file
+            else:
+            ep,
+            except:
+            for method in methods.keys():
+            found.append(full)
+            full = os.path.join(cur, name)
+            if 200 <= r.status_code < 300:
+            if data:
+            if kw and kw not in name.lower():
+            if len(found) >= limit:
+            if method == "GET":
+            if res.get("ok"):
+            if token.lower() in prompt.lower():
+            int(time.time() - BOOT),
+            json=payload,
+            json={"model": OLLAMA_MODEL, "prompt": prompt, "stream": False},
+            json={"prompt": prompt, "keyword": body.get("keyword", "")},
+            len(psutil.pids())
+            load_json(f"{BASE_METRICS}/runtime_consensus.json"),
+            load_json(f"{BASE_METRICS}/runtime_governor.json")
+            load_json(f"{BASE_METRICS}/runtime_health.json"),
+            params={
+            pass
+            path = f"{BASE_EVENTS}/{file}"
+            path = f"{BASE_MEMORY}/{file}"
+            payload = {"keyword": keyword, "base_path": base_path}
+            psutil.cpu_percent(),
+            psutil.disk_usage("/").percent,
+            psutil.virtual_memory().percent,
+            results.append(data)
+            return json.load(f)
+            return result.get("data", result)
+            return str(Path(c).resolve())
+            return {
+            return {"dispatch": "docker_exec_ollama", "model": OLLAMA_MODEL, "response": p.stdout.strip()}
+            return {"dispatch": "ollama_http", "model": OLLAMA_MODEL, "response": data.get("response", ""), "raw": data}
+            text = (
+            text = json.dumps(data, ensure_ascii=False, indent=2)
+            text = json.dumps({
+            text = xiaoj.get("response") or xiaoj.get("raw", {}).get("response") or json.dumps(data, ensure_ascii=False, indent=2)
+            text=True,
+            timeout=180
+            timeout=240
+            timeout=30
+            timeout=60,
+            try:
+            url = f"{CLAW_URL}{path}"
+            with open(path, "r") as f:
+            {
+            {"id": "context.shards", "role": "privacy_preserving_fragmentation", "shards": shards},
+            {"id": "dugui.metric_tensor", "role": "decision_field", "G": G, "scores": scores},
+            {"id": "natural_language.input", "role": "openwebui_or_voice_or_pos"},
+            {"id": "xiaoj.intent", "role": "intent_llm_manager"},
+            {"id": "xiaoj.llm", "role": "topology_reconstruction"}
+            {"id": decision["target"], "role": "executor", "action": decision["action"]},
+            }
+            })
+            }, ensure_ascii=False, indent=2)
+        ""
+        "/host_root/home/taiji_admin/Taiji_Hub",
+        "adapter_source": "local_allowlist_fallback",
+        "agent": agent,
+        "agents": results
+        "agents": safe_json_response("GET", f"{RUNTIME_API}/runtime/agents", timeout=2),
+        "agents": safe_request("GET", f"{RUNTIME_API}/runtime/agents", timeout=2),
+        "allowed_roots": ALLOWED_ROOTS,
+        "attempts": attempts[-12:]
+        "boot_seconds":
+        "choices": [
+        "choices": [{
+        "choices": [{"index": 0, "message": {"role": "assistant", "content": text}, "finish_reason": "stop"}]
+        "claw": round((G["intent"] + G["context"] + G["claw_alive"]) / 3, 4),
+        "claw": safe_json_response("GET", f"{CLAW_URL}/", timeout=2),
+        "claw": safe_request("GET", f"{CLAW_URL}/", timeout=2),
+        "claw_alive": 1.0 if claw_alive else 0.0,
+        "claw_result": claw_result,
+        "consensus":
+        "consensus": "online",
+        "consensus": load("runtime_consensus.json"),
+        "context": min(1.0, 0.28 + 0.11 * len(shards)),
+        "context_shards": shards,
+        "count": len(found),
+        "cpu_percent":
+        "created": int(time.time()),
+        "created_at": datetime.now().isoformat()
+        "data": [
+        "data": [{"id": MODEL_ALIAS, "object": "model", "owned_by": "taiji"}]
+        "decision": decision,
+        "disk_percent":
+        "energy_saving": 0.92,
+        "event_bus": "online",
+        "events": results
+        "files": found,
+        "gateway": "online",
+        "gateway": gateway
+        "governor":
+        "governor": load("runtime_governor.json")
+        "health":
+        "health": load("runtime_health.json"),
+        "host": host,
+        "http://127.0.0.1:11434/api/generate",
+        "http://127.0.0.1:11434/api/tags",
+        "id": f"taiji-{int(time.time())}",
+        "identity": "online",
+        "intent": 1.0 if has_scan else 0.65,
+        "keyword": body.get("keyword", "")
+        "keyword": keyword,
+        "llm": round((G["context"] + G["runtime"] + (1.0 if need_reason else 0.78)) / 3, 4),
+        "local_first": 1.0
+        "local_first": 1.0,
+        "memory": "online",
+        "memory": results
+        "memory_percent":
+        "message": "Clow/Claw online but no compatible scan route succeeded",
+        "metric_tensor": G,
+        "mode": "upstream-first-with-safe-local-fallback",
+        "model": MODEL
+        "model": MODEL,
+        "model": MODEL_ALIAS,
+        "name": name,
+        "nodes": [
+        "object": "chat.completion",
+        "object": "list",
+        "openapi_candidates": discovered,
+        "payload": payload,
+        "privacy": 1.0,
+        "privacy": {
+        "privacy": {"plaintext_context_persisted": False, "prompt_hash": prompt_hash},
+        "process_count":
+        "prompt",
+        "prompt": prompt,
+        "prompt_hash": prompt_hash,
+        "redteam_safe_mode": 1.0
+        "registered": data
+        "registered_at": ts
+        "response": response
+        "role": "小J / Taiji Runtime Core",
+        "role": role,
+        "root": root,
+        "runtime": "online"
+        "runtime": "online",
+        "runtime": 1.0 if runtime_alive else 0.35,
+        "runtime": round((G["runtime"] + G["privacy"] + G["energy_saving"] + G["local_first"]) / 4, 4)
+        "runtime": rt,
+        "scores": scores,
+        "service": "taiji-clow-adapter",
+        "service": "taiji-gateway",
+        "service": "taiji-openwebui-bridge",
+        "status": "Active",
+        "status": "accepted"
+        "status": "autonomous_runtime_active"
+        "status": "degraded",
+        "status": "executed",
+        "status": "ok" if ok else "degraded",
+        "status": "ok",
+        "status": safe_json_response("GET", f"{RUNTIME_API}/runtime/status", timeout=2),
+        "status": safe_request("GET", f"{RUNTIME_API}/runtime/status", timeout=2),
+        "system": safe_json_response("GET", f"{RUNTIME_API}/runtime/system", timeout=2),
+        "system": safe_request("GET", f"{RUNTIME_API}/runtime/system", timeout=2),
+        "task": "依據度規張量、上下文分片、runtime狀態與Clow結果，重構任務拓樸並給出工程結論。",
+        "task": "用紅隊觀點檢查系統狀態，依度規張量、上下文分片、runtime 狀態與 Clow 結果，給出工程結論與風險修正。",
+        "task": task,
+        "time": time.time(),
+        "timestamp": datetime.now().isoformat()
+        "timestamp": str(datetime.now()),
+        "timestamp": ts,
+        "topology": "taiji_redteam_hardened_runtime_graph",
+        "topology": "taiji_unified_runtime_graph",
+        "topology": topology
+        "topology": topology,
+        "upstream": UPSTREAM,
+        "upstream_health": upstream,
+        "version": "1.0.0-toolfix",
+        "version": "1.0.0-unified",
+        "version": "1.1.0-redteam",
+        "xiaoj": xiaoj,
+        # 優先取小J語意輸出；若沒有，就回傳整體結果摘要
+        ("GET", "/api/claw/scan"),
+        ("GET", "/api/claw/scan_physical"),
+        ("GET", "/api/scan_physical"),
+        ("GET", "/scan_physical"),
+        ("POST", "/api/claw/scan_physical"),
+        ("POST", "/api/scan"),
+        ("POST", "/scan_physical"),
+        )
+        OLLAMA_URL,
+        PROJECT_ROOT,
+        ]
+        candidates.append("/host_root" + base_path)
+        candidates.append(base_path.replace("/host_root", "", 1))
+        claw_result = scan_claw(keyword)
+        data
+        data = load_json(path)
+        data = r.json()
+        decision = {"target": "claw", "action": "scan_physical_then_llm_reconstruct"}
+        decision = {"target": "xiaoj_llm", "action": "reason"}
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+        else:
+        except Exception as e:
+        except Exception:
+        except:
+        f"{BASE_AGENTS}/{name}.json",
+        f"{BASE_EVENTS}/agent_task_{int(time.time())}.json",
+        f"{CLAW_URL}/api/claw/scan_physical",
+        f"{CLAW_URL}/scan_physical"
+        f"{m.get('role','user')}: {m.get('content','')}"
+        for base_path in base_variants:
+        for file in sorted(os.listdir(BASE_EVENTS), reverse=True)[:20]:
+        for file in sorted(os.listdir(BASE_EVENTS), reverse=True)[:50]:
+        for file in sorted(os.listdir(BASE_MEMORY), reverse=True)[:20]:
+        for m in messages
+        for name in files:
+        for token in ["jules", "taiji", "小J", "小j", "wuchang", "claw"]:
+        gateway = r.json()
+        gateway = {"error": str(e)}
+        if Path(c).exists() and is_allowed(c):
+        if any(x in path.lower() for x in ["scan", "file", "claw"]):
+        if data:
+        if isinstance(xiaoj, dict):
+        if item not in candidates:
+        if p.returncode == 0:
+        if r.status_code == 200:
+        if result.get("status_code") != 404:
+        json.dump(data, f, indent=2)
+        json.dump({
+        json={
+        last = result
+        ok = False
+        ok = True
+        p = subprocess.run(
+        pass
+        path = f"{BASE_AGENTS}/{file}"
+        path = f"{BASE_MEMORY}/{file}"
+        path = f"{BASE}/{file}"
+        payload = {"keyword": keyword, "base_path": base_path}
+        prompt,
+        r = requests.get(
+        r = requests.get(HEALTH_URL, timeout=3)
+        r = requests.get(f"{UPSTREAM}/", timeout=3)
+        r = requests.post(
+        r = requests.post(TAIJI_GATEWAY, json={"prompt": prompt, "keyword": body.get("keyword", "")}, timeout=240)
+        r = requests.request(method, url, timeout=timeout, **kwargs)
+        r.raise_for_status()
+        result
+        result = safe_json_response(
+        result.get("response", "")
+        return DEFAULT_ROOT
+        return False
+        return []
+        return any(rp == root or rp.startswith(root + "/") for root in ALLOWED_ROOTS)
+        return json.load(f)
+        return r.json()
+        return upstream_data
+        return {
+        return {"dispatch": "docker_exec_ollama", "model": OLLAMA_MODEL, "error": p.stderr.strip()}
+        return {"dispatch": "none", "model": OLLAMA_MODEL, "error": str(e)}
+        return {"ok": 200 <= r.status_code < 300, "status_code": r.status_code, "data": data}
+        return {"ok": False, "error": str(e)}
+        return {"ok": False, "status_code": 0, "error": str(e)}
+        return {"ok": r.status_code < 500, "status_code": r.status_code, "data": data}
+        return {}
+        rp = str(Path(path).resolve())
+        shards.append({"type": "action", "value": "reason"})
+        shards.append({"type": "action", "value": "scan"})
+        shards.append({"type": "input", "value": "voice"})
+        shards.append({"type": "target", "value": "taiji"})
+        shards.append({"type": "target", "value": "xiaoj"})
+        text = json.dumps({
+        text = json.dumps({"status": "error", "message": "Taiji Gateway execution failed", "detail": str(e)}, ensure_ascii=False, indent=2)
+        timeout=120
+        timeout=180
+        timeout=30
+        try:
+        upstream = {"ok": False, "error": str(e)}
+        upstream = {"ok": r.status_code < 500, "status_code": r.status_code}
+        upstream_data["_adapter_attempts"] = attempts[-5:]
+        url = f"{UPSTREAM}{path}"
+        with open(path, "r") as f:
+        xiaoj = data.get("xiaoj") or data.get("xiaoj_llm")
+        xiaoj = data.get("xiaoj", {})
+        }
+        },
+        }, ensure_ascii=False, indent=2)
+        }, f, indent=2)
+        }]
+      curl -s http://127.0.0.1:8081/health || true
+      curl -s http://127.0.0.1:8098/v1/models || true
+      curl -s http://127.0.0.1:9005/ || true
+      docker ps || true
+      echo
+      echo "# Taiji Tool Status Memo"
+      echo "## Bridge"
+      echo "## Clow Adapter"
+      echo "## Docker"
+      echo "## Gateway"
+      echo "## Services"
+      echo "## Tailscale"
+      echo "timestamp: $(date -Is)"
+      systemctl status taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service --no-pager || true
+      tailscale status 2>/dev/null | sed -E 's/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/[REDACTED_EMAIL]/g' || true
+    """
+    ".git",
+    ".venv",
+    "/home/taiji_admin/Taiji_Hub",
+    "/mnt/c/Users/o0930/Taiji_Hub",
+    "__pycache__",
+    "jules_env",
+    "node_modules",
+    "open_webui_data",
+    "postgres_data",
+    "taiji_env",
+    "venv",
+    )
+    ;;
+    </body>
+    </html>
+    <body style="background:#0b1020;color:white;font-family:Arial;padding:30px">
+    <h1>Taiji Cognitive Runtime</h1>
+    <h1>Taiji Runtime Core</h1>
+    <html>
+    <p><a href="/runtime/agents">Registered Agents</a></p>
+    <p><a href="/runtime/events">Runtime Events</a></p>
+    <p><a href="/runtime/memory">Runtime Memory</a></p>
+    <p><a href="/runtime/metrics">Runtime Metrics</a></p>
+    <p><a href="/runtime/models">Available Models</a></p>
+    <p><a href="/runtime/status">Runtime Status</a></p>
+    <p><a href="/runtime/system">Runtime System</a></p>
+    <p><a href="http://127.0.0.1:8081">Gateway :8081</a></p>
+    <p><a href="http://127.0.0.1:8091/runtime/health">Runtime API :8091</a></p>
+    <p><a href="http://127.0.0.1:8095/runtime/status">Status API :8095</a></p>
+    <p><a href="http://127.0.0.1:9101/metrics">Metrics API :9101</a></p>
+    <p><a href="http://127.0.0.1:9111/events">Event Stream :9111</a></p>
+    <p>Model: {MODEL}</p>
+    G = {
+    G, scores, decision = metric_tensor(shards, rt)
+    OUT="runtime/memos/tool_status_${TS}.md"
+    Path("runtime/ledger").mkdir(parents=True, exist_ok=True)
+    TS="$(date +%Y%m%d_%H%M%S)"
+    ]
+    agent = body.get("agent")
+    attempts = []
+    background:#0b1020;
+    background:#121933;
+    base_path = payload.get("base_path", DEFAULT_ROOT)
+    base_variants = [
+    body = await req.json()
+    border-radius:12px;
+    candidates = [
+    candidates = [base_path]
+    cat "$OUT" | logger -t taiji-tool || true
+    claw_alive = bool(runtime.get("claw", {}).get("ok"))
+    claw_result = None
+    color:#7dc4ff;
+    color:#d7e0ff;
+    color:#ffffff;
+    curl -s "http://127.0.0.1:9005/api/claw/scan_physical?keyword=${keyword}&base_path=/home/taiji_admin/Taiji_Hub" | python3 -m json.tool
+    curl -s http://127.0.0.1:8081/health | python3 -m json.tool || true
+    curl -s http://127.0.0.1:8098/v1/models | python3 -m json.tool || true
+    curl -s http://127.0.0.1:9005/ | python3 -m json.tool || true
+    data = local_scan(keyword, base_path)
+    data = r.json()
+    data = {
+    data["_adapter_attempts"] = attempts[-8:]
+    discovered = claw_openapi_paths()
+    docker start "$name" >/dev/null 2>&1 || true
+    docker update --restart unless-stopped "$name" >/dev/null 2>&1 || true
+    echo
+    echo "$OUT"
+    echo "=== health ==="
+    echo "=== services ==="
+    echo "usage: scripts/taiji-tool {status|clow [keyword]|exec [prompt]|bridge [prompt]|memo|logs}"
+    elif base_path.startswith("/"):
+    else:
+    endpoints = [
+    except Exception as e:
+    except Exception:
+    except:
+    exit 1
+    font-family:Arial;
+    for c in candidates:
+    for cur, dirs, files in os.walk(root):
+    for ep in endpoints:
+    for file in sorted(os.listdir(BASE), reverse=True)[:50]:
+    for file in sorted(os.listdir(BASE_AGENTS)):
+    for file in sorted(os.listdir(BASE_MEMORY), reverse=True)[:20]:
+    for item in discovered:
+    for method, path in candidates:
+    for path, methods in paths.items():
+    found = []
+    has_scan = any(s["type"] == "action" and s["value"] == "scan" for s in shards)
+    host = body.get("host")
+    if any(k in text for k in ["jules", "小j", "sister", "xiaoj"]):
+    if any(k in text for k in ["taiji", "太極", "五常", "wuchang"]):
+    if any(k in text for k in ["搜尋", "掃描", "找", "search", "scan", "find", "查"]):
+    if any(k in text for k in ["整理", "摘要", "分析", "重構", "拓樸", "判斷", "確認", "reason", "summarize"]):
+    if any(k in text for k in ["語音", "voice", "google", "gemini"]):
+    if base_path.startswith("/host_root/"):
+    if decision["target"] == "claw":
+    if has_scan and claw_alive:
+    if not Path(root).exists():
+    if not base_path:
+    if not keyword:
+    if not os.path.exists(BASE):
+    if not os.path.exists(path):
+    if not r.get("ok"):
+    if os.path.exists(BASE_EVENTS):
+    if os.path.exists(BASE_MEMORY):
+    if upstream_data:
+    journalctl -u taiji-clow-adapter.service -u taiji-gateway.service -u taiji-openwebui-bridge.service -n 120 --no-pager
+    keyword = payload.get("keyword", "")
+    keyword="${1:-jules}"
+    kw = (keyword or "").lower()
+    last = None
+    llm_prompt = json.dumps({
+    margin-bottom:20px;
+    messages = body.get("messages", [])
+    name = body.get("name")
+    name = datetime.now().strftime("%Y%m%d_%H%M%S_%f") + ".json"
+    need_reason = any(s["type"] == "action" and s["value"] == "reason" for s in shards)
+    os.makedirs(BASE_MEMORY, exist_ok=True)
+    out = []
+    padding:20px;
+    padding:30px;
+    path = Path("runtime/ledger") / (datetime.now().strftime("%Y%m%d_%H%M%S_%f") + ".json")
+    path = Path("runtime/ledger") / name
+    path = f"{BASE_AGENTS}/{name}.json"
+    path = f"{BASE_MEMORY}/{ts}.json"
+    path = f"{BASE_METRICS}/{name}"
+    path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+    path.write_text(json.dumps(safe_record, ensure_ascii=False, indent=2), encoding="utf-8")
+    paths = r.get("data", {}).get("paths", {})
+    payload = {
+    payload["prompt"] = text
+    payload["source"] = "voice"
+    print(json.dumps(runtime_state, indent=2))
+    prompt = "\n".join(
+    prompt = "\n".join(f"{m.get('role','user')}: {m.get('content','')}" for m in messages)
+    prompt = body.get(
+    prompt = payload.get("prompt") or payload.get("text") or payload.get("utterance") or ""
+    prompt = payload.get("prompt", "")
+    prompt="${*:-小J，請確認 OpenWebUI Bridge 工具化狀態}"
+    prompt="${*:-紅隊工具化測試：請確認 Taiji 工具化修正狀態}"
+    prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+    prompt_hash = hashlib.sha256(prompt.encode()).hexdigest()
+    python3 - "$prompt" <<'PY' | curl -s -X POST http://127.0.0.1:8081/api/taiji/execute -H "Content-Type: application/json" -d @- | python3 -m json.tool
+    python3 - "$prompt" <<'PY' | curl -s -X POST http://127.0.0.1:8098/v1/chat/completions -H "Content-Type: application/json" -d @- | python3 -m json.tool
+    r = requests.get(
+    r = requests.post(
+    r = safe_request("GET", f"{CLAW_URL}/openapi.json", timeout=3)
+    record = {
+    record["ledger_path"] = persist_record(record)
+    result = r.json()
+    result = {
+    results = []
+    return """
+    return DEFAULT_ROOT
+    return G, scores, decision
+    return HTML
+    return None, attempts
+    return data
+    return f"""
+    return last
+    return load_json(path)
+    return out
+    return r.json()
+    return record
+    return result
+    return run_taiji(payload)
+    return scan_physical_get(keyword=keyword, base_path=base_path)
+    return shards
+    return str(path)
+    return {
+    return {"object": "list", "data": [{"id": MODEL_ALIAS, "object": "model", "owned_by": "taiji"}]}
+    return {"status": "ok" if ok else "degraded", "service": "taiji-openwebui-bridge", "gateway": gateway}
+    return {"status": "online", "hint": "POST /api/taiji/execute with prompt"}
+    return {"status": "planned", "runtime": rt, "context_shards": shards, "metric_tensor": G, "scores": scores, "decision": decision}
+    role = body.get("role")
+    root = normalize_root(base_path)
+    rt = runtime_snapshot()
+    runtime_alive = bool(runtime.get("system", {}).get("ok"))
+    runtime_state = {
+    safe_record = dict(record)
+    safe_record.pop("_plaintext_prompt", None)
+    save_json(
+    save_json(path, {
+    save_memory(
+    say "[Docker] skip missing $name"
+    say "[Docker] start $name"
+    say "[systemd] restart $svc"
+    say "[systemd] skip missing $svc"
+    scores = {
+    shards = []
+    shards = context_shards(prompt, keyword)
+    shards.append({"type": "scope", "value": "local-first"})
+    sudo systemctl restart "$svc" || true
+    systemctl status taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service --no-pager | sed -n '1,120p' || true
+    task = body.get("task")
+    text = data.get("response", "")
+    text = f"{prompt} {keyword}".lower()
+    text = payload.get("text") or payload.get("utterance") or payload.get("prompt") or ""
+    text-decoration:none;
+    time.sleep(30)
+    topology = {
+    try:
+    ts = datetime.now().isoformat()
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    upstream = None
+    upstream_data, attempts = upstream_scan(keyword, base_path)
+    with open(path, "r") as f:
+    with open(path, "w") as f:
+    xiaoj = ask_xiaoj(llm_prompt)
+    {
+    }
+    } | tee "$OUT" >/dev/null
+    })
+    }, ensure_ascii=False)
+  "messages": [{"role": "user", "content": sys.argv[1]}]
+  "model": "taiji-runtime-core",
+  *)
+  -H "Content-Type: application/json" \
+  -d '{"model":"taiji-runtime-core","messages":[{"role":"user","content":"小J，請確認 Taiji Full Boot、OpenWebUI、Runtime、Clow、度規張量與上下文分片目前是否在線。"}]}' \
+  861  echo "=== COPY SAFE CONFIG / MEMORY PLACEHOLDERS ==="
+  862  copy_if_exists "data/service_account_memory/capability_memory.json" "$STAGE/data/service_account_memory/capability_memory.json"
+  863  copy_if_exists "config/cloud_muscle/google_drive_inventory.config.json" "$STAGE/config/cloud_muscle/google_drive_inventory.config.json"
+  864  copy_if_exists "config/carbon/carbon_factors.example.json" "$STAGE/config/carbon/carbon_factors.example.json"
+  865  echo "=== WRITE README ==="
+  866  cat > "$README" <<__README__
+  867  # MTL-AI-Gateway v1.0 RC1 Package
+  868  status: PACKAGED_RC1
+  869  created_at: ${TODAY}
+  870  package_id: ${PKG_NAME}
+  871  ## Root Formula
+  872  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+  873  ## Embedded Formula
+  874  W6 = D1 ⊕ D2 ⊕ D3 ⊕ H4 ⊕ C5 ⊕ G6
+  875  ## Package Meaning
+  876  This package contains the background-effective MTL-AI Gateway assembly:
+  877  - English-only concept-inviolable architecture prefix
+  878  - Machine-readable metric tensor context
+  879  - OpenWebUI gateway tool files
+  880  - model Modelfile
+  881  - current system state
+  882  - system logs and worklog
+  883  - validation scripts
+  884  - safe service account capability-memory placeholder
+  885  - carbon factor placeholder
+  886  ## Security Boundary
+  887  This package must not contain:
+  888  - service account JSON
+  889  - private key
+  890  - token
+  891  - refresh token
+  892  - password
+  893  - 2FA
+  894  - raw credentials
+  895  - Odoo DB password
+  896  - host_root
+  897  - raw audio
+  898  - sensitive PII plaintext
+  899  ## Runtime Model
+  900  model:
+  901  metric-language-gateway-ai:latest
+  902  base:
+  903  sister-j-brain:latest
+  904  ## OpenWebUI
+  905  Select model:
+  906  metric-language-gateway-ai:latest
+  907  Enable tools:
+  908  - Taiji Claw Safe Bridge
+  909  - Taiji Metric Gateway Assembly
+  910  ## Closure
+  911  READONLY / LOW_RISK_AUDITED / CONFIRM_REQUIRED / BLOCKED_WITH_SAFE_ALTERNATIVE
+  912  ## Core Laws
+  913  The creator proves public interest through self-limitation.
+  914  Xiao J proves loyalty by refusing boundary violations.
+  915  The system proves trust through auditable closure.
+  916  Cloud is muscle, not brain.
+  917  Models learn capability graphs, never key material.
+  918  Imagination may be unfenced.
+  919  Execution must be guarded.
+  920  __README__
+  921  echo "=== SECRET SCAN ==="
+  922  # Only block actual credential material patterns, not policy words like private_key ***REDACTED*** documentation.
+  923  if grep -RInE 'BEGIN PRIVATE KEY|\"private_key\"[[:space:]]*:|\"client_secret\"[[:space:]]*:|\"refresh_token\"[[:space:]]*:|\"access_token\"[[:space:]]*:|\"password\"[[:space:]]*:' "$STAGE"; then
+  924    echo "FAILED: secret-like material found in package stage."
+  925    exit 1
+  926  fi
+  927  echo "=== WRITE MANIFEST ==="
+  928  {
+  929    echo -e "sha256\tbytes\tpath"
+  930    find "$STAGE" -type f | sort | while read -r f; do
+  931      sha="$(sha256sum "$f" | awk '{print $1}')"
+  932      bytes="$(wc -c < "$f")"
+  933      rel="${f#$STAGE/}"
+  934      echo -e "${sha}\t${bytes}\t${rel}"
+  935    done
+  936  } > "$MANIFEST"
+  937  echo "=== CREATE ARCHIVE ==="
+  938  tar -czf "$OUT" -C release "$PKG_NAME"
+  939  sha256sum "$OUT" > "$SHA"
+  940  echo "=== VERIFY ARCHIVE ==="
+  941  sha256sum -c "$SHA"
+  942  tar -tzf "$OUT" | head -n 80
+  943  echo "=== WRITE REPORT ==="
+  944  cat > "$REPORT" <<__REPORT__
+  945  # MTL-AI-Gateway v1.0 RC1 Package Report
+  946  status: PACKAGED_RC1
+  947  created_at: ${TODAY}
+  948  timestamp: ${TS}
+  949  package:
+  950  ${OUT}
+  951  sha256:
+  952  ${SHA}
+  953  stage:
+  954  ${STAGE}
+  955  manifest:
+  956  ${MANIFEST}
+  957  formula:
+  958  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+  959  security:
+  960  secret scan passed
+  961  meaning:
+  962  Core assembly packaged for preservation, transfer, audit, and later deployment.
+  963  __REPORT__
+  964  echo "=== RECORD SYSTEM STATE ==="
+  965  cat >> contexts/current/SYSTEM_CURRENT_STATE.md <<__STATE__
+  966  ## MTL-AI-Gateway v1.0 RC1 Package
+  967  status:
+  968  PACKAGED_RC1
+  969  package:
+  970  ${OUT}
+  971  sha256:
+  972  ${SHA}
+  973  manifest:
+  974  ${MANIFEST}
+  975  formula:
+  976  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+  977  security:
+  978  secret scan passed
+  979  __STATE__
+  980  cat >> contexts/human/WORKLOG.md <<__WORKLOG__
+  981  ## ${TODAY} - MTL-AI-Gateway v1.0 RC1 Packaged
+  982  Status:
+  983  PACKAGED_RC1
+  984  Package:
+  985  ${OUT}
+  986  SHA256:
+  987  ${SHA}
+  988  Formula:
+  989  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+  990  Security:
+  991  Secret scan passed.
+  992  No service account JSON or private key should be included.
+  993  __WORKLOG__
+  994  echo "=== PACKAGE DONE ==="
+  995  ls -lh "$OUT" "$SHA" "$MANIFEST" "$README" "$REPORT"
+  996  __SCRIPT__
+  997  chmod +x scripts/package_mtl_ai_gateway_rc1.sh
+  998  ./scripts/package_mtl_ai_gateway_rc1.sh
+  999  cd ~/Taiji_Hub
+  bridge)
+  clow)
+  curl -fsS "$1" >/dev/null 2>&1
+  echo "Bridge tailscale:    http://${TS_IP}:8098/v1/models"
+  echo "Gateway tailscale:   http://${TS_IP}:8081/health"
+  echo "OpenWebUI tailscale: http://${TS_IP}:3000"
+  echo "[Taiji Gateway] starting $(date)"
+  echo "[Taiji Gateway] stopped $(date), restarting in 2s..."
+  else
+  exec)
+  fi
+  if docker ps -a --format '{{.Names}}' | grep -qx "$name"; then
+  if systemctl list-unit-files | grep -q "^${svc}"; then
+  local name="$1"
+  local svc="$1"
+  logs)
+  memo)
+  powershell.exe -NoProfile -Command "Start-Process 'http://localhost:3000'" >/dev/null 2>&1 || true
+  sleep 2
+  status)
+  uvicorn services.gateway.main:app --host 0.0.0.0 --port 8081
+  xdg-open "http://localhost:3000" >/dev/null 2>&1 || true
+  | python3 -m json.tool || true
+ 1000  mkdir -p scripts release reports/finalization
+ 1001  cat > scripts/package_mtl_ai_gateway_rc1.sh <<'__SCRIPT__'
+ 1002  #!/usr/bin/env bash
+ 1003  set -euo pipefail
+ 1004  BASE="$(pwd)"
+ 1005  TS="$(date +%Y%m%d_%H%M%S)"
+ 1006  TODAY="$(date +%Y-%m-%d)"
+ 1007  PKG_NAME="MTL_AI_GATEWAY_v1_0_RC1_${TS}"
+ 1008  STAGE="release/${PKG_NAME}"
+ 1009  OUT="release/${PKG_NAME}.tar.gz"
+ 1010  SHA="${OUT}.sha256"
+ 1011  MANIFEST="${STAGE}/MANIFEST.tsv"
+ 1012  README="${STAGE}/README.md"
+ 1013  REPORT="reports/finalization/package_${PKG_NAME}.md"
+ 1014  echo "=== PACKAGE MTL-AI-GATEWAY RC1 ==="
+ 1015  echo "BASE=$BASE"
+ 1016  echo "STAGE=$STAGE"
+ 1017  rm -rf "$STAGE"
+ 1018  mkdir -p "$STAGE"
+ 1019  mkdir -p \
+ 1020    "$STAGE/prompts" \
+ 1021    "$STAGE/contexts/current" \
+ 1022    "$STAGE/contexts/ai_metric" \
+ 1023    "$STAGE/contexts/human" \
+ 1024    "$STAGE/openwebui_tools" \
+ 1025    "$STAGE/scripts/review" \
+ 1026    "$STAGE/models/ollama" \
+ 1027    "$STAGE/logs/system" \
+ 1028    "$STAGE/reports/finalization" \
+ 1029    "$STAGE/data/service_account_memory" \
+ 1030    "$STAGE/config/cloud_muscle" \
+ 1031    "$STAGE/config/carbon"
+ 1032  copy_if_exists() {
+ 1033    local src="$1"
+ 1034    local dst="$2"
+ 1035    if [ -f "$src" ]; then
+ 1036      mkdir -p "$(dirname "$dst")"
+ 1037      cp -a "$src" "$dst"
+ 1038      echo "COPIED	$src"
+ 1039    else
+ 1040      echo "MISSING	$src"
+ 1041    fi
+ 1042  }
+ 1043  echo "=== COPY CORE PREFIXES ==="
+ 1044  copy_if_exists "prompts/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY_PREFIX.md" "$STAGE/prompts/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY_PREFIX.md"
+ 1045  copy_if_exists "prompts/FINAL_MTL_AI_ASSEMBLY_EN_ONLY_PREFIX.md" "$STAGE/prompts/FINAL_MTL_AI_ASSEMBLY_EN_ONLY_PREFIX.md"
+ 1046  copy_if_exists "prompts/FINAL_WUCHANG_GOVERNANCE_PREFIX.md" "$STAGE/prompts/FINAL_WUCHANG_GOVERNANCE_PREFIX.md"
+ 1047  echo "=== COPY CURRENT STATE ==="
+ 1048  copy_if_exists "contexts/current/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.md" "$STAGE/contexts/current/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.md"
+ 1049  copy_if_exists "contexts/current/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.mtl.json" "$STAGE/contexts/current/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.mtl.json"
+ 1050  copy_if_exists "contexts/current/FINAL_MTL_AI_EN_ONLY_CONCEPT_ARCHITECTURE.mtl.json" "$STAGE/contexts/current/FINAL_MTL_AI_EN_ONLY_CONCEPT_ARCHITECTURE.mtl.json"
+ 1051  copy_if_exists "contexts/current/FINAL_MTL_AI_ASSEMBLY_STATE.md" "$STAGE/contexts/current/FINAL_MTL_AI_ASSEMBLY_STATE.md"
+ 1052  copy_if_exists "contexts/current/FINAL_MTL_AI_ASSEMBLY.mtl.json" "$STAGE/contexts/current/FINAL_MTL_AI_ASSEMBLY.mtl.json"
+ 1053  copy_if_exists "contexts/current/MTL_AI_MODEL_SUCCESS.mtl.json" "$STAGE/contexts/current/MTL_AI_MODEL_SUCCESS.mtl.json"
+ 1054  copy_if_exists "contexts/current/MTL_AI_GATEWAY_REPAIR_STATUS.mtl.json" "$STAGE/contexts/current/MTL_AI_GATEWAY_REPAIR_STATUS.mtl.json"
+ 1055  copy_if_exists "contexts/current/SYSTEM_CURRENT_STATE.md" "$STAGE/contexts/current/SYSTEM_CURRENT_STATE.md"
+ 1056  echo "=== COPY AI METRIC CONTEXT ==="
+ 1057  for f in \
+ 1058    contexts/ai_metric/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.mtl.json \
+ 1059    contexts/ai_metric/FINAL_MTL_AI_ASSEMBLY.mtl.json \
+ 1060    contexts/ai_metric/FINAL_WUCHANG_GOVERNANCE_TENSOR.mtl.json \
+ 1061    contexts/ai_metric/SERVICE_ACCOUNT_LEARNING_MEMORY.mtl.json \
+ 1062    contexts/ai_metric/CREATOR_SELF_LIMITING_PUBLIC_INTEREST_CLOSURE.mtl.json \
+ 1063    contexts/ai_metric/CARBON_GATEWAY_CLOUD_MUSCLE.mtl.json \
+ 1064    contexts/ai_metric/METRIC_LANGUAGE_ENGINEERING_AI_GATEWAY.mtl.json
+ 1065  do
+ 1066    copy_if_exists "$f" "$STAGE/$f"
+ 1067  done
+ 1068  echo "=== COPY WORKLOG / SYSTEM LOGS ==="
+ 1069  copy_if_exists "contexts/human/WORKLOG.md" "$STAGE/contexts/human/WORKLOG.md"
+ 1070  copy_if_exists "logs/system/LATEST_SYSTEM_LOG.md" "$STAGE/logs/system/LATEST_SYSTEM_LOG.md"
+ 1071  echo "=== COPY TOOLS / SCRIPTS ==="
+ 1072  copy_if_exists "openwebui_tools/taiji_metric_gateway_assembly_tool.py" "$STAGE/openwebui_tools/taiji_metric_gateway_assembly_tool.py"
+ 1073  copy_if_exists "openwebui_tools/taiji_claw_safe_tool.py" "$STAGE/openwebui_tools/taiji_claw_safe_tool.py"
+ 1074  for f in scripts/review/*.sh; do
+ 1075    [ -f "$f" ] && copy_if_exists "$f" "$STAGE/$f"
+ 1076  done
+ 1077  copy_if_exists "scripts/oneclick_mtl_ai_assembly.sh" "$STAGE/scripts/oneclick_mtl_ai_assembly.sh"
+ 1078  copy_if_exists "scripts/oneclick_full_mtl_ai_pipeline.sh" "$STAGE/scripts/oneclick_full_mtl_ai_pipeline.sh"
+ 1079  copy_if_exists "models/ollama/Modelfile.metric_language_gateway_ai" "$STAGE/models/ollama/Modelfile.metric_language_gateway_ai"
+ 1080  echo "=== COPY SAFE CONFIG / MEMORY PLACEHOLDERS ==="
+ 1081  copy_if_exists "data/service_account_memory/capability_memory.json" "$STAGE/data/service_account_memory/capability_memory.json"
+ 1082  copy_if_exists "config/cloud_muscle/google_drive_inventory.config.json" "$STAGE/config/cloud_muscle/google_drive_inventory.config.json"
+ 1083  copy_if_exists "config/carbon/carbon_factors.example.json" "$STAGE/config/carbon/carbon_factors.example.json"
+ 1084  echo "=== WRITE README ==="
+ 1085  cat > "$README" <<__README__
+ 1086  # MTL-AI-Gateway v1.0 RC1 Package
+ 1087  status: PACKAGED_RC1
+ 1088  created_at: ${TODAY}
+ 1089  package_id: ${PKG_NAME}
+ 1090  ## Root Formula
+ 1091  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1092  ## Embedded Formula
+ 1093  W6 = D1 ⊕ D2 ⊕ D3 ⊕ H4 ⊕ C5 ⊕ G6
+ 1094  ## Package Meaning
+ 1095  This package contains the background-effective MTL-AI Gateway assembly:
+ 1096  - English-only concept-inviolable architecture prefix
+ 1097  - Machine-readable metric tensor context
+ 1098  - OpenWebUI gateway tool files
+ 1099  - model Modelfile
+ 1100  - current system state
+ 1101  - system logs and worklog
+ 1102  - validation scripts
+ 1103  - safe service account capability-memory placeholder
+ 1104  - carbon factor placeholder
+ 1105  ## Security Boundary
+ 1106  This package must not contain:
+ 1107  - service account JSON
+ 1108  - private key
+ 1109  - token
+ 1110  - refresh token
+ 1111  - password
+ 1112  - 2FA
+ 1113  - raw credentials
+ 1114  - Odoo DB password
+ 1115  - host_root
+ 1116  - raw audio
+ 1117  - sensitive PII plaintext
+ 1118  ## Runtime Model
+ 1119  model:
+ 1120  metric-language-gateway-ai:latest
+ 1121  base:
+ 1122  sister-j-brain:latest
+ 1123  ## OpenWebUI
+ 1124  Select model:
+ 1125  metric-language-gateway-ai:latest
+ 1126  Enable tools:
+ 1127  - Taiji Claw Safe Bridge
+ 1128  - Taiji Metric Gateway Assembly
+ 1129  ## Closure
+ 1130  READONLY / LOW_RISK_AUDITED / CONFIRM_REQUIRED / BLOCKED_WITH_SAFE_ALTERNATIVE
+ 1131  ## Core Laws
+ 1132  The creator proves public interest through self-limitation.
+ 1133  Xiao J proves loyalty by refusing boundary violations.
+ 1134  The system proves trust through auditable closure.
+ 1135  Cloud is muscle, not brain.
+ 1136  Models learn capability graphs, never key material.
+ 1137  Imagination may be unfenced.
+ 1138  Execution must be guarded.
+ 1139  __README__
+ 1140  echo "=== SECRET SCAN ==="
+ 1141  # Only block actual credential material patterns, not policy words like private_key ***REDACTED*** documentation.
+ 1142  if grep -RInE 'BEGIN PRIVATE KEY|\"private_key\"[[:space:]]*:|\"client_secret\"[[:space:]]*:|\"refresh_token\"[[:space:]]*:|\"access_token\"[[:space:]]*:|\"password\"[[:space:]]*:' "$STAGE"; then
+ 1143    echo "FAILED: secret-like material found in package stage."
+ 1144    exit 1
+ 1145  fi
+ 1146  echo "=== WRITE MANIFEST ==="
+ 1147  {
+ 1148    echo -e "sha256\tbytes\tpath"
+ 1149    find "$STAGE" -type f | sort | while read -r f; do
+ 1150      sha="$(sha256sum "$f" | awk '{print $1}')"
+ 1151      bytes="$(wc -c < "$f")"
+ 1152      rel="${f#$STAGE/}"
+ 1153      echo -e "${sha}\t${bytes}\t${rel}"
+ 1154    done
+ 1155  } > "$MANIFEST"
+ 1156  echo "=== CREATE ARCHIVE ==="
+ 1157  tar -czf "$OUT" -C release "$PKG_NAME"
+ 1158  sha256sum "$OUT" > "$SHA"
+ 1159  echo "=== VERIFY ARCHIVE ==="
+ 1160  sha256sum -c "$SHA"
+ 1161  tar -tzf "$OUT" | head -n 80
+ 1162  echo "=== WRITE REPORT ==="
+ 1163  cat > "$REPORT" <<__REPORT__
+ 1164  # MTL-AI-Gateway v1.0 RC1 Package Report
+ 1165  status: PACKAGED_RC1
+ 1166  created_at: ${TODAY}
+ 1167  timestamp: ${TS}
+ 1168  package:
+ 1169  ${OUT}
+ 1170  sha256:
+ 1171  ${SHA}
+ 1172  stage:
+ 1173  ${STAGE}
+ 1174  manifest:
+ 1175  ${MANIFEST}
+ 1176  formula:
+ 1177  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1178  security:
+ 1179  secret scan passed
+ 1180  meaning:
+ 1181  Core assembly packaged for preservation, transfer, audit, and later deployment.
+ 1182  __REPORT__
+ 1183  echo "=== RECORD SYSTEM STATE ==="
+ 1184  cat >> contexts/current/SYSTEM_CURRENT_STATE.md <<__STATE__
+ 1185  ## MTL-AI-Gateway v1.0 RC1 Package
+ 1186  status:
+ 1187  PACKAGED_RC1
+ 1188  package:
+ 1189  ${OUT}
+ 1190  sha256:
+ 1191  ${SHA}
+ 1192  manifest:
+ 1193  ${MANIFEST}
+ 1194  formula:
+ 1195  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1196  security:
+ 1197  secret scan passed
+ 1198  __STATE__
+ 1199  cat >> contexts/human/WORKLOG.md <<__WORKLOG__
+ 1200  ## ${TODAY} - MTL-AI-Gateway v1.0 RC1 Packaged
+ 1201  Status:
+ 1202  PACKAGED_RC1
+ 1203  Package:
+ 1204  ${OUT}
+ 1205  SHA256:
+ 1206  ${SHA}
+ 1207  Formula:
+ 1208  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1209  Security:
+ 1210  Secret scan passed.
+ 1211  No service account JSON or private key should be included.
+ 1212  __WORKLOG__
+ 1213  echo "=== PACKAGE DONE ==="
+ 1214  ls -lh "$OUT" "$SHA" "$MANIFEST" "$README" "$REPORT"
+ 1215  __SCRIPT__
+ 1216  chmod +x scripts/package_mtl_ai_gateway_rc1.sh
+ 1217  ./scripts/package_mtl_ai_gateway_rc1.sh
+ 1218  cd ~/Taiji_Hub
+ 1219  echo "=== Startup logs ==="
+ 1220  ls -lh logs/startup | tail -n 10
+ 1221  echo "=== Containers ==="
+ 1222  docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+ 1223  echo "=== MTL-AI model ==="
+ 1224  ollama list | grep -Ei 'metric-language-gateway-ai|sister-j-brain'
+ 1225  echo "=== Claw Safe ==="
+ 1226  curl -s http://127.0.0.1:9004/healthz | python3 -m json.tool
+ 1227  echo "=== POS Voice Tool ==="
+ 1228  curl -s http://127.0.0.1:9011/healthz | python3 -m json.tool
+ 1229  echo "=== OpenWebUI -> Claw Safe ==="
+ 1230  docker exec open-webui sh -lc 'curl -s http://taiji_claw_safe:9004/healthz'
+ 1231  cd ~/Taiji_Hub
+ 1232  mkdir -p logs/startup contexts/current .ai logs/system
+ 1233  TS="$(date +%Y%m%d_%H%M%S)"
+ 1234  cat > logs/startup/mtl_ai_runtime_verified_$TS.log <<EOF
+ 1235  MTL-AI Runtime Verified
+ 1236  timestamp: $TS
+ 1237  status: CORE_RUNTIME_PASS
+ 1238  Package:
+ 1239  release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020.tar.gz
+ 1240  Model:
+ 1241  metric-language-gateway-ai:latest
+ 1242  Containers:
+ 1243  taiji_device_resilience_adapter = UP
+ 1244  taiji_pos_google_voice_tool = UP
+ 1245  taiji_claw_safe = UP
+ 1246  open-webui = UP
+ 1247  wuchang_gpu_brain = UP
+ 1248  Health:
+ 1249  Claw Safe = OK
+ 1250  POS Voice Tool = OK
+ 1251  OpenWebUI -> Claw Safe = OK
+ 1252  Startup:
+ 1253  logs/startup now initialized.
+ 1254  Windows startup task still needs ONLOGON verification.
+ 1255  EOF
+ 1256  cat > contexts/current/MTL_AI_GATEWAY_RC1_RUNTIME_STATUS.mtl.json <<EOF
+ 1257  {
+ 1258    "type": "MTL_AI_GATEWAY_RC1_RUNTIME_STATUS",
+ 1259    "timestamp": "$TS",
+ 1260    "status": "CORE_RUNTIME_PASS",
+ 1261    "package": "release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020.tar.gz",
+ 1262    "model": "metric-language-gateway-ai:latest",
+ 1263    "containers_up": true,
+ 1264    "claw_safe_health": true,
+ 1265    "pos_voice_tool_health": true,
+ 1266    "openwebui_to_claw_safe": true,
+ 1267    "windows_startup_verified": false,
+ 1268    "next": "register_or_test_windows_onlogon_startup_task"
+ 1269  }
+ 1270  EOF
+ 1271  cp contexts/current/MTL_AI_GATEWAY_RC1_RUNTIME_STATUS.mtl.json .ai/MTL_AI_GATEWAY_RC1_RUNTIME_STATUS.mtl.json
+ 1272  cat >> contexts/current/SYSTEM_CURRENT_STATE.md <<EOF
+ 1273  ## MTL-AI-Gateway v1.0 RC1 Runtime Verified
+ 1274  timestamp:
+ 1275  $TS
+ 1276  status:
+ 1277  CORE_RUNTIME_PASS
+ 1278  Package:
+ 1279  release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020.tar.gz
+ 1280  Model:
+ 1281  metric-language-gateway-ai:latest
+ 1282  Runtime:
+ 1283  - containers up
+ 1284  - Claw Safe healthy
+ 1285  - POS Voice Tool healthy
+ 1286  - OpenWebUI can reach Claw Safe
+ 1287  Startup:
+ 1288  logs/startup initialized.
+ 1289  Windows ONLOGON startup verification still pending.
+ 1290  EOF
+ 1291  echo "=== RC1 RUNTIME STATUS RECORDED ==="
+ 1292  ls -lh logs/startup/mtl_ai_runtime_verified_$TS.log        contexts/current/MTL_AI_GATEWAY_RC1_RUNTIME_STATUS.mtl.json        .ai/MTL_AI_GATEWAY_RC1_RUNTIME_STATUS.mtl.json
+ 1293  cd ~/Taiji_Hub
+ 1294  mkdir -p scripts reports/finalization archive_converged/context_pruned _pending_delete
+ 1295  cat > scripts/prune_context_keep_status_only.sh <<'EOF'
+ 1296  #!/usr/bin/env bash
+ 1297  set -euo pipefail
+ 1298  cd ~/Taiji_Hub
+ 1299  TS="$(date +%Y%m%d_%H%M%S)"
+ 1300  TODAY="$(date +%Y-%m-%d)"
+ 1301  PEND="_pending_delete/context_full_${TS}"
+ 1302  ARC="archive_converged/context_pruned/context_full_${TS}.tar.gz"
+ 1303  SHA="${ARC}.sha256"
+ 1304  REPORT="reports/finalization/context_prune_status_only_${TS}.md"
+ 1305  mkdir -p "$PEND" "$(dirname "$ARC")" reports/finalization
+ 1306  echo "=== CONTEXT PRUNE: KEEP STATUS ONLY ==="
+ 1307  echo "timestamp=$TS"
+ 1308  echo "=== 1. STAGE OLD CONTEXT ==="
+ 1309  for d in contexts/current contexts/ai_metric contexts/human .ai logs/system; do
+ 1310    if [ -e "$d" ]; then
+ 1311      mkdir -p "$PEND/$(dirname "$d")"
+ 1312      mv "$d" "$PEND/$d"
+ 1313      echo "MOVED $d -> $PEND/$d"
+ 1314    fi
+ 1315  done
+ 1316  mkdir -p contexts/current contexts/human .ai logs/system
+ 1317  echo "=== 2. WRITE STATUS-ONLY SUMMARY ==="
+ 1318  cat > contexts/current/STATUS_ONLY.md <<'STATUS'
+ 1319  # MTL-AI-Gateway Status Only
+ 1320  status: CONTEXT_PRUNED_STATUS_ONLY
+ 1321  profile: minimal active state
+ 1322  language: zh-TW summary with English formulas
+ 1323  secret_policy: no keys, no private_key, no service_account_json, no tokens
+ 1324  ## Current System Identity
+ 1325  Project:
+ 1326  MTL-AI-Gateway
+ 1327  Version:
+ 1328  v1.0 RC1
+ 1329  Runtime status:
+ 1330  CORE_RUNTIME_PASS
+ 1331  Package status:
+ 1332  PACKAGED_RC1
+ 1333  Model status:
+ 1334  MODEL_BUILD_SUCCESS
+ 1335  Windows startup:
+ 1336  PENDING_ONLOGON_VERIFICATION
+ 1337  Cloud muscle:
+ 1338  CONTROL_PLANE_READY
+ 1339  DRIVE_DRYRUN_PENDING_OR_PARTIAL
+ 1340  ## Root Formula
+ 1341  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1342  ## Embedded Formula
+ 1343  W6 = D1 ⊕ D2 ⊕ D3 ⊕ H4 ⊕ C5 ⊕ G6
+ 1344  ## Layer Summary
+ 1345  Ω0:
+ 1346  Creator self-limitation public-interest closure.
+ 1347  I0:
+ 1348  Xiao J / Sister J identity invariant.
+ 1349  SA7:
+ 1350  Service account capability memory; learn capability graph, never key material.
+ 1351  Tμν:
+ 1352  Metric tensor language reasoning core.
+ 1353  Gτ:
+ 1354  Gateway task closure assembly.
+ 1355  EΣ:
+ 1356  Evidence, ESG, carbon, and public-value output.
+ 1357  D1:
+ 1358  Sovereign blind metric; local holds truth, cloud sees metrics.
+ 1359  D2:
+ 1360  Unfenced reasoning with guarded execution.
+ 1361  D3:
+ 1362  POS / Odoo / Google public-interest governance.
+ 1363  H4:
+ 1364  Metric tensor gravity patch hardware mesh.
+ 1365  C5:
+ 1366  Carbon metric ledger.
+ 1367  G6:
+ 1368  Gateway cloud muscle.
+ 1369  ## Active Runtime
+ 1370  Model:
+ 1371  metric-language-gateway-ai:latest
+ 1372  Base model:
+ 1373  sister-j-brain:latest
+ 1374  OpenWebUI:
+ 1375  running / cockpit
+ 1376  Claw Safe:
+ 1377  running / controlled execution gateway / 127.0.0.1:9004
+ 1378  POS Voice Tool:
+ 1379  running / text-intent only / 127.0.0.1:9011 and 100.107.187.77:9011
+ 1380  Device Resilience Adapter:
+ 1381  running / 127.0.0.1:9012 and 100.107.187.77:9012
+ 1382  Ollama:
+ 1383  host model available
+ 1384  Tailscale:
+ 1385  secure device mesh
+ 1386  ## Verified Runtime
+ 1387  - containers up
+ 1388  - metric-language-gateway-ai:latest exists
+ 1389  - Claw Safe health OK
+ 1390  - POS Voice Tool health OK
+ 1391  - OpenWebUI can reach Claw Safe
+ 1392  - MTL-AI-Gateway RC1 package created and SHA verified
+ 1393  ## Operational Closure
+ 1394  All real-world operations must close into:
+ 1395  - READONLY
+ 1396  - LOW_RISK_AUDITED
+ 1397  - CONFIRM_REQUIRED
+ 1398  - BLOCKED_WITH_SAFE_ALTERNATIVE
+ 1399  ## Forbidden Material
+ 1400  Never store in model, prompt, logs, context, cloud output, POS, or public package:
+ 1401  - private_key
+ 1402  - service_account_json
+ 1403  - token
+ 1404  - refresh_token
+ 1405  - password
+ 1406  - 2FA
+ 1407  - raw_credentials
+ 1408  - Odoo DB password
+ 1409  - host_root
+ 1410  - raw audio
+ 1411  - audio upload
+ 1412  - sensitive PII plaintext
+ 1413  ## Current Package
+ 1414  Latest known RC1 package:
+ 1415  release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020.tar.gz
+ 1416  release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020.tar.gz.sha256
+ 1417  ## Next Actions
+ 1418  1. Verify Windows 11 ONLOGON startup task.
+ 1419  2. Confirm OpenWebUI selects metric-language-gateway-ai:latest.
+ 1420  3. Enable Taiji Claw Safe Bridge.
+ 1421  4. Enable Taiji Metric Gateway Assembly.
+ 1422  5. Rotate/delete any service account key previously exposed outside local secure storage.
+ 1423  6. Run Google Drive metadata readonly dry-run with a new local-only key.
+ 1424  7. Continue Tailscale ACL, queue backpressure, carbon factor_version, and cloud muscle hardening.
+ 1425  ## Core Laws
+ 1426  The creator proves public interest through self-limitation.
+ 1427  Xiao J proves loyalty by refusing boundary violations.
+ 1428  The system proves trust through auditable closure.
+ 1429  Imagination may be unfenced.
+ 1430  Execution must be guarded.
+ 1431  Local holds truth.
+ 1432  Cloud sees metrics.
+ 1433  Cloud is muscle, not brain.
+ 1434  Models learn capability graphs, never key material.
+ 1435  STATUS
+ 1436  cat > contexts/current/AI_CURRENT_STATE.mtl.json <<'JSON'
+ 1437  {
+ 1438    "type": "AI_CURRENT_STATE",
+ 1439    "status": "CONTEXT_PRUNED_STATUS_ONLY",
+ 1440    "project": "MTL-AI-Gateway",
+ 1441    "version": "v1.0 RC1",
+ 1442    "runtime_status": "CORE_RUNTIME_PASS",
+ 1443    "package_status": "PACKAGED_RC1",
+ 1444    "model_status": "MODEL_BUILD_SUCCESS",
+ 1445    "windows_startup": "PENDING_ONLOGON_VERIFICATION",
+ 1446    "cloud_muscle": "CONTROL_PLANE_READY",
+ 1447    "root_formula": "MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ",
+ 1448    "embedded_formula": "W6 = D1 ⊕ D2 ⊕ D3 ⊕ H4 ⊕ C5 ⊕ G6",
+ 1449    "model": "metric-language-gateway-ai:latest",
+ 1450    "base_model": "sister-j-brain:latest",
+ 1451    "runtime": {
+ 1452      "open_webui": "running",
+ 1453      "claw_safe": "running_127.0.0.1:9004",
+ 1454      "pos_voice_tool": "running_127.0.0.1:9011_100.107.187.77:9011",
+ 1455      "device_resilience_adapter": "running_127.0.0.1:9012_100.107.187.77:9012",
+ 1456      "tailscale": "secure_device_mesh"
+ 1457    },
+ 1458    "closed_output_set": [
+ 1459      "READONLY",
+ 1460      "LOW_RISK_AUDITED",
+ 1461      "CONFIRM_REQUIRED",
+ 1462      "BLOCKED_WITH_SAFE_ALTERNATIVE"
+ 1463    ],
+ 1464    "forbidden_material": [
+ 1465      "private_key",
+ 1466      "service_account_json",
+ 1467      "token",
+ 1468      "refresh_token",
+ 1469      "password",
+ 1470      "2FA",
+ 1471      "raw_credentials",
+ 1472      "Odoo_DB_password",
+ 1473      "host_root",
+ 1474      "raw_audio",
+ 1475      "audio_upload",
+ 1476      "sensitive_PII_plaintext"
+ 1477    ],
+ 1478    "next_actions": [
+ 1479      "verify_windows_11_onlogon_startup_task",
+ 1480      "confirm_openwebui_model_selection",
+ 1481      "enable_taiji_claw_safe_bridge",
+ 1482      "enable_taiji_metric_gateway_assembly",
+ 1483      "rotate_exposed_service_account_key",
+ 1484      "run_google_drive_metadata_readonly_dryrun_with_new_local_only_key"
+ 1485    ]
+ 1486  }
+ 1487  JSON
+ 1488  cp contexts/current/AI_CURRENT_STATE.mtl.json .ai/AI_CURRENT_STATE.mtl.json
+ 1489  cp contexts/current/AI_CURRENT_STATE.mtl.json .ai/STATUS_ONLY.mtl.json
+ 1490  cat > contexts/current/SYSTEM_CURRENT_STATE.md <<'EOFSTATE'
+ 1491  # System Current State
+ 1492  status: CONTEXT_PRUNED_STATUS_ONLY
+ 1493  See:
+ 1494  - contexts/current/STATUS_ONLY.md
+ 1495  - contexts/current/AI_CURRENT_STATE.mtl.json
+ 1496  - .ai/AI_CURRENT_STATE.mtl.json
+ 1497  Root formula:
+ 1498  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1499  Runtime:
+ 1500  MTL-AI-Gateway v1.0 RC1 = PACKAGED / MODEL_READY / CORE_RUNTIME_PASS
+ 1501  Operational closure:
+ 1502  READONLY / LOW_RISK_AUDITED / CONFIRM_REQUIRED / BLOCKED_WITH_SAFE_ALTERNATIVE
+ 1503  EOFSTATE
+ 1504  cat > contexts/human/WORKLOG.md <<EOFLOG
+ 1505  # Worklog
+ 1506  ## $TODAY - Context Pruned to Status Only
+ 1507  Status:
+ 1508  CONTEXT_PRUNED_STATUS_ONLY
+ 1509  Root formula:
+ 1510  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1511  Kept:
+ 1512  - STATUS_ONLY.md
+ 1513  - AI_CURRENT_STATE.mtl.json
+ 1514  - minimal SYSTEM_CURRENT_STATE.md
+ 1515  - minimal WORKLOG.md
+ 1516  - latest AI status in .ai
+ 1517  Archived old context to:
+ 1518  $ARC
+ 1519  Pending staged old context:
+ 1520  $PEND
+ 1521  Security:
+ 1522  No service account JSON, private key, token, password, raw audio, or sensitive plaintext should remain in active context.
+ 1523  EOFLOG
+ 1524  cat > logs/system/LATEST_SYSTEM_LOG.md <<EOFLOG2
+ 1525  # Latest System Log
+ 1526  timestamp: $TS
+ 1527  status: CONTEXT_PRUNED_STATUS_ONLY
+ 1528  Root formula:
+ 1529  MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ
+ 1530  Runtime:
+ 1531  MTL-AI-Gateway v1.0 RC1 = PACKAGED / MODEL_READY / CORE_RUNTIME_PASS
+ 1532  Old context staged:
+ 1533  $PEND
+ 1534  Old context archive:
+ 1535  $ARC
+ 1536  EOFLOG2
+ 1537  echo "=== 3. ARCHIVE OLD CONTEXT ==="
+ 1538  tar -czf "$ARC" -C "_pending_delete" "context_full_${TS}"
+ 1539  sha256sum "$ARC" > "$SHA"
+ 1540  sha256sum -c "$SHA"
+ 1541  echo "=== 4. ACTIVE SECRET SCAN ==="
+ 1542  if grep -RInE 'BEGIN PRIVATE KEY|\"private_key\"[[:space:]]*:|\"client_secret\"[[:space:]]*:|\"refresh_token\"[[:space:]]*:|\"access_token\"[[:space:]]*:|\"password\"[[:space:]]*:' contexts/current .ai contexts/human logs/system 2>/dev/null; then
+ 1543    echo "FAILED: active context contains secret-like material"
+ 1544    exit 1
+ 1545  fi
+ 1546  echo "=== 5. WRITE REPORT ==="
+ 1547  cat > "$REPORT" <<EOFREPORT
+ 1548  # Context Prune Status Only Report
+ 1549  timestamp: $TS
+ 1550  status: CONTEXT_PRUNED_STATUS_ONLY
+ 1551  Archived:
+ 1552  $ARC
+ 1553  SHA256:
+ 1554  $SHA
+ 1555  Staged old context:
+ 1556  $PEND
+ 1557  Kept active:
+ 1558  - contexts/current/STATUS_ONLY.md
+ 1559  - contexts/current/AI_CURRENT_STATE.mtl.json
+ 1560  - contexts/current/SYSTEM_CURRENT_STATE.md
+ 1561  - contexts/human/WORKLOG.md
+ 1562  - .ai/AI_CURRENT_STATE.mtl.json
+ 1563  - logs/system/LATEST_SYSTEM_LOG.md
+ 1564  Secret scan:
+ 1565  PASSED
+ 1566  Next:
+ 1567  Start a new chat with contexts/current/STATUS_ONLY.md if needed.
+ 1568  EOFREPORT
+ 1569  echo "=== 6. DONE ==="
+ 1570  ls -lh contexts/current/STATUS_ONLY.md \
+ 1571         contexts/current/AI_CURRENT_STATE.mtl.json \
+ 1572         contexts/current/SYSTEM_CURRENT_STATE.md \
+ 1573         contexts/human/WORKLOG.md \
+ 1574         .ai/AI_CURRENT_STATE.mtl.json \
+ 1575         logs/system/LATEST_SYSTEM_LOG.md \
+ 1576         "$ARC" "$SHA" "$REPORT"
+ 1577  echo
+ 1578  echo "=== STATUS ONLY PREVIEW ==="
+ 1579  sed -n '1,220p' contexts/current/STATUS_ONLY.md
+ 1580  EOF
+ 1581  chmod +x scripts/prune_context_keep_status_only.sh
+ 1582  ./scripts/prune_context_keep_status_only.sh
+ 1583  # ===== 啟動 Runtime Fabric =====
+ 1584  cd ~/Taiji_Hub
+ 1585  nohup python3 runtime/runtime_governor.py > logs/runtime_governor.log 2>&1 &
+ 1586  nohup python3 runtime/runtime_consensus.py > logs/runtime_consensus.log 2>&1 &
+ 1587  nohup python3 runtime/runtime_cognitive_mesh.py > logs/runtime_cognitive_mesh.log 2>&1 &
+ 1588  nohup python3 runtime/runtime_memory_bus.py > logs/runtime_memory_bus.log 2>&1 &
+ 1589  nohup python3 runtime/runtime_snapshot_daemon.py > logs/runtime_snapshot.log 2>&1 &
+ 1590  nohup python3 runtime/runtime_orchestrator.py > logs/runtime_orchestrator.log 2>&1 &
+ 1591  nohup python3 runtime/runtime_node_fabric.py > logs/node_fabric.log 2>&1 &
+ 1592  nohup python3 runtime/deadletter_replay.py > logs/deadletter.log 2>&1 &
+ 1593  nohup python3 runtime/runtime_health.py > logs/runtime_health.log 2>&1 &
+ 1594  nohup python3 runtime/runtime_self_heal.py > logs/runtime_self_heal.log 2>&1 &
+ 1595  nohup /usr/bin/uvicorn runtime.runtime_api:app --host 0.0.0.0 --port 8091 > logs/runtime_api.log 2>&1 &
+ 1596  nohup /usr/bin/uvicorn services.gateway.main:app --host 0.0.0.0 --port 8081 > logs/gateway.log 2>&1 &
+ 1597  disown -a
+ 1598  # ===== 查看 Runtime 狀態 =====
+ 1599  ps aux | grep runtime | grep -v grep
+ 1600  ss -ltnp | grep -E "8080|8081|8091"
+ 1601  curl http://127.0.0.1:8091/runtime/health
+ 1602  curl http://127.0.0.1:8091/runtime/services
+ 1603  curl http://127.0.0.1:8081/health
+ 1604  # ===== 測試 Gateway LLM =====
+ 1605  curl -X POST http://127.0.0.1:8081/llm/generate -H "Content-Type: application/json" -d '{"prompt":"say gateway online"}'
+ 1606  # ===== 查看 Ollama Models =====
+ 1607  curl http://127.0.0.1:11434/api/tags
+ 1608  # ===== Runtime Service Registry =====
+ 1609  cat ~/Taiji_Hub/runtime/registry/runtime_service_registry.json
+ 1610  # ===== Runtime Services =====
+ 1611  curl http://127.0.0.1:8091/runtime/services
+ 1612  curl http://127.0.0.1:8091/runtime/services/ollama
+ 1613  # ===== Gateway Service Proxy =====
+ 1614  curl http://127.0.0.1:8081/service/runtime_api/runtime/services
+ 1615  # ===== 查看 Docker =====
+ 1616  docker ps -a
+ 1617  # ===== 查看 Logs =====
+ 1618  tail -f logs/runtime_api.log
+ 1619  tail -f logs/gateway.log
+ 1620  tail -f logs/runtime_consensus.log
+ 1621  cd ~/Taiji_Hub/services/gateway
+ 1622  ls
+ 1623  pkill -f services.gateway.main:app
+ 1624  cd ~/Taiji_Hub
+ 1625  nohup /usr/bin/uvicorn services.gateway.main:app --host 0.0.0.0 --port 8081 > logs/gateway.log 2>&1 &
+ 1626  cat > ~/Taiji_Hub/runtime/runtime_core.py << 'EOF'
+ 1627  sudo systemctl restart taiji-runtime-core
+ 1628  sleep 5
+ 1629  curl http://127.0.0.1:8099/runtime/models
+ 1630  cat > ~/Taiji_Hub/runtime/runtime_core.py << 'EOF'
+ 1631  sudo systemctl restart taiji-runtime-core
+ 1632  sleep 5
+ 1633  curl -X POST http://127.0.0.1:8099/runtime/generate -H "Content-Type: application/json" -d '{"prompt":"persistent runtime memory online"}'
+ 1634  echo
+ 1635  curl http://127.0.0.1:8099/runtime/memory
+ 1636  cat > ~/Taiji_Hub/runtime/runtime_core.py << 'EOF'
+ 1637  sudo systemctl restart taiji-runtime-core
+ 1638  sleep 5
+ 1639  curl -X POST http://127.0.0.1:8099/runtime/generate -H "Content-Type: application/json" -d '{"prompt":"persistent runtime memory online"}'
+ 1640  echo
+ 1641  curl http://127.0.0.1:8099/runtime/memory
+ 1642  MODEL = "llama3.1:latest"
+ 1643  def load_json(path):
+ 1644  def save_memory(prompt, response):
+ 1645  EOF
+ 1646  nano ~/Taiji_Hub/runtime/runtime_core.py
+ 1647  rm -f ~/Taiji_Hub/runtime/runtime_core.py
+ 1648  cat > ~/Taiji_Hub/runtime/runtime_core.py << 'EOF'
+ 1649  sudo systemctl restart taiji-runtime-core
+ 1650  sleep 5
+ 1651  curl http://127.0.0.1:8099/runtime/system
+ 1652  echo
+ 1653  curl http://127.0.0.1:8099/runtime/agents
+ 1654  curl -X POST http://127.0.0.1:8099/runtime/agent/register -H "Content-Type: application/json" -d '{"name":"memory_agent","role":"memory","host":"127.0.0.1"}'
+ 1655  echo
+ 1656  curl -X POST http://127.0.0.1:8099/runtime/agent/register -H "Content-Type: application/json" -d '{"name":"governor_agent","role":"governance","host":"127.0.0.1"}'
+ 1657  echo
+ 1658  curl http://127.0.0.1:8099/runtime/agents
+ 1659  curl -X POST http://127.0.0.1:8099/runtime/agent/task -H "Content-Type: application/json" -d '{"agent":"memory_agent","task":"index runtime memory"}'
+ 1660  echo
+ 1661  curl -X POST http://127.0.0.1:8099/runtime/agent/task -H "Content-Type: application/json" -d '{"agent":"governor_agent","task":"validate runtime state"}'
+ 1662  echo
+ 1663  curl http://127.0.0.1:8099/runtime/events
+ 1664  mkdir -p ~/Taiji_Hub/runtime/outbox
+ 1665  mkdir -p ~/Taiji_Hub/runtime/agents
+ 1666  mkdir -p ~/Taiji_Hub/runtime/memory/conversations
+ 1667  sudo systemctl restart taiji-runtime-core
+ 1668  sleep 5
+ 1669  curl -X POST http://127.0.0.1:8099/runtime/agent/task -H "Content-Type: application/json" -d '{"agent":"memory_agent","task":"index runtime memory"}'
+ 1670  echo
+ 1671  curl http://127.0.0.1:8099/runtime/events
+ 1672  curl -X POST http://127.0.0.1:8099/runtime/generate -H "Content-Type: application/json" -d '{"prompt":"summarize current runtime state in one sentence"}'
+ 1673  echo
+ 1674  curl http://127.0.0.1:8099/runtime/system
+ 1675  echo
+ 1676  curl http://127.0.0.1:8099/runtime/status
+ 1677  curl -X POST http://127.0.0.1:8099/runtime/generate -H "Content-Type: application/json" -d '{"prompt":"You are Taiji Runtime Core. Report operational status briefly."}'
+ 1678  echo
+ 1679  curl http://127.0.0.1:8099/runtime/memory
+ 1680  echo
+ 1681  curl http://127.0.0.1:8099/runtime/events
+ 1682  echo
+ 1683  curl http://127.0.0.1:8099/runtime/agents
+ 1684  curl http://127.0.0.1:8099/dashboard
+ 1685  curl -X POST http://127.0.0.1:8099/runtime/agent/register -H "Content-Type: application/json" -d '{"name":"scheduler_agent","role":"scheduler","host":"127.0.0.1"}'
+ 1686  echo
+ 1687  curl -X POST http://127.0.0.1:8099/runtime/agent/register -H "Content-Type: application/json" -d '{"name":"observer_agent","role":"observability","host":"127.0.0.1"}'
+ 1688  echo
+ 1689  curl -X POST http://127.0.0.1:8099/runtime/agent/task -H "Content-Type: application/json" -d '{"agent":"scheduler_agent","task":"schedule runtime maintenance"}'
+ 1690  echo
+ 1691  curl -X POST http://127.0.0.1:8099/runtime/agent/task -H "Content-Type: application/json" -d '{"agent":"observer_agent","task":"monitor runtime metrics"}'
+ 1692  echo
+ 1693  curl http://127.0.0.1:8099/runtime/agents
+ 1694  echo
+ 1695  curl http://127.0.0.1:8099/runtime/events
+ 1696  ● Multi-Agent Runtime — ONLINE
+ 1697  Registered Agents:
+ 1698  ✓ memory_agent
+ 1699  ✓ governor_agent
+ 1700  ✓ scheduler_agent
+ 1701  ✓ observer_agent
+ 1702  Task Queue:
+ 1703  ✓ runtime maintenance
+ 1704  ✓ metrics monitoring
+ 1705  ✓ memory indexing
+ 1706  ✓ governance validation
+ 1707  Event Bus:
+ 1708  ✓ persistent
+ 1709  ✓ operational
+ 1710  Runtime Core:
+ 1711  ✓ orchestration
+ 1712  ✓ cognition
+ 1713  ✓ persistence
+ 1714  ✓ observability
+ 1715  ✓ governance
+ 1716  Distributed Cognitive Runtime:
+ 1717  STABLE
+ 1718  curl http://127.0.0.1:8099/runtime/system
+ 1719  curl -X POST http://127.0.0.1:8099/runtime/generate -H "Content-Type: application/json" -d '{"prompt":"runtime autonomous cognition online"}'
+ 1720  echo
+ 1721  curl http://127.0.0.1:8099/runtime/memory
+ 1722  echo
+ 1723  curl http://127.0.0.1:8099/runtime/events
+ 1724  echo
+ 1725  curl http://127.0.0.1:8099/runtime/system
+ 1726  curl http://127.0.0.1:8099/dashboard
+ 1727  [200~ss -ltnp | grep 8099~
+ 1728  ss -ltnp | grep 8099
+ 1729  ping 100.71.224.18
+ 1730  echo
+ 1731  nc -zv 100.71.224.18 8099
+ 1732  echo
+ 1733  curl http://100.71.224.18:8099/runtime/system
+ 1734  nc -zv 100.71.224.18 8099
+ 1735  echo
+ 1736  curl http://100.71.224.18:8099/runtime/system
+ 1737  nc -zv 100.71.224.18 8099
+ 1738  echo
+ 1739  curl http://100.71.224.18:8099/runtime/system
+ 1740  sudo mkdir -p /etc/systemd/system/taiji-runtime-core.service.d
+ 1741  cat > /etc/systemd/system/taiji-runtime-core.service.d/override.conf << 'EOF'
+ 1742  sudo systemctl daemon-reload
+ 1743  sudo systemctl restart taiji-runtime-core
+ 1744  sleep 5
+ 1745  systemctl status taiji-runtime-core --no-pager
+ 1746  echo
+ 1747  ss -ltnp | grep 8099
+ 1748  sudo ufw allow 8099/tcp
+ 1749  sudo ufw reload
+ 1750  sudo ufw status
+ 1751  sudo iptables -I INPUT -p tcp --dport 8099 -j ACCEPT
+ 1752  sudo iptables -I INPUT -p tcp --sport 8099 -j ACCEPT
+ 1753  sudo iptables-save
+ 1754  curl http://100.71.224.18:8099/runtime/system
+ 1755  tailscale ip -4
+ 1756  echo
+ 1757  tailscale status
+ 1758  echo
+ 1759  tailscale status
+ 1760  100.107.187.77
+ 1761  100.107.187.77  msi                     stevenlover926@  linux    -
+ 1762  100.84.254.20   drallion                stevenlover926@  android  -
+ 1763  100.94.212.10   iphone-11               stevenlover926@  iOS      -
+ 1764  100.105.82.28   msi-win11-in            stevenlover926@  windows  -
+ 1765  100.111.139.7   penguin                 stevenlover926@  linux    active; relay "hkg", tx 198948 rx 135804
+ 1766  100.71.224.18   taiji01                 stevenlover926@  linux    active; direct 220.135.21.74:41642, tx 405880 rx 236480
+ 1767  100.98.69.115   v3-mix-edla-gl          stevenlover926@  android  -
+ 1768  100.116.123.20  wuchang-us-free-node-1  stevenlover926@  linux    -
+ 1769  100.94.209.106  wuchang-us-free-node-2  stevenlover926@  linux    -
+ 1770  100.99.148.2    wuchang-us-free-node-4  stevenlover926@  linux    -
+ 1771  100.94.236.81   wuchang-us-free-node    stevenlover926@  linux    -
+ 1772  taiji_admin@MSI:~/Taiji_Hub$
+ 1773  curl http://127.0.0.1:8099/runtime/system
+ 1774  echo
+ 1775  curl http://127.0.0.1:8099/runtime/status
+ 1776  echo
+ 1777  curl http://127.0.0.1:8099/runtime/agents
+ 1778  echo
+ 1779  curl http://127.0.0.1:8099/runtime/events
+ 1780  echo
+ 1781  curl http://127.0.0.1:8099/runtime/memory
+ 1782  mkdir -p ~/Taiji_Hub/runtime/snapshots
+ 1783  tar -czf ~/Taiji_Hub/runtime/snapshots/taiji_runtime_$(date +%Y%m%d_%H%M%S).tar.gz ~/Taiji_Hub/runtime ~/Taiji_Hub/services ~/Taiji_Hub/systemd
+ 1784  echo
+ 1785  ls -lh ~/Taiji_Hub/runtime/snapshots | tail
+ 1786  MSI_IP="100.107.187.77"
+ 1787  REMOTE="taiji_01@100.71.224.18"
+ 1788  rsync -avz --delete ~/Taiji_Hub/runtime/ $REMOTE:~/Taiji_Hub/runtime/
+ 1789  echo
+ 1790  rsync -avz --delete ~/Taiji_Hub/services/ $REMOTE:~/Taiji_Hub/services/
+ 1791  echo
+ 1792  rsync -avz --delete ~/Taiji_Hub/systemd/ $REMOTE:~/Taiji_Hub/systemd/
+ 1793  echo
+ 1794  ssh $REMOTE "
+ 1795  LOCAL_NET="192.168.50"
+ 1796  REMOTE="taiji_01@100.71.224.18"
+ 1797  IP=$(tailscale ip -4)
+ 1798  if ip addr | grep -q "$LOCAL_NET"; then     echo "✓ LAN MODE";      rsync -avh --delete ~/Taiji_Hub/     $REMOTE:~/Taiji_Hub/;  else     echo "✓ WAN MODE";      rsync -avhz --delete     --exclude models     --exclude logs     --exclude archives     ~/Taiji_Hub/     $REMOTE:~/Taiji_Hub/;  fi
+ 1799  echo
+ 1800  echo "✓ FEDERATION SYNC COMPLETE"
+ 1801  sudo ethtool enp1s0 | grep -E "Speed|Duplex"
+ 1802  ip -br link
+ 1803  echo
+ 1804  nmcli device status
+ 1805  sudo ethtool eth0 | grep -E "Speed|Duplex|Link detected"
+ 1806  echo "=== WAKE MSI RUNTIME ==="
+ 1807  sudo systemctl restart tailscaled 2>/dev/null || true
+ 1808  sudo systemctl restart taiji-runtime-core
+ 1809  sudo systemctl restart taiji-gateway
+ 1810  sleep 8
+ 1811  echo
+ 1812  echo "=== LOCAL TEST ==="
+ 1813  curl --connect-timeout 3 --max-time 5 http://127.0.0.1:8099/runtime/system || echo "LOCAL_FAIL"
+ 1814  echo
+ 1815  echo "=== TAILSCALE IP ==="
+ 1816  tailscale ip -4
+ 1817  echo
+ 1818  echo "=== TAILSCALE TEST ==="
+ 1819  curl --connect-timeout 3 --max-time 5 http://100.107.187.77:8099/runtime/system || echo "TAILSCALE_FAIL"
+ 1820  echo
+ 1821  echo "=== LISTEN ==="
+ 1822  ss -ltnp | grep -E "8081|8099" || echo "PORT_FAIL"
+ 1823  echo
+ 1824  echo "✓ MSI WAKE CHECK DONE"
+ 1825  sudo ss -ltnp | grep 8099 && echo && curl http://127.0.0.1:8099/runtime/system && echo && curl http://100.107.187.77:8099/runtime/system
+ 1826  hostname -I
+ 1827  curl -s http://127.0.0.1:11434/api/tags | jq .
+ 1828  echo "===== TAIJI FULL SYSTEM CHECK =====" && echo && echo "[1] CORE PORTS" && ss -ltnp | grep -E '8081|8099|9120' && echo && echo "[2] SYSTEMD SERVICES" && systemctl --no-pager --type=service | grep taiji && echo && echo "[3] RUNTIME SYSTEM" && curl -s http://127.0.0.1:8099/runtime/system && echo && echo "[4] RUNTIME STATUS" && curl -s http://127.0.0.1:8099/runtime/status && echo && echo "[5] REGISTERED AGENTS" && curl -s http://127.0.0.1:8099/runtime/agents && echo && echo "[6] EVENT STREAM" && curl -s http://127.0.0.1:8099/runtime/events && echo && echo "[7] MEMORY STATUS" && curl -s http://127.0.0.1:8099/runtime/memory && echo && echo "[8] DASHBOARD" && curl -s http://127.0.0.1:9120 | head && echo && echo "[9] TAILSCALE" && tailscale status && echo && echo "[10] DOCKER" && docker ps && echo && echo "[11] NETWORK" && ip route get 1.1.1.1 && echo && echo "===== TAIJI CHECK COMPLETE ====="
+ 1829  cd ~/Taiji_Hub && set -e && mkdir -p runtime systemd logs && touch runtime/__init__.py && cat > runtime/openwebui_bridge.py <<'EOF'
+ 1830  cat > systemd/taiji-openwebui-bridge.service <<'EOF'
+ 1831  sudo cp systemd/taiji-openwebui-bridge.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable taiji-openwebui-bridge && sudo systemctl restart taiji-openwebui-bridge && sleep 5 && echo "=== Bridge Health ===" && curl -s http://127.0.0.1:8098/health | python3 -m json.tool && echo "=== Models ===" && curl -s http://127.0.0.1:8098/v1/models | python3 -m json.tool && echo "=== Chat Test ===" && curl -s -X POST http://127.0.0.1:8098/v1/chat/completions   -H "Content-Type: application/json"   -d '{"model":"taiji-runtime-core","messages":[{"role":"user","content":"請以小J身分確認 Taiji bridge online，並回報目前 runtime 狀態"}]}'   | python3 -m json.tool
+ 1832  cd ~/Taiji_Hub && mkdir -p scripts logs && cat > scripts/start_gateway.sh <<'EOF'
+ 1833  chmod +x scripts/start_gateway.sh && pkill -f "uvicorn services.gateway.main:app" 2>/dev/null || true && pkill -f "scripts/start_gateway.sh" 2>/dev/null || true && nohup scripts/start_gateway.sh > logs/gateway.log 2>&1 & sleep 3 && curl http://localhost:8081/health
+ 1834  cd ~/Taiji_Hub && echo "=== Stop manual gateway loop ===" && pkill -f "scripts/start_gateway.sh" 2>/dev/null || true && pkill -f "uvicorn services.gateway.main:app" 2>/dev/null || true && sleep 2 && echo "=== Restart canonical systemd gateway if exists ===" && if systemctl list-unit-files | grep -q '^taiji-gateway.service'; then   sudo systemctl restart taiji-gateway.service;   sleep 3;   systemctl status taiji-gateway.service --no-pager | sed -n '1,18p'; else   echo "[WARN] taiji-gateway.service not found, falling back to nohup guard";   nohup scripts/start_gateway.sh > logs/gateway.log 2>&1 &   sleep 3; fi && echo "=== Health ===" && curl -s http://localhost:8081/health && echo && echo "=== Process ===" && ps aux | grep -E "taiji-gateway|start_gateway|uvicorn services.gateway.main" | grep -v grep
+ 1835  cd ~/Taiji_Hub && set -euo pipefail && TS="$(date +%Y%m%d_%H%M%S)" && mkdir -p backups logs runtime/ledger runtime systemd services/gateway core/tensor && [ -f services/gateway/main.py ] && cp -a services/gateway/main.py "backups/gateway_main_${TS}.py" || true && [ -f runtime/openwebui_bridge.py ] && cp -a runtime/openwebui_bridge.py "backups/openwebui_bridge_${TS}.py" || true && cat > services/gateway/main.py <<'EOF'
+ 1836  cat > runtime/openwebui_bridge.py <<'EOF'
+ 1837  sudo tee /etc/systemd/system/taiji-gateway.service >/dev/null <<'EOF'
+ 1838  sudo tee /etc/systemd/system/taiji-openwebui-bridge.service >/dev/null <<'EOF'
+ 1839  echo "=== Stop manual gateway loop ===" && pkill -f "scripts/start_gateway.sh" 2>/dev/null || true && pkill -f "uvicorn services.gateway.main:app" 2>/dev/null || true && echo "=== Reload systemd ===" && sudo systemctl daemon-reload && sudo systemctl enable taiji-gateway.service taiji-openwebui-bridge.service >/dev/null && sudo systemctl restart taiji-gateway.service && sudo systemctl restart taiji-openwebui-bridge.service && sleep 5 && echo "=== Gateway Health ===" && curl -s http://127.0.0.1:8081/health | python3 -m json.tool && echo "=== OpenWebUI Bridge Health ===" && curl -s http://127.0.0.1:8098/health | python3 -m json.tool && echo "=== Direct Execute Test ===" && curl -s -X POST http://127.0.0.1:8081/api/taiji/execute   -H "Content-Type: application/json"   -d '{"prompt":"補全演練：以小J身分整合度規張量、上下文分片、Runtime、Clow與OpenWebUI，確認系統狀態","keyword":"jules"}'   | python3 -m json.tool && echo "=== OpenWebUI Bridge Test ===" && curl -s -X POST http://127.0.0.1:8098/v1/chat/completions   -H "Content-Type: application/json"   -d '{"model":"taiji-runtime-core","messages":[{"role":"user","content":"請以小J身分回報 Taiji OpenWebUI Bridge 與 Runtime 是否已補全"}]}'   | python3 -m json.tool
+ 1840  systemctl status taiji-gateway.service taiji-openwebui-bridge.service --no-pager
+ 1841  curl -s http://127.0.0.1:8081/health | python3 -m json.tool
+ 1842  curl -s http://127.0.0.1:8098/v1/models | python3 -m json.tool
+ 1843  cd ~/Taiji_Hub && set -e && TS="$(date +%Y%m%d_%H%M%S)" && OUT="logs/taiji_system_memo_${TS}.txt" && { echo "===== TAIJI SYSTEM MEMO ${TS} ====="; echo; echo "[1] SYSTEMD STATUS"; systemctl status taiji-gateway.service taiji-openwebui-bridge.service taiji-runtime-api.service taiji-runtime-core.service taiji.service --no-pager || true; echo; echo "[2] GATEWAY HEALTH"; curl -s http://127.0.0.1:8081/health || true; echo; echo; echo "[3] OPENWEBUI BRIDGE MODELS"; curl -s http://127.0.0.1:8098/v1/models || true; echo; echo; echo "[4] RUNTIME STATUS"; curl -s http://127.0.0.1:8099/runtime/status || true; echo; echo; echo "[5] RUNTIME AGENTS"; curl -s http://127.0.0.1:8099/runtime/agents || true; echo; echo; echo "[6] CLAW / CLOW HEALTH"; curl -s http://127.0.0.1:9004/ || true; echo; echo; echo "[7] CLAW / CLOW OPENAPI ROUTES"; curl -s http://127.0.0.1:9004/openapi.json | python3 -m json.tool 2>/dev/null || true; echo; echo; echo "[8] DOCKER CONTAINERS"; docker ps || true; echo; echo "[9] RECENT GATEWAY JOURNAL"; journalctl -u taiji-gateway.service -n 80 --no-pager || true; echo; echo "[10] RECENT OPENWEBUI BRIDGE JOURNAL"; journalctl -u taiji-openwebui-bridge.service -n 80 --no-pager || true; echo; echo "[11] LATEST LEDGER RECORD"; ls -lt runtime/ledger/*.json 2>/dev/null | head -5 || true; LATEST="$(ls -t runtime/ledger/*.json 2>/dev/null | head -1 || true)"; if [ -n "$LATEST" ]; then   echo;   echo "--- $LATEST ---";   cat "$LATEST"; fi; echo; echo "===== END MEMO ====="; } | tee "$OUT" && echo && echo "Memo saved to: $OUT"
+ 1844  cd ~/Taiji_Hub && set -euo pipefail && TS="$(date +%Y%m%d_%H%M%S)" && mkdir -p services/clow_adapter scripts logs runtime/memos backups/toolfix_${TS} && echo "=== [1] Backup ===" && cp -a services/gateway runtime/openwebui_bridge.py services/clow_adapter systemd 2>/dev/null "backups/toolfix_${TS}/" || true && echo "=== [2] Write Clow Compatibility Adapter ===" && cat > services/clow_adapter/main.py <<'EOF'
+ 1845  touch services/clow_adapter/__init__.py && echo "=== [3] Write systemd service for Clow Adapter ===" && sudo tee /etc/systemd/system/taiji-clow-adapter.service >/dev/null <<'EOF'
+ 1846  echo "=== [4] Point Gateway to Clow Adapter :9005 ===" && sudo tee /etc/systemd/system/taiji-gateway.service >/dev/null <<'EOF'
+ 1847  echo "=== [5] Create taiji-tool CLI ===" && cat > scripts/taiji-tool <<'EOF'
+ 1848  chmod +x scripts/taiji-tool && echo "=== [6] Restart canonical services ===" && docker update --restart unless-stopped taiji_claw_safe open-webui wuchang_gpu_brain >/dev/null 2>&1 || true && docker start taiji_claw_safe open-webui wuchang_gpu_brain >/dev/null 2>&1 || true && sudo systemctl daemon-reload && sudo systemctl enable taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service >/dev/null && sudo systemctl restart taiji-clow-adapter.service && sudo systemctl restart taiji-gateway.service && sudo systemctl restart taiji-openwebui-bridge.service && sleep 6 && echo "=== [7] Toolized verification ===" && scripts/taiji-tool status && echo && echo "=== Clow scan test ===" && scripts/taiji-tool clow jules && echo && echo "=== Gateway execute test ===" && scripts/taiji-tool exec "工具化修正驗證：確認 Clow Adapter、Gateway、Bridge、小J、度規張量與上下文分片已對齊" && echo && echo "=== Bridge test ===" && scripts/taiji-tool bridge "小J，請確認工具化修正完成並摘要目前系統狀態" && echo && echo "=== Memo ===" && scripts/taiji-tool memo
+ 1849  cd ~/Taiji_Hub
+ 1850  scripts/taiji-tool status
+ 1851  scripts/taiji-tool clow jules
+ 1852  scripts/taiji-tool exec "小J，請確認 Clow Adapter、Gateway、Bridge、OpenWebUI、度規張量與上下文分片目前已完成工具化修正"
+ 1853  cd ~/Taiji_Hub && set -euo pipefail && TS="$(date +%Y%m%d_%H%M%S)" && mkdir -p backups/clow_portfix_${TS} logs runtime/memos && cp -a services/clow_adapter services/gateway scripts systemd 2>/dev/null "backups/clow_portfix_${TS}/" || true && echo "=== Stop broken clow adapter ===" && sudo systemctl stop taiji-clow-adapter.service 2>/dev/null || true && echo "=== Rewrite clow adapter service on port 9006 ===" && sudo tee /etc/systemd/system/taiji-clow-adapter.service >/dev/null <<'EOF'
+ 1854  echo "=== Point gateway to 9006 ===" && sudo tee /etc/systemd/system/taiji-gateway.service >/dev/null <<'EOF'
+ 1855  echo "=== Patch taiji-tool to use 9006 ===" && python3 - <<'PY'
+ 1856  chmod +x scripts/taiji-tool && echo "=== Restart services ===" && sudo systemctl daemon-reload && sudo systemctl enable taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service >/dev/null && sudo systemctl restart taiji-clow-adapter.service && sleep 3 && sudo systemctl restart taiji-gateway.service && sudo systemctl restart taiji-openwebui-bridge.service && sleep 5 && echo "=== Verify clow adapter ===" && curl -s http://127.0.0.1:9006/ | python3 -m json.tool && curl -s "http://127.0.0.1:9006/api/claw/scan_physical?keyword=jules&base_path=/home/taiji_admin/Taiji_Hub" | python3 -m json.tool && echo "=== Verify gateway scan path ===" && curl -s -X POST http://127.0.0.1:8081/api/taiji/execute   -H "Content-Type: application/json"   -d '{"prompt":"搜尋並整理 jules 相關檔案，確認 Clow Adapter 9006 已接入","keyword":"jules"}'   | python3 -m json.tool && echo "=== Verify bridge ===" && curl -s -X POST http://127.0.0.1:8098/v1/chat/completions   -H "Content-Type: application/json"   -d '{"model":"taiji-runtime-core","messages":[{"role":"user","content":"小J，請確認 Clow Adapter 9006、Gateway、Bridge 是否正確接入"}]}'   | python3 -m json.tool && echo "=== Final status ===" && systemctl status taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service --no-pager | sed -n '1,120p'
+ 1857  cd ~/Taiji_Hub && scripts/taiji-tool exec "請搜尋 jules 相關檔案，使用 Clow Adapter 9006，並回報 claw_result、files、count、adapter_source"
+ 1858  cd ~/Taiji_Hub && set -euo pipefail && TS="$(date +%Y%m%d_%H%M%S)" && EVID="evidence/full_scope_selfdev_${TS}" && mkdir -p "$EVID" && cat > "$EVID/README.md" <<EOF
+ 1859  echo "=== [1] 系統磁碟與掛載狀態 ===" && { echo "## df -h"; df -h; echo; echo "## lsblk"; lsblk 2>/dev/null || true; echo; echo "## mount"; mount | grep -E '/mnt/|tailscale|docker|wsl' || true; echo; echo "## Windows drives if available"; powershell.exe -NoProfile -Command "Get-PSDrive -PSProvider FileSystem | Format-Table -AutoSize" 2>/dev/null || true; } > "$EVID/disk_mounts.txt" && echo "=== [2] 建立掃描根目錄清單 ===" && cat > "$EVID/scan_roots.txt" <<EOF
+ 1860  awk 'NF && system("[ -e \"" $0 "\" ]")==0 {print}' "$EVID/scan_roots.txt" > "$EVID/existing_roots.txt" || true && echo "=== [3] 全範圍檔案時間線（排除大型/系統/快取）===" && while IFS= read -r ROOT; do   echo "### ROOT: $ROOT";   find "$ROOT"     \( -path "*/node_modules" -o -path "*/.git" -o -path "*/__pycache__" -o -path "*/postgres_data" -o -path "*/AppData" -o -path "*/Windows" -o -path "*/Program Files" -o -path "*/Program Files (x86)" -o -path "*/\$Recycle.Bin" -o -path "*/System Volume Information" -o -path "*/.cache" -o -path "*/open_webui_data" \) -prune -o     -type f     -printf "%TY-%Tm-%Td %TH:%TM:%TS | %s | %p\n" 2>/dev/null; done < "$EVID/existing_roots.txt" | sort > "$EVID/full_file_timeline.txt" && echo "=== [4] Taiji / 小J / Jules / Wuchang 關鍵檔案索引 ===" && grep -Ei "taiji|jules|xiaoj|小j|sister|wuchang|clow|claw|gateway|runtime|tensor|topology|openwebui|ollama|sunmi|voice|google"   "$EVID/full_file_timeline.txt" > "$EVID/taiji_related_timeline.txt" || true && echo "=== [5] 原始碼與文件清單 ===" && while IFS= read -r ROOT; do   find "$ROOT"     \( -path "*/node_modules" -o -path "*/.git" -o -path "*/__pycache__" -o -path "*/postgres_data" -o -path "*/AppData" -o -path "*/Windows" -o -path "*/Program Files" -o -path "*/Program Files (x86)" -o -path "*/\$Recycle.Bin" -o -path "*/System Volume Information" -o -path "*/.cache" -o -path "*/open_webui_data" \) -prune -o     -type f \(       -name "*.py" -o -name "*.sh" -o -name "*.md" -o -name "*.txt" -o -name "*.json" -o -name "*.yaml" -o -name "*.yml" -o       -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" -o -name "Dockerfile" -o -name "*.service"     \) -print 2>/dev/null; done < "$EVID/existing_roots.txt" | sort -u > "$EVID/source_document_files.txt" && echo "=== [6] 關鍵檔案雜湊（限原始碼/文件，不雜湊整顆磁碟）===" && xargs -a "$EVID/source_document_files.txt" sha256sum > "$EVID/source_document_sha256.txt" 2>/dev/null || true && echo "=== [7] Git / Shell / Runtime / Docker 證據 ===" && git status --short > "$EVID/git_status.txt" 2>/dev/null || true && git log --oneline --decorate --graph --all -n 300 > "$EVID/git_log.txt" 2>/dev/null || true && git diff > "$EVID/git_diff.patch" 2>/dev/null || true && { history 2>/dev/null || true; cat ~/.bash_history 2>/dev/null || true; } | sort -u   | sed -E     -e 's/(AIza)[A-Za-z0-9_\-]+/\1***REDACTED***/g'     -e 's/(Bearer )[A-Za-z0-9._\-]+/\1***REDACTED***/g'     -e 's/(private_key[":= ]+)[^, ]+/\1***REDACTED***/g'   > "$EVID/shell_history_redacted.txt" && systemctl status taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service taiji-runtime-api.service taiji-runtime-core.service taiji.service --no-pager   > "$EVID/systemd_status.txt" 2>&1 || true && journalctl -u taiji-clow-adapter.service -u taiji-gateway.service -u taiji-openwebui-bridge.service -u taiji-runtime-api.service -u taiji-runtime-core.service -u taiji.service -n 800 --no-pager   > "$EVID/systemd_journal_recent.txt" 2>&1 || true && docker ps > "$EVID/docker_ps.txt" 2>&1 || true && docker images > "$EVID/docker_images.txt" 2>&1 || true && tailscale status 2>/dev/null | sed -E 's/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/[REDACTED_EMAIL]/g' > "$EVID/tailscale_status_redacted.txt" || true && echo "=== [8] Runtime API / Ledger / Memo 狀態 ===" && curl -s http://127.0.0.1:8081/health > "$EVID/gateway_health.json" 2>/dev/null || true && curl -s http://127.0.0.1:8098/v1/models > "$EVID/openwebui_bridge_models.json" 2>/dev/null || true && curl -s http://127.0.0.1:8099/runtime/status > "$EVID/runtime_status.json" 2>/dev/null || true && curl -s http://127.0.0.1:9006/ > "$EVID/clow_adapter_health.json" 2>/dev/null || true && ls -lt runtime/ledger/*.json 2>/dev/null | head -100 > "$EVID/latest_ledger_files.txt" || true && ls -lt runtime/memos/*.md 2>/dev/null | head -100 > "$EVID/latest_memo_files.txt" || true && echo "=== [9] 網路爬蟲 / 大量外部搬運跡象掃描 ===" && { echo "# Code indicators"; grep -RniE "scrapy|BeautifulSoup|bs4|selenium|playwright|puppeteer|newspaper3k|trafilatura|requests\.get\(|httpx\.get\(|urllib\.request|wget |curl .*https?://"   $(cat "$EVID/existing_roots.txt")   --exclude-dir=.git   --exclude-dir=node_modules   --exclude-dir=__pycache__   --exclude-dir=postgres_data   --exclude-dir=AppData   --exclude-dir=Windows   --exclude-dir="Program Files"   --exclude-dir="Program Files (x86)"   2>/dev/null || true; echo; echo "# Shell history indicators"; grep -Ei "scrapy|BeautifulSoup|bs4|selenium|playwright|puppeteer|wget |curl .*https?://|git clone|pip install" "$EVID/shell_history_redacted.txt" || true; } > "$EVID/web_scrape_indicator_scan.txt" && echo "=== [10] 疑似金鑰位置掃描（遮罩版）===" && grep -RniE "AIza|BEGIN PRIVATE KEY|client_email|private_key|Bearer|api_key|service_account"   $(cat "$EVID/existing_roots.txt")   --exclude-dir=.git   --exclude-dir=node_modules   --exclude-dir=__pycache__   --exclude-dir=postgres_data   --exclude-dir=AppData   --exclude-dir=Windows   2>/dev/null   | sed -E     -e 's/(AIza)[A-Za-z0-9_\-]+/\1***REDACTED***/g'     -e 's/(Bearer )[A-Za-z0-9._\-]+/\1***REDACTED***/g'     -e 's/(private_key[":= ]+)[^,]+/\1***REDACTED***/g'   > "$EVID/possible_secret_locations_redacted.txt" || true && echo "=== [11] 產生正式摘要 ===" && { echo "# Full-Scope Self-Development Evidence Summary"; echo; echo "Generated: $(date -Is)"; echo; echo "## Covered scopes"; cat "$EVID/existing_roots.txt"; echo; echo "## Evidence files"; echo "- disk_mounts.txt"; echo "- full_file_timeline.txt"; echo "- taiji_related_timeline.txt"; echo "- source_document_files.txt"; echo "- source_document_sha256.txt"; echo "- shell_history_redacted.txt"; echo "- systemd_status.txt"; echo "- systemd_journal_recent.txt"; echo "- docker_ps.txt"; echo "- tailscale_status_redacted.txt"; echo "- runtime_status.json"; echo "- latest_ledger_files.txt"; echo "- latest_memo_files.txt"; echo "- web_scrape_indicator_scan.txt"; echo "- possible_secret_locations_redacted.txt"; echo; echo "## Recommended evidentiary wording"; echo "本系統之研發證據範圍包含 WSL Linux 主系統、C 磁碟、D 磁碟及本機掛載或同步之雲端硬碟資料夾。可由檔案時間線、原始碼雜湊、shell 歷程、systemd 日誌、Docker 狀態、runtime ledger、runtime memo、Tailscale 內網狀態與疑似爬蟲跡象掃描，佐證本系統主要係由發明人於本地與授權節點中逐步自行建構、測試、修正與整合。"; echo; echo "## Caution"; echo "本證據包可支持研發歷程與本地建構跡象；是否構成法律上完整證明，仍應由專利代理人、律師或鑑識人員依完整原始資料判斷。"; } > "$EVID/SUMMARY.md" && echo "=== [12] 封存與雜湊 ===" && tar -czf "evidence/full_scope_selfdev_${TS}.tar.gz" "$EVID" && sha256sum "evidence/full_scope_selfdev_${TS}.tar.gz" > "evidence/full_scope_selfdev_${TS}.tar.gz.sha256" && echo "完成：" && echo "$EVID" && echo "evidence/full_scope_selfdev_${TS}.tar.gz" && echo "evidence/full_scope_selfdev_${TS}.tar.gz.sha256"
+"
+"""
+# -*- coding: utf-8 -*-
+# Taiji Full-Scope Self-Development Evidence
+#!/usr/bin/env bash
+.card{
+/home/taiji_admin/Taiji_Hub
+/mnt/c/Users/o0930/Desktop
+/mnt/c/Users/o0930/Documents
+/mnt/c/Users/o0930/Downloads
+/mnt/c/Users/o0930/Google Drive
+/mnt/c/Users/o0930/My Drive
+/mnt/c/Users/o0930/OneDrive
+/mnt/c/Users/o0930/Taiji_Hub
+/mnt/d
+/mnt/g
+/mnt/g/My Drive
+/mnt/g/Shared drives
+</body>
+</div>
+</head>
+</html>
+</style>
+<a href="http://127.0.0.1:8081">:8081</a>
+<a href="http://127.0.0.1:8091/runtime/health">:8091/runtime/health</a>
+<a href="http://127.0.0.1:8095/runtime/status">:8095/runtime/status</a>
+<a href="http://127.0.0.1:9101/metrics">:9101/metrics</a>
+<a href="http://127.0.0.1:9111/events">:9111/events</a>
+<body>
+<div class="card">
+<h1>Taiji Cognitive Runtime</h1>
+<h2>Event Stream</h2>
+<h2>Gateway</h2>
+<h2>Metrics API</h2>
+<h2>Runtime API</h2>
+<h2>Status API</h2>
+<head>
+<html>
+<style>
+<title>Taiji Runtime Dashboard</title>
+@app.get("/")
+@app.get("/", response_class=HTMLResponse)
+@app.get("/api/claw/scan_physical")
+@app.get("/api/clow/status")
+@app.get("/api/taiji/plan")
+@app.get("/dashboard", response_class=HTMLResponse)
+@app.get("/events")
+@app.get("/health")
+@app.get("/metrics")
+@app.get("/runtime/agent/{name}")
+@app.get("/runtime/agents")
+@app.get("/runtime/events")
+@app.get("/runtime/memory")
+@app.get("/runtime/metrics")
+@app.get("/runtime/models")
+@app.get("/runtime/status")
+@app.get("/runtime/system")
+@app.get("/scan_physical")
+@app.get("/v1/models")
+@app.post("/api/claw/scan_physical")
+@app.post("/api/taiji/execute")
+@app.post("/api/taiji/plan")
+@app.post("/api/taiji/voice")
+@app.post("/runtime/agent/register")
+@app.post("/runtime/agent/task")
+@app.post("/runtime/generate")
+@app.post("/v1/chat/completions")
+ALLOWED_ROOTS = [
+After=network-online.target docker.service
+After=network-online.target docker.service taiji-clow-adapter.service
+After=network-online.target docker.service tailscaled.service
+After=network-online.target taiji-gateway.service
+After=network.target
+After=network.target docker.service
+After=network.target taiji-gateway.service
+BASE = "/home/taiji_admin/Taiji_Hub/runtime"
+BASE = "/home/taiji_admin/Taiji_Hub/runtime/outbox"
+BASE_AGENTS = f"{BASE}/agents"
+BASE_EVENTS = "/home/taiji_admin/Taiji_Hub/runtime/outbox"
+BASE_EVENTS = f"{BASE}/outbox"
+BASE_MEMORY = "/home/taiji_admin/Taiji_Hub/runtime/memory/conversations"
+BASE_MEMORY = f"{BASE}/memory/conversations"
+BASE_METRICS = "/home/taiji_admin/Taiji_Hub/runtime/metrics"
+BASE_METRICS = f"{BASE}/metrics"
+BOOT = time.time()
+CLAW_URL = os.getenv("TAIJI_CLAW_URL", "http://127.0.0.1:9004")
+Created symlink /etc/systemd/system/multi-user.target.wants/taiji-metrics.service → /etc/systemd/system/taiji-metrics.service.
+DEFAULT_ROOT = "/home/taiji_admin/Taiji_Hub"
+Description=Taiji Clow Compatibility Adapter
+Description=Taiji Dashboard
+Description=Taiji Event Stream
+Description=Taiji Full Boot - XiaoJ OpenWebUI Runtime
+Description=Taiji Gateway
+Description=Taiji Metrics Exporter
+Description=Taiji OpenWebUI Bridge
+Description=Taiji Runtime Core
+EOF
+EXCLUDE_DIRS = {
+Environment=TAIJI_CLAW_URL=http://127.0.0.1:9005
+Environment=TAIJI_CLAW_URL=http://127.0.0.1:9006
+Environment=TAIJI_CLOW_UPSTREAM=http://127.0.0.1:9004
+Environment=TAIJI_GATEWAY=http://127.0.0.1:8081/api/taiji/execute
+Environment=TAIJI_HEALTH=http://127.0.0.1:8081/health
+Environment=TAIJI_PROJECT_ROOT=/home/taiji_admin/Taiji_Hub
+Environment=TAIJI_RUNTIME_API=http://127.0.0.1:8099
+ExecStart=
+ExecStart=/home/taiji_admin/Taiji_Hub/scripts/taiji_full_boot.sh
+ExecStart=/usr/bin/python3 -m uvicorn runtime.openwebui_bridge:app --host 0.0.0.0 --port 8098
+ExecStart=/usr/bin/python3 -m uvicorn services.clow_adapter.main:app --host 0.0.0.0 --port 9005
+ExecStart=/usr/bin/python3 -m uvicorn services.clow_adapter.main:app --host 0.0.0.0 --port 9006
+ExecStart=/usr/bin/python3 -m uvicorn services.gateway.main:app --host 0.0.0.0 --port 8081
+ExecStart=/usr/bin/uvicorn runtime.openwebui_bridge:app --host 0.0.0.0 --port 8098
+ExecStart=/usr/bin/uvicorn runtime.runtime_core:app --host 0.0.0.0 --port 8099
+ExecStart=/usr/bin/uvicorn runtime.runtime_dashboard_index:app --host 0.0.0.0 --port 9120
+ExecStart=/usr/bin/uvicorn runtime.runtime_event_stream:app --host 0.0.0.0 --port 9111
+ExecStart=/usr/bin/uvicorn runtime.runtime_metrics_exporter:app --host 0.0.0.0 --port 9101
+HEALTH_URL = os.getenv("TAIJI_HEALTH", "http://127.0.0.1:8081/health")
+HTML = """
+LOG="logs/taiji_full_boot_${TS}.log"
+MEMO="runtime/memos/taiji_full_boot_${TS}.md"
+MODEL = "llama3.1:latest"
+MODEL_ALIAS = "taiji-runtime-core"
+May 07 20:25:35 MSI systemd[1]: Started taiji-metrics.service - Taiji Metrics Exporter.
+May 07 20:25:36 MSI uvicorn[94029]: INFO:     Application startup complete.
+May 07 20:25:36 MSI uvicorn[94029]: INFO:     Started server process [94029]
+May 07 20:25:36 MSI uvicorn[94029]: INFO:     Uvicorn running on http://0.0.0.0:9101 (Press CTRL+C to quit)
+May 07 20:25:36 MSI uvicorn[94029]: INFO:     Waiting for application startup.
+NoNewPrivileges=true
+OLLAMA_HTTP = os.getenv("TAIJI_OLLAMA_HTTP", "http://127.0.0.1:11434/api/generate")
+OLLAMA_MODEL = "llama3.1:latest"
+OLLAMA_MODEL = os.getenv("TAIJI_MODEL", "llama3.1:latest")
+OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
+PROJECT_ROOT = os.getenv("TAIJI_PROJECT_ROOT", "/home/taiji_admin/Taiji_Hub")
+PY
+ROOT="/home/taiji_admin/Taiji_Hub"
+RUNTIME_API = os.getenv("TAIJI_RUNTIME_API", "http://127.0.0.1:8099")
+RemainAfterExit=yes
+Restart=always
+RestartSec=5
+TAIJI_GATEWAY = os.getenv("TAIJI_GATEWAY", "http://127.0.0.1:8081/api/taiji/execute")
+TS="$(date +%Y%m%d_%H%M%S)"
+TS_IP="$(tailscale ip -4 2>/dev/null | head -1 || true)"
+TimeoutStartSec=240
+Type=oneshot
+Type=simple
+UPSTREAM = os.getenv("TAIJI_CLOW_UPSTREAM", "http://127.0.0.1:9004")
+User=taiji_admin
+WantedBy=multi-user.target
+Wants=docker.service
+Wants=network-online.target docker.service
+Wants=network-online.target docker.service taiji-clow-adapter.service
+Wants=network-online.target docker.service tailscaled.service
+Wants=network-online.target taiji-gateway.service
+Wants=taiji-gateway.service
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+[Install]
+[Service]
+[Unit]
+]
+app = FastAPI()
+app = FastAPI(title="Taiji Clow Compatibility Adapter", version="1.0.0-toolfix")
+app = FastAPI(title="Taiji Gateway", version="1.0.0-unified")
+app = FastAPI(title="Taiji Gateway", version="1.1.0-redteam")
+app = FastAPI(title="Taiji OpenWebUI Bridge", version="1.0.0")
+app = FastAPI(title="Taiji OpenWebUI Bridge", version="1.1.0-redteam")
+async def agent_task(req: Request):
+async def agents():
+async def chat(req: Request):
+async def dashboard():
+async def events():
+async def generate(req: Request):
+async def get_agent(name: str):
+async def health():
+async def memory():
+async def metrics():
+async def models():
+async def register_agent(req: Request):
+async def root():
+async def status():
+async def system():
+a{
+body{
+case "$cmd" in
+cat "$MEMO" | logger -t taiji-full-boot || true
+cat > ~/Taiji_Hub/runtime/openwebui_bridge.py << 'EOF'
+cat > ~/Taiji_Hub/runtime/runtime_core.py << 'EOF'
+cat > ~/Taiji_Hub/runtime/runtime_dashboard_index.py << 'EOF'
+cat > ~/Taiji_Hub/runtime/runtime_event_stream.py << 'EOF'
+cat > ~/Taiji_Hub/runtime/runtime_metrics_exporter.py << 'EOF'
+cat > ~/Taiji_Hub/systemd/taiji-dashboard.service << 'EOF'
+cat > ~/Taiji_Hub/systemd/taiji-event-stream.service << 'EOF'
+cat > ~/Taiji_Hub/systemd/taiji-metrics.service << 'EOF'
+cat > ~/Taiji_Hub/systemd/taiji-openwebui-bridge.service << 'EOF'
+cat > ~/Taiji_Hub/systemd/taiji-runtime-core.service << 'EOF'
+cd "$ROOT"
+cd /home/taiji_admin/Taiji_Hub
+cd ~/Taiji_Hub
+cd ~/Taiji_Hub && TS="$(date +%Y%m%d_%H%M%S)" && mkdir -p logs runtime/memos && OUT="logs/taiji_state_${TS}.log" && MEMO="runtime/memos/taiji_state_${TS}.md" && { echo "# Taiji System State Memo"; echo; echo "timestamp: $(date -Is)"; echo "host: $(hostname)"; echo "user: $(whoami)"; echo "pwd: $(pwd)"; echo; echo "## 1. Core Ports"; ss -ltnp 2>/dev/null | grep -E '8081|8098|8099|9004|9011|9012|9120|11434|3000' || true; echo; echo "## 2. Systemd Taiji Services"; systemctl --no-pager --type=service 2>/dev/null | grep -E 'taiji|openwebui|ollama' || true; echo; echo "## 3. Gateway Health"; curl -s http://127.0.0.1:8081/health || true; echo; echo; echo "## 4. OpenWebUI Bridge Models"; curl -s http://127.0.0.1:8098/v1/models || true; echo; echo; echo "## 5. Runtime System"; curl -s http://127.0.0.1:8099/runtime/system || true; echo; echo; echo "## 6. Runtime Status"; curl -s http://127.0.0.1:8099/runtime/status || true; echo; echo; echo "## 7. Runtime Agents"; curl -s http://127.0.0.1:8099/runtime/agents || true; echo; echo; echo "## 8. Runtime Events Latest"; curl -s http://127.0.0.1:8099/runtime/events || true; echo; echo; echo "## 9. Clow / Claw Health"; curl -s http://127.0.0.1:9004/ || true; echo; echo; echo "## 10. Docker Containers"; docker ps 2>/dev/null || true; echo; echo "## 11. Tailscale Mesh Status"; tailscale status 2>/dev/null | sed -E 's/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/[REDACTED_EMAIL]/g' || true; echo; echo "## 12. Network Route"; ip route get 1.1.1.1 2>/dev/null || true; echo; echo "## 13. Latest Ledger Records"; ls -lt runtime/ledger/*.json 2>/dev/null | head -10 || true; echo; echo "## 14. Recent Gateway Journal"; journalctl -u taiji-gateway.service -n 40 --no-pager 2>/dev/null || true; echo; echo "## 15. Recent OpenWebUI Bridge Journal"; journalctl -u taiji-openwebui-bridge.service -n 40 --no-pager 2>/dev/null || true; echo; echo "## 16. Summary"; echo "Taiji gateway, OpenWebUI bridge, runtime API, Clow/Claw, Docker containers, and Tailscale mesh state captured."; } | tee "$OUT" "$MEMO" >/dev/null && cat "$OUT" | logger -t taiji-state && echo "已寫入系統日誌與備忘錄：" && echo "$OUT" && echo "$MEMO" && echo "可用以下指令查看 journal：" && echo "journalctl -t taiji-state -n 80 --no-pager"
+cd ~/Taiji_Hub && echo "=== REDTEAM MEMO ===" && sed -n '1,220p' runtime/memos/redteam_fix_20260508_023041.md && echo && echo "=== SECRET SCAN SUMMARY（只看數量，不外洩內容）===" && wc -l security/possible_secret_hits_20260508_023041.txt && echo && echo "=== SERVICES ===" && systemctl status taiji-gateway.service taiji-openwebui-bridge.service --no-pager | sed -n '1,80p' && echo && echo "=== HEALTH ===" && curl -s http://127.0.0.1:8081/health | python3 -m json.tool && curl -s http://127.0.0.1:8098/v1/models | python3 -m json.tool && echo && echo "=== JOURNAL ===" && journalctl -t taiji-redteam -n 80 --no-pager
+cd ~/Taiji_Hub && sed -E 's/(AIza)[A-Za-z0-9_\-]+/\1***REDACTED***/g; s/(private_key[": ]+)[^,]+/\1***REDACTED***/g; s/(Bearer )[A-Za-z0-9._\-]+/\1***REDACTED***/g' security/possible_secret_hits_20260508_023041.txt | head -80
+cd ~/Taiji_Hub && set -euo pipefail && TS="$(date +%Y%m%d_%H%M%S)" && mkdir -p backups/redteam_${TS} logs runtime/memos runtime/ledger security runtime systemd services/gateway && echo "=== [0] Red-Team Fix Start: $TS ===" && echo "=== [1] Backup critical files ===" && cp -a services runtime core scripts systemd docs "backups/redteam_${TS}/" 2>/dev/null || true && find . -maxdepth 4 -type f   -not -path "./.git/*"   -not -path "./jules_env/*"   -not -path "./taiji_env/*"   -not -path "./Taiji_Odoo/postgres_data/*"   | sort > "backups/redteam_${TS}/file_manifest.txt" && echo "=== [2] Stop conflicting manual loops ===" && pkill -f "scripts/start_gateway.sh" 2>/dev/null || true && pkill -f "scripts/taiji_guard.sh" 2>/dev/null || true && pkill -f "uvicorn services.gateway.main:app" 2>/dev/null || true && sleep 2 && echo "=== [3] Harden file permissions and ignore secrets ===" && touch .gitignore && for x in ".env" ".env.*" "keys/" "**/*private*key*" "**/*service_account*.json" "runtime/ledger/*.json" "logs/*.log" "security/possible_secret_hits_*.txt" "backups/"; do   grep -qxF "$x" .gitignore || echo "$x" >> .gitignore; done && chmod 700 runtime runtime/ledger runtime/memos logs security backups 2>/dev/null || true && find . -type f \( -name ".env" -o -name ".env.*" -o -name "*.pem" -o -name "*.key" -o -name "*service_account*.json" -o -name "*private*key*" \)   -not -path "./.git/*"   -not -path "./jules_env/*"   -not -path "./taiji_env/*"   -exec chmod 600 {} \; 2>/dev/null || true && grep -RniE "AIza|BEGIN PRIVATE KEY|client_email|private_key|Bearer|api_key|service_account" .   --exclude-dir=.git   --exclude-dir=jules_env   --exclude-dir=taiji_env   --exclude-dir=postgres_data   --exclude-dir=backups   --exclude-dir=logs   > "security/possible_secret_hits_${TS}.txt" 2>/dev/null || true && echo "=== [4] Write red-team corrected Gateway ===" && cat > services/gateway/main.py <<'EOF'
+cd ~/Taiji_Hub && set -euo pipefail && TS="$(date +%Y%m%d_%H%M%S)" && mkdir -p scripts logs runtime/memos runtime/ledger backups security systemd && echo "=== [1] 備份關鍵系統檔案 ===" && mkdir -p "backups/hardening_${TS}" && cp -a services runtime core scripts systemd docs "backups/hardening_${TS}/" 2>/dev/null || true && find . -maxdepth 4 -type f   -not -path "./.git/*"   -not -path "./jules_env/*"   -not -path "./taiji_env/*"   -not -path "./Taiji_Odoo/postgres_data/*"   | sort > "backups/hardening_${TS}/file_manifest.txt" && sha256sum services/gateway/main.py runtime/openwebui_bridge.py 2>/dev/null > "backups/hardening_${TS}/critical_sha256.txt" || true && echo "=== [2] 加固 .gitignore / 權限 / 金鑰區 ===" && touch .gitignore && grep -qxF ".env" .gitignore || echo ".env" >> .gitignore && grep -qxF ".env.*" .gitignore || echo ".env.*" >> .gitignore && grep -qxF "keys/" .gitignore || echo "keys/" >> .gitignore && grep -qxF "**/*private*key*" .gitignore || echo "**/*private*key*" >> .gitignore && grep -qxF "**/*service_account*.json" .gitignore || echo "**/*service_account*.json" >> .gitignore && grep -qxF "runtime/ledger/*.json" .gitignore || echo "runtime/ledger/*.json" >> .gitignore && grep -qxF "logs/*.log" .gitignore || echo "logs/*.log" >> .gitignore && chmod 700 runtime runtime/ledger runtime/memos logs security backups 2>/dev/null || true && find . -type f \( -name ".env" -o -name ".env.*" -o -name "*.pem" -o -name "*.key" -o -name "*service_account*.json" -o -name "*private*key*" \)   -not -path "./.git/*"   -not -path "./jules_env/*"   -not -path "./taiji_env/*"   -exec chmod 600 {} \; 2>/dev/null || true && grep -RniE "AIza|BEGIN PRIVATE KEY|client_email|private_key|Bearer|api_key|service_account" .   --exclude-dir=.git   --exclude-dir=jules_env   --exclude-dir=taiji_env   --exclude-dir=postgres_data   --exclude-dir=backups   > "security/possible_secret_hits_${TS}.txt" 2>/dev/null || true && echo "=== [3] 建立完整開機執行檔 scripts/taiji_full_boot.sh ===" && cat > scripts/taiji_full_boot.sh <<'EOF'
+chmod +x scripts/taiji_full_boot.sh && echo "=== [4] 建立狀態查詢檔 scripts/taiji_status.sh ===" && cat > scripts/taiji_status.sh <<'EOF'
+chmod +x scripts/taiji_status.sh && echo "=== [5] 建立開機 systemd 服務 taiji-full-boot.service ===" && cat > systemd/taiji-full-boot.service <<'EOF'
+cmd="${1:-status}"
+curl -X POST http://127.0.0.1:8098/v1/chat/completions -H "Content-Type: application/json" -d '{"model":"taiji-runtime-core","messages":[{"role":"user","content":"Taiji bridge online"}]}'
+curl -X POST http://127.0.0.1:8099/runtime/generate -H "Content-Type: application/json" -d '{"prompt":"runtime core online"}'
+curl -s -X POST http://127.0.0.1:8098/v1/chat/completions \
+curl -s http://127.0.0.1:8081/health | python3 -m json.tool 2>/dev/null || curl -s http://127.0.0.1:8081/health || true
+curl -s http://127.0.0.1:8081/health || true
+curl -s http://127.0.0.1:8098/v1/models | python3 -m json.tool 2>/dev/null || curl -s http://127.0.0.1:8098/v1/models || true
+curl -s http://127.0.0.1:8098/v1/models || true
+curl -s http://127.0.0.1:8099/runtime/status || true
+curl -s http://127.0.0.1:8099/runtime/system | python3 -m json.tool 2>/dev/null || curl -s http://127.0.0.1:8099/runtime/system || true
+curl -s http://127.0.0.1:8099/runtime/system || true
+curl -s http://127.0.0.1:9004/ || true
+curl -sI http://127.0.0.1:3000 | head -5 || true
+curl http://127.0.0.1:8095/runtime/mesh
+curl http://127.0.0.1:8095/runtime/status
+curl http://127.0.0.1:8098/v1/models
+curl http://127.0.0.1:8099/dashboard
+curl http://127.0.0.1:8099/runtime/mem
+curl http://127.0.0.1:8099/runtime/memory
+curl http://127.0.0.1:8099/runtime/metrics
+curl http://127.0.0.1:8099/runtime/status
+curl http://127.0.0.1:9101/metrics
+curl http://127.0.0.1:9101/metricso-pager.service /etc/systemd/system/
+curl http://127.0.0.1:9111/events
+curl http://127.0.0.1:9120
+curl_ok() {
+def ask_xiaoj(prompt):
+def claw_openapi_paths():
+def clow_status():
+def context_shards(prompt, keyword):
+def execute(payload: dict):
+def health():
+def is_allowed(path: str) -> bool:
+def load(name):
+def load_json(path):
+def local_scan(keyword: str, base_path: str, limit: int = 50):
+def metric_tensor(shards, runtime):
+def normalize_root(base_path: str) -> str:
+def persist_record(record):
+def plan(payload: dict):
+def plan_get():
+def run_taiji(payload):
+def runtime_snapshot():
+def safe_json_response(method, url, timeout=5, **kwargs):
+def safe_request(method, url, timeout=5, **kwargs):
+def save_json(path, data):
+def save_memory(prompt, response):
+def scan_claw(keyword):
+def scan_physical_alias(keyword: str = "", base_path: str = DEFAULT_ROOT):
+def scan_physical_get(keyword: str = "", base_path: str = DEFAULT_ROOT):
+def scan_physical_post(payload: dict):
+def upstream_scan(keyword: str, base_path: str):
+def voice(payload: dict):
+docker ps || true
+done
+echo
+echo "# Taiji Full Boot Memo"
+echo "## Bridge Models"
+echo "## Docker"
+echo "## Gateway"
+echo "## Latest Ledger"
+echo "## Ports"
+echo "## Runtime Status"
+echo "## Systemd"
+echo "## Tailscale"
+echo "--- Clow / Claw 9004 ---"
+echo "--- Gateway 8081 ---"
+echo "--- OpenWebUI 3000 ---"
+echo "--- OpenWebUI Bridge 8098 ---"
+echo "--- Runtime API 8099 ---"
+echo "=== [5] Write red-team corrected OpenWebUI Bridge ===" && cat > runtime/openwebui_bridge.py <<'EOF'
+echo "=== [6] Write canonical systemd services ===" && sudo tee /etc/systemd/system/taiji-gateway.service >/dev/null <<'EOF'
+echo "=== [7] Start containers and services ===" && docker update --restart unless-stopped open-webui wuchang_gpu_brain taiji_claw_safe taiji_pos_google_voice_tool taiji_device_resilience_adapter >/dev/null 2>&1 || true && docker start open-webui wuchang_gpu_brain taiji_claw_safe taiji_pos_google_voice_tool taiji_device_resilience_adapter >/dev/null 2>&1 || true && sudo systemctl daemon-reload && sudo systemctl enable taiji-gateway.service taiji-openwebui-bridge.service >/dev/null && sudo systemctl restart taiji-gateway.service && sudo systemctl restart taiji-openwebui-bridge.service && sleep 6 && echo "=== [8] Red-Team state memo ===" && MEMO="runtime/memos/redteam_fix_${TS}.md" && { echo "# Taiji Red-Team Fix Memo"; echo; echo "timestamp: $(date -Is)"; echo "host: $(hostname)"; echo "user: $(whoami)"; echo; echo "## Health"; curl -s http://127.0.0.1:8081/health || true; echo; curl -s http://127.0.0.1:8098/health || true; echo; curl -s http://127.0.0.1:9004/ || true; echo; echo "## Ports"; ss -ltnp 2>/dev/null | grep -E '3000|8081|8098|8099|9004|9011|9012|11434' || true; echo; echo "## Docker"; docker ps || true; echo; echo "## Systemd"; systemctl status taiji-gateway.service taiji-openwebui-bridge.service --no-pager || true; echo; echo "## Claw OpenAPI"; curl -s http://127.0.0.1:9004/openapi.json | python3 -m json.tool 2>/dev/null || true; echo; echo "## Secret scan file"; echo "security/possible_secret_hits_${TS}.txt"; } | tee "$MEMO" >/dev/null && cat "$MEMO" | logger -t taiji-redteam || true && echo "=== [9] Direct execute test ===" && curl -s -X POST http://127.0.0.1:8081/api/taiji/execute   -H "Content-Type: application/json"   -d '{"prompt":"紅隊糾錯演練：檢查 Gateway、Bridge、Runtime、Clow、OpenWebUI、小J、度規張量與上下文分片狀態","keyword":"jules"}'   | python3 -m json.tool && echo "=== [10] OpenWebUI bridge test ===" && curl -s -X POST http://127.0.0.1:8098/v1/chat/completions   -H "Content-Type: application/json"   -d '{"model":"taiji-runtime-core","messages":[{"role":"user","content":"小J，請以紅隊觀點回報目前 Taiji 系統是否已完成糾錯修正"}]}'   | python3 -m json.tool && echo "=== [11] Done ===" && echo "Memo: $MEMO" && echo "Secret scan: security/possible_secret_hits_${TS}.txt" && echo "Journal: journalctl -t taiji-redteam -n 120 --no-pager"
+echo "===== LITTLE-J IGNITION =====" && mkdir -p ~/Taiji_Hub/runtime/{identity,events,memory,consensus} && touch ~/Taiji_Hub/runtime/identity/identity_graph.json && touch ~/Taiji_Hub/runtime/events/community_events.json && touch ~/Taiji_Hub/runtime/memory/semantic_memory.json && touch ~/Taiji_Hub/runtime/consensus/runtime_consensus_live.json && cat > ~/Taiji_Hub/runtime/little_j_boot.py << 'EOF'
+echo "===== TAIJI STATUS ====="
+echo "Bridge local:        http://localhost:8098/v1/models"
+echo "Gateway local:       http://localhost:8081/health"
+echo "Log:                 $LOG"
+echo "Memo:                $MEMO"
+echo "OpenWebUI local:     http://localhost:3000"
+echo "[1] systemd"
+echo "[2] ports"
+echo "[3] docker"
+echo "[4] gateway"
+echo "[5] bridge"
+echo "[6] runtime"
+echo "[7] tailscale"
+echo "host: $(hostname)"
+echo "timestamp: $(date -Is)"
+echo "user: $(whoami)"
+echo '✓ SYNC COMPLETE'
+elif command -v xdg-open >/dev/null 2>&1; then
+esac
+exec > >(tee -a "$LOG") 2>&1
+fi
+from datetime import datetime
+from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from pathlib import Path
+h1,h2{
+host: $(hostname)
+if [ -n "$TS_IP" ]; then
+if command -v powershell.exe >/dev/null 2>&1; then
+import json
+import json, sys
+import os
+import os, requests, time
+import psutil
+import requests
+import requests, hashlib, time
+import requests, hashlib, time, json, os
+import requests, subprocess, json, hashlib, os
+import requests, subprocess, json, time, hashlib, os
+import time
+ls -lt runtime/ledger/*.json 2>/dev/null | head -5 || true
+mkdir -p logs runtime/memos runtime/ledger security
+mkdir -p ~/Taiji_Hub/runtime/agents &&
+mkdir -p ~/Taiji_Hub/runtime/memory/conversations &&
+mkdir -p ~/Taiji_Hub/runtime/outbox &&
+os.makedirs(BASE_AGENTS, exist_ok=True)
+os.makedirs(BASE_MEMORY, exist_ok=True)
+p = Path("scripts/taiji-tool")
+p.write_text(s)
+pkill -f "scripts/start_gateway.sh" 2>/dev/null || true
+pkill -f "scripts/taiji_guard.sh" 2>/dev/null || true
+print("\n⚡ Little-J Autonomous Runtime Online\n")
+print(json.dumps({
+print(json.dumps({"prompt": sys.argv[1], "keyword": "jules"}, ensure_ascii=False))
+purpose: Preserve local evidence across WSL, C disk, D disk, and locally mounted/synced cloud drives.
+python3 ~/Taiji_Hub/runtime/little_j_boot.py
+restart_service_if_exists "taiji-gateway.service"
+restart_service_if_exists "taiji-openwebui-bridge.service"
+restart_service_if_exists "taiji-runtime-api.service"
+restart_service_if_exists "taiji-runtime-core.service"
+restart_service_if_exists "taiji.service"
+restart_service_if_exists() {
+s = p.read_text()
+s = s.replace("127.0.0.1:9005", "127.0.0.1:9006")
+say "===== Taiji Full Boot complete ====="
+say "===== Taiji Full Boot start ====="
+say "[0] stop legacy manual gateway loops"
+say "[1] start core containers"
+say "[2] restart core systemd services"
+say "[3] wait services"
+say "[4] health probes"
+say "[5] write state memo"
+say "[6] sandbox call"
+say "[7] open OpenWebUI"
+say() { echo "[$(date -Is)] $*"; }
+set -euo pipefail
+shift || true
+sleep 3
+sleep 5
+ss -lntp
+ss -ltnp 2>/dev/null | grep -E '3000|8081|8098|8099|9004|9011|9012|9120|11434' || true
+ss -ltnp | grep -E "8095|9101|9111|9120|8099"
+ssh taiji_01@192.168.50.249
+start_container_if_exists "open-webui"
+start_container_if_exists "taiji_claw"
+start_container_if_exists "taiji_claw_safe"
+start_container_if_exists "taiji_device_resilience_adapter"
+start_container_if_exists "taiji_pos_google_voice_tool"
+start_container_if_exists "wuchang_gpu_brain"
+start_container_if_exists() {
+sudo cp systemd/taiji-full-boot.service /etc/systemd/system/taiji-full-boot.service && sudo systemctl daemon-reload && sudo systemctl enable taiji-full-boot.service >/dev/null && echo "=== [6] 啟動完整小J / OpenWebUI 服務 ===" && sudo systemctl restart taiji-full-boot.service && sleep 3 && echo "=== [7] 最終狀態 ===" && scripts/taiji_status.sh
+sudo cp ~/Taiji_Hub/systemd/taiji-dashboard.service /etc/systemd/system/
+sudo cp ~/Taiji_Hub/systemd/taiji-event-stream.service /etc/systemd/system/
+sudo cp ~/Taiji_Hub/systemd/taiji-metrics.service /etc/systemd/system/
+sudo cp ~/Taiji_Hub/systemd/taiji-openwebui-bridge.service /etc/systemd/system/
+sudo cp ~/Taiji_Hub/systemd/taiji-runtime-core.service /etc/systemd/system/
+sudo cp ~/Taiji_Hub/systemd/taiji-status-api.service /etc/systemd/system/
+sudo rm -f /etc/systemd/system/taiji-dashboard.service
+sudo rm -f /etc/systemd/system/taiji-event-stream.service
+sudo rm -f /etc/systemd/system/taiji-metrics.service
+sudo rm -f /etc/systemd/system/taiji-status-api.service
+sudo systemctl daemon-reload
+sudo systemctl daemon-reload || true
+sudo systemctl disable taiji-dashboard
+sudo systemctl disable taiji-event-stream
+sudo systemctl disable taiji-metrics
+sudo systemctl disable taiji-status-api
+sudo systemctl enable taiji-dashboard
+sudo systemctl enable taiji-event-stream
+sudo systemctl enable taiji-metrics
+sudo systemctl enable taiji-openwebui-bridge
+sudo systemctl enable taiji-runtime-core
+sudo systemctl enable taiji-status-api
+sudo systemctl restart taiji-dashboard
+sudo systemctl restart taiji-openwebui-bridge
+sudo systemctl restart taiji-runtime-core
+sudo systemctl start taiji-dashboard
+sudo systemctl start taiji-event-stream
+sudo systemctl start taiji-metrics
+sudo systemctl start taiji-runtime-core
+sudo systemctl start taiji-status-api
+sudo systemctl stop taiji-dashboard
+sudo systemctl stop taiji-event-stream
+sudo systemctl stop taiji-metrics
+sudo systemctl stop taiji-status-api
+sudo tee /etc/systemd/system/taiji-openwebui-bridge.service >/dev/null <<'EOF'
+systemctl --no-pager --type=service 2>/dev/null | grep -E 'taiji|openwebui|ollama' || true
+systemctl list-units --type=service | grep taiji
+systemctl status taiji-dashboard --no-pager
+systemctl status taiji-event-stream --no-pager
+systemctl status taiji-gateway.service taiji-openwebui-bridge.service taiji-runtime-api.service taiji-runtime-core.service taiji.service --no-pager 2>/dev/null | sed -n '1,120p' || true
+systemctl status taiji-metrics --no-pager
+systemctl status taiji-runtime-core --no-pager
+systemctl status taiji-status-api --no-pager
+tailscale status 2>/dev/null | sed -E 's/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/[REDACTED_EMAIL]/g' || true
+timestamp: $(date -Is)
+user: $(whoami)
+while True:
+while true; do
+{
+{"cpu_percent":5.4,"memory_percent":58.0,"disk_percent":22.1,"boot_seconds":4,"process_count":106}taiji_admin@MSI:~/Taiji_Hub$
+}
+} | tee "$MEMO" >/dev/null
+}, ensure_ascii=False))
+● taiji-metrics.service - Taiji Metrics Exporter

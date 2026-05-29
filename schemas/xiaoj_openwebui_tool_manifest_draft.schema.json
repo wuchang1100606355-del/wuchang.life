@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJOpenWebUIToolManifestDraft",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "tool_id": {"type": "string"},
+    "tool_name": {"type": "string"},
+    "workspace": {"type": "string"},
+    "tool_type": {"type": "string", "enum": ["read_only", "plan_only_action", "dlq_draft", "privacy_plan"]},
+    "allowed_roles": {"type": "array", "items": {"type": "string"}},
+    "input_scope": {"type": "array", "items": {"type": "string"}},
+    "output_type": {"type": "string"},
+    "plan_only": {"const": true},
+    "odoo_write": {"const": false},
+    "shell_access": {"const": false},
+    "secret_read": {"const": false},
+    "raw_pii_to_cloud": {"const": false},
+    "ai_final_decision": {"const": false},
+    "human_review_required": {"type": "boolean"},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["tool_id", "tool_name", "workspace", "tool_type", "allowed_roles", "input_scope", "output_type", "plan_only", "odoo_write", "shell_access", "secret_read", "raw_pii_to_cloud", "ai_final_decision", "human_review_required", "created_at"]
+}

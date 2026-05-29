@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJDeliveryRequestDraft",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "LINE",
+        "OPEN_WEBUI",
+        "MANUAL"
+      ]
+    },
+    "requester_hash": {
+      "type": "string"
+    },
+    "requester_role": {
+      "type": "string",
+      "enum": [
+        "resident",
+        "merchant",
+        "staff",
+        "volunteer",
+        "unknown"
+      ]
+    },
+    "pickup_area": {
+      "type": "string"
+    },
+    "dropoff_area": {
+      "type": "string"
+    },
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "food",
+        "document",
+        "daily_goods",
+        "community_item",
+        "unknown"
+      ]
+    },
+    "delivery_note_summary": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "requested_time_window": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft_created",
+        "waiting_staff_review",
+        "waiting_volunteer_accept",
+        "accepted",
+        "pickup_in_progress",
+        "delivery_in_progress",
+        "completed",
+        "cancelled",
+        "rejected",
+        "dead_letter_review",
+        "pii_limited_unlocked",
+        "delivery_completed",
+        "requester_confirmed",
+        "staff_audited",
+        "service_closed",
+        "cancelled_by_requester",
+        "cancelled_by_volunteer",
+        "timeout_failed",
+        "delivery_failed",
+        "safety_escalation"
+      ]
+    },
+    "assigned_volunteer_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "plan_only": {
+      "const": true
+    },
+    "human_confirmation_required": {
+      "const": true
+    },
+    "pii_raw_payload_allowed": {
+      "const": false
+    },
+    "cloud_lane_payload_allowed": {
+      "const": false
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "pii_unlock_stage": {
+      "type": "string",
+      "enum": [
+        "none",
+        "area_only",
+        "limited_unlocked",
+        "revoked"
+      ]
+    },
+    "pii_unlock_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "pii_unlock_expiry": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "unlock_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "auto_revoke_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "volunteer_verified_required": {
+      "const": true
+    },
+    "staff_review_required": {
+      "const": true
+    },
+    "high_risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "safety_escalation_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "requester_confirmation_method": {
+      "type": "string",
+      "enum": [
+        "dynamic_qr",
+        "paper_one_time_code",
+        "voice_confirmation_code",
+        "staff_manual_close",
+        "not_set"
+      ]
+    },
+    "service_close_stage": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "delivery_completed",
+        "requester_confirmed",
+        "staff_audited",
+        "service_closed"
+      ]
+    }
+  },
+  "required": [
+    "request_id",
+    "source",
+    "requester_hash",
+    "pickup_area",
+    "dropoff_area",
+    "item_type",
+    "delivery_note_summary",
+    "status",
+    "plan_only",
+    "human_confirmation_required",
+    "pii_raw_payload_allowed",
+    "cloud_lane_payload_allowed",
+    "created_at",
+    "volunteer_verified_required",
+    "staff_review_required"
+  ]
+}

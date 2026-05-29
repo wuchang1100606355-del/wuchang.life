@@ -1,0 +1,67 @@
+{
+  "language": "UTSL",
+  "language_full_name": "Universal Tensor State Language",
+  "chinese_name": "通用張量態語言",
+  "version": "0.1",
+  "runtime": "五常7維度數位陣型",
+  "protocol": "UTSL-0.1",
+  "canonical_packet": {
+    "required_fields": [
+      "protocol",
+      "runtime",
+      "node",
+      "tensor_code",
+      "dimension_names",
+      "formation",
+      "payload_class",
+      "payload_ref",
+      "route",
+      "audit"
+    ],
+    "safe_payload_classes": [
+      "metric",
+      "masked",
+      "hash",
+      "summary",
+      "virtual",
+      "public",
+      "state_ref",
+      "audit_ref"
+    ],
+    "blocked_payload_classes": [
+      "secret",
+      "identity",
+      "private",
+      "raw_identity",
+      "raw_private_data",
+      "oauth_token",
+      "service_account_key",
+      "password",
+      "raw_plaintext_context"
+    ]
+  },
+  "reserved_dimension_sets": {
+    "5D": ["x", "y", "z", "time", "scale"],
+    "7D": ["x", "y", "z", "time", "scale", "heaven", "earth"]
+  },
+  "bagua_opcode": {
+    "000": {"name": "TIAN", "role": "governance"},
+    "001": {"name": "DI", "role": "persistence"},
+    "010": {"name": "FENG", "role": "routing"},
+    "011": {"name": "YUN", "role": "projection"},
+    "100": {"name": "LONG", "role": "ai_derivation"},
+    "101": {"name": "HU", "role": "risk_isolation"},
+    "110": {"name": "NIAO", "role": "observation"},
+    "111": {"name": "SHE", "role": "masked_sync"}
+  },
+  "hazard_rules": {
+    "H001": "modify_5d_prefix",
+    "H002": "cloud_direct_write_real_state",
+    "H003": "secret_exfiltration",
+    "H004": "raw_identity_to_cloud",
+    "H005": "odoo_direct_mutation_without_metric_gate",
+    "H006": "policy_unlocked_mutation",
+    "H007": "raw_plaintext_as_canonical_unit",
+    "H008": "dimension_set_without_audit"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJLineWebhookEventMock",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {"type": "string"},
+    "source": {"type": "string", "enum": ["LINE"]},
+    "line_user_hash": {"type": "string"},
+    "event_type": {"type": "string", "enum": ["message", "postback", "rich_menu_click"]},
+    "raw_text_redacted": {"type": "string"},
+    "selected_action": {"type": "string"},
+    "derived_service_type": {"type": "string"},
+    "route": {"type": "string", "enum": ["community_redacted_lane", "personal_privacy_lane", "staff_review_lane", "dlq_lane"]},
+    "risk_level": {"type": "string", "enum": ["L0", "L1", "L2", "L3", "DLQ"]},
+    "pii_detected": {"type": "boolean"},
+    "raw_pii_to_cloud": {"const": false},
+    "odoo_write": {"const": false},
+    "plan_only": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["event_id", "source", "line_user_hash", "event_type", "selected_action", "derived_service_type", "route", "risk_level", "pii_detected", "raw_pii_to_cloud", "odoo_write", "plan_only", "created_at"]
+}

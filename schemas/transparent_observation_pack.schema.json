@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/transparent_observation_pack.schema.json",
+  "title": "Sister J Transparent Observation Pack MVP",
+  "description": "Mock-only, redacted observation pack for cloud advice and human review. It is not a live probe or execution request.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "pack_id",
+    "observation_mode",
+    "system_role",
+    "current_stage",
+    "directory_map_summary",
+    "services_status_summary",
+    "ports_summary",
+    "docker_summary",
+    "gateway_summary",
+    "odoo_boundary_summary",
+    "ollama_models_summary",
+    "topology_summary",
+    "known_errors",
+    "candidate_files",
+    "blocked_sensitive_paths",
+    "open_questions",
+    "next_recommended_actions",
+    "cloud_review"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "sister_j.transparent_observation_pack.v0.1"
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^transparent_pack_[a-f0-9]{12}$"
+    },
+    "observation_mode": {
+      "type": "string",
+      "const": "mock_static_input_only"
+    },
+    "system_role": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "current_stage": {
+      "type": "string",
+      "enum": ["design", "prototype", "audit"]
+    },
+    "directory_map_summary": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/summary_entry"}
+    },
+    "services_status_summary": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/status_entry"}
+    },
+    "ports_summary": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/status_entry"}
+    },
+    "docker_summary": {
+      "$ref": "#/$defs/section_summary"
+    },
+    "gateway_summary": {
+      "$ref": "#/$defs/section_summary"
+    },
+    "odoo_boundary_summary": {
+      "$ref": "#/$defs/section_summary"
+    },
+    "ollama_models_summary": {
+      "$ref": "#/$defs/section_summary"
+    },
+    "topology_summary": {
+      "$ref": "#/$defs/section_summary"
+    },
+    "known_errors": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/issue_entry"}
+    },
+    "candidate_files": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/summary_entry"}
+    },
+    "blocked_sensitive_paths": {
+      "type": "array",
+      "minItems": 11,
+      "uniqueItems": true,
+      "allOf": [
+        {"contains": {"const": ".env"}},
+        {"contains": {"const": ".env.*"}},
+        {"contains": {"const": "logs/"}},
+        {"contains": {"const": "memory/"}},
+        {"contains": {"const": "memory_zone/"}},
+        {"contains": {"const": "wuchang_memory_vault/"}},
+        {"contains": {"const": "_ollama_memory/"}},
+        {"contains": {"const": "backup_*"}},
+        {"contains": {"const": "private keys"}},
+        {"contains": {"const": "token files"}},
+        {"contains": {"const": "credential files"}}
+      ],
+      "items": {"type": "string"}
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {"type": "string", "maxLength": 400}
+    },
+    "next_recommended_actions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/action_entry"}
+    },
+    "cloud_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "review_priority",
+        "review_focus",
+        "decision_requests",
+        "cloud_action_boundary",
+        "redaction_summary"
+      ],
+      "properties": {
+        "review_priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "blocked"]
+        },
+        "review_focus": {
+          "type": "array",
+          "items": {"type": "string", "maxLength": 200}
+        },
+        "decision_requests": {
+          "type": "array",
+          "items": {"type": "string", "maxLength": 300}
+        },
+        "cloud_action_boundary": {
+          "type": "string",
+          "const": "advice_only_no_execution"
+        },
+        "redaction_summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applied", "replacement_count", "categories"],
+          "properties": {
+            "applied": {"type": "boolean", "const": true},
+            "replacement_count": {"type": "integer", "minimum": 0},
+            "categories": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "summary_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role", "status"],
+      "properties": {
+        "name": {"type": "string", "maxLength": 240},
+        "role": {"type": "string", "maxLength": 300},
+        "status": {"type": "string", "maxLength": 120}
+      }
+    },
+    "status_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "status", "basis"],
+      "properties": {
+        "name": {"type": "string", "maxLength": 120},
+        "status": {"type": "string", "enum": ["mock_not_probed", "known_design_only", "blocked", "unknown"]},
+        "basis": {"type": "string", "maxLength": 300}
+      }
+    },
+    "section_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "summary"],
+      "properties": {
+        "status": {"type": "string", "maxLength": 120},
+        "summary": {"type": "string", "maxLength": 600}
+      }
+    },
+    "issue_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "issue", "evidence_basis", "handling"],
+      "properties": {
+        "severity": {"type": "string", "enum": ["low", "medium", "high", "blocked"]},
+        "issue": {"type": "string", "maxLength": 400},
+        "evidence_basis": {"type": "string", "maxLength": 300},
+        "handling": {"type": "string", "maxLength": 300}
+      }
+    },
+    "action_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["priority", "action", "mode"],
+      "properties": {
+        "priority": {"type": "integer", "minimum": 1},
+        "action": {"type": "string", "maxLength": 400},
+        "mode": {"type": "string", "const": "review_or_plan_only"}
+      }
+    }
+  }
+}

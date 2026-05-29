@@ -1,0 +1,53 @@
+{
+  "policy_name": "7d_cloud_ai_management_policy",
+  "runtime": "7D",
+  "protocol": "TEFMP-0.1",
+  "status": "locked_draft",
+  "principle": "cloud_ai_is_external_derivation_node_not_root_controller",
+  "default_route": "local_first",
+  "cloud_ai_role": {
+    "formation": "LONG_EXTERNAL",
+    "meaning": "external_ai_derivation_after_metric_gate",
+    "allowed_input": [
+      "masked_state_packet",
+      "desensitized_summary",
+      "public_information",
+      "non_sensitive_runtime_status",
+      "hash_or_metric_only_payload"
+    ],
+    "blocked_input": [
+      "raw_identity",
+      "private_personal_data",
+      "secrets",
+      "oauth_tokens",
+      "service_account_keys",
+      "production_passwords",
+      "raw_line_ids",
+      "raw_member_records",
+      "bank_or_payment_raw_data"
+    ]
+  },
+  "routing_rules": {
+    "local_ai_first": true,
+    "require_metric_gate": true,
+    "require_audit_log": true,
+    "require_payload_classification": true,
+    "require_desensitization_for_cloud": true,
+    "cloud_can_execute_direct_write": false,
+    "cloud_can_modify_odoo_directly": false,
+    "cloud_can_modify_policy_directly": false
+  },
+  "risk_actions": {
+    "L0_exact_match": "allow_local",
+    "L1_near": "allow_local_with_audit",
+    "L2_review": "cloud_requires_masking_and_audit",
+    "L3_metric_hazard": "block_cloud_route"
+  },
+  "ports": {
+    "five_metric_8105": true,
+    "odoo_8069": true,
+    "ollama_11434": true,
+    "mu_1_gateway_9004": true,
+    "formal_tensor_runtime_8126": false
+  }
+}

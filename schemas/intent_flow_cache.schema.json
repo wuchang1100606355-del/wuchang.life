@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Taiji Intent Flow Cache Manifest",
+  "type": "object",
+  "required": [
+    "event",
+    "status",
+    "policy_active",
+    "policy_version",
+    "cache_scope",
+    "allowed_intents",
+    "blocked_intents",
+    "allowed_cache_material",
+    "blocked_cache_material"
+  ],
+  "properties": {
+    "event": { "const": "intent_flow_cache_policy_loaded" },
+    "status": { "enum": ["ACTIVE", "PAUSED"] },
+    "policy_active": { "type": "boolean" },
+    "policy_version": { "type": "string" },
+    "cache_scope": { "type": "string" },
+    "allowed_intents": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "blocked_intents": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "allowed_cache_material": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "blocked_cache_material": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "requires_human_confirmation_before_pos_submit": { "type": "boolean" },
+    "raw_plaintext_cache_allowed": { "const": false },
+    "payment_cache_allowed": { "const": false },
+    "secret_material_included": { "const": false },
+    "member_plaintext_included": { "const": false }
+  }
+}
