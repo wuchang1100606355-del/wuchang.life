@@ -1,0 +1,33 @@
+schema: taiji.replay_index.v1
+classification: non_secret_runtime_metadata
+required_fields:
+  - packet_id
+  - packet_hash
+  - parent_hash
+  - nonce_hash
+  - created_at
+  - replay_expiration
+  - execution_window
+  - authority_vector_hash
+  - topology_vector_hash
+  - deadbox_state
+  - audit_event_id
+blocked_fields:
+  - raw_prompt
+  - raw_shell_secret
+  - token
+  - private_key
+  - service_account_json
+transitions:
+  allow:
+    requires:
+      - nonce_unique
+      - window_valid
+      - authority_continuity
+      - topology_legitimate
+  deadbox:
+    triggers:
+      - expired_mutating_packet
+      - authority_mismatch
+      - topology_mismatch
+      - deadbox_reentry_attempt

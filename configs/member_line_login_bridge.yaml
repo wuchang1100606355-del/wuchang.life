@@ -1,0 +1,18 @@
+member_line_login_bridge:
+  service: taiji-line-login.service
+  port: 8103
+  routes:
+    health: http://127.0.0.1:8103/health
+    status: http://127.0.0.1:8103/line/status
+    start: http://127.0.0.1:8103/line/login/start
+    callback: http://127.0.0.1:8103/line/callback
+  reads:
+    - runtime/state/current_member_session.json
+    - C:\Taiji_Runtime line scripts
+  secrets:
+    env_file: ~/.secrets/taiji_line_login.env
+  rules:
+    no_token_storage: true
+    no_password_storage: true
+    no_private_key_storage: true
+    odoo_password_still_required: true

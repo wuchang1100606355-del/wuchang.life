@@ -1,0 +1,59 @@
+{
+  "work_id": "runtime_distribution_20260517_101653",
+  "time": "2026-05-17T10:16:53+08:00",
+
+  "state": "planning_active",
+
+  "completed": [
+
+    "workspace_segmentation",
+    "runtime_topology_split",
+    "distribution_node_roles",
+    "workload_assignment",
+    "runtime_scheduler",
+    "dispatch_engine",
+    "dispatch_validation"
+  ],
+
+  "target_topology": {
+
+    "msi": [
+      "governance",
+      "odoo",
+      "postgres",
+      "claw_safe",
+      "five_metric"
+    ],
+
+    "penguin": [
+      "ollama",
+      "tensor_compute",
+      "runtime_replay",
+      "vector_prediction"
+    ],
+
+    "taiji01": [
+      "gateway",
+      "voice",
+      "routing",
+      "probe"
+    ],
+
+    "wuchang_us_free_node": [
+      "deadbox",
+      "cold_backup",
+      "reachability_witness"
+    ]
+  },
+
+  "next_steps": [
+
+    "gateway_shadow_deployment",
+    "voice_shadow_deployment",
+    "penguin_compute_probe",
+    "mesh_service_naming",
+    "runtime_continuum_expansion"
+  ],
+
+  "mode": "proposal_only"
+}

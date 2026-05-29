@@ -1,0 +1,66 @@
+{
+  "title": "Metric Information Audit Watermark",
+  "type": "object",
+  "required": [
+    "event",
+    "watermark_id",
+    "dataset_id",
+    "dataset_version",
+    "release_window",
+    "canary_code",
+    "sha256_baseline",
+    "contains_personal_data",
+    "contains_secret_material",
+    "audit_required",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "metric_information_audit_watermark"
+    },
+    "watermark_id": {
+      "type": "string"
+    },
+    "org": {
+      "type": "string",
+      "default": "wuchang.life"
+    },
+    "dataset_id": {
+      "type": "string"
+    },
+    "dataset_version": {
+      "type": "string"
+    },
+    "license_id_hash": {
+      "type": "string"
+    },
+    "recipient_class": {
+      "type": "string"
+    },
+    "release_window": {
+      "type": "string"
+    },
+    "canary_code": {
+      "type": "string"
+    },
+    "sha256_baseline": {
+      "type": "string"
+    },
+    "contains_personal_data": {
+      "const": false
+    },
+    "contains_secret_material": {
+      "const": false
+    },
+    "reversible_identifier_included": {
+      "type": "boolean",
+      "default": false
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

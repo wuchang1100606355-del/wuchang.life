@@ -1,0 +1,143 @@
+{
+  "schema": "taiji.wuchang_life_system_scope.v1",
+  "status": "ACTIVE",
+  "domain": "wuchang.life",
+  "source": "user_provided_tailscale_screenshot_2026-05-13",
+  "scope_principle": "凡 wuchang.life 所轄設備與容器均為五維度規 AI 治理總成服務對象；服務對象不等於任意遠端控制。",
+  "default_write_permission": "blocked_until_gateway_authorized",
+  "nodes": [
+    {
+      "machine": "taiji01",
+      "tailscale_ip": "100.71.224.18",
+      "platform": "Linux 6.8.0-111-generic",
+      "node_class": "governance_host",
+      "scope_role": ["governance_node", "edge_runtime", "memory_node", "subnet_router_candidate"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "主要系統主機；只允許本機現場操作、本機 SSH、或度規寫入。"
+    },
+    {
+      "machine": "msi",
+      "tailscale_ip": "100.107.187.77",
+      "platform": "Linux 6.6.87.2 WSL2",
+      "node_class": "developer_workstation",
+      "scope_role": ["development_node", "orchestration_node", "temporal_runtime"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "目前 Taiji_Hub Linux workspace 來源。"
+    },
+    {
+      "machine": "msi-win11-in",
+      "tailscale_ip": "100.105.82.28",
+      "platform": "Windows 11 25H2",
+      "node_class": "windows_node",
+      "scope_role": ["desktop_ui_node", "operator_console"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "Windows UI 與本機人類操作窗。"
+    },
+    {
+      "machine": "penguin",
+      "tailscale_ip": "100.111.139.7",
+      "platform": "Linux 6.6.119 ChromeOS container",
+      "node_class": "linux_node",
+      "scope_role": ["developer_aux_node", "low_risk_runtime_probe"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "輔助 Linux 節點；不得持有 secret 或 production DB 寫入權。"
+    },
+    {
+      "machine": "drallion",
+      "tailscale_ip": "100.84.254.20",
+      "platform": "Android 13",
+      "node_class": "mobile_device",
+      "scope_role": ["member_or_operator_mobile_ui", "least_privilege_confirm_device"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "行動端只作低權限 UI / 確認窗，不作資料庫或 secret 節點。"
+    },
+    {
+      "machine": "iphone-11",
+      "tailscale_ip": "100.94.212.10",
+      "platform": "iOS 26.4.2",
+      "node_class": "mobile_device",
+      "scope_role": ["member_or_operator_mobile_ui", "least_privilege_confirm_device"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "行動端只作低權限 UI / 確認窗，不作資料庫或 secret 節點。"
+    },
+    {
+      "machine": "v3-mix-edla-gl",
+      "tailscale_ip": "100.98.69.115",
+      "platform": "Android 13",
+      "node_class": "mobile_device",
+      "scope_role": ["member_or_operator_mobile_ui", "least_privilege_confirm_device"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "行動端只作低權限 UI / 確認窗。"
+    },
+    {
+      "machine": "wuchang-us-free-node",
+      "tailscale_ip": "100.94.236.81",
+      "platform": "Linux 6.1.0-43-cloud-amd64",
+      "node_class": "cloud_ephemeral_node",
+      "scope_role": ["cloud_metric_aux_node", "ephemeral_compute_candidate"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "Ephemeral；只允許無敏 metric / hash / artifact 類任務。"
+    },
+    {
+      "machine": "wuchang-us-free-node-1",
+      "tailscale_ip": "100.116.123.20",
+      "platform": "Linux 6.1.0-43-cloud-amd64",
+      "node_class": "cloud_ephemeral_node",
+      "scope_role": ["cloud_metric_aux_node", "ephemeral_compute_candidate"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "Ephemeral；只允許無敏 metric / hash / artifact 類任務。"
+    },
+    {
+      "machine": "wuchang-us-free-node-2",
+      "tailscale_ip": "100.94.209.106",
+      "platform": "Linux 6.1.0-43-cloud-amd64",
+      "node_class": "cloud_ephemeral_node",
+      "scope_role": ["cloud_metric_aux_node", "ephemeral_compute_candidate"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "Ephemeral；只允許無敏 metric / hash / artifact 類任務。"
+    },
+    {
+      "machine": "wuchang-us-free-node-4",
+      "tailscale_ip": "100.99.148.2",
+      "platform": "Linux 6.1.0-43-cloud-amd64",
+      "node_class": "cloud_ephemeral_node",
+      "scope_role": ["cloud_metric_aux_node", "ephemeral_compute_candidate"],
+      "last_seen_state": "connected",
+      "write_permission": "blocked_until_gateway_authorized",
+      "notes": "Ephemeral；只允許無敏 metric / hash / artifact 類任務。"
+    }
+  ],
+  "domain_routes": [
+    { "host": "wuchang.life", "purpose": "組織主域與公開入口", "exposure": "manual_dns_only" },
+    { "host": "www.wuchang.life", "purpose": "公開首頁", "exposure": "public_summary_only" },
+    { "host": "docs.wuchang.life", "purpose": "無敏唯讀文件與版本", "exposure": "public_summary_only" },
+    { "host": "business.wuchang.life", "purpose": "商業協力雲摘要", "exposure": "public_summary_only" },
+    { "host": "property.wuchang.life", "purpose": "物業管理雲摘要", "exposure": "public_summary_only" },
+    { "host": "fund.wuchang.life", "purpose": "公益基金池科目與摘要", "exposure": "public_summary_only" },
+    { "host": "carbon.wuchang.life", "purpose": "ESG / 碳資料摘要", "exposure": "public_summary_only" },
+    { "host": "api.wuchang.life", "purpose": "Gateway API", "exposure": "vpn_only" },
+    { "host": "odoo.wuchang.life", "purpose": "Odoo runtime", "exposure": "vpn_only" },
+    { "host": "ai.wuchang.life", "purpose": "本地/內網 AI runtime", "exposure": "vpn_only" },
+    { "host": "spatial.wuchang.life", "purpose": "轄區圖與空間資料 runtime", "exposure": "vpn_only" },
+    { "host": "voice.wuchang.life", "purpose": "語音 gateway", "exposure": "vpn_only" },
+    { "host": "admin.wuchang.life", "purpose": "人類管理入口", "exposure": "vpn_only" }
+  ],
+  "security_invariants": {
+    "service_object_not_remote_control": true,
+    "secret_material_allowed": false,
+    "member_plaintext_cloud_allowed": false,
+    "direct_production_write_allowed": false,
+    "gateway_required": true,
+    "audit_required": true
+  }
+}

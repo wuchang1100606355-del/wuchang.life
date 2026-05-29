@@ -1,0 +1,40 @@
+{
+  "event": "unique_ai_window_partition_policy_loaded",
+  "status": "ACTIVE",
+  "version": "2026-05-12",
+  "policy": "本系統唯一 AI 分窗制度",
+  "ai_authority_model": "windowed_permission_vectors",
+  "accountable_natural_person": "江政隆",
+  "creator_accountability_anchor": true,
+  "creator_anchor_bypasses_gate": false,
+  "single_super_admin_ai_allowed": false,
+  "windows": [
+    "AIW-local-xiaoj",
+    "AIW-codex-engineering",
+    "AIW-cloud-reference",
+    "AIW-browser-action",
+    "AIW-gateway-policy",
+    "AIW-audit-replay",
+    "AIW-human-boundary"
+  ],
+  "blocked_l3": [
+    "ai_window_collapse_to_super_admin",
+    "cloud_ai_plaintext_member_data",
+    "cloud_ai_secret_material",
+    "browser_admin_bypass",
+    "payment_or_credential_without_human_decision",
+    "ungoverned_remote_write",
+    "gateway_or_audit_bypass"
+  ],
+  "required_runtime_controls": [
+    "Five Metric Gate",
+    "Taiji Gateway",
+    "Audit Runtime",
+    "Replay Governance",
+    "Deadbox",
+    "Rollback Plan",
+    "Human Decision Boundary"
+  ],
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

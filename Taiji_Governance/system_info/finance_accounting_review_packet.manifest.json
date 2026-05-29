@@ -1,0 +1,26 @@
+{
+  "schema": "taiji.finance_accounting_review_packet_activation.v1",
+  "status": "ACTIVE",
+  "version": "0.1.0",
+  "activated_at": "2026-05-13T00:00:00+08:00",
+  "module": "Finance / Accounting Review Packet Runtime",
+  "mode": "review_packet_only",
+  "files": {
+    "policy_adapter": "runtime_adapters/finance_accounting_review_policy.py",
+    "schema": "schemas/finance_accounting_review_packet.schema.json",
+    "tests": "tests/test_finance_accounting_review_policy.py",
+    "governance_policy": "Taiji_Governance/policies/finance_accounting_review_packet_policy_2026-05-13.md"
+  },
+  "security_invariants": {
+    "payment_execution_allowed": false,
+    "odoo_account_mutation_allowed": false,
+    "ai_final_accounting_approval_allowed": false,
+    "public_detail_visibility_allowed": false,
+    "voucher_public_visibility_allowed": false,
+    "physical_delete_allowed": false,
+    "member_plaintext_allowed": false,
+    "secret_material_allowed": false
+  },
+  "risk_rating": "L2_until_accountant_and_human_review",
+  "notes": "This runtime only prepares non-sensitive review packets and public subject/summary outputs. It does not perform formal accounting, tax, payment, refund, or Odoo database mutation."
+}

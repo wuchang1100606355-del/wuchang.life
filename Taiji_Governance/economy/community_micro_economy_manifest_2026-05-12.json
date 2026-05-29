@@ -1,0 +1,60 @@
+{
+  "schema": "taiji.community_micro_economy_manifest.v1",
+  "status": "design_active_not_financial_runtime",
+  "created_at": "2026-05-12T18:20:00+08:00",
+  "source": "user_provided_strategy_report",
+  "core_system": "Odoo community digital twin with Taiji Five Metric governance",
+  "entities": {
+    "association": "新北市三重區五常社區發展協會",
+    "domain": "wuchang.life",
+    "cafe_nodes": [
+      "聊國咖啡館重新店 / 上品食品行",
+      "聊國咖啡館仁義店"
+    ],
+    "fund_pool": "五常社區數位發展基金",
+    "service_team": "社區專勤隊"
+  },
+  "economy_units": {
+    "happiness_coin": {
+      "classification": "non_financial_design_token_until_reviewed",
+      "allowed_uses": [
+        "micro_labor_contribution_record",
+        "merchant_ticket_production_credit",
+        "local_service_redemption_draft",
+        "time_bank_prototype"
+      ],
+      "forbidden_uses_before_review": [
+        "legal_tender",
+        "investment_product",
+        "private_profit_distribution",
+        "payment_execution_without_human_decision"
+      ]
+    }
+  },
+  "flow": [
+    "resident_fiat_purchase",
+    "local_merchant_revenue",
+    "community_service_team_task",
+    "happiness_coin_or_ticket_credit_issue",
+    "fund_pool_retention",
+    "local_redemption",
+    "coin_burn_or_accounting_correction"
+  ],
+  "required_controls": {
+    "five_metric_gate": true,
+    "human_decision_for_finance": true,
+    "accounting_window_required": true,
+    "no_physical_delete": true,
+    "wrong_entry_correction_required": true,
+    "small_sample_suppression_required": true,
+    "no_member_plaintext_cloud_sync": true
+  },
+  "risk_level": "L2_drift_until_accounting_and_legal_review",
+  "l3_blocks": [
+    "private_conversion_of_public_interest_assets",
+    "unreviewed_token_as_financial_product",
+    "payment_execution_by_ai",
+    "member_plaintext_cloud_sync",
+    "physical_delete_of_accounting_records"
+  ]
+}

@@ -1,0 +1,50 @@
+schema: taiji.tensor_packet.v1.yaml_mirror
+canonical_schema: schemas/tensor_packet.schema.json
+classification: non_secret_runtime_metadata
+vectors:
+  intent_vector:
+    - purpose
+    - operational_objective
+    - governance_classification
+    - execution_necessity
+  resource_vector:
+    - compute_usage
+    - token_usage
+    - gpu_usage
+    - multimodal_generation_cost
+    - storage_pressure
+    - network_consumption
+  time_vector:
+    - execution_window
+    - replay_expiration
+    - task_lifetime
+    - rollback_horizon
+    - synchronization_timing
+    - audit_chronology
+  authority_vector:
+    - permission_level
+    - governance_ownership
+    - approval_requirement
+    - human_decision_requirement
+    - escalation_boundary
+  topology_vector:
+    - node_location
+    - routing_structure
+    - governance_boundary
+    - distributed_relationship
+    - device_trust_position
+    - runtime_adjacency
+required_runtime_guards:
+  - packet_hash
+  - parent_hash
+  - nonce
+  - replay_check
+  - authority_check
+  - topology_check
+  - audit
+blocked_payloads:
+  - raw_secret
+  - raw_personal_data
+  - service_account_json
+  - oauth_token
+  - private_key

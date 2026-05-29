@@ -1,0 +1,29 @@
+runtime_ports:
+  current:
+    gateway:
+      name: "Gateway / 匝道器"
+      url: "http://127.0.0.1:8081/health"
+      port: 8081
+    openwebui:
+      name: "Open WebUI"
+      url: "http://127.0.0.1:8080"
+      port: 8080
+    openwebui_bridge:
+      name: "OpenWebUI Bridge"
+      url: "http://127.0.0.1:8098/v1/models"
+      port: 8098
+    ollama:
+      name: "Ollama"
+      url: "http://127.0.0.1:11434/api/tags"
+      port: 11434
+    claw:
+      name: "Claw"
+      url: "http://127.0.0.1:9004/healthz"
+      port: 9004
+    ssh_tunnel:
+      name: "SSH Tunnel"
+      port: 2222
+
+  legacy_replaced:
+    8000: "舊 mu_0，已不作為新版主檢查"
+    9090: "舊 mu_2，已不作為新版主檢查"

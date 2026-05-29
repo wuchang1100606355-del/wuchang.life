@@ -1,0 +1,33 @@
+member_account_binding_policy:
+  purpose: bind approved internal members to local system identities without storing secrets
+  canonical_files:
+    approved_members: data/internal_members/approved_members.jsonl
+    account_bindings: data/internal_members/account_bindings.jsonl
+    ledger: runtime/ledger/member_account_binding_events.jsonl
+
+  allowed_bindings:
+    - linux_user
+    - domain_admin_email
+    - chatgpt_user_email
+    - windows_user_hint
+    - vpn_node_name
+    - vpn_node_ip
+    - odoo_partner_id_after_sync
+    - line_user_id_hash_after_consent
+    - google_email_after_consent
+
+  forbidden_storage:
+    - passwords
+    - api_tokens
+    - private_keys
+    - oauth_refresh_tokens
+    - line_channel_access_token
+    - google_client_secret
+    - odoo_password
+
+  rules:
+    gateway_required: true
+    consent_required_for_external_accounts: true
+    no_secret_in_memory_model: true
+    no_secret_in_reports: true
+    high_risk_to_dead_letter: true

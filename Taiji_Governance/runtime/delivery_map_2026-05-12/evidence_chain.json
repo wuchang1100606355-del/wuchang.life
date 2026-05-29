@@ -1,0 +1,39 @@
+{
+  "schema": "taiji_delivery_evidence_chain.v1",
+  "generated_at": "2026-05-12",
+  "secret_material_included": false,
+  "member_plaintext_included": false,
+  "cloud_api_called": false,
+  "evidence": [
+    {
+      "concept": "Odoo community main module",
+      "artifact": "Taiji_Odoo/addons/wuchang_core/__manifest__.py",
+      "classification": "runtime_prototype",
+      "next_action": "Review Odoo module fields, access rules, and install status before production."
+    },
+    {
+      "concept": "Sovereign AI commercial POS system",
+      "artifact": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_options.py",
+      "classification": "prototype",
+      "next_action": "Map natural intent draft output to POS option models through Gateway."
+    },
+    {
+      "concept": "XiaoJ one identity with internal model windows",
+      "artifact": "runtime/dual_state/ollama_dual_state_runtime.py",
+      "classification": "runtime",
+      "next_action": "Wire into local Gateway only after preflight and audit."
+    },
+    {
+      "concept": "Formal tensor runtime",
+      "artifact": "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/runtime_entry_v0_1_1.py",
+      "classification": "deployment",
+      "next_action": "Keep localhost-only; do not expose without Gateway/Tunnel."
+    },
+    {
+      "concept": "Container governance",
+      "artifact": "Taiji_Governance/runtime/delivery_map_2026-05-12/container_audit_report.md",
+      "classification": "governance",
+      "next_action": "Confirm exposed-port boundary and healthcheck plan."
+    }
+  ]
+}

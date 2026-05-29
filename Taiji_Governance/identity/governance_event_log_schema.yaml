@@ -1,0 +1,26 @@
+schema: taiji.governance_event_log.v1
+classification: non_secret_audit_metadata
+required_fields:
+  - event_id
+  - created_at
+  - identity_id
+  - identity_role
+  - action
+  - risk_level
+  - tensor_packet_hash
+  - authority_vector_hash
+  - topology_vector_hash
+  - data_scope
+  - container_scope
+  - odoo_scope
+  - public_interest_scope
+  - commercial_boundary
+  - human_decision_required
+  - audit_result
+blocked_fields:
+  - natural_person_id_plaintext
+  - credential_secret
+  - private_key
+  - oauth_token
+  - service_account_json
+  - payment_sensitive_data

@@ -1,0 +1,94 @@
+schema: taiji_metric_tensor_runtime_bootstrap.v1
+generated_at: "2026-05-12"
+mode: distributed_runtime
+secret_policy: metadata_only_no_secret_values
+
+system_vector:
+  N:
+    n0: MSI
+    n1: taiji01
+    n2: Odoo
+    n3: Ollama
+    n4: ContainerMesh
+  M:
+    m0: persona_state
+    m1: engineering_state
+    m2: metric_state
+    m3: memory_state
+  R: runtime_state
+  G: governance_state
+  E: event_stream
+  A: audit_chain
+  P: projection_layer
+  C: container_state
+
+xiaoj_identity:
+  invariant_identity: XiaoJ
+  visible_ai_count: 1
+  physical_presentation: single_ai_system
+  internal_windows:
+    persona_state:
+      purpose: low_cost_interaction
+      model_candidates:
+        - qwen:0.5b
+        - gemma:2b
+    engineering_state:
+      purpose: engineering_reasoning
+      model_candidates:
+        - metric-language-gateway-ai:latest
+        - sister-j-brain:latest
+        - llama3.1:latest
+        - deepseek-r1:8b
+    metric_state:
+      purpose: five_metric_gate_and_policy
+    memory_state:
+      purpose: hash_metric_reference_only
+  exchange_contract:
+    exchange_format: MetricPacket_coordinate_tensor_field
+    raw_full_context_exchange: false
+    raw_plaintext_runtime_memory: false
+    long_text_context_transfer_between_model_states: false
+
+metric_packet:
+  fields:
+    - intent
+    - node
+    - auth
+    - hazard
+    - memory_ref
+    - event_ref
+    - output_contract
+    - curvature
+  required_gate: Five Metric Gate
+  l3_route: deadbox_review
+
+container_audit:
+  destructive_actions_allowed: false
+  delete_volume_allowed: false
+  read_env_values_allowed: false
+  exposed_port_policy: require_gateway_vpn_firewall_evidence
+
+local_truth_cloud_metric:
+  local_truth_allowed_locations:
+    - linux_native_workspace
+    - governed_local_runtime
+    - controlled_d_drive_after_human_review
+  cloud_payload_allowed:
+    - metric
+    - hash
+    - event_id
+    - anonymized_state
+    - audit_ref
+  cloud_payload_forbidden:
+    - member_plaintext
+    - odoo_customer_plaintext
+    - secret
+    - token
+    - private_key
+    - service_account_json
+
+end_state:
+  runtime_ready: planned
+  memory_updated: metric_reference_only
+  containers_audited: report_generated
+  delivery_map_created: true

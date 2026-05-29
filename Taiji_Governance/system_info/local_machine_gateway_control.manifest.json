@@ -1,0 +1,54 @@
+{
+  "schema": "taiji.local_machine_gateway_control.v1",
+  "status": "ACTIVE",
+  "activated_at": "2026-05-13T00:00:00+08:00",
+  "node_identities": [
+    "TDI-NODE-admin-msi",
+    "TDI-NODE-msi-win11-operator-console"
+  ],
+  "service_identities": [
+    "TDI-SERVICE-local-ollama",
+    "TDI-SERVICE-local-openwebui"
+  ],
+  "local_endpoints": [
+    {
+      "name": "ollama",
+      "host": "127.0.0.1",
+      "port": 11434,
+      "allowed_direct_use": "local_model_test_only",
+      "gateway_required_for": [
+        "system_action",
+        "production_mutation",
+        "policy_change",
+        "odoo_write",
+        "google_admin_action",
+        "payment_or_refund",
+        "secret_access",
+        "member_plaintext_export"
+      ]
+    },
+    {
+      "name": "openwebui_local",
+      "host": "127.0.0.1",
+      "port": 8080,
+      "allowed_direct_use": "local_chat_or_preview_only",
+      "gateway_required_for": [
+        "system_action",
+        "production_mutation",
+        "admin_browser_automation",
+        "secret_access",
+        "member_plaintext_export"
+      ]
+    }
+  ],
+  "security_invariants": {
+    "local_machine_is_gateway_controlled": true,
+    "direct_llm_to_production_mutation_allowed": false,
+    "direct_secret_access_allowed": false,
+    "member_plaintext_export_allowed": false,
+    "human_decision_boundary_required": true,
+    "audit_required": true
+  },
+  "risk_level": "L1_near",
+  "action": "allow_with_audit"
+}

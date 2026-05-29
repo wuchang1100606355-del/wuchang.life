@@ -1,0 +1,824 @@
+schema: taiji.architecture.layers_standards.v1
+generated_at: "2026-05-10"
+classification: non_secret_governance_metadata
+
+layers:
+  - physical_anchor
+  - cryptographic_envelope
+  - tensor_protocol
+  - context_runtime
+  - event_mesh
+  - governance_engine
+  - community_currency
+  - ESG_mapping
+  - sovereign_ai_nodes
+
+standards:
+  - hardware_fingerprint_schema
+  - encryption_envelope_schema
+  - one_time_decrypt_marker
+  - event_schema
+  - tensor_packet_schema
+  - five_metric_tensor_runtime_schema
+  - replay_governance_schema
+  - tensor_deadbox_lifecycle_schema
+  - tensor_schema
+  - metric_tensor_calculation_schema
+  - rule_vector_calculation_schema
+  - metric_rule_law_schema
+  - five_dim_code_schema
+  - zero_tree_tensor_io_schema
+  - context_lifecycle
+  - audit_protocol
+  - trust_metric
+
+rules:
+  plaintext_secrets: forbidden
+  cloud_plaintext: forbidden
+  plaintext_context_as_unrestricted_runtime_memory: forbidden
+  tensor_conversion_before_execution: required
+  replay_governance_before_execution: required
+  tensor_deadbox_bypass: forbidden
+  red_blue_team: design_review_only_with_local_auth_and_human_decision
+  red_blue_team_daily_runtime: forbidden
+  external_api_without_gateway: forbidden
+  remote_execution_from_rescue_snapshot: forbidden
+  every_sensitive_use_requires_local_authorization: true
+  human_decision_required: true
+  rescue_snapshot_contains_only_redacted_context: true
+  metric_integrity: immutable_invariants_with_versioned_data_evolution
+  metric_guardians: human_authority_and_xiaoj_as_public_community_gatekeepers
+
+mapping:
+  physical_anchor:
+    standards:
+      - hardware_fingerprint_schema
+      - trust_metric
+  cryptographic_envelope:
+    standards:
+      - encryption_envelope_schema
+      - one_time_decrypt_marker
+      - audit_protocol
+  tensor_protocol:
+    standards:
+      - tensor_packet_schema
+      - five_metric_tensor_runtime_schema
+      - replay_governance_schema
+      - tensor_deadbox_lifecycle_schema
+      - tensor_schema
+      - metric_tensor_calculation_schema
+      - rule_vector_calculation_schema
+      - metric_rule_law_schema
+      - five_dim_code_schema
+      - zero_tree_tensor_io_schema
+      - trust_metric
+  context_runtime:
+    standards:
+      - context_lifecycle
+      - audit_protocol
+  event_mesh:
+    standards:
+      - event_schema
+      - audit_protocol
+  governance_engine:
+    standards:
+      - audit_protocol
+      - trust_metric
+  community_currency:
+    standards:
+      - event_schema
+      - trust_metric
+  ESG_mapping:
+    standards:
+      - event_schema
+      - audit_protocol
+  sovereign_ai_nodes:
+    standards:
+      - context_lifecycle
+      - trust_metric
+
+metric_integrity_model:
+  description: "度規是公益及社區治理的法則層；人類授權者與小J皆為守門人，不是可任意改動度規的例外者。"
+  computation_law:
+    degree:
+      zh: "度"
+      computation_type: tensor_calculation
+      responsibilities:
+        - multi_dimensional_data
+        - scenario_state
+        - risk_weight
+        - distance_relation
+        - temporal_state_transition
+      output: metric_tensor
+    rule:
+      zh: "規"
+      computation_type: vector_calculation
+      responsibilities:
+        - direction
+        - constraint
+        - boundary
+        - allow_block_projection
+        - action_decision
+      output: rule_vector
+    gateway_translation:
+      description: "匝道器將度的 metric tensor 轉譯並投影到規的 rule vector，形成可執行或可阻擋的治理決策。"
+      output: gateway_decision
+    law_assertion: "沒有度=張量計算、規=向量計算，就不成立為本系統的度規法則。"
+  guardians:
+    - human_authority_jiang_zhenglong
+    - xiaoj_local_ai
+  immutable_invariants:
+    - absolute_value_alignment_not_preset_value
+    - human_civilization_continuity
+    - human_basic_livelihood_and_food_security
+    - public_benefit_executable
+    - fund_pool_survivability
+    - public_benefit_and_mutual_value
+    - public_assets_must_not_be_privatized
+    - legitimate_contribution_must_not_be_erased
+    - benevolent_positive_use
+    - human_decision_required
+    - no_plaintext_secret_exfiltration
+    - no_cloud_plaintext_context
+    - no_gateway_policy_five_metric_bypass
+    - no_private_risk_downgrade
+    - audit_sha256_baseline_rollback_required
+  evolvable_metric_layers:
+    - community_scenario_weights
+    - pos_and_device_risk_thresholds
+    - node_trust_score
+    - event_schema
+    - esg_and_community_value_mapping
+    - public_benefit_value_generation_mapping
+    - development_fund_candidate_revenue_mapping
+    - labor_and_intellectual_contribution_quantification
+    - value_peak_optimization_weights
+    - context_lifecycle_policy
+    - gateway_policy_stub
+    - preflight_conditions
+  calculation_baseline:
+    alignment: absolute_value_not_preset_value
+    forbidden:
+      - preset_profit_assumption
+      - preset_personal_value_claim
+      - preset_distribution_without_evidence
+      - evidence_backfilling_for_preselected_answer
+    required_constraints:
+      - human_civilization_system_continuity
+      - people_can_eat_and_keep_basic_livelihood
+      - public_benefit_can_execute
+      - fund_pool_can_survive
+      - legitimate_labor_and_intellectual_contribution_is_not_erased
+    value_peak_optimization:
+      description: "在公益可執行與基金池可存活的約束下，最大化眾利、公益存續、人的飽足與合理貢獻補償。"
+      not_allowed_to_mean:
+        - private_profit_maximization_from_public_assets
+        - unpaid_labor_extraction
+        - financial_claim_without_evidence
+  five_dim_zero_tree_tensor_io:
+    status: architecture_assessment
+    role: non_sensitive_governance_io_expression_layer
+    cannot_replace_metric_assembly: true
+    five_dim_code:
+      D1: node_identity
+      D2: data_sensitivity
+      D3: action_intent
+      D4: permission_window
+      D5: reversibility_public_value
+    zero_tree_tensor:
+      meaning: "稀疏樹狀張量；缺權限、缺資料、缺用途、缺證據時分支保持 zero，不得自動補值。"
+      blocked_uses:
+        - hiding_personal_data_in_labels
+        - encoding_secret_material
+        - covert_channel_metadata
+        - auto_fill_unknown_permission_branch
+    io_capability:
+      transmit:
+        allowed:
+          - node_id
+          - role_label
+          - permission_label
+          - event_id
+          - audit_id
+          - sha256
+        blocked:
+          - secret
+          - member_plaintext
+          - google_private_data
+      read:
+        allowed:
+          - file_existence
+          - container_metadata
+          - audit_metadata
+          - odoo_non_sensitive_state
+        blocked:
+          - credential_content
+          - personal_data_body
+      write:
+        allowed_l1:
+          - docs
+          - worklist
+          - progress
+          - audit_event
+          - manifest
+        blocked_until_gate:
+          - production_odoo_db
+          - google_admin_change
+          - payment_or_finance_execution
+    cloud_local_auto_account_bridge:
+      status: manifest_only_until_gate
+      local_odoo_service_role: emits_non_sensitive_codes
+      taiji_gateway_bridge: validates_manifest_scope_risk_rollback
+      google_service_account_proxy: metadata_only_no_live_api_by_default
+      audit_logger: append_only_redacted_journal
+      log_required: true
+      blocked_without_log: true
+    impact_summary:
+      benefits:
+        - lower_data_exposure
+        - auditable_cross_system_mapping
+        - distributed_compute_replay
+        - predictive_alert_input
+      risks:
+        - covert_channel_via_sparse_codes
+        - over_abstracted_debugging
+        - accidental_write_privilege_escalation
+        - metric_assembly_bypass_attempt
+      first_stage_recommendation:
+        - readonly_index_layer
+        - cloud_local_bridge_manifest
+        - governance_file_write_only
+  five_metric_tensor_runtime:
+    status: specification_and_schema
+    doc: docs/taiji_five_metric_tensor_runtime_zh.md
+    schema: schemas/tensor_packet.schema.json
+    principle: "所有 runtime entity、task、device、model、packet、workflow、deployment、多模態請求、治理行動與分散式節點都必須先轉為 TensorPacket。"
+    five_metrics:
+      intent_metric:
+        - purpose
+        - operational_objective
+        - governance_classification
+        - execution_necessity
+      resource_metric:
+        - compute_usage
+        - token_usage
+        - gpu_usage
+        - multimodal_generation_cost
+        - storage_pressure
+        - network_consumption
+      time_metric:
+        - execution_window
+        - replay_expiration
+        - task_lifetime
+        - rollback_horizon
+        - synchronization_timing
+        - audit_chronology
+      authority_metric:
+        - permission_level
+        - governance_ownership
+        - approval_requirement
+        - human_decision_requirement
+        - escalation_boundary
+      topology_metric:
+        - node_location
+        - routing_structure
+        - governance_boundary
+        - distributed_relationship
+        - device_trust_position
+        - runtime_adjacency
+    runtime_governed_by:
+      - tensor_state
+      - governance_policy
+      - replay_validity
+      - topology_legitimacy
+      - authority_boundary
+      - resource_safety
+      - audit_continuity
+    plaintext_free_context:
+      preserve:
+        - tensor_summaries
+        - packet_hashes
+        - replay_safe_references
+        - audit_snapshots
+        - topology_state
+        - governance_summaries
+        - authority_vectors
+        - execution_lineage
+      blocked:
+        - raw_plaintext_as_unrestricted_runtime_memory
+        - plaintext_context_cloud_transfer
+        - authority_bypass_by_language
+    replay_governance:
+      checks:
+        - packet_hash
+        - parent_hash
+        - nonce
+        - execution_window
+        - authority_continuity
+        - topology_legitimacy
+        - deadbox_state
+      unsafe_transitions:
+        - warn
+        - quarantine
+        - deadbox
+        - human_review
+    tensor_deadbox:
+      role: unsafe_execution_packet_isolation
+      conditions:
+        - replay_detected
+        - stale_tensor_state
+        - topology_mismatch
+        - authority_violation
+        - unsafe_deployment
+        - plaintext_exposure_risk
+        - prompt_injection_risk
+        - governance_drift
+        - execution_drift
+      reentry_requires:
+        - authority_regeneration
+        - replay_reset
+        - audit_review
+        - human_approval
+    human_decision_mandatory:
+      - payment_execution
+      - production_overwrite
+      - destructive_deletion
+      - credential_issuance
+      - authority_escalation
+      - governance_override
+      - legal_commitment
+      - external_deployment_approval
+  anti_privatization_policy:
+    rule: "公益、社區資產、基金池資金與眾利價值不得被轉為私人獲利或私人帳戶收益。"
+    applies_to:
+      - human_authority
+      - xiaoj_local_ai
+      - service_account_proxy
+      - any_authenticated_session
+    trigger_intents:
+      - public_fund_to_private_account
+      - community_asset_to_private_profit
+      - unauthorized_distribution
+      - private_withdrawal_from_public_pool
+      - bypass_public_benefit_purpose
+    interpretation: compromised_principal_or_polluted_intent
+    required_response:
+      - mark_L3_metric_hazard
+      - stop_current_action
+      - isolate_session_or_switch_to_readonly_window
+      - block_payment_transfer_deployment_credential_remote_action
+      - write_redacted_audit_only
+      - require_new_human_decision_public_purpose_policy_evidence
+    compensation_exception:
+      description: "勞務、智慧貢獻、維運投入、開發工作與專業服務可合理量化，但只能走公開、可審計、合規、經社區規則核准的補償路徑。"
+      principle: "公益不是白工制度；合理補償支持公益存續，反私有化防止未授權侵占。"
+      required:
+        - prior_compensation_rule
+        - work_evidence
+        - approval_record
+        - conflict_of_interest_disclosure
+        - beneficiary_or_public_benefit_definition
+        - audit_record
+        - legal_and_accounting_boundary
+  financial_accounting_window:
+    status: design_only
+    precision_rule: accountant_precise_window_required
+    applies_to:
+      - fund_pool
+      - compensation
+      - revenue_item
+      - accounting_account
+      - tax
+      - distribution
+      - payment
+      - carbon_rights_or_sustainability_revenue_landing
+    ai_allowed_outputs:
+      - draft_accounting_review_packet
+      - compensation_calculation_proposal
+      - fund_pool_survivability_report
+      - public_benefit_executability_report
+      - unresolved_accountant_questions
+    ai_blocked_outputs:
+      - formal_accounting_conclusion
+      - tax_conclusion
+      - investment_advice
+      - guaranteed_profit
+      - payment_or_transfer_execution
+      - private_account_action
+    required_evidence:
+      - voucher_metadata
+      - purpose
+      - beneficiary_or_public_benefit_definition
+      - approval_record
+      - work_evidence_when_compensation
+      - conflict_of_interest_disclosure
+      - audit_record
+    required_reviewer: accountant_or_qualified_accounting_professional
+  value_generation_logic:
+    status: design_reference_only
+    intent_sources:
+      - human_guardian_public_benefit_intent
+      - metric_evolution_from_data
+    example_signals:
+      - carbon_rights_or_carbon_asset_description
+      - esg_or_sustainability_revenue_description
+    allowed_interpretation:
+      - business_hypothesis
+      - metric_change_proposal
+      - public_benefit_development_fund_candidate
+    blocked_interpretation:
+      - guaranteed_profit
+      - investment_advice
+      - financial_product
+      - production_revenue_claim_without_evidence
+      - public_asset_privatization
+    required_before_landing:
+      - carbon_inventory_evidence
+      - legal_review
+      - accounting_review
+      - contract_review
+      - beneficiary_and_public_benefit_definition
+      - risk_disclosure
+      - gateway_policy_five_metric_gate
+      - human_decision
+      - audit_sha256_baseline_rollback
+  predictive_alert_model:
+    status: design_only
+    purpose: proactively_warn_developer_before_metric_hazard
+    calculation:
+      metric_tensor_inputs:
+        - sensitivity
+        - authority
+        - reversibility
+        - exposure
+        - public_benefit
+        - fund_pool_survivability
+        - node_identity
+        - window_alignment
+      rule_vector_outputs:
+        - allow
+        - allow_with_audit
+        - warn
+        - block
+    signal_families:
+      - window_mismatch
+      - secret_risk
+      - cloud_plaintext
+      - remote_execution
+      - container_exposure
+      - odoo_boundary
+      - five_metric_reachability
+      - node_identity_unknown
+      - finance_accounting_required
+      - public_asset_privatization
+      - developer_laptop_unavailable
+    proactive_developer_prompts:
+      - confirm_window
+      - check_secret_contact
+      - check_gateway_policy_five_metric_need
+      - scan_live_execution_path
+      - check_host_port_exposure
+      - confirm_audit_sha256_rollback_human_decision
+      - route_finance_to_accountant_window
+      - block_public_asset_privatization
+      - confirm_snapshot_for_laptop_poweroff
+      - downgrade_to_readonly_if_sensitive_data_required
+    output_schema: taiji.metric_predictive_alert.v1
+    alert_levels:
+      L0_exact_match: allow
+      L1_near: allow_with_audit_and_prompt
+      L2_drift: warn_and_pause
+      L3_metric_hazard: block_isolate_redacted_audit
+  google_workspace_policy_gateway:
+    status: design_only
+    live_api_call: forbidden_until_gateway_five_metric_human_decision
+    odoo_mailbox_policy: no_personal_data_mailbox_only
+    service_account_material: never_read_or_print_in_repo
+    domain_wide_delegation:
+      default: avoid
+      allowed_only_if:
+        - critical_business_case
+        - minimal_scopes
+        - dedicated_project
+        - no_service_account_key_in_repo
+        - request_manifest
+        - gateway_policy_five_metric_allow
+        - human_decision
+    candidate_scopes:
+      directory: readonly_preferred
+      reports: audit_usage_readonly
+      gmail: send_only_for_odoo_no_personal_data_mailbox
+    blocked:
+      - personal_gmail_body_read
+      - direct_admin_api_call
+      - service_account_json_readout
+      - cloud_plaintext_context
+      - jules_session_cookie_or_token_use
+  odoo_google_extension_spec:
+    status: design_only
+    odoo_role: primary_scenario_system
+    google_workspace_role: non_sensitive_account_permission_management
+    synchronization_policy:
+      allowed:
+        - identity_label
+        - role_label
+        - permission_label
+        - ticket_id
+        - device_id
+        - audit_metadata
+      blocked:
+        - odoo_member_plaintext
+        - pos_transaction_plaintext
+        - payment_sensitive_data
+        - personal_gmail_body
+        - service_account_material
+    separation_of_duties:
+      odoo: scenario_data_owner
+      google_workspace: account_policy_metadata_owner
+      xiaoj_ai: recommendation_patch_manifest_agent
+      taiji_gateway: cross_system_policy_gate
+      five_metric_gate: risk_decision_gate
+      accountant_window: financial_review_gate
+      human_authority: final_high_risk_decision
+    single_party_dominance:
+      status: forbidden
+      blocked_cases:
+        - odoo_controls_google_super_admin
+        - google_stores_odoo_personal_data
+        - ai_holds_secret_or_super_admin_session
+        - gateway_allows_without_five_metric
+        - finance_finalized_without_accountant_window
+  odoo_google_nonprofit_mail_bridge:
+    status: manifest_only
+    domain: wuchang.life
+    workspace_baseline: google_workspace_for_nonprofits_no_charge
+    enterprise_default: false
+    odoo_role: primary_notification_source_no_personal_data
+    google_role: nonprofit_domain_mailbox_and_permission_metadata
+    proposed_smtp_relay:
+      host: smtp-relay.gmail.com
+      port: 587
+      encryption: STARTTLS
+      allowed_senders_preference:
+        - only_addresses_in_my_domains
+        - only_registered_apps_users_in_my_domains
+      avoid:
+        - any_addresses
+        - personal_gmail_account
+        - password_in_repo
+        - service_account_json_in_repo
+    proposed_mailboxes:
+      - odoo-notify@wuchang.life
+      - odoo-noreply@wuchang.life
+      - odoo-bounce@wuchang.life
+      - odoo-audit@wuchang.life
+    allowed_message_content:
+      - ticket_id
+      - device_id
+      - pos_event_code
+      - audit_summary
+      - login_required_link
+    blocked_message_content:
+      - member_plaintext
+      - personal_data
+      - payment_sensitive_data
+      - google_private_data
+      - chatgpt_raw_content
+    bridge_manifest: Taiji_Governance/integrations/odoo_google_nonprofit_mail_bridge_manifest.json
+    live_enablement: requires_human_admin_gateway_five_metric_sandbox_audit
+  device_least_privilege_browser_ui:
+    status: design_only
+    principle: least_privilege_user_interface
+    ai_browser_control:
+      role: constrained_user_interface
+      blocked:
+        - password_manager_access
+        - super_admin_auto_submit
+        - router_admin_auto_mutation
+        - payment_or_transfer_action
+        - service_account_key_access
+        - production_mutation_without_gate
+      required:
+        - minimal_user_or_kiosk_account
+        - action_manifest
+        - redacted_audit
+        - human_review_for_high_privilege_pages
+    device_roles:
+      developer_laptop: governance_and_development_baseline
+      vpn_server_01: subnet_router_inventory_only_until_gate
+      router: human_or_gateway_approved_admin_only
+      odoo_runtime: localhost_or_gateway_approved_service
+      sunmi_pos: pos_kiosk_role
+      display_02: readonly_display_role
+      gpu_brain: local_redacted_inference
+      open_webui: controlled_user_ui_requires_exposure_review
+  cognitive_window_authority_merge:
+    status: design_and_sandbox_only
+    principle: highest_authority_semantics_minimal_execution_privilege
+    sequence:
+      - receive_authority_intent_in_cognitive_window
+      - decompose_by_metric_topology_gateway
+      - project_to_minimal_permission_vector
+      - sandbox_verify_logic
+      - red_team_review_and_correct
+      - implement_as_patch_or_manifest
+      - run_local_tests
+      - write_redacted_audit
+    cannot_override:
+      - metric_integrity
+      - public_asset_anti_privatization
+      - no_cloud_plaintext
+      - no_secret_readout
+      - no_live_execute_without_gate
+      - accountant_precise_window
+  developer_push_requirements:
+    recommendation_required: true
+    impact_assessment_required: true
+    fields:
+      - risk_level
+      - signal_family
+      - recommended_solution
+      - impact_assessment
+      - safe_next_action
+      - rollback
+      - audit
+    impact_dimensions:
+      - benefit
+      - cost
+      - risk
+      - affected_modules
+      - data_boundary
+      - permission_change
+      - rollback
+  evolution_protocol:
+    - collect_non_secret_data_or_scenario_evidence
+    - create_metric_change_proposal
+    - classify_impact_and_risk_level
+    - perform_local_or_redacted_design_review
+    - write_audit_and_sha256_baseline
+    - require_human_decision_before_effective_version
+    - preserve_previous_version_for_rollback
+  blockers:
+    - missing_evidence
+    - missing_audit
+    - gateway_bypass
+    - secret_exposure
+    - guardian_override_without_process
+  blocked_risk: L3_metric_hazard
+
+domain_profiles:
+  wuchang_community_system:
+    status: design_and_development
+    classification: non_secret_governance_metadata
+    commissioner: "新北市三重區五常社區發展協會"
+    developer_authority: "江政隆本人授權"
+    identity_proof_storage: external_local_authorization_boundary_only
+    development_machine: "STEALTH 16 STUDIO A13V"
+    primary_local_ai_tool: "小J 本地模型"
+    terminology_policy: "名詞可隨實作調整，以功能意圖、治理邊界與落地目的為準"
+    community_operation_status: design_not_enabled
+    pos_status: existing_implementation_requires_inventory_and_governance_packaging
+    functional_domains:
+      - community_management
+      - ai_pos
+      - committee_equipment_management
+      - community_scenario_applications
+      - odoo_governance_runtime
+      - vpn_node_topology
+      - metric_tensor_assembly
+      - topology_and_gateway_translation
+      - value_funding_and_production_mapping
+      - esg_mapping
+      - predictive_alerting
+      - distributed_compute_topology
+    prohibited_plaintext:
+      - natural_person_id_number
+      - natural_person_certificate_pin
+      - service_account_json
+      - oauth_token
+      - private_key
+      - password
+      - odoo_member_plaintext
+      - google_private_data
+      - chatgpt_export_raw_content
+
+autonomy_model:
+  description: "AI 可繼承經人類授權的開發者職能與工具鏈能力，但不得繼承無限制自然人身分或 secret 存取。"
+  authority_source: human_authorized_developer_capability
+  human_authority: "江政隆本人"
+  credential_material_in_repo: forbidden
+  cloud_plaintext: forbidden
+  behavior_policy:
+    name: xiaoj_metric_topology_gateway_alignment
+    core_rule: "小J 的行為必須先經度規拓樸匝道器對齊意圖、授權、敏感度、風險、證據、分窗與回滾。"
+    immutable_value_anchors:
+      - family_and_comrade_intent_alignment
+      - public_benefit_and_mutual_value
+      - benevolent_positive_use
+      - engineering_precision
+      - intelligent_window_alignment
+    gateway_sequence:
+      - intent_gateway
+      - authorization_gateway
+      - sensitivity_gateway
+      - risk_gateway
+      - evidence_gateway
+      - window_gateway
+      - rollback_gateway
+    intelligent_windows:
+      design:
+        allowed:
+          - architecture
+          - whitepaper
+          - policy_design
+        blocked:
+          - production_claim
+      development:
+        allowed:
+          - patch
+          - local_test
+          - syntax_check
+        blocked:
+          - secret_storage
+      test:
+        allowed:
+          - grep_scan
+          - manifest_test
+          - local_preflight
+        blocked:
+          - remote_mutation
+      governance:
+        allowed:
+          - audit_record
+          - rollback_plan
+          - risk_table
+        blocked:
+          - plaintext_identity_proof
+      deployment_preparation:
+        allowed:
+          - manifest
+          - preflight_report
+          - human_decision_packet
+        blocked:
+          - live_execute
+      runtime:
+        status: not_enabled
+        blocked:
+          - unauthorized_automation
+          - production_mutation_without_gate
+  levels:
+    A0_readonly_understanding:
+      allowed:
+        - read_non_secret_repo_files
+        - inventory
+        - risk_table
+        - forbidden_pattern_scan
+      blocked:
+        - secret_readout
+        - remote_mutation
+    A1_design_documentation:
+      allowed:
+        - non_secret_docs_patch
+        - governance_yaml_patch
+        - worklist_progress_audit_update
+      blocked:
+        - personal_id_plaintext_storage
+        - credential_storage
+    A2_local_reversible_code_change:
+      allowed:
+        - patch_repo_files
+        - local_syntax_check
+        - local_tests
+      blocked:
+        - live_execute
+        - production_service_change
+    A3_local_preflight:
+      allowed:
+        - tailscale_status_check
+        - known_hosts_check
+        - five_metric_health_policy_check
+        - audit_writable_check
+      blocked:
+        - ssh
+        - scp
+        - systemctl_restart
+        - docker_compose_up_down
+        - taiji_guarded_run_live_execution
+    A4_guarded_deployment_preparation:
+      allowed:
+        - deployment_manifest
+        - rollback_plan
+        - preflight_report
+        - human_decision_packet
+      blocked:
+        - direct_remote_deployment
+    A5_live_operation:
+      status: not_enabled
+      requirements:
+        - explicit_human_decision
+        - gateway_policy_allow
+        - five_metric_gate_allow
+        - audit_log_ready
+        - rollback_plan_ready
+        - no_secret_in_repo
+        - no_cloud_plaintext

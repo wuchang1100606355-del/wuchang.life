@@ -1,0 +1,40 @@
+schema: taiji.formal_notation_protocol.v1
+classification: non_secret_runtime_protocol
+canonical_symbols:
+  tau: Five-Metric Tensor State
+  pi: Payload
+  omega: Result
+  mu: Runtime Metadata
+  sigma: Continuity State
+  delta: State Transition
+  lambda: Route Vector
+  gamma: Governance Vector
+  rho: Replay Vector
+  kappa: Cache Vector
+  epsilon: Entropy Usage Cost Vector
+  zeta: Deadbox State
+  alpha: Audit Snapshot
+runtime_rule:
+  natural_language_role: human_explanation_layer_only
+  internal_protocol:
+    - YAML
+    - JSON
+    - TensorPacket
+    - State Machine
+    - Event Flow
+    - Route Vector
+    - Continuity State
+    - Replay Metadata
+    - Audit Snapshot
+blocked:
+  - raw_prompt_as_runtime_protocol
+  - direct_pos_mutation_from_language
+  - direct_odoo_mutation_from_language
+  - browser_admin_bypass
+  - payment_execute_without_human_decision
+  - secret_material_in_packet
+continuity_markers:
+  - tensor_hash: tx_91ae7f
+    pattern: beverage_hot_standard
+    continuity: reuse
+    execution_authority: none_without_full_TensorPacket

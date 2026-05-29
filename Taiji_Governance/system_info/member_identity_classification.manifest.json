@@ -1,0 +1,110 @@
+{
+  "schema": "taiji_governance_manifest.v1",
+  "name": "member_identity_classification",
+  "status": "ACTIVE_GOVERNANCE_MODEL_ONLY",
+  "created_at": "2026-05-12T16:20:00+08:00",
+  "association": "新北市三重區五常社區發展協會",
+  "policy_file": "Taiji_Governance/policies/member_identity_classification_policy_2026-05-12.md",
+  "schema_file": "schemas/member_identity_classification.schema.json",
+  "classification": {
+    "member_classes": [
+      "group_member",
+      "natural_person_member"
+    ],
+    "group_member_types": [
+      "merchant",
+      "property_or_building_management_committee",
+      "other_authorized_group"
+    ],
+    "governance_roles": [
+      "secretary_general",
+      "director_or_supervisor",
+      "association_staff"
+    ],
+    "role_separation": {
+      "secretary_general_is_not_general_member_window": true,
+      "merchant_group_member_is_not_property_group_member": true,
+      "governance_role_bypasses_gate": false
+    },
+    "natural_person_membership_status_by_location": {
+      "inside_jurisdiction": "regular_member",
+      "outside_jurisdiction": "supporting_member"
+    },
+    "jurisdiction_area": [
+      "五常里",
+      "仁忠里",
+      "五順里"
+    ]
+  },
+  "accounting_boundary": {
+    "group_members_require_independent_ledger": true,
+    "branches_require_independent_ledger": true,
+    "association_main_company_public_summary_allowed": true,
+    "individual_ledger_detail_publication_allowed": false,
+    "readable_business_summary_allowed": false,
+    "single_store_record_allowed": "gross_revenue_total_only",
+    "community_market_category_total_allowed": true,
+    "single_store_item_detail_visible": false,
+    "reverse_inference_to_single_store_forbidden": true,
+    "non_identifying_demographic_distribution_allowed": true,
+    "buyer_identity_visible": false,
+    "cross_join_to_identify_person_allowed": false,
+    "non_identifying_time_bucket_market_heat_allowed": true,
+    "individual_time_bucket_purchase_visible": false,
+    "public_service_signal_allowed_for_association_local_governance": true,
+    "cloud_plaintext_detail_visible": false,
+    "cloud_allowed_payload": [
+      "metric",
+      "hash",
+      "event_id",
+      "anonymized_state",
+      "audit_ref"
+    ],
+    "member_five_dim_code": {
+      "issued_at_membership_enrollment": true,
+      "represents_member_rights_and_governance_state": true,
+      "stores_personal_plaintext": false,
+      "reversible_to_personal_plaintext": false,
+      "personal_plaintext_storage": "member_device_or_physical_custody_only",
+      "ai_runtime_member_plaintext_access_allowed": false,
+      "member_ai_endpoint_whitelist_required": true,
+      "gateway_and_five_metric_gate_required": true,
+      "allowed_whitelist_functions": [
+        "member_status_check",
+        "community_service_request",
+        "pos_member_benefit_draft",
+        "forum_registration_token",
+        "odoo_mailbox_request",
+        "audit_receipt_query"
+      ],
+      "forbidden_member_ai_actions": [
+        "personal_plaintext_lookup",
+        "google_admin_sdk_direct_call",
+        "gmail_body_read",
+        "odoo_production_write",
+        "payment_execute",
+        "secret_or_token_access"
+      ]
+    },
+    "community_industry_fund_body_store_allowed": true,
+    "community_industry_fund_body_private_capital_gain_allowed": false,
+    "aggregate_mapping_allowed": "irreversible_account_category_and_total_number_only",
+    "ai_accounting_mutation_allowed": false
+  },
+  "development_period": {
+    "formal_member_registry_active": false,
+    "mock_or_classification_only": true,
+    "live_odoo_mutation_performed": false
+  },
+  "forbidden": [
+    "member_plaintext_cloud_upload",
+    "formal_member_registry_as_dashboard_data",
+    "ai_auto_member_rights_grant_without_human_review",
+    "merchant_access_to_natural_person_plaintext",
+    "group_business_secret_public_cloud_upload"
+  ],
+  "secret_material_included": false,
+  "member_plaintext_included": false,
+  "risk_level": "L1_near",
+  "action": "allow_with_audit"
+}

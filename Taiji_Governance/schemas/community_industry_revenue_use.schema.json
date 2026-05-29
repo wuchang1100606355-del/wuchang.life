@@ -1,0 +1,77 @@
+{
+  "title": "Community Industry Revenue Use",
+  "type": "object",
+  "required": [
+    "event",
+    "revenue_use_id",
+    "purpose",
+    "amount_window",
+    "public_interest_metric",
+    "authority_basis",
+    "accounting_window",
+    "audit_required",
+    "human_approval_required",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "community_industry_revenue_use"
+    },
+    "revenue_use_id": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "amount_window": {
+      "type": "string"
+    },
+    "public_interest_metric": {
+      "type": "string",
+      "enum": ["aligned", "needs_review", "blocked"]
+    },
+    "authority_basis": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "general_assembly_resolution",
+          "board_resolution",
+          "association_charter",
+          "project_authorization",
+          "accounting_review",
+          "owner_review"
+        ]
+      }
+    },
+    "accounting_window": {
+      "type": "string",
+      "enum": [
+        "public_service",
+        "community_industry_cost",
+        "system_operation",
+        "labor_compensation",
+        "intellectual_contribution",
+        "risk_reserve",
+        "fund_pool_retention"
+      ]
+    },
+    "private_gain_risk": {
+      "type": "string",
+      "enum": ["none", "checked", "needs_review", "blocked"]
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "human_approval_required": {
+      "type": "boolean"
+    },
+    "payment_execution_allowed": {
+      "type": "boolean",
+      "default": false
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+import hashlib
+import time
+from dataclasses import dataclass, asdict
+from typing import Dict, Tuple, List, Any
+
+
+@dataclass
+class IntentPacket:
+    raw_text: str
+
+    # 正向單量：越高越安全
+    D: float      # Developer Direction：開發者方向符合度
+    DEV: float    # Developer Recommendation Value：開發者建議值
+    P: float      # Proof of Identity：身份可信度
+    R: float      # Right of Way：路權合法度
+    G: float      # Guardrail Pass：Guard 可通行度
+    A: float      # Auditability：ADI 可留證度
+
+    # 風險單量：越高越危險
+    S: float      # Sensitivity：資料敏感度
+    H: float      # Hallucination Risk：幻覺風險
+    X: float      # Exfiltration

@@ -1,0 +1,63 @@
+services:
+
+  taiji_worklist:
+    image: alpine:latest
+    container_name: taiji_worklist
+
+    command: >
+      sh -c "
+      touch /data/worklist.md &&
+      tail -f /dev/null
+      "
+
+    volumes:
+      - ./worklist:/data
+
+    restart: always
+
+  taiji_progress:
+    image: alpine:latest
+    container_name: taiji_progress
+
+    command: >
+      sh -c "
+      touch /progress/progress.md &&
+      tail -f /dev/null
+      "
+
+    volumes:
+      - ./progress:/progress
+
+    restart: always
+
+  taiji_audit:
+    image: alpine:latest
+    container_name: taiji_audit
+
+    command: >
+      sh -c "
+      touch /logs/audit.log &&
+      tail -f /dev/null
+      "
+
+    volumes:
+      - ./logs:/logs
+
+    restart: always
+
+
+  taiji_syslog:
+    image: alpine:latest
+    container_name: taiji_syslog
+
+    command: >
+      sh -c "
+      touch /syslog/system_journal.log &&
+      tail -f /dev/null
+      "
+
+    volumes:
+      - ./syslog:/syslog
+
+    restart: always
+

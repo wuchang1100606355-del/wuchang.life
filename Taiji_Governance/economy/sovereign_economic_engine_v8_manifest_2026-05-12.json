@@ -1,0 +1,64 @@
+{
+  "schema": "taiji.sovereign_economic_engine_v8.v1",
+  "status": "strategy_active_not_financial_runtime",
+  "created_at": "2026-05-12T18:45:00+08:00",
+  "system_name": "五常主權系統 V8.0",
+  "english_name": "Community Sovereign Economic Engine",
+  "core_principle": "0 EPS to ESG",
+  "parent_company": "新北市三重區五常社區發展協會",
+  "branches_or_sub_company_candidates": [
+    "物業協力平台",
+    "商業協力平台",
+    "聊國咖啡仁義店"
+  ],
+  "external_support_or_vendor_node": "聊國咖啡重新總店 / 上品食品行",
+  "capital_pool": "社區數位發展資本池",
+  "reinvestment_formula_draft": {
+    "development_reserve_and_ticket_pool": "50_percent_draft",
+    "compute_sovereignty_and_operations": "max_20_percent_draft",
+    "task_force_and_labor_development": "max_20_percent_draft",
+    "wish_tree_and_social_protection": "min_10_percent_or_remaining_draft"
+  },
+  "odoo_modules_candidate": {
+    "pos_marketing": [
+      "point_of_sale",
+      "loyalty",
+      "web_pwa_oca"
+    ],
+    "task_force": [
+      "fieldservice",
+      "fleet"
+    ],
+    "care": [
+      "appointments",
+      "event",
+      "wuchang_care"
+    ],
+    "wish_tree": [
+      "helpdesk",
+      "forum",
+      "wuchang_core"
+    ]
+  },
+  "required_controls": {
+    "no_physical_delete": true,
+    "wrong_entry_correction_required": true,
+    "accounting_window_required": true,
+    "human_decision_required_for_finance": true,
+    "payment_execution_blocked_by_default": true,
+    "small_sample_suppression_required": true,
+    "member_plaintext_cloud_sync_forbidden": true
+  },
+  "forbidden_interpretations": [
+    "investment_product",
+    "guaranteed_profit",
+    "private_control_of_public_interest_assets",
+    "ai_payment_execution",
+    "cloud_plaintext_member_context",
+    "formal_legal_or_accounting_conclusion_without_review"
+  ],
+  "risk_level": "L2_drift_until_accounting_legal_and_odoo_manifest_review",
+  "live_odoo_mutation_performed": false,
+  "payment_execution_performed": false,
+  "invariant_record": "Taiji_Governance/economy/sovereign_economic_engine_v8_invariants_2026-05-12.md"
+}

@@ -1,0 +1,25 @@
+schema: taiji.usage_routing_policy.v1
+classification: non_secret_runtime_metadata
+routes:
+  low_entropy_readonly:
+    risk: L0
+    preferred_path: deterministic_local
+    audit_required: false
+  draft_generation:
+    risk: L1
+    preferred_path: local_model_or_policy_stub
+    audit_required: true
+  guarded_confirmation:
+    risk: L2
+    preferred_path: gateway_policy_human_confirmation
+    audit_required: true
+    rollback_required: true
+  unsafe_or_sensitive:
+    risk: L3
+    preferred_path: tensor_deadbox
+    audit_required: true
+blocked:
+  - raw_secret_context_to_model
+  - customer_personal_data_to_cloud
+  - payment_execution_by_model
+  - production_overwrite_by_model

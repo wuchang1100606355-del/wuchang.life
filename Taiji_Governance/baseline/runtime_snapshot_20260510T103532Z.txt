@@ -1,0 +1,95 @@
+Taiji runtime snapshot
+created_at_utc=20260510T103532Z
+mode=read_only_no_secret_output
+
+[paths]
+
+.agents
+.codex
+.continue
+.continue/agents
+.git
+.venv
+.venv/bin
+.venv/include
+.venv/include/python3.12
+.venv/lib
+.venv/lib/python3.12
+Taiji_AutoBuild
+Taiji_AutoBuild/prompts
+Taiji_AutoBuild/scripts
+Taiji_AutoBuild/scripts/__pycache__
+Taiji_Governance
+Taiji_Governance/baseline
+Taiji_Governance/deployments
+Taiji_Governance/identity
+Taiji_Governance/logs
+Taiji_Governance/progress
+Taiji_Governance/syslog
+Taiji_Governance/worklist
+Taiji_Odoo
+Taiji_Odoo/addons
+Taiji_Odoo/odoo_data
+Taiji_Odoo/postgres_data
+Taiji_Vector_Runtime_Lite
+Taiji_Vector_Runtime_Lite/app
+Taiji_Vector_Runtime_Lite/app/__pycache__
+__pycache__
+archive
+archive/secrets_backup
+archive/secrets_backup/keys_backup
+core
+data
+data/voice_cache_test
+docs
+edge
+keys
+legacy_core
+legacy_core/__pycache__
+models
+scripts
+security
+services
+services/gateway
+services/gateway/__pycache__
+
+[governance_files_sha256]
+c641218538e3ec81210c08999c5d3f5458700f90dc93e412468310a2b5ee7e22  /mnt/c/Users/o0930/Taiji_Hub/Taiji_AutoBuild/prompts/codex_readonly_prompt.md
+24a47dfa16de90306450b9b48de2848f841618414706c8bb97479a0ca9ab3fe2  /mnt/c/Users/o0930/Taiji_Hub/Taiji_AutoBuild/prompts/xiaoj_master_prompt.md
+6fcf3d4eea6ec8d7977214da8283d755d42dc351aa5accdeca40c3f1343b11b6  /mnt/c/Users/o0930/Taiji_Hub/Taiji_AutoBuild/scripts/00_readonly_probe.sh
+c061f051e3974c04c2f7e29032c21ee1de2f854c50facb9646aa2343ab101088  /mnt/c/Users/o0930/Taiji_Hub/Taiji_AutoBuild/scripts/01_import_chatgpt_export.py
+39edc3e605a4ad4dc2bd58fedc1f3cdd67ee3ab2d5984c3062f5713b384bbde4  /mnt/c/Users/o0930/Taiji_Hub/Taiji_AutoBuild/scripts/02_start_vector_lite.sh
+76fd030b04afe4a54edc2f27548b1be3ff5b286f885efa2489e5a93f5f80b107  /mnt/c/Users/o0930/Taiji_Hub/Taiji_AutoBuild/scripts/03_collect_runtime_snapshot.sh
+3e9eb3d44234a3f05f35dc06098c203ffbb1f02596625fba8bb909e34f1e8f44  /mnt/c/Users/o0930/Taiji_Hub/Taiji_AutoBuild/scripts/__pycache__/01_import_chatgpt_export.cpython-312.pyc
+462c3b3337ce0564561c9eb7490691bac92b4da23674ae39b35249b79f44b948  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/baseline/README.md
+31c71d63d3f3f6fd0eab84cf1f281c05e8302f9ba5d89d38caeeb2975f643ab9  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/baseline/runtime_snapshot_20260510T103532Z.txt
+c099030cfffd29b8077c5a3d99236a41c82b0d7fc6aa1937e842c0189cbdb044  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/deployments/cafe_main_redeploy_status.md
+ebb18c2ba466517ad9eb0b0245fdb0cde3292ea2fbf054fa5dbd20a6c6e8a70b  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/deployments/tailscale_deployment_manifest.json
+df1e277c8ed72c3594991a3c19bb60e861a2105a950f34f347806fd43eb1aae3  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/deployments/tailscale_rollback_plan.md
+36c7a12365be9c3dcad375bb5b412bc9c9db8383bf05fae11ffc6e9cb4645c5d  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/identity/digital_identity.yml
+2ff1fd8ec3e243226e84d1d8044d600a4af8c8663a443518828cc0c13fb167c6  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/logs/audit.log
+222c22c61b787a5d6d33ccabc11397fa630ae11c7b8da16eb3bb7ce328d748e2  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/progress/progress.md
+6d1f88125f504d2bf634af4b5683ae8cc64f55ee8fc3dd88984428cad9b86c2f  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/syslog/system_journal.log
+dd320eb5b7248b26790c5357b51c6aaff2397b02ecd8239bab650843dba8253e  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Governance/worklist/worklist.md
+d7a83e90e7876ce3deffbfb6d08f3989d0cb9a6c604d3212fdc67448d9aa23f1  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Vector_Runtime_Lite/README.md
+080be50050fe4624e8da94ee45eacfe0756932cc8eef865fc39b55ef6b271157  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Vector_Runtime_Lite/app/__init__.py
+197d54a4b3c1f3a910a1c334abd33efacbf581284756426b47466d4ee36447f7  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Vector_Runtime_Lite/app/__pycache__/main.cpython-312.pyc
+5bb9d9938449ef0a79fc0fbd503e81bf5c2a3f59a6a45d1a6111cf76bb32f6d3  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Vector_Runtime_Lite/app/main.py
+9b275cffc6388f5eda899b21070ca5de56cfb757475595d0a7f467b21f4a6319  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Vector_Runtime_Lite/manifest.yml
+5792fcf4f8dfdf2ba8acf70ce8733feb594d7096464a005435dd9a91a7cee12d  /mnt/c/Users/o0930/Taiji_Hub/Taiji_Vector_Runtime_Lite/requirements.txt
+
+[docker_ps]
+
+[listening_ports]
+State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+
+[ip_route]
+
+[tailscale]
+
+[credential_file_names_only]
+keys/my-j-483304-23978329de4c.json
+keys/system_status_report_20260421.json
+keys/system_status_rollback_20260421T_full.json
+keys/system_status_snapshot_20260421.json
+keys/taiji_workspace_key.json

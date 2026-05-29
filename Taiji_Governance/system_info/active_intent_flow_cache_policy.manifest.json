@@ -1,0 +1,57 @@
+{
+  "event": "intent_flow_cache_policy_loaded",
+  "status": "ACTIVE",
+  "policy_active": true,
+  "policy_version": "2026-05-12",
+  "cache_scope": "five_metric_intent_flow_template_cache",
+  "description": "Governed cache for reusable POS/service intent flow templates. It stores no raw speech, raw text, member plaintext, payment data, or secrets.",
+  "allowed_intents": [
+    "menu_query",
+    "staff_assist",
+    "service_request",
+    "display_update",
+    "pos_order_create",
+    "pos_order_modify"
+  ],
+  "blocked_intents": [
+    "payment_execute",
+    "payment_prepare",
+    "refund",
+    "discount_override",
+    "manager_override",
+    "credential_issue",
+    "credential_read",
+    "secret_read",
+    "production_overwrite",
+    "database_direct_write",
+    "live_deploy"
+  ],
+  "allowed_cache_material": [
+    "tensor_hash",
+    "semantic_hash",
+    "pattern",
+    "route_vector",
+    "option_vector",
+    "redacted_summary",
+    "draft_template_hash"
+  ],
+  "blocked_cache_material": [
+    "raw_speech",
+    "raw_text",
+    "customer_plaintext",
+    "member_plaintext",
+    "payment_sensitive_data",
+    "secret_or_token",
+    "credential_material",
+    "production_mutation_result"
+  ],
+  "requires_human_confirmation_before_pos_submit": true,
+  "raw_plaintext_cache_allowed": false,
+  "payment_cache_allowed": false,
+  "secret_material_included": false,
+  "member_plaintext_included": false,
+  "external_api_called": false,
+  "live_deploy_executed": false,
+  "risk_level": "L1_near",
+  "action": "allow_with_audit"
+}

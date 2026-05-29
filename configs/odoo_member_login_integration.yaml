@@ -1,0 +1,19 @@
+odoo_member_login_integration:
+  addon: Taiji_Odoo/addons/taiji_member_login
+  module_name: taiji_member_login
+  purpose: show Taiji internal member status on Odoo login page
+  reads:
+    - runtime/state/current_member_session.json
+    - data/internal_members/approved_members.jsonl
+  does_not_store:
+    - passwords
+    - tokens
+    - private_keys
+  routes:
+    status_json: /taiji/member/status
+    local_session_page: /taiji/member/local-session
+    login_prefill: /taiji/member/login
+  security:
+    odoo_auth_still_required: true
+    no_password_bypass: true
+    no_secret_to_memory_model: true

@@ -1,0 +1,23 @@
+services:
+  taiji_device_resilience_adapter:
+    build: .
+    container_name: taiji_device_resilience_adapter
+    ports:
+      - "127.0.0.1:9012:9012"
+      - "100.107.187.77:9012:9012"
+    volumes:
+      - ../data/device_resilience:/mnt/device:rw
+      - ../reports/device_resilience:/mnt/audit:rw
+      - ../contexts/current:/mnt/current:ro
+    restart: unless-stopped
+    networks:
+      - taiji-ai
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+
+networks:
+  taiji-ai:
+    external: true
