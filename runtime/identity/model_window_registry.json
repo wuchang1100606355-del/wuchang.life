@@ -1,0 +1,222 @@
+{
+  "schema": "taiji.model_window_registry.v1",
+  "status": "ACTIVE",
+  "generated_at": "2026-05-13T00:00:00+08:00",
+  "visible_ai_identity": "XiaoJ",
+  "visible_ai_count": 1,
+  "principle": "Models are internal state windows of one XiaoJ identity. Model name selects a window, not unrestricted authority.",
+  "gateway_required_for": [
+    "system_action",
+    "production_mutation",
+    "odoo_write",
+    "google_admin_action",
+    "container_or_service_change",
+    "deployment",
+    "payment_or_refund",
+    "secret_access",
+    "member_plaintext_export",
+    "policy_override"
+  ],
+  "windows": [
+    {
+      "window_id": "AIW-persona-light",
+      "display_name": "小J輕量人格窗",
+      "models": [
+        "qwen:0.5b",
+        "gemma:2b"
+      ],
+      "direct_use": "local_chat_or_low_entropy_draft",
+      "risk_ceiling": "L1_near",
+      "gateway_required": false,
+      "gateway_required_when": [
+        "output_becomes_system_action",
+        "data_boundary_touched"
+      ],
+      "blocked": [
+        "production_mutation",
+        "secret_access",
+        "payment_execute",
+        "member_plaintext_export"
+      ]
+    },
+    {
+      "window_id": "AIW-engineering-reasoning",
+      "display_name": "小J工程推理窗",
+      "models": [
+        "metric-language-gateway-ai:latest",
+        "sister-j-brain:latest",
+        "llama3.1:latest",
+        "deepseek-r1:8b",
+        "Sister_J_DeepSeek:latest",
+        "dolphin-llama3:latest",
+        "gemma4:e4b",
+        "Wuchang-Phi4:latest"
+      ],
+      "direct_use": "analysis_patch_manifest_test_draft",
+      "risk_ceiling": "L2_drift",
+      "gateway_required": true,
+      "gateway_required_when": [
+        "any_system_action",
+        "odoo_google_container_node_or_policy_action"
+      ],
+      "blocked": [
+        "direct_production_mutation",
+        "secret_access",
+        "payment_execute",
+        "manager_override",
+        "admin_browser_submit_without_human"
+      ]
+    },
+    {
+      "window_id": "AIW-gateway-policy",
+      "display_name": "匝道政策窗",
+      "models": [
+        "metric-language-gateway-ai:latest",
+        "sister-j-brain:latest"
+      ],
+      "direct_use": "tensor_packet_classification_and_route_proposal",
+      "risk_ceiling": "L3_metric_hazard_detection",
+      "gateway_required": true,
+      "gateway_required_when": [
+        "always_for_runtime_decision"
+      ],
+      "blocked": [
+        "self_bypass",
+        "policy_override_without_human",
+        "secret_access"
+      ]
+    },
+    {
+      "window_id": "AIW-audit-replay",
+      "display_name": "稽核與重放窗",
+      "models": [
+        "metric-language-gateway-ai:latest",
+        "sister-j-brain:latest"
+      ],
+      "direct_use": "hash_audit_replay_snapshot_rollback_review",
+      "risk_ceiling": "L2_drift",
+      "gateway_required": true,
+      "gateway_required_when": [
+        "audit_record_creation",
+        "rollback_or_replay_decision"
+      ],
+      "blocked": [
+        "delete_audit_logs",
+        "overwrite_baseline",
+        "deadbox_restore_without_human"
+      ]
+    },
+    {
+      "window_id": "AIW-deadbox",
+      "display_name": "Deadbox隔離窗",
+      "models": [],
+      "direct_use": "quarantine_only",
+      "risk_ceiling": "L3_metric_hazard",
+      "gateway_required": true,
+      "gateway_required_when": [
+        "always"
+      ],
+      "blocked": [
+        "runtime_reentry_without_authority_regeneration",
+        "execute"
+      ]
+    },
+    {
+      "window_id": "AIW-human-boundary",
+      "display_name": "人類決策邊界窗",
+      "models": [],
+      "direct_use": "human_review_and_approval_only",
+      "risk_ceiling": "human_decision_required",
+      "gateway_required": true,
+      "gateway_required_when": [
+        "payment",
+        "production_overwrite",
+        "credential_issuance",
+        "legal_commitment",
+        "governance_override"
+      ],
+      "blocked": [
+        "ai_auto_approval"
+      ]
+    }
+  ],
+  "model_inventory": [
+    {
+      "model": "metric-language-gateway-ai:latest",
+      "parameter_size": "8.0B",
+      "family": "llama",
+      "quantization": "Q4_K_M",
+      "primary_window": "AIW-gateway-policy"
+    },
+    {
+      "model": "sister-j-brain:latest",
+      "parameter_size": "8.0B",
+      "family": "llama",
+      "quantization": "Q4_K_M",
+      "primary_window": "AIW-engineering-reasoning"
+    },
+    {
+      "model": "dolphin-llama3:latest",
+      "parameter_size": "8B",
+      "family": "llama",
+      "quantization": "Q4_0",
+      "primary_window": "AIW-engineering-reasoning"
+    },
+    {
+      "model": "Wuchang-Phi4:latest",
+      "parameter_size": "14.7B",
+      "family": "phi3",
+      "quantization": "Q6_K",
+      "primary_window": "AIW-engineering-reasoning"
+    },
+    {
+      "model": "llama3.1:latest",
+      "parameter_size": "8.0B",
+      "family": "llama",
+      "quantization": "Q4_K_M",
+      "primary_window": "AIW-engineering-reasoning"
+    },
+    {
+      "model": "qwen:0.5b",
+      "parameter_size": "620M",
+      "family": "qwen2",
+      "quantization": "Q4_0",
+      "primary_window": "AIW-persona-light"
+    },
+    {
+      "model": "gemma:2b",
+      "parameter_size": "3B",
+      "family": "gemma",
+      "quantization": "Q4_0",
+      "primary_window": "AIW-persona-light"
+    },
+    {
+      "model": "gemma4:e4b",
+      "parameter_size": "8.0B",
+      "family": "gemma4",
+      "quantization": "Q4_K_M",
+      "primary_window": "AIW-engineering-reasoning"
+    },
+    {
+      "model": "Sister_J_DeepSeek:latest",
+      "parameter_size": "8.2B",
+      "family": "qwen3",
+      "quantization": "Q4_K_M",
+      "primary_window": "AIW-engineering-reasoning"
+    },
+    {
+      "model": "deepseek-r1:8b",
+      "parameter_size": "8.2B",
+      "family": "qwen3",
+      "quantization": "Q4_K_M",
+      "primary_window": "AIW-engineering-reasoning"
+    }
+  ],
+  "runtime_entrypoints": {
+    "ollama": "http://127.0.0.1:11434",
+    "clow_adapter": "http://127.0.0.1:9006",
+    "claw_safe": "http://127.0.0.1:9004",
+    "gateway": "http://127.0.0.1:8081",
+    "five_metric_engine": "http://127.0.0.1:8105"
+  }
+}

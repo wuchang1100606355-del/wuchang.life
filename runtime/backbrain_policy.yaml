@@ -1,0 +1,14 @@
+backbrain:
+  wake_on:
+    - vector_lookup
+    - routing
+    - reflection
+    - topology_analysis
+
+  auto_collapse: true
+
+  ttl_seconds: 15
+
+  max_active_context: 2048
+
+  reflection_depth: 2
