@@ -1,0 +1,33 @@
+stopline_id: 39_task_execution_stopline_v0
+purpose: Define current safe stopline before implementation or service changes.
+mode: docs_index_only
+completed_today:
+  - state_world_extension
+  - sub_universe_registry
+  - knowledge_world_index
+  - project_search_agent
+  - readonly_search_commands
+  - readonly_search_runner
+  - task_cards_from_search
+  - task_priority_index
+  - next_dev_execution_plan
+  - state_world_router_boundary
+  - memory_lifecycle_map
+  - gateway_route_map
+  - odoo_module_inventory_map
+  - patent_evidence_claim_map
+  - p0_handoff_packet
+  - p0_next_action_menu
+  - state_world_router_spec
+  - memory_boot_map
+  - gateway_inventory_classification
+  - odoo_inventory_classification
+stop_before:
+  - runtime_service_changes
+  - docker_start_stop
+  - odoo_db_write
+  - api_key_integration
+  - git_commit
+next_safe_step:
+  - review_created_indexes
+  - choose one implementation target after human confirmation

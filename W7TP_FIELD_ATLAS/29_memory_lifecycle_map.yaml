@@ -1,0 +1,19 @@
+memory_map_id: 29_memory_lifecycle_map
+purpose: Define memory lifecycle for XiaoJ project development.
+mode: docs_index_only
+lifecycle:
+  hot: active task context and current working state
+  warm: reusable project knowledge and field indexes
+  cold: evidence archives and completed reports
+  archive: immutable snapshots rollback and patent evidence
+  forget: redundant volatile context not needed for governance
+routing:
+  hot_to_warm: after validation
+  warm_to_cold: after task completion
+  cold_to_archive: after evidence hash or human review
+  volatile_to_forget: after summarization
+governance:
+  no_raw_secret_memory: true
+  no_personal_data_export: true
+  local_device_time_authority: true
+next_action: create gateway route map

@@ -1,0 +1,224 @@
+packet_id: W7TP_SUB_UNIVERSE_ELEMENTS_V0_2
+index_id: 61_sub_universe_element_index_v0_2
+project: 五常智慧雲 / 小J / W7TP
+status: element_collection_indexed
+mode: docs_index_only
+scope: 社區級 AI 隱私治理與算力分流系統
+purpose:
+  - 收集可形成子場或子系統的元素
+  - 供後續建立 12 意圖狀態場、7D/8D 封包、專利請求項與產品模組
+
+engineering_translation:
+  sub_universe: 具有明確輸入、狀態、權限、風險與路由邊界的工程子場或子系統
+  boundary_rule: 子場不得繞過 policy_gate、role_boundary 或 action_scope_limit
+  runtime_claim_rule: 設計候選與證據索引不得被描述為已部署 runtime
+
+source_relationships:
+  existing_execution_domain_registry: 20_sub_universe_registry.yaml
+  intent_state_topology: 42_12_intent_state_field_topology_v0.yaml
+  packet_specs:
+    - 43_7d_packet_spec_v1.yaml
+    - 44_8d_encrypted_packet_spec_v1.yaml
+  claim_mapping: 45_state_field_claim_mapping_v0.yaml
+  patent_evidence_chain: 60_patent_evidence_chain_master_v0.yaml
+  relationship_note: 本索引是產品與治理元素收集層，不取代既有 execution domain registry
+
+element_catalog:
+  privacy:
+    - 無明文會員資料
+    - 個資最小化
+    - location_hash
+    - member_hash
+    - role_token
+    - consent_token
+    - one_way_privacy_gate
+    - 三金鑰 USB 分權
+    - break_glass_audit
+  usage:
+    - local_first_inference
+    - model_routing
+    - token_budget
+    - cost_ledger
+    - cloud_allowed_level
+    - free_quota
+    - paid_priority_queue
+    - group_member_compute_assist
+    - edge_node_offload
+  governance:
+    - 7D 意圖封包
+    - 8D 加密狀態封包
+    - policy_gate
+    - human_review
+    - dead_letter
+    - immutable_audit
+    - 狀態場告警
+    - role_boundary
+    - action_scope_limit
+  community_identities:
+    - 住戶
+    - 會員
+    - 管委會
+    - 社區發展協會
+    - 志工
+    - 長者
+    - 兒童
+    - 里長
+    - 店員
+    - 外部贊助者
+  merchant:
+    - 仁義店
+    - 重新總店
+    - 合作商家
+    - 社區商家雲分公司
+    - POS
+    - 店內 AI 點餐
+    - 惜食櫃
+    - 外送網
+    - 公益額度帳本
+  property:
+    - 包裹通知
+    - 報修
+    - 漏水
+    - 門禁
+    - 車牌
+    - 訪客
+    - 公設預約
+    - 欠費狀態
+    - 區權會
+    - 管委會交接
+  care:
+    - 長者照護
+    - 送餐
+    - 志工陪同
+    - 仁義店職員核定
+    - 緊急聯絡
+    - 失聯告警
+    - 用藥提醒
+    - 弱勢關懷
+  ai_compute:
+    - 本地小J
+    - Gemma 前腦
+    - Gemma 後腦
+    - OpenAI cloud lane
+    - Gemini cloud lane
+    - Open WebUI
+    - Odoo
+    - LINE
+    - PWA
+    - client_browser_node
+
+sub_universe_candidates:
+  - id: U01_privacy_universe
+    name: 私隱亞宇宙
+    engineering_name: privacy_governance_subsystem
+    core: 個資最小化 / 無明文會員 / 三金鑰分權
+    element_groups: [privacy, governance]
+    registry_crosswalk: [SU_01_local_xiaoj_core, SU_03_public_interest_service]
+    runtime_status: design_candidate_only
+  - id: U02_usage_universe
+    name: 用量亞宇宙
+    engineering_name: compute_usage_routing_subsystem
+    core: 算力分流 / token 成本 / 本地優先
+    element_groups: [usage, ai_compute, governance]
+    registry_crosswalk: [SU_01_local_xiaoj_core, SU_04_dual_cloud_compute]
+    runtime_status: design_candidate_only
+  - id: U03_property_universe
+    name: 物業亞宇宙
+    engineering_name: property_service_subsystem
+    core: 管委會 / 報修 / 包裹 / 門禁 / 住戶服務
+    element_groups: [property, community_identities, privacy, governance]
+    registry_crosswalk: [SU_02_commerce_odoo_pos, SU_03_public_interest_service]
+    runtime_status: candidate_only_not_verified_active_runtime
+  - id: U04_merchant_universe
+    name: 商家亞宇宙
+    engineering_name: merchant_service_subsystem
+    core: POS / 商家維運 / 外送 / 惜食櫃
+    element_groups: [merchant, community_identities, privacy, governance]
+    registry_crosswalk: [SU_02_commerce_odoo_pos, SU_03_public_interest_service]
+    runtime_status: design_candidate_only
+  - id: U05_care_universe
+    name: 照護亞宇宙
+    engineering_name: community_care_subsystem
+    core: 長者 / 兒童 / 志工 / 仁義店職員核定
+    element_groups: [care, community_identities, privacy, governance]
+    registry_crosswalk: [SU_03_public_interest_service]
+    runtime_status: design_candidate_only
+  - id: U06_governance_universe
+    name: 治理亞宇宙
+    engineering_name: policy_audit_subsystem
+    core: 7D/8D / policy gate / audit / human review
+    element_groups: [governance, privacy]
+    registry_crosswalk: [SU_01_local_xiaoj_core, SU_05_ip_evidence_world]
+    runtime_status: design_candidate_only
+  - id: U07_ai_compute_universe
+    name: AI 算力亞宇宙
+    engineering_name: ai_compute_lane_subsystem
+    core: 本地模型 / 雲端模型 / provider lane / 成本路由
+    element_groups: [ai_compute, usage, privacy, governance]
+    registry_crosswalk: [SU_01_local_xiaoj_core, SU_04_dual_cloud_compute]
+    runtime_status: design_candidate_only
+  - id: U08_evidence_universe
+    name: 證據鏈亞宇宙
+    engineering_name: immutable_evidence_chain_subsystem
+    core: 版本紀錄 / hash / audit / 專利證據鏈
+    element_groups: [governance, privacy]
+    registry_crosswalk: [SU_05_ip_evidence_world]
+    runtime_status: docs_index_only
+  - id: U09_public_welfare_universe
+    name: 公益造血亞宇宙
+    engineering_name: public_welfare_ledger_subsystem
+    core: 公益餐 / 惜食 / 活動支持額度 / 社區基金
+    element_groups: [merchant, care, community_identities, privacy, governance]
+    registry_crosswalk: [SU_02_commerce_odoo_pos, SU_03_public_interest_service]
+    runtime_status: design_candidate_only
+  - id: U10_identity_universe
+    name: 會員身份亞宇宙
+    engineering_name: accountable_identity_subsystem
+    core: 7D identity code / role token / consent / 可究責自然人
+    element_groups: [community_identities, privacy, governance]
+    registry_crosswalk: [SU_01_local_xiaoj_core, SU_02_commerce_odoo_pos, SU_03_public_interest_service]
+    runtime_status: design_candidate_only
+
+next_collection_schema:
+  apply_to_each_sub_universe:
+    input_events: []
+    state_codes: []
+    risk_codes: []
+    permission_codes: []
+    routing_codes: []
+    patent_technical_features: []
+  identity_permission_model:
+    identity_classes:
+      - human_identity
+      - device_identity
+      - service_identity
+    required_fields:
+      - role_token
+      - consent_token
+      - action_scope_limit
+      - audit_subject_hash
+  risk_band_seed:
+    - L0_readonly_local
+    - L1_scoped_service_action
+    - L2_human_review_required
+    - L3_break_glass_audit_required
+
+red_flags:
+  - 把亞宇宙寫成玄學
+  - 把所有資料送雲端
+  - 把會員當資料物件而非系統使用者
+  - 讓管理者單人可看原始個資
+  - 把商家、協會、管委會帳務混在一起
+  - 把設計候選寫成已部署 runtime
+
+governance:
+  local_first: true
+  no_plaintext_member_data: true
+  cloud_redacted_packets_only: true
+  no_secret_read: true
+  no_db_write: true
+  no_service_restart: true
+  no_runtime_promotion: true
+  human_review_for_high_risk: true
+
+next_step: 建立每個子場的事件與碼表矩陣 v0.3

@@ -1,0 +1,102 @@
+world_id: 21_knowledge_world
+world_name: W7TP Knowledge World Index
+purpose: XiaoJ project controller locator map
+time_authority: local_device_time
+scope: index_only_no_secret_read
+
+roots:
+  governance:
+    - Taiji_Governance
+    - policies
+    - security
+  development:
+    - runtime
+    - services
+    - scripts
+    - tests
+    - docs
+    - schemas
+  commerce:
+    - Taiji_Odoo
+    - Taiji_POS_Google_Voice_Tool
+    - Wuchang_Odoo_Core
+  compute:
+    - ollama_dev_models
+    - openwebui_tools
+    - Taiji_Vector_Runtime_Lite
+    - voice_gateway
+  evidence:
+    - evidence
+    - evidence_master_index
+    - reports
+    - runtime/reports
+    - patent_evidence_pack_clean_20260522_065946
+  state_world:
+    - W7TP_FIELD_ATLAS
+    - docs/w7tp_algorithms
+    - state
+    - topology
+    - Wuchang_Hexagram_State_Protocol_Open_20260523_194932
+  memory:
+    - runtime/memory
+    - runtime/memory_bus
+    - docs/system_memory
+    - config/memory
+  ip:
+    - patent
+    - patent_filing
+    - docs/w7tp_algorithms
+
+query_shortcuts:
+  odoo:
+    - Taiji_Odoo
+    - Wuchang_Odoo_Core
+  memory:
+    - runtime/memory
+    - runtime/memory_bus
+    - docs/system_memory
+    - config/memory
+  gateway:
+    - services
+    - runtime
+    - taiji_gateway.py
+  patent:
+    - patent
+    - patent_filing
+    - patent_evidence_pack_clean_20260522_065946
+  state_world:
+    - W7TP_FIELD_ATLAS
+    - docs/w7tp_algorithms
+    - state
+    - topology
+  evidence:
+    - evidence
+    - evidence_master_index
+    - reports
+    - runtime/reports
+  odoo_pos:
+    - Taiji_Odoo
+    - Taiji_POS_Google_Voice_Tool
+  container:
+    - docker
+    - docker-compose.ai.yml
+    - docker-compose.domain-gateway.yml
+    - docker-compose.xiaoj-intent-field.yml
+
+forbidden_reference_only:
+  - .env
+  - .secrets
+  - data/secrets
+  - keys
+  - token
+  - password
+  - private_key
+  - credential
+
+routing_rule:
+  user_query_to_roots: true
+  raw_secret_read: false
+  service_modification: false
+  commit_without_human_review: false
+
+next_action: readonly_project_search_agent

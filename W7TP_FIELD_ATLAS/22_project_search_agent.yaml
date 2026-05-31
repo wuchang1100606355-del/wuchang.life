@@ -1,0 +1,21 @@
+agent_id: 22_project_search_agent
+agent_name: W7TP Readonly Project Search Agent
+purpose: XiaoJ locates project materials by topic world and recent changes
+mode: readonly_index_only
+time_authority: local_device_time
+capabilities: [search_by_topic, search_by_world, search_by_recent_change, return_paths_only, avoid_secret_paths]
+topics:
+  odoo: [Taiji_Odoo, Wuchang_Odoo_Core, Taiji_POS_Google_Voice_Tool]
+  memory: [runtime/memory, runtime/memory_bus, docs/system_memory, config/memory, data]
+  gateway: [services, runtime, scripts, deploy, config]
+  patent: [patent, patent_filing, patent_evidence_pack_clean_20260522_065946, docs/w7tp_algorithms]
+  state_world: [W7TP_FIELD_ATLAS, docs/w7tp_algorithms, state, topology, runtime/hexagram]
+  container: [docker, deploy, runtime, services]
+forbidden_reference_only: [.env, .secrets, data/secrets, keys, token, password, private_key, credential]
+governance:
+  read_secret_contents: false
+  modify_files: false
+  delete_files: false
+  restart_services: false
+  commit_without_review: false
+next_action: readonly_project_search_agent

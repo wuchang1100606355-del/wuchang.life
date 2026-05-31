@@ -1,0 +1,11 @@
+command_pack_id: 23_readonly_project_search_commands
+purpose: Safe readonly project search commands for XiaoJ project controller.
+mode: readonly_no_secret_content
+commands:
+  find_odoo: find Taiji_Odoo Wuchang_Odoo_Core Taiji_POS_Google_Voice_Tool -maxdepth 5 -type f
+  find_memory: find runtime/memory runtime/memory_bus docs/system_memory config/memory data -maxdepth 5 -type f
+  find_gateway: find services runtime scripts deploy config -maxdepth 5 -type f
+  find_patent: find patent patent_filing patent_evidence_pack_clean_20260522_065946 docs/w7tp_algorithms -maxdepth 5 -type f
+  find_state_world: find W7TP_FIELD_ATLAS docs/w7tp_algorithms state topology runtime/hexagram -maxdepth 5 -type f
+  find_recent: find . -maxdepth 4 -type f -mtime -7
+forbidden: [read_secret_contents, modify_files, delete_files, restart_services, commit_without_review]

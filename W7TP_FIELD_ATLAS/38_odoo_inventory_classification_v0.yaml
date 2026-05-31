@@ -1,0 +1,25 @@
+odoo_inventory_id: 38_odoo_inventory_classification_v0
+purpose: Classify Odoo and POS related files into commerce member fund delivery and POS domains.
+mode: docs_index_only
+inputs:
+  - runtime/reports/search_odoo_paths.txt
+  - runtime/reports/TASK_ODOO.md
+  - W7TP_FIELD_ATLAS/31_odoo_module_inventory_map.yaml
+classes:
+  odoo_core: [Taiji_Odoo, Wuchang_Odoo_Core]
+  pos_voice: [Taiji_POS_Google_Voice_Tool]
+  member_identity: [member, login, partner, res_users, res_partner]
+  commerce_fund: [fund, allocation, commerce, merchant]
+  delivery_service: [delivery, volunteer, service]
+safe_next_actions:
+  - inventory Odoo files only
+  - do not install modules
+  - do not write database
+  - do not restart Odoo
+  - do not read credentials
+governance:
+  no_secret_read: true
+  no_db_write: true
+  no_service_restart: true
+  no_module_install: true
+next_action: create task execution stopline

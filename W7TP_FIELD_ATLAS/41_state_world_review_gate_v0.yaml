@@ -1,0 +1,26 @@
+review_id: 41_state_world_review_gate_v0
+purpose: Gate before moving from docs/index mode to implementation mode.
+mode: review_gate_only
+required_checks:
+  - confirm Field Atlas 19-40 exist
+  - confirm reports exist
+  - confirm no service changes
+  - confirm no secrets read
+  - confirm no commit yet
+implementation_allowed_after:
+  - human selects one target
+  - focused file scope defined
+  - validation command defined
+  - rollback or stopline defined
+allowed_next_targets:
+  - state_router_mock
+  - memory_boot_readiness_check
+  - gateway_inventory_report
+  - odoo_module_inventory_report
+blocked_until_confirmed:
+  - real_api_key_integration
+  - service_restart
+  - docker_operations
+  - odoo_db_write
+  - git_commit
+next_action: human_selects_single_target

@@ -1,0 +1,150 @@
+registry_id: "20_sub_universe_registry"
+registry_name: "W7TP Sub-Universe Registry"
+purpose: "Define coupled multi-field execution domains within W7TP State World."
+durable_scope: "Sub-universe classification, field coupling, routing meaning, governance boundary, and development use."
+
+sub_universes:
+  - id: "SU_01_local_xiaoj_core"
+    name: "Local XiaoJ Core Sub-Universe"
+    fields:
+      - intent
+      - memory
+      - governance
+      - state
+      - temporal
+      - development
+    routing_role: "local_state_governance_core"
+    time_authority: "local_device_time"
+    governance_boundary: "D6_HARDWALL_REQUIRED"
+    dev_use:
+      - local_llm_state_control
+      - memory_lifecycle
+      - safe_task_packet_generation
+    ip_use:
+      - state_world_architecture
+      - local_first_ai_governance
+    evidence_use:
+      - runtime/memory
+      - runtime/reports
+      - git_status
+
+  - id: "SU_02_commerce_odoo_pos"
+    name: "Commerce Odoo POS Sub-Universe"
+    fields:
+      - identity
+      - commerce
+      - governance
+      - evidence
+      - topology
+    routing_role: "business_transaction_governance"
+    time_authority: "local_device_time"
+    governance_boundary: "NO_SECRET_NO_PAYMENT_AUTOMATION_WITHOUT_REVIEW"
+    dev_use:
+      - odoo_module_mapping
+      - pos_voice_tool_mapping
+      - merchant_workflow_index
+    ip_use:
+      - commerce_service_control
+      - pos_member_governance
+    evidence_use:
+      - Taiji_Odoo
+      - Taiji_POS_Google_Voice_Tool
+
+  - id: "SU_03_public_interest_service"
+    name: "Public Interest Service Sub-Universe"
+    fields:
+      - public_interest
+      - identity
+      - governance
+      - commerce
+      - evidence
+    routing_role: "community_service_governance"
+    time_authority: "local_device_time"
+    governance_boundary: "NO_RAW_PERSONAL_DATA_FLOW"
+    dev_use:
+      - volunteer_service_index
+      - food_care_service_index
+      - public_benefit_metrics
+    ip_use:
+      - public_service_platform_model
+    evidence_use:
+      - DUAL_J_CRITICAL_MEMORY_SYSTEM.md
+      - Wuchang community service materials
+
+  - id: "SU_04_dual_cloud_compute"
+    name: "Dual Cloud Compute Sub-Universe"
+    fields:
+      - compute
+      - governance
+      - intent
+      - state
+      - evidence
+    routing_role: "gemini_openai_lane_orchestration"
+    time_authority: "local_device_time"
+    governance_boundary: "API_KEYS_ISOLATED_IN_GATEWAY_RUNTIME"
+    dev_use:
+      - gemini_lane
+      - openai_lane
+      - result_fusion
+      - red_team_validation
+    ip_use:
+      - dual_cloud_compute_gateway
+      - state_packet_routing
+    evidence_use:
+      - WUCHANG_AI_API_DOCUMENTATION.md
+      - W7TP packet documents
+
+  - id: "SU_05_ip_evidence_world"
+    name: "IP Evidence Sub-Universe"
+    fields:
+      - evidence
+      - ip
+      - temporal
+      - state
+    routing_role: "patent_copyright_trade_secret_mapping"
+    time_authority: "local_device_time"
+    governance_boundary: "READONLY_EVIDENCE_CHAIN"
+    dev_use:
+      - evidence_timeline
+      - patent_family_map
+      - trade_secret_boundary
+    ip_use:
+      - state_field_packet
+      - metric_translation_engine
+      - governance_native_packet
+    evidence_use:
+      - automation.log
+      - AI_LEARNING_SYSTEM_COMPLETION_REPORT.md
+      - DUAL_J_COLLABORATION_MODEL.md
+      - ROLLBACK_POINT_20260219
+      - patent_evidence_pack_clean_20260522_065946
+
+  - id: "SU_06_media_avatar_world"
+    name: "Media Avatar Sub-Universe"
+    fields:
+      - media
+      - intent
+      - identity
+      - evidence
+    routing_role: "human_readable_ai_identity_presentation"
+    time_authority: "local_device_time"
+    governance_boundary: "PUBLIC_PRESENTATION_REVIEW"
+    dev_use:
+      - dual_j_media_index
+      - avatar_layer
+      - presentation_materials
+    ip_use:
+      - copyright_media_assets
+      - public_narrative_model
+    evidence_use:
+      - dual_j_work_log.html
+      - 雙J形象整合說明.md
+
+red_team_constraints:
+  - "Sub-Universe is an engineering subsystem classification, not a metaphysical claim."
+  - "No sub-universe may bypass D6 governance."
+  - "Local device time remains primary temporal authority."
+  - "No raw personal data or secrets may be moved across sub-universes."
+  - "Cloud lanes receive only redacted state packets."
+
+next_action: "Create W7TP_STATE_WORLD_ROUTING_BOUNDARY_v1"

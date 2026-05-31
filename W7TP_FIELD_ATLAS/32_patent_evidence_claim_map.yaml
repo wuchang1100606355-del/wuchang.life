@@ -1,0 +1,23 @@
+patent_map_id: 32_patent_evidence_claim_map
+purpose: Map patent/IP evidence files to future claim clusters.
+mode: docs_index_only
+sources:
+  - runtime/reports/search_patent_paths.txt
+  - runtime/reports/TASK_PATENT.md
+clusters:
+  state_field_packet: 7D 8D state packet field grammar
+  governance_native_packet: D6 hardwall dead-letter human review
+  metric_translation_engine: degree metric tensor translation
+  state_world_architecture: field atlas sub-universe state world
+  memory_lifecycle: hot warm cold archive forget
+  commerce_public_interest: POS Odoo public-interest service chain
+safe_next_actions:
+  - map evidence path to claim cluster
+  - do not draft final claims yet
+  - do not overclaim unverifiable performance
+  - mark experimental ICTP separately
+governance:
+  no_secret_read: true
+  no_external_filing: true
+  no_commit: true
+next_action: create state world P0 handoff packet

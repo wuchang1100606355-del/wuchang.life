@@ -1,0 +1,17 @@
+agent_id: 24_readonly_project_search_runner
+agent_name: W7TP Readonly Project Search Runner
+purpose: Generate readonly search reports for XiaoJ project controller.
+mode: readonly_report_only
+inputs: [21_knowledge_world_index.yaml, 22_project_search_agent.yaml, 23_readonly_project_search_commands.yaml]
+outputs:
+  - runtime/reports/search_odoo_paths.txt
+  - runtime/reports/search_memory_paths.txt
+  - runtime/reports/search_gateway_paths.txt
+  - runtime/reports/search_patent_paths.txt
+  - runtime/reports/search_state_world_paths.txt
+  - runtime/reports/search_recent_paths.txt
+governance:
+  no_secret_content_read: true
+  no_file_modification_except_reports: true
+  no_service_change: true
+  no_commit: true

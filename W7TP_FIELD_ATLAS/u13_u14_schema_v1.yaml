@@ -1,0 +1,44 @@
+packet_id: U13_U14_SCHEMA_V1
+mode: readonly_schema_parse
+container: "wuchang_os_odoo_18"
+schemas:
+  - source: "/mnt/extra-addons/wuchang_fund_allocation/models/wuchang_fund_allocation.py"
+    models:
+  - source: "/mnt/extra-addons/wuchang_core/models/coin_ledger.py"
+    models:
+  - source: "/mnt/extra-addons/wuchang_core/models/delivery.py"
+    models:
+  - source: "/mnt/extra-addons/wuchang_core/models/delivery_team.py"
+    models:
+  - source: "/mnt/extra-addons/wuchang_core/models/volunteer.py"
+    models:
+  - source: "/mnt/extra-addons/wuchang_core/models/wuchang_task_force.py"
+    models:
+
+universe_binding:
+  U13_wuchang_community_fund_pool:
+    source:
+      - wuchang_fund_allocation.py
+      - coin_ledger.py
+    purpose:
+      - fund_allocation
+      - welfare_credit
+      - community_coin_ledger
+  U14_dedicated_delivery_team:
+    source:
+      - delivery.py
+      - delivery_team.py
+      - volunteer.py
+      - wuchang_task_force.py
+    purpose:
+      - delivery_order
+      - dedicated_team_dispatch
+      - volunteer_support
+      - escort_or_staff_review
+
+governance:
+  readonly: true
+  no_db_write: true
+  no_restart: true
+  no_secret_read: true
+  no_commit: true
