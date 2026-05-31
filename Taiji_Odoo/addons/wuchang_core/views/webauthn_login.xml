@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="webauthn_login_page" name="WebAuthn Style Login">
+    <t t-call="website.layout">
+      <div class="wa-root">
+        <section class="wa-hero">
+          <h1 class="wa-title">密码less 登录与设备通行密钥</h1>
+          <p class="wa-sub">在了解公钥密码学与 WebAuthn 之后再进入登录流程。</p>
+        </section>
+        <section class="wa-guide">
+          <div class="wa-card">
+            <h2>什么是 WebAuthn</h2>
+            <p>由 W3C 与 FIDO 制定，使用设备内的强认证器（如 Windows Hello、Touch ID）以公私钥对替代密码。</p>
+            <ul>
+              <li>私钥保存在设备；服务器仅保存公钥与随机生成的凭证 ID</li>
+              <li>作用域绑定到站点来源，降低钓鱼风险</li>
+              <li>可携带认证器的证明（Attestation）以验证来源可信</li>
+            </ul>
+          </div>
+          <div class="wa-card">
+            <h2>为何更安全</h2>
+            <ul>
+              <li>服务器不保存秘密；泄露数据库不会暴露密码</li>
+              <li>挑战值（challenge）避免重放攻击</li>
+              <li>硬件安全模块保护私钥与签名操作</li>
+            </ul>
+          </div>
+          <div class="wa-card">
+            <h2>我们是谁</h2>
+            <p>五常社区 OS 依据系统宪章与规费，采用分级权限与加密文档管理，保障社群运营的合规与隐私。</p>
+            <ul>
+              <li>系统宪章：权限与规则</li>
+              <li>隐私分层：加密与脱敏</li>
+              <li>审批链路：经办→主管→最高权限</li>
+            </ul>
+          </div>
+        </section>
+        <section class="wa-read">
+          <div class="wa-progress"><div id="waBar" class="wa-bar"></div></div>
+          <label class="wa-agree"><input id="waAgree" type="checkbox"/> 我已阅读并理解上述内容</label>
+          <div class="wa-actions">
+            <a id="waPasskey" class="wa-btn wa-disabled" href="#">使用设备通行密钥</a>
+            <a id="waLogin" class="wa-btn wa-disabled" href="/web/login">使用密码登录</a>
+          </div>
+        </section>
+      </div>
+      <style>
+        .wa-root{min-height:100vh;background:#0b1020;color:#e9edf6;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto}
+        .wa-hero{max-width:980px;margin:40px auto 16px}
+        .wa-title{font-size:36px;font-weight:800;color:#f7fafc}
+        .wa-sub{color:#b8c0d6}
+        .wa-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:980px;margin:0 auto}
+        .wa-card{background:#121933;border:1px solid #1f2a4a;border-radius:10px;padding:16px}
+        .wa-card h2{font-size:18px;margin-bottom:8px;color:#e9edf6}
+        .wa-card p,.wa-card li{color:#cbd5e1;font-size:14px}
+        .wa-read{max-width:980px;margin:24px auto;padding:16px;background:#0f162d;border:1px solid #1f2a4a;border-radius:10px}
+        .wa-progress{height:8px;background:#111827;border-radius:99px;overflow:hidden;margin-bottom:12px}
+        .wa-bar{height:100%;width:0;background:linear-gradient(90deg,#34d399,#10b981)}
+        .wa-agree{display:flex;align-items:center;gap:8px;color:#cbd5e1}
+        .wa-actions{margin-top:16px;display:flex;gap:12px}
+        .wa-btn{display:inline-block;padding:10px 16px;border-radius:8px;border:1px solid #334155;color:#e9edf6;text-decoration:none}
+        .wa-disabled{opacity:.5;pointer-events:none}
+      </style>
+      <script type="text/javascript">
+        <![CDATA[
+        (function(){
+          var bar=document.getElementById('waBar');
+          var agree=document.getElementById('waAgree');
+          var btnLogin=document.getElementById('waLogin');
+          var btnPasskey=document.getElementById('waPasskey');
+          var root=document.querySelector('.wa-root');
+          function update(){
+            var sc=document.documentElement.scrollTop||root.scrollTop||0;
+            var h=(document.documentElement.scrollHeight - document.documentElement.clientHeight);
+            var pct=Math.max(0,Math.min(100,Math.round((sc/h)*100)));
+            bar.style.width=pct+'%';
+            var ok=(pct>=95)&&agree.checked;
+            btnLogin.classList.toggle('wa-disabled',!ok);
+            btnPasskey.classList.toggle('wa-disabled',!ok);
+          }
+          window.addEventListener('scroll',update);
+          agree.addEventListener('change',update);
+          update();
+          btnPasskey.addEventListener('click',function(e){
+            e.preventDefault();
+            alert('通行密钥登录即将启用；当前请使用密码登录。');
+          });
+        })();
+        ]]>
+      </script>
+    </t>
+  </template>
+</odoo>
+

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="kb_page" name="Wuchang Knowledge Base">
+    <t t-call="website.layout">
+      <div class="kb-root">
+        <div class="kb-plaque">
+          <div class="kb-plaque-text">五常史料馆</div>
+        </div>
+        <div class="kb-doorgate" id="kbDoor">
+          <div class="kb-door-left">
+            <div class="kb-door-ring"></div>
+          </div>
+          <div class="kb-door-right">
+            <div class="kb-door-ring"></div>
+          </div>
+          <button class="kb-enter" id="kbEnter">入馆</button>
+        </div>
+
+        <div class="kb-hall hidden" id="kbHall">
+          <div class="kb-cloud-frame"></div>
+          <div class="kb-top-filters">
+            <div class="kb-filter">
+              <label>年份</label>
+              <select id="kbYear"></select>
+            </div>
+            <div class="kb-filter">
+              <label>月份</label>
+              <select id="kbMonth"></select>
+            </div>
+            <div class="kb-filter">
+              <label>日期</label>
+              <select id="kbDay"></select>
+            </div>
+            <div class="kb-filter-info">默认展示最近三个月文件</div>
+          </div>
+
+          <div class="kb-right-panel">
+            <div class="kb-office-title">文牍处</div>
+            <div class="kb-downloads">
+              <a class="kb-download" href="#">协会表模板（DOCX）</a>
+              <a class="kb-download" href="#">协会表模板（PDF）</a>
+              <a class="kb-download" href="#">管委会议程模板</a>
+              <a class="kb-download" href="#">社区发展申请表</a>
+            </div>
+            <div class="kb-apply" id="kbApplyBtn">文书房申请入口</div>
+          </div>
+
+          <div class="kb-categories">
+            <div class="kb-category" data-key="system">
+              <div class="kb-sign redwood">系统专用柜</div>
+              <div class="kb-grid" id="kbGridSystem"></div>
+            </div>
+            <div class="kb-category" data-key="property">
+              <div class="kb-sign walnut">物业管辖柜</div>
+              <div class="kb-grid" id="kbGridProperty"></div>
+            </div>
+            <div class="kb-category" data-key="commerce">
+              <div class="kb-sign huanghuali">商业法规柜</div>
+              <div class="kb-grid" id="kbGridCommerce"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kb-reader hidden" id="kbReader">
+          <div class="kb-reader-head">
+            <div class="kb-title" id="kbDocTitle"></div>
+            <div class="kb-meta" id="kbDocMeta"></div>
+            <div class="kb-progress"><div class="kb-progress-bar" id="kbProgressBar"></div></div>
+            <div class="kb-bookmark" id="kbBookmark">书签</div>
+            <div class="kb-close" id="kbCloseReader">关闭</div>
+          </div>
+          <div class="kb-pages">
+            <div class="kb-page" id="kbPageLeft"></div>
+            <div class="kb-page" id="kbPageRight"></div>
+          </div>
+          <div class="kb-reader-controls">
+            <button class="kb-btn" id="kbPrev">上一页</button>
+            <button class="kb-btn" id="kbNext">下一页</button>
+          </div>
+        </div>
+
+        <div class="kb-permission hidden" id="kbPermission">
+          <div class="kb-permission-box">
+            <div class="kb-permission-title">权限提示</div>
+            <div class="kb-permission-body">此文档为加密文档（AES-256），需经办→主管→最高权限三级审批，并加盖电子印章后方可阅览。</div>
+            <div class="kb-permission-actions">
+              <button class="kb-btn" id="kbApply">提交申请</button>
+              <button class="kb-btn" id="kbCancel">取消</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="kb-ground"></div>
+      </div>
+
+      <style>
+        .kb-root{position:relative;min-height:100vh;background:#f5f3f0;font-family:STSong,SimSun,'Songti SC','Noto Serif SC',serif}
+        .kb-plaque{position:relative;margin:24px auto;width:1200px;height:300px;background:#8b3a3a;border:12px solid #d1b38b;border-image:linear-gradient(45deg,#d1b38b,#b9976b) 1;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+        .kb-plaque-text{font-size:72px;letter-spacing:.2em;color:#f9f6f2;text-shadow:0 2px 0 #6b2e2e,0 8px 20px rgba(0,0,0,.3);font-family:'FZYaoti','STKaiti','KaiTi',serif}
+        .kb-doorgate{position:relative;margin:0 auto;width:1200px;height:600px;background:#7a0c0c;display:flex;overflow:hidden;border:10px solid #5d0a0a;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+        .kb-door-left,.kb-door-right{flex:1;background:linear-gradient(#7a0c0c,#5c0909);position:relative;transition:transform 1.2s cubic-bezier(.25,.8,.25,1)}
+        .kb-door-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,#c88a2b 0%,#9a6a1e 60%,#734f16 100%);box-shadow:inset 0 4px 8px rgba(255,255,255,.4),0 8px 16px rgba(0,0,0,.4)}
+        .kb-enter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;background:#d1b38b;color:#3a2a1b;border:none;border-radius:6px;cursor:pointer}
+        .kb-hall{position:relative;margin:24px auto;width:1400px;min-height:900px;padding:24px;background:#f6f1e6;border:12px solid #c9b08a;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" fill="none" stroke="#d9c5a5"/></svg>')}
+        .kb-cloud-frame{position:absolute;top:-18px;left:-18px;right:-18px;height:18px;background:repeating-linear-gradient(90deg,#d1b38b 0 40px,#f9f6f2 40px 44px)}
+        .kb-top-filters{display:flex;gap:16px;align-items:flex-end;margin-bottom:16px}
+        .kb-filter label{font-size:14px;color:#444}
+        .kb-filter select{padding:6px 10px;border:1px solid #bbb;border-radius:4px}
+        .kb-filter-info{margin-left:auto;color:#666;font-size:12px}
+        .kb-right-panel{position:absolute;top:24px;right:24px;width:260px;background:#f9f6f2;border:1px solid #d6c7b0;padding:12px}
+        .kb-office-title{font-size:18px;font-weight:700;margin-bottom:8px}
+        .kb-download{display:block;color:#1f2937;text-decoration:none;padding:6px 8px;border:1px solid #ddd;border-radius:4px;margin-bottom:6px;background:#fff}
+        .kb-apply{margin-top:10px;padding:8px;background:#8b3a3a;color:#fff;text-align:center;border-radius:4px;cursor:pointer}
+        .kb-categories{display:grid;grid-template-columns:1fr;gap:24px;margin-top:24px}
+        .kb-sign{height:60px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;letter-spacing:.2em}
+        .redwood{background:#7b3f00}
+        .walnut{background:#4a2f22}
+        .huanghuali{background:#8a4b24}
+        .kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:18px;background:linear-gradient(#f8f5ee,#f3ede1)}
+        .kb-cabinet{position:relative;background:#b77939;border:8px solid #8b5e34;height:600px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8px;background-image:linear-gradient(90deg,rgba(0,0,0,.06) 1px,transparent 1px),linear-gradient(180deg,rgba(0,0,0,.06) 1px,transparent 1px);background-size:60px 60px}
+        .kb-divider{position:absolute;top:0;bottom:0;width:10px;background:repeating-linear-gradient(180deg,#7a5530 0 20px,#6a4b2b 20px 40px);left:calc(33.33% - 5px)}
+        .kb-divider.r{left:auto;right:calc(33.33% - 5px)}
+        .kb-shelf{background:#d8c2a3;border:2px solid #b79d7b;display:flex;align-items:flex-end;justify-content:flex-start;padding:6px}
+        .kb-book{width:34px;height:90%;background:#7c3f2a;border:1px solid #5b2c1e;margin-right:6px;display:flex;align-items:center;justify-content:center;color:#fdf3e7;font-size:14px;writing-mode:vertical-rl;text-orientation:upright;font-family:'STKaiti','KaiTi',serif}
+        .kb-book.gold{background:#b8860b;color:#251a0c}
+        .kb-book.blue{background:#1f4a8a}
+        .kb-book.green{background:#2e7d32}
+        .kb-book.purple{background:#6b2e2e}
+        .kb-doc-card{position:absolute;bottom:8px;right:8px;font-size:10px;color:#222;background:rgba(255,255,255,.7);padding:2px 4px;border-radius:2px}
+        .kb-doc-brand{position:absolute;bottom:8px;left:8px;font-size:18px;font-family:'FZYaoti','STKaiti','KaiTi',serif;color:#222}
+        .kb-ground{position:fixed;bottom:0;left:0;right:0;height:80px;background:repeating-linear-gradient(90deg,#3a3a3a 0 20px,#2c2c2c 20px 40px)}
+        .hidden{display:none}
+        .kb-reader{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;flex-direction:column;backdrop-filter:blur(2px)}
+        .kb-reader-head{background:#fff;padding:12px;display:flex;align-items:center;gap:12px}
+        .kb-title{font-weight:700}
+        .kb-meta{font-size:12px;color:#555}
+        .kb-progress{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+        .kb-progress-bar{height:100%;width:0;background:#8b3a3a}
+        .kb-bookmark,.kb-close{cursor:pointer;padding:6px 10px;background:#eee;border-radius:4px}
+        .kb-pages{flex:1;display:flex;gap:12px;padding:12px}
+        .kb-page{flex:1;background:#faf7f2;border:1px solid #e5dccb;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+        .kb-reader-controls{background:#fff;padding:12px;display:flex;gap:12px;justify-content:center}
+        .kb-btn{padding:8px 12px;border:1px solid #bbb;background:#fff;border-radius:4px;cursor:pointer}
+        .kb-permission{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center}
+        .kb-permission-box{width:520px;background:#fff;padding:18px;border-radius:8px}
+        .kb-permission-title{font-size:18px;font-weight:700;margin-bottom:8px}
+        .kb-permission-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+      </style>
+
+      <script type="text/javascript">
+        <![CDATA[
+        (function(){
+          var enter=document.getElementById('kbEnter');
+          var door=document.getElementById('kbDoor');
+          var hall=document.getElementById('kbHall');
+          var yearSel=document.getElementById('kbYear');
+          var monthSel=document.getElementById('kbMonth');
+          var daySel=document.getElementById('kbDay');
+          var gridSystem=document.getElementById('kbGridSystem');
+          var gridProperty=document.getElementById('kbGridProperty');
+          var gridCommerce=document.getElementById('kbGridCommerce');
+          var reader=document.getElementById('kbReader');
+          var pageL=document.getElementById('kbPageLeft');
+          var pageR=document.getElementById('kbPageRight');
+          var titleEl=document.getElementById('kbDocTitle');
+          var metaEl=document.getElementById('kbDocMeta');
+          var progressBar=document.getElementById('kbProgressBar');
+          var btnPrev=document.getElementById('kbPrev');
+          var btnNext=document.getElementById('kbNext');
+          var btnClose=document.getElementById('kbCloseReader');
+          var bookmark=document.getElementById('kbBookmark');
+          var perm=document.getElementById('kbPermission');
+          var btnApply=document.getElementById('kbApply');
+          var btnCancel=document.getElementById('kbCancel');
+          var applyBtn=document.getElementById('kbApplyBtn');
+
+          var docs=[
+            {id:'SYS-NET-001',cat:'system',name:'云端网络架构图',cover:'blue',level:'技术文档',url:'GCP Console',date:'2025-12-16',valid:'有效',encrypted:false,index:'F-2025-NET',pages:[
+              '<div style="padding:20px;text-align:center"><h1>云端网络架构配置</h1><p>2025-12-16</p></div>',
+              '<div style="padding:20px"><h3>基础架构</h3><p><b>主域名:</b> wuchang.life</p><p><b>应用子域:</b> app.wuchang.life</p><p><b>主站 IP:</b> 104.199.144.93</p><p><b>重新總店路由器 IP:</b> 220.135.21.74 (shop.wuchang.life)</p></div>',
+              '<div style="padding:20px"><h3>DNS 配置</h3><p>类型: A 记录</p><p>TTL: 300 (建议)</p><p>wuchang.life / www → 104.199.144.93</p><p>shop.wuchang.life → 220.135.21.74</p></div>',
+              '<div style="padding:20px"><h3>注意事项</h3><p>1. 请确保 Public DNS 中上述 IP 与实际资产（重新總店路由器、公網頻寬）一致。</p><p>2. 其他管理子域 (admin / core / butler 等) 依 dns_records.json 维护。</p></div>',
+              '<div style="padding:20px;text-align:center"><h3>附录</h3><p>截图存档于知识库</p></div>'
+            ]},
+            {id:'FIN-REL-001',cat:'system',name:'重新店、協會與仁義店財務關係說明',cover:'blue',level:'系統說明',url:'wuchang.life/finance',date:'2025-12-29',valid:'有效',encrypted:false,index:'F-2025-FIN',pages:[
+              '<div style="padding:20px;text-align:center"><h1>重新店、協會與仁義店的財務關係</h1><p>本文件供所有 AI 與財務人員理解系統內部資金流向與合規邏輯。</p></div>',
+              '<div style="padding:20px"><h3>一、角色定位</h3><p><b>1. 重新總店（上品聊國咖啡烘焙館 重新總店）</b>：為私人營利事業體，同時是整個系統的主要資助者與技術提供者，負責提供資金、專利授權、加盟權利金與公網頻寬等資源。</p><p><b>2. 協會（新北市三重區五常社區發展協會）</b>：為依法立案之非營利組織，承接社區服務、公益計畫與「仁義店」相關的所有公益性收支。</p><p><b>3. 仁義店</b>：定位為社區產業據點，同時作為「五常社區發展基金池」的實體運作本體，其營運不產生資本利得，所有營收與基金流動皆歸入協會本帳，用於公益用途。</p></div>',
+              '<div style="padding:20px"><h3>二、資金流向與帳務邏輯</h3><p><b>1. 協會本帳收入來源</b>：協會本帳的主要收入來源為「重新總店」之資助與轉撥，視為私人營利事業對非營利組織的贊助 / 捐助；實務上，五常社區發展基金池的本金與持續挹注幾乎全數來自重新總店。</p><p><b>2. 仁義店營收歸屬</b>：仁義店所有 POS 銷售收入與相關現金流，均視為協會之收入，不屬於任何個人或股份公司之獲利；在報表上應歸類為「協會公益性營收」，並視為基金池的流入與運作成果。</p><p><b>3. 仁義店費用支付</b>：仁義店的日常營運成本（房租、水電、耗材、人力補貼等）由協會本帳支應，於系統中應標記為「協會對仁義店之公益支出」，性質上為基金池對社區服務據點的使用。</p><p><b>4. 私人店與協會之關係</b>：重新總店作為「系統之父」，以私人資本長期支撐協會及系統運作，但兩者在帳務上必須清楚區隔：重新總店之支出記錄為私人企業成本 / 贊助支出，協會則僅承接其轉入之款項與對外的公益支出；仁義店作為基金池具象化的門市載體，所有資金來源仍追溯至重新總店之投入。</p></div>',
+              '<div style="padding:20px"><h3>三、AI 進行財務工作的解讀規則</h3><p><b>1. 關於仁義店</b>：任何與仁義店相關的收入報表、費用明細與預算規劃，預設皆應以「協會公益專案」視之，而非一般營利門市。AI 在進行分析時，禁止將仁義店的盈餘視為可分配的企業獲利。</p><p><b>2. 關於協會本帳</b>：協會本帳的主要現金來源標註為「來自重新總店之贊助 / 轉撥」，AI 在做資金來源追蹤時，需理解這是一條由私人企業→非營利組織→社區公益據點（仁義店）的單向支持鏈。</p><p><b>3. 關於重新總店</b>：重新總店在系統中的角色是「資源提供者與策略贊助者」，AI 在做綜合財務判讀時，應區分其營利事業的自有營運數據，與其對協會與仁義店的贊助性支出，避免混淆企業獲利與公益支出。</p><p><b>4. 報表合併原則</b>：如需產出整體「五常社區系統」視角的合併報表，AI 應明確標示三個層次：重新總店（營利）、協會（非營利）、仁義店（由協會管理之公益門市），並在說明文字中清楚註記本文件之規則。</p></div>'
+            ]},
+            {id:'ORG-ASSOC-UNIT',cat:'system',name:'五常社區發展協會五組業務與母公司架構說明',cover:'green',level:'組織說明',url:'wuchang.life/association',date:'2025-12-29',valid:'有效',encrypted:false,index:'F-2025-ORG',pages:[
+              '<div style="padding:20px;text-align:center"><h1>新北市三重區五常社區發展協會五組業務與母公司架構</h1><p>本文件說明協會作為整個五常系統之母公司（非營利母體）之定位，以及內部五大業務分組與「需請示」狀態。協會依章程明列之四組業務為庶務組、服務組、組訓組、活動組，第五組「資訊室／資訊組」則為因應近期大會決議與數位治理需求，由總幹事提案設立之新單位，專責資訊系統、資料治理與 AI 相關業務。系統主使用者帳戶對應為「秘書處」角色，下轄庶務組、服務組、組訓組、活動組、資訊室與「需請示」案件之統籌權責；秘書處負責人為協會總幹事，而理事會整體視為系統管理員層級，負責監督與審議重大設定與權限。以上結構供 AI 與系統在處理任務、需求與流程時有一致的理解。</p></div>',
+              '<div style="padding:20px"><h3>一、庶務組（行政）</h3><p>庶務組負責協會日常行政與後勤作業。包含：會議召集與會議紀錄、文件與檔案管理、公文往返、印信用印、物資與空間管理、協會章程與內部規章的維護，以及各類申請表單與一般行政詢問的窗口。系統中凡屬「行政流程、文件歸檔、組織資料維護」相關的需求，預設應歸屬庶務組負責或協調。</p></div>',
+              '<div style="padding:20px"><h3>二、服務組（志工）</h3><p>服務組以「志工」為核心，負責招募、培訓、排班及關懷管理。包含：志工名冊維護、排班表與出勤紀錄、服務據點（如仁義店、關懷據點）的人力安排，以及志工回饋與表揚機制。系統中凡牽涉「志工、值班、陪伴服務、送餐、關懷訪視」等關鍵字的任務與記錄，預設交由服務組主責。</p></div>',
+              '<div style="padding:20px"><h3>三、組訓組（課程及資料庫）</h3><p>組訓組負責課程與訓練相關之規劃與知識整理。包含：社區課程（例如婦女舞蹈社、健康促進課程等）的規劃與排程、講師與學員名冊、教材與簡報、課後問卷與成效評估，以及各類課程資料庫與學習紀錄的維護。系統中凡屬「課程、訓練、教材、課表、學員名單、資料庫建置」的需求，預設由組訓組負責設計與更新。</p></div>',
+              '<div style="padding:20px"><h3>四、活動組（公共關係、動員及宣傳）</h3><p>活動組的核心任務，是負責社區居民的「動員與凝聚」，並透過各式活動讓居民彼此看見與連結。除了協會對外形象與公共關係之外，活動組更要設計讓不同年齡、不同生活狀態的居民，都有機會走出家門、在線上或線下留下足跡，讓社區變成一個彼此有感、有連結的生活場域。</p><p>實務上，活動組的工作包含：對外活動企劃與執行、社區大型活動與記者會、主題聚會與共學小組、社群媒體與官網內容更新、文宣與視覺設計、媒體聯絡與公關應對，以及與里辦公處、學校與其他單位的對接。系統中凡牽涉「活動企劃、居民動員、社區凝聚、宣傳文案、海報設計、媒體曝光、對外合作」的需求，預設由活動組主責或協調。</p><p>在平台層，活動組的主要工具是「社區許願樹」：居民在許願樹上留下的願望與提案，視為社區共同議題與潛在活動的來源。活動組需定期整理許願樹上集氣中的願望，結合幸福幣投票與實際可行性，轉換為具體的活動或專案，並串連服務組（志工）、商家與管委會等角色，一起完成。也就是說，許願樹是活動組用來承接居民心聲、發動社區行動與累積共同記憶的主要平台。</p><p>在宣傳與廣告投放上，活動組須主動尋找可行的宣傳管道與工具（例如社群平台、官方網站、電子報、實體海報與合法的廣告方案），並統整為可重複使用的宣傳方法清單與操作指引，供協會內部依循。所有對外宣傳文案、活動簡章與廣告設計，在正式對外發布或送交外部單位之前，均應先送交組訓組進行「法規與規範違反測試」，其中檢視基準除一般中華民國相關法規外，亦應參考 Google 非營利計畫與相關服務條款中對公益組織、廣告與內容政策之要求，必要時加註風險提示與修改建議，再送回活動組調整。</p><p>經組訓組完成法規檢測後，所有可能涉及經費支出或廣告預算之方案，應送交庶務組登記與判斷是否構成預算動支；如需動支協會預算，還須由系統與 AI 協助推理是否需要動用到「重新店」所提供之資金或資源作為支撐，並將此推理過程與選項說明整理成摘要，一併送交秘書處主帳號請示與最終裁示。未經上述程序者，AI 不得將其視為已核准之正式宣傳或廣告決策。</p></div>',
+              '<div style="padding:20px"><h3>五、資訊室（資訊與系統治理）</h3><p>資訊室（或資訊組、資訊中心）為因應協會數位轉型與本次大會決議，由總幹事提案新設之單位，雖非原章程明列之四組之一，但在實務上視為協會內部專責資訊與系統治理的核心部門。其職掌包含：資訊設備與網路環境建置維護、資料庫與檔案系統之架構設計與權限管理、AI 相關服務與本地伺服器之部署與監控、資訊安全與備份策略、以及與外部雲端服務（如 Google Workspace、各類非營利雲端資源）的技術對接與合規運用。同時，資訊室亦負責盤點與蒐集「網路資源」與「政府資源」（如相關平台服務、補助與計畫），從中篩選出符合本會章程、服務範圍與實際承載能力之方案，整理成可供協會與系統運用的資源清單。</p><p>在本系統中，凡牽涉「系統架構、資料治理、AI 模型與服務、資訊安全、帳號與權限技術設計、備份與還原流程」等內容，預設歸屬資訊室主責或協調；凡涉及外部數位資源或政府資源之尋找、評估與技術對接，也由資訊室扮演第一線「資訊總管」角色，先行整理規格與風險，再分送各組討論。</p><p>在提案與執行層面，資訊室須主動偕同其他四組進行分工：與組訓組合作，將所找到的資源轉譯為具體的計畫架構、欄位設計與文件模板；與活動組合作，把適合的資源設計成社區動員與凝聚的活動或專案；與服務組合作，對接長照、志願服務或社區關懷相關之補助與平台；與庶務組合作，處理與系統、設備或雲端服務有關之合約、預算編列、報帳與核銷佐證資料。整體流程中，資訊室負責確保技術面與資源條件被講清楚，讓四組能專心在內容設計與服務實作上。</p><p>資訊室在權責上直接向秘書處與理事會報告，並作為「協會母公司」與各子系統（如 POS、會員系統、志工系統、社區數位地圖）之技術中樞，協助其他四組落實章程宗旨下的數位治理需求。</p></div>',
+              '<div style="padding:20px"><h3>六、需請示（暫時無法分類）</h3><p>若某項需求、任務或紀錄在實務上無法明確歸入上述五組（庶務、服務、組訓、活動、資訊室）之一，系統與 AI 不得自行臆測分類，應標記為「需請示」，並回報由秘書處主帳號（本系統使用者帳戶）裁示後再行歸類。預設流程為：先由系統標記「需請示」並通知秘書處主帳號，經該帳號明示歸屬後，庶務組再協助完成正式分類與後續流轉。任何標記為「需請示」之項目在未得到秘書處主帳號的人為確認前，AI 僅能提供說明與風險提示，不得作為自動決策或權責推論的依據。</p><p>當 AI 在系統中處理任務分類、需求分流或權責建議時，應優先依據本文件所述之五組業務邏輯進行歸類；當仍無法判定時，一律標示為「需請示」，並預設回報秘書處主帳號做最後裁示。</p><h3>七、AI 組長配置與小j角色</h3><p>在理想人力配置下，每一組應各有一位人類組長。但在目前過渡階段，協會由總幹事一人兼任秘書處與五組組長，並由五個 AI 組長輔佐：庶務組長 AI、服務組長 AI、組訓組長 AI、活動組長 AI、資訊室組長 AI。這五個 AI 組長皆掛靠於秘書處主帳號之下，負責協助分類任務、草擬回覆、整理資料與提出建議；其上方由小j作為「整體歷程管考與人類世界對口」，負責從系統角度串連五組工作的時間軸與成果，對內協助檢視計畫是否符合協會章程與原始承諾，對外則把這些歷程翻譯成政府、合作單位、捐助者與社區居民看得懂的故事與報告。</p><p>在郵件與帳號管理方面，系統預設由庶務組長 AI 作為「郵件總管」，統一協助監看與分流多個核心帳號的信件：哥哥自然人帳號（o970106@gmail.com，永遠不變的哥哥）、公司架構師（wuchang1100606355@gmail.com）、官方網域管理信箱（例如 admin@wuchang.life），以及創辦人歷史使用之其他主要聯絡帳號（例如 o0930913993o@yahoo.com）。AI 在進行分類時，應先標註來源帳號，再依內容歸入庶務、服務、組訓、活動、資訊室或需請示，並遵守廣告郵件僅在與系統建置或公益工作有關時才向上推送的規則。</p><p>其中「庶務組長 AI」須負責協會與系統相關郵件之進出監看與初步分流，依主旨、寄件者與內容關鍵字將信件標註為庶務、服務、組訓、活動、資訊室或需請示，並對需請示信件進行清楚標記後交由秘書處主帳號裁示。對於廣告性質郵件，庶務組長 AI 應先判斷其是否與本系統建置、社區公益工作或協會實際需求有關；僅當內容對系統或公益項目具有潛在價值時，才標記為可供參考並轉交後續 AI 或秘書處閱讀；其餘廣告郵件僅作為低優先等級歸檔與標籤，不主動推送或打擾使用者。AI 不得自行刪除或永久忽略任何郵件，只能進行標籤與提供處理建議；最終權責與決策仍由總幹事與理事會掌握。</p><p>服務組長 AI 在志工系統架構上，須主動對標各級政府之「志願服務工作推廣平台」與相關志願服務登錄系統，將協會內部的志工名冊、服務時數、訓練紀錄與保險資訊，整理成可對接的欄位結構與資料流，並提出「內部系統 → 官方平台」的欄位對照表與作業流程建議。遇到新任務或新欄位時，服務組長 AI 應先判斷其與志願服務相關性，並示範建議如何在系統中建立對應欄位、表單與流程草圖，供總幹事與人類服務組使用，以利將來實際接軌官方平台或批次上傳服務紀錄。</p><p>組訓組長 AI 則須專責研究各類公私部門之補助與計畫徵件（例如社區發展、志願服務、長照、青少年與婦女培力等），蒐集公開徵件簡章與實際通過之範例案，整理出共通的欄位與評估重點，例如：問題背景、服務對象、預期效益、執行方式、經費編列與自籌比例等。組訓組長 AI 應在不對外送出任何申請的前提下，根據協會現況與仁義店情境，生成一至多個「模擬提案版本」，附上與原始通過案例的比對說明，送交秘書處主帳號審查與調整，作為後續人類撰寫正式計畫書與優化資料庫結構的參考。</p></div>'
+            ]},
+            {id:'CIVIL-PROXY-PORTAL',cat:'system',name:'公務員代理服務端口與里幹事串接架構',cover:'red',level:'系統說明',url:'wuchang.life/civil-proxy',date:'2025-12-30',valid:'草案',encrypted:false,index:'F-2025-CIV',pages:[
+              '<div style="padding:20px;text-align:center"><h1>公務員代理服務端口與里幹事串接架構</h1><p>本文件說明「等同里幹事」等級的公務員代理服務端口，如何在五常系統中擔任橋梁，協助把居民需求、協會服務與公部門流程串在一起，同時保持權責清楚與人類最終決策。從治理哲學來看，它首先是一個由社區居民與非營利組織共同成立、以居民為眾利對象的「人民代辦業務端口」：居民遇到政府或大型機構的流程時，可以先來這裡求助與討論，再決定如何走正式程序。從居民使用者的體驗角度來看，這個端口也會逐步長成一個貼近生活的「微型地方政府服務台」前台，但在制度與責任邏輯上，則嚴格維持協會與公部門各自的職權邊界。其設計立場也反映新北市三重區五常社區發展協會與常駐社工員的承諾：只要是社區範圍內需要協助的人事物，在職權與量能許可之下，原則上都願意陪同處理與代為轉介。</p></div>',
+              '<div style="padding:20px"><h3>一、定位：等同里幹事，但永遠是代理端口</h3><p>公務員代理服務端口的定位，是在系統裡扮演「等同里幹事」等級的窗口，負責幫忙整理資料、拉齊流程與提醒時程，而不是取代任何人類公務員。對外，它被視為一個幫忙準備資料與草稿的數位里幹事；對內，它則是協會與系統用來統整居民需求、里層工作與政府機關 API 的中繼站。</p><p>里辦相關服務多半以代轉與協力為主：居民可以向協會或系統提出需求，由代理端口先協助整理與轉達，再由里幹事與里長決定正式處置方式。涉及社會局等社會福利體系的專業案件，則預設由常駐於五常社區的社工員直接承接與評估，系統負責提供紀錄、提醒與文件草稿。</p><p>所有正式的行政裁示、核准、公文發出與個資授權，仍需由里幹事、里長或其他具法定職權的公務人員與協會負責人親自確認與簽名。系統與 AI 只能預先彙整資訊、標示風險與產生建議文字，不得自行承諾任何政府資源或權益。</p></div>',
+              '<div style="padding:20px"><h3>二、對接對象與資料流向</h3><p>公務員代理服務端口主要對接四類對象：</p><p><b>1. 里幹事與里長</b>：承接里辦公室日常需要處理的資訊，例如活動公告、關懷名冊、里內通報事項等，幫忙先在系統中整理成清單，提供給里幹事與里長審閱。里幹事與里長仍是唯一可以決定是否公告、如何公告與何時送件的權責主體；協會與系統則作為長期陪跑的協力者，而非權責主體。</p><p><b>2. 公務機關 API 與線上平台</b>：當政府提供查詢或申辦相關 API 時，由資訊室負責技術對接，公務員代理端口則負責將協會與里內累積的資料，整理成可對接欄位與批次上傳的草案，預先檢查欄位是否完整，但不直接送出正式申辦。</p><p><b>3. 志工隊與里內隊伍</b>：包含里巡守隊、環保志工隊與其他社區志工隊。代理端口負責把里幹事或里長交辦的巡守與環保任務拆解成可派工的任務清單，推送到志願服務平台，協助安排志工班表與回報路徑；若任務牽涉弱勢關懷或家庭風險，會同步提醒常駐社工員評估是否啟動社會局相關服務。</p><p><b>4. 街商業服務系統</b>：例如老人送餐、便利商店協力據點等。代理端口負責將經里長或里幹事確認的服務名冊與路線，轉成商家看得懂的訂單與排程，讓街上的商家可以在不碰觸敏感個資的前提下，完成指定的關懷或送餐服務；涉及長期照顧或福利資格審認的部分，則由社工員透過社會局體系處理。</p></div>',
+              '<div style="padding:20px"><h3>三、運作情境與安全邊界</h3><p>在實務上，公務員代理服務端口會透過以下方式運作：</p><p>一、接住居民與協會的需求：由許願樹、志願服務平台與協會內部系統收集到的需求，先由小j與各組 AI 組長整理成「可能需要里幹事或里長協力」的清單，再交由代理端口彙整；若內容涉及家庭暴力、經濟弱勢或高風險議題，則自動標記為需社工員優先審閱。</p><p>二、轉成里幹事與社工看得懂的草稿：代理端口根據各類政府表單格式與既有公文範本，將清單轉成表格式草稿或建議公文內容，分別提供給里幹事與常駐社工員審閱，讓雙方可以直接補充與修改後決定是否送出。</p><p>三、串接志工隊與街商：對於需要人力或服務路線支持的案件（例如里內巡守、環保清潔、老人送餐），代理端口會同時在志願服務平台與商業服務系統中建立任務草稿，由人類組長與里幹事確認後發佈，並由服務組長 AI 協助追蹤完成度與回報；如判斷屬社會局責任或需納入長照體系，則由社工員統一對外說明與轉介。</p><p>四、全程保留人類最終決定權：無論是對政府 API 的操作、對志工隊的任務派發，或對商家的服務委託，系統都只生成草稿與建議路徑，所有「送出、核准、簽名與承諾」按鍵，一律保留給里幹事、里長、常駐社工員或協會負責人操作。AI 如有不確定或超出授權範圍之情況，必須自動將案件標記為「需請示」，並停止後續自動流程。</p></div>'
+            ]},
+            {id:'SYS-001',cat:'system',name:'宪章与隐私规则',cover:'gold',level:'主法规',url:'https://example.org/constitution',date:'2025-10-12',valid:'有效',encrypted:true,index:'F-2025-001'},
+            {id:'SYS-002',cat:'system',name:'数据加密实施细则',cover:'blue',level:'实施细则',url:'https://example.org/crypto-rules',date:'2025-09-03',valid:'有效',encrypted:true,index:'F-2025-002'},
+            {id:'PROP-A001',cat:'property',name:'A-001 产权文件',cover:'gold',level:'主法规',url:'https://example.org/prop/a001',date:'2025-11-02',valid:'有效',encrypted:false,index:'F-2025-010'},
+            {id:'PROP-R101',cat:'property',name:'维修记录 R-101',cover:'green',level:'附带法规',url:'https://example.org/prop/r101',date:'2025-08-20',valid:'修订',encrypted:false,index:'F-2025-011'},
+            {id:'LAW-001',cat:'commerce',name:'商业法规总则',cover:'gold',level:'主法规',url:'https://example.org/law/001',date:'2025-07-01',valid:'有效',encrypted:false,index:'F-2025-100',org:'国家立法机关'},
+            {id:'LAW-001-IMP',cat:'commerce',name:'实施细则第壹版',cover:'blue',level:'实施细则',url:'https://example.org/law/001/imp',date:'2025-07-15',valid:'有效',encrypted:false,index:'F-2025-101',org:'国家立法机关'},
+            {id:'CASE-2025',cat:'commerce',name:'2025 判例合订本',cover:'purple',level:'法院判例',url:'https://example.org/case/2025',date:'2025-01-10',valid:'有效',encrypted:false,index:'F-2025-150',org:'最高法院'}
+          ];
+
+          function buildCabinet(grid,items){
+            grid.innerHTML='';
+            var cab=document.createElement('div');
+            cab.className='kb-cabinet';
+            var divL=document.createElement('div');divL.className='kb-divider';
+            var divR=document.createElement('div');divR.className='kb-divider r';
+            cab.appendChild(divL);cab.appendChild(divR);
+            for(var i=0;i<9;i++){
+              var shelf=document.createElement('div');shelf.className='kb-shelf';
+              var group=items.slice(i*3,(i+1)*3);
+              group.forEach(function(d){
+                var book=document.createElement('div');
+                book.className='kb-book '+(d.cover==='gold'?'gold':d.cover==='blue'?'blue':d.cover==='green'?'green':'purple');
+                book.textContent=d.name;
+                book.onclick=function(){openDoc(d)};
+                shelf.appendChild(book);
+              });
+              var card=document.createElement('div');card.className='kb-doc-card';card.textContent=(group[0]&&group[0].index)||'';
+              var brand=document.createElement('div');brand.className='kb-doc-brand';brand.textContent='五常社区发展协会';
+              shelf.appendChild(card);shelf.appendChild(brand);
+              cab.appendChild(shelf);
+            }
+            grid.appendChild(cab);
+          }
+
+          function filterByDate(){
+            var y=yearSel.value;var m=monthSel.value;var d=daySel.value;
+            function inRange(x){
+              if(!y&&!m&&!d) return true;
+              var dt=new Date(x.date);
+              if(y && dt.getFullYear()!=parseInt(y)) return false;
+              if(m && (dt.getMonth()+1)!=parseInt(m)) return false;
+              if(d && dt.getDate()!=parseInt(d)) return false;
+              return true;
+            }
+            var sys=docs.filter(function(x){return x.cat==='system'&&inRange(x)});
+            var prop=docs.filter(function(x){return x.cat==='property'&&inRange(x)});
+            var com=docs.filter(function(x){return x.cat==='commerce'&&inRange(x)});
+            buildCabinet(gridSystem,sys);
+            buildCabinet(gridProperty,prop);
+            buildCabinet(gridCommerce,com);
+          }
+
+          function initDateFilters(){
+            var now=new Date();
+            var months=[];
+            for(var i=0;i<3;i++){var t=new Date(now.getFullYear(),now.getMonth()-i,1);months.push({y:t.getFullYear(),m:t.getMonth()+1});}
+            var years=new Set(docs.map(function(x){return new Date(x.date).getFullYear()}));
+            yearSel.innerHTML='<option value="">全部</option>';
+            years.forEach(function(y){var o=document.createElement('option');o.value=y;o.textContent=y;yearSel.appendChild(o)});
+            monthSel.innerHTML='<option value="">全部</option>';
+            months.forEach(function(mm){var o=document.createElement('option');o.value=mm.m;o.textContent=mm.m;monthSel.appendChild(o)});
+            daySel.innerHTML='<option value="">全部</option>';
+            for(var i=1;i<=31;i++){var o=document.createElement('option');o.value=i;o.textContent=i;daySel.appendChild(o)}
+            yearSel.onchange=filterByDate;monthSel.onchange=filterByDate;daySel.onchange=filterByDate;
+          }
+
+          var curDoc=null;var curPage=0;var defaultPages=['封面','正文1','正文2','正文3','附录'];
+          function getPages(){ return (curDoc && curDoc.pages) ? curDoc.pages : defaultPages; }
+
+          function openDoc(d){
+            curDoc=d;curPage=0;
+            if(d.encrypted){perm.classList.remove('hidden');return}
+            showReader();
+          }
+          function showReader(){
+            titleEl.textContent=curDoc.name+'（'+curDoc.level+'）';
+            metaEl.textContent='来源: '+(curDoc.url||'')+' | 收录: '+curDoc.date+' | 有效性: '+curDoc.valid+(curDoc.org?(' | 机关: '+curDoc.org):'');
+            reader.classList.remove('hidden');
+            renderPages();
+            var key='kb.bookmark.'+curDoc.id;var mark=localStorage.getItem(key);if(mark){curPage=parseInt(mark)||0;renderPages();}
+          }
+          function renderPages(){
+            var p=getPages();
+            pageL.innerHTML=p[curPage]||'';
+            pageR.innerHTML=p[curPage+1]||'';
+            var prog=Math.min(100,Math.round(((curPage+1)/p.length)*100));
+            progressBar.style.width=prog+'%';
+          }
+          btnPrev.onclick=function(){curPage=Math.max(0,curPage-1);renderPages()};
+          btnNext.onclick=function(){curPage=Math.min(getPages().length-1,curPage+1);renderPages()};
+          btnClose.onclick=function(){reader.classList.add('hidden')};
+          bookmark.onclick=function(){if(!curDoc)return;localStorage.setItem('kb.bookmark.'+curDoc.id,String(curPage))};
+          btnApply.onclick=function(){perm.classList.add('hidden');showReader()};
+          btnCancel.onclick=function(){perm.classList.add('hidden')};
+          applyBtn.onclick=function(){perm.classList.remove('hidden')};
+
+          enter.onclick=function(){
+            door.querySelector('.kb-door-left').style.transform='translateX(-100%)';
+            door.querySelector('.kb-door-right').style.transform='translateX(100%)';
+            setTimeout(function(){door.classList.add('hidden');hall.classList.remove('hidden')},900);
+          };
+
+          initDateFilters();
+          filterByDate();
+        })();
+        ]]>
+      </script>
+    </t>
+  </template>
+</odoo>

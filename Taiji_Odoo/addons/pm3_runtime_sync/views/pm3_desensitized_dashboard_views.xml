@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_pm3_root" name="PM3 Runtime" sequence="80"/>
+
+    <record id="view_pm3_desensitized_dashboard_list" model="ir.ui.view">
+        <field name="name">pm3.desensitized.dashboard.list</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <list string="Desensitized Realtime Dashboard" create="0" delete="0"
+                  decoration-success="dashboard_status == 'ok'"
+                  decoration-warning="dashboard_status in ('changed','watch')"
+                  decoration-danger="dashboard_status == 'blocked'">
+                <field name="dashboard_updated_at"/>
+                <field name="dashboard_status"/>
+                <field name="dashboard_category"/>
+                <field name="node_code"/>
+                <field name="dashboard_title"/>
+                <field name="dashboard_safe_text"/>
+                <field name="five_d_code"/>
+                <field name="vector_hash"/>
+                <field name="sensitive_scan_status"/>
+                <field name="change_state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pm3_desensitized_dashboard_form" model="ir.ui.view">
+        <field name="name">pm3.desensitized.dashboard.form</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <form string="Desensitized Dashboard Item">
+                <sheet>
+                    <group string="Dashboard">
+                        <field name="desensitized_dashboard"/>
+                        <field name="dashboard_updated_at"/>
+                        <field name="dashboard_status"/>
+                        <field name="dashboard_category"/>
+                        <field name="dashboard_title"/>
+                        <field name="dashboard_safe_text"/>
+                    </group>
+
+                    <group string="Metric / Vector">
+                        <field name="node_code"/>
+                        <field name="five_d_code"/>
+                        <field name="vector_hash"/>
+                        <field name="vector_algorithm"/>
+                        <field name="vector_dim"/>
+                        <field name="behavior_event_type"/>
+                    </group>
+
+                    <group string="Safety">
+                        <field name="sensitive_scan_status"/>
+                        <field name="sensitive_flags"/>
+                        <field name="change_state"/>
+                        <field name="content_sha256"/>
+                    </group>
+
+                    <group string="Source Index">
+                        <field name="name"/>
+                        <field name="vault_rel_path"/>
+                        <field name="vault_section"/>
+                        <field name="last_seen_at"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pm3_desensitized_dashboard_search" model="ir.ui.view">
+        <field name="name">pm3.desensitized.dashboard.search</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <search string="Search Desensitized Dashboard">
+                <field name="dashboard_title"/>
+                <field name="dashboard_safe_text"/>
+                <field name="dashboard_category"/>
+                <field name="five_d_code"/>
+                <field name="vector_hash"/>
+                <field name="vault_rel_path"/>
+
+                <filter string="Dashboard" name="dashboard_filter" domain="[('desensitized_dashboard','=',True)]"/>
+                <filter string="OK" name="ok_filter" domain="[('dashboard_status','=','ok')]"/>
+                <filter string="Changed" name="changed_filter" domain="[('dashboard_status','=','changed')]"/>
+                <filter string="Watch" name="watch_filter" domain="[('dashboard_status','=','watch')]"/>
+                <filter string="Clear / Redacted" name="safe_filter" domain="[('sensitive_scan_status', 'in', ('clear', 'redacted'))]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by':'dashboard_category'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by':'dashboard_status'}"/>
+                    <filter string="Node" name="group_node" context="{'group_by':'node_code'}"/>
+                    <filter string="Sensitive Status" name="group_sensitive" context="{'group_by':'sensitive_scan_status'}"/>
+                    <filter string="Change State" name="group_change" context="{'group_by':'change_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pm3_desensitized_dashboard" model="ir.actions.act_window">
+        <field name="name">Desensitized Realtime Dashboard</field>
+        <field name="res_model">pm3.memory.index</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('desensitized_dashboard','=',True), ('sensitive_scan_status', 'in', ('clear', 'redacted'))]</field>
+        <field name="search_view_id" ref="view_pm3_desensitized_dashboard_search"/>
+        <field name="context">{'search_default_dashboard_filter': 1, 'search_default_safe_filter': 1}</field>
+    </record>
+
+    <menuitem id="menu_pm3_desensitized_dashboard"
+              name="Desensitized Realtime Dashboard"
+              parent="menu_pm3_root"
+              action="action_pm3_desensitized_dashboard"
+              sequence="50"/>
+
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_pm3_vector_state_window_tree" model="ir.ui.view">
+        <field name="name">pm3.vector.state.window.tree</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <list string="Vector State Window">
+                <field name="name"/>
+                <field name="vector_algorithm"/>
+                <field name="vector_dim"/>
+                <field name="vector_hash"/>
+                <field name="vector_updated_at"/>
+            </list>
+        </field>
+    </record>
+</odoo>

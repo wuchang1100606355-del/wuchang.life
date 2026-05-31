@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_pm3_memory_index_tree" model="ir.ui.view">
+        <field name="name">pm3.memory.index.tree</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <list string="PM3 Memory Index">
+                <field name="name"/>
+                <field name="node_code"/>
+                <field name="vault_rel_path"/>
+                <field name="payload_kind"/>
+                <field name="access_level"/>
+                <field name="sync_state"/>
+                <field name="last_seen_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pm3_memory_index_form" model="ir.ui.view">
+        <field name="name">pm3.memory.index.form</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <form string="PM3 Memory Index">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="node_code"/>
+                        <field name="vault_path"/>
+                        <field name="vault_rel_path"/>
+                        <field name="payload_kind"/>
+                        <field name="payload_summary"/>
+                    </group>
+                    <group>
+                        <field name="access_level"/>
+                        <field name="sync_state"/>
+                        <field name="last_seen_at"/>
+                        <field name="dashboard_status"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pm3_memory_index" model="ir.actions.act_window">
+        <field name="name">PM3 Memory Index</field>
+        <field name="res_model">pm3.memory.index</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Use this section to review runtime memory index entries.</p>
+        </field>
+    </record>
+</odoo>

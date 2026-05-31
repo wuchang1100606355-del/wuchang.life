@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_wuchang_property_root" name="五常物業在地雲" sequence="10"/>
+
+    <record id="view_wuchang_group_customer_list" model="ir.ui.view">
+        <field name="name">wuchang.group.customer.list</field>
+        <field name="model">wuchang.group.customer</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="customer_type"/>
+                <field name="service_area"/>
+                <field name="contact_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_wuchang_group_customer_form" model="ir.ui.view">
+        <field name="name">wuchang.group.customer.form</field>
+        <field name="model">wuchang.group.customer</field>
+        <field name="arch" type="xml">
+            <form string="團體客戶">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="customer_type"/>
+                        <field name="contact_id"/>
+                        <field name="service_area"/>
+                    </group>
+                    <notebook>
+                        <page string="會員">
+                            <field name="member_ids"/>
+                        </page>
+                        <page string="第2件 場域驗證設備">
+                            <field name="field_device_ids"/>
+                        </page>
+                        <page string="第3件 受託治理設備">
+                            <field name="governance_node_ids"/>
+                        </page>
+                        <page string="第4件 在地雲端商設備">
+                            <field name="local_cloud_ids"/>
+                        </page>
+                        <page string="備註">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_wuchang_group_customer" model="ir.actions.act_window">
+        <field name="name">團體客戶</field>
+        <field name="res_model">wuchang.group.customer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_group_customer" name="團體客戶" parent="menu_wuchang_property_root" action="action_wuchang_group_customer" sequence="10"/>
+
+    <record id="view_wuchang_member_identity_list" model="ir.ui.view">
+        <field name="name">wuchang.member.identity.list</field>
+        <field name="model">wuchang.member.identity</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="display_name"/>
+                <field name="group_customer_id"/>
+                <field name="member_role"/>
+                <field name="status"/>
+                <field name="happiness_coin_balance"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_wuchang_member_identity_form" model="ir.ui.view">
+        <field name="name">wuchang.member.identity.form</field>
+        <field name="model">wuchang.member.identity</field>
+        <field name="arch" type="xml">
+            <form string="會員權限來源">
+                <sheet>
+                    <group>
+                        <field name="display_name"/>
+                        <field name="partner_id"/>
+                        <field name="group_customer_id"/>
+                        <field name="member_role"/>
+                        <field name="status"/>
+                        <field name="five_code_public_ref"/>
+                        <field name="happiness_coin_balance"/>
+                    </group>
+                    <notebook>
+                        <page string="第1件 權限來源設備">
+                            <field name="sovereign_device_ids"/>
+                        </page>
+                        <page string="備註">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_wuchang_member_identity" model="ir.actions.act_window">
+        <field name="name">會員權限來源</field>
+        <field name="res_model">wuchang.member.identity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_member_identity" name="第1件 會員權限來源" parent="menu_wuchang_property_root" action="action_wuchang_member_identity" sequence="20"/>
+
+    <record id="view_wuchang_member_sov_device_list" model="ir.ui.view">
+        <field name="name">wuchang.member.sovereign.device.list</field>
+        <field name="model">wuchang.member.sovereign.device</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="member_id"/>
+                <field name="device_type"/>
+                <field name="can_issue_permission"/>
+                <field name="can_hold_wallet"/>
+                <field name="last_seen"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_wuchang_member_sov_device" model="ir.actions.act_window">
+        <field name="name">會員權限來源設備</field>
+        <field name="res_model">wuchang.member.sovereign.device</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_member_sov_device" name="會員設備" parent="menu_wuchang_property_root" action="action_wuchang_member_sov_device" sequence="25"/>
+
+    <record id="view_wuchang_field_device_list" model="ir.ui.view">
+        <field name="name">wuchang.field.verification.device.list</field>
+        <field name="model">wuchang.field.verification.device</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="group_customer_id"/>
+                <field name="domain_type"/>
+                <field name="device_class"/>
+                <field name="location_code"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_wuchang_field_device" model="ir.actions.act_window">
+        <field name="name">第2件 場域權限驗證設備</field>
+        <field name="res_model">wuchang.field.verification.device</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_field_device" name="第2件 場域驗證設備" parent="menu_wuchang_property_root" action="action_wuchang_field_device" sequence="30"/>
+
+    <record id="view_wuchang_governance_node_list" model="ir.ui.view">
+        <field name="name">wuchang.trusted.governance.node.list</field>
+        <field name="model">wuchang.trusted.governance.node</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="group_customer_id"/>
+                <field name="node_type"/>
+                <field name="operator_partner_id"/>
+                <field name="local_cloud_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_wuchang_governance_node" model="ir.actions.act_window">
+        <field name="name">第3件 受託營運/治理設備</field>
+        <field name="res_model">wuchang.trusted.governance.node</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_governance_node" name="第3件 受託治理設備" parent="menu_wuchang_property_root" action="action_wuchang_governance_node" sequence="40"/>
+
+    <record id="view_wuchang_local_cloud_list" model="ir.ui.view">
+        <field name="name">wuchang.local.cloud.appliance.list</field>
+        <field name="model">wuchang.local.cloud.appliance</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="group_customer_id"/>
+                <field name="local_cloud_provider_id"/>
+                <field name="deployment_site"/>
+                <field name="status"/>
+                <field name="last_audit_at"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_wuchang_local_cloud" model="ir.actions.act_window">
+        <field name="name">第4件 在地雲端商設備</field>
+        <field name="res_model">wuchang.local.cloud.appliance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_local_cloud" name="第4件 在地雲端商設備" parent="menu_wuchang_property_root" action="action_wuchang_local_cloud" sequence="50"/>
+
+    <record id="view_wuchang_permission_proof_list" model="ir.ui.view">
+        <field name="name">wuchang.permission.proof.list</field>
+        <field name="model">wuchang.permission.proof</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="one_time_code_hash"/>
+                <field name="member_id"/>
+                <field name="group_customer_id"/>
+                <field name="target_type"/>
+                <field name="proof_type"/>
+                <field name="request_state"/>
+                <field name="expires_at"/>
+                <field name="amount"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_wuchang_permission_proof" model="ir.actions.act_window">
+        <field name="name">5維碼/權限證明事件</field>
+        <field name="res_model">wuchang.permission.proof</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_permission_proof" name="5維碼/權限證明" parent="menu_wuchang_property_root" action="action_wuchang_permission_proof" sequence="60"/>
+
+    <record id="view_wuchang_happiness_ledger_list" model="ir.ui.view">
+        <field name="name">wuchang.happiness.ledger.list</field>
+        <field name="model">wuchang.happiness.ledger</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="member_id"/>
+                <field name="group_customer_id"/>
+                <field name="ledger_type"/>
+                <field name="amount"/>
+                <field name="state"/>
+                <field name="memo"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_wuchang_happiness_ledger" model="ir.actions.act_window">
+        <field name="name">幸福幣/管理費折抵帳</field>
+        <field name="res_model">wuchang.happiness.ledger</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_happiness_ledger" name="幸福幣/折抵帳" parent="menu_wuchang_property_root" action="action_wuchang_happiness_ledger" sequence="70"/>
+</odoo>

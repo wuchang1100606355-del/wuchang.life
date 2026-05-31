@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_wuchang_ai_memory_tree" model="ir.ui.view">
+        <field name="name">wuchang.ai.memory.tree</field>
+        <field name="model">wuchang.ai.memory</field>
+        <field name="arch" type="xml">
+            <tree string="AI Memories">
+                <field name="create_date"/>
+                <field name="memory_type"/>
+                <field name="name"/>
+                <field name="recall_date"/>
+                <field name="is_active_recall"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_wuchang_ai_memory_form" model="ir.ui.view">
+        <field name="name">wuchang.ai.memory.form</field>
+        <field name="model">wuchang.ai.memory</field>
+        <field name="arch" type="xml">
+            <form string="AI Memory">
+                <header>
+                    <button name="action_schedule_recall" string="Schedule Recall (1 Day)" type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="memory_type"/>
+                            <field name="create_date"/>
+                        </group>
+                        <group>
+                            <field name="recall_date"/>
+                            <field name="is_active_recall"/>
+                            <field name="recall_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Content">
+                            <field name="content"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_wuchang_ai_memory" model="ir.actions.act_window">
+        <field name="name">AI Work Logs (Memory)</field>
+        <field name="res_model">wuchang.ai.memory</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_wuchang_ai_memory"
+              name="Work Logs (Memory)"
+              parent="menu_wuchang_ai_root"
+              action="action_wuchang_ai_memory"
+              sequence="20"/>
+</odoo>

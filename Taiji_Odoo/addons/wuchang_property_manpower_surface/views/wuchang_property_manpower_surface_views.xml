@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_wuchang_property_manpower_surface_root"
+              name="社區物業人力預算面"
+              sequence="103"/>
+
+    <record id="view_wuchang_property_manpower_surface_plan_list" model="ir.ui.view">
+        <field name="name">wuchang.property.manpower.surface.plan.list</field>
+        <field name="model">wuchang.property.manpower.surface.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="source_point_name"/>
+                <field name="surface_scope"/>
+                <field name="stage"/>
+                <field name="households_estimate"/>
+                <field name="people_estimate"/>
+                <field name="service_node_count"/>
+                <field name="minimum_monthly_budget"/>
+                <field name="maximum_known_monthly_budget"/>
+                <field name="unknown_salary_headcount"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_property_manpower_surface_plan_form" model="ir.ui.view">
+        <field name="name">wuchang.property.manpower.surface.plan.form</field>
+        <field name="model">wuchang.property.manpower.surface.plan</field>
+        <field name="arch" type="xml">
+            <form string="社區物業人力預算面">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="source_point_name"/>
+                        <field name="surface_scope"/>
+                        <field name="stage"/>
+                    </group>
+                    <group string="覆蓋估算">
+                        <field name="households_estimate"/>
+                        <field name="people_estimate"/>
+                        <field name="service_node_count"/>
+                    </group>
+                    <group string="預算小計">
+                        <field name="minimum_monthly_budget"/>
+                        <field name="maximum_known_monthly_budget"/>
+                        <field name="unknown_salary_headcount"/>
+                    </group>
+                    <notebook>
+                        <page string="覆蓋範圍">
+                            <field name="coverage_area_note"/>
+                        </page>
+                        <page string="人力面配置">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="manpower_domain"/>
+                                    <field name="phase"/>
+                                    <field name="headcount"/>
+                                    <field name="base_salary"/>
+                                    <field name="license_extra"/>
+                                    <field name="salary_state"/>
+                                    <field name="minimum_monthly_budget"/>
+                                    <field name="maximum_known_monthly_budget"/>
+                                    <field name="license_required"/>
+                                    <field name="required_license_name"/>
+                                    <field name="funding_source"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="治理說明">
+                            <field name="governance_note"/>
+                        </page>
+                        <page string="安全邊界">
+                            <field name="safety_note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_property_manpower_surface_plan" model="ir.actions.act_window">
+        <field name="name">社區物業人力預算面</field>
+        <field name="res_model">wuchang.property.manpower.surface.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_property_manpower_surface_plan"
+              name="人力預算面"
+              parent="menu_wuchang_property_manpower_surface_root"
+              action="action_wuchang_property_manpower_surface_plan"
+              sequence="10"/>
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="view_pos_order_pivot_report" model="ir.ui.view">
+      <field name="name">pos.order.pivot.report</field>
+      <field name="model">pos.order</field>
+      <field name="arch" type="xml">
+        <pivot string="POS 銷售報表">
+          <field name="config_id" type="row"/>
+          <field name="state" type="col"/>
+          <field name="amount_total" type="measure"/>
+          <field name="amount_tax" type="measure"/>
+          <field name="date_order" interval="month"/>
+        </pivot>
+      </field>
+    </record>
+
+    <record id="view_pos_order_graph_report" model="ir.ui.view">
+      <field name="name">pos.order.graph.report</field>
+      <field name="model">pos.order</field>
+      <field name="arch" type="xml">
+        <graph string="POS 銷售圖表" type="bar">
+          <field name="date_order" type="row" interval="day"/>
+          <field name="amount_total" type="measure"/>
+          <field name="config_id" type="col"/>
+        </graph>
+      </field>
+    </record>
+
+    <record id="action_pos_sales_report" model="ir.actions.act_window">
+      <field name="name">POS 銷售報表</field>
+      <field name="res_model">pos.order</field>
+      <field name="view_mode">pivot,graph,tree</field>
+      <field name="context">{"pivot_measures": ["amount_total","amount_tax"]}</field>
+    </record>
+
+    <menuitem id="menu_wuchang_reports_root" name="營業報表" sequence="10" groups="base.group_user"/>
+    <menuitem id="menu_pos_sales_report" name="銷售報表" parent="menu_wuchang_reports_root" action="action_pos_sales_report" sequence="10" groups="base.group_user"/>
+
+    <record id="view_expense_pivot_report" model="ir.ui.view">
+      <field name="name">account.move.expense.pivot.report</field>
+      <field name="model">account.move</field>
+      <field name="arch" type="xml">
+        <pivot string="費用報表">
+          <field name="partner_id" type="row"/>
+          <field name="state" type="col"/>
+          <field name="amount_total" type="measure"/>
+          <field name="invoice_date" interval="month"/>
+        </pivot>
+      </field>
+    </record>
+
+    <record id="view_expense_graph_report" model="ir.ui.view">
+      <field name="name">account.move.expense.graph.report</field>
+      <field name="model">account.move</field>
+      <field name="arch" type="xml">
+        <graph string="費用圖表" type="bar">
+          <field name="invoice_date" type="row" interval="month"/>
+          <field name="amount_total" type="measure"/>
+          <field name="partner_id" type="col"/>
+        </graph>
+      </field>
+    </record>
+
+    <record id="action_expense_report" model="ir.actions.act_window">
+      <field name="name">費用報表</field>
+      <field name="res_model">account.move</field>
+      <field name="view_mode">pivot,graph,tree</field>
+      <field name="domain">[("move_type","in",["in_invoice","in_refund","in_receipt"])]</field>
+      <field name="context">{"pivot_measures": ["amount_total"]}</field>
+    </record>
+    <menuitem id="menu_expense_report" name="費用報表" parent="menu_wuchang_reports_root" action="action_expense_report" sequence="20" groups="base.group_user"/>
+
+    <record id="action_business_evaluation" model="ir.actions.act_window">
+      <field name="name">營業評估</field>
+      <field name="res_model">pos.order</field>
+      <field name="view_mode">pivot,graph,tree</field>
+      <field name="context">{"pivot_measures": ["amount_total"], "group_by": ["config_id","date_order"]}</field>
+    </record>
+    <menuitem id="menu_business_evaluation" name="營業評估" parent="menu_wuchang_reports_root" action="action_business_evaluation" sequence="30" groups="base.group_user"/>
+  </data>
+</odoo>
+

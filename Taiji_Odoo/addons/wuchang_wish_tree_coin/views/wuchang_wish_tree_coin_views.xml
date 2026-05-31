@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_wuchang_wish_tree_root" name="社區許願樹公益幣" sequence="100"/>
+
+    <record id="view_wuchang_wish_tree_coin_policy_list" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.coin.policy.list</field>
+        <field name="model">wuchang.wish.tree.coin.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="grant_frequency"/>
+                <field name="grant_amount"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_wish_tree_coin_policy_form" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.coin.policy.form</field>
+        <field name="model">wuchang.wish.tree.coin.policy</field>
+        <field name="arch" type="xml">
+            <form string="公益幣撥發政策">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="grant_frequency"/>
+                        <field name="grant_amount"/>
+                        <field name="state"/>
+                    </group>
+                    <notebook>
+                        <page string="用途限制">
+                            <field name="allowed_usage"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_wish_tree_coin_policy" model="ir.actions.act_window">
+        <field name="name">公益幣撥發政策</field>
+        <field name="res_model">wuchang.wish.tree.coin.policy</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_wish_tree_coin_policy"
+              name="公益幣撥發政策"
+              parent="menu_wuchang_wish_tree_root"
+              action="action_wuchang_wish_tree_coin_policy"
+              sequence="10"/>
+
+    <record id="view_wuchang_wish_tree_target_list" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.target.list</field>
+        <field name="model">wuchang.wish.tree.target</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="target_type"/>
+                <field name="approval_state"/>
+                <field name="related_group_customer_id"/>
+                <field name="needed_amount"/>
+                <field name="received_amount"/>
+                <field name="progress_rate"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_wish_tree_target_form" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.target.form</field>
+        <field name="model">wuchang.wish.tree.target</field>
+        <field name="arch" type="xml">
+            <form string="許願樹捐贈目標">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="target_type"/>
+                        <field name="approval_state"/>
+                        <field name="related_group_customer_id"/>
+                    </group>
+                    <group string="公益幣需求">
+                        <field name="needed_amount"/>
+                        <field name="received_amount"/>
+                        <field name="progress_rate"/>
+                    </group>
+                    <notebook>
+                        <page string="公開說明">
+                            <field name="public_description"/>
+                        </page>
+                        <page string="隱私說明">
+                            <field name="privacy_note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_wish_tree_target" model="ir.actions.act_window">
+        <field name="name">公益單位/願望牌</field>
+        <field name="res_model">wuchang.wish.tree.target</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_wish_tree_target"
+              name="公益單位/願望牌"
+              parent="menu_wuchang_wish_tree_root"
+              action="action_wuchang_wish_tree_target"
+              sequence="20"/>
+
+    <record id="view_wuchang_wish_tree_coin_cycle_list" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.coin.cycle.list</field>
+        <field name="model">wuchang.wish.tree.coin.cycle</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="policy_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="grant_date"/>
+                <field name="grant_amount"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_wish_tree_coin_cycle_form" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.coin.cycle.form</field>
+        <field name="model">wuchang.wish.tree.coin.cycle</field>
+        <field name="arch" type="xml">
+            <form string="公益幣季度撥發週期">
+                <header>
+                    <button name="action_grant_to_consumers" type="object" string="撥發給消費者會員"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="policy_id"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="grant_date"/>
+                        <field name="grant_amount"/>
+                    </group>
+                    <notebook>
+                        <page string="備註">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_wish_tree_coin_cycle" model="ir.actions.act_window">
+        <field name="name">季度撥發週期</field>
+        <field name="res_model">wuchang.wish.tree.coin.cycle</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_wish_tree_coin_cycle"
+              name="季度撥發週期"
+              parent="menu_wuchang_wish_tree_root"
+              action="action_wuchang_wish_tree_coin_cycle"
+              sequence="30"/>
+
+    <record id="view_wuchang_wish_tree_coin_ledger_list" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.coin.ledger.list</field>
+        <field name="model">wuchang.wish.tree.coin.ledger</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="cycle_id"/>
+                <field name="member_id"/>
+                <field name="ledger_type"/>
+                <field name="target_id"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_wish_tree_coin_ledger_form" model="ir.ui.view">
+        <field name="name">wuchang.wish.tree.coin.ledger.form</field>
+        <field name="model">wuchang.wish.tree.coin.ledger</field>
+        <field name="arch" type="xml">
+            <form string="公益幣台帳">
+                <header>
+                    <button name="action_confirm" type="object" string="確認"/>
+                    <button name="action_post" type="object" string="入帳"/>
+                    <button name="action_cancel" type="object" string="取消"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="cycle_id"/>
+                        <field name="member_id"/>
+                        <field name="ledger_type"/>
+                        <field name="target_id"/>
+                        <field name="amount"/>
+                    </group>
+                    <notebook>
+                        <page string="用途限制">
+                            <field name="restriction_note"/>
+                        </page>
+                        <page string="備註">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_wish_tree_coin_ledger" model="ir.actions.act_window">
+        <field name="name">公益幣台帳</field>
+        <field name="res_model">wuchang.wish.tree.coin.ledger</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_wish_tree_coin_ledger"
+              name="公益幣台帳"
+              parent="menu_wuchang_wish_tree_root"
+              action="action_wuchang_wish_tree_coin_ledger"
+              sequence="40"/>
+</odoo>

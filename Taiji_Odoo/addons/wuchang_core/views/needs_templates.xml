@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="needs_page" name="居民需求調查">
+    <t t-call="website.layout">
+      <t t-set="ok" t-value="ok"/>
+      <div class="container my-5">
+        <h1>居民需求調查</h1>
+        <t t-if="ok">
+          <div class="alert alert-success" role="alert">
+            已收到您的需求，我們將盡快回覆，感謝！
+          </div>
+        </t>
+        <form action="/needs/submit" method="post" class="mt-3">
+          <div class="mb-3">
+            <label class="form-label">主旨</label>
+            <input type="text" class="form-control" name="subject" placeholder="例如：長輩看護協助" required="required"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">角色</label>
+            <select class="form-select" name="role">
+              <option value="">— 請選擇 —</option>
+              <option value="居民">居民</option>
+              <option value="家屬">家屬</option>
+              <option value="志工">志工</option>
+              <option value="物業">物業</option>
+              <option value="商家">商家</option>
+              <option value="服務">服務</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">緊急程度</label>
+            <select class="form-select" name="urgency">
+              <option value="">— 請選擇 —</option>
+              <option value="普通">普通</option>
+              <option value="重要">重要</option>
+              <option value="緊急">緊急</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">聯絡人</label>
+            <div class="row">
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="contact_name" placeholder="姓名"/>
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="contact" placeholder="電話或 Email"/>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">詳細描述</label>
+            <textarea class="form-control" name="detail" rows="6" placeholder="請描述需求內容、期望時程、可配合的時間與地點等"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">送出</button>
+          <a href="/" class="btn btn-link">返回首頁</a>
+        </form>
+      </div>
+    </t>
+  </template>
+</odoo>

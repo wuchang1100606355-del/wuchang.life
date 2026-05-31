@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_wuchang_root" name="五常指揮中心" sequence="10" web_icon="base,static/description/icon.png"/>
+    <menuitem id="menu_wuchang_chronos" name="時光系裝置" parent="menu_wuchang_root" sequence="10" action="action_wuchang_chronos_device"/>
+    <menuitem id="menu_wuchang_covenant" name="生活公約" parent="menu_wuchang_root" sequence="20" action="action_wuchang_life_covenant"/>
+</odoo>

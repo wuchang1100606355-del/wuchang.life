@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="pos_simulator_page" name="Shan Shui POS Simulator">
+        <html lang="zh-Hant">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>山水風格 POS 模擬預覽 (AI 加強版 + 3D 樓層)</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+            <style>
+                :root { --paper-bg: #f3ecd5; --wood-dark: #3e2723; --wood-medium: #5d4037; --wood-light: #8d6e63; --seal-red: #b71c1c; --text-color: #2c2c2c; --ai-gold: #b8860b; --floor-bg: #e0e0e0; }
+                body { margin: 0; padding: 0; font-family: "Microsoft JhengHei", "Noto Serif TC", serif; background-color: #e0e0e0; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+                .simulator-container { width: 100%; height: 100%; max-width: 1200px; max-height: 800px; position: relative; background: #fff; box-shadow: 0 0 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden; }
+                .pos-screen { display: flex; flex-direction: column; height: 100%; background-color: var(--paper-bg); background-image: linear-gradient(0deg, rgba(255,255,255,0.4) 50%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(141,110,99, 0.1) 0%, transparent 40%); }
+                .header { height: 50px; background: var(--wood-dark); border-bottom: 3px solid #d4af37; display: flex; align-items: center; padding: 0 15px; color: #d7ccc8; justify-content: space-between; z-index: 10; }
+                .header-left { display: flex; align-items: center; gap: 15px; height: 100%; }
+                .menu-toggle-btn { background: transparent; border: 1px solid #d7ccc8; color: #d7ccc8; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+                .menu-toggle-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+                .floor-toggle-btn { background: var(--wood-medium); border: 1px solid #d7ccc8; color: #fff; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 5px; }
+                .floor-toggle-btn:hover { background: var(--wood-light); }
+                .header-logo { display: flex; align-items: center; height: 100%; }
+                .header-logo img { height: 40px; width: auto; object-fit: contain; vertical-align: middle; filter: none !important; border: none; }
+                .header-logo img[src=""], .header-logo img:not([src]) { display: none; }
+                .header-status { display: flex; gap: 15px; }
+                .status-icon { cursor: pointer; padding: 5px 10px; border-radius: 4px; transition: 0.3s; }
+                .status-icon:hover { background: rgba(255,255,255,0.1); }
+                .highlight-red { color: #ff5252; animation: pulse 2s infinite; }
+                .sidebar { position: absolute; top: 0; left: -280px; width: 280px; height: 100%; background: var(--wood-dark); box-shadow: 2px 0 10px rgba(0,0,0,0.5); z-index: 2000; transition: left 0.3s ease-in-out; display: flex; flex-direction: column; border-right: 2px solid #d4af37; }
+                .sidebar.active { left: 0; }
+                .sidebar-header { padding: 20px; background: rgba(0,0,0,0.2); color: #d4af37; font-size: 1.5rem; font-weight: bold; border-bottom: 1px solid var(--wood-light); display: flex; align-items: center; gap: 10px; }
+                .sidebar-menu { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; }
+                .sidebar-item { padding: 15px 20px; color: #d7ccc8; border-bottom: 1px solid rgba(141,110,99,0.3); cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 15px; }
+                .sidebar-item:hover { background: var(--wood-medium); color: #fff; padding-left: 25px; }
+                .sidebar-item i { width: 25px; text-align: center; }
+                .sidebar-item.special { color: #ffd700; border-bottom: 1px solid #b8860b; }
+                .sidebar-item.special:hover { background: #5d4037; }
+                .sidebar-footer { padding: 20px; border-top: 1px solid var(--wood-light); color: #8d6e63; font-size: 0.8rem; text-align: center; }
+                .sidebar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1900; display: none; backdrop-filter: blur(2px); }
+                .sidebar-overlay.active { display: block; }
+                .main-content { display: flex; flex: 1; padding: 10px; gap: 10px; overflow: hidden; position: relative; }
+                .left-pane { flex: 2; border: 10px solid var(--wood-medium); border-image: linear-gradient(to bottom right, var(--wood-light), var(--wood-dark)) 1; background: rgba(255,255,255,0.3); overflow-y: auto; padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); grid-gap: 10px; align-content: start; position: relative; }
+                .left-pane::before { content: "⛰️"; position: absolute; font-size: 200px; opacity: 0.1; bottom: 0; right: 0; pointer-events: none; filter: grayscale(1); }
+                .product-card { background: rgba(255,255,255,0.9); border: 1px solid #a1887f; border-radius: 2px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); position: relative; }
+                .product-card:hover { transform: translateY(-2px); border-color: var(--wood-dark); }
+                .product-img { width: 80px; height: 80px; background: #ddd; margin: 0 auto 5px; border-radius: 50%; display:flex; align-items:center; justify-content:center; color:#888; }
+                .product-price { color: var(--seal-red); font-weight: bold; }
+                .new-badge { position: absolute; top: -5px; right: -5px; background: #b71c1c; color: white; font-size: 0.7rem; padding: 2px 5px; border-radius: 50%; animation: pulse 2s infinite; }
+                .right-pane { flex: 1; display: flex; flex-direction: column; border: 10px solid var(--wood-medium); border-image: linear-gradient(to bottom right, var(--wood-light), var(--wood-dark)) 1; background: #fff; }
+                .order-header-info { background: #3e2723; color: #fff; padding: 5px 10px; font-size: 0.9rem; display: flex; justify-content: space-between; }
+                .order-list { flex: 1; background: #fdfbf7; padding: 5px; overflow-y: auto; }
+                .order-line { padding: 8px; border-bottom: 1px dashed #ccc; display: flex; justify-content: space-between; font-size: 0.9rem; }
+                .order-line.selected { background-color: #efebe9; border-left: 5px solid var(--seal-red); font-weight: bold; }
+                .order-discount { color: var(--seal-red); font-size: 0.8rem; text-align: right; font-style: italic; }
+                .control-pad { background: #eee; padding: 10px; border-top: 2px solid var(--wood-dark); }
+                .summary { text-align: right; font-size: 1.2rem; color: var(--seal-red); font-weight: bold; margin-bottom: 10px; padding-right: 10px; }
+                .button-group { display: flex; gap: 5px; margin-bottom: 5px; }
+                .btn { border: none; padding: 10px; cursor: pointer; font-family: inherit; font-weight: bold; color: var(--paper-bg); background: var(--wood-light); border: 2px solid var(--wood-dark); border-radius: 3px; flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+                .btn:active { transform: translateY(1px); box-shadow: none; }
+                .btn.highlight { background: var(--seal-red); border-color: #7f0000; }
+                .btn.ai { background: var(--wood-dark); color: #ffd700; border: 1px solid #b8860b; }
+                .btn.ai i { color: #ffd700; margin-right: 5px; }
+                .btn.haggle { background: #5d4037; color: #fff; border: 1px solid #8d6e63; }
+                .btn.expense { background: #795548; color: #fff; }
+                .btn.nav { background: var(--wood-dark); color: #d7ccc8; flex: 0.5; font-size: 1.2rem; }
+                .pay-btn { width: 100%; padding: 15px; background: var(--seal-red); color: white; font-size: 1.2rem; border: 2px solid #7f0000; border-radius: 40% 5% 40% 5% / 5% 40% 5% 40%; margin-top: 5px; }
+                #floorView { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #333; background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80'); background-size: cover; background-position: center; display: none; z-index: 100; overflow: hidden; }
+                .floor-header { position: absolute; top: 20px; left: 20px; background: rgba(62,39,35,0.9); color: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; gap: 20px; align-items: center; backdrop-filter: blur(5px); z-index: 10; }
+                .floor-map { width: 100%; height: 100%; position: relative; }
+                .table { position: absolute; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); display: flex; justify-content: center; align-items: center; flex-direction: column; cursor: pointer; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37); transition: 0.3s; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+                .table:hover { transform: scale(1.1) translateY(-5px); background: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.8); }
+                .table.busy { background: rgba(183,28,28,0.4); border-color: rgba(255,100,100,0.4); }
+                .table-round { border-radius: 50%; }
+                .table-rect { border-radius: 8px; }
+                .table-label { font-weight: bold; font-size: 1.2rem; }
+                .table-seats { font-size: 0.8rem; opacity: 0.9; }
+                .ai-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 3000; }
+                .ai-scroll-content { width: 500px; min-height: 300px; background: #f3ecd5; border-top: 15px solid #5d4037; border-bottom: 15px solid #5d4037; border-left: 2px solid #8d6e63; border-right: 2px solid #8d6e63; padding: 30px; text-align: center; box-shadow: 0 0 30px #000; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+                .ai-scroll-content::before, .ai-scroll-content::after { content: ""; position: absolute; width: 120%; height: 20px; background: #3e2723; left: -10%; }
+                .ai-scroll-content::before { top: -20px; }
+                .ai-scroll-content::after { bottom: -20px; }
+                .ai-text { white-space: pre-wrap; color: var(--text-color); line-height: 1.8; font-size: 1rem; }
+                .loading-text { color: var(--wood-dark); font-weight: bold; }
+                .sim-controls { position: fixed; right: 20px; top: 20px; background: rgba(62,39,35,0.85); color: #fff; padding: 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 5000; }
+                .sim-btn { background: #ffd700; color: #3e2723; border: 1px solid #b8860b; padding: 5px 8px; border-radius: 6px; font-weight: bold; margin: 2px; cursor: pointer; }
+                @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+                .toast { position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%); background: rgba(62,39,35,0.95); color: #fff; border: 1px solid #8d6e63; border-radius: 10px; padding: 10px 16px; box-shadow: 0 4px 12px rgba(0,0,0,.3); z-index: 6000; min-width: 220px; text-align: center; }
+                .toast.hidden { display: none; }
+                .toast-success { background: rgba(34,197,94,0.95); border-color: #16a34a; }
+                .toast-warning { background: rgba(234,179,8,0.95); border-color: #ca8a04; }
+                .toast-error { background: rgba(185,28,28,0.95); border-color: #7f0000; }
+            </style>
+        </head>
+        <body>
+            <div class="simulator-container">
+                <div id="posView" class="pos-screen">
+                    <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+                    <div id="sidebar" class="sidebar">
+                        <div class="sidebar-header"><i class="fas fa-bars"></i> LOGE 功能表</div>
+                        <ul class="sidebar-menu">
+                            <li class="sidebar-item special" onclick="callGeminiGenerateItem()"><i class="fas fa-flask"></i> AI 研發新品</li>
+                            <li class="sidebar-item special" onclick="openHaggleModal()"><i class="fas fa-hand-holding-usd"></i> AI 殺價</li>
+                            <li class="sidebar-item" onclick="showToast('開啟庫存盤點','success')"><i class="fas fa-boxes"></i> 庫存盤點</li>
+                        </ul>
+                        <div class="sidebar-footer">LOGE 茶館 · 山水風格 POS</div>
+                    </div>
+                    <div class="header">
+                        <div class="header-left">
+                            <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i> 功能表</button>
+                            <div class="header-logo">
+                                <img src="/web/image/website/1/logo" alt="LOGO POS" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"/>
+                                <span style="display:none; font-weight:bold;"><i class="fas fa-coffee"></i> LOGO POS（圖片未載入）</span>
+                            </div>
+                        </div>
+                        <button class="floor-toggle-btn" onclick="toggleFloorPlan()"><i class="fas fa-map"></i> 桌位圖 (3D)</button>
+                        <div class="header-status">
+                            <div class="status-icon"><i class="fas fa-wifi"></i> 連線</div>
+                            <div class="status-icon"><i class="fas fa-tv"></i> 廣告</div>
+                            <div class="status-icon"><i class="fas fa-store"></i> <t t-esc="store_name or '未指定店舖'"/></div>
+                            <div class="status-icon" id="personaLabel"><i class="fas fa-user"></i> 店員小J</div>
+                        </div>
+                    </div>
+                    <div class="main-content">
+                        <div class="left-pane" id="productPane"></div>
+                        <div class="right-pane">
+                            <div class="order-header-info"><div id="currentTableName">Table: 未選擇</div><div>客數: <span id="currentTableGuests">0</span></div></div>
+                            <input id="customerName" placeholder="客名（例：王先生）" style="width:100%; margin:6px 10px;"/>
+                            <div id="customerBadge" style="margin:0 10px; color:#3e2723; font-weight:bold;"></div>
+                            <div id="habitSuggestion" style="margin:6px 10px; color:#5d4037;"></div>
+                            <div id="customerTags" style="margin:6px 10px; display:flex; gap:6px; flex-wrap:wrap;"></div>
+                            <div style="margin:6px 10px; display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+                                <input id="manualTag" placeholder="標籤（例：常客）" style="flex:1;"/>
+                                <button class="btn" style="flex:0;" onclick="addCustomerTag()">加上標籤</button>
+                                <button class="btn" style="flex:0;" onclick="quickTag('常客')">常客</button>
+                                <button class="btn" style="flex:0;" onclick="quickTag('每週三天+')">每週三天+</button>
+                                <input id="habitItemInput" placeholder="固定飲品（例：綠茶）" style="flex:1;"/>
+                                <button class="btn" style="flex:0;" onclick="setFixedHabit()">設定固定飲品</button>
+                            </div>
+                            <div id="orderList" class="order-list"></div>
+                            <div class="control-pad">
+                                <div class="summary">合計：$<span id="totalPrice">0</span></div>
+                                <div class="button-group">
+                                    <button class="btn ai" onclick="callGeminiPoem()"><i class="fas fa-feather"></i> 詠物（AI 題詩）</button>
+                                    <button class="btn haggle" onclick="openHaggleModal()"><i class="fas fa-user-tag"></i> 殺價（AI 評估）</button>
+                                    <button class="btn ai" onclick="openOrderModal()"><i class="fas fa-robot"></i> 下單（AI 解析）</button>
+                                </div>
+                                <div class="button-group">
+                                    <button class="btn nav" onclick="showToast('切換至外送','success')"><i class="fas fa-motorcycle"></i> 外送</button>
+                                    <button class="btn nav" onclick="showToast('切換至內用','success')"><i class="fas fa-utensils"></i> 內用</button>
+                                </div>
+                                <button class="pay-btn" onclick="showToast('交易完成','success')"><i class="fas fa-cash-register"></i> 結帳</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="floorView" style="display:none;">
+                        <div class="floor-header"><div><i class="fas fa-layer-group"></i> 3D 模式</div><div><i class="fas fa-chair"></i> 桌位數：8</div></div>
+                        <div class="floor-map">
+                            <div class="table table-round" style="left:10%; top:10%; width:120px; height:120px;" onclick="selectTable('T01', 4)"><div class="table-label">T01</div><div class="table-seats">4</div></div>
+                            <div class="table table-round busy" style="left:40%; top:12%; width:120px; height:120px;" onclick="selectTable('T02', 6)"><div class="table-label">T02</div><div class="table-seats">6</div></div>
+                            <div class="table table-rect" style="left:70%; top:10%; width:160px; height:100px;" onclick="selectTable('T03', 4)"><div class="table-label">T03</div><div class="table-seats">4</div></div>
+                        </div>
+                    </div>
+                    <div id="aiModal" class="ai-modal">
+                        <div class="ai-scroll-content">
+                            <div id="haggleInputArea" style="display:none;">
+                                <div class="ai-text" style="text-align:left;">
+                                    請輸入殺價理由（控制在一段話內）：
+                                </div>
+                                <textarea id="haggleReason" style="width:100%; height:80px; margin-top:10px;"></textarea>
+                                <div style="margin-top:10px; display:flex; gap:10px;">
+                                    <button class="btn" onclick="submitHaggle()" style="background:#b71c1c; color:white; flex:2;">立即試算</button>
+                                    <button class="btn" onclick="closeAiModal()" style="background:#5d4037; color:#f3ecd5; flex:1;">關閉</button>
+                                </div>
+                            </div>
+                            <div id="orderInputArea" style="display:none;">
+                                <div class="ai-text" style="text-align:left;">請輸入自然語言點餐（例：兩杯阿里山烏龍、一個起司蛋糕）：</div>
+                                <textarea id="orderText" placeholder="例：阿里山烏龍兩杯，起司蛋糕一個" style="width:100%; height:80px; margin-top:10px;"></textarea>
+                                <div class="ai-text" style="text-align:left; margin-top:8px; display:flex; align-items:center; gap:8px;">
+                                    <button class="btn ai" onclick="startVoiceOrder()" id="btnVoiceStart" style="flex:0; background:#3e2723; color:#ffd700;"><i class="fas fa-microphone"></i> 語音輸入</button>
+                                    <button class="btn" onclick="stopVoiceOrder()" id="btnVoiceStop" style="flex:0; display:none;"><i class="fas fa-stop"></i> 停止</button>
+                                    <span id="voiceStatus" class="muted" style="color:#6b7280;">待機</span>
+                                </div>
+                                <div class="ai-text" style="text-align:left; margin-top:8px; display:flex; align-items:center; gap:8px;">
+                                    <span>AI 模式：</span>
+                                    <span id="aiModeLabelOrder">雲端</span>
+                                    <button class="btn ai" onclick="toggleAiMode()" style="flex:0; background:#3e2723; color:#ffd700;">切換</button>
+                                </div>
+                                <div style="margin-top:10px; display:flex; gap:10px;">
+                                    <button class="btn ai" onclick="parseOrderWithAI()"><i class="fas fa-robot"></i> AI 解析並加入</button>
+                                    <button class="btn" onclick="closeAiModal()" style="background:#5d4037; color:#f3ecd5;">關閉</button>
+                                </div>
+                            </div>
+                            <div id="expenseInputArea" style="display:none;">
+                                <div class="ai-text" style="text-align:left;">請輸入支出項目與金額：</div>
+                                <input id="expenseReason" placeholder="支出項目 (例：清潔劑)" style="width:100%; margin-top:10px;"/>
+                                <input id="expenseAmount" type="number" placeholder="金額 (例：120)" style="width:100%; margin-top:10px;"/>
+                                <textarea id="expenseNLP" placeholder="自然語言描述（例：昨天 T03 補清潔劑 120 元）" style="width:100%; height:70px; margin-top:10px;"></textarea>
+                                <div class="ai-text" style="text-align:left; margin-top:8px; display:flex; align-items:center; gap:8px;">
+                                    <span>AI 模式：</span>
+                                    <span id="aiModeLabel">雲端</span>
+                                    <button class="btn ai" onclick="toggleAiMode()" style="flex:0; background:#3e2723; color:#ffd700;">切換</button>
+                                </div>
+                                <div id="expenseSuggestions" style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;"></div>
+                                <div style="margin-top:10px; display:flex; gap:10px;">
+                                    <button class="btn ai" onclick="parseExpenseWithAI()"><i class="fas fa-robot"></i> AI 解析並填入</button>
+                                    <button class="btn expense" onclick="submitExpense()">確認支出</button>
+                                </div>
+                            </div>
+                            <div id="aiResultText" class="ai-text"></div>
+                            <div id="aiCloseBtn" style="margin-top:20px;"><button class="btn" onclick="closeAiModal()" style="background:#5d4037; color:#f3ecd5;">收起卷軸</button></div>
+                        </div>
+                    </div>
+                    <div id="toast" class="toast hidden"></div>
+                </div>
+        </div>
+        <div class="sim-controls"><strong>視角切換</strong><button class="sim-btn" onclick="showPos()">店員主機</button><button class="sim-btn" onclick="showAd()">客顯廣告機</button></div>
+        <script id="menuData" type="application/json"><t t-raw="menu_json"/></script>
+        <script>
+            <![CDATA[
+                const apiKey = "<t t-esc='api_key'/>";
+                const llmBaseUrl = "<t t-esc='llm_base_url'/>";
+                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const modelUrl = (llmBaseUrl && llmBaseUrl.length) ? llmBaseUrl : '/wuchang/llm/generate';
+                const storeName = "<t t-esc='store_name'/>";
+                function lsKey(){ return 'customerProfiles:' + ((storeName && storeName.length) ? storeName : 'default'); }
+                function showPos() { document.getElementById('posView').style.display = 'flex'; document.getElementById('adView').style.display = 'none'; }
+                function showAd() { document.getElementById('posView').style.display = 'none'; document.getElementById('adView').style.display = 'flex'; }
+                function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('sidebarOverlay'); sidebar.classList.toggle('active'); overlay.classList.toggle('active'); }
+                function closeSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('sidebarOverlay'); sidebar.classList.remove('active'); overlay.classList.remove('active'); }
+                let orderItems = [];
+                let discountRate = 1;
+                let customerProfiles = {};
+                let currentCustomer = '';
+                let lastSuggestedItem = '';
+                function initCustomerProfile() { try { customerProfiles = JSON.parse(localStorage.getItem(lsKey())||'{}'); } catch(e) { customerProfiles = {}; } const nameInput = document.getElementById('customerName'); if (nameInput) { nameInput.addEventListener('input', function(){ currentCustomer = String(nameInput.value||'').trim(); recordCustomerVisit(); renderCustomerBadge(); renderHabitSuggestion(); renderCustomerTags(); }); } }
+                function dateStr(){ const d=new Date(); const y=d.getFullYear(); const m=('0'+(d.getMonth()+1)).slice(-2); const dd=('0'+d.getDate()).slice(-2); return `${y}-${m}-${dd}`; }
+                function weekDayIndex(d){ return new Date(d).getDay(); }
+                function saveCustomerProfile(name, favoriteItem, price) { const key = String(name||'').trim(); if (!key) return; const prof = customerProfiles[key] || { visits: 0, favorites: {}, days: [], habits: {}, prices: {}, tags: [], fixedHabit: '' }; prof.visits = (prof.visits||0) + 1; const today = dateStr(); if (!prof.days.includes(today)) { prof.days.unshift(today); prof.days = prof.days.slice(0,30); }
+                    if (favoriteItem) { const k = String(favoriteItem||'').trim(); prof.favorites[k] = (prof.favorites[k]||0) + 1; prof.habits[today] = k; if (price && !isNaN(price)) { prof.prices[k] = parseFloat(price); } }
+                    customerProfiles[key] = prof; try { localStorage.setItem(lsKey(), JSON.stringify(customerProfiles)); } catch(e) {} renderCustomerBadge(); }
+                function recordCustomerVisit(){ const key = String(currentCustomer||'').trim(); if (!key) return; const prof = customerProfiles[key] || { visits: 0, favorites: {}, days: [] }; const today = dateStr(); if (!prof.days.includes(today)) { prof.days.unshift(today); prof.days = prof.days.slice(0,30); } customerProfiles[key] = prof; try { localStorage.setItem(lsKey(), JSON.stringify(customerProfiles)); } catch(e) {} }
+                function getCustomerBadgeText(){ const key = String(currentCustomer||'').trim(); if (!key) return ''; const prof = customerProfiles[key]; if (!prof) return ''; const total = prof.visits||0; const days = prof.days||[]; const now = new Date(); const start = new Date(now); const day = now.getDay(); const diffToMonday = (day===0)?6:(day-1); start.setDate(now.getDate()-diffToMonday); const weekSet = new Set(); days.forEach(function(ds){ const d=new Date(ds); if (d>=start && d<=now) { weekSet.add(ds); } }); const isFrequent = total>=5; const isThreeDays = weekSet.size>=3; if (isFrequent && isThreeDays) return '常客 · 每週三天+'; if (isFrequent) return '常客'; if (isThreeDays) return '每週三天+'; return ''; }
+                function renderCustomerBadge(){ const el = document.getElementById('customerBadge'); if (!el) return; const t = getCustomerBadgeText(); el.textContent = t; }
+                function addToOrder(name, price) { orderItems.push({ name, price }); renderOrder(); }
+                function recordOrderPreference(name, price){ const cust = document.getElementById('customerName')?.value?.trim() || ''; if (cust) { saveCustomerProfile(cust, name, price); renderHabitSuggestion(); } }
+                function renderOrder() { const list = document.getElementById('orderList'); const totalEl = document.getElementById('totalPrice'); list.innerHTML = ""; let total = 0; orderItems.forEach(item => { const line = document.createElement('div'); line.className = 'order-line'; line.innerHTML = `<span>1x ${item.name}</span><span>$${item.price}</span>`; list.appendChild(line); total += item.price; recordOrderPreference(item.name, item.price); }); if (discountRate < 1) { const discountAmount = Math.round(total * (1 - discountRate)); const discountLine = document.createElement('div'); discountLine.className = 'order-discount'; discountLine.innerText = `(AI 殺價優惠 -${Math.round((1-discountRate)*100)}%: -$${discountAmount})`; list.appendChild(discountLine); total = total - discountAmount; } totalEl.innerText = total; renderCustomerBadge(); renderHabitSuggestion(); }
+                function toggleFloorPlan() { const floorView = document.getElementById('floorView'); if (floorView.style.display === 'block') { floorView.style.display = 'none'; } else { floorView.style.display = 'block'; } renderCustomerBadge(); }
+                function selectTable(tableName, capacity) { document.getElementById('floorView').style.display = 'none'; document.getElementById('currentTableName').innerText = `Table: ${tableName}`; document.getElementById('currentTableGuests').innerText = capacity; if(tableName === 'T02') { showToast(`已載入 ${tableName} 的訂單`, 'success'); } }
+                function openExpenseModal() { showAiModal("", false, false, true); }
+                async function submitExpense() { const reason = document.getElementById('expenseReason').value; const amount = document.getElementById('expenseAmount').value; if(!amount) return showToast('請輸入金額','warning'); const tableText = document.getElementById('currentTableName').innerText || ''; const table = tableText.replace('Table: ',''); try { const resp = await fetch('/wuchang/pos/expense/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason, amount, table }) }); const data = await resp.json(); try { saveExpenseMemory(reason, amount, table); renderExpenseSuggestions(); } catch(e) {} document.getElementById('expenseInputArea').style.display = 'none'; document.getElementById('aiCloseBtn').style.display = 'block'; const content = document.getElementById('aiResultText'); const ref = data.ref || '已登記'; content.innerHTML = `<div style="color:#b71c1c; font-size:3rem;"><i class="fas fa-check-circle"></i></div><br/>支出已登記（${ref}）！<br/><span style="font-size:1.2rem; color:#5d4037;">${reason}: $${amount}</span>`; showToast('支出已登記','success'); } catch(e) { document.getElementById('aiResultText').innerText = '登記失敗，請重試'; document.getElementById('aiCloseBtn').style.display = 'block'; showToast('登記失敗，請重試','error'); } }
+                function showAiModal(text, isLoading=false, isHaggle=false, isExpense=false, isOrder=false) { const modal = document.getElementById('aiModal'); const content = document.getElementById('aiResultText'); const haggleArea = document.getElementById('haggleInputArea'); const expenseArea = document.getElementById('expenseInputArea'); const orderArea = document.getElementById('orderInputArea'); const closeBtn = document.getElementById('aiCloseBtn'); modal.style.display = 'flex'; haggleArea.style.display = 'none'; expenseArea.style.display = 'none'; orderArea.style.display = 'none'; content.innerHTML = ""; closeBtn.style.display = 'block'; if (isHaggle) { haggleArea.style.display = 'block'; closeBtn.style.display = 'none'; } else if (isExpense) { expenseArea.style.display = 'block'; closeBtn.style.display = 'none'; try { initExpenseMemory(); renderExpenseSuggestions(); } catch(e) {} } else if (isOrder) { orderArea.style.display = 'block'; closeBtn.style.display = 'none'; const label = document.getElementById('aiModeLabelOrder'); if (label) { label.innerText = aiMode === 'cloud' ? '雲端' : '地端'; } } else if (isLoading) { content.innerHTML = '<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> 墨磨研中... AI 運算中...</div>'; } else { content.innerText = text; } }
+                function openOrderModal(){ document.getElementById('orderText').value = ""; showAiModal("", false, false, false, true); }
+                let menuPrices = {};
+                function buildMenuPrices(items){ const mp={}; items.forEach(it=>{ const name=String(it.name||'').trim(); const price=parseFloat(it.price||0)||0; if(name) mp[name]=price; }); return mp; }
+                function renderMenu(items){ const pane=document.getElementById('productPane'); if(!pane) return; pane.innerHTML=''; items.forEach(it=>{ const card=document.createElement('div'); card.className='product-card'; card.onclick=()=>addToOrder(it.name, parseFloat(it.price||0)||0); card.innerHTML = `<div class='product-img'><i class='fas fa-mug-hot fa-2x'></i></div><div>${it.name}</div><div class='product-price'>$${it.price}</div>`; pane.appendChild(card); }); }
+                (function(){ try { const el=document.getElementById('menuData'); const raw=el?el.textContent:''; const items=raw?JSON.parse(raw):[]; if(Array.isArray(items) && items.length){ menuPrices = buildMenuPrices(items); renderMenu(items); } } catch(e) {} })();
+                // 非阻塞提示（避免 alert 導致閃爍與打斷）
+                let toastTimer = null; let lastToastAt = 0;
+                function showToast(message, type){ const now=Date.now(); const minGap=600; if(now - lastToastAt < minGap){ lastToastAt = now; return; } lastToastAt = now; const t=document.getElementById('toast'); if(!t) return; t.className = 'toast'; if(type==='success') t.classList.add('toast-success'); else if(type==='warning') t.classList.add('toast-warning'); else if(type==='error') t.classList.add('toast-error'); t.textContent = String(message||''); t.classList.remove('hidden'); if(toastTimer){ clearTimeout(toastTimer); }
+                    toastTimer = setTimeout(function(){ t.classList.add('hidden'); t.className = 'toast hidden'; }, 2200);
+                }
+                function normalizeChineseNumber(numStr){ const map={"零":0,"一":1,"二":2,"兩":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"九":9,"十":10}; let s=String(numStr||'').trim(); if(/^\d+$/.test(s)) return parseInt(s,10); let val=0; if(s.length===1){ return map[s]||1; } if(s.includes('十')){ const parts=s.split('十'); const tens=parts[0]?map[parts[0]]||1:1; const ones=parts[1]?map[parts[1]]||0:0; val=tens*10+ones; return val||1; } return map[s]||1; }
+                function parseOrderLocally(text){ const t=String(text||'').replace(/，/g,',').replace(/。/g,','); const segs=t.split(',').map(s=>s.trim()).filter(Boolean); const items=[]; segs.forEach(seg=>{ const m=seg.match(/(\d+|[一二兩三四五六七八九十]+)\s*(杯|個|份)?\s*([\u4e00-\u9fa5A-Za-z0-9]+)/) || seg.match(/([\u4e00-\u9fa5A-Za-z0-9]+)\s*(\d+|[一二兩三四五六七八九十]+)\s*(杯|個|份)?/); if(m){ let qty=normalizeChineseNumber(m[1]); let name=m[3]||m[1]; name=String(name).trim(); if(!menuPrices[name]){ /* 未列於菜單者忽略或可用預設 */ } items.push({ name, qty: qty||1 }); } }); return { items }; }
+                async function parseOrderWithAI(){ const text=document.getElementById('orderText').value.trim(); if(!text){ showToast('請先輸入點餐內容','warning'); return; } if(aiMode==='local'){ const parsed=parseOrderLocally(text); applyParsedOrder(parsed); return; } document.getElementById('orderInputArea').style.display='none'; document.getElementById('aiResultText').innerHTML = '<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> AI 正在解析下單...</div>'; try { const prompt = `你是咖啡與茶點 POS 助理。請解析以下中文點餐文字，輸出純 JSON：{ "items": [{"name": "品項", "qty": 數量}] }。只輸出 JSON，不要文字。\n內容：${text}`; const response = await fetch(modelUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: 'application/json' } }) }); const data = await response.json(); let parsed={ items:[] }; try { parsed = JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'); } catch(e){ parsed = parseOrderLocally(text); } applyParsedOrder(parsed); } catch(e){ const parsed = parseOrderLocally(text); applyParsedOrder(parsed); } }
+                function applyParsedOrder(parsed){ const items = Array.isArray(parsed.items)? parsed.items : []; let added=0; items.forEach(it=>{ const name=String(it.name||'').trim(); const qty=parseInt(it.qty||1,10)||1; const price = menuPrices[name]; if(!price){ return; } for(let i=0;i<qty;i++){ addToOrder(name, price); added++; } }); const content=document.getElementById('aiResultText'); if(added>0){ content.innerHTML = `已加入 ${added} 項商品。`; } else { content.innerHTML = '未能解析到有效品項（或不在菜單內）。'; } document.getElementById('aiCloseBtn').style.display = 'block'; renderOrder(); }
+                function closeAiModal() { document.getElementById('aiModal').style.display = 'none'; }
+                // --- Voice Order ---
+                let mediaRecorder = null; let audioChunks = []; let voiceUploading = false;
+                async function startVoiceOrder(){ const st=document.getElementById('voiceStatus'); const bS=document.getElementById('btnVoiceStart'); const bT=document.getElementById('btnVoiceStop'); try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); audioChunks = []; mediaRecorder = new MediaRecorder(stream); mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size>0){ audioChunks.push(e.data); } }; mediaRecorder.onstop = async ()=>{ try { st.textContent = '上傳中…'; voiceUploading = true; const blob = new Blob(audioChunks, { type: 'audio/wav' }); const form = new FormData(); form.append('audio', blob, 'order.wav'); const resp = await fetch('/wuchang/voice/transcribe', { method:'POST', body: form }); const data = await resp.json(); if(data && data.ok && data.text){ document.getElementById('orderText').value = String(data.text||''); st.textContent = '已轉寫'; } else { st.textContent = '轉寫失敗'; } } catch(e){ st.textContent = '轉寫失敗'; } finally { voiceUploading = false; bS.style.display=''; bT.style.display='none'; } }; mediaRecorder.start(); st.textContent = '錄音中…'; bS.style.display='none'; bT.style.display=''; } catch(e){ const st=document.getElementById('voiceStatus'); st.textContent = '無法啟用麥克風'; }
+                }
+                function stopVoiceOrder(){ try { if(mediaRecorder && mediaRecorder.state !== 'inactive'){ mediaRecorder.stop(); } } catch(e){} }
+                // --- Persona label ---
+                (function(){ try { fetch('/api/persona/get', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' }).then(function(r){ return r.json(); }).then(function(d){ var el=document.getElementById('personaLabel'); if(el){ el.innerHTML = '<i class="fas fa-user"></i> ' + (d.pos_clerk||'店員小J'); } }); } catch(e){} })();
+                async function callGeminiPoem() { if (orderItems.length === 0) { showAiModal("卷軸空空如也，請先點些茶點，方能題詩。", false); return; } const itemNames = orderItems.map(i => i.name).join('、'); if (aiMode === 'local') { const poem = humanPoem(itemNames); showAiModal(poem, false); return; } showAiModal("", true); const prompt = `你是一位身處傳統水墨畫風茶館的文人雅士。請為這張訂單上的餐點寫一首「七言絕句」，風格要優雅、充滿禪意。訂單內容：${itemNames}`; try { const response = await fetch(modelUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); const poem = data.candidates?.[0]?.content?.parts?.[0]?.text || humanPoem(itemNames); showAiModal(poem, false); } catch (error) { const poem = humanPoem(itemNames); showAiModal(poem, false); } renderCustomerBadge(); }
+                async function callGeminiRecommend() { const itemNames = orderItems.map(i => i.name).join('、'); let contextText = itemNames ? `目前客人點了：${itemNames}` : "目前購物車是空的"; if (aiMode === 'local') { const rec = humanRecommend(itemNames); showAiModal(rec, false); return; } showAiModal("", true); const prompt = `你是一位專業的茶藝師。${contextText}。請從以下菜單中：「阿里山烏龍, 招牌拿鐵, 起司蛋糕, 手沖單品, 手工餅乾」推薦一項最適合搭配的產品。請用簡短、充滿文藝氣息的一句話解釋推薦理由。`; try { const response = await fetch(modelUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); const recommendation = data.candidates?.[0]?.content?.parts?.[0]?.text || humanRecommend(itemNames); showAiModal(recommendation, false); } catch (error) { const rec = humanRecommend(itemNames); showAiModal(rec, false); } }
+                function openHaggleModal() { document.getElementById('haggleReason').value = ""; showAiModal("", false, true); }
+                async function submitHaggle() { const reason = document.getElementById('haggleReason').value; if (!reason) return; if (aiMode === 'local') { const result = humanHaggle(reason); let replyText = `AI 評分：${result.score}\n\n${result.reply}`; if (result.discount > 0) { discountRate = 1 - result.discount; replyText += `\n\n🎉 恭喜！獲得 ${(result.discount * 100).toFixed(0)}% 折扣！`; renderOrder(); } else { discountRate = 1; renderOrder(); } document.getElementById('haggleInputArea').style.display = 'none'; document.getElementById('aiResultText').innerText = replyText; document.getElementById('aiCloseBtn').style.display = 'block'; return; } document.getElementById('haggleInputArea').style.display = 'none'; document.getElementById('aiResultText').innerHTML = '<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> AI 店長正在評估您的理由...</div>'; const prompt = `你是一位嚴格但欣賞創意的AI咖啡店長。顧客想殺價，理由是：'${reason}'.\n請評估這個理由的創意或悲慘程度 (0-100分)。\n如果分數 >= 75，給予 'Deal' 和 10%~30% 的折扣。\n如果分數 &lt; 75，拒絕並給予毒舌回應。\n回傳純 JSON: { "score": 分數, "reply": "回應內容", "discount": 0.X (若無折扣則為0) }`; try { const response = await fetch(modelUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } }) }); const data = await response.json(); let result = {}; try { result = JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text); } catch(e) { result = humanHaggle(reason); } let replyText = `AI 評分：${result.score}\n\n${result.reply}`; if (result.discount > 0) { discountRate = 1 - result.discount; replyText += `\n\n🎉 恭喜！獲得 ${(result.discount * 100).toFixed(0)}% 折扣！`; renderOrder(); } else { discountRate = 1; renderOrder(); } document.getElementById('aiResultText').innerText = replyText; document.getElementById('aiCloseBtn').style.display = 'block'; } catch (error) { const result = humanHaggle(reason); let replyText = `AI 評分：${result.score}\n\n${result.reply}`; if (result.discount > 0) { discountRate = 1 - result.discount; replyText += `\n\n🎉 恭喜！獲得 ${(result.discount * 100).toFixed(0)}% 折扣！`; renderOrder(); } else { discountRate = 1; renderOrder(); } document.getElementById('aiResultText').innerText = replyText; document.getElementById('aiCloseBtn').style.display = 'block'; } }
+                async function callGeminiGenerateItem() { if (aiMode === 'local') { closeSidebar(); const newItem = humanGenerateItem(); const productPane = document.getElementById('productPane'); const newCard = document.createElement('div'); newCard.className = 'product-card'; newCard.onclick = () => addToOrder(newItem.name, newItem.price); newCard.innerHTML = `<div class='new-badge'>New</div><div class='product-img' style='color:#5d4037;'><i class='fas fa-robot fa-2x'></i></div><div>${newItem.name}</div><div class='product-price'>$${newItem.price}</div><div style='font-size:0.7rem; color:#8d6e63;'>${newItem.desc}</div>`; productPane.appendChild(newCard); showAiModal(`✨ 研發成功！\n\n【${newItem.name}】\n${newItem.desc}\n\n已上架至菜單！`, false); return; } closeSidebar(); showAiModal("", true); const prompt = "你是 AI 創意主廚。請發明一道「未來感」的新菜單項目。回傳純 JSON: { \"name\": \"菜名\", \"price\": 數字, \"desc\": \"描述\" }"; try { const response = await fetch(modelUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } }) }); const data = await response.json(); let newItem = {}; try { newItem = JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text); } catch(e) { newItem = humanGenerateItem(); } const productPane = document.getElementById('productPane'); const newCard = document.createElement('div'); newCard.className = 'product-card'; newCard.onclick = () => addToOrder(newItem.name, newItem.price); newCard.innerHTML = `<div class='new-badge'>New</div><div class='product-img' style='color:#5d4037;'><i class='fas fa-robot fa-2x'></i></div><div>${newItem.name}</div><div class='product-price'>$${newItem.price}</div><div style='font-size:0.7rem; color:#8d6e63;'>${newItem.desc}</div>`; productPane.appendChild(newCard); showAiModal(`✨ 研發成功！\n\n【${newItem.name}】\n${newItem.desc}\n\n已上架至菜單！`, false); } catch (error) { const newItem = humanGenerateItem(); const productPane = document.getElementById('productPane'); const newCard = document.createElement('div'); newCard.className = 'product-card'; newCard.onclick = () => addToOrder(newItem.name, newItem.price); newCard.innerHTML = `<div class='new-badge'>New</div><div class='product-img' style='color:#5d4037;'><i class='fas fa-robot fa-2x'></i></div><div>${newItem.name}</div><div class='product-price'>$${newItem.price}</div><div style='font-size:0.7rem; color:#8d6e63;'>${newItem.desc}</div>`; productPane.appendChild(newCard); showAiModal(`✨ 研發成功！\n\n【${newItem.name}】\n${newItem.desc}\n\n已上架至菜單！`, false); } }
+                function humanPoem(items){ const cust = document.getElementById('customerName')?.value?.trim() || ''; const a=["茶湯清澈映山窗","香霧輕飄繞指旁","一口入喉心自靜","禪風淡淡伴書香"]; const b=["木桌微溫","紙燈輕搖","客話如泉","店心安然"]; const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)]; const honor = cust ? `${cust}，` : ""; const line1=honor + pick(a); const line2=pick(b); const line3=items?`最合您心的，或是${items}`:`坐看云起`; const line4=pick(a.concat(b)); return `${line1}\n${line2}\n${line3}\n${line4}`; }
+                function humanRecommend(items){ const cust = document.getElementById('customerName')?.value?.trim() || ''; const prof = cust ? customerProfiles[cust] : null; let rec = null; if (prof && prof.favorites) { const entries = Object.entries(prof.favorites); if (entries.length) { entries.sort((a,b)=>b[1]-a[1]); rec = entries[0][0]; } }
+                    const opts=["招牌拿鐵","手沖單品","手工餅乾","阿里山烏龍","起司蛋糕"]; const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)]; if (!rec) rec = pick(opts);
+                    return `${cust?cust+'，':''}今日宜搭配「${rec}」，與${items?items:"清雅氣息"}相映成趣。`; }
+                function humanHaggle(reason){ const cust = document.getElementById('customerName')?.value?.trim() || ''; const r=String(reason||''); let score=50; if(r.length>20) score+=15; if(/可憐|失業|辛苦|雨天|學生/.test(r)) score+=20; if(/創意|自創|聯名|公益/.test(r)) score+=15; if(score>95) score=95; let discount=0; let reply=(cust?cust+'，':'')+'謝謝分享，店長慎重考量後維持原價，盼見諒。'; if(score>=75){ discount = (10+Math.floor(Math.random()*21))/100; reply = (cust?cust+'，':'')+'創意可嘉，店長答應些許優惠，請慢慢品味。'; } return {score, reply, discount}; }
+                function humanGenerateItem(){ const cust = document.getElementById('customerName')?.value?.trim() || ''; const prof = cust ? customerProfiles[cust] : null; const bases=["琥珀","露雨","暮色","雲海","晨霧"]; const forms=["拿鐵","冷萃","氣泡茶","奶蓋茶","特調"]; const descs=["入口清亮層次分明","微甜不膩、茶韻繚繞","奶香輕盈、回甘悠長","果香清新、冰涼爽口","苦甜平衡、細緻順口"]; const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)]; let form = pick(forms); if (prof && prof.favorites) { const keys = Object.keys(prof.favorites); if (keys.some(k=>/拿鐵|奶|乳/.test(k))) form = '拿鐵'; }
+                    const name=pick(bases)+form; const price=80+Math.floor(Math.random()*101); let desc=pick(descs); if (cust) desc = `${cust}偏好口感，`+desc; return {name, price, desc}; }
+                let aiMode = 'cloud';
+                let expenseMemory = [];
+                function initExpenseMemory() { try { expenseMemory = JSON.parse(localStorage.getItem('expenseMemory')||'[]'); } catch(e) { expenseMemory = []; } const label = document.getElementById('aiModeLabel'); if (label) { label.innerText = aiMode === 'cloud' ? '雲端' : '地端'; } }
+                function toggleAiMode() { aiMode = (aiMode === 'cloud') ? 'local' : 'cloud'; const label = document.getElementById('aiModeLabel'); if (label) { label.innerText = aiMode === 'cloud' ? '雲端' : '地端'; } }
+                function saveExpenseMemory(reason, amount, table) { const item = { reason: String(reason||'').trim(), amount: parseFloat(amount||0)||0, table: String(table||'').trim() }; expenseMemory.unshift(item); expenseMemory = expenseMemory.slice(0,10); try { localStorage.setItem('expenseMemory', JSON.stringify(expenseMemory)); } catch(e) {} }
+                function renderExpenseSuggestions() { const box = document.getElementById('expenseSuggestions'); if (!box) return; box.innerHTML = ''; expenseMemory.slice(0,5).forEach(function(it){ const btn = document.createElement('button'); btn.className = 'btn expense'; btn.style.flex = '0'; btn.textContent = `${it.reason} $${it.amount}`; btn.onclick = function(){ document.getElementById('expenseReason').value = it.reason; document.getElementById('expenseAmount').value = it.amount; if (it.table) { document.getElementById('currentTableName').innerText = 'Table: ' + it.table; } }; box.appendChild(btn); }); }
+                function parseExpenseLocally(text, currentTable) { const t = String(text||''); const tm = t.match(/T\d{2,3}/); const tbl = tm ? tm[0] : String(currentTable||'').trim(); const am = t.match(/(\d+(?:\.\d+)?)(?=\s*元?)/); const amt = am ? parseFloat(am[1]) : 0; let reason = t.replace(/T\d{2,3}/g,'').replace(/\d+(?:\.\d+)?\s*元?/g,'').replace(/[，,。\.\s]/g,'').replace(/昨天|今日|支出|補|購買|費用|元|桌位/g,''); if (!reason && expenseMemory.length) { reason = expenseMemory[0].reason; } return { reason: reason, amount: amt, table: tbl }; }
+                async function parseExpenseWithAI() { const text = document.getElementById('expenseNLP').value; if (!text || !text.trim()) { return; } const tableText = document.getElementById('currentTableName').innerText || ''; const currentTable = tableText.replace('Table: ','').trim(); const cust = document.getElementById('customerName')?.value?.trim() || ''; if (aiMode === 'local') { const parsed = parseExpenseLocally(text, currentTable); if (parsed.reason) { document.getElementById('expenseReason').value = parsed.reason; } if (parsed.amount) { document.getElementById('expenseAmount').value = parsed.amount; } if (parsed.table) { document.getElementById('currentTableName').innerText = `Table: ${parsed.table}`; } renderExpenseSuggestions(); return; } const prompt = `你是 POS 記帳助理。請解析以下自然語言，輸出純 JSON：{ \"reason\": 字串, \"amount\": 數字, \"table\": 字串 }。內容：${text}${currentTable ? `（當前桌位：${currentTable}）` : ''}${cust?`（客戶：${cust}）`:''}`; try { const response = await fetch(modelUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } }) }); const data = await response.json(); let parsed = {}; try { parsed = JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'); } catch(e) { parsed = {}; } if (parsed.reason || parsed.amount || parsed.table) { if (parsed.reason) { document.getElementById('expenseReason').value = parsed.reason; } if (parsed.amount) { document.getElementById('expenseAmount').value = parsed.amount; } if (parsed.table) { document.getElementById('currentTableName').innerText = `Table: ${parsed.table}`; } } else { const fb = parseExpenseLocally(text, currentTable); if (fb.reason) { document.getElementById('expenseReason').value = fb.reason; } if (fb.amount) { document.getElementById('expenseAmount').value = fb.amount; } if (fb.table) { document.getElementById('currentTableName').innerText = `Table: ${fb.table}`; } } renderExpenseSuggestions(); } catch (error) { const fb = parseExpenseLocally(text, currentTable); if (fb.reason) { document.getElementById('expenseReason').value = fb.reason; } if (fb.amount) { document.getElementById('expenseAmount').value = fb.amount; } if (fb.table) { document.getElementById('currentTableName').innerText = `Table: ${fb.table}`; } renderExpenseSuggestions(); }
+                ]]>
+            </script>
+        </body>
+        </html>
+    </template>
+</odoo>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- UI 代理服務列表視圖 -->
+    <record id="view_ui_proxy_tree" model="ir.ui.view">
+        <field name="name">wuchang.ui.proxy.tree</field>
+        <field name="model">wuchang.ui.proxy</field>
+        <field name="arch" type="xml">
+            <tree string="UI 代理服務">
+                <field name="name"/>
+                <field name="ui_device_ip"/>
+                <field name="ui_device_name"/>
+                <field name="ui_device_status" widget="badge" 
+                       decoration-success="ui_device_status == 'online'"
+                       decoration-danger="ui_device_status == 'offline'"
+                       decoration-muted="ui_device_status == 'unknown'"/>
+                <field name="is_proxying" widget="boolean_toggle"/>
+                <field name="last_heartbeat"/>
+                <field name="total_proxy_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- UI 代理服務表單視圖 -->
+    <record id="view_ui_proxy_form" model="ir.ui.view">
+        <field name="name">wuchang.ui.proxy.form</field>
+        <field name="model">wuchang.ui.proxy</field>
+        <field name="arch" type="xml">
+            <form string="UI 代理服務">
+                <header>
+                    <button name="action_force_proxy" type="object" string="強制啟用代理" 
+                            class="oe_highlight" attrs="{'invisible': [('is_proxying', '=', True)]}"/>
+                    <button name="action_stop_proxy" type="object" string="停止代理" 
+                            class="oe_highlight" attrs="{'invisible': [('is_proxying', '=', False)]}"/>
+                    <field name="is_proxying" widget="boolean_toggle" readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="UI 代理服務"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="UI 設備資訊">
+                            <field name="ui_device_ip" required="1"/>
+                            <field name="ui_device_name"/>
+                            <field name="ui_device_status" widget="statusbar" 
+                                   statusbar_visible="online,offline,unknown"/>
+                        </group>
+                        <group string="心跳監控">
+                            <field name="last_heartbeat" readonly="1"/>
+                            <field name="heartbeat_interval"/>
+                            <field name="heartbeat_timeout"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="代理設定">
+                            <field name="proxy_enabled"/>
+                            <field name="proxy_mode"/>
+                        </group>
+                        <group string="代理狀態">
+                            <field name="proxy_start_time" readonly="1"/>
+                            <field name="proxy_end_time" readonly="1"/>
+                            <field name="total_proxy_count" readonly="1"/>
+                            <field name="total_proxy_duration" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="代理功能">
+                            <field name="proxy_capabilities" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- UI 代理服務搜尋視圖 -->
+    <record id="view_ui_proxy_search" model="ir.ui.view">
+        <field name="name">wuchang.ui.proxy.search</field>
+        <field name="model">wuchang.ui.proxy</field>
+        <field name="arch" type="xml">
+            <search string="搜尋 UI 代理服務">
+                <field name="name"/>
+                <field name="ui_device_ip"/>
+                <field name="ui_device_name"/>
+                <filter string="在線" name="online" domain="[('ui_device_status', '=', 'online')]"/>
+                <filter string="離線" name="offline" domain="[('ui_device_status', '=', 'offline')]"/>
+                <filter string="正在代理" name="proxying" domain="[('is_proxying', '=', True)]"/>
+                <group expand="0" string="分組">
+                    <filter string="狀態" name="group_status" context="{'group_by': 'ui_device_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- UI 代理服務動作 -->
+    <record id="action_ui_proxy" model="ir.actions.act_window">
+        <field name="name">UI 代理服務</field>
+        <field name="res_model">wuchang.ui.proxy</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_ui_proxy_search"/>
+    </record>
+
+    <!-- 選單項目 -->
+    <menuitem id="menu_ui_proxy" name="UI 代理服務" 
+              parent="menu_wuchang_sister_root" 
+              action="action_ui_proxy" 
+              sequence="20"/>
+</odoo>

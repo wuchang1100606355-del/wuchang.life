@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- System Medic Views -->
+    <record id="view_wuchang_system_medic_form" model="ir.ui.view">
+        <field name="name">wuchang.system.medic.form</field>
+        <field name="model">wuchang.system.medic</field>
+        <field name="arch" type="xml">
+            <form string="System Medic">
+                <header>
+                    <button name="action_check_health" string="Check Health" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_vacuum" string="Vacuum Database" type="object" class="btn-warning" invisible="state != 'draft'"/>
+                    <button name="action_clear_tmp" string="Clear Temp Files" type="object" class="btn-danger" invisible="state != 'draft'"/>
+                    <button name="action_unlock_wifi" string="Unlock WiFi (Security Override)" type="object" class="btn-secondary" invisible="wifi_status != 'locked'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Metrics">
+                            <field name="check_date" readonly="1"/>
+                            <field name="db_size_mb"/>
+                            <field name="filestore_size_mb"/>
+                            <field name="session_count"/>
+                            <field name="log_file_size_mb"/>
+                        </group>
+                        <group string="Security Status">
+                            <field name="wifi_status" decoration-danger="wifi_status == 'locked'" decoration-success="wifi_status == 'monitoring'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Report">
+                            <field name="report" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_system_medic_tree" model="ir.ui.view">
+        <field name="name">wuchang.system.medic.tree</field>
+        <field name="model">wuchang.system.medic</field>
+        <field name="arch" type="xml">
+            <tree string="System Health Checks">
+                <field name="name"/>
+                <field name="check_date"/>
+                <field name="state"/>
+                <field name="wifi_status"/>
+                <field name="db_size_mb"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Audit Log Views -->
+    <record id="view_wuchang_audit_log_tree" model="ir.ui.view">
+        <field name="name">wuchang.audit.log.tree</field>
+        <field name="model">wuchang.audit.log</field>
+        <field name="arch" type="xml">
+            <tree string="Audit Logs" create="false" edit="false" delete="false" decoration-danger="severity=='critical'" decoration-warning="severity=='warning'">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="model_name"/>
+                <field name="severity"/>
+                <field name="ip_address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wuchang_audit_log_search" model="ir.ui.view">
+        <field name="name">wuchang.audit.log.search</field>
+        <field name="model">wuchang.audit.log</field>
+        <field name="arch" type="xml">
+            <search string="Search Audit Logs">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="severity"/>
+                <filter string="Critical" name="critical" domain="[('severity', '=', 'critical')]"/>
+                <filter string="Warning" name="warning" domain="[('severity', '=', 'warning')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Severity" name="group_by_severity" context="{'group_by': 'severity'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_wuchang_system_medic" model="ir.actions.act_window">
+        <field name="name">System Medic</field>
+        <field name="res_model">wuchang.system.medic</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_wuchang_audit_log" model="ir.actions.act_window">
+        <field name="name">Audit Logs</field>
+        <field name="res_model">wuchang.audit.log</field>
+        <field name="view_mode">tree,search</field>
+    </record>
+
+    <!-- Menus (Under Infrastructure) -->
+    <menuitem id="menu_wuchang_system_tools" name="System Tools" parent="menu_wuchang_infrastructure" sequence="50"/>
+    <menuitem id="menu_wuchang_system_medic" name="System Medic" parent="menu_wuchang_system_tools" action="action_wuchang_system_medic" sequence="10"/>
+    <menuitem id="menu_wuchang_audit_log" name="Audit Center" parent="menu_wuchang_system_tools" action="action_wuchang_audit_log" sequence="20"/>
+
+</odoo>

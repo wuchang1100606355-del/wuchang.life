@@ -1,0 +1,13 @@
+<odoo>
+    <record id="action_wuchang_cafe_option_group" model="ir.actions.act_window">
+        <field name="name">WuChang POS Option Groups</field>
+        <field name="res_model">wuchang.cafe.option.group</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_cafe_menu_options"
+              name="POS Menu Options"
+              parent="wuchang_cafe_ai_gateway.menu_wuchang_cafe_root"
+              action="action_wuchang_cafe_option_group"
+              sequence="40"/>
+</odoo>

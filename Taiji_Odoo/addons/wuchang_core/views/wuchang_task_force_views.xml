@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Chronos Device Action -->
+    <record id="action_wuchang_chronos_device" model="ir.actions.act_window">
+        <field name="name">時光系 AI 增幅裝置</field>
+        <field name="res_model">wuchang.chronos.device</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Chronos Device Tree View -->
+    <record id="view_wuchang_chronos_device_tree" model="ir.ui.view">
+        <field name="name">wuchang.chronos.device.tree</field>
+        <field name="model">wuchang.chronos.device</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="status=='self_destructed'" decoration-success="status=='active'">
+                <field name="name"/>
+                <field name="owner_name"/>
+                <field name="status"/>
+                <field name="is_helmet_included"/>
+                <field name="activation_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Chronos Device Form View -->
+    <record id="view_wuchang_chronos_device_form" model="ir.ui.view">
+        <field name="name">wuchang.chronos.device.form</field>
+        <field name="model">wuchang.chronos.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,distributed,active"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="owner_name"/>
+                        </group>
+                        <group>
+                            <field name="is_helmet_included"/>
+                            <field name="activation_time"/>
+                        </group>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Life Covenant Action -->
+    <record id="action_wuchang_life_covenant" model="ir.actions.act_window">
+        <field name="name">生活公約</field>
+        <field name="res_model">wuchang.life.covenant</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

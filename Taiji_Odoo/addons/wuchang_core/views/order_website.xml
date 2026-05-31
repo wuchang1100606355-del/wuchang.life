@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <template id="order_website_page" name="Wuchang Online Order" page="True">
+        <t t-call="website.layout">
+                <div id="wrap" class="oe_structure container mx-auto px-4 py-8">
+                    <section class="mb-6">
+                        <h1 class="text-3xl font-extrabold">線上點餐</h1>
+                        <p class="text-gray-600" t-esc="announcement"/>
+                        <t t-if="not ordering_enabled">
+                            <div class="mt-3 p-4 rounded bg-red-50 text-red-700">目前暫停線上點餐</div>
+                        </t>
+                    </section>
+
+                    <section class="grid grid-cols-1 md:grid-cols-3 gap-6" id="menuGrid">
+                        <div class="bg-white rounded shadow p-4" data-name="阿里山烏龍" data-price="150">
+                            <div class="font-bold">阿里山烏龍</div>
+                            <div class="text-emerald-700">$150</div>
+                            <button class="mt-2 px-3 py-1 rounded bg-emerald-600 text-white add-btn">加入</button>
+                        </div>
+                        <div class="bg-white rounded shadow p-4" data-name="招牌拿鐵" data-price="120">
+                            <div class="font-bold">招牌拿鐵</div>
+                            <div class="text-emerald-700">$120</div>
+                            <button class="mt-2 px-3 py-1 rounded bg-emerald-600 text-white add-btn">加入</button>
+                        </div>
+                        <div class="bg-white rounded shadow p-4" data-name="手工餅乾" data-price="80">
+                            <div class="font-bold">手工餅乾</div>
+                            <div class="text-emerald-700">$80</div>
+                            <button class="mt-2 px-3 py-1 rounded bg-emerald-600 text-white add-btn">加入</button>
+                        </div>
+                    </section>
+
+                    <section class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded shadow p-4">
+                            <div class="font-bold mb-2">購物車</div>
+                            <ul id="cartList" class="space-y-2"></ul>
+                            <div class="mt-3 text-right">合計：<span id="totalAmt">0</span></div>
+                        </div>
+                        <div class="bg-white rounded shadow p-4">
+                            <div class="font-bold mb-2">訂購人資訊</div>
+                            <input id="custName" class="border p-2 w-full mb-2" placeholder="姓名"/>
+                            <input id="custPhone" class="border p-2 w-full mb-2" placeholder="電話"/>
+                            <div class="mb-2">
+                                <div class="font-semibold mb-1">銷售模式</div>
+                                <label class="mr-2"><input type="radio" name="sale_mode" value="dine_in"/> 內用</label>
+                                <label class="mr-2"><input type="radio" name="sale_mode" value="takeout" checked="checked"/> 外帶</label>
+                                <t t-if="allow_delivery">
+                                    <label class="mr-2"><input type="radio" name="sale_mode" value="delivery_commercial"/> 商業平台外送</label>
+                                    <label class="mr-2"><input type="radio" name="sale_mode" value="delivery_nonprofit"/> 公益平台外送</label>
+                                </t>
+                            </div>
+                            <div id="dineInFields" class="mb-2 hidden">
+                                <input id="tableNo" class="border p-2 w-full mb-2" placeholder="桌號（例：A12）"/>
+                            </div>
+                            <div id="deliveryFields" class="mb-2 hidden">
+                                <input id="deliveryAddress" class="border p-2 w-full mb-2" placeholder="外送地址"/>
+                                <input id="deliveryTime" class="border p-2 w-full mb-2" placeholder="期望送達時間（例：14:30）"/>
+                                <textarea id="deliveryNote" class="border p-2 w-full mb-2" placeholder="外送備註"></textarea>
+                                <div id="commercialFields" class="mb-2 hidden">
+                                    <input id="deliveryPlatform" class="border p-2 w-full mb-2" placeholder="外送平台（例：UberEats/Doordash）"/>
+                                </div>
+                                <div id="nonprofitFields" class="mb-2 hidden">
+                                    <input id="nonprofitProgram" class="border p-2 w-full mb-2" placeholder="公益專案名稱"/>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input id="deliveryFee" class="border p-2 w-full" placeholder="外送費（如需）"/>
+                                    <input id="tipAmount" class="border p-2 w-full" placeholder="小費（選填）"/>
+                                </div>
+                            </div>
+                            <button id="checkoutBtn" class="mt-2 px-4 py-2 rounded bg-gray-800 text-white">送出訂單</button>
+                            <div id="orderRef" class="mt-2 text-emerald-700"></div>
+                        </div>
+                    </section>
+
+                    <script type="text/javascript">
+                        var MIN_AMOUNT = <t t-esc="min_amount"/>;
+                        <![CDATA[
+                        (function(){
+                            var items=[]; var total=0; var minAmt=parseFloat(MIN_AMOUNT);
+                            function render(){ var ul=document.getElementById('cartList'); ul.innerHTML=''; total=0; items.forEach(function(it,idx){ total+=it.price; var li=document.createElement('li'); li.className='flex justify-between'; li.innerHTML='<span>'+it.name+'</span><span>$'+it.price+'</span>'; ul.appendChild(li); }); document.getElementById('totalAmt').innerText=total; }
+                            document.querySelectorAll('.add-btn').forEach(function(b){ b.onclick=function(){ var card=b.parentElement; items.push({name:card.getAttribute('data-name'), price:parseFloat(card.getAttribute('data-price'))}); render(); }; });
+                            function toggleMode(){ var mode=(document.querySelector('input[name="sale_mode"]:checked')||{}).value||'takeout'; var dine=document.getElementById('dineInFields'); var del=document.getElementById('deliveryFields'); var com=document.getElementById('commercialFields'); var np=document.getElementById('nonprofitFields'); if(dine){ if(mode==='dine_in'){ dine.classList.remove('hidden'); } else { dine.classList.add('hidden'); } } if(del){ if(mode==='delivery_commercial' || mode==='delivery_nonprofit'){ del.classList.remove('hidden'); } else { del.classList.add('hidden'); } } if(com){ if(mode==='delivery_commercial'){ com.classList.remove('hidden'); } else { com.classList.add('hidden'); } } if(np){ if(mode==='delivery_nonprofit'){ np.classList.remove('hidden'); } else { np.classList.add('hidden'); } } }
+                            document.querySelectorAll('input[name="sale_mode"]').forEach(function(r){ r.addEventListener('change', toggleMode); });
+                            toggleMode();
+                            document.getElementById('checkoutBtn').onclick=function(){ if(items.length===0){ alert('請先加入品項'); return; } if(total<minAmt){ alert('未達最低消費：$'+minAmt); return; } var mode=(document.querySelector('input[name="sale_mode"]:checked')||{}).value||'takeout'; var payload={ items:items, total:total, customer_name:document.getElementById('custName').value||'', phone:document.getElementById('custPhone').value||'', sale_mode:mode };
+                                if(mode==='dine_in'){ payload.table_no=document.getElementById('tableNo').value||''; }
+                                if(mode==='delivery_commercial' || mode==='delivery_nonprofit'){ var addr=document.getElementById('deliveryAddress').value||''; if(!addr){ alert('請輸入外送地址'); return; } payload.address=addr; payload.schedule_time=document.getElementById('deliveryTime').value||''; payload.note=document.getElementById('deliveryNote').value||''; payload.delivery_fee=document.getElementById('deliveryFee').value||''; payload.tip_amount=document.getElementById('tipAmount').value||''; }
+                                if(mode==='delivery_commercial'){ payload.delivery_platform=document.getElementById('deliveryPlatform').value||''; }
+                                if(mode==='delivery_nonprofit'){ payload.nonprofit_program=document.getElementById('nonprofitProgram').value||''; }
+                                fetch('/api/order/create', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)}).then(function(r){ return r.json(); }).then(function(d){ if(d.ok){ document.getElementById('orderRef').innerText='訂單已建立：'+d.order_ref; } else { alert('建立失敗：'+d.error); } }); };
+                        })();
+                        ]]>
+                    </script>
+                </div>
+        </t>
+    </template>
+    <template id="employee_order_page" name="Employee Ordering">
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h4><i class="fa fa-id-badge"/> 員工點餐專用介面 (<t t-esc="store_name"/>)</h4>
+                    </div>
+                    <div class="card-body p-0">
+                         <!-- Embedding the standard order page for consistency -->
+                        <iframe src="/order" style="width:100%; height:800px; border:none;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="customer_display_page" name="Customer Display">
+        <t t-call="website.layout">
+            <div class="d-flex flex-column" style="height: 100vh;">
+                <div class="bg-dark text-white p-3 text-center d-flex justify-content-between align-items-center">
+                    <h2 class="m-0"><i class="fa fa-store"/> <t t-esc="store_name"/></h2>
+                    <span class="badge bg-success">線上點餐開放中</span>
+                </div>
+                <div class="flex-grow-1">
+                    <iframe t-att-src="order_url" style="width:100%; height:100%; border:none;" allow="payment"></iframe>
+                </div>
+            </div>
+        </t>
+    </template>
+    </data>
+</odoo>
+

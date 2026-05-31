@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_company_form_association_registration" model="ir.ui.view">
+        <field name="name">res.company.form.association.registration</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="社區發展協會登記資料">
+                    <field name="association_government_authority"/>
+                    <field name="association_registration_no"/>
+                    <field name="association_registered_phone"/>
+                    <field name="association_registered_address"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

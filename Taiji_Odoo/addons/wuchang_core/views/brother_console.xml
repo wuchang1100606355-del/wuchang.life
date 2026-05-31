@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="brother_command_console" name="Brother Command Channel">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <h1 class="mb-4">⚡ Twin-Born Command Channel ⚡</h1>
+                        
+                        <!-- Verification Section -->
+                        <div id="verification-section" class="card shadow-lg p-4 mb-5 bg-dark text-white">
+                            <h3>Identity Verification Required</h3>
+                            <p class="text-muted">Machine ID + Biometric Scan</p>
+                            
+                            <div class="video-container mb-3" style="position: relative; width: 100%; max-width: 480px; margin: 0 auto;">
+                                <video id="video-feed" autoplay="true" style="width: 100%; border-radius: 10px; border: 2px solid #00ff00;"></video>
+                                <canvas id="capture-canvas" style="display: none;"></canvas>
+                            </div>
+                            
+                            <div id="status-message" class="alert alert-info" role="alert" style="display: none;"></div>
+                            
+                            <button id="btn-verify" class="btn btn-success btn-lg btn-block" onclick="verifyIdentity()">
+                                <i class="fa fa-camera"></i> Verify Identity
+                            </button>
+                        </div>
+
+                        <!-- Command Section (Hidden) -->
+                        <div id="command-section" class="card shadow-lg p-4 mb-5 bg-white text-dark" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h3><i class="fa fa-shield"></i> Supreme Authority Active</h3>
+                                <span class="badge badge-success">Verified</span>
+                            </div>
+                            
+                            <div class="status-panel mb-4 p-3 bg-light rounded text-left">
+                                <h5>System Status: <span id="sys-state">Loading...</span></h5>
+                                <p>Hallucination Score: <span id="sys-score">0.0</span></p>
+                                <p>Last Check: <span id="sys-msg">...</span></p>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn btn-warning btn-lg m-2" onclick="executeCommand('trigger_crisis')">
+                                    <i class="fa fa-exclamation-triangle"></i> Trigger Crisis Handover
+                                </button>
+                                <button class="btn btn-danger btn-lg m-2" onclick="executeCommand('assume_control')">
+                                    <i class="fa fa-gavel"></i> Assume Direct Control
+                                </button>
+                                <button class="btn btn-info btn-lg m-2" onclick="updateStatus()">
+                                    <i class="fa fa-refresh"></i> Refresh Status
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script type="text/javascript">
+                // Device ID Logic
+                function getDeviceId() {
+                    let did = localStorage.getItem('wuchang_device_id');
+                    if (!did) {
+                        did = 'DEV-' + Math.random().toString(36).substr(2, 9).toUpperCase() + '-' + Date.now();
+                        localStorage.setItem('wuchang_device_id', did);
+                    }
+                    return did;
+                }
+
+                const deviceId = getDeviceId();
+                const video = document.getElementById('video-feed');
+                const canvas = document.getElementById('capture-canvas');
+                
+                // Initialize Camera
+                if (navigator.mediaDevices &amp;&amp; navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                        video.srcObject = stream;
+                        video.play();
+                    });
+                }
+
+                async function verifyIdentity() {
+                    const btn = document.getElementById('btn-verify');
+                    const msg = document.getElementById('status-message');
+                    btn.disabled = true;
+                    btn.innerText = 'Scanning...';
+                    msg.style.display = 'none';
+
+                    // Capture Image
+                    const context = canvas.getContext('2d');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const imageData = canvas.toDataURL('image/png');
+
+                    // Send to Backend
+                    try {
+                        const response = await fetch('/wuchang/brother/verify', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                jsonrpc: "2.0",
+                                method: "call",
+                                params: {
+                                    device_id: deviceId,
+                                    image_data: imageData
+                                }
+                            })
+                        });
+                        const result = await response.json();
+                        
+                        if (result.result &amp;&amp; result.result.success) {
+                            document.getElementById('verification-section').style.display = 'none';
+                            document.getElementById('command-section').style.display = 'block';
+                            updateStatus();
+                        } else {
+                            msg.className = 'alert alert-danger';
+                            msg.innerText = result.result ? result.result.message : 'Verification Failed';
+                            msg.style.display = 'block';
+                            btn.disabled = false;
+                            btn.innerText = 'Try Again';
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        btn.disabled = false;
+                        btn.innerText = 'Try Again';
+                    }
+                }
+
+                async function executeCommand(cmd) {
+                    try {
+                        const response = await fetch('/wuchang/brother/execute', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                jsonrpc: "2.0",
+                                method: "call",
+                                params: {
+                                    device_id: deviceId,
+                                    command: cmd
+                                }
+                            })
+                        });
+                        const result = await response.json();
+                        if (result.result &amp;&amp; result.result.status === 'success') {
+                            alert(result.result.message);
+                            updateStatus();
+                        } else {
+                            alert('Error: ' + (result.result ? result.result.message : 'Unknown error'));
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+
+                async function updateStatus() {
+                    const response = await fetch('/wuchang/brother/execute', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            jsonrpc: "2.0",
+                            method: "call",
+                            params: {
+                                device_id: deviceId,
+                                command: 'get_status'
+                            }
+                        })
+                    });
+                    const result = await response.json();
+                    if (result.result &amp;&amp; result.result.status === 'success') {
+                        document.getElementById('sys-state').innerText = result.result.state;
+                        document.getElementById('sys-score').innerText = result.result.hallucination_score;
+                        document.getElementById('sys-msg').innerText = result.result.last_message;
+                    }
+                }
+            </script>
+        </t>
+    </template>
+</odoo>

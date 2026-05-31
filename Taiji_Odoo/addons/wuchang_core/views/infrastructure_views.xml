@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id='view_wuchang_infrastructure_device_tree' model='ir.ui.view'>
+        <field name='name'>wuchang.infrastructure.device.tree</field>
+        <field name='model'>wuchang.infrastructure.device</field>
+        <field name='arch' type='xml'>
+            <tree string='網路設備' decoration-success='status==&quot;online&quot;' decoration-muted='status==&quot;offline&quot;'>
+                <field name='name' string='設備名稱'/>
+                <field name='ip_address' string='IP 位址'/>
+                <field name='mac_address' string='MAC 位址'/>
+                <field name='device_type' string='設備類型'/>
+                <field name='status' string='狀態'/>
+                <field name='last_seen' string='最後連線'/>
+                <field name='owner_id' string='負責人'/>
+            </tree>
+        </field>
+    </record>
+
+    <record id='view_wuchang_infrastructure_device_form' model='ir.ui.view'>
+        <field name='name'>wuchang.infrastructure.device.form</field>
+        <field name='model'>wuchang.infrastructure.device</field>
+        <field name='arch' type='xml'>
+            <form string='網路設備'>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='name' string='設備名稱'/>
+                            <field name='ip_address' string='IP 位址'/>
+                            <field name='mac_address' string='MAC 位址'/>
+                        </group>
+                        <group>
+                            <field name='device_type' string='設備類型'/>
+                            <field name='status' string='狀態'/>
+                            <field name='last_seen' string='最後連線'/>
+                            <field name='owner_id' string='負責人'/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string='備註'>
+                            <field name='note'/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class='oe_chatter'>
+                    <field name='message_follower_ids'/>
+                    <field name='activity_ids'/>
+                    <field name='message_ids'/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id='action_wuchang_infrastructure_device' model='ir.actions.act_window'>
+        <field name='name'>網路設備</field>
+        <field name='res_model'>wuchang.infrastructure.device</field>
+        <field name='view_mode'>tree,form</field>
+    </record>
+
+    <menuitem id='menu_wuchang_infrastructure' name='基礎設施' parent='menu_wuchang_root' sequence='50'/>
+    <menuitem id='menu_wuchang_infrastructure_device' name='設備管理' parent='menu_wuchang_infrastructure' action='action_wuchang_infrastructure_device' sequence='10'/>
+</odoo>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_wuchang_fund_revenue_rule_form_allocation" model="ir.ui.view">
+        <field name="name">wuchang.fund.revenue.rule.form.allocation</field>
+        <field name="model">wuchang.fund.revenue.rule</field>
+        <field name="inherit_id" ref="wuchang_fund_reserve.view_wuchang_fund_revenue_rule_form_reserve"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='社區幣/票券圈禁保付']" position="after">
+                <group string="基金收入分配">
+                    <field name="volunteer_team_rate"/>
+                    <field name="system_cost_rate"/>
+                    <field name="wish_tree_rate"/>
+                    <field name="allocation_total_rate"/>
+                    <field name="allocation_note"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wuchang_fund_revenue_rule_list_allocation" model="ir.ui.view">
+        <field name="name">wuchang.fund.revenue.rule.list.allocation</field>
+        <field name="model">wuchang.fund.revenue.rule</field>
+        <field name="inherit_id" ref="wuchang_fund_reserve.view_wuchang_fund_revenue_rule_list_reserve"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reserve_rate']" position="after">
+                <field name="volunteer_team_rate"/>
+                <field name="system_cost_rate"/>
+                <field name="wish_tree_rate"/>
+                <field name="allocation_total_rate"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wuchang_delivery_order_fund_ledger_form_allocation" model="ir.ui.view">
+        <field name="name">wuchang.delivery.order.fund.ledger.form.allocation</field>
+        <field name="model">wuchang.delivery.order.fund.ledger</field>
+        <field name="inherit_id" ref="wuchang_fund_reserve.view_wuchang_delivery_order_fund_ledger_form_reserve"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_allocate_fund" type="object" string="分配基金"/>
+                <button name="action_post_allocation" type="object" string="分配入帳"/>
+                <button name="action_settle_allocation" type="object" string="分配結清"/>
+            </xpath>
+            <xpath expr="//group[@string='社區幣/票券圈禁保付']" position="after">
+                <group string="基金收入分配">
+                    <field name="volunteer_team_rate"/>
+                    <field name="system_cost_rate"/>
+                    <field name="wish_tree_rate"/>
+                    <field name="volunteer_team_amount"/>
+                    <field name="system_cost_amount"/>
+                    <field name="wish_tree_amount"/>
+                    <field name="allocation_total_amount"/>
+                    <field name="allocation_state"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wuchang_delivery_order_fund_ledger_list_allocation" model="ir.ui.view">
+        <field name="name">wuchang.delivery.order.fund.ledger.list.allocation</field>
+        <field name="model">wuchang.delivery.order.fund.ledger</field>
+        <field name="inherit_id" ref="wuchang_fund_reserve.view_wuchang_delivery_order_fund_ledger_list_reserve"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='available_fund_amount']" position="after">
+                <field name="volunteer_team_amount"/>
+                <field name="system_cost_amount"/>
+                <field name="wish_tree_amount"/>
+                <field name="allocation_total_amount"/>
+                <field name="allocation_state"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wuchang_fund_allocation_ledger_list" model="ir.ui.view">
+        <field name="name">wuchang.fund.allocation.ledger.list</field>
+        <field name="model">wuchang.fund.allocation.ledger</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="source_ledger_id"/>
+                <field name="order_ref"/>
+                <field name="sales_amount"/>
+                <field name="total_fund_amount"/>
+                <field name="reserved_guarantee_amount"/>
+                <field name="volunteer_team_amount"/>
+                <field name="system_cost_amount"/>
+                <field name="wish_tree_amount"/>
+                <field name="allocation_total_amount"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_fund_allocation_ledger_form" model="ir.ui.view">
+        <field name="name">wuchang.fund.allocation.ledger.form</field>
+        <field name="model">wuchang.fund.allocation.ledger</field>
+        <field name="arch" type="xml">
+            <form string="基金分配台帳">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="source_ledger_id"/>
+                        <field name="state"/>
+                    </group>
+                    <group string="來源訂單">
+                        <field name="order_ref"/>
+                        <field name="sales_amount"/>
+                        <field name="total_fund_amount"/>
+                    </group>
+                    <group string="分配結果">
+                        <field name="reserved_guarantee_amount"/>
+                        <field name="volunteer_team_amount"/>
+                        <field name="system_cost_amount"/>
+                        <field name="wish_tree_amount"/>
+                        <field name="allocation_total_amount"/>
+                    </group>
+                    <notebook>
+                        <page string="備註">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_fund_allocation_ledger" model="ir.actions.act_window">
+        <field name="name">基金分配台帳</field>
+        <field name="res_model">wuchang.fund.allocation.ledger</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_fund_allocation_ledger"
+              name="基金分配台帳"
+              parent="wuchang_fund_revenue.menu_wuchang_fund_revenue_root"
+              action="action_wuchang_fund_allocation_ledger"
+              sequence="40"/>
+</odoo>

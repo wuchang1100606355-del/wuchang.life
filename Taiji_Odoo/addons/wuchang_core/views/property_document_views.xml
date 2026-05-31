@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 管委會公文樹狀視圖 -->
+    <record id="view_property_document_tree" model="ir.ui.view">
+        <field name="name">wuchang.property.document.tree</field>
+        <field name="model">wuchang.property.document</field>
+        <field name="arch" type="xml">
+            <tree string="管委會公文" decoration-info="state=='draft'" decoration-muted="state=='archived'">
+                <field name="doc_number"/>
+                <field name="name"/>
+                <field name="community_id"/>
+                <field name="document_type"/>
+                <field name="signer_id"/>
+                <field name="state"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- 管委會公文表單視圖 -->
+    <record id="view_property_document_form" model="ir.ui.view">
+        <field name="name">wuchang.property.document.form</field>
+        <field name="model">wuchang.property.document</field>
+        <field name="arch" type="xml">
+            <form string="管委會公文">
+                <header>
+                    <button name="action_generate_from_template" string="從範本生成" type="object" 
+                            class="btn-primary" attrs="{'invisible': [('content', '!=', False)]}"/>
+                    <button name="action_generate_from_form_response" string="從表單回應生成" type="object" 
+                            class="btn-primary" attrs="{'invisible': [('response_id', '=', False)]}"/>
+                    <button name="action_save_to_google_drive" string="儲存到 Google Drive" type="object" 
+                            class="btn-secondary" attrs="{'invisible': [('state', 'in', ['draft', 'review'])]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review,approved,published"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_property_document_preview)d" type="action" 
+                                class="oe_stat_button" icon="fa-file-text-o" 
+                                attrs="{'invisible': [('content', '=', False)]}">
+                            <field name="id" widget="statinfo" string="預覽"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="doc_number" readonly="1"/>
+                            <field name="name" required="1"/>
+                            <field name="community_id" required="1"/>
+                            <field name="document_type" required="1"/>
+                        </group>
+                        <group>
+                            <field name="template_id" domain="[('organization_type', '=', 'committee')]"/>
+                            <field name="form_id" domain="[('form_type', '=', 'document')]"/>
+                            <field name="response_id" domain="[('form_id', '=', form_id)]"/>
+                            <field name="signer_id" domain="[('community_id', '=', community_id)]"/>
+                            <field name="sign_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="content_draft" placeholder="原始內容（從表單回應或手動輸入）"/>
+                    </group>
+                    <notebook>
+                        <page string="公文內容">
+                            <field name="content" nolabel="1" widget="html"/>
+                        </page>
+                        <page string="Google 整合">
+                            <group>
+                                <field name="google_drive_file_id" readonly="1"/>
+                                <field name="google_drive_url" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- 管委會公文搜尋視圖 -->
+    <record id="view_property_document_search" model="ir.ui.view">
+        <field name="name">wuchang.property.document.search</field>
+        <field name="model">wuchang.property.document</field>
+        <field name="arch" type="xml">
+            <search string="管委會公文">
+                <field name="name"/>
+                <field name="doc_number"/>
+                <field name="community_id"/>
+                <field name="document_type"/>
+                <field name="signer_id"/>
+                <field name="state"/>
+                <filter string="草稿" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="審核中" name="review" domain="[('state', '=', 'review')]"/>
+                <filter string="已核准" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="已發布" name="published" domain="[('state', '=', 'published')]"/>
+                <group expand="0" string="分組">
+                    <filter string="依社區" name="group_community" context="{'group_by': 'community_id'}"/>
+                    <filter string="依類型" name="group_type" context="{'group_by': 'document_type'}"/>
+                    <filter string="依狀態" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- 管委會公文動作 -->
+    <record id="action_property_document" model="ir.actions.act_window">
+        <field name="name">管委會公文</field>
+        <field name="res_model">wuchang.property.document</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'default_organization_type': 'committee'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                建立您的第一份管委會公文
+            </p>
+            <p>
+                管委會公文系統獨立於社區發展協會，專為公寓大廈管理委員會設計。
+                您可以從 Google 表單回應自動生成公文，或使用範本手動建立。
+            </p>
+        </field>
+    </record>
+
+    <!-- 管委會公文預覽動作 -->
+    <record id="action_property_document_preview" model="ir.actions.act_window">
+        <field name="name">公文預覽</field>
+        <field name="res_model">wuchang.property.document</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

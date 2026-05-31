@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="taiji_member_login_panel" inherit_id="web.login" name="Taiji Member Login Panel">
+    <xpath expr="//form[contains(@class, 'oe_login_form')]" position="before">
+      <div class="taiji_member_login_panel">
+        <div class="taiji_member_title">五常智慧雲｜內部會員登入</div>
+        <div class="taiji_member_desc">
+          本頁已接入 Taiji 內部會員狀態與手機存在驗證。Odoo 登入仍使用 Odoo 帳密；會員身分、手機節點、Gateway、ledger 與 dead letter 由本機系統管理。
+        </div>
+        <div class="taiji_member_actions">
+          <a class="btn btn-primary" href="/taiji/member/login">使用目前內部會員身分</a>
+          <a class="btn btn-secondary" href="/taiji/member/local-session">查看本機會員狀態</a>
+          <a class="btn btn-secondary" href="http://127.0.0.1:8103/line/login/start">LINE 登入綁定</a>
+          <a class="btn btn-secondary" href="http://127.0.0.1:8104/google/login/start">Google 登入綁定</a>
+        </div>
+        <div class="taiji_member_rule">手機驗證：使用 Tailscale 手機節點在線狀態，不儲存 SMS、不儲存 token。</div>
+        <div class="taiji_member_rule">
+          不儲存密碼、不儲存 token、不把私鑰送入模型記憶。
+        </div>
+      </div>
+    </xpath>
+  </template>
+</odoo>

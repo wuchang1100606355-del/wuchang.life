@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Views for Property Management -->
+
+    <!-- Community -->
+    <record id="view_property_community_tree" model="ir.ui.view">
+        <field name="name">wuchang.property.community.tree</field>
+        <field name="model">wuchang.property.community</field>
+        <field name="arch" type="xml">
+            <tree string="社區列表">
+                <field name="name"/>
+                <field name="address"/>
+                <field name="total_households"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_property_community_form" model="ir.ui.view">
+        <field name="name">wuchang.property.community.form</field>
+        <field name="model">wuchang.property.community</field>
+        <field name="arch" type="xml">
+            <form string="社區資料">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="address"/>
+                        <field name="total_households"/>
+                    </group>
+                    <notebook>
+                        <page string="棟別資訊">
+                            <field name="building_ids"/>
+                        </page>
+                        <page string="管委會成員">
+                            <field name="committee_member_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Unit -->
+    <record id="view_property_unit_tree" model="ir.ui.view">
+        <field name="name">wuchang.property.unit.tree</field>
+        <field name="model">wuchang.property.unit</field>
+        <field name="arch" type="xml">
+            <tree string="住戶資料">
+                <field name="community_id" invisible="1"/> <!-- Assuming related field exists or handled by context -->
+                <field name="building_id"/>
+                <field name="name"/>
+                <field name="floor"/>
+                <field name="owner_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Complaint -->
+    <record id="view_property_complaint_tree" model="ir.ui.view">
+        <field name="name">wuchang.property.complaint.tree</field>
+        <field name="model">wuchang.property.complaint</field>
+        <field name="arch" type="xml">
+            <tree string="住戶反映事項">
+                <field name="state"/>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="unit_id"/>
+                <field name="community_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_property_community" model="ir.actions.act_window">
+        <field name="name">社區管理</field>
+        <field name="res_model">wuchang.property.community</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_property_complaint" model="ir.actions.act_window">
+        <field name="name">住戶反映與報修</field>
+        <field name="res_model">wuchang.property.complaint</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_property_root" name="物業管理" parent="menu_wuchang_root" sequence="25"/>
+    <menuitem id="menu_property_community" name="社區資料" parent="menu_property_root" action="action_property_community" sequence="10"/>
+    <menuitem id="menu_property_complaint" name="住戶反映" parent="menu_property_root" action="action_property_complaint" sequence="20"/>
+
+
+    <!-- Smart Life: Bulletins -->
+    <record id="view_community_bulletin_tree" model="ir.ui.view">
+        <field name="name">community.bulletin.tree</field>
+        <field name="model">community.bulletin</field>
+        <field name="arch" type="xml">
+            <tree string="Bulletins">
+                <field name="name"/>
+                <field name="date_published"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_community_bulletin_form" model="ir.ui.view">
+        <field name="name">community.bulletin.form</field>
+        <field name="model">community.bulletin</field>
+        <field name="arch" type="xml">
+            <form string="Bulletin">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="date_published"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <field name="content"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_community_bulletin" model="ir.actions.act_window">
+        <field name="name">Bulletins</field>
+        <field name="res_model">community.bulletin</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Smart Life: Packages -->
+    <record id="view_community_package_tree" model="ir.ui.view">
+        <field name="name">community.package.tree</field>
+        <field name="model">community.package</field>
+        <field name="arch" type="xml">
+            <tree string="Packages" create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="resident_id"/>
+                <field name="status"/>
+                <field name="arrival_date"/>
+                <button name="action_confirm_pickup" string="Pickup" type="object" class="oe_highlight" invisible="status != 'arrived'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_community_package_form" model="ir.ui.view">
+        <field name="name">community.package.form</field>
+        <field name="model">community.package</field>
+        <field name="arch" type="xml">
+            <form string="Package">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="resident_id"/>
+                        <field name="status"/>
+                    </group>
+                    <group>
+                        <field name="arrival_date"/>
+                        <field name="pickup_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_community_package" model="ir.actions.act_window">
+        <field name="name">Packages</field>
+        <field name="res_model">community.package</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_bulletin" name="Bulletins" parent="menu_smart_life" action="action_community_bulletin" sequence="10"/>
+    <menuitem id="menu_package" name="Packages" parent="menu_smart_life" action="action_community_package" sequence="20"/>
+</odoo>
+
