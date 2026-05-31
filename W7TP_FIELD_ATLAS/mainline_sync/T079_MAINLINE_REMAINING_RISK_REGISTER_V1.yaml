@@ -1,0 +1,48 @@
+risk_register_id: T079_MAINLINE_REMAINING_RISK_REGISTER_V1
+status: OPEN_RISK_FLAGS
+execution_date: "2026-06-01"
+
+push_gate:
+  push_allowed: false
+  reason: push_only_if_no_risk_flags_remain
+
+risks:
+  - risk_id: R079_001
+    severity: HIGH
+    status: OPEN
+    issue: restricted_name_untracked_paths_were_not_archived_or_read
+    count: 19
+    next_step: human_review_in_separate_restricted_material_workflow
+
+  - risk_id: R079_002
+    severity: MEDIUM
+    status: OPEN
+    issue: nonregular_untracked_paths_were_not_archived
+    count: 3
+    next_step: human_review_symlink_or_nonregular_path_targets_separately
+
+  - risk_id: R079_003
+    severity: MEDIUM
+    status: OPEN
+    issue: untracked_GEI_expansion_exists_but_GEIs_scope_is_closed
+    next_step: keep_unstaged_and_review_separately_without_expanding_GEI
+
+  - risk_id: R079_004
+    severity: MEDIUM
+    status: OPEN
+    issue: unrelated_worktree_changes_remain_outside_focused_commit
+    next_step: classify_and_review_in_separate_commits
+
+  - risk_id: R079_005
+    severity: HIGH
+    status: OPEN
+    issue: no_existing_git_remote_is_configured
+    next_step: do_not_push_until_existing_remote_is_verified_by_human
+
+closed_boundaries:
+  - MSI_only
+  - no_taiji01_access
+  - no_runtime_sync
+  - no_service_restart
+  - no_untracked_delete
+  - no_GEI_redesign_or_expansion

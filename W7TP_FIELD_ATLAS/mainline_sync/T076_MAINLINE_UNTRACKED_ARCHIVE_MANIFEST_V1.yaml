@@ -1,0 +1,25 @@
+manifest_id: T076_MAINLINE_UNTRACKED_ARCHIVE_MANIFEST_V1
+status: LOCAL_ARCHIVE_CREATED
+execution_date: "2026-06-01"
+
+archive:
+  target: runtime/archive/untracked_sync_20260601/
+  file_root: runtime/archive/untracked_sync_20260601/files/
+  archived_regular_files: 3200
+  sha256_manifest_path: runtime/archive/untracked_sync_20260601/sha256_manifest.txt
+  sha256_manifest_entries: 3200
+  sha256_manifest_digest: d372b37a3b4fc3889229709672959efa6d67d778784ef0d173f9871655bc717f
+  gitignored_local_only: true
+
+excluded_from_archive:
+  restricted_name_paths_preserved_in_place: 19
+  restricted_path_list: runtime/archive/untracked_sync_20260601/restricted_paths_not_archived.txt
+  nonregular_paths_preserved_in_place: 3
+  nonregular_path_list: runtime/archive/untracked_sync_20260601/nonregular_paths_not_archived.txt
+
+rules_applied:
+  - archive_first_then_sha256
+  - no_untracked_delete
+  - no_restricted_content_read
+  - archive_is_not_git_add
+  - archive_is_not_push_approval
