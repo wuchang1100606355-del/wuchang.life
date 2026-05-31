@@ -1,0 +1,13 @@
+[Unit]
+Description=Taiji Claw Safe Container
+After=taiji-gateway.service
+Wants=taiji-gateway.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker start taiji_claw_safe
+ExecStop=/usr/bin/docker stop taiji_claw_safe
+
+[Install]
+WantedBy=default.target

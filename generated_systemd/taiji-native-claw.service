@@ -1,0 +1,15 @@
+[Unit]
+Description=Taiji Native Claw Docker Guard
+After=taiji-gateway.service
+Requires=taiji-gateway.service
+
+[Service]
+Type=simple
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+WorkingDirectory=%h/Taiji_Hub
+ExecStart=%h/Taiji_Hub/boot/start_native_claw.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

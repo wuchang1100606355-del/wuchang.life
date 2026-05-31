@@ -1,0 +1,14 @@
+[Unit]
+Description=LittleJ Runtime State
+After=network.target
+
+[Service]
+Type=simple
+User=taiji_admin
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+ExecStart=/usr/bin/python3 /home/taiji_admin/Taiji_Hub/runtime/core/littlej_runtime_state.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

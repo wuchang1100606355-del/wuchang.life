@@ -1,0 +1,20 @@
+[Unit]
+Description=Taiji Audit Runtime
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+EnvironmentFile=/home/taiji_admin/Taiji_Hub/deploy/env/runtime.env.example
+Environment=TAIJI_RUNTIME_ROLE=audit_runtime
+Environment=TAIJI_PORT=8113
+ExecStartPre=/usr/bin/env bash /home/taiji_admin/Taiji_Hub/deploy/scripts/preflight_check.sh
+ExecStart=/usr/bin/env python3 /home/taiji_admin/Taiji_Hub/deploy/runtime/runtime_entry.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

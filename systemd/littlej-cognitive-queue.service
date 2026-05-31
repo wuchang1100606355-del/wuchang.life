@@ -1,0 +1,15 @@
+[Unit]
+Description=LittleJ Cognitive Queue
+After=network.target
+
+[Service]
+Type=simple
+User=taiji_admin
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+ExecStart=/usr/bin/python3 /home/taiji_admin/Taiji_Hub/runtime/queue/cognitive_queue.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+

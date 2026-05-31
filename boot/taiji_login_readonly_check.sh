@@ -1,9 +1,43 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="${TAIJI_ROOT:-$HOME/Taiji_Hub}"
+ACTUAL_CWD="${PWD:-$(pwd -P)}"
+CONFIGURED_CANONICAL="${TAIJI_ROOT:-$HOME/Taiji_Hub}"
+ROOT="$CONFIGURED_CANONICAL"
 LEDGER="$ROOT/runtime/ledger/login_readonly_check.jsonl"
-mkdir -p "$ROOT/runtime/ledger"
+LEDGER_ENABLED="${TAIJI_LOGIN_READONLY_LEDGER:-0}"
+
+resolve_git_root() {
+  local path="$1"
+  if [ ! -e "$path/.git" ]; then
+    return 0
+  fi
+  git -C "$path" rev-parse --show-toplevel 2>/dev/null || true
+}
+
+RESOLVED_GIT_ROOT="$(resolve_git_root "$ACTUAL_CWD")"
+if [ -z "$RESOLVED_GIT_ROOT" ]; then
+  RESOLVED_GIT_ROOT="$(resolve_git_root "$CONFIGURED_CANONICAL")"
+fi
+if [ -z "$RESOLVED_GIT_ROOT" ]; then
+  RESOLVED_GIT_ROOT="UNRESOLVED"
+fi
+
+if command -v wslpath >/dev/null 2>&1; then
+  WINDOWS_PATH_HINT="$(wslpath -w "$ACTUAL_CWD" 2>/dev/null || printf "%s" "UNAVAILABLE")"
+else
+  WINDOWS_PATH_HINT="UNAVAILABLE"
+fi
+
+READONLY_GUARD="readonly only; no SSH, no process kill, no auto-start"
+
+write_ledger() {
+  if [ "$LEDGER_ENABLED" != "1" ]; then
+    return 0
+  fi
+  mkdir -p "$ROOT/runtime/ledger"
+  printf "%s\n" "$1" >> "$LEDGER"
+}
 
 check_url() {
   local name="$1"
@@ -14,8 +48,8 @@ check_url() {
     status="not_running"
   fi
   printf "[status] %-24s %s\n" "$name:" "$status"
-  printf '{"ts":"%s","check":"%s","url":"%s","status":"%s"}\n' \
-    "$(date -Is)" "$name" "$url" "$status" >> "$LEDGER"
+  write_ledger "$(printf '{"ts":"%s","check":"%s","url":"%s","status":"%s"}' \
+    "$(date -Is)" "$name" "$url" "$status")"
 }
 
 check_port() {
@@ -27,15 +61,18 @@ check_port() {
     status="not_listening"
   fi
   printf "[port]   %-24s %s\n" "$name $port:" "$status"
-  printf '{"ts":"%s","check":"%s","port":"%s","status":"%s"}\n' \
-    "$(date -Is)" "$name" "$port" "$status" >> "$LEDGER"
+  write_ledger "$(printf '{"ts":"%s","check":"%s","port":"%s","status":"%s"}' \
+    "$(date -Is)" "$name" "$port" "$status")"
 }
 
 echo "======================================================"
 echo "     Taiji Login Readonly Check - CURRENT"
 echo "======================================================"
-echo "[workspace] canonical: $ROOT"
-echo "[guard] readonly only; no SSH, no process kill, no auto-start"
+echo "[workspace] actual_cwd: $ACTUAL_CWD"
+echo "[workspace] configured_canonical: $CONFIGURED_CANONICAL"
+echo "[workspace] resolved_git_root: $RESOLVED_GIT_ROOT"
+echo "[workspace] windows_path_hint: $WINDOWS_PATH_HINT"
+echo "[guard] readonly_guard: $READONLY_GUARD"
 
 check_url  "taiji_gateway"      "http://127.0.0.1:8081/health"
 check_url  "open_webui"         "http://127.0.0.1:8080"

@@ -1,0 +1,15 @@
+[Unit]
+Description=Taiji Edge Node %i
+After=taiji-gateway.service
+Requires=taiji-gateway.service
+
+[Service]
+Type=simple
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+WorkingDirectory=%h/Taiji_Hub
+ExecStart=%h/Taiji_Hub/boot/start_edge_node.sh %i
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

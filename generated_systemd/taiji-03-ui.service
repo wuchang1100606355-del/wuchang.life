@@ -1,0 +1,15 @@
+[Unit]
+Description=Taiji 03 UI Layer - OpenWebUI and Bridge
+After=taiji-gateway.service
+Requires=taiji-gateway.service
+
+[Service]
+Type=simple
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+WorkingDirectory=%h/Taiji_Hub
+ExecStart=%h/Taiji_Hub/boot/start_03_ui.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

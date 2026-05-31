@@ -1,0 +1,15 @@
+[Unit]
+Description=Taiji Full Boot - XiaoJ OpenWebUI Runtime
+After=network-online.target docker.service tailscaled.service
+Wants=network-online.target docker.service tailscaled.service
+
+[Service]
+Type=oneshot
+User=taiji_admin
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+ExecStart=/home/taiji_admin/Taiji_Hub/scripts/taiji_full_boot.sh
+RemainAfterExit=yes
+TimeoutStartSec=240
+
+[Install]
+WantedBy=multi-user.target

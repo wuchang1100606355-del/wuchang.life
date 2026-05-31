@@ -1,0 +1,16 @@
+[Unit]
+Description=Taiji Docker Stack Guard
+After=taiji-gateway.service docker.service
+Wants=docker.service
+Requires=taiji-gateway.service
+
+[Service]
+Type=simple
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+WorkingDirectory=%h/Taiji_Hub
+ExecStart=%h/Taiji_Hub/boot/start_docker_stack.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

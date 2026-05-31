@@ -1,0 +1,16 @@
+[Unit]
+Description=Taiji OpenWebUI Bridge
+After=network.target
+
+[Service]
+Type=simple
+User=taiji_admin
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+Environment=TAIJI_GATEWAY=http://127.0.0.1:8081/api/taiji/execute
+Environment=TAIJI_HEALTH=http://127.0.0.1:8081/health
+ExecStart=/usr/bin/python3 -m uvicorn runtime.openwebui_bridge:app --host 127.0.0.1 --port 8098
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

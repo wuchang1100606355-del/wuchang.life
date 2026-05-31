@@ -1,0 +1,13 @@
+[Unit]
+Description=Taiji Preflight Guard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+ExecStart=%h/Taiji_Hub/boot/preflight.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

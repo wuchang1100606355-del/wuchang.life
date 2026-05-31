@@ -1,0 +1,16 @@
+[Unit]
+Description=Taiji Google Login Bridge 8104
+After=taiji-gateway.service
+Wants=taiji-gateway.service
+
+[Service]
+Type=simple
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+EnvironmentFile=%h/.secrets/taiji_google_login.env
+WorkingDirectory=%h/Taiji_Hub
+ExecStart=/usr/bin/python3 %h/Taiji_Hub/services/google_login/simple_google_login_server.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
