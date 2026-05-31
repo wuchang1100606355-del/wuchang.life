@@ -1,0 +1,74 @@
+universe_id: U13_member_identity_universe
+title: Odoo No-Plaintext Member Governance Universe
+purpose:
+  - no_plaintext_member_system
+  - pseudonymous_member_code
+  - google_login_mapping
+  - 7d_identity_packet
+  - member_agent
+  - member_consent
+  - member_governance
+
+classification:
+  memory_level: SUB_UNIVERSE_INDEX
+  primary_universe: U13_member_identity_universe
+  secondary_universes:
+    - U02_governance_universe
+    - U04_w7tp_packet_universe
+    - U05_community_service_universe
+    - U07_property_management_universe
+    - U11_ai_agent_universe
+
+governance:
+  raw_member_pii_allowed: false
+  cloud_redacted_packets_only: true
+  group_member_raw_pii_allowed: false
+  daily_runtime_identifier: pseudonymous_member_code
+  runtime_packet: 5d_or_7d_redacted_packet
+  gateway_to_compute: redacted_packet_only
+  admin_blind_default: true
+  human_review_required_for_pii: true
+
+carriers:
+  - Odoo
+  - Google Login
+  - LINE
+  - PWA
+  - W7TP Gateway
+  - XiaoJ Intent Field
+
+evidence_refs:
+  - W7TP_FIELD_ATLAS/61_sub_universe_element_index_v0_2.yaml
+  - W7TP_FIELD_ATLAS/28_state_world_router_boundary.yaml
+  - W7TP_FIELD_ATLAS/31_odoo_module_inventory_map.yaml
+  - W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml
+  - /mnt/c/Taiji_Runtime/configs/dev/xiaoj_converged_governance_architecture.template.json
+  - /mnt/c/Taiji_Runtime/configs/front_brain/xiaoj_system_prompt_core.md
+
+known_carrier_modules:
+  - taiji_member_login
+  - wuchang_google_member_login
+
+memory_sentence: >
+  使用者曾在 C:\Taiji_Runtime 與 Taiji_Hub/Odoo 架構無明文會員治理；
+  其核心不是失效，而是分散於 Odoo、Google 登入、7D封包、Taiji_Runtime 與 W7TP_FIELD_ATLAS，
+  應整合為 U13_member_identity_universe 亞宇宙索引。
+
+do_not_store:
+  - raw_member_pii
+  - phone_number
+  - address
+  - id_number
+  - oauth_code
+  - session_cookie
+  - api_key
+  - token
+  - password
+  - private_key
+  - docker_secret
+  - database_dump
+  - raw_odoo_partner_export
+
+red_team_note: >
+  此檔只建立無明文會員治理亞宇宙索引，不讀取 Odoo DB、不輸出會員明文、
+  不重啟容器、不修改正式資料；後續若接入 Odoo 模組，需人審與備份。

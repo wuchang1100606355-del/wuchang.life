@@ -1,0 +1,16 @@
+
+  L5_removable_physical_git_space:
+    windows_path: D:\Taiji_Git_Space
+    purpose: removable physical-isolation git/bundle/evidence storage
+    medium: removable_memory_card_or_external_disk
+    security_value:
+      - physical_air_gap_possible
+      - ransomware_blast_radius_reduction
+      - founder_controlled_evidence_custody
+      - offline_patent_evidence_backup
+    rule:
+      - mount_only_when_backup_or_restore
+      - store_git_bundle_and_sha256
+      - do_not_run_live_runtime_from_removable_disk
+      - do_not_store_plaintext_secrets
+      - eject_after_backup

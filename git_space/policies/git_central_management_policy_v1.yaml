@@ -1,0 +1,46 @@
+policy_id: git_central_management_policy_v1
+purpose: Centralize Git governance without blindly committing all files.
+
+principles:
+  - focused_git_add_only
+  - no_git_add_dot
+  - no_live_dot_git_on_google_drive
+  - bundle_plus_sha256_for_cold_backup
+  - removable_D_drive_for_physical_isolation
+  - secrets_and_runtime_cache_forbidden
+
+git_spaces:
+  working_repo: /home/taiji_admin/Taiji_Hub
+  central_control: /home/taiji_admin/Taiji_Hub/git_space
+  local_bare_mirror: /home/taiji_admin/Taiji_Hub/git_space/bare
+  removable_cold_backup: D:\Taiji_Git_Space
+  google_cold_backup: Google Shared Drive / W7TP_GIT_BACKUP
+
+allowed_to_track:
+  - W7TP_FIELD_ATLAS
+  - docs
+  - evidence
+  - topology
+  - configs_without_secrets
+  - runtime/templates
+  - tests
+  - scripts_reviewed_only
+
+forbidden_to_track:
+  - .env
+  - "*.key"
+  - "*.pem"
+  - "*token*"
+  - "*password*"
+  - "*secret*"
+  - odoo-data
+  - postgres-data
+  - db-data
+  - filestore
+  - __pycache__
+  - node_modules
+  - .venv
+  - runtime/cache
+  - raw_member_data
+  - database_dump
+  - session_cookie
