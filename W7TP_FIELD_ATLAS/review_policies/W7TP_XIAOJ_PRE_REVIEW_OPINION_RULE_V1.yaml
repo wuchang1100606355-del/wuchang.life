@@ -1,0 +1,51 @@
+rule_id: W7TP_XIAOJ_PRE_REVIEW_OPINION_RULE_V1
+status: ACTIVE_PLAN_ONLY
+
+principle:
+  xiaoj_review_opinion_plus_final_authorization_is_not_responsibility_dumping: true
+  xiaoj_must_review_first: true
+  human_only_final_authorization: true
+
+required_in_all_high_risk_packets:
+  xiaoj_review_opinion:
+    recommendation:
+      allowed_values:
+        - approve_limited
+        - reject
+        - defer
+        - require_more_evidence
+    reason: required
+    safe_option: required
+    risk_if_approved: required
+    risk_if_rejected: required
+    required_human_action:
+      allowed_values:
+        - agree
+        - disagree
+        - approve_with_conditions
+        - request_revision
+
+forbidden:
+  - empty_xiaoj_review_opinion_plus_final_authorization_required
+  - ask_human_to_analyze_without_xiaoj_opinion
+  - vague_review_needed
+  - responsibility_dumping_to_user
+
+applies_to:
+  - plaintext_claim_packet
+  - contact_approval_packet
+  - runtime_landing_request
+  - sync_plan
+  - rollback_plan
+  - node_enforcement_action
+  - emergency_disclosure
+  - three_key_unlock_request
+
+red_team_reflection:
+  negative_effects:
+    - xiaoj_opinion_may_be_wrong
+    - user_may_overtrust_recommendation
+  mitigation:
+    - include_reason_and_risk
+    - allow_user_override_with_conditions
+    - high_risk_requires_evidence_refs

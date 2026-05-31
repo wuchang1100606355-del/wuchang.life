@@ -1,0 +1,51 @@
+schema_id: W7TP_GEI_CONTEXT_PACKET_SCHEMA_V1
+status: DRAFT
+
+packet_fields:
+  d1_identity:
+    - context_packet_id
+    - host
+    - node_id
+    - owner
+    - created_at
+
+  d2_intent:
+    - decision_context
+    - evidence_context
+    - runtime_context
+    - patent_context
+
+  d3_state:
+    - current_phase
+    - known_truth
+    - unknown_or_pending
+    - risk_state
+
+  d4_topology:
+    - source_universe
+    - twin_universe
+    - runtime_universe
+    - registry_refs
+
+  d5_resource:
+    - linked_files
+    - hash_refs
+    - reports
+    - task_ids
+
+  d6_governance:
+    - allowed_actions
+    - forbidden_actions
+    - xiaoj_review_opinion_plus_final_authorization_required
+    - no_secret_policy
+
+  d7_validation:
+    - evidence_links_valid
+    - source_of_truth_marked
+    - drift_state
+    - confidence_level
+
+  d8_encryption:
+    - encrypted_payload_ref
+    - signature_ref
+    - tamper_boundary

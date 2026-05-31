@@ -1,0 +1,35 @@
+policy_id: W7TP_UNIVERSE_LIFECYCLE_POLICY_V1
+status: PLAN_ONLY
+
+universe_status:
+  ACTIVE:
+    meaning: currently authoritative or operational
+  SANDBOX:
+    meaning: validation field only
+  CANDIDATE:
+    meaning: possible source or target, not authoritative
+  QUARANTINE:
+    meaning: isolated due to drift/risk/unknown state
+  ARCHIVED:
+    meaning: historical reference only
+  DEPRECATED:
+    meaning: no longer used, retained for evidence if needed
+
+rules:
+  - only_one_source_of_truth_per_module
+  - runtime_carrier_must_not_become_source_without_registry_update
+  - archived_universe_must_not_be_runtime_target
+  - quarantine_universe_requires_xiaoj_review_opinion_plus_final_authorization_before_use
+
+retirement_policy:
+  review_after_days: 90
+  archive_if_no_active_reference: true
+  never_delete_without_evidence_review: true
+
+red_team_reflection:
+  negative_effects:
+    - too_many_universe_records_can_create_registry_bloat
+    - wrong_archive_may_hide_useful_history
+  mitigation:
+    - use ACTIVE/SANDBOX/CANDIDATE/QUARANTINE/ARCHIVED/DEPRECATED
+    - keep completed items title-only in daily board

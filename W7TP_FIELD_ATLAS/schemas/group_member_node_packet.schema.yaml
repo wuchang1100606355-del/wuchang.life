@@ -1,0 +1,14 @@
+schema_id: GROUP_MEMBER_NODE_PACKET
+status: DRAFT
+fields:
+  node_id:
+  organization_type:
+  odoo_db_or_tenant_location:
+  service_scope:
+  public_endpoint_reference:
+  allowed_8d_services:
+  forbidden:
+    - raw_member_contact_without_approval
+    - plaintext_export
+    - cross_purpose_tracking
+  audit_required: true

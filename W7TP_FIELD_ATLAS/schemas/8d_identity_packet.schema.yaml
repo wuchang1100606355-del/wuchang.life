@@ -1,0 +1,29 @@
+schema_id: 8D_IDENTITY_PACKET
+status: DRAFT
+fields:
+  d1_identity:
+    - member_code
+    - issuer
+    - issued_at
+  d2_intent:
+    - service_purpose
+    - consent_scope
+  d3_state:
+    - active
+    - revoked
+    - expired
+  d4_topology:
+    - node_scope
+    - allowed_group_member_nodes
+  d5_resource:
+    - service_permissions
+    - ai_service_quota
+  d6_governance:
+    - privacy_level
+    - plaintext_hidden_by_default
+  d7_validation:
+    - signature_required
+    - audit_required
+  d8_encryption:
+    - encrypted_payload_ref
+    - key_custody_policy

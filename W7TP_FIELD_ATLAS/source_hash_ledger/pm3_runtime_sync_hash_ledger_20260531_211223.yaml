@@ -1,0 +1,23 @@
+ledger_id: PM3_RUNTIME_SYNC_HASH_LEDGER
+timestamp: 2026-05-31T21:12:23+08:00
+host: MSI
+
+sources:
+  U02_RUNTIME_SOURCE:
+    path: /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+    exists: true
+
+  U03_MSI_TWIN_CARRIER:
+    path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+    exists: true
+
+  U04_TAIJI01_RUNTIME_CARRIER:
+    path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+    exists: false
+
+governance:
+  plan_only: true
+  no_copy: true
+  no_restart: true
+  no_db_write: true
+  no_secret_read: true

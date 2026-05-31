@@ -1,0 +1,46 @@
+sub_universe_id: SU_BLIND_AI_SERVICE_FUNCTION_UNIVERSE_V1
+parent_field: U06_ECONOMIC_BLOODMAKING_FIELD
+status: PLAN_ONLY
+
+purpose:
+  - provide_subscription_blind_ai_service
+  - reduce_ai_usage_cost
+  - prevent_raw_plaintext_to_cloud_or_group_nodes
+
+functions:
+  F01_redacted_prompt_router:
+    input: member_or_node_request
+    output: redacted_ai_packet
+
+  F02_cost_lane_selector:
+    routes:
+      - local_first
+      - group_node_assist
+      - cloud_assist
+      - xiaoj_review_opinion_plus_final_authorization
+
+  F03_usage_reduction_ledger:
+    records:
+      - estimated_tokens_saved
+      - selected_lane
+      - redaction_level
+
+  F04_quality_gate:
+    output:
+      - acceptable
+      - needs_cloud_assist
+      - needs_xiaoj_review_opinion_plus_final_authorization
+
+forbidden:
+  - raw_plaintext_to_provider
+  - secret_sync_to_group_node
+  - unlogged_cloud_lane_use
+
+red_team_reflection:
+  negative_effects:
+    - aggressive_cost_saving_can_reduce_quality
+    - redaction_can_remove_context_needed_for_answer
+  mitigation:
+    - quality_threshold
+    - confidence_score
+    - fallback_to_higher_quality_lane

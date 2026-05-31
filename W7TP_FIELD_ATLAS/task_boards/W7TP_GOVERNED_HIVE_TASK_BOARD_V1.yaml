@@ -1,0 +1,331 @@
+task_board_id: W7TP_GOVERNED_HIVE_TASK_BOARD_V1
+status: ACTIVE_PLAN_ONLY
+
+done:
+  - T001_field_drift_event
+  - T002_universe_event_registry
+  - T003_startup_state_packet
+  - T004_metric_alert
+  - T005_twin_sync_plan
+  - T006_server_view_plan
+  - T007_module_map
+  - T008_core_packet_schemas
+  - T009_schema_index
+  - T010_pm3_split_plan
+  - T011_sandbox_validation_plan
+  - T012_runtime_landing_gate
+  - T013_rollback_policy
+  - T014_governed_hive_master_index
+
+active:
+  - task_id: T015_module_dependency_graph
+    goal: map dependencies between split target addons
+    output: W7TP_FIELD_ATLAS/dependency_graphs/W7TP_MODULE_DEPENDENCY_GRAPH_V1.yaml
+    allowed:
+      - read manifests
+      - create yaml plan
+    forbidden:
+      - modify runtime addon
+      - restart service
+      - db write
+
+  - task_id: T016_no_secret_linter_plan
+    goal: define secret literal scan before addon enters runtime
+    output: W7TP_FIELD_ATLAS/linter_plans/W7TP_NO_SECRET_LINTER_PLAN_V1.yaml
+
+  - task_id: T017_drift_detector_v1_plan
+    goal: compare source/twin/runtime field fingerprints at startup
+    output: W7TP_FIELD_ATLAS/drift_detector_plans/W7TP_DRIFT_DETECTOR_V1.yaml
+
+  - task_id: T018_actual_odoo_db_identification
+    goal: identify active Odoo database without DB write
+    output: Taiji_Governance/actual_odoo_db_identification_*.md
+
+pending:
+  - T019_inbound_sync_plan_only
+  - T020_server_acceptance_report
+  - T021_restore_test_plan
+  - T022_runtime_landing_after_explicit_approval
+
+governance:
+  plan_only: true
+  no_runtime_copy: true
+  no_restart: true
+  no_db_write: true
+  no_secret_read: true
+
+completed_append:
+  - T015_module_dependency_graph
+
+next_recommended:
+  - T016_no_secret_linter_plan
+  - T017_drift_detector_v1_plan
+  - T018_actual_odoo_db_identification
+
+completed_append:
+  - T016_no_secret_linter_plan
+
+next_recommended:
+  - T017_drift_detector_v1_plan
+  - T018_actual_odoo_db_identification
+
+completed_append:
+  - T017_drift_detector_v1_plan
+
+next_recommended:
+  - T018_actual_odoo_db_identification
+  - T019_inbound_sync_plan_only
+
+completed_append:
+  - T017_drift_detector_v1_plan
+
+next_recommended:
+  - T018_actual_odoo_db_identification
+  - T019_inbound_sync_plan_only
+
+completed_append:
+  - T018_actual_odoo_db_identification
+
+active_append:
+  - task_id: T019_inbound_sync_plan_only
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/sync_plans/INBOUND_SYNC_PLAN_PM3_TO_TAIJI01_V1.yaml
+    runtime_action: FORBIDDEN
+
+completed_append:
+  - T019_inbound_sync_plan_only
+
+active_append:
+  - task_id: T020_server_acceptance_report
+    status: REJECT_RUNTIME_CHANGE_FOR_NOW
+    output: W7TP_FIELD_ATLAS/server_acceptance_reports/SERVER_ACCEPTANCE_REPORT_PM3_TO_TAIJI01_V1.yaml
+
+completed_append:
+  - T020_server_acceptance_report
+
+active_append:
+  - task_id: T021_taiji01_rollback_point_plan
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/rollback_plans/TAIJI01_PM3_ROLLBACK_POINT_PLAN_V1.yaml
+    runtime_action: FORBIDDEN
+
+completed_append:
+  - T021_taiji01_rollback_point_plan
+
+active_append:
+  - task_id: T022_final_sync_diff_packet
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/diff_packets/FINAL_SYNC_DIFF_PACKET_PM3_TO_TAIJI01_V1.yaml
+    runtime_action: FORBIDDEN
+
+completed_append:
+  - T021_taiji01_rollback_point_plan
+
+active_append:
+  - task_id: T022_final_sync_diff_packet
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/diff_packets/FINAL_SYNC_DIFF_PACKET_PM3_TO_TAIJI01_V1.yaml
+    runtime_action: FORBIDDEN
+
+completed_append:
+  - T023_human_approval_packet_template
+
+active_append:
+  - task_id: T024_universe_lifecycle_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/lifecycle_policies/W7TP_UNIVERSE_LIFECYCLE_POLICY_V1.yaml
+
+  - task_id: T025_group_member_node_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/node_policies/W7TP_GROUP_MEMBER_NODE_POLICY_V1.yaml
+
+  - task_id: T026_privacy_ai_subscription_model
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/subscription_models/W7TP_PRIVACY_AI_SUBSCRIPTION_MODEL_V1.yaml
+
+active_append:
+  - task_id: T027_member_contact_approval_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/contact_policies/W7TP_MEMBER_CONTACT_APPROVAL_POLICY_V1.yaml
+
+  - task_id: T028_plaintext_claim_review_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/plaintext_policies/W7TP_PLAINTEXT_CLAIM_REVIEW_POLICY_V1.yaml
+
+  - task_id: T029_accountability_audit_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/audit_policies/W7TP_ACCOUNTABILITY_AUDIT_POLICY_V1.yaml
+
+active_append:
+  - task_id: T030_third_party_physical_custody_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/disaster_recovery/W7TP_THIRD_PARTY_PHYSICAL_CUSTODY_POLICY_V1.yaml
+
+  - task_id: T031_8d_identity_use_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/8d_policies/W7TP_8D_IDENTITY_USE_POLICY_V1.yaml
+
+  - task_id: T032_service_result_only_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/service_rules/W7TP_SERVICE_RESULT_ONLY_RULE_V1.yaml
+
+active_append:
+  - task_id: T033_group_member_node_onboarding_flow
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/node_onboarding/W7TP_GROUP_MEMBER_NODE_ONBOARDING_FLOW_V1.yaml
+
+  - task_id: T034_merchant_privacy_service_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/merchant_rules/W7TP_MERCHANT_PRIVACY_SERVICE_RULE_V1.yaml
+
+  - task_id: T035_committee_lawful_plaintext_request_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/committee_rules/W7TP_COMMITTEE_LAWFUL_PLAINTEXT_REQUEST_RULE_V1.yaml
+
+active_append:
+  - task_id: T036_node_credit_metric
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/node_credit/W7TP_NODE_CREDIT_METRIC_V1.yaml
+
+  - task_id: T037_node_enforcement_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/node_enforcement/W7TP_NODE_ENFORCEMENT_POLICY_V1.yaml
+
+  - task_id: T038_ai_blind_compute_cost_router
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/cost_routing/W7TP_AI_BLIND_COMPUTE_COST_ROUTER_V1.yaml
+
+  - task_id: T039_standard_addon_market_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/addon_market/W7TP_STANDARD_ADDON_MARKET_POLICY_V1.yaml
+
+  - task_id: T040_group_member_revenue_sharing_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/revenue_sharing/W7TP_GROUP_MEMBER_REVENUE_SHARING_RULE_V1.yaml
+
+active_append:
+  - task_id: T041_member_device_loss_recovery_flow
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/device_loss/W7TP_MEMBER_DEVICE_LOSS_RECOVERY_FLOW_V1.yaml
+
+  - task_id: T042_three_key_custody_operation_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/key_custody/W7TP_THREE_KEY_CUSTODY_OPERATION_RULE_V1.yaml
+
+  - task_id: T043_emergency_care_disclosure_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/emergency_care/W7TP_EMERGENCY_CARE_DISCLOSURE_RULE_V1.yaml
+
+  - task_id: T044_member_delegation_authority_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/delegation/W7TP_MEMBER_DELEGATION_AUTHORITY_RULE_V1.yaml
+
+  - task_id: T045_xiaoj_xiaoj_review_opinion_plus_final_authorization_queue_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml
+
+active_append:
+  - task_id: T046_gei_context_field
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_FIELD_V1.yaml
+
+  - task_id: T047_gei_context_packet_schema
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_PACKET_SCHEMA_V1.yaml
+
+  - task_id: T048_gei_context_index
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+
+active_append:
+  - task_id: T049_universe_total_field_registry_v2
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/registries/WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2.yaml
+
+  - task_id: T050_sub_universe_registry_v1
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/registries/WUCHANG_SUB_UNIVERSE_REGISTRY_V1.yaml
+
+  - task_id: T051_economic_bloodmaking_universe
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/sub_universes/SU_ECONOMIC_BLOODMAKING_UNIVERSE_V1.yaml
+
+  - task_id: T052_gei_reasoning_universe
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/sub_universes/SU_GEI_REASONING_UNIVERSE_V1.yaml
+
+  - task_id: T053_twin_sync_universe
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/sub_universes/SU_TWIN_SYNC_UNIVERSE_V1.yaml
+
+  - task_id: T054_12_intent_state_field
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/sub_universes/SU_12_INTENT_STATE_FIELD_V1.yaml
+
+active_append:
+  - task_id: T055_module_to_sub_universe_mount_map
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/module_mounts/WUCHANG_MODULE_TO_SUB_UNIVERSE_MOUNT_MAP_V1.yaml
+
+  - task_id: T056_field_governance_route_table
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/governance_routes/WUCHANG_FIELD_GOVERNANCE_ROUTE_TABLE_V1.yaml
+
+  - task_id: T057_function_to_module_map
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/function_maps/WUCHANG_FUNCTION_TO_MODULE_MAP_V1.yaml
+
+  - task_id: T058_registration_first_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/registration_rules/WUCHANG_REGISTRATION_FIRST_RULE_V1.yaml
+
+  - task_id: T059_gei_context_routing_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_ROUTING_RULE_V1.yaml
+
+active_append:
+  - task_id: T060_registry_integrity_validator
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/registry_validators/WUCHANG_REGISTRY_INTEGRITY_VALIDATOR_V1.yaml
+
+  - task_id: T061_namespace_canonical_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/namespace_policies/WUCHANG_NAMESPACE_CANONICAL_POLICY_V1.yaml
+
+  - task_id: T062_unregistered_route_dead_letter_policy
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/dead_letter/WUCHANG_UNREGISTERED_ROUTE_DEAD_LETTER_POLICY_V1.yaml
+
+  - task_id: T063_registry_status_report_template
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/registry_reports/WUCHANG_REGISTRY_STATUS_REPORT_TEMPLATE_V1.yaml
+
+  - task_id: T064_gei_registration_assistant_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_REGISTRATION_ASSISTANT_RULE_V1.yaml
+
+active_append:
+  - task_id: T065_member_privacy_function_universe
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/function_universes/SU_MEMBER_PRIVACY_FUNCTION_UNIVERSE_V1.yaml
+
+  - task_id: T066_8d_identity_dev_spec
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/dev_specs/W7TP_8D_IDENTITY_DEV_SPEC_V1.yaml
+
+  - task_id: T067_merchant_contact_service_flow
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/service_flows/W7TP_MERCHANT_CONTACT_SERVICE_FLOW_V1.yaml
+
+  - task_id: T068_blind_ai_service_function_universe
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/ai_service/W7TP_BLIND_AI_SERVICE_FUNCTION_UNIVERSE_V1.yaml
+
+  - task_id: T069_portable_xiaoj_member_agent_spec
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/member_portability/W7TP_PORTABLE_XIAOJ_MEMBER_AGENT_SPEC_V1.yaml
+
+active_append:
+  - task_id: T075_xiaoj_pre_review_opinion_rule
+    status: PLAN_CREATED
+    output: W7TP_FIELD_ATLAS/review_policies/W7TP_XIAOJ_PRE_REVIEW_OPINION_RULE_V1.yaml

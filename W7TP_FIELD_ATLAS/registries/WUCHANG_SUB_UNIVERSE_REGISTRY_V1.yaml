@@ -1,0 +1,72 @@
+registry_id: WUCHANG_SUB_UNIVERSE_REGISTRY_V1
+status: ACTIVE_PLAN_ONLY
+
+sub_universes:
+  identity_privacy:
+    parent_field: U04_IDENTITY_PRIVACY_FIELD
+    children:
+      - SU_IDENTITY_8D
+      - SU_MEMBER_PRIVACY
+      - SU_CONTACT_APPROVAL
+      - SU_PLAINTEXT_CLAIM
+      - SU_THREE_KEY_CUSTODY
+
+  community_service:
+    parent_field: U05_COMMUNITY_SERVICE_FIELD
+    children:
+      - SU_COMMITTEE
+      - SU_WELFARE
+      - SU_VOLUNTEER
+      - SU_EMERGENCY_CARE
+      - SU_DELEGATION
+
+  economic_bloodmaking:
+    parent_field: U06_ECONOMIC_BLOODMAKING_FIELD
+    children:
+      - SU_MERCHANT_SUBSCRIPTION
+      - SU_BLIND_AI_SUBSCRIPTION
+      - SU_STANDARD_ADDON_MARKET
+      - SU_REVENUE_SHARING
+      - SU_NODE_CREDIT
+
+  governance_evidence:
+    parent_field: U03_GOVERNANCE_FIELD
+    children:
+      - SU_AUDIT
+      - SU_HUMAN_REVIEW
+      - SU_PATENT_EVIDENCE
+      - SU_GIT_EVIDENCE
+      - SU_RUNTIME_LANDING_GATE
+
+  gei_context:
+    parent_field: U07_GEI_CONTEXT_FIELD
+    children:
+      - SU_GEI_DECISION_CONTEXT
+      - SU_GEI_EVIDENCE_LINK
+      - SU_GEI_RUNTIME_CONTEXT
+      - SU_GEI_PATENT_CONTEXT
+
+  twin_sync:
+    parent_field: U08_TWIN_SYNC_FIELD
+    children:
+      - SU_FIELD_DRIFT
+      - SU_SOURCE_HASH_LEDGER
+      - SU_SANDBOX_VALIDATION
+      - SU_SERVER_ACCEPTANCE
+      - SU_ROLLBACK
+
+  intent_state:
+    parent_field: U09_INTENT_STATE_FIELD
+    children:
+      - SU_12_INTENT_STATE_MACHINE
+      - SU_POLICY_ROUTING
+      - SU_REVIEW_APPROVAL
+      - SU_AUDIT_LEARN_ARCHIVE
+
+red_team_reflection:
+  negative_effects:
+    - sub_universe_names_may_overlap_existing_module_names
+    - registry_may_become_stale_if_task_board_not_synced
+  mitigation:
+    - add_module_mount_map
+    - update_task_board_after_each_batch

@@ -1,0 +1,55 @@
+map_id: WUCHANG_FUNCTION_TO_MODULE_MAP_V1
+status: ACTIVE_PLAN_ONLY
+
+functions:
+  issue_8d_identity:
+    module: M02_8d_identity_registry
+    sub_universe: SU_IDENTITY_8D
+
+  approve_merchant_contact:
+    module: M04_contact_approval_gate
+    sub_universe: SU_CONTACT_APPROVAL
+
+  review_plaintext_claim:
+    module: M05_plaintext_claim_review
+    sub_universe: SU_PLAINTEXT_CLAIM
+
+  route_blind_ai_task:
+    module: M06_blind_ai_subscription
+    sub_universe: SU_BLIND_AI_SUBSCRIPTION
+
+  register_group_member_node:
+    module: M03_group_member_node_registry
+    sub_universe: SU_NODE_REGISTRY
+
+  detect_field_drift:
+    module: M08_field_drift_governance
+    sub_universe: SU_FIELD_DRIFT
+
+  accept_runtime_landing:
+    module: M09_server_acceptance_gate
+    sub_universe: SU_SERVER_ACCEPTANCE
+
+  create_rollback_point:
+    module: M10_disaster_recovery_accountability
+    sub_universe: SU_ROLLBACK
+
+  generate_gei_context_packet:
+    module: GEI_CONTEXT_FIELD
+    sub_universe: SU_GEI_DECISION_CONTEXT
+
+  run_12_intent_transition:
+    module: INTENT_STATE_FIELD
+    sub_universe: SU_12_INTENT_STATE_MACHINE
+
+rules:
+  - function_without_module_is_unregistered
+  - module_without_sub_universe_is_unmounted
+  - runtime_function_requires_registered_route
+
+red_team_reflection:
+  negative_effects:
+    - function_map_may_lag_behind_real_code
+  mitigation:
+    - update_after_each_batch
+    - drift_detector_should_check_unmapped_functions_later

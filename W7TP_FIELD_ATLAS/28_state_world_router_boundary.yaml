@@ -9,10 +9,10 @@ allowed_flows:
 blocked_flows:
   - raw_personal_data_to_cloud
   - secrets_to_any_lane
-  - payment_action_without_human_review
-  - service_restart_without_human_review
+  - payment_action_without_xiaoj_review_opinion_plus_final_authorization
+  - service_restart_without_xiaoj_review_opinion_plus_final_authorization
 governance:
   d6_hardwall: required
   d7_validation: required
-  human_review: required_for_high_risk
+  xiaoj_review_opinion_plus_final_authorization: required_for_high_risk
 next_action: create memory lifecycle map

@@ -1,0 +1,14 @@
+schema_id: BLIND_AI_SUBSCRIPTION_PACKET
+status: DRAFT
+fields:
+  subscription_id:
+  subscriber_node_id:
+  service_type:
+    - blind_ai
+    - no_plaintext_usage_reduction
+    - hardware_optimization
+  redaction_required: true
+  raw_plaintext_to_provider: false
+  usage_ledger_required: true
+  cost_routing_enabled: true
+  audit_required: true

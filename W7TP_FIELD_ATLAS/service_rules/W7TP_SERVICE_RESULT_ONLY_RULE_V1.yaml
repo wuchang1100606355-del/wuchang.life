@@ -1,0 +1,47 @@
+rule_id: W7TP_SERVICE_RESULT_ONLY_RULE_V1
+status: PLAN_ONLY
+
+principle:
+  group_member_receives_service_result_not_member_plaintext: true
+
+service_result_examples:
+  merchant:
+    - order_allowed
+    - discount_valid
+    - pickup_notice_allowed
+    - contact_request_pending
+    - contact_request_approved
+  committee:
+    - member_status_verified
+    - event_eligibility_verified
+    - plaintext_claim_pending_review
+    - plaintext_claim_approved_limited
+  ai_service:
+    - redacted_prompt_processed
+    - usage_saved
+    - cost_route_selected
+
+forbidden_outputs:
+  - raw_phone
+  - raw_address
+  - raw_line_id
+  - raw_google_sub
+  - full_member_list
+  - unrelated_personal_history
+
+exception_path:
+  plaintext_claim_packet_required: true
+  xiaoj_review_opinion_plus_final_authorization_required: true
+  legal_basis_required: true
+  minimum_necessary_required: true
+  expiry_required: true
+
+red_team_reflection:
+  negative_effects:
+    - service_result_may_still_reveal_identity_by_context
+    - repeated_queries_may_reconstruct_member_profile
+  mitigation:
+    - rate_limit_sensitive_queries
+    - purpose_code_required
+    - anomaly_detection
+    - audit_and_member_visibility

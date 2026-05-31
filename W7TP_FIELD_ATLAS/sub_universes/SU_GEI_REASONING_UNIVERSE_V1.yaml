@@ -1,0 +1,35 @@
+sub_universe_id: SU_GEI_REASONING_UNIVERSE_V1
+parent_field: U07_GEI_CONTEXT_FIELD
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - connect_context_evidence_runtime_truth_and_decision
+  - prevent_context_loss
+  - support_system_rebuild_and_patent_period_evidence
+
+inputs:
+  - W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+  - W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+  - W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+  - W7TP_FIELD_ATLAS/01_universe_registry.yaml
+  - Taiji_Governance/
+
+outputs:
+  - gei_context_snapshot
+  - gei_decision_context_packet
+  - gei_evidence_link_packet
+  - gei_runtime_context_summary
+
+rules:
+  - GEI_links_to_evidence_not_replaces_evidence
+  - GEI_must_not_store_secrets
+  - GEI_must_separate_plan_only_from_runtime_truth
+  - GEI_must_mark_source_of_truth_per_layer
+
+red_team_reflection:
+  negative_effects:
+    - GEI_may_collect_too_much_metadata
+    - GEI_may_be_mistaken_as_runtime_truth
+  mitigation:
+    - store_refs_not_plaintext
+    - require_source_refs_for_decision

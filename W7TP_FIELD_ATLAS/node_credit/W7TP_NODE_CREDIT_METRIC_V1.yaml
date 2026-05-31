@@ -1,0 +1,58 @@
+metric_id: W7TP_NODE_CREDIT_METRIC_V1
+status: PLAN_ONLY
+
+purpose:
+  - score_group_member_nodes_by_trust_service_quality_and_privacy_compliance
+  - prevent_bad_nodes_from_scaling
+  - support_governed_hive_expansion
+
+score_dimensions:
+  privacy_compliance:
+    weight: high
+    signals:
+      - contact_request_abuse_rate
+      - plaintext_claim_rejection_rate
+      - audit_completeness
+
+  service_quality:
+    weight: medium
+    signals:
+      - member_complaint_rate
+      - successful_service_completion
+      - response_timeliness
+
+  technical_health:
+    weight: medium
+    signals:
+      - node_uptime
+      - drift_alert_count
+      - failed_validation_count
+
+  public_interest_alignment:
+    weight: medium
+    signals:
+      - welfare_service_participation
+      - community_activity_support
+      - transparent_accounting
+
+node_credit_levels:
+  A_TRUSTED:
+    effect: normal_access_plus_priority_addon
+  B_NORMAL:
+    effect: normal_access
+  C_RESTRICTED:
+    effect: limited_sensitive_services
+  D_SUSPENDED:
+    effect: contact_and_plaintext_claim_blocked
+  E_REVOKED:
+    effect: removed_from_governed_hive
+
+red_team_reflection:
+  negative_effects:
+    - scoring_may_be_seen_as_punitive_or_unfair
+    - bad_metrics_may_penalize_small_shops
+    - credit_score_may_become_reputation_risk
+  mitigation:
+    - use_appeal_process
+    - separate_internal_risk_score_from_public_status
+    - xiaoj_review_opinion_plus_final_authorization_before_suspension_or_revocation

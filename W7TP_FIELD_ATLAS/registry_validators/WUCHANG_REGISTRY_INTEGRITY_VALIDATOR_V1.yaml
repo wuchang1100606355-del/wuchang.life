@@ -1,0 +1,48 @@
+validator_id: WUCHANG_REGISTRY_INTEGRITY_VALIDATOR_V1
+status: PLAN_ONLY
+
+purpose:
+  - detect_unregistered_fields_sub_universes_modules_and_functions
+  - prevent_context_drift_and_namespace_drift
+  - keep_Wuchang_Universe_from_scattering
+
+checks:
+  C1_field_registered:
+    input: WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2
+    fail_if: referenced_field_not_in_primary_fields
+
+  C2_sub_universe_registered:
+    input: WUCHANG_SUB_UNIVERSE_REGISTRY_V1
+    fail_if: module_mount_uses_unknown_sub_universe
+
+  C3_module_mounted:
+    input: WUCHANG_MODULE_TO_SUB_UNIVERSE_MOUNT_MAP_V1
+    fail_if: task_board_module_not_mounted
+
+  C4_function_mapped:
+    input: WUCHANG_FUNCTION_TO_MODULE_MAP_V1
+    fail_if: function_has_no_module_or_sub_universe
+
+  C5_route_registered:
+    input: WUCHANG_FIELD_GOVERNANCE_ROUTE_TABLE_V1
+    fail_if: request_type_has_no_route
+
+outputs:
+  - registry_integrity_report
+  - unmounted_module_report
+  - unknown_sub_universe_report
+  - route_gap_report
+
+actions:
+  on_low_gap: create_notice
+  on_medium_gap: require_registration_update
+  on_high_gap: block_runtime_landing
+  on_unknown_sensitive_route: send_to_dead_letter
+
+red_team_reflection:
+  negative_effects:
+    - validator_may_block_valid_new_ideas_before_registration
+    - stale_task_board_may_create_false_gaps
+  mitigation:
+    - allow_sandbox_idea_notes
+    - validate_runtime_landing_more_strictly_than_plan_files

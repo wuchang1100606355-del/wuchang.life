@@ -1,0 +1,99 @@
+plan_id: W7TP_TWIN_SYNC_ERROR_CORRECTION_PLAN_V2
+
+status: PLAN_ONLY
+
+d1_identity:
+  task: twin_sync_error_correction_plan
+  owner: CHIANG_CHENG_LUNG
+  status: development_patent_period
+
+d2_intent:
+  goal:
+    - convert_field_drift_to_governed_field_transfer
+    - establish_source_twin_sandbox_carrier_layers
+    - prevent_dual_master_confusion
+    - keep_MSI_and_taiji01_highly_synchronized_without_blind_overwrite
+
+d3_universe_roles:
+  U02_SOURCE_UNIVERSE:
+    path: /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+    role: source_of_truth_candidate
+    deployable: false
+
+  U03_MSI_TWIN_CARRIER:
+    path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+    role: active_development_twin
+    deployable: sandbox_first
+
+  U04_TAIJI01_RUNTIME_CARRIER:
+    path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+    role: stable_runtime_carrier
+    deployable: approval_required
+
+  U05_VIRTUAL_SANDBOX:
+    path: runtime/sandbox/odoo_sync_validation
+    role: validation_field
+    deployable: false
+
+d4_correction_flow:
+  - freeze_current_evidence
+  - build_source_hash_ledger
+  - mirror_to_virtual_sandbox
+  - run_manifest_python_xml_validation
+  - produce_sync_diff_packet
+  - xiaoj_review_opinion_plus_final_authorization_gate
+  - backup_runtime_carrier
+  - sync_to_taiji01_plan_only
+  - restart_only_after_explicit_approval
+
+d5_required_artifacts:
+  - W7TP_FIELD_ATLAS/01_universe_registry.yaml
+  - W7TP_FIELD_ATLAS/source_hash_ledger/pm3_runtime_sync_hash_ledger.yaml
+  - W7TP_FIELD_ATLAS/sync_plans/pm3_runtime_sync_to_taiji01_plan.yaml
+  - W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml
+  - Taiji_Governance/twin_sync_red_team_report.md
+
+d6_governance:
+  allowed_now:
+    - create_registry
+    - create_hash_ledger
+    - create_sync_plan
+    - create_sandbox_directory
+    - copy_into_sandbox_only
+    - run_static_validation
+  forbidden_now:
+    - copy_into_taiji01_running_addons
+    - docker_compose_up
+    - restart_odoo
+    - change_oauth_console
+    - print_secrets
+    - db_write
+
+d7_validation:
+  HASH_GATE:
+    required: true
+  MANIFEST_GATE:
+    required: true
+  PYTHON_IMPORT_GATE:
+    required: true
+  XML_GATE:
+    required: true
+  HUMAN_REVIEW_GATE:
+    required: true
+  ROLLBACK_GATE:
+    required: true
+
+d8_red_team_reflection:
+  negative_effects:
+    - twin_system_may_become_dual_master
+    - sandbox_success_does_not_guarantee_production_success
+    - sync_may_import_MSI_only_assumptions
+    - secret_refs_may_not_exist_on_taiji01
+    - odoo_version_addons_path_db_state_may_differ
+  mitigation:
+    - explicitly_label_source_twin_carrier
+    - sync_code_and_manifest_only
+    - never_sync_secrets
+    - generate_diff_packet_first
+    - require_xiaoj_review_opinion_plus_final_authorization_before_runtime_landing
+    - create_rollback_point_before_formal_landing

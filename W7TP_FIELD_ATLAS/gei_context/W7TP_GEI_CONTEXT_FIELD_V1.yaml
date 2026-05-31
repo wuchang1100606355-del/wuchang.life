@@ -1,0 +1,97 @@
+field_id: W7TP_GEI_CONTEXT_FIELD_V1
+status: PLAN_ONLY
+
+name:
+  zh: GEI脈絡場
+  en: Governance Evidence Intelligence Context Field
+
+purpose:
+  - collect_governance_context
+  - connect_evidence_chain_with_current_decisions
+  - prevent_context_loss_between_MSI_taiji01_odoo_runtime_and_W7TP_field
+  - support_patent_period_evidence_and_system_rebuild
+
+definition:
+  GEI: Governance Evidence Intelligence
+  role: context_field_for_governance_evidence_identity_and_runtime_state
+  not_runtime_service: true
+  not_secret_store: true
+
+context_layers:
+  L1_identity_context:
+    owns:
+      - owner_identity
+      - node_identity
+      - member_8d_identity_context
+      - group_member_node_context
+
+  L2_evidence_context:
+    owns:
+      - field_drift_events
+      - git_commits
+      - bundle_hashes
+      - startup_state_packets
+      - sandbox_validation_reports
+
+  L3_runtime_context:
+    owns:
+      - MSI_runtime_state
+      - taiji01_runtime_state
+      - Odoo_DB_context
+      - addon_presence_context
+
+  L4_governance_context:
+    owns:
+      - xiaoj_review_opinion_plus_final_authorization_rules
+      - plaintext_claim_rules
+      - contact_approval_rules
+      - no_secret_linter_rules
+      - runtime_landing_gates
+
+  L5_business_public_interest_context:
+    owns:
+      - free_member_privacy_service
+      - merchant_subscription_service
+      - committee_subscription_service
+      - addon_market_context
+      - group_member_revenue_sharing_context
+
+  L6_patent_context:
+    owns:
+      - invention_evolution_evidence
+      - state_field_packet_history
+      - 8d_identity_packet_history
+      - governed_transfer_engine_history
+
+inputs:
+  - W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+  - W7TP_FIELD_ATLAS/01_universe_registry.yaml
+  - W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+  - W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+  - W7TP_FIELD_ATLAS/schemas/00_schema_index.yaml
+  - Taiji_Governance/
+
+outputs:
+  - gei_context_snapshot
+  - gei_decision_context_packet
+  - gei_evidence_link_packet
+  - gei_runtime_context_summary
+
+governance:
+  plan_only: true
+  no_secret_read: true
+  no_runtime_write: true
+  no_db_write: true
+  no_service_restart: true
+  evidence_preservation: true
+
+red_team_reflection:
+  negative_effects:
+    - GEI_context_field_may_collect_too_much_metadata
+    - context_field_may_be_mistaken_as_source_of_truth
+    - patent_context_may_be_mixed_with_runtime_truth
+  mitigation:
+    - store_refs_not_plaintext
+    - mark_source_of_truth_per_context_layer
+    - separate_patent_evidence_from_runtime_decision
+    - keep_no_secret_policy

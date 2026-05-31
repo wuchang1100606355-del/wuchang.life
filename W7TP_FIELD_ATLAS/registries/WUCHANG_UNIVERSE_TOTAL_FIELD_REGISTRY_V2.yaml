@@ -1,0 +1,61 @@
+registry_id: WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2
+status: ACTIVE_PLAN_ONLY
+
+root_field:
+  id: U00_WUCHANG_UNIVERSE_TOTAL_FIELD
+  name: 五常宇宙總場
+  role: root_field
+  owner: CHIANG_CHENG_LUNG
+  mode: development_patent_period
+
+primary_fields:
+  - id: U01_ROUTER_FIELD
+    name: 路由治理場
+    role: network_boundary_and_route_governance
+
+  - id: U02_RUNTIME_SOURCE_FIELD
+    name: Runtime來源場
+    role: source_of_truth_candidate
+
+  - id: U03_GOVERNANCE_FIELD
+    name: 治理場
+    role: policy_audit_review_patent_evidence
+
+  - id: U04_IDENTITY_PRIVACY_FIELD
+    name: 身份私隱場
+    role: 8d_identity_member_privacy_plaintext_review
+
+  - id: U05_COMMUNITY_SERVICE_FIELD
+    name: 社區服務場
+    role: committee_welfare_volunteer_public_service
+
+  - id: U06_ECONOMIC_BLOODMAKING_FIELD
+    name: 經濟造血場
+    role: merchant_subscription_addon_market_revenue_sharing
+
+  - id: U07_GEI_CONTEXT_FIELD
+    name: GEI脈絡場
+    role: governance_evidence_intelligence_context
+
+  - id: U08_TWIN_SYNC_FIELD
+    name: 雙生同步場
+    role: source_twin_runtime_transfer_governance
+
+  - id: U09_INTENT_STATE_FIELD
+    name: 12意圖狀態場
+    role: intent_state_transition_and_routing
+
+governance:
+  before_create_module: require_sub_universe
+  before_create_sub_universe: require_field
+  before_runtime_landing: require_registration
+  no_unregistered_runtime_landing: true
+  no_secret_store: true
+
+red_team_reflection:
+  negative_effects:
+    - registration_first_may_slow_fast_prototyping
+    - too_many_fields_may_create_registry_overhead
+  mitigation:
+    - allow_sandbox_idea_notes_without_runtime_landing
+    - require_registration_before_module_or_runtime_action

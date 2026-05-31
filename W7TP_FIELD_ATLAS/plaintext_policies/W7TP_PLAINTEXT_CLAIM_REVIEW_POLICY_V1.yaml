@@ -1,0 +1,41 @@
+policy_id: W7TP_PLAINTEXT_CLAIM_REVIEW_POLICY_V1
+status: PLAN_ONLY
+
+principle:
+  association_may_hold_legal_minimum_plaintext: true
+  daily_use_must_be_8d_or_service_result: true
+  plaintext_claim_requires_review: true
+
+claim_requirements:
+  - requester_node_id
+  - legal_basis
+  - purpose
+  - requested_fields
+  - minimum_necessary
+  - expiry_time
+  - reseal_plan
+
+review_levels:
+  LOW:
+    requirement: staff_review
+  MEDIUM:
+    requirement: supervisor_review
+  HIGH:
+    requirement: threshold_key_or_three_key_review
+
+forbidden:
+  - plaintext_export_to_merchant_by_default
+  - broad_claim_without_purpose
+  - indefinite_plaintext_access
+  - claim_without_audit_hash
+
+red_team_reflection:
+  negative_effects:
+    - legal_basis_may_be_overstated
+    - emergency_claim_may_be_abused
+    - association_becomes_high_value_attack_target
+  mitigation:
+    - minimum_necessary_fields
+    - time_limited_access
+    - audit_hash_required
+    - high_risk_three_key_review

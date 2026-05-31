@@ -48,7 +48,7 @@ element_catalog:
     - 7D 意圖封包
     - 8D 加密狀態封包
     - policy_gate
-    - human_review
+    - xiaoj_review_opinion_plus_final_authorization
     - dead_letter
     - immutable_audit
     - 狀態場告警
@@ -200,7 +200,7 @@ next_collection_schema:
   risk_band_seed:
     - L0_readonly_local
     - L1_scoped_service_action
-    - L2_human_review_required
+    - L2_xiaoj_review_opinion_plus_final_authorization_required
     - L3_break_glass_audit_required
 
 red_flags:
@@ -219,6 +219,6 @@ governance:
   no_db_write: true
   no_service_restart: true
   no_runtime_promotion: true
-  human_review_for_high_risk: true
+  xiaoj_review_opinion_plus_final_authorization_for_high_risk: true
 
 next_step: 建立每個子場的事件與碼表矩陣 v0.3

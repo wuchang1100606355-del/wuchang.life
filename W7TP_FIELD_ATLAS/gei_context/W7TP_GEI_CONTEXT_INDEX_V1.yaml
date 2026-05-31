@@ -1,0 +1,30 @@
+index_id: W7TP_GEI_CONTEXT_INDEX_V1
+status: ACTIVE_PLAN_ONLY
+
+field:
+  file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_FIELD_V1.yaml
+
+schema:
+  file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_PACKET_SCHEMA_V1.yaml
+
+primary_links:
+  governed_hive_master_index:
+    file: W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+  task_board:
+    file: W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+  universe_registry:
+    file: W7TP_FIELD_ATLAS/01_universe_registry.yaml
+  event_registry:
+    file: W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+
+current_role:
+  - context_bridge
+  - evidence_linker
+  - decision_memory_field
+  - patent_period_context_anchor
+
+rules:
+  - GEI_must_not_store_secrets
+  - GEI_must_not_be_used_as_runtime_truth_without_source_refs
+  - GEI_must_link_to_evidence_not_replace_evidence
+  - GEI_must_separate_plan_only_from_runtime_state

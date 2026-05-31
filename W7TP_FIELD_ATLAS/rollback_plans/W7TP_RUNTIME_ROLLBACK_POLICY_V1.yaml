@@ -1,0 +1,47 @@
+rollback_policy_id: W7TP_RUNTIME_ROLLBACK_POLICY_V1
+status: PLAN_ONLY
+
+scope:
+  - taiji01_runtime_carrier
+  - odoo_addons
+  - odoo_db_volume_reference
+
+rollback_required_before:
+  - runtime_addon_copy
+  - module_install
+  - module_update
+  - service_restart
+  - domain_deploy
+
+rollback_artifacts:
+  addon_snapshot:
+    required: true
+    method: tar_or_hash_manifest
+  db_snapshot:
+    required: true
+    method: pg_dump_or_volume_snapshot
+  compose_snapshot:
+    required: true
+    method: copy_compose_and_env_without_secret_print
+  service_state_snapshot:
+    required: true
+    method: docker_ps_and_inspect_masked
+
+restore_test:
+  required_before_formal_production: true
+  optional_during_development: true
+
+forbidden:
+  - rollback_without_artifact
+  - overwrite_without_snapshot
+  - restart_without_separate_approval
+
+red_team_reflection:
+  negative_effects:
+    - rollback_files_may_consume_disk_space
+    - DB snapshot may contain personal data
+    - snapshot handling may become sensitive evidence
+  mitigation:
+    - encrypt_or_access_control_backups
+    - keep_retention_policy
+    - do_not_export_snapshots_to_cloud_without_review

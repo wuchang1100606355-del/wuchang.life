@@ -1,0 +1,38 @@
+spec_id: W7TP_PORTABLE_XIAOJ_MEMBER_AGENT_SPEC_V1
+status: PLAN_ONLY
+
+purpose:
+  - allow_member_to_take_xiaoj_across_nodes
+  - keep_member_privacy_and_service_context_portable
+  - prevent_node_specific_lock_in
+
+portable_context:
+  - 8d_identity_status
+  - consent_scope
+  - contact_permissions
+  - service_history_refs
+  - privacy_preferences
+  - device_binding_state
+
+entry_points:
+  - LINE
+  - PWA
+  - OpenWebUI
+  - merchant_node
+  - committee_node
+  - guest_wifi_limited_session
+
+rules:
+  - member_controls_contact_permission
+  - node_receives_service_result_not_plaintext
+  - portable_context_uses_refs_not_raw_secrets
+  - lost_device_triggers_recovery_flow
+
+red_team_reflection:
+  negative_effects:
+    - portability_can_be_misread_as_cross_site_tracking
+    - guest_wifi_context_may_be_confused_with_identity
+  mitigation:
+    - explicit_consent_session
+    - purpose_scoped_identity
+    - wifi_presence_not_identity_proof

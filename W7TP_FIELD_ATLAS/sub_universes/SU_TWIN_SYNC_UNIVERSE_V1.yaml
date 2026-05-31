@@ -1,0 +1,38 @@
+sub_universe_id: SU_TWIN_SYNC_UNIVERSE_V1
+parent_field: U08_TWIN_SYNC_FIELD
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - convert_field_drift_into_governed_field_transfer
+  - separate_source_twin_sandbox_runtime
+  - prevent_wrong_machine_or_wrong_odoo_landing
+
+roles:
+  source_field:
+    example: /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+  twin_field:
+    example: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  runtime_field:
+    example: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+
+functions:
+  - field_drift_detection
+  - source_hash_ledger
+  - sandbox_validation
+  - final_sync_diff_packet
+  - server_acceptance_report
+  - rollback_gate
+  - human_approval_packet
+
+rule:
+  plan_first: true
+  no_runtime_copy_without_acceptance: true
+  restart_requires_separate_approval: true
+
+red_team_reflection:
+  negative_effects:
+    - twin_system_may_become_dual_master
+    - sandbox_pass_does_not_guarantee_runtime_success
+  mitigation:
+    - only_one_source_of_truth_per_module
+    - server_acceptance_required

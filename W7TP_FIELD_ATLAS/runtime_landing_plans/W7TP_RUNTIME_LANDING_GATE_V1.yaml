@@ -1,0 +1,65 @@
+landing_gate_id: W7TP_RUNTIME_LANDING_GATE_V1
+status: PLAN_ONLY
+
+purpose:
+  - prevent_unreviewed_module_landing
+  - protect_taiji01_stable_runtime
+  - require_server_acceptance_before_copy_or_restart
+
+target_runtime:
+  host: taiji01
+  carrier_path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+  service: wuchang_os_odoo_18
+  db_container: wuchang_os_pg
+
+required_before_runtime_landing:
+  G1_SOURCE_HASH_LEDGER:
+    required: true
+    artifact: W7TP_FIELD_ATLAS/source_hash_ledger/
+
+  G2_FIELD_DIFF_PACKET:
+    required: true
+    artifact: W7TP_FIELD_ATLAS/diff_packets/
+
+  G3_SANDBOX_VALIDATION_PASS:
+    required: true
+    artifact: Taiji_Governance/sandbox_validation_*.md
+
+  G4_SERVER_TRUTH_PACKET:
+    required: true
+    artifact: Taiji_Governance/taiji01_server_truth_packet_*.md
+
+  G5_DB_COMPATIBILITY_CONFIRMED:
+    required: true
+    rule: actual_odoo_database_must_be_identified
+
+  G6_ROLLBACK_POINT_CREATED:
+    required: true
+    artifact: W7TP_FIELD_ATLAS/rollback_plans/
+
+  G7_HUMAN_APPROVAL:
+    required: true
+    rule: explicit_approval_required_for_copy
+
+  G8_RESTART_SEPARATE_APPROVAL:
+    required: true
+    rule: restart_is_not_included_in_copy_approval
+
+forbidden_without_all_gates:
+  - copy_to_runtime_addons
+  - module_install
+  - module_update
+  - docker_compose_up
+  - odoo_restart
+  - domain_deploy
+  - secret_transfer
+
+red_team_reflection:
+  negative_effects:
+    - too_many_gates_may_slow_iteration
+    - incomplete_db_detection_may_block_valid_landing
+    - rollback_plan_without_restore_test_may_create_false_safety
+  mitigation:
+    - allow_low_risk_sandbox_iteration
+    - keep_runtime_gate_only_for_taiji01_or_formal_runtime
+    - require_restore_test_later_before formal production

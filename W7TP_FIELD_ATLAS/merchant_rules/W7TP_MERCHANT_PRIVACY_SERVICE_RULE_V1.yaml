@@ -1,0 +1,42 @@
+rule_id: W7TP_MERCHANT_PRIVACY_SERVICE_RULE_V1
+status: PLAN_ONLY
+
+principle:
+  merchant_uses_service_not_member_data: true
+  raw_member_contact_default: hidden
+  member_contact_requires_approval: true
+
+merchant_allowed_services:
+  - order_status_service
+  - pickup_notice_request
+  - delivery_coordination_request
+  - discount_or_ticket_validation
+  - after_sales_service_request
+  - blind_ai_business_assist
+  - standard_addon_subscription
+
+merchant_forbidden_actions:
+  - export_member_list
+  - store_raw_contact_without_approval
+  - marketing_without_opt_in
+  - cross_purpose_profile_building
+  - plaintext_claim_without_legal_or_service_reason
+
+merchant_subscription_boundary:
+  pays_for:
+    - privacy_ai_service
+    - blind_ai_usage_reduction
+    - standard_addon_service
+  does_not_buy:
+    - member_plaintext
+    - member_contact_list
+    - unrestricted_identity_graph
+
+red_team_reflection:
+  negative_effects:
+    - merchants_may_think_subscription_grants_contact_rights
+    - business_pressure_may_push_overmarketing
+  mitigation:
+    - contact_right_is_separate_member_approval
+    - marketing_requires_explicit_opt_in
+    - node_credit_score_penalizes_abuse

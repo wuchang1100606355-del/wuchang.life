@@ -1,0 +1,69 @@
+sync_plan_id: INBOUND_SYNC_PLAN_PM3_TO_TAIJI01_V1
+status: PLAN_ONLY
+
+source:
+  host: MSI
+  role: active_development_twin
+  addon_path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  runtime_source_path: /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+  actual_db: postgres
+  pm3_runtime_sync_state: installed
+
+target:
+  host: taiji01
+  role: stable_runtime_carrier
+  addon_path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  current_state: missing
+  actual_db: unknown_on_taiji01
+
+preconditions:
+  required:
+    - taiji01_actual_db_identification
+    - source_hash_ledger
+    - field_diff_packet
+    - sandbox_validation_pass
+    - no_secret_linter_pass
+    - server_acceptance_report
+    - rollback_point
+    - explicit_human_approval
+
+copy_scope:
+  allowed_candidate_files:
+    - __manifest__.py
+    - __init__.py
+    - controllers/
+    - models/
+    - views/
+    - security/
+  forbidden:
+    - .env
+    - secret files
+    - raw DB dump
+    - private keys
+    - OAuth client secret values
+
+runtime_actions:
+  copy_to_runtime: forbidden_until_approval
+  module_install_or_update: forbidden_until_approval
+  service_restart: separate_approval_required
+  domain_change: forbidden
+
+decision:
+  current: DO_NOT_SYNC_YET
+  reason:
+    - taiji01 actual DB not confirmed
+    - rollback point not created
+    - human approval not granted
+
+red_team_reflection:
+  negative_effects:
+    - MSI postgres DB may not match taiji01 DB
+    - copied addon may depend on settings absent on taiji01
+    - OAuth routes may expose incomplete login flow if enabled early
+    - syncing code without DB migration plan may create broken UI
+  mitigation:
+    - identify taiji01 actual DB first
+    - sync code only after server acceptance
+    - do not sync secrets
+    - test in sandbox before runtime
+    - restart requires separate approval

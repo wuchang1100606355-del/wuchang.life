@@ -1,0 +1,87 @@
+plan_id: PM3_RUNTIME_SYNC_SPLIT_PLAN_V1
+status: PLAN_ONLY
+
+source_addon:
+  name: pm3_runtime_sync
+  source_paths:
+    - /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+    - /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+
+target_addons:
+  w7tp_identity_registry:
+    module_ref: M02_8d_identity_registry
+    owns:
+      - res_users_proxy
+      - member_identity_mapper
+      - 8d_identity_packet
+      - external_identity_binding
+
+  w7tp_contact_approval:
+    module_ref: M04_contact_approval_gate
+    owns:
+      - contact_approval_packet
+      - merchant_contact_request
+      - member_approval_flow
+
+  w7tp_plaintext_claim_review:
+    module_ref: M05_plaintext_claim_review
+    owns:
+      - plaintext_claim_packet
+      - legal_basis_check
+      - xiaoj_review_opinion_plus_final_authorization_gate
+      - reseal_policy
+
+  w7tp_blind_ai_subscription:
+    module_ref: M06_blind_ai_subscription
+    owns:
+      - blind_ai_subscription_packet
+      - redacted_ai_request
+      - usage_ledger
+      - cost_routing
+
+  w7tp_oauth_bridge:
+    module_ref: M02_8d_identity_registry
+    owns:
+      - google_auth
+      - line_auth
+      - oauth_callback_bridge
+    rule:
+      - oauth_maps_to_8d_identity
+      - no_raw_contact_export
+
+  w7tp_field_drift_governance:
+    module_ref: M08_field_drift_governance
+    owns:
+      - universe_packet
+      - source_hash_ledger
+      - sandbox_validation
+      - drift_detector
+
+split_rules:
+  - no_secret_in_addon
+  - secret_refs_only
+  - no_runtime_copy_without_plan
+  - no_db_write_in_refactor_phase
+  - each_target_addon_must_have_universe_packet
+  - each_target_addon_must_have_manifest_gate
+  - each_target_addon_must_have_red_team_section
+
+validation_gates:
+  - manifest_check
+  - python_syntax_check
+  - xml_parse_check
+  - no_secret_literal_check
+  - dependency_map_check
+  - sandbox_install_check_later
+
+red_team_reflection:
+  negative_effects:
+    - split_too_early_may_break_current_working_MSI_addon
+    - addon_dependency_order_may_be_wrong
+    - oauth_bridge_may_depend_on_res_users_proxy
+    - too_many_modules_may_increase_maintenance
+  mitigation:
+    - keep_original_pm3_runtime_sync_as_legacy_reference
+    - split_into_sandbox_first
+    - generate_dependency_graph_before_code_change
+    - no_runtime_install_until_server_acceptance

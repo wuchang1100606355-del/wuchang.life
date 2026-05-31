@@ -1,0 +1,94 @@
+dependency_graph_id: W7TP_MODULE_DEPENDENCY_GRAPH_V1
+status: PLAN_ONLY
+
+modules:
+  w7tp_identity_registry:
+    module_ref: M02_8d_identity_registry
+    depends_on:
+      - base
+      - mail
+    provides:
+      - 8d_identity_packet
+      - external_identity_binding
+      - member_code
+      - res_users_proxy
+
+  w7tp_oauth_bridge:
+    module_ref: M02_8d_identity_registry
+    depends_on:
+      - base
+      - auth_oauth
+      - w7tp_identity_registry
+    provides:
+      - google_login_bridge
+      - line_login_bridge
+      - oauth_to_8d_binding
+
+  w7tp_contact_approval:
+    module_ref: M04_contact_approval_gate
+    depends_on:
+      - base
+      - mail
+      - w7tp_identity_registry
+    provides:
+      - contact_request_packet
+      - member_contact_approval
+      - temporary_contact_channel
+
+  w7tp_plaintext_claim_review:
+    module_ref: M05_plaintext_claim_review
+    depends_on:
+      - base
+      - mail
+      - w7tp_identity_registry
+    provides:
+      - plaintext_claim_packet
+      - legal_basis_check
+      - xiaoj_review_opinion_plus_final_authorization_gate
+      - reseal_policy
+
+  w7tp_blind_ai_subscription:
+    module_ref: M06_blind_ai_subscription
+    depends_on:
+      - base
+      - w7tp_identity_registry
+    provides:
+      - blind_ai_subscription_packet
+      - redacted_ai_request
+      - usage_ledger
+      - cost_routing
+
+  w7tp_field_drift_governance:
+    module_ref: M08_field_drift_governance
+    depends_on:
+      - base
+    provides:
+      - universe_packet
+      - source_hash_ledger
+      - drift_detector
+      - sandbox_validation_report
+
+install_order:
+  - w7tp_identity_registry
+  - w7tp_oauth_bridge
+  - w7tp_contact_approval
+  - w7tp_plaintext_claim_review
+  - w7tp_blind_ai_subscription
+  - w7tp_field_drift_governance
+
+risk_notes:
+  - oauth_bridge_must_not_create_identity_without_8d_binding
+  - contact_approval_must_not_export_raw_contact
+  - plaintext_claim_review_must_require_xiaoj_review_opinion_plus_final_authorization
+  - blind_ai_subscription_must_not_send_raw_plaintext_to_provider
+  - field_drift_governance_must_not_auto_sync_runtime
+
+red_team_reflection:
+  negative_effects:
+    - dependency graph may be wrong until real manifests are generated
+    - auth_oauth dependency may vary by Odoo edition/setup
+    - over-splitting can create circular dependencies
+  mitigation:
+    - keep this as plan_only
+    - validate each manifest later in sandbox
+    - identity_registry must remain the root dependency

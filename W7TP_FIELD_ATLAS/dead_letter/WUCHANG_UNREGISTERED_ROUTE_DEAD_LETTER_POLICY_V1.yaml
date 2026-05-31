@@ -1,0 +1,48 @@
+policy_id: WUCHANG_UNREGISTERED_ROUTE_DEAD_LETTER_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - handle_requests_with_no_registered_field_route
+  - prevent_sensitive_request_from_falling_into_wrong_module
+  - preserve_evidence_for_later_registration
+
+dead_letter_triggers:
+  - unknown_field
+  - unknown_sub_universe
+  - unknown_function_route
+  - unregistered_runtime_landing_request
+  - sensitive_request_without_review_path
+  - plaintext_or_contact_request_without_policy
+
+dead_letter_packet:
+  required_fields:
+    - dead_letter_id
+    - timestamp
+    - host
+    - original_request_type
+    - suspected_field
+    - reason
+    - risk_level
+    - evidence_refs
+    - recommended_registration_action
+
+actions:
+  LOW:
+    - create_registration_notice
+  MEDIUM:
+    - require_GEIcontext_review
+  HIGH:
+    - block_action
+    - xiaoj_review_opinion_plus_final_authorization_required
+  CRITICAL:
+    - quarantine_candidate
+    - preserve_evidence
+
+red_team_reflection:
+  negative_effects:
+    - dead_letter_queue_may_accumulate_and_be_ignored
+    - overblocking_unknown_routes_may_slow_work
+  mitigation:
+    - weekly_dead_letter_review
+    - allow_low_risk_sandbox_notes
+    - high_risk_only_blocks_runtime_actions

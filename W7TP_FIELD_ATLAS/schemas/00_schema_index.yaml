@@ -1,0 +1,28 @@
+schema_index_id: W7TP_CORE_PACKET_SCHEMA_INDEX
+status: DRAFT
+
+schemas:
+  - schema_id: 8D_IDENTITY_PACKET
+    file: W7TP_FIELD_ATLAS/schemas/8d_identity_packet.schema.yaml
+    module: M02_8d_identity_registry
+
+  - schema_id: GROUP_MEMBER_NODE_PACKET
+    file: W7TP_FIELD_ATLAS/schemas/group_member_node_packet.schema.yaml
+    module: M03_group_member_node_registry
+
+  - schema_id: CONTACT_APPROVAL_PACKET
+    file: W7TP_FIELD_ATLAS/schemas/contact_approval_packet.schema.yaml
+    module: M04_contact_approval_gate
+
+  - schema_id: PLAINTEXT_CLAIM_PACKET
+    file: W7TP_FIELD_ATLAS/schemas/plaintext_claim_packet.schema.yaml
+    module: M05_plaintext_claim_review
+
+  - schema_id: BLIND_AI_SUBSCRIPTION_PACKET
+    file: W7TP_FIELD_ATLAS/schemas/blind_ai_subscription_packet.schema.yaml
+    module: M06_blind_ai_subscription
+
+governance:
+  plan_only: true
+  no_runtime_write: true
+  no_secret: true

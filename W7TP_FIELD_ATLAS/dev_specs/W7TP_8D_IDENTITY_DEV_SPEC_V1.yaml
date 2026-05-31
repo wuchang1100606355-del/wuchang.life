@@ -1,0 +1,48 @@
+spec_id: W7TP_8D_IDENTITY_DEV_SPEC_V1
+status: PLAN_ONLY
+
+target_sub_universe: SU_IDENTITY_8D
+target_module: M02_8d_identity_registry
+
+data_objects:
+  8d_identity_packet:
+    fields:
+      - member_code
+      - purpose_scope
+      - node_scope
+      - service_permissions
+      - expiry
+      - revocation_status
+      - audit_ref
+      - encrypted_payload_ref
+
+core_operations:
+  issue_8d_identity:
+    requires:
+      - member_registration
+      - issuer_authority
+  rotate_8d_identity:
+    requires:
+      - device_loss_or_periodic_rotation
+  revoke_8d_identity:
+    requires:
+      - member_request_or_security_event
+  verify_8d_service_result:
+    output:
+      - allowed
+      - denied
+      - xiaoj_review_opinion_plus_final_authorization_required
+
+forbidden:
+  - embed_raw_phone
+  - embed_raw_address
+  - embed_raw_line_id
+  - unrestricted_cross_context_tracking
+
+red_team_reflection:
+  negative_effects:
+    - persistent_identifier_can_become_tracking_id
+  mitigation:
+    - purpose_scoped_tokens
+    - expiry_and_rotation
+    - audit_unusual_lookup_patterns

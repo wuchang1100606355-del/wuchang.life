@@ -1,0 +1,64 @@
+rollback_plan_id: TAIJI01_PM3_ROLLBACK_POINT_PLAN_V1
+status: PLAN_ONLY
+
+target:
+  host: taiji01
+  runtime_carrier: /home/taiji_01/Taiji_Hub/Taiji_Odoo
+  addon_target: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  odoo_container: wuchang_os_odoo_18
+  db_container: wuchang_os_pg
+
+rollback_required_before:
+  - copying_pm3_runtime_sync_to_taiji01
+  - installing_or_updating_pm3_runtime_sync
+  - restarting_odoo
+  - changing_domain_or_oauth_redirect
+
+required_artifacts:
+  addon_snapshot:
+    type: tar_or_hash_manifest
+    required: true
+    note: snapshot existing addons directory before copy
+
+  compose_snapshot:
+    type: masked_compose_copy
+    required: true
+    note: copy compose without printing secrets
+
+  db_snapshot:
+    type: pg_dump_or_volume_snapshot
+    required: true
+    note: may contain personal data; must remain local and access-controlled
+
+  docker_state_snapshot:
+    type: docker_ps_and_inspect_masked
+    required: true
+
+  restore_instruction:
+    type: manual_restore_steps
+    required: true
+
+forbidden:
+  - runtime_copy_before_snapshot
+  - module_update_before_db_snapshot
+  - restart_without_separate_approval
+  - cloud_upload_of_snapshot_without_review
+  - printing_secret_values
+
+decision:
+  rollback_ready: false
+  reason:
+    - plan_created_only
+    - no_snapshot_created_yet
+    - taiji01_actual_db_still_required
+
+red_team_reflection:
+  negative_effects:
+    - DB snapshot may contain personal/member data
+    - addon snapshot may preserve outdated vulnerable code
+    - rollback plan without restore test can create false safety
+  mitigation:
+    - keep snapshots local
+    - restrict permissions
+    - create hash manifest
+    - test restore later in sandbox before formal production

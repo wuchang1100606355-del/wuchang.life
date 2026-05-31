@@ -1,0 +1,55 @@
+flow_id: W7TP_GROUP_MEMBER_NODE_ONBOARDING_FLOW_V1
+status: PLAN_ONLY
+
+purpose:
+  - onboard merchants_committees_group_members_as_governed_hive_nodes
+  - prevent_unregistered_nodes_from_using_8d_services
+  - bind_each_node_to_service_scope_and_audit_rules
+
+required_registration_fields:
+  - node_id
+  - organization_name
+  - organization_type
+  - responsible_person_or_contact_role
+  - service_scope
+  - odoo_db_or_tenant_location
+  - endpoint_reference
+  - allowed_8d_services
+  - data_boundary_acknowledgement
+  - audit_consent
+
+onboarding_steps:
+  - submit_group_member_node_packet
+  - verify_membership_or_contract_status
+  - assign_node_id
+  - assign_allowed_service_scope
+  - issue_node_8d_service_certificate
+  - enable_service_result_only_access
+  - monitor_first_30_days
+
+node_status:
+  TRIAL:
+    meaning: limited service access
+  CERTIFIED:
+    meaning: normal governed node
+  RESTRICTED:
+    meaning: limited due to warning or incomplete review
+  SUSPENDED:
+    meaning: blocked from service until review
+  REVOKED:
+    meaning: removed from governed hive
+
+forbidden:
+  - self_assign_node_id
+  - use_8d_service_without_registration
+  - bypass_member_contact_approval
+  - request_plaintext_without_claim_packet
+
+red_team_reflection:
+  negative_effects:
+    - onboarding_may_become_too_heavy_for_small_shops
+    - weak_node_verification_may_allow_fake_nodes
+  mitigation:
+    - trial_mode_for_low_risk_services
+    - certified_mode_for_contact_or_plaintext_related_services
+    - xiaoj_review_opinion_plus_final_authorization_for_high_risk_node_permissions

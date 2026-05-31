@@ -1,0 +1,74 @@
+validation_plan_id: W7TP_MODULE_SPLIT_SANDBOX_VALIDATION_V1
+status: PLAN_ONLY
+
+purpose:
+  - validate_split_addons_before_runtime_landing
+  - prevent_broken_modules_from_entering_taiji01
+  - ensure_no_secret_literal_in_addons
+
+sandbox:
+  path: runtime/sandbox/w7tp_module_split_validation
+  runtime_copy_allowed: false
+  db_write_allowed: false
+  service_restart_allowed: false
+
+target_addons:
+  - w7tp_identity_registry
+  - w7tp_contact_approval
+  - w7tp_plaintext_claim_review
+  - w7tp_blind_ai_subscription
+  - w7tp_oauth_bridge
+  - w7tp_field_drift_governance
+
+validation_gates:
+  G1_UNIVERSE_PACKET:
+    required: true
+    check: each_addon_has_universe_packet_yaml
+
+  G2_MANIFEST:
+    required: true
+    check: manifest_exists_and_python_compiles
+
+  G3_PYTHON_SYNTAX:
+    required: true
+    check: all_python_files_compile
+
+  G4_XML_PARSE:
+    required: true
+    check: all_xml_files_parse
+
+  G5_NO_SECRET_LITERAL:
+    required: true
+    check:
+      forbidden_patterns:
+        - SECRET=
+        - PASSWORD=
+        - PRIVATE_KEY
+        - CLIENT_SECRET
+        - sk-
+        - xoxb-
+        - ghp_
+
+  G6_DEPENDENCY_GRAPH:
+    required: true
+    check: manifest_dependencies_must_be_declared
+
+  G7_NO_RUNTIME_ACTION:
+    required: true
+    check: validation_must_not_copy_to_runtime_or_restart
+
+outputs:
+  - sandbox_validation_report
+  - addon_dependency_graph
+  - no_secret_literal_report
+  - failed_gate_report
+
+red_team_reflection:
+  negative_effects:
+    - syntax_pass_does_not_equal_odoo_install_success
+    - no_secret_scan_may_have_false_positive_or_false_negative
+    - split_addons_may_create_dependency_cycle
+  mitigation:
+    - add_odoo_dry_run_later
+    - keep_original_pm3_runtime_sync_as_reference
+    - require_server_acceptance_before_runtime_landing

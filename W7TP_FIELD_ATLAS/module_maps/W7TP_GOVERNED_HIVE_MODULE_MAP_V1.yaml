@@ -1,0 +1,126 @@
+module_map_id: W7TP_GOVERNED_HIVE_MODULE_MAP_V1
+status: PLAN_ONLY
+
+root_goal:
+  convert_current_dual_machine_validation_into_modular_governed_hive_system
+
+modules:
+  M01_member_privacy_core:
+    role: 免費會員小J個資私隱服務
+    owns:
+      - member_privacy_policy
+      - 8d_daily_identity_use
+      - plaintext_minimization
+
+  M02_8d_identity_registry:
+    role: 8D身分碼核發與身份場登記
+    owns:
+      - 8d_identity_packet
+      - member_code
+      - node_identity_binding
+
+  M03_group_member_node_registry:
+    role: 商店/管委會/團體會員節點登記
+    owns:
+      - node_id
+      - service_scope
+      - odoo_db_or_tenant_location
+      - public_endpoint_reference
+
+  M04_contact_approval_gate:
+    role: 商店聯絡會員必經會員核准
+    owns:
+      - contact_request_packet
+      - member_approval
+      - temporary_contact_channel
+      - revocation
+
+  M05_plaintext_claim_review:
+    role: 明文個資聲請、人審、三金鑰、回封
+    owns:
+      - plaintext_claim_packet
+      - legal_basis
+      - purpose_limit
+      - xiaoj_review_opinion_plus_final_authorization
+      - audit_hash
+      - reseal
+
+  M06_blind_ai_subscription:
+    role: AI盲算/無明文/用量降低訂閱服務
+    owns:
+      - redacted_ai_packet
+      - usage_reduction
+      - cloud_lane_policy
+      - cost_ledger
+
+  M07_standard_addon_market:
+    role: 標準模組加值訂閱，利潤歸團體會員
+    owns:
+      - addon_catalog
+      - subscription_rule
+      - group_member_profit_rule
+      - module_lifecycle
+
+  M08_field_drift_governance:
+    role: 雙機/多機場漂移偵測與受治理轉場
+    owns:
+      - universe_registry
+      - source_hash_ledger
+      - startup_state_packet
+      - metric_alert
+      - sandbox_validation
+      - sync_plan_only
+
+  M09_server_acceptance_gate:
+    role: taiji01/正式伺服器接受閘門
+    owns:
+      - server_truth_packet
+      - db_compatibility_check
+      - rollback_gate
+      - human_approval_gate
+
+  M10_disaster_recovery_accountability:
+    role: 可災復、可究責、第三方物理監管
+    owns:
+      - physical_custody
+      - backup_packet
+      - audit_trail
+      - incident_recovery
+
+boundaries:
+  forbidden:
+    - merchant_raw_contact_without_member_approval
+    - direct_plaintext_to_group_member
+    - secret_sync
+    - runtime_copy_without_plan
+    - restart_without_explicit_approval
+    - domain_deploy_without_field_check
+
+integration_flow:
+  - member_registers_with_association
+  - association_issues_8d_identity
+  - group_member_registers_node
+  - group_member_uses_8d_service_result
+  - contact_requires_member_approval
+  - plaintext_claim_requires_xiaoj_review_opinion_plus_final_authorization
+  - ai_service_uses_blind_redacted_packet
+  - addon_changes_pass_field_drift_governance
+  - server_acceptance_before_runtime_landing
+
+red_team_reflection:
+  negative_effects:
+    - 模組數增加，維護成本上升
+    - 團體會員可能誤解為可取得會員明文
+    - 中央協會責任集中
+    - 8D碼若未分用途可能形成追蹤風險
+    - 加值訂閱可能造成過度推銷
+  mitigation:
+    - 日常只用8D碼與服務結果
+    - 明文聲請必須人審與期限
+    - 聯絡必須會員核准
+    - secret只存reference不同步
+    - 模組進runtime前必須通過M08與M09
+
+schema_index:
+  file: W7TP_FIELD_ATLAS/schemas/00_schema_index.yaml
+  status: DRAFT

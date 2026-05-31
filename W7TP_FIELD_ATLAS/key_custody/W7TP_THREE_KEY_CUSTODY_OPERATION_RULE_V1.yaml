@@ -1,0 +1,48 @@
+rule_id: W7TP_THREE_KEY_CUSTODY_OPERATION_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - prevent_single_person_plaintext_access
+  - support_disaster_recovery_and_high_risk_plaintext_claims
+  - protect_member_privacy_under_physical_custody
+
+key_roles:
+  holder_A:
+    role: local_key_custodian
+  holder_B:
+    role: local_key_custodian
+  holder_C:
+    role: local_key_custodian
+
+threshold_rule:
+  normal_plaintext_access: forbidden
+  high_risk_unlock: requires_threshold_or_three_key_review
+  emergency_unlock: allowed_only_with_post_review_and_audit
+
+required_record:
+  - claim_id
+  - legal_basis
+  - reason
+  - requester
+  - reviewer
+  - key_holder_participation
+  - opened_fields
+  - expiry_time
+  - reseal_status
+  - audit_hash
+
+forbidden:
+  - founder_single_person_unlock
+  - admin_single_person_unlock
+  - key_copy_without_record
+  - plaintext_export_without_claim_packet
+
+red_team_reflection:
+  negative_effects:
+    - key_holder_unavailable_may_delay_service
+    - physical_keys_can_be_lost_or_coerced
+  mitigation:
+    - backup_key_rotation_plan
+    - scheduled_key_holder_review
+    - emergency_path_with_limited_scope
+    - post_event_audit

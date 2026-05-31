@@ -1,0 +1,41 @@
+rule_id: WUCHANG_REGISTRATION_FIRST_RULE_V1
+status: ACTIVE_PLAN_ONLY
+
+principle:
+  field_before_sub_universe: true
+  sub_universe_before_module: true
+  module_before_function: true
+  registration_before_runtime_landing: true
+
+hard_rules:
+  R1:
+    name: no_unregistered_module
+    action: block_runtime_landing
+  R2:
+    name: no_unmounted_function
+    action: require_function_map_update
+  R3:
+    name: no_unknown_route
+    action: send_to_dead_letter_or_xiaoj_review_opinion_plus_final_authorization
+  R4:
+    name: no_unregistered_sync
+    action: block_copy_restart_deploy
+  R5:
+    name: no_secret_in_registry
+    action: fail_linter
+
+allowed_exception:
+  sandbox_idea_note:
+    allowed: true
+    condition: not_runtime_landing
+  temporary_experiment:
+    allowed: true
+    condition: sandbox_only_and_expiry_required
+
+red_team_reflection:
+  negative_effects:
+    - registration_first_can_slow_creative_exploration
+    - too_strict_rules_can_make_small_edits_annoying
+  mitigation:
+    - sandbox_exception_allowed
+    - runtime_landing_stays_strict
