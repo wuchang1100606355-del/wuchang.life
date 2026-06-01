@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 擴充 Odoo 預設的登入頁面，加入 Google 與 LINE 登入按鈕 -->
+    <template id="pm3_oauth_login_buttons" inherit_id="web.login" name="PM3 OAuth Login Buttons">
+        <xpath expr="//form[contains(@class, 'o_login_form') or contains(@class, 'oe_login_form')]" position="after">
+            <div class="o_login_oauth_container mt-4 pt-3 border-top text-center">
+                <p class="text-muted mb-3"><small>或使用五常社區授權帳號登入 / 註冊：</small></p>
+                <div class="d-grid gap-2">
+                    <a href="/auth/line/login" class="btn btn-block text-white" style="background-color: #06C755; padding: 10px;">
+                        <i class="fa fa-commenting-o fa-fw"/> 以 LINE 登入 / 註冊
+                    </a>
+                    <a href="/auth/google/login" class="btn btn-outline-dark btn-block" style="padding: 10px;">
+                        <i class="fa fa-google fa-fw"/> 以 Google 登入 / 註冊
+                    </a>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

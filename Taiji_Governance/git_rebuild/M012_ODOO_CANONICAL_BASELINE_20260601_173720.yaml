@@ -1,0 +1,10 @@
+id: M012_ODOO_CANONICAL_BASELINE
+timestamp: 20260601_173720
+mode: focused_odoo_baseline
+actions:
+  - stage_safe_odoo_addons_and_configs
+  - exclude_backup_import_runtime_noise
+  - no_db_write
+  - no_service_restart
+  - no_docker_action
+  - no_secret_read

@@ -1,0 +1,42 @@
+services:
+
+  wuchang_os_odoo_18:
+    image: odoo:18.0
+    container_name: wuchang_os_odoo_18
+    restart: always
+    command:
+      - odoo
+      - -d
+      - postgres
+      - --db-filter=^postgres$
+      - --no-database-list
+    depends_on:
+      - wuchang_os_pg
+
+    ports:
+      - "127.0.0.1:8069:8069"
+
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./odoo_data:/var/lib/odoo
+      - /mnt/c/Taiji_Runtime:/mnt/taiji_runtime:ro
+      - ./config/odoo.conf:/etc/odoo/odoo.conf:ro
+
+    environment:
+      HOST: wuchang_os_pg
+      USER: odoo
+      PASSWORD: taiji_secret
+      PM3_IDENTITY_HMAC_SECRET: "2e5d42e5c3d3ad716d1fa18a5c41f814eddcae7e60b44fee4e5706490e478d21"
+
+  wuchang_os_pg:
+    image: postgres:15
+    container_name: wuchang_os_pg
+    restart: always
+
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: taiji_secret
+
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data

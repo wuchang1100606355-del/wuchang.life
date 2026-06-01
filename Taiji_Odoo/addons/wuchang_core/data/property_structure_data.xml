@@ -1,0 +1,52 @@
+<odoo>
+    <data noupdate="0">
+        <!-- 三重分公司 -->
+        <record id="company_sanchong_branch" model="res.company">
+            <field name="name">三重分公司</field>
+            <!-- <field name="parent_id" ref="base.main_company"/> -->
+        </record>
+
+        <!-- 五常社區發展協會 -->
+        <record id="partner_wuchang_association" model="res.partner">
+            <field name="name">五常社區發展協會</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="company_sanchong_branch"/>
+            <field name="street">新北市三重區五常里</field>
+            <field name="city">新北市</field>
+            <field name="street2">三重區</field>
+            <field name="zip">241</field>
+            <field name="comment">轄區：新北市三重區五順里、五常里、仁忠里</field>      
+            <field name="property_payment_term_id" ref="account.account_payment_term_immediate"/>
+            <field name="property_management_role">association</field>
+            <field name="spatial_idx_lat">25.0700000</field>
+            <field name="spatial_idx_lng">121.5000000</field>
+            <field name="spatial_idx_alt">10.5</field>
+            <field name="spatial_ref_uuid">WUCHANG-HQ-ANCHOR-001</field>
+        </record>
+
+        <!-- 里辦公處 -->
+        <record id="partner_wushun_office" model="res.partner">
+            <field name="name">五順里辦公處</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="company_sanchong_branch"/>
+            <field name="property_management_role">government</field>
+            <field name="street">新北市三重區五順里</field>
+        </record>
+
+        <record id="partner_wuchang_office" model="res.partner">
+            <field name="name">五常里辦公處</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="company_sanchong_branch"/>
+            <field name="property_management_role">government</field>
+            <field name="street">新北市三重區五常里</field>
+        </record>
+
+        <record id="partner_renzhong_office" model="res.partner">
+            <field name="name">仁忠里辦公處</field>
+            <field name="is_company">True</field>
+            <field name="company_id" ref="company_sanchong_branch"/>
+            <field name="property_management_role">government</field>
+            <field name="street">新北市三重區仁忠里</field>
+        </record>
+    </data>
+</odoo>

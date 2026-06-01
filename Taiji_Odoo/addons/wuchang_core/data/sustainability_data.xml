@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 6. 初始化：社區永續發展基金 --> 
+        <record id="wuchang_sustainability_fund_main" model="community.sustainability.fund"> 
+            <field name="name">五常社區永續發展基金</field> 
+            <field name="total_capital">0.0</field> 
+            <field name="management_rule">本基金之管理辦法由新北市三重區五常社區發展協會訂定。系統執行規則由最高權限者江政隆先生提供。</field> 
+        </record> 
+
+        <!-- 7. 設定系統最高權限者 (江政隆) --> 
+        <record id="user_supreme_authority" model="res.users"> 
+            <field name="name">江政隆 (系統最高權限)</field> 
+            <field name="login">supreme@wuchang.life</field> 
+            <field name="is_supreme_authority">True</field> 
+            <field name="real_name_verified">True</field> 
+            <field name="privacy_waived">True</field> 
+            <field name="active">True</field> 
+            
+            <field name="bio_face_hash">a1b2c3d4e5f6...</field> 
+            <field name="bio_voice_hash">1a2b3c4d5e6f...</field> 
+            <field name="id_card_hash">9z8y7x6w5v4u...</field> 
+            <field name="citizen_digital_cert_uid">MOICA-123456789</field> 
+            
+            <!-- 法律管轄宣告 --> 
+            <field name="legal_jurisdiction">臺灣新北地方法院</field> 
+            
+            <field name="groups_id" eval="[(6,0,[ref('base.group_system')])]"/> 
+        </record> 
+        
+        <!-- 8. 權限設定：合規公文只有管理員可操作 --> 
+        <!-- 這部分通常在 ir.model.access.csv 設定，這裡僅作註記 --> 
+    </data>
+</odoo>

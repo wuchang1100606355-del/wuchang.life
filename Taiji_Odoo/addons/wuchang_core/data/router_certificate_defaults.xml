@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ASUS 路由器證書默認配置 -->
+        <record id="router_certificate_asus_default" model="wuchang.router.certificate">
+            <field name="name">ASUS RT-BE86U 路由器證書</field>
+            <field name="router_ip">192.168.50.1</field>
+            <field name="router_model">RT-BE86U-7428</field>
+            <field name="status">not_configured</field>
+            <field name="current_ssl_method">caddy_auto</field>
+            <field name="download_url">http://www.asusrouter.com/cert_key.tar</field>
+            <field name="download_method">manual</field>
+            <field name="is_self_signed" eval="True"/>
+            <field name="use_in_caddy" eval="False"/>
+            <field name="use_in_router" eval="False"/>
+            <field name="note">ASUS 路由器 RT-BE86U-7428 的伺服器憑證配置。當前系統使用 Caddy 自動 HTTPS，無需配置路由器證書。如需使用路由器證書，請從管理界面下載並上傳。</field>
+        </record>
+    </data>
+</odoo>

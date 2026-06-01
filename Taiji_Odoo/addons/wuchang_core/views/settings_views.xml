@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_wuchang_settings" model="ir.ui.view">
+    <field name="name">wuchang.res.config.settings</field>
+    <field name="model">res.config.settings</field>
+    <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//form" position="inside">
+        <div class="app_settings_block" data-string="五常社區網站設定">
+          <h2>點餐與外送</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <field name="ordering_enabled"/>
+                </div>
+                <div class="o_setting_right">
+                  <label for="ordering_enabled"/>
+                  <field name="announcement"/>
+                  <field name="allow_delivery"/>
+                  <field name="min_amount"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>史料館</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <field name="kb_enabled"/>
+                </div>
+                <div class="o_setting_right">
+                  <label for="kb_enabled"/>
+                  <field name="kb_plaque_text"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>登入與安全</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <field name="webauthn_enabled"/>
+                </div>
+                <div class="o_setting_right">
+                  <label for="webauthn_enabled"/>
+                  <field name="webauthn_rp_id"/>
+                  <field name="webauthn_rp_name"/>
+                  <field name="security_require_2fa"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>工作站隱私</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <field name="ws_privacy_enabled"/>
+                </div>
+                <div class="o_setting_right">
+                  <label for="ws_privacy_enabled"/>
+                  <field name="ws_privacy_anonymize_logs"/>
+                  <field name="ws_privacy_disable_analytics"/>
+                  <field name="ws_privacy_retention_days"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>郵件</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <label for="smtp_host"/>
+                </div>
+                <div class="o_setting_right">
+                  <field name="smtp_name"/>
+                  <field name="email_from"/>
+                  <field name="smtp_host"/>
+                  <field name="smtp_port"/>
+                  <field name="smtp_encryption"/>
+                  <field name="smtp_user"/>
+                  <field name="smtp_pass" password="True"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>組織身份與資金來源聲明</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12">
+              <div class="alert alert-info" role="alert">
+                <strong>重要：</strong>以下設定將顯示在登入頁面與所有公開頁面，請確保準確性。
+              </div>
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <label for="branding_organization_info">組織身份</label>
+                </div>
+                <div class="o_setting_right">
+                  <field name="branding_organization_info" widget="textarea" placeholder="新北市五常社區發展協會（立案字號：新北市社區補自第1100606355號）"/>
+                </div>
+              </div>
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <label for="branding_funding_source">資金來源</label>
+                </div>
+                <div class="o_setting_right">
+                  <field name="branding_funding_source" widget="textarea" placeholder="系統開發：上品聊國咖啡館全額捐助"/>
+                </div>
+              </div>
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <label for="branding_coffee_org_link">咖啡館Google商家資訊</label>
+                </div>
+                <div class="o_setting_right">
+                  <field name="branding_coffee_org_link" placeholder="https://www.google.com/maps/search/上品聊國咖啡館"/>
+                </div>
+              </div>
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <label for="branding_decision_maker">核心決策人</label>
+                </div>
+                <div class="o_setting_right">
+                  <field name="branding_decision_maker" placeholder="江政隆（F124771717，1979-12-25）"/>
+                </div>
+              </div>
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <label for="branding_nonprofit_declaration">無資本利得宣告</label>
+                </div>
+                <div class="o_setting_right">
+                  <field name="branding_nonprofit_declaration" widget="textarea"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>代理人</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <field name="agent_enabled"/>
+                </div>
+                <div class="o_setting_right">
+                  <label for="agent_enabled"/>
+                  <field name="agent_name"/>
+                  <field name="agent_email"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>AI 設定</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <label for="ai_mode"/>
+                </div>
+                <div class="o_setting_right">
+                  <field name="ai_mode"/>
+                  <field name="gen_model" invisible="ai_mode != 'external_key'"/>
+                  <field name="google_api_key" password="True" invisible="ai_mode != 'external_key'"/>
+                  <field name="ollama_model" invisible="ai_mode != 'local_ollama'"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>身體與語音</h2>
+          <div class="row mt16 o_settings_container">
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <field name="body_enabled"/>
+                </div>
+                <div class="o_setting_right">
+                  <label for="body_enabled"/>
+                  <field name="body_name"/>
+                  <field name="body_location"/>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="o_setting_box">
+                <div class="o_setting_left">
+                  <field name="voice_enabled"/>
+                </div>
+                <div class="o_setting_right">
+                  <label for="voice_enabled"/>
+                  <field name="llm_host"/>
+                  <field name="asr_host"/>
+                  <field name="tts_host"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="action_wuchang_settings" model="ir.actions.act_window">
+    <field name="name">五常社區網站設定</field>
+    <field name="res_model">res.config.settings</field>
+    <field name="view_mode">form</field>
+    <field name="target">inline</field>
+    <field name="context">{"module":"wuchang_core"}</field>
+  </record>
+
+  <menuitem id="menu_wuchang_settings" name="網站設定" parent="wuchang_core.menu_wuchang_root" action="action_wuchang_settings" sequence="99"/>
+</odoo>

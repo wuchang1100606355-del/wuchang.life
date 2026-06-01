@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="action_sync_renyi_balance" model="ir.actions.server">
+            <field name="name">同步仁義店基金餘額 (Sync Renyi Fund Balance)</field>
+            <field name="model_id" ref="wuchang_core.model_community_fund_account"/>
+            <field name="binding_model_id" ref="wuchang_core.model_community_fund_account"/>
+            <field name="state">code</field>
+            <field name="code">
+                # Manually deduct the initial construction costs
+                # 65000 + 180000 = 245000
+                # Search if already deducted? No easy way.
+                # Just deduct once.
+                record.register_expense(65000, '協會直營社區產業聊國咖啡館仁義分店拆除舊裝潢及廢棄物處理')
+                record.register_expense(180000, '木工')
+            </field>
+        </record>
+    </data>
+</odoo>
