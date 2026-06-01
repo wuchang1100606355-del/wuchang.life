@@ -1,0 +1,19 @@
+# Production Copy Set Review
+
+timestamp: 20260602_012514
+source_head: ef3873b0f41c18b0af9cff605378571bbd0db891
+source_head_short: ef3873b
+dirty_gate: PASS_ONLY_PREVIOUS_FAILED_MANIFEST_ARTIFACTS
+manifest: evidence/server_handoff/production_copy_set/production_copy_set_manifest_20260602_012514.txt
+sha256: evidence/server_handoff/production_copy_set/production_copy_set_manifest_20260602_012514.sha256
+sha256_verify: PASS
+included_count: 2043
+excluded_count: 66
+containers_included: false
+volumes_included: false
+db_included: false
+scan_scope: INCLUDED_PATHS_ONLY
+case_insensitive_exclusion: true
+forbidden_scan_count: 0
+
+decision: PASS_MANIFEST_READY_FOR_HUMAN_REVIEW
