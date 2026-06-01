@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+: "${TAIJI_CLOUD_API_BASE_URL:=}"
+
+if [ -z "$TAIJI_CLOUD_API_BASE_URL" ]; then
+  echo "ERROR: TAIJI_CLOUD_API_BASE_URL not set"
+  echo "usage: export TAIJI_CLOUD_API_BASE_URL='https://your-cloud-api-url'"
+  exit 31
+fi
+
+export GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS:-$PWD/.secrets/taiji-service-account.json}"
+PY="$PWD/.venv_sa/bin/python"
+
+ID_TOKEN="$("$PY" - <<'PY'
+import os
+import google.auth.transport.requests
+from google.oauth2 import id_token
+
+audience = os.environ["TAIJI_CLOUD_API_BASE_URL"].rstrip("/")
+request = google.auth.transport.requests.Request()
+print(id_token.fetch_id_token(request, audience))
+PY
+)"
+
+export TAIJI_CLOUD_API_TOKEN="$ID_TOKEN"
+
+echo "=== SERVICE ACCOUNT CLOUD BRIDGE ==="
+echo "base_url=$TAIJI_CLOUD_API_BASE_URL"
+echo "credential=$GOOGLE_APPLICATION_CREDENTIALS"
+echo "token=GOOGLE_ID_TOKEN_GENERATED"
+echo
+
+./bin/cloud-api-bridge

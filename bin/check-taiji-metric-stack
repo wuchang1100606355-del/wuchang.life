@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -e
+
+export PATH="/home/taiji_admin/.local/bin:$PATH"
+
+echo "=== SYSTEMD ==="
+systemctl --no-pager is-active five-metric-engine
+systemctl --no-pager is-enabled five-metric-engine
+
+echo
+echo "=== POLICY INTEGRITY ==="
+/home/taiji_admin/five_metric_engine/.venv/bin/python /home/taiji_admin/five_metric_engine/verify_policy.py
+
+echo
+echo "=== ACTION REGISTRY INTEGRITY ==="
+/home/taiji_admin/Taiji_Hub/bin/verify-action-registry
+
+echo
+echo "=== ENGINE HEALTH ==="
+curl -s http://127.0.0.1:8105/health
+echo
+
+echo
+echo "=== ENGINE POLICY ==="
+curl -s http://127.0.0.1:8105/policy
+echo
+
+echo
+echo "=== ACTION REGISTRY LIST ==="
+taiji-action-run --action safe_memory_lookup --list
+
+echo
+echo "=== SAFE ACTION TEST ==="
+taiji-action-run \
+--action safe_memory_lookup \
+--actor taiji_phase5_stack_check \
+-- echo "PHASE5_SAFE_OK"
+
+echo
+echo "=== BLOCK ACTION TEST ==="
+set +e
+taiji-action-run \
+--action dangerous_metric_drift \
+--actor taiji_phase5_stack_check \
+-- echo "PHASE5_BLOCK_FAIL"
+CODE=$?
+set -e
+
+if [ "$CODE" -ne 40 ]; then
+  echo "expected_block_exit_code_40_got_$CODE"
+  exit 1
+fi
+
+echo "PHASE5_BLOCK_OK exit_code=$CODE"
+
+echo
+echo "=== AUDIT TAIL ==="
+tail -8 /home/taiji_admin/Taiji_Hub/logs/five_metric_audit.jsonl
+
+echo
+echo "✓ TAIJI METRIC STACK FULL CHECK COMPLETE"

@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+PREFLIGHT="/home/taiji_admin/Taiji_Hub/bin/taiji-metric-preflight"
+
+ACTION=""
+CURRENT=""
+ACTOR="taiji_guarded_run"
+STRICT=0
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --action)
+      ACTION="${2:-}"
+      shift 2
+      ;;
+    --current)
+      CURRENT="${2:-}"
+      shift 2
+      ;;
+    --actor)
+      ACTOR="${2:-}"
+      shift 2
+      ;;
+    --strict)
+      STRICT=1
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      echo "unknown argument: $1" >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ -z "$ACTION" ]]; then
+  echo "missing --action" >&2
+  exit 2
+fi
+
+if [[ -z "$CURRENT" ]]; then
+  echo "missing --current" >&2
+  exit 2
+fi
+
+if [[ $# -eq 0 ]]; then
+  echo "missing command after --" >&2
+  exit 2
+fi
+
+if [[ ! -x "$PREFLIGHT" ]]; then
+  echo "preflight command not found or not executable: $PREFLIGHT" >&2
+  exit 127
+fi
+
+PREFLIGHT_CMD=(
+  "$PREFLIGHT"
+  --action "$ACTION"
+  --current "$CURRENT"
+  --actor "$ACTOR"
+)
+
+if [[ "$STRICT" -eq 1 ]]; then
+  PREFLIGHT_CMD+=(--strict)
+fi
+
+echo "=== TAIJI METRIC PREFLIGHT ==="
+"${PREFLIGHT_CMD[@]}"
+PREFLIGHT_CODE=$?
+
+if [[ "$PREFLIGHT_CODE" -ne 0 ]]; then
+  echo "=== BLOCKED BY FIVE METRIC GATE ==="
+  echo "exit_code=$PREFLIGHT_CODE"
+  exit "$PREFLIGHT_CODE"
+fi
+
+echo "=== PREFLIGHT PASSED: EXECUTING COMMAND ==="
+exec "$@"

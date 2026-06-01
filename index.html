@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊國咖啡 - 社區客顯</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4ece1;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 {
+            color: #8b5a2b;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .status-box {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        p {
+            font-size: 1.5rem;
+            margin: 15px 0;
+        }
+        .btn {
+            background-color: #8b5a2b;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #6b4423;
+        }
+        #response-area {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #2c5e1c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>聊國咖啡 ☕</h1>
+    <div class="status-box">
+        <p>歡迎光臨！</p>
+        <p>請將您的需求告訴我們：</p>
+        
+        <input type="text" id="userInput" placeholder="例如：王阿嬤電話0912...想喝拿鐵" style="width: 80%; padding: 10px; font-size: 1rem; margin-bottom: 10px;">
+        <br>
+        <button class="btn" onclick="sendBlindData()">發送給 Sister J (盲寫加密)</button>
+
+        <div id="response-area">等待 Sister J 回應...</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js"></script>
+    <script>
+        // ⚠️ 這裡貼上剛剛在 .249 產生的 public.pem 內容
+        const PUBLIC_KEY = `-----BEGIN RSA PUBLIC KEY-----
+(請把你的 public.pem 內容貼到這裡，換行要保留)
+-----END RSA PUBLIC KEY-----`;
+
+        async function sendBlindData() {
+            const rawText = document.getElementById('userInput').value;
+            if (!rawText) return;
+
+            const responseArea = document.getElementById('response-area');
+            responseArea.innerText = "加密中... 準備發送";
+
+            // 1. 前端盲寫加密 (只用公鑰)
+            const encrypt = new JSEncrypt();
+            encrypt.setPublicKey(PUBLIC_KEY);
+            const cipherText = encrypt.encrypt(rawText);
+
+            if (!cipherText) {
+                responseArea.innerText = "❌ 加密失敗，請檢查公鑰";
+                return;
+            }
+
+            // 2. 發送給 .249 的大腦 (注意：這裡直接打 .249 的 IP)
+            try {
+                responseArea.innerText = "發送中... 等待大腦解密";
+                const res = await fetch("http://192.168.50.249:8082/api/sensor/blind_process", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ cipher_text: cipherText })
+                });
+
+                const data = await res.json();
+                if (data.status === "success") {
+                    responseArea.innerHTML = `✅ <b>大腦回應：</b><br>${data.safe_response}`;
+                } else {
+                    responseArea.innerText = `⚠️ ${data.message}`;
+                }
+            } catch (error) {
+                responseArea.innerText = "❌ 連線失敗，大腦未回應";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

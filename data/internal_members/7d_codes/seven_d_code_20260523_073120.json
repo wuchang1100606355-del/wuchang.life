@@ -1,0 +1,58 @@
+{
+  "type": "WUCHANG_SEVEN_D_CODE",
+  "issued_at": "2026-05-23T07:31:20.194726+08:00",
+  "issuer": "CHIANG_CHENG_LUNG_LOCAL_ROOT",
+  "domain": "wuchang.life",
+  "subject": {
+    "member_id": "m_489fcbdd4e924d90",
+    "member_hash": "442255d02ede234dfed1caa3d96fbef368a53df7ad03885f8814ba461d0020ab",
+    "member_email": "admin@wuchang.life",
+    "member_name": "江政隆 CHIANG CHENG LUNG"
+  },
+  "dimensions": {
+    "D1_member_identity": {
+      "status": "approved_internal_founder",
+      "member_type": "founder_internal"
+    },
+    "D2_authority_role": {
+      "authority_role": "founder_internal_member",
+      "approval_source": "local_root_self_approval"
+    },
+    "D3_phone_presence": {
+      "mobile_verified": true,
+      "mobile_verify_method": "tailscale_phone_presence",
+      "mobile_verify_status": "mobile_verified",
+      "login_assurance": "member_plus_phone_presence"
+    },
+    "D4_line_binding": {
+      "line_login_status": "pending_channel_config",
+      "line_login_method": "line_login_oauth"
+    },
+    "D5_google_workspace": {
+      "google_login_status": "pending_client_config",
+      "business_email": "admin@wuchang.life",
+      "workspace_domain": "wuchang.life",
+      "nonprofit_identity": true
+    },
+    "D6_odoo_erp": {
+      "odoo_url": "http://127.0.0.1:8069",
+      "odoo_sync_status": "pending_odoo_credentials",
+      "odoo_password_still_required": true
+    },
+    "D7_topology_ledger": {
+      "community_3d_map_state": "indexed",
+      "community_3d_map_level": 2,
+      "ledger": "runtime/ledger/member_login_events.jsonl",
+      "seven_d_ledger": "runtime/ledger/seven_d_code_events.jsonl"
+    }
+  },
+  "security": {
+    "contains_password": false,
+    "contains_token": false,
+    "contains_private_key": false,
+    "public_share_level": "hash_and_status_only",
+    "high_risk_actions_require_gateway": true
+  },
+  "seven_d_code_hash": "9144921623201a6f97b4796641a411e2d54bb8ca699fa48f3c678695490be46e",
+  "seven_d_code_short": "7D-9144921623201A6F"
+}

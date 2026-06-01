@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path("/home/taiji_admin/Taiji_Hub")
+VERIFY_LOG = ROOT / "logs" / "phase7_verify.jsonl"
+
+results = {
+    "checks": [],
+    "final_status": "unknown"
+}
+
+def check(name, cmd, description=""):
+    """Execute check and record result"""
+    try:
+        result = subprocess.run(
+            cmd,
+            shell=isinstance(cmd, str),
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        passed = result.returncode == 0
+        results["checks"].append({
+            "name": name,
+            "passed": passed,
+            "exit_code": result.returncode,
+            "description": description
+        })
+        return passed
+    except Exception as e:
+        results["checks"].append({
+            "name": name,
+            "passed": False,
+            "error": str(e),
+            "description": description
+        })
+        return False
+
+# Checks
+checks_list = [
+    ("service_active", ["systemctl", "--no-pager", "is-active", "five-metric-engine"], "five-metric-engine service running"),
+    ("policy_verified", ["/home/taiji_admin/five_metric_engine/.venv/bin/python", "/home/taiji_admin/five_metric_engine/verify_policy.py"], "Policy file integrity verified"),
+    ("registry_verified", ["verify-action-registry"], "Action registry integrity verified"),
+    ("api_health", ["curl", "-s", "-f", "http://127.0.0.1:8105/health"], "API /health endpoint responsive"),
+    ("api_policy", ["curl", "-s", "-f", "http://127.0.0.1:8105/policy"], "API /policy endpoint responsive"),
+]
+
+for name, cmd, desc in checks_list:
+    check(name, cmd, desc)
+
+# Summary
+passed_count = sum(1 for c in results["checks"] if c["passed"])
+total_count = len(results["checks"])
+results["summary"] = {
+    "passed": passed_count,
+    "total": total_count,
+    "success": passed_count == total_count
+}
+
+if results["summary"]["success"]:
+    results["final_status"] = "PHASE7_VERIFICATION_COMPLETE"
+else:
+    results["final_status"] = "PHASE7_VERIFICATION_FAILED"
+
+# Log result
+with VERIFY_LOG.open("a", encoding="utf-8") as f:
+    f.write(json.dumps(results, ensure_ascii=False) + "\n")
+
+# Print
+print(json.dumps(results, indent=2, ensure_ascii=False))
+print(f"\n✓ {results['final_status']}")
+
+sys.exit(0 if results["summary"]["success"] else 1)

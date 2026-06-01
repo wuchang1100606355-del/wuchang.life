@@ -1,0 +1,14 @@
+{
+  "event": "d_drive_access_review",
+  "review_id": "d_review_<timestamp>_<hash>",
+  "reviewed_by_owner": true,
+  "public_interest_metric": "needs_review",
+  "access_reason": "Describe why this D drive hot/special-purpose file is needed.",
+  "target_path": "/mnt/d/Taiji_Hub_Archive/<path>",
+  "sha256": "sha256:<hash>",
+  "decision": "warn",
+  "created_at": "2026-05-11T00:00:00+08:00",
+  "contains_secret": false,
+  "contains_member_progress": false,
+  "rollback_reference": "D_ARCHIVE/<version>"
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=/home/taiji_admin/Taiji_Hub
+
+test -f "$ROOT/topology/7d_bagua_metric_language.json"
+test -f "$ROOT/topology/7d_formation_mesh.json"
+test -f "$ROOT/runtime/7d_formation_runtime_8127.py"
+test -x "$ROOT/bin/7d-formation-status"
+test -x "$ROOT/bin/7d-formation-packet-test"
+
+curl -fsS http://127.0.0.1:8126/health >/dev/null
+curl -fsS http://127.0.0.1:8127/health >/dev/null
+"$ROOT/bin/7d-formation-packet-test" >/tmp/7d-formation-packet-test.out
+grep -q 'FINAL_PACKET_TEST=PASS' /tmp/7d-formation-packet-test.out
+cat /tmp/7d-formation-packet-test.out
+printf 'BOOT_VERIFY=PASS\n'

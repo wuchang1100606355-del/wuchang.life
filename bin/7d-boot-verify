@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$HOME/Taiji_Hub"
+
+echo "===== 7D BOOT VERIFY ====="
+
+echo
+echo "[checkpoint]"
+python3 -m json.tool "$ROOT/state/7d_green_checkpoint_latest.json"
+
+echo
+echo "[service enabled]"
+systemctl is-enabled taiji-7d-formal-runtime.service || true
+
+echo
+echo "[service status]"
+systemctl is-active taiji-7d-formal-runtime.service || true
+
+echo
+echo "[8126 health]"
+curl -s http://127.0.0.1:8126/health || true
+
+echo
+echo "[login marker]"
+grep -n "TAIJI_7D_MARK\|7D runtime prompt marker" "$HOME/.bashrc" || true
+
+echo
+echo "[audit]"
+echo "{\"event\":\"7d_boot_verify\",\"time\":\"$(date -Iseconds)\",\"service_enabled\":\"$(systemctl is-enabled taiji-7d-formal-runtime.service 2>/dev/null || true)\",\"service_active\":\"$(systemctl is-active taiji-7d-formal-runtime.service 2>/dev/null || true)\"}" >> "$ROOT/logs/7d_boot_verify.jsonl"
+tail -n 1 "$ROOT/logs/7d_boot_verify.jsonl"

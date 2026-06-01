@@ -1,0 +1,24 @@
+name: taiji-formal-tensor-runtime-v0-1-0
+
+services:
+  taiji_formal_tensor_runtime_v0_1_0:
+    build:
+      context: ../../..
+      dockerfile: deploy/packages/taiji_formal_tensor_runtime_v0_1_0/Dockerfile
+    container_name: taiji_formal_tensor_runtime_v0_1_0
+    env_file:
+      - ./env.example
+    ports:
+      - "127.0.0.1:8126:8126"
+    volumes:
+      - taiji_formal_tensor_runtime_v0_1_0_state:/app/state
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import json,urllib.request; data=json.load(urllib.request.urlopen('http://127.0.0.1:8126/health', timeout=3)); raise SystemExit(0 if data.get('ok') else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  taiji_formal_tensor_runtime_v0_1_0_state:

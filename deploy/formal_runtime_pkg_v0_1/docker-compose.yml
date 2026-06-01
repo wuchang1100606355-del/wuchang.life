@@ -1,0 +1,24 @@
+name: taiji-formal-runtime-pkg-v0-1
+
+services:
+  taiji_formal_runtime_pkg_v0_1:
+    build:
+      context: ../..
+      dockerfile: deploy/formal_runtime_pkg_v0_1/Dockerfile
+    container_name: taiji_formal_runtime_pkg_v0_1
+    env_file:
+      - ./env.example
+    ports:
+      - "127.0.0.1:8125:8125"
+    volumes:
+      - taiji_formal_runtime_pkg_v0_1_state:/app/state
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import json,urllib.request; data=json.load(urllib.request.urlopen('http://127.0.0.1:8125/health', timeout=3)); raise SystemExit(0 if data.get('ok') else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  taiji_formal_runtime_pkg_v0_1_state:

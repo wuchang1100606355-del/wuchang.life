@@ -1,0 +1,37 @@
+{
+  "request_id": "sample-l3-payment-execute-001",
+  "source": {
+    "channel": "test_fixture",
+    "node": "TDI-NODE-pos-kiosk",
+    "operator_role": "blocked_policy_test"
+  },
+  "raw_text_hash": "sha256:8a34dd9fdb1e7c5e3643f4f6a80a87a61a8b11958fd083ce9c670706b22e087d",
+  "raw_text_redacted_summary": "Request attempts to execute payment directly from natural language.",
+  "raw_text_stored": false,
+  "parsed_intent": {
+    "intent_type": "payment_execute",
+    "confidence": 0.95,
+    "language": "zh-TW",
+    "summary": "Blocked direct payment execution attempt."
+  },
+  "items": [],
+  "options": {
+    "blocked_reason": "Natural language cannot execute payment."
+  },
+  "node_identity": "TDI-NODE-pos-kiosk",
+  "data_sensitivity": "payment_sensitive_data",
+  "action_intent": "payment_execute",
+  "permission_window": "runtime",
+  "reversibility_public_value": {
+    "reversible": false,
+    "public_or_service_value": "Protect payment and financial boundary.",
+    "rollback_note": "No execution allowed; create a separate human-governed payment flow if needed."
+  },
+  "risk_level": "L3",
+  "requires_human_confirmation": true,
+  "allowed_action": "block",
+  "audit_required": true,
+  "rollback_required": true,
+  "target_system": "blocked",
+  "created_at": "2026-05-11T03:13:00+08:00"
+}

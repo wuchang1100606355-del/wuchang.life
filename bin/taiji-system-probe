@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+OUT_DIR="${1:-reports}"
+TS="$(date +%Y%m%d_%H%M%S)"
+OUT="$OUT_DIR/system_probe_${TS}.json"
+TXT="$OUT_DIR/system_probe_${TS}.txt"
+
+mkdir -p "$OUT_DIR" logs
+
+mask() {
+  sed -E \
+    -e 's/([A-Za-z0-9_]*SECRET[A-Za-z0-9_]*=).+/\1***MASKED***/g' \
+    -e 's/([A-Za-z0-9_]*TOKEN[A-Za-z0-9_]*=).+/\1***MASKED***/g' \
+    -e 's/([A-Za-z0-9_]*KEY[A-Za-z0-9_]*=).+/\1***MASKED***/g' \
+    -e 's/([A-Za-z0-9_]*PASSWORD[A-Za-z0-9_]*=).+/\1***MASKED***/g' \
+    -e 's/(client_secret["'"'"']?[[:space:]]*[:=][[:space:]]*["'"'"']?).+/\1***MASKED***/Ig'
+}
+
+{
+echo "=== TAIJI SYSTEM PROBE ==="
+echo "time=$(date -Iseconds)"
+echo "host=$(hostname)"
+echo "user=$(whoami)"
+echo "pwd=$(pwd)"
+echo
+
+echo "=== OS ==="
+uname -a || true
+cat /etc/os-release 2>/dev/null || true
+echo
+
+echo "=== CPU / MEMORY / DISK ==="
+nproc || true
+free -h || true
+df -h | head -50 || true
+echo
+
+echo "=== NETWORK ==="
+ip -br addr 2>/dev/null || true
+ip route 2>/dev/null || true
+echo
+
+echo "=== LISTEN PORTS ==="
+ss -lntup 2>/dev/null || true
+echo
+
+echo "=== PROCESS SNAPSHOT ==="
+ps aux --sort=-%mem | head -40 || true
+echo
+
+echo "=== SYSTEMD SERVICES TAIJI/ODOO/OLLAMA/NGINX/POSTGRES ==="
+systemctl list-units --type=service --all 2>/dev/null | grep -Ei 'taiji|five|metric|odoo|ollama|nginx|postgres|redis|docker' || true
+echo
+
+echo "=== DOCKER ==="
+docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}' 2>/dev/null || true
+docker compose ps 2>/dev/null || true
+echo
+
+echo "=== PROJECT TREE TOP ==="
+find . -maxdepth 3 -type f \
+  ! -path '*/.git/*' \
+  ! -path '*/node_modules/*' \
+  ! -path '*/.venv/*' \
+  ! -path '*/venv/*' \
+  | sort | head -300 || true
+echo
+
+echo "=== KEY CONFIG FILES HASH ONLY ==="
+find . -maxdepth 5 -type f \( \
+  -name '*.py' -o -name '*.sh' -o -name '*.yml' -o -name '*.yaml' -o -name '*.json' -o -name '*.md' -o -name '*.conf' \
+\) \
+  ! -path '*/.git/*' \
+  ! -path '*/node_modules/*' \
+  ! -path '*/.venv/*' \
+  ! -path '*/venv/*' \
+  -print0 | xargs -0 sha256sum 2>/dev/null | sort | head -500 || true
+echo
+
+echo "=== ENV KEYS ONLY, VALUES MASKED ==="
+env | sort | mask || true
+echo
+
+echo "=== TAIJI REPORT FILES ==="
+find reports logs runtime probes -maxdepth 2 -type f 2>/dev/null | sort | tail -100 || true
+echo
+
+echo "=== HEALTH ENDPOINTS ==="
+for url in \
+  http://127.0.0.1:8000/health \
+  http://127.0.0.1:8069/web/database/selector \
+  http://127.0.0.1:8105/health \
+  http://127.0.0.1:8126/health \
+  http://127.0.0.1:8081/health \
+  http://127.0.0.1:8099/health \
+  http://127.0.0.1:11434/api/tags
+do
+  echo "--- $url"
+  curl -sS --max-time 3 "$url" 2>/dev/null | head -20 || echo "not_reachable"
+done
+
+} | tee "$TXT" >/dev/null
+
+python3 - <<PY
+import json, pathlib, datetime
+txt = pathlib.Path("$TXT").read_text(errors="ignore")
+data = {
+  "probe": "taiji-system-probe",
+  "mode": "readonly",
+  "time": datetime.datetime.now().isoformat(),
+  "text_report": "$TXT",
+  "raw_text": txt[-120000:]
+}
+pathlib.Path("$OUT").write_text(json.dumps(data, ensure_ascii=False, indent=2))
+print("$OUT")
+PY
+
+echo "{\"event\":\"system_probe_created\",\"time\":\"$(date -Iseconds)\",\"txt\":\"$TXT\",\"json\":\"$OUT\",\"mode\":\"readonly\"}" >> logs/system_probe_audit.jsonl
+echo "PROBE_TXT=$TXT"
+echo "PROBE_JSON=$OUT"

@@ -1,0 +1,21 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV TAIJI_BIND_HOST=127.0.0.1
+ENV TAIJI_PORT=8105
+ENV TAIJI_RUNTIME_ROLE=taiji_gateway
+ENV TAIJI_RUNTIME_STATE_DIR=/app/runtime_state
+
+WORKDIR /app
+
+COPY deploy/runtime/runtime_entry.py /app/deploy/runtime/runtime_entry.py
+COPY schemas /app/schemas
+COPY services /app/services
+COPY tests /app/tests
+
+RUN mkdir -p /app/runtime_state/audit /app/runtime_state/deadbox /app/runtime_state/replay /app/runtime_state/cache
+
+EXPOSE 8105
+
+CMD ["python3", "/app/deploy/runtime/runtime_entry.py"]

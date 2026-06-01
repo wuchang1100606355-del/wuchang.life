@@ -1,0 +1,41 @@
+// POS ACL Draft
+// Goal: POS can only call POS Voice Tool on MSI:9011.
+// POS cannot access Open WebUI, Claw Safe, Odoo DB, LAN, or admin services.
+
+{
+  "tagOwners": {
+    "tag:pos": ["autogroup:admin"],
+    "tag:core": ["autogroup:admin"],
+    "tag:cockpit": ["autogroup:admin"],
+    "tag:claw-safe": ["autogroup:admin"],
+    "tag:cloud-worker": ["autogroup:admin"],
+    "tag:quarantine": ["autogroup:admin"]
+  },
+
+  "acls": [
+    {
+      "action": "accept",
+      "src": ["tag:pos"],
+      "dst": ["100.107.187.77:9011"]
+    },
+
+    {
+      "action": "accept",
+      "src": ["tag:cockpit"],
+      "dst": ["tag:core:3000", "tag:core:8080"]
+    },
+
+    {
+      "action": "accept",
+      "src": ["tag:core"],
+      "dst": ["tag:claw-safe:9004"]
+    }
+
+    // No POS access to:
+    // - Open WebUI 3000
+    // - Claw Safe 9004
+    // - Odoo DB
+    // - full LAN
+    // - cloud workers
+  ]
+}

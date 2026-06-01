@@ -1,0 +1,38 @@
+{
+  "request_id": "sample-service-request-001",
+  "source": {
+    "channel": "test_fixture",
+    "node": "TDI-NODE-service-counter",
+    "operator_role": "staff"
+  },
+  "raw_text_hash": "sha256:78b063864ec6a33cae313f98867395b605e4b6f7452707dd7aa698f8f1b2aa72",
+  "raw_text_redacted_summary": "Guest asks staff to check table-side service status.",
+  "raw_text_stored": false,
+  "parsed_intent": {
+    "intent_type": "service_request",
+    "confidence": 0.88,
+    "language": "zh-TW",
+    "summary": "Create a non-sensitive service request draft."
+  },
+  "items": [],
+  "options": {
+    "service_type": "staff_assist",
+    "draft_only": true
+  },
+  "node_identity": "TDI-NODE-service-counter",
+  "data_sensitivity": "non_sensitive_metadata",
+  "action_intent": "service_request",
+  "permission_window": "runtime",
+  "reversibility_public_value": {
+    "reversible": true,
+    "public_or_service_value": "Improve service response without storing personal data.",
+    "rollback_note": "Cancel service request draft before dispatch."
+  },
+  "risk_level": "L1",
+  "requires_human_confirmation": true,
+  "allowed_action": "create_service_request_draft",
+  "audit_required": true,
+  "rollback_required": false,
+  "target_system": "service_desk_draft",
+  "created_at": "2026-05-11T03:11:00+08:00"
+}

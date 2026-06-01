@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+curl -fsS http://127.0.0.1:8127/health
+printf '\n'
+systemctl is-enabled taiji-7d-formation-runtime.service 2>/dev/null || true
+systemctl is-active taiji-7d-formation-runtime.service 2>/dev/null || true
+ss -ltnp 2>/dev/null | grep -E ':(8126|8127)\b' || true

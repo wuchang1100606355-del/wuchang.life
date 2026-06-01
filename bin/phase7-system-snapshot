@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+import json
+import subprocess
+import hashlib
+from pathlib import Path
+from datetime import datetime
+
+ROOT = Path("/home/taiji_admin/Taiji_Hub")
+SNAPSHOT_DIR = ROOT / "snapshots"
+TIMESTAMP = datetime.now().isoformat()
+
+snapshot = {
+    "timestamp": TIMESTAMP,
+    "phase": "7",
+    "components": {}
+}
+
+# five-metric-engine 狀態
+try:
+    result = subprocess.run(
+        ["systemctl", "--no-pager", "is-active", "five-metric-engine"],
+        capture_output=True,
+        text=True,
+        timeout=5
+    )
+    snapshot["components"]["five_metric_engine_active"] = result.returncode == 0
+except Exception as e:
+    snapshot["components"]["five_metric_engine_active"] = False
+
+# Policy integrity
+try:
+    result = subprocess.run(
+        ["/home/taiji_admin/five_metric_engine/.venv/bin/python",
+         "/home/taiji_admin/five_metric_engine/verify_policy.py"],
+        capture_output=True,
+        text=True,
+        timeout=10
+    )
+    snapshot["components"]["policy_integrity_ok"] = result.returncode == 0
+except Exception as e:
+    snapshot["components"]["policy_integrity_ok"] = False
+
+# Registry integrity
+try:
+    result = subprocess.run(
+        ["verify-action-registry"],
+        capture_output=True,
+        text=True,
+        timeout=10,
+        env={**dict(subprocess.os.environ), "PATH": "/home/taiji_admin/.local/bin:/usr/local/bin:/usr/bin"}
+    )
+    snapshot["components"]["registry_integrity_ok"] = result.returncode == 0
+except Exception as e:
+    snapshot["components"]["registry_integrity_ok"] = False
+
+# Config files checksums
+config_files = {
+    "action_registry.json": ROOT / "config" / "action_registry.json",
+    "metric_action_registry.json": ROOT / "config" / "metric_action_registry.json",
+}
+
+snapshot["config_hashes"] = {}
+for name, path in config_files.items():
+    if path.exists():
+        sha = hashlib.sha256(path.read_bytes()).hexdigest()
+        snapshot["config_hashes"][name] = sha
+
+# Directory structure
+dirs_to_check = ["config", "audit", "logs", "bin", "snapshots"]
+snapshot["directories_exist"] = {}
+for d in dirs_to_check:
+    snapshot["directories_exist"][d] = (ROOT / d).exists()
+
+# Save snapshot
+snapshot_file = SNAPSHOT_DIR / f"system_snapshot.{TIMESTAMP.replace(':', '-')}.json"
+snapshot_file.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False))
+
+print(json.dumps(snapshot, indent=2, ensure_ascii=False))
+print(f"✓ snapshot_saved: {snapshot_file.name}")

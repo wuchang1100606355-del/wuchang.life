@@ -1,0 +1,116 @@
+{
+  "policy_name": "五常全域廣播與節點同步設計",
+  "mode": "dry_run_first",
+  "canonical_workspace": "/home/taiji_admin/Taiji_Hub",
+  "hard_walls": [
+    "不輸出 secret/password/token/private_key/client_secret",
+    "不自動 kill process",
+    "不自動重建 DB volume",
+    "不自動推正式 Odoo runtime",
+    "Android/iPhone 不做遠端 shell",
+    "跨節點執行先乾跑"
+  ],
+  "nodes": [
+    {
+      "name": "msi",
+      "ip": "100.107.187.77",
+      "role": "主控節點 / 指揮官 / 源頭倉",
+      "sync": [
+        "commander/",
+        "services/w7tp/",
+        "docs/governance/",
+        "docs/prompts/",
+        "reviews/odoo18_property_candidate/",
+        "runtime/reports/"
+      ],
+      "commands": [
+        "commander/bin/commander_health.sh",
+        "ss -ltnp | grep -E :8080|:9002|:8069|:11434|:9004|:2222",
+        "curl -fsS http://127.0.0.1:9002/openapi.json",
+        "curl -fsS http://127.0.0.1:11434/api/tags"
+      ]
+    },
+    {
+      "name": "taiji01",
+      "ip": "100.71.224.18",
+      "role": "邊緣備援 / 社區節點候選 / 證據鏈鏡像",
+      "ssh_target": "taiji_01@100.71.224.18",
+      "sync": [
+        "docs/governance/",
+        "docs/prompts/",
+        "services/w7tp/",
+        "commander/config/",
+        "runtime/broadcast/",
+        "runtime/reports/"
+      ],
+      "commands": [
+        "hostname && date",
+        "tailscale status",
+        "ss -ltnp | grep -E :9002|:8080|:11434 || true",
+        "mkdir -p ~/Taiji_Hub_mirror"
+      ]
+    },
+    {
+      "name": "msi-win11-in",
+      "ip": "100.105.82.28",
+      "role": "Windows 宿主 / C:\\\\Taiji_Runtime / 開機回報 / 商用瀏覽器入口",
+      "sync": [
+        "C:\\\\Taiji_Runtime\\\\logs",
+        "C:\\\\Taiji_Runtime\\\\reports"
+      ],
+      "commands": [
+        "Get-ScheduledTask | findstr Taiji",
+        "curl.exe http://127.0.0.1:11434/api/tags",
+        "netstat -ano | findstr 11434"
+      ]
+    },
+    {
+      "name": "drallion-1",
+      "ip": "100.97.147.17",
+      "role": "Android 影音/POS 終端候選",
+      "sync": [
+        "只同步前台 URL、菜單設定、裝置狀態碼；不傳 secret"
+      ],
+      "commands": [
+        "開瀏覽器到 http://100.107.187.77:8080 或本地商米頁面",
+        "語音/觸控只送 W7TP 封包到 9002"
+      ]
+    },
+    {
+      "name": "iphone-11",
+      "ip": "100.94.212.10",
+      "role": "會員/管理者行動端候選",
+      "sync": [
+        "只同步入口網址、狀態碼、提醒；不做遠端 shell"
+      ],
+      "commands": [
+        "開啟指揮官或 Odoo 行動頁面"
+      ]
+    },
+    {
+      "name": "penguin",
+      "ip": "100.111.139.7",
+      "role": "Linux 備援/唯讀索引候選",
+      "sync": [
+        "docs/governance/",
+        "runtime/broadcast/",
+        "runtime/reports/"
+      ],
+      "commands": [
+        "hostname && date",
+        "tailscale status"
+      ]
+    },
+    {
+      "name": "wuchang-us-free-node-2",
+      "ip": "100.94.209.106",
+      "role": "離線雲端肌肉候選",
+      "sync": [
+        "目前 offline，不同步"
+      ],
+      "commands": [
+        "待 online 後只接收盲算分片，不接收完整意圖"
+      ]
+    }
+  ]
+}

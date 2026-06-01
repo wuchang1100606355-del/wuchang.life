@@ -1,0 +1,38 @@
+{
+  "package": "taiji_formal_tensor_runtime_v0_1_0",
+  "mode": "conservative_additive_deployment",
+  "hash_status": "pending_local_execution",
+  "default_bind": "127.0.0.1",
+  "auto_start_production": false,
+  "secret_material": "not_included",
+  "files": [
+    "runtime_adapters/taiji_formal_tensor_runtime_v0_1_0_adapter.py",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/runtime_entry.py",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/env.example",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/Dockerfile",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/docker-compose.yml",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/systemd.service",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/PREFLIGHT.sh",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/START_LOCAL.sh",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/STOP_LOCAL.sh",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/HEALTH.sh",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/HASH_SCRIPT.sh",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/ROLLBACK.sh",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/MANIFEST.json",
+    "deploy/packages/taiji_formal_tensor_runtime_v0_1_0/README_DEPLOY.md"
+  ],
+  "endpoints": [
+    "GET /health",
+    "POST /tensor/validate",
+    "POST /tensor/route"
+  ],
+  "fail_closed_rules": [
+    "validator import failure uses local fail-closed adapter",
+    "payment_allowed=true is blocked",
+    "plaintext_context_stored=true is blocked",
+    "missing tau is blocked",
+    "replay_safe=false routes to deadbox",
+    "secrets and external API markers are blocked",
+    "0.0.0.0 requires explicit TAIJI_ALLOW_0_0_0_0=true"
+  ]
+}

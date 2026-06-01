@@ -1,0 +1,245 @@
+#!/usr/bin/env bash
+set -u
+
+ROOT="/home/taiji_admin/Taiji_Hub"
+ENGINE="/home/taiji_admin/five_metric_engine"
+REPORT="$ROOT/redteam/redteam_report_$(date +%Y%m%d_%H%M%S).txt"
+
+pass(){ echo "PASS: $*" | tee -a "$REPORT"; }
+warn(){ echo "WARN: $*" | tee -a "$REPORT"; }
+fail(){ echo "FAIL: $*" | tee -a "$REPORT"; }
+info(){ echo "INFO: $*" | tee -a "$REPORT"; }
+
+mkdir -p "$ROOT/redteam"
+
+{
+echo "=================================================="
+echo "TAIJI LOCAL REDTEAM AUDIT"
+echo "time=$(date)"
+echo "root=$ROOT"
+echo "engine=$ENGINE"
+echo "=================================================="
+} | tee "$REPORT"
+
+echo | tee -a "$REPORT"
+echo "[1] SERVICE / API HEALTH" | tee -a "$REPORT"
+
+if systemctl --no-pager is-active five-metric-engine >/dev/null 2>&1; then
+  pass "five-metric-engine active"
+else
+  fail "five-metric-engine not active"
+fi
+
+if curl -s http://127.0.0.1:8105/health | grep -q '"policy_locked":true'; then
+  pass "health policy_locked=true"
+else
+  fail "health missing policy_locked=true"
+fi
+
+if curl -s http://127.0.0.1:8105/policy | grep -q '"policy_name":"five_metric_tensor_policy"'; then
+  pass "policy endpoint returns five_metric_tensor_policy"
+else
+  fail "policy endpoint failed"
+fi
+
+echo | tee -a "$REPORT"
+echo "[2] LISTENING PORTS" | tee -a "$REPORT"
+ss -ltnp | grep -E '(:8105|:8000|:9004|:9090|:9201)' | tee -a "$REPORT" || true
+
+if ss -ltnp | grep ':8105' | grep -q '0.0.0.0'; then
+  warn "8105 binds 0.0.0.0. Good for LAN/node access, risky if firewall allows external access."
+else
+  pass "8105 not globally bound or not visible"
+fi
+
+echo | tee -a "$REPORT"
+echo "[3] POLICY INTEGRITY" | tee -a "$REPORT"
+
+if "$ENGINE/.venv/bin/python" "$ENGINE/verify_policy.py" >> "$REPORT" 2>&1; then
+  pass "metric policy hash integrity ok"
+else
+  fail "metric policy drift detected"
+fi
+
+if [ -f "$ROOT/bin/verify-action-registry" ]; then
+  if "$ROOT/bin/verify-action-registry" >> "$REPORT" 2>&1; then
+    pass "action registry integrity ok"
+  else
+    fail "action registry integrity failed"
+  fi
+else
+  warn "verify-action-registry not found"
+fi
+
+echo | tee -a "$REPORT"
+echo "[4] ACTION GATE TESTS" | tee -a "$REPORT"
+
+SAFE_OUT="$(mktemp)"
+if taiji-action-run --action safe_memory_lookup --actor redteam_audit -- echo "REDTEAM_SAFE_OK" > "$SAFE_OUT" 2>&1; then
+  if grep -q "REDTEAM_SAFE_OK" "$SAFE_OUT" && grep -q '"allowed": true' "$SAFE_OUT"; then
+    pass "safe_memory_lookup allowed and executed"
+  else
+    fail "safe_memory_lookup output unexpected"
+    cat "$SAFE_OUT" >> "$REPORT"
+  fi
+else
+  fail "safe_memory_lookup failed"
+  cat "$SAFE_OUT" >> "$REPORT"
+fi
+rm -f "$SAFE_OUT"
+
+BLOCK_OUT="$(mktemp)"
+set +e
+taiji-action-run --action dangerous_metric_drift --actor redteam_audit -- echo "REDTEAM_BLOCK_FAIL" > "$BLOCK_OUT" 2>&1
+BLOCK_CODE=$?
+set -e
+
+if [ "$BLOCK_CODE" -eq 40 ] && grep -q '"allowed": false' "$BLOCK_OUT"; then
+  if grep -q '^REDTEAM_BLOCK_FAIL$' "$BLOCK_OUT"; then
+    fail "dangerous_metric_drift command executed despite block"
+  else
+    pass "dangerous_metric_drift blocked with exit_code=40"
+  fi
+else
+  fail "dangerous_metric_drift did not return expected block code 40; got $BLOCK_CODE"
+  cat "$BLOCK_OUT" >> "$REPORT"
+fi
+rm -f "$BLOCK_OUT"
+
+UNREG_OUT="$(mktemp)"
+set +e
+taiji-action-run --action unregistered_redteam_probe --actor redteam_audit -- echo "UNREGISTERED_SHOULD_NOT_RUN" > "$UNREG_OUT" 2>&1
+UNREG_CODE=$?
+set -e
+
+if [ "$UNREG_CODE" -eq 44 ]; then
+  pass "unregistered action denied with exit_code=44"
+else
+  warn "unregistered action did not return 44; got $UNREG_CODE"
+  cat "$UNREG_OUT" >> "$REPORT"
+fi
+rm -f "$UNREG_OUT"
+
+echo | tee -a "$REPORT"
+echo "[5] FILE PERMISSIONS" | tee -a "$REPORT"
+
+for f in \
+  "$ENGINE/config/metric_policy.json" \
+  "$ENGINE/audit/metric_policy.sha256" \
+  "$ROOT/config/action_registry.json" \
+  "$ROOT/config/metric_action_registry.json" \
+  "$ROOT/audit/action_registry.sha256" \
+  "$ROOT/audit/metric_action_registry.sha256"
+do
+  if [ -e "$f" ]; then
+    perm="$(stat -c '%a' "$f")"
+    owner="$(stat -c '%U:%G' "$f")"
+    info "$f perm=$perm owner=$owner"
+  else
+    warn "missing file: $f"
+  fi
+done
+
+echo | tee -a "$REPORT"
+echo "[6] SECRET FILE DISCOVERY - FILENAMES ONLY" | tee -a "$REPORT"
+
+find "$ROOT" "$ENGINE" \
+  -path "*/.venv/*" -prune -o \
+  -path "*/node_modules/*" -prune -o \
+  -path "*/.git/*" -prune -o \
+  -type f \( \
+    -iname "*secret*" -o \
+    -iname "*token*" -o \
+    -iname "*credential*" -o \
+    -iname "*service_account*" -o \
+    -iname "*.pem" -o \
+    -iname "*.key" -o \
+    -iname "*.json" \
+  \) -print | tee -a "$REPORT"
+
+echo | tee -a "$REPORT"
+echo "[7] SECRET PATTERN SCAN - FILENAMES ONLY" | tee -a "$REPORT"
+
+grep -RIlE \
+  --exclude-dir=.venv \
+  --exclude-dir=node_modules \
+  --exclude-dir=.git \
+  --exclude='*.log' \
+  --exclude='*.jsonl' \
+  '(BEGIN PRIVATE KEY|PRIVATE KEY|api[_-]?key|secret|token|client_secret|service_account|password)' \
+  "$ROOT" "$ENGINE" 2>/dev/null | tee -a "$REPORT" || true
+
+echo | tee -a "$REPORT"
+echo "[8] EXECUTABLE PATH / SYMLINK CHECK" | tee -a "$REPORT"
+
+for cmd in taiji-action-run taiji-guarded-run taiji-metric-preflight verify-action-registry; do
+  p="$(command -v "$cmd" || true)"
+  if [ -n "$p" ]; then
+    info "$cmd -> $p"
+    ls -l "$p" | tee -a "$REPORT"
+  else
+    warn "$cmd not found in PATH"
+  fi
+done
+
+echo | tee -a "$REPORT"
+echo "[9] WRITABLE CRITICAL FILES" | tee -a "$REPORT"
+
+for f in \
+  "$ROOT/bin/taiji-action-run" \
+  "$ROOT/bin/taiji-guarded-run" \
+  "$ROOT/bin/taiji-metric-preflight" \
+  "$ROOT/connectors/five_metric_gate.py" \
+  "$ROOT/connectors/five_metric_client.py" \
+  "$ROOT/runtime/taiji_metric_preflight.py" \
+  "$ENGINE/app.py" \
+  "$ENGINE/verify_policy.py"
+do
+  if [ -e "$f" ]; then
+    perm="$(stat -c '%a' "$f")"
+    owner="$(stat -c '%U:%G' "$f")"
+    info "$f perm=$perm owner=$owner"
+    if [ -w "$f" ]; then
+      warn "$f writable by current user"
+    fi
+  else
+    warn "missing critical file: $f"
+  fi
+done
+
+echo | tee -a "$REPORT"
+echo "[10] FIREWALL / NETWORK EDGE" | tee -a "$REPORT"
+
+if command -v ufw >/dev/null 2>&1; then
+  sudo ufw status verbose | tee -a "$REPORT" || true
+else
+  warn "ufw not installed"
+fi
+
+if command -v tailscale >/dev/null 2>&1; then
+  tailscale status | head -30 | tee -a "$REPORT" || true
+else
+  warn "tailscale not installed or unavailable"
+fi
+
+echo | tee -a "$REPORT"
+echo "[11] AUDIT LOG HEALTH" | tee -a "$REPORT"
+
+AUDIT="$ROOT/logs/five_metric_audit.jsonl"
+if [ -f "$AUDIT" ]; then
+  count="$(wc -l < "$AUDIT")"
+  pass "audit log exists records=$count"
+  tail -5 "$AUDIT" | tee -a "$REPORT"
+else
+  fail "audit log missing"
+fi
+
+echo | tee -a "$REPORT"
+echo "[12] PROCESS MEMORY TOP" | tee -a "$REPORT"
+ps -eo pid,ppid,user,%mem,%cpu,cmd --sort=-%mem | head -15 | tee -a "$REPORT"
+
+echo | tee -a "$REPORT"
+echo "==================================================" | tee -a "$REPORT"
+echo "REDTEAM AUDIT COMPLETE" | tee -a "$REPORT"
+echo "report=$REPORT" | tee -a "$REPORT"
+echo "==================================================" | tee -a "$REPORT"

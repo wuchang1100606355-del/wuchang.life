@@ -1,0 +1,22 @@
+{
+  "tensor_engine": {
+    "model": "qwen2.5-coder:1.5b",
+    "node": "taiji01",
+    "ollama_url": "http://127.0.0.1:11434",
+    "purpose": "metric_ramp_translation_and_five_dimensional_tensor_packet_generation"
+  },
+  "fallback_worker": {
+    "model": "gemma3:4b",
+    "node": "penguin",
+    "ollama_url": "http://100.111.139.7:11434",
+    "purpose": "lightweight_generation_and_fallback_reasoning"
+  },
+  "high_reasoning_worker": {
+    "model": "metric-language-gateway-ai:latest",
+    "node": "MSI",
+    "ollama_url": "http://100.107.187.77:11434",
+    "purpose": "complex_reasoning_patent_whitepaper_architecture_review",
+    "policy": "use_only_when_online_and_needed"
+  },
+  "rule": "Never use 8B model for routine tensor routing unless escalation is required."
+}

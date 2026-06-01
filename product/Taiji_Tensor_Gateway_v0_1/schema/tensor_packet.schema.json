@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Taiji Five-Dimensional Metric Tensor Packet",
+  "type": "object",
+  "required": ["intent", "resource", "time", "authority", "topology", "decision"],
+  "properties": {
+    "intent": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string" },
+        "summary": { "type": "string" }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "properties": {
+        "model_tier": { "enum": ["rule", "1b", "1.5b", "3b", "4b", "7b", "8b", "gpu"] },
+        "gpu_required": { "type": "boolean" },
+        "memory_pressure": { "enum": ["low", "medium", "high", "unknown"] },
+        "io_cost": { "enum": ["low", "medium", "high", "unknown"] },
+        "wake_cost": { "enum": ["none", "low", "medium", "high", "unknown"] }
+      }
+    },
+    "time": {
+      "type": "object",
+      "properties": {
+        "urgency": { "enum": ["low", "normal", "high", "realtime"] },
+        "always_on_required": { "type": "boolean" },
+        "wake_allowed": { "type": "boolean" },
+        "expires_at": { "type": ["string", "null"] }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["risk"],
+      "properties": {
+        "risk": { "enum": ["L0_readonly", "L1_low", "L2_confirm", "L3_forbidden"] },
+        "requires_confirmation": { "type": "boolean" },
+        "audit_required": { "type": "boolean" }
+      }
+    },
+    "topology": {
+      "type": "object",
+      "properties": {
+        "primary": { "enum": ["taiji01", "penguin", "msi", "none"] },
+        "fallback": {
+          "type": "array",
+          "items": { "enum": ["taiji01", "penguin", "msi"] }
+        },
+        "temporary": {
+          "type": "array",
+          "items": { "enum": ["msi"] }
+        }
+      }
+    },
+    "replay": {
+      "type": "object",
+      "properties": {
+        "context_id": { "type": "string" },
+        "task_id": { "type": "string" },
+        "packet_hash": { "type": "string" },
+        "parent_hash": { "type": ["string", "null"] },
+        "nonce": { "type": "string" },
+        "issued_at": { "type": "string" },
+        "expires_at": { "type": "string" },
+        "sequence": { "type": "integer" },
+        "max_replay": { "type": "integer", "default": 0 },
+        "seen_before": { "type": "boolean", "default": false }
+      }
+    },
+    "decision": {
+      "enum": ["dry_run", "route_to_worker", "ask_confirm", "reject", "dead_letter"]
+    },
+    "deadbox": {
+      "type": "object",
+      "properties": {
+        "reason": { "type": "string" },
+        "retryable": { "type": "boolean" },
+        "retry_after_seconds": { "type": "integer" },
+        "audit_required": { "type": "boolean" },
+        "preserve_raw_input": { "type": "boolean", "default": false },
+        "packet_hash": { "type": "string" }
+      }
+    }
+  }
+}

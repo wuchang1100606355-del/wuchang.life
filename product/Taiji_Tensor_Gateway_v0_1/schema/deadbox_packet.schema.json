@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Taiji Tensor Deadbox Packet",
+  "type": "object",
+  "required": [
+    "task_id",
+    "packet_hash",
+    "failure_reason",
+    "risk_level",
+    "retryable",
+    "audit_required",
+    "created_at"
+  ],
+  "properties": {
+    "task_id": { "type": "string" },
+    "packet_hash": { "type": "string" },
+    "source_node": { "type": "string" },
+    "target_node": { "type": "string" },
+    "failure_reason": {
+      "enum": [
+        "schema_invalid",
+        "node_offline",
+        "model_unavailable",
+        "timeout",
+        "permission_denied",
+        "confirmation_missing",
+        "risk_L3_forbidden",
+        "execution_failed",
+        "context_unrecoverable",
+        "replay_detected",
+        "stale_context",
+        "confirmation_expired",
+        "context_chain_broken",
+        "duplicate_task_id",
+        "pasted_output_as_command",
+        "deadbox_replay_attempt",
+        "node_reconnect_old_queue",
+        "expired_authorization_state"
+      ]
+    },
+    "risk_level": {
+      "enum": ["L0_readonly", "L1_low", "L2_confirm", "L3_forbidden"]
+    },
+    "retryable": { "type": "boolean" },
+    "retry_after_seconds": { "type": "integer" },
+    "audit_required": { "type": "boolean" },
+    "redacted_summary": { "type": "string" },
+    "created_at": { "type": "string" }
+  }
+}

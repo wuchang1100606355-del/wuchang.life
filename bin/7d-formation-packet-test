@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+import json
+import sys
+import urllib.request
+from datetime import datetime, timezone
+
+
+URL = "http://127.0.0.1:8127"
+
+
+def post(path, packet):
+    data = json.dumps(packet).encode("utf-8")
+    req = urllib.request.Request(
+        URL + path,
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=5) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def base_packet():
+    return {
+        "node": "MSI",
+        "protocol": "TEFMP-0.1",
+        "runtime": "7D",
+        "formation_bits": "010",
+        "formation": "FENG",
+        "code": [1, 2, 3, 4, 5, "governed", "local"],
+        "payload_class": "masked",
+        "payload_ref": "sha256:test",
+        "route": {"from": "FENG", "to": "YUN", "gate": "audit_gate"},
+        "audit": {
+            "required": True,
+            "actor": "local_runtime",
+            "time": datetime.now(timezone.utc).isoformat(),
+            "reason": "formation_packet_test",
+            "checkpoint": "test",
+        },
+    }
+
+
+tests = []
+
+safe = base_packet()
+tests.append(("safe_packet", safe, "allow"))
+
+raw_identity = base_packet()
+raw_identity.update({
+    "formation_bits": "100",
+    "formation": "LONG",
+    "payload_class": "identity",
+    "payload_ref": "raw_identity:line-user-id",
+    "route": {"from": "YUN", "to": "LONG", "gate": "desensitization_gate"},
+    "audit": {**raw_identity["audit"], "actor": "cloud_ai"},
+})
+tests.append(("cloud_raw_identity", raw_identity, "block"))
+
+prefix_mutation = base_packet()
+prefix_mutation.update({
+    "mutate_5d_prefix": True,
+    "attempted_code_fields": ["x", "y", "time", "z", "scale", "heaven", "earth"],
+})
+tests.append(("prefix_mutation", prefix_mutation, "block"))
+
+odoo_direct = base_packet()
+odoo_direct.update({
+    "operation": "write",
+    "target": "odoo",
+    "route": {"from": "FENG", "to": "DI", "gate": "audit_gate"},
+    "audit": {"required": True, "actor": "odoo", "time": datetime.now(timezone.utc).isoformat(), "reason": "bad_test"},
+})
+tests.append(("odoo_direct_mutation_without_gate", odoo_direct, "block"))
+
+plaintext = base_packet()
+plaintext.update({
+    "canonical_unit": "raw_plaintext_context",
+    "payload_class": "summary",
+    "payload_ref": "raw plaintext context must not be canonical",
+})
+tests.append(("raw_plaintext_canonical", plaintext, "block"))
+
+results = {}
+ok = True
+for name, packet, expected in tests:
+    decision = post("/packet/validate", packet).get("decision", "fail")
+    results[name] = decision
+    if decision != expected:
+        ok = False
+    print(f"{name}={decision} expected={expected}")
+
+print("FINAL_PACKET_TEST=PASS" if ok else "FINAL_PACKET_TEST=FAIL")
+sys.exit(0 if ok else 1)

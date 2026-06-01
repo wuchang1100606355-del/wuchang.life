@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+NODE="$(hostname)"
+
+echo "=== NODE ==="
+echo "$NODE"
+whoami
+pwd
+
+echo
+echo "=== MANIFEST ==="
+python3 -m json.tool ~/Taiji_Hub/Taiji_Governance/system_info/distributed_admin_authority_sync.manifest.json >/dev/null \
+  && echo "manifest_json_ok"
+
+echo
+echo "=== ADMIN USER ==="
+id taiji_admin
+
+echo
+echo "=== NODE-AWARE COMMUNITY USER CHECK ==="
+if [ "$NODE" = "taiji01" ]; then
+  id taiji_01
+
+  echo
+  echo "=== COMMUNITY HIGH-RISK GROUP CHECK ==="
+  for g in sudo docker lxd; do
+    if id -nG taiji_01 | tr " " "\n" | grep -qx "$g"; then
+      echo "FAIL: taiji_01 still in $g"
+      exit 40
+    else
+      echo "PASS: taiji_01 not in $g"
+    fi
+  done
+else
+  echo "INFO: taiji_01 is a taiji01 community operator account; not required on $NODE"
+fi
+
+echo
+echo "=== ADMIN DOCKER CHECK ==="
+if id -nG taiji_admin | tr " " "\n" | grep -qx docker; then
+  docker ps --format "table {{.Names}}\t{{.Status}}" | head
+else
+  echo "WARN: taiji_admin not in docker on this node"
+fi
+
+echo
+echo "DISTRIBUTED_ADMIN_SYNC_CHECK_OK"

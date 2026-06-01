@@ -1,0 +1,12 @@
+{
+  "type": "GOOGLE_DRIVE_INVENTORY_DRYRUN_CONFIG",
+  "mode": "readonly_dryrun",
+  "service_account_key_path_env": "GOOGLE_APPLICATION_CREDENTIALS",
+  "scopes": [
+    "https://www.googleapis.com/auth/drive.metadata.readonly"
+  ],
+  "max_results": 20,
+  "supports_all_drives": true,
+  "include_items_from_all_drives": true,
+  "rule": "Do not store private keys, tokens, raw credentials, or sensitive file contents."
+}

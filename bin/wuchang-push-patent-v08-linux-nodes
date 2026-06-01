@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SRC_DIR="/home/taiji_admin/Taiji_Hub/evidence_master_index/patent_v0_8_handoff_package"
+OUTBOX="/home/taiji_admin/Taiji_Hub/node_outbox/patent_v0_8_handoff_20260520"
+AUDIT="/home/taiji_admin/Taiji_Hub/logs/patent_v0_8_node_push.jsonl"
+REMOTE_DIR="/home/taiji_admin/Taiji_Hub/node_inbox/patent_v0_8_handoff_20260520"
+
+TARGETS=(
+  "taiji01"
+  "penguin"
+)
+
+FILES=(
+  "patent_v0_8_handoff_package.zip"
+  "patent_v0_8_handoff_package.zip.sha256.txt"
+  "patent_v0_8_handoff_lock_record.txt"
+  "patent_v0_8_handoff_lock_record.txt.sha256.txt"
+  "README_FOR_PATENT_ATTORNEY_v0_8.md"
+  "handoff_letter_v0_8.md"
+  "handoff_index_v0_8.txt"
+)
+
+mkdir -p "$OUTBOX" "$(dirname "$AUDIT")"
+
+echo "===== PATENT V0.8 NODE PUSH PREFLIGHT ====="
+echo "Source node: MSI"
+echo "Source dir:  $SRC_DIR"
+echo "Outbox:      $OUTBOX"
+echo "Remote dir:  $REMOTE_DIR"
+echo
+
+for f in "${FILES[@]}"; do
+  test -f "$SRC_DIR/$f" || { echo "MISSING_SOURCE_FILE: $SRC_DIR/$f"; exit 1; }
+  cp -f "$SRC_DIR/$f" "$OUTBOX/$f"
+done
+
+cd "$OUTBOX"
+
+echo "===== LOCAL HASH VERIFY ====="
+sha256sum -c patent_v0_8_handoff_package.zip.sha256.txt
+sha256sum -c patent_v0_8_handoff_lock_record.txt.sha256.txt
+
+echo
+echo "===== TAILSCALE STATUS ====="
+tailscale status || true
+
+for node in "${TARGETS[@]}"; do
+  echo
+  echo "===== TARGET NODE: $node ====="
+
+  if ! ping -c 1 -W 2 "$node" >/dev/null 2>&1; then
+    echo "[warn] $node hostname ping failed; will still try SSH"
+  fi
+
+  if ssh -o BatchMode=yes -o ConnectTimeout=6 "$node" 'echo SSH_OK' 2>/dev/null | grep -q SSH_OK; then
+    echo "[ok] SSH ready: $node"
+
+    ssh "$node" "mkdir -p '$REMOTE_DIR'"
+
+    rsync -av --checksum --ignore-existing \
+      "$OUTBOX/" \
+      "$node:$REMOTE_DIR/"
+
+    ssh "$node" "cd '$REMOTE_DIR' && sha256sum -c patent_v0_8_handoff_package.zip.sha256.txt && sha256sum -c patent_v0_8_handoff_lock_record.txt.sha256.txt"
+
+    status="PUSHED_AND_VERIFIED"
+  else
+    echo "[skip] SSH not ready: $node"
+    status="SKIPPED_SSH_NOT_READY"
+  fi
+
+  printf '{"time":"%s","event":"patent_v0_8_node_push","source_node":"MSI","target_node":"%s","remote_dir":"%s","status":"%s","mode":"copy_only_no_runtime_change"}\n' \
+    "$(date -Iseconds)" "$node" "$REMOTE_DIR" "$status" >> "$AUDIT"
+done
+
+echo
+echo "===== FINAL STATUS ====="
+echo "PATENT_V0_8_NODE_PUSH_ATTEMPT_RECORDED"
+echo "Audit: $AUDIT"
+tail -n 20 "$AUDIT"
