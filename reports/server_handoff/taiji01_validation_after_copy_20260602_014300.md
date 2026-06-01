@@ -1,0 +1,20 @@
+# Taiji01 Validation After Copy
+
+timestamp: 20260602_014300
+source_head: a74de72
+file_count: 1982
+local_hashes: evidence/server_handoff/taiji01_validation/local_copy_set_hashes_20260602_014300.sha256
+remote_hashes: evidence/server_handoff/taiji01_validation/taiji01_copy_set_hashes_20260602_014300.sha256
+hash_diff: evidence/server_handoff/taiji01_validation/taiji01_copy_set_hash_diff_20260602_014300.txt
+remote_log: evidence/server_handoff/taiji01_validation/taiji01_validation_remote_20260602_014300.txt
+ssh_result: 0
+hash_validation_result: FAIL
+
+deploy_executed: false
+db_write_executed: false
+service_restart_executed: false
+delete_executed: false
+chmod_chown_executed: false
+remote_shell_executed: false
+
+decision: STOP_VALIDATION_FAIL
