@@ -1,0 +1,39 @@
+TAIJI01_SHADOW_HANDOFF_SNAPSHOT
+timestamp=2026-06-01T16:12:00+00:00
+whoami=taiji_admin
+hostname=taiji01
+pwd=/home/taiji_admin/Taiji_Hub
+
+=== GIT ===
+
+=== USERS ===
+uid=1002(taiji_admin) gid=1003(taiji_admin) groups=1003(taiji_admin),27(sudo),988(docker),1005(taiji_full_admins)
+uid=1000(taiji_01) gid=1000(taiji_01) groups=1000(taiji_01),4(adm),24(cdrom),30(dip),46(plugdev),987(ollama),1002(autologin),1004(taiji_community_writers)
+
+=== DOCKER PS ===
+NAMES                                      STATUS       PORTS
+wuchang_os_pg                              Up 10 days   5432/tcp
+wuchang_os_odoo_18                         Up 10 days   0.0.0.0:8069->8069/tcp, [::]:8069->8069/tcp, 8071-8072/tcp
+quarantine_wuchang_os_pg_20260508_200520   Up 10 days   5432/tcp
+
+=== ODOO CONTAINER INSPECT SAFE ===
+Name=/wuchang_os_odoo_18 Status=running StartedAt=2026-05-22T12:51:43.192405357Z RestartCount=0
+
+=== POSTGRES CONTAINER INSPECT SAFE ===
+Name=/wuchang_os_pg Status=running StartedAt=2026-05-22T12:51:43.19403772Z RestartCount=0
+
+=== DISK ===
+Filesystem                         Size  Used Avail Use% Mounted on
+/dev/mapper/ubuntu--vg-ubuntu--lv  226G  103G  113G  48% /
+
+=== MEMORY ===
+               total        used        free      shared  buff/cache   available
+Mem:            23Gi       1.7Gi        14Gi       199Mi       7.8Gi        21Gi
+Swap:          4.0Gi          0B       4.0Gi
+
+=== GOVERNANCE DECISION ===
+virtual_shadow_handoff=GO
+runtime_promotion=NO_GO
+db_write=NO_GO
+service_restart=NO_GO
+secret_read=NO_GO
