@@ -1,0 +1,33 @@
+report_id: T081_RESTRICTED_BACKUP_ARCHIVE_AND_IGNORE_V1
+status: RESTRICTED_BACKUP_ARCHIVED_AND_IGNORE_RULE_ADDED
+execution_date: "2026-06-01"
+
+decision:
+  selected:
+    - option_A_archive_restricted_backup_names_without_content_read
+    - option_B_add_safe_gitignore_for_backup_temp_archive
+  rejected:
+    - option_C_keep_push_blocked
+
+archive:
+  mode: path_only_no_content_read
+  target: runtime/archive/restricted_backup_archive_20260601/
+  candidate_paths: runtime/archive/restricted_backup_archive_20260601/candidate_paths.txt
+  sha256_manifest: runtime/archive/restricted_backup_archive_20260601/sha256_manifest.txt
+
+gitignore:
+  updated: true
+  rules:
+    - "*.backup"
+    - "*.bak"
+    - "*.tmp"
+    - "*.swp"
+    - "runtime/archive/"
+    - "runtime/reports/*.tmp"
+
+runtime_boundary:
+  runtime_sync_performed: false
+  taiji01_access_performed: false
+  services_restarted: false
+  db_secret_read: false
+  untracked_files_deleted: false

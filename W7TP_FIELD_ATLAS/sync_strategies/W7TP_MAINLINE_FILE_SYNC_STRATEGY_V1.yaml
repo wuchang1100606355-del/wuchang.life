@@ -1,0 +1,99 @@
+strategy_id: W7TP_MAINLINE_FILE_SYNC_STRATEGY_V1
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - separate_git_push_archive_runtime_sync_and_secret_boundaries
+  - prevent_all_or_nothing_sync_confusion
+  - allow_progress_without_unsafe_runtime_changes
+
+sync_layers:
+  L1_governance_files:
+    description: governance plans schemas indexes task boards GEI context
+    source_machine: MSI
+    source_path: /home/taiji_admin/Taiji_Hub
+    target: internal_git_existing_remote
+    action:
+      - focused_git_add
+      - commit
+      - bundle
+      - push_existing_remote
+    risk: LOW
+    allowed_paths:
+      - W7TP_FIELD_ATLAS
+      - Taiji_Governance
+      - boot/read_startup_state_packet.sh
+      - .gitignore
+    gates:
+      - no_secret_scan
+      - focused_git_status
+
+  L2_untracked_dev_files:
+    description: unclassified scripts tools topology web voice gateway runtime dev files
+    source_machine: MSI
+    source_path: /home/taiji_admin/Taiji_Hub
+    target: local_archive
+    action:
+      - tar_gz_archive
+      - sha256_manifest
+      - later_review
+    risk: MEDIUM
+    rule:
+      - archive_does_not_equal_git_add
+      - do_not_delete_after_archive_without_approval
+
+  L3_odoo_addons:
+    description: pm3_runtime_sync and future split Odoo modules
+    source_machine:
+      - MSI
+      - Taiji_Runtime
+    target_machine: taiji01
+    target_path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+    action:
+      - sync_plan_only
+    risk: HIGH
+    required_before_copy:
+      - taiji01_actual_db_identification
+      - source_hash_ledger
+      - no_secret_linter_pass
+      - server_acceptance_report
+      - rollback_point
+      - explicit_human_approval
+    forbidden_now:
+      - runtime_copy
+      - module_update
+      - restart
+
+  L4_runtime_db_secret_service:
+    description: DB volumes secrets env service restart domain deployment
+    action:
+      - no_auto_sync
+    risk: CRITICAL
+    requires:
+      - explicit_human_approval
+      - separate_action_packet
+      - rollback_or_backup
+      - human_review
+    forbidden_by_default:
+      - DB_write
+      - secret_print
+      - env_sync
+      - docker_compose_up
+      - service_restart
+      - domain_deploy
+
+current_decision:
+  push_governance_files: allowed_after_secret_scan
+  archive_untracked_files: allowed_local_only
+  sync_odoo_to_taiji01: not_allowed_yet
+  sync_db_secret_service: forbidden
+
+red_team_reflection:
+  negative_effects:
+    - focused_push_may_miss_useful_dev_files
+    - archive_may_store sensitive files locally
+    - too_strict_runtime_sync_may_delay_odoo_feature_use
+  mitigation:
+    - archive_untracked_before_review
+    - keep_push_scope_explicit
+    - runtime_sync_requires_acceptance_gates
+    - no_delete_after_archive_without_review

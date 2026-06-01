@@ -1,0 +1,41 @@
+gate_id: W7TP_GEI_RUNTIME_ACCEPTANCE_GATE_V1
+status: PLAN_ONLY
+
+purpose:
+  - ensure_gei_context_supports_runtime_landing_without_authorizing_it
+  - connect_context_snapshot_to_governed_hive_runtime_landing_gate
+  - prevent_context_only_artifacts_from_becoming_execution_permission
+
+required_before_runtime_action:
+  - current_gei_snapshot
+  - decision_packet
+  - source_of_truth_map_check
+  - twin_system_compare_packet
+  - server_acceptance_report
+  - rollback_plan
+  - explicit_human_approval
+
+gate_results:
+  PASS_CONTEXT:
+    meaning: context_sufficient_for_review_not_execution
+  FAIL_STALE_CONTEXT:
+    meaning: snapshot_or_git_head_stale
+  FAIL_HOST_MISMATCH:
+    meaning: target_machine_does_not_match_current_host
+  FAIL_MISSING_DECISION_PACKET:
+    meaning: no_action_scope_defined
+  FAIL_APPROVAL_ABSENT:
+    meaning: no_explicit_human_approval
+
+hard_rule:
+  gei_acceptance_never_equals_runtime_approval: true
+  copy_restart_deploy_must_be_separately_approved: true
+
+red_team_reflection:
+  negative_effects:
+    - extra_gate_may_feel_redundant_with_runtime_landing_gate
+    - users_may_try_to_treat_GEIs_context_pass_as_deploy_permission
+  mitigation:
+    - mark_PASS_CONTEXT_not_EXECUTE
+    - runtime_landing_gate_remains_authoritative
+    - explicit_approval_packet_required

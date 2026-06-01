@@ -29,7 +29,6 @@ runtime/ledger/
 .venv*/
 venv*/
 *_env/
-
 # runtime / generated data
 open_webui_data/
 logs/
@@ -41,26 +40,20 @@ runtime/deadletter/
 runtime/checkpoints/
 runtime/snapshots/
 runtime/build/
-
 # databases / model / cache
-*.db
 *.sqlite
 *.sqlite3
-*.log
 *.pid
-__pycache__/
 .pytest_cache/
 *.swp
-
 # Odoo runtime data
-Taiji_Odoo/odoo_data/
-Taiji_Odoo/postgres_data/
-
 # local secrets / keys
-.env
 *.env
-*.pem
-*.key
 admin
 admin.pub
-.secrets/
+# W7TP safe archive / generated backup rules
+*.backup
+*.bak
+*.tmp
+runtime/archive/
+runtime/reports/*.tmp

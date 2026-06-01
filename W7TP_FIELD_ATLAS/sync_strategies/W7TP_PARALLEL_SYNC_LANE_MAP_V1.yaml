@@ -1,0 +1,54 @@
+lane_map_id: W7TP_PARALLEL_SYNC_LANE_MAP_V1
+status: ACTIVE_PLAN_ONLY
+
+lanes:
+  LANE_A_GOVERNANCE_GIT:
+    purpose: commit_push_governance_files
+    scope:
+      - W7TP_FIELD_ATLAS
+      - Taiji_Governance
+      - boot/read_startup_state_packet.sh
+      - .gitignore
+    action: focused_commit_push
+    risk: LOW
+
+  LANE_B_UNTRACKED_ARCHIVE:
+    purpose: archive_untracked_unclassified_files
+    scope: git_untracked_files
+    action: tar_sha256_archive
+    risk: MEDIUM
+    no_delete: true
+
+  LANE_C_GIT_BUNDLE:
+    purpose: create_disaster_recovery_bundle
+    scope: git_all_refs
+    action: git_bundle_create
+    risk: LOW
+
+  LANE_D_RUNTIME_SYNC_PLAN:
+    purpose: keep_odoo_runtime_sync_as_plan_only
+    scope: pm3_runtime_sync_and_future_split_addons
+    action: no_runtime_copy
+    risk: HIGH
+
+  LANE_E_REPORT:
+    purpose: produce_parallel_sync_report
+    scope: all_lanes
+    action: summarize
+    risk: LOW
+
+rules:
+  - LANE_A_can_run_after_secret_scan
+  - LANE_B_can_run_local_only
+  - LANE_C_can_run_after_commit
+  - LANE_D_must_remain_plan_only
+  - LANE_E_always_runs
+
+red_team_reflection:
+  negative_effects:
+    - parallel_lanes_may_hide_which_step_failed
+    - archive_may_preserve_sensitive_untracked_files
+  mitigation:
+    - each_lane_outputs_own_status
+    - final_report_records_failed_lanes
+    - no_delete_after_archive

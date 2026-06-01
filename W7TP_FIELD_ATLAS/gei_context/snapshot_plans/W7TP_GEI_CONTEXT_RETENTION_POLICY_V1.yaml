@@ -1,0 +1,45 @@
+policy_id: W7TP_GEI_CONTEXT_RETENTION_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - prevent_gei_snapshot_bloat
+  - preserve_important_evidence_chain
+  - separate_daily_context_from_major_events
+
+retention_classes:
+  DAILY_CONTEXT:
+    keep_recent_count: 30
+    archive_after_days: 30
+    delete_allowed: false
+    note: delete_requires_future_evidence_review_policy
+
+  MAJOR_EVENT:
+    examples:
+      - field_drift_event
+      - runtime_landing_attempt
+      - human_review_approval
+      - rollback_event
+    retain_as_evidence_chain: true
+
+  PATENT_PERIOD_CONTEXT:
+    retain_as_evidence_chain: true
+    delete_allowed: false
+
+  SECRET_OR_PLAINTEXT_MISTAKE:
+    action: quarantine_and_review
+    retain_redacted_evidence: true
+    do_not_publish: true
+
+governance:
+  no_cloud_upload_without_review: true
+  no_secret_in_snapshot: true
+  redact_sensitive_paths_when_exporting: true
+
+red_team_reflection:
+  negative_effects:
+    - retaining_too_much_context_increases_attack_surface
+    - deleting_too_much_context_weakens_evidence_chain
+  mitigation:
+    - classify_snapshots_by_retention_class
+    - keep_hash_refs_for_archived_context
+    - quarantine_sensitive_mistakes

@@ -1,0 +1,35 @@
+policy_id: W7TP_PARALLEL_UNTRACKED_ARCHIVE_RULE_V1
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - preserve_untracked_files_without_git_pollution
+  - prevent_push_blocking
+  - support_later_classification
+
+archive_rules:
+  method:
+    - tar_gz
+    - sha256
+    - manifest_txt
+  base_dir: /home/taiji_admin/Taiji_Git_Bundles
+  no_delete_after_archive: true
+  local_only_by_default: true
+
+classification_after_archive:
+  SAFE_GOVERNANCE:
+    action: may_promote_to_git_later
+  DEV_CODE:
+    action: review_before_git_add
+  RUNTIME_OR_DB:
+    action: quarantine_or_plan_only
+  SECRET_OR_PII:
+    action: restricted_review
+
+red_team_reflection:
+  negative_effects:
+    - archive_can_store_sensitive_content
+    - archive_size_can_grow
+  mitigation:
+    - local_only
+    - sha256_manifest
+    - future_retention_policy

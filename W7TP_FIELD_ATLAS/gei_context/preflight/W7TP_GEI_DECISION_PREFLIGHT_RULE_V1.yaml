@@ -1,0 +1,32 @@
+rule_id: W7TP_GEI_DECISION_PREFLIGHT_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - require_context_check_before_runtime_action
+  - prevent_old_snapshot_from_authorizing_execution
+  - force_target_machine_and_target_path_declaration
+
+required_before_action:
+  - latest_gei_snapshot_ref
+  - target_machine
+  - target_path
+  - action_type
+  - risk_level
+  - allowed_actions
+  - forbidden_actions
+  - approval_scope
+
+hard_blocks:
+  - missing_target_machine
+  - missing_target_path
+  - snapshot_used_as_approval
+  - runtime_action_without_decision_packet
+  - secret_read_without_explicit_approval
+
+red_team_reflection:
+  negative_effects:
+    - may slow down urgent small actions
+    - may feel repetitive during development
+  mitigation:
+    - low_risk_plan_files_can_use_compact_preflight
+    - runtime_actions_require_full_preflight

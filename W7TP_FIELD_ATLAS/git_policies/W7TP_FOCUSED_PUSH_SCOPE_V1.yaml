@@ -1,0 +1,34 @@
+policy_id: W7TP_FOCUSED_PUSH_SCOPE_V1
+status: ACTIVE_PLAN_ONLY
+
+allowed_push_paths:
+  - W7TP_FIELD_ATLAS
+  - Taiji_Governance
+  - boot/read_startup_state_packet.sh
+  - .gitignore
+
+excluded_by_default:
+  - Taiji_Odoo
+  - runtime
+  - web
+  - voice_gateway
+  - topology
+  - node_modules
+  - .env
+  - "*.key"
+  - "*.pem"
+  - "*.db"
+  - "*.sqlite"
+  - "*.dump"
+
+required_before_push:
+  - no_secret_scan_on_allowed_push_paths
+  - git_status_review
+  - existing_remote_only
+
+red_team_reflection:
+  negative_effects:
+    - useful_dev_files_may_not_be_pushed
+  mitigation:
+    - untracked_archive_lane_preserves_them
+    - later_classify_and_promote_safe_files

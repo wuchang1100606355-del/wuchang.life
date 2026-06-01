@@ -1,0 +1,32 @@
+linter_plan_id: W7TP_GEI_SNAPSHOT_LINTER_PLAN_V1
+status: PLAN_ONLY
+
+purpose:
+  - ensure_gei_snapshot_is_context_only
+  - prevent_secret_or_runtime_authorization_leakage
+  - prevent_snapshot_from_becoming_false_approval
+
+required_markers:
+  - status: CONTEXT_ONLY
+  - no_secret_read: true
+  - no_runtime_write: true
+  - no_db_write: true
+  - no_service_restart: true
+  - can_authorize_action: false
+
+forbidden_patterns:
+  - "CLIENT_SECRET="
+  - "PM3_IDENTITY_HMAC_SECRET="
+  - "PASSWORD="
+  - "PRIVATE KEY"
+  - "sk-"
+  - "APPROVED_RESTART"
+  - "APPROVED_DEPLOY"
+
+red_team_reflection:
+  negative_effects:
+    - linter_may_false_positive_on_policy_text
+    - linter_is_not_full_security_audit
+  mitigation:
+    - treat_linter_as_gate_not_proof
+    - keep_runtime_action_approval_separate

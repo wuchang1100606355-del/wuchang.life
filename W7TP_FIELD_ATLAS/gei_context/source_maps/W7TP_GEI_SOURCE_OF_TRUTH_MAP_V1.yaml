@@ -1,0 +1,65 @@
+map_id: W7TP_GEI_SOURCE_OF_TRUTH_MAP_V1
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - define_which_artifact_is_authoritative_for_each_context_layer
+  - prevent_gei_snapshot_from_becoming_false_source_of_truth
+  - separate_context_refs_from_runtime_authority
+
+source_of_truth_by_layer:
+  identity_context:
+    primary:
+      - W7TP_FIELD_ATLAS/schemas/8d_identity_packet.schema.yaml
+      - W7TP_FIELD_ATLAS/8d_policies/W7TP_8D_IDENTITY_USE_POLICY_V1.yaml
+    note: GEI only links identity context, does not issue identity by itself
+
+  universe_context:
+    primary:
+      - W7TP_FIELD_ATLAS/01_universe_registry.yaml
+      - W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+
+  governed_hive_context:
+    primary:
+      - W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+      - W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+
+  gei_context:
+    primary:
+      - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+      - W7TP_FIELD_ATLAS/gei_context/00_GEI_MASTER_INDEX.yaml
+
+  runtime_context:
+    primary:
+      - latest_startup_state_packet
+      - server_truth_packet
+      - docker_inspect_report
+      - actual_odoo_db_identification_report
+    rule: runtime_truth_must_come_from_current_machine_report
+
+  decision_context:
+    primary:
+      - W7TP_FIELD_ATLAS/gei_context/decision_packets/W7TP_GEI_DECISION_PACKET_TEMPLATE_V1.yaml
+    rule: decision_packet_required_before_runtime_action
+
+  patent_or_evidence_context:
+    primary:
+      - evidence_chain_artifacts
+      - hash_ledgers
+      - git_commits
+      - bundles
+    rule: evidence_refs_do_not_authorize_runtime_action
+
+forbidden:
+  - using_gei_snapshot_as_runtime_truth
+  - using_patent_context_as_runtime_state
+  - using_plan_only_artifact_as_approval
+  - using_old_host_context_for_current_machine_action
+
+red_team_reflection:
+  negative_effects:
+    - too_many_sources_of_truth_can_confuse_operators
+    - stale_source_map_can_mislead_future_decisions
+  mitigation:
+    - mark_source_by_layer
+    - require_host_guard_for_runtime_truth
+    - update_master_index_when_context_layer_changes

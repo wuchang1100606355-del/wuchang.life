@@ -1,0 +1,24 @@
+rule_id: W7TP_GEI_LATEST_SNAPSHOT_INDEX_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - keep_latest_gei_snapshot_discoverable
+  - avoid_searching_many_snapshot_files
+  - support_chat_handoff
+
+latest_refs:
+  yaml: W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.yaml
+  markdown: W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.md
+
+rules:
+  - latest_snapshot_is_context_only
+  - latest_snapshot_must_not_authorize_runtime_action
+  - if_git_head_changed_create_new_snapshot_before_major_decision
+  - if_target_machine_changed_create_new_snapshot_before_action
+
+red_team_reflection:
+  negative_effects:
+    - latest_symlink_can_point_to_stale_context_if_script_not_run
+  mitigation:
+    - check_timestamp_and_git_head
+    - regenerate_snapshot_before_major_action
