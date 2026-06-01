@@ -1,0 +1,99 @@
+<odoo>
+    <data>
+        <record id="view_property_request_tree" model="ir.ui.view">
+            <field name="name">property.request.tree</field>
+            <field name="model">property.request</field>
+            <field name="arch" type="xml">
+                <tree string="社區報修單">
+                    <field name="name"/>
+                    <field name="resident_id"/>
+                    <field name="location"/>
+                    <field name="request_type"/>
+                    <field name="state"/>
+                    <field name="required_skill_id"/>
+                    <field name="task_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_property_request_form" model="ir.ui.view">
+            <field name="name">property.request.form</field>
+            <field name="model">property.request</field>
+            <field name="arch" type="xml">
+                <form string="社區報修單">
+                    <sheet>
+                        <header>
+                            <button name="action_submit" type="object" string="提交" class="btn-primary" states="draft"/>
+                            <button name="action_mark_done" type="object" string="完修" class="btn-success" states="assigned,submitted"/>
+                            <button name="action_cancel" type="object" string="取消" class="btn-secondary" states="draft,submitted,assigned"/>
+                            <button name="action_reset_to_draft" type="object" string="重設草稿" class="btn-secondary" states="submitted,assigned,cancel,done"/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,submitted,assigned,done,cancel"/>
+                        </header>
+                        <sheet>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="resident_id"/>
+                                    <field name="location"/>
+                                    <field name="request_type"/>
+                                </group>
+                                <group>
+                                    <field name="required_skill_id"/>
+                                    <field name="task_id" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="description" widget="html"/>
+                                <field name="image" widget="image" class="oe_avatar"/>
+                            </group>
+                        </sheet>
+                        <chatter>
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="activity_ids" widget="mail_activity"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </chatter>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_property_request_kanban" model="ir.ui.view">
+            <field name="name">property.request.kanban</field>
+            <field name="model">property.request</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_small_column">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <strong><field name="name"/></strong>
+                                <div class="mt8">
+                                    <span class="o_text_overflow">住戶：<field name="resident_id"/></span>
+                                </div>
+                                <div>
+                                    所需技能：<field name="required_skill_id"/>
+                                </div>
+                                <div>
+                                    狀態：<field name="state"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="action_property_request" model="ir.actions.act_window">
+            <field name="name">社區報修單</field>
+            <field name="res_model">property.request</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    建立第一筆社區報修單。
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_property_root" name="智慧物業" parent="maintenance.menu_maintenance_root" sequence="30"/>
+        <menuitem id="menu_property_requests" name="社區報修單" parent="menu_property_root" action="action_property_request" sequence="10"/>
+    </data>
+</odoo>

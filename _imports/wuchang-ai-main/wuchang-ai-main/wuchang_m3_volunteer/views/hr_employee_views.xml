@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <record id="view_hr_employee_form_volunteer" model="ir.ui.view">
+            <field name="name">hr.employee.form.volunteer</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.hr_employee_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="志工資訊" groups="wuchang_m3_volunteer.group_volunteer_manager">
+                        <group>
+                            <field name="x_is_volunteer"/>
+                            <field name="x_volunteer_level"/>
+                            <field name="x_wallet_id"/>
+                        </group>
+                        <group>
+                            <field name="x_volunteer_skills" widget="many2many_tags"/>
+                            <field name="x_m7_certs" widget="many2many_tags"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

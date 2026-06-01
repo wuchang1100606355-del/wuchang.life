@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  wuchang_claw:
+    build: .
+    container_name: wuchang_os_claw_9004
+    ports:
+      - "9004:9004"
+    volumes:
+      # 👑 上帝蟲洞：唯讀掛載整個系統，毫無保留！
+      - /:/host_root:ro
+      - ./keys:/app/keys
+    restart: always

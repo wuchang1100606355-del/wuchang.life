@@ -1,0 +1,39 @@
+/* 登入頁背景（改用 DOM div 置底，無透明遮罩） */
+.o_web_login,
+.o_login {
+  min-height: 100vh;
+  position: relative;
+  z-index: 0; /* 建立堆疊環境，背景層在最底 */
+  background: none !important; /* 移除任何白底影響 */
+}
+
+/* 內容層提高，確保在背景之上 */
+.o_web_login > *,
+.o_login > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 以實體 div 當背景層，鋪滿視窗，置底 */
+.wuchang-login-bg {
+  position: fixed;
+  inset: 0;
+  background: url('/wuchang_comm_incub/static/src/img/wuchang-login.jpg') center/cover no-repeat;
+  z-index: 0; /* 比內容低，當作真正底層背景 */
+  pointer-events: none;
+}
+
+/* 登入卡片：改為不透明白底，移除模糊 */
+.o_web_login .card,
+.o_login .card {
+  background-color: #fff; /* 完全不透明 */
+  backdrop-filter: none;
+  border: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 表單輸入維持不透明白底以提升可讀性 */
+.o_web_login .form-control,
+.o_login .form-control {
+  background-color: #fff;
+}

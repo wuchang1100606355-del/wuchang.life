@@ -1,0 +1,8 @@
+boot_policy:
+  owner: CHIANG_CHENG_LUNG
+  fail_closed: true
+  unknown_node_goes_dead_letter: true
+  gateway_required: true
+  ledger_append_only: true
+  deny_plaintext_keys: true
+  deny_node_self_escalation: true

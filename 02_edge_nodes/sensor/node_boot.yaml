@@ -1,0 +1,25 @@
+node:
+  id: sensor
+  layer: 02_edge_nodes
+  owner: CHIANG_CHENG_LUNG
+  boot_profile: canonical_edge_node_v1
+  role:
+    - sensing
+    - heartbeat
+    - environment_state
+    - status_report
+  trust:
+    trust_level: 40
+    compute_score: 10
+    energy_score: 90
+    max_authority_level: 1
+  allow:
+    - status_report
+    - heartbeat
+    - environment_state
+  deny:
+    - private_data
+    - money
+    - legal_action
+    - root_decision
+    - private_key_access

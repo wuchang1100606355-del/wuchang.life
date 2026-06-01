@@ -1,0 +1,23 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV VOICE_PROVIDER=local
+ENV VOICE_RATE=160
+ENV VOICE_VOLUME=1.0
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends espeak-ng libespeak-ng1 ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY legacy_core ./legacy_core
+COPY data ./data
+
+EXPOSE 9002
+
+CMD ["python", "legacy_core/taiji_unified_gateway_edge.py"]

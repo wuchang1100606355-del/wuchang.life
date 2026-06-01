@@ -1,0 +1,32 @@
+node:
+  id: taiji01
+  layer: 02_edge_nodes
+  owner: CHIANG_CHENG_LUNG
+  boot_profile: canonical_edge_node_v1
+  role:
+    - llm_inference
+    - metric_tensor
+    - topology_compute
+    - gateway_backup
+    - status_report
+  trust:
+    trust_level: 90
+    compute_score: 95
+    energy_score: 70
+    max_authority_level: 3
+  allow:
+    - local_llm
+    - topology_compute
+    - document_generation
+    - status_report
+    - heartbeat
+    - gateway_backup
+  deny:
+    - private_key_access
+    - spend_money
+    - sign_contract
+    - delete_core_data
+    - change_dns
+    - expose_secret
+    - external_publish
+    - legal_commitment_without_signature
