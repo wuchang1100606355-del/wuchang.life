@@ -1,0 +1,30 @@
+blocker_id: XIAOJ_TOTAL_FIELD_V2_PRE_LANDING_BLOCKER_20260601_073945
+status: BLOCK_LANDING_UNTIL_CANDIDATE_REGISTRATION_REVIEWED
+
+reason:
+  - new_sub_universe_candidates_detected
+  - avoid_landing_total_field_before_new_growth_is_registered
+  - prevent_recreating_field_drift
+
+candidate_packet:
+  file: W7TP_FIELD_ATLAS/sub_universe_candidates/XIAOJ_NEW_SUB_UNIVERSE_CANDIDATES_20260601_073945.yaml
+
+allowed_now:
+  - review_candidate_packet
+  - classify_keep_merge_alias_deprecate
+  - update_master_index_plan_only
+
+forbidden_now:
+  - copy_XIAOJ_TOTAL_FIELD_REGISTRY_V2_to_canonical
+  - runtime_write
+  - docker_action
+  - db_write
+  - service_restart
+
+xiaoj_review_opinion:
+  recommendation: defer
+  reason: V2 sandbox passed, but new candidate directories must be registered first.
+  safe_option: review and mount candidates, then land V2.
+  risk_if_approved: V2 landing may immediately become stale.
+  risk_if_rejected: no runtime risk, but total-field registration remains pending.
+  required_human_action: approve_with_conditions

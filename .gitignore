@@ -57,3 +57,23 @@ admin.pub
 *.tmp
 runtime/archive/
 runtime/reports/*.tmp
+# T100B git debt cleanup - generated/runtime noise
+runtime/
+reports/
+reviews/
+simulations/
+*.bak_*
+*.bak.*
+*.tar.gz
+*.sha256
+patent_evidence_pack_*/
+patent_evidence_pack_*.tar.gz
+patent_evidence_pack_*.tar.gz.sha256
+# local/generated misc
+node_outbox/
+ollama_dev_models/
+sync_agents/
+state/
+site/
+"taged files ===\""
+taiji01:22
