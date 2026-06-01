@@ -1,0 +1,19 @@
+global_broadcast_governance:
+  id: GLOBAL_UNIVERSE_CUTOVER_GOVERNANCE_20260602_022110
+  meaning: >
+    This record writes the taiji01 cutover state into local governance and
+    universe indexes only. It is not a database migration, not a cloud push,
+    not an Odoo module update, and not a personal data export.
+  hard_boundaries:
+    - no_db_write
+    - no_secret_read
+    - no_personal_data_export
+    - no_docker_restart
+    - no_odoo_module_update
+  approved_state:
+    code_transfer: pass
+    hash_validation: pass
+    taiji_edge_gateway: pass
+  deferred_state:
+    - wuchang_jules_torch_dependency
+    - wuchang_display_uvicorn_runtime

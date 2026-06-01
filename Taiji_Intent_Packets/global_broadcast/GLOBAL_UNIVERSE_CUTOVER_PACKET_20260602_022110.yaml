@@ -1,0 +1,34 @@
+packet_type: W7TP_GLOBAL_UNIVERSE_CUTOVER_PACKET
+packet_version: 1
+D1_identity:
+  actor: taiji_admin
+  system: W7TP_XIAOJ_TAIJI_HUB
+  current_head: "23b344b"
+D2_intent:
+  action: broadcast_cutover_state_to_all_local_universe_indexes
+D3_state:
+  cutover_result: PARTIAL_RUNTIME_PASS
+  gateway: PASS
+  odoo: RUNNING_NO_DB_WRITE
+  jules: DEFERRED
+  display: DEFERRED
+D4_topology:
+  local_repo: /home/taiji_admin/Taiji_Hub
+  target_node: taiji01
+  transfer_set_files: 1982
+D5_resources:
+  manifest: production_copy_set_manifest_20260602_013154.txt
+  gateway_service: taiji_edge_gateway.service
+D6_governance:
+  allow_db_write: false
+  allow_service_restart: false
+  allow_cloud_push: false
+  allow_secret_read: false
+D7_validation:
+  transfer: PASS
+  missing_count: 0
+  bad_hash_count: 0
+  gateway_runtime: PASS
+D8_integrity:
+  created_at: "20260602_022110"
+  commit_before_write: "23b344b207dd4b9fd34a41a7ac96bc821bc2c9c8"

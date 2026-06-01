@@ -1,0 +1,26 @@
+broadcast_id: GLOBAL_UNIVERSE_CUTOVER_20260602_022110
+source_head: "23b344b"
+scope: all_local_universe_indexes
+event: taiji01_code_and_gateway_cutover
+status:
+  transfer: PASS
+  validation: PASS
+  runtime_preflight: PASS
+  taiji_edge_gateway: PASS
+  odoo_container: RUNNING
+  db_write: false
+  docker_restart: false
+  odoo_module_update: false
+  service_restart_scope:
+    - taiji_edge_gateway.service
+deferred:
+  wuchang_jules:
+    reason: torch_dependency_deferred
+  wuchang_display:
+    reason: uvicorn_runtime_path_deferred
+governance:
+  no_secret_extraction: true
+  no_personal_data_export: true
+  no_db_mutation: true
+  no_cloud_push: true
+  evidence_chain_required: true
