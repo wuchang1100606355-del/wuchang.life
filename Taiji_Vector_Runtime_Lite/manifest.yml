@@ -1,0 +1,31 @@
+schema: taiji.vector_runtime_lite.v1
+service: Taiji_Vector_Runtime_Lite
+version: 0.1.0
+classification: non_secret_local_runtime
+network:
+  default_host: 127.0.0.1
+  default_port: 8110
+policy:
+  external_api_calls: forbidden
+  plaintext_persistence: forbidden
+  service_account_json: forbidden
+  oauth_token: forbidden
+  api_key: forbidden
+  required_gates:
+    - taiji-metric-preflight
+    - human_decision_receipt
+    - approved_external_deployment_control
+    - audit_jsonl
+    - sha256_baseline
+storage:
+  mode: memory
+  persisted_fields:
+    - item_id
+    - sha256
+    - vector
+    - metadata
+  forbidden_fields:
+    - plaintext
+    - raw_chatgpt_export
+    - google_private_data
+    - odoo_member_plaintext

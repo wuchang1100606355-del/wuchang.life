@@ -1,0 +1,48 @@
+executor_plan_id: W7TP_PARALLEL_SAFE_SYNC_EXECUTOR_PLAN_V1
+status: PLAN_ONLY
+
+purpose:
+  - define_safe_parallel_execution_for_push_archive_bundle_report
+  - avoid_blocking_on_untracked_files
+  - keep_runtime_sync_forbidden
+
+execution_order:
+  phase_1_preflight:
+    - host_guard
+    - git_remote_check
+    - focused_secret_scan
+
+  phase_2_parallel:
+    A_governance_git:
+      - git_add_safe_scope
+      - git_commit
+      - git_push_existing_remote
+    B_untracked_archive:
+      - list_untracked
+      - tar_gz_archive
+      - sha256_manifest
+    C_bundle:
+      - git_bundle_create
+      - sha256_bundle
+
+  phase_3_report:
+    - collect_lane_status
+    - write_sync_report
+    - print_next_action
+
+hard_forbidden:
+  - runtime_copy
+  - docker_compose_up
+  - service_restart
+  - db_write
+  - secret_print
+  - delete_untracked_after_archive
+
+red_team_reflection:
+  negative_effects:
+    - if_secret_scan_scope_is_wrong_push_may_leak_sensitive_file
+    - git_push_may_fail_but_archive_succeeds_creating_mixed_status
+  mitigation:
+    - focused_scope_only
+    - final_report_must_allow_partial_success
+    - failed_push_does_not_delete_bundle_or_archive

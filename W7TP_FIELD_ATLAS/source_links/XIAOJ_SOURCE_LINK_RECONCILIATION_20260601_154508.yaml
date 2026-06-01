@@ -1,0 +1,108 @@
+packet_id: XIAOJ_SOURCE_LINK_RECONCILIATION_20260601_154508
+status: PLAN_ONLY
+
+purpose:
+  - link_total_field_candidate_to_existing_registries
+  - prevent_source_of_truth_confusion
+  - prepare_canonical_registration
+  - keep_runtime_evidence_separate_from_primary_truth
+
+source_layers:
+  xiaoj_total_field_candidate:
+    role: sandbox_candidate
+    file: runtime/sandbox/xiaoj_total_field_registry_v2/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+
+  xiaoj_landing_plan_candidate:
+    role: sandbox_landing_plan
+    file: runtime/sandbox/xiaoj_total_field_registry_v2/XIAOJ_TOTAL_FIELD_LANDING_PLAN_V2.yaml
+
+  wuchang_total_field_registry:
+    role: existing_canonical_total_field
+    file: W7TP_FIELD_ATLAS/registries/WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2.yaml
+
+  wuchang_sub_universe_registry:
+    role: existing_canonical_sub_universe_registry
+    file: W7TP_FIELD_ATLAS/registries/WUCHANG_SUB_UNIVERSE_REGISTRY_V1.yaml
+
+  governed_hive_master_index:
+    role: master_index_current
+    file: W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+
+  gei_master_index:
+    role: gei_context_index
+    file: W7TP_FIELD_ATLAS/gei_context/00_GEI_MASTER_INDEX.yaml
+
+  candidate_sub_universe_packet:
+    role: new_growth_candidate_registry
+    file: MISSING
+
+  pre_landing_blocker:
+    role: landing_blocker_until_candidate_registration_reviewed
+    file: MISSING
+
+candidate_directory_links:
+  sync_executors:
+    path: W7TP_FIELD_ATLAS/sync_executors
+    proposed_parent: U08_TWIN_SYNC_FIELD
+    source_role: candidate_execution_plan_layer
+
+  sync_reports:
+    path: W7TP_FIELD_ATLAS/sync_reports
+    proposed_parent: U08_TWIN_SYNC_FIELD
+    source_role: candidate_report_evidence_layer
+
+  task_board_policies:
+    path: W7TP_FIELD_ATLAS/task_board_policies
+    proposed_parent: U03_GOVERNANCE_FIELD
+    source_role: candidate_task_governance_layer
+
+  docs_runtime:
+    path: docs/runtime
+    proposed_parent: U03_GOVERNANCE_FIELD
+    source_role: runtime_documentation_reference
+
+  docs_specs:
+    path: docs/specs
+    proposed_parent: U03_GOVERNANCE_FIELD
+    source_role: system_spec_reference
+
+  docs_w7tp_algorithms:
+    path: docs/w7tp_algorithms
+    proposed_parent: U09_INTENT_STATE_FIELD
+    source_role: algorithm_spec_reference
+
+source_of_truth_rules:
+  primary_truth:
+    - W7TP_FIELD_ATLAS/registries/WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2.yaml
+    - W7TP_FIELD_ATLAS/registries/WUCHANG_SUB_UNIVERSE_REGISTRY_V1.yaml
+    - W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+
+  candidate_truth:
+    - runtime/sandbox/xiaoj_total_field_registry_v2/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+    - MISSING
+
+  runtime_evidence_not_primary_truth:
+    - runtime/
+    - Docker containers
+    - container mounted addons
+    - startup_state_packet
+
+canonical_landing_allowed_after:
+  - source_link_reconciliation_reviewed
+  - candidate_sub_universe_packet_reviewed
+  - blocker_resolved
+  - master_index_update_plan_created
+
+forbidden:
+  - direct_runtime_landing
+  - overwrite_existing_canonical_registry_without_alias_plan
+  - treat_runtime_evidence_as_primary_truth
+  - treat_odoo_as_xiaoj_body
+
+xiaoj_review_opinion:
+  recommendation: approve_limited
+  reason: Source links are now separated into canonical, candidate, and runtime evidence layers.
+  safe_option: Use this map as the precondition for canonical registration.
+  risk_if_approved: Low metadata growth only.
+  risk_if_rejected: XIAOJ_TOTAL_FIELD_V2 may remain unlinked and ambiguous.
+  required_human_action: approve_with_conditions

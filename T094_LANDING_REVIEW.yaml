@@ -1,0 +1,21 @@
+id: T094_XIAOJ_TOTAL_FIELD_V2_LANDING_REVIEW
+generated_at: "2026-06-01T08:35:00Z"
+mode: PASS_SANDBOX_ONLY
+
+inputs:
+  - XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+  - T093_BLOCKER_CLEAR_REVIEW
+
+status_checks:
+  registry_ready: true
+  syntax_valid: true
+  twin_validation_pass: true
+  blocker_cleared: false
+
+landing_readiness:
+  status: HOLD
+  reason: "Pre-landing blocker is still ACTIVE because T091/T092 execution was preview-only."
+
+forbidden:
+  - canonical_registration
+  - physical_file_move

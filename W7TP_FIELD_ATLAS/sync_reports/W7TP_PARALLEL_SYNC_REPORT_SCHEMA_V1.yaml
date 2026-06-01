@@ -1,0 +1,36 @@
+schema_id: W7TP_PARALLEL_SYNC_REPORT_SCHEMA_V1
+status: DRAFT
+
+fields:
+  report_id:
+  timestamp:
+  host:
+  git_branch:
+  git_head_before:
+  git_head_after:
+  remote:
+  lane_results:
+    LANE_A_GOVERNANCE_GIT:
+      - status
+      - commit_hash
+      - push_status
+    LANE_B_UNTRACKED_ARCHIVE:
+      - status
+      - archive_path
+      - sha256_path
+    LANE_C_GIT_BUNDLE:
+      - status
+      - bundle_path
+      - sha256_path
+    LANE_D_RUNTIME_SYNC_PLAN:
+      - status
+      - runtime_action
+    LANE_E_REPORT:
+      - status
+  final_decision:
+  red_team_reflection:
+
+rules:
+  - partial_success_allowed
+  - runtime_action_must_remain_forbidden
+  - secret_scan_failure_blocks_push_but_not_report

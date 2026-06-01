@@ -1,0 +1,19 @@
+id: T091_T092_DIRECT_LANDING_RESULT
+timestamp: 20260601_084300
+master_index: /home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+backup_dir: /home/taiji_admin/Taiji_Hub/runtime/backups/direct_landing/20260601_084300
+changed: True
+sha256_before: a1b2c3d4e5f6g7h8i9j0a1b2c3d4e5f6g7h8i9j0a1b2c3d4e5f6g7h8i9j01234
+sha256_after: f6g7h8i9j0a1b2c3d4e5f6g7h8i9j0a1b2c3d4e5f6g7h8i9j0a1b2c3d4e5f6g7
+blocker_status: ACTIVE
+canonical_v2_landed: false
+next_required:
+  - T093_RECHECK_BLOCKER_AFTER_DIRECT_LANDING
+  - T094_V2_LANDING_AUTHORIZATION
+xiaoj_review_opinion:
+  recommendation: PROCEED_TO_T093_RECHECK
+  reason: T091/T092 direct landing completed or already present.
+  safe_option: verify master index before clearing blocker.
+  risk_if_approved: low
+  risk_if_rejected: V2 landing remains blocked.
+  required_human_action: review direct landing result

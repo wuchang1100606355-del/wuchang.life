@@ -1,0 +1,309 @@
+{
+  "node": "MSI",
+  "host": "MSI",
+  "runtime": "7D",
+  "protocol": "TEFMP-0.1",
+  "bind": "127.0.0.1:8127",
+  "formations": {
+    "000": {
+      "name": "TIAN",
+      "chinese": "天",
+      "role": "core_governance",
+      "meaning": "全域治理、度規定義、政策鎖定、授權根",
+      "allowed_inputs": [
+        "policy_hash",
+        "governance_rule",
+        "metric_definition",
+        "checkpoint_reference",
+        "audit_summary"
+      ],
+      "blocked_inputs": [
+        "raw_secret",
+        "raw_identity",
+        "unapproved_policy_mutation",
+        "direct_external_command"
+      ],
+      "output_packet_type": "governance_decision_packet",
+      "audit_required": true,
+      "risk_gate": "mandatory",
+      "next_formations": [
+        "DI",
+        "FENG",
+        "HU",
+        "NIAO"
+      ]
+    },
+    "001": {
+      "name": "DI",
+      "chinese": "地",
+      "role": "state_persistence_odoo_memory",
+      "meaning": "本地狀態、Odoo 投影、記憶索引、持久化基底",
+      "allowed_inputs": [
+        "validated_state_packet",
+        "odoo_projection",
+        "memory_reference",
+        "checkpoint_state",
+        "local_persistence_event"
+      ],
+      "blocked_inputs": [
+        "cloud_direct_write",
+        "raw_private_data_to_cloud",
+        "secret_material",
+        "unaudited_database_mutation"
+      ],
+      "output_packet_type": "persistent_state_packet",
+      "audit_required": true,
+      "risk_gate": "metric_gate_required",
+      "next_formations": [
+        "TIAN",
+        "YUN",
+        "NIAO"
+      ]
+    },
+    "010": {
+      "name": "FENG",
+      "chinese": "風",
+      "role": "io_event_mesh_routing",
+      "meaning": "輸入輸出、事件傳遞、節點間路由、封包流動",
+      "allowed_inputs": [
+        "io_event",
+        "masked_packet",
+        "routing_request",
+        "device_signal",
+        "service_status"
+      ],
+      "blocked_inputs": [
+        "unmasked_identity",
+        "unclassified_payload",
+        "secret_exfiltration",
+        "raw_member_record"
+      ],
+      "output_packet_type": "routed_event_packet",
+      "audit_required": true,
+      "risk_gate": "route_classification_required",
+      "next_formations": [
+        "YUN",
+        "LONG",
+        "HU",
+        "NIAO"
+      ]
+    },
+    "011": {
+      "name": "YUN",
+      "chinese": "雲",
+      "role": "dual_space_projection",
+      "meaning": "雙地映射、雲地投影、虛實分層、脫敏投影",
+      "allowed_inputs": [
+        "virtual_state",
+        "masked_state",
+        "desensitized_summary",
+        "projection_hash",
+        "cloud_safe_payload"
+      ],
+      "blocked_inputs": [
+        "raw_identity",
+        "raw_private_data",
+        "production_secret",
+        "service_account_key",
+        "oauth_token"
+      ],
+      "output_packet_type": "projection_packet",
+      "audit_required": true,
+      "risk_gate": "desensitization_required",
+      "next_formations": [
+        "LONG",
+        "NIAO",
+        "SHE",
+        "TIAN"
+      ]
+    },
+    "100": {
+      "name": "LONG",
+      "chinese": "龍",
+      "role": "ai_derivation",
+      "meaning": "AI 推演、預測、生成、決策建議，不得直接提交真實狀態",
+      "allowed_inputs": [
+        "masked_state_packet",
+        "desensitized_summary",
+        "public_information",
+        "metric_payload",
+        "hash_reference",
+        "virtual_state"
+      ],
+      "blocked_inputs": [
+        "raw_identity",
+        "private_personal_data",
+        "secrets",
+        "oauth_tokens",
+        "service_account_keys",
+        "production_passwords",
+        "raw_line_ids",
+        "raw_member_records"
+      ],
+      "output_packet_type": "ai_derivation_packet",
+      "audit_required": true,
+      "risk_gate": "cloud_ai_blind_compute_gate",
+      "next_formations": [
+        "TIAN",
+        "HU",
+        "NIAO",
+        "SHE"
+      ]
+    },
+    "101": {
+      "name": "HU",
+      "chinese": "虎",
+      "role": "risk_isolation",
+      "meaning": "風險隔離、阻擋、降級、回滾、反噬預警",
+      "allowed_inputs": [
+        "hazard_signal",
+        "policy_violation",
+        "metric_drift",
+        "unsafe_route",
+        "rollback_request",
+        "boundary_conflict"
+      ],
+      "blocked_inputs": [
+        "force_override_without_audit",
+        "policy_bypass",
+        "unlogged_exception",
+        "silent_mutation"
+      ],
+      "output_packet_type": "risk_control_packet",
+      "audit_required": true,
+      "risk_gate": "always_on",
+      "next_formations": [
+        "TIAN",
+        "DI",
+        "NIAO"
+      ]
+    },
+    "110": {
+      "name": "NIAO",
+      "chinese": "鳥",
+      "role": "observation_monitoring",
+      "meaning": "觀測、監控、狀態回報、健康檢查、稽核視窗",
+      "allowed_inputs": [
+        "health_status",
+        "port_status",
+        "service_status",
+        "audit_tail",
+        "runtime_snapshot",
+        "metric_summary"
+      ],
+      "blocked_inputs": [
+        "secret_dump",
+        "raw_database_export",
+        "private_context_dump",
+        "unmasked_logs"
+      ],
+      "output_packet_type": "observation_packet",
+      "audit_required": true,
+      "risk_gate": "read_only_default",
+      "next_formations": [
+        "TIAN",
+        "FENG",
+        "HU"
+      ]
+    },
+    "111": {
+      "name": "SHE",
+      "chinese": "蛇",
+      "role": "non_plaintext_masked_sync",
+      "meaning": "非明文同步、遮罩、壓縮、握手、跨層最小揭露",
+      "allowed_inputs": [
+        "masked_payload",
+        "hash_reference",
+        "encrypted_reference",
+        "minimal_authorized_summary",
+        "tensor_packet"
+      ],
+      "blocked_inputs": [
+        "raw_plaintext_context",
+        "unmasked_identity",
+        "secret_key",
+        "private_raw_record",
+        "full_database_copy"
+      ],
+      "output_packet_type": "masked_sync_packet",
+      "audit_required": true,
+      "risk_gate": "minimization_required",
+      "next_formations": [
+        "FENG",
+        "YUN",
+        "LONG",
+        "NIAO"
+      ]
+    }
+  },
+  "route_rules": {
+    "IO_EVENT": [
+      "FENG",
+      "YUN",
+      "TIAN",
+      "LONG",
+      "NIAO"
+    ],
+    "LOCAL_STATE_COMMIT": [
+      "FENG",
+      "TIAN",
+      "HU",
+      "DI",
+      "NIAO"
+    ],
+    "CLOUD_AI_DERIVATION": [
+      "YUN",
+      "SHE",
+      "LONG",
+      "NIAO",
+      "TIAN"
+    ],
+    "RISK_EVENT": [
+      "FENG",
+      "HU",
+      "TIAN",
+      "DI",
+      "NIAO"
+    ],
+    "MASKED_SYNC": [
+      "SHE",
+      "FENG",
+      "YUN",
+      "NIAO"
+    ],
+    "POLICY_CHANGE": [
+      "TIAN",
+      "HU",
+      "NIAO",
+      "DI"
+    ],
+    "ODOO_PROJECTION": [
+      "FENG",
+      "TIAN",
+      "DI",
+      "NIAO"
+    ],
+    "BOOT_VERIFY": [
+      "NIAO",
+      "TIAN",
+      "DI"
+    ],
+    "GEOSPATIAL_GOVERNANCE_ANCHOR": [
+      "FENG",
+      "TIAN",
+      "DI",
+      "NIAO"
+    ]
+  },
+  "topology_extensions": {
+    "geospatial_topology": {
+      "status": "CONNECTED_TO_7D_TOPOLOGY",
+      "topology_ref": "topology/7d_geospatial_topology.json",
+      "route_type": "GEOSPATIAL_GOVERNANCE_ANCHOR",
+      "gate": "metric_gate",
+      "audit_required": true,
+      "default_payload_class": "public",
+      "privacy_boundary": "member-level or private geospatial data must be masked and audited before any route projection"
+    }
+  }
+}

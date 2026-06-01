@@ -74,3 +74,23 @@ registry_validation_layer:
 canonicalization_layer:
   keep_merge_alias_deprecate_matrix: W7TP_FIELD_ATLAS/canonicalization/WUCHANG_KEEP_MERGE_ALIAS_DEPRECATE_MATRIX_V1.yaml
   status: PLAN_ONLY
+
+gei_context_field:
+  file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+gei_master_index:
+  file: W7TP_FIELD_ATLAS/gei_context/00_GEI_MASTER_INDEX.yaml
+  status: CHAPTER_CLOSED
+
+mainline_file_sync_strategy:
+  file: W7TP_FIELD_ATLAS/sync_strategies/W7TP_MAINLINE_FILE_SYNC_STRATEGY_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+parallel_sync_lane_map:
+  file: W7TP_FIELD_ATLAS/sync_strategies/W7TP_PARALLEL_SYNC_LANE_MAP_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+parallel_safe_sync_executor_plan:
+  file: W7TP_FIELD_ATLAS/sync_executors/W7TP_PARALLEL_SAFE_SYNC_EXECUTOR_PLAN_V1.yaml
+  status: PLAN_ONLY

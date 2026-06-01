@@ -1,0 +1,26 @@
+id: LANDING_READINESS_GAP_LIST
+
+gaps:
+  T091:
+    status: preview_only
+    missing:
+      - backup_before_patch
+      - sha256_before_patch
+      - actual_patch_result
+      - sha256_after_patch
+      - validation_result
+
+  T092:
+    status: preview_only
+    missing:
+      - backup_before_merge_alias
+      - actual_merge_alias_result
+      - validation_result
+
+  T093:
+    status: hold
+    reason: T091/T092 actual evidence missing
+
+blocker:
+  status: ACTIVE
+  clear_allowed: false

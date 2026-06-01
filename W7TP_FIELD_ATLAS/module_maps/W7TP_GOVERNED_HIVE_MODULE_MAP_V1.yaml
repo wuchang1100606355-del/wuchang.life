@@ -41,7 +41,7 @@ modules:
       - plaintext_claim_packet
       - legal_basis
       - purpose_limit
-      - xiaoj_review_opinion_plus_final_authorization
+      - human_review
       - audit_hash
       - reseal
 
@@ -102,7 +102,7 @@ integration_flow:
   - group_member_registers_node
   - group_member_uses_8d_service_result
   - contact_requires_member_approval
-  - plaintext_claim_requires_xiaoj_review_opinion_plus_final_authorization
+  - plaintext_claim_requires_human_review
   - ai_service_uses_blind_redacted_packet
   - addon_changes_pass_field_drift_governance
   - server_acceptance_before_runtime_landing
@@ -120,7 +120,3 @@ red_team_reflection:
     - 聯絡必須會員核准
     - secret只存reference不同步
     - 模組進runtime前必須通過M08與M09
-
-schema_index:
-  file: W7TP_FIELD_ATLAS/schemas/00_schema_index.yaml
-  status: DRAFT

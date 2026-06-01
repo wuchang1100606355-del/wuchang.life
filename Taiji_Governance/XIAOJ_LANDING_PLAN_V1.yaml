@@ -1,0 +1,16 @@
+packet_id: XIAOJ_LANDING_PLAN_V1
+version: "1.0"
+timestamp: "2026-06-01T15:35:23+08:00"
+target_landing_root: W7TP_FIELD_ATLAS/xiaoj_total_field
+proposed_files:
+  - source: runtime/sandbox/xiaoj_total_field_registry_v1/XIAOJ_TOTAL_FIELD_REGISTRY_V1.yaml
+    destination: W7TP_FIELD_ATLAS/xiaoj_total_field/XIAOJ_TOTAL_FIELD_REGISTRY_V1.yaml
+  - source: runtime/sandbox/xiaoj_total_field_registry_v1/XIAOJ_SOURCE_OF_TRUTH_LAYER_V1.yaml
+    destination: W7TP_FIELD_ATLAS/xiaoj_total_field/XIAOJ_SOURCE_OF_TRUTH_LAYER_V1.yaml
+  - source: runtime/sandbox/xiaoj_total_field_registry_v1/XIAOJ_COMPONENT_BOUNDARY_MAP_V1.yaml
+    destination: W7TP_FIELD_ATLAS/xiaoj_total_field/XIAOJ_COMPONENT_BOUNDARY_MAP_V1.yaml
+  - source: runtime/sandbox/xiaoj_total_field_registry_v1/XIAOJ_LANDING_PLAN_V1.yaml
+    destination: W7TP_FIELD_ATLAS/xiaoj_total_field/XIAOJ_LANDING_PLAN_V1.yaml
+pre_landing_conditions:
+  - "Validation report passes all D7 checks."
+  - "Human review confirms safety and zero runtime contamination."

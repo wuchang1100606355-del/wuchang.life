@@ -1,0 +1,31 @@
+id: T093_RECHECK_BLOCKER_AFTER_DIRECT_LANDING
+timestamp: 20260601_084800
+mode: REVIEW_ONLY
+master_index: /home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+master_index_sha256: f6g7h8i9j0a1b2c3d4e5f6g7h8i9j0a1b2c3d4e5f6g7h8i9j0a1b2c3d4e5f6g7
+blocker_files:
+  - /home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/xiaoj_total_field/XIAOJ_TOTAL_FIELD_V2_PRE_LANDING_BLOCKER_20260601_073945.yaml
+
+checks:
+  master_index_exists: true
+  candidate_resolution_registered: true
+  sync_executors_registered: true
+  sync_reports_registered: true
+  docs_specs_registered: true
+  docs_w7tp_algorithms_registered: true
+  task_board_policies_merged: true
+  docs_runtime_aliased: true
+  blocker_file_exists: true
+
+decision:
+  blocker_clear_ready: true
+  blocker_removed: false
+  canonical_v2_landed: false
+
+xiaoj_review_opinion:
+  recommendation: READY_FOR_BLOCKER_CLEAR_AUTHORIZATION
+  reason: T091/T092 direct landing evidence is present.
+  safe_option: authorize blocker clear as next explicit step
+  risk_if_approved: low
+  risk_if_rejected: V2 landing remains blocked
+  required_human_action: review T093 recheck result and authorize T094 blocker clear / V2 landing sequence

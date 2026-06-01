@@ -1,0 +1,535 @@
+# Workspace Unclassified Inventory
+2026-06-01T15:25:23+08:00
+
+## Host
+MSI
+taiji_admin
+/home/taiji_admin/Taiji_Hub
+
+## Git status
+## main
+M  .gitignore
+A  Taiji_Governance/auto_push_or_archive_20260531_223533.md
+A  Taiji_Governance/focused_governed_hive_push_20260531_223427.md
+A  Taiji_Governance/full_system_module_feature_compare_20260531_225818.md
+A  Taiji_Governance/git_push_report_20260531_223009.md
+A  Taiji_Governance/global_remaining_human_review.txt
+A  Taiji_Governance/p0_xiaoj_pre_review_patch_candidates_20260531_230936.md
+A  Taiji_Governance/p1_p2_human_review_candidates.txt
+A  Taiji_Governance/pm3_runtime_sync_source_truth_20260531_200753.md
+A  Taiji_Governance/rebuild_execution_plan_20260531_211223.md
+A  Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260531_203905.md
+A  Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260601_011938.md
+A  Taiji_Governance/system_error_correction_plan_20260531_203119.md
+A  Taiji_Governance/taiji01_odoo_mount_readonly_inventory_20260531_192749.md
+A  Taiji_Governance/taiji01_server_truth_packet_20260531_210853.md
+A  Taiji_Governance/total_field_duplicate_development_audit_20260531_225228.md
+A  Taiji_Governance/wuchang_universe_misplaced_file_packet_20260531_200715.md
+A  Taiji_Governance/xiaoj_pre_review_upgrade_inventory_20260531_230819.md
+A  Taiji_Governance/yaml_only_targets.txt
+ M W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+A  W7TP_FIELD_ATLAS/archive_policies/W7TP_PARALLEL_UNTRACKED_ARCHIVE_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/archive_policies/W7TP_UNTRACKED_ARCHIVE_POLICY_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/00_GEI_MASTER_INDEX.yaml
+A  W7TP_FIELD_ATLAS/gei_context/correlation/W7TP_GEI_FIELD_DRIFT_CORRELATION_ENGINE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/decision_packets/W7TP_GEI_DECISION_PACKET_TEMPLATE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/export_policies/W7TP_GEI_CONTEXT_EXPORT_BOUNDARY_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/handoff_templates/W7TP_GEI_CHAT_HANDOFF_TEMPLATE_V1.md
+A  W7TP_FIELD_ATLAS/gei_context/index_updates/W7TP_GEI_LATEST_SNAPSHOT_INDEX_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/linter_plans/W7TP_GEI_SNAPSHOT_LINTER_PLAN_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/preflight/W7TP_GEI_DECISION_PREFLIGHT_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/runtime_acceptance/W7TP_GEI_RUNTIME_ACCEPTANCE_GATE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/scripts/W7TP_GEI_SNAPSHOT_SCRIPT_PLAN_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/scripts/generate_gei_snapshot.sh
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/00_gei_snapshot_output_index.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/gei_context_snapshot_20260601_012517.md
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/gei_context_snapshot_20260601_012517.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.md
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_CONTEXT_RETENTION_POLICY_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_DECISION_CONTEXT_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_SNAPSHOT_GENERATOR_PLAN_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/source_maps/W7TP_GEI_SOURCE_OF_TRUTH_MAP_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/task_boards/W7TP_GEI_CONTEXT_TASK_BOARD_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/twin_compare/W7TP_GEI_TWIN_SYSTEM_COMPARE_PACKET_V1.yaml
+A  W7TP_FIELD_ATLAS/git_policies/W7TP_FOCUSED_PUSH_SCOPE_V1.yaml
+A  W7TP_FIELD_ATLAS/git_policies/W7TP_INTERNAL_GIT_PUSH_POLICY_V1.yaml
+A  W7TP_FIELD_ATLAS/mainline_sync/T080_MAINLINE_OPEN_RISK_FLAG_CLOSURE_V1.yaml
+A  W7TP_FIELD_ATLAS/mainline_sync/T081_RESTRICTED_BACKUP_ARCHIVE_AND_IGNORE_V1.yaml
+ M W7TP_FIELD_ATLAS/module_maps/W7TP_GOVERNED_HIVE_MODULE_MAP_V1.yaml
+ M W7TP_FIELD_ATLAS/restructure_plans/W7TP_GOVERNED_HIVE_RESTRUCTURE_V1.yaml
+ M W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml
+ M W7TP_FIELD_ATLAS/sync_plans/W7TP_TWIN_SYNC_ERROR_CORRECTION_PLAN_V2.yaml
+A  W7TP_FIELD_ATLAS/sync_strategies/W7TP_MAINLINE_FILE_SYNC_STRATEGY_V1.yaml
+A  W7TP_FIELD_ATLAS/sync_strategies/W7TP_PARALLEL_SYNC_LANE_MAP_V1.yaml
+M  W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+?? .ai/
+?? .continue/
+?? .taiji_migration_source.json
+?? 01_admin/
+?? 02_edge_nodes/
+?? 172.27.16.1:2222
+?? BaGua_State
+?? DiZhi_Domain
+?? Dockerfile.ai
+?? Intent_Routing##
+?? LiangYi_Direction
+?? Linux
+?? Modelfile.backbrain
+?? Modelfile.frontbrain
+?? Modelfile.metric_interpreter
+?? SiXiang_Tendency
+?? Taiji_AutoBuild/
+?? Taiji_Claw_Container/
+?? Taiji_Governance/workspace_unclassified_inventory_20260601_152523.md
+?? Taiji_Odoo/addons/pm3_runtime_sync.bak./
+?? Taiji_Odoo/addons/pm3_runtime_sync/controllers/google_auth.py
+?? Taiji_Odoo/addons/pm3_runtime_sync/views/web_login_templates.xml.disabled
+?? Taiji_Odoo/addons/taiji_member_login/static/
+?? Taiji_Odoo/addons/wuchang_core/controllers/device_enrollment_controller.py
+?? Taiji_Odoo/addons/wuchang_core/controllers/main.py
+?? Taiji_Odoo/addons/wuchang_core/data/
+?? Taiji_Odoo/addons/wuchang_core/models/r.txt
+?? Taiji_Odoo/addons/wuchang_core/models/router_certificate.py
+?? "Taiji_Odoo/addons/wuchang_core/models/\350\257\266.txt"
+?? Taiji_Odoo/addons/wuchang_core/scripts/setup_vm.sh
+?? Taiji_Odoo/addons/wuchang_core/scripts/vm_requirements.txt
+?? Taiji_Odoo/addons/wuchang_core/security/ir.model.access.csv.bak.20260528_011041
+?? Taiji_Odoo/addons/wuchang_core/static/audio/
+?? Taiji_Odoo/addons/wuchang_core/static/src/js/community_super_app.jsx
+?? Taiji_Odoo/addons/wuchang_core/views/g3.txt
+?? Taiji_Odoo/addons/wuchang_core/views/router_certificate_views.xml
+?? Taiji_Odoo/addons/wuchang_core/views/settings_views.xml
+?? Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py
+?? Taiji_Odoo/addons/wuchang_line_login/controllers/main.py
+?? Taiji_Odoo/backup/
+?? Taiji_Odoo/config/
+?? Taiji_Odoo/deploy/
+?? Taiji_Odoo/docker-compose.yml
+?? Taiji_Odoo/docker-compose.yml.bak_20260531_185856
+?? Taiji_Odoo/import/
+?? Taiji_Odoo/inspect_quickclick_xlsx.py
+?? Taiji_Odoo/scripts/
+?? Taiji_Odoo/wuchang_menu_parser.py
+?? Taiji_Vector_Runtime_Lite/
+?? TianGan_Timing
+?? W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_152118.yaml
+?? W7TP_FIELD_ATLAS/sync_executors/
+?? W7TP_FIELD_ATLAS/sync_reports/
+?? W7TP_FIELD_ATLAS/task_board_policies/
+?? Windows
+?? WuXing_Authority
+?? Wuchang_Hexagram_State_Protocol_Open_20260523_194932.tar.gz
+?? Wuchang_Hexagram_State_Protocol_Open_20260523_194932.tar.gz.sha256
+?? Wuchang_Hexagram_State_Protocol_Open_20260523_194932/
+?? ^C
+?? _imports/
+?? _pending_delete/
+?? "afe focused add ==="
+?? archive_converged/
+?? audit/
+?? benchmarks/
+?? bin/
+?? boot/read_startup_state_packet.sh
+?? cloud_proxy_update/
+?? cloudflare/
+?? commander/
+?? config/
+?? connectors/
+?? contexts/
+?? dashboard/
+?? data/
+?? deploy/docker/
+?? deploy/formal_runtime_pkg_v0_1/
+?? deploy/host_refactor/
+?? deploy/migration/
+?? deploy/packages/
+?? deploy/pages/
+?? deploy/runtime/
+?? deploy/scripts/
+?? deploy/sync/
+?? deploy/vpn/
+?? deploy_jules.sh
+?? deploy_taiji_array.sh
+?? deploy_taiji_safe.ps1
+?? deploy_v21_3.sh
+?? dispatch_usb.sh
+?? dispatch_usb_dlq.sh
+?? docker-compose.ai.yml
+?? docs/runtime/
+?? docs/specs/
+?? docs/w7tp_algorithms/
+?? drive_upload_bundle/
+?? eamtp_tipo_generator.py
+?? edge/
+?? evidence/community/
+?? evidence/pos/
+?? evidence/property/
+?? examples/
+?? feed_all.sh
+?? feed_j.sh
+?? full_system.sh
+?? git_space/reports/M002_atlas_forbidden_scan_20260531_125530.txt
+?? git_space/reports/M002_atlas_inventory_20260531_125530.txt
+?? git_space/reports/M003_patent_inventory_20260531_125947.txt
+?? git_space/reports/M004_odoo_full_inventory_20260531_131236.txt
+?? git_space/reports/M005A_runtime_safe_control_inventory.txt
+?? git_space/reports/M005_runtime_gateway_inventory.txt
+?? git_space/reports/git_central_status_20260531_125009.txt
+?? ignite_jules_cloud_run.sh
+?? index.html
+?? indexes/
+?? install_service.sh
+?? jules_cloud_api.py
+?? jules_cloud_deployment/
+?? jules_core_v21_2.py
+?? jules_core_v21_3.py
+?? jules_core_v21_4.py
+?? kan_yu_onepaste.py
+?? kan_yu_same_object_functions.py
+?? legacy_core/
+?? local_worker.py
+?? migrate_to_hub.sh
+?? models/
+?? node_outbox/
+?? nodes_roles.sh
+?? nodes_summary.sh
+?? ollama_dev_models/
+?? openwebui_tools/
+?? patent_evidence_pack_20260522_065813.tar.gz
+?? patent_evidence_pack_20260522_065813.tar.gz.sha256
+?? patent_evidence_pack_20260522_065813/
+?? patent_evidence_pack_clean_20260522_065946.tar.gz
+?? patent_evidence_pack_clean_20260522_065946.tar.gz.sha256
+?? patent_evidence_pack_clean_20260522_065946/
+?? product/
+?? pull_usb_run.sh
+?? redteam/
+?? release/
+?? reports/
+?? reviews/
+?? run_nodes.sh
+?? run_nodes_status.sh
+?? run_queue.sh
+?? runtime/WUCHANG_POS_TERMINAL_ACCESS.txt
+?? runtime/broadcast/
+?? runtime/consensus/
+?? runtime/hexagram/wuchang_hexagram_demo.svg
+?? runtime/indexes/
+?? runtime/memory/conversations/
+?? runtime/memory/semantic_memory.json
+?? runtime/memos/
+?? runtime/metrics/
+?? runtime/mock/
+?? runtime/models/
+?? runtime/outbox/
+?? runtime/patches/
+?? runtime/queue/
+?? runtime/registry/
+?? runtime/sandbox/
+?? runtime/semantic/
+?? runtime/state/
+?? runtime/taiji_metric_preflight.py.bak.20260510_001953
+?? runtime/taiji_metric_preflight.py.bak.20260510_002005
+?? runtime/taiji_metric_preflight.py.bak.20260510_002036
+?? runtime/taiji_metric_preflight.py.bak.20260510_002652
+?? runtime/taiji_metric_preflight.py.bak.20260510_002747
+?? runtime/taiji_metric_preflight.py.bak.20260510_003020
+?? runtime/taiji_metric_preflight.py.bak.20260510_003229
+?? runtime/tools/
+?? runtime/topology/
+?? runtime_adapters/
+?? scripts/cloud_muscle/
+?? scripts/extract_wuchang_three_li_boundary.py
+?? scripts/intake_self_member.sh
+?? scripts/member_intake_oneclick_test.sh
+?? scripts/package_mtl_ai_gateway_rc1.sh
+?? scripts/prune_context_keep_status_only.sh
+?? scripts/review/
+?? scripts/start_gateway.sh.bak_20260515_062401
+?? scripts/start_gateway_guard.sh.bak_20260515_062401
+?? scripts/taiji-tool
+?? scripts/taiji_guard.sh.bak_20260515_062401
+?? setup_jules_daemon.sh
+?? simulations/
+?? site/
+?? smart_dispatch.sh
+?? state/
+?? strategy_logic.py
+?? sync_agents/
+?? systemd/taiji-dashboard.service.bak_20260515_062401
+?? systemd/taiji-event-stream.service.bak_20260515_062401
+?? systemd/taiji-gateway.service.bak_20260515_062401
+?? systemd/taiji-metrics.service.bak_20260515_062401
+?? systemd/taiji-openwebui-bridge.service.bak_20260515_062401
+?? systemd/taiji-runtime-api.service.bak_20260515_062401
+?? systemd/taiji-runtime-core.service.bak_20260515_062401
+?? systemd/taiji-status-api.service.bak_20260515_062401
+?? "taged files ===\""
+?? taiji01:22
+?? taiji_boot_memory_v1.sh
+?? taiji_claw_stub.py
+?? taiji_core_stub.py
+?? taiji_gateway.py
+?? taiji_hub.py
+?? taiji_metric_memory_api.py
+?? taiji_metric_memory_core.py
+?? test_fire.py
+?? tools/generate_patent_printable_pdf.py
+?? tools/generate_readonly_boot_patent_package.py
+?? topology/
+?? voice_gateway/
+?? web/
+?? wuchang_grand_unification.sh
+
+## Untracked top-level
+     28 Taiji_Odoo
+     27 runtime
+     11 scripts
+     10 deploy
+      8 systemd
+      7 git_space
+      4 W7TP_FIELD_ATLAS
+      3 evidence
+      3 docs
+      2 tools
+      1 wuchang_grand_unification.sh
+      1 web
+      1 voice_gateway
+      1 topology
+      1 test_fire.py
+      1 taiji_metric_memory_core.py
+      1 taiji_metric_memory_api.py
+      1 taiji_hub.py
+      1 taiji_gateway.py
+      1 taiji_core_stub.py
+      1 taiji_claw_stub.py
+      1 taiji_boot_memory_v1.sh
+      1 taiji01:22
+      1 sync_agents
+      1 strategy_logic.py
+      1 state
+      1 smart_dispatch.sh
+      1 site
+      1 simulations
+      1 setup_jules_daemon.sh
+      1 runtime_adapters
+      1 run_queue.sh
+      1 run_nodes_status.sh
+      1 run_nodes.sh
+      1 reviews
+      1 reports
+      1 release
+      1 redteam
+      1 pull_usb_run.sh
+      1 product
+      1 patent_evidence_pack_clean_20260522_065946.tar.gz.sha256
+      1 patent_evidence_pack_clean_20260522_065946.tar.gz
+      1 patent_evidence_pack_clean_20260522_065946
+      1 patent_evidence_pack_20260522_065813.tar.gz.sha256
+      1 patent_evidence_pack_20260522_065813.tar.gz
+      1 patent_evidence_pack_20260522_065813
+      1 openwebui_tools
+      1 ollama_dev_models
+      1 nodes_summary.sh
+      1 nodes_roles.sh
+      1 node_outbox
+      1 models
+      1 migrate_to_hub.sh
+      1 local_worker.py
+      1 legacy_core
+      1 kan_yu_same_object_functions.py
+      1 kan_yu_onepaste.py
+      1 jules_core_v21_4.py
+      1 jules_core_v21_3.py
+      1 jules_core_v21_2.py
+      1 jules_cloud_deployment
+      1 jules_cloud_api.py
+      1 install_service.sh
+      1 indexes
+      1 index.html
+      1 ignite_jules_cloud_run.sh
+      1 full_system.sh
+      1 feed_j.sh
+      1 feed_all.sh
+      1 examples
+      1 edge
+      1 eamtp_tipo_generator.py
+      1 drive_upload_bundle
+      1 docker-compose.ai.yml
+      1 dispatch_usb_dlq.sh
+      1 dispatch_usb.sh
+      1 deploy_v21_3.sh
+      1 deploy_taiji_safe.ps1
+      1 deploy_taiji_array.sh
+      1 deploy_jules.sh
+      1 data
+      1 dashboard
+      1 contexts
+      1 connectors
+      1 config
+      1 commander
+      1 cloudflare
+      1 cloud_proxy_update
+      1 boot
+      1 bin
+      1 benchmarks
+      1 audit
+      1 archive_converged
+      1 _pending_delete
+      1 _imports
+      1 ^C
+      1 Wuchang_Hexagram_State_Protocol_Open_20260523_194932.tar.gz.sha256
+      1 Wuchang_Hexagram_State_Protocol_Open_20260523_194932.tar.gz
+      1 Wuchang_Hexagram_State_Protocol_Open_20260523_194932
+      1 WuXing_Authority
+      1 Windows
+      1 TianGan_Timing
+      1 Taiji_Vector_Runtime_Lite
+      1 Taiji_Governance
+      1 Taiji_Claw_Container
+      1 Taiji_AutoBuild
+      1 SiXiang_Tendency
+      1 Modelfile.metric_interpreter
+      1 Modelfile.frontbrain
+      1 Modelfile.backbrain
+      1 Linux
+      1 LiangYi_Direction
+      1 Intent_Routing##
+      1 Dockerfile.ai
+      1 DiZhi_Domain
+      1 BaGua_State
+      1 172.27.16.1:2222
+      1 02_edge_nodes
+      1 01_admin
+      1 .taiji_migration_source.json
+      1 .continue
+      1 .ai
+      1 "taged files ===\""
+      1 "afe focused add ==="
+      1 "Taiji_Odoo
+
+## High risk names
+A  Taiji_Governance/pm3_runtime_sync_source_truth_20260531_200753.md
+A  Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260531_203905.md
+A  Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260601_011938.md
+A  W7TP_FIELD_ATLAS/gei_context/runtime_acceptance/W7TP_GEI_RUNTIME_ACCEPTANCE_GATE_V1.yaml
+ M W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml
+?? Taiji_Odoo/addons/pm3_runtime_sync.bak./
+?? Taiji_Odoo/addons/pm3_runtime_sync/controllers/google_auth.py
+?? Taiji_Odoo/addons/pm3_runtime_sync/views/web_login_templates.xml.disabled
+?? Taiji_Odoo/addons/wuchang_core/models/r.txt
+?? Taiji_Odoo/addons/wuchang_core/models/router_certificate.py
+?? "Taiji_Odoo/addons/wuchang_core/models/\350\257\266.txt"
+?? Taiji_Vector_Runtime_Lite/
+?? W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_152118.yaml
+?? Wuchang_Hexagram_State_Protocol_Open_20260523_194932.tar.gz
+?? Wuchang_Hexagram_State_Protocol_Open_20260523_194932.tar.gz.sha256
+?? deploy/formal_runtime_pkg_v0_1/
+?? deploy/runtime/
+?? docs/runtime/
+?? drive_upload_bundle/
+?? git_space/reports/M005A_runtime_safe_control_inventory.txt
+?? git_space/reports/M005_runtime_gateway_inventory.txt
+?? models/
+?? ollama_dev_models/
+?? patent_evidence_pack_20260522_065813.tar.gz
+?? patent_evidence_pack_20260522_065813.tar.gz.sha256
+?? patent_evidence_pack_clean_20260522_065946.tar.gz
+?? patent_evidence_pack_clean_20260522_065946.tar.gz.sha256
+?? runtime/WUCHANG_POS_TERMINAL_ACCESS.txt
+?? runtime/broadcast/
+?? runtime/consensus/
+?? runtime/hexagram/wuchang_hexagram_demo.svg
+?? runtime/indexes/
+?? runtime/memory/conversations/
+?? runtime/memory/semantic_memory.json
+?? runtime/memos/
+?? runtime/metrics/
+?? runtime/mock/
+?? runtime/models/
+?? runtime/outbox/
+?? runtime/patches/
+?? runtime/queue/
+?? runtime/registry/
+?? runtime/sandbox/
+?? runtime/semantic/
+?? runtime/state/
+?? runtime/taiji_metric_preflight.py.bak.20260510_001953
+?? runtime/taiji_metric_preflight.py.bak.20260510_002005
+?? runtime/taiji_metric_preflight.py.bak.20260510_002036
+?? runtime/taiji_metric_preflight.py.bak.20260510_002652
+?? runtime/taiji_metric_preflight.py.bak.20260510_002747
+?? runtime/taiji_metric_preflight.py.bak.20260510_003020
+?? runtime/taiji_metric_preflight.py.bak.20260510_003229
+?? runtime/tools/
+?? runtime/topology/
+?? runtime_adapters/
+?? systemd/taiji-runtime-api.service.bak_20260515_062401
+?? systemd/taiji-runtime-core.service.bak_20260515_062401
+
+## Safe push candidates
+M  .gitignore
+A  Taiji_Governance/auto_push_or_archive_20260531_223533.md
+A  Taiji_Governance/focused_governed_hive_push_20260531_223427.md
+A  Taiji_Governance/full_system_module_feature_compare_20260531_225818.md
+A  Taiji_Governance/git_push_report_20260531_223009.md
+A  Taiji_Governance/global_remaining_human_review.txt
+A  Taiji_Governance/p0_xiaoj_pre_review_patch_candidates_20260531_230936.md
+A  Taiji_Governance/p1_p2_human_review_candidates.txt
+A  Taiji_Governance/pm3_runtime_sync_source_truth_20260531_200753.md
+A  Taiji_Governance/rebuild_execution_plan_20260531_211223.md
+A  Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260531_203905.md
+A  Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260601_011938.md
+A  Taiji_Governance/system_error_correction_plan_20260531_203119.md
+A  Taiji_Governance/taiji01_odoo_mount_readonly_inventory_20260531_192749.md
+A  Taiji_Governance/taiji01_server_truth_packet_20260531_210853.md
+A  Taiji_Governance/total_field_duplicate_development_audit_20260531_225228.md
+A  Taiji_Governance/wuchang_universe_misplaced_file_packet_20260531_200715.md
+A  Taiji_Governance/xiaoj_pre_review_upgrade_inventory_20260531_230819.md
+A  Taiji_Governance/yaml_only_targets.txt
+ M W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+A  W7TP_FIELD_ATLAS/archive_policies/W7TP_PARALLEL_UNTRACKED_ARCHIVE_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/archive_policies/W7TP_UNTRACKED_ARCHIVE_POLICY_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/00_GEI_MASTER_INDEX.yaml
+A  W7TP_FIELD_ATLAS/gei_context/correlation/W7TP_GEI_FIELD_DRIFT_CORRELATION_ENGINE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/decision_packets/W7TP_GEI_DECISION_PACKET_TEMPLATE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/export_policies/W7TP_GEI_CONTEXT_EXPORT_BOUNDARY_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/handoff_templates/W7TP_GEI_CHAT_HANDOFF_TEMPLATE_V1.md
+A  W7TP_FIELD_ATLAS/gei_context/index_updates/W7TP_GEI_LATEST_SNAPSHOT_INDEX_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/linter_plans/W7TP_GEI_SNAPSHOT_LINTER_PLAN_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/preflight/W7TP_GEI_DECISION_PREFLIGHT_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/runtime_acceptance/W7TP_GEI_RUNTIME_ACCEPTANCE_GATE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/scripts/W7TP_GEI_SNAPSHOT_SCRIPT_PLAN_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/scripts/generate_gei_snapshot.sh
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/00_gei_snapshot_output_index.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/gei_context_snapshot_20260601_012517.md
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/gei_context_snapshot_20260601_012517.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.md
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_CONTEXT_RETENTION_POLICY_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_DECISION_CONTEXT_RULE_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_SNAPSHOT_GENERATOR_PLAN_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/source_maps/W7TP_GEI_SOURCE_OF_TRUTH_MAP_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/task_boards/W7TP_GEI_CONTEXT_TASK_BOARD_V1.yaml
+A  W7TP_FIELD_ATLAS/gei_context/twin_compare/W7TP_GEI_TWIN_SYSTEM_COMPARE_PACKET_V1.yaml
+A  W7TP_FIELD_ATLAS/git_policies/W7TP_FOCUSED_PUSH_SCOPE_V1.yaml
+A  W7TP_FIELD_ATLAS/git_policies/W7TP_INTERNAL_GIT_PUSH_POLICY_V1.yaml
+A  W7TP_FIELD_ATLAS/mainline_sync/T080_MAINLINE_OPEN_RISK_FLAG_CLOSURE_V1.yaml
+A  W7TP_FIELD_ATLAS/mainline_sync/T081_RESTRICTED_BACKUP_ARCHIVE_AND_IGNORE_V1.yaml
+ M W7TP_FIELD_ATLAS/module_maps/W7TP_GOVERNED_HIVE_MODULE_MAP_V1.yaml
+ M W7TP_FIELD_ATLAS/restructure_plans/W7TP_GOVERNED_HIVE_RESTRUCTURE_V1.yaml
+ M W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml
+ M W7TP_FIELD_ATLAS/sync_plans/W7TP_TWIN_SYNC_ERROR_CORRECTION_PLAN_V2.yaml
+A  W7TP_FIELD_ATLAS/sync_strategies/W7TP_MAINLINE_FILE_SYNC_STRATEGY_V1.yaml
+A  W7TP_FIELD_ATLAS/sync_strategies/W7TP_PARALLEL_SYNC_LANE_MAP_V1.yaml
+M  W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+?? Taiji_Governance/workspace_unclassified_inventory_20260601_152523.md
+?? W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_152118.yaml
+?? W7TP_FIELD_ATLAS/sync_executors/
+?? W7TP_FIELD_ATLAS/sync_reports/
+?? W7TP_FIELD_ATLAS/task_board_policies/
+?? boot/read_startup_state_packet.sh
+?? docs/runtime/
+?? docs/specs/
+?? docs/w7tp_algorithms/

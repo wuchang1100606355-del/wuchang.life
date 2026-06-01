@@ -1,0 +1,20 @@
+id: T093_XIAOJ_REVIEW
+task_id: T093
+
+xiaoj_review_opinion:
+  recommendation: KEEP_BLOCKER_ACTIVE
+  reason: T091 and T092 are preview-only; actual execution evidence is not yet present.
+  safe_option: execute and verify T091/T092 physical patch steps before blocker clearance.
+  risk_if_approved: premature landing gate opens and may reintroduce field drift.
+  risk_if_rejected: canonical landing delayed but governance remains safe.
+  required_human_action: authorize_actual_T091_T092_execution_or_keep_review_only
+
+redteam:
+  violation_if_cleared_now:
+    - blocker_bypass
+    - sequence_skip
+    - canonical_staleness
+  mitigation:
+    - keep_blocker_active
+    - require_execution_evidence
+    - require_human_authorization

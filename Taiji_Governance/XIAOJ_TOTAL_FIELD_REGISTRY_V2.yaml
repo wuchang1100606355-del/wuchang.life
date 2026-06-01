@@ -1,0 +1,133 @@
+packet_id: XIAOJ_TOTAL_FIELD_REGISTRY_V2
+status: SANDBOX_VALIDATED_CANDIDATE
+version: "2.0"
+
+xiaoj_total_field:
+  role: 小J總場
+  nature:
+    - intent_field
+    - governance_field
+    - member_sovereignty_ai_proxy
+    - local_first_cloud_assist_system
+    - not_single_llm
+    - not_odoo_only
+
+core_state_engine:
+  role: 小J狀態場引擎
+  components:
+    - BaGua_State
+    - LiangYi_Direction
+    - SiXiang_Tendency
+    - WuXing_Authority
+    - TianGan_Timing
+    - DiZhi_Domain
+
+cognition_field:
+  role: 小J脈絡與證據智能場
+  components:
+    - W7TP_FIELD_ATLAS/gei_context
+    - GEI_Context
+
+governance_field:
+  role: 小J治理與後腦規格場
+  components:
+    - W7TP_FIELD_ATLAS
+    - Taiji_Governance
+
+routing_field:
+  role: 小J意圖路由場
+  components:
+    - Intent_Routing
+    - W7TP_FIELD_ATLAS/governance_routes
+    - W7TP_FIELD_ATLAS/function_maps
+
+synchronization_field:
+  role: 小J雙生同步與漂移校正場
+  components:
+    - Twin_Sync
+    - W7TP_FIELD_ATLAS/sync_plans
+    - W7TP_FIELD_ATLAS/drift_detector_plans
+    - W7TP_FIELD_ATLAS/server_acceptance_reports
+    - W7TP_FIELD_ATLAS/rollback_plans
+
+identity_privacy_field:
+  role: 小J會員主權與私隱場
+  components:
+    - W7TP_FIELD_ATLAS/8d_policies
+    - W7TP_FIELD_ATLAS/plaintext_policies
+    - W7TP_FIELD_ATLAS/contact_policies
+    - W7TP_FIELD_ATLAS/key_custody
+    - W7TP_FIELD_ATLAS/member_portability
+
+ai_service_field:
+  role: 小J盲算與算力路由場
+  components:
+    - W7TP_FIELD_ATLAS/ai_service
+    - W7TP_FIELD_ATLAS/cost_routing
+    - W7TP_FIELD_ATLAS/subscription_models
+
+implementation_carriers:
+  role: 小J實作載體，不是小J本體
+  components:
+    - Taiji_Odoo
+    - Taiji_Vector_Runtime_Lite
+    - OpenWebUI
+    - Odoo
+    - LINE
+    - PWA
+
+runtime_evidence:
+  role: 運行證據，不是總場正本
+  components:
+    - runtime
+    - Docker containers
+    - startup_state_packet
+    - container mounted addons
+
+evidence_chain:
+  role: 證據鏈與專利形成期紀錄
+  components:
+    - Taiji_Governance
+    - evidence
+    - patent
+    - patent_filing
+    - git_space
+
+source_of_truth_rule:
+  primary_truth:
+    - W7TP_FIELD_ATLAS
+  governance_truth:
+    - Taiji_Governance
+  implementation_truth:
+    - Taiji_Odoo
+  runtime_truth:
+    - runtime_evidence
+  archive_truth:
+    - evidence_chain
+
+boundaries:
+  odoo_is_carrier_not_core: true
+  runtime_is_evidence_not_primary_truth: true
+  gei_links_evidence_not_replace_evidence: true
+  no_secret_store: true
+  no_runtime_write: true
+  no_db_write: true
+  no_service_restart: true
+
+xiaoj_review_opinion:
+  recommendation: approve_limited
+  reason: V2補齊小J總場、狀態引擎、GEI、Twin Sync、Odoo載體與證據鏈邊界，比V1更符合目前實際系統。
+  safe_option: 先保留於sandbox，不覆蓋既有registry，驗證通過後再產生landing plan。
+  risk_if_approved: 若未同步更新master index，可能形成V1/V2並存的主表漂移。
+  risk_if_rejected: 小J總場仍缺正式註冊，後續模組可能繼續散場。
+  required_human_action: approve_with_conditions
+
+red_team_reflection:
+  negative_effects:
+    - V2若直接落地可能與WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2重疊
+    - implementation_carriers若命名不清可能讓Odoo再次被誤認為小J本體
+    - runtime_evidence若進入primary truth會污染治理主線
+  mitigation:
+    - keep_as_sandbox_candidate_first
+    - use_source_of_truth_rule
+    - landing_requires_master_index_update

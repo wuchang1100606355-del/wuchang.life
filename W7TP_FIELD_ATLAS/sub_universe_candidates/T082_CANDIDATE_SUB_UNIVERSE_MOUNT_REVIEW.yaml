@@ -1,0 +1,64 @@
+id: T082_CANDIDATE_SUB_UNIVERSE_MOUNT_REVIEW
+
+task_id: T082
+
+description: "Review candidate sub-universe mounts in sandbox and classify them before any landing or registry promotion."
+
+candidate_sub_universe_review:
+  target_spaces:
+    - sync_executors
+    - sync_reports
+    - task_board_policies
+    - docs_runtime
+    - docs_specs
+    - docs_w7tp_algorithms
+
+  classification_matrix:
+    sync_executors:
+      classification: candidate_sub_universe
+      recommendation: REVIEW
+      canonical_ready: false
+    sync_reports:
+      classification: candidate_sub_universe
+      recommendation: REVIEW
+      canonical_ready: false
+    task_board_policies:
+      classification: governance_candidate
+      recommendation: REVIEW
+      canonical_ready: false
+    docs_runtime:
+      classification: evidence_candidate
+      recommendation: ALIAS
+      canonical_ready: false
+    docs_specs:
+      classification: specification_candidate
+      recommendation: REVIEW
+      canonical_ready: false
+    docs_w7tp_algorithms:
+      classification: algorithm_candidate
+      recommendation: REVIEW
+      canonical_ready: false
+
+  candidate_classifications:
+    - KEEP
+    - MERGE
+    - ALIAS
+    - DEPRECATE
+
+findings:
+  - candidate_universes_not_registered
+
+risks:
+  - duplicate_universe
+  - undocumented_mount
+
+mitigation:
+  - manual_review
+  - registration_order_approval
+
+validation:
+  status: PASS_SANDBOX_ONLY
+
+human_action:
+  - review_candidate_matrix
+  - approve_registration_order

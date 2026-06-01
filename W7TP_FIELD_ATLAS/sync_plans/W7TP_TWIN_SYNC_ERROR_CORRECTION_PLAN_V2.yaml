@@ -41,7 +41,7 @@ d4_correction_flow:
   - mirror_to_virtual_sandbox
   - run_manifest_python_xml_validation
   - produce_sync_diff_packet
-  - xiaoj_review_opinion_plus_final_authorization_gate
+  - human_review_gate
   - backup_runtime_carrier
   - sync_to_taiji01_plan_only
   - restart_only_after_explicit_approval
@@ -95,5 +95,5 @@ d8_red_team_reflection:
     - sync_code_and_manifest_only
     - never_sync_secrets
     - generate_diff_packet_first
-    - require_xiaoj_review_opinion_plus_final_authorization_before_runtime_landing
+    - require_human_review_before_runtime_landing
     - create_rollback_point_before_formal_landing

@@ -1,0 +1,17 @@
+id: T093_CLEARANCE_CHECKLIST
+
+must_be_true_before_clear:
+  - T091_MASTER_INDEX_PATCH_RESULT_exists
+  - T092_MERGE_ALIAS_RESULT_exists
+  - blocker_file_identified
+  - master_index_sha256_before_recorded
+  - master_index_sha256_after_recorded
+  - diff_reviewed
+  - no_runtime_write
+  - no_db_write
+  - no_service_restart
+  - human_authorization_recorded
+
+current_result:
+  clear_allowed: false
+  reason: current phase is preview/review only

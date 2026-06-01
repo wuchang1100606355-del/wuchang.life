@@ -1,0 +1,77 @@
+{
+  "name": "7D_AI_IO_ODoo_Metric_Tensor_Topology",
+  "runtime": "7D",
+  "protocol": "TEFMP-0.1",
+  "node": "MSI",
+  "created_at": "2026-05-19T15:08:13.328536+00:00",
+  "definition": "AI IO Odoo metric tensor topology for 7D runtime state field",
+  "seven_dimensions": [
+    "space",
+    "time",
+    "governance",
+    "risk",
+    "memory",
+    "energy",
+    "projection"
+  ],
+  "formations": {
+    "000_TIAN": "core_governance",
+    "001_DI": "state_persistence_odoo_memory",
+    "010_FENG": "io_event_mesh_routing",
+    "011_YUN": "dual_space_projection",
+    "100_LONG": "ai_derivation",
+    "101_HU": "risk_isolation",
+    "110_NIAO": "observation_monitoring",
+    "111_SHE": "non_plaintext_masked_sync"
+  },
+  "layers": {
+    "AI": {
+      "formation": "100_LONG",
+      "role": "local_or_cloud_derivation_after_metric_gate"
+    },
+    "IO": {
+      "formation": "010_FENG",
+      "role": "event_input_output_layer"
+    },
+    "Odoo": {
+      "formation": "001_DI_011_YUN",
+      "role": "business_governance_projection"
+    },
+    "Metric": {
+      "formation": "000_TIAN_101_HU",
+      "role": "metric_gate_risk_control"
+    }
+  },
+  "flows": {
+    "normal": [
+      "IO",
+      "FENG",
+      "YUN",
+      "TIAN",
+      "LONG",
+      "NIAO"
+    ],
+    "risk": [
+      "IO",
+      "FENG",
+      "HU",
+      "TIAN",
+      "DI"
+    ],
+    "cloud_ai": [
+      "virtual_state",
+      "metric_gate",
+      "masked_packet",
+      "LONG_EXTERNAL",
+      "audit",
+      "local_7d_decision"
+    ]
+  },
+  "ports": {
+    "five_metric_8105": true,
+    "odoo_8069": true,
+    "ollama_11434": true,
+    "mu_1_gateway_9004": true,
+    "formal_tensor_runtime_8126": false
+  }
+}

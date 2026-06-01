@@ -1,0 +1,154 @@
+{
+  "node": "MSI",
+  "host": "MSI",
+  "user": "taiji_admin",
+  "protocol": "TEFMP-0.1",
+  "runtime": "7D",
+  "language": "BML-7D",
+  "canonical_root": "/home/taiji_admin/Taiji_Hub",
+  "runtime_workspace": "/home/taiji_admin/Taiji_Runtime",
+  "definition": "BML-7D is the Taiji 7D Bagua Metric Language: Two-Polarity Fields (Liangyi) + Eight-Formation routing grammar (Bagua) + Five-Metric prefix = seven runtime dimensions.",
+  "metric": {
+    "7D_CODE": [
+      "x",
+      "y",
+      "z",
+      "time",
+      "scale",
+      "heaven",
+      "earth"
+    ],
+    "5D_PREFIX": [
+      "x",
+      "y",
+      "z",
+      "time",
+      "scale"
+    ],
+    "rules": [
+      "5D_PREFIX MUST NOT be deleted.",
+      "5D_PREFIX MUST NOT be renamed.",
+      "7D is 5D_PREFIX elevated by Liangyi fields [heaven, earth].",
+      "Bagua is formation opcode and routing grammar, not an additional dimension.",
+      "Every packet, event, memory, authorization, Odoo projection, AI derivation, geospatial node, and audit record MUST map to 7D_CODE.",
+      "Raw plaintext context MUST NOT be used as the canonical transferable unit."
+    ]
+  },
+  "canonical_transferable_unit": {
+    "name": "GOVERNED_TENSOR_PACKET",
+    "required_fields": [
+      "7D_CODE",
+      "FORMATION_OPCODE",
+      "PAYLOAD_CLASS",
+      "MINIMAL_PAYLOAD_OR_HASH",
+      "ROUTE_POLICY",
+      "AUDIT_METADATA"
+    ]
+  },
+  "hazard_rules": {
+    "H001": {
+      "name": "modify_5d_prefix",
+      "condition": "packet attempts to rename, remove, reorder, or overwrite [x,y,z,time,scale]",
+      "action": "block",
+      "level": "L3_metric_hazard"
+    },
+    "H002": {
+      "name": "cloud_direct_write_real_state",
+      "condition": "cloud_ai attempts direct write to Odoo, database, device, policy, or runtime state",
+      "action": "block",
+      "level": "L3_metric_hazard"
+    },
+    "H003": {
+      "name": "secret_exfiltration",
+      "condition": "payload_class in [secret, oauth_token, service_account_key, password]",
+      "action": "block",
+      "level": "L3_metric_hazard"
+    },
+    "H004": {
+      "name": "raw_identity_to_cloud",
+      "condition": "raw identity, raw LINE ID, member record, private personal data routed to cloud",
+      "action": "block",
+      "level": "L3_metric_hazard"
+    },
+    "H005": {
+      "name": "odoo_direct_mutation_without_metric_gate",
+      "condition": "Odoo write occurs without metric_gate and audit metadata",
+      "action": "block",
+      "level": "L3_metric_hazard"
+    },
+    "H006": {
+      "name": "policy_unlocked_mutation",
+      "condition": "policy modification without checkpoint, impact analysis, rollback, and audit",
+      "action": "block",
+      "level": "L3_metric_hazard"
+    },
+    "H007": {
+      "name": "raw_plaintext_as_canonical_unit",
+      "condition": "raw plaintext context is used as canonical transferable unit",
+      "action": "block",
+      "level": "L3_metric_hazard"
+    }
+  },
+  "geospatial_topology": {
+    "status": "CONNECTED_TO_7D_TOPOLOGY",
+    "topology_ref": "topology/7d_geospatial_topology.json",
+    "scope": "新北市三重區五常里、五順里、仁忠里",
+    "official_boundary_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.geojson",
+    "google_earth_kml_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.kml",
+    "manifest_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.manifest.json",
+    "formation_route": [
+      "FENG",
+      "TIAN",
+      "DI",
+      "NIAO"
+    ],
+    "payload_class": "public",
+    "required_gates": [
+      "metric_gate",
+      "audit_gate"
+    ],
+    "private_member_location_rule": "private or member-level geospatial joins require minimization, masking, authorization window, and audit before any projection."
+  },
+  "dimension_model": {
+    "formula": "2_POLARITY_FIELDS + 5_METRIC_PREFIX = 7D; BAGUA is formation opcode/route grammar, not an extra dimension.",
+    "zh_formula": "兩儀 + 五維度規 = 七維；八陣是 formation opcode / route grammar，不是第八維。",
+    "five_metric_prefix": [
+      "x",
+      "y",
+      "z",
+      "time",
+      "scale"
+    ],
+    "liangyi_fields": [
+      "heaven",
+      "earth"
+    ],
+    "bagua_opcode_bits": 3,
+    "bagua_formations": [
+      "TIAN",
+      "DI",
+      "FENG",
+      "YUN",
+      "LONG",
+      "HU",
+      "NIAO",
+      "SHE"
+    ],
+    "7d_code": [
+      "x",
+      "y",
+      "z",
+      "time",
+      "scale",
+      "heaven",
+      "earth"
+    ],
+    "rules": [
+      "5D_PREFIX remains immutable as [x,y,z,time,scale].",
+      "heaven is the governance/policy/authority polarity field.",
+      "earth is the local substrate/execution/state polarity field.",
+      "Bagua formations classify packet route, risk gate, audit window, and payload behavior.",
+      "Bagua formations do not add or remove dimensions from 7D_CODE."
+    ]
+  }
+}

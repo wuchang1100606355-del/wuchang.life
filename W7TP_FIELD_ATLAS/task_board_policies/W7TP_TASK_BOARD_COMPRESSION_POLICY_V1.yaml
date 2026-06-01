@@ -1,0 +1,37 @@
+policy_id: W7TP_TASK_BOARD_COMPRESSION_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - reduce_context_load
+  - prevent_completed_tasks_from_polluting_daily_work
+  - preserve details in artifact files
+
+rules:
+  done_items:
+    keep_only:
+      - task_id
+      - title
+    move_details_to:
+      - module_file
+      - evidence_file
+      - plan_file
+
+  active_items:
+    keep:
+      - task_id
+      - goal
+      - output
+      - blocking_items
+
+  pending_items:
+    keep:
+      - task_id
+      - reason
+      - next_gate
+
+red_team_reflection:
+  negative_effects:
+    - overcompression_may_hide_important_context
+  mitigation:
+    - keep_file_refs_for_each_task
+    - GEI_snapshot_can_recover_context_refs
