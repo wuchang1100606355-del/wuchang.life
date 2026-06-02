@@ -1,0 +1,45 @@
+=== 007 AVATAR FIELD START ===
+Tue Jun  2 04:34:27 AM UTC 2026
+taiji01
+=== ADDON MOUNT ===
+ADDONS_SRC=/home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+=== SYNC MODULE TO ACTUAL MOUNT ===
+MODULE_VISIBLE=OK
+=== MASKED DB PASSWORD ===
+DB_PASSWORD_SOURCE=internal_env_masked
+=== PRE-UPGRADE BACKUP ===
+BACKUP_DONE=/home/taiji_admin/Taiji_Hub/Taiji_Odoo/backups/pre_member_registration_avatar_20260602_123409
+=== MODULE UPGRADE ===
+2026-06-02 04:34:28,446 290 INFO ? odoo: Odoo version 18.0-20260421 
+2026-06-02 04:34:28,446 290 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-06-02 04:34:28,446 290 INFO ? odoo: addons paths: ['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/18.0', '/mnt/extra-addons'] 
+2026-06-02 04:34:28,446 290 INFO ? odoo: database: odoo@wuchang_os_pg:5432 
+Warn: Can't find .pfb for face 'Courier'
+2026-06-02 04:34:28,595 290 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /usr/local/bin/wkhtmltopdf 
+2026-06-02 04:34:28,601 290 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltoimage binary at /usr/local/bin/wkhtmltoimage 
+2026-06-02 04:34:28,746 290 INFO wuchang_odoo odoo.modules.loading: loading 1 modules... 
+2026-06-02 04:34:28,751 290 INFO wuchang_odoo odoo.modules.loading: 1 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-06-02 04:34:28,771 290 INFO wuchang_odoo odoo.modules.loading: updating modules list 
+2026-06-02 04:34:28,772 290 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-06-02 04:34:29,503 290 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Wuchang Member Registration'] to user __system__ #1 via n/a 
+2026-06-02 04:34:29,503 290 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Wuchang Member Registration'] to user __system__ #1 via n/a 
+2026-06-02 04:34:30,072 290 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user __system__ #1 via n/a 
+2026-06-02 04:34:30,094 290 INFO wuchang_odoo odoo.modules.loading: loading 73 modules... 
+2026-06-02 04:34:30,218 290 INFO wuchang_odoo odoo.modules.loading: Loading module wuchang_member_registration (14/73) 
+2026-06-02 04:34:30,265 290 INFO wuchang_odoo odoo.modules.registry: module wuchang_member_registration: creating or updating database tables 
+2026-06-02 04:34:30,316 290 INFO wuchang_odoo odoo.modules.loading: loading wuchang_member_registration/security/ir.model.access.csv 
+2026-06-02 04:34:30,595 290 INFO wuchang_odoo odoo.modules.loading: loading wuchang_member_registration/views/member_registration_views.xml 
+2026-06-02 04:34:30,618 290 INFO wuchang_odoo odoo.addons.base.models.ir_module: module wuchang_member_registration: no translation for language zh_TW 
+2026-06-02 04:34:30,625 290 INFO wuchang_odoo odoo.modules.loading: Module wuchang_member_registration loaded in 0.41s, 122 queries (+122 other) 
+2026-06-02 04:34:30,983 290 INFO wuchang_odoo odoo.modules.loading: 73 modules loaded in 0.89s, 122 queries (+122 extra) 
+2026-06-02 04:34:31,392 290 INFO wuchang_odoo odoo.modules.registry: verifying fields for every extended model 
+2026-06-02 04:34:31,921 290 INFO wuchang_odoo odoo.modules.loading: Modules loaded. 
+2026-06-02 04:34:31,926 290 INFO wuchang_odoo odoo.modules.registry: Registry changed, signaling through the database 
+2026-06-02 04:34:31,927 290 INFO wuchang_odoo odoo.modules.registry: Registry loaded in 3.201s 
+2026-06-02 04:34:31,927 290 INFO wuchang_odoo odoo.service.server: Initiating shutdown 
+2026-06-02 04:34:31,927 290 INFO wuchang_odoo odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-06-02 04:34:31,927 290 INFO wuchang_odoo odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  
+=== VERIFY FIELDS ===
+=== VERIFY MODULE ===
+wuchang_member_registration=installed
+MEMBER_REGISTRATION_AVATAR_FIELD_PASS

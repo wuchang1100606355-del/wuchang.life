@@ -1,7 +1,33 @@
 import hashlib
+import base64
+import urllib.request
 import secrets
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+
+
+
+def _fetch_image_b64_from_url(image_url, max_bytes=2_000_000):
+    """Fetch LINE/Google profile image into Odoo Image base64 without storing raw URL."""
+    if not image_url or not isinstance(image_url, str):
+        return False, False
+    if not image_url.startswith(("https://", "http://")):
+        return False, False
+
+    req = urllib.request.Request(
+        image_url,
+        headers={"User-Agent": "WuchangMemberRegistration/1.0"}
+    )
+    with urllib.request.urlopen(req, timeout=8) as res:
+        content_type = (res.headers.get("Content-Type") or "").lower()
+        if "image" not in content_type:
+            return False, False
+        raw = res.read(max_bytes + 1)
+        if len(raw) > max_bytes:
+            return False, False
+
+    digest = hashlib.sha256(raw).hexdigest()
+    return base64.b64encode(raw), digest
 
 
 class WuchangMemberRegistration(models.Model):
@@ -38,6 +64,20 @@ class WuchangMemberRegistration(models.Model):
         string="會員暱稱",
         help="會員可自行修改的顯示暱稱；不得作為正式身份核驗資料。"
     )
+    member_avatar = fields.Image(
+        string="會員縮圖",
+        max_width=512,
+        max_height=512,
+        help="會員可手動貼圖/上傳；也可由 LINE 或 Google 頭像預設帶入同一欄位。"
+    )
+    member_avatar_source = fields.Selection([
+        ("manual", "Manual Upload"),
+        ("line", "LINE"),
+        ("google", "Google"),
+        ("odoo", "Odoo"),
+    ], default="manual", string="縮圖來源")
+    member_avatar_url_hash = fields.Char(readonly=True)
+    member_avatar_updated_at = fields.Datetime(readonly=True)
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
 
@@ -55,6 +95,20 @@ class WuchangMemberRegistration(models.Model):
     @api.model
     def _new_provisional_id(self):
         return "PROV-" + secrets.token_hex(8).upper()
+
+    def set_member_avatar_from_provider(self, provider, image_url):
+        if provider not in ("line", "google", "odoo", "manual"):
+            provider = "manual"
+        image_b64, digest = _fetch_image_b64_from_url(image_url)
+        if not image_b64:
+            return False
+        self.write({
+            "member_avatar": image_b64,
+            "member_avatar_source": provider,
+            "member_avatar_url_hash": digest,
+            "member_avatar_updated_at": fields.Datetime.now(),
+        })
+        return True
 
     def action_submit_review(self):
         for rec in self:
@@ -119,6 +173,20 @@ class WuchangMemberIdentityCode(models.Model):
         help="會員可自行修改的顯示暱稱；不等於法定姓名或身份核驗資料。"
     )
     nickname_updated_at = fields.Datetime(readonly=True)
+    member_avatar = fields.Image(
+        string="會員縮圖",
+        max_width=512,
+        max_height=512,
+        help="會員可手動貼圖/上傳；也可由 LINE 或 Google 頭像預設帶入同一欄位。"
+    )
+    member_avatar_source = fields.Selection([
+        ("manual", "Manual Upload"),
+        ("line", "LINE"),
+        ("google", "Google"),
+        ("odoo", "Odoo"),
+    ], default="manual", string="縮圖來源")
+    member_avatar_url_hash = fields.Char(readonly=True)
+    member_avatar_updated_at = fields.Datetime(readonly=True)
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
     active_status = fields.Selection([
@@ -128,6 +196,20 @@ class WuchangMemberIdentityCode(models.Model):
         ("closed", "Closed"),
     ], default="active", index=True)
     registration_id = fields.Many2one("wuchang.member.registration", readonly=True)
+
+    def set_identity_avatar_from_provider(self, provider, image_url):
+        if provider not in ("line", "google", "odoo", "manual"):
+            provider = "manual"
+        image_b64, digest = _fetch_image_b64_from_url(image_url)
+        if not image_b64:
+            return False
+        self.write({
+            "member_avatar": image_b64,
+            "member_avatar_source": provider,
+            "member_avatar_url_hash": digest,
+            "member_avatar_updated_at": fields.Datetime.now(),
+        })
+        return True
 
     @api.model
     def create_from_registration(self, registration):
@@ -145,6 +227,10 @@ class WuchangMemberIdentityCode(models.Model):
             "role_scope": registration.role_scope or "member",
             "service_scope": registration.service_scope or "basic_member_service",
             "member_nickname": registration.member_nickname,
+            "member_avatar": registration.member_avatar,
+            "member_avatar_source": registration.member_avatar_source or "manual",
+            "member_avatar_url_hash": registration.member_avatar_url_hash,
+            "member_avatar_updated_at": registration.member_avatar_updated_at,
             "registration_id": registration.id,
         })
 
@@ -168,6 +254,10 @@ class WuchangMemberExternalAuth(models.Model):
         ("revoked", "Revoked"),
     ], default="pending", index=True)
     consent_ref = fields.Char()
+    provider_picture_url_hash = fields.Char(
+        readonly=True,
+        help="LINE/Google picture URL or fetched image hash; raw URL should not be exported."
+    )
     last_login_at = fields.Datetime()
 
     _sql_constraints = [
