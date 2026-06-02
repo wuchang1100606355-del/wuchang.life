@@ -1,0 +1,1527 @@
+# Device Resilience / Memory / IO Strategy Search
+
+timestamp: 20260602_141438
+head: 5d8f6c7
+
+scope:
+- 設備韌性
+- 記憶體管理
+- I/O 策略
+- AI 算力壓力
+- token / cloud cost pressure
+- failover / backup / queue / latency
+
+## Matched files
+
+- Taiji_Governance/architecture/layers_standards.yml
+- Taiji_Governance/architecture/mvp_exclusion_policy_zh.md
+- Taiji_Governance/architecture/wuchang_taiji_operational_topology_v0_2.md
+- Taiji_Governance/auto_push_or_archive_20260531_223533.md
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/.gitignore
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/env.example
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/runtime_entry_v0_1_1.py
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/deploy/runtime/runtime_entry.py
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/deploy_taiji_safe.ps1
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/legacy_core/taiji_8_0_api_gateway.py
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/legacy_core/wuchang_llm_core.py
+- Taiji_Governance/backups/workspace_merge_review_20260514T025322+0800/from_windows_conflicts/site/taiji_system_dashboard/index.html
+- Taiji_Governance/baseline/runtime_snapshot_20260510T103532Z.txt
+- Taiji_Governance/focused_governed_hive_push_20260531_223427.md
+- Taiji_Governance/full_system_module_feature_compare_20260531_225818.md
+- Taiji_Governance/git_rebuild/git_status_after_M011_20260601_173624.txt
+- Taiji_Governance/git_rebuild/git_status_before_M011_20260601_173624.txt
+- Taiji_Governance/git_rebuild/git_status_before_M012_20260601_173720.txt
+- Taiji_Governance/git_rebuild/git_status_before_M013_20260601_173900.txt
+- Taiji_Governance/global_remaining_human_review.txt
+- Taiji_Governance/identity/legal_responsible_person_record_policy_2026-05-11.md
+- Taiji_Governance/identity/primary_system_topology_profile_2026-05-11.md
+- Taiji_Governance/identity/wuchang_association_legal_profile_v2_2026-05-11.md
+- Taiji_Governance/logs/intent_flow_cache_activation_2026-05-12.jsonl
+- Taiji_Governance/logs/obsidian_ai_window_memory_vault_2026-05-14.jsonl
+- Taiji_Governance/p1_p2_human_review_candidates.txt
+- Taiji_Governance/pm3_runtime_sync_source_truth_20260531_200753.md
+- Taiji_Governance/policies/community_association_data_authority_policy_2026-05-11.md
+- Taiji_Governance/policies/development_efficiency_first_policy_2026-05-11.md
+- Taiji_Governance/policies/development_no_permission_friction_policy_2026-05-11.md
+- Taiji_Governance/policies/development_period_no_member_pii_policy_2026-05-11.md
+- Taiji_Governance/policies/distributed_compute_boundary_policy_2026-05-11.md
+- Taiji_Governance/policies/information_custodian_accountability_statement_2026-05-11.md
+- Taiji_Governance/policies/member_identity_classification_policy_2026-05-12.md
+- Taiji_Governance/policies/member_information_sealed_vault_policy_2026-05-11.md
+- Taiji_Governance/policies/member_information_vault_d_drive_policy_2026-05-11.md
+- Taiji_Governance/policies/metric_information_audit_watermark_policy_2026-05-12.md
+- Taiji_Governance/policies/non_sensitive_vector_data_product_policy_2026-05-11.md
+- Taiji_Governance/policies/public_interest_academic_research_data_policy_2026-05-11.md
+- Taiji_Governance/progress/progress.md
+- Taiji_Governance/progress/taiji01_topology_brain_transfer_progress_2026-05-14.md
+- Taiji_Governance/rebuild_execution_plan_20260531_211223.md
+- Taiji_Governance/reports/full_system_scan_2026-05-13.md
+- Taiji_Governance/reports/local_workspace_inventory_20260510_191056.md
+- Taiji_Governance/runtime/ai_usage/ai_usage_governance.md
+- Taiji_Governance/runtime/ai_usage/multimodal_usage_metrics.md
+- Taiji_Governance/runtime/delivery_map_2026-05-12/architecture_map.md
+- Taiji_Governance/runtime/delivery_map_2026-05-12/engineering_narrative.md
+- Taiji_Governance/runtime/delivery_map_2026-05-12/runtime_bootstrap.yaml
+- Taiji_Governance/runtime/non_linguistic/tensor_state_mapping.md
+- Taiji_Governance/runtime/plaintext_free/plaintext_free_runtime.md
+- Taiji_Governance/runtime/reconciliation/deployment_artifact_generation_report.md
+- Taiji_Governance/runtime/reconciliation/formal_notation_refactor_report.md
+- Taiji_Governance/runtime/reconciliation/governance_gap_report.md
+- Taiji_Governance/runtime/reconciliation/governance_runtime_topology_map.md
+- Taiji_Governance/runtime/reconciliation/missing_runtime_report.md
+- Taiji_Governance/runtime/reconciliation/runtime_completion_matrix.md
+- Taiji_Governance/runtime/reconciliation/runtime_enforcement_recommendations.md
+- Taiji_Governance/runtime/reconciliation/runtime_trust_boundary_diagram.md
+- Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260531_203905.md
+- Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260601_011938.md
+- Taiji_Governance/snapshots/git_safety_20260510_190035/git_status_before.txt
+- Taiji_Governance/snapshots/mvp_safe/20260518T110908_+0800/mvp_exclusion_policy_zh.md
+- Taiji_Governance/snapshots/mvp_safe/20260518T110908_+0800/wuchang_taiji_operational_topology_v0_2.md
+- Taiji_Governance/snapshots/savepoint_20260514T043034+0800/files/runtime_adapters/taiji01_metric_identity_gateway.py
+- Taiji_Governance/snapshots/savepoint_20260514T043034+0800/files/scripts/taiji_login_readonly_check.sh
+- Taiji_Governance/snapshots/savepoint_20260514T043034+0800/files/site/taiji_system_dashboard/index.html
+- Taiji_Governance/snapshots/savepoint_20260514T043034+0800/files/site/taiji_system_dashboard/refresh_dashboard_state.py
+- Taiji_Governance/snapshots/savepoint_20260514T043034+0800/reports/git_status_short.txt
+- Taiji_Governance/snapshots/snapshot_20260512T180017+0800/git_status_short.txt
+- Taiji_Governance/snapshots/snapshot_20260512T180017+0800/snapshot_filelist.txt
+- Taiji_Governance/system_error_correction_plan_20260531_203119.md
+- Taiji_Governance/system_info/active_data_processing_principles_2026-05-12.md
+- Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json
+- Taiji_Governance/system_info/active_intent_flow_cache_policy_2026-05-12.md
+- Taiji_Governance/system_info/dependency_links_2026-05-12.csv
+- Taiji_Governance/system_info/dependency_relocation_plan_2026-05-12.jsonl
+- Taiji_Governance/system_info/dependency_relocation_plan_2026-05-12.md
+- Taiji_Governance/system_info/dependency_relocation_verify_2026-05-12.jsonl
+- Taiji_Governance/system_info/host_restructure/taiji01_host_inventory_20260511T170226Z.jsonl
+- Taiji_Governance/system_info/local_machine_gateway_control_2026-05-13.md
+- Taiji_Governance/system_info/model_artifact_cold_hot_mapping_2026-05-12.md
+- Taiji_Governance/system_info/model_artifact_manifest_2026-05-12.jsonl
+- Taiji_Governance/system_info/model_artifact_manifest_2026-05-12.md
+- Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+- Taiji_Governance/system_info/vpn_node_declaration_2026-05-14.json
+- Taiji_Governance/system_info/vpn_node_declaration_2026-05-14.md
+- Taiji_Governance/system_info/wuchang_life_system_scope_nodes.manifest.json
+- Taiji_Governance/system_info/wuchang_life_system_scope_nodes_2026-05-13.md
+- Taiji_Governance/taiji01_server_truth_packet_20260531_210853.md
+- Taiji_Governance/total_field_duplicate_development_audit_20260531_225228.md
+- Taiji_Governance/worklist/worklist.md
+- Taiji_Governance/workspace_unclassified_inventory_20260601_152523.md
+- Taiji_Governance/xiaoj_pre_review_upgrade_inventory_20260531_230819.md
+- Taiji_Governance/yaml_only_targets.txt
+- W7TP_FIELD_ATLAS/00_supreme_intent_field_principle_v1.md
+- W7TP_FIELD_ATLAS/20_sub_universe_registry.yaml
+- W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml
+- W7TP_FIELD_ATLAS/22_project_search_agent.yaml
+- W7TP_FIELD_ATLAS/23_readonly_project_search_commands.yaml
+- W7TP_FIELD_ATLAS/24_readonly_project_search_runner.yaml
+- W7TP_FIELD_ATLAS/25_project_task_cards_from_search.yaml
+- W7TP_FIELD_ATLAS/27_next_dev_execution_plan.yaml
+- W7TP_FIELD_ATLAS/28_state_world_router_boundary.yaml
+- W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml
+- W7TP_FIELD_ATLAS/32_patent_evidence_claim_map.yaml
+- W7TP_FIELD_ATLAS/33_state_world_p0_handoff_packet.yaml
+- W7TP_FIELD_ATLAS/34_p0_next_action_menu.yaml
+- W7TP_FIELD_ATLAS/35_state_world_router_spec_v0.yaml
+- W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+- W7TP_FIELD_ATLAS/39_task_execution_stopline_v0.yaml
+- W7TP_FIELD_ATLAS/40_state_world_snapshot_v0.yaml
+- W7TP_FIELD_ATLAS/41_state_world_review_gate_v0.yaml
+- W7TP_FIELD_ATLAS/61_sub_universe_element_index_v0_2.yaml
+- W7TP_FIELD_ATLAS/addon_market/W7TP_STANDARD_ADDON_MARKET_POLICY_V1.yaml
+- W7TP_FIELD_ATLAS/archive_policies/W7TP_UNTRACKED_ARCHIVE_POLICY_V1.yaml
+- W7TP_FIELD_ATLAS/cost_routing/W7TP_AI_BLIND_COMPUTE_COST_ROUTER_V1.yaml
+- W7TP_FIELD_ATLAS/dead_letter/WUCHANG_UNREGISTERED_ROUTE_DEAD_LETTER_POLICY_V1.yaml
+- W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md
+- W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv
+- W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv
+- W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+- W7TP_FIELD_ATLAS/git_space_architecture_v1.yaml
+- W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml
+- W7TP_FIELD_ATLAS/mainline_sync/T077_MAINLINE_FOCUSED_COMMIT_SCOPE_V1.yaml
+- W7TP_FIELD_ATLAS/module_mounts/WUCHANG_MODULE_TO_SUB_UNIVERSE_MOUNT_MAP_V1.yaml
+- W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml
+- W7TP_FIELD_ATLAS/odoo_no_plaintext_member_universe_v1.yaml
+- W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md
+- W7TP_FIELD_ATLAS/review_upgrade/patch_plans/P1_P2_XIAOJ_PRE_REVIEW_TARGETED_PATCH_PLAN_V1.yaml
+- W7TP_FIELD_ATLAS/rollback_plans/W7TP_RUNTIME_ROLLBACK_POLICY_V1.yaml
+- W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml
+- W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260531_201634.yaml
+- W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_152118.yaml
+- W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_222540.yaml
+- W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260602_082031.yaml
+- W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml
+- W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+- configs/community_3d_map_topology.yaml
+- configs/community_emergency_final_settings.yaml
+- configs/containers/container_offload_registry.template.json
+- configs/ip/wuchang_project_source_manifest.template.json
+- configs/member_account_binding_policy.yaml
+- configs/member_mobile_verify_policy.yaml
+- configs/odoo_member_login_integration.yaml
+- configs/taiji_sync_vpn_endpoints.yaml
+- configs/w7tp/ha_mesh_inventory.template.json
+- docs/7d_ai_io_odoo_metric_tensor_topology.md
+- docs/7d_bagua_metric_language.md
+- docs/design/SISTER_J_TRANSPARENT_BUILD_MODE.md
+- docs/design/W7TP_009_SHANGPIN_GOOGLE_WORKSPACE_ACCOUNT_PATCH.md
+- docs/design/W7TP_LITE_MVP_SPEC.md
+- docs/design/W7TP_SIMILAR_TECH_OPTIMIZATION.md
+- docs/design/XIAOJ_ODOO_ADDON_FILE_LAYOUT_DESIGN_ONLY.md
+- docs/design/XIAOJ_OPENWEBUI_LOCAL_WORKBENCH_MVP.md
+- docs/design/XIAOJ_OPENWEBUI_WORKSPACE_INTEGRATION_DESIGN.md
+- docs/distributed_voice_nodes.md
+- docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md
+- docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md
+- docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md
+- docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md
+- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md
+- docs/governance/W7TP_HA_MESH_PLAN_ONLY.md
+- docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md
+- docs/governance/XIAOJ_ADMIN_BLIND_PRIVACY_HARDWALL.md
+- docs/governance/XIAOJ_BREAK_GLASS_OPERATOR_CHECKLIST.md
+- docs/governance/XIAOJ_CONVERGED_GOVERNANCE_ARCHITECTURE.md
+- docs/governance/XIAOJ_CRYPTOGRAPHIC_IMPLEMENTATION_DESIGN_ONLY.md
+- docs/governance/XIAOJ_DESIGNER_ARCHITECT_KEY_LEASING_POLICY.md
+- docs/governance/XIAOJ_EMERGENCY_BREAK_GLASS_SOP.md
+- docs/governance/XIAOJ_THREE_KEY_CIVIC_CUSTODY_POLICY.md
+- docs/governance/XIAOJ_THREE_KEY_HOLDER_APPOINTMENT_POLICY.md
+- docs/governance/wuchang_global_broadcast_node_sync.md
+- docs/patent/wuchang_sovereign_gateway_patent_draft_20260523_053242.md
+- docs/project/PROJECT_CONTROL_BOARD.md
+- docs/project/PROJECT_DASHBOARD.html
+- docs/project/RUNTIME_SHADOW_INVENTORY.md
+- docs/project/TASK_CARDS.md
+- docs/project/TASK_CARDS_COMPACT.md
+- docs/project/W7TP_007_VOLUNTEER_DELIVERY_FINAL_EVIDENCE.md
+- docs/project/W7TP_016_ADMIN_BLIND_PRIVACY_FINAL_EVIDENCE.md
+- docs/project/W7TP_FIELD_SCAN_LATEST.md
+- docs/project/W7TP_GOOGLE_MAPS_NONPROFIT_CREDIT_NOTE.md
+- docs/project/W7TP_ODOO_ADDON_INSTALL_DECISION_PLAN.md
+- docs/project/W7TP_ODOO_CANONICAL_ADDON_REGISTRY.md
+- docs/project/W7TP_ODOO_COMMITTEE_CANDIDATE_DETAIL.md
+- docs/project/W7TP_ODOO_COMMITTEE_MODULE_READ.md
+- docs/project/W7TP_P0_ACTION_PLAN.md
+- docs/project/W7TP_WORK_ITEMS_V0_1.md
+- docs/project/W7TP_WUCHANG_CORE_COMMITTEE_MODULE_READ.md
+- docs/project/W7TP_WUCHANG_CORE_INSTALL_READINESS_CHECK.md
+- docs/project/WORKLINKS.md
+- docs/project/WUCHANG_CORE_FINAL_UI_EVIDENCE.md
+- docs/system_memory/pos_four_piece_and_community_merchant_member.md
+- docs/taiji_five_metric_formal_notation_runtime_zh.md
+- docs/taiji_five_metric_tensor_runtime_zh.md
+- docs/taiji_hub_architecture_completion_board_zh.md
+- docs/taiji_hub_device_least_privilege_browser_ui_zh.md
+- docs/taiji_hub_five_dim_zero_tree_tensor_io_assessment_zh.md
+- docs/taiji_hub_odoo_google_extension_spec_zh.md
+- docs/taiji_hub_whitepaper_zh.md
+- docs/w7tp_algorithms/W7TP_STATE_WORLD_ATLAS_v1_1.md
+- docs/w7tp_algorithms/W7TP_SUB_UNIVERSE_REGISTRY_v1.md
+- reports/ai_probe_20260507_010813.md
+- reports/archive_stage_delete_report_20260507_012719.md
+- reports/claw_safe/2026-05-06T18-54-46.209621+00-00_e71e7f1220e2735a.json
+- reports/claw_safe/2026-05-06T18-54-46.239999+00-00_f10d55c6c6312de7.json
+- reports/claw_safe/2026-05-08T07-04-54.424811+00-00_1e8ae41d3df2ac26.json
+- reports/container_architecture/inspect_taiji_claw_safe.txt
+- reports/container_architecture/inspect_taiji_pos_google_voice_tool.txt
+- reports/container_hardening/container_hardening_20260507_030444.md
+- reports/container_probe_20260507_011028.md
+- reports/container_review_20260507_030310.md
+- reports/device_resilience/DEVICE_RESILIENCE_MEMORY_IO_SEARCH_20260602_141438.md
+- reports/duplicate_basenames_20260507_011800.txt
+- reports/file_convergence_20260507_011800.md
+- reports/gpu_power_log.csv
+- reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.csv
+- reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.json
+- reports/intent_field_test_v0_2/run_v0_2_mini.py
+- reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.csv
+- reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.json
+- reports/intent_field_test_v0_3/run_v0_3_hallucination_warning.py
+- reports/llm_identity/find_xiaoj_unfenced_20260507_034402.md
+- reports/llm_identity/xiaoj_identity_search_20260507_040953.md
+- reports/member_registration/member_registration_odoo_install_preflight_20260602_120443.txt
+- reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt
+- reports/memory/apply_container_memory_policy_20260507_033727.md
+- reports/memory/memory_probe_20260507_033434.md
+- reports/metric_tensor_io_energy_eval_20260509_012731.json
+- reports/metric_tensor_io_energy_eval_v2_20260509_012945.json
+- reports/metric_tensor_io_eval_v2_latest.txt
+- reports/prefix/original_prefix_read_20260507_035831.md
+- reports/property_module_review/2026-05-18/property_identity_permission_model.json
+- reports/property_module_review/2026-05-18/property_identity_permission_model.md
+- reports/property_module_review/2026-05-18/property_three_piece_modularization.md
+- reports/property_module_review/2026-05-18/wuchang_m1_property_review.md
+- reports/property_module_review/2026-05-23/candidate_write_report.md
+- reports/server_handoff/copy_set_human_review_20260602_012750.md
+- reports/server_handoff/dirty_worktree_reconcile_20260602_004526.md
+- reports/server_handoff/production_copy_set_risk_exclusion_review_20260602_012942.md
+- reports/server_handoff/worktree_remediation_plan_20260602_004952.md
+- reports/system_architecture_current_2026-05-18.md
+- reports/system_probe_20260517_055501.json
+- reports/system_probe_20260517_055501.txt
+- reports/taiji_claw_dockerfile_20260507_011425.txt
+- reports/taiji_claw_dockerfile_20260507_011450.txt
+- reports/tailscale_mesh_probe_20260507_024739.md
+- reports/tri_node_container_probe_20260509_002918.txt
+- reports/tri_node_container_probe_20260509_003300.txt
+- reports/wuchang_carbon_report.json
+- runtime/agents/memory_agent.json
+- runtime/archive/login_guard_20260523_043917/taiji_login_readonly_check.sh.old
+- runtime/archive/restricted_backup_archive_20260601/deploy/env/runtime.env.example
+- runtime/archive/restricted_backup_archive_20260601/git_space/reports/M003_patent_secret_scan.txt
+- runtime/archive/restricted_backup_archive_20260601/git_space/reports/M003_patent_secret_scan_20260531_125947.txt
+- runtime/archive/restricted_backup_archive_20260601/legacy_core/taiji_ground_db_engine.py
+- runtime/archive/restricted_backup_archive_20260601/security/possible_secret_hits_20260508_022756.txt
+- runtime/archive/restricted_backup_archive_20260601/security/possible_secret_hits_20260508_023041.txt
+- runtime/archive/untracked_sync_20260601/archived_paths.txt
+- runtime/archive/untracked_sync_20260601/files/.continue/agents/new-config-1.yaml
+- runtime/archive/untracked_sync_20260601/files/.continue/agents/new-config.yaml
+- runtime/archive/untracked_sync_20260601/files/Dockerfile.ai
+- runtime/archive/untracked_sync_20260601/files/Taiji_AutoBuild/scripts/05_red_blue_exchange.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_AutoBuild/scripts/06_metric_predictive_alert.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_Claw_Container/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/auto_push_or_archive_20260531_223533.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/focused_governed_hive_push_20260531_223427.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/full_system_module_feature_compare_20260531_225818.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/global_remaining_human_review.txt
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/p1_p2_human_review_candidates.txt
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/pm3_runtime_sync_source_truth_20260531_200753.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/rebuild_execution_plan_20260531_211223.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260531_203905.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/sandbox_validation_pm3_runtime_sync_20260601_011938.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/system_error_correction_plan_20260531_203119.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/taiji01_server_truth_packet_20260531_210853.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/total_field_duplicate_development_audit_20260531_225228.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/xiaoj_pre_review_upgrade_inventory_20260531_230819.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Governance/yaml_only_targets.txt
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_base/controllers/edge_api.py.bak
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./__manifest__.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./models/__init__.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./security/ir.model.access.csv
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_behavior_vector_database_views.xml
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_desensitized_dashboard_views.xml
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_fixed_vector_state_window_views.xml
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_vector_state_window_views.xml
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/wuchang_core/controllers/device_app_controller.py.backup
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/wuchang_core/controllers/device_enrollment_controller.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/wuchang_core/controllers/device_enrollment_controller.py.backup
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/wuchang_core/controllers/main.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/wuchang_core/data/ai_cron.xml
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/wuchang_core/data/ai_memory_init.xml
+- runtime/archive/untracked_sync_20260601/files/Taiji_Odoo/addons/wuchang_core/data/optimization_items.json
+- runtime/archive/untracked_sync_20260601/files/Taiji_Vector_Runtime_Lite/README.md
+- runtime/archive/untracked_sync_20260601/files/Taiji_Vector_Runtime_Lite/app/main.py
+- runtime/archive/untracked_sync_20260601/files/Taiji_Vector_Runtime_Lite/manifest.yml
+- runtime/archive/untracked_sync_20260601/files/W7TP_FIELD_ATLAS/archive_policies/W7TP_UNTRACKED_ARCHIVE_POLICY_V1.yaml
+- runtime/archive/untracked_sync_20260601/files/Wuchang_Hexagram_State_Protocol_Open_20260523_194932/.gitignore
+- runtime/archive/untracked_sync_20260601/files/_imports/wuchang-ai-main/wuchang-ai-main/codex/prompts/linux_workspace_transfer_metric_tensor_prompt.md
+- runtime/archive/untracked_sync_20260601/files/_imports/wuchang-ai-main/wuchang-ai-main/docs/ai-civic-runtime/governed-prosocial-runtime.md
+- runtime/archive/untracked_sync_20260601/files/_imports/wuchang-ai-main/wuchang-ai-main/docs/sovereign-ai-runtime/user_sovereign_ai_compute_pool_2026-05-16.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/CONTAINER_MEMORY_POLICY_STATE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/CREATOR_SELF_LIMITING_PUBLIC_INTEREST_CLOSURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/DEVICE_RESILIENCE_ARCHITECTURE_EXTRACT.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/FINAL_MTL_AI_EN_ONLY_CONCEPT_ARCHITECTURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/FINAL_WUCHANG_GOVERNANCE_TENSOR.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/LATEST_PROBE.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/LATEST_SYSTEM_LOG.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/MEMORY_MANAGEMENT_STATE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/OPENWEBUI_CLAW_SAFE_TOOL.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/TAIJI_CLAW_SAFE_STATUS.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/.ai/VOICE_CONTROL_STATE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/ai_metric/CREATOR_SELF_LIMITING_PUBLIC_INTEREST_CLOSURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/ai_metric/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/ai_metric/FINAL_WUCHANG_GOVERNANCE_TENSOR.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/CONTAINER_MEMORY_POLICY_STATE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/DEVICE_RESILIENCE_ARCHITECTURE_EXTRACT.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/DEVICE_RESILIENCE_ARCHITECTURE_EXTRACT.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/FINAL_ACTIVE_GOVERNANCE_BASELINE.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/FINAL_MTL_AI_ASSEMBLY_STATE.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/FINAL_MTL_AI_EN_ONLY_CONCEPT_ARCHITECTURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/FINAL_WUCHANG_GOVERNANCE_TENSOR.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/LATEST_SYSTEM_LOG.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/MEMORY_MANAGEMENT_STATE.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/MEMORY_MANAGEMENT_STATE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/OPENWEBUI_CLAW_SAFE_TOOL.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/OPENWEBUI_CLAW_SAFE_TOOL.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/ORIGINAL_XIAOJ_PREFIX_READ.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/POS_PRECISE_POSITIONING.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/POS_VOICE_VPN_ENDPOINT.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/SYSTEM_CURRENT_STATE.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/TAIJI_CLAW_SAFE_STATUS.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/TAIJI_CLAW_SAFE_STATUS.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/VOICE_CONTROL_STATE.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/current/VOICE_CONTROL_STATE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/context_full_20260507_044525/contexts/human/WORKLOG.md
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/nonessential_20260507_012719/wuchang_cognition_archive/WUCHANG_COGNITION_MASTER_20260505_003744.txt
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/nonessential_20260507_012719/wuchang_cognition_archive/fund/02_團體會員算力貢獻與數位資訊使用權.txt
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/nonessential_20260507_012719/wuchang_cognition_archive/governance/03_本人度量規則.txt
+- runtime/archive/untracked_sync_20260601/files/_pending_delete/nonessential_20260507_012719/wuchang_cognition_archive/prefix/00_小J總前綴_數位孿生妹妹_收斂版.txt
+- runtime/archive/untracked_sync_20260601/files/audit/odoo_condo_probe_20260517_114132.txt
+- runtime/archive/untracked_sync_20260601/files/benchmarks/metric_tensor_io_eval.py
+- runtime/archive/untracked_sync_20260601/files/benchmarks/metric_tensor_io_eval_v2.py
+- runtime/archive/untracked_sync_20260601/files/bin/check-taiji-metric-guard
+- runtime/archive/untracked_sync_20260601/files/bin/check-taiji-metric-stack
+- runtime/archive/untracked_sync_20260601/files/bin/redteam-local-audit
+- runtime/archive/untracked_sync_20260601/files/bin/taiji-system-probe
+- runtime/archive/untracked_sync_20260601/files/boot/read_startup_state_packet.sh
+- runtime/archive/untracked_sync_20260601/files/cloud_proxy_update/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/cloud_proxy_update/jules_metric_tensor_engine.py
+- runtime/archive/untracked_sync_20260601/files/commander/config/node_sync_policy.json
+- runtime/archive/untracked_sync_20260601/files/commander/reports/node_sync_dryrun_latest.md
+- runtime/archive/untracked_sync_20260601/files/config/action_registry.json
+- runtime/archive/untracked_sync_20260601/files/config/google_nonprofit_resources.json
+- runtime/archive/untracked_sync_20260601/files/config/memory/CONTAINER_MEMORY_POLICY.md
+- runtime/archive/untracked_sync_20260601/files/config/metric_action_registry.json
+- runtime/archive/untracked_sync_20260601/files/connectors/five_metric_client.py
+- runtime/archive/untracked_sync_20260601/files/connectors/five_metric_gate.py
+- runtime/archive/untracked_sync_20260601/files/contexts/current/STATUS_ONLY.md
+- runtime/archive/untracked_sync_20260601/files/dashboard/preview.html
+- runtime/archive/untracked_sync_20260601/files/dashboard/system-module-progress.html
+- runtime/archive/untracked_sync_20260601/files/dashboard/system-module-progress.json
+- runtime/archive/untracked_sync_20260601/files/data/cloud_pilot_queue/diag-readonly-001_3c59f13f734b.json
+- runtime/archive/untracked_sync_20260601/files/data/cloud_pilot_queue/test_l1_001_36ccbcda5793.json
+- runtime/archive/untracked_sync_20260601/files/data/cloud_pilot_queue/test_l2_002_9fbe846d7688.json
+- runtime/archive/untracked_sync_20260601/files/data/host_runner_results/20260508_150454_diag-readonly-001.json
+- runtime/archive/untracked_sync_20260601/files/data/internal_members/mobile_bindings.jsonl
+- runtime/archive/untracked_sync_20260601/files/deploy/docker/Dockerfile.runtime
+- runtime/archive/untracked_sync_20260601/files/deploy/docker/docker-compose.runtime.yml
+- runtime/archive/untracked_sync_20260601/files/deploy/formal_runtime_pkg_v0_1/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/deploy/formal_runtime_pkg_v0_1/env.example
+- runtime/archive/untracked_sync_20260601/files/deploy/formal_runtime_pkg_v0_1/runtime_entry_v0_1.py
+- runtime/archive/untracked_sync_20260601/files/deploy/host_refactor/taiji01_file_restructure_v0_1/HOST_READONLY_INVENTORY.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/dependency_relocation_v0_1/BUILD_DEPENDENCY_PLAN.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/dependency_relocation_v0_1/BUILD_MODEL_ARTIFACT_MANIFEST.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/dependency_relocation_v0_1/README.md
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/APPLY_MIGRATION.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/BUILD_MIGRATION_PLAN.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/CREATE_D_MEMBER_VAULT_FOLDERS.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/C_SCENARIO_DATA_POLICY.md
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/DRY_RUN.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/MEMBER_VAULT_SEALED_MODE.md
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/ORG_SHARED_CLOUD_POLICY.md
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/STORAGE_BOUNDARY_POLICY.md
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/STORAGE_BOUNDARY_POLICY_V2_C_DRIVE_SCENARIO.md
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/multi_target_dependency_migration_v0_1/STORAGE_BOUNDARY_POLICY_V3_ASSOCIATION_AUTHORITY.md
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/wsl_native_migration_v0_1/MIGRATE_APPLY.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/wsl_native_migration_v0_1/MIGRATE_DRY_RUN.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/wsl_native_migration_v0_1/migration_plan.json
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/wsl_native_migration_v0_1/wsl_native_migration_v0_1/MIGRATE_APPLY.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/wsl_native_migration_v0_1/wsl_native_migration_v0_1/MIGRATE_DRY_RUN.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/migration/wsl_native_migration_v0_1/wsl_native_migration_v0_1/migration_plan.json
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji01_metric_identity_gateway_v0_1/README_CONTAINER.md
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji01_metric_identity_gateway_v0_1/taiji01_metric_identity_gateway.py
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji01_topology_brain_transfer_v0_1/Modelfile.metric_language_gateway_ai.taiji01
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/COLLECT_RUNTIME_NODE_INFO.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/START_LOCAL_V011.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/env.example
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/runtime_entry.py
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/runtime_entry_v0_1_1.py
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/taiji_formal_tensor_runtime_v0_1_0/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/taiji_formal_tensor_runtime_v0_1_0/env.example
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/taiji_formal_tensor_runtime_v0_1_0/runtime_entry.py
+- runtime/archive/untracked_sync_20260601/files/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/taiji_formal_tensor_runtime_v0_1_0/runtime_entry_v0_1_1.py
+- runtime/archive/untracked_sync_20260601/files/deploy/runtime/runtime_entry.py
+- runtime/archive/untracked_sync_20260601/files/deploy/sync/taiji01_memory_sync_v0_1/PULL_FROM_TAIJI01.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/sync/taiji01_memory_sync_v0_1/PUSH_TO_TAIJI01_MANUAL_ONLY.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/sync/taiji01_memory_sync_v0_1/SHA256SUMS
+- runtime/archive/untracked_sync_20260601/files/deploy/sync/taiji01_memory_sync_v0_1/STATUS_MEMORY_SYNC.sh
+- runtime/archive/untracked_sync_20260601/files/deploy/sync/taiji01_memory_sync_v0_1/SYNC_POLICY.md
+- runtime/archive/untracked_sync_20260601/files/deploy_jules.sh
+- runtime/archive/untracked_sync_20260601/files/deploy_taiji_safe.ps1
+- runtime/archive/untracked_sync_20260601/files/dispatch_usb.sh
+- runtime/archive/untracked_sync_20260601/files/dispatch_usb_dlq.sh
+- runtime/archive/untracked_sync_20260601/files/docs/w7tp_algorithms/W7TP_STATE_WORLD_ATLAS_v1_1.md
+- runtime/archive/untracked_sync_20260601/files/docs/w7tp_algorithms/W7TP_SUB_UNIVERSE_REGISTRY_v1.md
+- runtime/archive/untracked_sync_20260601/files/drive_upload_bundle/20260507_012719/AI_FILE_TENSOR_INDEX_20260507_012719.json
+- runtime/archive/untracked_sync_20260601/files/drive_upload_bundle/20260507_012719/ARCHIVE_MANIFEST_20260507_012719.tsv
+- runtime/archive/untracked_sync_20260601/files/drive_upload_bundle/20260507_012719/HUMAN_FILE_INDEX_20260507_012719.md
+- runtime/archive/untracked_sync_20260601/files/drive_upload_bundle/20260507_012719/archive_stage_delete_report_20260507_012719.md
+- runtime/archive/untracked_sync_20260601/files/eamtp_tipo_generator.py
+- runtime/archive/untracked_sync_20260601/files/full_system.sh
+- runtime/archive/untracked_sync_20260601/files/git_space/reports/M002_atlas_forbidden_scan_20260531_125530.txt
+- runtime/archive/untracked_sync_20260601/files/git_space/reports/M002_atlas_inventory_20260531_125530.txt
+- runtime/archive/untracked_sync_20260601/files/git_space/reports/M003_patent_inventory_20260531_125947.txt
+- runtime/archive/untracked_sync_20260601/files/git_space/reports/M004_odoo_full_inventory_20260531_131236.txt
+- runtime/archive/untracked_sync_20260601/files/git_space/reports/M005A_runtime_safe_control_inventory.txt
+- runtime/archive/untracked_sync_20260601/files/git_space/reports/M005_runtime_gateway_inventory.txt
+- runtime/archive/untracked_sync_20260601/files/git_space/reports/git_central_status_20260531_125009.txt
+- runtime/archive/untracked_sync_20260601/files/ignite_jules_cloud_run.sh
+- runtime/archive/untracked_sync_20260601/files/indexes/AI_FILE_TENSOR_INDEX_20260507_012719.json
+- runtime/archive/untracked_sync_20260601/files/indexes/ARCHIVE_MANIFEST_20260507_012719.tsv
+- runtime/archive/untracked_sync_20260601/files/indexes/HUMAN_FILE_INDEX_20260507_012719.md
+- runtime/archive/untracked_sync_20260601/files/jules_cloud_deployment/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/jules_cloud_deployment/jules_metric_tensor_engine.py
+- runtime/archive/untracked_sync_20260601/files/jules_core_v21_2.py
+- runtime/archive/untracked_sync_20260601/files/jules_core_v21_4.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/sister_j_agent_core.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/taiji_8_0_api_gateway.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/taiji_8_0_main.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/taiji_f5_protocol.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/taiji_patent_v3_engine.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/taiji_redis_engine.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/taiji_unified_gateway_edge.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/wuchang_live_workspace_8000.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/wuchang_llm_core.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/wuchang_local_reconstruction_service.py
+- runtime/archive/untracked_sync_20260601/files/legacy_core/wuchang_pos_voice_engine.py
+- runtime/archive/untracked_sync_20260601/files/local_worker.py
+- runtime/archive/untracked_sync_20260601/files/models/Wuchang_Adjutant.Modelfile
+- runtime/archive/untracked_sync_20260601/files/models/dead_letter_router.py
+- runtime/archive/untracked_sync_20260601/files/models/ollama/Modelfile.metric_language_gateway_ai
+- runtime/archive/untracked_sync_20260601/files/models/ollama/Modelfile.metric_language_gateway_ai.container
+- runtime/archive/untracked_sync_20260601/files/models/ollama/Modelfile.xiaoj_dual_brain_unified_2b
+- runtime/archive/untracked_sync_20260601/files/ollama_dev_models/Modelfile.pm3-dev-backbrain
+- runtime/archive/untracked_sync_20260601/files/openwebui_tools/taiji_claw_safe_tool.py
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/manifest/00_environment.md
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/manifest/01_tree_redacted.txt
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/manifest/02_sha256_redacted_manifest.txt
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/manifest/03_key_files.md
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/reports/reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.csv
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/reports/reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.json
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/reports/reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.csv
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_20260522_065813/reports/reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.json
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/manifest/00_environment.md
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/manifest/01_tree_redacted.txt
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/manifest/02_sha256_redacted_manifest.txt
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/manifest/03_key_files.md
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/reports/reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.csv
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/reports/reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.json
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/reports/reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.csv
+- runtime/archive/untracked_sync_20260601/files/patent_evidence_pack_clean_20260522_065946/reports/reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.json
+- runtime/archive/untracked_sync_20260601/files/product/Taiji_Tensor_Gateway_v0_1/PRODUCT_MANIFEST.md
+- runtime/archive/untracked_sync_20260601/files/product/Taiji_Tensor_Gateway_v0_1/docs/ARCHITECTURE.md
+- runtime/archive/untracked_sync_20260601/files/product/Taiji_Tensor_Gateway_v0_1/docs/CONTEXT_REPLAY_INDEX.md
+- runtime/archive/untracked_sync_20260601/files/product/Taiji_Tensor_Gateway_v0_1/docs/DEADBOX_ROUTE.md
+- runtime/archive/untracked_sync_20260601/files/product/Taiji_Tensor_Gateway_v0_1/schema/deadbox_packet.schema.json
+- runtime/archive/untracked_sync_20260601/files/product/Taiji_Tensor_Gateway_v0_1/schema/tensor_packet.schema.json
+- runtime/archive/untracked_sync_20260601/files/pull_usb_run.sh
+- runtime/archive/untracked_sync_20260601/files/redteam/redteam_report_20260510_023315.txt
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/MANIFEST.tsv
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/README.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/ai_metric/CREATOR_SELF_LIMITING_PUBLIC_INTEREST_CLOSURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/ai_metric/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/ai_metric/FINAL_WUCHANG_GOVERNANCE_TENSOR.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/current/FINAL_MTL_AI_ASSEMBLY_STATE.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/current/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/current/FINAL_MTL_AI_EN_ONLY_CONCEPT_ARCHITECTURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/current/SYSTEM_CURRENT_STATE.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/contexts/human/WORKLOG.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/models/ollama/Modelfile.metric_language_gateway_ai
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/openwebui_tools/taiji_claw_safe_tool.py
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/prompts/FINAL_MTL_AI_ASSEMBLY_EN_ONLY_PREFIX.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/prompts/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY_PREFIX.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/prompts/FINAL_WUCHANG_GOVERNANCE_PREFIX.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/scripts/oneclick_full_mtl_ai_pipeline.sh
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/scripts/oneclick_mtl_ai_assembly.sh
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/MANIFEST.tsv
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/README.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/ai_metric/CREATOR_SELF_LIMITING_PUBLIC_INTEREST_CLOSURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/ai_metric/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/ai_metric/FINAL_WUCHANG_GOVERNANCE_TENSOR.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/current/FINAL_MTL_AI_ASSEMBLY_STATE.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/current/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/current/FINAL_MTL_AI_EN_ONLY_CONCEPT_ARCHITECTURE.mtl.json
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/current/SYSTEM_CURRENT_STATE.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/contexts/human/WORKLOG.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/models/ollama/Modelfile.metric_language_gateway_ai
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/openwebui_tools/taiji_claw_safe_tool.py
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/prompts/FINAL_MTL_AI_ASSEMBLY_EN_ONLY_PREFIX.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/prompts/FINAL_MTL_AI_CONCEPT_ARCHITECTURE_EN_ONLY_PREFIX.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/prompts/FINAL_WUCHANG_GOVERNANCE_PREFIX.md
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/scripts/oneclick_full_mtl_ai_pipeline.sh
+- runtime/archive/untracked_sync_20260601/files/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/scripts/oneclick_mtl_ai_assembly.sh
+- runtime/archive/untracked_sync_20260601/files/reports/ai_probe_20260507_010813.md
+- runtime/archive/untracked_sync_20260601/files/reports/archive_stage_delete_report_20260507_012719.md
+- runtime/archive/untracked_sync_20260601/files/reports/claw_safe/2026-05-06T18-54-46.209621+00-00_e71e7f1220e2735a.json
+- runtime/archive/untracked_sync_20260601/files/reports/claw_safe/2026-05-06T18-54-46.239999+00-00_f10d55c6c6312de7.json
+- runtime/archive/untracked_sync_20260601/files/reports/claw_safe/2026-05-08T07-04-54.424811+00-00_1e8ae41d3df2ac26.json
+- runtime/archive/untracked_sync_20260601/files/reports/container_architecture/inspect_taiji_claw_safe.txt
+- runtime/archive/untracked_sync_20260601/files/reports/container_architecture/inspect_taiji_pos_google_voice_tool.txt
+- runtime/archive/untracked_sync_20260601/files/reports/container_hardening/container_hardening_20260507_030444.md
+- runtime/archive/untracked_sync_20260601/files/reports/container_probe_20260507_011028.md
+- runtime/archive/untracked_sync_20260601/files/reports/container_review_20260507_030310.md
+- runtime/archive/untracked_sync_20260601/files/reports/duplicate_basenames_20260507_011800.txt
+- runtime/archive/untracked_sync_20260601/files/reports/file_convergence_20260507_011800.md
+- runtime/archive/untracked_sync_20260601/files/reports/gpu_power_log.csv
+- runtime/archive/untracked_sync_20260601/files/reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.csv
+- runtime/archive/untracked_sync_20260601/files/reports/intent_field_test_v0_2/results_20260521_222834/v0_2_mini_results.json
+- runtime/archive/untracked_sync_20260601/files/reports/intent_field_test_v0_2/run_v0_2_mini.py
+- runtime/archive/untracked_sync_20260601/files/reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.csv
+- runtime/archive/untracked_sync_20260601/files/reports/intent_field_test_v0_3/results_20260521_223445/v0_3_warning_results.json
+- runtime/archive/untracked_sync_20260601/files/reports/intent_field_test_v0_3/run_v0_3_hallucination_warning.py
+- runtime/archive/untracked_sync_20260601/files/reports/llm_identity/find_xiaoj_unfenced_20260507_034402.md
+- runtime/archive/untracked_sync_20260601/files/reports/llm_identity/xiaoj_identity_search_20260507_040953.md
+- runtime/archive/untracked_sync_20260601/files/reports/memory/apply_container_memory_policy_20260507_033727.md
+- runtime/archive/untracked_sync_20260601/files/reports/memory/memory_probe_20260507_033434.md
+- runtime/archive/untracked_sync_20260601/files/reports/metric_tensor_io_energy_eval_20260509_012731.json
+- runtime/archive/untracked_sync_20260601/files/reports/metric_tensor_io_energy_eval_v2_20260509_012945.json
+- runtime/archive/untracked_sync_20260601/files/reports/metric_tensor_io_eval_v2_latest.txt
+- runtime/archive/untracked_sync_20260601/files/reports/prefix/original_prefix_read_20260507_035831.md
+- runtime/archive/untracked_sync_20260601/files/reports/property_module_review/2026-05-18/property_identity_permission_model.json
+- runtime/archive/untracked_sync_20260601/files/reports/property_module_review/2026-05-18/property_identity_permission_model.md
+- runtime/archive/untracked_sync_20260601/files/reports/property_module_review/2026-05-18/property_three_piece_modularization.md
+- runtime/archive/untracked_sync_20260601/files/reports/property_module_review/2026-05-18/wuchang_m1_property_review.md
+- runtime/archive/untracked_sync_20260601/files/reports/property_module_review/2026-05-23/candidate_write_report.md
+- runtime/archive/untracked_sync_20260601/files/reports/system_architecture_current_2026-05-18.md
+- runtime/archive/untracked_sync_20260601/files/reports/system_probe_20260517_055501.json
+- runtime/archive/untracked_sync_20260601/files/reports/system_probe_20260517_055501.txt
+- runtime/archive/untracked_sync_20260601/files/reports/taiji_claw_dockerfile_20260507_011425.txt
+- runtime/archive/untracked_sync_20260601/files/reports/taiji_claw_dockerfile_20260507_011450.txt
+- runtime/archive/untracked_sync_20260601/files/reports/tailscale_mesh_probe_20260507_024739.md
+- runtime/archive/untracked_sync_20260601/files/reports/tri_node_container_probe_20260509_002918.txt
+- runtime/archive/untracked_sync_20260601/files/reports/tri_node_container_probe_20260509_003300.txt
+- runtime/archive/untracked_sync_20260601/files/reports/wuchang_carbon_report.json
+- runtime/archive/untracked_sync_20260601/files/reviews/odoo18_property_candidate/taiji_property_device_adapter/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/reviews/odoo18_property_candidate/taiji_property_device_adapter/app/main.py
+- runtime/archive/untracked_sync_20260601/files/reviews/odoo18_property_candidate/taiji_property_device_adapter/docker-compose.yml
+- runtime/archive/untracked_sync_20260601/files/reviews/odoo18_property_candidate/taiji_property_voice_tool/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/reviews/odoo18_property_candidate/taiji_property_voice_tool/app/main.py
+- runtime/archive/untracked_sync_20260601/files/reviews/odoo18_property_candidate/taiji_property_voice_tool/docker-compose.yml
+- runtime/archive/untracked_sync_20260601/files/run_queue.sh
+- runtime/archive/untracked_sync_20260601/files/runtime/indexes/xiaoj_dev_history_evidence_index_20260531_173054.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memory/conversations/20260507_151307_508514.json
+- runtime/archive/untracked_sync_20260601/files/runtime/memory/conversations/20260507_204546.json
+- runtime/archive/untracked_sync_20260601/files/runtime/memory/conversations/20260507_204701.json
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_022809.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_032009.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_033349.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_101152.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_101231.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_121943.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_122507.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260508_135808.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_061126.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_061355.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_062004.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_081307.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_083101.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_091844.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_093425.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_093510.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_093653.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_093828.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_093938.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260509_104325.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260510_034912.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260510_131827.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260511_173454.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260511_173537.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260512_113344.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260512_113504.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260512_190327.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260513_184838.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260514_125443.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260514_182413.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260515_043357.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_full_boot_20260515_053636.md
+- runtime/archive/untracked_sync_20260601/files/runtime/memos/taiji_state_20260508_022533.md
+- runtime/archive/untracked_sync_20260601/files/runtime/metrics/node_fabric.json
+- runtime/archive/untracked_sync_20260601/files/runtime/metrics/runtime_governor.json
+- runtime/archive/untracked_sync_20260601/files/runtime/metrics/runtime_orchestrator.json
+- runtime/archive/untracked_sync_20260601/files/runtime/outbox/agent_task_1778158400.json
+- runtime/archive/untracked_sync_20260601/files/runtime/patches/vscode_failed/settings_20260527_115225.json.bak
+- runtime/archive/untracked_sync_20260601/files/runtime/queue/cognitive_queue.py
+- runtime/archive/untracked_sync_20260601/files/runtime/registry/runtime_registry.json
+- runtime/archive/untracked_sync_20260601/files/runtime/registry/vpn_node_declaration.json
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/__manifest__.py
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/models/__init__.py
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/models/pm3_memory_index.py
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/security/ir.model.access.csv
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_behavior_vector_database_views.xml
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_desensitized_dashboard_views.xml
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_fixed_vector_state_window_views.xml
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_memory_index_views.xml
+- runtime/archive/untracked_sync_20260601/files/runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_vector_state_window_views.xml
+- runtime/archive/untracked_sync_20260601/files/runtime/semantic/semantic_compression_engine.py
+- runtime/archive/untracked_sync_20260601/files/runtime/state/security_state_field.json
+- runtime/archive/untracked_sync_20260601/files/runtime/tools/taiji_memory_hash_guard.py
+- runtime/archive/untracked_sync_20260601/files/runtime/tools/w7tp_odoo_field_observer.py
+- runtime/archive/untracked_sync_20260601/files/runtime_adapters/finance_accounting_review_policy.py
+- runtime/archive/untracked_sync_20260601/files/runtime_adapters/intent_flow_cache_policy.py
+- runtime/archive/untracked_sync_20260601/files/runtime_adapters/taiji01_metric_identity_gateway.py
+- runtime/archive/untracked_sync_20260601/files/runtime_adapters/voice_browser_runtime_policy.py
+- runtime/archive/untracked_sync_20260601/files/scripts/cloud_muscle/google_drive_inventory_dryrun.py
+- runtime/archive/untracked_sync_20260601/files/scripts/package_mtl_ai_gateway_rc1.sh
+- runtime/archive/untracked_sync_20260601/files/scripts/prune_context_keep_status_only.sh
+- runtime/archive/untracked_sync_20260601/files/site/dual_brain_runtime/index.html
+- runtime/archive/untracked_sync_20260601/files/site/index.html
+- runtime/archive/untracked_sync_20260601/files/site/taiji_system_dashboard/dashboard_state.json
+- runtime/archive/untracked_sync_20260601/files/site/taiji_system_dashboard/index.html
+- runtime/archive/untracked_sync_20260601/files/site/taiji_system_dashboard/refresh_dashboard_state.py
+- runtime/archive/untracked_sync_20260601/files/state/runtime_7d_packet.example.json
+- runtime/archive/untracked_sync_20260601/files/state/runtime_7d_state.json
+- runtime/archive/untracked_sync_20260601/files/strategy_logic.py
+- runtime/archive/untracked_sync_20260601/files/taiji_boot_memory_v1.sh
+- runtime/archive/untracked_sync_20260601/files/taiji_hub.py
+- runtime/archive/untracked_sync_20260601/files/taiji_metric_memory_api.py
+- runtime/archive/untracked_sync_20260601/files/taiji_metric_memory_core.py
+- runtime/archive/untracked_sync_20260601/files/tools/generate_patent_printable_pdf.py
+- runtime/archive/untracked_sync_20260601/files/tools/generate_readonly_boot_patent_package.py
+- runtime/archive/untracked_sync_20260601/files/topology/7d_ai_io_odoo_metric_tensor_topology.json
+- runtime/archive/untracked_sync_20260601/files/topology/7d_bagua_metric_language.json
+- runtime/archive/untracked_sync_20260601/files/topology/7d_formation_mesh.json
+- runtime/archive/untracked_sync_20260601/files/topology/community_3d_map/manifest.json
+- runtime/archive/untracked_sync_20260601/files/voice_gateway/Dockerfile
+- runtime/archive/untracked_sync_20260601/files/web/index.html
+- runtime/archive/untracked_sync_20260601/files/web/xiaoj_openwebui_workbench/index.html
+- runtime/archive/untracked_sync_20260601/files/wuchang_grand_unification.sh
+- runtime/archive/untracked_sync_20260601/git_status_after.txt
+- runtime/archive/untracked_sync_20260601/git_status_before.txt
+- runtime/archive/untracked_sync_20260601/sha256_manifest.txt
+- runtime/build/odoo_extra_addons_clean/wuchang_core/controllers/device_app_controller.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/controllers/device_app_controller.py.backup
+- runtime/build/odoo_extra_addons_clean/wuchang_core/controllers/device_enrollment_controller.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/controllers/device_enrollment_controller.py.backup
+- runtime/build/odoo_extra_addons_clean/wuchang_core/controllers/main.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/controllers/sister_controller.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/data/ai_cron.xml
+- runtime/build/odoo_extra_addons_clean/wuchang_core/data/ai_memory_init.xml
+- runtime/build/odoo_extra_addons_clean/wuchang_core/data/optimization_items.json
+- runtime/build/odoo_extra_addons_clean/wuchang_core/models/__init__.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/models/ai_guard.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/models/ai_index_mixin.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/models/ai_memory.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/models/device_control.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/models/sister_control.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/scripts/knowledge_sync_agent.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/security/ir.model.access.csv
+- runtime/build/odoo_extra_addons_clean/wuchang_core/tests/benchmark_spatiotemporal.py
+- runtime/build/odoo_extra_addons_clean/wuchang_core/views/ai_memory_views.xml
+- runtime/build/odoo_extra_addons_clean/wuchang_core/views/mobile_voice_app.xml
+- runtime/build/odoo_extra_addons_clean/wuchang_core/views/sister_control_views.xml
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/controllers/device_app_controller.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/controllers/device_app_controller.py.backup
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/controllers/device_enrollment_controller.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/controllers/device_enrollment_controller.py.backup
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/controllers/main.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/controllers/sister_controller.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/data/ai_cron.xml
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/data/ai_memory_init.xml
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/data/optimization_items.json
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/models/__init__.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/models/ai_guard.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/models/ai_index_mixin.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/models/ai_memory.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/models/device_control.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/models/sister_control.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/scripts/knowledge_sync_agent.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/tests/benchmark_spatiotemporal.py
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/views/ai_memory_views.xml
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/views/mobile_voice_app.xml
+- runtime/build/odoo_extra_addons_phase0/wuchang_core/views/sister_control_views.xml
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/controllers/device_app_controller.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/controllers/device_app_controller.py.backup
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/controllers/device_enrollment_controller.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/controllers/device_enrollment_controller.py.backup
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/controllers/main.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/controllers/sister_controller.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/data/ai_cron.xml
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/data/ai_memory_init.xml
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/data/optimization_items.json
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/models/__init__.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/models/ai_guard.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/models/ai_index_mixin.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/models/ai_memory.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/models/device_control.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/models/sister_control.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/scripts/knowledge_sync_agent.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/tests/benchmark_spatiotemporal.py
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/views/ai_memory_views.xml
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/views/mobile_voice_app.xml
+- runtime/build/odoo_extra_addons_phase2_ui/wuchang_core/views/sister_control_views.xml
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/controllers/device_app_controller.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/controllers/device_app_controller.py.backup
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/controllers/device_enrollment_controller.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/controllers/device_enrollment_controller.py.backup
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/controllers/main.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/controllers/sister_controller.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/data/ai_cron.xml
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/data/ai_memory_init.xml
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/data/optimization_items.json
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/models/__init__.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/models/ai_guard.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/models/ai_index_mixin.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/models/ai_memory.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/models/device_control.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/models/sister_control.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/scripts/knowledge_sync_agent.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/tests/benchmark_spatiotemporal.py
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/views/ai_memory_views.xml
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/views/mobile_voice_app.xml
+- runtime/build/odoo_extra_addons_phase2c_warning_fix/wuchang_core/views/sister_control_views.xml
+- runtime/dual_state/ollama_dual_state_runtime.py
+- runtime/indexes/xiaoj_dev_history_evidence_index_20260531_173054.md
+- runtime/ledger/20260508_022135_933838.json
+- runtime/ledger/20260508_022146_137118.json
+- runtime/ledger/20260508_022832_496566.json
+- runtime/ledger/20260508_023105_198272.json
+- runtime/ledger/20260508_023114_078468.json
+- runtime/ledger/20260508_023511_783609.json
+- runtime/ledger/20260508_023520_609769.json
+- runtime/ledger/20260508_023624_254040.json
+- runtime/ledger/20260508_023828_415266.json
+- runtime/ledger/20260508_023836_083870.json
+- runtime/ledger/20260508_024239_604844.json
+- runtime/ledger/20260508_033410_374431.json
+- runtime/ledger/20260508_101619_117326.json
+- runtime/ledger/20260508_122843_073971.json
+- runtime/ledger/20260508_140319_304283.json
+- runtime/ledger/20260509_061152_076846.json
+- runtime/ledger/20260509_061417_791375.json
+- runtime/ledger/20260509_062030_557518.json
+- runtime/ledger/20260509_083130_703074.json
+- runtime/ledger/20260509_092347_979937.json
+- runtime/ledger/20260509_093452_211558.json
+- runtime/ledger/20260509_093535_112229.json
+- runtime/ledger/20260509_093851_803134.json
+- runtime/ledger/20260509_094002_881569.json
+- runtime/ledger/20260509_104357_946235.json
+- runtime/ledger/20260510_034953_905132.json
+- runtime/ledger/20260510_131858_992842.json
+- runtime/ledger/20260511_173609_525172.json
+- runtime/ledger/20260512_113533_175328.json
+- runtime/ledger/20260512_190357_943843.json
+- runtime/ledger/20260513_184905_985414.json
+- runtime/ledger/20260514_125508_336993.json
+- runtime/ledger/20260514_182446_126186.json
+- runtime/ledger/20260515_053704_676383.json
+- runtime/ledger/community_3d_map_events.jsonl
+- runtime/ledger/routing_decisions.jsonl
+- runtime/little_j_boot.py
+- runtime/logs/openwebui_8080.log
+- runtime/memory/conversations/20260507_151307_508514.json
+- runtime/memory/conversations/20260507_204546.json
+- runtime/memory/conversations/20260507_204701.json
+- runtime/memory/metric_memory_engine.py
+- runtime/memos/taiji_full_boot_20260508_022809.md
+- runtime/memos/taiji_full_boot_20260508_032009.md
+- runtime/memos/taiji_full_boot_20260508_033349.md
+- runtime/memos/taiji_full_boot_20260508_101152.md
+- runtime/memos/taiji_full_boot_20260508_101231.md
+- runtime/memos/taiji_full_boot_20260508_121943.md
+- runtime/memos/taiji_full_boot_20260508_122507.md
+- runtime/memos/taiji_full_boot_20260508_135808.md
+- runtime/memos/taiji_full_boot_20260509_061126.md
+- runtime/memos/taiji_full_boot_20260509_061355.md
+- runtime/memos/taiji_full_boot_20260509_062004.md
+- runtime/memos/taiji_full_boot_20260509_081307.md
+- runtime/memos/taiji_full_boot_20260509_083101.md
+- runtime/memos/taiji_full_boot_20260509_091844.md
+- runtime/memos/taiji_full_boot_20260509_093425.md
+- runtime/memos/taiji_full_boot_20260509_093510.md
+- runtime/memos/taiji_full_boot_20260509_093653.md
+- runtime/memos/taiji_full_boot_20260509_093828.md
+- runtime/memos/taiji_full_boot_20260509_093938.md
+- runtime/memos/taiji_full_boot_20260509_104325.md
+- runtime/memos/taiji_full_boot_20260510_034912.md
+- runtime/memos/taiji_full_boot_20260510_131827.md
+- runtime/memos/taiji_full_boot_20260511_173454.md
+- runtime/memos/taiji_full_boot_20260511_173537.md
+- runtime/memos/taiji_full_boot_20260512_113344.md
+- runtime/memos/taiji_full_boot_20260512_113504.md
+- runtime/memos/taiji_full_boot_20260512_190327.md
+- runtime/memos/taiji_full_boot_20260513_184838.md
+- runtime/memos/taiji_full_boot_20260514_125443.md
+- runtime/memos/taiji_full_boot_20260514_182413.md
+- runtime/memos/taiji_full_boot_20260515_043357.md
+- runtime/memos/taiji_full_boot_20260515_053636.md
+- runtime/memos/taiji_state_20260508_022533.md
+- runtime/merlin_apply_queue/merlin_apply_queue.jsonl
+- runtime/merlin_apply_queue/observe_only.jsonl
+- runtime/merlin_apply_queue/pending_human_review.jsonl
+- runtime/merlin_apply_queue/rejected_dead_letter.jsonl
+- runtime/merlin_approval_gate/approved_record_only.jsonl
+- runtime/merlin_approval_gate/merlin_approval_gate.jsonl
+- runtime/merlin_approval_gate/rejected_approval.jsonl
+- runtime/merlin_human_execution_checklist/20260527_080928_ssh_hardening_plan_merlin_apply_20260527_080928_c5f595dc.json
+- runtime/merlin_intent_driver/allow_low_risk_router_plan.jsonl
+- runtime/merlin_intent_driver/dead_letter_router_plan.jsonl
+- runtime/merlin_intent_driver/merlin_intent_driver_plan_only.jsonl
+- runtime/merlin_intent_driver/pending_review_router_plan.jsonl
+- runtime/metrics/node_fabric.json
+- runtime/metrics/runtime_governor.json
+- runtime/metrics/runtime_orchestrator.json
+- runtime/outbox/agent_task_1778158400.json
+- runtime/patches/vscode_failed/settings_20260527_115225.json.bak
+- runtime/proofs/merlin_apply_queue_20260527_075618.sha256
+- runtime/proofs/xiaoj_memory_evidence_governance_policy_20260523_214818.sha256
+- runtime/queue/cognitive_queue.py
+- runtime/registry/runtime_registry.json
+- runtime/registry/vpn_node_declaration.json
+- runtime/reports/ODOO_RESOURCE_INVENTORY_DELIVERY_20260525_160859.md
+- runtime/reports/OPEN_WEBUI_ENTRYPOINT_DECISION_20260525_155634.md
+- runtime/reports/OPEN_WEBUI_LOCAL_AUDIT_20260525_155059.md
+- runtime/reports/PATENT_EVIDENCE_CLAIM_MAP.md
+- runtime/reports/STATE_WORLD_REVIEW_GATE_v0.md
+- runtime/reports/STATE_WORLD_ROUTER_BOUNDARY.md
+- runtime/reports/TAIJI_HUB_PHASE3_RUNTIME_CANDIDATE_COMPARE.md
+- runtime/reports/TASK_GATEWAY.md
+- runtime/reports/TASK_MEMORY.md
+- runtime/reports/TASK_ODOO.md
+- runtime/reports/TASK_RECENT.md
+- runtime/reports/TRANSPARENT_BUILD_MODE_DRYRUN_REPORT.md
+- runtime/reports/W7TP_ENV_ADJUSTMENT_REPORT.md
+- runtime/reports/W7TP_FIELD_SCAN_20260526_003138.md
+- runtime/reports/W7TP_FIELD_SCAN_20260526_003138.raw.txt
+- runtime/reports/W7TP_LITE_MVP_DRYRUN_REPORT.md
+- runtime/reports/W7TP_ODOO_ADDON_INSTALL_DECISION_PLAN_20260526_003928.md
+- runtime/reports/W7TP_ODOO_CANONICAL_ADDON_REGISTRY_20260526_003729.json
+- runtime/reports/W7TP_ODOO_CANONICAL_ADDON_REGISTRY_20260526_003729.md
+- runtime/reports/W7TP_ODOO_COMMITTEE_CANDIDATE_DETAIL_20260526_004219.json
+- runtime/reports/W7TP_ODOO_COMMITTEE_CANDIDATE_DETAIL_20260526_004219.md
+- runtime/reports/W7TP_ODOO_COMMITTEE_MODULE_READ_20260526_004015.md
+- runtime/reports/W7TP_PHYSICAL_FILE_STATUS_20260525_154546.md
+- runtime/reports/W7TP_SIMILAR_TECH_OPTIMIZATION_DRYRUN.md
+- runtime/reports/W7TP_WORK_ITEMS_DRYRUN_20260525_155255.md
+- runtime/reports/W7TP_WUCHANG_CORE_ACCESS_PATCH_20260526_004608.md
+- runtime/reports/W7TP_WUCHANG_CORE_COMMITTEE_MODULE_READ_20260526_004340.json
+- runtime/reports/W7TP_WUCHANG_CORE_COMMITTEE_MODULE_READ_20260526_004340.md
+- runtime/reports/W7TP_WUCHANG_CORE_INSTALL_READINESS_CHECK_20260526_004447.md
+- runtime/reports/WUCHANG_CORE_FINAL_UI_EVIDENCE_20260526_012552.md
+- runtime/reports/WUCHANG_CORE_VALIDATE_AND_SYNC_20260526_004709.md
+- runtime/reports/XIAOJ_VOLUNTEER_DELIVERY_P0_DESIGN_20260525_214754.md
+- runtime/reports/XIAOJ_VOLUNTEER_DELIVERY_P0_DESIGN_20260525_220030.md
+- runtime/reports/agent_freeze_20260527_083146.txt
+- runtime/reports/community_3d_map_indexed_20260523_054512.sha256
+- runtime/reports/community_3d_map_indexed_baseline_20260523_054628.txt
+- runtime/reports/community_3d_map_indexed_plus_03ui_20260523_054733.txt
+- runtime/reports/community_3d_map_indexed_plus_03ui_20260523_054834.txt
+- runtime/reports/community_3d_map_indexed_plus_03ui_20260523_055052.txt
+- runtime/reports/container_probe_20260527_114629.md
+- runtime/reports/eamtp_7d_benign_packet_20260527_074047.json
+- runtime/reports/eamtp_7d_redteam_packet_20260527_074005.json
+- runtime/reports/eamtp_7d_redteam_packet_20260527_074047_hardwall.json
+- runtime/reports/eamtp_7d_smoke_packet_20260527_073931.json
+- runtime/reports/gateway_phase_d2_1_wsl_root_cause_sampling.md
+- runtime/reports/gateway_phase_d2_5_canonical_cutover_verifier_dryrun.md
+- runtime/reports/ha_mesh_script_analysis_20260527_103433.json
+- runtime/reports/ha_mesh_script_analysis_20260527_103433.md
+- runtime/reports/ha_mesh_script_analysis_20260527_103634.json
+- runtime/reports/ha_mesh_script_analysis_20260527_103634.md
+- runtime/reports/indexer_restart_probe_20260527_114753.md
+- runtime/reports/login_guard_refs_20260523_043437.txt
+- runtime/reports/mainline_stable_check_20260527_083751.md
+- runtime/reports/member_phone_login_oneclick_20260523_060504.txt
+- runtime/reports/merlin_apply_queue_hardwall_20260527_075618.json
+- runtime/reports/merlin_apply_queue_observe_20260527_075618.json
+- runtime/reports/merlin_apply_queue_qos_20260527_075618.json
+- runtime/reports/merlin_apply_queue_ssh_20260527_075618.json
+- runtime/reports/merlin_approval_final_hw_ticket_20260527_080440.json
+- runtime/reports/merlin_approval_final_prepare_20260527_080440.json
+- runtime/reports/merlin_approval_hardwall_ticket_20260527_075819.json
+- runtime/reports/merlin_approval_prepare_20260527_075819.json
+- runtime/reports/merlin_chain_ticket_20260527_080828.json
+- runtime/reports/merlin_inventory_eamtp_20260527_081551.json
+- runtime/reports/merlin_regression_ssh_ticket_20260527_080928.json
+- runtime/reports/merlin_regression_wan_ssh_ticket_20260527_080928.json
+- runtime/reports/odoo_container_file_index_v0_1.md
+- runtime/reports/odoo_member_login_integration_20260523_060301.txt
+- runtime/reports/project_control_board_20260527_102115.json
+- runtime/reports/project_control_board_20260527_102755.json
+- runtime/reports/project_control_board_20260527_102844.json
+- runtime/reports/project_control_board_20260527_103104.json
+- runtime/reports/project_control_board_20260527_103212.json
+- runtime/reports/project_control_board_20260527_103323.json
+- runtime/reports/project_control_board_20260527_103434.json
+- runtime/reports/project_control_board_20260527_103530.json
+- runtime/reports/project_control_board_20260527_103818.json
+- runtime/reports/project_control_board_20260527_104000.json
+- runtime/reports/project_control_board_20260527_104001.json
+- runtime/reports/project_control_board_20260527_104702.json
+- runtime/reports/project_control_board_20260527_105954.json
+- runtime/reports/project_control_board_20260527_110920.json
+- runtime/reports/project_control_board_20260527_111500.json
+- runtime/reports/project_control_board_20260527_112324.json
+- runtime/reports/project_control_board_20260527_123425.json
+- runtime/reports/project_control_board_20260527_130539.json
+- runtime/reports/project_control_board_20260527_135016.json
+- runtime/reports/project_control_board_20260527_140122.json
+- runtime/reports/runtime_shadow_inventory_20260527_103212.json
+- runtime/reports/runtime_shadow_inventory_20260527_103433.json
+- runtime/reports/runtime_shadow_inventory_20260527_103634.json
+- runtime/reports/runtime_shadow_inventory_20260527_103635.json
+- runtime/reports/safe_git_stage_20260527_103635.md
+- runtime/reports/search_gateway_paths.txt
+- runtime/reports/search_memory_paths.txt
+- runtime/reports/search_odoo_paths.txt
+- runtime/reports/search_recent_paths.txt
+- runtime/reports/security_state_field_20260523_073729.txt
+- runtime/reports/security_state_field_20260523_073937.txt
+- runtime/reports/security_state_field_20260523_074650.txt
+- runtime/reports/server_handoff/taiji01_shadow_handoff_snapshot_20260601_161200.txt
+- runtime/reports/service_health_readonly_20260527_103007.json
+- runtime/reports/service_health_readonly_20260527_103007.md
+- runtime/reports/service_health_readonly_20260527_103433.json
+- runtime/reports/service_health_readonly_20260527_103433.md
+- runtime/reports/service_health_readonly_20260527_103634.json
+- runtime/reports/service_health_readonly_20260527_103634.md
+- runtime/reports/sub_universe_memory_gate_report_v1.md
+- runtime/reports/system_arch_health_20260524_230557.md
+- runtime/reports/system_conformity_for_patent_20260523_053242.md
+- runtime/reports/system_conformity_for_patent_20260523_053531.md
+- runtime/reports/system_current_audit_20260525_125806.md
+- runtime/reports/taiji01_boot_cleanup_20260523_041325.txt
+- runtime/reports/taiji01_boot_cleanup_20260523_041412.txt
+- runtime/reports/taiji_layer_latency_20260523_044826.md
+- runtime/reports/taiji_layer_latency_20260523_045053.md
+- runtime/reports/taiji_layer_latency_20260523_045147.md
+- runtime/reports/taiji_memory_hash_guard_report.json
+- runtime/reports/taiji_memory_trigger_scan.txt
+- runtime/reports/taiji_memory_windows_task_readonly.txt
+- runtime/reports/w7tp_smoke_all_20260527_103433.jsonl
+- runtime/reports/w7tp_smoke_all_20260527_103433.md
+- runtime/reports/w7tp_smoke_all_20260527_103633.jsonl
+- runtime/reports/w7tp_smoke_all_20260527_103633.md
+- runtime/reports/worklinks_20260527_102329.json
+- runtime/reports/worklinks_20260527_102756.json
+- runtime/reports/worklinks_20260527_102844.json
+- runtime/reports/worklinks_20260527_103105.json
+- runtime/reports/worklinks_20260527_103213.json
+- runtime/reports/worklinks_20260527_103323.json
+- runtime/reports/worklinks_20260527_103434.json
+- runtime/reports/worklinks_20260527_103531.json
+- runtime/reports/worklinks_20260527_103819.json
+- runtime/reports/worklinks_20260527_104000.json
+- runtime/reports/worklinks_20260527_104001.json
+- runtime/reports/worklinks_20260527_104702.json
+- runtime/reports/worklinks_20260527_105954.json
+- runtime/reports/worklinks_20260527_110928.json
+- runtime/reports/worklinks_20260527_111500.json
+- runtime/reports/worklinks_20260527_112324.json
+- runtime/reports/worklinks_20260527_123425.json
+- runtime/reports/worklinks_20260527_130539.json
+- runtime/reports/worklinks_20260527_135017.json
+- runtime/reports/worklinks_20260527_135220.json
+- runtime/reports/worklinks_20260527_140123.json
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/controllers/device_app_controller.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/controllers/device_app_controller.py.backup
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/controllers/device_enrollment_controller.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/controllers/device_enrollment_controller.py.backup
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/controllers/main.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/controllers/sister_controller.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/data/ai_cron.xml
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/data/ai_memory_init.xml
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/data/ai_memory_init.xml.quantum
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/data/memory_consolidation_log.txt.quantum
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/data/optimization_items.json
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/models/__init__.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/models/ai_guard.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/models/ai_index_mixin.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/models/ai_memory.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/models/ai_memory.py.quantum
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/models/device_control.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/models/sister_control.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/scripts/knowledge_sync_agent.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/security/ir.model.access.csv
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/tests/benchmark_spatiotemporal.py
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/views/ai_memory_views.xml
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/views/ai_memory_views.xml.quantum
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/views/mobile_voice_app.xml
+- runtime/reports/wuchang_core_pre_file_fix_backup_20260526_004908/views/sister_control_views.xml
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/controllers/device_app_controller.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/controllers/device_app_controller.py.backup
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/controllers/device_enrollment_controller.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/controllers/device_enrollment_controller.py.backup
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/controllers/main.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/controllers/sister_controller.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/data/ai_cron.xml
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/data/ai_memory_init.xml
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/data/ai_memory_init.xml.quantum
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/data/memory_consolidation_log.txt.quantum
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/data/optimization_items.json
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/models/__init__.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/models/ai_guard.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/models/ai_index_mixin.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/models/ai_memory.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/models/ai_memory.py.quantum
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/models/device_control.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/models/sister_control.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/scripts/knowledge_sync_agent.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/security/ir.model.access.csv
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/tests/benchmark_spatiotemporal.py
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/views/ai_memory_views.xml
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/views/ai_memory_views.xml.quantum
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/views/mobile_voice_app.xml
+- runtime/reports/wuchang_core_pre_final_xml_fix_backup_20260526_005016/views/sister_control_views.xml
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/controllers/device_app_controller.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/controllers/device_app_controller.py.backup
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/controllers/device_enrollment_controller.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/controllers/device_enrollment_controller.py.backup
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/controllers/main.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/controllers/sister_controller.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/data/ai_cron.xml
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/data/ai_memory_init.xml
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/data/ai_memory_init.xml.quantum
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/data/memory_consolidation_log.txt.quantum
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/data/optimization_items.json
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/models/__init__.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/models/ai_guard.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/models/ai_index_mixin.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/models/ai_memory.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/models/ai_memory.py.quantum
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/models/device_control.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/models/sister_control.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/scripts/knowledge_sync_agent.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/security/ir.model.access.csv
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/tests/benchmark_spatiotemporal.py
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/views/ai_memory_views.xml
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/views/ai_memory_views.xml.quantum
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/views/mobile_voice_app.xml
+- runtime/reports/wuchang_core_pre_xml_brutefix_backup_20260526_005125/views/sister_control_views.xml
+- runtime/reports/xiaoj_standard_chain_audit_20260531_145606.md
+- runtime/router/eamtp_7d_translator.py
+- runtime/router/eamtp_router_guard_dryrun.py
+- runtime/router/merlin_apply_queue.py
+- runtime/router/merlin_approval_gate.py
+- runtime/router/merlin_intent_driver.py
+- runtime/router_guard_dryrun/allow_low_risk_shadow.jsonl
+- runtime/router_guard_dryrun/dead_letter_shadow.jsonl
+- runtime/router_guard_dryrun/eamtp_router_guard_dryrun.jsonl
+- runtime/router_guard_dryrun/pending_review_shadow.jsonl
+- runtime/runtime_cognitive_mesh.py
+- runtime/runtime_core.py
+- runtime/runtime_memory_bus.py
+- runtime/runtime_metrics_exporter.py
+- runtime/runtime_node_fabric.py
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/__manifest__.py
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/models/__init__.py
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/models/pm3_memory_index.py
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/security/ir.model.access.csv
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_behavior_vector_database_views.xml
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_desensitized_dashboard_views.xml
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_fixed_vector_state_window_views.xml
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_memory_index_views.xml
+- runtime/sandbox/odoo_sync_validation/pm3_runtime_sync/views/pm3_vector_state_window_views.xml
+- runtime/semantic/semantic_compression_engine.py
+- runtime/snapshots/20260508_024704.json
+- runtime/snapshots/20260508_024715.json
+- runtime/snapshots/20260508_024810.json
+- runtime/snapshots/20260508_024821.json
+- runtime/snapshots/20260508_024916.json
+- runtime/snapshots/20260508_024924.json
+- runtime/snapshots/20260508_025021.json
+- runtime/snapshots/20260508_025030.json
+- runtime/snapshots/20260508_025127.json
+- runtime/snapshots/20260508_025136.json
+- runtime/snapshots/20260508_025233.json
+- runtime/snapshots/20260508_025241.json
+- runtime/snapshots/20260508_025339.json
+- runtime/snapshots/20260508_025347.json
+- runtime/snapshots/20260508_025442.json
+- runtime/snapshots/20260508_025453.json
+- runtime/snapshots/20260508_025548.json
+- runtime/snapshots/20260508_025556.json
+- runtime/snapshots/20260508_025654.json
+- runtime/snapshots/20260508_025702.json
+- runtime/snapshots/LATEST.json
+- runtime/start_7d_bagua_runtime.sh
+- runtime/state/security_state_field.json
+- runtime/templates/sub_universe_memory_dialogue_v1.md
+- runtime/tools/taiji_memory_hash_guard.py
+- runtime/tools/w7tp_odoo_field_observer.py
+
+## Matched snippets
+
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_222540.yaml:39:  disk:
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_222540.yaml:43:  memory:
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260602_082031.yaml:39:  disk:
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260602_082031.yaml:43:  memory:
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260531_201634.yaml:39:  disk:
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260531_201634.yaml:43:  memory:
+W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml:39:  disk:
+W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml:43:  memory:
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_152118.yaml:39:  disk:
+W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260601_152118.yaml:43:  memory:
+W7TP_FIELD_ATLAS/35_state_world_router_spec_v0.yaml:28:next_action: build memory boot map
+W7TP_FIELD_ATLAS/archive_policies/W7TP_UNTRACKED_ARCHIVE_POLICY_V1.yaml:29:    - too_many_archives_can_consume_disk
+W7TP_FIELD_ATLAS/cost_routing/W7TP_AI_BLIND_COMPUTE_COST_ROUTER_V1.yaml:13:  - latency_requirement
+W7TP_FIELD_ATLAS/33_state_world_p0_handoff_packet.yaml:6:  - memory_lifecycle_map
+W7TP_FIELD_ATLAS/33_state_world_p0_handoff_packet.yaml:11:  - W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml
+W7TP_FIELD_ATLAS/61_sub_universe_element_index_v0_2.yaml:44:    - paid_priority_queue
+W7TP_FIELD_ATLAS/28_state_world_router_boundary.yaml:5:  - memory_to_state_world: metadata_only
+W7TP_FIELD_ATLAS/28_state_world_router_boundary.yaml:18:next_action: create memory lifecycle map
+W7TP_FIELD_ATLAS/git_space_architecture_v1.yaml:5:    medium: removable_memory_card_or_external_disk
+W7TP_FIELD_ATLAS/git_space_architecture_v1.yaml:14:      - do_not_run_live_runtime_from_removable_disk
+W7TP_FIELD_ATLAS/rollback_plans/W7TP_RUNTIME_ROLLBACK_POLICY_V1.yaml:41:    - rollback_files_may_consume_disk_space
+W7TP_FIELD_ATLAS/mainline_sync/T077_MAINLINE_FOCUSED_COMMIT_SCOPE_V1.yaml:29:  - git_diff_cached_stat
+W7TP_FIELD_ATLAS/mainline_sync/T077_MAINLINE_FOCUSED_COMMIT_SCOPE_V1.yaml:30:  - git_diff_cached_check
+W7TP_FIELD_ATLAS/24_readonly_project_search_runner.yaml:8:  - runtime/reports/search_memory_paths.txt
+W7TP_FIELD_ATLAS/dead_letter/WUCHANG_UNREGISTERED_ROUTE_DEAD_LETTER_POLICY_V1.yaml:43:    - dead_letter_queue_may_accumulate_and_be_ignored
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:249:plaintext,Taiji_Governance/logs/intent_flow_cache_activation_2026-05-12.jsonl
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:255:plaintext,Taiji_Governance/logs/obsidian_ai_window_memory_vault_2026-05-14.jsonl
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:307:plaintext,Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:325:plaintext,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:337:plaintext,Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:338:plaintext,Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:875:audit,Taiji_Governance/logs/intent_flow_cache_activation_2026-05-12.jsonl
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:984:audit,Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:985:audit,Taiji_Governance/system_info/active_intent_flow_cache_policy_2026-05-12.md
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1003:audit,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1004:audit,Taiji_Governance/system_info/obsidian_ai_window_memory_vault_2026-05-14.md
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1090:human_review,W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1228:sync,Taiji_Governance/system_info/active_intent_flow_cache_policy_2026-05-12.md
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1248:sync,Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1249:sync,Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1251:sync,Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1252:sync,Taiji_Odoo/addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1398:rollback,W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1399:rollback,W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1657:odoo,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1674:odoo,Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1679:odoo,Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1684:odoo,Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1689:odoo,Taiji_Odoo/addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1722:odoo,Taiji_Odoo/addons/wuchang_core/data/ai_memory_init.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1757:odoo,Taiji_Odoo/addons/wuchang_core/models/ai_memory.py
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1809:odoo,Taiji_Odoo/addons/wuchang_core/views/ai_memory_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1944:oauth,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:1960:oauth,W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_module_feature_matrix.csv:2011:google,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:278:Taiji_Governance/logs/intent_flow_cache_activation_2026-05-12.jsonl
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:284:Taiji_Governance/logs/obsidian_ai_window_memory_vault_2026-05-14.jsonl
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:336:Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:354:Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:366:Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:367:Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:930:Taiji_Governance/logs/intent_flow_cache_activation_2026-05-12.jsonl
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1039:Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1040:Taiji_Governance/system_info/active_intent_flow_cache_policy_2026-05-12.md
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1058:Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1059:Taiji_Governance/system_info/obsidian_ai_window_memory_vault_2026-05-14.md
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1147:W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1289:Taiji_Governance/system_info/active_intent_flow_cache_policy_2026-05-12.md
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1309:Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1310:Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1312:Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1313:Taiji_Odoo/addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1461:W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1462:W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1736:Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1753:Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1758:Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1763:Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1768:Taiji_Odoo/addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1801:Taiji_Odoo/addons/wuchang_core/data/ai_memory_init.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1836:Taiji_Odoo/addons/wuchang_core/models/ai_memory.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:1888:Taiji_Odoo/addons/wuchang_core/views/ai_memory_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2025:Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2041:W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2094:Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2399:Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2404:Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2412:Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2417:Taiji_Odoo/addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2451:Taiji_Odoo/addons/wuchang_core/data/ai_memory_init.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2484:Taiji_Odoo/addons/wuchang_core/models/ai_memory.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2528:Taiji_Odoo/addons/wuchang_core/views/ai_memory_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2631:/mnt/extra-addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2636:/mnt/extra-addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2644:/mnt/extra-addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2649:/mnt/extra-addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2683:/mnt/extra-addons/wuchang_core/data/ai_memory_init.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2716:/mnt/extra-addons/wuchang_core/models/ai_memory.py
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2760:/mnt/extra-addons/wuchang_core/views/ai_memory_views.xml
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:2871:      3 T045_xiaoj_human_review_queue_rule
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:3064:      1 memory_map_id: 29_memory_lifecycle_map
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:3065:      1 memory_boot_id: 36_memory_boot_map_v0
+W7TP_FIELD_ATLAS/feature_compare/latest_full_system_module_feature_compare.md:3078:      1 gate_id: sub_universe_memory_gate_v1
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:249:plaintext,Taiji_Governance/logs/intent_flow_cache_activation_2026-05-12.jsonl
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:255:plaintext,Taiji_Governance/logs/obsidian_ai_window_memory_vault_2026-05-14.jsonl
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:307:plaintext,Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:325:plaintext,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:337:plaintext,Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:338:plaintext,Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:875:audit,Taiji_Governance/logs/intent_flow_cache_activation_2026-05-12.jsonl
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:984:audit,Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:985:audit,Taiji_Governance/system_info/active_intent_flow_cache_policy_2026-05-12.md
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1003:audit,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1004:audit,Taiji_Governance/system_info/obsidian_ai_window_memory_vault_2026-05-14.md
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1090:human_review,W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1228:sync,Taiji_Governance/system_info/active_intent_flow_cache_policy_2026-05-12.md
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1248:sync,Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1249:sync,Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1251:sync,Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1252:sync,Taiji_Odoo/addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1398:rollback,W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1399:rollback,W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1657:odoo,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1674:odoo,Taiji_Odoo/addons/pm3_runtime_sync.bak./models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1679:odoo,Taiji_Odoo/addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1684:odoo,Taiji_Odoo/addons/pm3_runtime_sync/models/pm3_memory_index.py
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1689:odoo,Taiji_Odoo/addons/pm3_runtime_sync/views/pm3_memory_index_views.xml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1722:odoo,Taiji_Odoo/addons/wuchang_core/data/ai_memory_init.xml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1757:odoo,Taiji_Odoo/addons/wuchang_core/models/ai_memory.py
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1809:odoo,Taiji_Odoo/addons/wuchang_core/views/ai_memory_views.xml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1944:oauth,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:1960:oauth,W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml
+W7TP_FIELD_ATLAS/feature_compare/module_feature_matrix_20260531_225818.csv:2011:google,Taiji_Governance/system_info/obsidian_ai_window_memory_vault.manifest.json
+W7TP_FIELD_ATLAS/module_mounts/WUCHANG_MODULE_TO_SUB_UNIVERSE_MOUNT_MAP_V1.yaml:40:      - T045_xiaoj_xiaoj_review_opinion_plus_final_authorization_queue_rule
+W7TP_FIELD_ATLAS/odoo_no_plaintext_member_universe_v1.yaml:13:  memory_level: SUB_UNIVERSE_INDEX
+W7TP_FIELD_ATLAS/odoo_no_plaintext_member_universe_v1.yaml:52:memory_sentence: >
+W7TP_FIELD_ATLAS/addon_market/W7TP_STANDARD_ADDON_MARKET_POLICY_V1.yaml:23:    - food_support_queue
+W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml:1:memory_boot_id: 36_memory_boot_map_v0
+W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml:2:purpose: Connect memory lifecycle to XiaoJ boot readiness and project controller usage.
+W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml:9:  - 29_memory_lifecycle_map.yaml
+W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml:22:  no_raw_secret_memory: true
+W7TP_FIELD_ATLAS/41_state_world_review_gate_v0.yaml:17:  - memory_boot_readiness_check
+W7TP_FIELD_ATLAS/23_readonly_project_search_commands.yaml:6:  find_memory: find runtime/memory runtime/memory_bus docs/system_memory config/memory data -maxdepth 5 -type f
+W7TP_FIELD_ATLAS/22_project_search_agent.yaml:9:  memory: [runtime/memory, runtime/memory_bus, docs/system_memory, config/memory, data]
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:47:      - "/mnt/extra-addons/wuchang_core/data/ai_memory_init.xml"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:77:      - "/mnt/extra-addons/wuchang_core/data/memory_consolidation_log.txt"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:118:      - "/mnt/extra-addons/wuchang_core/views/ai_memory_views.xml"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:193:      - "/mnt/extra-addons/wuchang_core/models/__pycache__/supervisor_description_patch.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:207:      - "/mnt/extra-addons/wuchang_core/models/ai_memory.py"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:217:      - "/mnt/extra-addons/pm3_base/models/__pycache__/packet_history.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:240:      - "/mnt/extra-addons/wuchang_cafe_menu_options/models/__pycache__/menu_options.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:244:      - "/mnt/extra-addons/pm3_runtime_sync/views/pm3_memory_index_views.xml"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:252:      - "/mnt/extra-addons/pm3_runtime_sync/models/__pycache__/res_users_proxy.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:253:      - "/mnt/extra-addons/pm3_runtime_sync/models/__pycache__/pm3_memory_index.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:254:      - "/mnt/extra-addons/pm3_runtime_sync/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:255:      - "/mnt/extra-addons/pm3_runtime_sync/models/pm3_memory_index.py"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:256:      - "/mnt/extra-addons/pm3_runtime_sync/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:280:      - "/mnt/extra-addons/pm3_runtime_sync.bak./views/pm3_memory_index_views.xml"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:287:      - "/mnt/extra-addons/pm3_runtime_sync.bak./models/__pycache__/res_users_proxy.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:288:      - "/mnt/extra-addons/pm3_runtime_sync.bak./models/__pycache__/pm3_memory_index.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:289:      - "/mnt/extra-addons/pm3_runtime_sync.bak./models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:290:      - "/mnt/extra-addons/pm3_runtime_sync.bak./models/pm3_memory_index.py"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:291:      - "/mnt/extra-addons/pm3_runtime_sync.bak./__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:309:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/models/__pycache__/template_sn.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:310:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:311:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/models/__pycache__/template_sn_syscebnl.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:312:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:322:      - "/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:323:      - "/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/models/__pycache__/theme_monglia.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:324:      - "/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:332:      - "/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/models/__pycache__/hr_employee.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:333:      - "/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/models/__pycache__/hr_resume_line.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:334:      - "/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:335:      - "/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/models/__pycache__/slide_channel.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:337:      - "/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:340:      - "/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation/models/__pycache__/ir_attachment.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:341:      - "/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:343:      - "/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:351:      - "/usr/lib/python3/dist-packages/odoo/addons/base_install_request/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:352:      - "/usr/lib/python3/dist-packages/odoo/addons/base_install_request/models/__pycache__/ir_module_module.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:354:      - "/usr/lib/python3/dist-packages/odoo/addons/base_install_request/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:368:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/models/__pycache__/template_ae.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:369:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/models/__pycache__/account_move_line.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:370:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:371:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:377:      - "/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:378:      - "/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/models/__pycache__/ir_qweb.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:379:      - "/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:402:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/stock_warehouse.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:403:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/stock_lot.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:404:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/stock_picking.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:405:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/stock_traceability.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:406:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:407:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/mail_compose_message.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:408:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/product.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:409:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/stock_move_line.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:410:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/stock_move.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:411:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/sale_order.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:412:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/models/__pycache__/repair.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:415:      - "/usr/lib/python3/dist-packages/odoo/addons/repair/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:422:      - "/usr/lib/python3/dist-packages/odoo/addons/sale_margin/models/__pycache__/sale_order_line.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:423:      - "/usr/lib/python3/dist-packages/odoo/addons/sale_margin/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:424:      - "/usr/lib/python3/dist-packages/odoo/addons/sale_margin/models/__pycache__/sale_order.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:425:      - "/usr/lib/python3/dist-packages/odoo/addons/sale_margin/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:435:      - "/usr/lib/python3/dist-packages/odoo/addons/account_fleet/models/__pycache__/fleet_vehicle_log_services.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:436:      - "/usr/lib/python3/dist-packages/odoo/addons/account_fleet/models/__pycache__/account_move.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:437:      - "/usr/lib/python3/dist-packages/odoo/addons/account_fleet/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:438:      - "/usr/lib/python3/dist-packages/odoo/addons/account_fleet/models/__pycache__/fleet_vehicle.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:439:      - "/usr/lib/python3/dist-packages/odoo/addons/account_fleet/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:442:      - "/usr/lib/python3/dist-packages/odoo/addons/test_inherits/__pycache__/models.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:443:      - "/usr/lib/python3/dist-packages/odoo/addons/test_inherits/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:467:      - "/usr/lib/python3/dist-packages/odoo/addons/website_blog/models/__pycache__/website_snippet_filter.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:468:      - "/usr/lib/python3/dist-packages/odoo/addons/website_blog/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:469:      - "/usr/lib/python3/dist-packages/odoo/addons/website_blog/models/__pycache__/website.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:470:      - "/usr/lib/python3/dist-packages/odoo/addons/website_blog/models/__pycache__/website_blog.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:472:      - "/usr/lib/python3/dist-packages/odoo/addons/website_blog/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:482:      - "/usr/lib/python3/dist-packages/odoo/addons/product_images/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:483:      - "/usr/lib/python3/dist-packages/odoo/addons/product_images/models/__pycache__/product.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:484:      - "/usr/lib/python3/dist-packages/odoo/addons/product_images/models/__pycache__/ir_cron_trigger.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:485:      - "/usr/lib/python3/dist-packages/odoo/addons/product_images/models/__pycache__/res_config_settings.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:487:      - "/usr/lib/python3/dist-packages/odoo/addons/product_images/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:496:      - "/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/models/__pycache__/payment_transaction.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:497:      - "/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/models/__pycache__/payment_provider.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:498:      - "/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:499:      - "/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:508:      - "/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/models/__pycache__/product_product.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:509:      - "/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/models/__pycache__/stock_picking.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:510:      - "/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:511:      - "/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/models/__pycache__/stock_move.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:512:      - "/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/models/__pycache__/mrp_production.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:513:      - "/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:517:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ec_stock/models/__pycache__/account_chart_template.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:518:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ec_stock/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:519:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ec_stock/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:531:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:532:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/models/__pycache__/template_gn.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:533:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/models/__pycache__/template_gn_syscebnl.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:534:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:539:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/tests/__pycache__/common.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:540:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/tests/__pycache__/test_pos_qr_payment.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:541:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/tests/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:544:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:545:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:555:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:556:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/models/__pycache__/template_pk.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:558:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:565:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/models/__pycache__/account_edi_xml_ubl_bis3.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:566:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/models/__pycache__/account_move.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:567:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:568:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:582:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/models/__pycache__/res_partner.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:583:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/models/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:584:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/models/__pycache__/template_ca.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:585:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/models/__pycache__/res_company.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:588:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/__pycache__/__manifest__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:595:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/tests/__pycache__/test_l10n_jo_edi_pos_tour.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:596:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/tests/__pycache__/__init__.cpython-312.pyc"
+W7TP_FIELD_ATLAS/odoo_container_file_universe_v0_1.yaml:597:      - "/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/tests/__pycache__/jo_edi_pos_common.cpython-312.pyc"
+W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml:1:gate_id: sub_universe_memory_gate_v1
+W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml:2:purpose: Classify whether a concept should enter W7TP sub-universe memory.
+W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml:5:memory_levels:
+W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml:13:  core_memory: "Only long-term stable definitions, governance rules, architecture principles, and mission-level concepts."
+W7TP_FIELD_ATLAS/sub_universe_memory_gate_v1.yaml:38:  memory_sentence: "one compressed sentence only"
+W7TP_FIELD_ATLAS/review_upgrade/patch_plans/P1_P2_XIAOJ_PRE_REVIEW_TARGETED_PATCH_PLAN_V1.yaml:10:  - W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml:223:  - task_id: T045_xiaoj_xiaoj_review_opinion_plus_final_authorization_queue_rule
+W7TP_FIELD_ATLAS/00_supreme_intent_field_principle_v1.md:7:XiaoJ is the digital extension of the user's will, intent, memory, service mission, and governance path.
+W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml:1:memory_map_id: 29_memory_lifecycle_map
+W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml:2:purpose: Define memory lifecycle for XiaoJ project development.
+W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml:16:  no_raw_secret_memory: true
+W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml:23:  - decision_memory_field
+W7TP_FIELD_ATLAS/27_next_dev_execution_plan.yaml:6:  - memory: build memory lifecycle map
+W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml:7:  - create_auditable_review_queue
+W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml:9:review_queue_triggers:
+W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml:18:queue_fields:
+W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml:40:    - review_queue_may_become_bottleneck
+W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml:42:    - sensitive_metadata_in_queue_may_become_risk
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:40:  memory:
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:41:    - runtime/memory
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:42:    - runtime/memory_bus
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:43:    - docs/system_memory
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:44:    - config/memory
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:54:  memory:
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:55:    - runtime/memory
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:56:    - runtime/memory_bus
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:57:    - docs/system_memory
+W7TP_FIELD_ATLAS/21_knowledge_world_index.yaml:58:    - config/memory
+W7TP_FIELD_ATLAS/34_p0_next_action_menu.yaml:6:  B_memory_boot_map: connect memory lifecycle to boot/readiness docs
+W7TP_FIELD_ATLAS/34_p0_next_action_menu.yaml:11:  - B_memory_boot_map
+W7TP_FIELD_ATLAS/20_sub_universe_registry.yaml:11:      - memory
+W7TP_FIELD_ATLAS/20_sub_universe_registry.yaml:21:      - memory_lifecycle
+W7TP_FIELD_ATLAS/20_sub_universe_registry.yaml:27:      - runtime/memory
+W7TP_FIELD_ATLAS/40_state_world_snapshot_v0.yaml:11:memory_map: available
+W7TP_FIELD_ATLAS/25_project_task_cards_from_search.yaml:4:sources: [search_gateway_paths, search_memory_paths, search_odoo_paths, search_patent_paths, search_state_world_paths, search_recent_paths]
+W7TP_FIELD_ATLAS/32_patent_evidence_claim_map.yaml:12:  memory_lifecycle: hot warm cold archive forget
+W7TP_FIELD_ATLAS/39_task_execution_stopline_v0.yaml:15:  - memory_lifecycle_map
+W7TP_FIELD_ATLAS/39_task_execution_stopline_v0.yaml:22:  - memory_boot_map
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:28:      2 T045_xiaoj_human_review_queue_rule
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:363:W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:726:W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:727:W7TP_FIELD_ATLAS/36_memory_boot_map_v0.yaml
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:886:      1 sub_universe_memory
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:929:      1 36_memory_boot
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:936:      1 29_memory_lifecycle
+W7TP_FIELD_ATLAS/registry_reports/latest_duplicate_development_audit.md:1020:  - audit_policy vs human_review_queue
+reports/tri_node_container_probe_20260509_003300.txt:21:               total        used        free      shared  buff/cache   available
+reports/tri_node_container_probe_20260509_003300.txt:73:{"ok":true,"service":"Taiji Claw Safe","mode":"safe_broker","host_root_mounted":false,"current_dir":"/mnt/current","index_dir":"/mnt/indexes","audit_dir":"/mnt/audit","queue_dir":"/mnt/queue"}
+reports/tri_node_container_probe_20260509_003300.txt:107:               total        used        free      shared  buff/cache   available
+reports/tri_node_container_probe_20260509_003300.txt:172:               total        used        free      shared  buff/cache   available
+reports/member_registration/member_registration_odoo_install_preflight_20260602_120443.txt:29:    return io.open(self, mode, buffering, encoding, errors, newline)
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:8:__pycache__/
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:9:__pycache__/__init__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:10:__pycache__/__manifest__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:14:controllers/__pycache__/
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:15:controllers/__pycache__/__init__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:16:controllers/__pycache__/main.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:20:models/__pycache__/
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:21:models/__pycache__/__init__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:22:models/__pycache__/member_registration.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:37:__pycache__/
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:38:__pycache__/__init__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:39:__pycache__/__manifest__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:43:controllers/__pycache__/
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:44:controllers/__pycache__/__init__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:45:controllers/__pycache__/main.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:49:models/__pycache__/
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:50:models/__pycache__/__init__.cpython-312.pyc
+reports/member_registration/member_registration_taiji01_sync_validate_20260602_120342.txt:51:models/__pycache__/member_registration.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:28:-rwxr-xr-x        846 2026-05-05 05:44 ./run_queue.sh
+reports/file_convergence_20260507_011800.md:115:2026-05-05 02:59 core/__pycache__/event_test.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:117:2026-05-05 01:39 core/carbon/__pycache__/wuchang_carbon_accounting.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:119:2026-05-04 22:29 core/carbon/__pycache__/cloud_baseline_inference.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:121:2026-05-04 22:17 core/demo/__pycache__/dual_path_carbon_demo.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:123:2026-05-04 22:16 core/workspace/__pycache__/google_workspace_approval.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:125:2026-05-04 20:06 core/cloud/__pycache__/cloud_model_router.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:126:2026-05-04 19:59 core/hippocampus/__pycache__/ai_hippocampus.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:138:2026-05-02 11:20 Wuchang_Unified_Core/01_Cloud_Core/__pycache__/jules_cloud_api.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:143:2026-05-02 02:44 Wuchang_Unified_Core/01_Cloud_Core/__pycache__/jules_metric_tensor_engine.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:146:2026-05-02 02:41 Wuchang_Unified_Core/02_Edge_Nodes/__pycache__/taiji_router_node_5d.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:211:2026-05-02 01:03 jules_cloud_deployment/__pycache__/jules_metric_tensor_engine.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:213:2026-05-02 00:23 jules_cloud_deployment/__pycache__/jules_cloud_api.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:231:2026-05-05 01:39 services/gateway/__pycache__/app.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:233:2026-05-03 23:11 services/gateway/__pycache__/main.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:480:889M	./open_webui_data/cache
+reports/file_convergence_20260507_011800.md:533:16K	./data/queue
+reports/file_convergence_20260507_011800.md:547:12K	./jules_cloud_deployment/__pycache__
+reports/file_convergence_20260507_011800.md:809:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/cachecontrol/__init__.py
+reports/file_convergence_20260507_011800.md:810:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/cachecontrol/caches/__init__.py
+reports/file_convergence_20260507_011800.md:863:./.venv-browser/lib/python3.12/site-packages/pip/_internal/utils/__pycache__/models.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:864:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/requests/__pycache__/models.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:892:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/rich/__pycache__/_windows.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:893:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/truststore/__pycache__/_windows.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:924:./.venv-browser/lib/python3.12/site-packages/greenlet/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:925:./.venv-browser/lib/python3.12/site-packages/greenlet/platform/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:926:./.venv-browser/lib/python3.12/site-packages/greenlet/tests/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:927:./.venv-browser/lib/python3.12/site-packages/pip/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:928:./.venv-browser/lib/python3.12/site-packages/pip/_internal/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:929:./.venv-browser/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:930:./.venv-browser/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:931:./.venv-browser/lib/python3.12/site-packages/pip/_internal/distributions/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:932:./.venv-browser/lib/python3.12/site-packages/pip/_internal/index/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:933:./.venv-browser/lib/python3.12/site-packages/pip/_internal/locations/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:934:./.venv-browser/lib/python3.12/site-packages/pip/_internal/metadata/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:935:./.venv-browser/lib/python3.12/site-packages/pip/_internal/metadata/importlib/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:936:./.venv-browser/lib/python3.12/site-packages/pip/_internal/models/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:937:./.venv-browser/lib/python3.12/site-packages/pip/_internal/network/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:938:./.venv-browser/lib/python3.12/site-packages/pip/_internal/operations/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:939:./.venv-browser/lib/python3.12/site-packages/pip/_internal/operations/build/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:940:./.venv-browser/lib/python3.12/site-packages/pip/_internal/operations/install/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:941:./.venv-browser/lib/python3.12/site-packages/pip/_internal/req/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:942:./.venv-browser/lib/python3.12/site-packages/pip/_internal/resolution/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:943:./.venv-browser/lib/python3.12/site-packages/pip/_internal/resolution/legacy/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:944:./.venv-browser/lib/python3.12/site-packages/pip/_internal/resolution/resolvelib/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:945:./.venv-browser/lib/python3.12/site-packages/pip/_internal/utils/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:946:./.venv-browser/lib/python3.12/site-packages/pip/_internal/vcs/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:947:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:948:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/cachecontrol/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:949:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/cachecontrol/caches/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:950:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/certifi/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:951:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/chardet/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:952:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/chardet/cli/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:953:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/chardet/metadata/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:954:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/colorama/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:955:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/colorama/tests/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:956:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/distlib/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:957:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/distro/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:958:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/idna/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:959:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/msgpack/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:960:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/packaging/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:961:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pkg_resources/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:962:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/platformdirs/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:963:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pygments/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:964:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pygments/filters/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:965:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pygments/formatters/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:966:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pygments/lexers/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:967:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pygments/styles/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:968:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pyparsing/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:969:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pyparsing/diagram/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:970:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:971:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/__pycache__/__init__.cpython-312.pyc
+reports/file_convergence_20260507_011800.md:972:./.venv-browser/lib/python3.12/site-packages/pip/_vendor/requests/__pycache__/__init__.cpython-312.pyc
