@@ -1,0 +1,28 @@
+packet_type: TAIJI01_CUTOVER_FINAL_PACKET
+D1_identity:
+  node: taiji01
+  repo: Taiji_Hub
+D2_intent:
+  result: runtime_cutover_completed
+D3_state:
+  gateway_systemd: PASS
+  odoo: PASS
+  postgres: PASS
+  line_google: PASS
+D4_topology:
+  gateway_port: 9002
+  odoo_port: 8069
+D5_resources:
+  head: "85742c4"
+  tags:
+    - TAIJI01_CUTOVER_TEMP_PASS_20260602
+    - TAIJI01_GATEWAY_SYSTEMD_PASS_20260602
+D6_governance:
+  db_write: false
+  docker_restart: false
+  secret_read: false
+D7_validation:
+  healthz: 200
+  runtime: PASS
+D8_integrity:
+  created_at: "20260602_115220"

@@ -1,0 +1,22 @@
+runtime_final_state:
+  timestamp: "20260602_115220"
+  head: "85742c4"
+  taiji01:
+    gateway:
+      status: PASS
+      service: taiji_edge_gateway.service
+      port: 9002
+      healthz: 200
+      systemd: true
+    odoo:
+      status: PASS
+      container: wuchang_os_odoo_18
+    postgres:
+      status: PASS
+      container: wuchang_os_pg
+    line_google:
+      status: PASS_BY_USER_VERIFIED
+  deferred:
+    - wuchang_jules_torch
+    - wuchang_display
+    - continue_extension
