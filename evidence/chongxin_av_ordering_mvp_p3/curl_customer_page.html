@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>聊國咖啡館 客戶互動面板</title>
+<style>
+body{font-family:sans-serif;background:#f6efe3;color:#2d1b10;padding:18px;font-size:20px}
+.card{background:white;border-radius:16px;padding:16px;margin:12px 0}
+button,input,select{font-size:20px;padding:12px;width:100%;margin-top:8px}
+</style></head><body><h1>聊國咖啡館 客戶互動面板</h1><p>送出後由 POS 店員確認。</p>
+<div class="card">
+<h2>美式咖啡</h2><b>$80</b>
+<form method="POST" action="/order">
+<input type="hidden" name="item_id" value="americano">
+<input type="hidden" name="item_name" value="美式咖啡">
+<input type="hidden" name="price" value="80">
+<select name="option"><option>正常</option><option>少冰</option><option>去冰</option><option>熱</option></select>
+<input name="note" placeholder="備註">
+<button>送出點餐意圖</button>
+</form>
+</div>
+<div class="card">
+<h2>拿鐵</h2><b>$100</b>
+<form method="POST" action="/order">
+<input type="hidden" name="item_id" value="latte">
+<input type="hidden" name="item_name" value="拿鐵">
+<input type="hidden" name="price" value="100">
+<select name="option"><option>正常</option><option>少冰</option><option>去冰</option><option>熱</option></select>
+<input name="note" placeholder="備註">
+<button>送出點餐意圖</button>
+</form>
+</div>
+<div class="card">
+<h2>紅茶</h2><b>$50</b>
+<form method="POST" action="/order">
+<input type="hidden" name="item_id" value="black_tea">
+<input type="hidden" name="item_name" value="紅茶">
+<input type="hidden" name="price" value="50">
+<select name="option"><option>正常</option><option>少冰</option><option>去冰</option><option>熱</option></select>
+<input name="note" placeholder="備註">
+<button>送出點餐意圖</button>
+</form>
+</div>
+<div class="card">
+<h2>今日甜點</h2><b>$120</b>
+<form method="POST" action="/order">
+<input type="hidden" name="item_id" value="dessert">
+<input type="hidden" name="item_name" value="今日甜點">
+<input type="hidden" name="price" value="120">
+<select name="option"><option>正常</option><option>少冰</option><option>去冰</option><option>熱</option></select>
+<input name="note" placeholder="備註">
+<button>送出點餐意圖</button>
+</form>
+</div></body></html>
