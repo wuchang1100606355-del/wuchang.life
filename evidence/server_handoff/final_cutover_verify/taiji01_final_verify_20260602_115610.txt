@@ -1,0 +1,30 @@
+=== TAIJI01 READONLY VERIFY ===
+HOST=taiji01
+=== GATEWAY ===
+active
+HTTP/1.1 200 OK
+date: Tue, 02 Jun 2026 03:56:27 GMT
+server: uvicorn
+content-length: 80
+content-type: application/json
+
+{"status":"ok","service":"taiji_edge_gateway","port":9002,"mode":"w7tp_runtime"}
+=== ODOO/PG ===
+wuchang_os_pg                              Up 10 days   5432/tcp
+wuchang_os_odoo_18                         Up 10 days   0.0.0.0:8069->8069/tcp, [::]:8069->8069/tcp, 8071-8072/tcp
+quarantine_wuchang_os_pg_20260508_200520   Up 10 days   5432/tcp
+
+=== PORTS ===
+LISTEN 0      1024                      0.0.0.0:8069       0.0.0.0:*    users:(("docker-proxy",pid=2514,fd=8))                 
+LISTEN 0      1024                      0.0.0.0:9002       0.0.0.0:*    users:(("python",pid=3590316,fd=14))                   
+LISTEN 0      1024                         [::]:8069          [::]:*    users:(("docker-proxy",pid=2520,fd=8))                 
+
+=== LOAD ===
+ 03:56:28 up 10 days, 15:04,  5 users,  load average: 0.08, 0.04, 0.01
+               total        used        free      shared  buff/cache   available
+Mem:            23Gi       1.8Gi        14Gi       199Mi       8.1Gi        21Gi
+Swap:          4.0Gi          0B       4.0Gi
+Filesystem                         Size  Used Avail Use% Mounted on
+/dev/mapper/ubuntu--vg-ubuntu--lv  226G  104G  113G  48% /
+/dev/mapper/ubuntu--vg-ubuntu--lv  226G  104G  113G  48% /
+/dev/mapper/ubuntu--vg-ubuntu--lv  226G  104G  113G  48% /
