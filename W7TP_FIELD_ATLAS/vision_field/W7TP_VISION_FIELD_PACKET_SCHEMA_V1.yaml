@@ -1,0 +1,73 @@
+packet_ref: W7TP_VISION_FIELD_PACKET_SCHEMA_V1
+status: draft_for_system_ingestion
+created_from: image_processing_packet_design
+
+D1_identity:
+  lane: vision_field
+  source: camera_image_video_screenshot
+  raw_image_cloud: false
+
+D2_intent:
+  allow:
+    - safety_detection
+    - food_station_status
+    - queue_density
+    - property_anomaly
+    - inventory_level
+    - public_welfare_service
+  deny:
+    - facial_recognition
+    - identity_tracking
+    - license_plate_tracking
+    - raw_image_cloud_upload
+
+D3_state:
+  output_only:
+    - class_code
+    - count
+    - confidence
+    - event_type
+    - risk_level
+    - spectrum_hash
+    - evidence_hash
+
+D4_topology:
+  maps_to:
+    - merchant_pos_area
+    - food_station
+    - delivery_node
+    - property_facility
+    - public_safety_zone
+  raw_coordinate_export: restricted
+
+D5_resources:
+  edge_first: true
+  cloud_allowed:
+    - state_packet
+    - redacted_summary
+  cloud_denied:
+    - raw_image
+    - feature_map
+    - pii_image
+
+D6_governance:
+  pii_hit: mask_block_or_dead_letter
+  unclear_consent: human_review
+  raw_image_requested: dead_letter
+
+D7_validation:
+  checks:
+    - no_raw_image
+    - no_feature_map
+    - pii_checked
+    - packet_hash
+    - confidence
+
+D8_integrity:
+  required:
+    - packet_sha256
+  optional:
+    - spectrum_sha256
+    - evidence_sha256
+    - edge_signature
+    - zkp_reference

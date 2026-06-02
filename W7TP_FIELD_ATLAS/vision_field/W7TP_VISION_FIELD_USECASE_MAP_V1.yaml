@@ -1,0 +1,49 @@
+packet_ref: W7TP_VISION_FIELD_USECASE_MAP_V1
+status: draft_active
+
+usecases:
+  food_sharing_station:
+    input: camera_or_shelf_image
+    output:
+      - stock_level
+      - expiry_risk
+      - pickup_needed
+    raw_image_cloud: false
+
+  merchant_pos:
+    input: store_area_camera
+    output:
+      - queue_density
+      - table_occupancy
+      - abnormal_waiting
+    identity_tracking: false
+
+  property_management:
+    input: facility_camera_or_sensor
+    output:
+      - water_leak_detected
+      - garbage_room_full
+      - elevator_abnormal
+      - corridor_blocked
+    raw_image_storage: false
+
+  elderly_care_public_service:
+    input: authorized_service_scene
+    output:
+      - service_needed
+      - fall_like_event
+      - staff_review_required
+    governance:
+      - human_review
+      - no_identity_export
+      - no_cloud_raw_image
+
+  delivery_network:
+    input: pickup_or_dropoff_scene
+    output:
+      - package_present
+      - food_ready
+      - handoff_required
+    staff_rule:
+      renyi_staff_approval_required: true
+      volunteer_accept_without_staff_approval: forbidden

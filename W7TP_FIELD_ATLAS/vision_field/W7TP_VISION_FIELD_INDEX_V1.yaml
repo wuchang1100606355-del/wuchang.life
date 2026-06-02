@@ -1,0 +1,15 @@
+packet_ref: W7TP_VISION_FIELD_INDEX_V1
+status: active_index
+modules:
+  schema: W7TP_VISION_FIELD_PACKET_SCHEMA_V1.yaml
+  router: runtime/router/vision_field_router_v1.yaml
+  twelve_field_map: W7TP_VISION_FIELD_TO_12_FIELDS_MAP_V1.yaml
+system_links:
+  field_registry: W7TP_FIELD_ATLAS/field_registry.yaml
+  memory_boot: boot/memory_boot_map.yaml
+  reports: reports/vision_field
+hard_boundary:
+  - no_raw_image_cloud
+  - no_reversible_feature_map_export
+  - no_identity_tracking
+  - pii_hit_mask_block_or_dead_letter

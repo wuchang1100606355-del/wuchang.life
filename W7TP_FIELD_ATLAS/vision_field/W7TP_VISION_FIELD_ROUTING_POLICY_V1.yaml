@@ -1,0 +1,44 @@
+packet_ref: W7TP_VISION_FIELD_ROUTING_POLICY_V1
+status: draft_active
+
+routing_rules:
+  raw_image:
+    cloud: deny
+    storage: deny_by_default
+    action: local_memory_only
+
+  feature_map:
+    cloud: deny
+    storage: deny_by_default
+    action: local_secure_buffer_only
+
+  pii_detected:
+    cloud: deny
+    action:
+      - mask_or_block
+      - human_review_if_service_needed
+      - dead_letter_if_unclear
+
+  state_packet:
+    cloud: allow_if_redacted
+    action:
+      - hash
+      - sign
+      - route_to_w7tp_router
+
+  evidence_packet:
+    cloud: encrypted_only
+    action:
+      - hash
+      - encrypt
+      - signature
+      - audit_ledger
+
+dead_letter_conditions:
+  - raw_image_upload_requested
+  - identity_tracking_requested
+  - facial_recognition_requested
+  - license_plate_tracking_requested
+  - consent_unknown_with_sensitive_scene
+  - packet_contains_pixel_payload
+  - packet_contains_reversible_feature_map

@@ -1,0 +1,35 @@
+packet_ref: W7TP_VISION_FIELD_TO_12_FIELDS_MAP_V1
+status: draft_active
+purpose: map vision_field into existing W7TP intent-field universe
+
+vision_field_routes:
+  food_station:
+    outputs: [stock_level, expiry_risk, pickup_needed]
+    target_fields: [public_welfare, care, delivery, merchant]
+
+  merchant_pos:
+    outputs: [queue_density, table_occupancy, abnormal_waiting]
+    target_fields: [merchant, pos, economy, service]
+
+  property_management:
+    outputs: [water_leak_detected, garbage_room_full, elevator_abnormal, corridor_blocked]
+    target_fields: [property, safety, maintenance, governance]
+
+  elderly_care:
+    outputs: [service_needed, fall_like_event, staff_review_required]
+    target_fields: [care, safety, volunteer, public_welfare]
+
+  delivery_network:
+    outputs: [food_ready, package_present, handoff_required]
+    target_fields: [delivery, merchant, care, volunteer]
+
+  evidence_chain:
+    outputs: [packet_sha256, spectrum_sha256, evidence_sha256, edge_signature]
+    target_fields: [evidence, patent, audit, governance]
+
+hard_boundaries:
+  raw_image_cloud: forbidden
+  reversible_feature_map_export: forbidden
+  identity_tracking: forbidden
+  unclear_consent: human_review
+  pii_hit: mask_block_or_dead_letter
