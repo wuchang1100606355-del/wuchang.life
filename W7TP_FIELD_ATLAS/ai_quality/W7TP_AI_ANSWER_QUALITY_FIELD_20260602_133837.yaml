@@ -1,0 +1,42 @@
+w7tp_ai_answer_quality_field:
+  version: "1.0"
+  timestamp: "20260602_133837"
+  head: "3bb7089"
+  status: ACTIVE
+  core_claim:
+    zh: "7D/8D 狀態場封包結構有利於提升 AI 回答品質。"
+    en: "The 7D/8D state-field packet structure improves AI answer quality."
+  reason:
+    - "D1 身份：降低角色混淆，讓 AI 知道以何種代理身份回答。"
+    - "D2 意圖：降低目標偏移，使回答對準任務。"
+    - "D3 狀態：讓 AI 知道目前進度、已完成項、待處理項與風險。"
+    - "D4 拓樸：讓 AI 理解檔案、服務、節點、模組與資料位置。"
+    - "D5 資源：明確可用資料、工具、模型、檔案與限制。"
+    - "D6 治理：建立隱私、安全、權限、不可碰事項與紅隊邊界。"
+    - "D7 驗證：定義 PASS/FAIL 條件，避免只用語氣宣稱完成。"
+    - "D8 完整性：提供 hash、commit、證據鏈、防竄改與追責能力。"
+  quality_effects:
+    accuracy: "提升：意圖與狀態明確，降低猜測。"
+    safety: "提升：D6 治理硬牆降低越權、外洩與危險操作。"
+    verifiability: "提升：D7 驗證條件讓回答可測試。"
+    continuity: "提升：封包可承接長期專案脈絡。"
+    token_efficiency: "提升：可用 packet_ref / delta 取代重複背景。"
+    multi_agent_alignment: "提升：Gemini、CODE、OpenAI、小J 可使用同一狀態接口。"
+    evidence_chain: "提升：D8 可連結 commit、hash、報告與證據鏈。"
+  engineering_interpretation:
+    - "此封包不是單純 prompt template，而是 AI 任務狀態機接口。"
+    - "7D 用於對準身份、意圖、狀態、拓樸、資源、治理與驗證。"
+    - "8D 用於補上簽章、hash、commit、證據鏈與追責完整性。"
+    - "封包可將 AI 從一般聊天推進為受狀態場約束的可治理執行系統。"
+  redteam_limits:
+    - "封包本身不是魔法；若沒有 schema、linter、validator，品質提升會不穩。"
+    - "D6 不硬，AI 仍可能越權或繞路。"
+    - "D7 不可驗證，AI 仍可能只用語氣宣稱 PASS。"
+    - "D8 沒有 hash/commit/evidence，證據鏈不夠硬。"
+  next_engineering_steps:
+    - "建立 7D/8D YAML schema。"
+    - "建立 packet linter。"
+    - "建立 packet validator。"
+    - "建立 red-team gate。"
+    - "建立 evidence hash ledger。"
+    - "建立 CODE/Gemini 任務轉換器。"

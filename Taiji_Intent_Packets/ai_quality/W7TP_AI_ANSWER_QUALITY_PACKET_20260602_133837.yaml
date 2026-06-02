@@ -1,0 +1,68 @@
+packet_type: W7TP_AI_ANSWER_QUALITY_PACKET
+packet_version: "1.0"
+created_at: "20260602_133837"
+
+D1_identity:
+  subject: "W7TP 7D/8D 狀態場封包"
+  role: "AI quality governance interface"
+
+D2_intent:
+  claim: "封包結構有利於提升 AI 回答品質"
+  purpose:
+    - "提升準確度"
+    - "降低繞路"
+    - "增加可驗證性"
+    - "支援多模型協作"
+    - "形成證據鏈"
+
+D3_state:
+  current_status: ACTIVE
+  linked_system:
+    - "五常智慧雲"
+    - "小J"
+    - "W7TP"
+    - "Taiji_Hub"
+    - "Odoo 18"
+    - "Gemini / CODE / OpenAI 協作"
+
+D4_topology:
+  field_state_file: "W7TP_FIELD_ATLAS/ai_quality/W7TP_AI_ANSWER_QUALITY_FIELD_20260602_133837.yaml"
+  latest_pointer: "W7TP_FIELD_ATLAS/ai_quality/latest_ai_answer_quality_field.yaml"
+  packet_file: "Taiji_Intent_Packets/ai_quality/W7TP_AI_ANSWER_QUALITY_PACKET_20260602_133837.yaml"
+  report_file: "reports/ai_quality/W7TP_AI_ANSWER_QUALITY_STATE_20260602_133837.md"
+
+D5_resources:
+  usable_by:
+    - "Gemini"
+    - "CODE"
+    - "OpenAI"
+    - "local XiaoJ"
+    - "Odoo module planning"
+  transmission_mode:
+    - "packet_ref"
+    - "delta"
+    - "executable_packet"
+
+D6_governance:
+  hard_rules:
+    - "不得以封包名義越過隱私、安全、金鑰、DB、SSH、正式服務邊界。"
+    - "高風險操作仍需 D6 hardwall 與人審。"
+    - "D7 未驗證不得宣稱完成。"
+    - "D8 未產生證據不得宣稱證據鏈完成。"
+
+D7_validation:
+  expected_effect:
+    - "回答更對準任務"
+    - "少重複背景"
+    - "更容易拆成 CODE/Gemini 小包"
+    - "更容易紅隊檢查"
+    - "更容易形成 commit/report/evidence"
+  pass_condition:
+    - "此 packet 與 state file 已建立"
+    - "latest pointer 已更新"
+    - "報告已建立"
+    - "git commit 已完成"
+
+D8_integrity:
+  sha256_manifest: "reports/ai_quality/W7TP_AI_ANSWER_QUALITY_SHA256_20260602_133837.txt"
+  git_commit_required: true
