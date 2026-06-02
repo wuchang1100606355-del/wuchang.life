@@ -1,0 +1,45 @@
+=== 006 NICKNAME FIELD START ===
+Tue Jun  2 04:31:06 AM UTC 2026
+taiji01
+=== ADDON MOUNT ===
+ADDONS_SRC=/home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+=== SYNC FROM MSI-COPIED MODULE TO ACTUAL MOUNT ===
+MODULE_VISIBLE=OK
+=== MASKED DB PASSWORD ===
+DB_PASSWORD_SOURCE=internal_env_masked
+=== PRE-UPGRADE BACKUP ===
+BACKUP_DONE=/home/taiji_admin/Taiji_Hub/Taiji_Odoo/backups/pre_member_registration_nickname_20260602_123048
+=== MODULE UPGRADE ===
+2026-06-02 04:31:08,014 271 INFO ? odoo: Odoo version 18.0-20260421 
+2026-06-02 04:31:08,014 271 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-06-02 04:31:08,014 271 INFO ? odoo: addons paths: ['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/18.0', '/mnt/extra-addons'] 
+2026-06-02 04:31:08,014 271 INFO ? odoo: database: odoo@wuchang_os_pg:5432 
+Warn: Can't find .pfb for face 'Courier'
+2026-06-02 04:31:08,164 271 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /usr/local/bin/wkhtmltopdf 
+2026-06-02 04:31:08,170 271 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltoimage binary at /usr/local/bin/wkhtmltoimage 
+2026-06-02 04:31:08,314 271 INFO wuchang_odoo odoo.modules.loading: loading 1 modules... 
+2026-06-02 04:31:08,319 271 INFO wuchang_odoo odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-06-02 04:31:08,339 271 INFO wuchang_odoo odoo.modules.loading: updating modules list 
+2026-06-02 04:31:08,341 271 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-06-02 04:31:09,077 271 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Wuchang Member Registration'] to user __system__ #1 via n/a 
+2026-06-02 04:31:09,077 271 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Wuchang Member Registration'] to user __system__ #1 via n/a 
+2026-06-02 04:31:09,653 271 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user __system__ #1 via n/a 
+2026-06-02 04:31:09,677 271 INFO wuchang_odoo odoo.modules.loading: loading 73 modules... 
+2026-06-02 04:31:09,802 271 INFO wuchang_odoo odoo.modules.loading: Loading module wuchang_member_registration (14/73) 
+2026-06-02 04:31:09,848 271 INFO wuchang_odoo odoo.modules.registry: module wuchang_member_registration: creating or updating database tables 
+2026-06-02 04:31:09,901 271 INFO wuchang_odoo odoo.modules.loading: loading wuchang_member_registration/security/ir.model.access.csv 
+2026-06-02 04:31:10,173 271 INFO wuchang_odoo odoo.modules.loading: loading wuchang_member_registration/views/member_registration_views.xml 
+2026-06-02 04:31:10,198 271 INFO wuchang_odoo odoo.addons.base.models.ir_module: module wuchang_member_registration: no translation for language zh_TW 
+2026-06-02 04:31:10,206 271 INFO wuchang_odoo odoo.modules.loading: Module wuchang_member_registration loaded in 0.40s, 122 queries (+122 other) 
+2026-06-02 04:31:10,569 271 INFO wuchang_odoo odoo.modules.loading: 73 modules loaded in 0.89s, 122 queries (+122 extra) 
+2026-06-02 04:31:10,954 271 INFO wuchang_odoo odoo.modules.registry: verifying fields for every extended model 
+2026-06-02 04:31:11,486 271 INFO wuchang_odoo odoo.modules.loading: Modules loaded. 
+2026-06-02 04:31:11,491 271 INFO wuchang_odoo odoo.modules.registry: Registry changed, signaling through the database 
+2026-06-02 04:31:11,492 271 INFO wuchang_odoo odoo.modules.registry: Registry loaded in 3.199s 
+2026-06-02 04:31:11,492 271 INFO wuchang_odoo odoo.service.server: Initiating shutdown 
+2026-06-02 04:31:11,492 271 INFO wuchang_odoo odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-06-02 04:31:11,492 271 INFO wuchang_odoo odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  
+=== VERIFY FIELDS ===
+=== VERIFY MODULE ===
+wuchang_member_registration=installed
+MEMBER_REGISTRATION_NICKNAME_FIELD_PASS

@@ -34,6 +34,10 @@ class WuchangMemberRegistration(models.Model):
     review_name_hint = fields.Char("Review Name Hint")
     review_contact_hint = fields.Char("Review Contact Hint")
     membership_category = fields.Char()
+    member_nickname = fields.Char(
+        string="會員暱稱",
+        help="會員可自行修改的顯示暱稱；不得作為正式身份核驗資料。"
+    )
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
 
@@ -110,6 +114,11 @@ class WuchangMemberIdentityCode(models.Model):
     member_id = fields.Char(readonly=True, index=True)
     identity_code_7d = fields.Char(readonly=True, index=True)
     service_code_masked = fields.Char(readonly=True, index=True)
+    member_nickname = fields.Char(
+        string="會員暱稱",
+        help="會員可自行修改的顯示暱稱；不等於法定姓名或身份核驗資料。"
+    )
+    nickname_updated_at = fields.Datetime(readonly=True)
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
     active_status = fields.Selection([
@@ -124,12 +133,18 @@ class WuchangMemberIdentityCode(models.Model):
     def create_from_registration(self, registration):
         seed = f"{registration.provisional_member_id}:{registration.create_date}:{secrets.token_hex(8)}"
         digest = hashlib.sha256(seed.encode("utf-8")).hexdigest()
+
+    def action_update_nickname(self):
+        for rec in self:
+            rec.nickname_updated_at = fields.Datetime.now()
+
         return self.create({
             "member_id": "M-" + digest[:12].upper(),
             "identity_code_7d": "7D-" + digest[12:28].upper(),
             "service_code_masked": "SVC-" + digest[28:44].upper(),
             "role_scope": registration.role_scope or "member",
             "service_scope": registration.service_scope or "basic_member_service",
+            "member_nickname": registration.member_nickname,
             "registration_id": registration.id,
         })
 
