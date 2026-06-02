@@ -1,0 +1,22 @@
+member_registration_final_state:
+  timestamp: "20260602_123557"
+  head: "e0389aa"
+  module: wuchang_member_registration
+  odoo:
+    status: PASS
+    db: wuchang_odoo
+    container: wuchang_os_odoo_18
+  features:
+    registration_workflow: PASS
+    seven_d_identity_code: PASS
+    external_auth_binding: PASS
+    consent_ledger: PASS
+    recovery_case: PASS
+    editable_nickname: PASS
+    avatar_thumbnail: PASS
+    line_google_avatar_source: PASS
+  privacy:
+    no_plaintext_cloud: true
+    nickname_not_legal_identity: true
+    avatar_not_identity_verification: true
+    merchant_contact_export: false

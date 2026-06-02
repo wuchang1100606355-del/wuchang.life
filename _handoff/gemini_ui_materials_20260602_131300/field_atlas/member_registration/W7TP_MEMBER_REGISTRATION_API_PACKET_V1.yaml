@@ -1,0 +1,82 @@
+spec_id: W7TP_MEMBER_REGISTRATION_API_PACKET_V1
+status: design_draft
+purpose: 會員註冊 7D/8D API 封包
+
+packet:
+  D1_identity:
+    actor_type:
+      - guest
+      - provisional_member
+      - verified_member
+      - staff_reviewer
+      - merchant
+    actor_ref: pseudonymous_or_session_ref
+
+  D2_intent:
+    allowed:
+      - start_registration
+      - bind_line
+      - bind_google
+      - submit_review_data
+      - approve_registration
+      - reject_registration
+      - revoke_consent
+      - request_device_recovery
+
+  D3_state:
+    registration_status:
+      - guest
+      - provisional
+      - pending_review
+      - approved
+      - rejected
+      - suspended
+      - recovery_pending
+
+  D4_topology:
+    entry:
+      - line
+      - google
+      - odoo
+      - pwa
+      - staff_terminal
+    service_node:
+      - taiji01
+      - odoo
+      - gateway_9002
+
+  D5_resources:
+    required:
+      - consent_version
+      - service_scope
+      - role_scope
+    forbidden:
+      - raw_secret
+      - raw_token
+      - raw_private_key
+      - raw_member_export
+
+  D6_governance:
+    checks:
+      - no_plaintext_cloud
+      - no_merchant_contact_export
+      - human_review_required_before_verified
+      - duplicate_check_required
+      - consent_required
+      - dead_letter_on_sensitive_mismatch
+
+  D7_validation:
+    pass_conditions:
+      - member_code_created
+      - consent_ledger_created
+      - external_auth_binding_masked
+      - no_raw_output
+      - audit_record_created
+
+  D8_integrity:
+    fields:
+      - packet_hash
+      - audit_hash
+      - timestamp
+      - reviewer_signature_optional
+      - rollback_ref
