@@ -1,0 +1,62 @@
+=== SERVICE ===
+active
+● taiji_edge_gateway.service - Taiji Unified Edge Gateway (taiji01)
+     Loaded: loaded (/etc/systemd/system/taiji_edge_gateway.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-06-02 03:42:42 UTC; 1min 25s ago
+   Main PID: 3588920 (python)
+      Tasks: 7 (limit: 28609)
+     Memory: 66.7M (peak: 67.2M)
+        CPU: 1.059s
+     CGroup: /system.slice/taiji_edge_gateway.service
+             └─3588920 /home/taiji_admin/Taiji_Hub/.venv_edge_gateway/bin/python /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py
+
+Jun 02 03:42:43 taiji01 python[3588920]: ============================================================
+Jun 02 03:42:43 taiji01 python[3588920]: INFO:     Started server process [3588920]
+Jun 02 03:42:43 taiji01 python[3588920]: INFO:     Waiting for application startup.
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] =====================================================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] 🚀 [V14 True Absolute Edition]: WSL Bridge x VRAM Lockdown x Enterprise Brain
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] =====================================================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] 🔧 [GPU Enforcer] Initiating strict VRAM allocation for llama3.1 on Host Loop...
+Jun 02 03:42:48 taiji01 python[3588920]: 2026-06-02 03:42:48,330 [VoiceEngine-Realtime] ⚠️ [GPU Enforcer] VRAM allocation ping failed:
+Jun 02 03:42:48 taiji01 python[3588920]: 2026-06-02 03:42:48,331 [VoiceEngine-Realtime] 💡 請確認 Windows 端的 Ollama 服務已啟動，並允許 0.0.0.0 跨域連線！
+Jun 02 03:42:48 taiji01 python[3588920]: INFO:     Application startup complete.
+Jun 02 03:42:48 taiji01 python[3588920]: INFO:     Uvicorn running on http://0.0.0.0:9002 (Press CTRL+C to quit)
+Jun 02 03:42:50 taiji01 python[3588920]: INFO:     127.0.0.1:60060 - "GET /docs HTTP/1.1" 200 OK
+=== PORT 9002 OWNER ===
+LISTEN 0      1024                      0.0.0.0:9002       0.0.0.0:*    users:(("python",pid=3588920,fd=14))                   
+taiji_a+ 3588920       1  1 03:42 ?        00:00:01 /home/taiji_admin/Taiji_Hub/.venv_edge_gateway/bin/python /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py
+=== HTTP PROBE ===
+--- / ---
+HTTP_CODE=404
+{"detail":"Not Found"}--- /docs ---
+HTTP_CODE=200
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <title>五常太極大陣-V14真理閘道器 - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/openapi.json',
+    "dom_id": "#swagger-ui",
+"layout": "BaseLayout",
+"deepLinking": true,
+--- /openapi.json ---
+HTTP_CODE=200
+{"openapi":"3.1.0","info":{"title":"五常太極大陣-V14真理閘道器","version":"0.1.0"},"paths":{"/v1/models":{"get":{"summary":"Get Openai Models","operationId":"get_openai_models_v1_models_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/v1/chat/completions":{"post":{"summary":"Openai Chat Endpoint","operationId":"openai_chat_endpoint_v1_chat_completions_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenAIChatRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/v1/audio/voices":{"get":{"summary":"Get Audio Voices","operationId":"get_audio_voices_v1_audio_voices_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/v1/audio/speech":{"post":{"summary":"Openai Tts Endpoint","operationId":"openai_tts_endpoint_v1_audio_speech_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/OpenAITTSRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}}},"components":{"schemas":{"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"OpenAIChatRequest":{"properties":{"messages":{"items":{"additionalProperties":{"type":"string"},"type":"object"},"type":"array","title":"Messages"},"model":{"type":"string","title":"Model","default":"wuchang-v14"}},"type":"object","required":["messages"],"title":"OpenAIChatRequest"},"OpenAITTSRequest":{"properties":{"input":{"type":"string","title":"Input"}},"type":"object","required":["input"],"title":"OpenAITTSRequest"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"},"input":{"title":"Input"},"ctx":{"type":"object","title":"Context"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"}}}}--- /health ---
+HTTP_CODE=404
+{"detail":"Not Found"}--- /status ---
+HTTP_CODE=404
+{"detail":"Not Found"}=== LIVENESS ===
+EDGE_HTTP_CODE=404
+EDGE_HTTP_RESPONDED=PASS
+TAIJI_EDGE_HTTP_PROBE_DONE
