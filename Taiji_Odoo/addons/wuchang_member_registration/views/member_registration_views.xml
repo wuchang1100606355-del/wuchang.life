@@ -24,6 +24,9 @@
           <button name="action_approve" type="object" string="Approve" class="btn-success"/>
           <button name="action_reject" type="object" string="Reject" class="btn-secondary"/>
           <button name="action_dead_letter" type="object" string="Dead Letter" class="btn-danger"/>
+          <button name="action_request_founder_review" type="object" string="Founder Review" class="btn-warning"/>
+          <button name="action_approve_founder" type="object" string="Approve Founder" class="btn-success"/>
+          <button name="action_reject_founder" type="object" string="Reject Founder" class="btn-secondary"/>
           <field name="review_status" widget="statusbar"/>
         </header>
         <sheet>
@@ -43,6 +46,12 @@
             <field name="member_avatar_source" readonly="1"/>
             <field name="role_scope"/>
             <field name="service_scope"/>
+          </group>
+          <group string="Founder Registration">
+            <field name="is_founder_claim"/>
+            <field name="founder_claim_status" readonly="1"/>
+            <field name="founder_verified_at" readonly="1"/>
+            <field name="founder_verification_note"/>
           </group>
           <group string="Generated Identity">
             <field name="identity_code_id" readonly="1"/>

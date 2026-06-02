@@ -78,6 +78,22 @@ class WuchangMemberRegistration(models.Model):
     ], default="manual", string="縮圖來源")
     member_avatar_url_hash = fields.Char(readonly=True)
     member_avatar_updated_at = fields.Datetime(readonly=True)
+
+    is_founder_claim = fields.Boolean(
+        string="創辦人註冊請求",
+        default=False,
+        help="僅作為創辦人身份請求；不得由 OAuth 或一般註冊自動通過。"
+    )
+    founder_claim_status = fields.Selection([
+        ("none", "None"),
+        ("pending_review", "Pending Founder Review"),
+        ("verified", "Founder Verified"),
+        ("rejected", "Rejected"),
+        ("dead_letter", "Dead Letter"),
+    ], default="none", string="創辦人核驗狀態", index=True)
+    founder_verification_note = fields.Text(string="創辦人核驗備註")
+    founder_verified_at = fields.Datetime(readonly=True)
+
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
 
@@ -109,6 +125,42 @@ class WuchangMemberRegistration(models.Model):
             "member_avatar_updated_at": fields.Datetime.now(),
         })
         return True
+
+    def action_request_founder_review(self):
+        for rec in self:
+            rec.write({
+                "is_founder_claim": True,
+                "founder_claim_status": "pending_review",
+                "review_status": "pending_review",
+                "role_scope": "founder_candidate",
+                "founder_verification_note": rec.founder_verification_note or "Founder review requested. OAuth/login alone is not sufficient.",
+            })
+
+    def action_approve_founder(self):
+        if not self.env.user.has_group("base.group_system"):
+            raise UserError(_("Only system administrators may approve founder registration."))
+        for rec in self:
+            existing = self.env["wuchang.member.identity.code"].search([
+                ("founder_authority_status", "=", "founder_verified")
+            ], limit=1)
+            if existing:
+                raise UserError(_("A verified founder identity already exists."))
+            rec.write({
+                "is_founder_claim": True,
+                "founder_claim_status": "verified",
+                "founder_verified_at": fields.Datetime.now(),
+                "review_status": "pending_review",
+                "role_scope": "founder",
+            })
+
+    def action_reject_founder(self):
+        if not self.env.user.has_group("base.group_system"):
+            raise UserError(_("Only system administrators may reject founder registration."))
+        for rec in self:
+            rec.write({
+                "founder_claim_status": "rejected",
+                "founder_verification_note": rec.founder_verification_note or "Founder claim rejected.",
+            })
 
     def action_submit_review(self):
         for rec in self:
@@ -187,6 +239,22 @@ class WuchangMemberIdentityCode(models.Model):
     ], default="manual", string="縮圖來源")
     member_avatar_url_hash = fields.Char(readonly=True)
     member_avatar_updated_at = fields.Datetime(readonly=True)
+
+    is_founder_claim = fields.Boolean(
+        string="創辦人註冊請求",
+        default=False,
+        help="僅作為創辦人身份請求；不得由 OAuth 或一般註冊自動通過。"
+    )
+    founder_claim_status = fields.Selection([
+        ("none", "None"),
+        ("pending_review", "Pending Founder Review"),
+        ("verified", "Founder Verified"),
+        ("rejected", "Rejected"),
+        ("dead_letter", "Dead Letter"),
+    ], default="none", string="創辦人核驗狀態", index=True)
+    founder_verification_note = fields.Text(string="創辦人核驗備註")
+    founder_verified_at = fields.Datetime(readonly=True)
+
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
     active_status = fields.Selection([
@@ -211,6 +279,17 @@ class WuchangMemberIdentityCode(models.Model):
         })
         return True
 
+    @api.constrains("founder_authority_status")
+    def _check_single_verified_founder(self):
+        for rec in self:
+            if rec.founder_authority_status == "founder_verified":
+                existing = self.search([
+                    ("founder_authority_status", "=", "founder_verified"),
+                    ("id", "!=", rec.id),
+                ], limit=1)
+                if existing:
+                    raise UserError(_("Only one verified founder identity is allowed."))
+
     @api.model
     def create_from_registration(self, registration):
         seed = f"{registration.provisional_member_id}:{registration.create_date}:{secrets.token_hex(8)}"
@@ -231,6 +310,9 @@ class WuchangMemberIdentityCode(models.Model):
             "member_avatar_source": registration.member_avatar_source or "manual",
             "member_avatar_url_hash": registration.member_avatar_url_hash,
             "member_avatar_updated_at": registration.member_avatar_updated_at,
+            "founder_authority_status": "founder_verified" if registration.founder_claim_status == "verified" else "none",
+            "founder_authority_scope": "system_owner" if registration.founder_claim_status == "verified" else "none",
+            "founder_verified_at": registration.founder_verified_at,
             "registration_id": registration.id,
         })
 

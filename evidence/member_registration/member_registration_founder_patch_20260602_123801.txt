@@ -1,0 +1,39 @@
+=== 008 FOUNDER REGISTRATION START ===
+Tue Jun  2 04:38:18 AM UTC 2026
+taiji01
+ADDONS_SRC=/home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+MODULE_VISIBLE=OK
+DB_PASSWORD_SOURCE=internal_env_masked
+BACKUP_DONE=/home/taiji_admin/Taiji_Hub/Taiji_Odoo/backups/pre_member_registration_founder_20260602_123801
+2026-06-02 04:38:20,200 309 INFO ? odoo: Odoo version 18.0-20260421 
+2026-06-02 04:38:20,201 309 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-06-02 04:38:20,201 309 INFO ? odoo: addons paths: ['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/18.0', '/mnt/extra-addons'] 
+2026-06-02 04:38:20,201 309 INFO ? odoo: database: odoo@wuchang_os_pg:5432 
+Warn: Can't find .pfb for face 'Courier'
+2026-06-02 04:38:20,353 309 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /usr/local/bin/wkhtmltopdf 
+2026-06-02 04:38:20,358 309 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltoimage binary at /usr/local/bin/wkhtmltoimage 
+2026-06-02 04:38:20,506 309 INFO wuchang_odoo odoo.modules.loading: loading 1 modules... 
+2026-06-02 04:38:20,511 309 INFO wuchang_odoo odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-06-02 04:38:20,531 309 INFO wuchang_odoo odoo.modules.loading: updating modules list 
+2026-06-02 04:38:20,532 309 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-06-02 04:38:21,280 309 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Wuchang Member Registration'] to user __system__ #1 via n/a 
+2026-06-02 04:38:21,280 309 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Wuchang Member Registration'] to user __system__ #1 via n/a 
+2026-06-02 04:38:21,834 309 INFO wuchang_odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user __system__ #1 via n/a 
+2026-06-02 04:38:21,857 309 INFO wuchang_odoo odoo.modules.loading: loading 73 modules... 
+2026-06-02 04:38:21,981 309 INFO wuchang_odoo odoo.modules.loading: Loading module wuchang_member_registration (14/73) 
+2026-06-02 04:38:22,028 309 INFO wuchang_odoo odoo.modules.registry: module wuchang_member_registration: creating or updating database tables 
+2026-06-02 04:38:22,080 309 INFO wuchang_odoo odoo.modules.loading: loading wuchang_member_registration/security/ir.model.access.csv 
+2026-06-02 04:38:22,358 309 INFO wuchang_odoo odoo.modules.loading: loading wuchang_member_registration/views/member_registration_views.xml 
+2026-06-02 04:38:22,382 309 INFO wuchang_odoo odoo.addons.base.models.ir_module: module wuchang_member_registration: no translation for language zh_TW 
+2026-06-02 04:38:22,389 309 INFO wuchang_odoo odoo.modules.loading: Module wuchang_member_registration loaded in 0.41s, 122 queries (+122 other) 
+2026-06-02 04:38:22,753 309 INFO wuchang_odoo odoo.modules.loading: 73 modules loaded in 0.90s, 122 queries (+122 extra) 
+2026-06-02 04:38:23,135 309 INFO wuchang_odoo odoo.modules.registry: verifying fields for every extended model 
+2026-06-02 04:38:23,689 309 INFO wuchang_odoo odoo.modules.loading: Modules loaded. 
+2026-06-02 04:38:23,694 309 INFO wuchang_odoo odoo.modules.registry: Registry changed, signaling through the database 
+2026-06-02 04:38:23,695 309 INFO wuchang_odoo odoo.modules.registry: Registry loaded in 3.210s 
+2026-06-02 04:38:23,695 309 INFO wuchang_odoo odoo.service.server: Initiating shutdown 
+2026-06-02 04:38:23,695 309 INFO wuchang_odoo odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-06-02 04:38:23,695 309 INFO wuchang_odoo odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  
+=== VERIFY FOUNDER FIELDS ===
+wuchang_member_registration=installed
+MEMBER_REGISTRATION_FOUNDER_FIELD_PASS
