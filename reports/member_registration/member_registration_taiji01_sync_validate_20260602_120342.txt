@@ -1,0 +1,62 @@
+=== RSYNC DRY RUN TO TAIJI01 ===
+sending incremental file list
+created directory /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/wuchang_member_registration
+./
+README.md
+__init__.py
+__manifest__.py
+__pycache__/
+__pycache__/__init__.cpython-312.pyc
+__pycache__/__manifest__.cpython-312.pyc
+controllers/
+controllers/__init__.py
+controllers/main.py
+controllers/__pycache__/
+controllers/__pycache__/__init__.cpython-312.pyc
+controllers/__pycache__/main.cpython-312.pyc
+models/
+models/__init__.py
+models/member_registration.py
+models/__pycache__/
+models/__pycache__/__init__.cpython-312.pyc
+models/__pycache__/member_registration.cpython-312.pyc
+security/
+security/ir.model.access.csv
+views/
+views/member_registration_views.xml
+
+sent 870 bytes  received 188 bytes  423.20 bytes/sec
+total size is 33.05K  speedup is 31.24 (DRY RUN)
+=== RSYNC REAL COPY TO TAIJI01 ADDON ONLY ===
+sending incremental file list
+created directory /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/wuchang_member_registration
+./
+README.md
+__init__.py
+__manifest__.py
+__pycache__/
+__pycache__/__init__.cpython-312.pyc
+__pycache__/__manifest__.cpython-312.pyc
+controllers/
+controllers/__init__.py
+controllers/main.py
+controllers/__pycache__/
+controllers/__pycache__/__init__.cpython-312.pyc
+controllers/__pycache__/main.cpython-312.pyc
+models/
+models/__init__.py
+models/member_registration.py
+models/__pycache__/
+models/__pycache__/__init__.cpython-312.pyc
+models/__pycache__/member_registration.cpython-312.pyc
+security/
+security/ir.model.access.csv
+views/
+views/member_registration_views.xml
+
+sent 34.52K bytes  received 436 bytes  23.31K bytes/sec
+total size is 33.05K  speedup is 0.95
+=== REMOTE STATIC VALIDATION ===
+REMOTE_MANIFEST_OK Wuchang Member Registration
+REMOTE_XML_OK Taiji_Odoo/addons/wuchang_member_registration/views/member_registration_views.xml
+REMOTE_MEMBER_REGISTRATION_STATIC_PASS
