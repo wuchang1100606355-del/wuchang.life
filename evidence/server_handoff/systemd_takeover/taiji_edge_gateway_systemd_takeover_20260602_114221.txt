@@ -1,0 +1,122 @@
+=== SYSTEMD TAKEOVER START ===
+Tue Jun  2 03:42:38 AM UTC 2026
+taiji01
+/home/taiji_admin/Taiji_Hub
+=== PRECHECK 9002 ===
+LISTEN 0      1024                      0.0.0.0:9002       0.0.0.0:*    users:(("python",pid=3479109,fd=14))                   
+UID          PID    PPID  C STIME TTY          TIME CMD
+taiji_a+ 3479109       1  0 Jun01 ?        00:00:46 python legacy_core/taiji_unified_gateway_edge.py
+=== SERVICE FILE BACKUP ===
+=== PATCH SERVICE ===
+=== STOP SERVICE FLAPPING ===
+Warning: The unit file, source configuration file or drop-ins of taiji_edge_gateway.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+=== STOP ONLY CONFIRMED MANUAL PID IF OWNING 9002 ===
+=== VERIFY 9002 FREE BEFORE SYSTEMD ===
+PORT_9002_FREE
+=== START SYSTEMD ===
+=== STATUS ===
+active
+● taiji_edge_gateway.service - Taiji Unified Edge Gateway (taiji01)
+     Loaded: loaded (/etc/systemd/system/taiji_edge_gateway.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-06-02 03:42:42 UTC; 8s ago
+   Main PID: 3588920 (python)
+      Tasks: 7 (limit: 28609)
+     Memory: 66.7M (peak: 67.2M)
+        CPU: 954ms
+     CGroup: /system.slice/taiji_edge_gateway.service
+             └─3588920 /home/taiji_admin/Taiji_Hub/.venv_edge_gateway/bin/python /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py
+
+Jun 02 03:42:43 taiji01 python[3588920]: ✅ [模組載入] WuchangVoiceEngine (Google WaveNet) 已就緒！
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,246 [VoiceEngine-Realtime] 📡 [WSL Bridge] 成功鎖定 Windows 宿主機 IP: 100.100.100.100
+Jun 02 03:42:43 taiji01 python[3588920]: /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py:496: DeprecationWarning:
+Jun 02 03:42:43 taiji01 python[3588920]:         on_event is deprecated, use lifespan event handlers instead.
+Jun 02 03:42:43 taiji01 python[3588920]:         Read more about it in the
+Jun 02 03:42:43 taiji01 python[3588920]:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+Jun 02 03:42:43 taiji01 python[3588920]:         
+Jun 02 03:42:43 taiji01 python[3588920]:   @app.on_event("startup")
+Jun 02 03:42:43 taiji01 python[3588920]: ============================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 🛡️ 【V14 究極無損真理閘道器】啟動中 (Port: 9002)...
+Jun 02 03:42:43 taiji01 python[3588920]:    [網路對接] 宿主機雷達已鎖定 Windows IP: 100.100.100.100
+Jun 02 03:42:43 taiji01 python[3588920]:    [底層引擎] TaijiConcurrencyEngine (併發清理) - 已完整恢復
+Jun 02 03:42:43 taiji01 python[3588920]:    [底層引擎] OllamaGPUEnforcer (VRAM 鎖定) - 已完整恢復
+Jun 02 03:42:43 taiji01 python[3588920]:    [已整合] 雲端企業盲算 + 龍蝦終端雙螯 + 實體物理寫檔
+Jun 02 03:42:43 taiji01 python[3588920]: ============================================================
+Jun 02 03:42:43 taiji01 python[3588920]: INFO:     Started server process [3588920]
+Jun 02 03:42:43 taiji01 python[3588920]: INFO:     Waiting for application startup.
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] =====================================================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] 🚀 [V14 True Absolute Edition]: WSL Bridge x VRAM Lockdown x Enterprise Brain
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] =====================================================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] 🔧 [GPU Enforcer] Initiating strict VRAM allocation for llama3.1 on Host Loop...
+Jun 02 03:42:48 taiji01 python[3588920]: 2026-06-02 03:42:48,330 [VoiceEngine-Realtime] ⚠️ [GPU Enforcer] VRAM allocation ping failed:
+Jun 02 03:42:48 taiji01 python[3588920]: 2026-06-02 03:42:48,331 [VoiceEngine-Realtime] 💡 請確認 Windows 端的 Ollama 服務已啟動，並允許 0.0.0.0 跨域連線！
+Jun 02 03:42:48 taiji01 python[3588920]: INFO:     Application startup complete.
+Jun 02 03:42:48 taiji01 python[3588920]: INFO:     Uvicorn running on http://0.0.0.0:9002 (Press CTRL+C to quit)
+=== PORT ===
+LISTEN 0      1024                      0.0.0.0:9002       0.0.0.0:*    users:(("python",pid=3588920,fd=14))                   
+=== HEALTH ===
+EDGE_DOCS=PASS
+=== JOURNAL LAST 60 ===
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+Jun 01 18:37:01 taiji01 python[3484421]: 2026-06-01 18:37:01,839 [VoiceEngine-Realtime] ⚠️ [語音檔引擎] pyttsx3 未安裝，啟用靜音降級。
+Jun 01 18:37:01 taiji01 python[3484421]: ✅ [模組載入] WuchangVoiceEngine (Google WaveNet) 已就緒！
+Jun 01 18:37:01 taiji01 python[3484421]: 2026-06-01 18:37:01,839 [VoiceEngine-Realtime] 📡 [WSL Bridge] 成功鎖定 Windows 宿主機 IP: 100.100.100.100
+Jun 01 18:37:01 taiji01 python[3484421]: /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py:496: DeprecationWarning:
+Jun 01 18:37:01 taiji01 python[3484421]:         on_event is deprecated, use lifespan event handlers instead.
+Jun 01 18:37:01 taiji01 python[3484421]:         Read more about it in the
+Jun 01 18:37:01 taiji01 python[3484421]:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+Jun 01 18:37:01 taiji01 python[3484421]:         
+Jun 01 18:37:01 taiji01 python[3484421]:   @app.on_event("startup")
+Jun 01 18:37:01 taiji01 python[3484421]: ============================================================
+Jun 01 18:37:01 taiji01 python[3484421]: 🛡️ 【V14 究極無損真理閘道器】啟動中 (Port: 9002)...
+Jun 01 18:37:01 taiji01 python[3484421]:    [網路對接] 宿主機雷達已鎖定 Windows IP: 100.100.100.100
+Jun 01 18:37:01 taiji01 python[3484421]:    [底層引擎] TaijiConcurrencyEngine (併發清理) - 已完整恢復
+Jun 01 18:37:01 taiji01 python[3484421]:    [底層引擎] OllamaGPUEnforcer (VRAM 鎖定) - 已完整恢復
+Jun 01 18:37:01 taiji01 python[3484421]:    [已整合] 雲端企業盲算 + 龍蝦終端雙螯 + 實體物理寫檔
+Jun 01 18:37:01 taiji01 python[3484421]: ============================================================
+Jun 01 18:37:01 taiji01 python[3484421]: INFO:     Started server process [3484421]
+Jun 01 18:37:01 taiji01 python[3484421]: INFO:     Waiting for application startup.
+Jun 01 18:37:01 taiji01 python[3484421]: 2026-06-01 18:37:01,851 [VoiceEngine-Realtime] =====================================================================================
+Jun 01 18:37:01 taiji01 python[3484421]: 2026-06-01 18:37:01,851 [VoiceEngine-Realtime] 🚀 [V14 True Absolute Edition]: WSL Bridge x VRAM Lockdown x Enterprise Brain
+Jun 01 18:37:01 taiji01 python[3484421]: 2026-06-01 18:37:01,851 [VoiceEngine-Realtime] =====================================================================================
+Jun 01 18:37:01 taiji01 python[3484421]: 2026-06-01 18:37:01,852 [VoiceEngine-Realtime] 🔧 [GPU Enforcer] Initiating strict VRAM allocation for llama3.1 on Host Loop...
+Jun 01 18:37:06 taiji01 python[3484421]: 2026-06-01 18:37:06,926 [VoiceEngine-Realtime] ⚠️ [GPU Enforcer] VRAM allocation ping failed:
+Jun 01 18:37:06 taiji01 python[3484421]: 2026-06-01 18:37:06,926 [VoiceEngine-Realtime] 💡 請確認 Windows 端的 Ollama 服務已啟動，並允許 0.0.0.0 跨域連線！
+Jun 01 18:37:06 taiji01 python[3484421]: INFO:     Application startup complete.
+Jun 01 18:37:06 taiji01 python[3484421]: ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 9002): address already in use
+Jun 01 18:37:06 taiji01 python[3484421]: INFO:     Waiting for application shutdown.
+Jun 01 18:37:06 taiji01 python[3484421]: INFO:     Application shutdown complete.
+Jun 02 03:42:43 taiji01 python[3588920]: ⚠️ 缺少 pyttsx3/psutil，語音引擎將以降級模式啟動。
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,230 [VoiceEngine-Realtime] ❌ 嚴重警告：作業系統缺少底層語音驅動 (eSpeak)！
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,231 [VoiceEngine-Realtime] 👉 請總司令在終端機輸入此指令來安裝硬體發聲器官：
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,231 [VoiceEngine-Realtime]    sudo apt-get update && sudo apt-get install espeak espeak-ng -y
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,231 [VoiceEngine-Realtime] ⚠️ 系統已自動進入降級模式。API 可正常接收指令，但將略過物理發聲。
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,246 [VoiceEngine-Realtime] ⚠️ [語音檔引擎] pyttsx3 未安裝，啟用靜音降級。
+Jun 02 03:42:43 taiji01 python[3588920]: ✅ [模組載入] WuchangVoiceEngine (Google WaveNet) 已就緒！
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,246 [VoiceEngine-Realtime] 📡 [WSL Bridge] 成功鎖定 Windows 宿主機 IP: 100.100.100.100
+Jun 02 03:42:43 taiji01 python[3588920]: /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py:496: DeprecationWarning:
+Jun 02 03:42:43 taiji01 python[3588920]:         on_event is deprecated, use lifespan event handlers instead.
+Jun 02 03:42:43 taiji01 python[3588920]:         Read more about it in the
+Jun 02 03:42:43 taiji01 python[3588920]:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+Jun 02 03:42:43 taiji01 python[3588920]:         
+Jun 02 03:42:43 taiji01 python[3588920]:   @app.on_event("startup")
+Jun 02 03:42:43 taiji01 python[3588920]: ============================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 🛡️ 【V14 究極無損真理閘道器】啟動中 (Port: 9002)...
+Jun 02 03:42:43 taiji01 python[3588920]:    [網路對接] 宿主機雷達已鎖定 Windows IP: 100.100.100.100
+Jun 02 03:42:43 taiji01 python[3588920]:    [底層引擎] TaijiConcurrencyEngine (併發清理) - 已完整恢復
+Jun 02 03:42:43 taiji01 python[3588920]:    [底層引擎] OllamaGPUEnforcer (VRAM 鎖定) - 已完整恢復
+Jun 02 03:42:43 taiji01 python[3588920]:    [已整合] 雲端企業盲算 + 龍蝦終端雙螯 + 實體物理寫檔
+Jun 02 03:42:43 taiji01 python[3588920]: ============================================================
+Jun 02 03:42:43 taiji01 python[3588920]: INFO:     Started server process [3588920]
+Jun 02 03:42:43 taiji01 python[3588920]: INFO:     Waiting for application startup.
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] =====================================================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] 🚀 [V14 True Absolute Edition]: WSL Bridge x VRAM Lockdown x Enterprise Brain
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] =====================================================================================
+Jun 02 03:42:43 taiji01 python[3588920]: 2026-06-02 03:42:43,259 [VoiceEngine-Realtime] 🔧 [GPU Enforcer] Initiating strict VRAM allocation for llama3.1 on Host Loop...
+Jun 02 03:42:48 taiji01 python[3588920]: 2026-06-02 03:42:48,330 [VoiceEngine-Realtime] ⚠️ [GPU Enforcer] VRAM allocation ping failed:
+Jun 02 03:42:48 taiji01 python[3588920]: 2026-06-02 03:42:48,331 [VoiceEngine-Realtime] 💡 請確認 Windows 端的 Ollama 服務已啟動，並允許 0.0.0.0 跨域連線！
+Jun 02 03:42:48 taiji01 python[3588920]: INFO:     Application startup complete.
+Jun 02 03:42:48 taiji01 python[3588920]: INFO:     Uvicorn running on http://0.0.0.0:9002 (Press CTRL+C to quit)
+Jun 02 03:42:50 taiji01 python[3588920]: INFO:     127.0.0.1:60060 - "GET /docs HTTP/1.1" 200 OK
+SYSTEMD_TAKEOVER_RESULT=PASS_SYSTEMD_OWNERSHIP
