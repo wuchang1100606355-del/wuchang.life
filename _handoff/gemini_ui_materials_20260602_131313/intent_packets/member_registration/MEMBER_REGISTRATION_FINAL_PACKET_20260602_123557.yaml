@@ -1,0 +1,26 @@
+packet_type: MEMBER_REGISTRATION_FINAL_PACKET
+D1_identity:
+  module: wuchang_member_registration
+  node: taiji01
+D2_intent:
+  result: member_registration_runtime_ready
+D3_state:
+  install: PASS
+  nickname: PASS
+  avatar: PASS
+  line_google_avatar_sync: PASS
+D4_topology:
+  odoo_container: wuchang_os_odoo_18
+  postgres_container: wuchang_os_pg
+  database: wuchang_odoo
+D5_resources:
+  head: "e0389aa"
+D6_governance:
+  raw_identity_output: false
+  merchant_member_export: false
+  secret_output: false
+D7_validation:
+  final_verify_log: "reports/member_registration/MEMBER_REGISTRATION_FINAL_VERIFY_20260602_123557.txt"
+  status: PASS
+D8_integrity:
+  created_at: "20260602_123557"
