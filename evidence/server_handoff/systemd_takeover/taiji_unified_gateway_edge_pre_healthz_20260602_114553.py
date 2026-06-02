@@ -67,17 +67,6 @@ def _client_allowed(host: str) -> bool:
     return any(client_ip in network for network in _allowed_networks())
 
 
-
-@app.get("/healthz")
-def w7tp_healthz():
-    return {
-        "status": "ok",
-        "service": "taiji_edge_gateway",
-        "port": 9002,
-        "mode": "w7tp_runtime"
-    }
-
-
 @app.middleware("http")
 async def enforce_client_whitelist(request: Request, call_next):
     client_host = request.client.host if request.client else ""
