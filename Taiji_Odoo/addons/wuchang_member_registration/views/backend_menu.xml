@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Simple safe action to link directly to portal home -->
+    <record id="action_wuchang_member_ai_portal_dashboard" model="ir.actions.act_url">
+        <field name="name">會員 AI 門戶儀表板</field>
+        <field name="url">/my/wuchang_ai</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- Top Menu -->
+    <menuitem id="menu_wuchang_member_ai_portal_root"
+              name="五常智慧雲門戶"
+              sequence="120"
+              web_icon="wuchang_member_ai_portal,static/description/icon.png"
+              groups="wuchang_member_ai_portal.group_wuchang_member_ai_portal_user"/>
+
+    <!-- Action Menu -->
+    <menuitem id="menu_wuchang_member_ai_portal_dashboard"
+              name="會員 AI 門戶"
+              parent="menu_wuchang_member_ai_portal_root"
+              action="action_wuchang_member_ai_portal_dashboard"
+              sequence="10"/>
+</odoo>
