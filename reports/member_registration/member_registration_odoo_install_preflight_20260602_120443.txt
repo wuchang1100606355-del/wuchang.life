@@ -1,0 +1,46 @@
+=== LOCAL HEAD ===
+25dc536
+
+=== REMOTE ODOO MODULE EXISTS ===
+MODULE_MANIFEST=OK
+MODULE_MODEL=OK
+MODULE_VIEW=OK
+MODULE_SECURITY=OK
+
+=== ODOO CONTAINER ===
+wuchang_os_pg                              Up 10 days   5432/tcp
+wuchang_os_odoo_18                         Up 10 days   0.0.0.0:8069->8069/tcp, [::]:8069->8069/tcp, 8071-8072/tcp
+quarantine_wuchang_os_pg_20260508_200520   Up 10 days   5432/tcp
+Image=odoo:18.0 Mounts=/home/taiji_01/Taiji_Hub/Taiji_Odoo/addons=>/mnt/extra-addons /home/taiji_01/Taiji_Hub/Taiji_Odoo/odoo_data=>/var/lib/odoo 
+
+=== ODOO ADDONS PATH CHECK ===
+ls: cannot access '/mnt/extra-addons/wuchang_member_registration': No such file or directory
+
+=== ODOO CONFIG DB INFO MASKED ===
+addons_path = /mnt/extra-addons
+
+=== MODULE IMPORT STATIC IN CONTAINER PYTHON ===
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/usr/lib/python3.12/pathlib.py", line 1029, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/mnt/extra-addons/wuchang_member_registration/__manifest__.py'
+
+=== INSTALL PLAN ONLY ===
+NEXT_INSTALL_PACKET_REQUIRES_EXPLICIT_APPROVAL:
+1. backup DB / filestore reference only
+2. update Odoo app list or install module
+3. DB write will occur
+4. no Docker rebuild needed if addon visible
+5. rollback: uninstall module or restore DB backup if install fails
+
+FORBIDDEN_IN_THIS_BATCH:
+- no Odoo module install
+- no DB write
+- no Docker restart
+- no service restart
+- no secret read
