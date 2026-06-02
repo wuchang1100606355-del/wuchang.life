@@ -1,0 +1,57 @@
+=== 005F CONFIG INSTALL START ===
+Tue Jun  2 04:24:45 AM UTC 2026
+taiji01
+=== DETECT ADDONS MOUNT ===
+ADDONS_SRC=/home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+=== COPY MODULE TO ACTUAL MOUNT ===
+HOST_SRC_MODULE=OK
+sending incremental file list
+
+sent 842 bytes  received 19 bytes  1.72K bytes/sec
+total size is 33.05K  speedup is 38.39
+HOST_MOUNT_MODULE=OK
+=== CONTAINER MODULE VISIBLE ===
+MODULE_VISIBLE=OK
+=== ODOO CONFIG DB HOST MASKED ===
+addons_path = /mnt/extra-addons
+=== DETECT DB ===
+DB_NAME=wuchang_odoo
+=== INSTALL WITH ODOO CONFIG ===
+2026-06-02 04:24:46,799 200 INFO ? odoo: Odoo version 18.0-20260421 
+2026-06-02 04:24:46,800 200 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-06-02 04:24:46,800 200 INFO ? odoo: addons paths: ['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/18.0', '/mnt/extra-addons'] 
+2026-06-02 04:24:46,800 200 INFO ? odoo: database: default@default:default 
+2026-06-02 04:24:46,800 200 INFO ? odoo.sql_db: Connection to the database failed 
+Traceback (most recent call last):
+  File "/usr/bin/odoo", line 8, in <module>
+    odoo.cli.main()
+  File "/usr/lib/python3/dist-packages/odoo/cli/command.py", line 76, in main
+    o.run(args)
+  File "/usr/lib/python3/dist-packages/odoo/cli/server.py", line 182, in run
+    main(args)
+  File "/usr/lib/python3/dist-packages/odoo/cli/server.py", line 153, in main
+    odoo.service.db._create_empty_database(db_name)
+  File "/usr/lib/python3/dist-packages/odoo/service/db.py", line 133, in _create_empty_database
+    with closing(db.cursor()) as cr:
+                 ^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/sql_db.py", line 812, in cursor
+    return Cursor(self.__pool, self.__dbname, self.__dsn)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/sql_db.py", line 295, in __init__
+    self._cnx = pool.borrow(dsn)
+                ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/decorator.py", line 232, in fun
+    return caller(func, *(extras + args), **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/tools/func.py", line 97, in locked
+    return func(inst, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/sql_db.py", line 739, in borrow
+    result = psycopg2.connect(
+             ^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+	Is the server running locally and accepting connections on that socket?
+
