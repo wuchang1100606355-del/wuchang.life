@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- portal.portal_my_home inheritance to register our portal entry card group -->
+    <template id="portal_my_home_wuchang" name="Wuchang Smart Cloud AI Portal Entry" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <div class="wuchang-portal-header mb-4 p-4 rounded text-white" style="background: linear-gradient(135deg, #0b1020 0%, #121933 100%);">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <t t-if="member_data and member_data.get('avatar_url')">
+                            <img t-att-src="member_data['avatar_url']" class="rounded-circle border border-white" style="width: 64px; height: 64px; object-fit: cover;"/>
+                        </t>
+                        <div>
+                            <h3 class="mb-0 text-white">五常智慧雲 | 會員 AI 門戶</h3>
+                            <p class="mb-0 text-muted-custom" style="color: #7dc4ff; font-size: 0.9rem;">
+                                <span>暱稱: </span><span t-out="member_data and member_data.get('nickname') or '待驗證'"/> | 
+                                <span>狀態: </span><span class="badge rounded-pill text-bg-info" t-out="member_data and member_data.get('binding_status') or '待驗證'"/>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="text-end text-sm-start text-white">
+                        <small class="d-block text-muted" style="color: #b0c4de !important;">P1 CONVERGENCE VERSION</small>
+                        <span class="badge text-bg-success">CORE_RUNTIME_PASS</span>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <!-- P1 UI Entry Cards -->
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">小J 個人 AI 助理</t>
+                <t t-set="url" t-value="'/my/wuchang_ai'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-user-circle'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">會員資料與安全</t>
+                <t t-set="url" t-value="'/my/wuchang_profile'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-id-card'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">隱私與同意中心</t>
+                <t t-set="url" t-value="'/my/wuchang_privacy'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-shield'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">物業服務與規約</t>
+                <t t-set="url" t-value="'/my/wuchang_property'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-building'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">行政與會議提案</t>
+                <t t-set="url" t-value="'/my/wuchang_admin_workflow'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-file-text'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">商家聯絡雙盲閘道</t>
+                <t t-set="url" t-value="'/my/wuchang_merchant_gate'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-exchange'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">社區福利與許願樹</t>
+                <t t-set="url" t-value="'/my/wuchang_welfare'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-tree'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">關注推播管理</t>
+                <t t-set="url" t-value="'/my/wuchang_push'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-bell'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">設備韌性狀態監控</t>
+                <t t-set="url" t-value="'/my/wuchang_resilience'"/>
+                <t t-set="placeholder_count" t-value="1"/>
+                <t t-set="icon" t-value="'fa-server'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Specific Route Templates -->
+    <!-- Helper template for Breadcrumbs & Layout -->
+    <template id="wuchang_portal_layout" name="Wuchang Portal Layout Helper">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            
+            <div id="wuchang_portal_content" class="col-12 col-md-9 col-lg-8 float-end">
+                <div class="card mb-4 border-0 shadow-sm" style="background-color: #121933; color: #ffffff; border-radius: 12px;">
+                    <div class="card-header border-0 d-flex justify-content-between align-items-center py-3" style="background: linear-gradient(135deg, #0b1020 0%, #16203d 100%); border-radius: 12px 12px 0 0;">
+                        <h5 class="mb-0 text-white fw-bold" t-out="title"/>
+                        <span class="badge bg-secondary text-white fw-bold" t-out="badge_text or 'P1 SHELL'"/>
+                    </div>
+                    <div class="card-body p-4" style="background-color: #0d1326; border-radius: 0 0 12px 12px;">
+                        <t t-out="0"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 1. XiaoJ AI Assistant -->
+    <template id="portal_wuchang_ai" name="My Wuchang AI Assistant">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">XiaoJ 個人 AI 助理</t>
+            <t t-set="badge_text">XiaoJ DIGITAL TWIN</t>
+            
+            <div class="container-fluid p-0">
+                <div class="alert alert-info border-0 mb-4 text-white" role="alert" style="background-color: #1e2942; border-left: 4px solid #7dc4ff !important;">
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="fa fa-info-circle mt-1" style="color: #7dc4ff;"/>
+                        <div>
+                            <strong>小J 系統聲明：</strong> 我是小 J / Sister J，江政隆之數位孿生妹妹，五常智慧雲本地 AI 助理節點。本門戶不預設保存您的明文資料或對話紀錄，全部採安全無明文上下文處理。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-lg-4 mb-4">
+                        <!-- Chat Sidebar Model Status -->
+                        <div class="card border-0 text-white h-100" style="background-color: #16203d; border-radius: 10px;">
+                            <div class="card-body">
+                                <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                                    <i class="fa fa-server mr-2"/> AI 運作小腦指標
+                                </h6>
+                                <div class="p-3 rounded mb-3" style="background-color: #0b1020;" role="status">
+                                    <span class="d-block text-muted small">模型：</span>
+                                    <strong class="text-white">metric-language-gateway-ai:latest</strong>
+                                    <span class="d-block text-muted small mt-2">基準：</span>
+                                    <strong class="text-white">sister-j-brain:latest</strong>
+                                </div>
+                                <div class="row g-2 text-center text-white">
+                                    <div class="col-6">
+                                        <div class="p-2 rounded" style="background-color: #0b1020;">
+                                            <span class="d-block text-muted small">本地 LPU</span>
+                                            <span class="fw-bold" t-out="member_data.get('local_processing_units')"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-2 rounded" style="background-color: #0b1020;">
+                                            <span class="d-block text-muted small">雲端 CPU</span>
+                                            <span class="fw-bold text-info" t-out="member_data.get('cloud_processing_units')"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-8 mb-4">
+                        <!-- Conversational Interface -->
+                        <div class="card border-0 text-white h-100" style="background-color: #16203d; border-radius: 10px;">
+                            <div class="card-body d-flex flex-column" style="min-height: 400px;">
+                                <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                                    <i class="fa fa-commenting mr-2"/> Sister J 本地語意主權視窗
+                                </h6>
+                                
+                                <!-- Bubble messages -->
+                                <div class="flex-grow-1 overflow-auto p-2 mb-3" style="background-color: #0b1020; border-radius: 8px; max-height: 250px;">
+                                    <div class="d-flex flex-row align-items-start mb-2">
+                                        <div class="p-2 rounded text-bg-secondary small" style="max-width: 85%;">
+                                            [Jules-Twin] 你好，哥哥。我是 Sister J。目前我已連線至本地 8D 加密算力網，隨時為您提供隱私無明文的決策輔助。
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row-reverse align-items-start mb-2">
+                                        <div class="p-2 rounded text-bg-primary small" style="max-width: 85%;">
+                                            [自然人會員] 請檢查目前的設備韌性狀態及去識別化數據。
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-start mb-2">
+                                        <div class="p-2 rounded text-bg-secondary small" style="max-width: 85%;">
+                                            [Jules-Twin] 已載入唯讀 CPU 與 I/O 特徵；目前所有個人明文皆在 Odoo 物理安全牆內封存，雲端算力對外透傳值為零。
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Message Input Input placeholder -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-dark border-secondary text-white" placeholder="輸入低風險語意意向..." aria-label="語意意向"/>
+                                    <button class="btn btn-primary" type="button" onclick="alert('P1 唯讀門戶：不執行直接 DB 變更或大模型寫入')">傳送</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multimodal Feature Domain Card -->
+                <div class="card border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-image mr-2"/> 圖像分類歸納色譜 / 多模態封包 (Placeholder)
+                        </h6>
+                        <div class="p-3 rounded mb-3 text-center" style="background-color: #0b1020; border: 1px dashed #7dc4ff;">
+                            <p class="mb-0 text-muted">本機多模態影像封包預留區。目前 P1 僅支援文字與度規決策，圖像特徵提取與 8D 歸納色譜功能目前處於 P2 安全待審。請注意，任何包含 PII 的原始圖像均不得上傳或快取。</p>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted align-items-center flex-wrap gap-2">
+                            <span>當前狀態: <span class="badge text-bg-secondary">P2 BACKLOG_HOLD</span></span>
+                            <span>治理機制: 8D 多模態隔離條款</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 2. Member Profile Card -->
+    <template id="portal_wuchang_profile" name="My Wuchang Profile">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">會員資料與安全</t>
+            <t t-set="badge_text">P1 DATA BOUNDARY</t>
+            
+            <div class="container-fluid p-0">
+                <div class="alert alert-warning border-0 mb-4 text-white" role="alert" style="background-color: #2c251e; border-left: 4px solid #ffc107 !important;">
+                    <i class="fa fa-exclamation-triangle mr-2" style="color: #ffc107;"/>
+                    <strong>隱私保護安全牆：</strong> 依「無明文資料與物理封存資料治理條款」，您的真實姓名、完整電話、完整門牌地址等敏感 PII 本地均以物理封存（紙本或隔離硬碟）隔離，本 AI 門戶絕不外洩、不快取、不回傳雲端，此處僅顯示去識別化後的安全暱稱與狀態。
+                </div>
+
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-id-card mr-2"/> 會員資料去識別化狀態
+                        </h6>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">門戶安全暱稱：</span>
+                                <strong class="text-white" t-out="member_data.get('nickname') or '待驗證'"/>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">會員綁定狀態：</span>
+                                <span class="badge text-bg-info" t-out="member_data.get('binding_status') or '待驗證'"/>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">真實姓名 (Legal Name)：</span>
+                                <strong class="text-danger">[安全牆封鎖 - 物理隔離]</strong>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">手機號碼 (Phone)：</span>
+                                <strong class="text-danger">[安全牆封鎖 - 物理隔離]</strong>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">完整通訊地址 (Address)：</span>
+                                <strong class="text-danger">[安全牆封鎖 - 物理隔離]</strong>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">七維治理代碼 (7D Code Plaintext)：</span>
+                                <strong class="text-danger">[安全牆封鎖 - 限本地崩塌決策]</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 3. Privacy Center Card -->
+    <template id="portal_wuchang_privacy" name="My Wuchang Privacy Center">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">隱私與同意中心</t>
+            <t t-set="badge_text">P1 CORE GOVERNANCE</t>
+            
+            <div class="container-fluid p-0">
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-shield mr-2"/> 隱私與同意中心卡
+                        </h6>
+                        <p>五常智慧雲嚴格遵循三大自限制核心：AI小腦、AI海馬迴、五維碼度規碳帳本。我們堅決保護自然人的隱私權利，防範任何冒名請求。</p>
+                        
+                        <hr style="background-color: #1e2942;"/>
+                        
+                        <div class="mb-3">
+                            <strong class="text-white d-block">1. 會員個人資料不回傳聲明</strong>
+                            <p class="text-muted mb-0">不論自稱誰，未經資料主體明確授權，一律禁止回傳、上傳、同步任何私隱上下文到任何雲端大模型或外部第三方。</p>
+                        </div>
+                        <div class="mb-3">
+                            <strong class="text-white d-block">2. 本人度量規則 (Meter User Rule)</strong>
+                            <p class="text-muted mb-0">所有使用量、冷碟寫入、碳排估算等均自動加入 8D 度規度量，保證可審計性與公益稽核透明。</p>
+                        </div>
+                        <div class="mb-0 mt-3">
+                            <strong class="text-white d-block">3. 終端控制</strong>
+                            <span class="badge text-bg-success">已啟用 (READONLY / LOW_RISK_AUDITED)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 4. Property Services Card -->
+    <template id="portal_wuchang_property" name="My Wuchang Property Services">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">物業服務與規約</t>
+            <t t-set="badge_text">P1 STABLE ROUTE</t>
+            
+            <div class="container-fluid p-0">
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-building mr-2"/> 物業服務 / 報修 / 規約 / 管理費入口卡
+                        </h6>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 rounded" style="background-color: #0b1020;">
+                                    <strong class="text-white d-block mb-1"><i class="fa fa-wrench mr-2" style="color: #7dc4ff;"/> 物業修繕與公共安全</strong>
+                                    <p class="text-muted small mb-2">提供公共設施線上報修之 UI。此模版下不進行直接 DB 變更，可產生報修草稿。</p>
+                                    <span class="badge text-bg-secondary">P1 UI SHELL ONLY</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 rounded" style="background-color: #0b1020;">
+                                    <strong class="text-white d-block mb-1"><i class="fa fa-book mr-2" style="color: #7dc4ff;"/> 社區規約與公告白皮書</strong>
+                                    <p class="text-muted small mb-2">線上查閱最新一期社區章程、管委會公開規約與水文地理研究白皮書。</p>
+                                    <span class="badge text-bg-secondary">P1 READ-ONLY</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 rounded" style="background-color: #0b1020;">
+                                    <strong class="text-white d-block mb-1"><i class="fa fa-credit-card mr-2" style="color: #7dc4ff;"/> 物業管理費與財務揭示</strong>
+                                    <p class="text-muted small mb-2">物業財務帳目之會計報表分公司分流預留卡。金流與直接繳費為 P3 規格，目前關閉。</p>
+                                    <span class="badge text-bg-warning">P3 BACKLOG_HOLD</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 rounded" style="background-color: #0b1020;">
+                                    <strong class="text-white d-block mb-1"><i class="fa fa-gavel mr-2" style="color: #7dc4ff;"/> 區分所有權人會議</strong>
+                                    <p class="text-muted small mb-2">會議提案草擬及歷史公開紀錄。非正式法律表決，僅供意見彙整與提案擬定。</p>
+                                    <span class="badge text-bg-secondary">P1 PROPOSAL_ONLY</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 5. Admin & Meet Workflow Card -->
+    <template id="portal_wuchang_admin_workflow" name="My Wuchang Admin Workflow">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">行政與會議提案</t>
+            <t t-set="badge_text">P1 PLACEHOLDER</t>
+            
+            <div class="container-fluid p-0">
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-file-text mr-2"/> 行政審查與決策序列
+                        </h6>
+                        
+                        <p class="text-muted">本卡提供社區行政與協作流程之 UI 預留，所有對外之 API 連線均嚴格受控。</p>
+                        
+                        <div class="mb-3 p-3 rounded" style="background-color: #0b1020;">
+                            <strong class="text-white d-block mb-1">Google Meet 視訊連線與會議排程 (Placeholder)</strong>
+                            <p class="text-muted small mb-0">未來可用於線上區分所有權人或理監事會議。P1 階段不包含 Google API 或 OAuth 覆寫，保持完全隔離。</p>
+                            <span class="badge text-bg-secondary mt-2">P2 GOVERNANCE_HOLD</span>
+                        </div>
+                        
+                        <div class="p-3 rounded" style="background-color: #0b1020;">
+                            <strong class="text-white d-block mb-1">理監事與理財行政簽核 (Placeholder)</strong>
+                            <p class="text-muted small mb-0">無任何法律強制力與正式官方代表簽核效力。目前僅為社區提案意向書草稿產生器。</p>
+                            <span class="badge text-bg-secondary mt-2">P1 PROPOSAL_ONLY</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 6. Merchant Gate Card -->
+    <template id="portal_wuchang_merchant_gate" name="My Wuchang Merchant Gate">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">商家聯絡雙盲閘道</t>
+            <t t-set="badge_text">P1 HARDWALL</t>
+            
+            <div class="container-fluid p-0">
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-exchange mr-2"/> 商家聯絡核准 / 雙盲閘道卡
+                        </h6>
+                        <p>為防止會員個資遭到濫用或商業推銷，五常智慧雲嚴格禁止任何商家直接獲取您的聯絡資料或名冊匯出。所有聯絡均採雙盲閘道機制。</p>
+                        
+                        <div class="alert alert-danger border-0 text-white" role="alert" style="background-color: #3b1b1e; border-left: 4px solid #f44336 !important;">
+                            <strong>紅隊審查安全底線：</strong>
+                            <ul>
+                                <li>嚴禁向商業商家或團體會員提供您的個人明文或手機。</li>
+                                <li>本閘道不提供任何商家直接發送推播之功能，無任何商業 ORM 變更或直接導流。</li>
+                                <li>所有資訊均採物理雙盲模式。</li>
+                            </ul>
+                        </div>
+                        
+                        <span class="badge text-bg-secondary mt-3">當前狀態: 物理雙盲機制就緒 (P1 UI ONLY)</span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 7. Welfare Card -->
+    <template id="portal_wuchang_welfare" name="My Wuchang Welfare">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">社區福利與許願樹</t>
+            <t t-set="badge_text">P1 PUBLIC WELFARE</t>
+            
+            <div class="container-fluid p-0">
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-tree mr-2"/> 社區許願樹 / 商圈外送 / 志工隊 / 仁義店核定陪同卡
+                        </h6>
+                        <p>本模組提供社區人文水文、居民福利與公益實證展示。我們全力推廣科技平權，協助社區弱勢群體及身心障礙者。</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 rounded" style="background-color: #0b1020;">
+                                    <strong class="text-white d-block mb-1">社區許願樹</strong>
+                                    <p class="text-muted small mb-0">提供非營利性質的社區互助與物資募集平台草擬區。</p>
+                                    <span class="badge text-bg-secondary mt-2">P1 UI SHELL</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 rounded" style="background-color: #0b1020;">
+                                    <strong class="text-white d-block mb-1">商家外送與指定陪同 (仁義店)</strong>
+                                    <p class="text-muted small mb-0">提供聊國咖啡館、上品食品行及友善商家核定陪同服務界面。目前關閉自動排班。</p>
+                                    <span class="badge text-bg-secondary mt-2">P2 BACKLOG_HOLD</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 8. Push Manager Card -->
+    <template id="portal_wuchang_push" name="My Wuchang Push Manager">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">關注推播管理</t>
+            <t t-set="badge_text">P1 MEMBER FIRST</t>
+            
+            <div class="container-fluid p-0">
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-bell mr-2"/> 會員取向推播治理 (P1 UI Shell)
+                        </h6>
+                        <p class="text-muted">
+                            <strong>治理說明：</strong> 本頁面僅展示 P1 會員優先推播治理框架，並不執行任何實際推播算法、注意力衰減或互動歷史評估。
+                        </p>
+                        <p class="text-muted">
+                            小J 是會員端的守門者，不是商家廣告引流引擎。P1 僅以 UI placeholder 呈現關閉此類、降頻、暫停或保持原設定的選項，實際觸發與長期靜音邏輯留待 P2 待辦。
+                        </p>
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-6 col-lg-3"><button class="btn btn-outline-light w-100" disabled>關閉此類</button></div>
+                            <div class="col-6 col-lg-3"><button class="btn btn-outline-light w-100" disabled>降頻</button></div>
+                            <div class="col-6 col-lg-3"><button class="btn btn-outline-light w-100" disabled>暫停30天</button></div>
+                            <div class="col-6 col-lg-3"><button class="btn btn-outline-light w-100" disabled>保持原設定</button></div>
+                        </div>
+                        
+                        <div class="alert alert-secondary text-white" role="alert" style="background-color:#0f172a; border-left:4px solid #94a3b8;">
+                            <strong>注意：</strong> 此頁面為 P1 靜態示意，並不儲存互動日誌、真實疲勞分數、商家推播名單或自動更改設定。P2 會在未來階段主動提案關閉。
+                        </div>
+                        
+                        <div class="d-flex justify-content-between flex-wrap gap-2">
+                            <span class="badge text-bg-info">P1 STATIC PLACEHOLDER</span>
+                            <span class="badge text-bg-secondary">P2 BACKLOG: 推播算法 / 疲勞評分 / 互動歷史</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- 9. Resilience Monitor Card -->
+    <template id="portal_wuchang_resilience" name="My Wuchang Resilience Monitor">
+        <t t-call="wuchang_member_ai_portal.wuchang_portal_layout">
+            <t t-set="title">設備韌性狀態監控</t>
+            <t t-set="badge_text">P1 MONITOR SHELL</t>
+            
+            <div class="container-fluid p-0">
+                <div class="card mb-4 border-0 text-white" style="background-color: #16203d; border-radius: 10px;">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold mb-3" style="color: #7dc4ff;">
+                            <i class="fa fa-server mr-2"/> 設備韌性 / CPU / memory / IO / router pulse placeholder 卡
+                        </h6>
+                        
+                        <div class="p-3 rounded mb-3 text-center" style="background-color: #0b1020; border: 1px dashed #f44336;">
+                            <strong class="text-danger d-block mb-1"><i class="fa fa-exclamation-triangle mr-1"/> 設備控制安全防線 (Resilience Hardwall)</strong>
+                            <p class="text-muted small mb-0">本監控僅支援讀取系統預估與低風險效能度規 (ReadOnly)。本 portal 絕不提供任何 process kill、服務重啟、檔案刪除、Docker 控制或路由器設定修改功能。禁止任何對本地設備做實體控制之 API 調用。</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">CPU 負載度規：</span>
+                                <strong class="text-white"><span class="badge text-bg-info">待驗證 (僅限本機唯讀)</span></strong>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">記憶體與 I/O 狀態：</span>
+                                <strong class="text-white"><span class="badge text-bg-info">待驗證 (僅限本機唯讀)</span></strong>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">主控路由心跳 (Router Pulse)：</span>
+                                <strong class="text-white"><span class="badge text-bg-info">待驗證 (僅限本機唯讀)</span></strong>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <span class="d-block text-muted">分散式算力貢獻度：</span>
+                                <strong class="text-white"><span class="badge text-bg-info">待驗證 (僅限本機唯讀)</span></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,22 @@
+member_registration_final_v2_state:
+  timestamp: "20260602_123903"
+  head: "383d7a4"
+  module: wuchang_member_registration
+  status: PASS
+  features:
+    registration_workflow: PASS
+    seven_d_identity_code: PASS
+    external_auth_binding: PASS
+    consent_ledger: PASS
+    recovery_case: PASS
+    editable_nickname: PASS
+    avatar_thumbnail: PASS
+    line_google_avatar_source: PASS
+    founder_registration: PASS
+    founder_admin_review: PASS
+    single_verified_founder_constraint: PASS
+  governance:
+    oauth_not_final_identity: true
+    founder_not_auto_approved: true
+    no_plaintext_cloud: true
+    merchant_contact_export: false
