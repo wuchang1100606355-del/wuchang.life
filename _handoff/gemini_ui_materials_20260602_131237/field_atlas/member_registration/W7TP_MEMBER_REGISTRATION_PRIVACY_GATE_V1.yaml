@@ -1,0 +1,71 @@
+spec_id: W7TP_MEMBER_REGISTRATION_PRIVACY_GATE_V1
+status: design_draft
+purpose: 會員註冊個資閘門
+
+privacy_model:
+  one_way_privacy_gate:
+    input_allowed:
+      - 身份核驗資料
+      - 聯絡資料
+      - 委託資料
+      - OAuth callback data
+    output_default:
+      - verification_pass_or_fail
+      - service_available_or_not
+      - next_manual_step
+      - pseudonymous_member_code
+    output_forbidden:
+      - raw_name
+      - raw_phone
+      - raw_address
+      - document_number
+      - raw_oauth_token
+      - raw_line_user_id
+      - raw_google_subject
+
+storage_classes:
+  sealed_raw_identity:
+    custody:
+      - offline_or_encrypted_storage
+      - split_key_or_three_usb
+      - break_glass_only
+    access:
+      - no_single_admin
+      - reason_required
+      - time_limited
+      - audit_hash_required
+
+  daily_runtime_identity:
+    fields:
+      - member_id
+      - 7d_identity_code
+      - pseudonymous_service_code
+      - role_scope
+      - consent_scope
+      - session_token
+    cloud_allowed:
+      - redacted_summary_only
+      - no_raw_pii
+
+  external_auth_binding:
+    fields:
+      - provider
+      - hashed_provider_subject
+      - binding_status
+      - consent_ref
+    forbidden:
+      - plaintext_token_storage
+      - provider_secret_in_repo
+      - merchant_access
+
+merchant_contact_rule:
+  principle: 商家不得直接取得會員明文聯絡資料
+  allowed:
+    - member_approved_contact_request
+    - purpose_limited_message
+    - expiry_time
+    - audit_record
+  denied:
+    - export_member_list
+    - bulk_marketing_without_consent
+    - hidden_tracking

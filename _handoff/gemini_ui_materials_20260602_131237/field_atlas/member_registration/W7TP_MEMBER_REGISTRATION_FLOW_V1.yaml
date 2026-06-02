@@ -1,0 +1,112 @@
+spec_id: W7TP_MEMBER_REGISTRATION_FLOW_V1
+status: design_draft
+purpose: 會員註冊流程
+
+flow:
+  step_01_entry:
+    entrypoints:
+      - LINE login
+      - Google login
+      - Odoo registration form
+      - PWA
+      - staff assisted terminal
+    output:
+      - provisional_session
+      - registration_intent_packet
+
+  step_02_oauth_or_contact_binding:
+    line:
+      route:
+        - /line/login
+        - /line/callback
+      result:
+        - external_provider: line
+        - external_user_ref: hashed_or_tokenized
+        - no_plaintext_export: true
+    google:
+      route:
+        - /auth/google/login
+        - /auth/google/callback
+      result:
+        - external_provider: google
+        - external_user_ref: hashed_or_tokenized
+        - no_plaintext_export: true
+
+  step_03_minimum_data_intake:
+    collect_only_if_needed:
+      - name_for_association_review
+      - contact_for_membership_notice
+      - membership_category
+      - household_or_role_if_applicable
+      - consent_records
+    forbidden_daily_output:
+      - raw_name
+      - raw_phone
+      - raw_address
+      - document_number
+
+  step_04_human_review:
+    reviewer:
+      - association_staff
+      - authorized_role
+    checks:
+      - duplicate_member_check
+      - consent_complete
+      - role_scope_valid
+      - supporting_document_exists_if_required
+    decision:
+      - approve
+      - reject
+      - need_more_info
+      - dead_letter
+
+  step_05_member_code_generation:
+    when: approval_passed
+    create:
+      - member_id_internal
+      - member_7d_identity_code
+      - pseudonymous_service_code
+      - member_agent_proxy
+      - consent_ledger
+      - service_scope_ledger
+
+  step_06_first_login:
+    output_to_user:
+      - registration_success
+      - member_service_available
+      - privacy_notice
+      - how_to_revoke_or_update_consent
+    do_not_output:
+      - raw_identity_data
+      - other_member_data
+      - admin_notes
+
+  step_07_service_use:
+    common_functions:
+      - member_notice
+      - service_request
+      - AI usage assistance
+      - privacy protected contact mediation
+    customized_functions:
+      keyed_by:
+        - household_type
+        - role
+        - merchant_or_management_committee_relation
+        - care_need
+        - consent_scope
+
+red_team:
+  risks:
+    - oauth_account_takeover
+    - duplicate_registration
+    - merchant_attempts_contact_export
+    - staff_overcollection
+    - admin_plaintext_access
+    - device_loss
+  mitigation:
+    - provisional_state_before_review
+    - no_plaintext_daily_runtime
+    - consent_ledger
+    - service_result_only
+    - three_key_recovery
+    - dead_letter_for_sensitive_requests

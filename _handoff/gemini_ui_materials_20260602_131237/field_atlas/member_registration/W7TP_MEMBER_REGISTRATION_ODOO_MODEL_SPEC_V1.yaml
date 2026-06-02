@@ -1,0 +1,93 @@
+spec_id: W7TP_MEMBER_REGISTRATION_ODOO_MODEL_SPEC_V1
+status: design_draft
+purpose: Odoo 會員註冊模型規格
+
+odoo_modules:
+  candidate_existing:
+    - taiji_member_login
+    - wuchang_line_login
+    - pm3_runtime_sync
+    - wuchang_property_local_cloud
+
+models_to_add_or_align:
+  wuchang.member.registration:
+    purpose: 暫定註冊單
+    fields:
+      - provisional_member_id
+      - registration_channel
+      - review_status
+      - consent_version
+      - consent_timestamp
+      - reviewer_id
+      - dead_letter_reason
+    no_plaintext_runtime_rule: true
+
+  wuchang.member.identity.code:
+    purpose: 會員7D身份碼與服務碼
+    fields:
+      - member_id
+      - identity_code_7d
+      - service_code_masked
+      - role_scope
+      - service_scope
+      - active_status
+    raw_pii: false
+
+  wuchang.member.external.auth:
+    purpose: LINE/Google/Odoo登入綁定
+    fields:
+      - member_id
+      - provider
+      - provider_subject_hash
+      - binding_status
+      - consent_ref
+      - last_login_at
+    forbidden_fields:
+      - raw_access_token
+      - raw_refresh_token
+      - client_secret
+
+  wuchang.member.consent.ledger:
+    purpose: 同意、撤回、用途限制
+    fields:
+      - member_id
+      - consent_type
+      - purpose
+      - allowed_until
+      - revoked_at
+      - audit_hash
+
+  wuchang.member.recovery.case:
+    purpose: 設備遺失/身份復原
+    fields:
+      - case_id
+      - applicant_type
+      - review_status
+      - key_custody_required
+      - approval_count
+      - audit_hash
+      - sealed_again_at
+
+security_groups:
+  association_reviewer:
+    can:
+      - review_registration
+      - see_minimum_review_fields
+    cannot:
+      - export_raw_member_list
+      - read_sealed_identity
+
+  member_self:
+    can:
+      - view_status
+      - revoke_consent
+      - request_recovery
+    cannot:
+      - view_raw_sealed_data_by_default
+
+  merchant:
+    can:
+      - request_member_approved_contact
+    cannot:
+      - browse_member_contact_list
+      - export_member_identity

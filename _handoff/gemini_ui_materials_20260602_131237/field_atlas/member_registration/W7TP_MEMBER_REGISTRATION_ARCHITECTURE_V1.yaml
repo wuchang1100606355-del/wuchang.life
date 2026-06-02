@@ -1,0 +1,73 @@
+spec_id: W7TP_MEMBER_REGISTRATION_ARCHITECTURE_V1
+status: design_draft
+purpose: 五常智慧雲 / 小J / W7TP 會員註冊總架構
+
+core_principle:
+  - 會員是系統使用者 user，不是外部訪客
+  - 註冊不是收集資料，而是建立受治理的會員服務代理
+  - 原始個資只做身份確認與法定/章程必要治理
+  - 日常系統使用去識別會員碼、7D身份碼、session token、role permission
+  - LINE/Google/Odoo 登入只作入口與綁定，不等於完整會員身份
+
+registration_layers:
+  L0_guest_entry:
+    description: 來賓入口
+    allowed:
+      - 查看公開資訊
+      - 提交入會意願
+      - 啟動 LINE/Google/Odoo 註冊流程
+    denied:
+      - 會員服務
+      - 個資查詢
+      - 商家聯絡
+      - 公益額度使用
+
+  L1_provisional_member:
+    description: 暫定會員 / 待審狀態
+    trigger:
+      - LINE OAuth
+      - Google OAuth
+      - Odoo form
+      - staff assisted registration
+    allowed:
+      - 建立 provisional_member_id
+      - 建立外部登入綁定
+      - 提交最小必要資料
+      - 等候人工審核
+    denied:
+      - 會員正式權益
+      - 商家聯絡授權
+      - 敏感服務
+
+  L2_verified_member:
+    description: 人工審核通過之正式會員
+    created:
+      - member_id
+      - 7d_identity_code
+      - member_agent_profile
+      - consent_ledger
+      - service_scope
+    daily_use:
+      - pseudonymous_member_code
+      - session_token
+      - role_flags
+      - service_result_only
+
+  L3_sensitive_recovery:
+    description: 設備遺失 / 身份復原 / 原始個資解封
+    required:
+      - 本人或合法委託親屬申請
+      - 人工審查
+      - 三金鑰或門檻核准
+      - audit_hash
+      - time_limited_access
+      - re-seal after use
+
+hard_boundaries:
+  - no_plaintext_member_data_to_cloud
+  - no_member_contact_export_to_merchants
+  - no_admin_single_person_decryption
+  - no_wifi_presence_as_identity
+  - no_oauth_login_as_final_membership
+  - no_secret_in_repo
+  - no_db_write_without_migration_packet
