@@ -1,0 +1,56 @@
+<odoo>
+    <record id="user_wuchang_gmail" model="res.users">
+        <field name="name">營運長</field>
+        <field name="login">wuchaog1100606355@gmail.com</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_general_manager')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_volunteer_admin" model="res.users">
+        <field name="name">志工平台管理員</field>
+        <field name="login">vol_admin@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_volunteer_admin')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_volunteer_member" model="res.users">
+        <field name="name">志工平台使用者</field>
+        <field name="login">vol_user@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_volunteer_user')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_property_admin" model="res.users">
+        <field name="name">物業平台管理員</field>
+        <field name="login">hoa_admin@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_property_admin')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_property_member" model="res.users">
+        <field name="name">物業平台使用者</field>
+        <field name="login">hoa_user@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_property_user')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_business_admin" model="res.users">
+        <field name="name">商業平台管理員</field>
+        <field name="login">biz_admin@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_business_admin')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_business_member" model="res.users">
+        <field name="name">商業平台使用者</field>
+        <field name="login">biz_user@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_business_user')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_services_admin" model="res.users">
+        <field name="name">服務平台管理員</field>
+        <field name="login">serv_admin@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_services_admin')])]"/>
+        <field name="active">True</field>
+    </record>
+    <record id="user_services_member" model="res.users">
+        <field name="name">服務平台使用者</field>
+        <field name="login">serv_user@wuchang.life</field>
+        <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('wuchang_core.group_wuchang_services_user')])]"/>
+        <field name="active">True</field>
+    </record>
+</odoo>

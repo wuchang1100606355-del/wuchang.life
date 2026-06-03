@@ -1,0 +1,26 @@
+registry_id: W7TP_UNIVERSE_REGISTRY
+
+field:
+  name: WUCHANG_UNIVERSE_TOTAL_FIELD
+  owner: CHIANG_CHENG_LUNG
+
+universes:
+  - id: U02_SOURCE_UNIVERSE
+    path: /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+    role: source_of_truth_candidate
+    deployable: false
+
+  - id: U03_MSI_TWIN_CARRIER
+    path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+    role: active_development_twin
+    deployable: sandbox_first
+
+  - id: U04_TAIJI01_RUNTIME_CARRIER
+    path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons
+    role: stable_runtime_carrier
+    deployable: approval_required
+
+  - id: U05_VIRTUAL_SANDBOX
+    path: runtime/sandbox/odoo_sync_validation
+    role: validation_field
+    deployable: false

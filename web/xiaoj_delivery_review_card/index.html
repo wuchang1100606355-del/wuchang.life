@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小J志工外送審核卡</title>
+<style>
+body{font-family:system-ui,"Noto Sans TC",sans-serif;background:#f6f7f9;color:#111827;margin:0;padding:18px}
+.wrap{max-width:900px;margin:auto}
+.card{background:white;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.field{background:#f3f4f6;border-radius:12px;padding:12px}
+.label{font-size:12px;color:#6b7280}
+.value{font-size:18px;font-weight:700;margin-top:4px;word-break:break-word}
+button,input{font-size:16px;padding:10px;border-radius:10px;border:1px solid #d1d5db;margin:4px}
+.ok{color:#047857;font-weight:800}.warn{color:#b45309;font-weight:800}.bad{color:#b91c1c;font-weight:800}
+.actions button{font-weight:800}
+pre{white-space:pre-wrap;background:#111827;color:#e5e7eb;padding:12px;border-radius:12px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>小J志工外送審核卡</h1>
+<p>PLANONLY / DESIGN ONLY。不連外、不寫 Odoo、不讀 secrets。手動匯入 mock JSON。</p>
+<div class="card">
+<h2>匯入外送草稿 JSON</h2>
+<input type="file" id="file" accept=".json,application/json">
+<button onclick="loadDemo()">載入內建範例</button>
+<div id="status" class="warn">尚未匯入</div>
+</div>
+<div class="card">
+<h2>審核資訊</h2>
+<div class="grid" id="fields"></div>
+</div>
+<div class="card actions">
+<h2>PLANONLY 審核動作</h2>
+<button onclick="setDecision(`approve_to_waiting_volunteer_accept`)">通過草稿</button>
+<button onclick="setDecision(`request_more_info`)">退回補資料</button>
+<button onclick="setDecision(`human_care_review`)">轉人工關懷</button>
+<button onclick="setDecision(`dead_letter_review`)">進入 DLQ</button>
+<button onclick="setDecision(`cancelled_by_requester`)">取消申請</button>
+<pre id="decision">尚未選擇</pre>
+</div>
+<div class="card">
+<h2>Hardwall</h2>
+<ul>
+<li>不自動派高風險單</li>
+<li>不送姓名、電話、精確地址、即時位置到雲端</li>
+<li>不讓 AI 直接完成派單或結案</li>
+<li>不寫 Odoo</li>
+<li>不啟動服務</li>
+</ul>
+</div>
+</div>
+<script>
+let current=null;
+const keys=["request_id","source","requester_hash","requester_role","pickup_area","dropoff_area","item_type","delivery_note_summary","status","pii_unlock_stage","high_risk_flags","staff_review_required","volunteer_verified_required","service_close_stage"];
+function esc(x){return String(x).replace(/[&<>"\047]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\047":"&#039;"}[c]));}
+function render(o){current=o;document.getElementById("status").innerHTML="<span class=ok>已載入草稿</span>";document.getElementById("fields").innerHTML=keys.map(k=>"<div class=field><div class=label>"+esc(k)+"</div><div class=value>"+esc(Array.isArray(o[k])?o[k].join(", "):(o[k]??""))+"</div></div>").join("");}
+document.getElementById("file").addEventListener("change",async e=>{let f=e.target.files[0];if(!f)return;try{render(JSON.parse(await f.text()))}catch(err){document.getElementById("status").innerHTML="<span class=bad>JSON 載入失敗</span> "+esc(err.message)}});
+function loadDemo(){render({"request_id":"mock_delivery_001","source":"LINE","requester_hash":"resident_hash_demo","requester_role":"resident","pickup_area":"merchant_area_A","dropoff_area":"building_B_area_only","item_type":"food","delivery_note_summary":"便當一份，區域級派送資訊，無姓名電話門牌","status":"waiting_staff_review","pii_unlock_stage":"area_only","high_risk_flags":[],"staff_review_required":true,"volunteer_verified_required":true,"service_close_stage":"draft"});}
+function setDecision(d){let out={"decision":d,"plan_only":true,"odoo_write":false,"human_confirmation_required":true,"request_id":current?current.request_id:null,"created_at":new Date().toISOString()};document.getElementById("decision").textContent=JSON.stringify(out,null,2);}
+</script>
+</body>
+</html>

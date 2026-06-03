@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/taiji/pos_service_intent.schema.json",
+  "title": "Taiji POS and Service Intent Manifest",
+  "description": "Non-secret, auditable intent manifest for POS ordering and business service interfaces. Raw speech/text should be hashed or redacted unless explicitly classified as non-sensitive.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "source",
+    "raw_text_hash",
+    "parsed_intent",
+    "items",
+    "options",
+    "node_identity",
+    "data_sensitivity",
+    "action_intent",
+    "permission_window",
+    "reversibility_public_value",
+    "risk_level",
+    "requires_human_confirmation",
+    "allowed_action",
+    "audit_required",
+    "rollback_required",
+    "target_system",
+    "created_at"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel", "node"],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "enum": ["voice_placeholder", "text_input", "kiosk_ui", "staff_ui", "service_counter", "test_fixture"]
+        },
+        "node": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "operator_role": {
+          "type": "string",
+          "maxLength": 128
+        }
+      }
+    },
+    "raw_text_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "raw_text_redacted_summary": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "raw_text_stored": {
+      "type": "boolean",
+      "default": false
+    },
+    "parsed_intent": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["intent_type"],
+      "properties": {
+        "intent_type": {
+          "$ref": "#/$defs/intent_type"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "operation": {
+          "type": "string",
+          "maxLength": 128
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "qty"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "qty": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "options": {
+            "type": "object",
+            "additionalProperties": {
+              "type": ["string", "number", "boolean", "null"]
+            }
+          },
+          "menu_code": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "price_delta": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number", "boolean", "array", "object", "null"]
+      }
+    },
+    "node_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "data_sensitivity": {
+      "type": "string",
+      "enum": [
+        "public_menu_data",
+        "non_sensitive_metadata",
+        "order_draft",
+        "transaction_reference",
+        "customer_personal_data",
+        "payment_sensitive_data",
+        "secret_or_token"
+      ]
+    },
+    "action_intent": {
+      "$ref": "#/$defs/intent_type"
+    },
+    "permission_window": {
+      "type": "string",
+      "enum": [
+        "design",
+        "development",
+        "testing",
+        "governance",
+        "finance_accounting",
+        "deployment_preparation",
+        "runtime"
+      ]
+    },
+    "reversibility_public_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reversible", "public_or_service_value", "rollback_note"],
+      "properties": {
+        "reversible": {
+          "type": "boolean"
+        },
+        "public_or_service_value": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "rollback_note": {
+          "type": "string",
+          "maxLength": 512
+        }
+      }
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["L0", "L1", "L2", "L3"]
+    },
+    "requires_human_confirmation": {
+      "type": "boolean"
+    },
+    "allowed_action": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "rollback_required": {
+      "type": "boolean"
+    },
+    "target_system": {
+      "type": "string",
+      "enum": ["pos_draft", "odoo_draft", "service_desk_draft", "display_status", "audit_only", "blocked"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "intent_type": {
+      "type": "string",
+      "enum": [
+        "menu_query",
+        "pos_order_create",
+        "pos_order_modify",
+        "pos_order_cancel_item",
+        "pos_order_confirm",
+        "payment_prepare",
+        "payment_execute",
+        "service_request",
+        "display_update",
+        "staff_assist",
+        "manager_override"
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_wuchang_google_member" model="ir.ui.view">
+        <field name="name">res.partner.form.wuchang.google.member</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="WuChang Member">
+                    <group>
+                        <field name="wuchang_member_join_source" readonly="1"/>
+                        <field name="wuchang_google_sub" readonly="1"/>
+                        <field name="wuchang_google_email_verified" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

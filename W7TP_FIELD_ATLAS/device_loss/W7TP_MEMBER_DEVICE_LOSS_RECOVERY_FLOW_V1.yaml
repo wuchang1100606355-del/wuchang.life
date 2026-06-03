@@ -1,0 +1,38 @@
+flow_id: W7TP_MEMBER_DEVICE_LOSS_RECOVERY_FLOW_V1
+status: PLAN_ONLY
+
+purpose:
+  - recover_member_access_when_device_is_lost
+  - prevent_impersonation
+  - preserve_member_privacy_and_accountability
+
+trigger:
+  - member_reports_device_lost
+  - delegated_family_reports_device_lost
+  - abnormal_device_activity_detected
+
+flow:
+  - receive_loss_report
+  - suspend_lost_device_session
+  - verify_member_or_delegated_family
+  - issue_temporary_recovery_ticket
+  - require_xiaoj_review_opinion_plus_final_authorization
+  - rebind_new_device
+  - revoke_old_device_token
+  - audit_and_weekly_key_holder_review
+
+forbidden:
+  - reveal_raw_plaintext_to_reporter_by_default
+  - rebind_without_identity_review
+  - keep_old_device_active_after_rebind
+  - bypass_audit
+
+red_team_reflection:
+  negative_effects:
+    - attacker_may_claim_device_loss_to_take_over_account
+    - emergency_recovery_may_pressure_staff_to_skip_review
+  mitigation:
+    - temporary_suspension_first
+    - xiaoj_review_opinion_plus_final_authorization_required
+    - threshold_key_for_high_risk_recovery
+    - audit_hash_and_post_review

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Taiji Context Replay Index",
+  "type": "object",
+  "required": [
+    "context_id",
+    "task_id",
+    "packet_hash",
+    "nonce",
+    "issued_at",
+    "expires_at",
+    "sequence",
+    "max_replay"
+  ],
+  "properties": {
+    "context_id": { "type": "string" },
+    "task_id": { "type": "string" },
+    "packet_hash": { "type": "string" },
+    "parent_hash": { "type": ["string", "null"] },
+    "nonce": { "type": "string" },
+    "issued_at": { "type": "string" },
+    "expires_at": { "type": "string" },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_replay": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "seen_before": {
+      "type": "boolean",
+      "default": false
+    },
+    "decision_on_replay": {
+      "enum": ["deadbox", "reject", "manual_review"]
+    }
+  }
+}

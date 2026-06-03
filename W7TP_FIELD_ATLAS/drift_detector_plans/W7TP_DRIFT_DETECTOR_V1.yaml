@@ -1,0 +1,78 @@
+drift_detector_id: W7TP_DRIFT_DETECTOR_V1
+status: PLAN_ONLY
+
+purpose:
+  - detect_source_twin_runtime_drift
+  - prevent_wrong_runtime_landing
+  - create_metric_alerts_before_sync
+
+field_roles:
+  U02_SOURCE_UNIVERSE:
+    expected_path: /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+    role: source_of_truth_candidate
+
+  U03_MSI_TWIN_CARRIER:
+    expected_path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+    role: active_development_twin
+
+  U04_TAIJI01_RUNTIME_CARRIER:
+    expected_path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+    role: stable_runtime_carrier
+
+fingerprint_components:
+  - file_count
+  - manifest_hash
+  - python_file_hashes
+  - xml_file_hashes
+  - missing_files
+  - extra_files
+  - forbidden_secret_literal_hits
+  - universe_packet_presence
+
+drift_levels:
+  CLEAR:
+    condition: source_hash_equals_twin_hash_and_runtime_declared_expected_state
+  LOW:
+    condition: minor_non_runtime_difference
+  MEDIUM:
+    condition: source_twin_partial_difference_or_missing_optional_component
+  HIGH:
+    condition: runtime_missing_required_addon_or_secret_literal_hard_block
+  CRITICAL:
+    condition: runtime_modified_without_plan_or_dual_master_detected
+
+outputs:
+  - W7TP_FIELD_ATLAS/drift_reports/drift_report_*.yaml
+  - Taiji_Governance/drift_detector_report_*.md
+
+actions:
+  CLEAR:
+    - allow_next_plan_step
+  LOW:
+    - record_notice
+  MEDIUM:
+    - require_review
+  HIGH:
+    - block_runtime_landing
+  CRITICAL:
+    - quarantine_candidate
+    - require_xiaoj_review_opinion_plus_final_authorization
+
+governance:
+  no_auto_sync: true
+  no_runtime_write: true
+  no_restart: true
+  no_secret_print: true
+  plan_only: true
+
+red_team_reflection:
+  negative_effects:
+    - detector may overreact to harmless file ordering or generated files
+    - source path may not exist on taiji01
+    - missing runtime addon may be intentional during development
+    - hash-only comparison cannot detect semantic compatibility
+  mitigation:
+    - classify expected_missing vs unexpected_missing
+    - compare only tracked addon source files first
+    - pair with sandbox validation and server acceptance
+    - keep action as alert/block only, not auto-fix

@@ -1,0 +1,15 @@
+boot_order:
+  - taiji-preflight
+  - taiji-gateway
+  - taiji-admin-node
+  - taiji-edge-nodes
+  - taiji-docker-stack
+  - taiji-healthcheck
+
+required_paths:
+  - 01_admin/boot/root_authority_guard.yaml
+  - 01_admin/boot/boot_policy.yaml
+  - services/gateway
+  - runtime/state
+  - runtime/ledger
+  - runtime/dead_letter

@@ -1,0 +1,40 @@
+{
+  "event": "taiji01_dual_identity_record_loaded",
+  "status": "ACTIVE",
+  "version": "2026-05-12",
+  "host": "taiji01",
+  "identities": [
+    {
+      "identity_id": "TDI-HOST-taiji01-runtime-host",
+      "role": "system_runtime_host",
+      "write_windows": [
+        "local_ssh_connection",
+        "local_console_operation",
+        "metric_governed_write"
+      ],
+      "default_write_permission": "blocked"
+    },
+    {
+      "identity_id": "TDI-NODE-vpn-server-01",
+      "role": "vpn_topology_gateway_node",
+      "tailscale_ip": "100.71.224.18",
+      "default_write_permission": "blocked",
+      "readonly_status_allowed": true
+    }
+  ],
+  "blocked_l3": [
+    "ungoverned_remote_automated_write",
+    "vpn_topology_bypass",
+    "audit_deletion",
+    "rollback_bypass",
+    "secret_material_output"
+  ],
+  "references": [
+    "Taiji_Governance/identity/identity_architecture.md",
+    "Taiji_Governance/identity/multi_governance_identity.md",
+    "Taiji_Governance/runtime/identity/topology_trust_graph.md",
+    "Taiji_Governance/policies/system_host_write_boundary_policy_2026-05-12.md"
+  ],
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

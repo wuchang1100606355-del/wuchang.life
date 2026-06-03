@@ -1,0 +1,14 @@
+dead_letter_canonical_map:
+  routing_rejected: runtime/dead_letter/routing_rejected.jsonl
+  general_rejected_tasks: runtime/dead_letter/rejected_tasks.jsonl
+  boot_rejected: runtime/dead_letter/boot_rejected.jsonl
+  edge_node_rejected: runtime/dead_letter/edge_node_rejected.jsonl
+  ui_03_rejected: runtime/dead_letter/ui_03_rejected.jsonl
+  native_claw_rejected: runtime/dead_letter/native_claw_rejected.jsonl
+  kan_yu_hardwall: runtime/dead_letter/kan_yu_dead_letter.jsonl
+
+rules:
+  append_only: true
+  no_auto_replay: true
+  no_auto_execute: true
+  human_review_required_for_high_risk: true

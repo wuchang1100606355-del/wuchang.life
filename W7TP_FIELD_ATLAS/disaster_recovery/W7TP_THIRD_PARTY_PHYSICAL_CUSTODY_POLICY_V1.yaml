@@ -1,0 +1,45 @@
+policy_id: W7TP_THIRD_PARTY_PHYSICAL_CUSTODY_POLICY_V1
+status: PLAN_ONLY
+
+principle:
+  association_role:
+    - third_party_physical_custody
+    - humanitarian_information_security_guardian
+    - disaster_recovery_and_accountability_center
+
+plaintext_position:
+  association_may_hold_legal_minimum_plaintext: true
+  daily_service_uses_8d_code: true
+  plaintext_not_for_merchant_daily_use: true
+
+custody_requirements:
+  - physical_or_local_control
+  - encrypted_storage
+  - access_log
+  - xiaoj_review_opinion_plus_final_authorization
+  - threshold_key_for_high_risk
+  - reseal_after_use
+
+disaster_recovery_use_cases:
+  - member_device_lost
+  - emergency_care
+  - disaster_relief
+  - lawful_committee_request
+  - accountability_investigation
+
+forbidden:
+  - merchant_direct_plaintext_custody_by_default
+  - cloud_plaintext_export_without_review
+  - single_person_high_risk_decryption
+  - indefinite_plaintext_open_access
+
+red_team_reflection:
+  negative_effects:
+    - association_becomes_high_value_attack_target
+    - disaster_recovery_may_be_used_as_excuse_for_overcollection
+    - custody_process_may_slow_urgent_service
+  mitigation:
+    - minimum_necessary_collection
+    - three_key_or_threshold_review_for_high_risk
+    - emergency_path_with_post_review
+    - audit_hash_and_reseal

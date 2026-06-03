@@ -1,0 +1,61 @@
+route_table_id: WUCHANG_FIELD_GOVERNANCE_ROUTE_TABLE_V1
+status: ACTIVE_PLAN_ONLY
+
+routes:
+  identity_or_8d_request:
+    field: U04_IDENTITY_PRIVACY_FIELD
+    sub_universe: SU_IDENTITY_8D
+    review: low_to_medium
+
+  merchant_contact_request:
+    field: U04_IDENTITY_PRIVACY_FIELD
+    sub_universe: SU_CONTACT_APPROVAL
+    review: member_approval_required
+
+  plaintext_claim_request:
+    field: U04_IDENTITY_PRIVACY_FIELD
+    sub_universe: SU_PLAINTEXT_CLAIM
+    review: xiaoj_review_opinion_plus_final_authorization_required
+
+  high_risk_plaintext_unlock:
+    field: U04_IDENTITY_PRIVACY_FIELD
+    sub_universe: SU_THREE_KEY_CUSTODY
+    review: threshold_key_required
+
+  merchant_subscription_request:
+    field: U06_ECONOMIC_BLOODMAKING_FIELD
+    sub_universe: SU_MERCHANT_SUBSCRIPTION
+    review: node_policy_required
+
+  addon_market_request:
+    field: U06_ECONOMIC_BLOODMAKING_FIELD
+    sub_universe: SU_STANDARD_ADDON_MARKET
+    review: addon_validation_required
+
+  runtime_landing_request:
+    field: U08_TWIN_SYNC_FIELD
+    sub_universe: SU_SERVER_ACCEPTANCE
+    review: human_approval_required
+
+  field_drift_alert:
+    field: U08_TWIN_SYNC_FIELD
+    sub_universe: SU_FIELD_DRIFT
+    review: block_runtime_landing_if_high
+
+  gei_context_request:
+    field: U07_GEI_CONTEXT_FIELD
+    sub_universe: SU_GEI_DECISION_CONTEXT
+    review: source_refs_required
+
+forbidden_routes:
+  - merchant_to_raw_plaintext_without_claim
+  - runtime_landing_without_server_acceptance
+  - secret_sync_to_group_node
+  - gei_context_as_runtime_truth_without_refs
+
+red_team_reflection:
+  negative_effects:
+    - wrong_route_can_send_sensitive_request_to_low_review_path
+  mitigation:
+    - high_risk_keywords_force_xiaoj_review_opinion_plus_final_authorization
+    - default_unknown_route_to_dead_letter

@@ -1,0 +1,40 @@
+gate_id: sub_universe_memory_gate_v1
+purpose: Classify whether a concept should enter W7TP sub-universe memory.
+mode: docs_index_only
+
+memory_levels:
+  - CORE_MEMORY
+  - SUB_UNIVERSE_INDEX
+  - EVENT_LOG
+  - DISCARD
+  - FORBIDDEN
+
+rule:
+  core_memory: "Only long-term stable definitions, governance rules, architecture principles, and mission-level concepts."
+  sub_universe_index: "Important concepts or modules that should be indexed but not treated as permanent core law."
+  event_log: "Current status snapshots, checks, progress, test results, and evidence records."
+  discard: "Temporary debug noise, repeated text, short-lived opinions, or shell-command clutter."
+  forbidden: "Secrets, credentials, raw PII, OAuth/session data, resident/member private data."
+
+forbidden_do_not_store:
+  - api_key
+  - token
+  - password
+  - private_key
+  - oauth_code
+  - session_cookie
+  - raw_member_data
+  - resident_pii
+  - phone_number
+  - address
+  - id_number
+  - full_vpn_ip_list
+  - raw_intent_when_sensitive
+  - temporary_session_key
+
+output_schema:
+  decision: "CORE_MEMORY | SUB_UNIVERSE_INDEX | EVENT_LOG | DISCARD | FORBIDDEN"
+  target_universe: "Uxx_name"
+  memory_sentence: "one compressed sentence only"
+  do_not_store: []
+  red_team_note: "risk note or none"

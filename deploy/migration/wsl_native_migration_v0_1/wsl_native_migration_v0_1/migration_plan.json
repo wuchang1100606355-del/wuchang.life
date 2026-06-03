@@ -1,0 +1,41 @@
+{
+  "package": "wsl_native_migration_v0_1",
+  "mode": "conservative_local_copy",
+  "default_source": "/mnt/c/Users/o0930/Taiji_Hub",
+  "default_target": "/home/taiji_admin/Taiji_Hub",
+  "dry_run_default": true,
+  "overwrite_existing_files": false,
+  "delete_source": false,
+  "start_services": false,
+  "external_api": "not_called",
+  "secret_material": "not_printed",
+  "excluded_by_default": [
+    ".git",
+    ".taiji_runtime*",
+    "__pycache__",
+    ".pytest_cache",
+    ".venv",
+    "node_modules",
+    ".env",
+    "*.env",
+    "*.key",
+    "*.pem",
+    "*token*",
+    "*secret*",
+    "*credential*",
+    "*credentials*",
+    "*service_account*.json",
+    "*oauth*.json"
+  ],
+  "post_migration_required": [
+    "POST_MIGRATION_VERIFY.sh",
+    "PREFLIGHT.sh",
+    "HASH_SCRIPT.sh"
+  ],
+  "risk_rating": {
+    "dry_run": "L0_exact_match",
+    "local_copy": "L1_near",
+    "service_cutover": "L2_drift",
+    "production_start": "L3_metric_hazard_without_human_approval"
+  }
+}

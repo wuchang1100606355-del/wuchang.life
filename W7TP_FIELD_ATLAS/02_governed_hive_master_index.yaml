@@ -1,0 +1,96 @@
+index_id: W7TP_GOVERNED_HIVE_MASTER_INDEX
+status: PLAN_ONLY
+
+root_plan:
+  file: W7TP_FIELD_ATLAS/restructure_plans/W7TP_GOVERNED_HIVE_RESTRUCTURE_V1.yaml
+
+module_map:
+  file: W7TP_FIELD_ATLAS/module_maps/W7TP_GOVERNED_HIVE_MODULE_MAP_V1.yaml
+
+schema_index:
+  file: W7TP_FIELD_ATLAS/schemas/00_schema_index.yaml
+
+odoo_refactor_plan:
+  file: W7TP_FIELD_ATLAS/odoo_refactor_plans/PM3_RUNTIME_SYNC_SPLIT_PLAN_V1.yaml
+
+sandbox_validation_plan:
+  file: W7TP_FIELD_ATLAS/validation_plans/W7TP_MODULE_SPLIT_SANDBOX_VALIDATION_V1.yaml
+
+runtime_landing_gate:
+  file: W7TP_FIELD_ATLAS/runtime_landing_plans/W7TP_RUNTIME_LANDING_GATE_V1.yaml
+
+rollback_policy:
+  file: W7TP_FIELD_ATLAS/rollback_plans/W7TP_RUNTIME_ROLLBACK_POLICY_V1.yaml
+
+universe_registry:
+  file: W7TP_FIELD_ATLAS/01_universe_registry.yaml
+
+event_registry:
+  file: W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+
+current_governance_state:
+  no_runtime_copy: true
+  no_restart: true
+  no_db_write: true
+  no_secret_sync: true
+  plan_only: true
+
+next_required:
+  - create_governed_hive_task_board
+  - create_module_dependency_graph
+  - create_no_secret_linter_plan
+  - create_drift_detector_v1_plan
+
+task_board:
+  file: W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+gei_context_field:
+  file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+field_registration_v2:
+  total_field_registry: W7TP_FIELD_ATLAS/registries/WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2.yaml
+  sub_universe_registry: W7TP_FIELD_ATLAS/registries/WUCHANG_SUB_UNIVERSE_REGISTRY_V1.yaml
+  field_to_sub_universe_map: W7TP_FIELD_ATLAS/field_maps/WUCHANG_FIELD_TO_SUB_UNIVERSE_MAP_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+registration_mount_layer:
+  module_mount_map: W7TP_FIELD_ATLAS/module_mounts/WUCHANG_MODULE_TO_SUB_UNIVERSE_MOUNT_MAP_V1.yaml
+  governance_route_table: W7TP_FIELD_ATLAS/governance_routes/WUCHANG_FIELD_GOVERNANCE_ROUTE_TABLE_V1.yaml
+  function_to_module_map: W7TP_FIELD_ATLAS/function_maps/WUCHANG_FUNCTION_TO_MODULE_MAP_V1.yaml
+  registration_first_rule: W7TP_FIELD_ATLAS/registration_rules/WUCHANG_REGISTRATION_FIRST_RULE_V1.yaml
+  gei_context_routing_rule: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_ROUTING_RULE_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+registry_validation_layer:
+  registry_integrity_validator: W7TP_FIELD_ATLAS/registry_validators/WUCHANG_REGISTRY_INTEGRITY_VALIDATOR_V1.yaml
+  namespace_policy: W7TP_FIELD_ATLAS/namespace_policies/WUCHANG_NAMESPACE_CANONICAL_POLICY_V1.yaml
+  unregistered_route_dead_letter_policy: W7TP_FIELD_ATLAS/dead_letter/WUCHANG_UNREGISTERED_ROUTE_DEAD_LETTER_POLICY_V1.yaml
+  registry_status_report_template: W7TP_FIELD_ATLAS/registry_reports/WUCHANG_REGISTRY_STATUS_REPORT_TEMPLATE_V1.yaml
+  gei_registration_assistant_rule: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_REGISTRATION_ASSISTANT_RULE_V1.yaml
+  status: PLAN_ONLY
+
+canonicalization_layer:
+  keep_merge_alias_deprecate_matrix: W7TP_FIELD_ATLAS/canonicalization/WUCHANG_KEEP_MERGE_ALIAS_DEPRECATE_MATRIX_V1.yaml
+  status: PLAN_ONLY
+
+gei_context_field:
+  file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+gei_master_index:
+  file: W7TP_FIELD_ATLAS/gei_context/00_GEI_MASTER_INDEX.yaml
+  status: CHAPTER_CLOSED
+
+mainline_file_sync_strategy:
+  file: W7TP_FIELD_ATLAS/sync_strategies/W7TP_MAINLINE_FILE_SYNC_STRATEGY_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+parallel_sync_lane_map:
+  file: W7TP_FIELD_ATLAS/sync_strategies/W7TP_PARALLEL_SYNC_LANE_MAP_V1.yaml
+  status: ACTIVE_PLAN_ONLY
+
+parallel_safe_sync_executor_plan:
+  file: W7TP_FIELD_ATLAS/sync_executors/W7TP_PARALLEL_SAFE_SYNC_EXECUTOR_PLAN_V1.yaml
+  status: PLAN_ONLY

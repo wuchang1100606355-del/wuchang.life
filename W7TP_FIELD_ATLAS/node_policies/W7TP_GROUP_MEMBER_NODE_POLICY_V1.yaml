@@ -1,0 +1,51 @@
+policy_id: W7TP_GROUP_MEMBER_NODE_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - define governed hive node rules for merchants, committees, group members
+
+node_types:
+  merchant_node:
+    allowed:
+      - use_8d_service_result
+      - request_member_contact_with_approval
+      - subscribe_standard_addons
+    forbidden:
+      - store_raw_member_contact_without_approval
+      - export_member_list
+      - cross_purpose_tracking
+
+  committee_node:
+    allowed:
+      - lawful_plaintext_claim_request
+      - use_8d_service_result
+      - subscribe_governance_modules
+    plaintext_rule:
+      xiaoj_review_opinion_plus_final_authorization_required: true
+      legal_basis_required: true
+      minimum_necessary: true
+
+  community_service_node:
+    allowed:
+      - welfare_service_request
+      - volunteer_coordination
+      - 8d_identity_check
+    forbidden:
+      - raw_pii_export
+
+registration_required:
+  - node_id
+  - organization_type
+  - service_scope
+  - odoo_db_or_tenant_location
+  - public_endpoint_reference
+  - allowed_8d_services
+
+red_team_reflection:
+  negative_effects:
+    - nodes_may_misunderstand_service_result_as_member_data_right
+    - committee_plaintext_claim_may_be_overused
+  mitigation:
+    - default_no_plaintext
+    - member_contact_requires_approval
+    - plaintext_claim_requires_xiaoj_review_opinion_plus_final_authorization

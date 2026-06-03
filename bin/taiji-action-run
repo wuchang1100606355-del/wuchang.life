@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+TAIJI_ROOT = Path("/home/taiji_admin/Taiji_Hub")
+REGISTRY_PATH = TAIJI_ROOT / "config" / "action_registry.json"
+GUARDED_RUN = TAIJI_ROOT / "bin" / "taiji-guarded-run"
+
+def load_registry():
+    with REGISTRY_PATH.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+def main():
+    parser = argparse.ArgumentParser(description="Taiji unified action registry runner")
+    parser.add_argument("--action", required=True)
+    parser.add_argument("--actor", default=None)
+    parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--list", action="store_true")
+    parser.add_argument("command", nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+
+    registry = load_registry()
+    actions = registry.get("actions", {})
+
+    if args.list:
+        print(json.dumps(actions, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.action not in actions:
+        print(f"unregistered_action={args.action}", file=sys.stderr)
+        print("default_policy=" + registry.get("default_policy", "deny_unregistered"), file=sys.stderr)
+        print("known_actions=" + ",".join(sorted(actions.keys())), file=sys.stderr)
+        return 44
+
+    action_def = actions[args.action]
+
+    if action_def.get("enabled") is not True:
+        print(f"disabled_action={args.action}", file=sys.stderr)
+        return 45
+
+    if not args.command or args.command[0] != "--":
+        print("missing_command_after_double_dash", file=sys.stderr)
+        return 2
+
+    command = args.command[1:]
+    if not command:
+        print("empty_command", file=sys.stderr)
+        return 2
+
+    current = action_def["current"]
+    actor = args.actor or registry.get("default_actor", "taiji_action_run")
+
+    cmd = [
+        str(GUARDED_RUN),
+        "--action", args.action,
+        "--current", json.dumps(current),
+        "--actor", actor
+    ]
+
+    if args.strict:
+        cmd.append("--strict")
+
+    cmd.append("--")
+    cmd.extend(command)
+
+    return subprocess.call(cmd)
+
+if __name__ == "__main__":
+    raise SystemExit(main())

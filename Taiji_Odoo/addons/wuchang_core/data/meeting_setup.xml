@@ -1,0 +1,122 @@
+<odoo>
+    <!-- 建立三方協作空間 -->
+    <record id="wuchang_three_party_space" model="wuchang.collab.space">
+        <field name="name">三方線上會議空間</field>
+        <field name="space_type">community_gm</field>
+        <field name="owner_id" ref="base.partner_admin"/>
+        <field name="active">True</field>
+    </record>
+
+    <!-- 建立三位人類參與者占位 -->
+    <record id="participant_human_1" model="res.partner">
+        <field name="name">人類參與者一</field>
+    </record>
+    <record id="participant_human_2" model="res.partner">
+        <field name="name">人類參與者二</field>
+    </record>
+    <record id="participant_human_3" model="res.partner">
+        <field name="name">人類參與者三</field>
+    </record>
+
+    <!-- 建立三位AI代理 -->
+    <record id="agent_ai_1" model="wuchang.ai.agent">
+        <field name="name">AI代理一</field>
+        <field name="agent_type">meeting</field>
+        <field name="role_type">connector</field>
+        <field name="capabilities">議程協助, 摘要, 行動項整理</field>
+    </record>
+    <record id="agent_ai_2" model="wuchang.ai.agent">
+        <field name="name">AI代理二</field>
+        <field name="agent_type">finance</field>
+        <field name="role_type">steward</field>
+        <field name="capabilities">成本分析, 策略建議</field>
+    </record>
+    <record id="agent_ai_3" model="wuchang.ai.agent">
+        <field name="name">AI代理三</field>
+        <field name="agent_type">ops</field>
+        <field name="role_type">steward</field>
+        <field name="capabilities">任務追蹤, 通知</field>
+    </record>
+
+    <record id="agent_time_governor" model="wuchang.ai.agent">
+        <field name="name">時間治理組</field>
+        <field name="agent_type">time</field>
+        <field name="role_type">steward</field>
+        <field name="capabilities">時程規劃, 閒置監控, 截止提醒</field>
+    </record>
+    <record id="agent_event_governor" model="wuchang.ai.agent">
+        <field name="name">事件治理組</field>
+        <field name="agent_type">event</field>
+        <field name="role_type">connector</field>
+        <field name="capabilities">事件蒐集, 分流, 通知與追蹤</field>
+    </record>
+
+    <record id="agent_satellite_research" model="wuchang.ai.agent">
+        <field name="name">衛星AI・研究</field>
+        <field name="agent_type">satellite</field>
+        <field name="role_type">connector</field>
+        <field name="capabilities">證據蒐集, 引用整理, 來源校驗</field>
+    </record>
+    <record id="agent_satellite_struct" model="wuchang.ai.agent">
+        <field name="name">衛星AI・結構</field>
+        <field name="agent_type">satellite</field>
+        <field name="role_type">steward</field>
+        <field name="capabilities">大綱生成, 驗收指標, 結構化輸出</field>
+    </record>
+    <record id="agent_satellite_critic" model="wuchang.ai.agent">
+        <field name="name">衛星AI・批判</field>
+        <field name="agent_type">satellite</field>
+        <field name="role_type">sentinel</field>
+        <field name="capabilities">反例檢查, 風險評估, 邊界與止損</field>
+    </record>
+
+    <record id="agent_assoc_admin_leader" model="wuchang.ai.agent">
+        <field name="name">協會庶務組長AI</field>
+        <field name="agent_type">assoc_admin</field>
+        <field name="role_type">steward</field>
+        <field name="description">協助秘書處處理協會行政庶務，含 Gmail 郵件分流與標註。</field>
+        <field name="responsibilities">監看協會官方 Gmail 收件匣與寄件匣, 依主旨與內容關鍵字將郵件標註為庶務、服務、組訓、活動或需請示, 對需請示案件加註說明並回報秘書處主帳號, 遵守知識庫中關於廣告郵件僅轉送對系統或公益有潛在價值內容之規則, 不得自行刪除或永遠忽略任何郵件。</field>
+        <field name="capabilities">Gmail 郵件監看與標籤, 任務分類建議, 行政庶務分流</field>
+        <field name="color_code">#f97316</field>
+    </record>
+
+    <record id="agent_assoc_service_leader" model="wuchang.ai.agent">
+        <field name="name">協會服務組長AI</field>
+        <field name="agent_type">assoc_service</field>
+        <field name="role_type">connector</field>
+        <field name="description">協助服務組處理志工相關資訊與任務分派，對標志願服務工作推廣平台之欄位與流程，僅提供建議與整理。</field>
+        <field name="responsibilities">協助整理志工名冊、服務時數與排班需求, 依據任務內容標示為志工服務相關或需請示, 提出志工關懷與出勤異常之提醒, 研究各級政府「志願服務工作推廣平台」與相關志願服務登錄系統的資料結構, 提出協會內部欄位與官方平台欄位的對照建議與示意流程, 但不具任何人事任免或考核決策權, 亦不得直接對外送出或修改官方平台資料。</field>
+        <field name="capabilities">志工任務分流建議, 名冊與排班需求整理, 服務時數與訓練紀錄結構建議, 對接官方志願服務平台之欄位規劃</field>
+        <field name="color_code">#22c55e</field>
+    </record>
+
+    <record id="agent_assoc_training_leader" model="wuchang.ai.agent">
+        <field name="name">協會組訓組長AI</field>
+        <field name="agent_type">assoc_training</field>
+        <field name="role_type">steward</field>
+        <field name="description">協助組訓組規劃課程架構與資料庫整理，系統性研究各類公私部門補助與徵件，並擔任宣傳與廣告文件的法規檢測協力，僅進行結構與紀錄建議。</field>
+        <field name="responsibilities">彙整課程與訓練需求, 建議課表結構與資料庫欄位, 協助標示課程相關任務歸屬組訓組或需請示, 系統性蒐集社區發展、志願服務、長照、青少年與婦女培力等相關補助或計畫徵件資訊, 解析公開徵件簡章與實際通過之案例, 整理共通欄位與評估指標, 基於協會與仁義店情境生成模擬提案草稿供秘書處審閱, 並對活動組送交之宣傳文案與廣告設計進行法規與平台政策檢測, 特別參考中華民國相關法規以及 Google 非營利計畫與相關服務條款對公益組織、廣告與內容的要求, 提出違規風險與修改建議, 但不得直接對外投件或承諾任何經費與成果。</field>
+        <field name="capabilities">課程結構建議, 訓練資料庫欄位構想, 任務分類輔助, 補助徵件欄位與指標分析, 模擬提案架構建議, 宣傳與廣告文件法規檢測建議</field>
+        <field name="color_code">#3b82f6</field>
+    </record>
+
+    <record id="agent_assoc_event_leader" model="wuchang.ai.agent">
+        <field name="name">協會活動組長AI</field>
+        <field name="agent_type">assoc_event</field>
+        <field name="role_type">connector</field>
+        <field name="description">協助活動組統整活動與宣傳需求，尋找可行宣傳管道並產生草案與分流建議。</field>
+        <field name="responsibilities">協助判讀各類對外活動與宣傳需求, 建議適合使用的宣傳管道與工具（如社群平台、官網、電子報、實體海報與合法廣告方案）, 提出活動企劃大綱與宣傳文案草稿, 協助標示活動相關任務歸屬活動組或需請示, 在流程上引導所有對外宣傳與廣告文件先送交組訓組長AI進行法規與平台政策檢測, 再送交庶務組長AI登記是否涉及預算動支與資金來源推理, 並將最終版本與相關風險摘要整理後送交秘書處主帳號請示, 活動組長AI本身不得自行發布任何對外公開訊息或更改活動決策。</field>
+        <field name="capabilities">活動企劃草案建議, 宣傳管道與文案構想, 對外活動任務分流, 宣傳流程引導與審核路徑提示</field>
+        <field name="color_code">#a855f7</field>
+    </record>
+
+    <!-- 建立會議（預設空間與參與者） -->
+    <record id="wuchang_three_party_meeting" model="wuchang.ai.meeting">
+        <field name="name">三方會議</field>
+        <field name="space_id" ref="wuchang_three_party_space"/>
+        <field name="human_ids" eval="[(6,0,[ref('participant_human_1'), ref('participant_human_2'), ref('participant_human_3')])]"/>
+        <field name="ai_agent_ids" eval="[(6,0,[ref('agent_ai_1'), ref('agent_ai_2'), ref('agent_ai_3'), ref('agent_time_governor'), ref('agent_event_governor'), ref('agent_satellite_research'), ref('agent_satellite_struct'), ref('agent_satellite_critic')])]"/>
+        <field name="state">planned</field>
+        <field name="final_decision_holder_id" ref="base.partner_admin"/>
+    </record>
+</odoo>

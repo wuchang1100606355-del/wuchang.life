@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_wuchang_order_tree" model="ir.ui.view">
+    <field name="name">wuchang.order.tree</field>
+    <field name="model">wuchang.order</field>
+    <field name="arch" type="xml">
+      <tree string="線上訂單">
+        <field name="name"/>
+        <field name="state"/>
+        <field name="customer_name"/>
+        <field name="phone"/>
+        <field name="sale_mode"/>
+        <field name="delivery_address"/>
+        <field name="delivery_time"/>
+        <field name="total_amount"/>
+        <field name="create_date"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_wuchang_order_form" model="ir.ui.view">
+    <field name="name">wuchang.order.form</field>
+    <field name="model">wuchang.order</field>
+    <field name="arch" type="xml">
+      <form string="線上訂單">
+        <sheet>
+          <group>
+            <field name="name" readonly="1"/>
+            <field name="state"/>
+          </group>
+          <group string="客戶資訊">
+            <field name="customer_name"/>
+            <field name="phone"/>
+          </group>
+          <group string="外送資訊">
+            <field name="sale_mode"/>
+            <field name="delivery_address"/>
+            <field name="delivery_time"/>
+            <field name="delivery_note"/>
+          </group>
+          <group string="金額與品項">
+            <field name="total_amount"/>
+            <field name="items_json"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_wuchang_order" model="ir.actions.act_window">
+    <field name="name">線上訂單</field>
+    <field name="res_model">wuchang.order</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{"search_default_delivery": 1}</field>
+  </record>
+
+  <menuitem id="menu_wuchang_order" name="線上訂單" parent="wuchang_core.menu_wuchang_task_root" action="action_wuchang_order" sequence="15" groups="base.group_user"/>
+</odoo>

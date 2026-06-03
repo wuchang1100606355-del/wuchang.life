@@ -1,0 +1,94 @@
+{
+  "title": "Odoo ADI Account Visibility",
+  "type": "object",
+  "required": [
+    "event",
+    "account_entry_id",
+    "account_visibility",
+    "adi_metric_tag",
+    "audit_required",
+    "sha256_required",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "odoo_adi_account_visibility"
+    },
+    "account_entry_id": {
+      "type": "string"
+    },
+    "account_visibility": {
+      "type": "string",
+      "enum": [
+        "permissioned_auditable",
+        "public_24h"
+      ]
+    },
+    "adi_metric_tag": {
+      "type": "string",
+      "enum": [
+        "public_interest",
+        "community_industry",
+        "system_operation",
+        "labor_compensation",
+        "intellectual_contribution",
+        "risk_reserve",
+        "fund_pool_retention",
+        "vector_data_license_income"
+      ]
+    },
+    "personal_data_included": {
+      "type": "boolean",
+      "default": false
+    },
+    "business_secret_included": {
+      "type": "boolean",
+      "default": false
+    },
+    "secret_material_included": {
+      "type": "boolean",
+      "default": false
+    },
+    "public_cloud_allowed": {
+      "type": "boolean",
+      "default": false
+    },
+    "public_account_visibility": {
+      "type": "string",
+      "enum": [
+        "subject_and_summary_only",
+        "permissioned_detail_only"
+      ],
+      "default": "permissioned_detail_only"
+    },
+    "subject_visible": {
+      "type": "boolean",
+      "default": false
+    },
+    "summary_visible": {
+      "type": "boolean",
+      "default": false
+    },
+    "detail_visible": {
+      "type": "boolean",
+      "default": false
+    },
+    "voucher_visible": {
+      "type": "boolean",
+      "default": false
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "sha256_required": {
+      "type": "boolean"
+    },
+    "human_review_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

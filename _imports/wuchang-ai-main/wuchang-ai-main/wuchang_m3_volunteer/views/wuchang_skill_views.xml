@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+        <record id="view_wuchang_skill_tree" model="ir.ui.view">
+            <field name="name">wuchang.skill.tree</field>
+            <field name="model">wuchang.skill</field>
+            <field name="arch" type="xml">
+                <tree string="志工技能">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_wuchang_skill_form" model="ir.ui.view">
+            <field name="name">wuchang.skill.form</field>
+            <field name="model">wuchang.skill</field>
+            <field name="arch" type="xml">
+                <form string="志工技能">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wuchang_skill" model="ir.actions.act_window">
+            <field name="name">志工技能</field>
+            <field name="res_model">wuchang.skill</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem
+            id="menu_volunteer_root"
+            name="志工專勤隊"
+            sequence="10"
+            parent="hr.menu_hr_root"
+            groups="wuchang_m3_volunteer.group_volunteer_manager"
+        />
+        <menuitem
+            id="menu_volunteer_skill"
+            name="志工技能"
+            parent="menu_volunteer_root"
+            action="action_wuchang_skill"
+            groups="wuchang_m3_volunteer.group_volunteer_manager"
+        />
+    </data>
+</odoo>

@@ -1,0 +1,23 @@
+{
+  "schema": "taiji_ai_bootstrap",
+  "version": "2026-05-12",
+  "status": "ACTIVE",
+  "active_workspace": "/home/taiji_admin/Taiji_Hub",
+  "workspace_mode": "wsl_native_linux",
+  "legacy_windows_workspace": "/mnt/c/Users/o0930/Taiji_Hub",
+  "node": {
+    "name": "MSI",
+    "role": "wuchang.life representative development node"
+  },
+  "rules": {
+    "source_of_truth": "/home/taiji_admin/Taiji_Hub",
+    "do_not_rsync_db_volumes": true,
+    "production_write_requires_backup": true,
+    "production_write_requires_preflight": true,
+    "production_write_requires_audit": true,
+    "production_write_requires_rollback": true,
+    "natural_language_is_not_highest_authority": true
+  },
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

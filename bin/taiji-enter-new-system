@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+cd /home/taiji_admin/Taiji_Hub
+
+if [ -f config/active_workspace.env ]; then
+  source config/active_workspace.env
+fi
+
+echo "=== TAIJI NEW SYSTEM ==="
+echo "whoami=$(whoami)"
+echo "hostname=$(hostname)"
+echo "pwd=$(pwd)"
+echo "workspace=${TAIJI_ACTIVE_WORKSPACE:-/home/taiji_admin/Taiji_Hub}"
+echo "mode=${TAIJI_WORKSPACE_MODE:-wsl_native_linux}"
+
+echo
+echo "=== FILESYSTEM ==="
+df -T . | tail -1
+
+echo
+echo "=== RUNTIME ==="
+bash deploy/packages/taiji_formal_tensor_runtime_v0_1_0/STATUS_LOCAL_V011.sh 2>/dev/null || true
+
+echo
+echo "=== LOCAL CONTAINERS ==="
+docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}' | head -30

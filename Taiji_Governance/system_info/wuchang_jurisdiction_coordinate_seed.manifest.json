@@ -1,0 +1,77 @@
+{
+  "schema": "taiji.geospatial_metric_seed.v1",
+  "status": "active_coordinate_seed_not_boundary_polygon",
+  "created_at": "2026-05-12T18:30:00+08:00",
+  "source": {
+    "path": "/mnt/c/Users/o0930/Downloads/Google 地球-20260512T094453Z-3-001/Google 地球/五常社區轄區圖.kml",
+    "sha256": "38c3a7fe82a7fd9edd336c1425632fcb1d9373cd71901d4830011853824ee1ac",
+    "format": "KML",
+    "placemark_count": 1,
+    "polygon_count": 0,
+    "linestring_count": 0
+  },
+  "anchor": {
+    "name": "五常社區",
+    "latitude": 25.0804429673534,
+    "longitude": 121.497961092329,
+    "altitude_m": 1.46854201938258,
+    "geohash12": "wsqqsvb05tqj",
+    "wgs84": true,
+    "meters_per_degree_lat_at_anchor": 110774.07172479,
+    "meters_per_degree_lon_at_anchor": 100884.23041543872
+  },
+  "five_metric_mapping": {
+    "intent_metric": "community_jurisdiction_spatial_anchor",
+    "resource_metric": "low_cost_static_coordinate_seed",
+    "time_metric": "2026-05-12_source_snapshot",
+    "authority_metric": "association_public_interest_geospatial_governance",
+    "topology_metric": "wuchang_life_jurisdiction_anchor_node"
+  },
+  "limits": [
+    "source_contains_point_only",
+    "not_a_complete_boundary_polygon",
+    "do_not_use_for_legal_boundary_without_official_polygon",
+    "do_not_infer_member_location_or_personal_data"
+  ],
+  "allowed_uses": [
+    "dashboard_anchor",
+    "service_area_seed",
+    "route_distance_reference",
+    "community_metric_index",
+    "future_polygon_reconciliation"
+  ],
+  "forbidden_uses": [
+    "legal_boundary_claim",
+    "member_tracking",
+    "individual_home_inference",
+    "cloud_plaintext_location_history_sync"
+  ],
+  "project_phase": "not_started_pending_construction",
+  "project_phase_zh": "未啟動 / 待建設",
+  "project_phase_rule": {
+    "formal_operation_boundary": false,
+    "construction_seed_allowed": false,
+    "pending_construction_reference_allowed": true,
+    "metric_database_nutrition_allowed": true,
+    "official_boundary_required_before_legal_use": true,
+    "reported_legal_jurisdiction_declaration_allowed": true
+  },
+  "legal_jurisdiction_declaration": {
+    "reported_to_authority": true,
+    "reported_status_source": "owner_association_statement",
+    "declared_areas": [
+      "五常里",
+      "仁忠里",
+      "五順里"
+    ],
+    "association": "新北市三重區五常社區發展協會",
+    "competent_authorities": [
+      "衛生福利部",
+      "新北市政府社會局",
+      "新北市政府文化局"
+    ],
+    "official_polygon_verified": false,
+    "current_kml_role": "reported_jurisdiction_anchor_seed_not_complete_polygon",
+    "note": "法定轄區可先宣告已報備；正式精密邊界仍需補官方或人工確認 polygon。"
+  }
+}

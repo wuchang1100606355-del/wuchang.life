@@ -1,0 +1,51 @@
+policy_id: WUCHANG_NAMESPACE_CANONICAL_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - prevent_name_drift_between_fields_universes_modules_functions
+  - define_canonical_prefixes
+  - reduce_duplicate_concepts
+
+canonical_prefixes:
+  fields:
+    prefix: U
+    example: U04_IDENTITY_PRIVACY_FIELD
+
+  sub_universes:
+    prefix: SU
+    example: SU_CONTACT_APPROVAL
+
+  modules:
+    prefix: M
+    example: M04_contact_approval_gate
+
+  tasks:
+    prefix: T
+    example: T027_member_contact_approval_policy
+
+  packets:
+    suffix: PACKET
+    example: PLAINTEXT_CLAIM_PACKET
+
+  policies:
+    suffix: POLICY
+    example: W7TP_MEMBER_CONTACT_APPROVAL_POLICY_V1
+
+forbidden:
+  - duplicate_names_for_same_concept
+  - same_name_with_different_governance_meaning
+  - unversioned_registry_files
+  - runtime_file_without_universe_packet_later
+
+merge_candidates:
+  node_credit_vs_node_reputation: review_required
+  service_result_vs_privacy_result: review_required
+  contact_request_vs_contact_approval: review_required
+
+red_team_reflection:
+  negative_effects:
+    - strict_naming_may_reduce_speed
+    - over_canonicalization_may_hide_useful_local_terms
+  mitigation:
+    - allow_aliases_but_require_one_canonical_name
+    - keep_human_readable_zh_name_as_alias

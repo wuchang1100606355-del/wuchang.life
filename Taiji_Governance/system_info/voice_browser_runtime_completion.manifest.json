@@ -1,0 +1,27 @@
+{
+  "schema": "taiji.voice_browser_runtime_completion.v1",
+  "status": "ACTIVE",
+  "version": "0.1.0",
+  "activated_at": "2026-05-13T00:00:00+08:00",
+  "module": "Voice / Browser Runtime",
+  "completion_basis": {
+    "voice_gateway_reachable_required_for_runtime_score": true,
+    "local_policy": "runtime_adapters/voice_browser_runtime_policy.py",
+    "schema": "schemas/voice_browser_runtime.schema.json",
+    "tests": "tests/test_voice_browser_runtime_policy.py",
+    "governance_policy": "Taiji_Governance/runtime/multimodal/voice_browser_runtime_policy_2026-05-13.md"
+  },
+  "security_invariants": {
+    "voice_is_intent_input": true,
+    "browser_is_minimum_privilege_interface": true,
+    "raw_plaintext_context_allowed": false,
+    "member_plaintext_allowed": false,
+    "secret_material_allowed": false,
+    "admin_browser_session_allowed": false,
+    "payment_execute_allowed": false,
+    "production_mutation_allowed": false,
+    "external_api_plaintext_allowed": false
+  },
+  "risk_rating": "L2_until_human_confirm_runtime_exists",
+  "notes": "This manifest completes the local governance layer only. It does not enable live browser submission, payment, credential handling, or production mutation."
+}

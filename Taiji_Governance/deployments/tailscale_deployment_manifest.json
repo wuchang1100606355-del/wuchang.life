@@ -1,0 +1,78 @@
+{
+  "schema": "taiji.tailnet.deployment_manifest.v1",
+  "generated_at": "2026-05-10T11:18:36.925135+00:00",
+  "mode": "manifest_only_no_live_deploy",
+  "site": "liaoguo_cafe_main_store",
+  "source_artifact": {
+    "path": "legacy_core/taiji_unified_gateway_edge.py",
+    "exists": true,
+    "sha256": "c42b3be76c41735b9a40203b43637760b4fd4c76d6c6af5ebc499dfda6d3d2e4"
+  },
+  "nodes": [
+    {
+      "identity": "TDI-NODE-vpn-server-01",
+      "name": "taiji01",
+      "tailscale_ipv4": "100.71.224.18",
+      "role": "vpn_subnet_router",
+      "approved_routes": [
+        "192.168.50.0/24"
+      ],
+      "deployment_state": "manifest_ready"
+    },
+    {
+      "identity": "TDI-NODE-admin-msi",
+      "name": "msi",
+      "tailscale_ipv4": "100.107.187.77",
+      "role": "admin_workstation",
+      "deployment_state": "inventory_confirmed"
+    },
+    {
+      "identity": "TDI-NODE-display-02",
+      "name": "customer-display-02",
+      "tailscale_ipv4": "pending",
+      "role": "customer_display",
+      "deployment_state": "inventory_required"
+    },
+    {
+      "identity": "TDI-NODE-sunmi-pos",
+      "name": "sunmi-pos",
+      "tailscale_ipv4": "pending",
+      "role": "point_of_sale",
+      "deployment_state": "inventory_required"
+    }
+  ],
+  "required_gates": [
+    "Taiji Gateway",
+    "Metric Translation Gateway",
+    "Five Metric Gate",
+    "taiji-metric-preflight",
+    "approved_external_deployment_control",
+    "audit_jsonl",
+    "sha256_baseline",
+    "rollback_plan"
+  ],
+  "forbidden_actions": [
+    "copy_service_account_json",
+    "copy_oauth_token",
+    "copy_api_key",
+    "direct_gemini_api_call",
+    "direct_google_api_call",
+    "direct_router_mutation",
+    "direct_vpn_acl_mutation",
+    "ssh_without_gateway_guard"
+  ],
+  "secret_material": {
+    "service_account_json": "not_in_manifest",
+    "oauth_token": "not_in_manifest",
+    "api_key": "not_in_manifest",
+    "odoo_member_plaintext": "not_in_manifest",
+    "chatgpt_export_text": "not_in_manifest"
+  },
+  "execution": {
+    "live_deploy_enabled": false,
+    "reason": "This tool is limited to manifest generation and local preflight checks.",
+    "default_mode": "manifest-only",
+    "preflight_only": true,
+    "live_execute_path": "forbidden"
+  }
+}

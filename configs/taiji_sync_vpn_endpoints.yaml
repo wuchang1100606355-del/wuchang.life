@@ -1,0 +1,55 @@
+sync:
+  linux_root: /home/taiji_admin/Taiji_Hub
+  windows_root: C:\Taiji_Runtime
+
+  allow:
+    - linux: configs
+      windows: memory\linux_configs
+    - linux: runtime/state
+      windows: state
+    - linux: runtime/ledger
+      windows: ledger
+    - linux: runtime/reports
+      windows: reports\linux
+    - linux: 01_admin
+      windows: memory\linux_01_admin
+    - linux: 02_edge_nodes
+      windows: memory\linux_02_edge_nodes
+
+  deny:
+    - .env
+    - keys/
+    - private_keys/
+    - secrets/
+    - "*.key"
+    - id_rsa
+    - data/*.db
+    - runtime/state/root_authority.json
+    - runtime/state/full_allocation_table.json
+
+vpn_endpoints:
+  local:
+    gateway: http://127.0.0.1:8081
+    openwebui: http://127.0.0.1:8080
+    openwebui_bridge: http://127.0.0.1:8098
+    ollama: http://127.0.0.1:11434
+    claw: http://127.0.0.1:9004
+    ssh_tunnel: 127.0.0.1:2222
+
+  expose_over_vpn:
+    gateway: "<VPN_IP>:8081"
+    openwebui: "<VPN_IP>:8080"
+    ssh_tunnel: "<VPN_IP>:2222"
+
+  do_not_expose_directly:
+    - ollama:11434
+    - claw:9004
+    - openwebui_bridge:8098
+    - private_keys
+    - databases
+    - full_ledger
+
+security:
+  rule: expose_gateway_first
+  root_authority: CHIANG_CHENG_LUNG_HUMAN
+  high_risk_tasks: dead_letter_or_approval_queue

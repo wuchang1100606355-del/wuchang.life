@@ -1,0 +1,139 @@
+{
+  "schema": "taiji.odoo_google_nonprofit_mail_bridge_manifest.v1",
+  "generated_at": "2026-05-11T02:34:00+08:00",
+  "mode": "manifest_only_no_live_api_no_secret",
+  "organization_domain": "wuchang.life",
+  "organization_type": "google_for_nonprofits",
+  "workspace_offer_baseline": {
+    "edition": "Google Workspace for Nonprofits",
+    "cost_basis": "no_charge_nonprofit_offer",
+    "enterprise_default": false,
+    "note": "Enterprise nonprofit plans are discounted, not the free default."
+  },
+  "system_roles": {
+    "odoo": "primary_scene_system_for_community_pos_devices_workorders",
+    "google_workspace": "non_sensitive_account_group_ou_permission_and_audit_metadata",
+    "taiji_gateway": "cross_system_request_manifest_and_policy_gate",
+    "five_metric_gate": "risk_decision_gate",
+    "audit_journal": "append_only_redacted_bridge_log"
+  },
+  "proposed_mailboxes": [
+    {
+      "address": "odoo-notify@wuchang.life",
+      "purpose": "Odoo no-personal-data system notification sender",
+      "status": "proposal_not_created"
+    },
+    {
+      "address": "odoo-noreply@wuchang.life",
+      "purpose": "No-reply alias for Odoo notices",
+      "status": "proposal_not_created"
+    },
+    {
+      "address": "odoo-bounce@wuchang.life",
+      "purpose": "Bounce/routing address without AI body ingestion",
+      "status": "proposal_not_created"
+    },
+    {
+      "address": "odoo-audit@wuchang.life",
+      "purpose": "Non-sensitive Odoo audit notification group",
+      "status": "proposal_not_created"
+    }
+  ],
+  "smtp_relay_proposal": {
+    "host": "smtp-relay.gmail.com",
+    "port": 587,
+    "encryption": "STARTTLS",
+    "allowed_senders_preference": [
+      "Only addresses in my domains",
+      "Only registered Apps users in my domains"
+    ],
+    "avoid": [
+      "Any addresses",
+      "personal Gmail account",
+      "password stored in repo",
+      "service account JSON in repo"
+    ],
+    "authentication_preference": [
+      "restricted static egress IP if available",
+      "Gateway-reviewed SMTP auth or OAuth only if IP auth is unavailable"
+    ],
+    "google_live_api_called": false
+  },
+  "odoo_outgoing_mail_server_proposal": {
+    "description": "wuchang.life Google Nonprofit SMTP Relay",
+    "smtp_server": "smtp-relay.gmail.com",
+    "smtp_port": 587,
+    "connection_security": "STARTTLS",
+    "username_password_in_manifest": false,
+    "from_filter": "@wuchang.life",
+    "live_odoo_write": false
+  },
+  "data_boundary": {
+    "allowed": [
+      "ticket_id",
+      "device_id",
+      "pos_event_code",
+      "audit_summary",
+      "login_required_link",
+      "role_label",
+      "permission_label"
+    ],
+    "blocked": [
+      "odoo_member_plaintext",
+      "personal_data_full_text",
+      "payment_sensitive_data",
+      "google_private_data",
+      "chatgpt_raw_conversation",
+      "service_account_json",
+      "oauth_token",
+      "password",
+      "private_key"
+    ]
+  },
+  "five_dim_code": {
+    "D1_node_identity": "odoo_mail_bridge",
+    "D2_data_sensitivity": "no_personal_data_metadata_only",
+    "D3_action_intent": "smtp_relay_send_manifest",
+    "D4_permission_window": "gateway_preflight_then_human_review",
+    "D5_reversibility_public_value": "disable_mail_server_or_revert_manifest"
+  },
+  "audit_schema": {
+    "schema": "taiji.cloud_local_auto_account_bridge.v1",
+    "required_fields": [
+      "ts",
+      "request_id",
+      "source",
+      "target",
+      "domain",
+      "five_dim_code",
+      "sender",
+      "data_boundary",
+      "result",
+      "risk",
+      "secret_material_included",
+      "google_live_api_called",
+      "rollback"
+    ]
+  },
+  "risk_rating": "L2_drift_until_sandbox_and_gateway_preflight",
+  "live_enablement_requirements": [
+    "Google Workspace for Nonprofits active for wuchang.life",
+    "Odoo no-personal-data mailbox created by human admin",
+    "SMTP relay rule reviewed by human admin",
+    "Five Metric preflight allows manifest",
+    "Audit journal writable",
+    "Sandbox test sends no-personal-data message only",
+    "Rollback instructions available"
+  ],
+  "member_five_dim_code_provisioning": {
+    "manifest": "Taiji_Governance/integrations/member_five_code_odoo_google_provisioning_manifest.json",
+    "member_ai_endpoint_whitelist_required": true,
+    "allowed_request_types": [
+      "odoo_mailbox_request",
+      "forum_registration_token",
+      "audit_receipt_query"
+    ],
+    "direct_google_api_from_member_ai_endpoint_allowed": false,
+    "five_dim_code_reversible_to_personal_plaintext": false
+  }
+}

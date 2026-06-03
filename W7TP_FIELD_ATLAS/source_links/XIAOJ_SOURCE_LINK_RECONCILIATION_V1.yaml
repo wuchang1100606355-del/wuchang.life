@@ -1,0 +1,45 @@
+registry_id: XIAOJ_SOURCE_LINK_RECONCILIATION_V1
+
+canonical_truth:
+  - W7TP_FIELD_ATLAS
+  - Taiji_Governance
+
+candidate_truth:
+  - runtime/sandbox
+  - docs/specs
+  - docs/runtime
+  - docs/w7tp_algorithms
+
+runtime_evidence:
+  - runtime
+  - reports
+  - validation
+
+implementation_carrier:
+  - odoo
+  - docker
+  - services
+  - modules
+  - ui
+
+canonical_registration_status:
+  xiaoj_total_field_registry_v2: HOLD
+
+xiaoj_review_opinion:
+  recommendation: NOT_READY_FOR_CANONICAL
+  reason: source reconciliation incomplete
+  safe_option: finish T081-T084 first
+  risk_if_approved: truth-layer collision
+  risk_if_rejected: only schedule impact
+  required_human_action: review source hierarchy
+
+redteam:
+  risk:
+    - truth_drift
+    - duplicate_registry
+    - carrier_overrides_truth
+
+  mitigation:
+    - canonical_table
+    - mount_review
+    - drift_engine

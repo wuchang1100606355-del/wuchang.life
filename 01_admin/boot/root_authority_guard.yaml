@@ -1,0 +1,20 @@
+root_authority:
+  owner: CHIANG_CHENG_LUNG
+  online_mode:
+    allow_authority_level: 5
+  offline_mode:
+    allow_authority_level: 2
+    allow:
+      - health_check
+      - restart_service
+      - local_inference
+      - status_report
+      - create_draft
+    deny:
+      - spend_money
+      - sign_contract
+      - delete_core_data
+      - change_dns
+      - expose_secret
+      - external_publish
+      - legal_commitment

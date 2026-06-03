@@ -1,0 +1,117 @@
+● taiji-clow-adapter.service - Taiji Clow Compatibility Adapter
+     Loaded: loaded (/etc/systemd/system/taiji-clow-adapter.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-05-08 02:38:08 CST; 17min ago
+   Main PID: 215105 (python3)
+      Tasks: 7 (limit: 4689)
+     Memory: 36.5M (peak: 37.2M)
+        CPU: 1.034s
+     CGroup: /system.slice/taiji-clow-adapter.service
+             └─215105 /usr/bin/python3 -m uvicorn services.clow_adapter.main:app --host 0.0.0.0 --port 9006
+
+May 08 02:38:08 MSI python3[215105]: INFO:     Uvicorn running on http://0.0.0.0:9006 (Press CTRL+C to quit)
+May 08 02:38:19 MSI python3[215105]: INFO:     127.0.0.1:33938 - "GET / HTTP/1.1" 200 OK
+May 08 02:38:19 MSI python3[215105]: INFO:     127.0.0.1:33948 - "GET /api/claw/scan_physical?keyword=jules&base_path=/home/taiji_admin/Taiji_Hub HTTP/1.1" 200 OK
+May 08 02:38:19 MSI python3[215105]: INFO:     127.0.0.1:33956 - "GET / HTTP/1.1" 200 OK
+May 08 02:38:19 MSI python3[215105]: INFO:     127.0.0.1:33970 - "GET /openapi.json HTTP/1.1" 200 OK
+May 08 02:38:19 MSI python3[215105]: INFO:     127.0.0.1:33978 - "GET /api/claw/scan_physical?keyword=jules&base_path=%2Fhome%2Ftaiji_admin%2FTaiji_Hub HTTP/1.1" 200 OK
+May 08 02:38:28 MSI python3[215105]: INFO:     127.0.0.1:45542 - "GET / HTTP/1.1" 200 OK
+May 08 02:42:28 MSI python3[215105]: INFO:     127.0.0.1:39996 - "GET / HTTP/1.1" 200 OK
+May 08 02:42:28 MSI python3[215105]: INFO:     127.0.0.1:40012 - "GET /openapi.json HTTP/1.1" 200 OK
+May 08 02:42:28 MSI python3[215105]: INFO:     127.0.0.1:40014 - "GET /api/claw/scan_physical?keyword=jules&base_path=%2Fhome%2Ftaiji_admin%2FTaiji_Hub HTTP/1.1" 200 OK
+
+● taiji-gateway.service - Taiji Gateway
+     Loaded: loaded (/etc/systemd/system/taiji-gateway.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-05-08 02:38:11 CST; 17min ago
+   Main PID: 215143 (python3)
+      Tasks: 7 (limit: 4689)
+     Memory: 39.1M (peak: 39.6M)
+        CPU: 969ms
+     CGroup: /system.slice/taiji-gateway.service
+             └─215143 /usr/bin/python3 -m uvicorn services.gateway.main:app --host 0.0.0.0 --port 8081
+
+May 08 02:38:11 MSI systemd[1]: Started taiji-gateway.service - Taiji Gateway.
+May 08 02:38:11 MSI python3[215143]: INFO:     Started server process [215143]
+May 08 02:38:11 MSI python3[215143]: INFO:     Waiting for application startup.
+May 08 02:38:11 MSI python3[215143]: INFO:     Application startup complete.
+May 08 02:38:11 MSI python3[215143]: INFO:     Uvicorn running on http://0.0.0.0:8081 (Press CTRL+C to quit)
+May 08 02:38:28 MSI python3[215143]: INFO:     127.0.0.1:49246 - "POST /api/taiji/execute HTTP/1.1" 200 OK
+May 08 02:38:36 MSI python3[215143]: INFO:     127.0.0.1:42674 - "POST /api/taiji/execute HTTP/1.1" 200 OK
+May 08 02:42:39 MSI python3[215143]: INFO:     127.0.0.1:36180 - "POST /api/taiji/execute HTTP/1.1" 200 OK
+
+● taiji-openwebui-bridge.service - Taiji OpenWebUI Bridge
+     Loaded: loaded (/etc/systemd/system/taiji-openwebui-bridge.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-05-08 02:38:11 CST; 17min ago
+   Main PID: 215150 (python3)
+      Tasks: 6 (limit: 4689)
+     Memory: 34.9M (peak: 35.1M)
+        CPU: 967ms
+     CGroup: /system.slice/taiji-openwebui-bridge.service
+             └─215150 /usr/bin/python3 -m uvicorn runtime.openwebui_bridge:app --host 0.0.0.0 --port 8098
+
+May 08 02:38:11 MSI systemd[1]: Started taiji-openwebui-bridge.service - Taiji OpenWebUI Bridge.
+May 08 02:38:11 MSI python3[215150]: INFO:     Started server process [215150]
+May 08 02:38:11 MSI python3[215150]: INFO:     Waiting for application startup.
+May 08 02:38:11 MSI python3[215150]: INFO:     Application startup complete.
+May 08 02:38:11 MSI python3[215150]: INFO:     Uvicorn running on http://0.0.0.0:8098 (Press CTRL+C to quit)
+May 08 02:38:36 MSI python3[215150]: INFO:     127.0.0.1:43098 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+
+● taiji-runtime-api.service - Taiji Runtime API
+     Loaded: loaded (/etc/systemd/system/taiji-runtime-api.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-05-07 20:10:21 CST; 6h ago
+   Main PID: 86856 (uvicorn)
+      Tasks: 7 (limit: 4689)
+     Memory: 30.7M (peak: 31.3M)
+        CPU: 13.693s
+     CGroup: /system.slice/taiji-runtime-api.service
+             └─86856 /usr/bin/python3 /usr/bin/uvicorn runtime.runtime_api:app --host 0.0.0.0 --port 8091
+
+May 07 20:10:21 MSI systemd[1]: Started taiji-runtime-api.service - Taiji Runtime API.
+May 07 20:10:21 MSI uvicorn[86856]: INFO:     Started server process [86856]
+May 07 20:10:21 MSI uvicorn[86856]: INFO:     Waiting for application startup.
+May 07 20:10:21 MSI uvicorn[86856]: INFO:     Application startup complete.
+May 07 20:10:21 MSI uvicorn[86856]: INFO:     Uvicorn running on http://0.0.0.0:8091 (Press CTRL+C to quit)
+May 07 20:10:26 MSI uvicorn[86856]: INFO:     127.0.0.1:58778 - "GET /runtime/health HTTP/1.1" 200 OK
+May 07 20:12:30 MSI uvicorn[86856]: INFO:     None:0 - "GET /runtime/health HTTP/1.1" 200 OK
+
+● taiji-runtime-core.service - Taiji Runtime Core
+     Loaded: loaded (/etc/systemd/system/taiji-runtime-core.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-05-07 22:59:10 CST; 3h 56min ago
+   Main PID: 134707 (uvicorn)
+      Tasks: 6 (limit: 4689)
+     Memory: 37.1M (peak: 39.4M)
+        CPU: 9.980s
+     CGroup: /system.slice/taiji-runtime-core.service
+             └─134707 /usr/bin/python3 /usr/bin/uvicorn runtime.runtime_core:app --host 0.0.0.0 --port 8099
+
+May 08 02:50:48 MSI uvicorn[134707]: INFO:     100.98.69.115:41882 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:51:19 MSI uvicorn[134707]: INFO:     100.98.69.115:49798 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:51:46 MSI uvicorn[134707]: INFO:     100.98.69.115:39256 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:52:17 MSI uvicorn[134707]: INFO:     100.98.69.115:43506 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:52:47 MSI uvicorn[134707]: INFO:     100.98.69.115:49202 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:53:18 MSI uvicorn[134707]: INFO:     100.98.69.115:49804 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:53:48 MSI uvicorn[134707]: INFO:     100.98.69.115:42198 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:54:19 MSI uvicorn[134707]: INFO:     100.98.69.115:41150 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:54:49 MSI uvicorn[134707]: INFO:     100.98.69.115:47430 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+May 08 02:55:17 MSI uvicorn[134707]: INFO:     100.98.69.115:44372 - "POST /runtime/agent/task HTTP/1.1" 200 OK
+
+● taiji.service - Taiji Distributed Queue System
+     Loaded: loaded (/etc/systemd/system/taiji.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-05-07 13:22:24 CST; 13h ago
+   Main PID: 269 (full_system.sh)
+      Tasks: 2 (limit: 4689)
+     Memory: 3.0M (peak: 4.4M swap: 124.0K swap peak: 124.0K)
+        CPU: 1.856s
+     CGroup: /system.slice/taiji.service
+             ├─   269 /bin/bash /home/taiji_admin/Taiji_Hub/full_system.sh
+             └─220875 ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 2222 coffeeboss@192.168.50.1 "ls /tmp/mnt/usb_big/taiji/queue/inbox 2>/dev/null | head -1"
+
+May 08 02:38:27 MSI full_system.sh[214029]: ssh: connect to host 192.168.50.1 port 2222: Connection timed out
+May 08 02:40:56 MSI full_system.sh[215274]: ssh: connect to host 192.168.50.1 port 2222: Connection timed out
+May 08 02:43:25 MSI full_system.sh[216173]: ssh: connect to host 192.168.50.1 port 2222: Connection timed out
+May 08 02:45:57 MSI full_system.sh[217098]: ssh: connect to host 192.168.50.1 port 2222: Connection timed out
+May 08 02:48:26 MSI full_system.sh[217987]: ssh: connect to host 192.168.50.1 port 2222: Connection timed out
+May 08 02:50:55 MSI full_system.sh[218906]: ssh: connect to host 192.168.50.1 port 2222: Connection timed out
+May 08 02:51:09 MSI full_system.sh[219820]: Permission denied, please try again.
+May 08 02:51:09 MSI full_system.sh[219820]: Permission denied, please try again.
+May 08 02:51:09 MSI full_system.sh[219820]: Connection closed by 192.168.50.1 port 2222
+May 08 02:53:39 MSI full_system.sh[219931]: ssh: connect to host 192.168.50.1 port 2222: Connection timed out

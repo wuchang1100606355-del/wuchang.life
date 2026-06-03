@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="delivery_page" name="Wuchang Delivery &amp; Ticket Platform">
+        <t t-call="website.layout">
+            <div class="bg-gray-50 min-h-screen font-sans">
+                <!-- Top Navigation Bar for Platform -->
+                <div class="bg-white shadow-sm sticky top-0 z-50">
+                    <div class="container mx-auto px-4 py-3">
+                        <div class="flex items-center justify-between">
+                            <!-- Logo & Branding -->
+                            <div class="flex items-center gap-3">
+                                <div class="bg-primary text-white p-2 rounded-lg">
+                                    <i class="fa fa-heartbeat fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h1 class="text-xl font-bold text-gray-800 leading-tight">五常公益生活圈</h1>
+                                    <div class="text-xs text-gray-500">社區幸福幣外送消費做公益</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Search Bar -->
+                            <div class="hidden md:flex flex-1 mx-8 relative">
+                                <input type="text" placeholder="搜尋美食、票券或商店..." class="w-full bg-gray-100 border-none rounded-full py-2 px-5 focus:ring-2 focus:ring-primary"/>
+                                <button class="absolute right-3 top-2 text-gray-400">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+
+                            <!-- User Actions -->
+                            <div class="flex items-center gap-4">
+                                <div class="hidden md:flex flex-col items-end mr-2">
+                                    <span class="text-xs text-gray-500">幸福幣餘額</span>
+                                    <span class="font-bold text-emerald-600">HC $1,250</span>
+                                </div>
+                                <button class="btn btn-outline-primary rounded-full px-4 relative">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sub Navigation (Delivery vs Tickets) -->
+                        <div class="flex gap-6 mt-4 border-b overflow-x-auto">
+                            <a href="/wuchang/delivery" class="pb-2 border-b-2 border-primary text-primary font-bold whitespace-nowrap">
+                                <i class="fa fa-motorcycle me-1"></i> 美食外送
+                            </a>
+                            <a href="/wuchang/tickets" class="pb-2 border-b-2 border-transparent text-gray-500 hover:text-gray-800 whitespace-nowrap">
+                                <i class="fa fa-ticket me-1"></i> 購券平台 (適用幸福幣)
+                            </a>
+                            <a href="#" class="pb-2 border-b-2 border-transparent text-gray-500 hover:text-gray-800 whitespace-nowrap">
+                                <i class="fa fa-gift me-1"></i> 公益回饋專區
+                            </a>
+                            <a href="/pos_simulator" class="pb-2 border-b-2 border-transparent text-gray-500 hover:text-gray-800 whitespace-nowrap ml-auto">
+                                <i class="fa fa-desktop me-1"></i> POS 模擬器
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="container mx-auto px-4 py-6">
+                    
+                    <!-- Promotional Banners -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-gradient-to-r from-orange-400 to-red-500 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h3 class="text-2xl font-bold mb-2">社區幸福幣外送</h3>
+                                <p class="mb-4 opacity-90">每一筆訂單都為社區累積公益基金</p>
+                                <button class="bg-white text-red-500 px-4 py-2 rounded-full font-bold text-sm">立即點餐</button>
+                            </div>
+                            <i class="fa fa-motorcycle absolute -bottom-4 -right-4 text-white opacity-20" style="font-size: 8rem;"></i>
+                        </div>
+                        <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h3 class="text-2xl font-bold mb-2">購券享回饋</h3>
+                                <p class="mb-4 opacity-90">幸福幣無法直接點餐，請先在此兌換專屬餐券</p>
+                                <button class="bg-white text-teal-600 px-4 py-2 rounded-full font-bold text-sm">前往購券平台</button>
+                            </div>
+                            <i class="fa fa-ticket absolute -bottom-4 -right-4 text-white opacity-20" style="font-size: 8rem;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="mb-6">
+                        <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                            <button class="bg-gray-800 text-white px-4 py-2 rounded-full whitespace-nowrap text-sm shadow-md">
+                                <i class="fa fa-th-large me-1"></i> 全部
+                            </button>
+                            <button class="bg-white text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-full whitespace-nowrap text-sm border shadow-sm">
+                                <i class="fa fa-cutlery me-1"></i> 餐廳美食
+                            </button>
+                            <button class="bg-white text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-full whitespace-nowrap text-sm border shadow-sm">
+                                <i class="fa fa-coffee me-1"></i> 咖啡飲品
+                            </button>
+                            <button class="bg-white text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-full whitespace-nowrap text-sm border shadow-sm">
+                                <i class="fa fa-birthday-cake me-1"></i> 甜點麵包
+                            </button>
+                            <button class="bg-white text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-full whitespace-nowrap text-sm border shadow-sm">
+                                <i class="fa fa-shopping-basket me-1"></i> 生鮮雜貨
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Store Selector (Legacy Support) -->
+                    <div class="mb-6 flex items-center gap-2">
+                        <label class="font-bold text-gray-700">選擇來源商店:</label>
+                        <select id="store_select" class="form-select w-auto border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                            <option value="">全部商店</option>
+                            <t t-foreach="configs" t-as="c">
+                                <option t-att-value="c.get('id')" t-att-selected="(selected_config_id==c.get('id')) and 'selected'"> <t t-esc="c.get('name')"/> </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- Product Grid (Dynamic) -->
+                    <div id="product_grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <!-- Loading State -->
+                        <div class="col-span-full text-center py-12 text-gray-400">
+                            <i class="fa fa-circle-o-notch fa-spin fa-2x mb-2"></i>
+                            <p>正在載入美味餐點...</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Floating Info -->
+                    <div class="fixed bottom-6 right-6 z-40">
+                         <button class="bg-primary hover:bg-primary-dark text-white rounded-full p-4 shadow-lg flex items-center gap-2 transition transform hover:scale-105">
+                            <i class="fa fa-question-circle fa-lg"></i>
+                            <span class="font-bold hidden md:inline">需要協助？</span>
+                         </button>
+                    </div>
+
+                </div>
+
+                <!-- Script for dynamic loading -->
+                <script type="text/javascript">
+                    (function(){
+                        function fetchProducts(){
+                            var configId = document.getElementById('store_select').value || '';
+                            var grid = document.getElementById('product_grid');
+                            
+                            // Show loading
+                            grid.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fa fa-circle-o-notch fa-spin fa-2x mb-2"></i><p>正在載入美味餐點...</p></div>';
+
+                            odoo.jsonRpc('/wuchang/delivery/products', 'call', {config_id: configId}).then(function(res){
+                                grid.innerHTML = '';
+                                if (!res.items || res.items.length === 0) {
+                                    grid.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500"><i class="fa fa-inbox fa-3x mb-3 opacity-50"></i><p>此分類目前沒有商品</p></div>';
+                                    return;
+                                }
+
+                                (res.items||[]).forEach(function(it){
+                                    var card = document.createElement('div');
+                                    card.className = 'bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden group flex flex-col h-full';
+                                    
+                                    // Image Section
+                                    var imgHtml = '<div class="relative h-48 overflow-hidden bg-gray-200">';
+                                    if(it.image) {
+                                        imgHtml += '<img src="'+it.image+'" alt="'+(it.name||'')+'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>';
+                                    } else {
+                                        imgHtml += '<div class="w-full h-full flex items-center justify-center text-gray-400"><i class="fa fa-picture-o fa-2x"></i></div>';
+                                    }
+                                    // Badge
+                                    imgHtml += '<div class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-gray-700"><i class="fa fa-clock-o me-1"></i>25-35 分</div>';
+                                    imgHtml += '</div>';
+
+                                    // Content Section
+                                    var contentHtml = '<div class="p-4 flex flex-col flex-grow">';
+                                    contentHtml += '<div class="flex justify-between items-start mb-1">';
+                                    contentHtml += '  <h4 class="font-bold text-gray-800 line-clamp-1 text-lg">'+(it.name||'未命名商品')+'</h4>';
+                                    contentHtml += '  <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">公益</span>';
+                                    contentHtml += '</div>';
+                                    
+                                    contentHtml += '<div class="text-sm text-gray-500 mb-3 line-clamp-2">'+(it.description || '暫無描述')+'</div>';
+                                    
+                                    contentHtml += '<div class="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between">';
+                                    contentHtml += '  <div>';
+                                    contentHtml += '    <span class="text-xs text-orange-500 font-bold block"><i class="fa fa-ticket me-1"></i>憑券兌換</span>';
+                                    contentHtml += '    <span class="text-xl font-bold text-gray-900">$'+(it.price||0)+'</span>';
+                                    contentHtml += '  </div>';
+                                    contentHtml += '  <button class="bg-primary hover:bg-primary-dark text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors"><i class="fa fa-plus"></i></button>';
+                                    contentHtml += '</div>';
+                                    contentHtml += '</div>';
+
+                                    card.innerHTML = imgHtml + contentHtml;
+                                    
+                                    // Add click event (optional)
+                                    card.style.cursor = 'pointer';
+                                    card.onclick = function() {
+                                        // TODO: Add to cart logic
+                                        alert('已將 ' + (it.name||'') + ' 加入購物車');
+                                    };
+
+                                    grid.appendChild(card);
+                                });
+                            });
+                        }
+
+                        document.addEventListener('DOMContentLoaded', function(){
+                            var sel = document.getElementById('store_select');
+                            if(sel) {
+                                sel.addEventListener('change', fetchProducts);
+                                fetchProducts();
+                            }
+                        });
+                    })();
+                </script>
+            </div>
+        </t>
+    </template>
+</odoo>

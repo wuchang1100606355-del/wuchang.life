@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path("/home/taiji_admin/Taiji_Hub")
+ACTION_REGISTRY = ROOT / "config" / "action_registry.json"
+METRIC_REGISTRY = ROOT / "config" / "metric_action_registry.json"
+ACTION_HASH = ROOT / "audit" / "action_registry.sha256"
+METRIC_HASH = ROOT / "audit" / "metric_action_registry.sha256"
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def saved(path):
+    return path.read_text(encoding="utf-8").split()[0]
+
+action = json.loads(ACTION_REGISTRY.read_text(encoding="utf-8"))
+metric = json.loads(METRIC_REGISTRY.read_text(encoding="utf-8"))
+
+action_hash = sha(ACTION_REGISTRY)
+metric_hash = sha(METRIC_REGISTRY)
+
+print("registry_name:", action.get("registry_name"))
+print("registry_version:", action.get("version"))
+print("locked:", action.get("locked"))
+print("default_policy:", action.get("default_policy"))
+print("action_current_hash:", action_hash)
+print("action_saved_hash:", saved(ACTION_HASH))
+print("metric_current_hash:", metric_hash)
+print("metric_saved_hash:", saved(METRIC_HASH))
+
+if action_hash != saved(ACTION_HASH):
+    raise SystemExit("ACTION_REGISTRY_DRIFT_DETECTED")
+
+if metric_hash != saved(METRIC_HASH):
+    raise SystemExit("METRIC_ACTION_REGISTRY_DRIFT_DETECTED")
+
+if action != metric:
+    raise SystemExit("ACTION_REGISTRY_SPLIT_BRAIN_DETECTED")
+
+if action.get("locked") is not True:
+    raise SystemExit("ACTION_REGISTRY_NOT_LOCKED")
+
+if action.get("default_policy") != "deny_unregistered":
+    raise SystemExit("ACTION_REGISTRY_DEFAULT_POLICY_NOT_DENY")
+
+print("✓ unified action registry integrity ok")

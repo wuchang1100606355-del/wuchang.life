@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- 在票券開設清單加入雙桶欄位 -->
+    <record id="view_wuchang_ticket_opening_list_quota_buckets" model="ir.ui.view">
+        <field name="name">wuchang.ticket.opening.list.quota.buckets</field>
+        <field name="model">wuchang.ticket.opening</field>
+        <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_ticket_opening_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='total_face_value']" position="after">
+                <field name="quota_account_type"/>
+                <field name="is_quota_limited"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 在票券開設表單加入雙桶欄位 -->
+    <record id="view_wuchang_ticket_opening_form_quota_buckets" model="ir.ui.view">
+        <field name="name">wuchang.ticket.opening.form.quota.buckets</field>
+        <field name="model">wuchang.ticket.opening</field>
+        <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_ticket_opening_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='票券額度']" position="inside">
+                <field name="quota_account_type"/>
+                <field name="is_quota_limited"/>
+                <field name="quota_bucket_note"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 團體客戶清單加入票券小計/合計 -->
+    <record id="view_wuchang_group_customer_list_ticket_quota_totals" model="ir.ui.view">
+        <field name="name">wuchang.group.customer.list.ticket.quota.totals</field>
+        <field name="model">wuchang.group.customer</field>
+        <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_group_customer_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='customer_type']" position="after">
+                <field name="community_coin_ticket_subtotal"/>
+                <field name="self_issued_ticket_subtotal"/>
+                <field name="ticket_quota_grand_total"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 團體客戶表單加入票券小計/合計 -->
+    <record id="view_wuchang_group_customer_form_ticket_quota_totals" model="ir.ui.view">
+        <field name="name">wuchang.group.customer.form.ticket.quota.totals</field>
+        <field name="model">wuchang.group.customer</field>
+        <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_group_customer_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]" position="after">
+                <group string="票券額度小計/合併總計">
+                    <field name="community_coin_ticket_subtotal"/>
+                    <field name="self_issued_ticket_subtotal"/>
+                    <field name="ticket_quota_grand_total"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 新增票券額度總表選單 -->
+    <record id="action_wuchang_ticket_quota_totals" model="ir.actions.act_window">
+        <field name="name">票券額度小計/合併總計</field>
+        <field name="res_model">wuchang.group.customer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_ticket_quota_totals"
+              name="票券額度小計/合併總計"
+              parent="menu_wuchang_ticket_root"
+              action="action_wuchang_ticket_quota_totals"
+              sequence="40"/>
+</odoo>

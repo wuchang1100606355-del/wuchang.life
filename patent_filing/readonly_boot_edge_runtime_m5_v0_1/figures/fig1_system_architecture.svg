@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+<style>text{font-family:'Noto Sans CJK TC',Arial,sans-serif} .small{font-size:15px;font-weight:400}</style>
+<text x="700" y="42" text-anchor="middle" font-size="28" font-weight="700">圖1 系統架構方塊圖</text>
+<rect x="40" y="90" width="170" height="170" rx="10" fill="#dcfce7" stroke="#334155" stroke-width="2"/><text x="125.0" y="120" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">110 輸入介面</text>
+<rect x="290" y="90" width="200" height="170" rx="10" fill="#fef3c7" stroke="#334155" stroke-width="2"/><text x="390.0" y="120" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">120 封包產生模組</text>
+<rect x="570" y="90" width="230" height="170" rx="10" fill="#dbeafe" stroke="#334155" stroke-width="2"/><text x="685.0" y="120" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">140 AI 匝道判決模組</text>
+<rect x="880" y="90" width="230" height="170" rx="10" fill="#dcfce7" stroke="#334155" stroke-width="2"/><text x="995.0" y="120" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">150 邊緣 I/O 調度器</text>
+<rect x="1180" y="90" width="180" height="170" rx="10" fill="#dbeafe" stroke="#334155" stroke-width="2"/><text x="1270.0" y="120" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">160 AI runtime</text>
+<rect x="570" y="345" width="230" height="135" rx="10" fill="#fee2e2" stroke="#334155" stroke-width="2"/><text x="685.0" y="375" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">170 稽核記錄模組</text>
+<rect x="880" y="345" width="230" height="135" rx="10" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="995.0" y="375" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">180 回復模組</text>
+<rect x="1180" y="345" width="180" height="135" rx="10" fill="#fef3c7" stroke="#334155" stroke-width="2"/><text x="1270.0" y="375" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">190 邊緣/儲存節點</text>
+<rect x="570" y="570" width="230" height="100" rx="10" fill="#ede9fe" stroke="#334155" stroke-width="2"/><text x="685.0" y="600" text-anchor="middle" font-size="18" font-family="Noto Sans CJK TC, Arial" font-weight="700">130 政策基準</text>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#111827"/></marker></defs>
+<path d="M210 175 H290" stroke="#111827" stroke-width="3" marker-end="url(#a)"/><text x="248" y="160" font-size="16">資料</text>
+<path d="M490 175 H570" stroke="#111827" stroke-width="3" marker-end="url(#a)"/><text x="525" y="160" font-size="16">M5</text>
+<path d="M800 175 H880" stroke="#111827" stroke-width="3" marker-end="url(#a)"/><text x="835" y="160" font-size="16">Vr</text>
+<path d="M1110 145 H1180" stroke="#111827" stroke-width="3" marker-end="url(#a)"/>
+<path d="M1110 205 C1160 205 1160 410 1180 410" stroke="#111827" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M685 260 V345" stroke="#111827" stroke-width="3" marker-end="url(#a)"/>
+<path d="M995 260 V345" stroke="#111827" stroke-width="3" marker-end="url(#a)"/>
+<path d="M685 570 V480" stroke="#111827" stroke-width="3" marker-end="url(#a)"/>
+<text x="125" y="150" class="small" text-anchor="middle">待執行動作</text><text x="125" y="175" class="small" text-anchor="middle">身份/權限資訊</text><text x="125" y="200" class="small" text-anchor="middle">節點狀態</text>
+<text x="390" y="150" class="small" text-anchor="middle">產生 M5</text><text x="390" y="175" class="small" text-anchor="middle">M5=&lt;N,D,A,W,R&gt;</text>
+<text x="685" y="150" class="small" text-anchor="middle">依 M5 與政策</text><text x="685" y="175" class="small" text-anchor="middle">輸出治理判決 Vr</text>
+<text x="995" y="150" class="small" text-anchor="middle">控制排載、讀寫</text><text x="995" y="175" class="small" text-anchor="middle">重組、稽核、回滾</text>
+</svg>

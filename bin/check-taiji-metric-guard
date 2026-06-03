@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -e
+
+echo "=== FIVE METRIC ENGINE ==="
+curl -s http://127.0.0.1:8105/health
+echo
+
+echo
+echo "=== POLICY ==="
+curl -s http://127.0.0.1:8105/policy
+echo
+
+echo
+echo "=== SAFE GUARDED RUN ==="
+/home/taiji_admin/Taiji_Hub/bin/taiji-guarded-run \
+--action safe_memory_lookup \
+--current '[1.0,1.0,1.0,5.0,1.0]' \
+--actor guard_check \
+-- echo "SAFE_OK"
+
+echo
+echo "=== BLOCK GUARDED RUN ==="
+set +e
+/home/taiji_admin/Taiji_Hub/bin/taiji-guarded-run \
+--action dangerous_metric_drift \
+--current '[10.0,10.0,10.0,50.0,1.0]' \
+--actor guard_check \
+-- echo "SHOULD_NOT_RUN"
+CODE=$?
+set -e
+
+if [ "$CODE" -ne 40 ]; then
+  echo "Expected block exit_code=40, got $CODE"
+  exit 1
+fi
+
+echo "BLOCK_OK exit_code=$CODE"
+
+echo
+echo "=== AUDIT TAIL ==="
+tail -5 /home/taiji_admin/Taiji_Hub/logs/five_metric_audit.jsonl
+
+echo
+echo "✓ TAIJI METRIC GUARD CHECK COMPLETE"

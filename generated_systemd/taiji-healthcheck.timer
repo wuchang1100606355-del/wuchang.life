@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Taiji Healthcheck Every Minute
+
+[Timer]
+OnBootSec=60
+OnUnitActiveSec=60
+Unit=taiji-healthcheck.service
+
+[Install]
+WantedBy=timers.target

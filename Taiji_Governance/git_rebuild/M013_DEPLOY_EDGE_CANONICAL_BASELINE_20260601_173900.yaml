@@ -1,0 +1,10 @@
+id: M013_DEPLOY_EDGE_CANONICAL_BASELINE
+timestamp: 20260601_173900
+mode: focused_deploy_edge_baseline
+actions:
+  - stage_deploy_edge_cloud_jules_scripts
+  - preserve_git_status_snapshot
+  - no_delete
+  - no_service_restart
+  - no_docker_action
+  - no_secret_read

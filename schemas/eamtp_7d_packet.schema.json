@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/eamtp_7d_packet.schema.json",
+  "title": "EAMTP-7D Internal Canonical Intent-State Packet",
+  "type": "object",
+  "required": [
+    "eamtp_version",
+    "packet_id",
+    "field",
+    "d1_identity_role",
+    "d2_intent",
+    "d3_context_topology",
+    "d4_privacy_consent",
+    "d5_risk_governance",
+    "d6_resource_cost",
+    "d7_action_state",
+    "ledger"
+  ],
+  "properties": {
+    "eamtp_version": {
+      "type": "string",
+      "const": "EAMTP-7D/0.1"
+    },
+    "packet_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "field": {
+      "type": "string",
+      "const": "xiaoj_intent_field"
+    },
+    "d1_identity_role": {
+      "type": "object",
+      "required": ["actor_type", "auth_level", "sovereignty_proxy"],
+      "properties": {
+        "actor_type": {
+          "type": "string",
+          "enum": ["member", "admin", "merchant", "node", "public", "system"]
+        },
+        "auth_level": {
+          "type": "string",
+          "enum": ["anonymous", "verified", "privileged", "system"]
+        },
+        "sovereignty_proxy": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "d2_intent": {
+      "type": "object",
+      "required": ["intent_type", "summary", "user_visible_goal"],
+      "properties": {
+        "intent_type": {
+          "type": "string",
+          "enum": ["ask", "plan", "execute", "review", "route", "memory_update", "system_check"]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "user_visible_goal": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "d3_context_topology": {
+      "type": "object",
+      "required": ["entry", "source_field", "target_field"],
+      "properties": {
+        "entry": {
+          "type": "string",
+          "enum": ["openwebui", "line", "odoo", "taiji01", "local", "cloud", "system"]
+        },
+        "source_field": {
+          "type": "string",
+          "enum": ["local_dev", "local_ops", "edge_dmz", "cloud_redacted", "memory", "evidence", "system"]
+        },
+        "target_field": {
+          "type": "string",
+          "enum": ["router", "memory", "execution", "pending_review", "dead_letter", "cloud_redacted"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "d4_privacy_consent": {
+      "type": "object",
+      "required": ["privacy_level", "consent_state", "cloud_allowed"],
+      "properties": {
+        "privacy_level": {
+          "type": "string",
+          "enum": ["public", "redacted", "pii", "sensitive"]
+        },
+        "consent_state": {
+          "type": "string",
+          "enum": ["unknown", "granted", "denied", "required", "system"]
+        },
+        "cloud_allowed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "d5_risk_governance": {
+      "type": "object",
+      "required": ["risk_level", "requires_human_review", "dead_letter_on_violation", "forbidden_actions"],
+      "properties": {
+        "risk_level": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "requires_human_review": {
+          "type": "boolean"
+        },
+        "dead_letter_on_violation": {
+          "type": "boolean"
+        },
+        "forbidden_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "d6_resource_cost": {
+      "type": "object",
+      "required": ["preferred_lane", "latency_class", "cost_policy"],
+      "properties": {
+        "preferred_lane": {
+          "type": "string",
+          "enum": ["local", "edge", "cloud_redacted", "hybrid"]
+        },
+        "latency_class": {
+          "type": "string",
+          "enum": ["realtime", "normal", "batch"]
+        },
+        "cost_policy": {
+          "type": "string",
+          "enum": ["minimize_cloud", "quality_first", "balanced", "offline_survival"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "d7_action_state": {
+      "type": "object",
+      "required": ["state", "allowed_actions", "result_capsule"],
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": ["received", "routed", "redacted", "computed", "pending_review", "completed", "dead_letter"]
+        },
+        "allowed_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "result_capsule": {}
+      },
+      "additionalProperties": true
+    },
+    "ledger": {
+      "type": "object",
+      "required": ["hash", "created_at", "review_required"],
+      "properties": {
+        "hash": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "review_required": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

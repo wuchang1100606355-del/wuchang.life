@@ -1,0 +1,95 @@
+schema: taiji.identity_tensor_state.v1
+classification: non_secret_governance_metadata
+required_fields:
+  - identity_id
+  - legal_role
+  - operational_role
+  - intent_vector
+  - resource_vector
+  - time_vector
+  - authority_vector
+  - topology_vector
+  - public_interest_vector
+  - commercial_boundary_vector
+  - audit_vector
+  - replay_vector
+  - deadbox_vector
+  - data_scope_vector
+  - container_scope_vector
+  - odoo_scope_vector
+identities:
+  runtime_owner:
+    legal_role: governance_definer
+    operational_role: metric_runtime_owner
+    authority_vector:
+      may:
+        - define_governance_rules
+        - approve_policy_migration
+        - approve_runtime_baseline_change
+      blocked:
+        - erase_audit_history
+        - bypass_metric_lock
+        - override_public_interest_boundary
+  system_architect:
+    legal_role: technical_designer
+    operational_role: architecture_and_runtime_builder
+    authority_vector:
+      may:
+        - propose_architecture
+        - write_deployment_plan
+        - build_prototype_files
+      blocked:
+        - production_deploy_without_approval
+  community_governor:
+    legal_role: public_interest_participant
+    operational_role: community_governance_goal_setter
+    authority_vector:
+      may:
+        - define_public_interest_goals
+        - approve_public_interest_ai_use_case
+      blocked:
+        - public_asset_to_private_gain
+  technology_sponsor:
+    legal_role: technical_donor_or_supporter
+    operational_role: technical_transfer_provider
+    authority_vector:
+      may:
+        - provide_technology
+        - provide_equipment_or_training
+      blocked:
+        - control_public_assets_by_donation
+  runtime_operator:
+    legal_role: maintainer
+    operational_role: runtime_maintenance_operator
+    authority_vector:
+      may:
+        - approved_maintenance
+        - read_only_inspection
+        - approved_rollback
+      blocked:
+        - credential_issuance
+        - payment_approval
+  private_commercial_operator:
+    legal_role: private_business_operator
+    operational_role: private_liaoguo_main_store_operator
+    authority_vector:
+      may:
+        - operate_private_business_systems
+        - support_community_industry_by_transfer_or_lending
+      blocked:
+        - control_association_assets
+  community_industry_operator:
+    legal_role: governed_community_industry_operator
+    operational_role: community_service_node_operator
+    authority_vector:
+      may:
+        - run_approved_community_industry_services
+        - support_public_interest_funding_goals
+      blocked:
+        - private_capital_gain_distribution
+blocked_payloads:
+  - natural_person_id_plaintext
+  - credential_material
+  - service_account_json
+  - oauth_token
+  - private_key

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="param_founder_identity_google_accounts" model="ir.config_parameter">
+            <field name="key">founder.identity.google_accounts</field>
+            <field name="value">["o970106@gmail.com","wuchang1100606355@gmail.com"]</field>
+        </record>
+        <record id="param_founder_delegates" model="ir.config_parameter">
+            <field name="key">founder.delegates</field>
+            <field name="value">["admin@wuchang.life"]</field>
+        </record>
+        <record id="param_managed_email_accounts" model="ir.config_parameter">
+            <field name="key">wuchang.managed_email_accounts</field>
+            <field name="value">["o970106@gmail.com","wuchang1100606355@gmail.com","admin@wuchang.life","o0930913993o@yahoo.com"]</field>
+        </record>
+        <record id="param_task_idle_hours" model="ir.config_parameter">
+            <field name="key">wuchang.task_idle_hours</field>
+            <field name="value">48</field>
+        </record>
+        <record id="param_ai_mode" model="ir.config_parameter">
+            <field name="key">wuchang.ai_mode</field>
+            <field name="value">local_ollama</field>
+        </record>
+        <record id="param_supabase_url" model="ir.config_parameter">
+            <field name="key">wuchang.supabase_url</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_supabase_anon_key" model="ir.config_parameter">
+            <field name="key">wuchang.supabase_anon_key</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_gemini_api_key" model="ir.config_parameter">
+            <field name="key">wuchang.gemini_api_key</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_llm_base_url" model="ir.config_parameter">
+            <field name="key">wuchang.llm_base_url</field>
+            <field name="value">https://llm.wuchang.life</field>
+        </record>
+        <record id="param_google_api_key" model="ir.config_parameter">
+            <field name="key">wuchang.google_api_key</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_gen_model" model="ir.config_parameter">
+            <field name="key">wuchang.gen_model</field>
+            <field name="value">gemini-1.5-flash</field>
+        </record>
+        <record id="param_ollama_model" model="ir.config_parameter">
+            <field name="key">wuchang.ollama_model</field>
+            <field name="value">llama3.1</field>
+        </record>
+        <record id="param_google_api_keys" model="ir.config_parameter">
+            <field name="key">wuchang.google_api_keys</field>
+            <field name="value">[]</field>
+        </record>
+        <record id="param_body_enabled" model="ir.config_parameter">
+            <field name="key">wuchang.body.enabled</field>
+            <field name="value">True</field>
+        </record>
+        <record id="param_body_name" model="ir.config_parameter">
+            <field name="key">wuchang.body.name</field>
+            <field name="value">洛地</field>
+        </record>
+        <record id="param_body_location" model="ir.config_parameter">
+            <field name="key">wuchang.body.location</field>
+            <field name="value">GCP asia-east1-a / vm-ai-server (10.140.0.4, 10.150.0.3, 35.185.171.57)</field>
+        </record>
+        <record id="param_voice_enabled" model="ir.config_parameter">
+            <field name="key">wuchang.voice.enabled</field>
+            <field name="value">True</field>
+        </record>
+        <record id="param_llm_host" model="ir.config_parameter">
+            <field name="key">wuchang.llm.host</field>
+            <field name="value">llm.wuchang.life</field>
+        </record>
+        <record id="param_asr_host" model="ir.config_parameter">
+            <field name="key">wuchang.asr.host</field>
+            <field name="value">asr.wuchang.life</field>
+        </record>
+        <record id="param_tts_host" model="ir.config_parameter">
+            <field name="key">wuchang.tts.host</field>
+            <field name="value">tts.wuchang.life</field>
+        </record>
+        <record id="param_ws_privacy_enabled" model="ir.config_parameter">
+            <field name="key">wuchang.ws_privacy.enabled</field>
+            <field name="value">False</field>
+        </record>
+        <record id="param_ws_privacy_anonymize_logs" model="ir.config_parameter">
+            <field name="key">wuchang.ws_privacy.anonymize_logs</field>
+            <field name="value">False</field>
+        </record>
+        <record id="param_ws_privacy_retention_days" model="ir.config_parameter">
+            <field name="key">wuchang.ws_privacy.retention_days</field>
+            <field name="value">7</field>
+        </record>
+        <record id="param_ws_privacy_disable_analytics" model="ir.config_parameter">
+            <field name="key">wuchang.ws_privacy.disable_analytics</field>
+            <field name="value">False</field>
+        </record>
+        <record id="param_public_interest_mode" model="ir.config_parameter">
+            <field name="key">wuchang.public_interest.enabled</field>
+            <field name="value">True</field>
+        </record>
+        <record id="param_public_interest_meta" model="ir.config_parameter">
+            <field name="key">wuchang.public_interest.meta</field>
+            <field name="value">{"host_compute":"google_infra","soul_owner":"public_interest_system","vortex_levels":["consumer","merchant","npo"]}</field>
+        </record>
+        <record id="param_public_interest_vortex" model="ir.config_parameter">
+            <field name="key">wuchang.public_interest.vortex_policy</field>
+            <field name="value">{"intercept_ratio_min":0.15,"intercept_ratio_max":0.3}</field>
+        </record>
+    </data>
+</odoo>

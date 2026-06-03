@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+cd /home/taiji_admin/Taiji_Hub
+
+echo "================================================="
+echo "  TAIJI01 NEW BOSS SESSION"
+echo "================================================="
+echo "whoami=$(whoami)"
+echo "hostname=$(hostname)"
+echo "pwd=$(pwd)"
+echo "role=taiji_admin full-write maintenance authority"
+
+echo
+echo "=== ADMIN ==="
+id taiji_admin
+
+echo
+echo "=== COMMUNITY USER ==="
+id taiji_01 || true
+
+echo
+echo "=== HIGH-RISK GROUP CHECK ==="
+for g in sudo docker lxd; do
+  if id -nG taiji_01 2>/dev/null | tr " " "\n" | grep -qx "$g"; then
+    echo "HAZARD: taiji_01 still in $g"
+  else
+    echo "PASS: taiji_01 not in $g"
+  fi
+done
+
+echo
+echo "=== DOCKER ==="
+docker ps --format "table {{.Names}}\t{{.Status}}" | head || true

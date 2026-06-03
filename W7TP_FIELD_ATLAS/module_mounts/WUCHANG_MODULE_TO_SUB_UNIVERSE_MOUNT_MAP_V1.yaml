@@ -1,0 +1,92 @@
+map_id: WUCHANG_MODULE_TO_SUB_UNIVERSE_MOUNT_MAP_V1
+status: ACTIVE_PLAN_ONLY
+
+mounts:
+  SU_IDENTITY_8D:
+    modules:
+      - T008_core_packet_schemas
+      - T031_8d_identity_use_policy
+      - M02_8d_identity_registry
+
+  SU_MEMBER_PRIVACY:
+    modules:
+      - T026_privacy_ai_subscription_model
+      - T030_third_party_physical_custody_policy
+      - T032_service_result_only_rule
+      - M01_member_privacy_core
+
+  SU_CONTACT_APPROVAL:
+    modules:
+      - T027_member_contact_approval_policy
+      - T034_merchant_privacy_service_rule
+      - M04_contact_approval_gate
+
+  SU_PLAINTEXT_CLAIM:
+    modules:
+      - T028_plaintext_claim_review_policy
+      - T035_committee_lawful_plaintext_request_rule
+      - M05_plaintext_claim_review
+
+  SU_THREE_KEY_CUSTODY:
+    modules:
+      - T042_three_key_custody_operation_rule
+
+  SU_AUDIT:
+    modules:
+      - T029_accountability_audit_policy
+
+  SU_HUMAN_REVIEW:
+    modules:
+      - T045_xiaoj_xiaoj_review_opinion_plus_final_authorization_queue_rule
+
+  SU_FIELD_DRIFT:
+    modules:
+      - T001_field_drift_event
+      - T017_drift_detector_v1_plan
+
+  SU_TWIN_SYNC:
+    modules:
+      - T005_twin_sync_plan
+      - T019_inbound_sync_plan_only
+      - T022_final_sync_diff_packet
+
+  SU_SERVER_ACCEPTANCE:
+    modules:
+      - T006_server_view_plan
+      - T020_server_acceptance_report
+
+  SU_ROLLBACK:
+    modules:
+      - T013_rollback_policy
+      - T021_taiji01_rollback_point_plan
+
+  SU_ECONOMIC_BLOODMAKING:
+    modules:
+      - T038_ai_blind_compute_cost_router
+      - T039_standard_addon_market_policy
+      - T040_group_member_revenue_sharing_rule
+      - T051_economic_bloodmaking_universe
+
+  SU_GEI_CONTEXT:
+    modules:
+      - T046_gei_context_field
+      - T047_gei_context_packet_schema
+      - T048_gei_context_index
+      - T052_gei_reasoning_universe
+
+  SU_12_INTENT_STATE_MACHINE:
+    modules:
+      - T054_12_intent_state_field
+
+rules:
+  - each_module_must_mount_to_one_primary_sub_universe
+  - cross_mount_allowed_only_as_reference
+  - unmounted_module_requires_review_before_next_batch
+
+red_team_reflection:
+  negative_effects:
+    - modules_may_be_mounted_to_wrong_sub_universe
+    - cross_dependencies_may_hide_real_ownership
+  mitigation:
+    - primary_mount_required
+    - secondary_reference_allowed_but_not_ownership

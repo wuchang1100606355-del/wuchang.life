@@ -1,0 +1,21 @@
+id: CONVERGENCE_NEXT_ACTION
+
+recommended_next:
+  T091_EXECUTION_RESULT_PREPARE
+
+purpose:
+  不是新開發，而是補齊既有 T091 的實際執行證據包。
+
+allowed:
+  - backup_plan
+  - sha256_plan
+  - patch_execution_script_preview
+  - validation_script_preview
+
+forbidden:
+  - direct_canonical_landing
+  - blocker_clear
+  - new_universe
+  - new_module
+  - service_restart
+  - db_write

@@ -1,0 +1,39 @@
+plan_id: W7TP_GOVERNED_HIVE_RESTRUCTURE_V1
+status: PLAN_ONLY
+
+phase_order:
+  P0_freeze_current_state:
+    - no_deploy
+    - no_restart
+    - no_runtime_copy
+    - preserve_MSI_and_taiji01_evidence
+
+  P1_module_boundary:
+    - write_module_map
+    - assign_module_owner_boundary
+    - mark_forbidden_cross_module_actions
+
+  P2_schema_design:
+    - 8d_identity_packet
+    - group_member_node_packet
+    - contact_approval_packet
+    - plaintext_claim_packet
+    - blind_ai_subscription_packet
+
+  P3_odoo_refactor_plan:
+    - split_pm3_runtime_sync_into_modules
+    - keep_secret_refs_only
+    - add_universe_packet_to_each_addon
+
+  P4_sandbox_validation:
+    - manifest_check
+    - python_check
+    - xml_check
+    - no_secret_check
+    - field_drift_check
+
+  P5_runtime_landing:
+    - server_acceptance_report
+    - rollback_point
+    - explicit_human_approval
+    - restart_separate_approval

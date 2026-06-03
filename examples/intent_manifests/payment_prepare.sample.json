@@ -1,0 +1,38 @@
+{
+  "request_id": "sample-payment-prepare-001",
+  "source": {
+    "channel": "test_fixture",
+    "node": "TDI-NODE-pos-kiosk",
+    "operator_role": "staff"
+  },
+  "raw_text_hash": "sha256:6db4d5d6c61ef8c90519e8e5edc68cbf10ef119a6e9bfbcb92c6557b8843ab97",
+  "raw_text_redacted_summary": "Staff asks to prepare checkout for a confirmed order reference.",
+  "raw_text_stored": false,
+  "parsed_intent": {
+    "intent_type": "payment_prepare",
+    "confidence": 0.9,
+    "language": "zh-TW",
+    "summary": "Prepare payment workflow only; do not execute payment."
+  },
+  "items": [],
+  "options": {
+    "payment_execution": false,
+    "human_confirmation_before_next_step": true
+  },
+  "node_identity": "TDI-NODE-pos-kiosk",
+  "data_sensitivity": "transaction_reference",
+  "action_intent": "payment_prepare",
+  "permission_window": "runtime",
+  "reversibility_public_value": {
+    "reversible": false,
+    "public_or_service_value": "Prepare checkout with staff confirmation.",
+    "rollback_note": "No payment executed; cancel prepared checkout if order is wrong."
+  },
+  "risk_level": "L2",
+  "requires_human_confirmation": true,
+  "allowed_action": "prepare_payment_only",
+  "audit_required": true,
+  "rollback_required": true,
+  "target_system": "audit_only",
+  "created_at": "2026-05-11T03:12:00+08:00"
+}

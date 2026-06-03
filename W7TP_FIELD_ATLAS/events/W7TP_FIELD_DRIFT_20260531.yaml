@@ -1,0 +1,81 @@
+event_id: W7TP_FIELD_DRIFT_20260531
+
+title: Source Universe and Runtime Universe Divergence Discovery
+
+classification: TOPOLOGY_DIVERGENCE
+
+severity: MEDIUM
+
+status: OPEN_FOR_PLAN_ONLY
+
+d1_identity:
+  owner: CHIANG_CHENG_LUNG
+  field: WUCHANG_UNIVERSE
+  mode: evidence_preservation
+
+d2_intent:
+  identify_divergence_between_source_and_runtime: true
+  prevent_wrong_deployment: true
+
+d3_state:
+  source_universe:
+    - U02_RUNTIME_SOURCE
+
+  deployment_candidate:
+    - U03_MSI_DEPLOYMENT_CANDIDATE
+
+  runtime_carrier:
+    - U04_TAIJI01_RUNNING_CARRIER
+
+  result:
+    - runtime_field_drift_detected
+
+d4_topology:
+  flow:
+    - U02_RUNTIME_SOURCE
+    - U03_MSI_DEPLOYMENT_CANDIDATE
+    - U04_TAIJI01_RUNNING_CARRIER
+
+  observed_breakpoint:
+    - U03_TO_U04
+
+d5_resource:
+  confirmed_source_assets:
+    - google_auth.py
+    - line_auth.py
+    - member_identity_mapper.py
+    - setup_odoo_secret_refs.py
+    - pm3_runtime_sync
+
+  confirmed_runtime_assets:
+    - wuchang_core
+    - wuchang_association_member_trust
+    - wuchang_cafe_ai_gateway
+    - wuchang_cafe_menu_options
+
+d6_governance:
+  classify_only: true
+  no_deploy: true
+  no_restart: true
+  no_delete: true
+  no_secret_read: true
+  evidence_preservation: true
+
+d7_validation:
+  universe_packet_required: true
+  source_of_truth_required: true
+  runtime_carrier_label_required: true
+  sync_plan_required_before_sync: true
+
+d8_tamper_boundary:
+  direct_relocation_forbidden: true
+  deployment_without_field_check_forbidden: true
+
+universe_lesson:
+  - OAuth was not the root problem
+  - Field Drift was the root problem
+  - Source Universe != Runtime Universe
+  - Universe Registration required
+  - Universe Packet Labels required
+  - Field Drift Detection required
+  - Deployment Validation required

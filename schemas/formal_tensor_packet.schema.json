@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/taiji/formal_tensor_packet.schema.json",
+  "title": "Taiji Formal Five-Metric TensorPacket",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["TensorPacket"],
+  "properties": {
+    "TensorPacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packet_id", "schema", "tau", "pi", "sigma", "lambda", "gamma", "rho", "kappa", "epsilon", "zeta", "alpha"],
+      "properties": {
+        "packet_id": {
+          "type": "string",
+          "pattern": "^tp_[A-Za-z0-9T_:-]+_[a-f0-9]{6,16}$"
+        },
+        "schema": {
+          "type": "string",
+          "const": "taiji.formal_tensor_packet.v1"
+        },
+        "tau": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["I", "R", "T", "A", "P"],
+          "properties": {
+            "I": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "modality", "confidence", "semantic_hash"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["order_create", "order_modify", "order_cancel_item", "order_confirm", "payment_prepare", "payment_execute", "browser_execute", "odoo_draft", "line_order", "ai_fallback", "audit_only"]
+                },
+                "modality": {
+                  "type": "string",
+                  "enum": ["voice", "text", "image", "video", "pos", "odoo", "line", "browser", "system"]
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "semantic_hash": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            },
+            "R": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["ai_cost", "gpu_required", "voice_api_required", "browser_runtime_cost", "estimated_tokens", "io_cost"],
+              "properties": {
+                "ai_cost": {"$ref": "#/$defs/cost_level"},
+                "gpu_required": {"type": "boolean"},
+                "voice_api_required": {"type": "boolean"},
+                "browser_runtime_cost": {"$ref": "#/$defs/cost_level"},
+                "estimated_tokens": {"type": "integer", "minimum": 0},
+                "io_cost": {"$ref": "#/$defs/cost_level"}
+              }
+            },
+            "T": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["created_at", "replay_window_sec", "continuity_state", "cache_ttl_sec", "rollback_horizon"],
+              "properties": {
+                "created_at": {"type": "string", "format": "date-time"},
+                "replay_window_sec": {"type": "integer", "minimum": 0, "maximum": 86400},
+                "continuity_state": {"type": "string", "enum": ["new", "active", "reuse", "expired", "deadbox"]},
+                "cache_ttl_sec": {"type": "integer", "minimum": 0, "maximum": 604800},
+                "rollback_horizon": {"type": "string", "maxLength": 160}
+              }
+            },
+            "A": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["governance_level", "human_confirmation_required", "payment_boundary", "deployment_boundary", "credential_boundary", "production_overwrite_boundary"],
+              "properties": {
+                "governance_level": {"type": "string", "enum": ["L0_allow", "L1_audit", "L2_confirm", "L3_block"]},
+                "human_confirmation_required": {"type": "boolean"},
+                "payment_boundary": {"type": "string", "enum": ["none", "prepare_only", "blocked"]},
+                "deployment_boundary": {"type": "string", "enum": ["none", "manifest_only", "preflight_only", "no_live_deploy", "blocked"]},
+                "credential_boundary": {"type": "string", "enum": ["no_credential_access", "blocked"]},
+                "production_overwrite_boundary": {"type": "string", "enum": ["none", "blocked"]}
+              }
+            },
+            "P": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source_node", "gateway", "target_runtime", "container_scope", "domain_route", "odoo_scope", "pos_node", "line_gateway", "browser_runtime", "audit_runtime"],
+              "properties": {
+                "source_node": {"type": "string", "maxLength": 128},
+                "gateway": {"type": "string", "maxLength": 128},
+                "target_runtime": {"type": "string", "maxLength": 128},
+                "container_scope": {"type": "string", "maxLength": 128},
+                "domain_route": {"type": "string", "maxLength": 128},
+                "odoo_scope": {"type": "string", "maxLength": 128},
+                "pos_node": {"type": "string", "maxLength": 128},
+                "line_gateway": {"type": "string", "maxLength": 128},
+                "browser_runtime": {"type": "string", "maxLength": 128},
+                "audit_runtime": {"type": "string", "maxLength": 128}
+              }
+            }
+          }
+        },
+        "pi": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["payload_hash", "raw_plaintext_stored", "redacted_summary"],
+          "properties": {
+            "payload_hash": {"$ref": "#/$defs/sha256"},
+            "raw_plaintext_stored": {"type": "boolean", "const": false},
+            "redacted_summary": {"type": "string", "maxLength": 512}
+          }
+        },
+        "sigma": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["continuity", "tensor_hash", "pattern"],
+          "properties": {
+            "continuity": {"type": "string", "enum": ["new", "reuse", "fork", "expired"]},
+            "tensor_hash": {"type": "string", "pattern": "^tx_[a-f0-9]{6,32}$"},
+            "pattern": {"type": "string", "maxLength": 128}
+          }
+        },
+        "lambda": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["route", "allowed_targets"],
+          "properties": {
+            "route": {"type": "string", "maxLength": 128},
+            "allowed_targets": {"type": "array", "items": {"type": "string", "maxLength": 128}}
+          }
+        },
+        "gamma": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["risk_level", "action", "human_decision", "audit_required", "rollback_required"],
+          "properties": {
+            "risk_level": {"type": "string", "enum": ["L0", "L1", "L2", "L3"]},
+            "action": {"type": "string", "enum": ["allow", "allow_with_audit", "warn", "block", "deadbox"]},
+            "human_decision": {"type": "string", "enum": ["not_required", "required"]},
+            "audit_required": {"type": "boolean"},
+            "rollback_required": {"type": "boolean"}
+          }
+        },
+        "rho": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["nonce_hash", "parent_hash", "replay_allowed"],
+          "properties": {
+            "nonce_hash": {"$ref": "#/$defs/sha256"},
+            "parent_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "string", "const": "root"}]},
+            "replay_allowed": {"type": "boolean"}
+          }
+        },
+        "kappa": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cache_key", "cache_ttl_sec"],
+          "properties": {
+            "cache_key": {"type": "string", "maxLength": 128},
+            "cache_ttl_sec": {"type": "integer", "minimum": 0}
+          }
+        },
+        "epsilon": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["entropy_level", "retry_budget", "gpu_wake_allowed"],
+          "properties": {
+            "entropy_level": {"type": "string", "enum": ["low", "medium", "high", "blocked"]},
+            "retry_budget": {"type": "integer", "minimum": 0, "maximum": 10},
+            "gpu_wake_allowed": {"type": "boolean"}
+          }
+        },
+        "zeta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["deadbox_state", "deadbox_reason"],
+          "properties": {
+            "deadbox_state": {"type": "string", "enum": ["none", "quarantine", "deadbox"]},
+            "deadbox_reason": {"type": "string", "maxLength": 256}
+          }
+        },
+        "alpha": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["audit_event_id", "audit_channel", "secret_material_printed", "external_api_called", "live_deploy_executed"],
+          "properties": {
+            "audit_event_id": {"type": "string", "maxLength": 128},
+            "audit_channel": {"type": "string", "maxLength": 256},
+            "secret_material_printed": {"type": "boolean", "const": false},
+            "external_api_called": {"type": "boolean", "const": false},
+            "live_deploy_executed": {"type": "boolean", "const": false}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "cost_level": {"type": "string", "enum": ["none", "low", "medium", "high", "blocked"]}
+  }
+}

@@ -1,0 +1,73 @@
+index_id: W7TP_GEI_MASTER_INDEX
+status: ACTIVE_PLAN_ONLY
+
+chapter: GEI_CONTEXT_FIELD
+completion: CLOSURE_V1
+
+core:
+  field:
+    file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_FIELD_V1.yaml
+  packet_schema:
+    file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_PACKET_SCHEMA_V1.yaml
+  context_index:
+    file: W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+
+snapshot_layer:
+  generator_plan:
+    file: W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_SNAPSHOT_GENERATOR_PLAN_V1.yaml
+  script_plan:
+    file: W7TP_FIELD_ATLAS/gei_context/scripts/W7TP_GEI_SNAPSHOT_SCRIPT_PLAN_V1.yaml
+  script:
+    file: W7TP_FIELD_ATLAS/gei_context/scripts/generate_gei_snapshot.sh
+  output_index:
+    file: W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/00_gei_snapshot_output_index.yaml
+  latest_snapshot_yaml:
+    file: W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.yaml
+  latest_snapshot_md:
+    file: W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/latest_gei_context_snapshot.md
+  linter_plan:
+    file: W7TP_FIELD_ATLAS/gei_context/linter_plans/W7TP_GEI_SNAPSHOT_LINTER_PLAN_V1.yaml
+  retention_policy:
+    file: W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_CONTEXT_RETENTION_POLICY_V1.yaml
+
+decision_layer:
+  decision_context_rule:
+    file: W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_DECISION_CONTEXT_RULE_V1.yaml
+  decision_packet_template:
+    file: W7TP_FIELD_ATLAS/gei_context/decision_packets/W7TP_GEI_DECISION_PACKET_TEMPLATE_V1.yaml
+  decision_preflight_rule:
+    file: W7TP_FIELD_ATLAS/gei_context/preflight/W7TP_GEI_DECISION_PREFLIGHT_RULE_V1.yaml
+  runtime_acceptance_gate:
+    file: W7TP_FIELD_ATLAS/gei_context/runtime_acceptance/W7TP_GEI_RUNTIME_ACCEPTANCE_GATE_V1.yaml
+
+evidence_and_compare_layer:
+  source_of_truth_map:
+    file: W7TP_FIELD_ATLAS/gei_context/source_maps/W7TP_GEI_SOURCE_OF_TRUTH_MAP_V1.yaml
+  field_drift_correlation_engine:
+    file: W7TP_FIELD_ATLAS/gei_context/correlation/W7TP_GEI_FIELD_DRIFT_CORRELATION_ENGINE_V1.yaml
+  twin_system_compare_packet:
+    file: W7TP_FIELD_ATLAS/gei_context/twin_compare/W7TP_GEI_TWIN_SYSTEM_COMPARE_PACKET_V1.yaml
+
+handoff_and_export_layer:
+  handoff_template:
+    file: W7TP_FIELD_ATLAS/gei_context/handoff_templates/W7TP_GEI_CHAT_HANDOFF_TEMPLATE_V1.md
+  export_boundary:
+    file: W7TP_FIELD_ATLAS/gei_context/export_policies/W7TP_GEI_CONTEXT_EXPORT_BOUNDARY_V1.yaml
+  gei_task_board:
+    file: W7TP_FIELD_ATLAS/gei_context/task_boards/W7TP_GEI_CONTEXT_TASK_BOARD_V1.yaml
+
+boundary:
+  GEI_is_context_layer: true
+  GEI_is_not_runtime_authority: true
+  GEI_does_not_authorize_copy_restart_deploy: true
+  runtime_actions_require_decision_packet_and_explicit_approval: true
+
+red_team_reflection:
+  negative_effects:
+    - GEI_may_expand_into_second_runtime_governance_system
+    - GEI_master_index_may_become_stale
+    - too_many_context_files_can_increase_maintenance_cost
+  mitigation:
+    - close_GEI_after_this_master_index
+    - put_runtime_logic_back_into_governed_hive_runtime_layer
+    - use_GEIs_role_as_context_bridge_only

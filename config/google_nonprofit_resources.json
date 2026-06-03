@@ -1,0 +1,54 @@
+{
+  "project": "Wuchang Smart Cloud",
+  "organization": "新北市三重區五常社區發展協會",
+  "domain": "wuchang.life",
+  "google_nonprofit_resources": {
+    "google_workspace": {
+      "role": "identity, email, drive, calendar, forms, sheets, sites, meet",
+      "system_use": [
+        "cold_disk_google_drive_shared_space",
+        "official_site",
+        "forms_to_sheets_data_collection",
+        "calendar_events",
+        "gmail_draft_after_user_approval"
+      ]
+    },
+    "google_drive_shared_space": {
+      "role": "cold_disk",
+      "path": "Google Drive 組織共用空間/五常共用空間",
+      "policy": "archive_only_non_sensitive_or_desensitized_records"
+    },
+    "google_sites": {
+      "role": "official_public_portal",
+      "hostname": "wuchang.life"
+    },
+    "google_forms_sheets": {
+      "role": "community_data_collection_and_public_statistics",
+      "policy": "avoid_sensitive_plaintext"
+    },
+    "google_maps_platform": {
+      "role": "community_humanities_hydrology_geography_mapping",
+      "policy": "public_or_authorized_layers_only"
+    },
+    "google_ad_grants": {
+      "role": "nonprofit_awareness_volunteer_recruiting_partnership_search_ads",
+      "policy": "nonprofit_promotion_only_no_resale"
+    },
+    "youtube_nonprofit_program": {
+      "role": "public_demonstration_video_ai_for_good_storytelling",
+      "policy": "educational_and_public_interest_content"
+    },
+    "gemini_notebooklm": {
+      "role": "controlled_cloud_ai_assist_after_user_authorization",
+      "policy": "local_first_desensitize_before_cloud_no_sensitive_plaintext"
+    }
+  },
+  "security_principles": [
+    "local_first",
+    "user_approval_required",
+    "minimum_google_api_scope",
+    "no_direct_llm_credentials_access",
+    "audit_all_workspace_actions",
+    "sensitive_data_stays_local"
+  ]
+}

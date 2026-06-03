@@ -1,0 +1,88 @@
+{
+  "title": "Group Member Aggregate Mapping",
+  "type": "object",
+  "required": [
+    "event",
+    "mapping_id",
+    "formula_visible",
+    "individual_detail_visible",
+    "aggregation_method",
+    "final_statistic",
+    "small_sample_protection",
+    "audit_required",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "group_member_aggregate_mapping"
+    },
+    "mapping_id": {
+      "type": "string"
+    },
+    "source_database": {
+      "type": "string"
+    },
+    "formula_visible": {
+      "const": true
+    },
+    "field_definition_visible": {
+      "type": "boolean",
+      "default": true
+    },
+    "individual_detail_visible": {
+      "const": false
+    },
+    "individual_behavior_used_in_calculation": {
+      "type": "boolean",
+      "default": true
+    },
+    "individual_number_visible": {
+      "const": false
+    },
+    "process_visible": {
+      "const": false
+    },
+    "final_result_visible": {
+      "type": "boolean",
+      "default": true
+    },
+    "intermediate_values_exportable": {
+      "const": false
+    },
+    "aggregation_method": {
+      "type": "string"
+    },
+    "final_statistic": {
+      "type": "object"
+    },
+    "group_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "event_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "dominance_ratio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "small_sample_protection": {
+      "type": "boolean"
+    },
+    "public_release_allowed": {
+      "type": "boolean",
+      "default": false
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "sha256": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

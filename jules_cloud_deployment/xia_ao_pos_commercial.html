@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>蝦敖 POS 語音系統 [AI 助理版]</title>
+    <style>
+        body { background: #121212; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
+        input { padding: 10px; text-align: center; font-weight: bold; }
+        button { padding: 10px 20px; background: #d4af37; border: none; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🍤 蝦敖 POS 企業版</h1>
+    <p>請輸入金鑰 (F124771717-PRO) 解鎖系統：</p>
+    <input type="password" id="key" placeholder="Enter License...">
+    <button onclick="unlock()">驗證</button>
+    <h2 id="msg" style="color:red;"></h2>
+    <script>
+        function unlock() {
+            if(document.getElementById('key').value === 'F124771717-PRO') {
+                document.getElementById('msg').style.color = '#10b981';
+                document.getElementById('msg').innerText = "✅ 解鎖成功！語音模組已載入。";
+                let t = new SpeechSynthesisUtterance("指揮官，歡迎使用蝦敖企業級語音 POS 系統。");
+                t.lang = 'zh-TW'; speechSynthesis.speak(t);
+            } else { document.getElementById('msg').innerText = "❌ 授權無效"; }
+        }
+    </script>
+</body>
+</html>

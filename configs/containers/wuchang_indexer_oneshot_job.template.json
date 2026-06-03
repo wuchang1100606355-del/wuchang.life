@@ -1,0 +1,44 @@
+{
+  "packet_version": "W7TP-CONTAINER-JOB/0.1",
+  "job_id": "w7tp_indexer_oneshot_template",
+  "domain": "wuchang.life",
+  "source_container": "wuchang_os_indexer",
+  "image": "w7tp-indexer:latest",
+  "task_type": "index_once",
+  "execution_mode": "one_shot_or_scheduled",
+  "restart_policy": "no",
+  "current_host": "msi",
+  "target_host": "pure_linux_server",
+  "risk": "medium",
+  "privacy": "redacted",
+  "network": "none_or_minimal",
+  "auto_commit": false,
+  "ssh_allowed": false,
+  "container_start_allowed_by_this_manifest": false,
+  "forbidden_paths": [
+    "/",
+    ".env",
+    "keys",
+    ".ssh",
+    "private_key",
+    "configs/merlin/router_inventory_redacted.local.json",
+    "Taiji_Odoo/postgres_data",
+    "raw_member_data"
+  ],
+  "forbidden_tasks": [
+    "git_commit",
+    "git_push",
+    "router_write",
+    "ssh_remote_command",
+    "credential_read",
+    "formal_db_write",
+    "raw_member_pii_read"
+  ],
+  "result_required": [
+    "summary.json",
+    "markdown_report",
+    "sha256",
+    "exit_code",
+    "resource_usage"
+  ]
+}

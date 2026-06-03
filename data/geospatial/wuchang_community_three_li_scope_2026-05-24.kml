@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>新北市三重區五常社區三里轄區</name>
+    <description><![CDATA[
+      五常社區發展協會轄區 scope：新北市三重區五常里、五順里、仁忠里。
+      此檔為三里轄區錨點與範圍聲明，不是完整邊界 polygon。
+      後續需補官方村里界 polygon 才能作為精密邊界圖資。
+    ]]></description>
+    <Style id="wuchang_scope_anchor">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.0</scale>
+      </LabelStyle>
+    </Style>
+    <Placemark>
+      <name>五常社區三里轄區：五常里、五順里、仁忠里</name>
+      <styleUrl>#wuchang_scope_anchor</styleUrl>
+      <description><![CDATA[
+        <b>組織：</b>新北市三重區五常社區發展協會<br/>
+        <b>轄區：</b>新北市三重區五常里、五順里、仁忠里<br/>
+        <b>圖資狀態：</b>三里 scope anchor，尚非完整 polygon 邊界<br/>
+        <b>治理限制：</b>不可用於精密法定邊界、會員住址推論或個資定位<br/>
+        <b>Anchor SHA256：</b>38c3a7fe82a7fd9edd336c1425632fcb1d9373cd71901d4830011853824ee1ac
+      ]]></description>
+      <Point>
+        <altitudeMode>absolute</altitudeMode>
+        <coordinates>121.497961092329,25.0804429673534,1.46854201938258</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

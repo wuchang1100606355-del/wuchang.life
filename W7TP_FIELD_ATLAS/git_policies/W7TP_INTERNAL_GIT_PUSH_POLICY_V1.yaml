@@ -1,0 +1,45 @@
+policy_id: W7TP_INTERNAL_GIT_PUSH_POLICY_V1
+status: PLAN_ONLY
+
+git_type: internal_built_in_git
+
+auto_commit:
+  allowed: true
+  scope:
+    - W7TP_FIELD_ATLAS
+    - Taiji_Governance
+    - boot
+    - docs
+  required_gates:
+    - no_secret_scan
+    - focused_git_status
+
+auto_bundle:
+  allowed: true
+  purpose:
+    - disaster_recovery
+    - evidence_chain
+    - rollback_reference
+
+push_existing_remote:
+  allowed: true
+  condition:
+    - user_requested
+    - safe_scope_only
+    - secret_scan_pass
+
+auto_external_push:
+  allowed: false
+  reason:
+    - patent_period
+    - sensitive_topology
+    - governance_docs_private_by_default
+
+red_team_reflection:
+  negative_effects:
+    - push_may_expose_patent_period_context
+    - unsafe_scope_may_include_runtime_or_secret_files
+  mitigation:
+    - focused_scope_push
+    - archive_untracked_separately
+    - secret_scan_before_push

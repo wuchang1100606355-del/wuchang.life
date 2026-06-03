@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_wuchang_task_intervention" model="ir.cron">
+        <field name="name">Wuchang 任務介入檢查</field>
+        <field name="model_id" ref="wuchang_core.model_wuchang_task"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_check_tasks_and_intervene()</field>
+        <field name="active" eval="True"/>
+        <field name="interval_type">minutes</field>
+        <field name="interval_number">15</field>
+        <field name="numbercall">-1</field>
+    </record>
+    <record id="ir_cron_wuchang_enforce_admin_singleton" model="ir.cron">
+        <field name="name">Wuchang 平台管理人唯一性檢查</field>
+        <field name="model_id" ref="wuchang_core.model_wuchang_platform_admin"/>
+        <field name="state">code</field>
+        <field name="code">model.enforce_single_admins()</field>
+        <field name="active" eval="True"/>
+        <field name="interval_type">hours</field>
+        <field name="interval_number">1</field>
+        <field name="numbercall">-1</field>
+</record>
+    <record id="ir_cron_wuchang_periodic_report_10m" model="ir.cron">
+        <field name="name">Wuchang 十分鐘回報</field>
+        <field name="model_id" ref="wuchang_core.model_wuchang_jf_gateway"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_periodic_report()</field>
+        <field name="active" eval="True"/>
+        <field name="interval_type">minutes</field>
+        <field name="interval_number">10</field>
+        <field name="numbercall">-1</field>
+    </record>
+    <record id="ir_cron_wuchang_event_watchdog_10m" model="ir.cron">
+        <field name="name">Wuchang 事件看守</field>
+        <field name="model_id" ref="wuchang_core.model_wuchang_jf_gateway"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_event_watchdog()</field>
+        <field name="active" eval="True"/>
+        <field name="interval_type">minutes</field>
+        <field name="interval_number">10</field>
+        <field name="numbercall">-1</field>
+    </record>
+</odoo>

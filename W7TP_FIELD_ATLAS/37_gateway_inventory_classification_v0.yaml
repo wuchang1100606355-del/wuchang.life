@@ -1,0 +1,23 @@
+gateway_inventory_id: 37_gateway_inventory_classification_v0
+purpose: Classify gateway-related files into route bridge health startup and config domains.
+mode: docs_index_only
+inputs:
+  - runtime/reports/search_gateway_paths.txt
+  - runtime/reports/TASK_GATEWAY.md
+  - W7TP_FIELD_ATLAS/30_gateway_route_map.yaml
+classes:
+  route_runtime: [services, runtime, taiji_gateway.py]
+  bridge_runtime: [runtime/openwebui_bridge.py, openwebui_tools]
+  startup_scripts: [scripts/start_gateway.sh, scripts/start_gateway_guard.sh, boot]
+  health_reports: [runtime/reports, reports, logs]
+  config_reference: [config, configs, deploy]
+safe_next_actions:
+  - inventory gateway files only
+  - do not restart gateway
+  - do not edit env files
+  - do not read credentials
+governance:
+  no_secret_read: true
+  no_service_restart: true
+  no_runtime_change: true
+next_action: build odoo inventory classification

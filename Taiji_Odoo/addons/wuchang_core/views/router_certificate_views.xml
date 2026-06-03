@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_router_certificate_tree" model="ir.ui.view">
+        <field name="name">wuchang.router.certificate.tree</field>
+        <field name="model">wuchang.router.certificate</field>
+        <field name="arch" type="xml">
+            <tree string="路由器證書" decoration-success="status == 'configured'" decoration-danger="status == 'expired'">
+                <field name="name"/>
+                <field name="router_ip"/>
+                <field name="router_model"/>
+                <field name="status" widget="badge"/>
+                <field name="current_ssl_method"/>
+                <field name="valid_until"/>
+                <field name="use_in_caddy"/>
+                <field name="use_in_router"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_router_certificate_form" model="ir.ui.view">
+        <field name="name">wuchang.router.certificate.form</field>
+        <field name="model">wuchang.router.certificate</field>
+        <field name="arch" type="xml">
+            <form string="路由器證書">
+                <header>
+                    <button name="action_download_certificate" string="下載證書" type="object" class="oe_highlight"/>
+                    <button name="action_validate_certificate" string="驗證證書" type="object"/>
+                    <button name="action_apply_to_caddy" string="應用到 Caddy" type="object"
+                            attrs="{'invisible': [('status', '!=', 'configured')]}"/>
+                    <field name="status" widget="statusbar" statusbar_visible="not_configured,configured,expired"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="router_ip"/>
+                            <field name="router_model"/>
+                            <field name="current_ssl_method"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="valid_from"/>
+                            <field name="valid_until"/>
+                            <field name="is_self_signed"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="證書文件">
+                            <group>
+                                <field name="cert_file_path" placeholder="/path/to/server.crt"/>
+                                <field name="key_file_path" placeholder="/path/to/server.key"/>
+                                <field name="ca_file_path" placeholder="/path/to/ca.crt"/>
+                                <field name="download_url"/>
+                                <field name="download_date"/>
+                                <field name="download_method"/>
+                            </group>
+                        </page>
+                        <page string="證書內容">
+                            <group>
+                                <field name="certificate_content" widget="text" placeholder="-----BEGIN CERTIFICATE-----&#10;...&#10;-----END CERTIFICATE-----"/>
+                                <field name="private_key_content" widget="text" password="True" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----"/>
+                            </group>
+                        </page>
+                        <page string="證書信息">
+                            <group>
+                                <field name="issuer"/>
+                                <field name="subject"/>
+                            </group>
+                        </page>
+                        <page string="使用配置">
+                            <group>
+                                <field name="use_in_caddy"/>
+                                <field name="use_in_router"/>
+                            </group>
+                        </page>
+                        <page string="備註">
+                            <field name="note" placeholder="證書配置說明和備註..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_router_certificate_search" model="ir.ui.view">
+        <field name="name">wuchang.router.certificate.search</field>
+        <field name="model">wuchang.router.certificate</field>
+        <field name="arch" type="xml">
+            <search string="路由器證書">
+                <field name="name"/>
+                <field name="router_ip"/>
+                <filter string="已配置" name="configured" domain="[('status', '=', 'configured')]"/>
+                <filter string="已過期" name="expired" domain="[('status', '=', 'expired')]"/>
+                <group expand="0" string="分組">
+                    <filter string="狀態" name="group_by_status" context="{'group_by': 'status'}"/>
+                    <filter string="SSL 方法" name="group_by_method" context="{'group_by': 'current_ssl_method'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_view_router_certificate" model="ir.actions.act_window">
+        <field name="name">路由器證書管理</field>
+        <field name="res_model">wuchang.router.certificate</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                配置路由器伺服器憑證
+            </p>
+            <p>
+                管理 ASUS 路由器的 SSL/TLS 證書，用於路由器 HTTPS 訪問或整合到 Caddy 反向代理中。
+            </p>
+        </field>
+    </record>
+
+    <!-- 菜單項 -->
+    <menuitem id="menu_router_certificate"
+              name="路由器證書"
+              parent="menu_wuchang_infrastructure"
+              action="action_view_router_certificate"
+              sequence="25"/>
+</odoo>

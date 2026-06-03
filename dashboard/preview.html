@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>五常太極｜動態連接埠轉發超連結</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#121a31;
+      --panel2:#0f172a;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --line:#27344d;
+      --accent:#38bdf8;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(56,189,248,.18), transparent 35%),
+        radial-gradient(circle at 80% 20%, rgba(34,197,94,.12), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+    .wrap{max-width:1120px;margin:0 auto;padding:28px 18px 50px}
+    header{
+      display:flex;gap:18px;align-items:flex-start;justify-content:space-between;
+      margin-bottom:18px;
+    }
+    h1{font-size:clamp(26px,4vw,42px);line-height:1.05;margin:0 0 8px}
+    .sub{color:var(--muted);line-height:1.55}
+    .badge{
+      border:1px solid rgba(56,189,248,.5);
+      color:#bae6fd;background:rgba(14,165,233,.12);
+      padding:8px 12px;border-radius:999px;font-size:13px;white-space:nowrap;
+    }
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:860px){.grid{grid-template-columns:1fr} header{display:block}.badge{display:inline-block;margin-top:12px}}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:0 18px 50px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+    }
+    h2{font-size:18px;margin:0 0 14px}
+    label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+    input,select,textarea{
+      width:100%;
+      background:#020617;
+      color:var(--text);
+      border:1px solid #334155;
+      border-radius:12px;
+      padding:11px 12px;
+      outline:none;
+      font-size:15px;
+    }
+    input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.15)}
+    .row{display:grid;grid-template-columns:140px 1fr 120px;gap:10px}
+    @media(max-width:620px){.row{grid-template-columns:1fr}}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    button,a.btn{
+      border:0;
+      cursor:pointer;
+      color:#00111c;
+      background:var(--accent);
+      font-weight:700;
+      border-radius:12px;
+      padding:11px 14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+    }
+    button.secondary,a.secondary{background:#1f2937;color:#e5e7eb;border:1px solid #334155}
+    button.good{background:var(--ok);color:#03130a}
+    button.warn{background:var(--warn);color:#1c1000}
+    button.danger{background:#7f1d1d;color:#fee2e2}
+    .urlbox{
+      background:#020617;border:1px dashed #334155;border-radius:14px;
+      padding:13px;margin-top:14px;word-break:break-all;color:#bae6fd;
+      min-height:52px;
+    }
+    .services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    @media(max-width:620px){.services{grid-template-columns:1fr}}
+    .svc{
+      border:1px solid #334155;background:rgba(15,23,42,.85);
+      border-radius:15px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center
+    }
+    .svc b{display:block;font-size:15px}
+    .svc small{color:var(--muted)}
+    .mini{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
+    .pill{display:inline-block;border:1px solid #334155;border-radius:999px;padding:4px 8px;color:#cbd5e1;margin:3px;font-size:12px}
+    .status{
+      margin-top:12px;padding:10px 12px;border-radius:12px;
+      background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.35);color:#bbf7d0;
+      display:none;
+    }
+    .status.show{display:block}
+    .footer{color:var(--muted);font-size:12px;line-height:1.6;margin-top:18px}
+    code{background:#020617;border:1px solid #334155;border-radius:7px;padding:2px 6px;color:#bae6fd}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>五常太極｜動態連接埠轉發超連結</h1>
+        <div class="sub">
+          用同一個網頁生成不同服務的動態連結：Odoo、WebUI、API、門市設備、Tailscale、區網 IP 都能切。<br>
+          支援 <code>?host=&port=&path=&proto=&go=1</code> 參數；可做「開新窗即轉發」。
+        </div>
+      </div>
+      <div class="badge">Dynamic Port Link Hub</div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>1. 目標連線</h2>
+
+        <label>協定</label>
+        <select id="proto">
+          <option value="http">http</option>
+          <option value="https">https</option>
+        </select>
+
+        <label>主機 / 網域 / Tailscale IP</label>
+        <input id="host" placeholder="例如：192.168.50.249、100.x.x.x、wuchang.life" />
+
+        <div class="row">
+          <div>
+            <label>連接埠</label>
+            <input id="port" placeholder="8069" inputmode="numeric" />
+          </div>
+          <div>
+            <label>路徑</label>
+            <input id="path" placeholder="/web" />
+          </div>
+          <div>
+            <label>自動跳轉</label>
+            <select id="go">
+              <option value="0">否</option>
+              <option value="1">是</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button onclick="build()">生成連結</button>
+          <button class="good" onclick="openTarget()">開啟目標</button>
+          <button class="secondary" onclick="copyTarget()">複製目標 URL</button>
+          <button class="secondary" onclick="copyShare()">複製動態頁連結</button>
+        </div>
+
+        <div id="targetUrl" class="urlbox"></div>
+        <div id="status" class="status"></div>
+
+        <div class="mini">
+          動態頁連結用途：把本頁網址加上參數分享或設成桌面捷徑，例如
+          <code>?host=192.168.50.249&port=8069&path=/web&proto=http&go=1</code>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. 快速服務卡</h2>
+        <div class="services" id="services"></div>
+
+        <div class="btns">
+          <button class="secondary" onclick="resetServices()">重置服務卡</button>
+          <button class="secondary" onclick="exportConfig()">匯出設定</button>
+          <button class="secondary" onclick="document.getElementById('importFile').click()">匯入設定</button>
+          <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importConfig(event)">
+        </div>
+
+        <div class="mini">
+          服務卡存在瀏覽器 localStorage。換瀏覽器或清除資料會消失，正式部署可改接你的度規記憶庫 / policy file。
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:16px">
+      <h2>3. 新增 / 修改服務卡</h2>
+      <div class="row">
+        <div>
+          <label>名稱</label>
+          <input id="svcName" placeholder="Odoo POS">
+        </div>
+        <div>
+          <label>路徑</label>
+          <input id="svcPath" placeholder="/web">
+        </div>
+        <div>
+          <label>連接埠</label>
+          <input id="svcPort" placeholder="8069" inputmode="numeric">
+        </div>
+      </div>
+      <div class="btns">
+        <button onclick="addService()">加入服務卡</button>
+      </div>
+      <div class="mini">
+        建議保留門市內網服務，不要直接把管理後台暴露到公網。對外請走 Cloudflare Tunnel / VPN / 反向代理與登入權限。
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:16px">
+      <h2>4. 常用參數</h2>
+      <span class="pill">host：主機或網域</span>
+      <span class="pill">port：連接埠</span>
+      <span class="pill">path：服務路徑</span>
+      <span class="pill">proto：http / https</span>
+      <span class="pill">go=1：載入後自動轉跳</span>
+      <span class="pill">delay=1500：自動轉跳延遲毫秒</span>
+
+      <div class="footer">
+        安全原則：本頁只是產生或開啟 URL，不含密碼、不含 token、不替你繞過登入。若用於公開網域，請在伺服器層加上認證、TLS、存取控制與日誌。
+      </div>
+    </section>
+  </div>
+
+<script>
+const DEFAULT_SERVICES = [
+  {name:"Odoo / POS", port:"8069", path:"/web"},
+  {name:"Odoo Longpolling", port:"8072", path:"/"},
+  {name:"Open WebUI", port:"3000", path:"/"},
+  {name:"Taiji API", port:"8081", path:"/"},
+  {name:"Runtime Health", port:"8099", path:"/"},
+  {name:"Claw Container", port:"9004", path:"/"}
+];
+
+function safePath(p){
+  p = (p || "/").trim();
+  if(!p.startsWith("/")) p = "/" + p;
+  return p;
+}
+
+function getServices(){
+  try {
+    return JSON.parse(localStorage.getItem("taiji_dynamic_services")) || DEFAULT_SERVICES;
+  } catch(e) {
+    return DEFAULT_SERVICES;
+  }
+}
+
+function setServices(list){
+  localStorage.setItem("taiji_dynamic_services", JSON.stringify(list));
+}
+
+function setStatus(msg){
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"), 2200);
+}
+
+function readInputs(){
+  return {
+    proto: document.getElementById("proto").value || "http",
+    host: document.getElementById("host").value.trim(),
+    port: document.getElementById("port").value.trim(),
+    path: safePath(document.getElementById("path").value),
+    go: document.getElementById("go").value || "0"
+  };
+}
+
+function targetFrom(x){
+  const portPart = x.port ? ":" + x.port : "";
+  return `${x.proto}://${x.host}${portPart}${x.path}`;
+}
+
+function build(){
+  const x = readInputs();
+  if(!x.host){
+    document.getElementById("targetUrl").textContent = "請先輸入 host / 網域 / IP。";
+    return "";
+  }
+  const url = targetFrom(x);
+  document.getElementById("targetUrl").textContent = url;
+  localStorage.setItem("taiji_last_link", JSON.stringify(x));
+  return url;
+}
+
+function dynamicPageUrl(){
+  const x = readInputs();
+  const base = location.href.split("?")[0].split("#")[0];
+  const params = new URLSearchParams();
+  params.set("proto", x.proto);
+  params.set("host", x.host);
+  params.set("port", x.port);
+  params.set("path", x.path);
+  params.set("go", x.go);
+  params.set("delay", "1200");
+  return base + "?" + params.toString();
+}
+
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    setStatus("已複製。");
+  }catch(e){
+    prompt("請手動複製：", text);
+  }
+}
+
+function copyTarget(){
+  const url = build();
+  if(url) copyText(url);
+}
+
+function copyShare(){
+  const x = readInputs();
+  if(!x.host){ setStatus("請先輸入 host。"); return; }
+  copyText(dynamicPageUrl());
+}
+
+function openTarget(){
+  const url = build();
+  if(url) window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function renderServices(){
+  const host = document.getElementById("host").value.trim() || "192.168.50.249";
+  const proto = document.getElementById("proto").value || "http";
+  const services = getServices();
+  const box = document.getElementById("services");
+  box.innerHTML = "";
+  services.forEach((svc, idx)=>{
+    const div = document.createElement("div");
+    div.className = "svc";
+    const url = `${proto}://${host}:${svc.port}${safePath(svc.path)}`;
+    div.innerHTML = `
+      <div>
+        <b>${escapeHtml(svc.name)}</b>
+        <small>${escapeHtml(url)}</small>
+      </div>
+      <div class="btns" style="margin:0;gap:6px">
+        <button class="secondary" title="套用" onclick="useService(${idx})">套用</button>
+        <button class="danger" title="刪除" onclick="deleteService(${idx})">刪</button>
+      </div>`;
+    box.appendChild(div);
+  });
+}
+
+function useService(idx){
+  const svc = getServices()[idx];
+  document.getElementById("port").value = svc.port;
+  document.getElementById("path").value = svc.path;
+  build();
+}
+
+function deleteService(idx){
+  const list = getServices();
+  list.splice(idx,1);
+  setServices(list);
+  renderServices();
+}
+
+function addService(){
+  const name = document.getElementById("svcName").value.trim();
+  const port = document.getElementById("svcPort").value.trim();
+  const path = safePath(document.getElementById("svcPath").value);
+  if(!name || !port){ setStatus("名稱與連接埠必填。"); return; }
+  const list = getServices();
+  list.push({name, port, path});
+  setServices(list);
+  document.getElementById("svcName").value = "";
+  document.getElementById("svcPort").value = "";
+  document.getElementById("svcPath").value = "";
+  renderServices();
+  setStatus("服務卡已加入。");
+}
+
+function resetServices(){
+  setServices(DEFAULT_SERVICES);
+  renderServices();
+  setStatus("服務卡已重置。");
+}
+
+function exportConfig(){
+  const data = {
+    exported_at: new Date().toISOString(),
+    last_link: readInputs(),
+    services: getServices()
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "taiji_dynamic_port_links.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importConfig(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      if(Array.isArray(data.services)){
+        setServices(data.services);
+        renderServices();
+        setStatus("設定已匯入。");
+      }
+    }catch(e){
+      setStatus("匯入失敗：JSON 格式錯誤。");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+  }[c]));
+}
+
+function loadFromParams(){
+  const params = new URLSearchParams(location.search);
+  let loaded = false;
+
+  const last = localStorage.getItem("taiji_last_link");
+  if(last){
+    try{
+      const x = JSON.parse(last);
+      document.getElementById("proto").value = x.proto || "http";
+      document.getElementById("host").value = x.host || "";
+      document.getElementById("port").value = x.port || "";
+      document.getElementById("path").value = x.path || "/";
+      document.getElementById("go").value = x.go || "0";
+      loaded = true;
+    }catch(e){}
+  }
+
+  ["proto","host","port","path","go"].forEach(k=>{
+    if(params.has(k)){
+      document.getElementById(k).value = params.get(k);
+      loaded = true;
+    }
+  });
+
+  if(!loaded){
+    document.getElementById("proto").value = "http";
+    document.getElementById("host").value = "192.168.50.249";
+    document.getElementById("port").value = "8069";
+    document.getElementById("path").value = "/web";
+  }
+
+  const url = build();
+  renderServices();
+
+  if(params.get("go") === "1" && url){
+    const delay = Number(params.get("delay") || "1200");
+    setStatus(`自動轉跳準備中：${delay}ms`);
+    setTimeout(()=>{ location.href = url; }, delay);
+  }
+}
+
+["proto","host","port","path","go"].forEach(id=>{
+  window.addEventListener("DOMContentLoaded", ()=>{
+    document.getElementById(id).addEventListener("input", ()=>{ build(); renderServices(); });
+    document.getElementById(id).addEventListener("change", ()=>{ build(); renderServices(); });
+  });
+});
+
+window.addEventListener("DOMContentLoaded", loadFromParams);
+</script>
+</body>
+</html>

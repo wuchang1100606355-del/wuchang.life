@@ -1,0 +1,40 @@
+sub_universe_id: SU_ECONOMIC_BLOODMAKING_UNIVERSE_V1
+parent_field: U06_ECONOMIC_BLOODMAKING_FIELD
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - define_public_interest_revenue_engine
+  - support_merchants_committees_group_members
+  - keep_member_data_out_of_commercial_sale
+
+core_modules:
+  - T026_privacy_ai_subscription_model
+  - T038_ai_blind_compute_cost_router
+  - T039_standard_addon_market_policy
+  - T040_group_member_revenue_sharing_rule
+
+service_model:
+  free_member_core:
+    - xiaoj_privacy_service
+    - 8d_identity_protection
+    - hardware_optimization_assist
+  paid_group_services:
+    - blind_ai_subscription
+    - no_plaintext_usage_reduction
+    - standard_addon_subscription
+  profit_rule:
+    value_added_module_profit_returns_to_group_member: true
+
+forbidden:
+  - member_data_sale
+  - contact_list_sale
+  - unauthorized_marketing_data
+
+red_team_reflection:
+  negative_effects:
+    - revenue_logic_may_be_misunderstood_as_data_monetization
+    - group_member_profit_may_pressure_members
+  mitigation:
+    - define_product_as_privacy_ai_service
+    - contact_requires_member_approval
+    - audit_revenue_and_privacy_boundary

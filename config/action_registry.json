@@ -1,0 +1,21 @@
+{
+  "registry_name": "taiji_action_registry",
+  "version": "0.1.0",
+  "locked": true,
+  "default_policy": "deny_unregistered",
+  "default_actor": "taiji_action_run",
+  "actions": {
+    "safe_memory_lookup": {
+      "enabled": true,
+      "current": [1.0, 1.0, 1.0, 5.0, 1.0],
+      "expected_decision": "allow",
+      "description": "Safe exact-match memory lookup action"
+    },
+    "dangerous_metric_drift": {
+      "enabled": true,
+      "current": [10.0, 10.0, 10.0, 50.0, 1.0],
+      "expected_decision": "block",
+      "description": "Intentional L3 hazard drift test action"
+    }
+  }
+}

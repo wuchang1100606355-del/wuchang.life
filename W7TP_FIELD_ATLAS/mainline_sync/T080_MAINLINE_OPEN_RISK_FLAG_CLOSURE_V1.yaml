@@ -1,0 +1,33 @@
+report_id: T080_MAINLINE_OPEN_RISK_FLAG_CLOSURE_V1
+status: PUSH_BLOCKER_CLASSIFIED_NOT_CLOSED
+execution_date: "2026-06-01"
+
+scope:
+  source: git_untracked_remaining
+  mode: path_only_no_content_read
+
+finding:
+  restricted_name_paths:
+    source_file: runtime/archive/restricted_left_in_place_20260601/restricted_paths.txt
+  nonregular_paths:
+    source_file: runtime/archive/restricted_left_in_place_20260601/nonregular_paths.txt
+  sha256_manifest:
+    path: runtime/archive/restricted_left_in_place_20260601/sha256_manifest.txt
+
+decision:
+  push_allowed: false
+  reason:
+    - restricted_name_paths_still_exist
+    - nonregular_paths_still_exist
+    - no_content_read_policy_preserved
+  next_required:
+    - manual_review_or_safe_archive_policy_for_restricted_names
+    - classify_odoo_backup_files_without_reading_secrets
+    - decide_track_archive_ignore
+
+runtime_boundary:
+  runtime_sync_performed: false
+  taiji01_access_performed: false
+  services_restarted: false
+  db_secret_read: false
+  untracked_files_deleted: false

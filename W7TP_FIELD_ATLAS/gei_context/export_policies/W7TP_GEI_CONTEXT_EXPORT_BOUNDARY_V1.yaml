@@ -1,0 +1,59 @@
+policy_id: W7TP_GEI_CONTEXT_EXPORT_BOUNDARY_V1
+status: PLAN_ONLY
+
+purpose:
+  - define_safe_export_boundary_for_gei_context
+  - support_chat_handoff_without_leaking_secrets_or_plaintext
+  - preserve_patent_period_context_safely
+
+export_classes:
+  INTERNAL_FULL_CONTEXT:
+    allowed_location: local_only
+    may_include:
+      - file_refs
+      - hashes
+      - task_ids
+      - topology_refs
+    forbidden:
+      - secrets
+      - raw_member_plaintext
+      - private_keys
+
+  CHAT_HANDOFF_CONTEXT:
+    allowed_location: chat
+    may_include:
+      - summary
+      - task_ids
+      - plan_status
+      - non_secret_paths
+    forbidden:
+      - secret_values
+      - raw_personal_data
+      - DB dumps
+      - full_sensitive_logs
+
+  PUBLIC_OR_PATENT_CONTEXT:
+    allowed_location: external_review
+    may_include:
+      - abstracted_architecture
+      - evidence_chain_refs
+      - non_sensitive_hash_refs
+    forbidden:
+      - exact_sensitive_topology
+      - secrets
+      - raw_member_plaintext
+
+redaction_rules:
+  - mask_secret_like_values
+  - avoid_printing_env
+  - separate_patent_argument_from_runtime_truth
+  - cite_evidence_refs_without_exporting_sensitive_content
+
+red_team_reflection:
+  negative_effects:
+    - overly_redacted_context_may_reduce_usefulness
+    - under_redacted_context_may_leak_sensitive_topology
+  mitigation:
+    - use_export_class_per_context
+    - default_to_chat_handoff_context_for_conversation
+    - require_review_for_public_or_patent_export

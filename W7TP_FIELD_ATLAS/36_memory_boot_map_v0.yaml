@@ -1,0 +1,25 @@
+memory_boot_id: 36_memory_boot_map_v0
+purpose: Connect memory lifecycle to XiaoJ boot readiness and project controller usage.
+mode: docs_index_only
+inputs:
+  - 21_knowledge_world_index.yaml
+  - 22_project_search_agent.yaml
+  - 23_readonly_project_search_commands.yaml
+  - 24_readonly_project_search_runner.yaml
+  - 29_memory_lifecycle_map.yaml
+boot_layers:
+  L0_device_time: local_device_time
+  L1_hot: current task cards and active reports
+  L2_warm: W7TP_FIELD_ATLAS indexes
+  L3_cold: runtime reports and evidence packs
+  L4_archive: snapshots rollback patent evidence
+readiness_checks:
+  - field_atlas_exists
+  - search_reports_exist
+  - task_cards_exist
+  - no_secret_read_required
+governance:
+  no_raw_secret_memory: true
+  no_cloud_raw_context: true
+  xiaoj_review_opinion_plus_final_authorization_for_high_risk: true
+next_action: build gateway inventory classification

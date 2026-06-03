@@ -1,0 +1,56 @@
+{
+  "contract_version": "W7TP-LOCAL-7D-AUTOMATION-SMOKE-GATE/0.1",
+  "domain": "wuchang.life",
+  "mode": "plan_only",
+  "authority": "local_xiaoj_router",
+  "local_only": true,
+  "push_allowed": false,
+  "remote_required": false,
+  "cloud_call_allowed": false,
+  "runtime_execution_allowed": false,
+  "contracts_to_validate": [
+    "M31A_xiaoj_converged_governance_architecture",
+    "M32A_tri_party_7d_runtime_dryrun",
+    "M32B_nl_to_7d_task_packet",
+    "M32C_dual_brain_metrics_capture"
+  ],
+  "linter_paths": [
+    "tools/xiaoj_converged_governance_architecture_linter.py",
+    "tools/w7tp_tri_party_7d_runtime_dryrun_linter.py",
+    "tools/w7tp_nl_to_7d_task_packet_linter.py",
+    "tools/xiaoj_dual_brain_metrics_capture_linter.py"
+  ],
+  "template_paths": [
+    "configs/dev/xiaoj_converged_governance_architecture.template.json",
+    "configs/dev/w7tp_tri_party_7d_runtime_dryrun.template.json",
+    "configs/dev/w7tp_nl_to_7d_task_packet.template.json",
+    "configs/dev/xiaoj_dual_brain_metrics_capture.template.json"
+  ],
+  "success_decisions": [
+    "safe_xiaoj_converged_governance_plan_only",
+    "safe_tri_party_7d_runtime_dryrun",
+    "safe_nl_to_7d_task_packet_plan_only",
+    "safe_dual_brain_metrics_capture_plan_only"
+  ],
+  "forbidden_actions": [
+    "git_push",
+    "git_add_dot",
+    "git_add_all",
+    "read_api_key",
+    "cloud_api_call",
+    "ssh_remote_command",
+    "docker_run",
+    "service_restart",
+    "formal_db_write"
+  ],
+  "action_flags": {
+    "git_push": false,
+    "remote_required": false,
+    "cloud_call": false,
+    "api_key_read": false,
+    "raw_pii_read": false,
+    "ssh": false,
+    "container_start": false,
+    "service_restart": false
+  }
+}

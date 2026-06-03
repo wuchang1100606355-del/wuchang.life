@@ -1,0 +1,80 @@
+{
+  "title": "Public Interest Academic Research Data Use",
+  "type": "object",
+  "required": [
+    "event",
+    "research_id",
+    "purpose",
+    "data_categories",
+    "legal_basis",
+    "public_interest_metric",
+    "deidentification_level",
+    "external_ai_plaintext_allowed",
+    "cloud_plaintext_allowed",
+    "audit_required",
+    "owner_reviewed",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "public_interest_research_data_use"
+    },
+    "research_id": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "data_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "legal_basis": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "member_internal_management",
+          "social_service",
+          "survey_statistics_research",
+          "academic_research",
+          "association_charter_business",
+          "data_subject_consent",
+          "public_interest_deidentified_research"
+        ]
+      }
+    },
+    "public_interest_metric": {
+      "type": "string",
+      "enum": ["aligned", "needs_review", "blocked"]
+    },
+    "deidentification_level": {
+      "type": "string",
+      "enum": ["none_blocked", "pseudonymized", "deidentified", "aggregate_only"]
+    },
+    "ethics_review_status": {
+      "type": "string",
+      "enum": ["not_required_dev_only", "needs_determination", "exempt_determined", "approved", "blocked"]
+    },
+    "external_ai_plaintext_allowed": {
+      "type": "boolean"
+    },
+    "cloud_plaintext_allowed": {
+      "type": "boolean"
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "owner_reviewed": {
+      "type": "boolean"
+    },
+    "sha256": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

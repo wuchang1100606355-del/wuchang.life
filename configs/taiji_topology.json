@@ -1,0 +1,52 @@
+{
+  "owner": "CHIANG_CHENG_LUNG",
+  "version": "2026-05-23-current-topology",
+  "layers": {
+    "01_admin": {
+      "role": ["root_policy", "approval", "guard"],
+      "authority": "guarded_admin"
+    },
+    "02_edge_nodes": {
+      "nodes": ["taiji01", "openwebui", "odoo", "sensor"]
+    },
+    "03_ui": {
+      "services": ["openwebui", "openwebui_bridge"]
+    }
+  },
+  "services": {
+    "gateway": "http://127.0.0.1:8081",
+    "openwebui": "http://127.0.0.1:8080",
+    "openwebui_bridge": "http://127.0.0.1:8098",
+    "ollama": "http://127.0.0.1:11434",
+    "claw": "http://127.0.0.1:9004",
+    "ssh_tunnel": "127.0.0.1:2222"
+  },
+  "nodes": {
+    "taiji01": {
+      "role": ["llm_inference", "metric_tensor", "topology_compute", "gateway_backup"],
+      "max_authority_level": 3
+    },
+    "openwebui": {
+      "role": ["ui", "human_interaction", "task_request"],
+      "max_authority_level": 2
+    },
+    "odoo": {
+      "role": ["pos", "property", "finance_record"],
+      "max_authority_level": 3
+    },
+    "sensor": {
+      "role": ["sensing", "heartbeat", "environment_state"],
+      "max_authority_level": 1
+    }
+  },
+  "hard_denies": [
+    "private_key_access",
+    "spend_money",
+    "sign_contract",
+    "delete_core_data",
+    "change_dns",
+    "expose_secret",
+    "external_publish",
+    "legal_commitment_without_signature"
+  ]
+}

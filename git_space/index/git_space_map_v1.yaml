@@ -1,0 +1,37 @@
+map_id: git_space_map_v1
+groups:
+  governance:
+    paths:
+      - W7TP_FIELD_ATLAS
+      - runtime/templates
+    commit_style: topic_commit
+
+  patent_evidence:
+    paths:
+      - docs/patent
+      - evidence/patent
+      - evidence/timeline
+    commit_style: evidence_commit
+
+  odoo_modules:
+    paths:
+      - Taiji_Odoo/addons
+    commit_style: module_by_module_review_required
+
+  runtime_code:
+    paths:
+      - runtime
+      - services
+      - scripts
+    commit_style: high_risk_review_required
+
+  backup_artifacts:
+    paths:
+      - git_space/bundles
+      - evidence/git
+    commit_style: evidence_only
+
+rules:
+  no_git_add_dot: true
+  high_risk_requires_review: true
+  secret_scan_before_commit: true

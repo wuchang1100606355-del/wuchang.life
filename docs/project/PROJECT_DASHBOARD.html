@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>W7TP Project Dashboard</title>
+<style>
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+header {
+  padding: 24px;
+  background: #111827;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid #374151;
+}
+h1 { margin: 0 0 8px 0; }
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+.card {
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+h2 {
+  font-size: 18px;
+  margin: 0 0 8px 0;
+}
+.badge {
+  white-space: nowrap;
+  background: #065f46;
+  color: #d1fae5;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+.risk-high { border-left: 5px solid #f59e0b; }
+.risk-medium { border-left: 5px solid #3b82f6; }
+.risk-low { border-left: 5px solid #10b981; }
+code, pre {
+  background: #020617;
+  color: #bfdbfe;
+  border-radius: 8px;
+}
+code { padding: 2px 5px; }
+pre {
+  padding: 12px;
+  overflow-x: auto;
+}
+summary {
+  cursor: pointer;
+  color: #93c5fd;
+  margin-top: 8px;
+}
+a { color: #93c5fd; }
+</style>
+</head>
+<body>
+<header>
+<h1>W7TP / 小J Project Dashboard</h1>
+<div>Generated: <code>2026-05-27T06:01:23.723796+00:00</code></div>
+<div>HEAD: <code>1b4d24b Add local XiaoJ cloud API broker dry-run</code></div>
+<div>Items: <code>25</code></div>
+</header>
+<main>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M01｜EAMTP-7D internal intent-state language</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>244cea1 Add EAMTP-7D internal intent-state language</code></p>
+  <p><b>Next:</b> Keep as base packet language; extend only through compatible schemas.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md</code></li><li><code>schemas/eamtp_7d_packet.schema.json</code></li><li><code>runtime/router/eamtp_7d_translator.py</code></li><li><code>runtime/dead_letter/eamtp_policy_gate.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md
+code schemas/eamtp_7d_packet.schema.json
+code runtime/router/eamtp_7d_translator.py
+code runtime/dead_letter/eamtp_policy_gate.py
+
+
+# Worklink section
+grep -n "M01" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/EAMTP_7D_INTERNAL_LANGUAGE_SPEC.md schemas/eamtp_7d_packet.schema.json runtime/router/eamtp_7d_translator.py runtime/dead_letter/eamtp_policy_gate.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M02｜Router Guard Dry-Run + Merlin physical boundary</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>d4df60c Add EAMTP router guard dry-run and Merlin router boundary</code></p>
+  <p><b>Next:</b> Expose dry-run route only after gateway adapter review.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md</code></li><li><code>docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md</code></li><li><code>runtime/router/eamtp_router_guard_dryrun.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md
+code docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md
+code runtime/router/eamtp_router_guard_dryrun.py
+
+
+# Worklink section
+grep -n "M02" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/EAMTP_ROUTER_GUARD_DRYRUN.md docs/governance/W7TP_ROUTER_FIELD_MERLIN_BOUNDARY.md runtime/router/eamtp_router_guard_dryrun.py</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M03｜Merlin Intent Driver plan-only</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>399724f Add Merlin intent driver plan-only governance</code></p>
+  <p><b>Next:</b> Add more intent classes only as plan-only tickets.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md</code></li><li><code>runtime/router/merlin_intent_driver.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md
+code runtime/router/merlin_intent_driver.py
+
+
+# Worklink section
+grep -n "M03" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/MERLIN_INTENT_DRIVER_GOVERNANCE.md runtime/router/merlin_intent_driver.py</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M04｜Merlin Apply Queue human-review</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>4184356 Add Merlin apply queue human-review governance</code></p>
+  <p><b>Next:</b> Maintain ticket-only boundary; no router login.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md</code></li><li><code>runtime/router/merlin_apply_queue.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md
+code runtime/router/merlin_apply_queue.py
+
+
+# Worklink section
+grep -n "M04" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/MERLIN_APPLY_QUEUE_GOVERNANCE.md runtime/router/merlin_apply_queue.py</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M05｜Merlin Approval Gate record-only</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>a914329 Add Merlin approval gate record-only governance</code></p>
+  <p><b>Next:</b> Use exact approval phrase; still no automatic execution.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md</code></li><li><code>runtime/router/merlin_approval_gate.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md
+code runtime/router/merlin_approval_gate.py
+
+
+# Worklink section
+grep -n "M05" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/MERLIN_APPROVAL_GATE_GOVERNANCE.md runtime/router/merlin_approval_gate.py</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M06｜Merlin Human Execution Checklist</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>f9f4e51 Add Merlin human execution checklist generator</code></p>
+  <p><b>Next:</b> Generate manual UI checklist for approved records only.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md</code></li><li><code>runtime/router/merlin_human_execution_checklist.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md
+code runtime/router/merlin_human_execution_checklist.py
+
+
+# Worklink section
+grep -n "M06" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/MERLIN_HUMAN_EXECUTION_CHECKLIST_GOVERNANCE.md runtime/router/merlin_human_execution_checklist.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M07｜Merlin Execution Result Recorder</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>47fe151 Add Merlin execution result recorder</code></p>
+  <p><b>Next:</b> Record completed / abandoned / failed / observation_only results.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md</code></li><li><code>runtime/router/merlin_execution_result_recorder.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md
+code runtime/router/merlin_execution_result_recorder.py
+
+
+# Worklink section
+grep -n "M07" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/MERLIN_EXECUTION_RESULT_RECORDER.md runtime/router/merlin_execution_result_recorder.py</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M08｜Merlin redacted full config inventory</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>491b8ab Add Merlin router redacted config inventory spec</code></p>
+  <p><b>Next:</b> Keep local inventory untracked; validate before W7TP use.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md</code></li><li><code>configs/merlin/router_inventory_redacted.template.json</code></li><li><code>configs/merlin/README.md</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md
+code configs/merlin/router_inventory_redacted.template.json
+code configs/merlin/README.md
+
+
+# Worklink section
+grep -n "M08" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/MERLIN_ROUTER_FULL_CONFIG_INVENTORY_SPEC.md configs/merlin/router_inventory_redacted.template.json configs/merlin/README.md</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M09｜Merlin redacted inventory validator + EAMTP adapter</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>fa54950 Add Merlin redacted inventory validator</code></p>
+  <p><b>Next:</b> Convert only redacted local inventory into pending_review EAMTP.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md</code></li><li><code>tools/merlin_inventory_validator.py</code></li><li><code>docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md</code></li><li><code>tools/merlin_inventory_to_eamtp.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md
+code tools/merlin_inventory_validator.py
+code docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md
+code tools/merlin_inventory_to_eamtp.py
+
+
+# Worklink section
+grep -n "M09" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/MERLIN_REDACTED_INVENTORY_VALIDATOR.md tools/merlin_inventory_validator.py docs/governance/MERLIN_INVENTORY_EAMTP_ADAPTER.md tools/merlin_inventory_to_eamtp.py</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M10｜W7TP HA Mesh plan-only governance</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>b899952 Add W7TP HA mesh plan-only governance</code></p>
+  <p><b>Next:</b> Analyze legacy HA scripts; never execute sudo/SSH/rsync/crontab/iptables.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/W7TP_HA_MESH_PLAN_ONLY.md</code></li><li><code>docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md</code></li><li><code>configs/w7tp/ha_mesh_inventory.template.json</code></li><li><code>schemas/w7tp_ha_mesh_inventory.schema.json</code></li><li><code>tools/ha_mesh_script_analyzer.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/W7TP_HA_MESH_PLAN_ONLY.md
+code docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md
+code configs/w7tp/ha_mesh_inventory.template.json
+code schemas/w7tp_ha_mesh_inventory.schema.json
+code tools/ha_mesh_script_analyzer.py
+
+
+# Worklink section
+grep -n "M10" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/W7TP_HA_MESH_PLAN_ONLY.md docs/governance/HA_MESH_LEGACY_SCRIPT_ANALYZER.md configs/w7tp/ha_mesh_inventory.template.json schemas/w7tp_ha_mesh_inventory.schema.json tools/ha_mesh_script_analyzer.py</pre>
+  </details>
+</section>
+
+<section class="card risk-high">
+  <div class="row">
+    <h2>M11｜W7TP Causal Ledger plan-only layer</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> high</p>
+  <p><b>Commit:</b> <code>2338ad1 Add W7TP causal ledger plan-only layer</code></p>
+  <p><b>Next:</b> Use causal packets for audit links; no production finance or Odoo ledger writes.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md</code></li><li><code>schemas/w7tp_causal_event_packet.schema.json</code></li><li><code>runtime/router/w7tp_causal_event_builder.py</code></li><li><code>tools/causal_ledger_text_analyzer.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md
+code schemas/w7tp_causal_event_packet.schema.json
+code runtime/router/w7tp_causal_event_builder.py
+code tools/causal_ledger_text_analyzer.py
+
+
+# Worklink section
+grep -n "M11" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/W7TP_CAUSAL_LEDGER_PLAN_ONLY.md schemas/w7tp_causal_event_packet.schema.json runtime/router/w7tp_causal_event_builder.py tools/causal_ledger_text_analyzer.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M12｜Merlin redacted inventory fill helper</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>9830277 Add Merlin redacted inventory fill helper</code></p>
+  <p><b>Next:</b> Use allowlisted --set updates for local redacted inventory; never commit local.json.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/merlin_inventory_fill_helper.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/merlin_inventory_fill_helper.py
+
+
+# Worklink section
+grep -n "M12" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/merlin_inventory_fill_helper.py</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M13｜Readonly service health checker</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>60e656c Add readonly service health checker</code></p>
+  <p><b>Next:</b> Use GET-only health summaries before deciding whether a service needs action.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/service_health_readonly.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/service_health_readonly.py
+
+
+# Worklink section
+grep -n "M13" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/service_health_readonly.py</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M14｜Runtime shadow inventory</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>5e6ff90 Add runtime shadow inventory tool</code></p>
+  <p><b>Next:</b> Use inventory-only reports before any cleanup or archive decision.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/runtime_shadow_inventory.py</code></li><li><code>docs/project/RUNTIME_SHADOW_INVENTORY.md</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/runtime_shadow_inventory.py
+code docs/project/RUNTIME_SHADOW_INVENTORY.md
+
+
+# Worklink section
+grep -n "M14" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/runtime_shadow_inventory.py docs/project/RUNTIME_SHADOW_INVENTORY.md</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M15｜EAMTP packet summarizer</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>7bb86c3 Add EAMTP packet summarizer</code></p>
+  <p><b>Next:</b> Use read-only packet summaries before router/gateway integration reviews.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/eamtp_packet_summarizer.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/eamtp_packet_summarizer.py
+
+
+# Worklink section
+grep -n "M15" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/eamtp_packet_summarizer.py</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M16｜W7TP smoke all checker</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>657a8a6 Add W7TP smoke all checker</code></p>
+  <p><b>Next:</b> Run before integration commits to verify mainline tools are still usable.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/w7tp_smoke_all.sh</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/w7tp_smoke_all.sh
+
+
+# Worklink section
+grep -n "M16" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/w7tp_smoke_all.sh</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M17｜Safe git stage allowlist tool</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>c14a9da Add safe git stage allowlist tool</code></p>
+  <p><b>Next:</b> Use before multi-agent commits to preview/stage only allowlisted canonical files.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/safe_git_stage.py</code></li><li><code>docs/project/git_stage_allowlist.txt</code></li><li><code>tests/test_safe_git_stage.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/safe_git_stage.py
+code docs/project/git_stage_allowlist.txt
+code tests/test_safe_git_stage.py
+
+
+# Worklink section
+grep -n "M17" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/safe_git_stage.py docs/project/git_stage_allowlist.txt tests/test_safe_git_stage.py</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M18｜Project dashboard HTML generator</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>447f6c1 Add project dashboard generator</code></p>
+  <p><b>Next:</b> Open local dashboard to copy task commands and inspect mainline status.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/project_dashboard_generator.py</code></li><li><code>docs/project/PROJECT_DASHBOARD.html</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/project_dashboard_generator.py
+code docs/project/PROJECT_DASHBOARD.html
+
+
+# Worklink section
+grep -n "M18" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/project_dashboard_generator.py docs/project/PROJECT_DASHBOARD.html</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M19｜Project dashboard launcher</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>59a2880 Add project dashboard launcher</code></p>
+  <p><b>Next:</b> Use this launcher to regenerate and open the local project dashboard.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/open_project_dashboard.sh</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/open_project_dashboard.sh
+
+
+# Worklink section
+grep -n "M19" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/open_project_dashboard.sh</pre>
+  </details>
+</section>
+
+<section class="card risk-low">
+  <div class="row">
+    <h2>M20｜Multi-agent task card generator</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> low</p>
+  <p><b>Commit:</b> <code>1db1351 Register container offload plan in project board</code></p>
+  <p><b>Next:</b> Use generated task cards to delegate isolated work to code agents.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>tools/task_card_generator.py</code></li><li><code>docs/project/TASK_CARDS.md</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code tools/task_card_generator.py
+code docs/project/TASK_CARDS.md
+
+
+# Worklink section
+grep -n "M20" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- tools/task_card_generator.py docs/project/TASK_CARDS.md</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M21｜Container server offload plan-only</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>1528c34 Add container server offload plan skeleton</code></p>
+  <p><b>Next:</b> Use offload registry and linter before moving background containers to pure Linux server nodes.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md</code></li><li><code>configs/containers/container_offload_registry.template.json</code></li><li><code>schemas/w7tp_container_offload_registry.schema.json</code></li><li><code>tools/container_offload_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md
+code configs/containers/container_offload_registry.template.json
+code schemas/w7tp_container_offload_registry.schema.json
+code tools/container_offload_linter.py
+
+
+# Worklink section
+grep -n "M21" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/W7TP_CONTAINER_SERVER_OFFLOAD_PLAN.md configs/containers/container_offload_registry.template.json schemas/w7tp_container_offload_registry.schema.json tools/container_offload_linter.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M22｜Indexer one-shot server job package</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>63bbe53 Add indexer one-shot job template</code></p>
+  <p><b>Next:</b> Use one-shot job template and linter before moving indexer workload to a pure Linux server.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>configs/containers/wuchang_indexer_oneshot_job.template.json</code></li><li><code>docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md</code></li><li><code>tools/indexer_oneshot_job_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code configs/containers/wuchang_indexer_oneshot_job.template.json
+code docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md
+code tools/indexer_oneshot_job_linter.py
+
+
+# Worklink section
+grep -n "M22" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- configs/containers/wuchang_indexer_oneshot_job.template.json docs/governance/W7TP_INDEXER_ONE_SHOT_SERVER_JOB.md tools/indexer_oneshot_job_linter.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M23｜Indexer one-shot compose package</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>8b9ec66 Add indexer one-shot compose template</code></p>
+  <p><b>Next:</b> Validate the plan-only compose template before any separately approved server execution.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>configs/containers/wuchang_indexer_oneshot.compose.template.yml</code></li><li><code>tools/indexer_oneshot_compose_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code configs/containers/wuchang_indexer_oneshot.compose.template.yml
+code tools/indexer_oneshot_compose_linter.py
+
+
+# Worklink section
+grep -n "M23" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- configs/containers/wuchang_indexer_oneshot.compose.template.yml tools/indexer_oneshot_compose_linter.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M25｜Tri-party 7D packet and cloud provider adapter bridge</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>39c3065 Add tri-party 7D packet language bridge</code></p>
+  <p><b>Next:</b> Use 7D packet bridge and provider adapter contract before any real cloud API broker implementation.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md</code></li><li><code>configs/packets/tri_party_7d_packet.template.json</code></li><li><code>schemas/w7tp_tri_party_7d_packet.schema.json</code></li><li><code>tools/tri_party_7d_packet_linter.py</code></li><li><code>docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md</code></li><li><code>configs/cloud/cloud_provider_adapter_contract.template.json</code></li><li><code>schemas/w7tp_cloud_provider_adapter_contract.schema.json</code></li><li><code>tools/cloud_provider_adapter_contract_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md
+code configs/packets/tri_party_7d_packet.template.json
+code schemas/w7tp_tri_party_7d_packet.schema.json
+code tools/tri_party_7d_packet_linter.py
+code docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md
+code configs/cloud/cloud_provider_adapter_contract.template.json
+code schemas/w7tp_cloud_provider_adapter_contract.schema.json
+code tools/cloud_provider_adapter_contract_linter.py
+
+
+# Worklink section
+grep -n "M25" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/W7TP_TRI_PARTY_7D_PACKET_LANGUAGE_BRIDGE.md configs/packets/tri_party_7d_packet.template.json schemas/w7tp_tri_party_7d_packet.schema.json tools/tri_party_7d_packet_linter.py docs/governance/W7TP_CLOUD_PROVIDER_ADAPTER_CONTRACT.md configs/cloud/cloud_provider_adapter_contract.template.json schemas/w7tp_cloud_provider_adapter_contract.schema.json tools/cloud_provider_adapter_contract_linter.py</pre>
+  </details>
+</section>
+
+<section class="card risk-medium">
+  <div class="row">
+    <h2>M26｜Local XiaoJ cloud API broker dry-run</h2>
+    <span class="badge">done_clean · 100%</span>
+  </div>
+  <p><b>Risk:</b> medium</p>
+  <p><b>Commit:</b> <code>1b4d24b Add local XiaoJ cloud API broker dry-run</code></p>
+  <p><b>Next:</b> Use dry-run broker policy before any real cloud API call implementation.</p>
+  <details>
+    <summary>Canonical files</summary>
+    <ul><li><code>docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md</code></li><li><code>configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json</code></li><li><code>schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json</code></li><li><code>tools/local_xiaoj_cloud_api_broker_dryrun_linter.py</code></li></ul>
+  </details>
+  <details>
+    <summary>Copy commands</summary>
+    <pre>cd /home/taiji_admin/Taiji_Hub || exit 1
+
+# Open files
+code docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md
+code configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json
+code schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json
+code tools/local_xiaoj_cloud_api_broker_dryrun_linter.py
+
+
+# Worklink section
+grep -n "M26" -A30 docs/project/WORKLINKS.md
+
+# Git preview
+git status --short -- docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json tools/local_xiaoj_cloud_api_broker_dryrun_linter.py</pre>
+  </details>
+</section>
+
+</main>
+</body>
+</html>

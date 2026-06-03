@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJOdooAddonFileLayoutManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "layout_id": {"type": "string"},
+    "addon_name": {"type": "string"},
+    "mode": {"type": "string", "enum": ["DESIGN_ONLY"]},
+    "files_planned": {"type": "array", "items": {"type": "string"}},
+    "models_planned": {"type": "array", "items": {"type": "string"}},
+    "security_files_planned": {"type": "array", "items": {"type": "string"}},
+    "views_planned": {"type": "array", "items": {"type": "string"}},
+    "addon_create": {"const": false},
+    "odoo_write": {"const": false},
+    "db_connect": {"const": false},
+    "service_restart": {"const": false},
+    "secret_read": {"const": false},
+    "raw_pii_to_cloud": {"const": false},
+    "plan_only": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["layout_id", "addon_name", "mode", "files_planned", "models_planned", "security_files_planned", "views_planned", "addon_create", "odoo_write", "db_connect", "service_restart", "secret_read", "raw_pii_to_cloud", "plan_only", "created_at"]
+}

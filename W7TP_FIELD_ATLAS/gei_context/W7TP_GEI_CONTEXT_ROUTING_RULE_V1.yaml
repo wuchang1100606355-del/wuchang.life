@@ -1,0 +1,38 @@
+rule_id: W7TP_GEI_CONTEXT_ROUTING_RULE_V1
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - let_GEI_connect_task_board_registry_evidence_and_runtime_context
+  - prevent_GEI_from_replacing_primary_evidence
+  - support_decision_context_before_new_module_generation
+
+gei_inputs:
+  - universe_registry
+  - sub_universe_registry
+  - module_mount_map
+  - governance_route_table
+  - function_map
+  - task_board
+  - evidence_reports
+
+gei_outputs:
+  - decision_context_packet
+  - missing_registration_notice
+  - suggested_sub_universe_mount
+  - red_team_context_reflection
+  - evidence_link_summary
+
+rules:
+  - GEI_must_use_refs_not_raw_secrets
+  - GEI_must_mark_confidence
+  - GEI_must_separate_runtime_truth_from_plan_truth
+  - GEI_must_flag_unregistered_modules
+
+red_team_reflection:
+  negative_effects:
+    - GEI_may_create_false_confidence_if_refs_are_stale
+    - GEI_summary_may_hide_conflicting_evidence
+  mitigation:
+    - require_source_refs
+    - include_uncertainty_field
+    - route_conflict_to_xiaoj_review_opinion_plus_final_authorization

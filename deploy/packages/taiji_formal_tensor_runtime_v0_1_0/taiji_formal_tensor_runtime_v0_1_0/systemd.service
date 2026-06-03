@@ -1,0 +1,19 @@
+[Unit]
+Description=Taiji Formal Tensor Runtime v0.1.0
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/mnt/c/Users/o0930/Taiji_Hub
+EnvironmentFile=/mnt/c/Users/o0930/Taiji_Hub/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/env.example
+ExecStartPre=/usr/bin/env python3 -m py_compile /mnt/c/Users/o0930/Taiji_Hub/runtime_adapters/taiji_formal_tensor_runtime_v0_1_0_adapter.py
+ExecStartPre=/usr/bin/env python3 -m py_compile /mnt/c/Users/o0930/Taiji_Hub/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/runtime_entry.py
+ExecStart=/usr/bin/env python3 /mnt/c/Users/o0930/Taiji_Hub/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/runtime_entry.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

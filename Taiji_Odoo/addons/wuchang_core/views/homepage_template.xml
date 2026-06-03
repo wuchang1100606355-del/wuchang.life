@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="homepage" name="Wuchang Homepage">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <!-- Hero Section with Latency Comparison -->
+                <section class="s_cover parallax bg-black s_parallax_is_fixed" style="background-color: #000000; min-height: 100vh; position: relative; overflow: hidden; display: flex; align-items: center;">
+                    <div class="container text-center text-white d-flex flex-column justify-content-center align-items-center h-100" style="position: relative; z-index: 2;">
+                        <h1 class="display-3 font-weight-bold mb-4">Wuchang OS V5.1.0</h1>
+                        <p class="lead mb-5" style="font-size: 1.5rem; opacity: 0.8;">
+                            數位人權．極速響應．在地治理<br/>
+                            <span style="font-size: 1rem; opacity: 0.6;">Digital Human Rights • Instant Response • Local Governance</span>
+                        </p>
+
+                        <div class="row justify-content-center w-100 mb-5">
+                            <div class="col-md-4 mb-3">
+                                <a href="/web" class="btn btn-primary btn-lg btn-block shadow-lg" style="border-radius: 50px; padding: 15px 30px;">
+                                    <i class="fa fa-sign-in mr-2"/> 進入系統 (System Login)
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="/shop" class="btn btn-outline-light btn-lg btn-block shadow-lg" style="border-radius: 50px; padding: 15px 30px;">
+                                    <i class="fa fa-shopping-cart mr-2"/> 社區商城 (Community Shop)
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Latency Comparison Dashboard -->
+                        <div class="row w-100 text-left justify-content-center">
+                            <div class="col-md-5 mb-4">
+                                <div class="card bg-dark border-secondary p-3" style="opacity: 0.8;">
+                                     <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h4 class="h5 font-weight-bold text-muted mb-0"><i class="fa fa-globe text-primary mr-2"/> 傳統雲端 AI</h4>
+                                        <span class="h4 text-muted mb-0">3000 <span style="font-size: 0.8rem;">ms</span></span>
+                                     </div>
+                                     <div class="progress" style="height: 10px; background-color: #333;">
+                                        <div class="progress-bar bg-primary" style="width: 40%"></div>
+                                     </div>
+                                     <p class="mt-2 text-muted small mb-0">還在排隊等伺服器回應...</p>
+                                </div>
+                            </div>
+                            <div class="col-md-5 mb-4">
+                                <div class="card bg-dark border-secondary p-3" style="opacity: 0.6;">
+                                     <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h4 class="h5 font-weight-bold text-muted mb-0"><i class="fa fa-rss text-danger mr-2"/> 火星通訊</h4>
+                                        <span class="h4 text-muted mb-0">25 <span style="font-size: 0.8rem;">min</span></span>
+                                     </div>
+                                     <div class="progress" style="height: 10px; background-color: #333;">
+                                        <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                                     </div>
+                                     <p class="mt-2 text-muted small mb-0">等你收到訊息，仗都打完了。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 text-muted">
+                            <div class="d-flex justify-content-center align-items-center mb-2">
+                                <span class="badge badge-success mr-2 p-2">● Online</span>
+                                <span style="opacity: 0.7;">System Status: Normal</span>
+                            </div>
+                            <p style="font-size: 0.9rem; opacity: 0.5;">Core Model: Gemini 2.0 Pro Experimental (Little J)</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Background Effect Overlay -->
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20,20,20,0.8) 100%); z-index: 1;"></div>
+                </section>
+
+                <!-- Black Box Model Section -->
+                <section class="py-5 bg-black" style="background-color: #111;">
+                    <div class="container py-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="card bg-black border-dark p-5 position-relative overflow-hidden">
+                                    <div class="position-absolute w-100" style="top: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a855f7, #ec4899, #ef4444);"></div>
+                                    <h2 class="h2 font-weight-bold mb-4 d-flex align-items-center text-white">
+                                        <i class="fa fa-lock text-primary mr-3" style="color: #a855f7 !important;"></i>
+                                        <span>黑盒子模型推論</span>
+                                    </h2>
+                                    <form>
+                                        <div class="form-group mb-4">
+                                            <label class="text-muted font-monospace">輸入指令 (Prompt)</label>
+                                            <input type="text" class="form-control form-control-lg bg-dark border-dark text-white font-monospace" placeholder="請輸入測試指令..."/>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-lg btn-block py-3 border-dark text-white font-weight-bold">
+                                            執行黑盒推論 (Demo Only)
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,37 @@
+policy_id: W7TP_MEMBER_CONTACT_APPROVAL_POLICY_V1
+status: PLAN_ONLY
+
+principle:
+  merchant_contact_default: denied
+  contact_requires_member_approval: true
+  raw_contact_hidden_by_default: true
+
+allowed_contact_purposes:
+  - order_notice
+  - pickup_notice
+  - delivery_coordination
+  - after_sales_service
+  - event_service_notice
+
+forbidden:
+  - marketing_without_opt_in
+  - raw_phone_storage_without_approval
+  - raw_line_id_storage_without_approval
+  - export_contact_list
+  - reuse_contact_for_other_purpose
+
+contact_channel:
+  type: mediated_channel
+  expires: true
+  revocable: true
+  audit_required: true
+
+red_team_reflection:
+  negative_effects:
+    - merchants_may_package_marketing_as_service_notice
+    - members_may_be_overrequested
+    - temporary_channel_may_leak_raw_contact_if_badly_implemented
+  mitigation:
+    - purpose_code_required
+    - approval_rate_and_complaint_rate_monitoring
+    - marketing_requires_separate_opt_in

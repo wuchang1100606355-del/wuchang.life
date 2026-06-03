@@ -1,0 +1,47 @@
+rule_id: W7TP_MEMBER_DELEGATION_AUTHORITY_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - allow_family_or_authorized_person_to_assist_member
+  - prevent_fake_delegation
+  - support_elderly_and_device_loss_cases
+
+delegation_types:
+  limited_service_delegation:
+    examples:
+      - pickup_support
+      - device_loss_report
+      - event_registration_support
+
+  sensitive_delegation:
+    examples:
+      - plaintext_claim_support
+      - device_rebinding
+      - emergency_contact_update
+    requires:
+      - xiaoj_review_opinion_plus_final_authorization
+      - identity_relation_check
+      - expiry_time
+
+required_fields:
+  - member_code
+  - delegate_identity_ref
+  - relationship_or_authority_basis
+  - allowed_actions
+  - expiry_time
+  - revocation_path
+
+forbidden:
+  - permanent_open_delegation_without_review
+  - delegation_to_access_raw_plaintext_by_default
+  - delegate_contacting_merchants_as_member_without_scope
+
+red_team_reflection:
+  negative_effects:
+    - family_conflict_may_create_abuse
+    - delegation_may_be_used_to_bypass_member_consent
+  mitigation:
+    - narrow_scope
+    - expiry_and_revocation
+    - member_notification_where_safe
+    - xiaoj_review_opinion_plus_final_authorization_for_sensitive_actions

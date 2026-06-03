@@ -1,0 +1,14 @@
+[Unit]
+Description=Taiji Metrics Exporter
+After=network.target
+
+[Service]
+Type=simple
+User=taiji_admin
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+ExecStart=/usr/bin/uvicorn runtime.runtime_metrics_exporter:app --host 127.0.0.1 --port 9101
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

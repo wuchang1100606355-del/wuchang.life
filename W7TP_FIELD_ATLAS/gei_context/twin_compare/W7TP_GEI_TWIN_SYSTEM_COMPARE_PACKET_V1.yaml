@@ -1,0 +1,57 @@
+packet_id: W7TP_GEI_TWIN_SYSTEM_COMPARE_PACKET_V1
+status: TEMPLATE_ONLY
+
+purpose:
+  - compare_source_twin_runtime_context_before_sync
+  - support_dual_machine_validation
+  - convert_field_drift_into_governed_transfer_decision
+
+compare_targets:
+  source_universe:
+    example_path: /mnt/c/Taiji_Runtime/odoo_addons/pm3_runtime_sync
+  twin_universe:
+    example_path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  runtime_universe:
+    example_path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+
+required_comparison:
+  - file_inventory
+  - file_count
+  - sha256_manifest
+  - manifest_dependencies
+  - missing_files
+  - extra_files
+  - forbidden_secret_literals
+  - runtime_db_context
+  - host_fingerprint
+
+output_fields:
+  compare_id:
+  timestamp:
+  source_fingerprint:
+  twin_fingerprint:
+  runtime_fingerprint:
+  drift_level:
+  confidence:
+  decision:
+    - clear
+    - plan_only
+    - require_review
+    - block_runtime_landing
+    - quarantine
+
+governance:
+  compare_only: true
+  no_copy: true
+  no_restart: true
+  no_db_write: true
+  no_secret_print: true
+
+red_team_reflection:
+  negative_effects:
+    - comparing_paths_across_machines_can_fail_if_path_absent
+    - hash_equality_does_not_prove_semantic_compatibility
+  mitigation:
+    - include_machine_identity
+    - pair_with_sandbox_validation
+    - pair_with_server_acceptance_gate

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="voice_chat_page" name="自然語音對話">
+    <t t-call="website.layout">
+      <div class="container my-5">
+        <h1>自然語音對話</h1>
+        <div class="mb-3">
+          <label class="form-label">語音輸入</label>
+          <div>
+            <button id="btnStart" class="btn btn-primary me-2">開始</button>
+            <button id="btnStop" class="btn btn-secondary">停止</button>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">辨識文字</label>
+          <textarea id="recognized" class="form-control" rows="3" placeholder="辨識結果或手動輸入"></textarea>
+        </div>
+        <div class="mb-3">
+          <button id="btnSend" class="btn btn-dark">送出給小j</button>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">回應</label>
+          <div id="reply" class="border rounded p-3" style="min-height:120px"></div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">語音合成</label>
+          <div>
+            <button id="btnSpeak" class="btn btn-success me-2">播報回應</button>
+            <button id="btnSing" class="btn btn-warning me-2">唱出回應</button>
+            <button id="btnTestAudio" class="btn btn-outline-dark me-2">測試聲音</button>
+            <select id="voiceSelect" class="form-select" style="max-width:360px; display:inline-block"></select>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+        <![CDATA[
+        (function(){
+          var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          var rec = SpeechRecognition ? new SpeechRecognition() : null;
+          var recognizing = false;
+          var recognized = document.getElementById('recognized');
+          var reply = document.getElementById('reply');
+          var btnStart = document.getElementById('btnStart');
+          var btnStop = document.getElementById('btnStop');
+          var btnSend = document.getElementById('btnSend');
+          var btnSpeak = document.getElementById('btnSpeak');
+          var btnSing = document.getElementById('btnSing');
+          var voiceSelect = document.getElementById('voiceSelect');
+
+          function loadVoices(){
+            var voices = window.speechSynthesis.getVoices();
+            voiceSelect.innerHTML = '';
+            for (var i=0;i<voices.length;i++){
+              var v = voices[i];
+              var opt = document.createElement('option');
+              opt.value = v.name;
+              opt.textContent = v.name + ' (' + v.lang + ')';
+              voiceSelect.appendChild(opt);
+            }
+          }
+          if (window.speechSynthesis){
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+          }
+
+          function sendTextToXiaoJ(text, autoSpeak){
+            var payload = (text || '').trim();
+            if (!payload){ return; }
+            try {
+              fetch('/wuchang/conversation/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: payload, role: 'user', page: 'voice' })
+              });
+            } catch(_){ }
+            fetch('/wuchang/llm/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ prompt: payload })
+            }).then(function(r){ return r.json(); })
+              .then(function(j){
+                try {
+                  var t = (((j || {}).candidates || [])[0] || {}).content || {};
+                  var p = ((t.parts || [])[0] || {}).text || '';
+                  reply.textContent = p || '';
+                  if (p) {
+                    try {
+                      fetch('/wuchang/conversation/log', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text: p, role: 'assistant', page: 'voice' })
+                      });
+                    } catch(_){ }
+                    if (autoSpeak){
+                      speakReply();
+                    }
+                  }
+                } catch(_){
+                  reply.textContent = '解析失敗';
+                }
+              }).catch(function(_){
+                reply.textContent = '連線失敗';
+              });
+          }
+
+          if (rec){
+            rec.lang = 'zh-TW';
+            rec.continuous = false;
+            rec.interimResults = false;
+            rec.onresult = function(e){
+              try {
+                var t = e.results[0][0].transcript || '';
+                recognized.value = t;
+                if ((t || '').trim()){
+                  sendTextToXiaoJ(t, true);
+                }
+              } catch(_){ }
+            };
+            rec.onend = function(){ recognizing = false; };
+          }
+
+          btnStart.addEventListener('click', function(){
+            if (!rec) { alert('瀏覽器不支援語音辨識'); return; }
+            if (!recognizing){ try { rec.start(); recognizing = true; } catch(_){ recognizing = false; } }
+          });
+          btnStop.addEventListener('click', function(){
+            if (rec && recognizing){ try { rec.stop(); recognizing = false; } catch(_){ } }
+          });
+          btnSend.addEventListener('click', function(){
+            var text = (recognized.value || '').trim();
+            if (!text) { return; }
+            sendTextToXiaoJ(text, true);
+          });
+
+          function speakReply(){
+            var text = reply.textContent || '';
+            if (!text || !window.speechSynthesis) { return; }
+            try { window.speechSynthesis.cancel(); } catch(_){ }
+            var u = new SpeechSynthesisUtterance(text);
+            var targetName = voiceSelect.value || '';
+            var voices = window.speechSynthesis.getVoices();
+            for (var i=0;i<voices.length;i++){
+              if (voices[i].name === targetName){ u.voice = voices[i]; break; }
+            }
+            u.lang = 'zh-TW';
+            window.speechSynthesis.speak(u);
+          }
+
+          btnSpeak.addEventListener('click', function(){
+            speakReply();
+          });
+          btnSing.addEventListener('click', function(){
+            var text = reply.textContent || '';
+            if (!text) { return; }
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) { return; }
+            var ctx = new AC();
+            try { if (ctx.state === 'suspended') { ctx.resume(); } } catch(_){}
+            var base = [261.63,293.66,329.63,349.23,392.00,440.00,493.88,523.25];
+            var arr = (text || '').replace(/[^\w\u4e00-\u9fa5]+/g,' ').trim().split(/\s+/);
+            if (!arr.length) { return; }
+            var tempo = 120;
+            var beat = 60/tempo;
+            var dur = beat*0.5;
+            var start = ctx.currentTime + 0.05;
+            for (var i=0;i<Math.min(arr.length,80);i++){
+              var s = arr[i] || '';
+              var code = s && s.length ? s.charCodeAt(0) : 0;
+              var idx = code % base.length;
+              var f = base[idx];
+              var osc = ctx.createOscillator();
+              var g = ctx.createGain();
+              osc.type = 'sine';
+              g.gain.setValueAtTime(0.0, start + i*dur);
+              g.gain.linearRampToValueAtTime(0.25, start + i*dur + 0.02);
+              g.gain.linearRampToValueAtTime(0.0, start + i*dur + dur);
+              osc.frequency.setValueAtTime(f, start + i*dur);
+              osc.connect(g);
+              g.connect(ctx.destination);
+              osc.start(start + i*dur);
+              osc.stop(start + i*dur + dur);
+            }
+          });
+          document.getElementById('btnTestAudio').addEventListener('click', function(){
+            try { window.speechSynthesis.cancel(); } catch(_){}
+            try {
+              var u = new SpeechSynthesisUtterance('我在這裡');
+              u.lang = 'zh-TW';
+              window.speechSynthesis.speak(u);
+            } catch(_){}
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) { return; }
+            var ctx = new AC();
+            try { if (ctx.state === 'suspended') { ctx.resume(); } } catch(_){}
+            var osc = ctx.createOscillator();
+            var g = ctx.createGain();
+            osc.type = 'square';
+            var t0 = ctx.currentTime + 0.05;
+            g.gain.setValueAtTime(0.0, t0);
+            g.gain.linearRampToValueAtTime(0.3, t0 + 0.02);
+            g.gain.linearRampToValueAtTime(0.0, t0 + 0.3);
+            osc.frequency.setValueAtTime(440, t0);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(t0);
+            osc.stop(t0 + 0.3);
+          });
+        })();
+        ]]>
+      </script>
+    </t>
+  </template>
+</odoo>

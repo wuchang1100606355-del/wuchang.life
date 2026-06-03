@@ -1,0 +1,14 @@
+[Unit]
+Description=Taiji Status API
+After=network.target
+
+[Service]
+Type=simple
+User=taiji_admin
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+ExecStart=/usr/bin/uvicorn runtime.runtime_status_api:app --host 127.0.0.1 --port 8095
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

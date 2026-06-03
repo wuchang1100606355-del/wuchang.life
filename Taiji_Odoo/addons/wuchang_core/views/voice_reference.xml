@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="voice_reference_page" name="語音參考上傳">
+    <t t-call="website.layout">
+      <t t-set="ok" t-value="ok"/>
+      <div class="container my-5">
+        <h1>語音參考上傳</h1>
+        <t t-if="ok">
+          <div class="alert alert-success" role="alert">
+            已收到語音參考，謝謝！我會用來優化語氣與節奏。
+          </div>
+        </t>
+        <form action="/voice/reference/upload" method="post" enctype="multipart/form-data" class="mt-3">
+          <div class="mb-3">
+            <label class="form-label">主題</label>
+            <input type="text" class="form-control" name="subject" placeholder="例如：Copilot 對話風格範例" required="required"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">備註</label>
+            <textarea class="form-control" name="notes" rows="3" placeholder="這段對話的情境、喜歡的語氣、互動特質等"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">逐字稿（可選）</label>
+            <textarea class="form-control" name="transcript" rows="6" placeholder="將外部自然語音 AI 的對話文字貼上，用於學習參考"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">語音檔（可選）</label>
+            <input type="file" class="form-control" name="sample" accept=".wav,.mp3,.m4a,.ogg,.flac"/>
+            <div class="form-text">支援常見音訊格式，檔案會保存在本機不外傳。</div>
+          </div>
+          <button type="submit" class="btn btn-primary">送出</button>
+          <a href="/voice" class="btn btn-link">返回語音對話</a>
+        </form>
+      </div>
+    </t>
+  </template>
+</odoo>

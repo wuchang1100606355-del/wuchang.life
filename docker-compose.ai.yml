@@ -1,0 +1,42 @@
+services:
+  taiji-ai-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai
+    image: taiji-ai-gateway:local
+    container_name: taiji_ai_gateway
+    restart: unless-stopped
+    ports:
+      - "${TAIJI_GATEWAY_PORT:-9002}:9002"
+    environment:
+      NODE_ID: "${NODE_ID:-local-node}"
+      NODE_ROLE: "${NODE_ROLE:-gateway}"
+      LAN_BASE_URL: "${LAN_BASE_URL:-http://localhost:9002}"
+      CLAW_SANDBOX_DIR: "${CLAW_SANDBOX_DIR:-/app/data/claw_workspace}"
+      ALLOWED_CLIENT_CIDRS: "${ALLOWED_CLIENT_CIDRS:-127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,fc00::/7,fe80::/10}"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      MERLIN_VPN_IPV6: "${MERLIN_VPN_IPV6:-fd00:wuchang:taiji::1}"
+      VOICE_PROVIDER: "${VOICE_PROVIDER:-local}"
+      VOICE_RATE: "${VOICE_RATE:-160}"
+      VOICE_VOLUME: "${VOICE_VOLUME:-1.0}"
+    volumes:
+      - ./data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  taiji-claw:
+    image: taiji-ai-gateway:local
+    container_name: taiji_claw
+    restart: unless-stopped
+    command: ["python", "legacy_core/taiji_native_claw.py"]
+    ports:
+      - "${CLAW_PORT:-9004}:9004"
+    environment:
+      NODE_ID: "${NODE_ID:-local-node}-claw"
+      NODE_ROLE: "claw"
+      CLAW_HOST: "0.0.0.0"
+      CLAW_PORT: "9004"
+      CLAW_SANDBOX_DIR: "${CLAW_SANDBOX_DIR:-/app/data/claw_workspace}"
+      ALLOWED_CLIENT_CIDRS: "${ALLOWED_CLIENT_CIDRS:-127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,fc00::/7,fe80::/10}"
+    volumes:
+      - ./data:/app/data

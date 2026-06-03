@@ -1,0 +1,57 @@
+engine_id: W7TP_GEI_FIELD_DRIFT_CORRELATION_ENGINE_V1
+status: PLAN_ONLY
+
+purpose:
+  - correlate_field_drift_events_with_source_hashes_runtime_truth_and_task_board_state
+  - explain_why_drift_happened
+  - prevent_repeating_same_machine_path_confusion
+
+correlation_inputs:
+  - universe_event_registry
+  - source_hash_ledger
+  - field_diff_packets
+  - startup_state_packets
+  - server_truth_packets
+  - task_board_state
+  - git_head_and_branch
+
+correlation_outputs:
+  - drift_cause_summary
+  - affected_universes
+  - missing_or_extra_modules
+  - confidence_level
+  - recommended_next_gate
+
+drift_cause_types:
+  SOURCE_RUNTIME_DIVERGENCE:
+    example: source_has_pm3_but_runtime_missing
+  TWIN_PARTIAL_DRIFT:
+    example: source_and_twin_mostly_same_but_one_controller_missing
+  FALSE_HOST_CONTEXT:
+    example: report_named_taiji01_but_hostname_is_MSI
+  DB_CONTEXT_CONFUSION:
+    example: multiple_odoo_dbs_exist_but_runtime_db_is_dbfilter_bound
+  SECRET_CONFIG_SPLIT:
+    example: env_empty_but_ir_config_parameter_has_value
+
+decision_rules:
+  HIGH_CONFIDENCE:
+    require:
+      - host_guard
+      - hash_or_file_inventory
+      - runtime_config_ref
+  MEDIUM_CONFIDENCE:
+    require:
+      - two_independent_evidence_refs
+  LOW_CONFIDENCE:
+    action:
+      - require_more_evidence
+
+red_team_reflection:
+  negative_effects:
+    - correlation_engine_may_overfit_to_current_pm3_case
+    - false_correlation_may_blame_wrong_layer
+  mitigation:
+    - require_evidence_refs
+    - keep_confidence_level
+    - never_auto_fix_based_on_correlation

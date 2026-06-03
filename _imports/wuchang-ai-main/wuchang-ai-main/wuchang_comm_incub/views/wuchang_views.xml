@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Root Menu -->
+        <menuitem id="menu_wuchang_root" name="武昌" sequence="10"/>
+
+        <!-- Community Ledger -->
+        <record id="action_community_ledger" model="ir.actions.act_window">
+            <field name="name">社區帳本</field>
+            <field name="res_model">community.ledger</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_community_ledger" name="帳本" parent="menu_wuchang_root" action="action_community_ledger" sequence="10"/>
+
+        <!-- Volunteer Task -->
+        <record id="action_volunteer_task" model="ir.actions.act_window">
+            <field name="name">志工任務</field>
+            <field name="res_model">volunteer.task</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_volunteer_task" name="志工" parent="menu_wuchang_root" action="action_volunteer_task" sequence="20"/>
+
+        <!-- Community Wallet -->
+        <record id="action_community_wallet" model="ir.actions.act_window">
+            <field name="name">社區錢包</field>
+            <field name="res_model">community.wallet</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_community_wallet" name="錢包" parent="menu_wuchang_root" action="action_community_wallet" sequence="30"/>
+
+        <!-- Care Alert -->
+        <record id="action_care_alert" model="ir.actions.act_window">
+            <field name="name">關懷通知</field>
+            <field name="res_model">care.alert</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_care_alert" name="關懷" parent="menu_wuchang_root" action="action_care_alert" sequence="40"/>
+
+        <!-- Fund Audit -->
+        <record id="action_fund_audit" model="ir.actions.act_window">
+            <field name="name">資金稽核</field>
+            <field name="res_model">fund.audit</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_fund_audit" name="資金稽核" parent="menu_wuchang_root" action="action_fund_audit" sequence="50"/>
+        <!-- Login page background div injection -->
+        <template id="wuchang_login_bg" inherit_id="web.login" name="Wuchang Login Background">
+            <xpath expr="//div[contains(@class,'o_web_login')]" position="inside">
+                <div class="wuchang-login-bg"></div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,18 @@
+member_mobile_verify_policy:
+  purpose: one-click phone presence verification for internal member login
+  method: tailscale_phone_presence
+  approved_phone_nodes:
+    - iphone-11
+    - v3-mix-edla-gl
+    - drallion
+  rules:
+    no_sms_code_storage: true
+    no_password_storage: true
+    no_token_storage: true
+    no_secret_to_memory_model: true
+    odoo_password_still_required: true
+    phone_presence_is_second_factor: true
+  files:
+    session: runtime/state/current_member_session.json
+    bindings: data/internal_members/mobile_bindings.jsonl
+    ledger: runtime/ledger/member_login_events.jsonl

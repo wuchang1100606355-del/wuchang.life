@@ -1,0 +1,38 @@
+rule_id: W7TP_GEI_REGISTRATION_ASSISTANT_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - let_GEI_suggest_where_new_ideas_belong_before_file_creation
+  - reduce_scattering_by_preclassifying_field_sub_universe_module
+  - support_registration_first_rule
+
+GEI_required_before_new_module:
+  classify:
+    - target_field
+    - target_sub_universe
+    - existing_similar_module
+    - governance_route
+    - risk_level
+    - whether_new_module_is_needed
+
+GEI_outputs:
+  - suggested_mount
+  - reuse_existing_module_recommendation
+  - new_sub_universe_needed_notice
+  - dead_letter_if_unclear
+  - red_team_negative_effects
+
+rules:
+  - if_similar_module_exists_then_prefer_extension_over_new_module
+  - if_sensitive_request_then_route_to_xiaoj_review_opinion_plus_final_authorization_or_plaintext_policy
+  - if_runtime_action_then_require_landing_gate
+  - if_no_clear_field_then_dead_letter_not_create_file
+
+red_team_reflection:
+  negative_effects:
+    - GEI_may_overfit_to_existing_registry_and_block_novel_design
+    - GEI_may_choose_wrong_field_with_high_confidence
+  mitigation:
+    - include_confidence_level
+    - allow_founder_override_as_plan_only
+    - require_xiaoj_review_opinion_plus_final_authorization_for_low_confidence_registration

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd /home/taiji_admin/Taiji_Hub
+
+cmd="${1:-status}"
+shift || true
+
+case "$cmd" in
+  status)
+    echo "=== services ==="
+    systemctl status taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service --no-pager | sed -n '1,120p' || true
+    echo
+    echo "=== health ==="
+    curl -s http://127.0.0.1:9006/ | python3 -m json.tool || true
+    curl -s http://127.0.0.1:8081/health | python3 -m json.tool || true
+    curl -s http://127.0.0.1:8098/v1/models | python3 -m json.tool || true
+    ;;
+  clow)
+    keyword="${1:-jules}"
+    curl -s "http://127.0.0.1:9006/api/claw/scan_physical?keyword=${keyword}&base_path=/home/taiji_admin/Taiji_Hub" | python3 -m json.tool
+    ;;
+  exec)
+    prompt="${*:-紅隊工具化測試：請確認 Taiji 工具化修正狀態}"
+    python3 - "$prompt" <<'PY' | curl -s -X POST http://127.0.0.1:8081/api/taiji/execute -H "Content-Type: application/json" -d @- | python3 -m json.tool
+import json, sys
+print(json.dumps({"prompt": sys.argv[1], "keyword": "jules"}, ensure_ascii=False))
+PY
+    ;;
+  bridge)
+    prompt="${*:-小J，請確認 OpenWebUI Bridge 工具化狀態}"
+    python3 - "$prompt" <<'PY' | curl -s -X POST http://127.0.0.1:8098/v1/chat/completions -H "Content-Type: application/json" -d @- | python3 -m json.tool
+import json, sys
+print(json.dumps({
+  "model": "taiji-runtime-core",
+  "messages": [{"role": "user", "content": sys.argv[1]}]
+}, ensure_ascii=False))
+PY
+    ;;
+  memo)
+    TS="$(date +%Y%m%d_%H%M%S)"
+    OUT="runtime/memos/tool_status_${TS}.md"
+    {
+      echo "# Taiji Tool Status Memo"
+      echo
+      echo "timestamp: $(date -Is)"
+      echo
+      echo "## Services"
+      systemctl status taiji-clow-adapter.service taiji-gateway.service taiji-openwebui-bridge.service --no-pager || true
+      echo
+      echo "## Docker"
+      docker ps || true
+      echo
+      echo "## Tailscale"
+      tailscale status 2>/dev/null | sed -E 's/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/[REDACTED_EMAIL]/g' || true
+      echo
+      echo "## Clow Adapter"
+      curl -s http://127.0.0.1:9006/ || true
+      echo
+      echo "## Gateway"
+      curl -s http://127.0.0.1:8081/health || true
+      echo
+      echo "## Bridge"
+      curl -s http://127.0.0.1:8098/v1/models || true
+    } | tee "$OUT" >/dev/null
+    cat "$OUT" | logger -t taiji-tool || true
+    echo "$OUT"
+    ;;
+  logs)
+    journalctl -u taiji-clow-adapter.service -u taiji-gateway.service -u taiji-openwebui-bridge.service -n 120 --no-pager
+    ;;
+  *)
+    echo "usage: scripts/taiji-tool {status|clow [keyword]|exec [prompt]|bridge [prompt]|memo|logs}"
+    exit 1
+    ;;
+esac

@@ -1,0 +1,45 @@
+{
+  "event": "odoo_account_role_mapping_loaded",
+  "status": "ACTIVE_GOVERNANCE_MAPPING_ONLY",
+  "version": "2026-05-12",
+  "live_odoo_mutation_performed": false,
+  "accounts": [
+    {
+      "account": "o970106@gmail.com",
+      "roles": [
+        "group_member_account",
+        "developer_vendor_account"
+      ],
+      "window": "group_member_developer_vendor",
+      "recorded_as_provided": false,
+      "corrected_by_user": true,
+      "needs_human_confirmation_before_live_apply": false,
+      "note": "domain spelling corrected from gmial.com to gmail.com by user confirmation"
+    },
+    {
+      "account": "admin@wuchang.life",
+      "roles": [
+        "super_admin_account",
+        "main_company_responsible_account"
+      ],
+      "window": "main_company_super_admin",
+      "organization_digital_representative": true,
+      "bypasses_five_metric_gate": false
+    }
+  ],
+  "required_before_live_apply": [
+    "human_confirmation",
+    "odoo_user_role_manifest",
+    "five_metric_gate_decision",
+    "audit_record",
+    "rollback_plan"
+  ],
+  "blocked_l3": [
+    "direct_odoo_permission_mutation_without_manifest",
+    "ai_admin_account_gateway_bypass",
+    "secret_material_output",
+    "member_plaintext_export"
+  ],
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

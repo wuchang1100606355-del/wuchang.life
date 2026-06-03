@@ -1,0 +1,31 @@
+policy_id: cloud_download_policy_v1
+purpose: Download selected Google Drive evidence files into local review area before Git commit.
+
+allowed:
+  - markdown
+  - pdf
+  - html
+  - plain_text
+  - google_doc_export_text_or_markdown
+
+blocked:
+  - service_account_json
+  - private_key
+  - token
+  - password
+  - cookie
+  - raw_dot_git
+  - database_dump
+  - full_drive_sync
+  - credential_files
+
+rules:
+  - download_selected_files_only
+  - secret_scan_after_download
+  - commit_index_and_safe_exports_only
+  - do_not_commit_raw_credentials
+  - no_git_add_dot
+
+local_paths:
+  download_review: cloud_drive_downloads/raw_review
+  metadata_index: cloud_drive_downloads/metadata_only

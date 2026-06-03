@@ -1,0 +1,29 @@
+packet_id: XIAOJ_TOTAL_FIELD_LANDING_PLAN_V2
+status: PLAN_ONLY
+
+target_landing_root: W7TP_FIELD_ATLAS/xiaoj_total_field
+
+proposed_files:
+  - source: runtime/sandbox/xiaoj_total_field_registry_v2/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+    destination: W7TP_FIELD_ATLAS/xiaoj_total_field/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+
+pre_landing_conditions:
+  - yaml_parse_pass
+  - no_secret_literal_pass
+  - no_conflict_with_WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2
+  - master_index_update_plan_created
+  - human_final_authorization
+
+runtime_actions:
+  copy_to_runtime: false
+  restart: false
+  db_write: false
+  docker_action: false
+
+xiaoj_review_opinion:
+  recommendation: approve_limited
+  reason: 只落地治理總場文件，不碰runtime/Odoo/DB。
+  safe_option: 落地到W7TP_FIELD_ATLAS/xiaoj_total_field後，再更新master index。
+  risk_if_approved: 可能多一個總場主表，需要canonical標記。
+  risk_if_rejected: V2只能停留sandbox，無法供GEI引用。
+  required_human_action: approve_with_conditions

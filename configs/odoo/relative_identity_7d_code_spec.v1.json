@@ -1,0 +1,125 @@
+{
+  "setting_version": "RELATIVE-IDENTITY-7D-CODE-SPEC/1.0",
+  "authority": "local_xiaoj_router",
+  "purpose": "pos_odoo_node_relative_identity_governance",
+  "identity_is_relative_not_absolute": true,
+  "raw_pii_required_for_daily_operation": false,
+  "dimensions": {
+    "d1_actor_scope": {
+      "description": "role in current event",
+      "allowed_values": [
+        "guest",
+        "member",
+        "staff",
+        "merchant",
+        "volunteer",
+        "committee",
+        "association_operator",
+        "developer",
+        "cloud_compute_lane"
+      ]
+    },
+    "d2_relationship_context": {
+      "description": "relative relationship to association, shop, POS, node, household, or task",
+      "allowed_values": [
+        "customer_to_shop",
+        "member_to_association",
+        "merchant_to_platform",
+        "volunteer_to_task",
+        "committee_to_property",
+        "staff_to_pos",
+        "developer_to_sandbox",
+        "cloud_lane_to_redacted_task"
+      ]
+    },
+    "d3_consent_and_session": {
+      "description": "consent, session, revocation, verification state",
+      "fields": [
+        "consent_state",
+        "session_token_hash",
+        "revocable",
+        "verified_by_wifi_only_false",
+        "human_review_required"
+      ]
+    },
+    "d4_privacy_boundary": {
+      "description": "privacy class and cloud/group visibility",
+      "fields": [
+        "raw_pii_allowed_false",
+        "pseudonymous_member_code",
+        "redacted_cloud_allowed",
+        "group_lane_raw_pii_allowed_false",
+        "one_way_privacy_gate"
+      ]
+    },
+    "d5_service_intent": {
+      "description": "business/community service intent",
+      "allowed_values": [
+        "pos_order",
+        "cafe_menu",
+        "public_welfare_quota",
+        "food_rescue",
+        "delivery",
+        "volunteer_support",
+        "member_service",
+        "property_committee_service",
+        "grant_or_event_planning",
+        "technical_support"
+      ]
+    },
+    "d6_execution_authority": {
+      "description": "what the packet is allowed to do",
+      "fields": [
+        "odoo_read_allowed",
+        "odoo_write_allowed",
+        "pos_action_allowed",
+        "cloud_compute_allowed",
+        "formal_db_write_allowed",
+        "human_review_required",
+        "dead_letter_on_forbidden_action"
+      ]
+    },
+    "d7_evidence_and_metrics": {
+      "description": "audit and validation proof",
+      "fields": [
+        "audit_hash",
+        "packet_hash",
+        "linter_decision",
+        "validation_summary",
+        "focused_status",
+        "commit_hash",
+        "dual_brain_metrics",
+        "service_record_hash"
+      ]
+    }
+  },
+  "d8_trust_envelope": {
+    "description": "outer node trust envelope",
+    "fields": [
+      "node_id_hash",
+      "git_head",
+      "addon_version",
+      "payload_hash",
+      "timestamp",
+      "ttl_seconds",
+      "nonce",
+      "packet_counter",
+      "signature_type",
+      "signature"
+    ],
+    "signature_policy": {
+      "local_pos": "hmac_sha256",
+      "cross_node_or_cloud": "ed25519"
+    }
+  },
+  "forbidden_payload": [
+    "token",
+    "password",
+    "private_key",
+    "credentials",
+    "raw_member_pii",
+    "user_cloud_key",
+    "router_secret",
+    "formal_db_write_authority"
+  ]
+}

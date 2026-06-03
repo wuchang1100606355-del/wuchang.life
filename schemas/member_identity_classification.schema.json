@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/member_identity_classification.schema.json",
+  "title": "Wuchang Association Member Identity Classification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "member_class",
+    "membership_status",
+    "residency_scope",
+    "contains_member_plaintext",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wuchang.member_identity_classification.v1"
+    },
+    "member_class": {
+      "type": "string",
+      "enum": [
+        "group_member",
+        "natural_person_member"
+      ]
+    },
+    "group_type": {
+      "type": "string",
+      "enum": [
+        "merchant",
+        "building_management_committee",
+        "property_or_building_management_committee",
+        "other_authorized_group",
+        "not_applicable"
+      ],
+      "default": "not_applicable"
+    },
+    "governance_role": {
+      "type": "string",
+      "enum": [
+        "secretary_general",
+        "director_or_supervisor",
+        "association_staff",
+        "not_applicable"
+      ],
+      "default": "not_applicable"
+    },
+    "role_window": {
+      "type": "string",
+      "enum": [
+        "member_rights_window",
+        "governance_execution_window",
+        "business_service_window",
+        "property_management_service_window",
+        "human_review_window"
+      ],
+      "default": "human_review_window"
+    },
+    "membership_status": {
+      "type": "string",
+      "enum": [
+        "regular_member",
+        "supporting_member",
+        "pending_human_review",
+        "not_applicable"
+      ]
+    },
+    "residency_scope": {
+      "type": "string",
+      "enum": [
+        "inside_jurisdiction",
+        "outside_jurisdiction",
+        "group_entity",
+        "unknown_requires_review"
+      ]
+    },
+    "jurisdiction_basis": {
+      "type": "string",
+      "enum": [
+        "wuchang_li",
+        "renzhong_li",
+        "wushun_li",
+        "outside_association_area",
+        "group_entity",
+        "not_recorded"
+      ],
+      "default": "not_recorded"
+    },
+    "allowed_windows": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "community_governance",
+          "community_service",
+          "commercial_pos_service",
+          "building_management_service",
+          "public_interest_research",
+          "accounting_review",
+          "human_review"
+        ]
+      },
+      "default": []
+    },
+    "accounting_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "independent_ledger_required": {
+          "type": "boolean",
+          "default": true
+        },
+        "ledger_scope": {
+          "type": "string",
+          "enum": [
+            "association_main_company",
+            "group_member",
+            "branch_company",
+            "merchant_group_member",
+            "property_group_member",
+            "natural_person_no_business_ledger",
+            "pending_human_review"
+          ]
+        },
+        "aggregate_to_association_allowed": {
+          "type": "boolean",
+          "default": true
+        },
+        "aggregate_mode": {
+          "type": "string",
+          "enum": [
+            "irreversible_account_subject_summary",
+            "irreversible_account_category_and_total_number",
+            "community_category_quantity_and_total_amount",
+            "public_subject_only",
+            "not_allowed",
+            "pending_human_review"
+          ],
+          "default": "irreversible_account_subject_summary"
+        },
+        "single_store_item_detail_visible": {
+          "const": false
+        },
+        "reverse_inference_to_single_store_allowed": {
+          "const": false
+        },
+        "demographic_distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "buyer_identity_visible": {
+              "const": false
+            },
+            "age_band_allowed": {
+              "type": "boolean",
+              "default": true
+            },
+            "gender_share_allowed": {
+              "type": "boolean",
+              "default": true
+            },
+            "consumption_share_allowed": {
+              "type": "boolean",
+              "default": true
+            },
+            "cross_join_to_identify_person_allowed": {
+              "const": false
+            }
+          }
+        },
+        "time_bucket_market_heat": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "best_business_time_visible": {
+              "type": "boolean",
+              "default": true
+            },
+            "buyer_identity_visible": {
+              "const": false
+            },
+            "individual_item_purchase_visible": {
+              "const": false
+            },
+            "device_path_tracking_allowed": {
+              "const": false
+            },
+            "single_store_item_detail_visible": {
+              "const": false
+            }
+          }
+        },
+        "public_service_signal": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "association_local_truth_visible": {
+              "type": "boolean",
+              "default": true
+            },
+            "cloud_plaintext_detail_visible": {
+              "const": false
+            },
+            "child_personal_data_visible_to_cloud": {
+              "const": false
+            },
+            "individual_route_visible_to_cloud": {
+              "const": false
+            },
+            "allowed_signal_types": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "commute_traffic_peak_time",
+                  "school_child_safety_community_shuttle_need",
+                  "resident_transport_service_gap",
+                  "community_service_heat"
+                ]
+              },
+              "default": []
+            }
+          }
+        },
+        "member_five_dim_code": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "issued_at_membership_enrollment": {
+              "type": "boolean",
+              "default": true
+            },
+            "represents_member_rights_and_governance_state": {
+              "type": "boolean",
+              "default": true
+            },
+            "stores_personal_plaintext": {
+              "const": false
+            },
+            "reversible_to_personal_plaintext": {
+              "const": false
+            },
+            "personal_plaintext_storage": {
+              "type": "string",
+              "enum": [
+                "member_device_or_physical_custody_only",
+                "not_recorded_in_runtime",
+                "pending_human_review"
+              ],
+              "default": "member_device_or_physical_custody_only"
+            },
+            "ai_runtime_member_plaintext_access_allowed": {
+              "const": false
+            },
+            "member_ai_endpoint_whitelist_required": {
+              "type": "boolean",
+              "default": true
+            },
+            "gateway_and_five_metric_gate_required": {
+              "type": "boolean",
+              "default": true
+            },
+            "allowed_whitelist_functions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "member_status_check",
+                  "community_service_request",
+                  "pos_member_benefit_draft",
+                  "forum_registration_token",
+                  "odoo_mailbox_request",
+                  "audit_receipt_query"
+                ]
+              },
+              "default": []
+            },
+            "forbidden_member_ai_actions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "personal_plaintext_lookup",
+                  "google_admin_sdk_direct_call",
+                  "gmail_body_read",
+                  "odoo_production_write",
+                  "payment_execute",
+                  "secret_or_token_access"
+                ]
+              },
+              "default": []
+            }
+          }
+        },
+        "ai_accounting_mutation_allowed": {
+          "const": false
+        }
+      }
+    },
+    "contains_member_plaintext": {
+      "const": false
+    },
+    "requires_human_review": {
+      "type": "boolean",
+      "default": true
+    },
+    "audit_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "five_metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intent_metric": { "type": "string" },
+        "resource_metric": { "type": "string" },
+        "time_metric": { "type": "string" },
+        "authority_metric": { "type": "string" },
+        "topology_metric": { "type": "string" }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

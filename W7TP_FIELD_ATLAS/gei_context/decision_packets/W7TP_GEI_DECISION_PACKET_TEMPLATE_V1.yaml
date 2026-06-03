@@ -1,0 +1,73 @@
+template_id: W7TP_GEI_DECISION_PACKET_TEMPLATE_V1
+status: TEMPLATE_ONLY
+
+purpose:
+  - standardize_decision_context_before_action
+  - separate_context_from_permission
+  - prevent_plan_only_files_from_becoming_execution_approval
+
+packet:
+  d1_identity:
+    decision_packet_id:
+    host:
+    operator:
+    created_at:
+
+  d2_intent:
+    requested_action:
+    target_machine:
+    target_path:
+    action_type:
+
+  d3_state:
+    current_context_snapshot_ref:
+    current_git_head:
+    current_runtime_state:
+    pending_unknowns:
+
+  d4_topology:
+    source_universe:
+    twin_universe:
+    runtime_universe:
+
+  d5_resource:
+    files_to_change:
+    files_to_read:
+    files_to_preserve:
+
+  d6_governance:
+    allowed:
+    forbidden:
+    human_review_required:
+    approval_phrase_required:
+
+  d7_validation:
+    required_gates:
+    passed_gates:
+    failed_or_pending_gates:
+
+  d8_tamper_boundary:
+    rollback_required:
+    no_secret_read:
+    audit_required:
+
+decision_levels:
+  CONTEXT_ONLY:
+    can_execute: false
+  PLAN_READY:
+    can_execute: false
+  APPROVED_COPY_ONLY:
+    can_execute: limited
+  APPROVED_RESTART:
+    can_execute: limited
+  APPROVED_DEPLOY:
+    can_execute: limited_high_risk
+
+red_team_reflection:
+  negative_effects:
+    - template_may_be_filled_in_wrong_context
+    - approval_scope_may_be_too_broad
+  mitigation:
+    - require_target_machine_and_path
+    - separate_copy_restart_deploy_approval
+    - one_execution_expiry

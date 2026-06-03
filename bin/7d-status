@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$HOME/Taiji_Hub"
+
+echo "===== 7D LIVE STATUS ====="
+python3 -m json.tool "$ROOT/state/7d_runtime_live_status.json"
+
+echo
+echo "===== 7D HEALTH 8126 ====="
+curl -s http://127.0.0.1:8126/health || true
+
+echo
+echo
+echo "===== 7D FULL CHECK ====="
+bash "$ROOT/runtime/check_7d_full.sh"

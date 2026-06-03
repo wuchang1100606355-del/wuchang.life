@@ -1,0 +1,6 @@
+CONTAINER ID   IMAGE                                                             COMMAND                  CREATED        STATUS                  PORTS                                                     NAMES
+de89612cee06   taiji_device_resilience_adapter-taiji_device_resilience_adapter   "uvicorn app.main:ap…"   23 hours ago   Up 14 hours             100.107.187.77:9012->9012/tcp, 127.0.0.1:9012->9012/tcp   taiji_device_resilience_adapter
+15ac960dd0b4   taiji_pos_google_voice_tool-taiji_pos_google_voice_tool           "uvicorn app.main:ap…"   24 hours ago   Up 14 hours             100.107.187.77:9011->9011/tcp, 127.0.0.1:9011->9011/tcp   taiji_pos_google_voice_tool
+88d24d1cd187   taiji_claw_safe-taiji_claw_safe                                   "uvicorn app.main:ap…"   24 hours ago   Up 14 hours             127.0.0.1:9004->9004/tcp                                  taiji_claw_safe
+ba974f93d457   ghcr.io/open-webui/open-webui:main                                "bash start.sh"          3 days ago     Up 13 hours (healthy)   0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp               open-webui
+2c722067232e   ollama/ollama:latest                                              "/bin/ollama serve"      3 days ago     Up 14 hours             11434/tcp                                                 wuchang_gpu_brain

@@ -1,0 +1,112 @@
+{
+  "lastUpdated": "2026-05-17T16:10:00+08:00",
+  "overview": {
+    "title": "Taiji / Wuchang 系統模組架構進度儀表板",
+    "icon": "fa-chart-network",
+    "subtitle": "Linux-first canonical runtime：/home/taiji_admin/Taiji_Hub。Windows 僅作為 VS Code、瀏覽器與控制台；_imports 僅為匯入審查區，不是正式主工作區。"
+  },
+  "modules": [
+    {
+      "name": "Linux Canonical Workspace",
+      "icon": "fa-folder",
+      "tags": [
+        { "label": "方向已定", "type": "good" },
+        { "label": "需照准", "type": "warn" }
+      ],
+      "description": "主工作區固定為 /home/taiji_admin/Taiji_Hub。",
+      "progress": 75
+    },
+    {
+      "name": "Git / Audit Boundary",
+      "icon": "fa-git-alt",
+      "tags": [
+        { "label": "漂移待收斂", "type": "warn" }
+      ],
+      "description": "先建立 .gitignore、pytest.ini、排除 runtime data。",
+      "progress": 45
+    },
+    {
+      "name": "Secret Governance",
+      "icon": "fa-lock",
+      "tags": [
+        { "label": "P0", "type": "bad" }
+      ],
+      "description": "Gemini / LINE secret 已視為暴露，需輪替並改環境變數。",
+      "progress": 30
+    },
+    {
+      "name": "Odoo 18 Canonical Modules",
+      "icon": "fa-cogs",
+      "tags": [
+        { "label": "17 下架", "type": "warn" },
+        { "label": "18 正式區", "type": "good" }
+      ],
+      "description": "Odoo 17 佈局停用；優異模組重構並收斂至 Odoo 18 正式區（wuchang_os_odoo_18）。",
+      "progress": 72
+    }
+  ],
+  "tableData": [
+    { "layer": "Canonical Workspace", "role": "Linux 主權工作區", "status": "已確定路徑", "task": "T1 工作區邊界收斂", "progress": "75%", "icon": "fa-arrow-right" },
+    { "layer": "_imports Review Area", "role": "匯入來源審查區", "status": "已校正：不得當主體", "task": "T1 / T2 安全匯入", "progress": "70%", "icon": "fa-check" },
+    { "layer": "GitHub Issues #7 #8", "role": "治理紀錄與任務追蹤", "status": "已建立 P0/P1 與授權紀錄", "task": "T0 治理照准", "progress": "90%", "icon": "fa-bug" },
+    { "layer": "Secret Layer", "role": "API key / OAuth / token 邊界", "status": "需輪替、去硬編碼、禁止入 Git", "task": "T3 Secret 修復", "progress": "30%", "icon": "fa-key" },
+    { "layer": "pytest Entry", "role": "測試入口", "status": "需新增 pytest.ini", "task": "T4 測試穩定", "progress": "45%", "icon": "fa-vial" },
+    { "layer": "Gateway / API", "role": "外部入口與 AI runtime 邊界", "status": "CORS / auth / proxy handler 需收斂", "task": "T5 Gateway 安全收斂", "progress": "45%", "icon": "fa-network-wired" },
+    { "layer": "Odoo Modules", "role": "社區 / 志工 / 物業模組", "status": "Odoo 17 下架中；優異模組重構至 Odoo 18", "task": "T6 Odoo 模組盤點 / T8 Odoo18 重構", "progress": "72%", "icon": "fa-puzzle-piece" },
+    { "layer": "Runtime Governance", "role": "五維碼、三問、動態賦能", "status": "已建立框架，策略接線進行中", "task": "T7 治理規格化", "progress": "70%", "icon": "fa-gavel" }
+  ],
+  "taskLines": [
+    { "id": "T0 治理照准", "icon": "fa-check-circle", "desc": "建立 Issue #7 P0/P1 安全穩定化、Issue #8 檔案照准與認知重構授權。" },
+    { "id": "T1 工作區邊界收斂", "icon": "fa-dot-circle", "desc": "確認 /home/taiji_admin/Taiji_Hub 是 canonical root；_imports 只作審查區。" },
+    { "id": "T2 匯入差異比對", "icon": "fa-dot-circle", "desc": "產出 canonical/import checksum、overlap、divergence、safe promotion list。" },
+    { "id": "T3 Secret 修復", "icon": "fa-dot-circle", "desc": "輪替 Gemini / LINE，硬編碼改環境變數，建立 .env.example，禁止秘密入 Git。" },
+    { "id": "T4 測試入口穩定", "icon": "fa-dot-circle", "desc": "新增 pytest.ini，限制 testpaths = tests，排除 Odoo data / filestore / venv / archives。" },
+    { "id": "T5 Gateway 安全收斂", "icon": "fa-dot-circle", "desc": "收斂 CORS、auth、proxy handler、docker exec fallback runtime adapter。" },
+    { "id": "T6 Odoo 模組盤點", "icon": "fa-dot-circle", "desc": "對三個自訂模組建立模型、權限、選單、資料依賴與完成度表。" },
+    { "id": "T7 即時進度網頁化", "icon": "fa-code", "desc": "把模組狀態、任務線、完成度改為可由 JSON 餵資料的 dashboard。" },
+    { "id": "T8 Odoo18 模組重構", "icon": "fa-cubes", "desc": "Odoo17 下架，將優異社區/志工/物業模組重構、驗證並收斂到 Odoo18 正式容器與資料邊界。" }
+  ],
+  "portScan": {
+    "scannedAt": "2026-05-17T16:10:00+08:00",
+    "policy": {
+      "allowedLocalExposure": [8069, 9201, 9004],
+      "note": "主機 localhost 暴露僅允許 8069/9201/9004；其餘監聽列為觀察或異常。"
+    },
+    "ports": [
+      { "port": 8069, "bind": "127.0.0.1", "owner": "wuchang_os_odoo_18", "role": "business_core", "status": "normal" },
+      { "port": 9201, "bind": "127.0.0.1", "owner": "taiji_voice_gateway", "role": "ai_runtime", "status": "normal" },
+      { "port": 9004, "bind": "127.0.0.1", "owner": "taiji_claw_safe", "role": "ai_runtime", "status": "normal" },
+      { "port": 11434, "bind": "127.0.0.1", "owner": "wuchang_gpu_brain", "role": "ai_runtime_internal", "status": "warn" },
+      { "port": 8080, "bind": "127.0.0.1", "owner": "python3", "role": "local_runtime_aux", "status": "warn" },
+      { "port": 8081, "bind": "127.0.0.1", "owner": "python3", "role": "local_runtime_aux", "status": "warn" },
+      { "port": 8091, "bind": "127.0.0.1", "owner": "python3", "role": "local_runtime_aux", "status": "warn" },
+      { "port": 8098, "bind": "127.0.0.1", "owner": "python3", "role": "local_runtime_aux", "status": "warn" },
+      { "port": 8099, "bind": "127.0.0.1", "owner": "python3", "role": "local_runtime_aux", "status": "warn" },
+      { "port": 8105, "bind": "127.0.0.1", "owner": "python", "role": "local_runtime_aux", "status": "warn" },
+      { "port": 6379, "bind": "127.0.0.1", "owner": "redis-server", "role": "cache_runtime", "status": "warn" },
+      { "port": 80, "bind": "*", "owner": "unknown", "role": "public_listener", "status": "abnormal" }
+    ],
+    "relations": [
+      { "from": "Windows Control Plane", "to": "Linux Canonical Runtime", "state": "normal" },
+      { "from": "Linux Canonical Runtime", "to": "wuchang_os_odoo_18:8069", "state": "normal" },
+      { "from": "Linux Canonical Runtime", "to": "taiji_voice_gateway:9201", "state": "normal" },
+      { "from": "Linux Canonical Runtime", "to": "taiji_claw_safe:9004", "state": "normal" },
+      { "from": "Linux Canonical Runtime", "to": "wuchang_gpu_brain:11434", "state": "warn" },
+      { "from": "Linux Canonical Runtime", "to": "public_listener:*:80", "state": "abnormal" }
+    ]
+  },
+  "systemPages": [
+    {
+      "name": "系統模組進度（正式區）",
+      "path": "http://localhost:8787/system-module-progress.html",
+      "desc": "正式區圖塊式系統架構頁，載入 system-module-progress.json。",
+      "status": "normal"
+    },
+    {
+      "name": "Preview 功能頁",
+      "path": "http://localhost:8787/preview.html",
+      "desc": "由 C:/Users/o0930/Downloads/preview.html 收錄至 dashboard/preview.html。",
+      "status": "normal"
+    }
+  ]
+}

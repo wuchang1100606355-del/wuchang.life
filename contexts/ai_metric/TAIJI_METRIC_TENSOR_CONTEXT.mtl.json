@@ -1,0 +1,52 @@
+{
+  "schema": "taiji_metric_tensor_context",
+  "version": "2026-05-12",
+  "status": "ACTIVE",
+  "metric_world": {
+    "definer": "江政隆",
+    "creator_accountability_anchor": true,
+    "creator_anchor_bypasses_gate": false,
+    "natural_language_command_is_causal_input_not_absolute_override": true
+  },
+  "workspace": {
+    "active": "/home/taiji_admin/Taiji_Hub",
+    "legacy": "/mnt/c/Users/o0930/Taiji_Hub",
+    "mode": "wsl_native_linux",
+    "filesystem_expected": "ext4"
+  },
+  "host_nodes": {
+    "MSI": {
+      "role": [
+        "wuchang.life representative node",
+        "local development node",
+        "local Odoo/POS test node"
+      ],
+      "shutdown_policy": "may_shutdown_after_local_work_or_service_handoff"
+    },
+    "taiji01": {
+      "role": [
+        "community resident edge node",
+        "deployment node",
+        "optional service node"
+      ],
+      "shutdown_policy": "do_not_shutdown_when_serving_without_handoff_or_log"
+    }
+  },
+  "entity_mapping": {
+    "odoo_main_company": "新北市三重區五常社區發展協會",
+    "developer_vendor_technical_transferor": "聊國咖啡館重新店 / 上品食品行",
+    "commercial_legal_entity": "上品食品行",
+    "commercial_tax_id": "34778660",
+    "inactive_typo_tax_id": "34775660",
+    "admin_account": "admin@wuchang.life",
+    "sponsor_developer_account": "o970106@gmail.com"
+  },
+  "governance": {
+    "same_person_does_not_merge_legal_subjects": true,
+    "same_container_names_do_not_mean_same_docker_daemon": true,
+    "trusted_operator_does_not_disable_security_governance": true,
+    "production_write_requires_backup_preflight_audit_rollback": true
+  },
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

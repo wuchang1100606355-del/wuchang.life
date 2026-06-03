@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="ticket_page_template" name="Ticket Platform">
+        <t t-call="website.layout">
+            <div id="ticket_app" class="bg-gray-50 min-h-screen font-sans">
+                <!-- Navigation Bar -->
+                <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-4 py-3">
+                    <div class="max-w-md mx-auto flex items-center justify-between">
+                        <a href="/wuchang/delivery" class="text-gray-500 hover:text-gray-800 transition-colors">
+                            <i class="fa fa-arrow-left text-xl"></i>
+                        </a>
+                        <h1 class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-emerald-600">
+                            購券中心
+                        </h1>
+                        <div class="flex items-center gap-2 bg-yellow-50 px-3 py-1.5 rounded-full border border-yellow-100">
+                            <div class="w-5 h-5 rounded-full bg-yellow-400 flex items-center justify-center text-white text-xs shadow-sm">
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <span class="text-sm font-bold text-yellow-700" id="user_coin_balance">Loading...</span>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Main Content -->
+                <main class="max-w-md mx-auto p-4 pb-24">
+                    
+                    <!-- Hero Section -->
+                    <div class="mb-6 relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-700 text-white shadow-lg">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10 blur-xl"></div>
+                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400 opacity-20 rounded-full -ml-10 -mb-10 blur-xl"></div>
+                        
+                        <div class="p-6 relative z-10">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h2 class="text-2xl font-bold mb-1">幸福幣價值保衛戰</h2>
+                                    <p class="text-teal-100 text-sm">您的每一分投入，都是為了讓公益價值更堅挺。</p>
+                                </div>
+                                <i class="fa fa-shield text-4xl text-teal-200 opacity-50"></i>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur rounded-lg p-3 text-xs text-teal-50 border border-white/20">
+                                <i class="fa fa-info-circle me-1"></i>
+                                正常人也達不到的標準：透過票券轉換機制，我們建立了一道心理與經濟的防火牆，確保社區幣不被濫用，讓每一筆消費都精準回流基金池。
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Voucher Grid -->
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-ticket text-emerald-500 me-2"></i>精選票券
+                    </h3>
+                    
+                    <div id="voucher_grid" class="grid grid-cols-1 gap-4">
+                        <!-- Vouchers will be loaded here via JS -->
+                        <div class="text-center py-12 text-gray-400">
+                            <i class="fa fa-circle-o-notch fa-spin fa-2x mb-2"></i>
+                            <p>正在載入票券列表...</p>
+                        </div>
+                    </div>
+
+                </main>
+
+                <!-- Bottom Tab Bar -->
+                <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 z-40">
+                    <div class="max-w-md mx-auto flex justify-around items-center">
+                        <a href="/wuchang/delivery" class="flex flex-col items-center text-gray-400 hover:text-emerald-600 transition-colors group">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center mb-1 group-hover:bg-emerald-50 transition-colors">
+                                <i class="fa fa-cutlery text-xl"></i>
+                            </div>
+                            <span class="text-xs font-medium">外送美食</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center text-emerald-600 relative -top-6">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg shadow-emerald-200 border-4 border-gray-50 transform hover:scale-105 transition-transform">
+                                <i class="fa fa-ticket text-2xl"></i>
+                            </div>
+                            <span class="text-xs font-bold mt-1">購券中心</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center text-gray-400 hover:text-emerald-600 transition-colors group">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center mb-1 group-hover:bg-emerald-50 transition-colors">
+                                <i class="fa fa-user text-xl"></i>
+                            </div>
+                            <span class="text-xs font-medium">會員專區</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client-side Logic -->
+            <script type="text/javascript">
+                (function(){
+                    function fetchVouchers(){
+                        var grid = document.getElementById('voucher_grid');
+                        odoo.jsonRpc('/wuchang/tickets/list', 'call', {}).then(function(res){
+                            grid.innerHTML = '';
+                            if (!res.items || res.items.length === 0) {
+                                grid.innerHTML = '<div class="text-center py-12 text-gray-500">暫無可購買的票券</div>';
+                                return;
+                            }
+                            
+                            (res.items||[]).forEach(function(v){
+                                var card = document.createElement('div');
+                                card.className = 'bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex';
+                                
+                                var leftSide = '<div class="bg-gradient-to-b from-emerald-500 to-teal-600 w-24 flex flex-col items-center justify-center text-white p-2 border-r border-dashed border-white/30 relative">';
+                                leftSide += '<div class="absolute -right-1.5 top-0 bottom-0 w-3 bg-white" style="mask: radial-gradient(circle 6px at 0 50%, #0000 98%, #000) 0 0/100% 24px;"></div>'; // Sawtooth effect
+                                leftSide += '<span class="text-xs opacity-80 mb-1">價值</span>';
+                                leftSide += '<span class="text-2xl font-bold">$' + v.price + '</span>';
+                                leftSide += '</div>';
+                                
+                                var rightSide = '<div class="flex-grow p-4 flex flex-col justify-between">';
+                                rightSide += '<div>';
+                                rightSide += '<div class="flex justify-between items-start">';
+                                rightSide += '<h4 class="font-bold text-gray-800 text-lg leading-tight mb-1">' + v.name + '</h4>';
+                                rightSide += '</div>';
+                                rightSide += '<p class="text-xs text-gray-500"><i class="fa fa-store me-1"></i>' + v.merchant + '</p>';
+                                rightSide += '</div>';
+                                
+                                rightSide += '<div class="mt-3 flex justify-between items-center">';
+                                rightSide += '<span class="text-xs text-orange-500 bg-orange-50 px-2 py-1 rounded-full">剩餘 ' + v.stock + ' 張</span>';
+                                rightSide += '<button onclick="buyTicket(' + v.id + ')" class="bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-black transition-colors">立即兌換</button>';
+                                rightSide += '</div>';
+                                rightSide += '</div>';
+                                
+                                card.innerHTML = leftSide + rightSide;
+                                grid.appendChild(card);
+                            });
+                            
+                            // Update balance (simulated)
+                            document.getElementById('user_coin_balance').innerText = '888';
+                        });
+                    }
+
+                    window.buyTicket = function(id) {
+                        if(confirm('確定要使用幸福幣兌換此票券嗎？')) {
+                            odoo.jsonRpc('/wuchang/tickets/buy', 'call', {voucher_id: id}).then(function(res){
+                                if(res.success) {
+                                    alert(res.message);
+                                    // Refresh logic here if needed
+                                }
+                            });
+                        }
+                    };
+
+                    document.addEventListener('DOMContentLoaded', fetchVouchers);
+                })();
+            </script>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,15 @@
+[Unit]
+Description=Taiji Open WebUI Native
+After=taiji-gateway.service
+Wants=taiji-gateway.service
+
+[Service]
+Type=simple
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+WorkingDirectory=%h/wuchang_8_0_core/open-webui/backend
+ExecStart=%h/wuchang_8_0_core/open-webui/backend/.venv/bin/python3 -m uvicorn open_webui.main:app --host 127.0.0.1 --port 8080 --forwarded-allow-ips 127.0.0.1 --workers 1
+Restart=always
+RestartSec=8
+
+[Install]
+WantedBy=default.target

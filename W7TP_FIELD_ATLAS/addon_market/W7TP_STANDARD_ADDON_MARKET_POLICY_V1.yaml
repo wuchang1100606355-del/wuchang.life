@@ -1,0 +1,42 @@
+policy_id: W7TP_STANDARD_ADDON_MARKET_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - define_standard_addon_subscription_market
+  - allow_group_members_to_profit_from_value_added_modules
+  - prevent_addon_market_from_becoming_data_market
+
+addon_types:
+  merchant_addons:
+    - order_notice
+    - ticket_validation
+    - pickup_flow
+    - blind_ai_business_assist
+
+  committee_addons:
+    - event_registration
+    - lawful_notice_workflow
+    - plaintext_claim_review_interface
+    - audit_dashboard
+
+  welfare_addons:
+    - food_support_queue
+    - volunteer_coordination
+    - elderly_child_meal_support
+
+market_rules:
+  - addon_profit_may_return_to_group_member
+  - addon_must_not_sell_member_plaintext
+  - addon_must_pass_no_secret_linter
+  - addon_must_have_universe_packet
+  - addon_must_pass_runtime_landing_gate_before_formal_use
+
+red_team_reflection:
+  negative_effects:
+    - addon_market_may_incentivize_overmarketing
+    - poorly_written_addons_may_weaken_privacy_boundary
+    - profit_logic_may_conflict_with_public_interest
+  mitigation:
+    - standard_addon_review
+    - privacy_boundary_required
+    - public_interest_and_accounting_review

@@ -1,0 +1,25 @@
+services:
+  web:
+    image: odoo:17.0
+    user: "root"
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      - ODOO_MASTER_PASSWORD=admin
+    volumes:
+      - ./wuchang_comm_incub:/mnt/extra-addons/wuchang_comm_incub
+      - ./odoo.conf:/etc/odoo/odoo.conf
+    command: --log-level=debug
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - wuchang-db-data:/var/lib/postgresql/data
+
+volumes:
+  wuchang-db-data:

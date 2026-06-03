@@ -1,0 +1,94 @@
+{
+  "title": "Non-Sensitive Five-Metric Vector Data License",
+  "type": "object",
+  "required": [
+    "event",
+    "license_id",
+    "dataset_name",
+    "dataset_version",
+    "data_classification",
+    "personal_data_included",
+    "reidentification_risk",
+    "allowed_use",
+    "buyer_commitments",
+    "audit_required",
+    "contract_required",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "non_sensitive_vector_data_license"
+    },
+    "license_id": {
+      "type": "string"
+    },
+    "dataset_name": {
+      "type": "string"
+    },
+    "dataset_version": {
+      "type": "string"
+    },
+    "data_classification": {
+      "type": "string",
+      "enum": [
+        "aggregate_only",
+        "deidentified_vector",
+        "non_sensitive_esg_indicator"
+      ]
+    },
+    "personal_data_included": {
+      "const": false
+    },
+    "secret_material_included": {
+      "type": "boolean",
+      "default": false
+    },
+    "business_secret_included": {
+      "type": "boolean",
+      "default": false
+    },
+    "reidentification_risk": {
+      "type": "string",
+      "enum": ["low", "controlled", "needs_review", "blocked"]
+    },
+    "allowed_use": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "public_interest_research",
+          "academic_research",
+          "community_esg_reporting",
+          "community_industry_analysis",
+          "service_improvement"
+        ]
+      }
+    },
+    "buyer_commitments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "no_reidentification",
+          "no_resale_raw_data",
+          "no_individual_profiling",
+          "no_discriminatory_decision_use",
+          "security_controls_required",
+          "esg_claims_must_be_verifiable"
+        ]
+      }
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "contract_required": {
+      "type": "boolean"
+    },
+    "sha256": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

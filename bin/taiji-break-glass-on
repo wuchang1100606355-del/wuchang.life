@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p logs runtime
+echo "enabled" > runtime/BREAK_GLASS_MODE
+echo "{\"event\":\"break_glass_on\",\"node\":\"MSI\",\"time\":\"$(date -Iseconds)\",\"reason\":\"manual emergency recovery\"}" >> logs/break_glass_audit.jsonl
+echo "BREAK_GLASS_MODE=enabled"

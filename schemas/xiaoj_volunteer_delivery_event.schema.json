@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJVolunteerDeliveryEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "actor_hash": {
+      "type": "string"
+    },
+    "actor_role": {
+      "type": "string",
+      "enum": [
+        "staff",
+        "volunteer",
+        "system",
+        "unknown"
+      ]
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "staff_reviewed",
+        "volunteer_offered",
+        "volunteer_accepted",
+        "pickup_started",
+        "delivery_started",
+        "completed",
+        "cancelled",
+        "rejected",
+        "dead_lettered",
+        "pii_unlocked",
+        "pii_revoked",
+        "delivery_completed",
+        "requester_confirmed",
+        "staff_audited",
+        "service_closed",
+        "token_failed",
+        "safety_escalated"
+      ]
+    },
+    "event_summary": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "status_after": {
+      "type": "string"
+    },
+    "plan_only": {
+      "const": true
+    },
+    "raw_pii_saved": {
+      "const": false
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "pii_visible_at_event": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "unlock_scope_used": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "token_verified": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "token_expired": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "staff_audit_required": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "event_id",
+    "request_id",
+    "actor_hash",
+    "event_type",
+    "event_summary",
+    "status_after",
+    "plan_only",
+    "raw_pii_saved",
+    "timestamp"
+  ]
+}

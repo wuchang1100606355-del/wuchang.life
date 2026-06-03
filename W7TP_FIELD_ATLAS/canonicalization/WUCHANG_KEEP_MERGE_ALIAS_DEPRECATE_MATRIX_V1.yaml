@@ -1,0 +1,102 @@
+matrix_id: WUCHANG_KEEP_MERGE_ALIAS_DEPRECATE_MATRIX_V1
+status: PLAN_ONLY
+
+decision_classes:
+  KEEP:
+    meaning: distinct role, keep as active canonical or active supporting module
+  MERGE:
+    meaning: combine into another canonical file later
+  ALIAS:
+    meaning: keep file but mark as reference/alias, not primary source
+  DEPRECATE:
+    meaning: keep for evidence only, do not extend
+
+zones:
+  GEI:
+    canonical:
+      - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_FIELD_V1.yaml
+    keep:
+      - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_ROUTING_RULE_V1.yaml
+      - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_REGISTRATION_ASSISTANT_RULE_V1.yaml
+    alias:
+      - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+      - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_PACKET_SCHEMA_V1.yaml
+    reason: GEI_FIELD is root; index/schema are subordinate references.
+
+  REGISTRY:
+    canonical:
+      - W7TP_FIELD_ATLAS/registries/WUCHANG_UNIVERSE_TOTAL_FIELD_REGISTRY_V2.yaml
+      - W7TP_FIELD_ATLAS/registries/WUCHANG_SUB_UNIVERSE_REGISTRY_V1.yaml
+    alias:
+      - W7TP_FIELD_ATLAS/01_universe_registry.yaml
+      - W7TP_FIELD_ATLAS/20_sub_universe_registry.yaml
+      - W7TP_FIELD_ATLAS/sub_universe_registry_v1.yaml
+    keep:
+      - W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+    reason: V2 total registry and current sub-universe registry are active canonical.
+
+  MODULE_MAP:
+    canonical:
+      - W7TP_FIELD_ATLAS/module_mounts/WUCHANG_MODULE_TO_SUB_UNIVERSE_MOUNT_MAP_V1.yaml
+    keep:
+      - W7TP_FIELD_ATLAS/module_maps/W7TP_GOVERNED_HIVE_MODULE_MAP_V1.yaml
+      - W7TP_FIELD_ATLAS/function_maps/WUCHANG_FUNCTION_TO_MODULE_MAP_V1.yaml
+    alias:
+      - W7TP_FIELD_ATLAS/71_sub_universe_module_map_v1.yaml
+    reason: mount map owns primary module-to-sub-universe relation.
+
+  CONTACT:
+    keep:
+      - W7TP_FIELD_ATLAS/contact_policies/W7TP_MEMBER_CONTACT_APPROVAL_POLICY_V1.yaml
+      - W7TP_FIELD_ATLAS/schemas/contact_approval_packet.schema.yaml
+      - W7TP_FIELD_ATLAS/service_flows/W7TP_MERCHANT_CONTACT_SERVICE_FLOW_V1.yaml
+    canonical_owner:
+      - M04_contact_approval_gate
+      - SU_CONTACT_APPROVAL
+    reason: policy, packet, flow are distinct layers.
+
+  PLAINTEXT:
+    keep:
+      - W7TP_FIELD_ATLAS/plaintext_policies/W7TP_PLAINTEXT_CLAIM_REVIEW_POLICY_V1.yaml
+      - W7TP_FIELD_ATLAS/committee_rules/W7TP_COMMITTEE_LAWFUL_PLAINTEXT_REQUEST_RULE_V1.yaml
+      - W7TP_FIELD_ATLAS/key_custody/W7TP_THREE_KEY_CUSTODY_OPERATION_RULE_V1.yaml
+      - W7TP_FIELD_ATLAS/service_rules/W7TP_SERVICE_RESULT_ONLY_RULE_V1.yaml
+    canonical_owner:
+      - M05_plaintext_claim_review
+      - SU_PLAINTEXT_CLAIM
+    reason: claim, committee request, key custody, and service result are separate gates.
+
+  TWIN_SYNC:
+    keep:
+      - W7TP_FIELD_ATLAS/drift_detector_plans/W7TP_DRIFT_DETECTOR_V1.yaml
+      - W7TP_FIELD_ATLAS/sub_universes/SU_TWIN_SYNC_UNIVERSE_V1.yaml
+      - W7TP_FIELD_ATLAS/runtime_landing_plans/W7TP_RUNTIME_LANDING_GATE_V1.yaml
+      - W7TP_FIELD_ATLAS/server_acceptance_reports/SERVER_ACCEPTANCE_REPORT_PM3_TO_TAIJI01_V1.yaml
+      - W7TP_FIELD_ATLAS/rollback_plans/W7TP_RUNTIME_ROLLBACK_POLICY_V1.yaml
+    canonical_owner:
+      - U08_TWIN_SYNC_FIELD
+    reason: detect, plan, accept, land, rollback are separate lifecycle stages.
+
+  BLIND_AI:
+    canonical:
+      - W7TP_FIELD_ATLAS/ai_service/W7TP_BLIND_AI_SERVICE_FUNCTION_UNIVERSE_V1.yaml
+    keep:
+      - W7TP_FIELD_ATLAS/cost_routing/W7TP_AI_BLIND_COMPUTE_COST_ROUTER_V1.yaml
+      - W7TP_FIELD_ATLAS/subscription_models/W7TP_PRIVACY_AI_SUBSCRIPTION_MODEL_V1.yaml
+      - W7TP_FIELD_ATLAS/schemas/blind_ai_subscription_packet.schema.yaml
+    reason: service universe is root; router/model/schema are supporting layers.
+
+rules:
+  - do_not_delete_alias_or_deprecated_files_during_patent_period
+  - alias_files_must_not_be_extended_as_primary_sources
+  - new_modules_must_check_this_matrix_before_creation
+  - canonical_owner_required_before_runtime_landing
+
+red_team_reflection:
+  negative_effects:
+    - wrong_canonical_choice_may_hide_valid_history
+    - alias_files_may_still_be_used_by_humans_accidentally
+  mitigation:
+    - preserve_all_files
+    - add_alias_header_later
+    - update_master_index_to_point_to_canonical

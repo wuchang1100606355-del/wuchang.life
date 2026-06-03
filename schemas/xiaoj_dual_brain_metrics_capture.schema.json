@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/xiaoj_dual_brain_metrics_capture.schema.json",
+  "title": "XiaoJ Dual-Brain Metrics Capture",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "domain",
+    "mode",
+    "authority",
+    "xiaoj_unified_intent_field",
+    "metrics_capture_only",
+    "model_started",
+    "front_brain_metrics",
+    "rear_brain_metrics",
+    "redteam_metrics",
+    "effectiveness_metrics",
+    "state_flow",
+    "forbidden_payload",
+    "forbidden_actions",
+    "action_flags"
+  ],
+  "properties": {
+    "mode": { "const": "plan_only" },
+    "authority": { "const": "local_xiaoj_router" },
+    "xiaoj_unified_intent_field": { "const": true },
+    "metrics_capture_only": { "const": true },
+    "model_started": { "const": false },
+    "front_brain_metrics": { "type": "array", "items": { "type": "string" } },
+    "rear_brain_metrics": { "type": "array", "items": { "type": "string" } },
+    "redteam_metrics": { "type": "array", "items": { "type": "string" } },
+    "effectiveness_metrics": { "type": "array", "items": { "type": "string" } },
+    "state_flow": { "type": "array", "items": { "type": "string" } },
+    "forbidden_payload": { "type": "array", "items": { "type": "string" } },
+    "forbidden_actions": { "type": "array", "items": { "type": "string" } },
+    "action_flags": { "type": "object" }
+  },
+  "additionalProperties": false
+}

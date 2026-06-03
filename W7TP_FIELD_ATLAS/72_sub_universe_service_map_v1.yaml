@@ -1,0 +1,50 @@
+packet_id: 72_SUB_UNIVERSE_SERVICE_MAP_V1
+mode: docs_index_only
+
+service_map:
+
+  U12_renyi_bloodmaking_engine:
+    services:
+      - member_order
+      - renyi_pos
+      - welfare_meal
+      - bloodmaking_income_entry
+    feeds_into:
+      - U13_wuchang_community_fund_pool
+      - U14_dedicated_delivery_team
+
+  U13_wuchang_community_fund_pool:
+    services:
+      - welfare_income_ledger
+      - welfare_expense_ledger
+      - activity_support_quota
+      - wish_tree_coin
+    feeds_into:
+      - U14_dedicated_delivery_team
+      - U09_public_welfare_universe
+
+  U14_dedicated_delivery_team:
+    services:
+      - delivery_dispatch
+      - elderly_meal_delivery
+      - volunteer_escort
+      - renyi_staff_approval
+    feeds_into:
+      - U05_care_universe
+      - U08_evidence_universe
+
+core_bloodmaking_loop:
+  sequence:
+    - U12_renyi_bloodmaking_engine
+    - U13_wuchang_community_fund_pool
+    - U14_dedicated_delivery_team
+    - U05_care_universe
+    - U09_public_welfare_universe
+    - U13_wuchang_community_fund_pool
+
+governance:
+  docs_index_only: true
+  no_db_write: true
+  no_runtime_promotion: true
+  no_service_restart: true
+  no_secret_read: true

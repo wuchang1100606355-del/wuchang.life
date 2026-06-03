@@ -1,0 +1,42 @@
+rule_id: W7TP_EMERGENCY_CARE_DISCLOSURE_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - allow_limited_plaintext_use_for_emergency_care
+  - prevent_emergency_excuse_abuse
+  - protect_elderly_children_and_vulnerable_members
+
+allowed_emergency_cases:
+  - disaster_relief
+  - urgent_health_or_safety_contact
+  - missing_person_or_device_loss_support
+  - elderly_child_food_or_care_support
+
+disclosure_principles:
+  minimum_necessary: true
+  time_limited: true
+  purpose_limited: true
+  audit_required: true
+  reseal_required: true
+  post_review_required: true
+
+default_output:
+  - service_result
+  - emergency_contact_status
+  - xiaoj_review_opinion_plus_final_authorization
+
+forbidden:
+  - full_member_export
+  - indefinite_plaintext_access
+  - unrelated_use_after_emergency
+  - merchant_access_under_emergency_label_without_review
+
+red_team_reflection:
+  negative_effects:
+    - emergency_label_may_be_overused
+    - urgent_cases_may_reduce_review_quality
+  mitigation:
+    - small_scope_first
+    - post_review_required
+    - audit_exception_list
+    - repeated_emergency_claim_monitoring

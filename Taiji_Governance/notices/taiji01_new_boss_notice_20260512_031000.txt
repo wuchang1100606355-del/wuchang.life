@@ -1,0 +1,32 @@
+【太極治理公告 / 新老大上台通知】
+
+taiji01 權限治理已完成切換。
+
+正式完整維運帳號：
+  taiji_admin@taiji01
+
+權限：
+  - SSH key 登入：已完成
+  - sudo：已完成
+  - docker：已完成
+  - production 維運 / 系統設定 / 容器管理：由 taiji_admin 執行
+
+社區操作帳號：
+  taiji_01@taiji01
+
+權限邊界：
+  - 已移出 sudo
+  - 已移出 docker
+  - 已移出 lxd
+  - 保留社區無容器工作區操作角色
+  - 不直接控制 container
+  - 不直接寫 production DB
+
+治理規則：
+  taiji_admin = 完整寫入權 / 維運老大
+  taiji_01 = 社區操作帳號 / 無容器工作區
+  production write 仍需 backup / preflight / audit / rollback
+  不得繞過 Five Metric Gate、audit、人類決策邊界
+
+公告來源：
+  taiji_admin@MSI

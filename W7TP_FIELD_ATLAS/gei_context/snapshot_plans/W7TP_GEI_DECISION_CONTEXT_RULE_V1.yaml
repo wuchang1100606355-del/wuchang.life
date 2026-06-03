@@ -1,0 +1,42 @@
+rule_id: W7TP_GEI_DECISION_CONTEXT_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - define_how_gei_context_supports_decisions
+  - separate_evidence_context_from_runtime_authority
+  - prevent_old_context_from_overriding_current_state
+
+decision_context_levels:
+  L0_NOTE:
+    meaning: useful_context_only
+    can_authorize_action: false
+
+  L1_EVIDENCE_LINK:
+    meaning: points_to_source_report_or_hash
+    can_authorize_action: false
+
+  L2_CURRENT_PLAN:
+    meaning: active_plan_only_artifact
+    can_authorize_action: false
+
+  L3_VALIDATED_GATE:
+    meaning: validation_passed_but_no_runtime_permission
+    can_authorize_action: false
+
+  L4_HUMAN_APPROVED_ACTION:
+    meaning: explicit_current_action_approval
+    can_authorize_action: true
+
+forbidden:
+  - using_gei_snapshot_as_approval
+  - using_old_context_to_override_host_guard
+  - treating_patent_context_as_runtime_truth
+  - executing_copy_or_restart_from_snapshot_only
+
+red_team_reflection:
+  negative_effects:
+    - decision_context_layers_may_add_complexity
+    - users_may_confuse_plan_context_with_permission
+  mitigation:
+    - require_explicit_action_packet_for_runtime_changes
+    - display_context_level_in_every_gei_snapshot

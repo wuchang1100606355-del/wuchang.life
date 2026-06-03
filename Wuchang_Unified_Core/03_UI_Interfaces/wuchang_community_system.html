@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>五常大陣 - 智能社區管家系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>body{background:#0f172a;color:#f8fafc;font-family:sans-serif;}</style>
+</head>
+<body class="p-8">
+    <h1 class="text-3xl font-bold text-sky-400 mb-6">🏢 五常智能社區 AI 管家系統</h1>
+    <div class="grid grid-cols-2 gap-4 max-w-2xl">
+        <button onclick="speak('目前尚無您的待領包裹。')" class="bg-slate-800 p-6 rounded-lg border border-slate-600 hover:bg-slate-700">📦 包裹查詢</button>
+        <button onclick="speak('今日無訪客登記。')" class="bg-slate-800 p-6 rounded-lg border border-slate-600 hover:bg-slate-700">👤 訪客登記</button>
+        <button onclick="speak('公設預約系統正常。')" class="bg-slate-800 p-6 rounded-lg border border-slate-600 hover:bg-slate-700">🏊‍♂️ 公設預約</button>
+        <button onclick="triggerDoor()" class="bg-emerald-900 p-6 rounded-lg border border-emerald-600 hover:bg-emerald-800">🚪 大門遠端解鎖</button>
+    </div>
+    <div id="status" class="mt-6 text-gray-400"></div>
+    <script>
+        function speak(text) { 
+            document.getElementById('status').innerText = "AI: " + text;
+            let u = new SpeechSynthesisUtterance(text); u.lang='zh-TW'; speechSynthesis.speak(u); 
+        }
+        async function triggerDoor() {
+            try {
+                document.getElementById('status').innerText = "發送大門解鎖訊號...";
+                const res = await fetch("http://127.0.0.1:8000/api/v1/forward/mu_2?command=UNLOCK_DOOR", { method: 'POST' });
+                if(res.ok) speak("已為您遠端解除大門門禁鎖。");
+            } catch(e) { speak("無法連線至大門控制閘道。"); }
+        }
+    </script>
+</body>
+</html>

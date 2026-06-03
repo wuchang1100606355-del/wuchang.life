@@ -1,0 +1,132 @@
+{
+  "schema": "taiji_governance_manifest.v1",
+  "name": "community_branch_group_member_mapping",
+  "status": "ACTIVE_GOVERNANCE_MAPPING_ONLY",
+  "created_at": "2026-05-12T16:30:00+08:00",
+  "main_company": {
+    "name": "新北市三重區五常社區發展協會",
+    "role": "association_main_company",
+    "accounting": "public_interest_main_ledger"
+  },
+  "entities": [
+    {
+      "name": "聊國咖啡館重新店 / 上品食品行",
+      "role": [
+        "group_supporting_member",
+        "developer_vendor",
+        "cooperation_contractor",
+        "technology_transferor"
+      ],
+      "accounting": "independent_ledger_gross_revenue_total_only",
+      "assists": [
+        "natural_person_supporting_member_service_management"
+      ]
+    },
+    {
+      "name": "聊國咖啡館仁義店",
+      "role": [
+        "branch_company",
+        "community_industry_fund_body"
+      ],
+      "menu_source": "聊國咖啡館重新店",
+      "menu_replication_allowed": true,
+      "capital_gain_distribution_allowed": false,
+      "accounting": "wuchang_community_digital_development_fund_body_ledger"
+    },
+    {
+      "name": "物業管理雲",
+      "role": [
+        "branch_company_for_group_members"
+      ],
+      "accepts_member_class": [
+        "group_member"
+      ],
+      "accounting": "independent_ledger_category_total_number_only"
+    },
+    {
+      "name": "商業協力雲",
+      "role": [
+        "branch_company_for_group_members"
+      ],
+      "accepts_member_class": [
+        "group_member"
+      ],
+      "accounting": "independent_ledger_category_total_number_only"
+    }
+  ],
+  "accounting_boundary": {
+    "independent_ledgers_required": true,
+    "association_aggregate_mode": "irreversible_account_category_and_total_number_only",
+    "readable_business_summary_allowed": false,
+    "single_store_record_allowed": "gross_revenue_total_only",
+    "community_market_category_total_allowed": true,
+    "community_market_category_total_example": {
+      "district": "五常社區仁義商圈",
+      "market_pattern": "breakfast_market_concentration",
+      "single_store_visible": "gross_revenue_total_only",
+      "community_visible": "category_quantity_and_total_amount",
+      "example_category": "hamburger",
+      "example_quantity_total": 120,
+      "example_amount_total_twd": 100000,
+      "single_store_item_detail_visible": false
+    },
+    "non_identifying_demographic_distribution_allowed": true,
+    "demographic_distribution_example": {
+      "buyer_identity_visible": false,
+      "age_band_50_60_consumption_share_percent": 8,
+      "gender_consumption_share_percent": {
+        "male": 65,
+        "female": 35
+      },
+      "cross_join_to_identify_person_allowed": false
+    },
+    "non_identifying_time_bucket_market_heat_allowed": true,
+    "time_bucket_market_heat_example": {
+      "best_business_time_visible": true,
+      "buyer_identity_visible": false,
+      "individual_item_purchase_visible": false,
+      "example_bucket": "07:00-09:00",
+      "allowed_metrics": [
+        "community_total_amount",
+        "community_category_quantity",
+        "market_heat_index"
+      ],
+      "forbidden_metrics": [
+        "person_item_purchase",
+        "device_path_tracking",
+        "single_store_item_detail"
+      ]
+    },
+    "public_service_signal_allowed_for_association_local_governance": true,
+    "public_service_signal_examples": [
+      "commute_traffic_peak_time",
+      "school_child_safety_community_shuttle_need",
+      "resident_transport_service_gap"
+    ],
+    "cloud_visibility_policy": {
+      "association_local_truth_visible": true,
+      "cloud_plaintext_detail_visible": false,
+      "cloud_allowed_payload": [
+        "metric",
+        "hash",
+        "event_id",
+        "anonymized_state",
+        "audit_ref"
+      ],
+      "cloud_forbidden_payload": [
+        "child_personal_data",
+        "household_data",
+        "individual_route",
+        "member_plaintext"
+      ]
+    },
+    "renyi_store_ledger_is_digital_development_fund_body": true,
+    "capital_gain_distribution_allowed": false,
+    "cross_ledger_detail_merge_allowed": false,
+    "ai_accounting_mutation_allowed": false
+  },
+  "live_odoo_mutation_performed": false,
+  "secret_material_included": false,
+  "member_plaintext_included": false,
+  "risk_level": "L1_near"
+}

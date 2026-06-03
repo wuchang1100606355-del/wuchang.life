@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Accounting Journals per Store -->
+        <record id="journal_pos_re_main" model="account.journal">
+            <field name="name">POS 重新總店</field>
+            <field name="type">sale</field>
+            <field name="code">REPOS</field>
+        </record>
+        <record id="journal_pos_renyi" model="account.journal">
+            <field name="name">POS 仁義分店</field>
+            <field name="type">sale</field>
+            <field name="code">RYPOS</field>
+        </record>
+        <record id="journal_pos_biz2" model="account.journal">
+            <field name="name">POS 公益商家乙</field>
+            <field name="type">sale</field>
+            <field name="code">B2POS</field>
+        </record>
+        <record id="journal_pos_biz3" model="account.journal">
+            <field name="name">POS 公益商家丙</field>
+            <field name="type">sale</field>
+            <field name="code">B3POS</field>
+        </record>
+
+        <!-- POS Configs per Store -->
+        <record id="pos_config_re_main" model="pos.config">
+            <field name="name">聊國咖啡重新總店</field>
+            <field name="journal_id" ref="wuchang_core.journal_pos_re_main"/>
+        </record>
+        <record id="pos_config_renyi" model="pos.config">
+            <field name="name">聊國咖啡仁義分店</field>
+            <field name="journal_id" ref="wuchang_core.journal_pos_renyi"/>
+        </record>
+        <record id="pos_config_biz2" model="pos.config">
+            <field name="name">細嚼慢嚥早餐店</field>
+            <field name="journal_id" ref="wuchang_core.journal_pos_biz2"/>
+            <field name="opening_time">06:00</field>
+            <field name="closing_time">14:00</field>
+            <field name="overnight">False</field>
+            <field name="wuchang_delivery_fund_partner">True</field>
+        </record>
+        <record id="pos_config_biz3" model="pos.config">
+            <field name="name">燒烤店</field>
+            <field name="journal_id" ref="wuchang_core.journal_pos_biz3"/>
+            <field name="opening_time">16:00</field>
+            <field name="closing_time">05:00</field>
+            <field name="overnight">True</field>
+        </record>
+
+        <!-- Fund pool attaches to 仁義分店 -->
+        <record id="param_fund_pool_store" model="ir.config_parameter">
+            <field name="key">wuchang.fund_pool_store</field>
+            <field name="value">聊國咖啡仁義分店</field>
+        </record>
+
+        <!-- 5. 上品聊國咖啡 (Wuchang Shangpin Coffee) -->
+        <record id="journal_pos_shangpin" model="account.journal">
+            <field name="name">POS 上品聊國咖啡</field>
+            <field name="type">sale</field>
+            <field name="code">SPPOS</field>
+        </record>
+        <record id="pos_config_shangpin_coffee" model="pos.config">
+            <field name="name">上品聊國咖啡</field>
+            <field name="journal_id" ref="wuchang_core.journal_pos_shangpin"/>
+            <field name="module_pos_restaurant">True</field>
+            <field name="iface_floorplan">True</field>
+            <field name="start_category">True</field>
+            <field name="wuchang_delivery_fund_partner">True</field>
+            <!-- Online Ordering / Self Order Config -->
+            <field name="self_ordering_mode">mobile</field>
+            <field name="self_ordering_takeaway">True</field>
+            <field name="self_ordering_service_mode">counter</field>
+            <!-- 上品聊國咖啡館重新總店信息 -->
+            <field name="wuchang_store_address">新北市三重區重新路三段204號</field>
+            <field name="wuchang_store_google_maps">https://www.google.com/maps/place/204,+Section+3,+Chongxin+Rd,+Sanchong+District,+New+Taipei+City/@25.0818,121.4898,15z</field>
+            <field name="wuchang_store_donation_source"><![CDATA[<a href="https://www.google.com/maps/place/204,+Section+3,+Chongxin+Rd,+Sanchong+District,+New+Taipei+City/@25.0818,121.4898,15z" target="_blank" rel="noopener noreferrer" style="color:#0066cc;text-decoration:underline;">上品聊國咖啡館重新總店</a>全額捐助]]></field>
+        </record>
+    </data>
+</odoo>
+

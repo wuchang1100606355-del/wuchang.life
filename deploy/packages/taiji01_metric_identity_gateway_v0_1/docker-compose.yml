@@ -1,0 +1,30 @@
+services:
+  taiji01_metric_identity_gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: taiji01-metric-identity-gateway:v0.1
+    container_name: taiji01_metric_identity_gateway
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      TAIJI_ROOT: /taiji
+      TAIJI_GATEWAY_BIND: 100.71.224.18
+      TAIJI_GATEWAY_PORT: "11435"
+      TAIJI_OLLAMA_TARGET: http://127.0.0.1:11434
+      TAIJI_ALLOWED_MODELS: metric-language-gateway-ai:latest
+      TAIJI_IDENTITY_ALLOWLIST: /taiji/Taiji_Odoo/identity_map/five_code_identity_allowlist.json
+      TAIJI_GATEWAY_AUDIT_LOG: /taiji/Taiji_Governance/logs/taiji01_metric_identity_gateway.jsonl
+      TAIJI_REQUIRE_FIVE_CODE_HASH: "false"
+      TAIJI_PROXY_TIMEOUT_SEC: "300"
+    volumes:
+      - /home/taiji_01/Taiji_Hub/data:/taiji/data:ro
+      - /home/taiji_01/Taiji_Hub/Taiji_Odoo/identity_map:/taiji/Taiji_Odoo/identity_map:ro
+      - /home/taiji_01/Taiji_Hub/Taiji_Governance/logs:/taiji/Taiji_Governance/logs:rw
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL

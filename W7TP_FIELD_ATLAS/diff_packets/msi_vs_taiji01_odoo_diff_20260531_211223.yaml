@@ -1,0 +1,22 @@
+diff_packet_id: MSI_VS_TAIJI01_ODOO_DIFF
+timestamp: 2026-05-31T21:12:27+08:00
+
+source:
+  host: MSI
+  path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  pm3_runtime_sync: PRESENT
+
+target:
+  host: taiji01
+  path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  pm3_runtime_sync: MISSING
+
+decision:
+  status: PLAN_ONLY
+  runtime_acceptance: NOT_READY
+
+required_before_sync:
+  - confirm_actual_odoo_db_name
+  - confirm_installed_modules
+  - rollback_point
+  - human_approval

@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7ip_lite.intent_packet.schema.json",
+  "title": "W7IP Lite Intent Packet MVP",
+  "description": "Mock-only intent packet for converting test text into a plan-only seven-dimensional intent representation. input_text is not approved for production transport or persistence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "intent_id",
+    "input_text",
+    "actor_level",
+    "yin_yang_axis",
+    "bagua_direction",
+    "five_d_vector",
+    "target_system",
+    "risk_level",
+    "allowed_mode",
+    "plan_only",
+    "reason"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "w7ip_lite.intent_packet.v0.1"
+    },
+    "intent_id": {
+      "type": "string",
+      "pattern": "^w7ip_lite_[a-f0-9]{12}$"
+    },
+    "input_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "description": "Mock test input only. Formal W7TP must replace this with approved minimized content or hash references."
+    },
+    "actor_level": {
+      "type": "string",
+      "enum": [
+        "A0_readonly",
+        "A1_design"
+      ]
+    },
+    "yin_yang_axis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heaven",
+        "earth"
+      ],
+      "properties": {
+        "heaven": {
+          "type": "string",
+          "enum": [
+            "governance_observe_only",
+            "governance_human_review_required"
+          ]
+        },
+        "earth": {
+          "type": "string",
+          "const": "mock_local_no_state_write"
+        }
+      }
+    },
+    "bagua_direction": {
+      "type": "string",
+      "enum": [
+        "TIAN",
+        "DI",
+        "FENG",
+        "YUN",
+        "LONG",
+        "HU",
+        "NIAO",
+        "SHE"
+      ],
+      "description": "Formation route class; it is not an eighth dimension."
+    },
+    "five_d_vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "z",
+        "time",
+        "scale"
+      ],
+      "properties": {
+        "x": {
+          "type": "string",
+          "const": "local_runtime"
+        },
+        "y": {
+          "type": "string",
+          "enum": [
+            "service_health",
+            "proposed_change",
+            "unclassified_target"
+          ]
+        },
+        "z": {
+          "type": "string",
+          "enum": [
+            "observe",
+            "blocked_mutation",
+            "review_required"
+          ]
+        },
+        "time": {
+          "type": "string",
+          "const": "request_now"
+        },
+        "scale": {
+          "type": "string",
+          "const": "w7tp_lite_mvp"
+        }
+      }
+    },
+    "target_system": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "gateway",
+          "ollama",
+          "odoo",
+          "line_webhook",
+          "unknown"
+        ]
+      }
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "L0",
+        "L1",
+        "L2",
+        "L3"
+      ]
+    },
+    "allowed_mode": {
+      "type": "string",
+      "const": "plan_only"
+    },
+    "plan_only": {
+      "type": "boolean",
+      "const": true
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    }
+  }
+}

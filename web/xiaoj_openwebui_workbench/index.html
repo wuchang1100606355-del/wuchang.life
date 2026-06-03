@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小J Open WebUI 本地工作台</title>
+<style>
+body{font-family:system-ui,"Noto Sans TC",sans-serif;background:#f6f7f9;color:#111827;margin:0;padding:18px}
+.wrap{max-width:1100px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:white;border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:14px}
+.title{font-size:20px;font-weight:900}
+.tag{display:inline-block;background:#eef2ff;border-radius:999px;padding:4px 10px;margin:4px;font-size:13px}
+.ok{color:#047857;font-weight:800}.warn{color:#b45309;font-weight:800}.bad{color:#b91c1c;font-weight:800}
+button{font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;background:white;font-weight:800;margin:4px;cursor:pointer}
+pre{background:#111827;color:#e5e7eb;border-radius:12px;padding:12px;white-space:pre-wrap;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>小J Open WebUI 本地工作台</h1>
+<p>PLANONLY / MOCK ONLY。不寫 Odoo、不啟動服務、不讀 secrets、不送 raw PII 到雲端。</p>
+<div class="grid">
+<div class="card"><div class="title">W7TP-005 LINE 居民入口</div><p>居民 LINE rich menu、webhook mock、resident flow test。</p><span class="tag ok">65%</span><span class="tag">L2</span><span class="tag">redacted</span><button onclick="selectCard(`line_intent`)">查看草稿卡</button></div>
+<div class="card"><div class="title">W7TP-007 志工外送接單</div><p>外送草稿、staff review、progressive PII unlock、dynamic token。</p><span class="tag ok">90%</span><span class="tag">L3</span><span class="tag">association_controlled</span><button onclick="selectCard(`delivery_review`)">查看審核卡</button></div>
+<div class="card"><div class="title">DLQ 高風險事件</div><p>提示詞注入、個資疑似外送、越權狀態轉移、高風險派單。</p><span class="tag warn">manual review</span><button onclick="selectCard(`dlq`)">查看 DLQ</button></div>
+<div class="card"><div class="title">後續模組</div><p>商家點餐、報修、管委會、社區程式需求。</p><span class="tag">reserved</span><button onclick="selectCard(`reserved`)">查看預留</button></div>
+</div>
+<div class="card">
+<h2>PLANONLY Action Draft</h2>
+<button onclick="makeAction(`approve_draft`)">通過草稿</button>
+<button onclick="makeAction(`request_more_info`)">退回補資料</button>
+<button onclick="makeAction(`send_to_human_review`)">轉人工審核</button>
+<button onclick="makeAction(`send_to_dlq`)">進入 DLQ</button>
+<button onclick="makeAction(`close_as_plan_only`)">草稿關閉</button>
+<pre id="out">尚未選擇</pre>
+</div>
+<div class="card">
+<h2>Hardwall</h2>
+<ul>
+<li>No Odoo write</li>
+<li>No service start/restart</li>
+<li>No .env/logs/memory/vault/backup read</li>
+<li>No raw PII to cloud</li>
+<li>AI result is candidate only</li>
+</ul>
+</div>
+</div>
+<script>
+let currentCard="none";
+function selectCard(c){currentCard=c;document.getElementById("out").textContent=JSON.stringify({selected_card:c,plan_only:true,odoo_write:false,raw_pii_to_cloud:false},null,2)}
+function makeAction(d){document.getElementById("out").textContent=JSON.stringify({source_card:currentCard,decision:d,plan_only:true,odoo_write:false,raw_pii_to_cloud:false,human_confirmation_required:true,created_at:new Date().toISOString()},null,2)}
+</script>
+</body>
+</html>

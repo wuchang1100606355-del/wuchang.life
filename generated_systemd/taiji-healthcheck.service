@@ -1,0 +1,7 @@
+[Unit]
+Description=Taiji Healthcheck
+
+[Service]
+Type=oneshot
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+ExecStart=%h/Taiji_Hub/boot/healthcheck.sh

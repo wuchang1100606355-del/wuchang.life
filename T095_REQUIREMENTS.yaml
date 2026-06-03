@@ -1,0 +1,16 @@
+id: T095_REQUIREMENTS
+
+must:
+  - backup existing canonical registry if present
+  - copy V2 registry to canonical path
+  - record source and destination sha256
+  - preserve blocker file as cleared audit record
+  - write landing report
+  - run final git status
+
+must_not:
+  - delete blocker evidence
+  - service_restart
+  - db_write
+  - docker_action
+  - secret_read

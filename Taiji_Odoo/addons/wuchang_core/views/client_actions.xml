@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Client Action Definition -->
+        <record id="action_community_super_app" model="ir.actions.client">
+            <field name="name">五常智慧社區雲 (Super App)</field>
+            <field name="tag">wuchang_core.community_super_app_action</field>
+            <field name="target">fullscreen</field>
+        </record>
+
+        <!-- Menu Item to launch the App -->
+        <menuitem id="menu_community_super_app"
+                  name="開啟 Super App"
+                  parent="wuchang_core.menu_wuchang_root"
+                  action="action_community_super_app"
+                  sequence="1"/>
+    </data>
+</odoo>

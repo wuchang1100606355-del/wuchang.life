@@ -1,0 +1,47 @@
+{
+  "request_id": "sample-pos-order-create-001",
+  "source": {
+    "channel": "test_fixture",
+    "node": "TDI-NODE-pos-kiosk",
+    "operator_role": "staff_or_customer_confirmed"
+  },
+  "raw_text_hash": "sha256:6d5c21c8de6db46086030b6b9db5b523404f6d58dd88f8498c8579d9f58d41d3",
+  "raw_text_redacted_summary": "Customer requested one iced Americano, less ice, no sugar, takeaway.",
+  "raw_text_stored": false,
+  "parsed_intent": {
+    "intent_type": "pos_order_create",
+    "confidence": 0.92,
+    "language": "zh-TW",
+    "summary": "Create POS order draft for one beverage."
+  },
+  "items": [
+    {
+      "name": "ice_americano",
+      "qty": 1,
+      "options": {
+        "ice": "less",
+        "sugar": "none",
+        "takeaway": true
+      }
+    }
+  ],
+  "options": {
+    "draft_only": true
+  },
+  "node_identity": "TDI-NODE-pos-kiosk",
+  "data_sensitivity": "order_draft",
+  "action_intent": "pos_order_create",
+  "permission_window": "runtime",
+  "reversibility_public_value": {
+    "reversible": true,
+    "public_or_service_value": "Faster ordering with staff/customer confirmation.",
+    "rollback_note": "Discard draft before final POS submission."
+  },
+  "risk_level": "L1",
+  "requires_human_confirmation": true,
+  "allowed_action": "create_order_draft",
+  "audit_required": true,
+  "rollback_required": false,
+  "target_system": "pos_draft",
+  "created_at": "2026-05-11T03:10:00+08:00"
+}

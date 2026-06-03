@@ -1,0 +1,45 @@
+id: T100_GIT_DEBT_CLEANUP
+task_id: T100
+status: PLAN_ONLY
+
+objective: "Scan current git status, classify untracked items, and prepare for safe git cleanup/staging without touching runtime, db, or secrets."
+
+git_status_scan:
+  untracked_items:
+    - path: "Taiji_Governance/xiaoj_new_sub_universe_candidate_scan_20260601_073945.md"
+      classification: KEEP
+      reason: "Governance scan documentation. Needs to be staged and committed to preserve the audit trail."
+    - path: "runtime/reports/"
+      classification: ARCHIVE
+      reason: "Execution reports (T091-T095). Valuable audit evidence. Should be preserved but ideally ignored by git and moved to a dedicated evidence volume."
+    - path: "runtime/backups/"
+      classification: IGNORE
+      reason: "Transient backup files created during the T091-T095 landing executions. Should be added to .gitignore."
+    - path: "runtime/sandbox/"
+      classification: DELETE_CANDIDATE
+      reason: "Sandbox artifacts from planning tasks (T081-T095). Since the canonical landing is complete and committed, these can safely be purged to free up space."
+
+forbidden_actions:
+  - delete_any_file
+  - touch_runtime
+  - touch_db
+  - touch_secrets
+  - service_restart
+  - docker_action
+
+next_required:
+  - human_review_of_classifications
+  - add_ignore_items_to_gitignore
+  - manual_git_add_safe_canonical_files
+  - purge_delete_candidates_only_after_approval
+
+xiaoj_review_opinion:
+  recommendation: REVIEW_PENDING
+  reason: "Untracked items classified safely. Awaiting human review before executing any staging, ignoring, or deletion actions."
+  safe_option: "Review the classifications. Manually stage the 'KEEP' items and update the .gitignore for 'IGNORE' items."
+  risk_if_approved: "Low. This is a review-only plan."
+  risk_if_rejected: "Git repository remains cluttered with untracked sandbox and backup files, obscuring real changes."
+  required_human_action:
+    - "Review T100 report."
+    - "Authorize staging of KEEP items."
+    - "Authorize deletion of DELETE_CANDIDATE items (optional)."

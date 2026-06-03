@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="ambassador_page" name="Ambassador">
+    <t t-call="website.layout">
+      <div class="container my-5">
+        <section class="mb-4">
+          <h1 class="display-6">江小J • 社區與系統代言人</h1>
+          <p class="lead">連結社區、維運系統，守護資料與服務，推動自建架構。</p>
+        </section>
+        <section class="mb-3">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">社區橋梁</h5>
+                  <p class="card-text">提供需求收集與回饋傳達，持續優化服務。</p>
+                  <a class="btn btn-primary" href="/voice">語音互動</a>
+                  <a class="btn btn-secondary ms-2" href="/order">服務入口</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">AI 能力中心</h5>
+                  <p class="card-text">使用本地 LLM 與工具，降低外部成本。</p>
+                  <a class="btn btn-dark" href="https://ai.wuchang.life" target="_blank">AI 控台</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">留言給小j</h5>
+              <div class="mb-3">
+                <textarea id="msg" class="form-control" rows="3" placeholder="寫下你的想法或需求"></textarea>
+              </div>
+              <button id="send" class="btn btn-success">送出</button>
+              <div id="result" class="mt-2 text-muted"></div>
+            </div>
+          </div>
+        </section>
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">設計稿</h5>
+              <p class="card-text">Canva 設計草稿連結。</p>
+              <a class="btn btn-outline-secondary" href="https://www.canva.com/design/DAG7WB8WpnQ/lypsf03s9-Zsjbh9b0R4dg/edit?utm_content=DAG7WB8WpnQ&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" target="_blank">在 Canva 開啟</a>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">系統狀態</h5>
+              <button id="check" class="btn btn-outline-secondary">立即檢查</button>
+              <pre id="status" class="mt-3" style="background:#111827;color:#d1d5db;padding:12px;border-radius:6px;"></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+      <script>
+      (function(){
+        document.getElementById('send').addEventListener('click',function(){
+          var msg=document.getElementById('msg').value;
+          if(!msg)return;
+          var res=document.getElementById('result');
+          res.textContent='傳送中…';
+          fetch('/wuchang/msg/leave',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({msg:msg})})
+            .then(function(r){return r.json()})
+            .then(function(j){res.textContent='已收到：'+(j.id||'OK');document.getElementById('msg').value='';})
+            .catch(function(){res.textContent='傳送失敗';});
+        });
+        document.getElementById('check').addEventListener('click',function(){
+          var st=document.getElementById('status');
+          st.textContent='檢查中…';
+          fetch('/wuchang/status',{method:'POST'})
+            .then(function(r){return r.json()})
+            .then(function(j){st.textContent=JSON.stringify(j,null,2);})
+            .catch(function(){st.textContent='檢查失敗';});
+        });
+      })();
+      </script>
+    </t>
+  </template>
+</odoo>

@@ -1,0 +1,96 @@
+{
+  "schema": "taiji.member_five_code_odoo_google_provisioning_manifest.v1",
+  "generated_at": "2026-05-12T17:04:00+08:00",
+  "mode": "manifest_only_no_live_api_no_secret",
+  "organization_domain": "wuchang.life",
+  "purpose": "Member uses non-PII five-dimensional code to request Odoo mailbox and Google forum membership workflow.",
+  "identity_boundary": {
+    "five_dim_code_represents": [
+      "member_rights",
+      "qualification_window",
+      "service_window",
+      "governance_state",
+      "audit_reference"
+    ],
+    "five_dim_code_stores_personal_plaintext": false,
+    "five_dim_code_reversible_to_personal_plaintext": false,
+    "personal_plaintext_storage": "member_device_or_physical_custody_only"
+  },
+  "provisioning_flow": [
+    "member_ai_endpoint_submits_five_dim_code",
+    "taiji_gateway_validates_whitelist_function",
+    "five_metric_gate_classifies_risk",
+    "odoo_creates_or_updates_request_manifest_only",
+    "human_admin_reviews",
+    "google_workspace_action_executed_only_after_authorized_gateway_window",
+    "audit_receipt_returned_to_member"
+  ],
+  "allowed_functions": {
+    "odoo_mailbox_request": {
+      "target": "Odoo request manifest",
+      "live_odoo_write": false,
+      "google_live_api_called": false,
+      "risk_level": "L2_until_human_review"
+    },
+    "forum_registration_token": {
+      "target": "Google Workspace forum/group membership request",
+      "token_contains_personal_plaintext": false,
+      "google_live_api_called": false,
+      "risk_level": "L2_until_human_review"
+    },
+    "audit_receipt_query": {
+      "target": "member-facing audit receipt",
+      "other_member_data_visible": false,
+      "risk_level": "L1"
+    }
+  },
+  "google_workspace_api_plan": {
+    "directory_api_user_or_alias_management": {
+      "status": "future_human_governed_window_only",
+      "scope_family": "Admin SDK Directory API",
+      "notes": "Official docs state Directory API manages users, aliases and profile metadata. Live create/update may affect billing and must be reviewed by human admin."
+    },
+    "gmail_api_send": {
+      "status": "not_default_for_account_provisioning",
+      "scope_candidate": "https://www.googleapis.com/auth/gmail.send",
+      "notes": "Send-only Odoo notices only after Gateway approval; Gmail body read scopes are forbidden."
+    },
+    "domain_wide_delegation": {
+      "status": "conditional_high_risk_not_daily_shortcut",
+      "requirement": "critical_business_case_minimal_scopes_dedicated_project_human_admin_review",
+      "service_account_json_in_repo": false
+    }
+  },
+  "forbidden": [
+    "google_admin_sdk_direct_call_from_member_ai_endpoint",
+    "gmail_body_read",
+    "service_account_json_read_or_output",
+    "oauth_token_output",
+    "personal_plaintext_lookup_from_five_dim_code",
+    "odoo_production_write_without_manifest",
+    "payment_execute",
+    "manager_override"
+  ],
+  "audit": {
+    "required": true,
+    "fields": [
+      "ts",
+      "request_id",
+      "five_dim_code_hash",
+      "requested_function",
+      "member_class",
+      "risk_level",
+      "gateway_decision",
+      "human_review_status",
+      "google_live_api_called",
+      "odoo_live_write",
+      "secret_material_included",
+      "member_plaintext_included"
+    ]
+  },
+  "secret_material_included": false,
+  "member_plaintext_included": false,
+  "google_live_api_called": false,
+  "odoo_live_write": false,
+  "risk_level": "L2_drift_until_gateway_preflight_and_human_review"
+}

@@ -1,0 +1,40 @@
+template_id: WUCHANG_REGISTRY_STATUS_REPORT_TEMPLATE_V1
+status: PLAN_ONLY
+
+purpose:
+  - provide_compact_status_for_field_registration
+  - avoid_repeating_completed_details
+  - show_only_open_gaps_and_risks
+
+report_sections:
+  summary:
+    - total_fields
+    - total_sub_universes
+    - total_modules
+    - unmounted_modules_count
+    - unknown_routes_count
+    - dead_letter_count
+
+active_gaps:
+  - missing_field_registration
+  - missing_sub_universe_registration
+  - missing_module_mount
+  - missing_function_route
+  - stale_task_board_items
+
+risk_summary:
+  - high_risk_unregistered_runtime_actions
+  - sensitive_routes_without_review
+  - duplicate_namespace_candidates
+
+output_style:
+  completed_items: title_only
+  active_items: include_required_next_action
+  red_team: concise
+
+red_team_reflection:
+  negative_effects:
+    - summary_may_hide_important_detail
+  mitigation:
+    - link_to_detailed_report_refs
+    - keep_high_risk_items_expanded

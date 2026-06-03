@@ -1,0 +1,17 @@
+{
+  "version": "taiji_identity_allowlist_v0_1",
+  "nodes": [
+    {
+      "node_id": "windows11_frontend_owner_device",
+      "allowed_ips": ["100.105.82.28", "100.107.187.77", "192.168.50.0/24"],
+      "identity_scope": "owner_frontend_llm",
+      "five_code_sha256": "pending_owner_local_registration"
+    },
+    {
+      "node_id": "msi_wsl_native_orchestration",
+      "allowed_ips": ["100.107.187.77", "192.168.50.0/24"],
+      "identity_scope": "developer_orchestration_node",
+      "five_code_sha256": "pending_owner_local_registration"
+    }
+  ]
+}

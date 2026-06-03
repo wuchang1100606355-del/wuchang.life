@@ -1,0 +1,39 @@
+plan_id: T075_MAINLINE_SYNC_EXECUTION_PLAN_V1
+status: EXECUTED_MSI_ONLY
+execution_date: "2026-06-01"
+
+scope:
+  source_machine: MSI
+  source_root: /home/taiji_admin/Taiji_Hub
+  archive_target: runtime/archive/untracked_sync_20260601/
+  runtime_sync: forbidden
+  taiji01_access: forbidden
+  service_restart: forbidden
+  untracked_delete: forbidden
+  GEI_expansion: forbidden
+
+ordered_actions:
+  - git_status_short_before
+  - classify_untracked_paths_without_reading_restricted_content
+  - archive_eligible_regular_untracked_files_locally
+  - generate_sha256_manifest_for_archived_files
+  - keep_restricted_and_nonregular_paths_in_place
+  - create_T075_to_T079_reports
+  - stage_focused_scope_only
+  - validate_git_diff_stats
+  - commit_if_validation_passes
+  - create_git_bundle_after_commit
+  - push_only_if_no_risk_flags_remain
+
+focused_commit_intent:
+  include:
+    - W7TP_FIELD_ATLAS/mainline_sync/
+    - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_FIELD_V1.yaml
+    - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_PACKET_SCHEMA_V1.yaml
+  exclude:
+    - untracked_GEI_expansion
+    - Taiji_Governance_untracked_review_material
+    - runtime_archive
+    - runtime_sync
+    - taiji01
+    - DB_secret_token_password_private_key_content

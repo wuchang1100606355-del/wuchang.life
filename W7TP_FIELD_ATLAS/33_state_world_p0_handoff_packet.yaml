@@ -1,0 +1,20 @@
+handoff_id: 33_state_world_p0_handoff_packet
+purpose: Create immediate P0 handoff packet for next development agent.
+mode: docs_index_only
+p0_targets:
+  - state_world_router_boundary
+  - memory_lifecycle_map
+  - gateway_route_map
+  - odoo_module_inventory_map
+ready_inputs:
+  - W7TP_FIELD_ATLAS/28_state_world_router_boundary.yaml
+  - W7TP_FIELD_ATLAS/29_memory_lifecycle_map.yaml
+  - W7TP_FIELD_ATLAS/30_gateway_route_map.yaml
+  - W7TP_FIELD_ATLAS/31_odoo_module_inventory_map.yaml
+  - W7TP_FIELD_ATLAS/32_patent_evidence_claim_map.yaml
+agent_instruction: continue from indexes only and do not touch runtime services
+governance:
+  no_secret_read: true
+  no_service_restart: true
+  no_commit_without_review: true
+next_action: human chooses P0 implementation target

@@ -1,0 +1,25 @@
+【太極搬家公告 / Taiji Migration Notice】
+
+MSI 已完成搬家，正式切換到 Linux 子系統原生工作區。
+
+Active workspace:
+  /home/taiji_admin/Taiji_Hub
+
+Legacy Windows-mounted workspace:
+  /mnt/c/Users/o0930/Taiji_Hub
+
+狀態：
+  - MSI 新系統主工作區已確認為 ext4 Linux 原生檔案系統
+  - broken symlink 已修復
+  - 必要檔案、JSON、Python import、pytest 已通過
+  - Docker daemon 為 MSI 本機 /var/lib/docker
+  - 不再以 /mnt/c/Users/o0930/Taiji_Hub 作為主工作區
+  - 禁止直接 rsync DB volumes，例如 postgres_data / odoo_data
+
+治理規則：
+  /home/taiji_admin/Taiji_Hub = active source of truth
+  /mnt/c/Users/o0930/Taiji_Hub = legacy / archive / comparison only
+  production write 仍需 backup / preflight / audit / rollback
+
+公告來源：
+  taiji_admin@MSI

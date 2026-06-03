@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- 1. 建立「五常社區發展協會」主公司 -->
+        <record id="company_wuchang_association" model="res.company">
+            <field name="name">新北市三重區五常社區發展協會</field>
+            <field name="street">新北市三重區五常里</field>
+            <field name="city">新北市</field>
+            <field name="zip">241</field>
+            <field name="currency_id" ref="base.TWD"/>
+        </record>
+
+        <!-- 2. 設定組織架構 (部門) -->
+        <record id="dept_association_board" model="hr.department">
+            <field name="name">理事會</field>
+            <field name="company_id" ref="company_wuchang_association"/>
+        </record>
+        <record id="dept_association_supervisory" model="hr.department">
+            <field name="name">監事會</field>
+            <field name="company_id" ref="company_wuchang_association"/>
+        </record>
+        <record id="dept_association_volunteer" model="hr.department">
+            <field name="name">志工隊</field>
+            <field name="company_id" ref="company_wuchang_association"/>
+        </record>
+
+        <!-- 3. 上品聊國咖啡 (作為一個 POS 店鋪配置，隸屬於協會) -->
+        <record id="pos_config_shangpin_coffee" model="pos.config">
+            <field name="name">上品聊國咖啡 POS</field>
+            <field name="company_id" ref="company_wuchang_association"/>
+            <field name="module_pos_restaurant">True</field>
+            <field name="iface_floorplan">True</field>
+            <field name="start_category">True</field>
+        </record>
+    </data>
+</odoo>

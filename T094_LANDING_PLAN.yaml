@@ -1,0 +1,11 @@
+id: T094_LANDING_PLAN
+status: PREVIEW_ONLY
+
+planned_operations:
+  - source: runtime/sandbox/xiaoj_total_field_registry_v2/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+    destination: W7TP_FIELD_ATLAS/xiaoj_total_field/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+    action: COPY_AND_VERIFY
+
+post_landing_checks:
+  - verify_sha256_match
+  - ensure_no_runtime_contamination

@@ -1,0 +1,21 @@
+gateway_map_id: 30_gateway_route_map
+purpose: Map gateway related files and safe next actions.
+mode: docs_index_only
+sources:
+  - runtime/reports/search_gateway_paths.txt
+  - runtime/reports/TASK_GATEWAY.md
+route_domains:
+  openwebui_bridge: runtime/openwebui_bridge.py
+  gateway_runtime: services runtime taiji_gateway.py
+  startup_scripts: scripts/start_gateway.sh scripts/start_gateway_guard.sh
+  health_reports: runtime/reports
+safe_next_actions:
+  - inspect gateway paths from TASK_GATEWAY.md
+  - classify gateway files by route bridge health startup config
+  - do not restart services
+  - do not edit env files
+governance:
+  no_secret_read: true
+  no_service_restart: true
+  no_runtime_change: true
+next_action: create odoo module inventory map

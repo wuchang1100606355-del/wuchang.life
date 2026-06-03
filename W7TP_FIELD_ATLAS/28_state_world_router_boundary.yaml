@@ -1,0 +1,18 @@
+boundary_id: 28_state_world_router_boundary
+purpose: Define safe routing boundaries between W7TP State World sub-universes.
+mode: docs_index_only
+allowed_flows:
+  - memory_to_state_world: metadata_only
+  - evidence_to_ip: index_only
+  - state_world_to_development: task_packet_only
+  - gateway_to_compute: redacted_packet_only
+blocked_flows:
+  - raw_personal_data_to_cloud
+  - secrets_to_any_lane
+  - payment_action_without_xiaoj_review_opinion_plus_final_authorization
+  - service_restart_without_xiaoj_review_opinion_plus_final_authorization
+governance:
+  d6_hardwall: required
+  d7_validation: required
+  xiaoj_review_opinion_plus_final_authorization: required_for_high_risk
+next_action: create memory lifecycle map

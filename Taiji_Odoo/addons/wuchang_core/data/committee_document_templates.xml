@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 管委會專屬公文範本 -->
+    <data noupdate="1">
+        
+        <!-- 管委會公告範本 -->
+        <record id="committee_template_announcement" model="wuchang.document.template">
+            <field name="name">管委會公告範本</field>
+            <field name="document_type">announcement</field>
+            <field name="organization_type">committee</field>
+            <field name="organization">管理委員會</field>
+            <field name="template_content" type="html">
+                <![CDATA[
+<div style="font-family: 新細明體, PMingLiU, serif; line-height: 1.8; padding: 20px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">{community_name}管理委員會</h2>
+        <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">公　　　告</h3>
+        <p style="font-size: 16px; margin: 0;">公告編號：{doc_number}</p>
+        <p style="font-size: 16px; margin: 0;">中華民國 {year} 年 {month} 月 {day} 日</p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">主旨：{subject}</p>
+        
+        <div style="margin: 20px 0; text-align: justify;">
+            <p style="margin-bottom: 15px; text-indent: 2em;">說明：</p>
+            {content}
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <p style="margin-bottom: 10px;">此致</p>
+            <p style="margin-bottom: 10px;">全體住戶</p>
+        </div>
+    </div>
+    
+    <div style="text-align: right; margin-top: 50px;">
+        <p style="margin-bottom: 5px;">{organization}</p>
+        <p style="margin-bottom: 5px;">{signer_role} {signer_name}</p>
+        <p>{sign_date}</p>
+    </div>
+</div>
+                ]]>
+            </field>
+            <field name="description">管委會公告專用範本，適用於社區公告事項</field>
+        </record>
+
+        <!-- 管委會通知範本 -->
+        <record id="committee_template_notice" model="wuchang.document.template">
+            <field name="name">管委會通知範本</field>
+            <field name="document_type">notice</field>
+            <field name="organization_type">committee</field>
+            <field name="organization">管理委員會</field>
+            <field name="template_content" type="html">
+                <![CDATA[
+<div style="font-family: 新細明體, PMingLiU, serif; line-height: 1.8; padding: 20px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">{community_name}管理委員會</h2>
+        <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">通　　　知</h3>
+        <p style="font-size: 16px; margin: 0;">通知編號：{doc_number}</p>
+        <p style="font-size: 16px; margin: 0;">中華民國 {year} 年 {month} 月 {day} 日</p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">主旨：{subject}</p>
+        
+        <div style="margin: 20px 0; text-align: justify;">
+            <p style="margin-bottom: 15px; text-indent: 2em;">說明：</p>
+            {content}
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <p style="margin-bottom: 10px;">此致</p>
+            <p style="margin-bottom: 10px;">相關住戶</p>
+        </div>
+    </div>
+    
+    <div style="text-align: right; margin-top: 50px;">
+        <p style="margin-bottom: 5px;">{organization}</p>
+        <p style="margin-bottom: 5px;">{signer_role} {signer_name}</p>
+        <p>{sign_date}</p>
+    </div>
+</div>
+                ]]>
+            </field>
+            <field name="description">管委會通知專用範本，適用於個別通知事項</field>
+        </record>
+
+        <!-- 管委會決議範本 -->
+        <record id="committee_template_resolution" model="wuchang.document.template">
+            <field name="name">管委會決議範本</field>
+            <field name="document_type">resolution</field>
+            <field name="organization_type">committee</field>
+            <field name="organization">管理委員會</field>
+            <field name="template_content" type="html">
+                <![CDATA[
+<div style="font-family: 新細明體, PMingLiU, serif; line-height: 1.8; padding: 20px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">{community_name}管理委員會</h2>
+        <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">決　　　議</h3>
+        <p style="font-size: 16px; margin: 0;">決議編號：{doc_number}</p>
+        <p style="font-size: 16px; margin: 0;">中華民國 {year} 年 {month} 月 {day} 日</p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">主旨：{subject}</p>
+        
+        <div style="margin: 20px 0; text-align: justify;">
+            <p style="margin-bottom: 15px; text-indent: 2em;">決議事項：</p>
+            {content}
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <p style="margin-bottom: 10px;">本決議經管理委員會第 {meeting_number} 次會議通過</p>
+        </div>
+    </div>
+    
+    <div style="text-align: right; margin-top: 50px;">
+        <p style="margin-bottom: 5px;">{organization}</p>
+        <p style="margin-bottom: 5px;">{signer_role} {signer_name}</p>
+        <p>{sign_date}</p>
+    </div>
+</div>
+                ]]>
+            </field>
+            <field name="description">管委會決議專用範本，適用於委員會決議事項</field>
+        </record>
+
+        <!-- 管委會會議記錄範本 -->
+        <record id="committee_template_meeting_minutes" model="wuchang.document.template">
+            <field name="name">管委會會議記錄範本</field>
+            <field name="document_type">meeting_minutes</field>
+            <field name="organization_type">committee</field>
+            <field name="organization">管理委員會</field>
+            <field name="template_content" type="html">
+                <![CDATA[
+<div style="font-family: 新細明體, PMingLiU, serif; line-height: 1.8; padding: 20px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">{community_name}管理委員會</h2>
+        <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">會　　議　　記　　錄</h3>
+        <p style="font-size: 16px; margin: 0;">會議編號：{doc_number}</p>
+        <p style="font-size: 16px; margin: 0;">會議日期：中華民國 {year} 年 {month} 月 {day} 日</p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">會議主題：{subject}</p>
+        
+        <div style="margin: 20px 0;">
+            <p style="margin-bottom: 10px;"><strong>出席人員：</strong>{attendees}</p>
+            <p style="margin-bottom: 10px;"><strong>列席人員：</strong>{observers}</p>
+            <p style="margin-bottom: 10px;"><strong>主席：</strong>{signer_name}</p>
+            <p style="margin-bottom: 10px;"><strong>記錄：</strong>{recorder}</p>
+        </div>
+        
+        <div style="margin: 20px 0; text-align: justify;">
+            <p style="margin-bottom: 15px; font-weight: bold;">會議內容：</p>
+            {content}
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <p style="margin-bottom: 10px; font-weight: bold;">決議事項：</p>
+            {resolutions}
+        </div>
+    </div>
+    
+    <div style="text-align: right; margin-top: 50px;">
+        <p style="margin-bottom: 5px;">{organization}</p>
+        <p style="margin-bottom: 5px;">主席 {signer_name}</p>
+        <p>{sign_date}</p>
+    </div>
+</div>
+                ]]>
+            </field>
+            <field name="description">管委會會議記錄專用範本</field>
+        </record>
+
+    </data>
+</odoo>

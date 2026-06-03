@@ -1,0 +1,57 @@
+{
+  "title": "Taiji D Drive Access Review Log",
+  "type": "object",
+  "required": [
+    "event",
+    "review_id",
+    "reviewed_by_owner",
+    "public_interest_metric",
+    "access_reason",
+    "target_path",
+    "sha256",
+    "decision",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "d_drive_access_review"
+    },
+    "review_id": {
+      "type": "string"
+    },
+    "reviewed_by_owner": {
+      "type": "boolean"
+    },
+    "public_interest_metric": {
+      "type": "string",
+      "enum": ["aligned", "needs_review", "blocked"]
+    },
+    "access_reason": {
+      "type": "string"
+    },
+    "target_path": {
+      "type": "string"
+    },
+    "sha256": {
+      "type": "string"
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["allow", "allow_with_audit", "warn", "block"]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "contains_secret": {
+      "type": "boolean",
+      "default": false
+    },
+    "contains_member_progress": {
+      "type": "boolean",
+      "default": false
+    },
+    "rollback_reference": {
+      "type": "string"
+    }
+  }
+}

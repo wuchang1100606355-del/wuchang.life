@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wuchang_ai_agent_tree" model="ir.ui.view">
+        <field name="name">wuchang.ai.agent.tree</field>
+        <field name="model">wuchang.ai.agent</field>
+        <field name="arch" type="xml">
+            <tree string="AI Agents">
+                <field name="name"/>
+                <field name="agent_type"/>
+                <field name="role_type"/>
+                <field name="capabilities"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wuchang_ai_agent_form" model="ir.ui.view">
+        <field name="name">wuchang.ai.agent.form</field>
+        <field name="model">wuchang.ai.agent</field>
+        <field name="arch" type="xml">
+            <form string="AI Agent">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="agent_type"/>
+                        <field name="role_type"/>
+                    </group>
+                    <group string="Details">
+                        <field name="description"/>
+                        <field name="responsibilities"/>
+                        <field name="capabilities"/>
+                        <field name="color_code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_ai_agent" model="ir.actions.act_window">
+        <field name="name">AI Agents</field>
+        <field name="res_model">wuchang.ai.agent</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_ai_agent"
+              name="AI Agents"
+              parent="wuchang_core.menu_wuchang_root"
+              action="action_wuchang_ai_agent"
+              sequence="55"
+              groups="base.group_system"/>
+</odoo>
+

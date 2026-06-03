@@ -1,0 +1,60 @@
+{
+  "event": "distributed_admin_authority_sync_loaded",
+  "version": "2026-05-12",
+  "status": "ACTIVE",
+  "sync_scope": "governance_authority_state_only",
+  "source_of_truth_node": "MSI",
+  "active_workspace": "/home/taiji_admin/Taiji_Hub",
+  "synced_nodes": [
+    "MSI",
+    "taiji01"
+  ],
+  "full_write_authority": {
+    "linux_user": "taiji_admin",
+    "meaning": "new full-write admin / system maintenance authority",
+    "ssh": true,
+    "sudo": true,
+    "docker": true,
+    "production_change_executor": true
+  },
+  "community_operator": {
+    "linux_user": "taiji_01",
+    "meaning": "community non-container operator",
+    "sudo": false,
+    "docker": false,
+    "lxd": false,
+    "allowed_workspace": "/srv/taiji/community_noncontainer"
+  },
+  "node_authority": {
+    "MSI": {
+      "role": "wuchang.life representative development node",
+      "active_workspace": "/home/taiji_admin/Taiji_Hub",
+      "docker_scope": "local_MSI_daemon",
+      "may_shutdown": true
+    },
+    "taiji01": {
+      "role": "community resident edge node",
+      "full_write_user": "taiji_admin",
+      "community_operator_user": "taiji_01",
+      "docker_scope": "local_taiji01_daemon",
+      "shutdown_requires_handoff_or_log": true
+    }
+  },
+  "hard_boundaries": {
+    "same_person_does_not_merge_legal_subjects": true,
+    "same_container_names_do_not_mean_same_docker_daemon": true,
+    "taiji_01_must_not_regain_sudo_without_audit": true,
+    "taiji_01_must_not_regain_docker_or_lxd_without_audit": true,
+    "production_write_requires_backup_preflight_audit_rollback": true,
+    "do_not_rsync_db_volumes": true
+  },
+  "not_synced_by_this_manifest": [
+    "secrets",
+    "member_plaintext",
+    "postgres_data",
+    "odoo_data",
+    "live_odoo_db_mutation"
+  ],
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

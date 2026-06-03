@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJOdooSecurityAccessMatrix",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "matrix_id": {"type": "string"},
+    "module_name": {"type": "string"},
+    "mode": {"type": "string", "enum": ["DESIGN_ONLY"]},
+    "roles": {"type": "array", "items": {"type": "string"}},
+    "models": {"type": "array", "items": {"type": "string"}},
+    "renyi_store_staff_approval_required": {"const": true},
+    "volunteer_self_accept_allowed": {"const": false},
+    "system_maintainer_raw_pii_access": {"const": false},
+    "single_admin_decrypt_allowed": {"const": false},
+    "break_glass_required_for_raw_pii": {"const": true},
+    "odoo_write": {"const": false},
+    "db_connect": {"const": false},
+    "addon_create": {"const": false},
+    "raw_pii_to_cloud": {"const": false},
+    "plan_only": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["matrix_id", "module_name", "mode", "roles", "models", "renyi_store_staff_approval_required", "volunteer_self_accept_allowed", "system_maintainer_raw_pii_access", "single_admin_decrypt_allowed", "break_glass_required_for_raw_pii", "odoo_write", "db_connect", "addon_create", "raw_pii_to_cloud", "plan_only", "created_at"]
+}

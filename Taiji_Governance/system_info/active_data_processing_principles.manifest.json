@@ -1,0 +1,58 @@
+{
+  "event": "active_data_processing_principles_loaded",
+  "status": "ACTIVE",
+  "version": "2026-05-12",
+  "organization": "新北市三重區五常社區發展協會",
+  "domain": "wuchang.life",
+  "digital_representative_account": "admin@wuchang.life",
+  "system_scope": [
+    "Taiji Hub",
+    "Odoo ADI",
+    "POS",
+    "Taiji Gateway",
+    "Five Metric Runtime",
+    "community vector data product",
+    "organization readonly cloud",
+    "distributed compute"
+  ],
+  "principles": {
+    "plaintext_free_context": true,
+    "formula_visible": true,
+    "individual_number_visible": false,
+    "process_visible": false,
+    "final_result_visible": true,
+    "community_vector_data_license_allowed": true,
+    "personal_data_sale_allowed": false,
+    "metric_information_watermark_required": true,
+    "audit_required": true,
+    "sha256_required": true,
+    "rollback_required_for_high_risk": true,
+    "cloud_policy": "non_sensitive_readonly_all_device",
+    "odoo_general_account_visibility": "permissioned_auditable",
+    "public_account_visibility": "subject_and_summary_only",
+    "distributed_compute_boundary": "compute_may_flow_authority_secret_plaintext_may_not",
+    "development_member_pii_database_active": false,
+    "pre_activation_sanitize_rotate_required": true
+  },
+  "storage_boundaries": {
+    "linux_runtime": "/home/taiji_admin/Taiji_Hub",
+    "c_scenario_data": "/mnt/c/Users/o0930/Taiji_Data",
+    "d_member_vault_future": "/mnt/d/Taiji_Member_Vault",
+    "org_readonly_cloud_staging": "/home/taiji_admin/Taiji_Hub_Org_Readonly_Cloud_Staging"
+  },
+  "blocked_l3": [
+    "personal_data_sale",
+    "individual_behavior_process_export",
+    "member_plaintext_cloud_upload",
+    "secret_material_output",
+    "public_fund_private_gain",
+    "public_account_detail_exposure",
+    "member_vault_development_use",
+    "member_device_privilege_bypass",
+    "gateway_audit_rollback_bypass",
+    "audit_sha256_chain_deletion"
+  ],
+  "effective_at": "2026-05-12T00:00:00+08:00",
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

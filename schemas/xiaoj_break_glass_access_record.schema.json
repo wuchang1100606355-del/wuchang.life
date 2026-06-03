@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJBreakGlassAccessRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "break_glass_id": {"type": "string"},
+    "legal_basis": {"type": "string"},
+    "purpose": {"type": "string"},
+    "requested_data_scope": {"type": "array", "items": {"type": "string"}},
+    "requester_role": {"type": "string"},
+    "approving_key_holders": {"type": "array", "items": {"type": "string"}},
+    "threshold_mode": {"type": "string", "enum": ["2_of_3", "3_of_3"]},
+    "opened_by": {"type": "string"},
+    "opened_at": {"type": "string", "format": "date-time"},
+    "expiry_time": {"type": "string", "format": "date-time"},
+    "audit_required": {"const": true},
+    "raw_pii_to_cloud": {"const": false},
+    "admin_single_party_allowed": {"const": false}
+  },
+  "required": ["break_glass_id", "legal_basis", "purpose", "requested_data_scope", "requester_role", "approving_key_holders", "threshold_mode", "opened_by", "opened_at", "expiry_time", "audit_required", "raw_pii_to_cloud", "admin_single_party_allowed"]
+}

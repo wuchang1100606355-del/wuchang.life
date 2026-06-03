@@ -1,0 +1,25 @@
+services:
+  taiji_claw_safe:
+    build: .
+    container_name: taiji_claw_safe
+    ports:
+      - "127.0.0.1:9004:9004"
+    volumes:
+      - ../contexts/current:/mnt/current:ro
+      - ../indexes:/mnt/indexes:ro
+      - ../reports:/mnt/reports:ro
+      - ../drive_upload_bundle:/mnt/drive_upload_bundle:ro
+      - ../reports/claw_safe:/mnt/audit:rw
+      - ../data/cloud_pilot_queue:/mnt/queue:rw
+    restart: unless-stopped
+    networks:
+      - taiji-ai
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+
+networks:
+  taiji-ai:
+    external: true

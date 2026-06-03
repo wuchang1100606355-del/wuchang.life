@@ -1,0 +1,15 @@
+[Unit]
+Description=Taiji Gateway / Router
+After=taiji-preflight.service network-online.target
+Requires=taiji-preflight.service
+
+[Service]
+Type=simple
+Environment=TAIJI_ROOT=%h/Taiji_Hub
+WorkingDirectory=%h/Taiji_Hub
+ExecStart=%h/Taiji_Hub/boot/start_gateway.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

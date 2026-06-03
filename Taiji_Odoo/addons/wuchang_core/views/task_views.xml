@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wuchang_task_tree" model="ir.ui.view">
+        <field name="name">wuchang.task.tree</field>
+        <field name="model">wuchang.task</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="progress"/>
+                <field name="owner_id"/>
+                <field name="deadline"/>
+                <field name="priority"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wuchang_task_form" model="ir.ui.view">
+        <field name="name">wuchang.task.form</field>
+        <field name="model">wuchang.task</field>
+        <field name="arch" type="xml">
+            <form string="任務">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="state"/>
+                        <field name="progress" widget="percentpie"/>
+                        <field name="owner_id"/>
+                        <field name="partner_id"/>
+                        <field name="deadline"/>
+                        <field name="priority"/>
+                        <field name="category"/>
+                        <field name="res_model"/>
+                        <field name="res_id"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <field name="parent_id"/>
+                        <field name="last_conversation_date" readonly="1"/>
+                        <field name="idle_hours" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="子任務">
+                            <field name="child_ids" context="{'default_parent_id': active_id}">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                    <field name="owner_id"/>
+                                    <field name="priority"/>
+                                    <field name="category"/>
+                                </tree>
+                            </field>
+                        </page>
+                    <page string="AI Reminder (Process)"><group><field name="ai_reminder_date"/><field name="ai_reminder_note"/></group></page></notebook>
+                </sheet>
+                <header>
+                    <button name="action_mark_done" type="object" string="標記完成" class="btn-primary"/>
+                    <button name="action_generate_sidequest_review" type="object" string="生成支線審查" class="btn-secondary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_task_kanban" model="ir.ui.view">
+        <field name="name">wuchang.task.kanban</field>
+        <field name="model">wuchang.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="progress"/>
+                <field name="owner_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><span>狀態：</span><field name="state"/></div>
+                            <div><span>負責人：</span><field name="owner_id"/></div>
+                            <div><span>進度：</span><field name="progress"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_wuchang_task" model="ir.actions.act_window">
+        <field name="name">任務管理</field>
+        <field name="res_model">wuchang.task</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help">管理所有任務進度並適時介入協療</field>
+    </record>
+
+    <menuitem id="menu_wuchang_root" name="五常社區" sequence="10"/>
+    <record id="action_wuchang_command_voice" model="ir.actions.act_url">
+        <field name="name">語音對話</field>
+        <field name="type">ir.actions.act_url</field>
+        <field name="url">/voice</field>
+        <field name="target">self</field>
+    </record>
+    <record id="action_wuchang_voice_reference" model="ir.actions.act_url">
+        <field name="name">語音參考上傳</field>
+        <field name="type">ir.actions.act_url</field>
+        <field name="url">/voice/reference</field>
+        <field name="target">self</field>
+    </record>
+    <record id="action_wuchang_supreme" model="ir.actions.act_url">
+        <field name="name">最高權限</field>
+        <field name="type">ir.actions.act_url</field>
+        <field name="url">/supreme</field>
+        <field name="target">self</field>
+    </record>
+    <menuitem id="menu_wuchang_command_center" name="最高指揮倉" parent="menu_wuchang_root" sequence="15"/>
+    <menuitem id="menu_wuchang_command_voice" name="語音對話" parent="menu_wuchang_command_center" action="action_wuchang_command_voice" sequence="10" groups="base.group_user"/>
+    <menuitem id="menu_wuchang_command_voice_reference" name="語音參考上傳" parent="menu_wuchang_command_center" action="action_wuchang_voice_reference" sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_wuchang_supreme_menu" name="最高權限頁" parent="menu_wuchang_command_center" action="action_wuchang_supreme" sequence="99" groups="base.group_system"/>
+    <menuitem id="menu_wuchang_task_root" name="任務管理" parent="menu_wuchang_root" sequence="20"/>
+    <menuitem id="menu_wuchang_task" name="任務" parent="menu_wuchang_task_root" action="action_wuchang_task" sequence="10"/>
+</odoo>
+

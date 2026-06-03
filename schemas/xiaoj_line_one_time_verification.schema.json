@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJLineOneTimeVerification",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "verification_id": {"type": "string"},
+    "line_user_hash": {"type": "string"},
+    "member_anchor_hash": {"type": "string"},
+    "verification_method": {"type": "string", "enum": ["one_time_code", "signed_magic_link", "staff_verified", "renyi_staff_verified"]},
+    "purpose": {"type": "string", "enum": ["status_query", "delivery_status", "repair_status", "personal_service", "other"]},
+    "allowed_scope": {"type": "array", "items": {"type": "string"}},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "used_once": {"type": "boolean"},
+    "replay_detected": {"type": "boolean"},
+    "wifi_is_identity": {"const": false},
+    "raw_pii_to_cloud": {"const": false},
+    "odoo_write": {"const": false},
+    "plan_only": {"const": true}
+  },
+  "required": ["verification_id", "line_user_hash", "member_anchor_hash", "verification_method", "purpose", "allowed_scope", "issued_at", "expires_at", "used_once", "replay_detected", "wifi_is_identity", "raw_pii_to_cloud", "odoo_write", "plan_only"]
+}

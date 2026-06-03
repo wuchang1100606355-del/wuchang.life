@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taiji 正式區圖塊式系統架構圖</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #d9e2ef;
+      --blue: #1d4ed8;
+      --green: #15803d;
+      --amber: #b45309;
+      --red: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif; }
+    header { background: #0b1b33; color: #dbeafe; padding: 20px 24px; border-bottom: 1px solid #102443; }
+    header h1 { margin: 0 0 6px; font-size: 26px; }
+    header p { margin: 0; color: #bfdbfe; max-width: 1200px; }
+    main { max-width: 1520px; margin: 0 auto; padding: 18px; }
+    .meta { color: var(--muted); margin: 4px 0 12px; }
+    .section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin-top: 14px; overflow: hidden; }
+    .section h2 { margin: 0; padding: 13px 14px; font-size: 18px; border-bottom: 1px solid var(--line); background: #f8fbff; }
+
+    .arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
+    .block { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 12px; }
+    .block h3 { margin: 0 0 8px; font-size: 16px; }
+    .chip { display: inline-block; border: 1px solid #bfdbfe; background: #eff6ff; color: #1e3a8a; border-radius: 999px; padding: 2px 8px; font-size: 12px; margin: 0 6px 6px 0; }
+    .nodes { display: grid; gap: 8px; margin-top: 6px; }
+    .node { border: 1px solid #dbeafe; background: #f8fbff; border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+    .arrow { color: var(--muted); font-size: 13px; margin: 4px 0; }
+
+    .grid4 { display: grid; gap: 12px; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 12px; }
+    .card { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: #fff; }
+    .card h3 { margin: 0 0 8px; font-size: 15px; }
+    .desc { color: var(--muted); font-size: 14px; min-height: 44px; }
+    .bar { height: 8px; border-radius: 999px; background: #e6eef7; margin-top: 10px; overflow: hidden; }
+    .bar span { display: block; height: 100%; background: var(--blue); }
+    .tag { display: inline-block; margin: 0 6px 6px 0; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--line); }
+    .tag.good { color: var(--green); border-color: #bbf7d0; background: #f0fdf4; }
+    .tag.warn { color: var(--amber); border-color: #fed7aa; background: #fffbeb; }
+    .tag.bad { color: var(--red); border-color: #fecaca; background: #fef2f2; }
+    .tag.info { color: var(--blue); border-color: #bfdbfe; background: #eff6ff; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 10px 12px; border-top: 1px solid #edf2f8; text-align: left; vertical-align: top; }
+    th { background: #f8fafc; color: #334155; }
+    .tasks { padding: 10px 14px; }
+    .task { border-left: 3px solid var(--blue); margin: 8px 0; padding: 8px 10px; background: #f8fbff; }
+    .lamp { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+    .lamp.normal { background: var(--green); }
+    .lamp.warn { background: var(--amber); }
+    .lamp.abnormal { background: var(--red); }
+    .rel { padding: 10px 14px; }
+    .rel-item { border-left: 3px solid var(--line); background: #fbfdff; padding: 8px 10px; margin: 8px 0; }
+    @media (max-width: 1200px) { .grid4 { grid-template-columns: 1fr 1fr; } .arch-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .grid4 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">Taiji 正式區圖塊式系統架構圖</h1>
+    <p id="subtitle">載入中…</p>
+  </header>
+
+  <main>
+    <div class="meta">Last Updated: <span id="updated">-</span></div>
+
+    <section class="section">
+      <h2>正式區圖塊式架構</h2>
+      <div class="arch-grid">
+        <article class="block">
+          <h3>控制面與邊界</h3>
+          <span class="chip">Windows Control Plane</span>
+          <span class="chip">Review Lane: _imports</span>
+          <span class="chip">Canonical Root</span>
+          <div class="nodes">
+            <div class="node"><strong>Canonical Runtime Root</strong><br>/home/taiji_admin/Taiji_Hub</div>
+            <div class="arrow">↓ 僅透過治理流程進入正式區</div>
+            <div class="node"><strong>Quarantine Review Lane</strong><br>_imports 僅審查，不可直接升級為正式執行區</div>
+          </div>
+        </article>
+
+        <article class="block">
+          <h3>正式容器責任區</h3>
+          <span class="chip">business_core</span>
+          <span class="chip">ai_runtime</span>
+          <span class="chip">device_pos_voice</span>
+          <span class="chip">governance</span>
+          <div class="nodes" id="runtime-nodes">
+            <div class="node"><strong>Business Core</strong><br>wuchang_os_odoo_18 / wuchang_os_pg</div>
+            <div class="node"><strong>AI Runtime</strong><br>wuchang_gpu_brain / taiji_voice_gateway / taiji_claw_safe</div>
+            <div class="node"><strong>Device POS Voice</strong><br>taiji_device_resilience_adapter / taiji_pos_google_voice_tool</div>
+            <div class="node"><strong>Governance</strong><br>taiji_syslog / taiji_worklist / taiji_audit / taiji_progress</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>模組完成度</h2>
+      <div class="grid4" id="module-grid"></div>
+    </section>
+
+    <section class="section">
+      <h2>模組層與任務線</h2>
+      <table>
+        <thead><tr><th>Layer</th><th>Role</th><th>Status</th><th>Task</th><th>Progress</th></tr></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>任務線</h2>
+      <div class="tasks" id="tasks"></div>
+    </section>
+
+    <section class="section">
+      <h2>占用阜號與燈號</h2>
+      <div class="meta" style="padding:10px 14px;">掃描時間：<span id="port-scanned-at">-</span></div>
+      <table>
+        <thead><tr><th>燈號</th><th>Port</th><th>Bind</th><th>Owner</th><th>Role</th><th>Status</th></tr></thead>
+        <tbody id="port-body"></tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>關聯示意</h2>
+      <div class="rel" id="relations"></div>
+    </section>
+
+    <section class="section">
+      <h2>系統功能頁面</h2>
+      <table>
+        <thead><tr><th>名稱</th><th>路徑</th><th>說明</th><th>狀態</th></tr></thead>
+        <tbody id="feature-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    function esc(v) {
+      return String(v ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+    }
+    function tagType(type) { return ["good","warn","bad","info"].includes(type) ? type : "info"; }
+    function lampType(type) { return ["normal","warn","abnormal"].includes(type) ? type : "warn"; }
+
+    async function load() {
+      const res = await fetch("./system-module-progress.json?ts=" + Date.now(), { cache: "no-store" });
+      const data = await res.json();
+
+      document.getElementById("title").textContent = data.overview?.title || "Taiji 正式區圖塊式系統架構圖";
+      document.getElementById("subtitle").textContent = data.overview?.subtitle || "";
+      document.getElementById("updated").textContent = data.lastUpdated || "-";
+
+      const modules = document.getElementById("module-grid");
+      modules.innerHTML = "";
+      (data.modules || []).forEach((m) => {
+        const pct = Number(m.progress || 0);
+        const tags = (m.tags || []).map(t => `<span class="tag ${tagType(t.type)}">${esc(t.label)}</span>`).join("");
+        const el = document.createElement("article");
+        el.className = "card";
+        el.innerHTML = `
+          <h3>${esc(m.name)}</h3>
+          <div>${tags}</div>
+          <div class="desc">${esc(m.description || "")}</div>
+          <div class="bar"><span style="width:${Math.max(0, Math.min(100, pct))}%"></span></div>
+          <div class="meta">${pct}%</div>
+        `;
+        modules.appendChild(el);
+      });
+
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = "";
+      (data.tableData || []).forEach((r) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${esc(r.layer)}</td><td>${esc(r.role)}</td><td>${esc(r.status)}</td><td>${esc(r.task)}</td><td>${esc(r.progress)}</td>`;
+        tbody.appendChild(tr);
+      });
+
+      const tasks = document.getElementById("tasks");
+      tasks.innerHTML = "";
+      (data.taskLines || []).forEach((t) => {
+        const div = document.createElement("div");
+        div.className = "task";
+        div.innerHTML = `<strong>${esc(t.id)}</strong><br>${esc(t.desc)}`;
+        tasks.appendChild(div);
+      });
+
+      document.getElementById("port-scanned-at").textContent = data.portScan?.scannedAt || "-";
+      const portBody = document.getElementById("port-body");
+      portBody.innerHTML = "";
+      (data.portScan?.ports || []).forEach((p) => {
+        const st = lampType(p.status);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td><span class="lamp ${st}"></span></td><td>${esc(p.port)}</td><td>${esc(p.bind)}</td><td>${esc(p.owner)}</td><td>${esc(p.role)}</td><td>${esc(st)}</td>`;
+        portBody.appendChild(tr);
+      });
+
+      const rel = document.getElementById("relations");
+      rel.innerHTML = "";
+      (data.portScan?.relations || []).forEach((r) => {
+        const st = lampType(r.state);
+        const item = document.createElement("div");
+        item.className = "rel-item";
+        item.innerHTML = `<span class="lamp ${st}"></span><strong>${esc(r.from)}</strong> → <strong>${esc(r.to)}</strong>（${esc(st)}）`;
+        rel.appendChild(item);
+      });
+
+      const featureBody = document.getElementById("feature-body");
+      featureBody.innerHTML = "";
+      (data.systemPages || []).forEach((p) => {
+        const st = lampType(p.status);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${esc(p.name)}</td><td><a href="${esc(p.path)}" target="_blank" rel="noopener">${esc(p.path)}</a></td><td>${esc(p.desc || "")}</td><td><span class="lamp ${st}"></span>${esc(st)}</td>`;
+        featureBody.appendChild(tr);
+      });
+    }
+
+    load().catch((e) => {
+      document.getElementById("subtitle").textContent = "載入失敗：" + e.message;
+    });
+  </script>
+</body>
+</html>

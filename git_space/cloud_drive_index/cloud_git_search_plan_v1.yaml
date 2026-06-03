@@ -1,0 +1,60 @@
+plan_id: cloud_git_search_plan_v1
+purpose: Build Google Drive cloud Git/Taiji/Wuchang evidence index without downloading raw files.
+
+search_keywords:
+  - git
+  - Taiji
+  - Wuchang
+  - Odoo
+  - runtime
+  - bundle
+  - patent
+  - evidence
+  - architecture
+  - TAIJI_ARCHITECTURE
+  - WUCHANG_TAIJI
+  - GEM
+  - deployment
+  - manifest
+  - README
+  - LICENSE
+  - INCIDENT_RESPONSE
+
+output_fields:
+  - title
+  - file_id
+  - url
+  - created_at
+  - updated_at
+  - keyword_matched
+  - evidence_category
+  - suggested_universe
+
+evidence_categories:
+  cloud_git: U08_evidence_universe
+  architecture: U04_w7tp_packet_universe
+  patent: U09_patent_universe
+  runtime: U11_ai_agent_universe
+  deployment: U08_evidence_universe
+  incident_response: U02_governance_universe
+  taiji_gem: U11_ai_agent_universe
+  wuchang_system: U00_core_cosmos
+  evidence_chain: U08_evidence_universe
+
+do_not_fetch:
+  - raw_dot_git
+  - service_account_json
+  - private_key
+  - token
+  - password
+  - cookie
+  - full_drive_dump
+  - database_dump
+
+rule:
+  - index_only
+  - metadata_only_first
+  - no_raw_download
+  - no_secret_read
+  - no_drive_sync_to_git
+  - no_git_add_dot

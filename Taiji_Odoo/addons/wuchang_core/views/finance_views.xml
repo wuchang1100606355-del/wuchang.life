@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Community Fund Account Views -->
+    <record id="view_community_fund_account_tree" model="ir.ui.view">
+        <field name="name">community.fund.account.tree</field>
+        <field name="model">community.fund.account</field>
+        <field name="arch" type="xml">
+            <tree string="Community Fund Accounts">
+                <field name="name"/>
+                <field name="account_type"/>
+                <field name="balance_twd"/>
+                <field name="balance_whc"/>
+                <field name="merchant_donation_total"/>
+                <field name="consumer_donation_total"/>
+                <field name="merchant_custody_total"/>
+                <field name="deferred_whc_quota"/>
+                <field name="deferred_voucher_quota"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_community_fund_account_form" model="ir.ui.view">
+        <field name="name">community.fund.account.form</field>
+        <field name="model">community.fund.account</field>
+        <field name="arch" type="xml">
+            <form string="Community Fund Account">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="account_type"/>
+                        </group>
+                        <group>
+                            <field name="balance_twd"/>
+                            <field name="balance_whc"/>
+                        </group>
+                        <group string="金流結構">
+                            <field name="merchant_donation_total"/>
+                            <field name="consumer_donation_total"/>
+                            <field name="merchant_custody_total"/>
+                        </group>
+                        <group string="遞延額度">
+                            <field name="deferred_whc_quota"/>
+                            <field name="deferred_voucher_quota"/>
+                        </group>
+                        <group string="支援準備金">
+                            <field name="association_balance"/>
+                            <field name="head_office_balance"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Transparency Log Views -->
+    <record id="view_transparency_log_tree" model="ir.ui.view">
+        <field name="name">transparency.log.tree</field>
+        <field name="model">transparency.log</field>
+        <field name="arch" type="xml">
+            <tree string="Transparency Logs" create="false" edit="false">
+                <field name="timestamp"/>
+                <field name="name"/>
+                <field name="flow_type"/>
+                <field name="amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Wuchang Coin Transaction Views -->
+    <record id="view_wuchang_coin_transaction_tree" model="ir.ui.view">
+        <field name="name">wuchang.coin.transaction.tree</field>
+        <field name="model">wuchang.coin.transaction</field>
+        <field name="arch" type="xml">
+            <tree string="Coin Transactions" create="false" edit="false">
+                <field name="timestamp"/>
+                <field name="transaction_type"/>
+                <field name="source_partner_id"/>
+                <field name="dest_partner_id"/>
+                <field name="amount"/>
+                <field name="hash_signature"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_community_fund_account" model="ir.actions.act_window">
+        <field name="name">Community Funds</field>
+        <field name="res_model">community.fund.account</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_transparency_log" model="ir.actions.act_window">
+        <field name="name">Transparency Logs</field>
+        <field name="res_model">transparency.log</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <record id="action_wuchang_coin_transaction" model="ir.actions.act_window">
+        <field name="name">Coin Transactions</field>
+        <field name="res_model">wuchang.coin.transaction</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!--
+    <template id="fund_bulletin_page" name="Community Fund Bulletin" page="True">
+        <t t-call="website.layout">
+            <div class="container my-5">
+                <section class="mb-4">
+                    <h1 class="display-6">社區基金雲端布告欄</h1>
+                    <p class="text-muted">即時公開基金餘額、捐款來源與商家代收結構。</p>
+                </section>
+
+                <section class="mb-4">
+                    <h5>各帳戶明細</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>帳戶名稱</th>
+                                    <th>類型</th>
+                                    <th class="text-end">基金餘額 (TWD)</th>
+                                    <th class="text-end">幸福幣餘額 (WHC)</th>
+                                    <th class="text-end">商家累計捐款</th>
+                                    <th class="text-end">消費者累計捐款</th>
+                                    <th class="text-end">商家代收款項</th>
+                                    <th class="text-end">遞延幸福幣額度</th>
+                                    <th class="text-end">遞延票券額度</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="funds" t-as="f">
+                                    <tr>
+                                        <td><t t-esc="f.name"/></td>
+                                        <td><t t-esc="f.account_type"/></td>
+                                        <td class="text-end"><t t-esc="'%.0f' % (f.balance_twd or 0.0)"/></td>
+                                        <td class="text-end"><t t-esc="'%.0f' % (f.balance_whc or 0.0)"/></td>
+                                        <td class="text-end"><t t-esc="'%.0f' % (f.merchant_donation_total or 0.0)"/></td>
+                                        <td class="text-end"><t t-esc="'%.0f' % (f.consumer_donation_total or 0.0)"/></td>
+                                        <td class="text-end"><t t-esc="'%.0f' % (f.merchant_custody_total or 0.0)"/></td>
+                                        <td class="text-end"><t t-esc="'%.0f' % (f.deferred_whc_quota or 0.0)"/></td>
+                                        <td class="text-end"><t t-esc="'%.0f' % (f.deferred_voucher_quota or 0.0)"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="mb-4">
+                    <h5>合計概況</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li>基金總餘額 (TWD)：<strong><t t-esc="'%.0f' % (total_twd or 0.0)"/></strong></li>
+                        <li>幸福幣流通量 (WHC)：<strong><t t-esc="'%.0f' % (total_whc or 0.0)"/></strong></li>
+                        <li>商家累計捐款合計：<strong><t t-esc="'%.0f' % (total_merchant_donation or 0.0)"/></strong></li>
+                        <li>消費者累計捐款合計：<strong><t t-esc="'%.0f' % (total_consumer_donation or 0.0)"/></strong></li>
+                        <li>商家代收款項合計：<strong><t t-esc="'%.0f' % (total_merchant_custody or 0.0)"/></strong></li>
+                        <li>遞延幸福幣額度合計：<strong><t t-esc="'%.0f' % (total_deferred_whc or 0.0)"/></strong></li>
+                        <li>遞延票券額度合計：<strong><t t-esc="'%.0f' % (total_deferred_voucher or 0.0)"/></strong></li>
+                    </ul>
+                </section>
+            </div>
+        </t>
+    </template>
+    -->
+
+    <!-- Wish Tree Views -->
+    <record id="view_wish_tree_fruit_kanban" model="ir.ui.view">
+        <field name="name">wish.tree.fruit.kanban</field>
+        <field name="model">wish.tree.fruit</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="fruit_size"/>
+                <field name="current_month_amount"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <img alt="Fruit" t-att-src="'/web/static/img/placeholder.png'"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong><field name="name"/></strong>
+                                <div>Raised: <field name="current_month_amount"/></div>
+                                <div><field name="fruit_size"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_wish_tree_fruit" model="ir.actions.act_window">
+        <field name="name">Wish Tree Fruits</field>
+        <field name="res_model">wish.tree.fruit</field>
+        <field name="view_mode">kanban,form,tree</field>
+    </record>
+
+    <record id="view_wish_tree_card_form" model="ir.ui.view">
+        <field name="name">wish.tree.card.form</field>
+        <field name="model">wish.tree.card</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit" type="object" invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_manager_approve" string="GM Approve" type="object" invisible="state != 'manager_review'" groups="base.group_user"/>
+                    <button name="action_chairman_approve" string="Chairman Approve" type="object" invisible="state != 'chairman_review'" groups="base.group_user"/>
+                    <button name="action_board_ratify" string="Board Ratify" type="object" invisible="state != 'board_review'" groups="base.group_user"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="applicant_id"/>
+                        <field name="fruit_id"/>
+                        <field name="target_amount"/>
+                        <field name="current_amount"/>
+                        <field name="progress" widget="progressbar"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wish_tree_card" model="ir.actions.act_window">
+        <field name="name">Wish Cards</field>
+        <field name="res_model">wish.tree.card</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="view_res_partner_wuchang_form" model="ir.ui.view">
+        <field name="name">res.partner.wuchang.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Wuchang Identity">
+                    <group>
+                        <group string="Identity">
+                            <field name="is_wuchang_resident"/>
+                            <field name="is_wuchang_merchant"/>
+                        </group>
+                        <group string="Assets">
+                            <field name="whc_wallet_balance"/>
+                            <field name="merchant_quota_balance"/>
+                        </group>
+                    </group>
+                    <field name="whc_ledger_ids" string="WHC Ledger">
+                        <tree create="false" edit="false" delete="false">
+                            <field name="amount"/>
+                            <field name="create_date"/>
+                            <field name="expiry_date"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <menuitem id="menu_fund_pool" name="Fund Pool" parent="menu_finance" action="action_community_fund_account" sequence="10"/>
+    <menuitem id="menu_transparency_log" name="Transparency Logs" parent="menu_finance" action="action_transparency_log" sequence="20"/>
+    <menuitem id="menu_coin_transaction" name="Coin Transactions" parent="menu_finance" action="action_wuchang_coin_transaction" sequence="30"/>
+
+    <menuitem id="menu_wish_fruits" name="Org Fruits" parent="menu_wish_tree" action="action_wish_tree_fruit" sequence="10"/>
+    <menuitem id="menu_wish_cards" name="Wish Cards" parent="menu_wish_tree" action="action_wish_tree_card" sequence="20"/>
+    </data>
+</odoo>

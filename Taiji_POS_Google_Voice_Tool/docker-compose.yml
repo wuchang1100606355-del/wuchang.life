@@ -1,0 +1,26 @@
+services:
+  taiji_pos_google_voice_tool:
+    build: .
+    container_name: taiji_pos_google_voice_tool
+    ports:
+      - "127.0.0.1:9011:9011"
+      - "100.107.187.77:9011:9011"
+    environment:
+      CLAW_SAFE_URL: "http://taiji_claw_safe:9004"
+      STORE_RAW_TRANSCRIPT: "false"
+    volumes:
+      - ../reports/pos_voice_tool:/mnt/audit:rw
+      - ../data/pos_voice_queue:/mnt/queue:rw
+      - ../contexts/current:/mnt/current:ro
+    restart: unless-stopped
+    networks:
+      - taiji-ai
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+
+networks:
+  taiji-ai:
+    external: true

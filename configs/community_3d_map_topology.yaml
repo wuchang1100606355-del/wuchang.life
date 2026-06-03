@@ -1,0 +1,51 @@
+community_3d_map:
+  id: wuchang_community_3d_map
+  owner: CHIANG_CHENG_LUNG
+  fusion_state: indexed
+  fusion_level: 2
+  created_at: "2026-05-23T05:40:27+08:00"
+
+  role:
+    - community_spatial_memory
+    - geospatial_anchor
+    - property_context
+    - route_context
+    - disaster_prevention_context
+    - cultural_geography_context
+
+  canonical_paths:
+    linux_data: data/community_3d_map
+    linux_topology: topology/community_3d_map
+    windows_memory: C:\Taiji_Runtime\memory\community_3d_map
+
+  source_files:
+    jurisdiction_anchor_geojson: data/community_3d_map/source/wuchang_community_jurisdiction_anchor_2026-05-12.geojson
+
+  allowed_use:
+    - local_query
+    - topology_reference
+    - property_case_context
+    - disaster_prevention_planning
+    - community_guidance
+    - 3d_visual_context
+
+  denied_use:
+    - expose_private_address_without_review
+    - publish_personal_location
+    - infer_sensitive_household_identity
+    - external_upload_without_human_approval
+
+  gateway_rule:
+    require_gateway: true
+    high_risk_to_dead_letter: true
+    dead_letter_file: runtime/dead_letter/routing_rejected.jsonl
+
+  privacy:
+    household_identity: masked_by_default
+    personal_location: review_required
+    public_boundary: allowed
+    raw_private_points: denied_without_human
+
+  status:
+    fusion_state: indexed
+    note: "GeoJSON jurisdiction anchor fused. Full 3D mesh/GLB/tileset not yet confirmed."

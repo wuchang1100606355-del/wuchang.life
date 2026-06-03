@@ -1,0 +1,38 @@
+sub_universe_id: SU_12_INTENT_STATE_FIELD_V1
+parent_field: U09_INTENT_STATE_FIELD
+status: ACTIVE_PLAN_ONLY
+
+states:
+  - S01_INIT
+  - S02_OBSERVE
+  - S03_CLASSIFY
+  - S04_PLAN
+  - S05_VERIFY
+  - S06_ROUTE
+  - S07_REVIEW
+  - S08_APPROVE
+  - S09_EXECUTE
+  - S10_AUDIT
+  - S11_LEARN
+  - S12_ARCHIVE
+
+purpose:
+  - define_intent_state_transition_for_xiaoj_and_W7TP
+  - connect_xiaoj_review_opinion_plus_final_authorization_runtime_landing_and_audit
+  - prevent_action_without_state_registration
+
+transition_rules:
+  - EXECUTE_requires_APPROVE
+  - APPROVE_requires_REVIEW_for_sensitive_actions
+  - REVIEW_requires_VERIFY
+  - ARCHIVE_requires_AUDIT
+  - high_risk_ROUTE_requires_xiaoj_review_opinion_plus_final_authorization
+
+red_team_reflection:
+  negative_effects:
+    - too_many_states_may_slow_simple_tasks
+    - state_machine_may_become_ceremonial_if_not_enforced
+  mitigation:
+    - low_risk_short_path_allowed
+    - high_risk_full_path_required
+    - attach_to_runtime_landing_gate_later

@@ -1,0 +1,67 @@
+{
+  "event": "active_host_node_role_boundary_loaded",
+  "version": "2026-05-12",
+  "status": "ACTIVE",
+  "host_nodes": {
+    "MSI": {
+      "linux_primary_user": "taiji_admin",
+      "tailscale_node": "msi",
+      "role": [
+        "wuchang.life_representative_node",
+        "association_portable_representative_node",
+        "local_development_node",
+        "local_odoo_pos_test_node",
+        "ai_window_validation_node"
+      ],
+      "shutdown_policy": "may_shutdown_after_service_handoff_or_if_local_only",
+      "docker_daemon_scope": "local_MSI_daemon",
+      "container_stack_names_may_overlap_with_taiji01": true
+    },
+    "taiji01": {
+      "linux_full_write_user": "taiji_admin",
+      "linux_community_user": "taiji_01",
+      "tailscale_node": "taiji01",
+      "role": [
+        "community_resident_edge_node",
+        "deployment_node",
+        "noncontainer_community_workspace_node",
+        "optional_service_node"
+      ],
+      "shutdown_policy": "do_not_shutdown_when_serving_community_workloads_without_handoff_or_log",
+      "docker_daemon_scope": "local_taiji01_daemon",
+      "requires_taiji_admin_local_account": true,
+      "requires_extra_vpn_node_for_taiji_admin": false
+    }
+  },
+  "account_boundaries": {
+    "taiji_admin": {
+      "scope": "full_write_system_maintenance",
+      "sudo": true,
+      "docker": true,
+      "production_change_executor": true
+    },
+    "taiji_01": {
+      "scope": "noncontainer_community_workspace_partial_write",
+      "sudo_should_be_removed_after_taiji_admin_login_verified": true,
+      "docker_should_be_absent": true,
+      "production_db_direct_write": false
+    }
+  },
+  "service_boundaries": {
+    "same_natural_person_reduces_internal_adversarial_risk": true,
+    "same_natural_person_does_not_disable_security_governance": true,
+    "same_container_names_do_not_mean_same_daemon": true,
+    "production_write_requires_backup_preflight_audit_rollback": true
+  },
+  "active_mapping": {
+    "odoo_main_company": "新北市三重區五常社區發展協會",
+    "developer_vendor_technical_transferor": "聊國咖啡館重新店 / 上品食品行",
+    "commercial_legal_entity": "上品食品行",
+    "commercial_tax_id": "34778660",
+    "typo_tax_id_inactive_audit_only": "34775660",
+    "admin_account": "admin@wuchang.life",
+    "sponsor_member_developer_account": "o970106@gmail.com"
+  },
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

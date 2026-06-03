@@ -1,0 +1,43 @@
+policy_id: W7TP_ACCOUNTABILITY_AUDIT_POLICY_V1
+status: PLAN_ONLY
+
+audit_scope:
+  - 8d_identity_issuance
+  - group_member_node_registration
+  - contact_approval_request
+  - plaintext_claim_request
+  - blind_ai_subscription_usage
+  - field_drift_event
+  - runtime_landing_attempt
+
+audit_record_required_fields:
+  - event_id
+  - timestamp
+  - requester
+  - node_id
+  - purpose_code
+  - decision
+  - reviewer
+  - hash_ref
+  - expiry_or_reseal_status
+
+retention_policy:
+  daily_operation_logs: retain_90_days_minimum
+  plaintext_claim_logs: retain_by_legal_policy
+  field_drift_events: retain_as_evidence_chain
+  runtime_landing_events: retain_as_evidence_chain
+
+forbidden:
+  - deleting_audit_before_review
+  - editing_audit_without_new_hash
+  - exporting_audit_with_plaintext_without_review
+
+red_team_reflection:
+  negative_effects:
+    - audit_records_can_themselves_become_sensitive
+    - retention_too_long_increases_risk
+    - retention_too_short_hurts_accountability
+  mitigation:
+    - hash_and_minimize_audit_content
+    - separate_plaintext_from_audit_index
+    - define_retention_by_risk_and_law

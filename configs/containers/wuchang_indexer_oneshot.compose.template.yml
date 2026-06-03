@@ -1,0 +1,16 @@
+# W7TP indexer one-shot compose template (plan-only).
+# This file is a template and must not be used directly for production.
+# Actual pure Linux server paths require human review before any separately approved execution.
+# This template does not authorize container launch, file transfer, SSH, secret access, or formal database writes.
+
+services:
+  wuchang_indexer_oneshot:
+    image: w7tp-indexer:latest
+    command: ["python", "-u", "watcher.py"]
+    restart: "no"
+    network_mode: "none"
+    read_only: true
+    volumes:
+      - "<REVIEWED_READONLY_PROJECT_SNAPSHOT_PATH>:/workspace:ro"
+      - "<REVIEWED_RUNTIME_JOBS_PATH>:/runtime/jobs:ro"
+      - "<REVIEWED_RUNTIME_RESULTS_PATH>:/runtime/results:rw"

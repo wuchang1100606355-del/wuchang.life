@@ -1,0 +1,63 @@
+plan_id: W7TP_HUMAN_REVIEW_TO_XIAOJ_PRE_REVIEW_UPGRADE_PLAN_V1
+status: PLAN_ONLY
+
+purpose:
+  - replace_empty_human_review_with_xiaoj_pre_review_opinion
+  - prevent_responsibility_dumping_to_user
+  - require_xiaoj_to_provide_reason_risk_and_safe_option_before_human_authorization
+
+old_pattern:
+  - human_review_required
+  - human_review
+  - require_human_review
+  - human_approval_required
+
+new_pattern:
+  xiaoj_pre_review_opinion:
+    recommendation:
+      allowed_values:
+        - approve_limited
+        - reject
+        - defer
+        - require_more_evidence
+    reason: required
+    safe_option: required
+    risk_if_approved: required
+    risk_if_rejected: required
+    required_human_action:
+      allowed_values:
+        - agree
+        - disagree
+        - approve_with_conditions
+        - request_revision
+
+  human_final_authorization:
+    required: true
+    role: final_consent_not_primary_analysis
+
+upgrade_rules:
+  - do_not_remove_human_authorization
+  - add_xiaoj_opinion_before_human_final_authorization
+  - high_risk_packets_must_include_evidence_refs
+  - no_empty_human_review_required_phrase
+  - no_runtime_change_from_this_upgrade
+
+affected_packet_types:
+  - plaintext_claim_packet
+  - contact_approval_packet
+  - runtime_landing_request
+  - sync_plan
+  - rollback_plan
+  - node_enforcement_action
+  - emergency_disclosure
+  - three_key_unlock_request
+
+red_team_reflection:
+  negative_effects:
+    - automatic_replacement_may_break_yaml_structure
+    - old_files_may_use_human_review_in_legitimate_context
+    - too_verbose_review_opinion_may_increase_file_size
+  mitigation:
+    - generate_inventory_first
+    - upgrade_high_risk_files_first
+    - use_manual_patch_plan_before_bulk_edit

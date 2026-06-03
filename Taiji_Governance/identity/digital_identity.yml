@@ -1,0 +1,154 @@
+version: 1
+generated_at: "2026-05-10"
+classification: "non_secret_governance_metadata"
+policy:
+  plaintext_secrets: forbidden
+  google_private_data_export: forbidden
+  direct_google_api_without_gateway: forbidden
+  direct_gemini_api_without_gateway: forbidden
+  router_mutation_without_gateway: forbidden
+  vpn_acl_mutation_without_gateway: forbidden
+  required_controls:
+    - audit
+    - rollback
+    - sha256_baseline
+    - taiji_gateway
+    - metric_translation_gateway
+    - five_metric_gate
+identities:
+  - id: TDI-HUMAN-o970106
+    type: human_authority
+    description: "Natural-person governance authority; no credential material stored here."
+    allowed_use:
+      - approve_high_risk_changes
+      - sign_governance_decisions
+    forbidden_use:
+      - runtime_service_identity
+      - container_secret
+      - stored_pin_or_token
+
+  - id: TDI-ADMIN-admin-wuchang-life
+    type: workspace_admin_authority
+    description: "wuchang.life super-admin authority represented as policy metadata only."
+    allowed_use:
+      - define_non_sensitive_command_policy
+      - approve_gateway_scoped_delegation
+    forbidden_use:
+      - raw_oauth_token_storage
+      - raw_service_account_json_storage
+      - direct_api_call_without_gateway
+
+  - id: TDI-SERVICE-google-ultra-proxy
+    type: delegated_service_policy
+    description: "Ultra organization delegation through topology and gateway translation; no secrets in repo."
+    gateway_required: true
+    allowed_use:
+      - non_sensitive_command_configuration
+      - policy_checked_admin_task_manifest
+    forbidden_use:
+      - plaintext_key_distribution
+      - direct_gemini_call
+      - direct_google_admin_call
+
+  - id: TDI-NODE-vpn-server-01
+    type: vpn_subnet_router
+    mapped_name: taiji01
+    tailscale_ipv4: 100.71.224.18
+    approved_routes:
+      - 192.168.50.0/24
+    allowed_use:
+      - subnet_routing_after_acl_check
+      - gateway_relay_after_policy_check
+    forbidden_use:
+      - router_admin_bypass
+      - secret_storage
+
+  - id: TDI-NODE-admin-msi
+    type: admin_workstation
+    mapped_name: msi
+    tailscale_ipv4: 100.107.187.77
+    gateway_controlled: true
+    windows_peer_identity: TDI-NODE-msi-win11-operator-console
+    local_runtime_scope:
+      - wsl_ubuntu_workspace
+      - ollama_local_llm
+      - openwebui_local_ui
+      - taiji_gateway_client
+      - developer_shell
+    allowed_use:
+      - local_development
+      - read_only_probe
+      - manifest_generation
+      - governed_local_llm_after_gateway
+      - local_chat_or_preview_without_mutation
+    forbidden_use:
+      - direct_secret_distribution
+      - direct_production_mutation_from_ollama_ui
+      - direct_member_plaintext_export
+      - direct_payment_execution
+      - gateway_bypass_for_system_runtime
+
+  - id: TDI-NODE-msi-win11-operator-console
+    type: windows_operator_console
+    mapped_name: msi-win11-in
+    tailscale_ipv4: 100.105.82.28
+    gateway_controlled: true
+    linux_peer_identity: TDI-NODE-admin-msi
+    allowed_use:
+      - human_operator_ui
+      - ollama_desktop_local_chat
+      - browser_preview
+      - least_privilege_confirmation
+    forbidden_use:
+      - direct_production_mutation_from_desktop_ui
+      - direct_secret_distribution
+      - admin_browser_session_automation_without_gateway
+      - member_plaintext_export
+      - payment_execute_without_human_boundary
+
+  - id: TDI-NODE-display-02
+    type: customer_display
+    mapped_name: pending
+    tailscale_ipv4: pending
+    allowed_use:
+      - display_runtime_after_registration
+    forbidden_use:
+      - credential_storage
+      - router_admin_access
+      - direct_google_api_access
+
+  - id: TDI-NODE-sunmi-pos
+    type: point_of_sale
+    mapped_name: pending
+    tailscale_ipv4: pending
+    allowed_use:
+      - odoo_pos_runtime_after_registration
+      - local_receipt_workflow_after_policy_check
+    forbidden_use:
+      - google_private_data_export
+      - raw_member_data_export
+      - credential_storage
+
+  - id: TDI-NET-asus-rt-be86u
+    type: router
+    lan_address: 192.168.50.1
+    allowed_use:
+      - management_after_explicit_acl_and_gateway_check
+    forbidden_use:
+      - tailnet_wide_admin_access
+      - unaudited_config_change
+
+  - id: TDI-SERVICE-taiji-gateway
+    type: gateway
+    allowed_use:
+      - policy_translation
+      - request_admission
+      - audit_event_boundary
+
+  - id: TDI-SERVICE-five-metric-engine
+    type: policy_engine
+    expected_policy_locked: true
+    allowed_use:
+      - preflight
+      - hazard_classification
+      - allow_warn_block_decision

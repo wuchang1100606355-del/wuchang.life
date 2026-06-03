@@ -1,0 +1,18 @@
+[Unit]
+Description=Taiji Formal Tensor Runtime Package v0.1
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+EnvironmentFile=/home/taiji_admin/Taiji_Hub/deploy/formal_runtime_pkg_v0_1/env.example
+ExecStartPre=/usr/bin/env python3 -m py_compile /home/taiji_admin/Taiji_Hub/deploy/formal_runtime_pkg_v0_1/runtime_entry_v0_1.py
+ExecStart=/usr/bin/env python3 /home/taiji_admin/Taiji_Hub/deploy/formal_runtime_pkg_v0_1/runtime_entry_v0_1.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

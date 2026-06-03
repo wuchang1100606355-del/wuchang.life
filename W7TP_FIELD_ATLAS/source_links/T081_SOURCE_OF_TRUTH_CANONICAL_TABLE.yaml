@@ -1,0 +1,51 @@
+registry_id: T081_SOURCE_OF_TRUTH_CANONICAL_TABLE
+
+task_id: T081
+
+description: "Define the canonical source-of-truth table for W7TP total field and align it with current sandbox candidate sources."
+
+canonical_truth:
+  - W7TP_FIELD_ATLAS
+  - Taiji_Governance
+
+candidate_truth:
+  - runtime/sandbox
+  - docs/runtime
+  - docs/w7tp_algorithms
+  - docs/specs
+
+runtime_evidence:
+  - runtime
+  - reports
+  - validation
+
+implementation_carrier:
+  - odoo
+  - docker
+  - services
+  - modules
+  - ui
+
+source_link_reconciliation:
+  status: PENDING
+  dependencies:
+    - T080_XIAOJ_TOTAL_FIELD_CANONICAL_REGISTRATION_PLAN
+  hold_conditions:
+    - no_canonical_copy
+    - no_registry_replacement
+  actions:
+    - define_canonical_table
+    - map_candidate_sources
+    - produce_source_truth_table
+
+xiaoj_review_opinion:
+  recommendation: REVIEW_PENDING
+  reason: canonical table not yet agreed
+  safe_option: build canonical table in sandbox first
+  risk_if_approved:
+    - truth_layer_collision
+  risk_if_rejected:
+    - schedule_delay_only
+  required_human_action:
+    - review_canonical_source_assembly
+    - confirm_source_mapping

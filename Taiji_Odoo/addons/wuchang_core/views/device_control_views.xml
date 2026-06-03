@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Node (Gateway) Views -->
+    <record id="view_wuchang_device_node_tree" model="ir.ui.view">
+        <field name="name">wuchang.device.node.tree</field>
+        <field name="model">wuchang.device.node</field>
+        <field name="arch" type="xml">
+            <tree string="Device Nodes">
+                <field name="name"/>
+                <field name="ip_address"/>
+                <field name="status" widget="badge" decoration-success="status == 'online'" decoration-danger="status == 'offline'"/>
+                <field name="last_heartbeat"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wuchang_device_node_form" model="ir.ui.view">
+        <field name="name">wuchang.device.node.form</field>
+        <field name="model">wuchang.device.node</field>
+        <field name="arch" type="xml">
+            <form string="Device Node">
+                <header>
+                    <button name="action_ping" string="Ping / Check Status" type="object" class="btn-secondary"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Node Name (e.g., Cashier PC)"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="ip_address"/>
+                            <field name="last_heartbeat" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Connected Displays">
+                            <field name="display_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="display_type"/>
+                                    <field name="state"/>
+                                    <button name="action_turn_on" string="On" type="object" icon="fa-power-off"/>
+                                    <button name="action_turn_off" string="Off" type="object" icon="fa-stop"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Connected Audio">
+                            <field name="audio_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="connection_type"/>
+                                    <field name="volume"/>
+                                    <field name="is_playing"/>
+                                    <button name="action_play" string="Play" type="object" icon="fa-play"/>
+                                    <button name="action_pause" string="Pause" type="object" icon="fa-pause"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Display Views -->
+    <record id="view_wuchang_device_display_form" model="ir.ui.view">
+        <field name="name">wuchang.device.display.form</field>
+        <field name="model">wuchang.device.display</field>
+        <field name="arch" type="xml">
+            <form string="Display Control">
+                <header>
+                    <button name="action_update_content" string="Push Content" type="object" class="btn-primary"/>
+                    <button name="action_turn_on" string="Turn On" type="object" invisible="state == 'on'"/>
+                    <button name="action_turn_off" string="Turn Off" type="object" invisible="state == 'off'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="node_id"/>
+                            <field name="display_type"/>
+                        </group>
+                        <group>
+                            <field name="current_content_type"/>
+                            <field name="content_text" invisible="current_content_type not in ('text', 'pos_data')"/>
+                            <field name="content_url" invisible="current_content_type not in ('image', 'video')"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Audio Views -->
+    <record id="view_wuchang_device_audio_form" model="ir.ui.view">
+        <field name="name">wuchang.device.audio.form</field>
+        <field name="model">wuchang.device.audio</field>
+        <field name="arch" type="xml">
+            <form string="Audio Control">
+                <header>
+                    <button name="action_play" string="Play" type="object" class="btn-success" invisible="is_playing"/>
+                    <button name="action_pause" string="Pause" type="object" class="btn-warning" invisible="not is_playing"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="node_id"/>
+                            <field name="connection_type"/>
+                        </group>
+                        <group>
+                            <label for="volume"/>
+                            <div class="o_row">
+                                <field name="volume" widget="integer"/>
+                                <button name="action_set_volume" string="Set" type="object" class="btn-sm btn-link"/>
+                            </div>
+                            <field name="is_playing"/>
+                            <field name="current_track"/>
+                        </group>
+                    </group>
+                    <group string="Playlist">
+                        <field name="playlist_url"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_wuchang_device_node" model="ir.actions.act_window">
+        <field name="name">IoT Nodes (Gateways)</field>
+        <field name="res_model">wuchang.device.node</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_wuchang_device_display" model="ir.actions.act_window">
+        <field name="name">Display Control (POS/Signage)</field>
+        <field name="res_model">wuchang.device.display</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_wuchang_device_audio" model="ir.actions.act_window">
+        <field name="name">Audio Control (Bluetooth)</field>
+        <field name="res_model">wuchang.device.audio</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_wuchang_iot_root" name="IoT Control" parent="menu_wuchang_infrastructure" sequence="20"/>
+    <menuitem id="menu_wuchang_device_node" name="Gateways" parent="menu_wuchang_iot_root" action="action_wuchang_device_node" sequence="10"/>
+    <menuitem id="menu_wuchang_device_display" name="Displays" parent="menu_wuchang_iot_root" action="action_wuchang_device_display" sequence="20"/>
+    <menuitem id="menu_wuchang_device_audio" name="Audio" parent="menu_wuchang_iot_root" action="action_wuchang_device_audio" sequence="30"/>
+</odoo>

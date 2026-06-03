@@ -1,0 +1,28 @@
+router_spec_id: 35_state_world_router_spec_v0
+purpose: Define docs-only State World Router v0 from existing indexes.
+mode: docs_index_only
+inputs:
+  - 19_state_world_extension.yaml
+  - 20_sub_universe_registry.yaml
+  - 21_knowledge_world_index.yaml
+  - 28_state_world_router_boundary.yaml
+  - 33_state_world_p0_handoff_packet.yaml
+router_principle:
+  - route by state world
+  - route by sub-universe
+  - route by risk
+  - route by evidence value
+allowed_outputs:
+  - task_packet
+  - readonly_report
+  - index_update
+blocked_outputs:
+  - secret_read
+  - service_restart
+  - direct_cloud_raw_data
+  - payment_or_db_write_without_review
+governance:
+  d6_hardwall: required
+  d7_validation: required
+  xiaoj_review_opinion_plus_final_authorization: required_for_high_risk
+next_action: build memory boot map

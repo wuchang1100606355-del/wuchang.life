@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+BASE="/home/taiji_admin/Taiji_Hub"
+LOG="$BASE/Taiji_Governance/logs/taiji01_new_boss_boot.log"
+mkdir -p "$(dirname "$LOG")"
+
+{
+  echo "=== TAIJI01 NEW BOSS BOOT CHECK ==="
+  date -Is
+  hostname
+  whoami
+  id taiji_admin
+  id taiji_01 || true
+
+  for g in sudo docker lxd; do
+    if id -nG taiji_01 2>/dev/null | tr " " "\n" | grep -qx "$g"; then
+      echo "HAZARD: taiji_01 still in $g"
+    else
+      echo "PASS: taiji_01 not in $g"
+    fi
+  done
+
+  docker ps --format "table {{.Names}}\t{{.Status}}" | head || true
+} >> "$LOG" 2>&1

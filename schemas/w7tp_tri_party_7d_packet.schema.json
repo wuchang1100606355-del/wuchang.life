@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_tri_party_7d_packet.schema.json",
+  "title": "W7TP Tri-Party 7D Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_version",
+    "domain",
+    "mode",
+    "authority",
+    "parties",
+    "d1_identity_scope",
+    "d2_intent",
+    "d3_context_space",
+    "d4_privacy_boundary",
+    "d5_risk_policy",
+    "d6_execution_lane",
+    "d7_audit_result",
+    "redacted_intent_summary",
+    "provider_visible_summary",
+    "code_agent_task",
+    "forbidden_payload",
+    "forbidden_actions",
+    "human_review_required",
+    "cloud_allowed",
+    "audit_hash_required"
+  ],
+  "properties": {
+    "packet_version": {
+      "const": "W7TP-TRI-PARTY-7D/0.1"
+    },
+    "domain": {
+      "const": "wuchang.life"
+    },
+    "mode": {
+      "const": "plan_only"
+    },
+    "authority": {
+      "const": "local_xiaoj_router"
+    },
+    "parties": {
+      "type": "array",
+      "uniqueItems": true,
+      "allOf": [
+        {
+          "contains": {
+            "const": "local_xiaoj_router"
+          }
+        },
+        {
+          "contains": {
+            "const": "code_agent"
+          }
+        },
+        {
+          "contains": {
+            "const": "cloud_provider_lane"
+          }
+        }
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "d1_identity_scope": {
+      "type": "object"
+    },
+    "d2_intent": {
+      "type": "object"
+    },
+    "d3_context_space": {
+      "type": "object"
+    },
+    "d4_privacy_boundary": {
+      "type": "object"
+    },
+    "d5_risk_policy": {
+      "type": "object",
+      "required": [
+        "risk_level",
+        "human_review_required"
+      ],
+      "properties": {
+        "risk_level": {
+          "type": "string"
+        },
+        "human_review_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "d6_execution_lane": {
+      "type": "object"
+    },
+    "d7_audit_result": {
+      "type": "object"
+    },
+    "redacted_intent_summary": {
+      "type": "string"
+    },
+    "provider_visible_summary": {
+      "type": "object"
+    },
+    "code_agent_task": {
+      "type": "object"
+    },
+    "forbidden_payload": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "human_review_required": {
+      "const": true
+    },
+    "cloud_allowed": {
+      "const": false
+    },
+    "audit_hash_required": {
+      "const": true
+    }
+  }
+}

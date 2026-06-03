@@ -1,0 +1,156 @@
+name: taiji-formal-tensor-runtime
+
+services:
+  taiji_gateway:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: taiji_gateway
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: taiji_gateway
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8105
+    ports:
+      - "127.0.0.1:8105:8105"
+    volumes:
+      - taiji_audit:/app/runtime_state/audit
+      - taiji_deadbox:/app/runtime_state/deadbox
+      - taiji_replay:/app/runtime_state/replay
+      - taiji_cache:/app/runtime_state/cache
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import json,urllib.request; data=json.load(urllib.request.urlopen('http://127.0.0.1:8105/health', timeout=3)); raise SystemExit(0 if data.get('ok') else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  tensor_validator:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: tensor_validator
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: tensor_validator
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8110
+    expose:
+      - "8110"
+    volumes:
+      - taiji_audit:/app/runtime_state/audit
+    restart: unless-stopped
+
+  replay_runtime:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: replay_runtime
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: replay_runtime
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8111
+    expose:
+      - "8111"
+    volumes:
+      - taiji_replay:/app/runtime_state/replay
+      - taiji_audit:/app/runtime_state/audit
+    restart: unless-stopped
+
+  deadbox_runtime:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: deadbox_runtime
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: deadbox_runtime
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8112
+    expose:
+      - "8112"
+    volumes:
+      - taiji_deadbox:/app/runtime_state/deadbox
+      - taiji_audit:/app/runtime_state/audit
+    restart: unless-stopped
+
+  audit_runtime:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: audit_runtime
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: audit_runtime
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8113
+    expose:
+      - "8113"
+    volumes:
+      - taiji_audit:/app/runtime_state/audit
+    restart: unless-stopped
+
+  continuity_cache:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: continuity_cache
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: continuity_cache
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8114
+    expose:
+      - "8114"
+    volumes:
+      - taiji_cache:/app/runtime_state/cache
+      - taiji_audit:/app/runtime_state/audit
+    restart: unless-stopped
+
+  voice_runtime:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: voice_runtime
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: voice_runtime
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8115
+    expose:
+      - "8115"
+    volumes:
+      - taiji_audit:/app/runtime_state/audit
+    restart: unless-stopped
+
+  browser_runtime:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.runtime
+    container_name: browser_runtime
+    env_file:
+      - ./.env.runtime.example
+    environment:
+      TAIJI_RUNTIME_ROLE: browser_runtime
+      TAIJI_BIND_HOST: 127.0.0.1
+      TAIJI_PORT: 8116
+    expose:
+      - "8116"
+    volumes:
+      - taiji_audit:/app/runtime_state/audit
+    restart: unless-stopped
+
+volumes:
+  taiji_audit:
+  taiji_deadbox:
+  taiji_replay:
+  taiji_cache:

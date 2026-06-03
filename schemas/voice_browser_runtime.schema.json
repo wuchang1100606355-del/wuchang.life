@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "taiji.voice_browser_runtime.v1",
+  "title": "Taiji Voice Browser Runtime Action Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "source",
+    "modality",
+    "action_type",
+    "target_system",
+    "node_identity",
+    "permission_window",
+    "data_sensitivity",
+    "created_at"
+  ],
+  "properties": {
+    "request_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+    "source": {
+      "type": "string",
+      "enum": ["voice_gateway", "browser_runtime", "kiosk_ui", "staff_ui", "system_probe"]
+    },
+    "modality": {
+      "type": "string",
+      "enum": ["voice", "browser", "kiosk_ui", "staff_ui", "system"]
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "menu_query",
+        "voice_prompt_playback",
+        "voice_health_check",
+        "voice_transcribe_intent",
+        "voice_to_intent_draft",
+        "voice_confirm_draft",
+        "pos_order_create_draft",
+        "pos_order_modify_draft",
+        "pos_order_confirm",
+        "service_request_draft",
+        "service_dispatch_confirm",
+        "browser_read_visible_text",
+        "browser_scroll",
+        "browser_focus_field",
+        "browser_fill_draft",
+        "browser_click_non_destructive",
+        "browser_select_option",
+        "browser_open_local_dashboard",
+        "browser_submit_local_draft",
+        "browser_submit_production",
+        "display_update",
+        "payment_execute",
+        "refund",
+        "discount_override",
+        "manager_override",
+        "credential_input",
+        "credential_issue",
+        "secret_read",
+        "admin_setting_change",
+        "database_direct_write",
+        "production_overwrite",
+        "cloud_plaintext_transfer",
+        "raw_audio_cloud_transfer",
+        "raw_audio_store"
+      ]
+    },
+    "target_system": {
+      "type": "string",
+      "enum": ["local_dashboard", "pos_draft", "odoo_draft", "voice_gateway", "browser_runtime", "staff_console", "audit_runtime"]
+    },
+    "node_identity": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "permission_window": {
+      "type": "string",
+      "enum": ["design", "development", "testing", "governance", "runtime", "deployment_preparation"]
+    },
+    "data_sensitivity": {
+      "type": "string",
+      "enum": [
+        "public_menu_data",
+        "non_sensitive_metadata",
+        "order_draft",
+        "transaction_reference",
+        "customer_personal_data",
+        "member_plaintext",
+        "payment_sensitive_data",
+        "secret_or_token",
+        "credential_material",
+        "session_cookie"
+      ]
+    },
+    "raw_text_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "redacted_summary": { "type": "string", "maxLength": 512 },
+    "allowed_action": { "type": "string", "maxLength": 128 },
+    "risk_level": { "type": "string", "enum": ["L0", "L1", "L2", "L3"] },
+    "requires_human_confirmation": { "type": "boolean" },
+    "audit_required": { "type": "boolean" },
+    "rollback_required": { "type": "boolean" },
+    "replay_safe": { "type": "boolean", "default": true },
+    "member_plaintext_included": { "type": "boolean", "default": false },
+    "secret_material_included": { "type": "boolean", "default": false },
+    "raw_plaintext_context_stored": { "type": "boolean", "default": false },
+    "admin_session": { "type": "boolean", "default": false },
+    "production_mutation": { "type": "boolean", "default": false },
+    "external_api_requested": { "type": "boolean", "default": false },
+    "payment_allowed": { "type": "boolean", "default": false },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

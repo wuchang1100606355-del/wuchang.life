@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Service Dashboard Actions -->
+    
+    <!-- Resident Needs Analysis (Graph) -->
+    <record id="view_wuchang_task_graph_dashboard" model="ir.ui.view">
+        <field name="name">wuchang.task.graph.dashboard</field>
+        <field name="model">wuchang.task</field>
+        <field name="arch" type="xml">
+            <graph string="Service Analysis" type="bar" sample="1">
+                <field name="category"/>
+                <field name="state" type="measure"/>
+                <field name="priority"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Resident Needs Analysis (Pivot) -->
+    <record id="view_wuchang_task_pivot_dashboard" model="ir.ui.view">
+        <field name="name">wuchang.task.pivot.dashboard</field>
+        <field name="model">wuchang.task</field>
+        <field name="arch" type="xml">
+            <pivot string="Service Analysis" sample="1">
+                <field name="category" type="row"/>
+                <field name="state" type="col"/>
+                <field name="priority" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_wuchang_service_dashboard" model="ir.actions.act_window">
+        <field name="name">Service Dashboard</field>
+        <field name="res_model">wuchang.task</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="domain">[('category', '!=', False)]</field>
+        <field name="view_id" ref="view_wuchang_task_graph_dashboard"/>
+        <field name="context">{'search_default_group_by_category': 1, 'search_default_group_by_state': 1}</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_wuchang_service_dashboard" 
+              name="Service Dashboard" 
+              parent="menu_wuchang_root" 
+              action="action_wuchang_service_dashboard" 
+              sequence="5"/>
+
+</odoo>

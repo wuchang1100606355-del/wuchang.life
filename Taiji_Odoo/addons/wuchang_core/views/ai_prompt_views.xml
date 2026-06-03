@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_wuchang_ai_prompt_tree" model="ir.ui.view">
+        <field name="name">wuchang.ai.prompt.tree</field>
+        <field name="model">wuchang.ai.prompt</field>
+        <field name="arch" type="xml">
+            <tree string="AI Prompts">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_wuchang_ai_prompt_form" model="ir.ui.view">
+        <field name="name">wuchang.ai.prompt.form</field>
+        <field name="model">wuchang.ai.prompt</field>
+        <field name="arch" type="xml">
+            <form string="AI Prompt">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Template">
+                        <field name="template" widget="text" nolabel="1" placeholder="Enter prompt template here..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_wuchang_ai_prompt" model="ir.actions.act_window">
+        <field name="name">AI Prompts</field>
+        <field name="res_model">wuchang.ai.prompt</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new AI Prompt
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_wuchang_ai_prompt"
+              name="AI Prompts"
+              parent="wuchang_core.menu_wuchang_root"
+              action="action_wuchang_ai_prompt"
+              sequence="50"/>
+</odoo>

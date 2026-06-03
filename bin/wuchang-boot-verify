@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$HOME/Taiji_Hub"
+NOW="$(date -Iseconds)"
+
+echo "======================================================"
+echo "     五常數位陣型 - Unified Boot Verify"
+echo "======================================================"
+echo "[time] $NOW"
+echo "[node] MSI"
+
+echo
+echo "===== 8126 FORMAL TENSOR RUNTIME ====="
+systemctl is-enabled taiji-7d-formal-runtime.service 2>/dev/null || true
+systemctl is-active taiji-7d-formal-runtime.service 2>/dev/null || true
+curl -s --connect-timeout 1 --max-time 3 http://127.0.0.1:8126/health || true
+
+echo
+echo "===== 8127 FORMATION RUNTIME ====="
+systemctl is-enabled taiji-7d-formation-runtime.service 2>/dev/null || true
+systemctl is-active taiji-7d-formation-runtime.service 2>/dev/null || true
+curl -s --connect-timeout 1 --max-time 3 http://127.0.0.1:8127/health || true
+
+echo
+echo "===== ODOO / POSTGRES ====="
+docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}' | grep -Ei 'odoo|postgres|pg|wuchang' || true
+curl -sS -o /dev/null -w 'odoo_8069=%{http_code}\n' --connect-timeout 1 --max-time 3 http://127.0.0.1:8069/web/login || true
+docker exec wuchang_os_pg pg_isready -U odoo -d postgres 2>/dev/null || true
+
+echo
+echo "===== PORTS ====="
+for p in 8069 8105 8126 8127 8128 9004 11434; do
+  ss -ltn | grep -q ":$p " && echo "$p=listening" || echo "$p=not_listening"
+done
+
+echo
+echo "===== PACKET TEST ====="
+"$ROOT/bin/7d-formation-packet-test" 2>/dev/null || bash "$ROOT/bin/7d-formation-boot-verify" 2>/dev/null || echo "formation_packet_test_missing_or_failed"
+
+echo
+echo "===== AUDIT ====="
+S8126_ENABLED="$(systemctl is-enabled taiji-7d-formal-runtime.service 2>/dev/null || true)"
+S8126_ACTIVE="$(systemctl is-active taiji-7d-formal-runtime.service 2>/dev/null || true)"
+S8127_ENABLED="$(systemctl is-enabled taiji-7d-formation-runtime.service 2>/dev/null || true)"
+S8127_ACTIVE="$(systemctl is-active taiji-7d-formation-runtime.service 2>/dev/null || true)"
+ODOO_CODE="$(curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 1 --max-time 3 http://127.0.0.1:8069/web/login 2>/dev/null || true)"
+
+mkdir -p "$ROOT/logs"
+echo "{\"event\":\"wuchang_unified_boot_verify\",\"time\":\"$NOW\",\"node\":\"MSI\",\"formal_8126_enabled\":\"$S8126_ENABLED\",\"formal_8126_active\":\"$S8126_ACTIVE\",\"formation_8127_enabled\":\"$S8127_ENABLED\",\"formation_8127_active\":\"$S8127_ACTIVE\",\"odoo_8069_http\":\"$ODOO_CODE\"}" >> "$ROOT/logs/wuchang_boot_verify.jsonl"
+tail -n 1 "$ROOT/logs/wuchang_boot_verify.jsonl"
+
+echo
+echo "===== FINAL STATE ====="
+if [ "$S8126_ENABLED" = "enabled" ] && [ "$S8126_ACTIVE" = "active" ] && [ "$S8127_ENABLED" = "enabled" ] && [ "$S8127_ACTIVE" = "active" ] && { [ "$ODOO_CODE" = "303" ] || [ "$ODOO_CODE" = "200" ]; }; then
+  echo "WUCHANG_DIGITAL_FORMATION_CORE_DUAL_RUNTIME_BOOT_VERIFIED"
+else
+  echo "PARTIAL_NEEDS_REVIEW"
+fi

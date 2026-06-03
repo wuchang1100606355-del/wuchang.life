@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/taiji/tensor_packet.schema.json",
+  "title": "Taiji Five-Metric TensorPacket",
+  "description": "Plaintext-minimized governance packet for Taiji Five-Metric Tensor Runtime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "packet_id",
+    "packet_hash",
+    "parent_hash",
+    "nonce",
+    "created_at",
+    "intent_vector",
+    "resource_vector",
+    "time_vector",
+    "authority_vector",
+    "topology_vector",
+    "governance_decision",
+    "audit"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "taiji.tensor_packet.v1"
+    },
+    "packet_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 160
+    },
+    "packet_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "parent_hash": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/sha256"
+        },
+        {
+          "type": "string",
+          "const": "root"
+        }
+      ]
+    },
+    "nonce": {
+      "type": "string",
+      "minLength": 12,
+      "maxLength": 128
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "plaintext_context_stored": {
+      "type": "boolean",
+      "const": false
+    },
+    "intent_vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purpose",
+        "operational_objective",
+        "governance_classification",
+        "execution_necessity"
+      ],
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "operational_objective": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "governance_classification": {
+          "type": "string",
+          "enum": ["readonly", "draft", "preflight", "guarded", "runtime", "deadbox", "blocked"]
+        },
+        "execution_necessity": {
+          "type": "string",
+          "enum": ["none", "low", "medium", "high", "mandatory_human_decision"]
+        }
+      }
+    },
+    "resource_vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compute_usage",
+        "token_usage",
+        "gpu_usage",
+        "multimodal_generation_cost",
+        "storage_pressure",
+        "network_consumption"
+      ],
+      "properties": {
+        "compute_usage": {
+          "$ref": "#/$defs/resource_level"
+        },
+        "token_usage": {
+          "$ref": "#/$defs/resource_level"
+        },
+        "gpu_usage": {
+          "$ref": "#/$defs/resource_level"
+        },
+        "multimodal_generation_cost": {
+          "$ref": "#/$defs/resource_level"
+        },
+        "storage_pressure": {
+          "$ref": "#/$defs/resource_level"
+        },
+        "network_consumption": {
+          "$ref": "#/$defs/resource_level"
+        }
+      }
+    },
+    "time_vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_window",
+        "replay_expiration",
+        "task_lifetime",
+        "rollback_horizon",
+        "synchronization_timing",
+        "audit_chronology"
+      ],
+      "properties": {
+        "execution_window": {
+          "type": "string",
+          "enum": ["design", "development", "testing", "governance", "finance_accounting", "deployment_preparation", "runtime"]
+        },
+        "replay_expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "task_lifetime": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "rollback_horizon": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "synchronization_timing": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "audit_chronology": {
+          "type": "string",
+          "maxLength": 160
+        }
+      }
+    },
+    "authority_vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "permission_level",
+        "governance_ownership",
+        "approval_requirement",
+        "human_decision_requirement",
+        "escalation_boundary"
+      ],
+      "properties": {
+        "permission_level": {
+          "type": "string",
+          "enum": ["A0_readonly", "A1_design", "A2_local_patch", "A3_preflight", "A4_deployment_preparation", "A5_live_disabled"]
+        },
+        "governance_ownership": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "approval_requirement": {
+          "type": "string",
+          "enum": ["none", "audit_only", "human_review", "human_decision", "blocked"]
+        },
+        "human_decision_requirement": {
+          "type": "boolean"
+        },
+        "escalation_boundary": {
+          "type": "string",
+          "maxLength": 256
+        }
+      }
+    },
+    "topology_vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_location",
+        "routing_structure",
+        "governance_boundary",
+        "distributed_relationship",
+        "device_trust_position",
+        "runtime_adjacency"
+      ],
+      "properties": {
+        "node_location": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "routing_structure": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "governance_boundary": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "distributed_relationship": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "device_trust_position": {
+          "type": "string",
+          "enum": ["trusted_local", "trusted_vpn", "limited_service", "pending_identity", "untrusted", "deadbox"]
+        },
+        "runtime_adjacency": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          }
+        }
+      }
+    },
+    "governance_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "risk_level",
+        "action",
+        "reason",
+        "deadbox_required",
+        "rollback_required"
+      ],
+      "properties": {
+        "risk_level": {
+          "type": "string",
+          "enum": ["L0", "L1", "L2", "L3"]
+        },
+        "action": {
+          "type": "string",
+          "enum": ["allow", "allow_with_audit", "warn", "block", "deadbox", "human_review"]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "deadbox_required": {
+          "type": "boolean"
+        },
+        "rollback_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "audit_required",
+        "audit_channel",
+        "secret_material_printed",
+        "external_api_called",
+        "live_deploy_executed"
+      ],
+      "properties": {
+        "audit_required": {
+          "type": "boolean"
+        },
+        "audit_channel": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "secret_material_printed": {
+          "type": "boolean",
+          "const": false
+        },
+        "external_api_called": {
+          "type": "boolean",
+          "const": false
+        },
+        "live_deploy_executed": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "resource_level": {
+      "type": "string",
+      "enum": ["none", "low", "medium", "high", "blocked"]
+    }
+  }
+}

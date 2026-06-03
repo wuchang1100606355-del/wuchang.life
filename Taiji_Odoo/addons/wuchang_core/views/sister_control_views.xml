@@ -1,0 +1,67 @@
+<odoo>
+    <record id="view_wuchang_sister_control_form" model="ir.ui.view">
+        <field name="name">wuchang.sister.control.form</field>
+        <field name="model">wuchang.sister.control</field>
+        <field name="arch" type="xml">
+            <form string="Sister Control Center">
+                <header>
+                    <button name="action_wake_up" string="喚醒妹妹 (Wake Up)" type="object" class="oe_highlight"/>
+                    <button name="action_sync_all" string="同步雙機設備 (Sync All)" type="object" class="oe_highlight"/>
+                    <button name="action_clear_queue" string="清除指令隊列" type="object"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="路由狀態 (Router Status)">
+                            <field name="pos_status" widget="badge" decoration-success="pos_status == 'online'" decoration-info="pos_status == 'active'"/>
+                            <field name="customer_display_status" widget="badge" decoration-success="customer_display_status == 'online'" decoration-info="customer_display_status == 'active'"/>
+                        </group>
+                        <group string="設備指令 (Device Commands)">
+                            <button name="action_sync_pos" string="單獨同步 POS" type="object" icon="fa-desktop"/>
+                            <button name="action_sync_customer" string="單獨同步客顯" type="object" icon="fa-user"/>
+                        </group>
+                    </group>
+                    <group string="通訊日誌">
+                        <field name="last_message"/>
+                        <field name="command_queue" groups="base.group_no_one"/>
+                    </group>
+                    <group string="網址配置">
+                        <field name="pos_url"/>
+                        <field name="customer_url"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_sister_control_tree" model="ir.ui.view">
+        <field name="name">wuchang.sister.control.tree</field>
+        <field name="model">wuchang.sister.control</field>
+        <field name="arch" type="xml">
+            <tree string="Sister Control">
+                <field name="name"/>
+                <field name="pos_status"/>
+                <field name="customer_display_status"/>
+                <field name="last_message"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_wuchang_sister_control" model="ir.actions.act_window">
+        <field name="name">妹妹控制中心 (Sister Control)</field>
+        <field name="res_model">wuchang.sister.control</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_sister_root" name="妹妹控制" sequence="10"/>
+    <menuitem id="menu_wuchang_sister_control" name="控制中心" parent="menu_wuchang_sister_root" action="action_wuchang_sister_control" sequence="10"/>
+</odoo>

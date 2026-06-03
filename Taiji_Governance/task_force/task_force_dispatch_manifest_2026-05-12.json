@@ -1,0 +1,28 @@
+{
+  "schema": "taiji.task_force_dispatch_manifest.v1",
+  "status": "design_active_not_runtime_dispatch",
+  "created_at": "2026-05-12T19:35:00+08:00",
+  "rule": "schedule_device_group_call_first_stop_wins",
+  "description_zh": "外送任務依排班設備群呼；掛牌者第一位按停者得單；照服員為當勤責任人員。",
+  "dispatch_flow": [
+    "task_created",
+    "schedule_checked",
+    "eligible挂牌_devices_selected",
+    "device_group_call_started",
+    "first_stop_claim_received",
+    "winner_assigned",
+    "other_devices_silenced",
+    "on_duty_care_worker_recorded",
+    "audit_record_written"
+  ],
+  "required_controls": {
+    "gateway_required": true,
+    "five_metric_gate_required": true,
+    "audit_required": true,
+    "no_physical_delete": true,
+    "human_confirmation_for_l2_l3": true,
+    "member_plaintext_broadcast_forbidden": true
+  },
+  "risk_level": "L2_drift_until_runtime_validator_exists",
+  "live_dispatch_enabled": false
+}

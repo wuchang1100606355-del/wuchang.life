@@ -1,0 +1,50 @@
+{
+  "type": "AI_CURRENT_STATE",
+  "status": "CONTEXT_PRUNED_STATUS_ONLY",
+  "project": "MTL-AI-Gateway",
+  "version": "v1.0 RC1",
+  "runtime_status": "CORE_RUNTIME_PASS",
+  "package_status": "PACKAGED_RC1",
+  "model_status": "MODEL_BUILD_SUCCESS",
+  "windows_startup": "PENDING_ONLOGON_VERIFICATION",
+  "cloud_muscle": "CONTROL_PLANE_READY",
+  "root_formula": "MTL-AI = Ω0 ⊕ I0 ⊕ SA7 ⊕ Tμν ⊕ Gτ ⊕ EΣ",
+  "embedded_formula": "W6 = D1 ⊕ D2 ⊕ D3 ⊕ H4 ⊕ C5 ⊕ G6",
+  "model": "metric-language-gateway-ai:latest",
+  "base_model": "sister-j-brain:latest",
+  "runtime": {
+    "open_webui": "running",
+    "claw_safe": "running_127.0.0.1:9004",
+    "pos_voice_tool": "running_127.0.0.1:9011_100.107.187.77:9011",
+    "device_resilience_adapter": "running_127.0.0.1:9012_100.107.187.77:9012",
+    "tailscale": "secure_device_mesh"
+  },
+  "closed_output_set": [
+    "READONLY",
+    "LOW_RISK_AUDITED",
+    "CONFIRM_REQUIRED",
+    "BLOCKED_WITH_SAFE_ALTERNATIVE"
+  ],
+  "forbidden_material": [
+    "private_key",
+    "service_account_json",
+    "token",
+    "refresh_token",
+    "password",
+    "2FA",
+    "raw_credentials",
+    "Odoo_DB_password",
+    "host_root",
+    "raw_audio",
+    "audio_upload",
+    "sensitive_PII_plaintext"
+  ],
+  "next_actions": [
+    "verify_windows_11_onlogon_startup_task",
+    "confirm_openwebui_model_selection",
+    "enable_taiji_claw_safe_bridge",
+    "enable_taiji_metric_gateway_assembly",
+    "rotate_exposed_service_account_key",
+    "run_google_drive_metadata_readonly_dryrun_with_new_local_only_key"
+  ]
+}

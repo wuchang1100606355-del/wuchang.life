@@ -1,0 +1,31 @@
+scope_id: T077_MAINLINE_FOCUSED_COMMIT_SCOPE_V1
+status: FOCUSED_SCOPE_DEFINED
+execution_date: "2026-06-01"
+
+stage_only:
+  - W7TP_FIELD_ATLAS/mainline_sync/
+  - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_FIELD_V1.yaml
+  - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_PACKET_SCHEMA_V1.yaml
+
+GEI_boundary:
+  status: CLOSED
+  closure_edits_only: true
+  closure_edit_summary:
+    - replace_xiaoj_authorization_wording_with_human_review_wording
+  untracked_GEI_expansion_staged: false
+
+explicitly_not_staged:
+  - W7TP_FIELD_ATLAS_unrelated_changes
+  - W7TP_FIELD_ATLAS/gei_context_untracked_expansion
+  - Taiji_Governance_untracked_review_material
+  - runtime/reports
+  - runtime/archive
+  - Taiji_Odoo
+  - taiji01
+
+validation_required:
+  - git_status_short_after
+  - git_diff_stat
+  - git_diff_cached_stat
+  - git_diff_cached_check
+  - staged_path_boundary_check

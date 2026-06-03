@@ -1,0 +1,165 @@
+community_emergency_final_settings:
+  version: 2026-05-23
+  purpose: community_lifesaving_emergency_settings_layer
+  status: settings_prepared_not_forced
+
+  modes:
+    normal:
+      label: 平時待命
+      level: GREEN
+      notify_operator: false
+      broadcast: false
+      silent: true
+
+    watch:
+      label: 關懷觀察
+      level: YELLOW
+      notify_operator: true
+      broadcast: false
+      silent: true
+      use_case:
+        - 長者未回應
+        - 設備異常
+        - 手機離線
+        - 感測器疑似異常
+
+    sos:
+      label: 一般求救
+      level: RED
+      notify_operator: true
+      broadcast: true
+      silent: false
+      require_human_review: true
+      use_case:
+        - 跌倒
+        - 急病
+        - 受困
+        - 需要立即協助
+
+    silent_sos:
+      label: 靜默求救
+      level: RED
+      notify_operator: true
+      broadcast: false
+      silent: true
+      require_human_review: true
+      use_case:
+        - 不方便出聲
+        - 現場有壓力
+        - 不希望驚動旁人
+        - 需要低調通報
+
+    broadcast_sos:
+      label: 廣播求救
+      level: RED
+      notify_operator: true
+      broadcast: true
+      silent: false
+      require_human_review: true
+      use_case:
+        - 公共區域事件
+        - 需要多人支援
+        - 防災通知
+        - 社區緊急集合
+
+    silent_broadcast:
+      label: 靜默廣播
+      level: RED
+      notify_operator: true
+      broadcast: true
+      silent: true
+      require_human_review: true
+      use_case:
+        - 現場不可驚動
+        - 需要多名管理員知道
+        - 家暴/威脅/安全疑慮
+        - 低調撤離或關懷
+
+  trusted_receivers:
+    operator:
+      email: admin@wuchang.life
+      role: root_operator
+
+    channels:
+      line_bridge:
+        url: http://127.0.0.1:8103/line/status
+        role: community_contact_bridge
+        enabled: prepared
+
+      google_bridge:
+        url: http://127.0.0.1:8104/google/status
+        role: workspace_contact_bridge
+        enabled: prepared
+
+      odoo:
+        url: http://127.0.0.1:8069
+        role: member_database
+        enabled: prepared
+
+      emergency_relay:
+        url: http://127.0.0.1:8110
+        role: emergency_location_and_call_ticket
+        enabled: prepared
+
+  five_d_code_policy:
+    plaintext_identity: forbidden
+    exact_location_in_public_code: forbidden
+    device_identity: hmac_only
+    resolver: local_private_only
+
+  private_location_policy:
+    exact_location_file: runtime/private_emergency/emergency_current_private.json
+    public_state_file: runtime/state/community_emergency_state_field.json
+    store_exact_location_in_ledger: false
+    store_location_hash_in_ledger: true
+    no_location_to_model_memory: true
+
+  two_way_call_policy:
+    default_state: ticket_created
+    auto_call: false
+    human_operator_required: true
+    configurable_call_url_env: EMERGENCY_CALL_URL
+    supported_future_targets:
+      - google_meet
+      - line_call
+      - internal_webrtc_room
+      - phone_manual_callback
+
+  broadcast_policy:
+    default_enabled: false
+    enable_only_by_mode:
+      - sos
+      - broadcast_sos
+      - silent_broadcast
+    require_receiver_whitelist: true
+    no_public_social_post: true
+    no_unreviewed_external_publish: true
+
+  silent_policy:
+    default_enabled: true
+    purpose:
+      - protect_person_at_scene
+      - avoid_attention
+      - allow_low_profile_help_request
+    device_behavior:
+      no_loud_alarm_by_default: true
+      no_full_identity_display: true
+      show_neutral_screen_if_needed: true
+
+  hard_denies:
+    - auto_call_official_emergency_without_human
+    - publish_exact_location
+    - publish_household_identity
+    - expose_phone_or_address
+    - store_password
+    - store_token
+    - store_private_key
+    - feed_emergency_private_data_to_model
+    - auto_resolve_without_human
+
+  state_transitions:
+    normal_to_watch: device_or_sensor_anomaly
+    watch_to_sos: human_or_device_confirms_distress
+    sos_to_escalated: operator_confirms
+    silent_sos_to_silent_broadcast: operator_confirms_multi_receiver
+    any_to_resolved: human_operator_resolves

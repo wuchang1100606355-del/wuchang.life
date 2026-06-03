@@ -1,0 +1,100 @@
+{
+  "setting_version": "ODOO-POS-OPEN-SOURCE-CANDIDATES/1.0",
+  "authority": "local_xiaoj_router",
+  "target": "odoo18_pos_sandbox",
+  "install_mode": "candidate_only_no_external_download",
+  "clean_db_protected": true,
+  "sandbox_db_prefix": "posdev_",
+  "local_first_candidates": [
+    {
+      "module": "wuchang_core",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P0",
+      "reason": "core community governance models"
+    },
+    {
+      "module": "wuchang_cafe_menu_options",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P0",
+      "reason": "POS cafe menu customization"
+    },
+    {
+      "module": "wuchang_fund_allocation",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P1",
+      "reason": "public welfare fund allocation"
+    },
+    {
+      "module": "wuchang_wish_tree_coin",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P1",
+      "reason": "community point/token experimental ledger"
+    },
+    {
+      "module": "wuchang_property_local_cloud",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P1",
+      "reason": "property/community local cloud service"
+    },
+    {
+      "module": "wuchang_property_manpower_surface",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P2",
+      "reason": "community manpower/volunteer surface"
+    },
+    {
+      "module": "taiji_member_login",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P2",
+      "reason": "member login bridge"
+    },
+    {
+      "module": "wuchang_line_login",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P2",
+      "reason": "LINE entry lane"
+    },
+    {
+      "module": "wuchang_google_member_login",
+      "source": "Taiji_Odoo/addons",
+      "priority": "P2",
+      "reason": "Google member login lane"
+    }
+  ],
+  "official_core_candidates": [
+    "point_of_sale",
+    "pos_hr",
+    "pos_online_payment",
+    "pos_sms",
+    "product",
+    "stock",
+    "sale",
+    "contacts"
+  ],
+  "external_open_source_policy": {
+    "allowed_stage": "review_only",
+    "clone_allowed": false,
+    "install_allowed": false,
+    "required_checks": [
+      "license_check",
+      "odoo_version_branch_check",
+      "manifest_check",
+      "security_access_check",
+      "dependency_check",
+      "no_secret_request",
+      "no_raw_pii_upload",
+      "sandbox_install_only"
+    ]
+  },
+  "forbidden_actions": [
+    "install_external_module_to_clean18",
+    "download_unknown_addon_and_install",
+    "read_api_key",
+    "save_api_key",
+    "raw_pii_cloud_upload",
+    "formal_db_write_without_authorization",
+    "git_add_dot",
+    "git_add_all",
+    "git_push"
+  ]
+}

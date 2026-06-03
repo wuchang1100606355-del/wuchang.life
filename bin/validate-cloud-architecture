@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+"""
+驗證本地五維引擎驅動雲端 API 架構
+Validates local five-metric-engine driving cloud API architecture
+"""
+import json
+import subprocess
+import sys
+from pathlib import Path
+from datetime import datetime
+
+ROOT = Path("/home/taiji_admin/Taiji_Hub")
+VALIDATION_LOG = ROOT / "logs" / "architecture_validation.jsonl"
+
+validation_report = {
+    "timestamp": datetime.now().isoformat(),
+    "architecture": "local-brain-cloud-executor",
+    "checks": []
+}
+
+def check(name, condition, details=""):
+    """Record validation result"""
+    result = {
+        "check": name,
+        "passed": condition,
+        "details": details,
+        "timestamp": datetime.now().isoformat()
+    }
+    validation_report["checks"].append(result)
+    status = "✓" if condition else "✗"
+    print(f"{status} {name}: {details}")
+    return condition
+
+# 1. Local Engine
+print("\n[1] LOCAL FIVE-METRIC-ENGINE")
+try:
+    result = subprocess.run(
+        ["systemctl", "--no-pager", "is-active", "five-metric-engine"],
+        capture_output=True,
+        timeout=5
+    )
+    check("service-active", result.returncode == 0, "five-metric-engine running")
+except Exception as e:
+    check("service-active", False, str(e))
+
+# 2. Engine API
+print("\n[2] ENGINE API ENDPOINTS")
+try:
+    result = subprocess.run(
+        ["curl", "-s", "http://127.0.0.1:8105/health"],
+        capture_output=True,
+        text=True,
+        timeout=5
+    )
+    health = json.loads(result.stdout)
+    check("api-health", result.returncode == 0, f"status={health.get('status')}")
+    check("policy-locked", health.get("policy_locked"), "policy_locked=true")
+    check("dimensions", len(health.get("dimensions", [])) == 5, f"5D: {health.get('dimensions')}")
+except Exception as e:
+    check("api-health", False, str(e))
+
+# 3. Configuration
+print("\n[3] CONFIGURATION FILES")
+config_file = ROOT / "config" / "action_registry.json"
+if config_file.exists():
+    config = json.loads(config_file.read_text(encoding="utf-8"))
+    check("config-exists", True, f"action_registry.json found")
+    check("registry-locked", config.get("locked"), "registry locked")
+    check("default-policy", config.get("default_policy") == "deny_unregistered", 
+          f"default_policy={config.get('default_policy')}")
+
+# 4. Continue Configuration
+print("\n[4] CONTINUE YAML CONFIGURATION")
+continue_config = Path("c:\\Users\\o0930\\Taiji_Hub\\.continue\\agents\\new-config.yaml")
+if continue_config.exists():
+    content = continue_config.read_text(encoding="utf-8")
+    has_engine = "five-metric-engine" in content
+    has_cloud = "cloudApis" in content
+    has_workflow = "workflow:" in content
+    check("yaml-engine-config", has_engine, "five-metric-engine defined")
+    check("yaml-cloud-apis", has_cloud, "cloudApis configured")
+    check("yaml-workflow", has_workflow, "workflow defined")
+
+# 5. Audit Trail
+print("\n[5] AUDIT & LOGGING")
+audit_file = ROOT / "logs" / "five_metric_audit.jsonl"
+if audit_file.exists():
+    lines = audit_file.read_text(encoding="utf-8").strip().split("\n")
+    audit_count = len([l for l in lines if l.strip()])
+    check("audit-log", audit_count > 0, f"{audit_count} audit records")
+
+# 6. Command availability
+print("\n[6] EXECUTABLE COMMANDS")
+try:
+    result = subprocess.run(
+        ["which", "taiji-action-run"],
+        capture_output=True,
+        timeout=5
+    )
+    check("taiji-action-run", result.returncode == 0, "command available")
+    
+    result = subprocess.run(
+        ["which", "verify-action-registry"],
+        capture_output=True,
+        timeout=5
+    )
+    check("verify-action-registry", result.returncode == 0, "command available")
+except Exception as e:
+    check("commands", False, str(e))
+
+# Summary
+passed = sum(1 for c in validation_report["checks"] if c["passed"])
+total = len(validation_report["checks"])
+validation_report["summary"] = {
+    "passed": passed,
+    "total": total,
+    "success_rate": f"{100*passed/total:.1f}%"
+}
+
+# Log
+with VALIDATION_LOG.open("a", encoding="utf-8") as f:
+    f.write(json.dumps(validation_report, ensure_ascii=False) + "\n")
+
+print(f"\n{'='*50}")
+print(f"VALIDATION RESULT: {passed}/{total} PASSED ({100*passed/total:.1f}%)")
+print(f"{'='*50}")
+
+if passed == total:
+    print("\n✓ ARCHITECTURE VALIDATION COMPLETE - ALL SYSTEMS GO")
+    sys.exit(0)
+else:
+    print(f"\n⚠ {total-passed} CHECK(S) FAILED - REVIEW LOGS")
+    sys.exit(1)

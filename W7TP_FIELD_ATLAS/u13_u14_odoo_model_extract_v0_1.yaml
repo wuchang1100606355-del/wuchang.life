@@ -1,0 +1,213 @@
+packet_id: U13_U14_ODOO_MODEL_EXTRACT_V0_1
+mode: readonly_extract
+container: "wuchang_os_odoo_18"
+universes:
+  U13: Wuchang Community Fund Pool
+  U14: Dedicated Delivery Team
+files:
+  - path: "/mnt/extra-addons/wuchang_core/models/delivery.py"
+    exists: true
+    extracted_lines:
+      - "8:    _name = 'wuchang.delivery.team'"
+      - "9:    name = fields.Char(required=True)"
+      - "10:    code = fields.Char()"
+      - "11:    leader_id = fields.Many2one('res.partner', string='隊長(兼店長)')"
+      - "12:    supervisor_id = fields.Many2one('res.partner', string='督導(兼會計)')"
+      - "18:    has_helmet = fields.Boolean('符合規格之安全帽')"
+      - "19:    has_thermal_bag = fields.Boolean('保溫袋 (需清潔)')"
+      - "20:    has_vest = fields.Boolean('識別背心 / 證件')"
+      - "21:    delivery_equipment_verified = fields.Boolean('外送裝備已驗證')"
+      - "24:    _name = 'wuchang.delivery.order'"
+      - "27:    name = fields.Char(default='New')"
+      - "28:    partner_id = fields.Many2one('res.partner')"
+      - "29:    merchant_id = fields.Many2one('res.partner')"
+      - "30:    order_type = fields.Selection([('dine_in', '內用'), ('takeout', '外帶'), ('delivery', '外送')], default='delivery')"
+      - "31:    delivery_team_id = fields.Many2one('wuchang.delivery.team')"
+      - "32:    delivery_partner_id = fields.Many2one('res.partner')"
+      - "33:    amount_total = fields.Float()"
+      - "34:    fund_contribution_amount = fields.Float(compute='_compute_contribution', store=True)"
+      - "35:    state = fields.Selection([('confirmed', '已接單'), ('delivering', '配送中'), ('done', '完成')], default='confirmed')"
+      - "38:    current_lat = fields.Float()"
+      - "39:    current_lng = fields.Float()"
+      - "44:            if r.merchant_id.is_fund_pool_store:"
+      - "45:                r.fund_contribution_amount = r.amount_total"
+      - "46:            elif r.order_type == 'delivery':"
+      - "47:                r.fund_contribution_amount = r.amount_total * 0.2"
+      - "49:                r.fund_contribution_amount = 0"
+      - "53:        self.env['wuchang.community.coin'].create({"
+      - "54:            'partner_id': self.partner_id.id, 'type': 'wish_credit', 'amount': 1.5, 'state': 'active'"
+      - "59:    _name = 'wuchang.voucher.product'"
+      - "60:    name = fields.Char()"
+      - "61:    voucher_type = fields.Selection([('discount_70', '7折'), ('discount_60', '6折'), ('free', '免費')])"
+      - "62:    merchant_id = fields.Many2one('res.partner')"
+      - "63:    stock_qty = fields.Integer()"
+      - "66:    _name = 'wuchang.community.coin'"
+      - "67:    partner_id = fields.Many2one('res.partner')"
+      - "68:    type = fields.Selection([('coin', '幣'), ('voucher', '券'), ('wish_credit', '許願')])"
+      - "69:    amount = fields.Float()"
+      - "70:    state = fields.Selection([('deferred', '遞延'), ('active', '有效')])"
+      - "73:    _name = 'wuchang.pos.expense'"
+      - "74:    amount = fields.Float()"
+      - "75:    vendor_name = fields.Char()"
+      - "76:    reason = fields.Char()"
+      - "77:    pos_config_id = fields.Many2one('pos.config')"
+      - "80:    _name = 'wuchang.social.config'"
+      - "81:    pos_config_id = fields.Many2one('pos.config')"
+      - "82:    platform = fields.Selection([('facebook', 'FB'), ('line', 'LINE'), ('google', 'Google')])"
+  - path: "/mnt/extra-addons/wuchang_core/models/delivery_team.py"
+    exists: true
+    extracted_lines:
+      - "4:    _name = 'wuchang.delivery.team'"
+      - "5:    _description = 'Wuchang Delivery Team'"
+      - "7:    name = fields.Char(required=True)"
+      - "8:    active = fields.Boolean(default=True)"
+      - "9:    note = fields.Text()"
+  - path: "/mnt/extra-addons/wuchang_core/models/volunteer.py"
+    exists: true
+    extracted_lines:
+      - "8:    _name = 'wuchang.volunteer.task'"
+      - "9:    _description = '五常社區志工任務'"
+      - "11:    name = fields.Char('任務名稱', required=True)"
+      - "12:    description = fields.Text('任務描述')"
+      - "13:    coins_reward = fields.Integer('獎勵幸福幣', default=0)"
+      - "14:    is_special_squad = fields.Boolean('專勤隊任務', default=False)"
+      - "15:    is_voice_collection = fields.Boolean('語音採集任務', default=False)"
+      - "17:    language = fields.Selection(["
+      - "24:    state = fields.Selection([('open', '招募中'), ('done', '已結束')], string='狀態', default='open')"
+      - "25:    volunteer_ids = fields.One2many('wuchang.volunteer.signup', 'task_id', string='報名志工')"
+      - "26:    voice_sample_ids = fields.One2many('wuchang.voice.sample', 'task_id', string='採集樣本')"
+      - "29:        self.write({'state': 'done'})"
+      - "30:        for signup in self.volunteer_ids:"
+      - "33:                signup.partner_id.sudo().write({'whc_wallet_balance': current + self.coins_reward})"
+      - "36:    _name = 'wuchang.volunteer.signup'"
+      - "37:    _description = '志工報名紀錄'"
+      - "38:    task_id = fields.Many2one('wuchang.volunteer.task', required=True, ondelete='cascade')"
+      - "39:    partner_id = fields.Many2one('res.partner', required=True)"
+      - "40:    state = fields.Selection([('confirmed', '已確認'), ('attended', '已出席')], default='confirmed')"
+      - "43:    _name = 'wuchang.voice.sample'"
+      - "44:    _description = '語音採集樣本'"
+      - "45:    task_id = fields.Many2one('wuchang.volunteer.task', required=True)"
+      - "46:    partner_id = fields.Many2one('res.partner', required=True)"
+      - "47:    audio_file = fields.Binary('錄音檔', required=True, attachment=True)"
+      - "48:    state = fields.Selection([('pending', '待審核'), ('approved', '已通過')], default='pending')"
+      - "51:        self.write({'state': 'approved'})"
+      - "52:        if self.task_id.coins_reward > 0:"
+      - "53:            self.partner_id.sudo().write({'whc_wallet_balance': self.partner_id.whc_wallet_balance + self.task_id.coins_reward})"
+      - "56:    _name = 'wuchang.volunteer.meeting'"
+      - "57:    _description = '專勤隊會議'"
+      - "58:    name = fields.Char('會議主題', required=True)"
+      - "59:    date = fields.Datetime('會議時間', default=fields.Datetime.now)"
+      - "60:    team_id = fields.Many2one('wuchang.delivery.team', required=True)"
+      - "61:    attendee_ids = fields.Many2many('res.partner')"
+      - "62:    content = fields.Html('會議內容')"
+      - "63:    ai_summary = fields.Text('小J 摘要')"
+      - "66:    _name = 'wuchang.volunteer.announcement'"
+      - "67:    _description = '專勤隊公告'"
+      - "68:    name = fields.Char('標題')"
+      - "69:    content = fields.Html('內容')"
+      - "70:    team_id = fields.Many2one('wuchang.delivery.team')"
+      - "73:    _name = 'wuchang.ai.supervisor.log'"
+      - "74:    name = fields.Char('督導事項')"
+      - "75:    target_volunteer_id = fields.Many2one('res.partner')"
+      - "76:    type = fields.Selection([('praise', '表揚'), ('reminder', '提醒'), ('warning', '警告')])"
+      - "77:    content = fields.Text()"
+  - path: "/mnt/extra-addons/wuchang_core/models/wuchang_task_force.py"
+    exists: true
+    extracted_lines:
+      - "4:    _name = 'wuchang.chronos.device'"
+      - "5:    _description = '時光系 AI 增幅裝置'"
+      - "7:    name = fields.Char(string='裝置序號', required=True, default=lambda self: 'CHRONOS-' + fields.Datetime.now().strftime('%Y%m%d%H%M%S'))"
+      - "8:    owner_name = fields.Char(string='領取人/單位')"
+      - "9:    status = fields.Selection(["
+      - "16:    activation_time = fields.Datetime(string='啟用時間')"
+      - "17:    is_helmet_included = fields.Boolean(string='含專利頭盔', default=True)"
+      - "18:    note = fields.Text(string='備註', default='主人喝咖啡，AI帶你飛。')"
+      - "21:    _name = 'wuchang.life.covenant'"
+      - "22:    _description = '五常生活公約'"
+      - "24:    name = fields.Char(string='條款名稱', required=True)"
+      - "25:    content = fields.Text(string='條款內容', required=True)"
+      - "26:    is_active = fields.Boolean(string='生效中', default=True)"
+      - "27:    penalty = fields.Char(string='違反罰則', default='敲頭')"
+  - path: "/mnt/extra-addons/wuchang_core/models/coin_ledger.py"
+    exists: true
+    extracted_lines:
+      - "6:    _name = 'wuchang.coin.ledger'"
+      - "7:    _description = 'WHC Ledger'"
+      - "9:    name = fields.Char(string='摘要')"
+      - "10:    partner_id = fields.Many2one('res.partner', string='夥伴')"
+      - "11:    amount = fields.Float(string='金額 (WHC)', default=0.0)"
+      - "12:    ledger_type = fields.Selection(["
+      - "19:    timestamp = fields.Datetime(string='時間', default=fields.Datetime.now)"
+      - "20:    note = fields.Char(string='備註')"
+  - path: "/mnt/extra-addons/wuchang_fund_allocation/models/wuchang_fund_allocation.py"
+    exists: true
+    extracted_lines:
+      - "6:    _inherit = 'wuchang.fund.revenue.rule'"
+      - "8:    volunteer_team_rate = fields.Float('志工隊統籌財源比例', default=20.0)"
+      - "9:    system_cost_rate = fields.Float('系統成本比例', default=20.0)"
+      - "10:    wish_tree_rate = fields.Float('社區許願樹公益比例', default=10.0)"
+      - "12:    allocation_total_rate = fields.Float("
+      - "18:    allocation_note = fields.Text("
+      - "23:    @api.depends('reserve_rate', 'volunteer_team_rate', 'system_cost_rate', 'wish_tree_rate')"
+      - "28:                + (rec.volunteer_team_rate or 0.0)"
+      - "33:    @api.constrains('reserve_rate', 'volunteer_team_rate', 'system_cost_rate', 'wish_tree_rate')"
+      - "38:                + (rec.volunteer_team_rate or 0.0)"
+      - "47:    _inherit = 'wuchang.delivery.order.fund.ledger'"
+      - "49:    volunteer_team_rate = fields.Float('志工隊統籌財源比例', related='rule_id.volunteer_team_rate', store=True)"
+      - "50:    system_cost_rate = fields.Float('系統成本比例', related='rule_id.system_cost_rate', store=True)"
+      - "51:    wish_tree_rate = fields.Float('社區許願樹公益比例', related='rule_id.wish_tree_rate', store=True)"
+      - "53:    volunteer_team_amount = fields.Float('志工隊統籌財源', compute='_compute_allocation_amounts', store=True)"
+      - "54:    system_cost_amount = fields.Float('系統成本', compute='_compute_allocation_amounts', store=True)"
+      - "55:    wish_tree_amount = fields.Float('社區許願樹公益', compute='_compute_allocation_amounts', store=True)"
+      - "57:    allocation_total_amount = fields.Float('基金分配合計', compute='_compute_allocation_amounts', store=True)"
+      - "58:    allocation_state = fields.Selection(["
+      - "67:        'total_fund_amount',"
+      - "69:        'rule_id.volunteer_team_rate',"
+      - "75:            total = rec.total_fund_amount or 0.0"
+      - "76:            rec.volunteer_team_amount = total * (rec.rule_id.volunteer_team_rate or 0.0) / 100.0"
+      - "81:                + rec.volunteer_team_amount"
+      - "86:    def action_allocate_fund(self):"
+      - "88:            rec.allocation_state = 'allocated'"
+      - "92:            rec.allocation_state = 'posted'"
+      - "96:            rec.allocation_state = 'settled'"
+      - "100:            rec.allocation_state = 'cancelled'"
+      - "104:    _name = 'wuchang.fund.allocation.ledger'"
+      - "105:    _description = '五常基金分配台帳'"
+      - "106:    _rec_name = 'name'"
+      - "108:    name = fields.Char('分配台帳名稱', required=True)"
+      - "109:    source_ledger_id = fields.Many2one("
+      - "110:        'wuchang.delivery.order.fund.ledger',"
+      - "115:    order_ref = fields.Char(related='source_ledger_id.order_ref', store=True, readonly=True)"
+      - "116:    sales_amount = fields.Float(related='source_ledger_id.sales_amount', store=True, readonly=True)"
+      - "117:    total_fund_amount = fields.Float(related='source_ledger_id.total_fund_amount', store=True, readonly=True)"
+      - "119:    reserved_guarantee_amount = fields.Float("
+      - "120:        related='source_ledger_id.reserved_guarantee_amount',"
+      - "124:    volunteer_team_amount = fields.Float("
+      - "125:        related='source_ledger_id.volunteer_team_amount',"
+      - "129:    system_cost_amount = fields.Float("
+      - "130:        related='source_ledger_id.system_cost_amount',"
+      - "134:    wish_tree_amount = fields.Float("
+      - "135:        related='source_ledger_id.wish_tree_amount',"
+      - "139:    allocation_total_amount = fields.Float("
+      - "140:        related='source_ledger_id.allocation_total_amount',"
+      - "145:    state = fields.Selection(["
+      - "153:    note = fields.Text('備註')"
+
+mapping:
+  U13_fund_pool:
+    source_files:
+      - wuchang_fund_allocation.py
+      - coin_ledger.py
+  U14_dedicated_delivery:
+    source_files:
+      - delivery.py
+      - delivery_team.py
+      - volunteer.py
+      - wuchang_task_force.py
+
+governance:
+  no_secret_read: true
+  no_db_write: true
+  no_container_write: true
+  no_restart: true
+  no_commit: true

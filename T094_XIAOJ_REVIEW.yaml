@@ -1,0 +1,18 @@
+id: T094_XIAOJ_REVIEW
+task_id: T094
+
+xiaoj_review_opinion:
+  recommendation: AUTHORIZE_T095_ONLY
+  reason: All preconditions for T095 are present.
+  safe_option: Generate separated T095 landing script; preserve blocker as audit evidence.
+  risk_if_approved: low if blocker is archived with hash and report.
+  risk_if_rejected: V2 landing remains delayed.
+  required_human_action: approve separated T095 script generation
+
+redteam:
+  corrected_issue:
+    - previous combined T094/T095 was too aggressive
+  required_boundary:
+    - no blocker clear in T094
+    - no V2 landing in T094
+    - T095 must create backup/hash/report first

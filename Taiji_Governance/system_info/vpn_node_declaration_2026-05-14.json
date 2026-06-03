@@ -1,0 +1,249 @@
+{
+  "schema": "taiji.vpn_node_declaration.v1",
+  "generated_at": "2026-05-14T03:26:28+08:00",
+  "source": "tailscale_status_json_sanitized_local_readonly",
+  "canonical_workspace": {
+    "path": "/home/taiji_admin/Taiji_Hub",
+    "node": "VPN-MSI-WSL-DEVELOPMENT",
+    "rule": "single_source_of_truth",
+    "legacy_windows_workspace": "/mnt/c/Users/o0930/Taiji_Hub",
+    "legacy_windows_workspace_role": "source_archive_and_manual_review_only",
+    "reverse_sync_from_legacy_allowed": false,
+    "db_volume_sync_allowed": false
+  },
+  "vpn_control_plane_note": "current_tailnet_is_personal_tailscale_account; wuchang.life remains governance/domain boundary until organizational tailnet migration is approved",
+  "global_write_rule": "Only canonical WSL local writes, local SSH/local console writes on taiji01, or metric-governed writes with audit are allowed. All other VPN nodes are read/confirm/low-risk compute only.",
+  "forbidden": "No node may bypass Taiji Gateway, Five Metric Gate, audit, rollback, human decision, or secret boundary.",
+  "nodes": [
+    {
+      "node_id": "VPN-MSI-WSL-DEVELOPMENT",
+      "display_name": "MSI WSL / taiji_admin",
+      "hostname": "MSI",
+      "dns_name": "msi.tailea1eef.ts.net",
+      "os": "linux",
+      "tailscale_ipv4": "100.107.187.77",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": true,
+      "role": [
+        "development_node",
+        "orchestration_node",
+        "canonical_workspace_host",
+        "local_runtime_node"
+      ],
+      "trust_position": "trusted_local",
+      "write_boundary": "local_write_allowed_with_audit",
+      "canonical_workspace": "/home/taiji_admin/Taiji_Hub",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-TAIJI01-SERVER-01",
+      "display_name": "taiji01 / VPN 節點伺服器01",
+      "hostname": "taiji01",
+      "dns_name": "taiji01.tailea1eef.ts.net",
+      "os": "linux",
+      "tailscale_ipv4": "100.71.224.18",
+      "subnet_routes": [
+        "192.168.50.0/24"
+      ],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "governance_node",
+        "edge_runtime_node",
+        "memory_node",
+        "subnet_router",
+        "metric_governed_write_target"
+      ],
+      "trust_position": "trusted_vpn_after_preflight",
+      "write_boundary": "local_ssh_or_local_console_or_metric_governed_write_only",
+      "canonical_workspace": "remote_node_not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-MSI-WIN11-OPERATOR-CONSOLE",
+      "display_name": "MSI Windows 11 Pro",
+      "hostname": "MSI",
+      "dns_name": "msi-win11-in.tailea1eef.ts.net",
+      "os": "windows",
+      "tailscale_ipv4": "100.105.82.28",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "operator_console",
+        "browser_ui",
+        "ollama_ui_host",
+        "local_human_interface"
+      ],
+      "trust_position": "trusted_local_ui_gateway_controlled",
+      "write_boundary": "no_direct_system_write_without_gateway",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-DRALLION",
+      "display_name": "drallion",
+      "hostname": "drallion",
+      "dns_name": "drallion.tailea1eef.ts.net",
+      "os": "android",
+      "tailscale_ipv4": "100.84.254.20",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "mobile_operator_device",
+        "human_confirmation_interface"
+      ],
+      "trust_position": "trusted_user_device_limited",
+      "write_boundary": "confirmation_only_no_direct_runtime_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-IPHONE_11",
+      "display_name": "iphone-11",
+      "hostname": "localhost",
+      "dns_name": "iphone-11.tailea1eef.ts.net",
+      "os": "iOS",
+      "tailscale_ipv4": "100.94.212.10",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "mobile_operator_device",
+        "human_confirmation_interface"
+      ],
+      "trust_position": "trusted_user_device_limited",
+      "write_boundary": "confirmation_only_no_direct_runtime_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-PENGUIN-LINUX-AUX",
+      "display_name": "penguin Linux auxiliary node",
+      "hostname": "penguin",
+      "dns_name": "penguin.tailea1eef.ts.net",
+      "os": "linux",
+      "tailscale_ipv4": "100.111.139.7",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "auxiliary_linux_node",
+        "low_risk_compute_candidate"
+      ],
+      "trust_position": "trusted_vpn_low_risk_after_preflight",
+      "write_boundary": "no_production_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-V3_MIX_EDLA_GL",
+      "display_name": "v3-mix-edla-gl",
+      "hostname": "V3_MIX_EDLA_GL",
+      "dns_name": "v3-mix-edla-gl.tailea1eef.ts.net",
+      "os": "android",
+      "tailscale_ipv4": "100.98.69.115",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "mobile_operator_device",
+        "human_confirmation_interface"
+      ],
+      "trust_position": "trusted_user_device_limited",
+      "write_boundary": "confirmation_only_no_direct_runtime_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-WUCHANG_US_FREE_NODE",
+      "display_name": "wuchang-us-free-node",
+      "hostname": "wuchang-us-free-node",
+      "dns_name": "wuchang-us-free-node.tailea1eef.ts.net",
+      "os": "linux",
+      "tailscale_ipv4": "100.94.236.81",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "ephemeral_cloud_compute_node",
+        "low_sensitive_batch_candidate"
+      ],
+      "trust_position": "external_cloud_low_trust_even_if_vpn",
+      "write_boundary": "no_secrets_no_pii_no_production_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-WUCHANG_US_FREE_NODE_1",
+      "display_name": "wuchang-us-free-node-1",
+      "hostname": "wuchang-us-free-node",
+      "dns_name": "wuchang-us-free-node-1.tailea1eef.ts.net",
+      "os": "linux",
+      "tailscale_ipv4": "100.116.123.20",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "ephemeral_cloud_compute_node",
+        "low_sensitive_batch_candidate"
+      ],
+      "trust_position": "external_cloud_low_trust_even_if_vpn",
+      "write_boundary": "no_secrets_no_pii_no_production_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-WUCHANG_US_FREE_NODE_2",
+      "display_name": "wuchang-us-free-node-2",
+      "hostname": "wuchang-us-free-node",
+      "dns_name": "wuchang-us-free-node-2.tailea1eef.ts.net",
+      "os": "linux",
+      "tailscale_ipv4": "100.94.209.106",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "ephemeral_cloud_compute_node",
+        "low_sensitive_batch_candidate"
+      ],
+      "trust_position": "external_cloud_low_trust_even_if_vpn",
+      "write_boundary": "no_secrets_no_pii_no_production_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    },
+    {
+      "node_id": "VPN-WUCHANG_US_FREE_NODE_4",
+      "display_name": "wuchang-us-free-node-4",
+      "hostname": "wuchang-us-free-node",
+      "dns_name": "wuchang-us-free-node-4.tailea1eef.ts.net",
+      "os": "linux",
+      "tailscale_ipv4": "100.99.148.2",
+      "subnet_routes": [],
+      "online": true,
+      "is_self": false,
+      "role": [
+        "ephemeral_cloud_compute_node",
+        "low_sensitive_batch_candidate"
+      ],
+      "trust_position": "external_cloud_low_trust_even_if_vpn",
+      "write_boundary": "no_secrets_no_pii_no_production_write",
+      "canonical_workspace": "not_canonical",
+      "secret_material_included": false,
+      "node_public_key_included": false
+    }
+  ],
+  "risk": "L1_near_for_declaration; L2_drift_for_personal_tailnet_vs_wuchang_life_domain_boundary"
+}

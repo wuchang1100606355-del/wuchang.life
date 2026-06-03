@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="0">
+
+    <!-- 屬性定義：杯型、套餐飲品、套餐餐點 -->
+    <record id="attr_drink_size" model="wuchang.menu.attribute">
+      <field name="name">杯型</field>
+      <field name="technical_key">drink_size</field>
+    </record>
+
+    <record id="attr_drink_choice" model="wuchang.menu.attribute">
+      <field name="name">套餐飲品</field>
+      <field name="technical_key">set_drink</field>
+    </record>
+
+    <record id="attr_meal_choice" model="wuchang.menu.attribute">
+      <field name="name">套餐餐點</field>
+      <field name="technical_key">set_meal</field>
+    </record>
+
+    <!-- 杯型屬性值：小杯 / 大杯 （以紅茶小杯30為基準，大杯多10元） -->
+    <record id="attr_val_size_small" model="wuchang.menu.attribute.value">
+      <field name="name">小杯</field>
+      <field name="delta_price">0</field>
+      <field name="attribute_id" ref="attr_drink_size"/>
+    </record>
+
+    <record id="attr_val_size_large" model="wuchang.menu.attribute.value">
+      <field name="name">大杯</field>
+      <field name="delta_price">10</field>
+      <field name="attribute_id" ref="attr_drink_size"/>
+    </record>
+
+    <!-- 套餐飲品屬性值：紅茶 / 綠茶（不加價） -->
+    <record id="attr_val_set_drink_red" model="wuchang.menu.attribute.value">
+      <field name="name">紅茶</field>
+      <field name="delta_price">0</field>
+      <field name="attribute_id" ref="attr_drink_choice"/>
+    </record>
+
+    <record id="attr_val_set_drink_green" model="wuchang.menu.attribute.value">
+      <field name="name">綠茶</field>
+      <field name="delta_price">0</field>
+      <field name="attribute_id" ref="attr_drink_choice"/>
+    </record>
+
+    <!-- 套餐餐點屬性值：中式 / 西式選項（不加價，由套餐價60包含） -->
+    <record id="attr_val_set_meal_dumpling" model="wuchang.menu.attribute.value">
+      <field name="name">煎餃</field>
+      <field name="delta_price">0</field>
+      <field name="attribute_id" ref="attr_meal_choice"/>
+    </record>
+
+    <record id="attr_val_set_meal_radish" model="wuchang.menu.attribute.value">
+      <field name="name">蘿蔔糕</field>
+      <field name="delta_price">0</field>
+      <field name="attribute_id" ref="attr_meal_choice"/>
+    </record>
+
+    <record id="attr_val_set_meal_burger_egg" model="wuchang.menu.attribute.value">
+      <field name="name">漢堡加蛋</field>
+      <field name="delta_price">0</field>
+      <field name="attribute_id" ref="attr_meal_choice"/>
+    </record>
+
+    <record id="attr_val_set_meal_club" model="wuchang.menu.attribute.value">
+      <field name="name">總匯三明治</field>
+      <field name="delta_price">0</field>
+      <field name="attribute_id" ref="attr_meal_choice"/>
+    </record>
+
+    <!-- 單點商品：飲料類 -->
+    <record id="item_red_tea" model="wuchang.menu.item">
+      <field name="code">DR_RED_TEA</field>
+      <field name="name">紅茶</field>
+      <field name="base_price">30</field>
+      <field name="category">飲料類</field>
+    </record>
+
+    <record id="item_green_tea" model="wuchang.menu.item">
+      <field name="code">DR_GREEN_TEA</field>
+      <field name="name">綠茶</field>
+      <field name="base_price">30</field>
+      <field name="category">飲料類</field>
+    </record>
+
+    <!-- 單點飲料綁定「杯型」屬性（小杯 / 大杯） -->
+    <record id="item_attr_red_tea_size" model="wuchang.menu.item.attribute">
+      <field name="item_id" ref="item_red_tea"/>
+      <field name="attribute_id" ref="attr_drink_size"/>
+      <field name="allow_value_ids" eval="[(6, 0, [ref('attr_val_size_small'), ref('attr_val_size_large')])]"/>
+    </record>
+
+    <record id="item_attr_green_tea_size" model="wuchang.menu.item.attribute">
+      <field name="item_id" ref="item_green_tea"/>
+      <field name="attribute_id" ref="attr_drink_size"/>
+      <field name="allow_value_ids" eval="[(6, 0, [ref('attr_val_size_small'), ref('attr_val_size_large')])]"/>
+    </record>
+
+    <!-- 單點商品：中式餐點類 -->
+    <record id="item_dumpling" model="wuchang.menu.item">
+      <field name="code">FO_C_DUMPLING</field>
+      <field name="name">煎餃</field>
+      <field name="base_price">30</field>
+      <field name="category">中式餐點類</field>
+    </record>
+
+    <record id="item_radish_cake" model="wuchang.menu.item">
+      <field name="code">FO_C_RADISH</field>
+      <field name="name">蘿蔔糕</field>
+      <field name="base_price">30</field>
+      <field name="category">中式餐點類</field>
+    </record>
+
+    <!-- 單點商品：西式餐點類 -->
+    <record id="item_burger" model="wuchang.menu.item">
+      <field name="code">FO_W_BURGER</field>
+      <field name="name">漢堡</field>
+      <field name="base_price">30</field>
+      <field name="category">西式餐點類</field>
+    </record>
+
+    <record id="item_burger_egg" model="wuchang.menu.item">
+      <field name="code">FO_W_BURGER_EGG</field>
+      <field name="name">漢堡加蛋</field>
+      <field name="base_price">40</field>
+      <field name="category">西式餐點類</field>
+    </record>
+
+    <record id="item_club_sandwich" model="wuchang.menu.item">
+      <field name="code">FO_W_CLUB</field>
+      <field name="name">總匯三明治</field>
+      <field name="base_price">45</field>
+      <field name="category">西式餐點類</field>
+    </record>
+
+    <!-- 套餐品項：中式套餐 60 元 -->
+    <record id="item_set_chinese" model="wuchang.menu.item">
+      <field name="code">SET_CHI_60</field>
+      <field name="name">中式套餐</field>
+      <field name="base_price">60</field>
+      <field name="category">套餐類</field>
+    </record>
+
+    <!-- 中式套餐：飲品可選 紅茶 / 綠茶 -->
+    <record id="item_attr_set_chinese_drink" model="wuchang.menu.item.attribute">
+      <field name="item_id" ref="item_set_chinese"/>
+      <field name="attribute_id" ref="attr_drink_choice"/>
+      <field name="allow_value_ids" eval="[(6, 0, [ref('attr_val_set_drink_red'), ref('attr_val_set_drink_green')])]"/>
+    </record>
+
+    <!-- 中式套餐：餐點可選 煎餃 / 蘿蔔糕 -->
+    <record id="item_attr_set_chinese_meal" model="wuchang.menu.item.attribute">
+      <field name="item_id" ref="item_set_chinese"/>
+      <field name="attribute_id" ref="attr_meal_choice"/>
+      <field name="allow_value_ids" eval="[(6, 0, [ref('attr_val_set_meal_dumpling'), ref('attr_val_set_meal_radish')])]"/>
+    </record>
+
+    <!-- 套餐品項：西式套餐 60 元 -->
+    <record id="item_set_western" model="wuchang.menu.item">
+      <field name="code">SET_WES_60</field>
+      <field name="name">西式套餐</field>
+      <field name="base_price">60</field>
+      <field name="category">套餐類</field>
+    </record>
+
+    <!-- 西式套餐：飲品可選 紅茶 / 綠茶 -->
+    <record id="item_attr_set_western_drink" model="wuchang.menu.item.attribute">
+      <field name="item_id" ref="item_set_western"/>
+      <field name="attribute_id" ref="attr_drink_choice"/>
+      <field name="allow_value_ids" eval="[(6, 0, [ref('attr_val_set_drink_red'), ref('attr_val_set_drink_green')])]"/>
+    </record>
+
+    <!-- 西式套餐：餐點可選 漢堡加蛋 / 總匯三明治 -->
+    <record id="item_attr_set_western_meal" model="wuchang.menu.item.attribute">
+      <field name="item_id" ref="item_set_western"/>
+      <field name="attribute_id" ref="attr_meal_choice"/>
+      <field name="allow_value_ids" eval="[(6, 0, [ref('attr_val_set_meal_burger_egg'), ref('attr_val_set_meal_club')])]"/>
+    </record>
+
+  </data>
+</odoo>
+

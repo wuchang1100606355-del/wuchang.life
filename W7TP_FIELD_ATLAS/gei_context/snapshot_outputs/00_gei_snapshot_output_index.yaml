@@ -1,0 +1,28 @@
+index_id: W7TP_GEI_SNAPSHOT_OUTPUT_INDEX
+status: ACTIVE_PLAN_ONLY
+
+purpose:
+  - index_generated_gei_snapshots
+  - preserve_context_handoff_history
+  - avoid_context_loss_between_chats_and_machines
+
+snapshot_directory: W7TP_FIELD_ATLAS/gei_context/snapshot_outputs
+
+index_rules:
+  - every_snapshot_must_include_timestamp
+  - every_snapshot_must_include_host
+  - every_snapshot_must_include_git_head
+  - every_snapshot_must_mark_context_only
+  - snapshots_do_not_authorize_runtime_actions
+
+retention_policy_ref:
+  file: W7TP_FIELD_ATLAS/gei_context/snapshot_plans/W7TP_GEI_CONTEXT_RETENTION_POLICY_V1.yaml
+
+red_team_reflection:
+  negative_effects:
+    - too_many_snapshots_can_create_noise
+    - old_snapshots_can_mislead_decisions
+  mitigation:
+    - use_latest_snapshot_only_for_context
+    - use_evidence_refs_for_decision
+    - never_use_snapshot_as_approval

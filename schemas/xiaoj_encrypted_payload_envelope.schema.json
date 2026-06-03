@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJEncryptedPayloadEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "payload_id": {"type": "string"},
+    "subject_hash": {"type": "string"},
+    "case_ref": {"type": "string"},
+    "data_class": {"type": "string", "enum": ["resident_profile", "contact", "precise_location", "service_case", "api_key_reference", "other"]},
+    "encrypted_payload_ref": {"type": "string"},
+    "plaintext_payload_present": {"const": false},
+    "key_policy_id": {"type": "string"},
+    "threshold_mode": {"type": "string", "enum": ["2_of_3", "3_of_3"]},
+    "single_admin_decrypt_allowed": {"const": false},
+    "cloud_lane_decrypt_allowed": {"const": false},
+    "raw_pii_to_cloud": {"const": false},
+    "audit_required": {"const": true},
+    "break_glass_required": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["payload_id", "subject_hash", "case_ref", "data_class", "encrypted_payload_ref", "plaintext_payload_present", "key_policy_id", "threshold_mode", "single_admin_decrypt_allowed", "cloud_lane_decrypt_allowed", "raw_pii_to_cloud", "audit_required", "break_glass_required", "created_at"]
+}

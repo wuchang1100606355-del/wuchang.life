@@ -1,0 +1,58 @@
+diff_packet_id: FINAL_SYNC_DIFF_PACKET_PM3_TO_TAIJI01_V1
+status: PLAN_ONLY
+
+source:
+  machine: MSI
+  role: active_development_twin
+  addon_path: /home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  db: postgres
+  state: installed
+
+target:
+  machine: taiji01
+  role: stable_runtime_carrier
+  addon_path: /home/taiji_01/Taiji_Hub/Taiji_Odoo/addons/pm3_runtime_sync
+  state: missing
+  db: unknown_on_taiji01
+
+diff_summary:
+  action_needed: add_missing_pm3_runtime_sync_to_taiji01
+  runtime_copy_allowed_now: false
+  module_update_allowed_now: false
+  restart_allowed_now: false
+
+candidate_scope:
+  include:
+    - __manifest__.py
+    - __init__.py
+    - controllers/
+    - models/
+    - views/
+    - security/
+  exclude:
+    - .env
+    - secrets
+    - private_keys
+    - raw_db_dump
+    - oauth_client_secret_values
+
+blocking_items:
+  - taiji01_actual_db_identification_required
+  - no_secret_linter_execution_required
+  - rollback_snapshot_required
+  - human_approval_required
+  - restart_separate_approval_required
+
+decision:
+  status: DO_NOT_SYNC_YET
+  reason: server_acceptance_report_rejects_runtime_change_for_now
+
+red_team_reflection:
+  negative_effects:
+    - final_diff_packet_may_be_mistaken_for_approval
+    - target_db_unknown_can_break_module_install
+    - copying_oauth_routes_too_early_can_expose_incomplete_login_flow
+  mitigation:
+    - keep_status_PLAN_ONLY
+    - runtime_copy_allowed_now_false
+    - require_taiji01_db_identification_before_any_landing

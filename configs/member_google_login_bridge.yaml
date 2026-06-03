@@ -1,0 +1,16 @@
+member_google_login_bridge:
+  service: taiji-google-login.service
+  port: 8104
+  routes:
+    health: http://127.0.0.1:8104/health
+    status: http://127.0.0.1:8104/google/status
+    start: http://127.0.0.1:8104/google/login/start
+    callback: http://127.0.0.1:8104/google/callback
+  secrets:
+    env_file: ~/.secrets/taiji_google_login.env
+  rules:
+    no_token_storage: true
+    no_password_storage: true
+    no_private_key_storage: true
+    odoo_password_still_required: true
+    google_login_is_identity_binding_not_password_bypass: true

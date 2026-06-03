@@ -1,0 +1,17 @@
+{
+  "event": "taiji01_permission_hardening_complete",
+  "version": "2026-05-12",
+  "status": "COMPLETE",
+  "full_admin_user": "taiji_admin",
+  "community_operator_user": "taiji_01",
+  "taiji_admin_ssh": "ok",
+  "taiji_admin_sudo": "ok",
+  "taiji_admin_docker": "ok",
+  "taiji_01_removed_from_sudo": true,
+  "taiji_01_removed_from_docker": true,
+  "taiji_01_removed_from_lxd": true,
+  "taiji_01_role": "noncontainer_community_workspace_operator",
+  "production_change_executor": "taiji_admin",
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

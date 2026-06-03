@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_pm3_root" name="PM3 Runtime" sequence="80"/>
+
+    <record id="view_pm3_behavior_vector_database_list" model="ir.ui.view">
+        <field name="name">pm3.behavior.vector.database.list</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <list string="Behavior Vector Database" create="0" delete="0"
+                  decoration-success="sensitive_scan_status in ('clear','redacted')"
+                  decoration-warning="dashboard_status == 'watch'"
+                  decoration-danger="dashboard_status == 'blocked'">
+                <field name="behavior_recorded_at"/>
+                <field name="node_code"/>
+                <field name="behavior_event_type"/>
+                <field name="behavior_subject_code"/>
+                <field name="behavior_action_code"/>
+                <field name="five_d_code"/>
+                <field name="behavior_metric_key"/>
+                <field name="vector_algorithm"/>
+                <field name="vector_dim"/>
+                <field name="vector_hash"/>
+                <field name="behavior_vector_score"/>
+                <field name="sensitive_scan_status"/>
+                <field name="change_state"/>
+                <field name="dashboard_status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pm3_behavior_vector_database_form" model="ir.ui.view">
+        <field name="name">pm3.behavior.vector.database.form</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <form string="Behavior Vector Record">
+                <sheet>
+                    <group string="Behavior Vector Identity">
+                        <field name="behavior_vector_db"/>
+                        <field name="behavior_recorded_at"/>
+                        <field name="node_code"/>
+                        <field name="behavior_event_type"/>
+                        <field name="behavior_subject_code"/>
+                        <field name="behavior_action_code"/>
+                        <field name="behavior_metric_key"/>
+                        <field name="five_d_code"/>
+                    </group>
+
+                    <group string="Vector">
+                        <field name="vector_algorithm"/>
+                        <field name="vector_dim"/>
+                        <field name="vector_hash"/>
+                        <field name="behavior_vector_score"/>
+                        <field name="vector_state_json"/>
+                    </group>
+
+                    <group string="Behavior State">
+                        <field name="behavior_state_json"/>
+                    </group>
+
+                    <group string="Source">
+                        <field name="name"/>
+                        <field name="vault_rel_path"/>
+                        <field name="vault_section"/>
+                        <field name="content_sha256"/>
+                        <field name="last_seen_at"/>
+                        <field name="change_state"/>
+                        <field name="sensitive_scan_status"/>
+                        <field name="sensitive_flags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pm3_behavior_vector_database_search" model="ir.ui.view">
+        <field name="name">pm3.behavior.vector.database.search</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <search string="Search Behavior Vector Database">
+                <field name="name"/>
+                <field name="vault_rel_path"/>
+                <field name="five_d_code"/>
+                <field name="behavior_event_type"/>
+                <field name="behavior_subject_code"/>
+                <field name="behavior_action_code"/>
+                <field name="behavior_metric_key"/>
+                <field name="vector_hash"/>
+                <field name="dashboard_safe_text"/>
+
+                <filter string="Behavior Vector DB" name="behavior_vector_db_filter" domain="[('behavior_vector_db','=',True)]"/>
+                <filter string="Clear / Redacted" name="safe_filter" domain="[('sensitive_scan_status', 'in', ('clear', 'redacted'))]"/>
+                <filter string="Changed" name="changed_filter" domain="[('change_state', 'in', ('new', 'changed'))]"/>
+                <filter string="MSI Node" name="msi_filter" domain="[('node_code','=','MSI')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Node" name="group_node" context="{'group_by':'node_code'}"/>
+                    <filter string="Event Type" name="group_event_type" context="{'group_by':'behavior_event_type'}"/>
+                    <filter string="Subject" name="group_subject" context="{'group_by':'behavior_subject_code'}"/>
+                    <filter string="Action" name="group_action" context="{'group_by':'behavior_action_code'}"/>
+                    <filter string="Sensitive Status" name="group_sensitive" context="{'group_by':'sensitive_scan_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pm3_behavior_vector_database" model="ir.actions.act_window">
+        <field name="name">Behavior Vector Database</field>
+        <field name="res_model">pm3.memory.index</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('behavior_vector_db','=',True), ('sensitive_scan_status', 'in', ('clear', 'redacted'))]</field>
+        <field name="search_view_id" ref="view_pm3_behavior_vector_database_search"/>
+        <field name="context">{'search_default_behavior_vector_db_filter': 1, 'search_default_safe_filter': 1}</field>
+    </record>
+
+    <menuitem id="menu_pm3_behavior_vector_database"
+              name="Behavior Vector Database"
+              parent="menu_pm3_root"
+              action="action_pm3_behavior_vector_database"
+              sequence="40"/>
+
+</odoo>

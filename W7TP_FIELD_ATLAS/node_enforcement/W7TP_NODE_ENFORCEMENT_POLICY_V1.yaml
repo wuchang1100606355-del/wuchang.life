@@ -1,0 +1,55 @@
+policy_id: W7TP_NODE_ENFORCEMENT_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - define_response_to_node_abuse_or_privacy_violation
+  - protect_members_from_unapproved_contact_or_plaintext_misuse
+  - preserve_governed_hive_trust
+
+violation_types:
+  V01_CONTACT_ABUSE:
+    examples:
+      - marketing_without_opt_in
+      - excessive_contact_requests
+      - contact_reuse_for_other_purpose
+    default_action: warning_or_restriction
+
+  V02_PLAINTEXT_MISUSE:
+    examples:
+      - broad_plaintext_claim
+      - unapproved_plaintext_storage
+      - shadow_member_database
+    default_action: suspend_sensitive_services
+
+  V03_TECHNICAL_DRIFT:
+    examples:
+      - unregistered_runtime_change
+      - missing_audit_packet
+      - failed_landing_gate
+    default_action: quarantine_node
+
+  V04_SEVERE_TAMPER:
+    examples:
+      - secret_exfiltration
+      - audit_deletion
+      - bypass_xiaoj_review_opinion_plus_final_authorization
+    default_action: revoke_and_preserve_evidence
+
+enforcement_ladder:
+  - notice
+  - warning
+  - restriction
+  - suspension
+  - revocation
+  - legal_or_board_review
+
+red_team_reflection:
+  negative_effects:
+    - enforcement_can_create_conflict_with_group_members
+    - false_positive_may_harm_business_relationships
+    - over_enforcement_may_reduce_adoption
+  mitigation:
+    - evidence_packet_required
+    - appeal_channel_required
+    - proportional_response
+    - board_or_xiaoj_review_for_high_impact_actions

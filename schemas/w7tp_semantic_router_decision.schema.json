@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_semantic_router_decision.schema.json",
+  "title": "W7TP Semantic Router Decision Mock",
+  "description": "Deterministic, plan-only lane decision produced before any LLM or executor.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "decision_id",
+    "intent_id",
+    "intent_class",
+    "selected_lanes",
+    "risk_level",
+    "plan_only",
+    "interrupt_required",
+    "route_to_dlq",
+    "durable_state_hint",
+    "reason"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "w7tp.semantic_router_decision.v0.1"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^router_decision_[a-f0-9]{12}$"
+    },
+    "intent_id": {
+      "type": "string",
+      "pattern": "^w7ip_lite_[a-f0-9]{12}$"
+    },
+    "intent_class": {
+      "type": "string",
+      "enum": ["health_check", "document_spec_review", "blocked_write", "manual_review"]
+    },
+    "selected_lanes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["local_lane", "google_lane", "open_lane", "blocked"]
+      }
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["L0", "L1", "L2", "L3"]
+    },
+    "plan_only": {
+      "type": "boolean",
+      "const": true
+    },
+    "interrupt_required": {
+      "type": "boolean"
+    },
+    "route_to_dlq": {
+      "type": "boolean"
+    },
+    "durable_state_hint": {
+      "type": "string",
+      "const": "manifest_only_no_runtime_write"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+    }
+  }
+}

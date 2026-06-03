@@ -1,0 +1,48 @@
+plan_id: W7TP_GEI_SNAPSHOT_SCRIPT_PLAN_V1
+status: PLAN_ONLY
+
+purpose:
+  - define_future_script_to_generate_gei_snapshot
+  - collect_context_refs_without_secret_read
+  - produce_context_snapshot_for_chat_handoff_and_system_review
+
+script_target:
+  future_path: W7TP_FIELD_ATLAS/gei_context/scripts/generate_gei_snapshot.sh
+  current_action: plan_only_no_script_execution
+
+inputs:
+  - W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+  - W7TP_FIELD_ATLAS/01_universe_registry.yaml
+  - W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+  - W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+  - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+
+outputs:
+  - W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/gei_context_snapshot_*.yaml
+  - W7TP_FIELD_ATLAS/gei_context/snapshot_outputs/gei_context_snapshot_*.md
+
+capture:
+  - hostname
+  - git_branch
+  - git_head
+  - changed_files_summary
+  - latest_field_drift_event
+  - active_task_summary
+  - pending_runtime_gates
+  - red_team_risk_summary
+
+governance:
+  no_secret_read: true
+  no_db_write: true
+  no_runtime_write: true
+  no_service_restart: true
+  context_only: true
+
+red_team_reflection:
+  negative_effects:
+    - script_may_accidentally_capture_sensitive_paths_or_env_if_expanded
+    - snapshot_may_become_false_source_of_truth
+  mitigation:
+    - forbid_env_dump
+    - mask_sensitive_terms
+    - include_context_only_marker

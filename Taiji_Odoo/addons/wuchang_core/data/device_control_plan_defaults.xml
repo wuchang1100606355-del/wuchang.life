@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Chrome OS 設備長期控制方案 -->
+        <record id="device_control_plan_chrome_os_default" model="wuchang.device.control.plan">
+            <field name="name">Chrome OS 設備長期納管方案</field>
+            <field name="plan_type">enrollment</field>
+            <field name="device_type">chrome_os</field>
+            <field name="priority">high</field>
+            <field name="status">active</field>
+            <field name="description">Chrome OS 設備的長期納管和控制方案，支持通過端口 3477 進行設備連接和管理。包括自動納管、狀態監控、心跳機制等功能。</field>
+            <field name="control_strategy">monitoring_only</field>
+            <field name="enrollment_method">auto</field>
+            <field name="start_date" eval="datetime.datetime.now()"/>
+            <field name="duration_days">365</field>
+            <field name="monitor_enabled" eval="True"/>
+            <field name="monitor_interval">5</field>
+            <field name="heartbeat_timeout">15</field>
+            <field name="alert_on_offline" eval="True"/>
+            <field name="allowed_ports">3477
+8069
+80
+443</field>
+            <field name="access_hours">00:00-23:59</field>
+        </record>
+
+        <!-- 所有設備監控方案 -->
+        <record id="device_control_plan_all_monitoring" model="wuchang.device.control.plan">
+            <field name="name">全設備長期監控方案</field>
+            <field name="plan_type">monitoring</field>
+            <field name="device_type">all</field>
+            <field name="priority">medium</field>
+            <field name="status">active</field>
+            <field name="description">對所有網絡設備進行長期監控，包括狀態檢查、離線告警、連接時間追蹤等。</field>
+            <field name="control_strategy">monitoring_only</field>
+            <field name="start_date" eval="datetime.datetime.now()"/>
+            <field name="duration_days">365</field>
+            <field name="monitor_enabled" eval="True"/>
+            <field name="monitor_interval">10</field>
+            <field name="heartbeat_timeout">30</field>
+            <field name="alert_on_offline" eval="True"/>
+            <field name="access_hours">00:00-23:59</field>
+        </record>
+
+        <!-- 路由器中繼長期控制 -->
+        <record id="device_control_plan_router_relay" model="wuchang.device.control.plan">
+            <field name="name">路由器中繼長期控制方案</field>
+            <field name="plan_type">automation</field>
+            <field name="device_type">router</field>
+            <field name="priority">critical</field>
+            <field name="status">active</field>
+            <field name="description">通過路由器 (192.168.50.1) 作為中繼節點，實現外網握手和設備控制的長期方案。支持 Cloudflare 隧道和端口轉發兩種方式。</field>
+            <field name="control_strategy">conditional</field>
+            <field name="start_date" eval="datetime.datetime.now()"/>
+            <field name="duration_days">365</field>
+            <field name="monitor_enabled" eval="True"/>
+            <field name="monitor_interval">1</field>
+            <field name="heartbeat_timeout">5</field>
+            <field name="alert_on_offline" eval="True"/>
+            <field name="allowed_ips">192.168.50.0/24
+0.0.0.0/0</field>
+            <field name="access_hours">00:00-23:59</field>
+            <field name="automation_rules">{"handshake_check": true, "relay_enabled": true, "cloudflare_tunnel_priority": true}</field>
+        </record>
+    </data>
+</odoo>

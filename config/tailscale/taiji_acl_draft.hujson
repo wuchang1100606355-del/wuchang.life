@@ -1,0 +1,72 @@
+// Taiji Tailscale ACL Draft
+// Do not paste blindly. Review in Tailscale Admin Console first.
+// Goal: deny-by-default, role-tagged mesh for Taiji Cloud Pilot.
+
+{
+  "tagOwners": {
+    "tag:core": ["autogroup:admin"],
+    "tag:cockpit": ["autogroup:admin"],
+    "tag:mobile": ["autogroup:admin"],
+    "tag:cloud-worker": ["autogroup:admin"],
+    "tag:router": ["autogroup:admin"],
+    "tag:archive": ["autogroup:admin"],
+    "tag:claw-safe": ["autogroup:admin"],
+    "tag:quarantine": ["autogroup:admin"]
+  },
+
+  "acls": [
+    // Cockpit can reach Open WebUI / local UI services.
+    {
+      "action": "accept",
+      "src": ["tag:cockpit", "tag:mobile"],
+      "dst": ["tag:core:3000", "tag:core:8080"]
+    },
+
+    // Core can reach Ollama locally across tailnet if needed.
+    {
+      "action": "accept",
+      "src": ["tag:core"],
+      "dst": ["tag:core:11434", "tag:core:6379"]
+    },
+
+    // Open WebUI / core may call Claw Safe only.
+    {
+      "action": "accept",
+      "src": ["tag:core"],
+      "dst": ["tag:claw-safe:9004"]
+    },
+
+    // Claw Safe can call approved core service ports.
+    {
+      "action": "accept",
+      "src": ["tag:claw-safe"],
+      "dst": ["tag:core:8080", "tag:core:3000"]
+    },
+
+    // Archive role can read archive endpoints only.
+    {
+      "action": "accept",
+      "src": ["tag:archive"],
+      "dst": ["tag:core:8080"]
+    },
+
+    // Router can reach core management ports only.
+    {
+      "action": "accept",
+      "src": ["tag:router"],
+      "dst": ["tag:core:22", "tag:core:3000", "tag:core:8080"]
+    }
+
+    // No explicit rule for tag:cloud-worker to LAN.
+    // No explicit rule for tag:quarantine.
+  ],
+
+  "ssh": [
+    {
+      "action": "accept",
+      "src": ["tag:core"],
+      "dst": ["tag:core"],
+      "users": ["autogroup:nonroot"]
+    }
+  ]
+}

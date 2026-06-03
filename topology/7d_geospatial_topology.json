@@ -1,0 +1,263 @@
+{
+  "schema": "taiji.7d.geospatial_topology.v1",
+  "node": "MSI",
+  "host": "MSI",
+  "runtime": "7D",
+  "protocol": "TEFMP-0.1",
+  "canonical_root": "/home/taiji_admin/Taiji_Hub",
+  "scope": "新北市三重區五常里、五順里、仁忠里",
+  "status": "CONNECTED_TO_7D_TOPOLOGY",
+  "language": "BML-7D",
+  "metric_rule": "7D_CODE = [x, y, z, time, scale, heaven, earth] = five-metric prefix + Liangyi fields; Bagua formations route and audit the packet but are not an extra dimension.",
+  "coordinate_mapping": {
+    "x": "longitude_wgs84",
+    "y": "latitude_wgs84",
+    "z": "altitude_or_0_for_polygon_surface",
+    "time": "source_extraction_or_governance_version_time",
+    "scale": "village_boundary_polygon",
+    "heaven": "official_governance_policy_source_authority",
+    "earth": "MSI_local_geospatial_execution_store"
+  },
+  "source_artifacts": {
+    "official_geojson": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.geojson",
+    "official_kml": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.kml",
+    "official_manifest": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.manifest.json",
+    "geojson_sha256": "7a637993c95d254e00d0d09e4ac1c2d15ab9d8a365a1288adcab7723c3fdc1be",
+    "kml_sha256": "b8bd507a9cb82852095281f23f4ad9dbe520ab543433302845c960404dd95447",
+    "manifest_sha256": "0bf99270fe98313850fc397f1602c1e0bff4f52dda73b1aeef616bcf8e4ed068"
+  },
+  "association_information_responsibility": {
+    "status": "recognized_public_interest_governance_responsibility",
+    "subject": "新北市三重區五常社區發展協會",
+    "scope": [
+      "人文資訊",
+      "水文資訊",
+      "地理資訊",
+      "文化資訊",
+      "歷史資訊"
+    ],
+    "responsibilities": [
+      "收集",
+      "儲存",
+      "研究",
+      "保護",
+      "來源留痕",
+      "分級授權",
+      "audit"
+    ],
+    "privacy_boundary": "公益地理文化資料可治理保存；涉及個資、會員位置、精密住址或服務紀錄時必須最小必要、分級權限、遮罩與 audit。"
+  },
+  "privacy_and_hazard_controls": {
+    "allowed": [
+      "public_official_boundary",
+      "community_culture_history_geography_research",
+      "hydrology_and_local_environment_research",
+      "masked_service_area_analysis"
+    ],
+    "blocked": [
+      "raw_member_location_to_cloud",
+      "precise_home_inference",
+      "private_service_record_geocoding_without_gate",
+      "raw_identity_geospatial_join"
+    ],
+    "required_gates": [
+      "metric_gate",
+      "audit_gate",
+      "minimization_gate_for_private_or_member_data"
+    ]
+  },
+  "topology_nodes": [
+    {
+      "id": "WUCHANG_LI",
+      "name": "五常里",
+      "formation": "DI",
+      "formation_bits": "001",
+      "payload_class": "public",
+      "7D_CODE": [
+        121.498652334511,
+        25.079605858564,
+        0,
+        "2026-05-24T00:00:00+08:00",
+        "village_boundary_polygon",
+        "official_open_data_governance",
+        "MSI_local_geospatial_store"
+      ],
+      "5D_PREFIX": [
+        121.498652334511,
+        25.079605858564,
+        0,
+        "2026-05-24T00:00:00+08:00",
+        "village_boundary_polygon"
+      ],
+      "coordinate_system": "WGS84 EPSG:4326",
+      "geometry_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.geojson",
+      "kml_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.kml",
+      "bbox_wgs84": [
+        121.492743957635,
+        25.076497736671,
+        121.504762336087,
+        25.084542858429
+      ],
+      "source": {
+        "dataset": "新北市里界圖資",
+        "agency": "新北市政府民政局",
+        "source_url": "https://data.gov.tw/dataset/169927",
+        "download_url": "https://data.ntpc.gov.tw/api/datasets/8bbd1aca-752c-4df0-b515-1cfd88b36274/csv/zip",
+        "village_id": "095",
+        "admit_id": "02",
+        "license": "政府資料開放授權條款-第1版"
+      },
+      "route_policy": {
+        "route_type": "GEOSPATIAL_GOVERNANCE_ANCHOR",
+        "path": [
+          "FENG",
+          "TIAN",
+          "DI",
+          "NIAO"
+        ],
+        "gate": "metric_gate",
+        "audit_required": true,
+        "cloud_plaintext_member_location": "blocked"
+      },
+      "audit_metadata": {
+        "actor": "local_runtime",
+        "reason": "connect_official_three_li_boundary_to_7d_topology",
+        "checkpoint": "wuchang_three_li_official_boundary_2026-05-24",
+        "source_sha256": "7a637993c95d254e00d0d09e4ac1c2d15ab9d8a365a1288adcab7723c3fdc1be"
+      }
+    },
+    {
+      "id": "WUSHUN_LI",
+      "name": "五順里",
+      "formation": "DI",
+      "formation_bits": "001",
+      "payload_class": "public",
+      "7D_CODE": [
+        121.496852831857,
+        25.081818173621,
+        0,
+        "2026-05-24T00:00:00+08:00",
+        "village_boundary_polygon",
+        "official_open_data_governance",
+        "MSI_local_geospatial_store"
+      ],
+      "5D_PREFIX": [
+        121.496852831857,
+        25.081818173621,
+        0,
+        "2026-05-24T00:00:00+08:00",
+        "village_boundary_polygon"
+      ],
+      "coordinate_system": "WGS84 EPSG:4326",
+      "geometry_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.geojson",
+      "kml_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.kml",
+      "bbox_wgs84": [
+        121.492681487167,
+        25.078938451256,
+        121.501576341389,
+        25.085089025249
+      ],
+      "source": {
+        "dataset": "新北市里界圖資",
+        "agency": "新北市政府民政局",
+        "source_url": "https://data.gov.tw/dataset/169927",
+        "download_url": "https://data.ntpc.gov.tw/api/datasets/8bbd1aca-752c-4df0-b515-1cfd88b36274/csv/zip",
+        "village_id": "119",
+        "admit_id": "02",
+        "license": "政府資料開放授權條款-第1版"
+      },
+      "route_policy": {
+        "route_type": "GEOSPATIAL_GOVERNANCE_ANCHOR",
+        "path": [
+          "FENG",
+          "TIAN",
+          "DI",
+          "NIAO"
+        ],
+        "gate": "metric_gate",
+        "audit_required": true,
+        "cloud_plaintext_member_location": "blocked"
+      },
+      "audit_metadata": {
+        "actor": "local_runtime",
+        "reason": "connect_official_three_li_boundary_to_7d_topology",
+        "checkpoint": "wuchang_three_li_official_boundary_2026-05-24",
+        "source_sha256": "7a637993c95d254e00d0d09e4ac1c2d15ab9d8a365a1288adcab7723c3fdc1be"
+      }
+    },
+    {
+      "id": "RENZHONG_LI",
+      "name": "仁忠里",
+      "formation": "DI",
+      "formation_bits": "001",
+      "payload_class": "public",
+      "7D_CODE": [
+        121.49640578843,
+        25.082373840013,
+        0,
+        "2026-05-24T00:00:00+08:00",
+        "village_boundary_polygon",
+        "official_open_data_governance",
+        "MSI_local_geospatial_store"
+      ],
+      "5D_PREFIX": [
+        121.49640578843,
+        25.082373840013,
+        0,
+        "2026-05-24T00:00:00+08:00",
+        "village_boundary_polygon"
+      ],
+      "coordinate_system": "WGS84 EPSG:4326",
+      "geometry_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.geojson",
+      "kml_ref": "data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.kml",
+      "bbox_wgs84": [
+        121.492064853627,
+        25.07933649769,
+        121.501207276704,
+        25.085340787752
+      ],
+      "source": {
+        "dataset": "新北市里界圖資",
+        "agency": "新北市政府民政局",
+        "source_url": "https://data.gov.tw/dataset/169927",
+        "download_url": "https://data.ntpc.gov.tw/api/datasets/8bbd1aca-752c-4df0-b515-1cfd88b36274/csv/zip",
+        "village_id": "097",
+        "admit_id": "02",
+        "license": "政府資料開放授權條款-第1版"
+      },
+      "route_policy": {
+        "route_type": "GEOSPATIAL_GOVERNANCE_ANCHOR",
+        "path": [
+          "FENG",
+          "TIAN",
+          "DI",
+          "NIAO"
+        ],
+        "gate": "metric_gate",
+        "audit_required": true,
+        "cloud_plaintext_member_location": "blocked"
+      },
+      "audit_metadata": {
+        "actor": "local_runtime",
+        "reason": "connect_official_three_li_boundary_to_7d_topology",
+        "checkpoint": "wuchang_three_li_official_boundary_2026-05-24",
+        "source_sha256": "7a637993c95d254e00d0d09e4ac1c2d15ab9d8a365a1288adcab7723c3fdc1be"
+      }
+    }
+  ],
+  "dimension_model": {
+    "formula": "5D geospatial prefix + Liangyi governance/substrate fields = 7D geospatial topology",
+    "five_metric_prefix": [
+      "x=longitude_wgs84",
+      "y=latitude_wgs84",
+      "z=altitude_or_0",
+      "time=source_version_time",
+      "scale=village_boundary_polygon"
+    ],
+    "liangyi_fields": [
+      "heaven=official_governance_policy_source_authority",
+      "earth=MSI_local_geospatial_execution_store"
+    ],
+    "bagua_route_role": "FENG moves, TIAN governs, DI persists, NIAO observes. Bagua is route grammar, not a coordinate dimension."
+  }
+}

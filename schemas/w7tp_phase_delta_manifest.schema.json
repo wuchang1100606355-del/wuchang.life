@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_phase_delta_manifest.schema.json",
+  "title": "W7TP Phase Delta Manifest Mock",
+  "description": "Synthetic-only block-hash and allocation manifest. It performs no real synchronization or file reads.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "manifest_id",
+    "intent_id",
+    "decision_id",
+    "phase",
+    "delta_only",
+    "phase_hash",
+    "allocation_mode",
+    "load_policy",
+    "allocated_shards",
+    "skipped_unchanged_shards",
+    "blocked_shards",
+    "plan_only"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "w7tp.phase_delta_manifest.v0.1"
+    },
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^phase_manifest_[a-f0-9]{12}$"
+    },
+    "intent_id": {
+      "type": "string",
+      "pattern": "^w7ip_lite_[a-f0-9]{12}$"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^router_decision_[a-f0-9]{12}$"
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["semantic_route", "review_allocation", "blocked"]
+    },
+    "delta_only": {
+      "type": "boolean",
+      "const": true
+    },
+    "phase_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "allocation_mode": {
+      "type": "string",
+      "const": "mock_shards_only_no_sync"
+    },
+    "load_policy": {
+      "type": "string",
+      "const": "mock_no_live_load_observation"
+    },
+    "allocated_shards": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/shard"}
+    },
+    "skipped_unchanged_shards": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/shard"}
+    },
+    "blocked_shards": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/shard"}
+    },
+    "plan_only": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "$defs": {
+    "shard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shard_id",
+        "content_class",
+        "block_hash",
+        "delta_required",
+        "preferred_node_label",
+        "lane",
+        "execution_status"
+      ],
+      "properties": {
+        "shard_id": {"type": "string", "pattern": "^shard_[a-f0-9]{12}$"},
+        "content_class": {"type": "string", "enum": ["health_plan", "document_spec", "blocked_write"]},
+        "block_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "delta_required": {"type": "boolean"},
+        "preferred_node_label": {
+          "type": "string",
+          "enum": ["local_design_workspace", "cloud_review_advice_only", "router_dlq"]
+        },
+        "lane": {"type": "string", "enum": ["local_lane", "google_lane", "open_lane", "blocked"]},
+        "execution_status": {"type": "string", "const": "not_executed"}
+      }
+    }
+  }
+}

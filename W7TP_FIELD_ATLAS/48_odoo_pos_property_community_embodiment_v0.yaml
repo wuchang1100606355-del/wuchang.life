@@ -1,0 +1,31 @@
+embodiments:
+  ODOO:
+    role: existing implementation carrier
+    modules:
+      - POS
+      - ERP
+      - membership
+      - property_management
+      - community_service
+  POS:
+    relation: Odoo POS implementation
+    features:
+      - ordering
+      - payment
+      - member_service
+      - merchant_operation
+  PROPERTY:
+    relation: Odoo property/community module implementation
+    features:
+      - access_control
+      - maintenance
+      - emergency
+      - management_committee_service
+  COMMUNITY:
+    relation: Wuchang community service implementation
+    features:
+      - volunteer
+      - public_service
+      - donation
+      - food_support
+      - nonprofit_activity_support

@@ -1,0 +1,77 @@
+{
+  "schema": "taiji.tailnet.preflight_record.v1",
+  "generated_at": "2026-05-10T11:18:36.880544+00:00",
+  "mode": "preflight_local_only",
+  "allow": false,
+  "risk": "L3_metric_hazard",
+  "hazards": [
+    "tailscale_local_check_failed",
+    "five_metric_policy_not_locked_or_unreachable"
+  ],
+  "remote_execution": "not_performed",
+  "secret_material": "not_accessed",
+  "tailscale_status": {
+    "ok": false,
+    "returncode": 1,
+    "output_stored": false
+  },
+  "tailscale_ip": {
+    "ok": false,
+    "returncode": 1,
+    "output_stored": false
+  },
+  "target_hosts": [
+    {
+      "identity": "TDI-NODE-vpn-server-01",
+      "name": "taiji01",
+      "host": "100.71.224.18",
+      "in_allowlist": true,
+      "risk": "L0_exact_match"
+    },
+    {
+      "identity": "TDI-NODE-admin-msi",
+      "name": "msi",
+      "host": "100.107.187.77",
+      "in_allowlist": true,
+      "risk": "L0_exact_match"
+    },
+    {
+      "identity": "TDI-NODE-display-02",
+      "name": "customer-display-02",
+      "host": "pending",
+      "in_allowlist": false,
+      "risk": "L2_drift",
+      "reason": "target_identity_pending"
+    },
+    {
+      "identity": "TDI-NODE-sunmi-pos",
+      "name": "sunmi-pos",
+      "host": "pending",
+      "in_allowlist": false,
+      "risk": "L2_drift",
+      "reason": "target_identity_pending"
+    }
+  ],
+  "known_hosts": {
+    "exists": true,
+    "path_printed": false
+  },
+  "gcp_key_path": {
+    "configured": false,
+    "exists": false,
+    "content_read": false
+  },
+  "five_metric_health": {
+    "ok": false,
+    "error": "URLError"
+  },
+  "five_metric_policy": {
+    "ok": false,
+    "error": "URLError"
+  },
+  "policy_locked": false,
+  "taiji_metric_preflight": {
+    "exists": true
+  },
+  "audit_writable": true
+}

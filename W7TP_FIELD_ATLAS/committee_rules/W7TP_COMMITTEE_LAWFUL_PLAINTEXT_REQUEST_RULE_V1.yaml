@@ -1,0 +1,51 @@
+rule_id: W7TP_COMMITTEE_LAWFUL_PLAINTEXT_REQUEST_RULE_V1
+status: PLAN_ONLY
+
+principle:
+  committee_may_have_lawful_plaintext_need: true
+  plaintext_access_is_not_default: true
+  xiaoj_review_required: true
+
+allowed_committee_use_cases:
+  - legal_property_management_notice
+  - emergency_contact_support
+  - disaster_relief_coordination
+  - community_event_eligibility
+  - lawful_accountability_or_dispute_review
+
+required_claim_fields:
+  - requester_node_id
+  - legal_basis
+  - purpose
+  - requested_member_scope
+  - requested_fields
+  - minimum_necessary_reason
+  - expiry_time
+  - reseal_plan
+
+review_requirement:
+  low_risk:
+    - staff_review
+  medium_risk:
+    - supervisor_review
+  high_risk:
+    - threshold_key_review
+    - audit_hash
+    - post_review
+
+forbidden:
+  - broad_member_export
+  - indefinite_plaintext_access
+  - non-purpose-limited_contact_use
+  - committee_side_shadow_database_without_approval
+
+red_team_reflection:
+  negative_effects:
+    - lawful_need_may_be_interpreted_too_broadly
+    - committee_may_build_parallel_plaintext_database
+    - emergency_reason_may_be_overused
+  mitigation:
+    - minimum_necessary_review
+    - expiry_and_reseal
+    - audit_all_plaintext_claims
+    - post_incident_review_for_emergency_claims

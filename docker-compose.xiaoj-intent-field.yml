@@ -1,0 +1,13 @@
+services:
+  xiaoj-intent-field:
+    build:
+      context: .
+      dockerfile: docker/xiaoj_intent_field/Dockerfile
+    image: wuchang/xiaoj-intent-field:dev
+    container_name: xiaoj-intent-field
+    ports:
+      - "9107:9107"
+    volumes:
+      - ./runtime/reports:/app/runtime/reports
+      - ./runtime/dead_letter:/app/runtime/dead_letter
+    restart: unless-stopped

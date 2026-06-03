@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "W7TP Tri-party 7D Runtime Dry-run",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "domain",
+    "mode",
+    "authority",
+    "runtime_execution_allowed",
+    "cloud_call_allowed",
+    "code_agent_execution_allowed",
+    "formal_write_allowed",
+    "tri_party_roles",
+    "visibility_split",
+    "runtime_flow",
+    "route_decision",
+    "required_packet_fields",
+    "forbidden_payload",
+    "forbidden_actions"
+  ],
+  "properties": {
+    "mode": { "const": "dry_run_only" },
+    "authority": { "const": "local_xiaoj_router" },
+    "runtime_execution_allowed": { "const": false },
+    "cloud_call_allowed": { "const": false },
+    "code_agent_execution_allowed": { "const": false },
+    "formal_write_allowed": { "const": false }
+  }
+}

@@ -1,0 +1,466 @@
+=== ODOO / COMMUNITY MANAGEMENT CONTAINER PROBE ===
+2026-05-17T11:41:32+08:00
+
+=== HOST ===
+ Static hostname: MSI
+       Icon name: computer-container
+         Chassis: container ☐
+      Machine ID: 6d111a74776b4ef68bd78afe33668f4b
+         Boot ID: 935970a0f5ee4dacbbd247bbb0ab0f3e
+  Virtualization: wsl
+Operating System: Ubuntu 24.04.4 LTS
+          Kernel: Linux 6.6.87.2-microsoft-standard-WSL2
+    Architecture: x86-64
+Linux MSI 6.6.87.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+lo               UNKNOWN        127.0.0.1/8 10.255.255.254/32 ::1/128 
+eth0             UP             172.27.18.190/20 fe80::215:5dff:fe3c:b5a7/64 
+br-0ebee12cd758  DOWN           172.18.0.1/16 
+br-1b85ec8fe6be  DOWN           172.19.0.1/16 
+docker0          UP             172.17.0.1/16 fe80::3cb4:12ff:fe64:3675/64 
+br-d5aba270059f  DOWN           172.22.0.1/16 
+br-d70d06636eac  UP             172.20.0.1/16 fe80::84eb:49ff:fe50:533a/64 
+br-dde479e91097  DOWN           172.21.0.1/16 
+br-f20a36b03fd1  UP             172.23.0.1/16 fe80::8c98:94ff:fe74:ee6c/64 
+br-0ae003a347ee  UP             172.24.0.1/16 fe80::246f:46ff:fe12:987d/64 
+tailscale0       UNKNOWN        100.107.187.77/32 fd7a:115c:a1e0::173a:bb4e/128 fe80::ab5b:d790:8cb7:6d03/64 
+veth736ce63@if2  UP             fe80::4c76:1eff:fe33:8740/64 
+veth6c6de82@if2  UP             fe80::4489:6dff:feb1:d272/64 
+vethc600899@if2  UP             fe80::28bf:4bff:feaf:7a7b/64 
+veth8bb550d@if2  UP             fe80::9076:d2ff:feba:27ba/64 
+vethd5afa63@if2  UP             fe80::4893:72ff:fe57:e7f8/64 
+veth90b5085@if2  UP             fe80::3443:51ff:fe37:359e/64 
+vetha11c3b9@if2  UP             fe80::c844:95ff:fef9:4c77/64 
+veth37ee8c5@if2  UP             fe80::f410:a7ff:fe58:7f9e/64 
+veth249fd33@if2  UP             fe80::ecec:22ff:fe4e:99e2/64 
+
+=== DOCKER PS ===
+NAMES                             IMAGE                                                             STATUS       PORTS
+wuchang_os_odoo_18                odoo:18.0                                                         Up 2 hours   127.0.0.1:8069->8069/tcp, 8071-8072/tcp
+wuchang_os_pg                     postgres:15                                                       Up 2 hours   5432/tcp
+taiji_syslog                      alpine:latest                                                     Up 2 hours   
+taiji_worklist                    alpine:latest                                                     Up 2 hours   
+taiji_audit                       alpine:latest                                                     Up 2 hours   
+taiji_progress                    alpine:latest                                                     Up 2 hours   
+taiji_voice_gateway               taiji_voice_gateway:local                                         Up 2 hours   127.0.0.1:9201->9201/tcp
+taiji_device_resilience_adapter   taiji_device_resilience_adapter-taiji_device_resilience_adapter   Up 2 hours   
+taiji_pos_google_voice_tool       taiji_pos_google_voice_tool-taiji_pos_google_voice_tool           Up 2 hours   
+taiji_claw_safe                   taiji_claw_safe-taiji_claw_safe                                   Up 2 hours   127.0.0.1:9004->9004/tcp
+wuchang_gpu_brain                 ollama/ollama:latest                                              Up 2 hours   11434/tcp
+
+=== COMPOSE FILES ===
+/home/taiji_admin/littlej_vision/docker-compose.yml
+/home/taiji_admin/Taiji_Hub_Dependency_Local/Taiji_Governance/docker-compose.yml
+/home/taiji_admin/Taiji_Hub_Dependency_Local/deploy/formal_runtime_pkg_v0_1/docker-compose.yml
+/home/taiji_admin/Taiji_Hub_Dependency_Local/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/docker-compose.yml
+/home/taiji_admin/littlej_ui/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Taiji_Device_Resilience_Adapter/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Wuchang_Odoo_Core/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Taiji_Claw_Container/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Taiji_POS_Google_Voice_Tool/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Wuchang_Unified_Core/05_LLM_Engine/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/deploy/formal_runtime_pkg_v0_1/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/deploy/packages/taiji01_metric_identity_gateway_v0_1/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/deploy/packages/taiji_formal_tensor_runtime_v0_1_0/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Taiji_Claw_Safe/docker-compose.yml
+/home/taiji_admin/Taiji_Hub/Taiji_Odoo/docker-compose.yml
+/home/taiji_admin/home/docker-compose.yml
+/home/taiji_admin/wuchang_8_0_core/docker-compose.yml
+
+=== ODOO-LIKE CONTAINERS ===
+wuchang_os_odoo_18 odoo:18.0
+wuchang_os_pg postgres:15
+
+=== CONTAINER INSPECT SUMMARY ===
+--- wuchang_os_odoo_18 ---
+
+Name=/wuchang_os_odoo_18
+Image=odoo:18.0
+Status=running
+Restart=always
+Networks=taiji_odoo_wuchang_network IP=172.24.0.2 
+Mounts=/home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons -> /mnt/extra-addons ; /home/taiji_admin/Taiji_Hub/Taiji_Odoo/odoo_data -> /var/lib/odoo ; 
+Env=PASSWORD=taiji_secret
+HOST=wuchang_db
+USER=odoo
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+LANG=en_US.UTF-8
+ODOO_VERSION=18.0
+ODOO_RC=/etc/odoo/odoo.conf
+
+
+--- wuchang_os_pg ---
+
+Name=/wuchang_os_pg
+Image=postgres:15
+Status=running
+Restart=always
+Networks=taiji_odoo_wuchang_network IP=172.24.0.3 
+Mounts=/home/taiji_admin/Taiji_Hub/Taiji_Odoo/postgres_data -> /var/lib/postgresql/data ; 
+Env=POSTGRES_DB=postgres
+POSTGRES_PASSWORD=taiji_secret
+POSTGRES_USER=odoo
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/postgresql/15/bin
+GOSU_VERSION=1.19
+LANG=en_US.utf8
+PG_MAJOR=15
+PG_VERSION=15.17-1.pgdg13+1
+PGDATA=/var/lib/postgresql/data
+
+
+
+=== DOCKER NETWORKS ===
+NETWORK ID     NAME                         DRIVER    SCOPE
+1b85ec8fe6be   05_llm_engine_default        bridge    local
+dbbef2c3d73f   bridge                       bridge    local
+5907ee04996e   host                         host      local
+d5aba270059f   littlej_ui_default           bridge    local
+dde479e91097   littlej_vision_default       bridge    local
+c2f4a9a72878   none                         null      local
+d70d06636eac   taiji-ai                     bridge    local
+f20a36b03fd1   taiji_governance_default     bridge    local
+0ebee12cd758   taiji_odoo_default           bridge    local
+0ae003a347ee   taiji_odoo_wuchang_network   bridge    local
+
+--- NETWORK 05_llm_engine_default ---
+{}
+--- NETWORK bridge ---
+{"d51ed62716ecdd7611252d977d41f192d27ae92bdd57809f7b47c32756baaf43":{"Name":"taiji_voice_gateway","EndpointID":"abae5d3d6dc38a9a05362f147df958d815de6a08c2e5522df6a3542d9667c4a2","MacAddress":"b6:7e:75:0a:b0:48","IPv4Address":"172.17.0.2/16","IPv6Address":""}}
+--- NETWORK host ---
+{}
+--- NETWORK littlej_ui_default ---
+{}
+--- NETWORK littlej_vision_default ---
+{}
+--- NETWORK none ---
+{}
+--- NETWORK taiji-ai ---
+{"2c722067232ea26894456afb0cbb730e448893809a11df48f3e74abc378058ef":{"Name":"wuchang_gpu_brain","EndpointID":"2aee98fa34610ecb934a86b854b90533cc7f73a7cef8d926c29a0b406945be38","MacAddress":"c6:18:8e:c0:34:27","IPv4Address":"172.20.0.3/16","IPv6Address":""},"88d24d1cd1875cdbb260b8d2b62b64163fdc0b61bb4dabebbca7237d56f323d2":{"Name":"taiji_claw_safe","EndpointID":"ca8b4946352603f1c8a2101c743bb278b3aa9c5d1f2e181f4d09c8ce93982471","MacAddress":"c2:c2:df:ce:14:c4","IPv4Address":"172.20.0.2/16","IPv6Address":""}}
+--- NETWORK taiji_governance_default ---
+{"3f0448e405f85d26c173a112e9364644d60b69f9a5c4cb0464ea61dca9474d35":{"Name":"taiji_audit","EndpointID":"bfc0100b3d3bd533280130d333420d6ff6a34dcc29554cc7c5e637bc6ae10c7c","MacAddress":"ae:68:d3:f1:8f:d2","IPv4Address":"172.23.0.5/16","IPv6Address":""},"454ff191a9ae6331dc747abee4922b181cca5c229aab317d075c722462bf24fc":{"Name":"taiji_worklist","EndpointID":"ab9dd19be97622302541e2c89d91f31a79d79e0386b6bffc7ded2dad261d38f1","MacAddress":"2e:3d:5e:8c:e7:3b","IPv4Address":"172.23.0.2/16","IPv6Address":""},"93158b45e7a9d98c4c142bd2ba811e36939bb188a0d0574f10cd8eec4feeaf48":{"Name":"taiji_progress","EndpointID":"32a5c4a9b31bfa5bdcb8d6aff9811d0b208520ae8fb8639947391f5b971dce30","MacAddress":"e6:f4:89:32:ce:20","IPv4Address":"172.23.0.4/16","IPv6Address":""},"d59dc09d78d23af00dfed9bceb0bcca21cedb4044f9e878963b6f72df2da59df":{"Name":"taiji_syslog","EndpointID":"c5cde8934848e16047a4cac969a106a8b4dee1683ade0fd0c3e4c2ebf03fa585","MacAddress":"5e:7a:4d:6e:03:e7","IPv4Address":"172.23.0.3/16","IPv6Address":""}}
+--- NETWORK taiji_odoo_default ---
+{}
+--- NETWORK taiji_odoo_wuchang_network ---
+{"0148fa4bb8fad3003c1e72e8963d3d64806cac36368a82aa1a0264d4d3c149c1":{"Name":"wuchang_os_pg","EndpointID":"897ad2e0588f882a3600f6e25e8e0f3fc550b6ce612d7596a3236a4311c25cae","MacAddress":"4a:5c:b8:80:cd:d3","IPv4Address":"172.24.0.3/16","IPv6Address":""},"88d4c4be1381ad9d5d4c6a2e204a7620da1afbc357220fd5db39ec5a906f3dba":{"Name":"wuchang_os_odoo_18","EndpointID":"6ffbe69d056d91bad36065995e1f64e5ce278a86b8e2563826e1bd83a16a1df6","MacAddress":"d6:f2:a7:02:32:69","IPv4Address":"172.24.0.2/16","IPv6Address":""}}
+
+=== DOCKER VOLUMES ===
+DRIVER    VOLUME NAME
+local     littlej_ui_flowise_data
+local     littlej_ui_grafana_data
+local     littlej_ui_n8n_data
+local     littlej_ui_openwebui
+local     littlej_vision_ollama_data
+local     littlej_vision_openwebui_data
+local     ollama
+local     open-webui
+
+=== ODOO VERSION / CONFIG / ADDONS ===
+ODOO_CONTAINER=wuchang_os_odoo_18
+--- whoami / pwd ---
+odoo
+/
+--- odoo version ---
+Odoo Server 18.0-20260421
+--- config candidates ---
+/etc/odoo:
+total 12K
+drwxr-xr-x 1 root root 4.0K Apr 21 17:22 .
+drwxr-xr-x 1 root root 4.0K May 15 02:12 ..
+-rw-r--r-- 1 odoo root  816 Apr 21 17:20 odoo.conf
+
+/var/lib/odoo:
+total 24K
+drwxrwxrwx 5 ubuntu ubuntu 4.0K Apr 30 01:10 .
+drwxr-xr-x 1 root   root   4.0K Apr 21 17:22 ..
+-rw------- 1 odoo   odoo    730 May 15 01:21 .bash_history
+drwxrwxrwx 3 odoo   odoo   4.0K Apr 30 16:49 addons
+drwxr-xr-x 4 odoo   odoo   4.0K May 15 02:18 filestore
+drwx------ 2 odoo   odoo   4.0K May  8 22:43 sessions
+--- odoo.conf ---
+[options]
+addons_path = /mnt/extra-addons
+data_dir = /var/lib/odoo
+; admin_passwd=***MASKED***
+; csv_internal_sep = ,
+; db_maxconn = 64
+; db_name = False
+; db_template = template1
+; dbfilter = .*
+; debug_mode = False
+; email_from = False
+; limit_memory_hard = 2684354560
+; limit_memory_soft = 2147483648
+; limit_request = 8192
+; limit_time_cpu = 60
+; limit_time_real = 120
+; list_db = True
+; log_db = False
+; log_handler = [':INFO']
+; log_level = info
+; logfile = None
+; longpolling_port = 8072
+; max_cron_threads = 2
+; osv_memory_age_limit = 1.0
+; osv_memory_count_limit = False
+; smtp_password=***MASKED***
+; smtp_port = 25
+; smtp_server = localhost
+; smtp_ssl = False
+; smtp_user = False
+; workers = 0
+; xmlrpc = True
+; xmlrpc_interface = 
+; xmlrpc_port = 8069
+; xmlrpcs = True
+; xmlrpcs_interface = 
+; xmlrpcs_port = 8071
+--- addons paths ---
+/mnt/extra-addons
+/mnt/extra-addons/wuchang_core
+/mnt/extra-addons/wuchang_core/security
+/mnt/extra-addons/wuchang_core/views
+/mnt/extra-addons/wuchang_core/models
+/mnt/extra-addons/pm3_base
+/mnt/extra-addons/pm3_base/security
+/mnt/extra-addons/pm3_base/controllers
+/mnt/extra-addons/pm3_base/views
+/mnt/extra-addons/pm3_base/models
+/mnt/extra-addons/wuchang_cafe_menu_options
+/mnt/extra-addons/wuchang_cafe_menu_options/security
+/mnt/extra-addons/wuchang_cafe_menu_options/views
+/mnt/extra-addons/wuchang_cafe_menu_options/models
+/var/lib/odoo/addons
+/var/lib/odoo/addons/18.0
+/usr/lib/python3/dist-packages/odoo/addons
+/usr/lib/python3/dist-packages/odoo/addons/l10n_sn
+/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/demo
+/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/data
+/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_sn/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/theme_monglia
+/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/data
+/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/static
+/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/views
+/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/i18n
+/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/models
+/usr/lib/python3/dist-packages/odoo/addons/theme_monglia/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides
+/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/data
+/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/static
+/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/views
+/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/i18n
+/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/models
+/usr/lib/python3/dist-packages/odoo/addons/hr_skills_slides/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation
+/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation/tests
+/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation/i18n
+/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation/models
+/usr/lib/python3/dist-packages/odoo/addons/attachment_indexation/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request/security
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request/data
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request/views
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request/i18n
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request/models
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request/wizard
+/usr/lib/python3/dist-packages/odoo/addons/base_install_request/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ae
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/demo
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/data
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/views
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ae/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/tests
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/data
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/controllers
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/static
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/views
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/models
+/usr/lib/python3/dist-packages/odoo/addons/test_assetsbundle/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/repair
+/usr/lib/python3/dist-packages/odoo/addons/repair/tests
+/usr/lib/python3/dist-packages/odoo/addons/repair/security
+/usr/lib/python3/dist-packages/odoo/addons/repair/data
+/usr/lib/python3/dist-packages/odoo/addons/repair/static
+/usr/lib/python3/dist-packages/odoo/addons/repair/views
+/usr/lib/python3/dist-packages/odoo/addons/repair/i18n
+/usr/lib/python3/dist-packages/odoo/addons/repair/models
+/usr/lib/python3/dist-packages/odoo/addons/repair/wizard
+/usr/lib/python3/dist-packages/odoo/addons/repair/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/repair/report
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin/tests
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin/data
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin/views
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin/i18n
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin/models
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/sale_margin/report
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet/tests
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet/data
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet/views
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet/i18n
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet/models
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet/wizard
+/usr/lib/python3/dist-packages/odoo/addons/account_fleet/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/test_inherits
+/usr/lib/python3/dist-packages/odoo/addons/test_inherits/tests
+/usr/lib/python3/dist-packages/odoo/addons/test_inherits/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/website_blog
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/tests
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/security
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/data
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/controllers
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/static
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/views
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/i18n
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/models
+/usr/lib/python3/dist-packages/odoo/addons/website_blog/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/product_images
+/usr/lib/python3/dist-packages/odoo/addons/product_images/security
+/usr/lib/python3/dist-packages/odoo/addons/product_images/data
+/usr/lib/python3/dist-packages/odoo/addons/product_images/views
+/usr/lib/python3/dist-packages/odoo/addons/product_images/i18n
+/usr/lib/python3/dist-packages/odoo/addons/product_images/models
+/usr/lib/python3/dist-packages/odoo/addons/product_images/wizard
+/usr/lib/python3/dist-packages/odoo/addons/product_images/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/tests
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/data
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/controllers
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/static
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/views
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/i18n
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/models
+/usr/lib/python3/dist-packages/odoo/addons/payment_mollie/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account
+/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/tests
+/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/security
+/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/i18n
+/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/models
+/usr/lib/python3/dist-packages/odoo/addons/mrp_subcontracting_account/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ec_stock
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ec_stock/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ec_stock/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ec_stock/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_gn
+/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/demo
+/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/data
+/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_gn/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment
+/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/tests
+/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/static
+/usr/lib/python3/dist-packages/odoo/addons/l10n_test_pos_qr_payment/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_pk
+/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/demo
+/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/data
+/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/migrations
+/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_pk/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro
+/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/tests
+/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/views
+/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_fr_facturx_chorus_pro/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/demo
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/data
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/views
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/migrations
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_ca/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/demo
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/tests
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/static
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/views
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_jo_edi_pos/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_es_pos
+/usr/lib/python3/dist-packages/odoo/addons/l10n_es_pos/tests
+/usr/lib/python3/dist-packages/odoo/addons/l10n_es_pos/static
+/usr/lib/python3/dist-packages/odoo/addons/l10n_es_pos/views
+/usr/lib/python3/dist-packages/odoo/addons/l10n_es_pos/i18n
+/usr/lib/python3/dist-packages/odoo/addons/l10n_es_pos/models
+/usr/lib/python3/dist-packages/odoo/addons/l10n_es_pos/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/tests
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/security
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/data
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/controllers
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/static
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/views
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/i18n
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/models
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/website_event_exhibitor/report
+/usr/lib/python3/dist-packages/odoo/addons/test_hr_contract_calendar
+/usr/lib/python3/dist-packages/odoo/addons/test_hr_contract_calendar/tests
+/usr/lib/python3/dist-packages/odoo/addons/test_hr_contract_calendar/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/theme_treehouse
+/usr/lib/python3/dist-packages/odoo/addons/theme_treehouse/data
+/usr/lib/python3/dist-packages/odoo/addons/theme_treehouse/static
+/usr/lib/python3/dist-packages/odoo/addons/theme_treehouse/views
+/usr/lib/python3/dist-packages/odoo/addons/theme_treehouse/i18n
+/usr/lib/python3/dist-packages/odoo/addons/theme_treehouse/models
+/usr/lib/python3/dist-packages/odoo/addons/theme_treehouse/__pycache__
+/usr/lib/python3/dist-packages/odoo/addons/l10n_do
+/usr/lib/python3/dist-packages/odoo/addons/l10n_do/demo
+
+=== POSTGRES DATABASES / ODOO MODULES ===
+POSTGRES_CONTAINER=wuchang_os_pg
+--- databases ---
+postgres
+odoo
+--- DB: odoo installed modules relevant to condo/community ---
+account|installed|18.0.1.3
+account_add_gln|installed|18.0.1.0
+account_edi_ubl_cii|installed|18.0.1.0
+account_payment|installed|18.0.2.0
+auth_signup|installed|18.0.1.0
+auth_totp_mail|installed|18.0.1.0
+auth_totp_portal|installed|18.0.1.0
+base|installed|18.0.1.3
+base_import|installed|18.0.2.0
+base_import_module|installed|18.0.1.0
+base_install_request|installed|18.0.1.0
+base_setup|installed|18.0.1.0
+google_gmail|installed|18.0.1.2
+iap_mail|installed|18.0.1.0
+l10n_us_account|installed|18.0.1.0
+mail|installed|18.0.1.18
+mail_bot|installed|18.0.1.2
+payment|installed|18.0.2.0
+point_of_sale|installed|18.0.1.0.2
+portal|installed|18.0.1.0
+pos_epson_printer|installed|18.0.1.0
+pos_online_payment|installed|18.0.1.0
+resource_mail|installed|18.0.1.0
+snailmail|installed|18.0.0.4
+snailmail_account|installed|18.0.0.1
+spreadsheet_account|installed|18.0.1.0
+spreadsheet_dashboard_account|installed|18.0.1.0
+spreadsheet_dashboard_stock_account|installed|18.0.1.0
+stock|installed|18.0.1.1
+stock_account|installed|18.0.1.1
+stock_sms|installed|18.0.1.0
+
+=== COMMUNITY CONDO DESIGN CHECKPOINT ===
+Recommended Odoo design layers:
+1. 會員/住戶層：res.partner + membership category + 五維碼 + house/unit relation
+2. 區權人/住戶/租戶/商家分流：account_scope / namespace / role / voting eligibility
+3. 管委會治理層：meeting, agenda, proposal, vote, resolution, authorization log
+4. 財務層：管理費、公共基金、廠商款、共用設施收益、公益/商業分帳
+5. 工務維修層：repair ticket, vendor dispatch, quote, approval, completion evidence
+6. 公告通知層：mail.thread + portal + Google Workspace / Gmail routing
+7. 稽核層：event log, immutable attachment hash, decision lineage, authorization boundary
+8. AI層：僅吃脫敏摘要與五維碼，不直接吃原始個資

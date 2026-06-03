@@ -1,0 +1,424 @@
+# Wuchang Claim → Artifact → Evidence Package → Hash Mapping v0.2 Clean
+
+## Package Hashes
+
+- Local ZIP SHA256: `7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956`
+- Cloud ZIP SHA256: `919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3`
+- Master Index SHA256: `593370681cdd4b6127acec12428096bbcea7faad7dd50a102d0df9f12b2215a6`
+
+## Claims
+
+### C01 — REWRITE_OR_DEPENDENT / MEDIUM
+
+**Claim language:** ERP 導入 AI Agent 後，系統於工具調用與資料存取前建立可稽核之執行邊界。
+
+**Technical feature:** 企業 AI 接入 ERP 後，需在資料庫與工具調用前建立可稽核邊界。
+
+**Prosecution note:** 可作為從屬項或背景支撐，避免主張過寬。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+D:\Wuchang_Project\architecture_check_report.md
+D:\Wuchang_Project\architecture_check_report.md.quantum
+J:\共用雲端硬碟\五常雲端空間\LOCAL_SECURE_VAULT\architecture_check_report.md.enc
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\architecture_check_report.md.backup
+J:\共用雲端硬碟\五常雲端空間\architecture_check_report.md
+J:\共用雲端硬碟\五常雲端空間\architecture_check_report.md.quantum
+J:\共用雲端硬碟\五常雲端空間\backups\reports_20260127_correction\SECURITY_CHECKLIST.md
+J:\共用雲端硬碟\五常雲端空間\backups\reports_20260127_correction\SECURITY_CHECKLIST.md.quantum
+J:\共用雲端硬碟\五常雲端空間\backups\reports_20260127_correction\WUCHANG_ODOO_LOGIC_ARCHITECTURE.md
+J:\共用雲端硬碟\五常雲端空間\backups\reports_20260127_correction\WUCHANG_ODOO_LOGIC_ARCHITECTURE.md.quantum
+J:\共用雲端硬碟\五常雲端空間\backups\reports_20260127_correction\security_check_google_tasks_setup.py
+J:\共用雲端硬碟\五常雲端空間\backups\reports_20260127_correction\security_check_google_tasks_setup.py.quantum
+J:\共用雲端硬碟\五常雲端空間\reports\SECURITY_CHECKLIST.md
+J:\共用雲端硬碟\五常雲端空間\reports\SECURITY_CHECKLIST.md.quantum
+J:\共用雲端硬碟\五常雲端空間\reports\WUCHANG_ODOO_LOGIC_ARCHITECTURE.md
+J:\共用雲端硬碟\五常雲端空間\reports\WUCHANG_ODOO_LOGIC_ARCHITECTURE.md.quantum
+J:\共用雲端硬碟\五常雲端空間\reports\security_check_google_tasks_setup.py
+J:\共用雲端硬碟\五常雲端空間\reports\security_check_google_tasks_setup.py.quantum
+```
+
+### C02 — REWRITE_OR_DEPENDENT / MEDIUM
+
+**Claim language:** 系統依端點、身分、設備狀態或組織權限產生存取邊界資料結構。
+
+**Technical feature:** 端點、身分、設備、IP 或權限矩陣映射至可執行存取邊界。
+
+**Prosecution note:** 可作為從屬項或背景支撐，避免主張過寬。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+D:\Wuchang_Project\DEVICE_IDENTITY_AUTH_GUIDE.md
+D:\Wuchang_Project\DEVICE_IDENTITY_AUTH_GUIDE.md.quantum
+D:\Wuchang_Project\device_identity_auth.ps1
+D:\Wuchang_Project\device_identity_auth.ps1.quantum
+J:\共用雲端硬碟\五常雲端空間\.venv\Lib\site-packages\google\auth\_agent_identity_utils.py.quantum
+J:\共用雲端硬碟\五常雲端空間\.venv\Lib\site-packages\google\auth\identity_pool.py
+J:\共用雲端硬碟\五常雲端空間\DEVICE_IDENTITY_AUTH_GUIDE.md
+J:\共用雲端硬碟\五常雲端空間\DEVICE_IDENTITY_AUTH_GUIDE.md.quantum
+J:\共用雲端硬碟\五常雲端空間\LOCAL_SECURE_VAULT\DEVICE_IDENTITY_AUTH_GUIDE.md.enc
+J:\共用雲端硬碟\五常雲端空間\LOCAL_SECURE_VAULT\device_identity_auth.ps1.enc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\auth\__pycache__\_agent_identity_utils.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\auth\__pycache__\identity_pool.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\auth\_agent_identity_utils.py
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\auth\identity_pool.py
+J:\共用雲端硬碟\五常雲端空間\device_identity_auth.ps1
+J:\共用雲端硬碟\五常雲端空間\device_identity_auth.ps1.quantum
+D:\Wuchang_Project\.wuchang_device\device_identity.json
+D:\Wuchang_Project\.wuchang_device\device_identity.json.quantum
+```
+
+### C03 — REWRITE_OR_DEPENDENT / MEDIUM
+
+**Claim language:** 系統維護複數代理人，每一代理人對應特定任務、資料來源及工具集合。
+
+**Technical feature:** 每一代理人綁定任務、知識來源、工具與系統提示詞。
+
+**Prosecution note:** 可作為從屬項或背景支撐，避免主張過寬。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+D:\Wuchang_Project\agent_orchestrator.py
+D:\Wuchang_Project\agent_orchestrator.py.quantum
+D:\Wuchang_Project\ai_router.json
+D:\Wuchang_Project\ai_router.json.quantum
+J:\共用雲端硬碟\五常雲端空間\LOCAL_SECURE_VAULT\ai_router.json.enc
+J:\共用雲端硬碟\五常雲端空間\LOCAL_SECURE_VAULT\wuchang_tools_library\spacetime_connectors\router_connector.py.enc
+J:\共用雲端硬碟\五常雲端空間\agent_orchestrator.py
+J:\共用雲端硬碟\五常雲端空間\agent_orchestrator.py.quantum
+J:\共用雲端硬碟\五常雲端空間\ai_router.json
+J:\共用雲端硬碟\五常雲端空間\ai_router.json.quantum
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\downloads\ai_router.json
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\remote_ui_control\hybrid_ai_router.py
+J:\共用雲端硬碟\五常雲端空間\downloads\ai_router.json
+J:\共用雲端硬碟\五常雲端空間\downloads\ai_router.json.quantum
+J:\共用雲端硬碟\五常雲端空間\remote_ui_control\hybrid_ai_router.py
+J:\共用雲端硬碟\五常雲端空間\remote_ui_control\hybrid_ai_router.py.quantum
+J:\共用雲端硬碟\五常雲端空間\tools\ArtGeneration\LittleJ_Avatar\Prompts
+J:\共用雲端硬碟\五常雲端空間\tools\router_controller.py
+```
+
+### C04 — REWRITE_OR_DEPENDENT / MEDIUM
+
+**Claim language:** 系統將自然語言請求轉換為候選意圖或語義表示，並輸入路由程序。
+
+**Technical feature:** 自然語言請求轉換為候選意圖或向量後進入路由流程。
+
+**Prosecution note:** 可作為從屬項或背景支撐，避免主張過寬。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+D:\Wuchang_Project\agent_orchestrator.py
+D:\Wuchang_Project\agent_orchestrator.py.quantum
+D:\Wuchang_Project\ai_router.json
+D:\Wuchang_Project\ai_router.json.quantum
+J:\共用雲端硬碟\五常雲端空間\LOCAL_SECURE_VAULT\ai_router.json.enc
+J:\共用雲端硬碟\五常雲端空間\agent_orchestrator.py
+J:\共用雲端硬碟\五常雲端空間\agent_orchestrator.py.quantum
+J:\共用雲端硬碟\五常雲端空間\ai_router.json
+J:\共用雲端硬碟\五常雲端空間\ai_router.json.quantum
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\downloads\ai_router.json
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\remote_ui_control\hybrid_ai_router.py
+J:\共用雲端硬碟\五常雲端空間\downloads\ai_router.json
+J:\共用雲端硬碟\五常雲端空間\downloads\ai_router.json.quantum
+J:\共用雲端硬碟\五常雲端空間\remote_ui_control\hybrid_ai_router.py
+J:\共用雲端硬碟\五常雲端空間\remote_ui_control\hybrid_ai_router.py.quantum
+D:\Wuchang_Project\ROUTER_EXTERNAL_JURISDICTION_REPORT.md
+D:\Wuchang_Project\ROUTER_EXTERNAL_JURISDICTION_REPORT.md.quantum
+D:\Wuchang_Project\ROUTER_RELAY_CONFIG.md
+```
+
+### C05 — KEEP_AND_NARROW / HIGH
+
+**Claim language:** 系統在任何 AI 生成結果觸發工具前，藉由策略閘道產生 allow、warn 或 block 判斷。
+
+**Technical feature:** 在 AI 生成或工具調用前，以硬性規則產生 allow / warn / block。
+
+**Prosecution note:** 保留為核心，但需用具體封包、閘道、稽核與跨系統流程收斂。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\node_modules\@babel\core\lib\transformation\block-hoist-plugin.js
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\node_modules\@babel\core\lib\transformation\block-hoist-plugin.js.map
+J:\共用雲端硬碟\五常雲端空間\node_modules\@babel\core\lib\transformation\block-hoist-plugin.js
+J:\共用雲端硬碟\五常雲端空間\node_modules\@babel\core\lib\transformation\block-hoist-plugin.js.map
+J:\共用雲端硬碟\五常雲端空間\node_modules\@babel\core\lib\transformation\block-hoist-plugin.js.map.quantum
+J:\共用雲端硬碟\五常雲端空間\node_modules\@babel\core\lib\transformation\block-hoist-plugin.js.quantum
+J:\共用雲端硬碟\五常雲端空間\voice_service\wuchang_policy_audit.log
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\mail\models\mail_gateway_allowed.py
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\mail\models\mail_gateway_allowed.py.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\mail\views\mail_gateway_allowed_views.xml
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\mail\views\mail_gateway_allowed_views.xml.quantum
+D:\Wuchang_Project\.conda\Lib\email\_policybase.py
+D:\Wuchang_Project\.conda\Lib\email\_policybase.py.quantum
+D:\Wuchang_Project\.conda\Lib\email\policy.py
+D:\Wuchang_Project\.conda\Lib\email\policy.py.quantum
+D:\Wuchang_Project\.conda\include\internal\pycore_blocks_output_buffer.h
+D:\Wuchang_Project\.conda\include\internal\pycore_blocks_output_buffer.h.quantum
+D:\Wuchang_Project\GOOGLE_SYNC_AUDIT.log
+```
+
+### C06 — REWRITE_OR_DEPENDENT / MEDIUM
+
+**Claim language:** 目標代理人僅能使用經授權之資料來源、檢索範圍及任務工具。
+
+**Technical feature:** 目標代理人僅能使用授權資料來源、工具與 Server Action。
+
+**Prosecution note:** 可作為從屬項或背景支撐，避免主張過寬。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+```
+
+**Supporting artifacts:**
+
+```text
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\l10n_in_ewaybill_stock\tools\ewaybill_api.py
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\l10n_in_ewaybill_stock\tools\ewaybill_api.py.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account\tools
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account\tools\__init__.py
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account\tools\__init__.py.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account\tools\certificate.py
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account\tools\certificate.py.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account\tools\structured_reference.py
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account\tools\structured_reference.py.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\__init__.py
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\__init__.py.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\demo_bill
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\demo_bill.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\demo_utils.py
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\demo_utils.py.quantum
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\enc_key
+J:\共用雲端硬碟\五常雲端空間\wuchang_os\_ARCHIVE_ (Seal)\.odoo_source\odoo\addons\account_peppol\tools\enc_key.quantum
+```
+
+### C07 — KEEP_AND_NARROW / HIGH
+
+**Claim language:** 當候選代理人或候選工具均不符合策略條件時，系統阻斷執行並產生稽核紀錄。
+
+**Technical feature:** 若候選代理人或候選工具全數不符合策略，系統直接阻斷並記錄。
+
+**Prosecution note:** 保留為核心，但需用具體封包、閘道、稽核與跨系統流程收斂。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+D:\Wuchang_Project\.conda\DLLs\_queue.pyd
+D:\Wuchang_Project\.conda\DLLs\_queue.pyd.quantum
+D:\Wuchang_Project\.conda\Lib\asyncio\queues.py
+D:\Wuchang_Project\.conda\Lib\asyncio\queues.py.quantum
+D:\Wuchang_Project\.conda\Lib\multiprocessing\queues.py
+D:\Wuchang_Project\.conda\Lib\multiprocessing\queues.py.quantum
+D:\Wuchang_Project\.conda\Lib\queue.py
+D:\Wuchang_Project\.conda\Lib\queue.py.quantum
+D:\Wuchang_Project\.conda\include\internal\pycore_blocks_output_buffer.h
+D:\Wuchang_Project\.conda\include\internal\pycore_blocks_output_buffer.h.quantum
+D:\Wuchang_Project\GOOGLE_SYNC_AUDIT.log
+D:\Wuchang_Project\comprehensive_system_audit.py
+D:\Wuchang_Project\comprehensive_system_audit.py.quantum
+D:\Wuchang_Project\system_audit_report.json
+D:\Wuchang_Project\system_audit_report.json.quantum
+J:\共用雲端硬碟\五常雲端空間\.conda\DLLs\_queue.pyd
+J:\共用雲端硬碟\五常雲端空間\.conda\Lib\asyncio\__pycache__\queues.cpython-311.pyc
+J:\共用雲端硬碟\五常雲端空間\.conda\Lib\asyncio\queues.py
+```
+
+### C08 — KEEP_AND_NARROW / HIGH
+
+**Claim language:** 跨 Odoo、Google、LINE 或邊緣節點之操作必須經受控連接器與策略閘道。
+
+**Technical feature:** AI 候選意圖不得直接突變外部系統，需經受控連接器與策略閘道。
+
+**Prosecution note:** 保留為核心，但需用具體封包、閘道、稽核與跨系統流程收斂。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+```
+
+**Supporting artifacts:**
+
+```text
+J:\共用雲端硬碟\五常雲端空間\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_admin_service\async_client.py.quantum
+J:\共用雲端硬碟\五常雲端空間\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_service\transports\rest_asyncio.py
+J:\共用雲端硬碟\五常雲端空間\.venv\Lib\site-packages\google\cloud\aiplatform_v1beta1\services\feature_online_store_admin_service\transports\grpc_asyncio.py.quantum
+J:\共用雲端硬碟\五常雲端空間\.venv\Lib\site-packages\google\cloud\aiplatform_v1beta1\services\featurestore_online_serving_service\async_client.py.quantum
+J:\共用雲端硬碟\五常雲端空間\.venv\Lib\site-packages\google\cloud\aiplatform_v1beta1\services\pipeline_service\transports\rest_asyncio.py.quantum
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_admin_service\__pycache__\async_client.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_admin_service\async_client.py
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_admin_service\transports\__pycache__\grpc_asyncio.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_admin_service\transports\__pycache__\rest_asyncio.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_admin_service\transports\grpc_asyncio.py
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_admin_service\transports\rest_asyncio.py
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_service\__pycache__\async_client.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_service\async_client.py
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_service\transports\__pycache__\grpc_asyncio.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_service\transports\__pycache__\rest_asyncio.cpython-314.pyc
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_service\transports\grpc_asyncio.py
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\feature_online_store_service\transports\rest_asyncio.py
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\.venv\Lib\site-packages\google\cloud\aiplatform_v1\services\featurestore_online_serving_service\__pycache__\async_client.cpython-314.pyc
+```
+
+### C09 — KEEP_AND_NARROW / HIGH
+
+**Claim language:** AI 候選意圖被轉換為多維狀態封包，並映射至受控陣型工作區與工具集合。
+
+**Technical feature:** 候選意圖轉為狀態封包，再映射至陣型工作區與受控工具集合。
+
+**Prosecution note:** 保留為核心，但需用具體封包、閘道、稽核與跨系統流程收斂。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+```
+
+**Supporting artifacts:**
+
+```text
+J:\共用雲端硬碟\五常雲端空間\Project_Backups\Wuchang_V5_Before_Container_20260129_0214\wuchang_os\performance_metrics.csv
+J:\共用雲端硬碟\五常雲端空間\Project_Backups\Wuchang_V5_Before_Container_20260129_0214\wuchang_os\performance_metrics.csv.quantum
+J:\共用雲端硬碟\五常雲端空間\Wuchang_System_Backup\calculate_growth_metrics.py
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\02\023fe7d5cfe8cffeecaa926b1626811fe926585a
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\0a\0afc7dd0b798119008397691404295b26b30f250
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\11\119f196addf8f1f82ecf1445f9b242a4657d42a0
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\17\17f3890e9d39212a0786e37da1235f0537a69f96
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\1c\1cce4c01dfb48eb37d11ae0c1c344d685e5a55e4
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\20\20637d9e9cb7b57b0a56a303736d535ffc28a7a7
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\24\24a6a1cd6a87d05d5ccaaaa3c97677272187fc41
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\2a\2a6847d51f85d4fdd00b764e1e38e797057769f0
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\34\34714cb78d71ad440b277ebf8a5dc51c0b010f7d
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\36\360397dd483f4ed8332762bc944817bd0e31e40c
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\37\37db4d649b09ca55779e81bc4d6d7eebca017503
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\3a\3ab73e5bdbaf668366705ed35907e2b7947d55b8
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\3e\3e6ed4bcf16e1bce5ec66814beb1c27d9f1e35ed
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\40\40daf9a07b1eb06afd37d63e8471b25397c93cac
+J:\共用雲端硬碟\五常雲端空間\_五常系統資源收整\歷史備份\wuchang_backup\filestore\47\47cb27d1b0847949018a32c7aa8d3cab99dace3a
+```
+
+### C10 — KEEP_AND_NARROW / HIGH
+
+**Claim language:** 系統記錄候選意圖、狀態封包、策略判斷、工具呼叫與結果，以供稽核回放。
+
+**Technical feature:** 所有 allow / block / package / index 均保留稽核紀錄與 hash。
+
+**Prosecution note:** 保留為核心，但需用具體封包、閘道、稽核與跨系統流程收斂。
+
+**Evidence package:**
+
+```text
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+D:\Wuchang_Project\BACKUP\ROLLBACK_POINT_20260219\snapshot_manifest.txt
+D:\Wuchang_Project\GOOGLE_SYNC_AUDIT.log
+D:\Wuchang_Project\system_audit_report.json
+D:\Wuchang_Project\system_audit_report.json.quantum
+D:\Wuchang_Project\system_logic_indexer.py
+D:\Wuchang_Project\system_logic_indexer.py.quantum
+D:\卡內資訊\SDXC\snapshot\19955.index
+D:\卡內資訊\SDXC\snapshot\19956.index
+D:\卡內資訊\SDXC\snapshot\19957.index
+D:\卡內資訊\SDXC\snapshot\19958.index
+D:\卡內資訊\SDXC\snapshot\19959.index
+D:\卡內資訊\SDXC\snapshot\19961.index
+D:\卡內資訊\SDXC\snapshot\19962.index
+D:\卡內資訊\SDXC\snapshot\19963.index
+D:\卡內資訊\SDXC\snapshot\19965.index
+D:\卡內資訊\SDXC\snapshot\19966.index
+D:\卡內資訊\SDXC\snapshot\19967.index
+D:\卡內資訊\SDXC\snapshot\19968.index
+```
+
+### C11 — REWRITE_OR_DEPENDENT / MEDIUM
+
+**Claim language:** 上述方法以安裝檔、部署腳本、runtime、設定檔或非暫態電腦可讀媒體實現。
+
+**Technical feature:** 部署腳本、安裝包、runtime、設定檔與容器化架構可支撐媒體型請求項。
+
+**Prosecution note:** 可作為從屬項或背景支撐，避免主張過寬。
+
+**Evidence package:**
+
+```text
+GOOGLE_DRIVE_CLOUD | C:\Wuchang_Cloud_Evidence_20260520_074721.zip | 919C097357783F30C48B9038FE2AE2939139BD46C17CEE5065A620BCDB9FD4A3
+LOCAL_SD_EXTERNAL | C:\Wuchang_IP_Evidence_20260520_073752.zip | 7E8F02FD8420CC2A875E6ECDABEF117566A277718EA5211FE51E1571AD0E1956
+```
+
+**Supporting artifacts:**
+
+```text
+D:\Wuchang_Project\wuchang_runtime\docker-compose.yml
+J:\共用雲端硬碟\五常雲端空間\backups\wuchang V6.0.0\workshop_deploy\Dockerfile
+J:\共用雲端硬碟\五常雲端空間\cloud_brain_deploy\docker-compose.yml
+J:\共用雲端硬碟\五常雲端空間\deployment\Dockerfile
+J:\共用雲端硬碟\五常雲端空間\deployment\docker-compose.yml
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\README_INSTALL.md
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\README_INSTALL.md.quantum
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\Vietnam_Family_Edition\Wuchang_System_Booster.exe
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\Vietnam_Family_Edition\Wuchang_System_Booster.exe.quantum
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\generate_license.exe
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\generate_license.exe.quantum
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\install_quantum_spacetime.exe
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\install_quantum_spacetime.exe.quantum
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\quantum_lock.exe
+J:\共用雲端硬碟\五常雲端空間\downloads\MemoryCard_Export\Secure_Backup\wuchangv510\Quantum_Installer\quantum_lock.exe.quantum
+J:\共用雲端硬碟\五常雲端空間\workshop_deploy\Dockerfile
+J:\共用雲端硬碟\五常雲端空間\workshop_deploy\Dockerfile.quantum
+D:\Wuchang_Project\.conda\Lib\site-packages\certifi-2025.11.12.dist-info\INSTALLER
+```
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_wuchang_group_customer_form_pos_policy" model="ir.ui.view">
+        <field name="name">wuchang.group.customer.form.pos.policy</field>
+        <field name="model">wuchang.group.customer</field>
+        <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_group_customer_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="POS社區幣/獨立票券政策">
+                    <group>
+                        <field name="pos_policy_mode"/>
+                        <field name="pos_accepts_community_coin"/>
+                        <field name="pos_accepts_community_coin_ticket"/>
+                        <field name="pos_accepts_self_issued_ticket"/>
+                    </group>
+                    <group>
+                        <field name="pos_policy_note"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wuchang_group_customer_list_pos_policy" model="ir.ui.view">
+        <field name="name">wuchang.group.customer.list.pos.policy</field>
+        <field name="model">wuchang.group.customer</field>
+        <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_group_customer_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='customer_type']" position="after">
+                <field name="pos_policy_mode"/>
+                <field name="pos_accepts_community_coin"/>
+                <field name="pos_accepts_self_issued_ticket"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wuchang_field_device_list_pos_policy" model="ir.ui.view">
+        <field name="name">wuchang.field.verification.device.list.pos.policy</field>
+        <field name="model">wuchang.field.verification.device</field>
+        <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_field_device_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='device_class']" position="after">
+                <field name="pos_policy_mode"/>
+                <field name="pos_accepts_community_coin"/>
+                <field name="pos_accepts_self_issued_ticket"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_wuchang_pos_policy_merchants" model="ir.actions.act_window">
+        <field name="name">POS社區幣/獨立票券政策</field>
+        <field name="res_model">wuchang.group.customer</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[("customer_type", "=", "merchant")]</field>
+    </record>
+
+    <menuitem id="menu_wuchang_pos_policy_merchants"
+              name="POS社區幣/獨立票券政策"
+              parent="menu_wuchang_property_root"
+              action="action_wuchang_pos_policy_merchants"
+              sequence="95"/>
+</odoo>

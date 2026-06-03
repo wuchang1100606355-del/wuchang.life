@@ -1,0 +1,43 @@
+policy_id: W7TP_8D_IDENTITY_USE_POLICY_V1
+status: PLAN_ONLY
+
+purpose:
+  - provide_cross_node_identity_without_plaintext_exposure
+  - allow merchants_and_committees_to_use_service_result
+  - prevent_member_list_export
+
+8d_identity_rules:
+  issuer: association_central_registry
+  daily_use: pseudonymous_service_identity
+  raw_plaintext_embedded: false
+  purpose_scoped: true
+  revocable: true
+  auditable: true
+
+allowed:
+  - service_eligibility_check
+  - membership_status_check
+  - discount_or_ticket_validation
+  - contact_request_routing
+  - lawful_plaintext_claim_reference
+
+forbidden:
+  - tracking_across_unrelated_purposes
+  - exporting_member_identity_graph
+  - deriving_raw_contact_without_approval
+  - using_8d_as_unlimited_surveillance_id
+
+rotation_policy:
+  supports_purpose_specific_code: true
+  supports_expiry: true
+  supports_reissue_on_device_loss: true
+
+red_team_reflection:
+  negative_effects:
+    - persistent_8d_code_may_become_tracking_identifier
+    - poor_scope_design_may_allow_cross_context_linkage
+  mitigation:
+    - purpose_scoped_8d_tokens
+    - expiry_and_rotation
+    - contact_requires_member_approval
+    - audit_unusual_lookup_patterns

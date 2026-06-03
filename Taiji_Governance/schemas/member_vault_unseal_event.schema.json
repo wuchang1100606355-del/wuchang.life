@@ -1,0 +1,77 @@
+{
+  "title": "Member Vault Unseal Event",
+  "type": "object",
+  "required": [
+    "event",
+    "unseal_id",
+    "reason_type",
+    "reviewed_by",
+    "minimum_scope",
+    "pre_unseal_sha256",
+    "post_unseal_sha256",
+    "audit_required",
+    "resealed",
+    "created_at"
+  ],
+  "properties": {
+    "event": {
+      "const": "member_vault_unseal_event"
+    },
+    "unseal_id": {
+      "type": "string"
+    },
+    "reason_type": {
+      "type": "string",
+      "enum": [
+        "member_device_lost_or_changed_five_metric_code_check",
+        "roc_government_document_order",
+        "data_subject_erasure_or_correction_claim"
+      ]
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "minimum_scope": {
+      "type": "string"
+    },
+    "government_agency": {
+      "type": "string"
+    },
+    "official_document_number": {
+      "type": "string"
+    },
+    "member_claim_reference": {
+      "type": "string"
+    },
+    "device_event_reference": {
+      "type": "string"
+    },
+    "five_metric_code_checked": {
+      "type": "boolean",
+      "default": false
+    },
+    "pre_unseal_sha256": {
+      "type": "string"
+    },
+    "post_unseal_sha256": {
+      "type": "string"
+    },
+    "cloud_upload_performed": {
+      "type": "boolean",
+      "default": false
+    },
+    "external_ai_used": {
+      "type": "boolean",
+      "default": false
+    },
+    "audit_required": {
+      "type": "boolean"
+    },
+    "resealed": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+claim_dependency_execution_plan:
+  purpose: convert claim tree into Taiwan patent draft sections
+  source:
+    - 46_taiwan_patent_packet_v0.yaml
+    - 47_claim_dependency_tree_v0.yaml
+    - 48_odoo_pos_property_community_embodiment_v0.yaml
+    - 49_taiwan_patent_draft_plan_v0.yaml
+  next_tasks:
+    - draft_independent_claim_1
+    - draft_dependent_claims_2_to_10
+    - draft_odoo_embodiment
+    - draft_no_plaintext_member_embodiment
+    - draft_state_translation_rules

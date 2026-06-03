@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_device_control_plan_tree" model="ir.ui.view">
+        <field name="name">wuchang.device.control.plan.tree</field>
+        <field name="model">wuchang.device.control.plan</field>
+        <field name="arch" type="xml">
+            <tree string="長期控制方案" decoration-success="status == 'active'" decoration-muted="status == 'archived'">
+                <field name="name"/>
+                <field name="plan_type"/>
+                <field name="device_type"/>
+                <field name="priority" widget="badge" decoration-danger="priority == 'critical'" decoration-warning="priority == 'high'"/>
+                <field name="status" widget="badge"/>
+                <field name="device_count"/>
+                <field name="control_strategy"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="last_execution"/>
+                <field name="execution_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_device_control_plan_form" model="ir.ui.view">
+        <field name="name">wuchang.device.control.plan.form</field>
+        <field name="model">wuchang.device.control.plan</field>
+        <field name="arch" type="xml">
+            <form string="長期控制方案">
+                <header>
+                    <button name="action_activate" string="啟用" type="object" class="oe_highlight" 
+                            attrs="{'invisible': [('status', '=', 'active')]}"/>
+                    <button name="action_pause" string="暫停" type="object" 
+                            attrs="{'invisible': [('status', '!=', 'active')]}"/>
+                    <button name="action_execute" string="立即執行" type="object" class="btn-primary"
+                            attrs="{'invisible': [('status', '!=', 'active')]}"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_execute" type="object" class="oe_stat_button" icon="fa-play">
+                            <field name="execution_count" widget="statinfo" string="執行次數"/>
+                        </button>
+                        <button name="%(action_view_execution_logs)d" type="action" class="oe_stat_button" icon="fa-list">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">執行記錄</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="plan_type"/>
+                            <field name="device_type"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="duration_days"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="方案詳情">
+                            <group>
+                                <field name="description" placeholder="請描述此長期控制方案的目標和策略..."/>
+                                <field name="control_strategy"/>
+                                <field name="enrollment_method"/>
+                            </group>
+                        </page>
+                        <page string="監控設置">
+                            <group>
+                                <field name="monitor_enabled"/>
+                                <field name="monitor_interval"/>
+                                <field name="heartbeat_timeout"/>
+                                <field name="alert_on_offline"/>
+                            </group>
+                        </page>
+                        <page string="訪問控制">
+                            <group>
+                                <field name="allowed_ips" widget="text" placeholder="192.168.50.0/24&#10;10.0.0.0/8"/>
+                                <field name="allowed_ports" widget="text" placeholder="3477&#10;8069&#10;80"/>
+                                <field name="access_hours"/>
+                            </group>
+                        </page>
+                        <page string="目標設備">
+                            <field name="device_count" readonly="1"/>
+                            <field name="device_ids" widget="many2many_tags" options="{'color_field': 'device_type'}"/>
+                        </page>
+                        <page string="自動化規則">
+                            <field name="automation_rules" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                        <page string="執行統計">
+                            <group>
+                                <group string="執行統計">
+                                    <field name="execution_count"/>
+                                    <field name="success_count"/>
+                                    <field name="failure_count"/>
+                                    <field name="last_execution"/>
+                                </group>
+                                <group string="審批信息">
+                                    <field name="require_approval"/>
+                                    <field name="approver_ids" widget="many2many_tags"/>
+                                    <field name="approved_by" readonly="1"/>
+                                    <field name="approved_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_device_control_plan_search" model="ir.ui.view">
+        <field name="name">wuchang.device.control.plan.search</field>
+        <field name="model">wuchang.device.control.plan</field>
+        <field name="arch" type="xml">
+            <search string="長期控制方案">
+                <field name="name"/>
+                <field name="plan_type"/>
+                <field name="device_type"/>
+                <field name="device_ids"/>
+                <filter string="啟用" name="active_plans" domain="[('status', '=', 'active')]"/>
+                <filter string="草稿" name="draft" domain="[('status', '=', 'draft')]"/>
+                <filter string="關鍵優先級" name="critical" domain="[('priority', '=', 'critical')]"/>
+                <separator/>
+                <filter string="我的方案" name="my_plans" domain="[('create_uid', '=', uid)]"/>
+                <group expand="0" string="分組">
+                    <filter string="方案類型" name="group_by_type" context="{'group_by': 'plan_type'}"/>
+                    <filter string="設備類型" name="group_by_device_type" context="{'group_by': 'device_type'}"/>
+                    <filter string="狀態" name="group_by_status" context="{'group_by': 'status'}"/>
+                    <filter string="優先級" name="group_by_priority" context="{'group_by': 'priority'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_view_device_control_plan" model="ir.actions.act_window">
+        <field name="name">長期控制方案</field>
+        <field name="res_model">wuchang.device.control.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                創建長期設備控制方案
+            </p>
+            <p>
+                長期控制方案用於管理和控制設備的長期運行狀態，包括納管、監控、遠程控制等功能。
+            </p>
+        </field>
+    </record>
+
+    <!-- 執行記錄視圖 -->
+    <record id="view_execution_log_tree" model="ir.ui.view">
+        <field name="name">wuchang.device.control.execution.log.tree</field>
+        <field name="model">wuchang.device.control.execution.log</field>
+        <field name="arch" type="xml">
+            <tree string="執行記錄">
+                <field name="plan_id"/>
+                <field name="execution_time"/>
+                <field name="status" widget="badge"/>
+                <field name="duration"/>
+                <field name="devices_affected"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_view_execution_logs" model="ir.actions.act_window">
+        <field name="name">執行記錄</field>
+        <field name="res_model">wuchang.device.control.execution.log</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('plan_id', '=', active_id)]</field>
+    </record>
+
+    <!-- 菜單項 -->
+    <menuitem id="menu_device_control_plan"
+              name="長期控制方案"
+              parent="menu_wuchang_infrastructure"
+              action="action_view_device_control_plan"
+              sequence="20"/>
+</odoo>

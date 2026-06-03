@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- 台灣咖啡館常用音樂播放清單 -->
+        
+        <!-- 爵士樂類別 -->
+        <record id="playlist_jazz_1" model="wuchang.customer.display.music.playlist">
+            <field name="name">Take Five</field>
+            <field name="artist">Dave Brubeck Quartet</field>
+            <field name="genre">jazz</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="9"/>
+            <field name="sequence" eval="10"/>
+        </record>
+
+        <record id="playlist_jazz_2" model="wuchang.customer.display.music.playlist">
+            <field name="name">Autumn Leaves</field>
+            <field name="artist">Cannonball Adderley</field>
+            <field name="genre">jazz</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="9"/>
+            <field name="sequence" eval="20"/>
+        </record>
+
+        <!-- Bossa Nova 類別 -->
+        <record id="playlist_bossa_1" model="wuchang.customer.display.music.playlist">
+            <field name="name">The Girl from Ipanema</field>
+            <field name="artist">Stan Getz &amp; João Gilberto</field>
+            <field name="genre">bossa_nova</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="10"/>
+            <field name="sequence" eval="30"/>
+        </record>
+
+        <record id="playlist_bossa_2" model="wuchang.customer.display.music.playlist">
+            <field name="name">Corcovado</field>
+            <field name="artist">Antônio Carlos Jobim</field>
+            <field name="genre">bossa_nova</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="9"/>
+            <field name="sequence" eval="40"/>
+        </record>
+
+        <!-- 台灣獨立音樂類別 -->
+        <record id="playlist_taiwanese_indie_1" model="wuchang.customer.display.music.playlist">
+            <field name="name">島嶼天光</field>
+            <field name="artist">滅火器</field>
+            <field name="genre">taiwanese_indie</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="8"/>
+            <field name="sequence" eval="50"/>
+        </record>
+
+        <record id="playlist_taiwanese_indie_2" model="wuchang.customer.display.music.playlist">
+            <field name="name">日常</field>
+            <field name="artist">田馥甄</field>
+            <field name="genre">taiwanese_indie</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="8"/>
+            <field name="sequence" eval="60"/>
+        </record>
+
+        <!-- 輕音樂/原聲類別 -->
+        <record id="playlist_acoustic_1" model="wuchang.customer.display.music.playlist">
+            <field name="name">River Flows in You</field>
+            <field name="artist">Yiruma</field>
+            <field name="genre">acoustic</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="9"/>
+            <field name="sequence" eval="70"/>
+        </record>
+
+        <record id="playlist_acoustic_2" model="wuchang.customer.display.music.playlist">
+            <field name="name">Comptine d'un autre été</field>
+            <field name="artist">Yann Tiersen</field>
+            <field name="genre">acoustic</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="9"/>
+            <field name="sequence" eval="80"/>
+        </record>
+
+        <!-- Lounge 音樂類別 -->
+        <record id="playlist_lounge_1" model="wuchang.customer.display.music.playlist">
+            <field name="name">Café del Mar</field>
+            <field name="artist">Various Artists</field>
+            <field name="genre">lounge</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="10"/>
+            <field name="sequence" eval="90"/>
+        </record>
+
+        <!-- 環境音樂類別 -->
+        <record id="playlist_ambient_1" model="wuchang.customer.display.music.playlist">
+            <field name="name">Ambient Works</field>
+            <field name="artist">Brian Eno</field>
+            <field name="genre">ambient</field>
+            <field name="source_type">spotify</field>
+            <field name="is_taiwan_cafe_appropriate" eval="True"/>
+            <field name="appropriateness_score" eval="8"/>
+            <field name="sequence" eval="100"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,11 @@
+id: M011_GIT_CANONICAL_REBUILD
+timestamp: 20260601_173624
+mode: safe_baseline_rebuild
+actions:
+  - update_gitignore_for_generated_noise
+  - preserve_full_git_status_snapshot
+  - stage_canonical_system_directories
+  - no_delete
+  - no_service_restart
+  - no_docker_action
+  - no_secret_read

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # -----------------------------------------------------
+  # 🗄️ 後勤資料庫 (PostgreSQL 15)
+  # -----------------------------------------------------
+  db:
+    image: postgres:15
+    container_name: wuchang_odoo_db
+    restart: always  # 💥 關鍵：永不關機，死後自動復活
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=wuchang_absolute_secret
+      - POSTGRES_USER=odoo
+    volumes:
+      - wuchang_odoo_pg_data:/var/lib/postgresql/data
+
+  # -----------------------------------------------------
+  # 🏢 企業後勤大腦 (Odoo 18)
+  # -----------------------------------------------------
+  web:
+    image: odoo:18.0
+    container_name: wuchang_odoo_web
+    restart: always  # 💥 關鍵：與資料庫同生共死
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=wuchang_absolute_secret
+    volumes:
+      - wuchang_odoo_web_data:/var/lib/odoo
+
+# 宣告實體固化硬碟 (確保資料重開機不見)
+volumes:
+  wuchang_odoo_pg_data:
+  wuchang_odoo_web_data:

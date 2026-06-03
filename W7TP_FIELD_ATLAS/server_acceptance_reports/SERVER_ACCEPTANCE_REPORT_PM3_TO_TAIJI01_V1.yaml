@@ -1,0 +1,65 @@
+acceptance_report_id: SERVER_ACCEPTANCE_REPORT_PM3_TO_TAIJI01_V1
+status: REJECT_RUNTIME_CHANGE_FOR_NOW
+
+source:
+  host: MSI
+  addon: pm3_runtime_sync
+  actual_db: postgres
+  state: installed
+
+target:
+  host: taiji01
+  addon: pm3_runtime_sync
+  state: missing
+  actual_db: unknown
+
+gate_results:
+  G1_SOURCE_DECLARED:
+    status: PASS
+    evidence: INBOUND_SYNC_PLAN_PM3_TO_TAIJI01_V1
+
+  G2_NO_SECRET_SYNC:
+    status: PASS_POLICY
+    rule: copy_scope excludes .env, secret files, OAuth client secrets, private keys
+
+  G3_ADDON_STATIC_PASS:
+    status: PARTIAL_PASS
+    evidence: MSI sandbox validation passed manifest/python/xml
+    remaining: full source inventory diff and no-secret linter execution
+
+  G4_DB_COMPATIBILITY:
+    status: FAIL_PENDING
+    reason: taiji01 actual Odoo DB not identified
+
+  G5_ROLLBACK_READY:
+    status: FAIL_PENDING
+    reason: taiji01 rollback point not created
+
+  G6_HUMAN_APPROVAL:
+    status: FAIL_PENDING
+    reason: no explicit approval for runtime copy/restart
+
+decision:
+  accept_sync_now: false
+  allow_runtime_copy: false
+  allow_module_install_or_update: false
+  allow_restart: false
+
+next_required:
+  - run_taiji01_actual_db_identification
+  - run_no_secret_linter_on_candidate
+  - create_taiji01_rollback_point_plan
+  - produce_final_sync_diff_packet
+  - request_explicit_human_approval
+
+red_team_reflection:
+  negative_effects:
+    - accepting MSI addon too early may break taiji01 stable runtime
+    - PM3 may depend on DB config existing only on MSI postgres
+    - OAuth routes may appear before DNS/OAuth Console is ready
+    - rollback without DB snapshot may be incomplete
+  mitigation:
+    - reject runtime copy for now
+    - require taiji01 DB identification
+    - require rollback point
+    - copy approval and restart approval must be separate

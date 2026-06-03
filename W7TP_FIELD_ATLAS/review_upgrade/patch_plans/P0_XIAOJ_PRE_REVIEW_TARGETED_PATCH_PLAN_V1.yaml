@@ -1,0 +1,62 @@
+patch_plan_id: P0_XIAOJ_PRE_REVIEW_TARGETED_PATCH_PLAN_V1
+status: EXECUTED_P0_SUCCESS
+
+purpose:
+  - upgrade_high_risk_review_language_first
+  - replace_empty_human_review_with_xiaoj_review_opinion_plus_final_authorization
+  - avoid_responsibility_dumping_to_user
+
+target_priority: P0
+
+target_concepts:
+  - plaintext_claim
+  - emergency_disclosure
+  - three_key_custody
+  - runtime_landing
+  - server_acceptance
+  - rollback
+  - node_enforcement
+
+candidate_files:
+  - W7TP_FIELD_ATLAS/plaintext_policies/W7TP_PLAINTEXT_CLAIM_REVIEW_POLICY_V1.yaml
+  - W7TP_FIELD_ATLAS/emergency_care/W7TP_EMERGENCY_CARE_DISCLOSURE_RULE_V1.yaml
+  - W7TP_FIELD_ATLAS/key_custody/W7TP_THREE_KEY_CUSTODY_OPERATION_RULE_V1.yaml
+  - W7TP_FIELD_ATLAS/runtime_landing_plans/W7TP_RUNTIME_LANDING_GATE_V1.yaml
+  - W7TP_FIELD_ATLAS/server_acceptance_reports/SERVER_ACCEPTANCE_REPORT_PM3_TO_TAIJI01_V1.yaml
+  - W7TP_FIELD_ATLAS/rollback_plans/W7TP_RUNTIME_ROLLBACK_POLICY_V1.yaml
+  - W7TP_FIELD_ATLAS/rollback_plans/TAIJI01_PM3_ROLLBACK_POINT_PLAN_V1.yaml
+  - W7TP_FIELD_ATLAS/node_enforcement/W7TP_NODE_ENFORCEMENT_POLICY_V1.yaml
+
+replacement_block:
+  xiaoj_review_opinion:
+    recommendation: require_more_evidence
+    reason: required
+    safe_option: required
+    risk_if_approved: required
+    risk_if_rejected: required
+    required_human_action: approve_with_conditions
+  human_final_authorization:
+    required: true
+    role: final_consent_not_primary_analysis
+
+patch_rules:
+  - do_not_remove_human_authorization
+  - add_xiaoj_review_opinion_before_human_final_authorization
+  - preserve_existing_human_review_meaning_as_final_authorization
+  - do_not_patch_automatically_until_candidate_lines_are_reviewed
+
+validation_after_patch:
+  - yaml_parse_check
+  - grep_no_empty_human_review_required
+  - grep_xiaoj_review_opinion_present
+  - git_diff_review
+
+red_team_reflection:
+  negative_effects:
+    - patch_may_duplicate_review_blocks
+    - yaml_indentation_may_break
+    - old_files_may_use_human_review_as_concept_not_gate
+  mitigation:
+    - patch_only_P0_first
+    - validate_yaml_after_patch
+    - keep_git_diff_review_before_commit

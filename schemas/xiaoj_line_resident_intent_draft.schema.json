@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XiaoJLineResidentIntentDraft",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "intent_id": {"type": "string"},
+    "source": {"type": "string", "enum": ["LINE"]},
+    "user_context": {"type": "string", "enum": ["community_wifi", "personal_network", "unknown"]},
+    "identity_context": {"type": "string", "enum": ["anonymous", "logged_in_member", "staff", "volunteer", "committee", "merchant"]},
+    "service_type": {"type": "string", "enum": ["ai_qa", "community_notice", "event", "repair", "delivery", "ordering", "committee", "coding_request", "other"]},
+    "route": {"type": "string", "enum": ["community_redacted_lane", "personal_privacy_lane", "staff_review_lane", "dlq_lane"]},
+    "summary": {"type": "string", "maxLength": 500},
+    "risk_level": {"type": "string", "enum": ["L0", "L1", "L2", "L3", "DLQ"]},
+    "pii_level": {"type": "string", "enum": ["none", "redacted", "association_controlled", "blocked_raw_pii"]},
+    "plan_only": {"const": true},
+    "human_confirmation_required": {"type": "boolean"},
+    "raw_pii_to_cloud": {"const": false},
+    "odoo_write": {"const": false},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["intent_id", "source", "user_context", "identity_context", "service_type", "route", "summary", "risk_level", "pii_level", "plan_only", "human_confirmation_required", "raw_pii_to_cloud", "odoo_write", "created_at"]
+}

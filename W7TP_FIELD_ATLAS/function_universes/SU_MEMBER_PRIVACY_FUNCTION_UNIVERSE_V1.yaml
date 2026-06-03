@@ -1,0 +1,34 @@
+sub_universe_id: SU_MEMBER_PRIVACY_FUNCTION_UNIVERSE_V1
+parent_field: U04_IDENTITY_PRIVACY_FIELD
+status: PLAN_ONLY
+
+purpose:
+  - develop_free_member_xiaoj_privacy_service
+  - protect_member_plaintext_by_default
+  - provide_member_visible_privacy_controls
+
+functions:
+  F01_member_privacy_dashboard:
+    output: member_can_view_service_permissions
+  F02_8d_identity_status:
+    output: active_revoked_expired_status
+  F03_contact_permission_center:
+    output: member_can_approve_revoke_contact
+  F04_plaintext_access_history:
+    output: member_can_review_claim_history
+  F05_device_binding_status:
+    output: active_device_and_recovery_state
+
+governance:
+  raw_plaintext_hidden_by_default: true
+  member_visibility_required: true
+  audit_required: true
+
+red_team_reflection:
+  negative_effects:
+    - dashboard_may_reveal_too_much_sensitive_metadata
+    - members_may_not_understand_permission_terms
+  mitigation:
+    - service_result_first_ui
+    - sensitive_details_hidden_unless_reviewed
+    - plain_language_status_labels

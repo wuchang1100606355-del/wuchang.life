@@ -1,0 +1,25 @@
+node:
+  id: openwebui
+  layer: 02_edge_nodes
+  owner: CHIANG_CHENG_LUNG
+  boot_profile: canonical_edge_node_v1
+  role:
+    - ui
+    - human_interaction
+    - task_request
+    - status_report
+  trust:
+    trust_level: 80
+    compute_score: 40
+    energy_score: 60
+    max_authority_level: 2
+  allow:
+    - chat_ui
+    - task_request
+    - status_report
+    - heartbeat
+  deny:
+    - root_decision
+    - private_key_access
+    - financial_action
+    - legal_commitment_without_signature

@@ -1,0 +1,57 @@
+plan_id: W7TP_GEI_SNAPSHOT_GENERATOR_PLAN_V1
+status: PLAN_ONLY
+
+purpose:
+  - generate_periodic_gei_context_snapshot
+  - preserve_current_governance_evidence_context
+  - prevent_context_loss_between_chats_machines_and_runtime_fields
+
+snapshot_inputs:
+  required:
+    - W7TP_FIELD_ATLAS/00_universe_event_registry.yaml
+    - W7TP_FIELD_ATLAS/01_universe_registry.yaml
+    - W7TP_FIELD_ATLAS/02_governed_hive_master_index.yaml
+    - W7TP_FIELD_ATLAS/task_boards/W7TP_GOVERNED_HIVE_TASK_BOARD_V1.yaml
+    - W7TP_FIELD_ATLAS/gei_context/W7TP_GEI_CONTEXT_INDEX_V1.yaml
+  optional:
+    - Taiji_Governance/
+    - W7TP_FIELD_ATLAS/schemas/00_schema_index.yaml
+    - W7TP_FIELD_ATLAS/diff_packets/
+    - W7TP_FIELD_ATLAS/source_hash_ledger/
+
+snapshot_output:
+  directory: W7TP_FIELD_ATLAS/gei_context/snapshot_outputs
+  format:
+    - yaml
+    - markdown_summary
+  filename_pattern:
+    - gei_context_snapshot_YYYYMMDD_HHMMSS.yaml
+    - gei_context_snapshot_YYYYMMDD_HHMMSS.md
+
+capture_fields:
+  - host
+  - git_branch
+  - git_head
+  - universe_registry_status
+  - governed_hive_task_board_status
+  - active_plan_only_files
+  - field_drift_events
+  - pending_runtime_gates
+  - red_team_risk_summary
+
+governance:
+  no_secret_read: true
+  no_runtime_write: true
+  no_db_write: true
+  no_service_restart: true
+  snapshot_is_context_not_source_of_truth: true
+
+red_team_reflection:
+  negative_effects:
+    - snapshot_may_become_stale
+    - snapshot_may_be_mistaken_as_runtime_truth
+    - too_many_snapshots_may_create_noise
+  mitigation:
+    - include_timestamp_git_head_and_host
+    - mark_snapshot_as_context_only
+    - add_retention_policy_later

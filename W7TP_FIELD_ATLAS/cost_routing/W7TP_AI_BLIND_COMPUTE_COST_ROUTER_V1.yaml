@@ -1,0 +1,53 @@
+router_id: W7TP_AI_BLIND_COMPUTE_COST_ROUTER_V1
+status: PLAN_ONLY
+
+purpose:
+  - reduce_ai_usage_cost_without_plaintext_leakage
+  - route_tasks_between_local_twin_group_node_and_cloud_lane
+  - support_subscription_based_blind_ai_service
+
+routing_inputs:
+  - task_type
+  - privacy_level
+  - quality_requirement
+  - latency_requirement
+  - local_compute_available
+  - group_member_subscription_level
+  - cloud_allowed
+  - redaction_required
+
+routing_modes:
+  LOCAL_FIRST:
+    use_when:
+      - low_complexity
+      - privacy_sensitive
+      - local_model_sufficient
+
+  GROUP_NODE_ASSIST:
+    use_when:
+      - member_consents
+      - group_node_registered
+      - task_redacted
+      - cost_saving_possible
+
+  CLOUD_ASSIST:
+    use_when:
+      - high_quality_required
+      - redacted_packet_ready
+      - policy_gate_passed
+
+  HUMAN_REVIEW:
+    use_when:
+      - plaintext_claim
+      - high_risk_governance
+      - legal_or_financial_context
+
+red_team_reflection:
+  negative_effects:
+    - cost_saving_may_reduce_answer_quality_if_overused
+    - group_node_compute_may_be_misunderstood_as_data_access
+    - cloud_lane_may_receive_too_much_context
+  mitigation:
+    - quality_threshold_required
+    - redaction_before_group_or_cloud_lane
+    - usage_ledger_and_member_visibility

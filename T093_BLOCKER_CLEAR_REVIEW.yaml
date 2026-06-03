@@ -1,0 +1,35 @@
+id: T093_BLOCKER_CLEAR_REVIEW
+generated_at: 2026-06-01T08:30:00Z
+mode: PASS_SANDBOX_ONLY
+objective: Review whether XIAOJ_TOTAL_FIELD_V2_PRE_LANDING_BLOCKER may be cleared later.
+
+inputs:
+  - T091_MASTER_INDEX_PATCH_EXECUTION
+  - T092_MERGE_ALIAS_EXECUTION
+  - T092_VALIDATION_PLAN
+  - T092_XIAOJ_REVIEW
+
+decision:
+  blocker_clear_status: HOLD
+  reason:
+    - T091_and_T092_are_preview_only
+    - physical_execution_not_confirmed
+    - canonical_landing_not_yet_authorized
+
+required_before_clear:
+  - T091_actual_patch_applied_and_verified
+  - T092_actual_merge_alias_applied_and_verified
+  - sha256_before_after_recorded
+  - no_runtime_or_db_change_confirmed
+  - human_authorization
+
+forbidden:
+  - actual_blocker_removal
+  - canonical_registration
+  - atlas_write
+  - registry_write
+  - runtime_write
+  - db_write
+  - service_restart
+
+status: BLOCKER_REMAINS_ACTIVE

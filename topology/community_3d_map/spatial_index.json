@@ -1,0 +1,33 @@
+{
+  "id": "wuchang_community_3d_map_spatial_index",
+  "created_at": "2026-05-23T05:45:12.371406+08:00",
+  "fusion_state": "indexed",
+  "fusion_level": 2,
+  "source_geojson": "data/community_3d_map/source/wuchang_community_jurisdiction_anchor_2026-05-12.geojson",
+  "source_sha256": "bc5ce7727b5a31cf0828d3952036d1f753c9a053b136878c7d7d6234dba04cb0",
+  "feature_count": 1,
+  "geometry_types": {
+    "Point": 1
+  },
+  "bbox": {
+    "min_lng": 121.497961092329,
+    "min_lat": 25.0804429673534,
+    "max_lng": 121.497961092329,
+    "max_lat": 25.0804429673534
+  },
+  "privacy_default": "mask_household_identity",
+  "gateway_required": true,
+  "dead_letter": "runtime/dead_letter/routing_rejected.jsonl",
+  "allowed_use": [
+    "local_query",
+    "topology_reference",
+    "property_case_context",
+    "community_guidance",
+    "disaster_prevention_planning"
+  ],
+  "denied_use": [
+    "publish_personal_location_without_review",
+    "infer_sensitive_household_identity",
+    "external_upload_without_human_approval"
+  ]
+}

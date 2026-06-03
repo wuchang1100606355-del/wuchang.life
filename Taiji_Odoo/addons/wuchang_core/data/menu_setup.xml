@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Product Categories -->
+    <record id="prod_categ_breakfast" model="product.category">
+      <field name="name">早餐</field>
+    </record>
+    <record id="prod_categ_bbq" model="product.category">
+      <field name="name">燒烤</field>
+    </record>
+    <record id="prod_categ_coffee" model="product.category">
+      <field name="name">咖啡</field>
+    </record>
+
+    <!-- Breakfast Products -->
+    <record id="prod_soy_milk" model="product.template">
+      <field name="name">豆漿</field>
+      <field name="list_price">25.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_breakfast"/>
+    </record>
+    <record id="prod_egg_pancake" model="product.template">
+      <field name="name">蛋餅</field>
+      <field name="list_price">40.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_breakfast"/>
+    </record>
+    <record id="prod_congee" model="product.template">
+      <field name="name">皮蛋瘦肉粥</field>
+      <field name="list_price">65.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_breakfast"/>
+    </record>
+
+    <!-- BBQ Products -->
+    <record id="prod_bbq_skewer" model="product.template">
+      <field name="name">烤肉串</field>
+      <field name="list_price">90.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_bbq"/>
+    </record>
+    <record id="prod_bbq_beef_tongue" model="product.template">
+      <field name="name">烤牛舌</field>
+      <field name="list_price">180.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_bbq"/>
+    </record>
+    <record id="prod_bbq_wings" model="product.template">
+      <field name="name">碳烤雞翅</field>
+      <field name="list_price">120.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_bbq"/>
+    </record>
+
+    <!-- Coffee Products for 聊國咖啡館 -->
+    <record id="prod_coffee_latte" model="product.template">
+      <field name="name">拿鐵</field>
+      <field name="list_price">80.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_americano" model="product.template">
+      <field name="name">美式咖啡</field>
+      <field name="list_price">60.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_cappuccino" model="product.template">
+      <field name="name">卡布奇諾</field>
+      <field name="list_price">85.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_mocha" model="product.template">
+      <field name="name">摩卡</field>
+      <field name="list_price">95.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_caramel_macchiato" model="product.template">
+      <field name="name">焦糖瑪奇朵</field>
+      <field name="list_price">100.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_pour_over" model="product.template">
+      <field name="name">手沖咖啡</field>
+      <field name="list_price">90.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_cold_brew" model="product.template">
+      <field name="name">冷萃咖啡</field>
+      <field name="list_price">90.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_flat_white" model="product.template">
+      <field name="name">馥芮白</field>
+      <field name="list_price">85.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_hazelnut_latte" model="product.template">
+      <field name="name">榛果拿鐵</field>
+      <field name="list_price">95.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+    <record id="prod_coffee_brown_sugar_latte" model="product.template">
+      <field name="name">黑糖拿鐵</field>
+      <field name="list_price">95.0</field>
+      <field name="sale_ok">True</field>
+      <field name="type">consu</field>
+      <field name="available_in_pos">True</field>
+      <field name="categ_id" ref="wuchang_core.prod_categ_coffee"/>
+    </record>
+  </data>
+</odoo>

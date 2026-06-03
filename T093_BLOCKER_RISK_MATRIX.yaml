@@ -1,0 +1,20 @@
+id: T093_BLOCKER_RISK_MATRIX
+
+risks:
+  premature_clear:
+    level: HIGH
+    reason: clearing blocker before T091/T092 physical verification may permit stale V2 landing
+
+  missing_execution_evidence:
+    level: MEDIUM
+    reason: preview outputs do not prove files were patched
+
+  sequence_skip:
+    level: HIGH
+    reason: T094 must not start before blocker review confirms execution evidence
+
+mitigation:
+  - require_T091_execution_result
+  - require_T092_execution_result
+  - require_sha256_before_after
+  - require_human_authorization

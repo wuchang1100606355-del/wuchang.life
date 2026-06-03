@@ -1,0 +1,47 @@
+rule_id: W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - route_sensitive_requests_to_xiaoj_review_opinion_plus_final_authorization
+  - prevent_auto_execution_of_plaintext_or_runtime_risk
+  - create_auditable_review_queue
+
+review_queue_triggers:
+  - plaintext_claim_packet
+  - high_risk_contact_request
+  - device_loss_rebind
+  - emergency_disclosure
+  - runtime_landing_request
+  - node_enforcement_action
+  - three_key_unlock_request
+
+queue_fields:
+  - review_id
+  - request_type
+  - requester
+  - affected_member_or_node
+  - purpose_code
+  - risk_level
+  - evidence_refs
+  - recommended_action
+  - reviewer_decision
+  - expiry_or_reseal_required
+
+decision_types:
+  - approve_limited
+  - reject
+  - request_more_evidence
+  - escalate_three_key_review
+  - quarantine
+  - defer
+
+red_team_reflection:
+  negative_effects:
+    - review_queue_may_become_bottleneck
+    - reviewers_may_rubber_stamp_requests
+    - sensitive_metadata_in_queue_may_become_risk
+  mitigation:
+    - priority_levels
+    - reviewer_accountability
+    - minimum_metadata_only
+    - audit_hash_required

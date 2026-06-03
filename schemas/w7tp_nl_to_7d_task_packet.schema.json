@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_nl_to_7d_task_packet.schema.json",
+  "title": "W7TP Natural Language to 7D Task Packet",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "domain",
+    "mode",
+    "authority",
+    "model_call_allowed",
+    "cloud_call_allowed",
+    "generator_input",
+    "generator_output",
+    "packet_state",
+    "prediction_policy",
+    "forbidden_payload",
+    "forbidden_actions",
+    "action_flags"
+  ],
+  "properties": {
+    "mode": { "const": "plan_only" },
+    "authority": { "const": "local_xiaoj_router" },
+    "model_call_allowed": { "const": false },
+    "cloud_call_allowed": { "const": false },
+    "generator_input": { "type": "array", "items": { "type": "string" } },
+    "generator_output": { "type": "array", "items": { "type": "string" } },
+    "packet_state": { "type": "array", "items": { "type": "string" } },
+    "prediction_policy": { "type": "object" },
+    "forbidden_payload": { "type": "array", "items": { "type": "string" } },
+    "forbidden_actions": { "type": "array", "items": { "type": "string" } },
+    "action_flags": { "type": "object" }
+  },
+  "additionalProperties": false
+}

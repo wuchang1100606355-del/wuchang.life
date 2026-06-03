@@ -1,0 +1,37 @@
+model_id: W7TP_PRIVACY_AI_SUBSCRIPTION_MODEL_V1
+status: PLAN_ONLY
+
+free_member_core:
+  - xiaoj_member_privacy_service
+  - 8d_identity_protection
+  - hardware_optimization_assist
+
+paid_subscription:
+  merchant:
+    - blind_ai_service
+    - no_plaintext_usage_reduction
+    - standard_addon_subscription
+  committee:
+    - governance_ai_service
+    - lawful_plaintext_claim_workflow
+    - audit_and_disaster_recovery_support
+
+value_added_modules:
+  profit_owner: group_member
+  rule: standard_addon_profit_returns_to_group_member
+  boundary: no_member_data_sale
+
+privacy_boundary:
+  daily_use: 8d_code_or_service_result
+  raw_plaintext_to_merchant: false
+  contact_requires_member_approval: true
+  plaintext_claim_requires_xiaoj_review_opinion_plus_final_authorization: true
+
+red_team_reflection:
+  negative_effects:
+    - subscription_model_may_be_mistaken_as_selling_member_data
+    - value_added_profit_may_create_overmarketing_pressure
+  mitigation:
+    - state_product_as_privacy_ai_service_not_data_sale
+    - opt_in_required_for_contact
+    - audit_all_contact_and_plaintext_claims

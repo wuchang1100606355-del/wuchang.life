@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_pm3_fixed_vector_state_window_tree" model="ir.ui.view">
+        <field name="name">pm3.fixed.vector.state.window.tree</field>
+        <field name="model">pm3.memory.index</field>
+        <field name="arch" type="xml">
+            <list string="Fixed Vector State Window">
+                <field name="name"/>
+                <field name="fixed_vector_hash"/>
+                <field name="fixed_last_content_sha256"/>
+                <field name="fixed_vector_locked_at"/>
+            </list>
+        </field>
+    </record>
+</odoo>

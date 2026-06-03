@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+cd "$HOME/Taiji_Hub"
+mkdir -p runtime logs
+
+AUDIT="logs/wuchang_pos_terminal_enable.jsonl"
+OUT="runtime/WUCHANG_POS_TERMINAL_ACCESS.txt"
+
+ts() { date -Iseconds; }
+
+audit() {
+  local event="$1"
+  local detail="${2:-}"
+  detail="$(printf '%s' "$detail" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+  printf '{"time":"%s","event":"%s","detail":"%s"}\n' "$(ts)" "$event" "$detail" >> "$AUDIT"
+}
+
+port_listening() {
+  local port="$1"
+  ss -ltn 2>/dev/null | awk '{print $4}' | grep -Eq "(:|\])${port}$"
+}
+
+echo "======================================================"
+echo "     五常 POS 小三機啟用檢查"
+echo "======================================================"
+
+audit "pos_terminal_enable_start" "check odoo pos access"
+
+echo "[1] 啟動 Odoo/Postgres 容器"
+if command -v docker >/dev/null 2>&1; then
+  docker start wuchang_os_pg >/dev/null 2>&1 || true
+  docker start wuchang_os_odoo_18 >/dev/null 2>&1 || true
+else
+  echo "[warn] docker not found"
+fi
+
+sleep 2
+
+echo "[2] 檢查 Odoo 8069"
+if port_listening 8069; then
+  echo "[ok] Odoo 8069 listening"
+else
+  echo "[fail] Odoo 8069 not listening"
+  audit "pos_terminal_enable_fail" "odoo_8069_not_listening"
+  exit 1
+fi
+
+HTTP_CODE="$(curl -sS -o /tmp/wuchang_odoo_login_check.html -w '%{http_code}' http://127.0.0.1:8069/web/login || true)"
+echo "[http] local Odoo /web/login = $HTTP_CODE"
+
+if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "303" ] && [ "$HTTP_CODE" != "302" ]; then
+  echo "[warn] Odoo HTTP check unusual: $HTTP_CODE"
+fi
+
+echo "[3] 取得 Tailscale / LAN 入口"
+
+TS_IP="$(tailscale ip -4 2>/dev/null | head -n 1 | tr -d '\r' || true)"
+
+WIN_LAN_IP="$(powershell.exe -NoProfile -Command 'Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike "127.*" -and $_.IPAddress -notlike "169.254.*" -and $_.InterfaceAlias -notmatch "Loopback|vEthernet|Tailscale|WSL|Docker" } | Sort-Object InterfaceMetric | Select-Object -First 1 -ExpandProperty IPAddress' 2>/dev/null | tr -d '\r' | head -n 1 || true)"
+
+{
+  echo "WUCHANG POS TERMINAL ACCESS"
+  echo "TIME=$(ts)"
+  echo ""
+  echo "PRIMARY_MODE=TAILSCALE_VPN"
+  echo "TAILSCALE_IP=${TS_IP:-UNKNOWN}"
+  if [ -n "${TS_IP:-}" ]; then
+    echo "POS_URL_TAILSCALE=http://${TS_IP}:8069/web"
+    echo "POS_LOGIN_TAILSCALE=http://${TS_IP}:8069/web/login"
+  fi
+  echo ""
+  echo "LAN_MODE=SAME_WIFI_PRIVATE_NETWORK"
+  echo "WINDOWS_LAN_IP=${WIN_LAN_IP:-UNKNOWN}"
+  if [ -n "${WIN_LAN_IP:-}" ]; then
+    echo "POS_URL_LAN=http://${WIN_LAN_IP}:8069/web"
+    echo "POS_LOGIN_LAN=http://${WIN_LAN_IP}:8069/web/login"
+  fi
+  echo ""
+  echo "ODOO_LOCAL=http://127.0.0.1:8069/web"
+  echo ""
+  echo "OPERATION:"
+  echo "1. 小三機若已安裝 Tailscale，優先開 POS_URL_TAILSCALE"
+  echo "2. 小三機若只在同 Wi-Fi，開 POS_URL_LAN"
+  echo "3. 登入 Odoo 後進入 Point of Sale / 銷售點"
+  echo "4. 開啟對應 POS Session"
+  echo ""
+  echo "SECURITY:"
+  echo "No Tailscale Funnel"
+  echo "No public exposure"
+  echo "No firewall change from this script"
+} | tee "$OUT"
+
+audit "pos_terminal_access_written" "$OUT"
+
+echo ""
+echo "======================================================"
+echo "POS_TERMINAL_ENABLE_CHECK_DONE"
+echo "access_file=$OUT"
+echo "======================================================"

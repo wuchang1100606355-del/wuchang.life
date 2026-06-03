@@ -1,0 +1,100 @@
+keys/
+.secrets/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.credentials
+*service-account*.json
+*service_account*.json
+*.db
+*.db-shm
+*.db-wal
+__pycache__/
+*.pyc
+*.log
+*.out
+taiji_env/
+jules_env/
+Taiji_Odoo/odoo_data/
+Taiji_Odoo/postgres_data/
+archive/
+runtime/ledger/
+.taiji_runtime/
+.taiji_runtime_v0_1_0/
+
+# local virtualenvs
+.venv*/
+venv*/
+*_env/
+# runtime / generated data
+open_webui_data/
+logs/
+backups/
+snapshots/
+runtime/reports/
+runtime/dead_letter/
+runtime/deadletter/
+runtime/checkpoints/
+runtime/snapshots/
+runtime/build/
+# databases / model / cache
+*.sqlite
+*.sqlite3
+*.pid
+.pytest_cache/
+*.swp
+# Odoo runtime data
+# local secrets / keys
+*.env
+admin
+admin.pub
+# W7TP safe archive / generated backup rules
+*.backup
+*.bak
+*.tmp
+runtime/archive/
+runtime/reports/*.tmp
+# T100B git debt cleanup - generated/runtime noise
+runtime/
+reports/
+reviews/
+simulations/
+*.bak_*
+*.bak.*
+*.tar.gz
+*.sha256
+patent_evidence_pack_*/
+patent_evidence_pack_*.tar.gz
+patent_evidence_pack_*.tar.gz.sha256
+# local/generated misc
+node_outbox/
+ollama_dev_models/
+sync_agents/
+state/
+site/
+"taged files ===\""
+taiji01:22
+# M011 canonical rebuild - local/generated noise only
+_pending_delete/
+^C
+"afe focused add ==="
+172.27.16.1:2222
+# M012 Odoo local/runtime noise
+Taiji_Odoo/backup/
+Taiji_Odoo/import/
+Taiji_Odoo/.local/
+Taiji_Odoo/**/*.pyc
+Taiji_Odoo/**/__pycache__/
+# M014 shell paste artifacts / scratch files
+Taiji_Odoo/addons/wuchang_core/models/r.txt
+Taiji_Odoo/addons/wuchang_core/models/诶.txt
+Taiji_Odoo/addons/wuchang_core/views/g3.txt
+.ai/
+.continue/
+# M015 final paste/status noise
+afe focused add ===
+taged files ==="
+Taiji_Governance/git_rebuild/git_status_after_*.txt

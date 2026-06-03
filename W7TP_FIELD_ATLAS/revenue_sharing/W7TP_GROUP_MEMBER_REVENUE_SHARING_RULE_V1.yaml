@@ -1,0 +1,36 @@
+rule_id: W7TP_GROUP_MEMBER_REVENUE_SHARING_RULE_V1
+status: PLAN_ONLY
+
+purpose:
+  - define_value_added_subscription_profit_return_to_group_member
+  - support_public_interest_bloodmaking
+  - keep_member_data_out_of_revenue_sale
+
+revenue_sources:
+  allowed:
+    - standard_addon_subscription
+    - blind_ai_usage_reduction_subscription
+    - hardware_optimization_service
+    - privacy_ai_service_subscription
+  forbidden:
+    - sale_of_member_plaintext
+    - sale_of_contact_list
+    - unauthorized_marketing_data
+    - raw_behavior_profile_export
+
+sharing_principles:
+  - group_member_can_receive_profit_from_value_added_modules
+  - association_can_charge_governance_or_platform_service_fee
+  - member_privacy_service_remains_free_core
+  - accounting_must_be_auditable
+  - public_interest_fund_flow_must_be_separated_from_private_profit
+
+red_team_reflection:
+  negative_effects:
+    - revenue_sharing_may_be_misread_as_data_monetization
+    - unclear_accounting_may_create_disputes
+    - group_member_profit_may_pressure_members
+  mitigation:
+    - explicitly_define_no_data_sale
+    - separate_service_fee_from_member_data
+    - require transparent accounting and opt-in contact rules

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_wuchang_ticket_root"
+              name="票券開設"
+              parent="menu_wuchang_property_root"
+              sequence="16"/>
+
+    <record id="view_wuchang_ticket_opening_list" model="ir.ui.view">
+        <field name="name">wuchang.ticket.opening.list</field>
+        <field name="model">wuchang.ticket.opening</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="issuer_mode"/>
+                <field name="issuer_member_id"/>
+                <field name="issuer_merchant_id"/>
+                <field name="target_scope"/>
+                <field name="target_merchant_id"/>
+                <field name="unit_value"/>
+                <field name="ticket_quantity"/>
+                <field name="total_face_value"/>
+                <field name="remaining_member_quota"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_ticket_opening_form" model="ir.ui.view">
+        <field name="name">wuchang.ticket.opening.form</field>
+        <field name="model">wuchang.ticket.opening</field>
+        <field name="arch" type="xml">
+            <form string="票券開設">
+                <header>
+                    <button name="action_activate" type="object" string="開設生效"/>
+                    <button name="action_suspend" type="object" string="暫停"/>
+                    <button name="action_close" type="object" string="結束"/>
+                    <button name="action_cancel" type="object" string="取消"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group string="開設模式">
+                        <field name="name"/>
+                        <field name="issuer_mode"/>
+                        <field name="ticket_type"/>
+                        <field name="target_scope"/>
+                    </group>
+
+                    <group string="團體會員開設：所有商家商品券 / 指定商家商品券">
+                        <field name="issuer_member_id"/>
+                        <field name="issuer_group_customer_id"/>
+                        <field name="target_merchant_id"/>
+                        <field name="member_quota_limit"/>
+                        <field name="remaining_member_quota"/>
+                    </group>
+
+                    <group string="商家自行開設：自家票券">
+                        <field name="issuer_merchant_id"/>
+                    </group>
+
+                    <group string="票券額度">
+                        <field name="unit_value"/>
+                        <field name="ticket_quantity"/>
+                        <field name="total_face_value"/>
+                    </group>
+
+                    <group string="有效期間與設備對應">
+                        <field name="valid_from"/>
+                        <field name="valid_to"/>
+                        <field name="governance_node_id"/>
+                        <field name="local_cloud_id"/>
+                    </group>
+
+                    <notebook>
+                        <page string="備註">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_ticket_opening" model="ir.actions.act_window">
+        <field name="name">全部票券開設</field>
+        <field name="res_model">wuchang.ticket.opening</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_wuchang_ticket_opening_all"
+              name="全部票券開設"
+              parent="menu_wuchang_ticket_root"
+              action="action_wuchang_ticket_opening"
+              sequence="10"/>
+
+    <record id="action_wuchang_ticket_opening_group_member" model="ir.actions.act_window">
+        <field name="name">團體會員商品券開設</field>
+        <field name="res_model">wuchang.ticket.opening</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[("issuer_mode", "=", "group_member_universal")]</field>
+        <field name="context">{"default_issuer_mode": "group_member_universal", "default_target_scope": "all_merchants"}</field>
+    </record>
+    <menuitem id="menu_wuchang_ticket_opening_group_member"
+              name="團體會員商品券開設"
+              parent="menu_wuchang_ticket_root"
+              action="action_wuchang_ticket_opening_group_member"
+              sequence="20"/>
+
+    <record id="action_wuchang_ticket_opening_merchant_self" model="ir.actions.act_window">
+        <field name="name">商家自家票券開設</field>
+        <field name="res_model">wuchang.ticket.opening</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[("issuer_mode", "=", "merchant_self")]</field>
+        <field name="context">{"default_issuer_mode": "merchant_self", "default_target_scope": "own_merchant"}</field>
+    </record>
+    <menuitem id="menu_wuchang_ticket_opening_merchant_self"
+              name="商家自家票券開設"
+              parent="menu_wuchang_ticket_root"
+              action="action_wuchang_ticket_opening_merchant_self"
+              sequence="30"/>
+</odoo>

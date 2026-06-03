@@ -1,0 +1,64 @@
+{
+  "event": "business_entity_subject_mapping_loaded",
+  "status": "ACTIVE_GOVERNANCE_MAPPING_ONLY",
+  "version": "2026-05-12",
+  "live_odoo_mutation_performed": false,
+  "commercial_brand": {
+    "brand_name": "聊國咖啡館重新店",
+    "legal_entity": "上品食品行",
+    "tax_id": "34778660",
+    "address": "新北市三重區重新路三段204號1樓",
+    "google_business_profile_user_provided": true,
+    "google_business_profile_role": "commercial_main_store_profile",
+    "user_corrected_tax_id": true,
+    "typo_retracted_tax_id": "34775660",
+    "public_source_supported_tax_id": "34778660"
+  },
+  "public_interest_entity": {
+    "name": "新北市三重區五常社區發展協會",
+    "address_user_provided": "新北市三重區五常里28鄰仁義街161號一樓",
+    "domain": "wuchang.life",
+    "google_business_profile_url_user_provided": true,
+    "google_business_profile_owner": "新北市三重區五常社區發展協會",
+    "google_business_profile_user_confirmed_association_owned": true,
+    "public_source_supported_name": true
+  },
+  "google_business_profile_windows": [
+    {
+      "profile_name": "聊國咖啡館重新店 / 總店",
+      "owner_window": "上品食品行 / 聊國咖啡館重新店",
+      "role": "commercial_main_store_developer_vendor_profile",
+      "user_confirmed": true
+    },
+    {
+      "profile_name": "五常智慧社區雲",
+      "owner_window": "新北市三重區五常社區發展協會",
+      "role": "association_public_interest_profile",
+      "user_confirmed": true
+    }
+  ],
+  "registration_or_tax_id_conflict": {
+    "previous_association_registration_id": "新北市社區補字第1100606355號",
+    "business_tax_id_active": "34778660",
+    "business_tax_id_typo_retracted": "34775660",
+    "decision": "active_business_tax_id_corrected_to_34778660",
+    "risk_level": "L1_near"
+  },
+  "odoo_representation": {
+    "main_company": "新北市三重區五常社區發展協會",
+    "developer_vendor": "上品食品行 / 聊國咖啡館重新店",
+    "vendor_roles": [
+      "developer_vendor",
+      "cooperation_contractor",
+      "technology_transferor"
+    ]
+  },
+  "odoo_boundary": {
+    "brand_is_not_legal_controller": true,
+    "commercial_entity_is_not_public_interest_controller": true,
+    "association_assets_must_not_mix_with_private_business_assets": true,
+    "live_apply_requires_manifest_gate_audit_rollback": true
+  },
+  "secret_material_included": false,
+  "member_plaintext_included": false
+}

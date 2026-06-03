@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  wuchang-local-brain:
+    image: ollama/ollama:latest
+    container_name: wuchang_gpu_brain
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - "/home/taiji_admin/.ollama:/root/.ollama"
+    # 💥 專利關鍵：NVIDIA GPU 實體穿透 💥
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

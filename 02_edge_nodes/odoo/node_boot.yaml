@@ -1,0 +1,27 @@
+node:
+  id: odoo
+  layer: 02_edge_nodes
+  owner: CHIANG_CHENG_LUNG
+  boot_profile: canonical_edge_node_v1
+  role:
+    - pos
+    - property
+    - finance_record
+    - invoice_record
+    - status_report
+  trust:
+    trust_level: 85
+    compute_score: 50
+    energy_score: 65
+    max_authority_level: 3
+  allow:
+    - order_record
+    - invoice_record
+    - property_case
+    - status_report
+    - heartbeat
+  deny:
+    - spend_money_without_approval
+    - legal_commitment_without_signature
+    - delete_core_data
+    - private_key_access
