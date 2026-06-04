@@ -1,0 +1,37 @@
+packet_ref: W7TP_INTENT_FIELD_CORE_V1
+
+root_nodes:
+  - identity
+  - intent
+  - state
+  - topology
+  - resources
+  - governance
+  - validation
+  - integrity
+
+memory_strategy:
+  storage_mode: manifest_index
+  context_mode: volatile
+  reference_mode: packet_ref
+  delta_mode: enabled
+
+field_axioms:
+  - XiaoJ_is_Intent_Field
+  - W7TP_is_Governance_Router
+  - Memory_is_Mapping
+  - Packet_is_State
+  - Local_First
+  - No_Plaintext
+  - Human_Review
+  - Sandbox_Validate_Land
+
+field_vector:
+  service: 1.0
+  governance: 1.0
+  privacy: 1.0
+  sovereignty: 1.0
+  engineering: 1.0
+  public_welfare: 1.0
+  auditability: 1.0
+  humanity: 1.0
