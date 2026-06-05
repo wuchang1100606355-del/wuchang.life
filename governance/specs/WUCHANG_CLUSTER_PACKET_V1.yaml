@@ -1,0 +1,143 @@
+version: 1.0
+
+cluster_name: WUCHANG_FIELD_CLUSTER
+
+organization:
+
+  name: 新北市三重區五常社區發展協會
+
+  registration:
+    新北市政府社區補字第1100606355號
+
+  domain: wuchang.life
+
+governance:
+
+  model: W7TP
+
+  packet_sovereignty: true
+
+  admin_blind_privacy: true
+
+  state_governed_access: true
+
+  mandatory_audit_chain: true
+
+  identity_required: true
+
+principles:
+
+  - 一意圖一太極
+  - 一太極一場
+  - 一場一封包
+  - 一封包一世界
+  - 一世界一主權
+
+packet_sovereignty:
+
+  owner_has_sovereignty: true
+
+  owner_readable: false
+
+  owner_modifiable: false
+
+  owner_governable: true
+
+  admin_readable: false
+
+  association_readable: false
+
+identity:
+
+  registration_required: true
+
+  login_methods:
+    - google
+    - line
+
+  archive:
+    type: physical_archive
+
+  reveal_conditions:
+    - owner_authorization
+    - lawful_public_authority
+
+access_model:
+
+  default:
+    read: denied
+
+  state_driven: true
+
+audit:
+
+  required: true
+
+  immutable: true
+
+  events:
+    - read
+    - authorize
+    - revoke
+    - governance_action
+    - state_change
+
+nodes:
+
+  taiji01:
+
+    role:
+      - governance_root
+      - database_root
+      - odoo_root
+
+    network:
+      tailscale_ipv4: 100.71.224.18
+      lan_ipv4: 192.168.50.249
+
+    hardware:
+      cpu: Intel i7-7700
+      ram: 23GiB
+      storage: 226GiB
+
+  MSI:
+
+    role:
+      - ai_runtime_core
+      - packet_builder
+      - development_workspace
+
+    network:
+      tailscale_ipv4: 100.107.187.77
+
+    hardware:
+      cpu: Intel i7-13620H
+      ram: 23GiB
+      storage: 1007GiB
+
+  penguin:
+
+    role:
+      - edge_router
+      - ai_gateway
+      - sister_j_runtime
+
+    network:
+      tailscale_ipv4: 100.111.139.7
+
+    hardware:
+      cpu: Intel i7-10610U
+      ram: 14GiB
+      storage: 83GiB
+
+  iphone_11:
+
+    role:
+      - mobile_node
+      - governance_notification
+      - emergency_access
+
+relationships:
+  - taiji01 -> MSI
+  - MSI -> penguin
+  - iphone_11 -> taiji01
