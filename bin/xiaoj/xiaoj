@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+CMD="$*"
+
+echo "[XiaoJ]"
+echo "Intent: $CMD"
+
+case "$CMD" in
+
+  *同步*)
+      aicgt-sync
+      ;;
+
+  *校正*)
+      aicgt-calibrate
+      ;;
+
+  *封包*)
+      aicgt-build
+      ;;
+
+  *驗證*)
+      aicgt-verify
+      ;;
+
+  *重建*)
+      aicgt-reconstruct
+      ;;
+
+  *)
+      echo "No matching intent"
+      ;;
+esac
+

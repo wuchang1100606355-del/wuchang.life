@@ -1,0 +1,13 @@
+termination_mode: STATE_ONLY
+
+forbidden_tokens:
+  - eop
+  - EOF
+  - END
+  - "---"
+  - "```"
+
+execution_model:
+  output_boundary: next_state
+  flow_control: routing_decision
+  system_transition: phase_transition

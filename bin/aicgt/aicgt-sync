@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+aicgt-calibrate
+aicgt-build
+aicgt-verify
+
+echo "[AICGT] Sync Complete"

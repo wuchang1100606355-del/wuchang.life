@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+ROOT="$HOME/Taiji_Hub"
+
+SHA=$(find "$ROOT" -type f -name "*.sha256" \
+| sort \
+| tail -1)
+
+if [ -z "$SHA" ]; then
+    echo "[WGTP] no sha256 found"
+    exit 1
+fi
+
+echo "[WGTP] verify:"
+echo "$SHA"
+
+cd "$(dirname "$SHA")"
+
+sha256sum -c "$(basename "$SHA")"

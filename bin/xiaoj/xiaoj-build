@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -e
+
+echo "================================="
+echo " XiaoJ Intent Discovery Engine"
+echo "================================="
+
+echo "[1/7] Knowledge Discovery"
+echo "[2/7] Intent Gap Analysis"
+echo "[3/7] Intent Completion"
+echo "[4/7] Red Team Validation"
+echo "[5/7] Blind Compute Planning"
+echo "[6/7] Sandbox Construction"
+echo "[7/7] AICGT Packet Build"
+
+mkdir -p .xiaoj
+
+cat > .xiaoj/XIAOJ_INTENT_PACKET.yaml <<EOT
+packet_type: XIAOJ_INTENT_PACKET_V1
+
+timestamp: $(date -Iseconds)
+
+pipeline:
+  - knowledge_discovery
+  - intent_completion
+  - redteam_validation
+  - blind_compute
+  - sandbox_validation
+
+status: draft
+EOT
+
+echo "[XiaoJ] Intent Packet Generated"

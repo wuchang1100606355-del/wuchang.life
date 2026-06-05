@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+PACK=$(ls -t *.tar.gz | head -1)
+
+mkdir -p runtime_rebuild
+
+tar -xzf "$PACK" -C runtime_rebuild
+
+echo "Rebuild Complete"

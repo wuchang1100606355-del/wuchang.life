@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+TARGET=${1:-taiji01}
+
+PACK=$(ls -t *.tar.gz | head -1)
+SHA=$(ls -t *.sha256 | head -1)
+
+scp "$PACK" "$TARGET:/tmp/"
+scp "$SHA" "$TARGET:/tmp/"
+
+echo "Transfer Complete"

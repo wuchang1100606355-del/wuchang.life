@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -e
+
+SHA=$(ls -t AICGT_PACKET_*.sha256 | head -1)
+
+if [ -z "$SHA" ]; then
+    echo "[AICGT] No packet found"
+    exit 1
+fi
+
+sha256sum -c "$SHA"

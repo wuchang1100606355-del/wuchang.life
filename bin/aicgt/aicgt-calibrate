@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+
+cat > CORRECTION_PACKET.yaml <<EOT
+packet_type: AICGT_CORRECTION_V1
+
+axioms:
+  - Memory_is_Mapping
+  - Packet_is_State
+  - Intent_Precedes_Generation
+  - Correction_Precedes_Transfer
+
+intent_alignment:
+  enabled: true
+
+state_alignment:
+  enabled: true
+
+generation_mode:
+  corrective_generation
+
+timestamp: $(date -Iseconds)
+EOT
+
+echo "[AICGT] Correction Packet Generated"

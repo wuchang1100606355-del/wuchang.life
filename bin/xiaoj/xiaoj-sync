@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+xiaoj-build
+xiaoj-redteam
+xiaoj-sandbox
+
+aicgt-calibrate
+aicgt-build
+aicgt-verify
+
+echo
+echo "[XiaoJ] Intent Governance Complete"

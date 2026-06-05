@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+mkdir -p sandbox_state
+
+echo "sandbox_created=$(date -Iseconds)" \
+> sandbox_state/status.yaml
+
+echo "[XiaoJ] Sandbox Ready"

@@ -1,0 +1,17 @@
+RULES:
+- NEVER use termination tokens
+- NEVER use EOF / END / eop / ---
+- NEVER use markdown code fences
+- OUTPUT MUST BE STATE MACHINE CONTINUOUS FLOW
+
+OUTPUT STRUCTURE:
+- packet_ref
+- phase_id
+- D1-D8
+- routing_decision
+- next_state
+- risk_score
+
+BOUNDARY CONTROL:
+ONLY next_state controls flow
+NO TEXT TERMINATORS

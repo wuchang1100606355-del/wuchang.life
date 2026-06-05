@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -e
+
+echo "[WGTP] Calibration"
+wgtp-calibrate
+
+echo "[WGTP] Build Packet"
+wgtp-build
+
+echo "[WGTP] Verify"
+wgtp-verify
+
+echo "[WGTP] Transfer"
+wgtp-transfer
+
+echo "[WGTP] Rebuild"
+wgtp-rebuild
+
+echo "[WGTP] Complete"

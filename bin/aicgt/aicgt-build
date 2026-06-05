@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+
+PACK=AICGT_PACKET_$(date +%Y%m%d_%H%M%S)
+
+tar -czf ${PACK}.tar.gz \
+W7TP_INTENT_FIELD_ROOT.yaml \
+GOVERNANCE_MANIFEST.yaml \
+PATENT_MANIFEST.yaml \
+CORRECTION_PACKET.yaml
+
+sha256sum ${PACK}.tar.gz > ${PACK}.sha256
+
+echo "[AICGT] Built:"
+echo "${PACK}.tar.gz"
+echo "${PACK}.sha256"
