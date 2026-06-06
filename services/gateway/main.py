@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from pathlib import Path
 import requests, subprocess, json, hashlib, os
 from datetime import datetime
+from services.w7tp_ui_adapter import router as w7tp_ui_router
 
 app = FastAPI(title="Taiji Gateway", version="1.1.0-redteam")
 
@@ -293,3 +294,4 @@ def voice(payload: dict):
 
 app.include_router(taiji_topology_router)
 app.include_router(openai_compat_router)
+app.include_router(w7tp_ui_router)
