@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>W7TP 8D Control Panel</title>
+  <style>
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif;background:#0B0F19;color:#e5e7eb;margin:0;padding:20px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{background:#161B2D;border:1px solid #2A3352;border-radius:12px;padding:16px}
+    textarea,input,select,button{width:100%;box-sizing:border-box;margin-top:8px;border-radius:8px;border:1px solid #2A3352;background:#0f172a;color:#e5e7eb;padding:10px}
+    button{background:#065f46;border-color:#10b981;font-weight:700;cursor:pointer}
+    pre{white-space:pre-wrap;word-break:break-word;background:#020617;border:1px solid #1e293b;border-radius:8px;padding:12px;min-height:120px}
+    .ok{color:#10b981}.bad{color:#ef4444}.warn{color:#f59e0b}
+  </style>
+</head>
+<body>
+  <h1>W7TP 8D Control Panel</h1>
+  <p id="status" class="warn">BACKEND_CHECK_PENDING</p>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Intent Compile</h2>
+      <textarea id="intent" rows="5">我想將社區照護任務轉成 W7TP 8D 封包，需本地治理審查後才落地。</textarea>
+      <button onclick="compileIntent()">Compile Intent</button>
+    </section>
+
+    <section class="card">
+      <h2>D6 Hardwall Lint</h2>
+      <textarea id="lintInput" rows="5">safe community care workflow</textarea>
+      <button onclick="lintIntent()">Run D6 Linter</button>
+      <button onclick="injectSecret()">Inject Fake Secret Test</button>
+    </section>
+
+    <section class="card">
+      <h2>State Hash / Seal</h2>
+      <input id="node" value="taiji01">
+      <select id="state">
+        <option>TRANSACTION_COMMITTED</option>
+        <option>HARDWALL_BLOCKED</option>
+        <option>PHASE_SYNCING</option>
+        <option>DATA_REDACTED_BLIND</option>
+      </select>
+      <button onclick="sealState()">Generate State Seal</button>
+    </section>
+
+    <section class="card">
+      <h2>Evidence Commit</h2>
+      <button onclick="commitEvidence()">Commit Evidence</button>
+      <button onclick="fullFlow()">Run Full Flow</button>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <h2>Output</h2>
+    <pre id="out">READY</pre>
+  </section>
+
+<script>
+let lastPacket = null;
+let lastDecision = null;
+let lastHash = null;
+
+function out(obj){ document.getElementById("out").textContent = typeof obj === "string" ? obj : JSON.stringify(obj,null,2); }
+
+async function post(url, payload){
+  const r = await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload||{})});
+  const text = await r.text();
+  let data;
+  try{ data = JSON.parse(text); }catch(e){ data = {raw:text}; }
+  if(!r.ok) throw new Error(url+" HTTP_"+r.status+" "+text);
+  return data;
+}
+
+async function checkBackend(){
+  try{
+    const r = await post("/api/w7tp/security/lint",{intent:"health check"});
+    document.getElementById("status").textContent = "REAL_W7TP_API_CONNECTED";
+    document.getElementById("status").className = "ok";
+    out(r);
+  }catch(e){
+    document.getElementById("status").textContent = "BACKEND_OFFLINE_OR_ROUTE_NOT_SERVED";
+    document.getElementById("status").className = "bad";
+    out(String(e));
+  }
+}
+
+async function compileIntent(){
+  const intent = document.getElementById("intent").value;
+  const r = await post("/api/w7tp/intent/compile",{intent,actor:"control_panel",node:document.getElementById("node").value});
+  lastPacket = r.packet || r;
+  out(r);
+}
+
+async function lintIntent(){
+  const intent = document.getElementById("lintInput").value;
+  const r = await post("/api/w7tp/security/lint",{intent,packet:lastPacket||{},context:{source:"w7tp_8d_control_panel"}});
+  lastDecision = r;
+  out(r);
+}
+
+function injectSecret(){
+  document.getElementById("lintInput").value = "sk-proj-FAKE_REDTEAM_SECRET must be blocked";
+}
+
+async function sealState(){
+  const r = await post("/api/w7tp/hash/seal",{
+    packet:lastPacket||{},
+    state:document.getElementById("state").value,
+    node:document.getElementById("node").value,
+    timestamp:Math.floor(Date.now()/1000),
+    coordinate:{ui:"web/w7tp_8d_control_panel.html"}
+  });
+  lastHash = r;
+  out(r);
+}
+
+async function commitEvidence(){
+  const r = await post("/api/w7tp/evidence/commit",{
+    packet:lastPacket||{},
+    state:document.getElementById("state").value,
+    decision:lastDecision||{},
+    hash:lastHash||{},
+    source:"w7tp_8d_control_panel"
+  });
+  out(r);
+}
+
+async function fullFlow(){
+  await compileIntent();
+  const lint = await post("/api/w7tp/security/lint",{intent:document.getElementById("intent").value,packet:lastPacket||{}});
+  lastDecision = lint;
+  const seal = await post("/api/w7tp/hash/seal",{packet:lastPacket||{},state:lint.state||"TRANSACTION_COMMITTED",node:document.getElementById("node").value,timestamp:Math.floor(Date.now()/1000),coordinate:{ui:"web"}});
+  lastHash = seal;
+  const ev = await post("/api/w7tp/evidence/commit",{packet:lastPacket||{},state:lint.state,decision:lint,hash:seal,source:"w7tp_8d_control_panel"});
+  out({packet:lastPacket,decision:lint,hash:seal,evidence:ev});
+}
+
+checkBackend();
+</script>
+</body>
+</html>
