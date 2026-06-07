@@ -1,0 +1,165 @@
+packet_id: W7TP_INTENT_FIELD_UPDATE_20260607_WUCHANG_GTS_IGC
+packet_type: intent_field_update
+host: taiji01
+host_role: runtime_replica
+source_status: association_internal_verified
+scope:
+  - W7TP
+  - XiaoJ
+  - Generative_State_Transport
+  - Intent_Generative_Construction
+  - Wuchang_Community_AI
+  - Community_POS
+  - Smart_Property
+  - Google_Earth_3D_Model
+
+core_rules:
+  generative_transport:
+    definition: 狀態重建式傳輸，不是單純壓縮。
+    fast_reply_rule: 先回狀態，後補生成；大型重建排隊；完成後推送增量封包。
+    main_risk: 狀態漂移，而非頻寬。
+    required_controls:
+      - manifest_validation
+      - hash_verification
+      - policy_check
+      - delta_tracking
+      - audit_ledger
+      - dead_letter_on_failure
+
+  intent_generative_construction:
+    zh: 意圖生成式建構
+    en: Intent-Generative Construction
+    abbr: IGC
+    formula: Intent -> State -> Packet -> Generate -> Verify -> Land
+    definition: 將使用者意圖轉換為可驗證狀態封包，並於邊緣設備、伺服器或雲端節點上生成式重建任務、資料、流程或應用狀態。
+
+  taiji01_node_role:
+    role: 社區場控與執行副本節點
+    allowed_roles:
+      - login
+      - permission_gate
+      - packet_relay
+      - manifest_index
+      - hash_ledger
+      - task_queue
+      - cache
+      - audit_log
+      - community_query_runtime
+    not_primary_roles:
+      - mass_llm_generation
+      - heavy_rebuild
+      - full_plaintext_context_processing
+
+  capacity_baseline:
+    router_guest_network: 約250人接入，只代表網路容量，不等於伺服器生成能力。
+    i7_16gb_headless_node:
+      online_users_safe: 約80-150人
+      concurrent_packet_interaction: 約20-60人
+      local_llm_generation: 約1-3人同時
+    distributed_compute_rule: 分散式算力必須依主控、工作、GPU、雲端、會員設備分工，不得混成不受控資源池。
+
+  cloud_rule:
+    principle: 雲端可參與，但雲端不應看見完整明文上下文。
+    allowed:
+      - packet_relay
+      - manifest_index
+      - hash_ledger
+      - task_scheduler
+      - non_sensitive_cache
+      - backup_generation_node
+    denied:
+      - plaintext_member_data
+      - full_context_storage
+      - sovereign_keys
+      - unmasked_behavior_logs
+      - core_governance_rule_originals
+
+wuchang_community_context:
+  source: 新北市三重區五常社區發展協會取得與彙整之真實社區資料
+  verification_level: association_internal_verified
+  public_filing_ready: false
+  scope:
+    city: 新北市
+    district: 三重區
+    villages:
+      - 五常里
+      - 五順里
+      - 仁忠里
+  population_2024:
+    total_households: 4891
+    total_population: 12524
+    average_household_size: 2.56
+    wuchang_village:
+      households: 2092
+      population: 5249
+      ten_year_growth_rate_percent: 16.15
+    wushun_village:
+      households: 1520
+      population: 4021
+      ten_year_growth_rate_percent: -3.99
+    renzhong_village:
+      households: 1279
+      population: 3254
+      aging_index_percent: 163.12
+      dependency_ratio_percent: 45.2
+  property_management:
+    current_management_committees: 32
+    projected_management_committees_within_3_years: 50
+    construction_cases_in_progress: 8
+    ai_or_unmanned_security_adoption_percent: 0
+  business:
+    estimated_business_entities: 90
+    physical_storefronts: 38
+    restaurants: 18
+    breakfast_shops: 8
+    convenience_stores: 9
+    supermarkets: 3
+    digitalized_store_count: 0
+  parking:
+    estimated_motorcycles: 約5800-6000輛
+    known_public_motorcycle_spaces: 60
+    public_supply_ratio_estimate_percent: 1
+  core_bottlenecks:
+    - 停車供需失衡
+    - 商家數位落差
+    - 管委會物業成本高
+    - 高齡化與長照需求
+    - 巷弄交通安全
+  core_applications:
+    - 社區專勤隊
+    - AI智慧物業平台
+    - 社區POS
+    - 交通安全與停車倡議
+    - 長照與高齡服務規劃
+
+privacy_hardwall:
+  denied:
+    - personal_address_inference
+    - vulnerable_household_exposure
+    - individual_financial_status
+    - unreviewed_member_data_export
+    - unauthorized_surveillance
+    - automatic_high_risk_decision
+  review_required:
+    - personal_data_query
+    - vulnerable_household_case
+    - security_dispatch
+    - property_contract
+    - financial_flow
+    - government_submission
+    - external_data_sharing
+
+next_evidence_task:
+  title: Generative State Transport Performance Report
+  required_metrics:
+    - bytes_sent
+    - response_time_ms
+    - cpu_usage
+    - ram_usage
+    - rebuild_success_rate
+    - hash_consistency_rate
+    - state_drift_rate
+
+boundary_warning:
+  kml_model: Google Earth模型可用於展示與內部推演；若未使用正式GeoJSON、地籍圖或都市計畫圖，不得宣稱為法定邊界。
+  external_use: 政府正式送件、法定邊界、交通事故統計、合約或招商承諾，需外部查核。
