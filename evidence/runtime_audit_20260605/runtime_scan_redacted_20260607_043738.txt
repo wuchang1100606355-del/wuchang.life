@@ -1,0 +1,243 @@
+===== SYSTEMD =====
+  ollama.service                                                                            loaded    active     running      Ollama Service
+● openwebui.service                                                                         loaded    failed     failed       Open WebUI Backend
+  taiji-online-line-order-gateway.service                                                   loaded    active     running      Taiji online LINE order gateway
+  taiji_edge_gateway.service                                                                loaded    active     running      Taiji Unified Edge Gateway (taiji01)
+● taiji_unified_gateway_edge.service                                                        loaded    failed     failed       Taiji Unified Gateway Edge
+
+===== PROCESS =====
+ollama      1365       1  0 May22 ?        00:00:50 /usr/local/bin/ollama serve
+taiji_01    1395       1  0 May22 ?        00:02:20 /usr/bin/python3 /home/taiji_01/Taiji_Hub/Taiji_Odoo/online_order/online_line_order_gateway.py
+taiji_01    1560    1414  0 May22 ?        00:02:27 /usr/bin/python3 /home/taiji_01/Taiji_Hub/sync_agents/mu_4_tensor_gateway.py
+ollama      2417    2342  0 May22 ?        00:00:31 postgres
+ollama      2431    2344  0 May22 ?        00:00:02 postgres
+ollama      2748    2431  0 May22 ?        00:00:00 postgres: checkpointer 
+ollama      2749    2431  0 May22 ?        00:00:10 postgres: background writer 
+ollama      2751    2417  0 May22 ?        00:00:00 postgres: checkpointer 
+ollama      2752    2417  0 May22 ?        00:00:10 postgres: background writer 
+ollama      2761    2417  0 May22 ?        00:00:11 postgres: walwriter 
+ollama      2763    2417  0 May22 ?        00:00:06 postgres: autovacuum launcher 
+ollama      2764    2431  0 May22 ?        00:00:10 postgres: walwriter 
+ollama      2765    2417  0 May22 ?        00:00:00 postgres: logical replication launcher 
+ollama      2766    2431  0 May22 ?        00:00:02 postgres: autovacuum launcher 
+ollama      2767    2431  0 May22 ?        00:00:00 postgres: logical replication launcher 
+taiji_a+ 3307959       1  0 Jun01 ?        00:00:44 python3 /home/taiji_admin/Taiji_Hub/XiaoJ_API_Gateway.py
+taiji_a+ 3590316       1  0 Jun02 ?        00:06:41 /home/taiji_admin/Taiji_Hub/.venv_edge_gateway/bin/python /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py
+ollama   4120258    2417  0 Jun04 ?        00:00:00 postgres: odoo postgres 172.28.0.2(33856) idle
+ollama   4120259    2417  0 Jun04 ?        00:00:00 postgres: odoo postgres 172.28.0.2(33864) idle
+
+===== PORTS =====
+LISTEN 0      5                         0.0.0.0:8000       0.0.0.0:*    users:(("python3",pid=3307959,fd=3))
+LISTEN 0      128                             *:8080             *:*                                        
+LISTEN 0      1024                            *:11434            *:*                                        
+
+===== DOCKER =====
+CONTAINER ID   IMAGE         COMMAND                  CREATED       STATUS        PORTS                                                        NAMES
+80da51442816   postgres:15   "docker-entrypoint.s…"   3 weeks ago   Up 2 weeks    5432/tcp                                                     wuchang_os_pg
+20425511896d   odoo:18.0     "/entrypoint.sh odoo"    3 weeks ago   Up 37 hours   0.0.0.0:8069->8069/tcp, [::]:8069->8069/tcp, 8071-8072/tcp   wuchang_os_odoo_18
+96410bd9cc51   postgres:15   "docker-entrypoint.s…"   5 weeks ago   Up 2 weeks    5432/tcp                                                     quarantine_wuchang_os_pg_20260508_200520
+
+===== MEMORY =====
+               total        used        free      shared  buff/cache   available
+Mem:            23Gi       1.8Gi        13Gi       219Mi       8.7Gi        21Gi
+Swap:          4.0Gi          0B       4.0Gi
+
+===== TOP CPU =====
+    PID    PPID %CPU %MEM CMD
+   1776       1  0.5  0.4 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+   1337       1  0.3  0.2 /usr/sbin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=41641
+   3338    2846  0.3  0.0 -bash
+      1       0  0.2  0.0 /sbin/init
+   1310       1  0.1  0.1 /usr/bin/headscale serve
+3590316       1  0.1  0.3 /home/taiji_admin/Taiji_Hub/.venv_edge_gateway/bin/python /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py
+   1343       1  0.1  0.2 /usr/bin/containerd
+ 335170  335109  0.0  0.0 sshd: taiji_admin@pts/0
+   1076       1  0.0  0.0 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+   1333       1  0.0  0.0 /bin/bash -c while true; do nice -n 10 python3 /opt/wuchang_mesh/core/predictive_io.py 2>/dev/null || sleep 60; sleep 1; done
+    441       1  0.0  0.3 /usr/lib/systemd/systemd-journald
+ 355655       2  0.0  0.0 [kworker/0:1-cgroup_release]
+ 351589       2  0.0  0.0 [kworker/0:2-kacpi_notify]
+ 356677       2  0.0  0.0 [kworker/0:0-events]
+    904       1  0.0  0.0 /usr/lib/systemd/systemd-timesyncd
+ 356699       2  0.0  0.0 [kworker/u16:1-events_unbound]
+   1396       1  0.0  0.2 /usr/bin/rclone mount wuchang_workspace: /mnt/taiji_cloud_drive --config /home/taiji_01/.config/rclone/rclone.conf --vfs-cache-mode full --vfs-cache-max-size 5G --vfs-write-back 30s --allow-other --dir-cache-time 72h
+     17       2  0.0  0.0 [rcu_preempt]
+   1104       1  0.0  0.0 /usr/lib/systemd/systemd-logind
+   1151       1  0.0  0.0 /usr/sbin/rsyslogd -n -iNONE
+ 345117       2  0.0  0.0 [kworker/u16:4-events_power_efficient]
+ 348229       2  0.0  0.0 [kworker/u16:2-events_power_efficient]
+   1327       1  0.0  0.0 /bin/bash -c while true; do nice -n 19 python3 /opt/wuchang_mesh/core/memory_sweeper.py 2>/dev/null || sleep 60; sleep 5; done
+   2344       1  0.0  0.0 /usr/bin/containerd-shim-runc-v2 -namespace moby -id 96410bd9cc511658f6ab87b9acfbbe56e9f74bbe35a2a7dcf92f08e49a2f6aeb -address /run/containerd/containerd.sock
+4120178 4120154  0.0  0.4 /usr/bin/python3 /usr/bin/odoo --db_host db --db_port 5432 --db_user odoo --db_password REDACTED
+   2342       1  0.0  0.0 /usr/bin/containerd-shim-runc-v2 -namespace moby -id 80da514428163f17d367de21343d8022da3498eb6037eb1df403a7f618ada3d0 -address /run/containerd/containerd.sock
+    799       1  0.0  0.0 /usr/lib/systemd/systemd-networkd
+4120154       1  0.0  0.0 /usr/bin/containerd-shim-runc-v2 -namespace moby -id 20425511896dd56794f5d0a0361330bc96e737eb9458415491b8ec4de6596997 -address /run/containerd/containerd.sock
+   1074       1  0.0  0.0 /usr/libexec/accounts-daemon
+
+===== TOP MEM =====
+    PID    PPID %CPU %MEM CMD
+   2447    2446  0.0  1.5 /usr/sbin/unity-greeter
+   1495    1420  0.0  0.5 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+4120178 4120154  0.0  0.4 /usr/bin/python3 /usr/bin/odoo --db_host db --db_port 5432 --db_user odoo --db_password REDACTED
+   1776       1  0.5  0.4 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+    441       1  0.0  0.3 /usr/lib/systemd/systemd-journald
+3590316       1  0.1  0.3 /home/taiji_admin/Taiji_Hub/.venv_edge_gateway/bin/python /home/taiji_admin/Taiji_Hub/legacy_core/taiji_unified_gateway_edge.py
+   1337       1  0.3  0.2 /usr/sbin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=41641
+   1819    1302  0.0  0.2 /usr/lib/code-server/lib/node /usr/lib/code-server/out/node/entry
+   1302       1  0.0  0.2 /usr/lib/code-server/lib/node /usr/lib/code-server
+   1343       1  0.1  0.2 /usr/bin/containerd
+   1396       1  0.0  0.2 /usr/bin/rclone mount wuchang_workspace: /mnt/taiji_cloud_drive --config /home/taiji_01/.config/rclone/rclone.conf --vfs-cache-mode full --vfs-cache-max-size 5G --vfs-write-back 30s --allow-other --dir-cache-time 72h
+  14460       1  0.0  0.1 /usr/libexec/fwupd/fwupd
+   1101       1  0.0  0.1 /snap/snapd/current/usr/lib/snapd/snapd
+   1310       1  0.1  0.1 /usr/bin/headscale serve
+   1365       1  0.0  0.1 /usr/local/bin/ollama serve
+   2667       1  0.0  0.1 /usr/lib/unity-settings-daemon/unity-settings-daemon
+   2663       1  0.0  0.1 nm-applet
+   3337    3325  0.0  0.1 /usr/bin/pulseaudio --daemonize=no --log-target=journal
+   2411    2269  0.0  0.1 /usr/bin/pulseaudio --daemonize=no --log-target=journal
+3307959       1  0.0  0.1 python3 /home/taiji_admin/Taiji_Hub/XiaoJ_API_Gateway.py
+   2417    2342  0.0  0.1 postgres
+    480       1  0.0  0.1 /sbin/multipathd -d -s
+   2431    2344  0.0  0.1 postgres
+   1732       1  0.0  0.1 /usr/sbin/smbd --foreground --no-process-group
+   2751    2417  0.0  0.1 postgres: checkpointer 
+   1339       1  0.0  0.0 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+   1395       1  0.0  0.0 /usr/bin/python3 /home/taiji_01/Taiji_Hub/Taiji_Odoo/online_order/online_line_order_gateway.py
+ 185470       1  0.0  0.0 /usr/sbin/cups-browsed
+   1560    1414  0.0  0.0 /usr/bin/python3 /home/taiji_01/Taiji_Hub/sync_agents/mu_4_tensor_gateway.py
+
+===== MODEL FILES =====
+
+===== OPENWEBUI =====
+/home/taiji_admin/Taiji_Hub/scripts/fix_openwebui_ollama.sh
+/home/taiji_admin/Taiji_Hub/Wuchang_Unified_Core/04_LLM_Tools/open_webui_taiji_tools.py
+/home/taiji_admin/Taiji_Hub/runtime/openwebui_bridge.py
+/home/taiji_admin/Taiji_Hub/jules_cloud_deployment/open_webui_taiji_tools.py
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_openwebui_staff_action_draft.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_openwebui_tool_manifest_draft.schema.json
+/home/taiji_admin/Taiji_Hub/openwebui_tools/taiji_claw_safe_tool.py
+/home/taiji_admin/Taiji_Hub/openwebui_tools/taiji_metric_gateway_assembly_tool.py
+/home/taiji_admin/Taiji_Hub/web/xiaoj_openwebui_workbench/index.html
+/home/taiji_admin/Taiji_Hub/systemd/taiji-openwebui-bridge.service
+/home/taiji_admin/Taiji_Hub/02_edge_nodes/openwebui/node_boot.yaml
+/home/taiji_admin/Taiji_Hub/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/openwebui_tools/taiji_claw_safe_tool.py
+/home/taiji_admin/Taiji_Hub/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_043832/openwebui_tools/taiji_metric_gateway_assembly_tool.py
+/home/taiji_admin/Taiji_Hub/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/openwebui_tools/taiji_claw_safe_tool.py
+/home/taiji_admin/Taiji_Hub/release/MTL_AI_GATEWAY_v1_0_RC1_20260507_044020/openwebui_tools/taiji_metric_gateway_assembly_tool.py
+/home/taiji_admin/Taiji_Hub/generated_systemd/taiji-openwebui-bridge.service
+/home/taiji_admin/Taiji_Hub/generated_systemd/taiji-openwebui.service
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_OPENWEBUI_WORKSPACE_INTEGRATION_DESIGN.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_OPENWEBUI_LOCAL_WORKBENCH_MVP.md
+/home/taiji_admin/Taiji_Hub/docs/project/W7TP_004_OPENWEBUI_LOCAL_WORKBENCH_FINAL_EVIDENCE.md
+/home/taiji_admin/Taiji_Hub/docs/project/W7TP_004_OPENWEBUI_LOCAL_WORKBENCH_STATUS.md
+/home/taiji_admin/Taiji_Hub/evidence/full_scope_selfdev_20260508_025146/openwebui_bridge_models.json
+
+===== XIAOJ =====
+/home/taiji_admin/Taiji_Hub/configs/cloud/local_xiaoj_cloud_api_broker_dryrun.template.json
+/home/taiji_admin/Taiji_Hub/configs/dev/xiaoj_dual_brain_metrics_capture.template.json
+/home/taiji_admin/Taiji_Hub/configs/dev/xiaoj_converged_governance_architecture.template.json
+/home/taiji_admin/Taiji_Hub/policies/xiaoj_memory_evidence_governance_policy.md
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/XIAOJ_COMPONENT_BOUNDARY_MAP_V1.yaml
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/XIAOJ_SOURCE_OF_TRUTH_LAYER_V1.yaml
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/xiaoj_pre_review_upgrade_inventory_20260531_230819.md
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/XIAOJ_LANDING_PLAN_V1.yaml
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/XIAOJ_TOTAL_FIELD_REGISTRY_V1.yaml
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/xiaoj_source_link_reconciliation_20260601_154508.md
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/XIAOJ_TOTAL_FIELD_LANDING_PLAN_V2.yaml
+/home/taiji_admin/Taiji_Hub/Taiji_Governance/p0_xiaoj_pre_review_patch_candidates_20260531_230936.md
+/home/taiji_admin/Taiji_Hub/tools/xiaoj_dual_brain_metrics_capture_linter.py
+/home/taiji_admin/Taiji_Hub/tools/xiaoj_converged_governance_architecture_linter.py
+/home/taiji_admin/Taiji_Hub/tools/local_xiaoj_cloud_api_broker_dryrun_linter.py
+/home/taiji_admin/Taiji_Hub/XiaoJ_API_Gateway.py
+/home/taiji_admin/Taiji_Hub/docker-compose.xiaoj-intent-field.yml
+/home/taiji_admin/Taiji_Hub/docker/xiaoj_intent_field/Dockerfile
+/home/taiji_admin/Taiji_Hub/T094_XIAOJ_REVIEW.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/member_portability/W7TP_PORTABLE_XIAOJ_MEMBER_AGENT_SPEC_V1.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/human_review/W7TP_XIAOJ_HUMAN_REVIEW_QUEUE_RULE_V1.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/01_xiaoj_dev_history_ingest_anchor_v1.md
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/review_policies/W7TP_XIAOJ_PRE_REVIEW_OPINION_RULE_V1.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/source_links/XIAOJ_SOURCE_LINK_RECONCILIATION_20260601_154508.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/source_links/XIAOJ_SOURCE_LINK_RECONCILIATION_V1.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/review_upgrade/W7TP_HUMAN_REVIEW_TO_XIAOJ_PRE_REVIEW_UPGRADE_PLAN_V1.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/review_upgrade/patch_plans/P0_XIAOJ_PRE_REVIEW_TARGETED_PATCH_PLAN_V1.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/review_upgrade/patch_plans/P1_P2_XIAOJ_PRE_REVIEW_TARGETED_PATCH_PLAN_V1.yaml
+/home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/00_supreme_intent_field_principle_v1.md
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_line_webhook_event_mock.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_dual_brain_metrics_capture.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_volunteer_delivery_event.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_line_one_time_verification.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_odoo_security_access_matrix.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_encrypted_payload_envelope.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_odoo_addon_file_layout_manifest.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_delivery_request_draft.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_odoo_reserved_model_manifest.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/w7tp_local_xiaoj_cloud_api_broker_dryrun.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_openwebui_staff_action_draft.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_openwebui_tool_manifest_draft.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_volunteer_qualification_record.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_break_glass_access_record.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_converged_governance_architecture.schema.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_line_delivery_rich_menu_draft.json
+/home/taiji_admin/Taiji_Hub/schemas/xiaoj_line_resident_intent_draft.schema.json
+/home/taiji_admin/Taiji_Hub/__pycache__/XiaoJ_Local_Driver.cpython-312.pyc
+/home/taiji_admin/Taiji_Hub/T093_XIAOJ_REVIEW.yaml
+/home/taiji_admin/Taiji_Hub/XiaoJ_Local_Driver.py
+/home/taiji_admin/Taiji_Hub/web/xiaoj_openwebui_workbench/index.html
+/home/taiji_admin/Taiji_Hub/web/xiaoj_delivery_review_card/index.html
+/home/taiji_admin/Taiji_Hub/XIAOJ_CONVERGENCE_REVIEW.yaml
+/home/taiji_admin/Taiji_Hub/systemd/XIAOJ_TOTAL_FIELD_V2_PRE_LANDING_BLOCKER_20260601_073945.yaml.CLEARED_20260601_090800
+/home/taiji_admin/Taiji_Hub/systemd/XIAOJ_TOTAL_FIELD_REGISTRY_V2.yaml
+/home/taiji_admin/Taiji_Hub/systemd/FINAL_XIAOJ_TOTAL_FIELD_V2_LANDING_RESULT.yaml
+/home/taiji_admin/Taiji_Hub/prompts/xiaoj_zh_transparent_reasoning.md
+/home/taiji_admin/Taiji_Hub/prompts/XIAOJ_MODEL_WINDOW_GOVERNED_PREFIX.md
+/home/taiji_admin/Taiji_Hub/prompts/XIAOJ_CLOUD_PILOT_PREFIX.md
+/home/taiji_admin/Taiji_Hub/core/xiaoj/intent_manager.py
+/home/taiji_admin/Taiji_Hub/core/xiaoj/__init__.py
+/home/taiji_admin/Taiji_Hub/core/intent_field/wuchang_citycode_engine.py.bak_20260522_124305
+/home/taiji_admin/Taiji_Hub/core/intent_field/wuchang_citycode_engine.py
+/home/taiji_admin/Taiji_Hub/core/intent_field/wuchang_citycode_engine.py.bak_20260522_124223
+/home/taiji_admin/Taiji_Hub/core/intent_field/wuchang_citycode_engine.py.bak_20260522_124408
+/home/taiji_admin/Taiji_Hub/core/intent_field/wuchang_citycode_engine.py.bak_fix_20260522_125239
+/home/taiji_admin/Taiji_Hub/core/intent_field/__init__.py
+/home/taiji_admin/Taiji_Hub/memory_rebuild_20260604/.xiaoj/XIAOJ_INTENT_PACKET.yaml
+/home/taiji_admin/Taiji_Hub/memory_rebuild_20260604/W7TP_INTENT_FIELD_ROOT.yaml
+/home/taiji_admin/Taiji_Hub/Taiji_AutoBuild/prompts/xiaoj_master_prompt.md
+/home/taiji_admin/Taiji_Hub/bin/xiaoj/xiaoj-build
+/home/taiji_admin/Taiji_Hub/bin/xiaoj/xiaoj-sandbox
+/home/taiji_admin/Taiji_Hub/bin/xiaoj/xiaoj
+/home/taiji_admin/Taiji_Hub/bin/xiaoj/xiaoj-redteam
+/home/taiji_admin/Taiji_Hub/bin/xiaoj/xiaoj-sync
+/home/taiji_admin/Taiji_Hub/boot/start_xiaoj_intent_field_on_login.sh
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_LINE_RESIDENT_ENTRY_MVP.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_VOLUNTEER_DELIVERY_V3_1_PROGRESSIVE_PII.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_VOLUNTEER_DELIVERY_STAFF_WORKFLOW_MOCK.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_ODOO_ADDON_FILE_LAYOUT_DESIGN_ONLY.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_LINE_RESIDENT_FLOW_TEST.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_ODOO_SECURITY_ACCESS_MATRIX_DESIGN_ONLY.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_LINE_CONSENT_ONE_TIME_VERIFICATION.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_OPENWEBUI_WORKSPACE_INTEGRATION_DESIGN.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_OPENWEBUI_LOCAL_WORKBENCH_MVP.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_LINE_WEBHOOK_MOCK_FLOW.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_VOLUNTEER_DELIVERY_ORDER_SERVICE.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_VOLUNTEER_DELIVERY_LINE_RICH_MENU_DRAFT.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_VOLUNTEER_DELIVERY_REVIEW_UI_AND_LINE_COPY.md
+/home/taiji_admin/Taiji_Hub/docs/design/W7TP_XIAOJ_DEVICE_FEDERATION_TOPOLOGY.md
+/home/taiji_admin/Taiji_Hub/docs/design/XIAOJ_ODOO_RESERVED_MODULE_DESIGN_ONLY.md
+/home/taiji_admin/Taiji_Hub/docs/browser_operator/XIAOJ_LIVE_BROWSER_OPERATOR.md
+/home/taiji_admin/Taiji_Hub/docs/prefix/XIAOJ_BYLAW_COMMUNITY_DEVELOPMENT_CONCEPT.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_BREAK_GLASS_OPERATOR_CHECKLIST.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_DUAL_BRAIN_METRICS_CAPTURE.md
+/home/taiji_admin/Taiji_Hub/docs/governance/W7TP_LOCAL_XIAOJ_CLOUD_API_BROKER_DRYRUN.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_ADMIN_BLIND_PRIVACY_HARDWALL.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_VOLUNTEER_QUALIFICATION_POLICY.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_CONVERGED_GOVERNANCE_ARCHITECTURE.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_CRYPTOGRAPHIC_IMPLEMENTATION_DESIGN_ONLY.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_ROLE_PERMISSION_MATRIX.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_MEMBERSHIP_INTENT_DOMAIN_CHARTER.md
+/home/taiji_admin/Taiji_Hub/docs/governance/XIAOJ_EMERGENCY_BREAK_GLASS_SOP.md
+/home/taiji_admin/Taiji_Hub/services/xiaoj_intent_field/app.py
+/home/taiji_admin/Taiji_Hub/models/ollama/Modelfile.xiaoj_model_window.template
+/home/taiji_admin/Taiji_Hub/models/ollama/Modelfile.xiaoj_dual_brain_unified_2b
+/home/taiji_admin/Taiji_Hub/models/ollama/README_xiaoj_model_window_download.md
+/home/taiji_admin/Taiji_Hub/models/ollama/Modelfile.xiaoj_dual_brain_unified
