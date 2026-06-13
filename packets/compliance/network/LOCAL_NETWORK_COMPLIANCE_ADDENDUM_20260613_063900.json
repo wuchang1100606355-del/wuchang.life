@@ -1,0 +1,43 @@
+{
+  "packet_type": "local_network_compliance_addendum_packet",
+  "run_id": "LOCAL_NETWORK_COMPLIANCE_ADDENDUM_20260613_063900",
+  "state": "LOCAL_NETWORK_COMPLIANCE_ADDENDUM_READY",
+  "safe_mode": true,
+  "runtime_change": false,
+  "router_change": false,
+  "ddns_change": false,
+  "tailscale_change": false,
+  "dns_change": false,
+  "local_network_profile": {
+    "isp": "Chunghwa Telecom fixed public IP network",
+    "router": "ASUSWRT",
+    "asus_ddns": "available_public_naming_resource",
+    "link_capacity": "1G",
+    "lan_gateway_observed": "192.168.50.1",
+    "taiji01_lan_ip_observed": "192.168.50.249",
+    "public_ipv4_observed": "220.135.21.74",
+    "taiji01_tailscale_ipv4": "100.71.224.18",
+    "taiji01_tailscale_ipv6": "fd7a:115c:a1e0::b3a:e012"
+  },
+  "hard_rules": {
+    "fixed_ip_is_resource_not_permission": true,
+    "ddns_is_resource_not_permission": true,
+    "no_public_core_exposure": true,
+    "no_direct_public_ssh": true,
+    "no_public_postgres": true,
+    "no_public_docker": true,
+    "no_public_keybroker": true,
+    "no_public_member_vault": true,
+    "gateway_oauth_acl_audit_required": true,
+    "no_plaintext_context_required": true
+  },
+  "runtime_hold": [
+    "port_forward_change",
+    "ddns_target_change",
+    "asus_router_change",
+    "tailscale_acl_grants_change",
+    "magicdns_dns_change",
+    "odoo_public_exposure",
+    "direct_public_ssh_exposure"
+  ]
+}
