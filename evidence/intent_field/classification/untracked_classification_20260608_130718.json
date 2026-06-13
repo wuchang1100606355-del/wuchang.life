@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "created_at": "2026-06-08T13:07:18+00:00",
+  "purpose": "Classify existing untracked evidence before landing W7TP LLM settings orchestration policy.",
+  "rule": "No unresolved unclassified ?? may contaminate PASS lane.",
+  "items": [
+    {
+      "path": "evidence/redteam/unverified_candidate/git_commit_id_20260607_1247.txt",
+      "lane": "redteam_unverified_candidate",
+      "sha256": "7ac9c64c93311651c0271d94be06a49ade5eb2b7b0533338006f898d68001227",
+      "size": 41
+    },
+    {
+      "path": "evidence/redteam/unverified_candidate/git_commit_id_20260607_1247.txt.sha256",
+      "lane": "redteam_unverified_candidate",
+      "sha256": "5d6d044e8efc09d69571c87b1e64f12d50d86d574509cf6d6d80050cabcabd53",
+      "size": 136
+    }
+  ],
+  "classification": {
+    "evidence/gie/": "gie_intent_classification_evidence",
+    "evidence/patent/ip_strategy_note_20260608.md": "patent_ip_strategy_evidence",
+    "evidence/redteam/unverified_candidate/": "redteam_unverified_candidate"
+  },
+  "secret_scan": "PASS_precise_patterns_only"
+}
