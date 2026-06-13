@@ -1,0 +1,61 @@
+{
+  "packet_type": "five_in_one_generative_deploy_packet",
+  "run_id": "FIVE_IN_ONE_GENERATIVE_DEPLOY_20260613_061417",
+  "state": "GENERATIVE_DEPLOYMENT_PACKET_READY",
+  "safe_mode": true,
+  "live_deploy": false,
+  "service_restart": false,
+  "odoo_db_write": false,
+  "secret_read": false,
+  "raw_pii_read": false,
+  "fields": [
+    "member_field",
+    "counter_field",
+    "merchant_field",
+    "committee_field",
+    "association_governance_field"
+  ],
+  "hard_rules": {
+    "association_admin_blind": true,
+    "no_plaintext_context": true,
+    "desensitized_no_pii_stats_only": true,
+    "key_ref_only": true,
+    "api_ref_only": true,
+    "avatar_speech_is_not_transaction": true
+  },
+  "dimensions": [
+    "D1_identity",
+    "D2_intent",
+    "D3_state",
+    "D4_topology",
+    "D5_resource",
+    "D6_governance",
+    "D7_verification",
+    "D8_envelope"
+  ],
+  "allowed_browser_actions": [
+    "read_selected_text",
+    "summarize",
+    "explain",
+    "translate",
+    "draft_fill",
+    "show_card",
+    "show_warning",
+    "ask_member_confirm",
+    "call_staff_or_member_service",
+    "display_xiaoj_ui"
+  ],
+  "forbidden_browser_actions": [
+    "free_mouse_control",
+    "read_all_tabs",
+    "read_passwords",
+    "read_cookies",
+    "read_localStorage",
+    "silent_form_submit",
+    "direct_payment_submit",
+    "export_raw_page_data",
+    "access_admin_pages",
+    "direct_odoo_admin_write",
+    "hidden_recording"
+  ]
+}
