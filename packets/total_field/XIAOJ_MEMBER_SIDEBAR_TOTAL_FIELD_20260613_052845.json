@@ -1,0 +1,86 @@
+{
+  "packet_type": "w7tp_total_field_design_write",
+  "run_id": "XIAOJ_MEMBER_SIDEBAR_TOTAL_FIELD_20260613_052845",
+  "state": "PASS",
+  "title": "Member-Owned Sidebar XiaoJ with 8D No-Plaintext Context",
+  "title_zh": "會員專屬側邊欄小J與八維無明文上下文",
+  "write_scope": "W7TP_XiaoJ_Total_Field",
+  "product_identity": [
+    "Member-Owned Sidebar XiaoJ",
+    "XiaoJ Member Browser AI Cockpit",
+    "Personal 8D Encrypted Agent AI"
+  ],
+  "core_sentence_zh": "本會提供無明文上下文與8D安全瀏覽器，小J真正屬於會員；會員可用自己的KEY與API，把雲端AI變成受保護、可節費、可治理的個人代理。本會看統計，不看個資。",
+  "hard_rules": {
+    "association_admin_blind": true,
+    "no_plaintext_context": true,
+    "raw_key_forbidden_in_browser_prompt_logs_git_odoo_ai": true,
+    "member_sensitive_info_forbidden_to_association": true,
+    "association_only_desensitized_no_pii_behavior_stats": true,
+    "browser_action_allowlist_required": true,
+    "member_confirmation_required_for_sensitive_actions": true
+  },
+  "dimensions": {
+    "D1_identity": "member_ref / merchant_ref / committee_ref / device_ref / role; no plaintext identity by default",
+    "D2_intent": "query / browser assistance / life knowledge / form drafting / ordering / repair / announcement / summary",
+    "D3_state": "session / sidebar / page access mode / member service / task state",
+    "D4_topology": "member browser / side panel / counter / merchant / committee / site / channel / device",
+    "D5_resource": "system/member/merchant/committee key_ref, api_ref, model tier, cache, tools, cost policy",
+    "D6_governance": "allowed/forbidden actions, no plaintext, no direct backend write, confirmation rules",
+    "D7_verification": "redaction check, leak check, allowlist check, response verify, usage logging",
+    "D8_envelope": "nonce, counter, TTL, hash, HMAC/signature, key_ref/api_ref binding, replay protection"
+  },
+  "key_modes": [
+    "System Key",
+    "Member Key",
+    "Merchant Key",
+    "Committee Key"
+  ],
+  "allowed_browser_actions": [
+    "read_selected_text",
+    "summarize",
+    "explain",
+    "translate",
+    "draft_fill",
+    "show_card",
+    "show_warning",
+    "ask_member_confirm",
+    "call_staff_or_member_service",
+    "display_xiaoj_ui"
+  ],
+  "forbidden_browser_actions": [
+    "free_mouse_control",
+    "read_all_tabs",
+    "read_passwords",
+    "read_cookies",
+    "read_localStorage",
+    "silent_form_submit",
+    "direct_payment_submit",
+    "export_raw_page_data",
+    "access_admin_pages",
+    "direct_odoo_admin_write",
+    "hidden_recording"
+  ],
+  "association_allowed_stats_only": [
+    "anonymous_feature_usage_count",
+    "desensitized_error_type",
+    "model_usage_aggregate",
+    "packet_success_failure_rate",
+    "feature_category_stats",
+    "cost_bucket_stats",
+    "risk_type_stats",
+    "no_pii_performance_metrics"
+  ],
+  "association_forbidden_data": [
+    "raw_member_pii",
+    "raw_private_context",
+    "raw_api_keys",
+    "raw_api_tokens",
+    "raw_browser_data",
+    "full_private_conversations",
+    "full_private_documents",
+    "passwords",
+    "cookies",
+    "localStorage"
+  ]
+}
