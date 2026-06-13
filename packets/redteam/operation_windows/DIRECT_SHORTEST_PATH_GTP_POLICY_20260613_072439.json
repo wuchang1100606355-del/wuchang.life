@@ -1,0 +1,32 @@
+{
+  "forbidden_detours_before_transfer": [
+    "Browser Action Bus",
+    "UI Scaffold",
+    "Context Broker",
+    "Key/API Broker",
+    "Avatar Spec",
+    "Connector Spec"
+  ],
+  "head_before": "a90a87f94352be720b2ef11f8c023bd72b282451",
+  "main_chain": [
+    "State",
+    "Coordinate",
+    "Hash",
+    "Packet",
+    "Generative Transfer",
+    "Verify",
+    "Reconstruct",
+    "Evidence",
+    "Action"
+  ],
+  "no_detour": true,
+  "packet_type": "direct_shortest_path_gtp_policy",
+  "priority": "generative_transfer_first",
+  "raw_pii_read": false,
+  "required_next_step_if_missing": "W3_GENERATIVE_TRANSFER_DEPLOY",
+  "run_id": "DIRECT_SHORTEST_PATH_GTP_POLICY_20260613_072439",
+  "runtime_change": false,
+  "secret_read": false,
+  "state": "DIRECT_SHORTEST_PATH_GTP_POLICY_READY",
+  "ts": "2026-06-13T07:24:39+00:00"
+}
