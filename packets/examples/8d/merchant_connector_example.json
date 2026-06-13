@@ -1,0 +1,83 @@
+{
+  "packet_type": "xiaoj_8d_packet",
+  "D1_identity": {
+    "actor_ref": "actor_ref:hash:merchant_connector_example:redacted",
+    "actor_type": "merchant",
+    "device_ref": "device_ref:hash:merchant_connector_example:redacted",
+    "role": "merchant_role_ref",
+    "plaintext_identity_forbidden": true
+  },
+  "D2_intent": {
+    "primary_intent": "merchant_order_draft_connector",
+    "secondary_intent": "redacted_ref:secondary_intent",
+    "transaction_intent": "order_draft",
+    "risk_level": "medium"
+  },
+  "D3_state": {
+    "session_state": "active",
+    "task_state": "dry_run",
+    "browser_state": "not_requested",
+    "order_state": "draft",
+    "context_mode": "ref_only"
+  },
+  "D4_topology": {
+    "channel": "merchant_connector",
+    "site_ref": "site_ref:merchant_connector:redacted",
+    "device_topology": "member_edge_to_governed_broker",
+    "origin_scope": "merchant_owned"
+  },
+  "D5_resource": {
+    "key_policy": "hybrid_ref_only",
+    "selected_key_ref": "key_ref:merchant_connector:broker_managed_default",
+    "api_refs": [
+      "api_ref:merchant_connector:broker_route_v1"
+    ],
+    "model_tier": "standard",
+    "cache_policy": "ref_cache_only",
+    "cost_policy": "budget_cap_ref"
+  },
+  "D6_governance": {
+    "allowed_actions": [
+      "read_menu_ref",
+      "create_order_draft_ref",
+      "notify_staff_ref",
+      "ask_human_confirm"
+    ],
+    "forbidden_actions": [
+      "login_with_plaintext",
+      "submit_payment",
+      "submit_order_without_human",
+      "read_raw_cookie",
+      "read_raw_local_storage",
+      "write_database",
+      "router_change",
+      "tailscale_change",
+      "dns_change",
+      "service_restart",
+      "docker_restart",
+      "systemctl_restart"
+    ],
+    "no_plaintext_context": true,
+    "human_confirm_required": true,
+    "staff_confirm_required": true
+  },
+  "D7_verification": {
+    "redaction_check_required": true,
+    "leak_check_required": true,
+    "action_allowlist_required": true,
+    "response_verify_required": true,
+    "usage_log_required": true
+  },
+  "D8_envelope": {
+    "packet_ref": "packet_ref:W3_8D_PACKET_SCHEMA_SDK_20260613_070707:merchant_connector_example",
+    "nonce": "nonce_ref:305b1644ba77f2c32a51f8a1e1ed6ced",
+    "counter": 4,
+    "ttl_seconds": 900,
+    "created_at": "2026-06-13T07:07:07+00:00",
+    "schema_version": "8d.packet.v1",
+    "content_hash": "1a430ced24a1bdbd80930d3abb713664e0f6286a3db146f24657ebd60a9feff7",
+    "hmac_ref": "hmac_ref:W3_8D_PACKET_SCHEMA_SDK_20260613_070707:merchant_connector_example",
+    "signature_ref": "signature_ref:W3_8D_PACKET_SCHEMA_SDK_20260613_070707:merchant_connector_example",
+    "replay_protection": true
+  }
+}

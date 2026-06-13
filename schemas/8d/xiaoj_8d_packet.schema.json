@@ -1,0 +1,441 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://w7tp.local/schemas/8d/xiaoj_8d_packet.schema.json",
+  "title": "Xiaoj8dPacket",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "packet_type": {
+      "const": "xiaoj_8d_packet"
+    },
+    "D1_identity": {
+      "$ref": "#/definitions/D1_identity"
+    },
+    "D2_intent": {
+      "$ref": "#/definitions/D2_intent"
+    },
+    "D3_state": {
+      "$ref": "#/definitions/D3_state"
+    },
+    "D4_topology": {
+      "$ref": "#/definitions/D4_topology"
+    },
+    "D5_resource": {
+      "$ref": "#/definitions/D5_resource"
+    },
+    "D6_governance": {
+      "$ref": "#/definitions/D6_governance"
+    },
+    "D7_verification": {
+      "$ref": "#/definitions/D7_verification"
+    },
+    "D8_envelope": {
+      "$ref": "#/definitions/D8_envelope"
+    }
+  },
+  "required": [
+    "packet_type",
+    "D1_identity",
+    "D2_intent",
+    "D3_state",
+    "D4_topology",
+    "D5_resource",
+    "D6_governance",
+    "D7_verification",
+    "D8_envelope"
+  ],
+  "definitions": {
+    "D1_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actor_ref": {
+          "type": "string",
+          "minLength": 8,
+          "description": "Opaque actor reference only; no plaintext member identity."
+        },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "member",
+            "staff",
+            "merchant",
+            "committee",
+            "system",
+            "browser_worker",
+            "counter_avatar",
+            "service"
+          ]
+        },
+        "device_ref": {
+          "type": "string",
+          "minLength": 8
+        },
+        "role": {
+          "type": "string",
+          "minLength": 2
+        },
+        "plaintext_identity_forbidden": {
+          "const": true
+        }
+      },
+      "required": [
+        "actor_ref",
+        "actor_type",
+        "device_ref",
+        "role",
+        "plaintext_identity_forbidden"
+      ]
+    },
+    "D2_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_intent": {
+          "type": "string",
+          "minLength": 2
+        },
+        "secondary_intent": {
+          "type": "string"
+        },
+        "transaction_intent": {
+          "type": "string",
+          "enum": [
+            "none",
+            "browse",
+            "service_request",
+            "order_draft",
+            "payment_intent_requires_human",
+            "handoff",
+            "governance_review"
+          ]
+        },
+        "risk_level": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "blocked"
+          ]
+        }
+      },
+      "required": [
+        "primary_intent",
+        "secondary_intent",
+        "transaction_intent",
+        "risk_level"
+      ]
+    },
+    "D3_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "session_state": {
+          "type": "string",
+          "enum": [
+            "new",
+            "active",
+            "paused",
+            "closed"
+          ]
+        },
+        "task_state": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "dry_run",
+            "pending_verify",
+            "verified",
+            "blocked",
+            "landed"
+          ]
+        },
+        "browser_state": {
+          "type": "string",
+          "enum": [
+            "not_requested",
+            "dry_run",
+            "active_readonly",
+            "blocked"
+          ]
+        },
+        "order_state": {
+          "type": "string",
+          "enum": [
+            "none",
+            "draft",
+            "quoted",
+            "pending_human_confirm",
+            "blocked"
+          ]
+        },
+        "context_mode": {
+          "type": "string",
+          "enum": [
+            "no_plaintext",
+            "ref_only",
+            "encrypted_ref_only"
+          ]
+        }
+      },
+      "required": [
+        "session_state",
+        "task_state",
+        "browser_state",
+        "order_state",
+        "context_mode"
+      ]
+    },
+    "D4_topology": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channel": {
+          "type": "string",
+          "enum": [
+            "member_sidebar",
+            "no_plaintext_context_broker",
+            "hybrid_key_api_broker",
+            "browser_action_bus",
+            "counter_avatar",
+            "merchant_connector",
+            "committee_connector"
+          ]
+        },
+        "site_ref": {
+          "type": "string",
+          "minLength": 4
+        },
+        "device_topology": {
+          "type": "string",
+          "minLength": 4
+        },
+        "origin_scope": {
+          "type": "string",
+          "enum": [
+            "member_owned",
+            "staff_owned",
+            "merchant_owned",
+            "committee_owned",
+            "system_owned",
+            "broker_owned"
+          ]
+        }
+      },
+      "required": [
+        "channel",
+        "site_ref",
+        "device_topology",
+        "origin_scope"
+      ]
+    },
+    "D5_resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key_policy": {
+          "type": "string",
+          "enum": [
+            "broker_managed",
+            "hybrid_ref_only",
+            "no_raw_key",
+            "offline_none"
+          ]
+        },
+        "selected_key_ref": {
+          "type": "string",
+          "pattern": "^key_ref:[A-Za-z0-9_./:-]+$"
+        },
+        "api_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^api_ref:[A-Za-z0-9_./:-]+$"
+          },
+          "uniqueItems": true
+        },
+        "model_tier": {
+          "type": "string",
+          "enum": [
+            "none",
+            "small",
+            "standard",
+            "high_reasoning",
+            "local_only"
+          ]
+        },
+        "cache_policy": {
+          "type": "string",
+          "enum": [
+            "no_cache",
+            "redacted_cache",
+            "ref_cache_only"
+          ]
+        },
+        "cost_policy": {
+          "type": "string",
+          "enum": [
+            "blocked",
+            "metered",
+            "budget_cap_ref",
+            "human_approved"
+          ]
+        }
+      },
+      "required": [
+        "key_policy",
+        "selected_key_ref",
+        "api_refs",
+        "model_tier",
+        "cache_policy",
+        "cost_policy"
+      ]
+    },
+    "D6_governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "navigate_ref",
+              "click_ref",
+              "fill_ref",
+              "select_ref",
+              "read_text_ref",
+              "screenshot_ref",
+              "wait_ref",
+              "extract_ref",
+              "open_sidebar_ref",
+              "close_sidebar_ref",
+              "render_sidebar_ref",
+              "read_context_ref",
+              "write_draft_ref",
+              "route_to_connector_ref",
+              "broker_api_call_ref",
+              "cache_lookup_ref",
+              "read_menu_ref",
+              "create_order_draft_ref",
+              "queue_service_ref",
+              "notify_staff_ref",
+              "ask_human_confirm",
+              "handoff_to_human"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "no_plaintext_context": {
+          "const": true
+        },
+        "human_confirm_required": {
+          "type": "boolean"
+        },
+        "staff_confirm_required": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "allowed_actions",
+        "forbidden_actions",
+        "no_plaintext_context",
+        "human_confirm_required",
+        "staff_confirm_required"
+      ]
+    },
+    "D7_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "redaction_check_required": {
+          "const": true
+        },
+        "leak_check_required": {
+          "const": true
+        },
+        "action_allowlist_required": {
+          "const": true
+        },
+        "response_verify_required": {
+          "const": true
+        },
+        "usage_log_required": {
+          "const": true
+        }
+      },
+      "required": [
+        "redaction_check_required",
+        "leak_check_required",
+        "action_allowlist_required",
+        "response_verify_required",
+        "usage_log_required"
+      ]
+    },
+    "D8_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "packet_ref": {
+          "type": "string",
+          "pattern": "^packet_ref:[A-Za-z0-9_./:-]+$"
+        },
+        "nonce": {
+          "type": "string",
+          "minLength": 16
+        },
+        "counter": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ttl_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "schema_version": {
+          "const": "8d.packet.v1"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "hmac_ref": {
+          "type": "string",
+          "pattern": "^hmac_ref:[A-Za-z0-9_./:-]+$"
+        },
+        "signature_ref": {
+          "type": "string",
+          "pattern": "^signature_ref:[A-Za-z0-9_./:-]+$"
+        },
+        "replay_protection": {
+          "const": true
+        }
+      },
+      "required": [
+        "packet_ref",
+        "nonce",
+        "counter",
+        "ttl_seconds",
+        "created_at",
+        "schema_version",
+        "content_hash",
+        "hmac_ref",
+        "signature_ref",
+        "replay_protection"
+      ]
+    }
+  }
+}

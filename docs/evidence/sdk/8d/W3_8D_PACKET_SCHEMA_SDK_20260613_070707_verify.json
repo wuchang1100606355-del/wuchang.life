@@ -1,0 +1,97 @@
+{
+  "current_node": "taiji01",
+  "db_write": false,
+  "json_parse_ok": [
+    "schemas/8d/xiaoj_8d_packet.schema.json",
+    "schemas/8d/xiaoj_8d_action_packet.schema.json",
+    "schemas/8d/xiaoj_8d_response_packet.schema.json",
+    "packets/examples/8d/member_sidebar_example.json",
+    "packets/examples/8d/browser_action_example.json",
+    "packets/examples/8d/no_plaintext_context_example.json",
+    "packets/examples/8d/merchant_connector_example.json",
+    "packets/examples/8d/committee_service_example.json"
+  ],
+  "live_deploy": false,
+  "python_py_compile_ok": true,
+  "result": "PASS",
+  "router_or_tailscale_change": false,
+  "run_id": "W3_8D_PACKET_SCHEMA_SDK_20260613_070707",
+  "secret_read": false,
+  "secret_scan_allowed_literals": [
+    {
+      "file": "sdk/python/w7tp_8d_packet.py",
+      "pattern": "private_key_block",
+      "reason": "detector_literal_required_by_verifier"
+    }
+  ],
+  "secret_scan_blocking_hits": [],
+  "service_restart": false,
+  "sha256_check_exit_code_before_report_manifest_refresh": 0,
+  "sha256_check_stdout_before_report_manifest_refresh": "docs/sdk/8d/W3_8D_PACKET_SCHEMA_SDK_20260613_070707.md: OK\nschemas/8d/xiaoj_8d_packet.schema.json: OK\nschemas/8d/xiaoj_8d_action_packet.schema.json: OK\nschemas/8d/xiaoj_8d_response_packet.schema.json: OK\nsdk/python/w7tp_8d_packet.py: OK\nsdk/typescript/w7tp_8d_packet.ts: OK\npackets/examples/8d/member_sidebar_example.json: OK\npackets/examples/8d/browser_action_example.json: OK\npackets/examples/8d/no_plaintext_context_example.json: OK\npackets/examples/8d/merchant_connector_example.json: OK\npackets/examples/8d/committee_service_example.json: OK\n",
+  "ts": "2026-06-13T07:08:46+00:00",
+  "verifier_exit_code": 0,
+  "verifier_stderr": "",
+  "verifier_stdout_json": [
+    {
+      "checks": {
+        "browser_actions": [],
+        "envelope": [],
+        "forbidden_plaintext": [],
+        "key_api_refs": [],
+        "required_dimensions": []
+      },
+      "errors": [],
+      "file": "packets/examples/8d/member_sidebar_example.json",
+      "ok": true
+    },
+    {
+      "checks": {
+        "browser_actions": [],
+        "envelope": [],
+        "forbidden_plaintext": [],
+        "key_api_refs": [],
+        "required_dimensions": []
+      },
+      "errors": [],
+      "file": "packets/examples/8d/browser_action_example.json",
+      "ok": true
+    },
+    {
+      "checks": {
+        "browser_actions": [],
+        "envelope": [],
+        "forbidden_plaintext": [],
+        "key_api_refs": [],
+        "required_dimensions": []
+      },
+      "errors": [],
+      "file": "packets/examples/8d/no_plaintext_context_example.json",
+      "ok": true
+    },
+    {
+      "checks": {
+        "browser_actions": [],
+        "envelope": [],
+        "forbidden_plaintext": [],
+        "key_api_refs": [],
+        "required_dimensions": []
+      },
+      "errors": [],
+      "file": "packets/examples/8d/merchant_connector_example.json",
+      "ok": true
+    },
+    {
+      "checks": {
+        "browser_actions": [],
+        "envelope": [],
+        "forbidden_plaintext": [],
+        "key_api_refs": [],
+        "required_dimensions": []
+      },
+      "errors": [],
+      "file": "packets/examples/8d/committee_service_example.json",
+      "ok": true
+    }
+  ],
+  "workspace": "/home/taiji_admin/Taiji_Hub"
+}
