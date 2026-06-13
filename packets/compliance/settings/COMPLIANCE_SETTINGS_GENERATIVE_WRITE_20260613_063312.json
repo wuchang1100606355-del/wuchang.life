@@ -1,0 +1,76 @@
+{
+  "packet_type": "compliance_settings_generative_write_packet",
+  "run_id": "COMPLIANCE_SETTINGS_GENERATIVE_WRITE_20260613_063312",
+  "state": "COMPLIANCE_SETTINGS_GENERATIVE_WRITE_READY",
+  "safe_mode": true,
+  "runtime_change": false,
+  "tailscale_change": false,
+  "dns_change": false,
+  "workspace_change": false,
+  "service_restart": false,
+  "odoo_db_write": false,
+  "secret_read": false,
+  "raw_pii_read": false,
+  "identity_trust_root": {
+    "association_root_identity": "admin@wuchang.life",
+    "public_domain_namespace": "wuchang.life",
+    "rule": "governs_policy_not_member_plaintext"
+  },
+  "tailscale_w0_observation": {
+    "mesh": "PASS",
+    "dns_health": "HOLD",
+    "taiji01_ipv4": "100.71.224.18",
+    "taiji01_ipv6": "fd7a:115c:a1e0::b3a:e012",
+    "tailscale_version": "1.96.4",
+    "corp_dns": true,
+    "route_all": true,
+    "run_ssh": false,
+    "resolv_conf_managed_by_tailscale": true,
+    "systemd_resolved_mode": "foreign"
+  },
+  "runtime_hold": [
+    "dns_change",
+    "magicdns_change",
+    "subnet_route_change",
+    "acl_grants_change",
+    "routeall_change",
+    "device_cleanup"
+  ],
+  "domain_roles": {
+    "www.wuchang.life": "public_site",
+    "auth.wuchang.life": "oauth_login",
+    "member.wuchang.life": "member_entry",
+    "xiaoj.wuchang.life": "xiaoj_member_ui",
+    "api.wuchang.life": "governed_api_gateway",
+    "merchant.wuchang.life": "merchant_entry",
+    "committee.wuchang.life": "committee_entry",
+    "status.wuchang.life": "status_page"
+  },
+  "tailscale_role_schedule_not_applied": {
+    "taiji01": ["tag:core-server", "subnet-router", "governance-backend"],
+    "msi": ["tag:admin-dev"],
+    "msi-win11-in": ["tag:admin-dev"],
+    "iphone-11": ["tag:mobile-observer"],
+    "penguin": ["tag:client-dev"],
+    "v3-mix-edla-gl": ["tag:mobile-observer", "pending_review"],
+    "desktop-ohe05sc*": ["tag:legacy-review"],
+    "wuchang-us-free-node-2": ["tag:legacy-review"]
+  },
+  "hard_rules": {
+    "association_admin_blind": true,
+    "desensitized_no_pii_stats_only": true,
+    "no_plaintext_context": true,
+    "key_ref_only": true,
+    "api_ref_only": true,
+    "no_public_core_exposure": true,
+    "member_controls_sidebar_xiaoj": true
+  },
+  "operation_windows": {
+    "W0_READONLY_PREFLIGHT": "allowed",
+    "W1_EVIDENCE_WRITE": "allowed_after_gates",
+    "W2_GIT_COMMIT": "allowed_after_verify",
+    "W3_GENERATIVE_DEPLOY": "allowed_no_runtime_mutation",
+    "W4_RUNTIME_CHANGE": "hold_requires_explicit_approval",
+    "W5_SECRET_OR_PII": "hold_requires_explicit_approval_and_isolation"
+  }
+}
