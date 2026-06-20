@@ -1,0 +1,43 @@
+{
+  "state": "PASS_STATIC_REVIEW",
+  "addon": "Taiji_Odoo/addons/wuchang_pos_topology",
+  "manifest_state": "literal_eval_pass",
+  "file_count": 5,
+  "errors": [],
+  "files": [
+    {
+      "path": "Taiji_Odoo/addons/wuchang_pos_topology/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "check": "python_ast_pass"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_pos_topology/__manifest__.py",
+      "size": 394,
+      "sha256": "925f1b4a367ba7a747241dc57ee18b9fcca222a7f8b1f5cf717d245b4711b91d",
+      "check": "python_ast_pass"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_pos_topology/__pycache__/__init__.cpython-312.pyc",
+      "size": 147,
+      "sha256": "54d130148992d86cc2f51780bb930c2a5132470fafcd6093f6d4eb4a0e210ad8",
+      "check": "metadata_only"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_pos_topology/data/res_company_topology.xml",
+      "size": 710,
+      "sha256": "64135eb58d73a2d88581804866b040edd38b714d91fed0777bc064016a1a790e",
+      "check": "xml_parse_pass"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_pos_topology/models/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "check": "python_ast_pass"
+    }
+  ],
+  "deploy": false,
+  "service_restart": false,
+  "db_write": false,
+  "secret_read": false
+}
