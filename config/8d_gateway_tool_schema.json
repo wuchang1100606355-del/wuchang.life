@@ -1,0 +1,33 @@
+{
+  "type": "function",
+  "function": {
+    "name": "w7tp_cloud_compute_gateway",
+    "description": "Invoke the W7TP 8D Gateway to offload complex reasoning or code generation to cloud compute. Constructs an 8D_GENERATIVE_TRANSFER_REQUEST. It does NOT execute code or modify local files directly.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "task_intent": {
+          "type": "string",
+          "description": "A clear, context-reduced intent of what needs to be generated or analyzed."
+        },
+        "manifest_index_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of relative file paths relevant to this task. The gateway will supply only these specific files to the cloud."
+        },
+        "candidate_only": {
+          "type": "boolean",
+          "description": "Must strictly be set to true. Enforces that cloud response is a candidate and not an auto-land command."
+        }
+      },
+      "required": [
+        "task_intent",
+        "manifest_index_refs",
+        "candidate_only"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
