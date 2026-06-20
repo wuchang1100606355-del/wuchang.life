@@ -1,0 +1,6 @@
+path	risk	redteam_verdict	matched_terms
+scripts/cloud_service_account_validation_dryrun.sh	SERVICE_ACCOUNT_KEY_JSON_PATH	HARD_HOLD	gcp-sa-key.json,GOOGLE_APPLICATION_CREDENTIALS
+scripts/cloud_service_account_validation_dryrun.sh	TOKEN_GENERATION	HARD_HOLD	print-access-token,ACCESS_TOKEN=
+scripts/cloud_service_account_validation_dryrun.sh	REAL_VERTEX_GEMINI_CALL	HARD_HOLD	generateContent,aiplatform.googleapis.com,gemini-1.5-pro
+scripts/cloud_service_account_validation_dryrun.sh	MISLEADING_DRYRUN_NAME	HARD_HOLD	PASS_CLOUD_COMPUTE_ACCESS_VERIFIED
+scripts/cloud_service_account_validation_dryrun.sh	CURL_REAL_POST	HARD_HOLD	curl,-X POST
