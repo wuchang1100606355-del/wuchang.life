@@ -1,0 +1,81 @@
+{
+  "run_id": "POS_MVP_SANDBOX_AUTODEV_REAL_MENU_20260621",
+  "state": "POS_MVP_SANDBOX_AUTODEV_PACKET",
+  "authority": "taiji01_total_field",
+  "real_menu_required": true,
+  "external_mother_file_required": false,
+  "external_mother_file_authority": false,
+  "external_mother_file_status": "KNOWN_INCORRECT_NOT_AUTHORITY",
+  "xlsx_export_required": false,
+  "product_photo_policy": {
+    "local_product_photos_supported": true,
+    "external_photo_fetch": false,
+    "generated_photo_allowed": false,
+    "generated_photo_allowed_as_product_evidence": false,
+    "photo_quality_tier_required": "PHOTOBOOK_PRODUCT_GRADE",
+    "current_photo_state": "PHOTOBOOK_PRODUCT_PHOTOS_REQUIRED_NOT_ATTACHED",
+    "market_demo_requires_local_photos": true,
+    "photobook_spec": "runtime/sandbox/pos_mvp_autodev/menu/product_photobook_spec.json"
+  },
+  "standby_display_policy": {
+    "xiaoj_anchor_with_menu": true,
+    "ui_file": "runtime/sandbox/pos_mvp_autodev/ui/standby_xiaoj_menu.html",
+    "display_only": true,
+    "chrome_live_control": false,
+    "external_asset_fetch": false,
+    "source_menu": "runtime/sandbox/pos_mvp_autodev/menu/menu.json"
+  },
+  "product_photo_prompt_policy": {
+    "prompt_pack_json": "runtime/sandbox/pos_mvp_autodev/menu/product_photo_ai_prompts.json",
+    "prompt_pack_markdown": "runtime/sandbox/pos_mvp_autodev/menu/product_photo_ai_prompts.md",
+    "single_product_prompt_markdown": "runtime/sandbox/pos_mvp_autodev/menu/gemini_single_product_prompt.md",
+    "style_id": "LIAOGUO_PHOTOBOOK_STANDBY_STYLE_V1",
+    "same_style_different_items_required": true,
+    "angle_variation_allowed": true,
+    "quality_tier": "PHOTOBOOK_PRODUCT_GRADE",
+    "google_generation": "USER_MANUAL_ONLY",
+    "google_account_read": false,
+    "google_api_call": false,
+    "generated_image_is_product_evidence": false,
+    "staff_approval_required_before_market_use": true
+  },
+  "menu_source": [
+    "Taiji_Odoo/addons/wuchang_core/data/breakfast_pos_menu.xml",
+    "Taiji_Odoo/addons/wuchang_core/data/menu_setup.xml"
+  ],
+  "primary_chain": [
+    "menu.json",
+    "order_candidate",
+    "GT8D route lookup",
+    "verifier",
+    "cashier_confirm",
+    "local order log / Odoo sidecar candidate",
+    "kitchen_display",
+    "spacetime_audit",
+    "dead_letter_queue"
+  ],
+  "sandbox_root": "runtime/sandbox/pos_mvp_autodev",
+  "candidate_only": true,
+  "local_reconstruction_required": true,
+  "production_deploy": false,
+  "service_restart": false,
+  "db_write": false,
+  "odoo_core_mutation": false,
+  "production_line_action": false,
+  "production_google_action": false,
+  "secret_read": false,
+  "member_plaintext_read": false,
+  "d8_envelope": {
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "db_write": false,
+    "service_restart": false,
+    "deploy": false
+  },
+  "bounded_retry": {
+    "max_retry_count": 2,
+    "max_queue_items": 200,
+    "failed_item_route": "dead_letter_queue"
+  },
+  "verifier": "scripts/verify/verify_pos_mvp_sandbox.sh"
+}
