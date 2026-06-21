@@ -1,0 +1,85 @@
+STATE=GT8D_ROUTE_003SEC_EVIDENCE
+HOST=taiji01
+ROOT=/home/taiji_admin/Taiji_Hub
+RUN_ID=W7TP_GT8D_ROUTE_003SEC_EVIDENCE_20260621T113027Z
+BRANCH=commit/pos-patch-W7TP_COMMIT_POS_PATCH_20260614_003010
+HEAD=b45b491
+
+--- 會員要用 LINE WORKS 通知
+STATE=LOCAL_LOOKUP
+ROUTE_CODE=MEMBER_SERVICE
+LOOKUP_KEY=member.service.lineworks.notify.v1
+D1_IDENTITY=local_gt8d_lookup_router
+D2_INTENT=select_route_code_and_lookup_key
+D3_STATE=candidate_only_no_runtime_mutation
+D4_TOPOLOGY=codex_wrapper_to_local_lookup_table
+D5_RESOURCE=llm_optional_code_authority_required
+D6_GOVERNANCE=local_reconstruction_required
+D7_VERIFICATION=route_code_exact_full_value_validated_by_code
+D8_ENVELOPE=path_ref_hash_ref_only
+CLOUD_RETURN_EXPECTED=candidate_result_only
+LOCAL_RECONSTRUCTION_REQUIRED=TRUE
+NEXT_SAFE_ACTION=handoff_to_w7tp_cloud_or_local_verifier
+SECRET_READ=FALSE
+MEMBER_PLAINTEXT_READ=FALSE
+TOKEN_PRINT=FALSE
+DB_WRITE=FALSE
+SERVICE_RESTART=FALSE
+DEPLOY=FALSE
+ELAPSED=0.07 sec
+--- 請把 Odoo POS 候選動作轉 7D
+STATE=LOCAL_LOOKUP
+ROUTE_CODE=ODOO_POS_ACTION
+LOOKUP_KEY=odoo.pos.action.candidate.v1
+D1_IDENTITY=local_gt8d_lookup_router
+D2_INTENT=select_route_code_and_lookup_key
+D3_STATE=candidate_only_no_runtime_mutation
+D4_TOPOLOGY=codex_wrapper_to_local_lookup_table
+D5_RESOURCE=llm_optional_code_authority_required
+D6_GOVERNANCE=local_reconstruction_required
+D7_VERIFICATION=route_code_exact_full_value_validated_by_code
+D8_ENVELOPE=path_ref_hash_ref_only
+CLOUD_RETURN_EXPECTED=candidate_result_only
+LOCAL_RECONSTRUCTION_REQUIRED=TRUE
+NEXT_SAFE_ACTION=handoff_to_w7tp_cloud_or_local_verifier
+SECRET_READ=FALSE
+MEMBER_PLAINTEXT_READ=FALSE
+TOKEN_PRINT=FALSE
+DB_WRITE=FALSE
+SERVICE_RESTART=FALSE
+DEPLOY=FALSE
+ELAPSED=0.03 sec
+--- 幫我分析專利請求項
+STATE=LOCAL_LOOKUP
+ROUTE_CODE=PATENT_ANALYSIS
+LOOKUP_KEY=patent.analysis.gt8d.v1
+D1_IDENTITY=local_gt8d_lookup_router
+D2_INTENT=select_route_code_and_lookup_key
+D3_STATE=candidate_only_no_runtime_mutation
+D4_TOPOLOGY=codex_wrapper_to_local_lookup_table
+D5_RESOURCE=llm_optional_code_authority_required
+D6_GOVERNANCE=local_reconstruction_required
+D7_VERIFICATION=route_code_exact_full_value_validated_by_code
+D8_ENVELOPE=path_ref_hash_ref_only
+CLOUD_RETURN_EXPECTED=candidate_result_only
+LOCAL_RECONSTRUCTION_REQUIRED=TRUE
+NEXT_SAFE_ACTION=handoff_to_w7tp_cloud_or_local_verifier
+SECRET_READ=FALSE
+MEMBER_PLAINTEXT_READ=FALSE
+TOKEN_PRINT=FALSE
+DB_WRITE=FALSE
+SERVICE_RESTART=FALSE
+DEPLOY=FALSE
+ELAPSED=0.03 sec
+
+[SHA256]
+91684113e135d4cc760d7197176c39ba9d7bf9c25dd2bbfbb89158d718ab9485  config/gt8d_lookup/route_table.json
+474a3e8382ee1a57c3ff2a38ca4f4609d4cbc9af0492061b2a6413f1e0d41ea4  runtime/gt8d_lookup/gt8d_route_resolver.py
+2a320f9f2d3b440e6c47ee9152a8f2ff7e0d7e8a251018e51e9629a21e1fd26f  /usr/local/bin/codex
+c61cd52afb270c16f912856e32707fb51b49e0aeccedbf3c9febdee3a515552c  runtime/gt8d_lookup_evidence/W7TP_GT8D_ROUTE_003SEC_EVIDENCE_20260621T113027Z/route_tests.txt
+
+SECRET_READ=FALSE
+MEMBER_PLAINTEXT_READ=FALSE
+DB_WRITE=FALSE
+SERVICE_RESTART=FALSE
+DEPLOY=FALSE
