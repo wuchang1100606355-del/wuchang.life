@@ -1,0 +1,17 @@
+{
+  "schema": "W7TP_POS_P2_COMMITTED_EVIDENCE_SEAL_V1",
+  "state": "POS_P2_CANDIDATE_READER_EVIDENCE_SEALED",
+  "scope": "sandbox_order_candidate_reader_ui_projection_human_confirm_gate",
+  "candidate_source": "runtime/sandbox/pos_mvp_autodev_run/*/orders/POS_SANDBOX_ORDER_CANDIDATE.json",
+  "run_output_dir": "runtime/sandbox/pos_mvp_p2_projection_run",
+  "verifier": "scripts/verify/verify_pos_mvp_p2_candidate_projection.sh",
+  "human_confirm_gate": "CONFIRM_DRY_RUN",
+  "formal_db_write": false,
+  "formal_pos_write": false,
+  "payment_capture": false,
+  "service_restart": false,
+  "deploy": false,
+  "production_release": false,
+  "secret_read": false,
+  "member_plaintext_read": false
+}
