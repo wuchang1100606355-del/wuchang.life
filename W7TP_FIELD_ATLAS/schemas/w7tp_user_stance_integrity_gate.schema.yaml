@@ -1,0 +1,40 @@
+schema_id: W7TP_USER_STANCE_INTEGRITY_GATE
+status: DRAFT
+purpose: Preserve user stance, Total Field handhold, anti-hallucination labels, and unified questions.
+required_fields:
+  - readonly_total_field_query_first
+  - user_stance_priority
+  - cloud_codex_gpt_candidate_only
+  - taiji01_total_field_authority
+  - output_label_set
+  - unified_question_rule
+  - simplification_alert_rule
+  - next_total_field_query
+required_output_labels:
+  - FACT
+  - INFERENCE
+  - DESIGN_PROPOSAL
+  - NOT_YET_VERIFIED
+  - INFO_REQUIRED
+required_next_total_field_options:
+  - POS order_candidate API
+  - cashier_confirm gate
+  - kitchen_display
+  - spacetime_event wrapper
+  - Odoo sidecar candidate
+  - 8D identity binding skeleton
+  - GT8D route table POS expansion
+stopline_states:
+  - HOLD_USER_STANCE_INTEGRITY
+  - SIMPLIFICATION_MISSED_ALERT
+  - TRUST_BREACH_INTEGRITY_BREACH_ETHICS_BREACH
+security_boundary:
+  no_secret_read: true
+  no_member_plaintext_read: true
+  no_db_write: true
+  no_deploy: true
+  no_service_restart: true
+  no_odoo_core_mutation: true
+  no_production_lineworks_action: true
+  no_google_token_validation: true
+

@@ -1,0 +1,19 @@
+schema_id: W7TP_8D_IDENTITY_CODE
+status: DRAFT
+purpose: Minimal identity-code schema for member, merchant, node, device, and entitlement binding.
+required_fields:
+  - subject_ref
+  - subject_type
+  - issuer_ref
+  - node_scope
+  - role
+  - entitlement_ref
+  - content_hash
+  - claim_label
+security_boundary:
+  plaintext_identity_forbidden: true
+  secret_material_forbidden: true
+verification_rule:
+  content_hash_required: true
+  claim_label_required: true
+

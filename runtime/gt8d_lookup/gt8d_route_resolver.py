@@ -11,6 +11,7 @@ VALID_ROUTE_CODES = {
     "API_ORCHESTRATION",
     "MEMBER_SERVICE",
     "CODE_GENERATION",
+    "XIAOJ_DISPLAY_COMPUTE",
 }
 
 def load_table():
@@ -105,9 +106,10 @@ def emit(row, mode):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["local", "llm"], default=os.environ.get("GT8D_ROUTE_MODE", "local"))
+    ap.add_argument("--route", help="route text alias for CLI callers")
     ap.add_argument("prompt", nargs="*")
     args = ap.parse_args()
-    text = " ".join(args.prompt) if args.prompt else sys.stdin.read()
+    text = args.route if args.route is not None else (" ".join(args.prompt) if args.prompt else sys.stdin.read())
     if not text.strip():
         print("STATE=NO_INPUT")
         return 2

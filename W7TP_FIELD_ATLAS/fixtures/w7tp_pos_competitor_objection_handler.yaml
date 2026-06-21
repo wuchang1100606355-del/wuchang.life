@@ -1,0 +1,59 @@
+fixture_id: W7TP_POS_COMPETITOR_OBJECTION_HANDLER_20260621
+state: PRODUCT_MARKET_DRY_RUN
+objections:
+  - competitor: Toast
+    objection: Toast already has offline POS, KDS, and kiosk workflows.
+    response: W7TP does not claim to replace Toast; it proves AI candidate control, local reconstruction, and evidence replay for Odoo-based stores.
+    proof_required_before_demo:
+      - local_reconstruction_success_rate
+      - audit_replay_completion_seconds
+      - outage_candidate_flow_success_count
+  - competitor: Square Restaurants
+    objection: Square is simpler for small merchants and already has restaurant workflow and offline payments.
+    response: W7TP should be sold only where Odoo is already the business system and AI governance is the pain; payment parity is not claimed.
+    proof_required_before_demo:
+      - pos_identity_collision_count
+      - notification_draft_to_approval_seconds
+  - competitor: Odoo POS
+    objection: Odoo already provides POS, self-ordering, and preparation displays.
+    response: W7TP is the governed edge ops layer above Odoo, adding no-blind-AI-write, candidate-only cloud, and evidence-backed local reconstruction.
+    proof_required_before_demo:
+      - local_reconstruction_success_rate
+      - manual_rekey_avoidance_count
+  - competitor: Lightspeed
+    objection: Lightspeed has reporting, inventory, offline selling, and multi-location operations.
+    response: W7TP must not claim management-suite parity; it should prove audit replay and ROI metrics for AI-assisted Odoo operations.
+    proof_required_before_demo:
+      - audit_replay_completion_seconds
+      - manual_rekey_avoidance_count
+  - competitor: Clover
+    objection: Clover bundles hardware, payment, KDS, and prep reporting.
+    response: W7TP is hardware-neutral and should target stores that need governance over existing POS/edge nodes rather than a new hardware bundle.
+    proof_required_before_demo:
+      - display_trust_path
+      - notification_trust_path
+  - competitor: TouchBistro
+    objection: TouchBistro is built for restaurant tableside and full-service workflows.
+    response: W7TP MVP remains cafe/QSR and Odoo-edge focused; table-service parity is explicitly deferred.
+    proof_required_before_demo:
+      - pos_identity_collision_count
+      - order_candidate_to_staff_confirm_seconds
+  - competitor: Shopify POS
+    objection: Shopify integrates online and offline commerce better.
+    response: W7TP does not lead with ecommerce; future product/order sync stays candidate-only until connector evidence exists.
+    proof_required_before_demo:
+      - local_reconstruction_success_rate
+      - notification_draft_to_approval_seconds
+  - competitor: SpotOn
+    objection: SpotOn makes automatic offline continuity a core promise.
+    response: W7TP must demonstrate dual-node continuity before any comparable market claim.
+    proof_required_before_demo:
+      - outage_candidate_flow_success_count
+      - audit_replay_completion_seconds
+  - competitor: Revel
+    objection: Revel already supports outage-oriented offline transactions.
+    response: W7TP should answer with outage runbook evidence and avoid transaction-processing parity claims.
+    proof_required_before_demo:
+      - outage_candidate_flow_success_count
+      - manual_rekey_avoidance_count
+

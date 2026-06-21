@@ -1,0 +1,44 @@
+schema_id: W7TP_POS_MARKET_GATE
+status: DRAFT
+purpose: Product-market readiness gate for the sovereign edge POS ops layer.
+required_gates:
+  - offline_degraded_operation_story
+  - pos_identity_collision_blocker
+  - notification_trust_path
+  - display_trust_path
+  - roi_metrics
+  - competitor_coverage
+  - total_field_dialogue
+  - merchant_one_page
+  - objection_handler
+required_competitors_min: 8
+required_objections_min: 8
+competitor_dimensions:
+  - restaurant_pos_core
+  - offline_or_degraded_mode
+  - kds_or_customer_display
+  - self_order_or_kiosk
+  - payments_or_payment_boundary
+  - reporting_or_roi
+  - integration_or_open_api
+  - ai_or_automation_control
+required_roi_metrics:
+  - order_candidate_to_staff_confirm_seconds
+  - notification_draft_to_approval_seconds
+  - pos_identity_collision_count
+  - local_reconstruction_success_rate
+  - outage_candidate_flow_success_count
+  - manual_rekey_avoidance_count
+  - audit_replay_completion_seconds
+forbidden_product_claims:
+  - direct_db_write
+  - direct_lineworks_send_without_review
+  - direct_odoo_mutation_without_review
+  - live_chrome_control_without_review
+  - payment_processing_claim_without_integration
+  - unverified_64_gua_implementation_fact
+  - pos_replacement_claim_before_parity
+  - market_leadership_claim_without_benchmark
+  - buyer_ready_claim_without_one_page
+  - competitor_parity_claim_without_proof
+stopline_state: HOLD_PRODUCT_MARKET_OVERCLAIM

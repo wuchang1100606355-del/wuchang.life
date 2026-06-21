@@ -1,0 +1,15 @@
+schema_id: W7TP_SPACETIME_EVENT
+status: DRAFT
+required_fields:
+  - event_id
+  - event_type
+  - actor_ref
+  - node_ref
+  - parent_hash
+  - event_hash
+  - claim_label
+verification_rule:
+  parent_hash_must_match_previous_event_hash: true
+  secrets_forbidden: true
+  member_plaintext_forbidden: true
+

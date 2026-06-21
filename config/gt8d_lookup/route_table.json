@@ -15,6 +15,18 @@
       "keywords": ["Odoo", "POS", "點餐", "訂單", "菜單", "收銀"]
     },
     {
+      "route_code": "ODOO_POS_ACTION",
+      "lookup_key": "pos.local.reconstruct.v1",
+      "priority": 115,
+      "keywords": ["本地還原", "local reconstruct", "候選還原", "雲端只回候選", "POS 維運"]
+    },
+    {
+      "route_code": "XIAOJ_DISPLAY_COMPUTE",
+      "lookup_key": "xiaoj.display.compute.v1",
+      "priority": 95,
+      "keywords": ["小J影像", "客顯", "外接電視", "Chrome 客顯", "display compute", "算力節點"]
+    },
+    {
       "route_code": "API_ORCHESTRATION",
       "lookup_key": "api.orchestration.connector.v1",
       "priority": 80,

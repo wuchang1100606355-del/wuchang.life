@@ -1,0 +1,18 @@
+schema_id: W7TP_SERVICE_ENTITLEMENT
+status: DRAFT
+allowed_entitlements:
+  - FREE
+  - ULTRA
+  - GROUP_MEMBER
+  - ADMIN
+  - FOUNDER_BREAK_GLASS
+required_fields:
+  - subject_ref
+  - entitlement
+  - risk_tier
+  - allowed_actions
+  - forbidden_actions
+verification_rule:
+  founder_break_glass_requires_stage_3_audit: true
+  runtime_action_requires_review: true
+

@@ -1,0 +1,44 @@
+schema_id: W7TP_CLOUD_COMPUTE_RESILIENCE_GATE
+status: DRAFT
+purpose: Governed cloud compute pressure-absorption gate for product improvement and market redteam.
+required_fields:
+  - cloud_trigger_allowed
+  - cloud_labor_only
+  - candidate_only
+  - cloud_authority
+  - cloud_memory_benefit
+  - cloud_data_benefit
+  - land_allowed
+  - allowed_cloud_workloads
+  - forbidden_cloud_workloads
+  - capacity_controls
+  - fallback_policy
+required_capacity_controls:
+  - max_cloud_batch_items
+  - max_candidate_ttl_seconds
+  - max_redacted_packet_bytes
+  - max_retry_count
+  - fallback_on_cloud_failure
+  - budget_policy
+required_allowed_workloads:
+  - competitor_matrix_expansion
+  - product_redteam_batch
+  - merchant_objection_draft
+  - roi_metric_hypothesis_generation
+  - schema_fixture_candidate_generation
+  - long_context_summarization_of_redacted_packets
+  - stress_scenario_generation
+forbidden_cloud_workloads:
+  - secret_read
+  - member_plaintext_read
+  - raw_odoo_record_dump
+  - lineworks_send
+  - odoo_db_write
+  - pos_action
+  - tailscale_change
+  - chrome_live_control
+  - payment_processing
+  - cloud_memory_benefit
+  - cloud_data_benefit
+  - final_authority_or_land_decision
+stopline_state: HOLD_CLOUD_COMPUTE_BOUNDARY

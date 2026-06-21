@@ -1,0 +1,81 @@
+{
+  "packet_type": "w3_generative_transfer_deploy_packet",
+  "run_id": "W3_GENERATIVE_TRANSFER_DEPLOY_20260621",
+  "state": "W3_GENERATIVE_TRANSFER_DEPLOY_INDEXABLE",
+  "safe_mode": true,
+  "runtime_change": false,
+  "service_restart": false,
+  "odoo_db_write": false,
+  "tailscale_change": false,
+  "lineworks_send": false,
+  "chrome_display_control": false,
+  "secret_read": false,
+  "raw_pii_read": false,
+  "main_chain": [
+    "State",
+    "Coordinate",
+    "Hash",
+    "Packet",
+    "Generative Transfer",
+    "Verify",
+    "Reconstruct",
+    "Evidence",
+    "Action"
+  ],
+  "dual_node_profile_refs": [
+    "NODE_POS_MAINT",
+    "NODE_XIAOJ_DISPLAY_COMPUTE"
+  ],
+  "allowed_outputs": [
+    "specification",
+    "packet",
+    "schema",
+    "fixture",
+    "dry_run_verifier",
+    "evidence_manifest",
+    "product_market_gate",
+    "cloud_compute_resilience_gate",
+    "user_stance_integrity_gate"
+  ],
+  "forbidden_outputs": [
+    "odoo_live_write",
+    "lineworks_send",
+    "tailscale_change",
+    "service_restart",
+    "db_write",
+    "secret_print",
+    "member_plaintext_dump",
+    "chrome_live_control"
+  ],
+  "cloud_boundary": {
+    "cloud_authority": false,
+    "candidate_result_only": true,
+    "local_reconstruction_required": true
+  },
+  "product_market_gate": {
+    "required_before_demo": true,
+    "positioning": "Sovereign Edge POS Ops Layer for Odoo stores",
+    "stopline": "HOLD_PRODUCT_MARKET_OVERCLAIM"
+  },
+  "cloud_compute_resilience_gate": {
+    "cloud_trigger_allowed": true,
+    "cloud_labor_only": true,
+    "candidate_only": true,
+    "cloud_authority": false,
+    "cloud_memory_benefit": false,
+    "cloud_data_benefit": false,
+    "land_allowed": false,
+    "stopline": "HOLD_CLOUD_COMPUTE_BOUNDARY"
+  },
+  "user_stance_integrity_gate": {
+    "readonly_total_field_query_first": true,
+    "fact_label_required": true,
+    "unified_questions_required_on_gap": true,
+    "stopline": "HOLD_USER_STANCE_INTEGRITY"
+  },
+  "claim_labels": {
+    "64_gua_bitmask": "DESIGN_PROPOSAL",
+    "live_odoo_state": "NOT_YET_VERIFIED",
+    "pos_id_3_4_collision_resolution": "NOT_YET_VERIFIED"
+  }
+}

@@ -1,0 +1,55 @@
+fixture_id: W7TP_CLOUD_COMPUTE_RESILIENCE_FIXTURE_20260621
+state: CLOUD_COMPUTE_LABOR_ONLY_GATE
+cloud_trigger_allowed: true
+cloud_labor_only: true
+candidate_only: true
+cloud_authority: false
+cloud_memory_benefit: false
+cloud_data_benefit: false
+land_allowed: false
+allowed_cloud_workloads:
+  - competitor_matrix_expansion
+  - product_redteam_batch
+  - merchant_objection_draft
+  - roi_metric_hypothesis_generation
+  - schema_fixture_candidate_generation
+  - long_context_summarization_of_redacted_packets
+  - stress_scenario_generation
+forbidden_cloud_workloads:
+  - secret_read
+  - member_plaintext_read
+  - raw_odoo_record_dump
+  - lineworks_send
+  - odoo_db_write
+  - pos_action
+  - tailscale_change
+  - chrome_live_control
+  - payment_processing
+  - cloud_memory_benefit
+  - cloud_data_benefit
+  - final_authority_or_land_decision
+capacity_controls:
+  max_cloud_batch_items: 20
+  max_candidate_ttl_seconds: 300
+  max_redacted_packet_bytes: 65536
+  max_retry_count: 2
+  fallback_on_cloud_failure: local_lookup_and_hold
+  budget_policy: cost_ceiling_required_before_cloud_trigger
+fallback_policy:
+  cloud_timeout: local_lookup_and_hold
+  cloud_schema_error: reject_candidate
+  cloud_redaction_error: hold_and_log
+  cloud_cost_limit_missing: hold_before_call
+resilience_use_cases:
+  - use_case: competitor_matrix_expansion
+    local_authority: product_market_gate_verifier
+    output_boundary: candidate_rows_only
+  - use_case: product_redteam_batch
+    local_authority: total_field_review_packet
+    output_boundary: findings_candidates_only
+  - use_case: merchant_objection_draft
+    local_authority: objection_handler_fixture
+    output_boundary: draft_copy_only
+  - use_case: stress_scenario_generation
+    local_authority: local_verifier
+    output_boundary: dry_run_scenarios_only

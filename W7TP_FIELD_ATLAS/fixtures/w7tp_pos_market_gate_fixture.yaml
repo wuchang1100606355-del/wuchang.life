@@ -1,0 +1,100 @@
+fixture_id: W7TP_POS_MARKET_GATE_FIXTURE_20260621
+state: PRODUCT_MARKET_DRY_RUN
+product_positioning: Sovereign Edge POS Ops Layer for Odoo stores
+market_claims:
+  - claim: AI cannot directly write accounting or POS records.
+    status: FACT_WITHIN_THIS_W3_PACKAGE
+  - claim: Cloud returns candidate results only.
+    status: FACT_WITHIN_THIS_W3_PACKAGE
+  - claim: Store-local nodes reconstruct and verify intent.
+    status: DESIGN_PROPOSAL
+  - claim: Offline/degraded operation can be demonstrated.
+    status: NOT_YET_VERIFIED
+market_gates:
+  offline_degraded_operation_story:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_NO_CONTINUITY_STORY
+  pos_identity_collision_blocker:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_POS_IDENTITY_COLLISION
+  notification_trust_path:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_NOTIFICATION_UNTRUSTED
+  display_trust_path:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_DISPLAY_UNTRACKED
+  roi_metrics:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_NO_ROI
+  competitor_coverage:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_COMPETITOR_COVERAGE_WEAK
+  total_field_dialogue:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_NO_TOTAL_FIELD_DIALOGUE
+  merchant_one_page:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_NO_MERCHANT_ONE_PAGE
+  objection_handler:
+    state: REQUIRED_BEFORE_DEMO
+    blocker: MARKET_HOLD_NO_OBJECTION_HANDLER
+competitor_matrix:
+  - competitor: Odoo POS
+    strongest_market_proof: restaurant POS, self-ordering, preparation display
+    w7tp_counter_position: sovereign ops layer above Odoo
+  - competitor: Toast
+    strongest_market_proof: offline POS, KDS, kiosk continuity
+    w7tp_counter_position: local reconstruction and audit replay
+  - competitor: Square Restaurants
+    strongest_market_proof: QSR UX, KDS, menu sync, offline payments
+    w7tp_counter_position: low-friction Odoo trust and AI ops add-on
+  - competitor: Lightspeed
+    strongest_market_proof: offline selling, reporting, inventory, multi-location
+    w7tp_counter_position: ROI dashboard and evidence replay roadmap
+  - competitor: Clover
+    strongest_market_proof: KDS routing, prep reporting, hardware/payment bundle
+    w7tp_counter_position: hardware-neutral governance layer
+  - competitor: TouchBistro
+    strongest_market_proof: full-service restaurant workflow, offline KDS/payment
+    w7tp_counter_position: cafe/QSR-first scope with table-service deferred
+  - competitor: Shopify POS
+    strongest_market_proof: omnichannel retail/ecommerce sync
+    w7tp_counter_position: future product/order sync candidate
+  - competitor: SpotOn
+    strongest_market_proof: automatic offline continuity across stations and devices
+    w7tp_counter_position: dual-node continuity proof as demo blocker
+  - competitor: Revel
+    strongest_market_proof: offline transactions and outage POS configuration
+    w7tp_counter_position: outage operations runbook
+total_field_dialogue:
+  product_redteam_question: Can W7TP compete before payment or KDS replacement parity?
+  total_field_response: Compete first as a sovereign edge ops and evidence layer for Odoo-based stores.
+  mutual_improvement:
+    - translate_governance_into_merchant_outcomes
+    - add_demo_roi_and_competitor_objection_handler
+    - defer_payment_and_kds_parity_claims_until_evidence_exists
+  follow_up_product_redteam_question: What must change before a merchant or investor hears it?
+  follow_up_total_field_response: Lead with merchant outcomes; keep Total Field as hidden trust engine.
+merchant_one_page_ref: docs/deploy/generative_transfer/W3_POS_MERCHANT_ONE_PAGE_20260621.md
+objection_handler_ref: W7TP_FIELD_ATLAS/fixtures/w7tp_pos_competitor_objection_handler.yaml
+roi_metrics:
+  order_candidate_to_staff_confirm_seconds: null
+  notification_draft_to_approval_seconds: null
+  pos_identity_collision_count: null
+  local_reconstruction_success_rate: null
+  outage_candidate_flow_success_count: null
+  manual_rekey_avoidance_count: null
+  audit_replay_completion_seconds: null
+demo_stopline:
+  state: HOLD_PRODUCT_MARKET_OVERCLAIM
+  applies_to:
+    - direct_db_write
+    - direct_lineworks_send_without_review
+    - direct_odoo_mutation_without_review
+    - live_chrome_control_without_review
+    - payment_processing_claim_without_integration
+    - unverified_64_gua_implementation_fact
+    - pos_replacement_claim_before_parity
+    - market_leadership_claim_without_benchmark
+    - buyer_ready_claim_without_one_page
+    - competitor_parity_claim_without_proof

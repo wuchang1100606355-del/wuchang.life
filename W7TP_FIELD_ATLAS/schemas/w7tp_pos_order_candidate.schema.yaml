@@ -1,0 +1,15 @@
+schema_id: W7TP_POS_ORDER_CANDIDATE
+status: DRAFT
+required_fields:
+  - candidate_id
+  - store_ref
+  - source_node_ref
+  - menu_refs
+  - confidence
+  - candidate_only
+  - local_reconstruction_required
+  - land_allowed
+verification_rule:
+  land_allowed_must_be_false_in_dry_run: true
+  odoo_write_forbidden_without_review: true
+
