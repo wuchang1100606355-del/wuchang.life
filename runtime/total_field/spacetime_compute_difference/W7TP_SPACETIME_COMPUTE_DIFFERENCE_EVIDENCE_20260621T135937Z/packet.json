@@ -1,0 +1,76 @@
+{
+  "state": "TOTAL_FIELD_SPACETIME_COMPUTE_DIFFERENCE_EVIDENCE_RECORDED",
+  "run_id": "W7TP_SPACETIME_COMPUTE_DIFFERENCE_EVIDENCE_20260621T135937Z",
+  "created_utc": "2026-06-21T13:59:37Z",
+  "classification": "DERIVED_TECHNICAL_EVIDENCE",
+  "assumptions": {
+    "dimensions": 8,
+    "expanded_state_count": "N=S^8",
+    "dense_transition_matrix": "N x N",
+    "float32_bytes_per_entry": 4,
+    "single_8d_vector_transform": "8x8 matrix multiply is small; full state expansion is the explosion case."
+  },
+  "calculation_table": [
+    {
+      "S": 2,
+      "N": 256,
+      "vector_bytes": 1024,
+      "vector_human": "1 KiB",
+      "dense_bytes": 262144,
+      "dense_human": "256 KiB"
+    },
+    {
+      "S": 4,
+      "N": 65536,
+      "vector_bytes": 262144,
+      "vector_human": "256 KiB",
+      "dense_bytes": 17179869184,
+      "dense_human": "16 GiB"
+    },
+    {
+      "S": 8,
+      "N": 16777216,
+      "vector_bytes": 67108864,
+      "vector_human": "64 MiB",
+      "dense_bytes": 1125899906842624,
+      "dense_human": "1 PiB"
+    },
+    {
+      "S": 16,
+      "N": 4294967296,
+      "vector_bytes": 17179869184,
+      "vector_human": "16 GiB",
+      "dense_bytes": 73786976294838206464,
+      "dense_human": "64 EiB"
+    },
+    {
+      "S": 32,
+      "N": 1099511627776,
+      "vector_bytes": 4398046511104,
+      "vector_human": "4 TiB",
+      "dense_bytes": 4835703278458516698824704,
+      "dense_human": "4 YiB"
+    },
+    {
+      "S": 64,
+      "N": 281474976710656,
+      "vector_bytes": 1125899906842624,
+      "vector_human": "1 PiB",
+      "dense_bytes": 316912650057057350374175801344,
+      "dense_human": "2.62e+05 YiB"
+    }
+  ],
+  "technical_conclusion": {
+    "dense_matrix_risk": "Full 8D dense expansion grows as O(S^16).",
+    "w7tp_advantage": "High-dimensional sparse coordinate lookup plus local reconstruction and verifier collapse.",
+    "evidence_boundary": "Calculation evidence only; runtime proof requires benchmark logs."
+  },
+  "d8_envelope": {
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "pii_reprint": false,
+    "db_write": false,
+    "service_restart": false,
+    "deploy": false
+  }
+}
