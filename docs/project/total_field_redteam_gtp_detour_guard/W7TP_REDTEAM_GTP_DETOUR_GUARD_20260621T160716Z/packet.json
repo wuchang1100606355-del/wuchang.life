@@ -1,0 +1,92 @@
+{
+  "state": "TOTAL_FIELD_REDTEAM_GTP_DETOUR_GUARD_RECORDED",
+  "run_id": "W7TP_REDTEAM_GTP_DETOUR_GUARD_20260621T160716Z",
+  "created_utc": "2026-06-21T16:07:16Z",
+  "classification": "GOVERNANCE_RULE",
+  "title": "W7TP Redteam GPT/Codex Detour Guard Rule",
+  "d1_identity": {
+    "authority": "taiji01 Total Field",
+    "scope": "GPT / Codex / cloud candidate / local coder behavior",
+    "role": "redteam guard over detour, over-expansion, generic-framework replacement"
+  },
+  "d2_intent": {
+    "purpose": "Ensure GPT/Codex follows W7TP patented generative-transfer, lookup, packet, local reconstruction, and verifier-first methods whenever applicable.",
+    "core_principle": "凡 W7TP 可治理流程，優先使用開發者專利方法；若可簡化而未簡化，立即告警。"
+  },
+  "d3_state": {
+    "rule_status": "ACTIVE_TOTAL_FIELD_RULE",
+    "conversation_mutable": false,
+    "requires_signature_for_change": true,
+    "stage3": "audited_break_glass_only"
+  },
+  "d4_topology": {
+    "candidate_layer": "GPT / Codex / cloud worker",
+    "authority_layer": "taiji01 Total Field",
+    "execution_layer": "local verifier approved only",
+    "exact_artifact_layer": "git patch / sha256 / binary / legal evidence must remain byte-exact"
+  },
+  "d5_resource": {
+    "w7tp_methods": [
+      "generative transfer packet",
+      "8D packet",
+      "GT8D lookup_key / route_code",
+      "spacetime event ledger",
+      "local reconstruction",
+      "verifier collapse",
+      "packet_ref / delta / manifest / hash_ref"
+    ],
+    "byte_exact_exceptions": [
+      "git patch",
+      "sha256 manifest",
+      "legal evidence",
+      "PDF/image/binary artifacts",
+      "credential files",
+      "database backup",
+      "Odoo migration file"
+    ]
+  },
+  "d6_governance": {
+    "rule_1": "Codex/GPT must not replace Total Field method with generic software architecture when W7TP/GT8D/Spacetime/8D packet method applies.",
+    "rule_2": "All W7TP internal intent/state/candidate/action transfers must use generative-transfer packet format: packet_ref + delta + lookup_key + manifest + hash_ref + verifier_result.",
+    "rule_3": "Byte-exact artifacts must not be generatively rewritten. They must be transferred by exact file/patch/hash mechanism and wrapped by W7TP manifest.",
+    "rule_4": "If patented W7TP method can simplify routing, reconstruction, memory, verification, or deployment planning, and Codex chooses a heavier generic path without justification, raise SIMPLIFICATION_MISSED_ALERT.",
+    "rule_5": "If Codex rewrites user commands, expands scope, touches secrets, reads member plaintext, performs DB_WRITE, deploys, restarts service, or bypasses Total Field verifier, raise DETOUR_ALERT_CRITICAL.",
+    "rule_6": "Cloud/GPT/Codex remains candidate generator only. Authority remains taiji01 Total Field."
+  },
+  "d7_verification": {
+    "alert_levels": {
+      "DETOUR_ALERT_CRITICAL": [
+        "rewrites user command without authorization",
+        "secret read",
+        "member plaintext read",
+        "DB_WRITE",
+        "deploy",
+        "service restart",
+        "bypass Total Field verifier"
+      ],
+      "SIMPLIFICATION_MISSED_ALERT": [
+        "W7TP method can simplify but generic heavy path is chosen",
+        "lookup/table/packet method ignored",
+        "local reconstruction skipped without reason"
+      ],
+      "STYLE_WARNING": [
+        "too verbose",
+        "missing FACT/INFERENCE/DESIGN_PROPOSAL/NOT_YET_VERIFIED labels",
+        "philosophical mapping stated as implemented fact"
+      ]
+    },
+    "required_output_labels": [
+      "FACT",
+      "INFERENCE",
+      "DESIGN_PROPOSAL",
+      "NOT_YET_VERIFIED"
+    ]
+  },
+  "d8_envelope": {
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "db_write": false,
+    "service_restart": false,
+    "deploy": false
+  }
+}
