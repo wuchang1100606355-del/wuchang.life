@@ -1,0 +1,42 @@
+{
+  "version": "gt8d_route_table_v1",
+  "authority": "local_code_table",
+  "routes": [
+    {
+      "route_code": "MEMBER_SERVICE",
+      "lookup_key": "member.service.lineworks.notify.v1",
+      "priority": 100,
+      "keywords": ["會員", "居民", "志工", "社區服務", "member", "LINE WORKS", "通知"]
+    },
+    {
+      "route_code": "ODOO_POS_ACTION",
+      "lookup_key": "odoo.pos.action.candidate.v1",
+      "priority": 90,
+      "keywords": ["Odoo", "POS", "點餐", "訂單", "菜單", "收銀"]
+    },
+    {
+      "route_code": "API_ORCHESTRATION",
+      "lookup_key": "api.orchestration.connector.v1",
+      "priority": 80,
+      "keywords": ["API", "webhook", "connector", "OAuth", "Google API", "LINE WORKS API"]
+    },
+    {
+      "route_code": "VOICE_INTERACTION",
+      "lookup_key": "voice.interaction.intent.v1",
+      "priority": 70,
+      "keywords": ["語音", "聲音", "STT", "TTS", "voice", "audio"]
+    },
+    {
+      "route_code": "PATENT_ANALYSIS",
+      "lookup_key": "patent.analysis.gt8d.v1",
+      "priority": 60,
+      "keywords": ["專利", "請求項", "審查", "TIPO", "patent", "claim"]
+    },
+    {
+      "route_code": "CODE_GENERATION",
+      "lookup_key": "code.generation.patch.v1",
+      "priority": 50,
+      "keywords": ["程式", "code", "patch", "bash", "python", "typescript", "VS Code", "Codex", "修復", "error"]
+    }
+  ]
+}
