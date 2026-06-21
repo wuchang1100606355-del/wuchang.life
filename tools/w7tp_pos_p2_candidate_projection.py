@@ -12,7 +12,9 @@ from typing import Any
 
 ROOT = Path("/home/taiji_admin/Taiji_Hub")
 DEFAULT_SEARCH_ROOT = ROOT / "runtime/sandbox/pos_mvp_autodev_run"
-DEFAULT_RUN_DIR = ROOT / "runtime/sandbox/pos_mvp_p2_projection_run"
+DEFAULT_RUN_DIR = ROOT / "runtime/sandbox/pos_mvp_autodev_run/POS_MVP_P2_CANDIDATE_READER"
+TOTAL_FIELD_EVIDENCE_ROOT = ROOT / "runtime/total_field/evidence"
+TOTAL_FIELD_INDEX = TOTAL_FIELD_EVIDENCE_ROOT / "POS_MVP_P2_CANDIDATE_READER_INDEX.jsonl"
 
 REQUIRED_FALSE_FLAGS = {
     "formal_db_write": False,
@@ -199,6 +201,49 @@ def write_outputs(run_dir: Path, projection: dict[str, Any], confirm: dict[str, 
     return {key: str(path.relative_to(ROOT)) for key, path in paths.items()}
 
 
+def write_total_field_evidence(result: dict[str, Any], projection: dict[str, Any], confirm: dict[str, Any]) -> dict[str, str]:
+    seal_dir = TOTAL_FIELD_EVIDENCE_ROOT / "TOTAL_FIELD_SEAL_POS_MVP_P2_CANDIDATE_READER"
+    seal_dir.mkdir(parents=True, exist_ok=True)
+    seal = {
+        "schema": "W7TP_TOTAL_FIELD_POS_MVP_P2_CANDIDATE_READER_SEAL_V1",
+        "state": "PASS_POS_P2_CANDIDATE_READER",
+        "created_at": now_iso(),
+        "candidate_path": result["candidate_path"],
+        "projection_hash": projection["projection_hash"],
+        "confirm_hash": confirm["confirm_hash"],
+        "payable_amount": projection["payable_amount"],
+        "human_confirm_gate": "CONFIRM_DRY_RUN",
+        "runtime_output_root": "runtime/sandbox/pos_mvp_autodev_run",
+        "formal_db_write": False,
+        "formal_pos_write": False,
+        "payment_capture": False,
+        "service_restart": False,
+        "deploy": False,
+        "production_release": False,
+        "secret_read": False,
+        "member_plaintext_read": False,
+    }
+    seal["seal_hash"] = sha_obj(seal)
+    seal_path = seal_dir / "TOTAL_FIELD_POS_MVP_P2_CANDIDATE_READER_SEAL.json"
+    seal_path.write_text(json.dumps(seal, ensure_ascii=False, indent=2), encoding="utf-8")
+    index_row = {
+        "created_at": seal["created_at"],
+        "state": seal["state"],
+        "seal_hash": seal["seal_hash"],
+        "seal_path": str(seal_path.relative_to(ROOT)),
+        "candidate_path": result["candidate_path"],
+        "payable_amount": projection["payable_amount"],
+        "human_confirm_gate": "CONFIRM_DRY_RUN",
+    }
+    TOTAL_FIELD_INDEX.parent.mkdir(parents=True, exist_ok=True)
+    with TOTAL_FIELD_INDEX.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(index_row, ensure_ascii=False, sort_keys=True) + "\n")
+    return {
+        "total_field_seal": str(seal_path.relative_to(ROOT)),
+        "total_field_index": str(TOTAL_FIELD_INDEX.relative_to(ROOT)),
+    }
+
+
 def run(search_root: Path, run_dir: Path) -> dict[str, Any]:
     candidate_path = find_latest_candidate(search_root)
     candidate = load_json(candidate_path)
@@ -209,12 +254,14 @@ def run(search_root: Path, run_dir: Path) -> dict[str, Any]:
     confirm = build_confirm_dry_run(projection)
     html = render_projection_html(projection, confirm)
     outputs = write_outputs(run_dir, projection, confirm, html)
-    return {
+    result = {
         "state": "PASS_POS_P2_CANDIDATE_READER",
         "candidate_path": str(candidate_path.relative_to(ROOT)),
         "outputs": outputs,
         "safety": {key: False for key in REQUIRED_FALSE_FLAGS},
     }
+    result["outputs"].update(write_total_field_evidence(result, projection, confirm))
+    return result
 
 
 def main() -> int:
@@ -234,6 +281,8 @@ def main() -> int:
     print("SERVICE_RESTART=false")
     print("DEPLOY=false")
     print("PRODUCTION_RELEASE=false")
+    for key in ["total_field_seal", "total_field_index"]:
+        print(f"{key.upper()}={result['outputs'][key]}")
     return 0
 
 

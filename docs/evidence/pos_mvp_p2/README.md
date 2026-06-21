@@ -29,3 +29,6 @@ Rollback notes:
 - Remove `docs/evidence/pos_mvp_p2`.
 - Remove `packets/pos_mvp/POS_MVP_P2_CANDIDATE_READER_PACKET.json`.
 - Runtime outputs are isolated under `runtime/sandbox/pos_mvp_p2_projection_run/`.
+- Current runtime outputs are isolated under `runtime/sandbox/pos_mvp_autodev_run/POS_MVP_P2_CANDIDATE_READER/`.
+- Total Field evidence seal is written to `runtime/total_field/evidence/TOTAL_FIELD_SEAL_POS_MVP_P2_CANDIDATE_READER/`.
+- Total Field evidence index is `runtime/total_field/evidence/POS_MVP_P2_CANDIDATE_READER_INDEX.jsonl`.
