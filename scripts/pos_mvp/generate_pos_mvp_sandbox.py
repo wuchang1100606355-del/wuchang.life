@@ -32,7 +32,8 @@ def main() -> int:
     )
     print(json.dumps({
         "STATE": "POS_MVP_SANDBOX_FILES_GENERATED",
-        "SANDBOX": "runtime/sandbox/pos_mvp_autodev",
+        "SANDBOX_BASELINE": "runtime/sandbox/pos_mvp_autodev",
+        "POS_MVP_RUN_DIR": "runtime/sandbox/pos_mvp_autodev_run",
         "MENU_SOURCE": "REAL_MENU_FROM_REPO_ODOO_XML",
         "GENERATE_STDOUT": init.stdout.splitlines()[:3],
         "VERIFY_RESULT": "PASS" if "STATE=POS_MVP_SANDBOX_AUTODEV_PASS" in verify.stdout else "UNKNOWN",

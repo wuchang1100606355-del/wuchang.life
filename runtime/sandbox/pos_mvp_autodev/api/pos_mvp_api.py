@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -12,18 +13,19 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 ROOT = Path("/home/taiji_admin/Taiji_Hub")
-SANDBOX = ROOT / "runtime/sandbox/pos_mvp_autodev"
-MENU_JSON = SANDBOX / "menu/menu.json"
-PHOTO_DIR = SANDBOX / "menu/product_photos"
-PHOTO_MANIFEST = SANDBOX / "menu/product_photos_manifest.json"
-PHOTOBOOK_SPEC = SANDBOX / "menu/product_photobook_spec.json"
-PHOTO_PROMPTS_JSON = SANDBOX / "menu/product_photo_ai_prompts.json"
-PHOTO_PROMPTS_MD = SANDBOX / "menu/product_photo_ai_prompts.md"
-GEMINI_SINGLE_PROMPT_MD = SANDBOX / "menu/gemini_single_product_prompt.md"
-ORDER_CANDIDATES = SANDBOX / "orders/order_candidates.jsonl"
-CONFIRMED_ORDERS = SANDBOX / "orders/confirmed_orders.jsonl"
-EVENTS = SANDBOX / "events/spacetime_events.jsonl"
-DEAD_LETTER = SANDBOX / "dead_letter/dead_letter_queue.jsonl"
+BASELINE_SANDBOX = ROOT / "runtime/sandbox/pos_mvp_autodev"
+RUN_DIR = Path(os.environ.get("POS_MVP_RUN_DIR", str(ROOT / "runtime/sandbox/pos_mvp_autodev_run")))
+MENU_JSON = BASELINE_SANDBOX / "menu/menu.json"
+PHOTO_DIR = BASELINE_SANDBOX / "menu/product_photos"
+PHOTO_MANIFEST = BASELINE_SANDBOX / "menu/product_photos_manifest.json"
+PHOTOBOOK_SPEC = BASELINE_SANDBOX / "menu/product_photobook_spec.json"
+PHOTO_PROMPTS_JSON = BASELINE_SANDBOX / "menu/product_photo_ai_prompts.json"
+PHOTO_PROMPTS_MD = BASELINE_SANDBOX / "menu/product_photo_ai_prompts.md"
+GEMINI_SINGLE_PROMPT_MD = BASELINE_SANDBOX / "menu/gemini_single_product_prompt.md"
+ORDER_CANDIDATES = RUN_DIR / "orders/order_candidates.jsonl"
+CONFIRMED_ORDERS = RUN_DIR / "orders/confirmed_orders.jsonl"
+EVENTS = RUN_DIR / "events/spacetime_events.jsonl"
+DEAD_LETTER = RUN_DIR / "dead_letter/dead_letter_queue.jsonl"
 
 BREAKFAST_XML = ROOT / "Taiji_Odoo/addons/wuchang_core/data/breakfast_pos_menu.xml"
 PRODUCT_XML = ROOT / "Taiji_Odoo/addons/wuchang_core/data/menu_setup.xml"
@@ -54,7 +56,7 @@ def canonical_hash(payload: dict) -> str:
 
 
 def ensure_dirs() -> None:
-    for path in [MENU_JSON.parent, PHOTO_DIR, ORDER_CANDIDATES.parent, EVENTS.parent, DEAD_LETTER.parent, SANDBOX / "ui"]:
+    for path in [ORDER_CANDIDATES.parent, CONFIRMED_ORDERS.parent, EVENTS.parent, DEAD_LETTER.parent]:
         path.mkdir(parents=True, exist_ok=True)
 
 
@@ -534,7 +536,7 @@ def write_menu() -> dict:
 
 def load_menu() -> dict:
     if not MENU_JSON.exists():
-        return write_menu()
+        raise SystemExit(f"baseline menu missing: {MENU_JSON}")
     return json.loads(MENU_JSON.read_text(encoding="utf-8"))
 
 
@@ -685,7 +687,7 @@ def kitchen_display() -> dict:
 
 
 def write_ui_files() -> None:
-    ui = SANDBOX / "ui"
+    ui = BASELINE_SANDBOX / "ui"
     menu = load_menu()
     files = {
         "customer_order.html": "POS MVP Customer Order - reads runtime/sandbox/pos_mvp_autodev/menu/menu.json",
@@ -875,10 +877,9 @@ def write_ui_files() -> None:
 
 def init_sandbox() -> dict:
     reset_runtime_files()
-    menu = write_menu()
-    write_ui_files()
-    append_event("menu.real_source.load", "NODE_POS_MAINT", "menu/menu.json", "FACT")
-    append_event("standby_xiaoj_menu.render", "NODE_XIAOJ_DISPLAY_COMPUTE", "ui/standby_xiaoj_menu.html", "FACT")
+    menu = load_menu()
+    append_event("baseline.menu.real_source.load", "NODE_POS_MAINT", "menu/menu.json", "FACT")
+    append_event("baseline.standby_xiaoj_menu.read", "NODE_XIAOJ_DISPLAY_COMPUTE", "ui/standby_xiaoj_menu.html", "FACT")
     return menu
 
 

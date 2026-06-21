@@ -3,25 +3,28 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path("/home/taiji_admin/Taiji_Hub")
-SANDBOX = ROOT / "runtime/sandbox/pos_mvp_autodev"
-API = SANDBOX / "api/pos_mvp_api.py"
-MENU_JSON = SANDBOX / "menu/menu.json"
-PHOTO_PROMPTS_JSON = SANDBOX / "menu/product_photo_ai_prompts.json"
-PHOTO_PROMPTS_MD = SANDBOX / "menu/product_photo_ai_prompts.md"
-GEMINI_SINGLE_PROMPT_MD = SANDBOX / "menu/gemini_single_product_prompt.md"
-ORDER_CANDIDATES = SANDBOX / "orders/order_candidates.jsonl"
-CONFIRMED_ORDERS = SANDBOX / "orders/confirmed_orders.jsonl"
-EVENTS = SANDBOX / "events/spacetime_events.jsonl"
-DEAD_LETTER = SANDBOX / "dead_letter/dead_letter_queue.jsonl"
-STANDBY_UI = SANDBOX / "ui/standby_xiaoj_menu.html"
+BASELINE_SANDBOX = ROOT / "runtime/sandbox/pos_mvp_autodev"
+RUN_DIR = Path(os.environ.get("POS_MVP_RUN_DIR", str(ROOT / "runtime/sandbox/pos_mvp_autodev_run")))
+API = BASELINE_SANDBOX / "api/pos_mvp_api.py"
+MENU_JSON = BASELINE_SANDBOX / "menu/menu.json"
+PHOTO_PROMPTS_JSON = BASELINE_SANDBOX / "menu/product_photo_ai_prompts.json"
+PHOTO_PROMPTS_MD = BASELINE_SANDBOX / "menu/product_photo_ai_prompts.md"
+GEMINI_SINGLE_PROMPT_MD = BASELINE_SANDBOX / "menu/gemini_single_product_prompt.md"
+ORDER_CANDIDATES = RUN_DIR / "orders/order_candidates.jsonl"
+CONFIRMED_ORDERS = RUN_DIR / "orders/confirmed_orders.jsonl"
+EVENTS = RUN_DIR / "events/spacetime_events.jsonl"
+DEAD_LETTER = RUN_DIR / "dead_letter/dead_letter_queue.jsonl"
+STANDBY_UI = BASELINE_SANDBOX / "ui/standby_xiaoj_menu.html"
 PACKET = ROOT / "packets/pos_mvp/POS_MVP_SANDBOX_PACKET.json"
 EVIDENCE = ROOT / "docs/evidence/pos_mvp/README.md"
-MANIFEST = ROOT / "docs/evidence/pos_mvp/sha256_manifest.txt"
+BASELINE_MANIFEST = ROOT / "docs/evidence/pos_mvp/sha256_manifest.txt"
+RUN_MANIFEST = RUN_DIR / "evidence/sha256_manifest.txt"
 
 
 def load_jsonl(path: Path) -> list[dict]:
@@ -236,13 +239,13 @@ def main() -> int:
 
     manifest_paths = [
         API,
-        SANDBOX / "verify/verify_pos_mvp_sandbox.py",
+        BASELINE_SANDBOX / "verify/verify_pos_mvp_sandbox.py",
         ROOT / "scripts/pos_mvp/run_pos_mvp_sandbox.py",
         ROOT / "scripts/pos_mvp/generate_pos_mvp_sandbox.py",
         ROOT / "scripts/verify/verify_pos_mvp_sandbox.sh",
         MENU_JSON,
-        SANDBOX / "menu/product_photos_manifest.json",
-        SANDBOX / "menu/product_photobook_spec.json",
+        BASELINE_SANDBOX / "menu/product_photos_manifest.json",
+        BASELINE_SANDBOX / "menu/product_photobook_spec.json",
         PHOTO_PROMPTS_JSON,
         PHOTO_PROMPTS_MD,
         GEMINI_SINGLE_PROMPT_MD,
@@ -250,8 +253,10 @@ def main() -> int:
         PACKET,
         EVIDENCE,
     ]
-    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST.write_text(
+    if not BASELINE_MANIFEST.exists():
+        raise SystemExit(f"baseline manifest missing: {BASELINE_MANIFEST}")
+    RUN_MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    RUN_MANIFEST.write_text(
         "".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.relative_to(ROOT)}\n" for path in manifest_paths),
         encoding="utf-8",
     )
@@ -267,6 +272,7 @@ def main() -> int:
     print("DB_WRITE=FALSE")
     print("SERVICE_RESTART=FALSE")
     print("DEPLOY=FALSE")
+    print(f"POS_MVP_RUN_DIR={RUN_DIR.relative_to(ROOT)}")
     return 0
 
 
