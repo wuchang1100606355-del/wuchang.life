@@ -11,3 +11,6 @@ from . import coin_ledger
 from . import volunteer
 from . import delivery_team
 from . import supervisor_description_patch
+from . import pos_config_ext
+from . import member_registration
+from . import pos_sms_receipt_compat

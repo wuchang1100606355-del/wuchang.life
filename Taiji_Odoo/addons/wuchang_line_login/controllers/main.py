@@ -19,6 +19,9 @@ class WuchangLineLogin(http.Controller):
 
         state = secrets.token_urlsafe(24)
         request.session['wuchang_line_state'] = state
+        group_packet_ref = kw.get('group_packet_ref')
+        if group_packet_ref:
+            request.session['wuchang_group_packet_ref'] = group_packet_ref
 
         params = {
             'response_type': 'code',
@@ -91,5 +94,15 @@ class WuchangLineLogin(http.Controller):
             user.write(vals)
         else:
             user = user_model.create(vals)
+
+        group_packet_ref = request.session.get('wuchang_group_packet_ref')
+        if group_packet_ref:
+            subject_hash = request.env['wuchang.member.external.auth'].sudo().hash_subject('line', line_user_id)
+            request.session['wuchang_group_auth_ref'] = {
+                'provider': 'line',
+                'provider_user_ref': subject_hash,
+                'display_ref': 'line_member_masked',
+            }
+            return request.redirect('/wuchang/member/register/group/%s' % group_packet_ref)
 
         return "LINE LOGIN OK: %s" % (user.display_name or user.line_user_id)

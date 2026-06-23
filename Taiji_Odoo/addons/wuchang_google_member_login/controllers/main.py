@@ -35,6 +35,9 @@ class WuchangGoogleMemberLogin(http.Controller):
 
         state = secrets.token_urlsafe(24)
         request.session["wuchang_google_oauth_state"] = state
+        group_packet_ref = kw.get("group_packet_ref")
+        if group_packet_ref:
+            request.session["wuchang_group_packet_ref"] = group_packet_ref
         params = {
             "client_id": client_id,
             "redirect_uri": self._redirect_uri(),
@@ -98,6 +101,15 @@ class WuchangGoogleMemberLogin(http.Controller):
 
         partner = request.env["res.partner"].sudo()._wuchang_get_or_create_google_member(userinfo)
         request.session["wuchang_google_member_partner_id"] = partner.id
+        group_packet_ref = request.session.get("wuchang_group_packet_ref")
+        if group_packet_ref:
+            subject_hash = request.env["wuchang.member.external.auth"].sudo().hash_subject("google", userinfo.get("sub"))
+            request.session["wuchang_group_auth_ref"] = {
+                "provider": "google",
+                "provider_user_ref": subject_hash,
+                "display_ref": "google_member_masked",
+            }
+            return request.redirect(f"/wuchang/member/register/group/{group_packet_ref}")
         return request.redirect("/google/member/welcome")
 
     @http.route("/google/member/welcome", type="http", auth="public", csrf=False)

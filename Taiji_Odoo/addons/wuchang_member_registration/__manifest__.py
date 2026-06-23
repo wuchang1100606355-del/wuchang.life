@@ -9,6 +9,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/member_registration_views.xml",
+        "views/group_member_registration_views.xml",
     ],
     "installable": True,
     "application": False,

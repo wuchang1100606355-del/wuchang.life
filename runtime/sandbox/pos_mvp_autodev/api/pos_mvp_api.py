@@ -571,23 +571,15 @@ def append_event(action_ref: str, node_ref: str, payload_ref: str, claim_label: 
     return event
 
 
-def append_dead_letter(reason: str, payload: dict, retry_count: int = 0) -> dict:
-    ensure_dirs()
-    row = {
-        "dead_letter_id": f"dlq_{len(read_jsonl(DEAD_LETTER)) + 1:06d}",
-        "created_at": utc_now(),
-        "reason": reason,
-        "retry_count": retry_count,
-        "max_retry_count": MAX_RETRY_COUNT,
-        "payload_hash": canonical_hash(payload),
-        "payload": payload,
-        "silent_drop": False,
-    }
-    with DEAD_LETTER.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
-    append_event("dead_letter.append", "NODE_POS_MAINT", row["dead_letter_id"], "FACT")
-    return row
-
+def append_dead_letter(reason, payload=None, source=None, **kwargs):
+    """24h hash-only dead letter writer. No plaintext payload is stored."""
+    from runtime.dead_letter.dead_letter_24h_hash_writer import append_24h_hash_dead_letter
+    return append_24h_hash_dead_letter(
+        reason=reason,
+        payload=payload,
+        source=source,
+        **kwargs,
+    )
 
 def create_order_candidate(lines: list[dict], source: str = "sandbox_customer_order") -> dict:
     menu = load_menu()
