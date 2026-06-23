@@ -52,3 +52,11 @@ Status:
 - SHA256: b9ed61cba4eb7ef922c4ff163e3e1ca754d1897430eeb460a5d22447374c0090
 - Scope: protocol-native generative transmission, computation-result lookup generation, local reconstruction, verifier-gated formal output, no-plaintext cloud candidate lane
 - Safety: SECRET_READ=FALSE MEMBER_PLAINTEXT_READ=FALSE DB_WRITE=FALSE SERVICE_RESTART=FALSE DEPLOY=FALSE PRODUCTION_RELEASE=FALSE
+
+## M37 Evidence Mirror
+
+- TOTAL_FIELD_GT_8D_PACKET_20260623_105658 committed evidence mirror
+- Evidence Dir: docs/project/M37_GT_STATIC_LLM_8D_INTAKE_TOTAL_FIELD_GT_8D_PACKET_20260623_105658
+- Packet SHA256: b9ed61cba4eb7ef922c4ff163e3e1ca754d1897430eeb460a5d22447374c0090
+- Report SHA256: df7e2ba58ad89fec7d75bd486bd65331daf376092e592d8064ab264ab35d5fd0
+- Safety: SECRET_READ=FALSE MEMBER_PLAINTEXT_READ=FALSE DB_WRITE=FALSE SERVICE_RESTART=FALSE DEPLOY=FALSE PRODUCTION_RELEASE=FALSE
