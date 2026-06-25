@@ -1,0 +1,12 @@
+# W7TP P0 Patent Engineering Gap SHA256 Seal
+
+STATE=PASS
+CANONICAL_FLAGS=PASS
+D8_HARDENING=PASS
+PUBLIC_FILING_RED_FLAG=NONE
+
+e6da49b1861b003277275135d9530a59824851aa30a591f831008492b11e3beb  docs/total_field/W7TP_API_BROKER_SPEC_P0.md
+b8820d3812c009baaa89c97ae3b8b94003ce63fb6ef4c97cd2a96928c3de9373  docs/total_field/TOTAL_FIELD_VERIFIER_CONTRACT_P0.md
+6beb149ec757131b6b69845f616aff0263594f873daa48f65612a20b09293d29  schemas/cloud_candidate/cloud_candidate_packet.schema.json
+d05ffef71432bdae613f6ae5c53785edf723b7b01cf28668662acb220cca0c64  schemas/cloud_candidate/cloud_candidate_result_packet.schema.json
+04aeb2c1af5a836e234b6a7116ebbbd2fe82d36785142a3c97885d994b4eacd0  schemas/member/member_gt_packet.schema.json
