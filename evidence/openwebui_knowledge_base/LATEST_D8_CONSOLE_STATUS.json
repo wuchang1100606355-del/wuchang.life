@@ -1,0 +1,40 @@
+{
+  "state": "PASS",
+  "action": "D8_TOTAL_FIELD_CONSOLE_STATUS",
+  "d8_memory_count": 4741,
+  "redteam_events_count": 16,
+  "possible_alerts_count": 11,
+  "guard_evaluations_count": 144,
+  "alert_counts": {
+    "HOLD": 6,
+    "WARN": 1,
+    "INFO": 1,
+    "BLOCK": 3
+  },
+  "latest_reports": {
+    "phase1": "runtime/d8_db/reports/D8_DBIFY_20260623_152850_FINAL_REPORT.json",
+    "phase6": "runtime/d8_db/reports/D8_PHASE6_TOTAL_FIELD_OPERATOR_COMMAND_CONSOLE_20260623_163249_FINAL_REPORT.json",
+    "console_status": "runtime/d8_db/reports/D8_CONSOLE_STATUS_20260624_172110.json"
+  },
+  "latest_backups": {
+    "phase5": "runtime/d8_db/backups/taiji_d8_phase5_codex_task_template_writeback_20260623_162534.dump",
+    "phase6": "runtime/d8_db/backups/taiji_d8_phase6_total_field_operator_console_20260623_163212.dump"
+  },
+  "active_pointer": "runtime/total_field/master_index/ACTIVE_GT_8D_PACKET_POINTER.json",
+  "safety_summary": {
+    "SECRET_READ": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "RAW_AUDIO_SAVED": false,
+    "PRODUCTION_DB_WRITE": false,
+    "D8_LOCAL_DB_WRITE": true,
+    "SERVICE_RESTART": false,
+    "DEPLOY": false,
+    "PRODUCTION_RELEASE": false,
+    "EXTERNAL_API_CALL": false,
+    "EMBEDDING_GENERATED": false,
+    "EXECUTABLE_REDTEAM_ARTIFACTS": false,
+    "POLLUTION_GUARD": true,
+    "REVERSE_INDEX_ISOLATION": true,
+    "DO_NOT_TOUCH_AGENTS_MD": true
+  }
+}

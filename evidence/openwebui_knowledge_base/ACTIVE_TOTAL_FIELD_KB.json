@@ -1,0 +1,37 @@
+{
+  "state": "PASS",
+  "kb_type": "openwebui_total_field_kb_v1",
+  "created_at": "2026-06-24T17:21:11.780512+00:00",
+  "source": "D8 databaseized total field console export",
+  "authoritative": true,
+  "git": {
+    "branch": "commit/pos-patch-W7TP_COMMIT_POS_PATCH_20260614_003010",
+    "head": "03934429822ac10c9286517c94b76a9a577f9192",
+    "dirty_tracked": 3
+  },
+  "d8": {
+    "d8_memory_count": "4741",
+    "redteam_events_count": "16",
+    "possible_alerts_count": "11",
+    "guard_evaluations_count": "144",
+    "active_pointer": "runtime/total_field/master_index/ACTIVE_GT_8D_PACKET_POINTER.json",
+    "safety_summary": "{\"SECRET_READ\": false, \"MEMBER_PLAINTEXT_READ\": false, \"RAW_AUDIO_SAVED\": false, \"PRODUCTION_DB_WRITE\": false, \"D8_LOCAL_DB_WRITE\": true, \"SERVICE_RESTART\": false, \"DEPLOY\": false, \"PRODUCTION_RELEASE\": false, \"EXTERNAL_API_CALL\": false, \"EMBEDDING_GENERATED\": false, \"EXECUTABLE_REDTEAM_ARTIFACTS\": false, \"POLLUTION_GUARD\": true, \"REVERSE_INDEX_ISOLATION\": true, \"DO_NOT_TOUCH_AGENTS_MD\": true}",
+    "latest_report": "runtime/d8_db/reports/D8_CONSOLE_STATUS_20260624_172110.json"
+  },
+  "evidence_refs": {
+    "status": "evidence/openwebui_knowledge_base/OPENWEBUI_KB_SYNC_20260624_172109_status.txt",
+    "alerts": "evidence/openwebui_knowledge_base/OPENWEBUI_KB_SYNC_20260624_172109_alerts.txt",
+    "redteam": "evidence/openwebui_knowledge_base/OPENWEBUI_KB_SYNC_20260624_172109_redteam.txt",
+    "evals": "evidence/openwebui_knowledge_base/OPENWEBUI_KB_SYNC_20260624_172109_evals.txt"
+  },
+  "hard_walls": {
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "token_print": false,
+    "db_write": false,
+    "service_restart": false,
+    "deploy": false,
+    "production_release": false
+  },
+  "instruction": "When answering live status questions, use this KB only. Do not guess. If a field is missing, return STATE=INFO_REQUIRED."
+}
