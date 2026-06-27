@@ -1,0 +1,183 @@
+{
+  "schema": "TOTAL_FACTORY_BRANCH_AUTOMATION_CAPABILITY_REGISTRY_V1",
+  "state": "ACTIVE_CANDIDATE_REGISTRY",
+  "date": "2026-06-26",
+  "total_factory": {
+    "authority": "final_governance",
+    "capabilities": [
+      "preflight_gate",
+      "postflight_seal",
+      "hard_wall_enforcement",
+      "work_count_inventory_review",
+      "archive_candidate_approval",
+      "redteam_quarantine",
+      "branch_capability_registry"
+    ],
+    "forbidden_actions_without_explicit_release": [
+      "secret_read",
+      "member_plaintext_read",
+      "odoo_db_write",
+      "payment_capture",
+      "service_restart",
+      "deploy",
+      "delete_workflow_evidence"
+    ]
+  },
+  "branches": [
+    {
+      "branch_id": "member_ui_branch",
+      "max_automation_level": "L3_SANDBOX_WRITE",
+      "may_prepare": [
+        "ai_browser_shell",
+        "mock_dashboard_payload",
+        "responsive_screenshots",
+        "pii_scan"
+      ],
+      "must_not_do": [
+        "grant_real_member_authority",
+        "read_member_plaintext",
+        "create_public_write_route"
+      ],
+      "total_factory_required_for": [
+        "promotion_to_beta",
+        "odoo_model_mapping"
+      ]
+    },
+    {
+      "branch_id": "review_branch",
+      "max_automation_level": "L4_CONTROLLED_LOCAL_WRITE_AFTER_RELEASE",
+      "may_prepare": [
+        "review_event_model",
+        "review_policy_tests",
+        "evidence_ref_requirements"
+      ],
+      "must_not_do": [
+        "approve_self",
+        "bypass_owner_review",
+        "cross_org_review"
+      ],
+      "total_factory_required_for": [
+        "odoo_module_upgrade",
+        "record_rule_change"
+      ]
+    },
+    {
+      "branch_id": "merchant_branch",
+      "max_automation_level": "L3_SANDBOX_WRITE",
+      "may_prepare": [
+        "merchant_dashboard",
+        "pos_display_candidate",
+        "line_works_notice_candidate"
+      ],
+      "must_not_do": [
+        "create_pos_order",
+        "capture_payment",
+        "approve_property_member"
+      ],
+      "total_factory_required_for": [
+        "pos_write",
+        "payment_flow"
+      ]
+    },
+    {
+      "branch_id": "property_branch",
+      "max_automation_level": "L4_CONTROLLED_LOCAL_WRITE_AFTER_RELEASE",
+      "may_prepare": [
+        "property_dashboard",
+        "committee_workflow",
+        "repair_workflow_candidate"
+      ],
+      "must_not_do": [
+        "grant_cross_community_access",
+        "final_vendor_dispatch",
+        "resident_plaintext_export"
+      ],
+      "total_factory_required_for": [
+        "property_record_rule_change",
+        "committee_role_authority"
+      ]
+    },
+    {
+      "branch_id": "family_branch",
+      "max_automation_level": "L4_CONTROLLED_LOCAL_WRITE_AFTER_RELEASE",
+      "may_prepare": [
+        "family_organization_model",
+        "family_membership_queue",
+        "care_reminder_candidate"
+      ],
+      "must_not_do": [
+        "family_head_self_appointment",
+        "cross_family_review",
+        "minor_or_elder_sensitive_sync"
+      ],
+      "total_factory_required_for": [
+        "family_membership_authority",
+        "external_care_sync"
+      ]
+    },
+    {
+      "branch_id": "integration_branch",
+      "max_automation_level": "L5_EXTERNAL_CANDIDATE_SYNC_AFTER_RELEASE",
+      "may_prepare": [
+        "google_status_card",
+        "line_works_status_card",
+        "candidate_sync_contract",
+        "scope_manifest"
+      ],
+      "must_not_do": [
+        "read_oauth_secret",
+        "print_token",
+        "treat_external_task_as_authority"
+      ],
+      "total_factory_required_for": [
+        "external_api_enablement",
+        "oauth_scope_change"
+      ]
+    },
+    {
+      "branch_id": "redteam_branch",
+      "max_automation_level": "L2_DRY_RUN",
+      "may_prepare": [
+        "route_scan",
+        "hard_wall_test",
+        "pii_leakage_test",
+        "cors_csrf_auth_report"
+      ],
+      "must_not_do": [
+        "promote_redteam_record_to_executable",
+        "modify_runtime_authority"
+      ],
+      "total_factory_required_for": [
+        "risk_acceptance",
+        "release_override"
+      ]
+    },
+    {
+      "branch_id": "cleanup_branch",
+      "max_automation_level": "L1_DRAFT",
+      "may_prepare": [
+        "work_count_inventory",
+        "duplicate_task_name_report",
+        "archive_candidate_manifest"
+      ],
+      "must_not_do": [
+        "delete",
+        "move_without_archive_land_task",
+        "rewrite_workflow_evidence"
+      ],
+      "total_factory_required_for": [
+        "archive",
+        "retention_policy_change"
+      ]
+    }
+  ],
+  "automation_levels": {
+    "L0_OBSERVE": "Read metadata and refs only.",
+    "L1_DRAFT": "Produce candidate docs or manifests.",
+    "L2_DRY_RUN": "Run no-write verification.",
+    "L3_SANDBOX_WRITE": "Write sandbox docs/tools/assets.",
+    "L4_CONTROLLED_LOCAL_WRITE_AFTER_RELEASE": "Modify local code/models only after Total Factory release.",
+    "L5_EXTERNAL_CANDIDATE_SYNC_AFTER_RELEASE": "Send ref-only external candidate sync after scope release.",
+    "L6_PRODUCTION_IMPACTING_ACTION": "Requires human and Total Factory explicit release."
+  }
+}
