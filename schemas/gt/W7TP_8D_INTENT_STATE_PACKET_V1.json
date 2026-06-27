@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:W7TP_8D_INTENT_STATE_PACKET_V1",
+  "title": "W7TP_8D_INTENT_STATE_PACKET_V1",
+  "type": "object",
+  "required": [
+    "packet_type", "packet_id", "D1_intent", "D2_state", 
+    "D3_coordinate", "D4_evidence", "D5_execution", 
+    "D6_generative_transmission", "D7_risk", "D8_envelope"
+  ],
+  "properties": {
+    "packet_type": { "const": "W7TP_8D_INTENT_STATE_PACKET_V1" },
+    "packet_id": { "type": "string" },
+    "version": { "type": "string", "default": "1.0.0" },
+    "D1_intent": {
+      "type": "object",
+      "required": ["intent_class", "goal"],
+      "properties": {
+        "intent_class": { "type": "string" },
+        "goal": { "type": "string" },
+        "candidate_task": { "type": "string" }
+      }
+    },
+    "D2_state": {
+      "type": "object",
+      "properties": {
+        "state_ref": { "type": "string" },
+        "kb_keys": { "type": "array", "items": { "type": "string" } },
+        "snapshot_ref": { "type": "string" }
+      }
+    },
+    "D3_coordinate": {
+      "type": "object",
+      "properties": {
+        "actor_ref": { "type": "string" },
+        "role": { "type": "string" },
+        "field_ref": { "type": "string" },
+        "device_ref": { "type": "string" },
+        "time_ref": { "type": "string" }
+      }
+    },
+    "D4_evidence": {
+      "type": "object",
+      "properties": {
+        "evidence_refs": { "type": "array", "items": { "type": "string" } },
+        "image_hash": { "type": "string" },
+        "report_ref": { "type": "string" }
+      }
+    },
+    "D5_execution": {
+      "type": "object",
+      "properties": {
+        "candidate_only": { "type": "boolean" },
+        "must_not_execute": { "type": "boolean" },
+        "forbidden_ops": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "D6_generative_transmission": {
+      "type": "object",
+      "properties": {
+        "transmit_mode": { "type": "string", "enum": ["ref", "summary", "hash", "projection"] },
+        "reconstructable": { "type": "boolean" },
+        "projection_manifest_ref": { "type": "string" }
+      }
+    },
+    "D7_risk": {
+      "type": "object",
+      "properties": {
+        "privacy_level": { "type": "string" },
+        "redteam_required": { "type": "boolean" },
+        "hard_walls": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "D8_envelope": {
+      "type": "object",
+      "required": ["ttl_sec", "nonce", "packet_hash", "verifier_required"],
+      "properties": {
+        "ttl_sec": { "type": "integer" },
+        "nonce": { "type": "string" },
+        "packet_hash": { "type": "string" },
+        "verifier_required": { "type": "boolean" },
+        "seal_ref": { "type": "string" }
+      }
+    }
+  }
+}

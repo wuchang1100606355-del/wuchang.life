@@ -1,0 +1,668 @@
+{
+  "packet_type": "w3_generative_transfer_5gb_speed_packet",
+  "run_id": "W3_GT_5GB_SPEED_20260622T133921Z",
+  "state": "GT_5GB_SPEED_DRY_RUN_COMPLETE",
+  "main_chain": [
+    "State",
+    "Coordinate",
+    "Hash",
+    "Packet",
+    "Generative Transfer",
+    "Verify",
+    "Reconstruct",
+    "Evidence",
+    "Action"
+  ],
+  "source_node": "NODE_POS_MAINT",
+  "target_node": "NODE_XIAOJ_DISPLAY_COMPUTE",
+  "lookup_key": "generative.transfer.5gb.speed.v1",
+  "candidate_only": true,
+  "local_reconstruction_required": true,
+  "land_allowed": false,
+  "safe_mode": {
+    "mode": "dry_run_candidate_only",
+    "runtime_change": false,
+    "service_restart": false,
+    "odoo_db_write": false,
+    "tailscale_change": false,
+    "secret_read": false,
+    "raw_payload_transfer": false
+  },
+  "packet_ref": "packets/benchmarks/generative_transfer_5gb/W3_GT_5GB_SPEED_20260622T133921Z.json",
+  "evidence_ref": "docs/evidence/generative_transfer_5gb/W3_GT_5GB_SPEED_20260622T133921Z.md",
+  "transfer_model": {
+    "equivalent_payload": "5GiB synthetic deterministic coordinate manifest",
+    "raw_payload_transfer": false,
+    "cross_node_mode": "manifest_handoff_dry_run"
+  },
+  "chunk_manifest": [
+    {
+      "index": 0,
+      "offset": 0,
+      "length": 67108864,
+      "coordinate_hash": "b3ac15578734083094f3d8fdd81709bc19d258ade032580f20fad2ed94cf9079",
+      "chunk_hash": "a40039142b594332af4d00cacfcc1df3a35ea945398329882653dd4a8f96a058"
+    },
+    {
+      "index": 1,
+      "offset": 67108864,
+      "length": 67108864,
+      "coordinate_hash": "d80d638b63401e9bb899404e2a42569f278a3e3ce1bbff27e6e5ba80176f9573",
+      "chunk_hash": "84a79b6548fc51c9ba3735d3475803ddcc2fab3ea984642a9f205539e8fc5408"
+    },
+    {
+      "index": 2,
+      "offset": 134217728,
+      "length": 67108864,
+      "coordinate_hash": "0ad114f32b5abb04bf0705275f75b25980edfd3e1732f8d1c06c4cbe166a47db",
+      "chunk_hash": "2d4716cb5d63cffded744b8a0bf4afa417f4682aee4639a2e11f6e3c9dba0155"
+    },
+    {
+      "index": 3,
+      "offset": 201326592,
+      "length": 67108864,
+      "coordinate_hash": "9bf47ccff0b666c5f5e1577a9871cc2a4de49dad678cfc136ad716ed40944dae",
+      "chunk_hash": "48d673974b5b3ba12bc1ab0d8569079ba392cc5f8c7c34e2ffe65c5ac24523a8"
+    },
+    {
+      "index": 4,
+      "offset": 268435456,
+      "length": 67108864,
+      "coordinate_hash": "2a118f1261af8d18ce87746db0c64e8f6d715ddf5b3adcce14be76740317cb81",
+      "chunk_hash": "85aae0b411f11814fa84975fb40d187fe71c178ec0633b47f64e96c58d9bd2f0"
+    },
+    {
+      "index": 5,
+      "offset": 335544320,
+      "length": 67108864,
+      "coordinate_hash": "586edf9aa78d37b5e9683a26f61ca22fc428818dd6cd08e680e26dfe1ea667a6",
+      "chunk_hash": "ee7badf26ab6014469f25da52f511ff1b4515a7cf4d0d1c908d39ff12fb3f7c7"
+    },
+    {
+      "index": 6,
+      "offset": 402653184,
+      "length": 67108864,
+      "coordinate_hash": "0e4699a1afdd500659c3cf47a11d8c4cfea86e9d079dddd84d33d4c54fadc222",
+      "chunk_hash": "dfffe73bc3dad9107aac2044fc1d5c44cb399e9af2cafc11956464cadcf1c111"
+    },
+    {
+      "index": 7,
+      "offset": 469762048,
+      "length": 67108864,
+      "coordinate_hash": "3e87b544aa99dc85ba479c4fa12506315474cc6098ce8c0f1532836736338f64",
+      "chunk_hash": "24287edb9f526dbe0e3c5bde8b96f938a2999ec73e3551046b5614078b88b3e6"
+    },
+    {
+      "index": 8,
+      "offset": 536870912,
+      "length": 67108864,
+      "coordinate_hash": "5425edf092e28b2a94b42d424ead50df2a25825b485fd8420845c9f34e71bc3e",
+      "chunk_hash": "c2d5af39d385e3f37126e89760b5c55684f383470ce28c3e78df081d38162f29"
+    },
+    {
+      "index": 9,
+      "offset": 603979776,
+      "length": 67108864,
+      "coordinate_hash": "99da55a501a8e91fe9673425ca4febfaafcba6ae09a32f1a5469c27b5f504961",
+      "chunk_hash": "7da43f50dbad23e95b102fcb00628bcb2f746eb59098209a88419229a7619042"
+    },
+    {
+      "index": 10,
+      "offset": 671088640,
+      "length": 67108864,
+      "coordinate_hash": "58dcc3d3b66827ac4e385e2334faf49b8040644e6a235d1f89f826a1d0f79d4d",
+      "chunk_hash": "f531fc3cee34a474b4a796a569a47d814779ae8ee5db45f51372358456f9d474"
+    },
+    {
+      "index": 11,
+      "offset": 738197504,
+      "length": 67108864,
+      "coordinate_hash": "bd46dd41ac6a1b7d85b80bbd66567e6d4f4281b6008dd2eae66c73b51b37a985",
+      "chunk_hash": "1986626cea73f97f03372246d187b5566a2d69a76af9b43713b41517826ba4d6"
+    },
+    {
+      "index": 12,
+      "offset": 805306368,
+      "length": 67108864,
+      "coordinate_hash": "cc74b9a6d9f534c28d1cefa9c0fcf676d585920d0b0f5f95f956e084a1fd1680",
+      "chunk_hash": "ae6d29c50d4825af43a13c8f9882af4d11012ed0a3e94571f49cac512bcac07a"
+    },
+    {
+      "index": 13,
+      "offset": 872415232,
+      "length": 67108864,
+      "coordinate_hash": "1ee3c0f61c0ac4dae26a19f50f68fd112ad80d4daa336e564f22fa1f8d106596",
+      "chunk_hash": "4acac231373685ac239047ab9c3f56f83695392c9712609087c4f1dab90c651a"
+    },
+    {
+      "index": 14,
+      "offset": 939524096,
+      "length": 67108864,
+      "coordinate_hash": "23d1b012c6a0d35775d2c517ae8d59ed617be2ce9ad72a5be3307b068377a2f3",
+      "chunk_hash": "98cb7dfa2458d6e648e6bcab566a0ab305f19a082f022a25ade595908f5c345b"
+    },
+    {
+      "index": 15,
+      "offset": 1006632960,
+      "length": 67108864,
+      "coordinate_hash": "d08f03690b5ec376089cf2e71ac2b0f95faaacbcba3b204472d2808e3b44119b",
+      "chunk_hash": "eb7a101a03966e05d05a080b8aa31f4e537cc259302e67c987114da8b6a24048"
+    },
+    {
+      "index": 16,
+      "offset": 1073741824,
+      "length": 67108864,
+      "coordinate_hash": "2af0b8f50b33a2e571cfa30ecd43feb6e20134a9efa63ef001abc7fc7536c1f9",
+      "chunk_hash": "d7763ace140832c896b3bc281a21d50e9821db752cb004d1792b6b165485ca9c"
+    },
+    {
+      "index": 17,
+      "offset": 1140850688,
+      "length": 67108864,
+      "coordinate_hash": "99a4ba99cbd5e8a095c5611b2c7b7e24d1a7ce0b0a5eba96c42baf7f18810d7e",
+      "chunk_hash": "4e31a9c63664837cc9469377b6db5d9c037cb1689b531bb674dda6b3dcd2b049"
+    },
+    {
+      "index": 18,
+      "offset": 1207959552,
+      "length": 67108864,
+      "coordinate_hash": "48fd11d8a97fb585fb6626b75e7cb19c3bc8ea63db50f3fd7874e3ebbfcb713e",
+      "chunk_hash": "b048a2081b3188d18f39cef674e3104ec69d516483bdfbf451558a2e2487a8d1"
+    },
+    {
+      "index": 19,
+      "offset": 1275068416,
+      "length": 67108864,
+      "coordinate_hash": "6baa66e13308a03bbc2a88f02a6bf3e26360aa0ce949b011259e98b2143b0596",
+      "chunk_hash": "69d745740154e7e3caf55d873e162a3a3f4c82cb17215b40d51e528118344e98"
+    },
+    {
+      "index": 20,
+      "offset": 1342177280,
+      "length": 67108864,
+      "coordinate_hash": "f98ffee94563e01a5c0f4f78f61a5c3cb94a5ce43bf16f8edfac0a33ec846445",
+      "chunk_hash": "3a85e83ab65f03fc5b398c6e252d528584b205abee32962c717099701dd2d7fd"
+    },
+    {
+      "index": 21,
+      "offset": 1409286144,
+      "length": 67108864,
+      "coordinate_hash": "a7859abde4f5d469aa49734dcb620012a5e22efabf7c8e9190babdd26d97eae0",
+      "chunk_hash": "3eba13dceeb5703aaa2382d81692beadc48d02910f09ecfba60a7124d2cf021b"
+    },
+    {
+      "index": 22,
+      "offset": 1476395008,
+      "length": 67108864,
+      "coordinate_hash": "51ebcb03fc6575663ffe2e476b545897b531546484d7213c95d78b3e38dd88e6",
+      "chunk_hash": "e1138e425368657ed3b1d85cda4ac1b74235a303025fbb376bcd05c4a7fe5311"
+    },
+    {
+      "index": 23,
+      "offset": 1543503872,
+      "length": 67108864,
+      "coordinate_hash": "5bddbdb2b35a24e273f57f43f747fa4d53c1111055abf6e16a18c36c74d1ec31",
+      "chunk_hash": "8f58bc623627356c481ee08883f74435218866738036623a010a2dc590fa28ef"
+    },
+    {
+      "index": 24,
+      "offset": 1610612736,
+      "length": 67108864,
+      "coordinate_hash": "9f1d1c9c988f17ba1b07fe1a6bcbbd82d874687278bc30ac3170f37af21fdc10",
+      "chunk_hash": "4bd2931b3f50b522fbfe285743716b51d65f25f8e09f0055470ea408921db5e6"
+    },
+    {
+      "index": 25,
+      "offset": 1677721600,
+      "length": 67108864,
+      "coordinate_hash": "a67617b41592f4064184dc34a5cb9c926ae349efa7a6010829c6b6ac562a500c",
+      "chunk_hash": "83688d8fa11106824c996fedc633bffd9e40daec76482ef512c5a1236fa8239f"
+    },
+    {
+      "index": 26,
+      "offset": 1744830464,
+      "length": 67108864,
+      "coordinate_hash": "ebbe3a3f3656b63791bfabebcb1ae6469722bc87b13ee2b182eeb588a106e1e3",
+      "chunk_hash": "fabb1af805be88ffe53fc5cca713ccb9e1db30dbaccd62f09ffe2fba7a762d41"
+    },
+    {
+      "index": 27,
+      "offset": 1811939328,
+      "length": 67108864,
+      "coordinate_hash": "4acf81138a24909316b3cf7177e5eb2eb7ff2057ad8d78d585d215b3446d10a9",
+      "chunk_hash": "071d8b5e150666402f405bdea393d745d1e1e596773a33fe5dbadbc08df89031"
+    },
+    {
+      "index": 28,
+      "offset": 1879048192,
+      "length": 67108864,
+      "coordinate_hash": "2c5bda863828de83d80089c44bf7141d164c1cf361ee2d8ebc9061a5d1027a0e",
+      "chunk_hash": "e90ffd7bfca7fa720e4d657799a621372d7fb4af249d4d0118e5b538dae28771"
+    },
+    {
+      "index": 29,
+      "offset": 1946157056,
+      "length": 67108864,
+      "coordinate_hash": "8bf04daa9fffdc105899d4847b43991ca713e37f3759d54ec098fc66c1d1c6d9",
+      "chunk_hash": "c36203ec8cde64cfd9ee867a4c5eb8e03c0940eecc7e380a4a5b63d8293a0e3b"
+    },
+    {
+      "index": 30,
+      "offset": 2013265920,
+      "length": 67108864,
+      "coordinate_hash": "2157915ce0b90560e4e6a449a1daacc379c7d09a0b5f393950df26977f1b241a",
+      "chunk_hash": "10a5fa416fb49e9e419f8405971cb87b128b18c1b55d1e16843b5823a842c37f"
+    },
+    {
+      "index": 31,
+      "offset": 2080374784,
+      "length": 67108864,
+      "coordinate_hash": "977bcc4a4a03b94b22ff113088b3323c2b3b080e1f4d91c05e0f82f4b5793fc5",
+      "chunk_hash": "f9866f8e3abb794d7ec56ea016e96ed73634a7ec72f3555f681f2cc0204a2c4d"
+    },
+    {
+      "index": 32,
+      "offset": 2147483648,
+      "length": 67108864,
+      "coordinate_hash": "d9492dfee8a9745eb1b4dccdc5c7b7597fcf840acd952f19d9653abccefb7f43",
+      "chunk_hash": "a67c0e70ac57fc1c46b55a5bf62a17f259ea5dd965e4c5ad7440e3499459491a"
+    },
+    {
+      "index": 33,
+      "offset": 2214592512,
+      "length": 67108864,
+      "coordinate_hash": "ec4584b4f7287714652d0dfee8412a5af075456d75099b8196fcacadd1540abf",
+      "chunk_hash": "7727d17743c5c0b28c7327cd9c225013e2825036a0691b55cbef7243bda63636"
+    },
+    {
+      "index": 34,
+      "offset": 2281701376,
+      "length": 67108864,
+      "coordinate_hash": "dc19ea8dc9e3f66f8f0c0bc0e99942fe7ea78fc46731eac3d1c49e57671423e7",
+      "chunk_hash": "fac1f7826e718ee0e458694063d7c041664ef9aee1f1aa95af82696f63a56a9d"
+    },
+    {
+      "index": 35,
+      "offset": 2348810240,
+      "length": 67108864,
+      "coordinate_hash": "ecbab64a7700b5aea4df9b8c5cd7924e51206a4d28937c5e2eae3924982fa834",
+      "chunk_hash": "76130320aadb63402c6f0984bab03bb00951bffb8d11fb3090505e82774caff8"
+    },
+    {
+      "index": 36,
+      "offset": 2415919104,
+      "length": 67108864,
+      "coordinate_hash": "ef5c43cad876d8d19b042241970af5f0fdea366497359d1a428b6313062b1aaa",
+      "chunk_hash": "8a39d32622938a4d40a98aaf51b668825cc3dbbdd1a8272475b8712370965d30"
+    },
+    {
+      "index": 37,
+      "offset": 2483027968,
+      "length": 67108864,
+      "coordinate_hash": "34d570b1ed2f012af325ebbffb2822be58eb1c1ac7a2f7a2b743c12d716b90d7",
+      "chunk_hash": "7af9a4aca025e02216f7d6f31ef85ec56dc4a1f04b79340eaff6c0034d4339c8"
+    },
+    {
+      "index": 38,
+      "offset": 2550136832,
+      "length": 67108864,
+      "coordinate_hash": "7aa9f34ff09c98652a628e9bd9b41b4766e9adb33a703d6dfa6caf3a6b568c83",
+      "chunk_hash": "48b4ac7dbd66006340f4cf21d737bbd98acddb464a8e9cc86e288b03d724591f"
+    },
+    {
+      "index": 39,
+      "offset": 2617245696,
+      "length": 67108864,
+      "coordinate_hash": "dc5f5d54fb8c0649d0152dfc3e147f6b2ae69286837ce4958f4c8ba736b61748",
+      "chunk_hash": "8a98765bf1fe1bd307e475dd2d8ede26feb1d8fdf68c64976c3a0b7597e3e4c1"
+    },
+    {
+      "index": 40,
+      "offset": 2684354560,
+      "length": 67108864,
+      "coordinate_hash": "116e9c3b77d20a4c710bf1a0b6a009dba03342d8c212f9453555a23a5f531d0f",
+      "chunk_hash": "f1733ab65e91b277862e9b34817c27fd9c945ae3f9f48bee5e4724372f4fb79b"
+    },
+    {
+      "index": 41,
+      "offset": 2751463424,
+      "length": 67108864,
+      "coordinate_hash": "caef0a9446bb37cc8ab5cebf5acf23e219b126e0d7aca6458e39d5f0c8b161b6",
+      "chunk_hash": "57d05247d9922eccb6b7ded60d35e8b1008cd813a8096d91b4c946581356e217"
+    },
+    {
+      "index": 42,
+      "offset": 2818572288,
+      "length": 67108864,
+      "coordinate_hash": "ee1bd13004bc5ff8a47f7a8a19037bc4ee116503dea15acb3164a431a03589e1",
+      "chunk_hash": "d766dab7d53c0d3af343de0a51d83248ef19bbbec4d3c23a0617a973858b5829"
+    },
+    {
+      "index": 43,
+      "offset": 2885681152,
+      "length": 67108864,
+      "coordinate_hash": "4a277d59a40fa908c78a15b1ecff98befc9a89deffc3617afc64499a38d8809b",
+      "chunk_hash": "2051fad21a1a929087e654087930fcfe282a092b79eb4fc8621feec0f0f94939"
+    },
+    {
+      "index": 44,
+      "offset": 2952790016,
+      "length": 67108864,
+      "coordinate_hash": "6a49c3296d9c7a0794906c59ff783a4d2e17c897c423cc9c5ed1e62d8b61d6b3",
+      "chunk_hash": "83606319b81f9b170f412490dc11e11ddf7b3a1a8416ed3fc7b777c9a03a11c1"
+    },
+    {
+      "index": 45,
+      "offset": 3019898880,
+      "length": 67108864,
+      "coordinate_hash": "c655c9f03c1f043a47fa662d262c966252006e202d89d61923f214400042a6b0",
+      "chunk_hash": "ae6ecfc294454d09de5d624d6803c4d9225a2208ca38a7153cb606bb85971aba"
+    },
+    {
+      "index": 46,
+      "offset": 3087007744,
+      "length": 67108864,
+      "coordinate_hash": "65f366c712986dfc9ba6958824439d0551d9645b4f7ca813907396a99210fd5b",
+      "chunk_hash": "c0f099081326911a0e3a49d4ea5dcab0f288ceb9f6cb2f24caf26d53d92ed5cc"
+    },
+    {
+      "index": 47,
+      "offset": 3154116608,
+      "length": 67108864,
+      "coordinate_hash": "ed9400020ba3b8f8df80c04c92494926fac157d7f40ab76fd14ec4a8a4be9244",
+      "chunk_hash": "c06bd395f3e922834a95d2c824baf6bdeb1d527ad3b4840016df10d5dc98acf9"
+    },
+    {
+      "index": 48,
+      "offset": 3221225472,
+      "length": 67108864,
+      "coordinate_hash": "d410ca7a56f91c6687d927da0e6daf428429d299f59408a70bb22fffdd76e27a",
+      "chunk_hash": "2ee06d5cb2805366dd52bbea02e2be627986cb9b46933cd104fac9736dad37f1"
+    },
+    {
+      "index": 49,
+      "offset": 3288334336,
+      "length": 67108864,
+      "coordinate_hash": "1d51f3d1144d9284b622984754137a3a02834f2848f5d1c8132e82daef9c809a",
+      "chunk_hash": "01411ad70fe13a1d038de7086668dbc64d3860cf33ce70dc768fff62dd6571ed"
+    },
+    {
+      "index": 50,
+      "offset": 3355443200,
+      "length": 67108864,
+      "coordinate_hash": "4fa4ad279e91779a979d47b6d660f213813d1c6a81178960ad94ac9fe71f7f7d",
+      "chunk_hash": "1a14d30ab31654c7663365dfc03eeac00b29855fed4d79983b1254208537a5e4"
+    },
+    {
+      "index": 51,
+      "offset": 3422552064,
+      "length": 67108864,
+      "coordinate_hash": "e65d69428fb60acbc6fdedb8917b9a31b8359f75ffab8ee7c03d893e2f86cd00",
+      "chunk_hash": "ed2710c8b6d9bc3683a7c952552b338167414fa195aefea6ecf7637613b2d721"
+    },
+    {
+      "index": 52,
+      "offset": 3489660928,
+      "length": 67108864,
+      "coordinate_hash": "1fc53913ac6a69e794746a0fac4bf3330a14755700e68362388cd1ce1d6e135e",
+      "chunk_hash": "6e45346561d02f5613aa9166fb3f5b5d33db2c28994b67d756d27ac589cbaf5d"
+    },
+    {
+      "index": 53,
+      "offset": 3556769792,
+      "length": 67108864,
+      "coordinate_hash": "82224e07dff2a5bc851a800e1190df10a34a44747ee0c5268ff5c9b1f2de6723",
+      "chunk_hash": "3c228efb821df9df70048e75f24ecc2ef98020824ab6522246b6b82f4cfc0a8f"
+    },
+    {
+      "index": 54,
+      "offset": 3623878656,
+      "length": 67108864,
+      "coordinate_hash": "f7f11216378631fc7a07fc53c613011cf3aec94e427861b2e5753a3c6d1fa400",
+      "chunk_hash": "599ccd6f713b7f393b2ea6a84b2ba962e226d18bea80a3bba0f8af7dea1e6ce9"
+    },
+    {
+      "index": 55,
+      "offset": 3690987520,
+      "length": 67108864,
+      "coordinate_hash": "e93290bb588fc8a70d2e857fab4927661a151b4143a92c3744597d410f6bb4e9",
+      "chunk_hash": "2ee96c2d2dacb241207ab99347f9f3b8fe5b8c6c098516abca5f7f431325eddb"
+    },
+    {
+      "index": 56,
+      "offset": 3758096384,
+      "length": 67108864,
+      "coordinate_hash": "465dee347df1cd331fd8ee0481705c57318086ba258ba78e1560e8bdc5dbc304",
+      "chunk_hash": "7cd17803d929a8c9d73e4562f99d6ff64951be520fa791d31034407d12a33a65"
+    },
+    {
+      "index": 57,
+      "offset": 3825205248,
+      "length": 67108864,
+      "coordinate_hash": "644884264b6e03b4a616365921cf86d1818464001c24c5517172f46f7194dc4f",
+      "chunk_hash": "b88f2793af4d055cecdfb3c4f086b688f6fb012a579a60294d2a719a8fe2428d"
+    },
+    {
+      "index": 58,
+      "offset": 3892314112,
+      "length": 67108864,
+      "coordinate_hash": "dc7d56676964feab137f73f0431d738fa7604159796b77d2426cdd22588fe459",
+      "chunk_hash": "92b28ea848fadacaf9cf321d2d2fa5eb83d5489bce3f8396e4804392cc132fca"
+    },
+    {
+      "index": 59,
+      "offset": 3959422976,
+      "length": 67108864,
+      "coordinate_hash": "55b0c9f59eb89a2896e825d2bd1e6f69160ddad0c816c53e651a9345fbaaec6a",
+      "chunk_hash": "675bc2b61b33af13c28fe994e018f1d04b90e402d4fba79011293acbdd1bbcdd"
+    },
+    {
+      "index": 60,
+      "offset": 4026531840,
+      "length": 67108864,
+      "coordinate_hash": "3955cb22c5f6e6e89a4140467ffa576d019f0a598764637603941b7fc2ffc9a8",
+      "chunk_hash": "e570bb6de017ee423b7a4357d215815cf6e691c28b0a1a6a9d6267476396aafc"
+    },
+    {
+      "index": 61,
+      "offset": 4093640704,
+      "length": 67108864,
+      "coordinate_hash": "f4130dfa1de8a357bd9f94d323a2d4c9423d89815ab62aaf87e6ec115a3320da",
+      "chunk_hash": "9dd50857eefcecdbcb16eb840b490791441b207409c4c7c695bd373be3ca7de6"
+    },
+    {
+      "index": 62,
+      "offset": 4160749568,
+      "length": 67108864,
+      "coordinate_hash": "e987b583d78c8568f41e2eee162c8187e76369c351409e7bd6e32fb828249d3c",
+      "chunk_hash": "5ce41ff6d2dfb7442a60bcc0b58bbc0f2a506d682d33ce576c427732d1cdd3de"
+    },
+    {
+      "index": 63,
+      "offset": 4227858432,
+      "length": 67108864,
+      "coordinate_hash": "5ccb10c80f83a064bbf06de40e4b3496d6dac0841b12c590f2e6888755e7b78e",
+      "chunk_hash": "9278a0b342194b4d1d50091044aca05ea671da5e26a61a068ae9ded98598f05d"
+    },
+    {
+      "index": 64,
+      "offset": 4294967296,
+      "length": 67108864,
+      "coordinate_hash": "d492189f2eb0980aac9aef83d1b69aa77141e561f6f03caa6f3b704ab9af9035",
+      "chunk_hash": "3412428d956d47f8fd966d12f6637ddcd00ed0c04414245e45ef3c6cee40d699"
+    },
+    {
+      "index": 65,
+      "offset": 4362076160,
+      "length": 67108864,
+      "coordinate_hash": "08b60ee2cee0e303aefef2f12b3e97c3b1ce101281b47aacad75c52a32bce348",
+      "chunk_hash": "dadebcba552615f6c91d7f4f51e2c0d827457bab7165c4aa466a0f75ac28c791"
+    },
+    {
+      "index": 66,
+      "offset": 4429185024,
+      "length": 67108864,
+      "coordinate_hash": "08ee4ca8a03c17c5bb98df7c53c357ca586e30f0f0a8b5c183f0ba241c02b624",
+      "chunk_hash": "b90c6d11831046cb1dc2d36fa6f1e3fdc455919a06d2dfdee0033546ef27193a"
+    },
+    {
+      "index": 67,
+      "offset": 4496293888,
+      "length": 67108864,
+      "coordinate_hash": "8c3d646e4578716e0d82e39131cd85dbd383317d7f88beabc869fe49419bee05",
+      "chunk_hash": "b3421089f126db5b38f21a279c29ab9d7a2b875d4ef9df5f502c5922e69e7e94"
+    },
+    {
+      "index": 68,
+      "offset": 4563402752,
+      "length": 67108864,
+      "coordinate_hash": "9e73f60f1868942fc1b9d3078ac7162bdb82f0ea87a98dc8357b593c2e543df0",
+      "chunk_hash": "98bd7c0ed56cce2a16e3386f18109798302858c03b5734061fbcd67f02ede977"
+    },
+    {
+      "index": 69,
+      "offset": 4630511616,
+      "length": 67108864,
+      "coordinate_hash": "62ea249616d80565e04c942a1992f15fb5d74151bf7c050cb0189d7628d9e2da",
+      "chunk_hash": "0765c770dbb9d4704beef9d7a414cd737a9b026ae193dbabe844b4e1a539b99a"
+    },
+    {
+      "index": 70,
+      "offset": 4697620480,
+      "length": 67108864,
+      "coordinate_hash": "7e35d2d875a6adf60465f4e86c7b70875ae1c4e62823da38383dd2270e824343",
+      "chunk_hash": "ceb8261c7b85b0f7f9fe3b7972ebb05ffb1e297abd6b91a8f2e2bdf8790e0dc4"
+    },
+    {
+      "index": 71,
+      "offset": 4764729344,
+      "length": 67108864,
+      "coordinate_hash": "82573b6e01fa912ad9a6fdf85274eaf90fc8cb8cebe879ff772854e2bffe4bd2",
+      "chunk_hash": "955656ae5cea66d96a720aec4f6546e469f9fc1914040768115ee5695e6054bf"
+    },
+    {
+      "index": 72,
+      "offset": 4831838208,
+      "length": 67108864,
+      "coordinate_hash": "e9f110c799fd7f17f955af94d3af685cc6588f727804377f066b9e6edfa99efc",
+      "chunk_hash": "e430f4675fa9e530df6915fc8fa2500d7d9bd42e44bcbfed777e79768d45b27e"
+    },
+    {
+      "index": 73,
+      "offset": 4898947072,
+      "length": 67108864,
+      "coordinate_hash": "78ce09f9a55885352396335d98f8c771326d6548c6bf090a5edf1863dbaa993e",
+      "chunk_hash": "5f949277833a17c636666cb8a981db8a9c8b7136d6e7524e3174a059c22818e0"
+    },
+    {
+      "index": 74,
+      "offset": 4966055936,
+      "length": 67108864,
+      "coordinate_hash": "819632fade248b2755f4e3bda274ab3f18bdb5f2db6f5b0da57e3244777ce921",
+      "chunk_hash": "cc6f833386ada549490d362038221c3c812fa358b4a481c18e6c560995f89dda"
+    },
+    {
+      "index": 75,
+      "offset": 5033164800,
+      "length": 67108864,
+      "coordinate_hash": "1d780cbb3d4babe7afafb5b5f88816eef397348958137fa3cc2df7ffc667aab8",
+      "chunk_hash": "7ea09b5e567677e46b0c987eb21e2471bd7d1602e3aaac20f684206fb5cb8b10"
+    },
+    {
+      "index": 76,
+      "offset": 5100273664,
+      "length": 67108864,
+      "coordinate_hash": "0e28afba240e35ff492aa3525e7d00b24f4bb916a2083686b30ac1dc383509de",
+      "chunk_hash": "4e403cae3890e1c48aa2f1501a624e1941cd7ca36fe4b213ed8ff1b1ac61a5dd"
+    },
+    {
+      "index": 77,
+      "offset": 5167382528,
+      "length": 67108864,
+      "coordinate_hash": "3208324e0227f1e650d2e6a9ff4a1b8166d7e6c9c864831d095d6f4c4680d20d",
+      "chunk_hash": "e80183cca7bed7710bc4a6d1fb142a66a5b05402f49bfcca85f2832455010a6a"
+    },
+    {
+      "index": 78,
+      "offset": 5234491392,
+      "length": 67108864,
+      "coordinate_hash": "56417fe2fa476f29f6e7224e7615dbcee52139339d846b6d6830323977536750",
+      "chunk_hash": "48c8b1c878edfd3c9f69715df4a4b053821ec51284678432b3427d9315479b28"
+    },
+    {
+      "index": 79,
+      "offset": 5301600256,
+      "length": 67108864,
+      "coordinate_hash": "fa63c51417691611cb63ddf0a9e753b6025d46f74d1c155f17290afe0c9f22b1",
+      "chunk_hash": "f71d741ff6d7c9a4d029460611106f0d37839cefa980d526f87c8c3ddcb2cb87"
+    }
+  ],
+  "hashes": {
+    "chunk_root": "23d5c5342b9a913f9f585c059a32034d3bd440773c80f50fd665b6cfede80198",
+    "transfer_hash_before_metrics": "603f2c1430e17eb19a76dfe9223be4459b8818bcfaa27e8499c4c52ba2dabc0b",
+    "packet_hash": "067377aec09fd2446a867831a858b14150b07166932c055a687ccb055f4bcb3d"
+  },
+  "stages": [
+    {
+      "stage": "State",
+      "elapsed_seconds": 2.025e-06,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    },
+    {
+      "stage": "Coordinate",
+      "elapsed_seconds": 0.000741617,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    },
+    {
+      "stage": "Hash",
+      "elapsed_seconds": 0.000771938,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    },
+    {
+      "stage": "Packet",
+      "elapsed_seconds": 0.000779744,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    },
+    {
+      "stage": "Generative Transfer",
+      "elapsed_seconds": 0.001055467,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    },
+    {
+      "stage": "Verify",
+      "elapsed_seconds": 0.001776601,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    },
+    {
+      "stage": "Reconstruct",
+      "elapsed_seconds": 0.001784972,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    },
+    {
+      "stage": "Evidence",
+      "elapsed_seconds": 0.002754047,
+      "timestamp_utc": "2026-06-22T13:39:21Z"
+    }
+  ],
+  "reconstruct": {
+    "reconstructed_chunk_count": 80,
+    "reconstructed_chunk_root": "23d5c5342b9a913f9f585c059a32034d3bd440773c80f50fd665b6cfede80198",
+    "raw_payload_materialized": false
+  },
+  "verifier_hint": "PASS",
+  "metrics": {
+    "equivalent_payload_bytes": 5368709120,
+    "equivalent_payload_gib": 5.0,
+    "chunk_bytes": 67108864,
+    "chunk_mib": 64,
+    "chunk_count": 80,
+    "completion_elapsed_seconds": 0.001789048,
+    "equivalent_gib_per_second": 2794.782713,
+    "packet_bytes": 18719,
+    "equivalent_payload_to_packet_ratio": 286805.337892
+  },
+  "action": {
+    "state": "NO_LIVE_ACTION_DRY_RUN_ONLY",
+    "reason": "benchmark records packet completion speed only"
+  }
+}

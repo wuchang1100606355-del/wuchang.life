@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:W7TP_VISION_EVIDENCE_PACKET_V1",
+  "title": "W7TP_VISION_EVIDENCE_PACKET_V1",
+  "type": "object",
+  "description": "將原始影像轉換為僅含 Hash 與候選標籤的證據封包，絕不直接觸發決策",
+  "required": [
+    "packet_type", "image_hash", "device_ref", "time_ref", "verifier_required"
+  ],
+  "properties": {
+    "packet_type": { "const": "W7TP_VISION_EVIDENCE_PACKET_V1" },
+    "image_hash": { "type": "string" },
+    "device_ref": { "type": "string" },
+    "time_ref": { "type": "string", "format": "date-time" },
+    "candidate_labels": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "confidence_hint": { "type": "number" },
+    "verifier_required": { "const": true }
+  }
+}

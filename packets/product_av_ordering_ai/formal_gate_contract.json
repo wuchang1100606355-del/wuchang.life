@@ -1,0 +1,16 @@
+{
+  "schema": "W7TP_FORMAL_GATE_CONTRACT_V1",
+  "state": "SPEC_CONVERGED",
+  "dry_run_gate": {
+    "confirm_state": "CONFIRM_DRY_RUN",
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false
+  },
+  "formal_gate": {
+    "state": "HOLD_OPERATOR_CONFIRM",
+    "requires": ["authenticated_staff", "validated_packet_hash", "odoo_recomputed_total", "fresh_human_confirmation", "separate_operator_authorization"],
+    "payment_capture": "separate_payment_gate_required",
+    "cloud_authority": false
+  }
+}

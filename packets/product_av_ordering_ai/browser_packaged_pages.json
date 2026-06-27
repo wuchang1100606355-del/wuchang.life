@@ -1,0 +1,58 @@
+{
+  "schema": "W7TP_XIAOJ_BROWSER_PACKAGED_PAGES_V1",
+  "state": "BROWSER_PACKAGED_APP_PATCH_READY",
+  "route": "/wuchang/xiaoj/ordering",
+  "manifest": "/wuchang_core/static/src/xiaoj_ordering/xiaoj_ordering.webmanifest",
+  "integration": "odoo_controller_static_asset",
+  "standalone_server": false,
+  "pages": [
+    {
+      "id": "staff_pos",
+      "name": "店員 POS",
+      "purpose": "cashier order candidate review and dry-run confirm",
+      "formal_write": false
+    },
+    {
+      "id": "counter_service_touch",
+      "name": "櫃台客戶服務觸控頁面",
+      "purpose": "8D scan, masked member service, queue and customer support touch workflow",
+      "formal_write": false
+    },
+    {
+      "id": "av_ai_menu_display",
+      "name": "影音 AI 影像菜單顯示場",
+      "purpose": "XiaoJ avatar, menu, customer display, top/bottom ticker and candidate order visualization",
+      "display_features": ["top_marquee", "bottom_marquee", "xiaoj_vrm_asset_slot"],
+      "avatar_asset": {
+        "name": "小J 接客顯示機 VRM",
+        "file_name": "lung.vrm",
+        "static_path": "/wuchang_core/static/src/xiaoj_ordering/avatar/lung.vrm",
+        "display_mode": "customer_menu_display",
+        "state": "VRM_ASSET_SLOT_READY"
+      },
+      "formal_write": false
+    },
+    {
+      "id": "business_management",
+      "name": "商業管理分級子功能頁",
+      "purpose": "boss interface for cash, community AI, maintenance queue and business analysis",
+      "formal_write": false
+    },
+    {
+      "id": "hardware_menu_business_settings",
+      "name": "硬體菜單設定營業資訊頁面",
+      "purpose": "hardware candidate settings, menu settings and business information settings",
+      "formal_write": false
+    }
+  ],
+  "safety": {
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "service_restart": false,
+    "deploy": false,
+    "production_release": false,
+    "secret_read": false,
+    "member_plaintext_read": false
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:W7TP_FIELD_PROJECTION_PACKET_V1",
+  "title": "W7TP_FIELD_PROJECTION_PACKET_V1",
+  "type": "object",
+  "description": "用於分場節點重構，不傳遞完整 DB，僅傳遞投影、知識子集與驗證合約",
+  "required": [
+    "packet_type", "field_state_projection", "manifest_ref", "verifier_contract_ref"
+  ],
+  "properties": {
+    "packet_type": { "const": "W7TP_FIELD_PROJECTION_PACKET_V1" },
+    "field_state_projection": { "type": "object" },
+    "kb_subset_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "manifest_ref": { "type": "string" },
+    "hash_references": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "verifier_contract_ref": { "type": "string" }
+  }
+}

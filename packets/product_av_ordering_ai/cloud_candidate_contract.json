@@ -1,0 +1,15 @@
+{
+  "schema": "W7TP_CLOUD_CANDIDATE_CONTRACT_V1",
+  "state": "SPEC_CONVERGED",
+  "cloud_role": "busy_compute_candidate_only",
+  "allowed_inputs": ["menu_context_ref", "masked_state_ref", "utterance_ref", "display_mode", "language"],
+  "forbidden_inputs": ["member_plaintext", "payment_data", "oauth_token", "client_secret", "odoo_credentials", "formal_pos_write_key"],
+  "required_outputs": ["candidate_lines", "voice_reply", "confidence", "reason_refs", "candidate_hash"],
+  "forbidden_outputs": ["formal_order_id", "payment_capture_id", "credential_echo"],
+  "authority": {
+    "can_decide_formal_order": false,
+    "can_write_odoo": false,
+    "can_capture_payment": false,
+    "must_pass_backbrain": true
+  }
+}

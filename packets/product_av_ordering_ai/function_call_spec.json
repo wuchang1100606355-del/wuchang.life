@@ -1,0 +1,37 @@
+{
+  "schema": "W7TP_FUNCTION_CALL_SPEC_V1",
+  "state": "SPEC_CONVERGED",
+  "calls": [
+    {
+      "function_code": "menu.browse.v1",
+      "input": ["packet_ref", "topology_ref", "category_ref"],
+      "output": ["menu_items", "option_groups", "price_refs"],
+      "authority": "odoo_orm_read"
+    },
+    {
+      "function_code": "order.candidate.create.v1",
+      "input": ["packet_ref", "utterance_ref", "menu_context_ref"],
+      "output": ["candidate_lines", "voice_reply", "confidence", "candidate_hash"],
+      "authority": "cloud_candidate_only"
+    },
+    {
+      "function_code": "order.candidate.validate.v1",
+      "input": ["packet_ref", "candidate_hash", "candidate_lines"],
+      "output": ["validated_lines", "subtotal", "discount", "payable_amount", "rule_refs"],
+      "authority": "no_llm_backbrain"
+    },
+    {
+      "function_code": "order.confirm.dry_run.v1",
+      "input": ["packet_ref", "validated_candidate_hash", "operator_ref"],
+      "output": ["confirm_state", "evidence_ref"],
+      "authority": "human_confirm_dry_run"
+    },
+    {
+      "function_code": "member.group.register.v1",
+      "input": ["group_ref", "packet_ref", "provider_ref"],
+      "output": ["provisional_member_ref", "d8_ref", "evidence_ref"],
+      "authority": "odoo_provisional_registration"
+    }
+  ],
+  "forbidden": ["formal_pos_write", "payment_capture", "secret_read", "member_plaintext_cloud_upload"]
+}
