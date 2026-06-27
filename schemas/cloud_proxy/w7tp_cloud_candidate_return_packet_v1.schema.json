@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/cloud_proxy/w7tp_cloud_candidate_return_packet_v1.schema.json",
+  "title": "W7TP Cloud Candidate Return Packet V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "return_packet_id",
+    "task_id",
+    "job_id",
+    "source_packet_id",
+    "source_packet_hash",
+    "candidate_id",
+    "candidate_payload_hash",
+    "candidate_only",
+    "must_not_execute",
+    "requires_total_field_verify",
+    "member_plaintext_transferred",
+    "secret_transferred",
+    "raw_audio_transferred",
+    "cloud_received_packet_only",
+    "cloud_provider_ref",
+    "d1_intent",
+    "d2_state",
+    "d3_coordinate",
+    "d4_evidence",
+    "d5_execution",
+    "d6_generative_transmission",
+    "d7_risk",
+    "d8_envelope"
+  ],
+  "properties": {
+    "schema_version": { "const": "w7tp.cloud_candidate_return_packet.v1" },
+    "packet_type": { "const": "CLOUD_CANDIDATE_RETURN_PACKET" },
+    "return_packet_id": { "type": "string", "pattern": "^RET_[A-Fa-f0-9]+$" },
+    "task_id": { "type": "string", "pattern": "^TASK_[A-Fa-f0-9]+$" },
+    "job_id": { "type": "string", "pattern": "^JOB_[A-Fa-f0-9]+$" },
+    "source_packet_id": { "type": "string", "pattern": "^PKT_[A-Fa-f0-9]+$" },
+    "source_packet_hash": { "type": "string", "minLength": 16 },
+    "candidate_id": { "type": "string", "pattern": "^CAND_[A-Fa-f0-9]+$" },
+    "candidate_payload_hash": { "type": "string", "minLength": 16 },
+    "candidate_only": { "const": true },
+    "must_not_execute": { "const": true },
+    "requires_total_field_verify": { "const": true },
+    "member_plaintext_transferred": { "const": false },
+    "secret_transferred": { "const": false },
+    "raw_audio_transferred": { "const": false },
+    "cloud_received_packet_only": { "const": true },
+    "cloud_provider_ref": { "type": "string", "pattern": "^CLOUD_PROVIDER_REF:[A-Za-z0-9_./:-]+$" },
+    "d1_intent": { "type": "object" },
+    "d2_state": { "type": "object" },
+    "d3_coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "cloud_lane", "authority", "cloud_compute_ref", "compute_provider_ref", "compute_cost_bucket_ref"],
+      "properties": {
+        "source": { "type": "string" },
+        "cloud_lane": { "type": "string" },
+        "authority": { "const": "candidate_only" },
+        "cloud_compute_ref": { "type": "string", "pattern": "^CLOUD_COMPUTE_REF:[A-Za-z0-9_./:-]+$" },
+        "compute_provider_ref": { "type": "string", "pattern": "^CLOUD_PROVIDER_REF:[A-Za-z0-9_./:-]+$" },
+        "compute_cost_bucket_ref": { "type": "string", "pattern": "^COMPUTE_COST_BUCKET_REF:[A-Za-z0-9_./:-]+$" }
+      }
+    },
+    "d4_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_packet_hash", "candidate_payload_hash", "evidence_ref", "behavior_info_ref", "action_trace_ref", "member_tendency_ref"],
+      "properties": {
+        "source_packet_hash": { "type": "string", "minLength": 16 },
+        "candidate_payload_hash": { "type": "string", "minLength": 16 },
+        "evidence_ref": { "type": "string", "pattern": "^EVIDENCE_REF:[A-Za-z0-9_./:-]+$" },
+        "behavior_info_ref": { "type": "string", "pattern": "^BEHAVIOR_INFO_REF:[A-Za-z0-9_./:-]+$" },
+        "action_trace_ref": { "type": "string", "pattern": "^ACTION_TRACE_REF:[A-Za-z0-9_./:-]+$" },
+        "member_tendency_ref": { "type": "string", "pattern": "^MEMBER_TENDENCY_REF:[A-Za-z0-9_./:-]+$" }
+      }
+    },
+    "d5_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_allowed", "allowed_next_actions", "forbidden_actions", "human_confirm_required"],
+      "properties": {
+        "execution_allowed": { "const": false },
+        "allowed_next_actions": { "type": "array", "items": { "type": "string" } },
+        "forbidden_actions": { "type": "array", "items": { "type": "string" } },
+        "human_confirm_required": { "type": "boolean" }
+      }
+    },
+    "d6_generative_transmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["return_mode", "reconstruction_hint_ref", "cloud_candidate_only", "member_plaintext_transferred", "secret_transferred"],
+      "properties": {
+        "return_mode": { "const": "packetized_candidate_result" },
+        "reconstruction_hint_ref": { "type": "string", "pattern": "^RECONSTRUCT_REF:[A-Za-z0-9_./:-]+$" },
+        "cloud_candidate_only": { "const": true },
+        "member_plaintext_transferred": { "const": false },
+        "secret_transferred": { "const": false }
+      }
+    },
+    "d7_risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["risk_flags", "final_status_candidate", "hold_required", "block_required"],
+      "properties": {
+        "risk_flags": { "type": "array", "items": { "type": "string" } },
+        "final_status_candidate": { "enum": ["CANDIDATE_READY", "BLOCKED", "HOLD", "DEAD_LETTER"] },
+        "hold_required": { "type": "boolean" },
+        "block_required": { "type": "boolean" }
+      }
+    },
+    "d8_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ttl_seconds", "nonce", "created_at", "return_packet_hash", "total_field_verifier_required", "replay_protection"],
+      "properties": {
+        "ttl_seconds": { "type": "integer", "minimum": 1 },
+        "nonce": { "type": "string", "minLength": 16 },
+        "created_at": { "type": "string" },
+        "return_packet_hash": { "type": "string", "minLength": 16 },
+        "total_field_verifier_required": { "const": true },
+        "replay_protection": { "const": true }
+      }
+    }
+  }
+}
