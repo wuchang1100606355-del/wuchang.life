@@ -1,0 +1,49 @@
+<odoo>
+  <template id="oauth_status_page" name="Wuchang OAuth Human Status Page">
+    <t t-call="web.login_layout">
+      <main class="wuchang-status-page">
+        <section class="wuchang-status-card">
+          <p class="wuchang-auth-kicker">五常社區發展協會 × 聊國咖啡館重新總店</p>
+          <h1><t t-esc="title or '入口暫停服務'"/></h1>
+          <p class="wuchang-status-message">
+            <t t-esc="message or '目前此入口尚未完成正式設定，請洽店長或系統管理員。'"/>
+          </p>
+          <div class="wuchang-status-grid">
+            <div>
+              <strong>現場協助</strong>
+              <span>請由店長或櫃台協助完成會員服務流程。</span>
+            </div>
+            <div>
+              <strong>安全邊界</strong>
+              <span>系統不會在公開頁面顯示技術密鑰、會員明文或外部服務錯誤細節。</span>
+            </div>
+          </div>
+          <div class="wuchang-status-actions">
+            <a class="wuchang-auth-action primary" href="/web/login">回到登入入口</a>
+            <a class="wuchang-auth-action" href="/web/signup">前往會員註冊</a>
+          </div>
+          <p class="wuchang-status-ref" t-if="reference">
+            參考代碼：<t t-esc="reference"/>
+          </p>
+        </section>
+      </main>
+    </t>
+  </template>
+
+  <template id="oauth_success_page" name="Wuchang OAuth Human Success Page">
+    <t t-call="web.login_layout">
+      <main class="wuchang-status-page">
+        <section class="wuchang-status-card success">
+          <p class="wuchang-auth-kicker">五常社區發展協會 × 聊國咖啡館重新總店</p>
+          <h1><t t-esc="title or '會員入口已完成'"/></h1>
+          <p class="wuchang-status-message">
+            <t t-esc="message or '會員登入已完成，請依現場指示繼續。'"/>
+          </p>
+          <div class="wuchang-status-actions">
+            <a class="wuchang-auth-action primary" href="/web/login">回到登入入口</a>
+          </div>
+        </section>
+      </main>
+    </t>
+  </template>
+</odoo>

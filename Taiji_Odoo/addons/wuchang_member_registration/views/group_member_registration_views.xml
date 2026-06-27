@@ -62,7 +62,7 @@
         <field name="group_ref"/>
         <field name="provider"/>
         <field name="provider_user_ref"/>
-        <field name="provisional_member_id"/>
+        <field name="provisional_member_ref"/>
         <field name="state"/>
         <field name="packet_hash"/>
         <field name="d8_ref"/>
@@ -83,7 +83,7 @@
             <field name="group_ref" readonly="1"/>
             <field name="provider" readonly="1"/>
             <field name="provider_user_ref" readonly="1"/>
-            <field name="provisional_member_id" readonly="1"/>
+            <field name="provisional_member_ref" readonly="1"/>
             <field name="state" readonly="1"/>
           </group>
           <group string="8D Evidence">
@@ -113,11 +113,13 @@
             name="Group 8D Batches"
             parent="menu_wuchang_member_registration_root"
             action="action_wuchang_member_group_registration_batch"
+            groups="wuchang_member_registration.group_wuchang_member_manager"
             sequence="20"/>
 
   <menuitem id="menu_wuchang_member_group_registration_packet"
             name="Group 8D Packets"
             parent="menu_wuchang_member_registration_root"
             action="action_wuchang_member_group_registration_packet"
+            groups="wuchang_member_registration.group_wuchang_member_manager"
             sequence="30"/>
 </odoo>

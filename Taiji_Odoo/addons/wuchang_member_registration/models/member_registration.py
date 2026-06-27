@@ -40,14 +40,33 @@ class WuchangMemberRegistration(models.Model):
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
 
+    member_type = fields.Selection([
+        ("individual", "Individual Member"),
+        ("organization", "Organization Member"),
+    ], default="individual", required=True, index=True)
+
+    organization_name = fields.Char("Organization / Affiliation")
+    organization_role = fields.Selection([
+        ("none", "None"),
+        ("responsible_person", "Responsible Person"),
+        ("representative", "Representative"),
+        ("position_responsible", "Position Responsible"),
+        ("staff", "Staff"),
+        ("volunteer", "Volunteer"),
+        ("resident", "Resident"),
+        ("other", "Other"),
+    ], default="none", index=True)
+
+    review_level = fields.Selection([
+        ("manager_allowed", "Manager Allowed"),
+        ("owner_required", "Owner Required"),
+        ("org_responsible_required", "Organization Responsible Required"),
+    ], default="manager_allowed", readonly=True, index=True)
+
+    reviewed_at = fields.Datetime(readonly=True)
+    review_reason = fields.Text("Review Reason")
+
     identity_code_id = fields.Many2one("wuchang.member.identity.code", readonly=True)
-    consent_ledger_ids = fields.One2many("wuchang.member.consent.ledger", "registration_id")
-    external_auth_ids = fields.One2many("wuchang.member.external.auth", "registration_id")
-    group_registration_packet_ids = fields.One2many(
-        "wuchang.member.group.registration.packet",
-        "provisional_member_id",
-        string="Group Registration Packets",
-    )
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -60,6 +79,31 @@ class WuchangMemberRegistration(models.Model):
     def _new_provisional_id(self):
         return "PROV-" + secrets.token_hex(8).upper()
 
+    def _compute_review_level_value(self):
+        self.ensure_one()
+        owner_roles = {"responsible_person", "representative", "position_responsible"}
+        if self.member_type == "organization" or self.organization_role in owner_roles or self.role_scope in owner_roles:
+            return "owner_required"
+        if self.organization_name:
+            return "org_responsible_required"
+        return "manager_allowed"
+
+    def _is_owner_reviewer(self):
+        return self.env.user.has_group("wuchang_member_registration.group_wuchang_member_admin")
+
+    def _check_approval_governance(self):
+        self.ensure_one()
+        if self.create_uid and self.create_uid == self.env.user:
+            raise UserError(_("Reviewer cannot approve their own registration."))
+
+        level = self.review_level or self._compute_review_level_value()
+
+        if level == "owner_required" and not self._is_owner_reviewer():
+            raise UserError(_("Organization members and responsible persons require owner/admin review."))
+
+        if level == "org_responsible_required" and not self._is_owner_reviewer():
+            raise UserError(_("Organization-affiliated members require approved organization responsible-person review. Responsible-person binding is not enabled yet."))
+
     def action_submit_review(self):
         for rec in self:
             if rec.review_status not in ("draft", "dead_letter"):
@@ -68,6 +112,7 @@ class WuchangMemberRegistration(models.Model):
                 raise UserError(_("Consent version is required."))
             rec.write({
                 "review_status": "pending_review",
+                "review_level": rec._compute_review_level_value(),
                 "consent_timestamp": fields.Datetime.now(),
             })
 
@@ -75,14 +120,17 @@ class WuchangMemberRegistration(models.Model):
         for rec in self:
             if rec.review_status != "pending_review":
                 raise UserError(_("Only pending registrations can be approved."))
+            rec._check_approval_governance()
             identity = self.env["wuchang.member.identity.code"].create_from_registration(rec)
             rec.write({
                 "review_status": "approved",
                 "reviewer_id": self.env.user.id,
+                "reviewed_at": fields.Datetime.now(),
                 "identity_code_id": identity.id,
             })
             self.env["wuchang.member.consent.ledger"].create({
-                "registration_id": rec.id,
+                "registration_ref_id": rec.id,
+                "provisional_member_ref": rec.provisional_member_id,
                 "member_identity_id": identity.id,
                 "consent_type": "registration",
                 "purpose": "membership_service",
@@ -126,7 +174,8 @@ class WuchangMemberIdentityCode(models.Model):
         ("recovery_pending", "Recovery Pending"),
         ("closed", "Closed"),
     ], default="active", index=True)
-    registration_id = fields.Many2one("wuchang.member.registration", readonly=True)
+    registration_ref_id = fields.Integer(readonly=True, index=True)
+    provisional_member_ref = fields.Char(readonly=True, index=True)
 
     @api.model
     def create_from_registration(self, registration):
@@ -138,7 +187,8 @@ class WuchangMemberIdentityCode(models.Model):
             "service_code_masked": "SVC-" + digest[28:44].upper(),
             "role_scope": registration.role_scope or "member",
             "service_scope": registration.service_scope or "basic_member_service",
-            "registration_id": registration.id,
+            "registration_ref_id": registration.id,
+            "provisional_member_ref": registration.provisional_member_id,
         })
 
 
@@ -147,7 +197,8 @@ class WuchangMemberExternalAuth(models.Model):
     _description = "Wuchang Member External Auth Binding"
     _order = "create_date desc"
 
-    registration_id = fields.Many2one("wuchang.member.registration", ondelete="cascade")
+    registration_ref_id = fields.Integer(index=True)
+    provisional_member_ref = fields.Char(index=True)
     member_identity_id = fields.Many2one("wuchang.member.identity.code", ondelete="cascade")
     provider = fields.Selection([
         ("line", "LINE"),
@@ -183,7 +234,8 @@ class WuchangMemberConsentLedger(models.Model):
     _description = "Wuchang Member Consent Ledger"
     _order = "create_date desc"
 
-    registration_id = fields.Many2one("wuchang.member.registration", ondelete="cascade")
+    registration_ref_id = fields.Integer(index=True)
+    provisional_member_ref = fields.Char(index=True)
     member_identity_id = fields.Many2one("wuchang.member.identity.code", ondelete="cascade")
     consent_type = fields.Char(required=True)
     purpose = fields.Char(required=True)
@@ -393,7 +445,8 @@ class WuchangMemberGroupRegistrationPacket(models.Model):
         ("manual", "Manual"),
     ], required=True, default="manual", index=True)
     provider_user_ref = fields.Char(readonly=True, index=True)
-    provisional_member_id = fields.Many2one("wuchang.member.registration", readonly=True, ondelete="set null")
+    registration_ref_id = fields.Integer(readonly=True, index=True)
+    provisional_member_ref = fields.Char(readonly=True, index=True)
     state = fields.Selection([
         ("provisional", "Provisional"),
         ("pending_review", "Pending Review"),
@@ -455,7 +508,8 @@ class WuchangMemberGroupRegistrationPacket(models.Model):
             "group_ref": batch.group_ref,
             "provider": provider,
             "provider_user_ref": provider_hash,
-            "provisional_member_id": registration.id,
+            "registration_ref_id": registration.id,
+            "provisional_member_ref": registration.provisional_member_id,
             "state": "pending_review",
             "packet_json": json.dumps(envelope, ensure_ascii=False, sort_keys=True),
             "packet_hash": packet_hash,
@@ -463,7 +517,8 @@ class WuchangMemberGroupRegistrationPacket(models.Model):
             "evidence_ref": batch.evidence_ref,
         })
         self.env["wuchang.member.external.auth"].sudo().create({
-            "registration_id": registration.id,
+            "registration_ref_id": registration.id,
+            "provisional_member_ref": registration.provisional_member_id,
             "provider": provider if provider in ("google", "line") else "odoo",
             "provider_subject_hash": provider_hash,
             "binding_status": "pending",
