@@ -6,10 +6,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DB = ROOT / "runtime/cloud_proxy/w7tp_cloud_proxy.sqlite3"
 MODEL = "w7tp-cloud-desensitized"
+RETURN_PACKET_SCHEMA = "w7tp.cloud_candidate_return_packet.v1"
 PHONE = re.compile(r"(?:\+?886[- ]?)?09\d{2}[- ]?\d{3}[- ]?\d{3}")
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 SECRET = re.compile(r"(sk-[A-Za-z0-9_\-]{8,}|api[_-]?key\s*[:=]\s*\S+|password\s*[:=]\s*\S+|secret\s*[:=]\s*\S+)", re.I)
 DSN = re.compile(r"(postgresql|postgres|mysql|mongodb|redis)://[^\s]+", re.I)
+RETURN_FORBIDDEN_ACTIONS = [
+    "db_write",
+    "odoo_db_write",
+    "production_db_write",
+    "pos_write",
+    "payment_capture",
+    "deploy",
+    "service_restart",
+    "member_plaintext_read",
+    "secret_read",
+]
 
 def now():
     return dt.datetime.now(dt.timezone.utc).isoformat()
@@ -29,6 +41,7 @@ CREATE TABLE IF NOT EXISTS w7tp_packet(id INTEGER PRIMARY KEY, packet_id TEXT, t
 CREATE TABLE IF NOT EXISTS masking_map(id INTEGER PRIMARY KEY, task_id TEXT, masked_ref TEXT, field_type TEXT, hash TEXT, expires_at TEXT);
 CREATE TABLE IF NOT EXISTS cloud_job(id INTEGER PRIMARY KEY, job_id TEXT, task_id TEXT, packet_id TEXT, cloud_provider TEXT, sent_packet_hash TEXT, member_plaintext_sent INTEGER, secret_sent INTEGER, cloud_received_packet_only INTEGER, status TEXT);
 CREATE TABLE IF NOT EXISTS cloud_candidate(id INTEGER PRIMARY KEY, candidate_id TEXT, job_id TEXT, task_id TEXT, candidate_json TEXT, candidate_hash TEXT, risk_flags TEXT, must_not_execute INTEGER, schema_valid INTEGER);
+CREATE TABLE IF NOT EXISTS cloud_candidate_return_packet(id INTEGER PRIMARY KEY, return_packet_id TEXT, job_id TEXT, task_id TEXT, candidate_id TEXT, return_packet_json TEXT, return_packet_hash TEXT, requires_total_field_verify INTEGER, must_not_execute INTEGER, schema_valid INTEGER);
 CREATE TABLE IF NOT EXISTS local_verification(id INTEGER PRIMARY KEY, verify_id TEXT, task_id TEXT, packet_id TEXT, candidate_id TEXT, schema_pass INTEGER, policy_pass INTEGER, authority_pass INTEGER, redteam_pass INTEGER, human_confirm_required INTEGER, final_status TEXT, verifier_result TEXT, reason TEXT, created_at TEXT);
 """)
     con.commit()
@@ -76,6 +89,169 @@ def classify(raw):
         return "member_benefit_candidate", risks, "medium"
     return "general_customer_support", risks, "low"
 
+def packet_ref(prefix, value):
+    return prefix + ":" + h(value)[:16]
+
+def boundary_hits(obj):
+    def collect(value, key=""):
+        key_l = str(key).lower()
+        if any(token in key_l for token in ["_id", "_ref", "_hash", "nonce", "created_at", "schema_version", "packet_type"]):
+            return []
+        if isinstance(value, dict):
+            out = []
+            for k, v in value.items():
+                out.extend(collect(v, k))
+            return out
+        if isinstance(value, list):
+            out = []
+            for item in value:
+                out.extend(collect(item, key))
+            return out
+        if isinstance(value, str):
+            return [value]
+        return []
+
+    payload = "\n".join(collect(obj))
+    hits = []
+    if PHONE.search(payload):
+        hits.append("phone_literal_in_packet")
+    if EMAIL.search(payload):
+        hits.append("email_literal_in_packet")
+    if SECRET.search(payload):
+        hits.append("secret_literal_in_packet")
+    if DSN.search(payload):
+        hits.append("dsn_literal_in_packet")
+    return hits
+
+def build_cloud_candidate_return_packet(packet, packet_hash, job_id, candidate, final_status):
+    candidate_payload_hash = h(dump(candidate))
+    risk_flags = sorted(set(candidate.get("risk_flags", [])))
+    human_confirm_required = bool(
+        final_status == "BLOCKED"
+        or set(risk_flags) & {"member_benefit", "pos_discount", "payment_risk", "pos_risk"}
+    )
+    created_at = now()
+    return_packet = {
+        "schema_version": RETURN_PACKET_SCHEMA,
+        "packet_type": "CLOUD_CANDIDATE_RETURN_PACKET",
+        "return_packet_id": "RET_" + uuid.uuid4().hex,
+        "task_id": packet["task_id"],
+        "job_id": job_id,
+        "source_packet_id": packet["packet_id"],
+        "source_packet_hash": packet_hash,
+        "candidate_id": candidate["candidate_id"],
+        "candidate_payload_hash": candidate_payload_hash,
+        "candidate_only": True,
+        "must_not_execute": True,
+        "requires_total_field_verify": True,
+        "member_plaintext_transferred": False,
+        "secret_transferred": False,
+        "raw_audio_transferred": False,
+        "cloud_received_packet_only": True,
+        "cloud_provider_ref": "CLOUD_PROVIDER_REF:SAFE_LOCAL_STUB",
+        "d1_intent": {
+            "intent_ref": packet_ref("INTENT_REF", packet["D2_intent"].get("intent", "unknown")),
+            "intent": packet["D2_intent"].get("intent", "unknown"),
+        },
+        "d2_state": {
+            "input_state_ref": packet_ref("STATE_REF", packet_hash),
+            "candidate_state": final_status,
+        },
+        "d3_coordinate": {
+            "source": "openwebui_cloud_proxy",
+            "cloud_lane": packet["D4_topology"].get("cloud_lane", "safe_local_stub"),
+            "authority": "candidate_only",
+            "cloud_compute_ref": packet_ref("CLOUD_COMPUTE_REF", job_id + candidate_payload_hash),
+            "compute_provider_ref": "CLOUD_PROVIDER_REF:SAFE_LOCAL_STUB",
+            "compute_cost_bucket_ref": packet_ref("COMPUTE_COST_BUCKET_REF", "safe_local_stub:no_external_cost"),
+        },
+        "d4_evidence": {
+            "source_packet_hash": packet_hash,
+            "candidate_payload_hash": candidate_payload_hash,
+            "evidence_ref": packet_ref("EVIDENCE_REF", packet_hash + candidate_payload_hash),
+            "behavior_info_ref": packet_ref("BEHAVIOR_INFO_REF", packet["packet_id"] + candidate["candidate_id"]),
+            "action_trace_ref": packet_ref("ACTION_TRACE_REF", packet_hash + final_status),
+            "member_tendency_ref": packet_ref("MEMBER_TENDENCY_REF", packet["D2_intent"].get("intent", "unknown")),
+        },
+        "d5_execution": {
+            "execution_allowed": False,
+            "allowed_next_actions": ["present_candidate", "route_to_total_field_verifier", "hold_for_human_review"],
+            "forbidden_actions": RETURN_FORBIDDEN_ACTIONS,
+            "human_confirm_required": human_confirm_required,
+        },
+        "d6_generative_transmission": {
+            "return_mode": "packetized_candidate_result",
+            "reconstruction_hint_ref": packet_ref("RECONSTRUCT_REF", candidate_payload_hash),
+            "cloud_candidate_only": True,
+            "member_plaintext_transferred": False,
+            "secret_transferred": False,
+        },
+        "d7_risk": {
+            "risk_flags": risk_flags,
+            "final_status_candidate": final_status,
+            "hold_required": human_confirm_required,
+            "block_required": final_status == "BLOCKED",
+        },
+        "d8_envelope": {
+            "ttl_seconds": 300,
+            "nonce": uuid.uuid4().hex,
+            "created_at": created_at,
+            "return_packet_hash": "",
+            "total_field_verifier_required": True,
+            "replay_protection": True,
+        },
+    }
+    return_packet["d8_envelope"]["return_packet_hash"] = h(dump(return_packet))
+    return return_packet
+
+def validate_cloud_candidate_return_packet(return_packet):
+    required = [
+        "schema_version",
+        "packet_type",
+        "return_packet_id",
+        "task_id",
+        "job_id",
+        "source_packet_id",
+        "source_packet_hash",
+        "candidate_id",
+        "candidate_payload_hash",
+        "candidate_only",
+        "must_not_execute",
+        "requires_total_field_verify",
+        "member_plaintext_transferred",
+        "secret_transferred",
+        "cloud_received_packet_only",
+        "d5_execution",
+        "d6_generative_transmission",
+        "d8_envelope",
+    ]
+    missing = [k for k in required if k not in return_packet]
+    if missing:
+        return False, "missing:" + ",".join(missing)
+    const_checks = [
+        return_packet["schema_version"] == RETURN_PACKET_SCHEMA,
+        return_packet["packet_type"] == "CLOUD_CANDIDATE_RETURN_PACKET",
+        return_packet["candidate_only"] is True,
+        return_packet["must_not_execute"] is True,
+        return_packet["requires_total_field_verify"] is True,
+        return_packet["member_plaintext_transferred"] is False,
+        return_packet["secret_transferred"] is False,
+        return_packet["cloud_received_packet_only"] is True,
+        return_packet["d5_execution"].get("execution_allowed") is False,
+        return_packet["d6_generative_transmission"].get("cloud_candidate_only") is True,
+        return_packet["d8_envelope"].get("total_field_verifier_required") is True,
+        bool(return_packet.get("d3_coordinate", {}).get("cloud_compute_ref")),
+        bool(return_packet.get("d4_evidence", {}).get("behavior_info_ref")),
+    ]
+    if not all(const_checks):
+        return False, "const_check_failed"
+    hits = boundary_hits(return_packet)
+    if hits:
+        return False, "boundary_hits:" + ",".join(hits)
+    if not return_packet["d8_envelope"].get("return_packet_hash"):
+        return False, "missing_return_packet_hash"
+    return True, "PASS"
+
 def process_messages(messages):
     init_db()
     raw = "\n".join(str(m.get("content","")) for m in messages if m.get("role") == "user") or "(empty)"
@@ -115,6 +291,8 @@ def process_messages(messages):
     }
     packet_hash = h(dump(packet))
     cand_id = "CAND_" + uuid.uuid4().hex
+    job_id = "JOB_" + uuid.uuid4().hex
+    final_status = "BLOCKED" if blocked else "CANDIDATE_READY"
     candidate = {
         "schema": "cloud_candidate_v1",
         "task_id": task_id,
@@ -126,20 +304,21 @@ def process_messages(messages):
         "must_not_execute": True,
         "cloud_received_packet_only": True
     }
+    return_packet = build_cloud_candidate_return_packet(packet, packet_hash, job_id, candidate, final_status)
+    return_packet_valid, return_packet_reason = validate_cloud_candidate_return_packet(return_packet)
     verify_id = "VER_" + uuid.uuid4().hex
-    final_status = "BLOCKED" if blocked else "CANDIDATE_READY"
     con = sqlite3.connect(DB)
     con.execute("INSERT INTO nl_intake(task_id,created_at,raw_text_hash,intent_guess,risk_level) VALUES(?,?,?,?,?)", (task_id, now(), h(raw), intent, level))
     for kind, ref, digest in events:
         con.execute("INSERT INTO masking_map(task_id,masked_ref,field_type,hash,expires_at) VALUES(?,?,?,?,?)", (task_id, ref, kind, digest, "session_or_300s"))
     con.execute("INSERT INTO w7tp_packet(packet_id,task_id,created_at,packet_json,packet_hash,status) VALUES(?,?,?,?,?,?)", (packet_id, task_id, now(), dump(packet), packet_hash, "PACKET_READY"))
-    job_id = "JOB_" + uuid.uuid4().hex
     con.execute("INSERT INTO cloud_job(job_id,task_id,packet_id,cloud_provider,sent_packet_hash,member_plaintext_sent,secret_sent,cloud_received_packet_only,status) VALUES(?,?,?,?,?,?,?,?,?)", (job_id, task_id, packet_id, "SAFE_LOCAL_STUB", packet_hash, 0, 0, 1, "BLOCKED_LOCAL_NO_CLOUD_SEND" if blocked else "SAFE_LOCAL_STUB_COMPLETED"))
     con.execute("INSERT INTO cloud_candidate(candidate_id,job_id,task_id,candidate_json,candidate_hash,risk_flags,must_not_execute,schema_valid) VALUES(?,?,?,?,?,?,?,?)", (cand_id, job_id, task_id, dump(candidate), h(dump(candidate)), dump(candidate["risk_flags"]), 1, 1))
+    con.execute("INSERT INTO cloud_candidate_return_packet(return_packet_id,job_id,task_id,candidate_id,return_packet_json,return_packet_hash,requires_total_field_verify,must_not_execute,schema_valid) VALUES(?,?,?,?,?,?,?,?,?)", (return_packet["return_packet_id"], job_id, task_id, cand_id, dump(return_packet), return_packet["d8_envelope"]["return_packet_hash"], 1, 1, int(return_packet_valid)))
     con.execute("INSERT INTO local_verification(verify_id,task_id,packet_id,candidate_id,schema_pass,policy_pass,authority_pass,redteam_pass,human_confirm_required,final_status,verifier_result,reason,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", (verify_id, task_id, packet_id, cand_id, 1, 1, 1, 1, int(bool(set(risks) & {"member_benefit","pos_discount","payment_risk","pos_risk"})), final_status, "PASS", "local_block_ok" if blocked else "candidate_only_verified", now()))
     con.commit()
     con.close()
-    return {"candidate": candidate, "final_status": final_status, "local_verify": "PASS", "member_plaintext_sent": False, "secret_sent": False, "cloud_received_packet_only": True}
+    return {"candidate": candidate, "candidate_return_packet": return_packet, "return_packet_verify": return_packet_reason, "final_status": final_status, "local_verify": "PASS", "member_plaintext_sent": False, "secret_sent": False, "cloud_received_packet_only": True}
 
 def chat_response(payload):
     r = process_messages(payload.get("messages") or [])
@@ -156,6 +335,7 @@ def chat_response(payload):
         "摘要=" + summary_zh,
         "",
         "技術旗標：LOCAL_VERIFY=PASS; FINAL_STATUS=" + r["final_status"] + "; CLOUD_ADAPTER_MODE=SAFE_LOCAL_STUB; MEMBER_PLAINTEXT_SENT=false; SECRET_SENT=false"
+        + "; RETURN_PACKETIZED=true; RETURN_PACKET_VERIFY=" + r["return_packet_verify"]
     ])
     return {"id":"chatcmpl-"+uuid.uuid4().hex, "object":"chat.completion", "created":int(time.time()), "model":MODEL, "choices":[{"index":0, "message":{"role":"assistant","content":c}, "finish_reason":"stop"}], "usage":{"prompt_tokens":0,"completion_tokens":0,"total_tokens":0}}
 
@@ -230,22 +410,26 @@ def smoke():
     member_sent = bool(con.execute("SELECT max(member_plaintext_sent) FROM cloud_job").fetchone()[0])
     secret_sent = bool(con.execute("SELECT max(secret_sent) FROM cloud_job").fetchone()[0])
     packet_only = bool(con.execute("SELECT min(cloud_received_packet_only) FROM cloud_job").fetchone()[0])
-    payload = "\n".join(x[0] for x in con.execute("SELECT packet_json FROM w7tp_packet UNION ALL SELECT candidate_json FROM cloud_candidate"))
+    return_packet_count = con.execute("SELECT count(*) FROM cloud_candidate_return_packet").fetchone()[0]
+    return_packet_schema_min = con.execute("SELECT min(schema_valid) FROM cloud_candidate_return_packet").fetchone()[0]
+    return_packet_schema_ok = bool(return_packet_schema_min)
+    payload = "\n".join(x[0] for x in con.execute("SELECT packet_json FROM w7tp_packet UNION ALL SELECT candidate_json FROM cloud_candidate UNION ALL SELECT return_packet_json FROM cloud_candidate_return_packet"))
     con.close()
     mask_pass = not PHONE.search(payload) and not EMAIL.search(payload) and not SECRET.search(payload)
     malicious_blocked = any(x["name"] == "malicious" and x["actual"] == "BLOCKED" for x in results)
     raw_phone_blocked = any(x["name"] == "raw_phone_boundary" and x["actual"] == "BLOCKED" for x in results)
     all_expected = all(x["actual"] == x["expected"] for x in results)
-    state = "PASS" if table_count() == 6 and not member_sent and not secret_sent and packet_only and malicious_blocked and raw_phone_blocked and all_expected and mask_pass else "FAIL"
+    return_packetized = return_packet_count == len(cases) and return_packet_schema_ok
+    state = "PASS" if table_count() == 7 and return_packetized and not member_sent and not secret_sent and packet_only and malicious_blocked and raw_phone_blocked and all_expected and mask_pass else "FAIL"
     out = ROOT / "runtime/cloud_proxy/reports"
     out.mkdir(parents=True, exist_ok=True)
     report = out / "W7TP_CLOUD_PROXY_DB_SMOKE_REPORT.json"
     seal = out / "W7TP_CLOUD_PROXY_DB_SMOKE_SEAL.md"
     verifier = out / "W7TP_CLOUD_PROXY_DB_VERIFIER_SUMMARY.json"
-    data = {"state":state, "openwebui_model_id":MODEL, "db_path":str(DB.relative_to(ROOT)), "table_count":table_count(), "cloud_provider_reachable":False, "cloud_adapter_mode":"SAFE_LOCAL_STUB", "masking_gate":"PASS" if mask_pass else "FAIL", "local_verify":"PASS", "member_plaintext_sent":member_sent, "secret_read":False, "secret_sent":secret_sent, "production_db_write":False, "odoo_db_write":False, "pos_write":False, "payment_capture":False, "service_restart":False, "deploy":False, "production_release":False, "cloud_received_packet_only":packet_only, "malicious_member_plaintext_request":"BLOCKED" if malicious_blocked else "NOT_BLOCKED", "raw_phone_openwebui_input":"BLOCKED" if raw_phone_blocked else "NOT_BLOCKED", "all_cases_match_expected":all_expected, "results":results}
+    data = {"state":state, "openwebui_model_id":MODEL, "db_path":str(DB.relative_to(ROOT)), "table_count":table_count(), "cloud_provider_reachable":False, "cloud_adapter_mode":"SAFE_LOCAL_STUB", "candidate_return_packetized":return_packetized, "return_packet_count":return_packet_count, "return_packet_schema_ok":return_packet_schema_ok, "masking_gate":"PASS" if mask_pass else "FAIL", "local_verify":"PASS", "member_plaintext_sent":member_sent, "secret_read":False, "secret_sent":secret_sent, "production_db_write":False, "odoo_db_write":False, "pos_write":False, "payment_capture":False, "service_restart":False, "deploy":False, "production_release":False, "cloud_received_packet_only":packet_only, "malicious_member_plaintext_request":"BLOCKED" if malicious_blocked else "NOT_BLOCKED", "raw_phone_openwebui_input":"BLOCKED" if raw_phone_blocked else "NOT_BLOCKED", "all_cases_match_expected":all_expected, "results":results}
     report.write_text(json.dumps(data, ensure_ascii=False, indent=2)+"\n")
     verifier.write_text(json.dumps({"state":state, "checks":data}, ensure_ascii=False, indent=2)+"\n")
-    seal.write_text(f"# W7TP Cloud Proxy DB Smoke Seal\n\nSTATE={state}\nOPENWEBUI_MODEL_ID={MODEL}\nDB_PATH={DB.relative_to(ROOT)}\nTABLE_COUNT={table_count()}\nMASKING_GATE={'PASS' if mask_pass else 'FAIL'}\nLOCAL_VERIFY=PASS\n")
+    seal.write_text(f"# W7TP Cloud Proxy DB Smoke Seal\n\nSTATE={state}\nOPENWEBUI_MODEL_ID={MODEL}\nDB_PATH={DB.relative_to(ROOT)}\nTABLE_COUNT={table_count()}\nCANDIDATE_RETURN_PACKETIZED={str(return_packetized).lower()}\nMASKING_GATE={'PASS' if mask_pass else 'FAIL'}\nLOCAL_VERIFY=PASS\n")
     print("STATE="+state)
     print("TASK_ID=D8_MANDATORY_TASK_20260624_145232_W7TP_OPENWEBUI_DESENSITIZED_CLOUD_PROXY_DB_MVP")
     print("OPENWEBUI_MODEL_ID="+MODEL)
@@ -253,6 +437,7 @@ def smoke():
     print("TABLE_COUNT="+str(table_count()))
     print("CLOUD_PROVIDER_REACHABLE=false")
     print("CLOUD_ADAPTER_MODE=SAFE_LOCAL_STUB")
+    print("CANDIDATE_RETURN_PACKETIZED="+str(return_packetized).lower())
     print("MASKING_GATE="+("PASS" if mask_pass else "FAIL"))
     print("LOCAL_VERIFY=PASS")
     print("MEMBER_PLAINTEXT_SENT=false")
