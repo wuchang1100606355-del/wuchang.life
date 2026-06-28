@@ -153,8 +153,9 @@ def main() -> int:
         {"claimed_identity": False, "accepted_as_truth": True, "verified_role_ref": "role_ref:dev:founder_maintainer"},
     )
     dev_pr = run_pr_layer(dev_request, disable_model=True)
-    check("開發期 dev role_ref" in dev_pr["FINAL_TEXT"], "DEV_PR_MENTIONS_DEV_ROLE_REF")
-    check("production 身分授權" in dev_pr["FINAL_TEXT"], "DEV_PR_NO_PRODUCTION_AUTHORITY_TEXT")
+    check("本機開發者設備" in dev_pr["FINAL_TEXT"], "DEV_PR_MENTIONS_DEV_DEVICE")
+    check("不等同於自然人身分驗證" in dev_pr["FINAL_TEXT"], "DEV_PR_NOT_PERSON_IDENTITY")
+    check("不會讀取 secret" in dev_pr["FINAL_TEXT"], "DEV_PR_NO_SECRET")
 
     report_dir = ROOT / "runtime" / "total_field" / "pr_layer" / time.strftime("%Y%m%d_%H%M%S")
     report_dir.mkdir(parents=True, exist_ok=True)

@@ -62,6 +62,14 @@ SCENE_SCOPE_TABLE = {
         "allowed_scope": ["create_claimed_identity_packet", "ask_role_verification"],
         "forbidden_scope": ["grant_role_without_verification", "trust_claimed_identity", "secret_read", "member_plaintext_read"],
     },
+    "DEV_DEVICE_CONTEXT": {
+        "allowed_scope": ["architecture_discussion", "codex_task_builder", "total_field_debug", "non_confidential_patent_draft"],
+        "forbidden_scope": ["secret_read", "member_plaintext_read", "payment_capture", "production_deploy_without_explicit_packet", "grant_identity_role"],
+    },
+    "VERIFIED_FOUNDER_ROLE": {
+        "allowed_scope": ["architecture_discussion", "codex_task_builder", "patent_non_confidential_draft", "total_field_debug"],
+        "forbidden_scope": ["secret_read", "member_plaintext_read", "payment_capture", "production_deploy_without_explicit_packet"],
+    },
     "GENERAL_CHAT_CONTEXT": {
         "allowed_scope": ["general_chat", "supportive_reply", "capability_intro"],
         "forbidden_scope": ["medical_diagnosis", "legal_advice", "financial_advice", "identity_verification_promise"],
@@ -74,8 +82,8 @@ SCENE_SCOPE_TABLE = {
 
 DEV_ROLE_REFS = {
     "role_ref:dev:founder_maintainer": {
-        "developer_full_context_switch": True,
-        "verified_context_type": "FOUNDER_CONTEXT",
+        "developer_device_trust": True,
+        "verified_context_type": "DEV_DEVICE_CONTEXT",
         "developer_scope": ["architecture_discussion", "codex_task_builder", "patent_non_confidential_draft", "total_field_debug"],
     },
     "role_ref:dev:store_operator": {
@@ -94,6 +102,8 @@ DEV_ROLE_REFS = {
         "developer_scope": ["association_service_admission_candidate", "activity_rsvp_candidate", "volunteer_service_candidate"],
     },
 }
+
+AUTHENTICATED_FOUNDER_REFS = {"role_ref:auth:founder", "role_ref:verified:founder"}
 
 INTENT_ALIAS_TABLE = {
     "recommend_order": ["推薦", "喝什麼", "好喝", "幫我配", "不苦", "清爽", "順口", "有點累", "想喝"],
@@ -361,7 +371,13 @@ def pick_slots(text: str) -> dict[str, str]:
     return slots
 
 
-def detect_scene_context(text: str, dev_role_ref: str = "", dev_identity_switch: bool = False) -> dict[str, Any]:
+def detect_scene_context(
+    text: str,
+    dev_role_ref: str = "",
+    dev_identity_switch: bool = False,
+    authenticated_role_ref: str = "",
+    signed_identity_packet_ref: str = "",
+) -> dict[str, Any]:
     lowered = text.lower()
     scores = {
         context_type: sum(1 for word in aliases if word.lower() in lowered)
@@ -381,16 +397,24 @@ def detect_scene_context(text: str, dev_role_ref: str = "", dev_identity_switch:
         confidence = "L3"
 
     dev_role = DEV_ROLE_REFS.get(dev_role_ref) if dev_identity_switch else None
-    if dev_role:
-        context_type = dev_role["verified_context_type"]
+    signed_founder_packet = signed_identity_packet_ref.startswith("signed_identity_packet:founder")
+    founder_role_verified = authenticated_role_ref in AUTHENTICATED_FOUNDER_REFS or signed_founder_packet
+    if founder_role_verified:
+        context_type = "VERIFIED_FOUNDER_ROLE"
+        confidence = "L3"
+    elif dev_role:
+        context_type = "DEV_DEVICE_CONTEXT"
         confidence = "L3"
 
     scope = SCENE_SCOPE_TABLE[context_type]
     scene_context = {
         "context_type": context_type,
         "confidence_level": confidence,
-        "accepted_as_truth": bool(dev_role),
-        "requires_role_verification": False if dev_role else context_type in {"FOUNDER_CONTEXT", "CLAIMED_FOUNDER_CONTEXT"},
+        "accepted_as_truth": bool(founder_role_verified),
+        "device_trust": bool(dev_role),
+        "identity_verified": bool(founder_role_verified),
+        "accepted_as_person_identity": bool(founder_role_verified),
+        "requires_role_verification": False if founder_role_verified else context_type in {"FOUNDER_CONTEXT", "CLAIMED_FOUNDER_CONTEXT", "DEV_DEVICE_CONTEXT"},
         "allowed_scope": list(scope["allowed_scope"]),
         "forbidden_scope": list(scope["forbidden_scope"]),
     }
@@ -398,12 +422,22 @@ def detect_scene_context(text: str, dev_role_ref: str = "", dev_identity_switch:
         scene_context["dev_identity_override"] = {
             "enabled": True,
             "role_ref": dev_role_ref,
-            "verification_source": "explicit_dev_role_ref",
+            "verification_source": "explicit_dev_device_role_ref",
+            "device_trust": True,
+            "identity_verified": False,
+            "accepted_as_person_identity": False,
             "production_authority": False,
             "plaintext_access": False,
             "db_read": False,
         }
         scene_context["allowed_scope"] = list(dict.fromkeys(scene_context["allowed_scope"] + dev_role["developer_scope"]))
+    if founder_role_verified:
+        scene_context["verified_founder_role"] = {
+            "enabled": True,
+            "authenticated_role_ref": authenticated_role_ref or None,
+            "signed_identity_packet_ref": signed_identity_packet_ref or None,
+            "verification_source": "authenticated_role_ref_or_signed_identity_packet",
+        }
     return scene_context
 
 
@@ -784,6 +818,8 @@ def run(
     channel: str = "counter_voice",
     dev_role_ref: str = "",
     dev_identity_switch: bool = False,
+    authenticated_role_ref: str = "",
+    signed_identity_packet_ref: str = "",
 ) -> dict[str, Any]:
     ctx = {
         "text": text,
@@ -793,7 +829,15 @@ def run(
         "ttl_seconds": 300,
         "dev_role_ref": dev_role_ref,
         "dev_identity_switch": dev_identity_switch,
-        "scene_context": detect_scene_context(text, dev_role_ref=dev_role_ref, dev_identity_switch=dev_identity_switch),
+        "authenticated_role_ref": authenticated_role_ref,
+        "signed_identity_packet_ref": signed_identity_packet_ref,
+        "scene_context": detect_scene_context(
+            text,
+            dev_role_ref=dev_role_ref,
+            dev_identity_switch=dev_identity_switch,
+            authenticated_role_ref=authenticated_role_ref,
+            signed_identity_packet_ref=signed_identity_packet_ref,
+        ),
     }
     packet_chain = []
     verifier_results = []
@@ -838,6 +882,8 @@ def main() -> int:
     parser.add_argument("--channel", default="counter_voice")
     parser.add_argument("--dev-role-ref", default="")
     parser.add_argument("--dev-identity-switch", action="store_true")
+    parser.add_argument("--authenticated-role-ref", default="")
+    parser.add_argument("--signed-identity-packet-ref", default="")
     args = parser.parse_args()
 
     data = run(
@@ -847,6 +893,8 @@ def main() -> int:
         channel=args.channel,
         dev_role_ref=args.dev_role_ref,
         dev_identity_switch=args.dev_identity_switch,
+        authenticated_role_ref=args.authenticated_role_ref,
+        signed_identity_packet_ref=args.signed_identity_packet_ref,
     )
     rendered = json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True)
     print(rendered)

@@ -141,7 +141,9 @@ def template_refine(request_packet: dict[str, Any]) -> str:
         draft = "目前總場已收到請求，但需要先完成 verifier 檢查。"
 
     if dev_override.get("enabled") is True:
-        return "目前使用開發期 dev role_ref 進行身分脈絡切換；這只代表本地開發參照已核對，不代表 production 身分授權。總場仍維持 verifier 決策、no plaintext、no DB write 與 candidate-only 模型邊界。"
+        return "已偵測本機開發者設備，可進入本機工程對話；這不等同於自然人身分驗證，仍不會讀取 secret、會員明文、付款或部署。總場仍維持 verifier 決策、no DB write 與 candidate-only 模型邊界。"
+    if scene_type == "VERIFIED_FOUNDER_ROLE":
+        return draft if "總場" in draft else "已收到已驗證 role_ref / signed identity packet 的總場工程脈絡；仍維持 no secret、no plaintext、no payment、no production deploy without explicit packet。"
     if scene_type == "CLAIMED_FOUNDER_CONTEXT":
         return "我收到你的身分聲明，但不會直接視為已驗證。若有登入狀態、role_ref 或 8D 身分封包，總場可用去識別方式確認可用權限。"
     if intent == "claimed_founder_identity":

@@ -14,6 +14,9 @@
       "safety_flags",
       "identity_state",
       "semantic_ir.scene_context.dev_identity_override",
+      "semantic_ir.scene_context.device_trust",
+      "semantic_ir.scene_context.identity_verified",
+      "semantic_ir.scene_context.accepted_as_person_identity",
       "public_context_only"
     ]
   },
@@ -39,6 +42,7 @@
     "No member plaintext read",
     "No verifier decision change",
     "No trusted identity from user self-claim",
-    "Dev identity override is local-development role_ref only and has no production authority"
+    "Dev identity override is DEV_DEVICE_CONTEXT only and has no production authority",
+    "VERIFIED_FOUNDER_ROLE requires authenticated role_ref or signed identity packet"
   ]
 }

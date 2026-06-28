@@ -127,9 +127,11 @@ allowed_scope
 forbidden_scope
 ```
 
-Supported context types are `STORE_CONTEXT`, `PROPERTY_CONTEXT`, `ASSOCIATION_CONTEXT`, `FOUNDER_CONTEXT`, `CLAIMED_FOUNDER_CONTEXT`, `GENERAL_CHAT_CONTEXT`, and `UNKNOWN_CONTEXT`. A founder self-claim is displayed only as `CLAIMED_FOUNDER_CONTEXT`, with `accepted_as_truth=false`.
+Supported context types are `STORE_CONTEXT`, `PROPERTY_CONTEXT`, `ASSOCIATION_CONTEXT`, `FOUNDER_CONTEXT`, `CLAIMED_FOUNDER_CONTEXT`, `DEV_DEVICE_CONTEXT`, `VERIFIED_FOUNDER_ROLE`, `GENERAL_CHAT_CONTEXT`, and `UNKNOWN_CONTEXT`. A founder self-claim is displayed only as `CLAIMED_FOUNDER_CONTEXT`, with `accepted_as_truth=false`.
 
-For local development, the cockpit may pass an explicit dev role ref, for example `role_ref:dev:founder_maintainer`, with `dev_identity_switch=true`. This allows developers to switch context while still making identity verification explicit. It is not production authority and does not allow DB read, member plaintext read, payment capture, deployment, or verifier bypass.
+For local development, the cockpit may pass an explicit dev device role ref, for example `role_ref:dev:founder_maintainer`, with `dev_identity_switch=true`. This produces `DEV_DEVICE_CONTEXT`, where `device_trust=true`, `identity_verified=false`, and `accepted_as_person_identity=false`. It is not `VERIFIED_FOUNDER_ROLE`, not production authority, and does not allow DB read, member plaintext read, payment capture, deployment, or verifier bypass.
+
+Only an authenticated role ref or signed identity packet can produce `VERIFIED_FOUNDER_ROLE`.
 
 ## Local Start Command
 

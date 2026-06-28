@@ -91,20 +91,25 @@ The runtime emits `scene_context` in packet state and `semantic_ir`:
 
 ```json
 {
-  "context_type": "STORE_CONTEXT|PROPERTY_CONTEXT|ASSOCIATION_CONTEXT|FOUNDER_CONTEXT|CLAIMED_FOUNDER_CONTEXT|GENERAL_CHAT_CONTEXT|UNKNOWN_CONTEXT",
+  "context_type": "STORE_CONTEXT|PROPERTY_CONTEXT|ASSOCIATION_CONTEXT|FOUNDER_CONTEXT|CLAIMED_FOUNDER_CONTEXT|DEV_DEVICE_CONTEXT|VERIFIED_FOUNDER_ROLE|GENERAL_CHAT_CONTEXT|UNKNOWN_CONTEXT",
   "confidence_level": "L1|L2|L3",
   "accepted_as_truth": false,
+  "device_trust": false,
+  "identity_verified": false,
+  "accepted_as_person_identity": false,
   "requires_role_verification": false,
   "allowed_scope": [],
   "forbidden_scope": []
 }
 ```
 
-Scene context is a routing hint and safety boundary, not identity proof. `CLAIMED_FOUNDER_CONTEXT` always keeps `accepted_as_truth=false`, requires role verification, and forbids `grant_role_without_verification`.
+Scene context is a routing hint and safety boundary, not identity proof. `CLAIMED_FOUNDER_CONTEXT` always keeps `accepted_as_truth=false`, `identity_verified=false`, `accepted_as_person_identity=false`, requires role verification, and forbids `grant_role_without_verification`.
 
 Store/POS, property, association, founder/architecture, general chat, and unknown contexts each carry explicit allowed and forbidden scopes. The verifier remains final authority.
 
-During local development, a developer may explicitly switch context with a dev-only `role_ref`, such as `role_ref:dev:founder_maintainer`. This is represented as `dev_identity_override` inside `scene_context`. It is a local development verification reference only: it does not read DB records, does not read member plaintext, does not grant production authority, and does not make a user self-claim true.
+During local development, a developer may explicitly switch context with a dev-only local device reference, such as `role_ref:dev:founder_maintainer`. This produces `DEV_DEVICE_CONTEXT`, not `VERIFIED_FOUNDER_ROLE`. It means `device_trust=true`, `identity_verified=false`, and `accepted_as_person_identity=false`.
+
+Only an authenticated role ref such as `role_ref:verified:founder` or a signed identity packet can produce `VERIFIED_FOUNDER_ROLE` with `identity_verified=true`. Dev device context does not read DB records, does not read member plaintext, does not grant production authority, and does not make a user self-claim true.
 
 ## Model Candidate Lane
 

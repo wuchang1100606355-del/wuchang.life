@@ -332,7 +332,16 @@ def fallback_response(text: str, reason: str) -> dict[str, Any]:
     }
 
 
-def run_runtime(text: str, branch: str, actor_role: str, channel: str, dev_role_ref: str = "", dev_identity_switch: bool = False) -> dict[str, Any]:
+def run_runtime(
+    text: str,
+    branch: str,
+    actor_role: str,
+    channel: str,
+    dev_role_ref: str = "",
+    dev_identity_switch: bool = False,
+    authenticated_role_ref: str = "",
+    signed_identity_packet_ref: str = "",
+) -> dict[str, Any]:
     if not RUNTIME.exists():
         return fallback_response(text, "runtime file missing")
 
@@ -349,6 +358,8 @@ def run_runtime(text: str, branch: str, actor_role: str, channel: str, dev_role_
             "--channel",
             channel,
             *(["--dev-role-ref", dev_role_ref, "--dev-identity-switch"] if dev_identity_switch and dev_role_ref else []),
+            *(["--authenticated-role-ref", authenticated_role_ref] if authenticated_role_ref else []),
+            *(["--signed-identity-packet-ref", signed_identity_packet_ref] if signed_identity_packet_ref else []),
         ],
         ["python3", str(RUNTIME), "--text", text],
     ]
@@ -429,10 +440,21 @@ class CockpitHandler(BaseHTTPRequestHandler):
             channel = str(body.get("channel", "web_cockpit"))
             dev_role_ref = str(body.get("dev_role_ref", ""))
             dev_identity_switch = bool(body.get("dev_identity_switch", False))
+            authenticated_role_ref = str(body.get("authenticated_role_ref", ""))
+            signed_identity_packet_ref = str(body.get("signed_identity_packet_ref", ""))
             if not text:
                 return safe_json_response(self, 400, {"STATE": "HOLD_EMPTY_TEXT"})
 
-            result = run_runtime(text, branch, actor_role, channel, dev_role_ref=dev_role_ref, dev_identity_switch=dev_identity_switch)
+            result = run_runtime(
+                text,
+                branch,
+                actor_role,
+                channel,
+                dev_role_ref=dev_role_ref,
+                dev_identity_switch=dev_identity_switch,
+                authenticated_role_ref=authenticated_role_ref,
+                signed_identity_packet_ref=signed_identity_packet_ref,
+            )
             RUN_ROOT.mkdir(parents=True, exist_ok=True)
             run_file = RUN_ROOT / f"chat_{int(time.time())}_{uuid.uuid4().hex[:8]}.json"
             audit = dict(result)

@@ -81,7 +81,7 @@ GENERAL_CHAT_CONTEXT: natural companionship tone
 
 This tone routing remains candidate-only and cannot grant scope, verify identity, or change the verifier decision.
 
-If `scene_context.dev_identity_override.enabled=true`, the PR layer may explain that a local development `role_ref` was provided. It must also preserve that the override is local-dev only, does not grant production authority, and does not allow member plaintext, DB writes, payment, or verifier bypass.
+If `scene_context.dev_identity_override.enabled=true`, the PR layer may explain that a trusted local developer device was detected. It must also preserve that this is `DEV_DEVICE_CONTEXT`, not `VERIFIED_FOUNDER_ROLE`; it does not verify natural-person identity, does not grant production authority, and does not allow secret reads, member plaintext, DB writes, payment, deployment, or verifier bypass.
 
 ## Verification
 

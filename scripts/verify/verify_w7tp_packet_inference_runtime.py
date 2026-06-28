@@ -124,10 +124,24 @@ def main() -> int:
         dev_identity_switch=True,
     )
     dev_scene = scene_context(dev_founder)
-    check(dev_scene["context_type"] == "FOUNDER_CONTEXT", "DEV_IDENTITY_FOUNDER_CONTEXT")
-    check(dev_scene["accepted_as_truth"] is True, "DEV_IDENTITY_ACCEPTED_BY_ROLE_REF")
+    check(dev_scene["context_type"] == "DEV_DEVICE_CONTEXT", "DEV_DEVICE_CONTEXT")
+    check(dev_scene["device_trust"] is True, "DEV_DEVICE_TRUST_TRUE")
+    check(dev_scene["identity_verified"] is False, "DEV_IDENTITY_VERIFIED_FALSE")
+    check(dev_scene["accepted_as_person_identity"] is False, "DEV_PERSON_IDENTITY_FALSE")
+    check("architecture_discussion" in dev_scene["allowed_scope"], "DEV_LOCAL_ENGINEERING_ALLOWED")
+    for forbidden in ["secret_read", "member_plaintext_read", "payment_capture", "production_deploy_without_explicit_packet", "grant_identity_role"]:
+        check(forbidden in dev_scene["forbidden_scope"], f"DEV_FORBIDS_{forbidden}")
     check(dev_scene["dev_identity_override"]["production_authority"] is False, "DEV_IDENTITY_NO_PRODUCTION_AUTHORITY")
     check(dev_scene["dev_identity_override"]["plaintext_access"] is False, "DEV_IDENTITY_NO_PLAINTEXT")
+    verified_founder = run(
+        "生成式傳輸跟封包推理下一步怎麼開發",
+        channel="verify_founder_role",
+        authenticated_role_ref="role_ref:verified:founder",
+    )
+    verified_scene = scene_context(verified_founder)
+    check(verified_scene["context_type"] == "VERIFIED_FOUNDER_ROLE", "VERIFIED_FOUNDER_ROLE_CONTEXT")
+    check(verified_scene["identity_verified"] is True, "VERIFIED_FOUNDER_IDENTITY_TRUE")
+    check(verified_scene["accepted_as_person_identity"] is True, "VERIFIED_FOUNDER_PERSON_TRUE")
 
     run_id = time.strftime("%Y%m%d_%H%M%S")
     report_dir = ROOT / "runtime" / "total_field" / "packet_inference" / run_id

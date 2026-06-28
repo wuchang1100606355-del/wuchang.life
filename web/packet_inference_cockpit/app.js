@@ -54,11 +54,15 @@ function renderSceneContext(scene) {
   const box = el("sceneContextBox");
   const data = scene || {};
   el("sceneContextStatus").textContent = data.context_type || "UNKNOWN_CONTEXT";
+  el("identityVerifiedStatus").textContent = data.identity_verified === true ? "TRUE" : "FALSE";
   box.innerHTML = "";
   [
     ["context_type", data.context_type || "UNKNOWN_CONTEXT"],
     ["confidence_level", data.confidence_level || "L1"],
     ["accepted_as_truth", data.accepted_as_truth === true],
+    ["device_trust", data.device_trust === true],
+    ["identity_verified", data.identity_verified === true],
+    ["accepted_as_person_identity", data.accepted_as_person_identity === true],
     ["requires_role_verification", data.requires_role_verification === true],
     ["dev_identity_override", data.dev_identity_override?.enabled === true ? data.dev_identity_override.role_ref : "off"],
     ["allowed_scope", (data.allowed_scope || []).join(", ") || "N/A"],

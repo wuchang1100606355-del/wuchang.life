@@ -155,10 +155,23 @@ def main() -> int:
         dev_identity_switch=True,
     )
     dev_scene = scene_context(dev_founder)
-    check(dev_scene.get("context_type") == "FOUNDER_CONTEXT", "COCKPIT_DEV_FOUNDER_CONTEXT")
-    check(dev_scene.get("accepted_as_truth") is True, "COCKPIT_DEV_ACCEPTED_BY_ROLE_REF")
+    check(dev_scene.get("context_type") == "DEV_DEVICE_CONTEXT", "COCKPIT_DEV_DEVICE_CONTEXT")
+    check(dev_scene.get("device_trust") is True, "COCKPIT_DEV_DEVICE_TRUST_TRUE")
+    check(dev_scene.get("identity_verified") is False, "COCKPIT_DEV_IDENTITY_VERIFIED_FALSE")
+    check(dev_scene.get("accepted_as_person_identity") is False, "COCKPIT_DEV_PERSON_IDENTITY_FALSE")
+    check("grant_identity_role" in dev_scene.get("forbidden_scope", []), "COCKPIT_DEV_GRANT_IDENTITY_ROLE_FORBIDDEN")
     check(dev_scene.get("dev_identity_override", {}).get("production_authority") is False, "COCKPIT_DEV_NO_PRODUCTION_AUTHORITY")
     check(dev_founder.get("PR_LAYER", {}).get("decision_locked") is True, "COCKPIT_DEV_PR_DECISION_LOCKED")
+    verified_founder = run_runtime(
+        "生成式傳輸跟封包推理下一步怎麼開發",
+        "cafe_main",
+        "counter_ai",
+        "web_cockpit",
+        authenticated_role_ref="role_ref:verified:founder",
+    )
+    verified_scene = scene_context(verified_founder)
+    check(verified_scene.get("context_type") == "VERIFIED_FOUNDER_ROLE", "COCKPIT_VERIFIED_FOUNDER_ROLE")
+    check(verified_scene.get("identity_verified") is True, "COCKPIT_VERIFIED_IDENTITY_TRUE")
 
     run_id = time.strftime("%Y%m%d_%H%M%S")
     report_dir = RUN_ROOT / run_id
