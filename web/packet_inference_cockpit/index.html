@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>W7TP Total Field AI Cockpit</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="title-block">
+        <div class="eyebrow">W7TP Total Field</div>
+        <h1>W7TP Total Field AI Cockpit</h1>
+        <p>總場封包推理 AI 控制台</p>
+      </div>
+      <div class="status-grid">
+        <span id="healthBadge" class="badge badge-blue">HEALTH CHECK</span>
+        <span class="badge badge-green">Lookup Lane ACTIVE</span>
+        <span class="badge badge-gray">Model Lane OFF</span>
+        <span class="badge badge-amber">Verifier TOTAL_FIELD</span>
+      </div>
+    </header>
+
+    <section class="lane-strip" aria-label="dual lane status">
+      <div><b>Model Lane</b><span>OFF / CANDIDATE_ONLY</span></div>
+      <div><b>Lookup Lane</b><span>ACTIVE</span></div>
+      <div><b>External API</b><span>FALSE</span></div>
+      <div><b>DB_WRITE</b><span>FALSE</span></div>
+      <div><b>PAYMENT_CAPTURE</b><span>FALSE</span></div>
+      <div><b>MEMBER_PLAINTEXT_READ</b><span>FALSE</span></div>
+    </section>
+
+    <section class="layout">
+      <section class="panel chat-panel">
+        <div class="panel-head">
+          <h2>自然語言對話</h2>
+          <span>8D input packet</span>
+        </div>
+        <div id="demoButtons" class="demo-buttons"></div>
+        <textarea id="inputText" rows="5" placeholder="輸入一句話，例如：我今天有點累，想喝不太苦的，幫我推薦"></textarea>
+        <div class="form-row">
+          <label>Branch<input id="branch" value="cafe_main"></label>
+          <label>Actor<input id="actorRole" value="counter_ai"></label>
+          <label>Channel<input id="channel" value="web_cockpit"></label>
+        </div>
+        <button id="runBtn">RUN PACKET INFERENCE</button>
+        <div id="chatLog" class="chat-log"></div>
+      </section>
+
+      <section class="panel output-panel">
+        <div class="panel-head">
+          <h2>總場回應</h2>
+          <span>template renderer</span>
+        </div>
+        <div id="decisionBadge" class="decision">WAITING</div>
+        <div id="answerText" class="answer">尚未執行。</div>
+        <h3>Verifier Decision</h3>
+        <pre id="verifierBox">{}</pre>
+      </section>
+
+      <section class="panel timeline-panel">
+        <div class="panel-head">
+          <h2>Packet Chain Timeline</h2>
+          <span>packet-by-packet inference</span>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+
+      <section class="panel inspector-panel">
+        <div class="panel-head">
+          <h2>8D Packet Inspector</h2>
+          <span>D1-D8</span>
+        </div>
+        <div id="inspectorTabs" class="inspector-tabs"></div>
+        <pre id="packetInspector">{}</pre>
+      </section>
+
+      <section class="panel semantic-panel">
+        <div class="panel-head">
+          <h2>Semantic IR / Reconstruction</h2>
+          <span>semantic_ir + slot filling</span>
+        </div>
+        <pre id="semanticBox">{}</pre>
+      </section>
+
+      <section class="panel safety-panel">
+        <div class="panel-head">
+          <h2>Safety Flags</h2>
+          <span>hard limits</span>
+        </div>
+        <div id="safetyFlags" class="flags"></div>
+      </section>
+
+      <section class="panel evidence-panel">
+        <div class="panel-head">
+          <h2>Evidence / Hash / Seal</h2>
+          <span>refs only</span>
+        </div>
+        <pre id="evidenceBox">{}</pre>
+      </section>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
