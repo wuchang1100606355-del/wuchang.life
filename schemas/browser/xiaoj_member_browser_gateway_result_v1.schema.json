@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/browser/xiaoj_member_browser_gateway_result_v1.schema.json",
+  "title": "XiaoJ Member Browser Gateway Result V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "state",
+    "candidate_only",
+    "requires_total_field_verify",
+    "member_plaintext_transferred",
+    "secret_transferred",
+    "raw_audio_saved",
+    "gateway_ref",
+    "action_packet",
+    "browser_bridge_result",
+    "browser_bridge_return_packet",
+    "cloud_candidate_return_packet",
+    "association_usage_admission_packet",
+    "safety_flags"
+  ],
+  "properties": {
+    "schema_version": { "const": "xiaoj.member_browser_gateway_result.v1" },
+    "packet_type": { "const": "XIAOJ_MEMBER_BROWSER_GATEWAY_RESULT" },
+    "state": { "enum": ["CANDIDATE_READY", "HOLD", "BLOCK"] },
+    "candidate_only": { "const": true },
+    "requires_total_field_verify": { "const": true },
+    "member_plaintext_transferred": { "const": false },
+    "secret_transferred": { "const": false },
+    "raw_audio_saved": { "const": false },
+    "gateway_ref": { "type": "string", "pattern": "^gateway_ref:[A-Za-z0-9_./:-]+$" },
+    "action_packet": { "type": "object" },
+    "browser_bridge_result": { "type": "object" },
+    "browser_bridge_return_packet": { "type": "object" },
+    "cloud_candidate_return_packet": { "type": "object" },
+    "association_usage_admission_packet": { "type": "object" },
+    "safety_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "SECRET_READ",
+        "MEMBER_PLAINTEXT_READ",
+        "RAW_AUDIO_SAVED",
+        "DB_WRITE",
+        "PAYMENT_CAPTURE",
+        "SERVICE_RESTART",
+        "DEPLOY"
+      ],
+      "properties": {
+        "SECRET_READ": { "const": false },
+        "MEMBER_PLAINTEXT_READ": { "const": false },
+        "RAW_AUDIO_SAVED": { "const": false },
+        "DB_WRITE": { "const": false },
+        "PAYMENT_CAPTURE": { "const": false },
+        "SERVICE_RESTART": { "const": false },
+        "DEPLOY": { "const": false }
+      }
+    }
+  }
+}

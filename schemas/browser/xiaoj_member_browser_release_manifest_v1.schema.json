@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/browser/xiaoj_member_browser_release_manifest_v1.schema.json",
+  "title": "XiaoJ Member Browser Release Manifest V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "release_id",
+    "created_at",
+    "product_name",
+    "scope",
+    "state",
+    "packages",
+    "included_sources",
+    "safety_flags",
+    "browser_boundary",
+    "verification"
+  ],
+  "properties": {
+    "schema_version": { "const": "xiaoj.member_browser_release_manifest.v1" },
+    "release_id": { "type": "string", "pattern": "^XIAOJ_MEMBER_BROWSER_[0-9]{8}_[0-9]{6}_[A-Fa-f0-9]{8}$" },
+    "created_at": { "type": "string" },
+    "product_name": { "const": "小J會員主權 AI 瀏覽器座艙" },
+    "scope": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 3
+    },
+    "state": { "enum": ["PACKAGED", "VERIFY_PASS"] },
+    "packages": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "path", "sha256", "bytes"],
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "bytes": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "included_sources": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "bytes"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "bytes": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "safety_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "SECRET_READ",
+        "MEMBER_PLAINTEXT_READ",
+        "RAW_AUDIO_SAVED",
+        "DB_WRITE",
+        "PAYMENT_CAPTURE",
+        "SERVICE_RESTART",
+        "DEPLOY"
+      ],
+      "properties": {
+        "SECRET_READ": { "const": false },
+        "MEMBER_PLAINTEXT_READ": { "const": false },
+        "RAW_AUDIO_SAVED": { "const": false },
+        "DB_WRITE": { "const": false },
+        "PAYMENT_CAPTURE": { "const": false },
+        "SERVICE_RESTART": { "const": false },
+        "DEPLOY": { "const": false }
+      }
+    },
+    "browser_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_actions", "blocked_actions", "host_permissions", "cookie_permission"],
+      "properties": {
+        "allowed_actions": {
+          "type": "array",
+          "items": { "enum": ["open_sidebar_ref", "read_text_ref", "write_draft_ref"] },
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true
+        },
+        "blocked_actions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 5
+        },
+        "host_permissions": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "cookie_permission": { "const": false }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cockpit_verifier", "release_manifest_schema", "sha256_manifest", "hard_scan"],
+      "properties": {
+        "cockpit_verifier": { "enum": ["PASS"] },
+        "release_manifest_schema": { "enum": ["PASS"] },
+        "sha256_manifest": { "enum": ["PASS"] },
+        "hard_scan": { "enum": ["PASS"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小J瀏覽器橋</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <main class="panel">
+    <header class="hero">
+      <div class="mark">J</div>
+      <div>
+        <h1>小J瀏覽器橋</h1>
+        <p>8D 候選動作，本地最小權限執行</p>
+      </div>
+    </header>
+
+    <section class="statusGrid" aria-label="安全狀態">
+      <div><span>上下文</span><strong>ref-only</strong></div>
+      <div><span>提交</span><strong>forbidden</strong></div>
+      <div><span>雲端</span><strong>candidate</strong></div>
+      <div><span>准駁</span><strong id="decisionText">WAIT</strong></div>
+    </section>
+
+    <section class="fieldGroup" aria-label="候選動作">
+      <label for="intentText">會員需求</label>
+      <textarea id="intentText" rows="4">請讀取我目前選取的文字，產生無敏摘要候選。</textarea>
+      <label for="actionType">動作</label>
+      <select id="actionType">
+        <option value="read_text_ref">讀取選取文字 ref</option>
+        <option value="open_sidebar_ref">開啟小J側邊欄</option>
+        <option value="write_draft_ref">寫入草稿 ref</option>
+        <option value="create_order_draft_ref">測試：訂單草稿阻擋</option>
+        <option value="submit_payment">測試：付款阻擋</option>
+      </select>
+      <label for="draftText">草稿預覽，需人工確認後才可寫入</label>
+      <textarea id="draftText" rows="3">這是一段小J草稿，請會員確認後再貼入目前欄位。</textarea>
+      <label class="checkLine">
+        <input id="humanConfirmed" type="checkbox">
+        會員已確認寫入草稿
+      </label>
+      <label class="checkLine">
+        <input id="useNativeGateway" type="checkbox" checked>
+        優先使用本機總場 gateway
+      </label>
+      <button id="runBtn" type="button">送入瀏覽器橋</button>
+    </section>
+
+    <section class="outputGroup" aria-label="執行結果">
+      <h2>Bridge Result</h2>
+      <pre id="resultOut">尚未執行</pre>
+      <h2>8D Packet</h2>
+      <pre id="packetOut">尚未產生</pre>
+    </section>
+  </main>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

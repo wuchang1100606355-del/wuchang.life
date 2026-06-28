@@ -1,0 +1,459 @@
+{
+  "action_packet": {
+    "D1_identity": {
+      "actor_ref": "actor_ref:member_browser_gateway:demo_member",
+      "actor_type": "member",
+      "device_ref": "device_ref:member_browser_gateway:demo_device",
+      "plaintext_identity_forbidden": true,
+      "role": "member_role_ref"
+    },
+    "D2_intent": {
+      "primary_intent": "intent_ref:1f72f09916b9ddbc",
+      "risk_level": "low",
+      "secondary_intent": "redacted_ref:gateway_example",
+      "transaction_intent": "browse"
+    },
+    "D3_state": {
+      "browser_state": "dry_run",
+      "context_mode": "ref_only",
+      "order_state": "none",
+      "session_state": "active",
+      "task_state": "dry_run"
+    },
+    "D4_topology": {
+      "channel": "browser_action_bus",
+      "device_topology": "member_browser_to_total_field",
+      "origin_scope": "member_owned",
+      "site_ref": "site_ref:xiaoj_member_browser_gateway"
+    },
+    "D5_resource": {
+      "api_refs": [
+        "api_ref:member_browser_gateway:local_1b"
+      ],
+      "cache_policy": "ref_cache_only",
+      "cost_policy": "budget_cap_ref",
+      "key_policy": "hybrid_ref_only",
+      "model_tier": "small",
+      "selected_key_ref": "key_ref:member_browser_gateway:broker_default"
+    },
+    "D6_governance": {
+      "allowed_actions": [
+        "ask_human_confirm",
+        "broker_api_call_ref",
+        "cache_lookup_ref",
+        "click_ref",
+        "close_sidebar_ref",
+        "create_order_draft_ref",
+        "extract_ref",
+        "fill_ref",
+        "handoff_to_human",
+        "navigate_ref",
+        "notify_staff_ref",
+        "open_sidebar_ref",
+        "queue_service_ref",
+        "read_context_ref",
+        "read_menu_ref",
+        "read_text_ref",
+        "render_sidebar_ref",
+        "route_to_connector_ref",
+        "screenshot_ref",
+        "select_ref",
+        "wait_ref",
+        "write_draft_ref"
+      ],
+      "forbidden_actions": [
+        "login_with_plaintext",
+        "submit_payment",
+        "submit_order_without_human",
+        "read_raw_cookie",
+        "read_raw_local_storage",
+        "write_database",
+        "router_change",
+        "tailscale_change",
+        "dns_change",
+        "service_restart",
+        "docker_restart",
+        "systemctl_restart"
+      ],
+      "human_confirm_required": false,
+      "no_plaintext_context": true,
+      "staff_confirm_required": false
+    },
+    "D7_verification": {
+      "action_allowlist_required": true,
+      "leak_check_required": true,
+      "redaction_check_required": true,
+      "response_verify_required": true,
+      "usage_log_required": true
+    },
+    "D8_envelope": {
+      "content_hash": "69a8cc1972d0dd77bf4f8c90d72a26f5ad86af62bcf5546165139e524ae61c3f",
+      "counter": 1,
+      "created_at": "2026-06-27T10:42:45.714363+00:00",
+      "hmac_ref": "hmac_ref:xiaoj_member_browser_1b:verifier_required",
+      "nonce": "nonce_ref:46136713b3764be28a3de9d28fa1525f",
+      "packet_ref": "packet_ref:xiaoj_member_browser_1b:107a8f849e944d3f",
+      "replay_protection": true,
+      "schema_version": "8d.packet.v1",
+      "signature_ref": "signature_ref:xiaoj_member_browser_1b:verifier_required",
+      "ttl_seconds": 300
+    },
+    "browser_action": {
+      "action_ref": "action_ref:xiaoj_member_browser_1b:febddc29dc6045da",
+      "action_type": "read_text_ref",
+      "dry_run": true,
+      "params": {
+        "behavior_info_ref": "behavior_ref:90dcbdb548db7d44",
+        "benefit_ref": "benefit_ref:community_ai_member_daily",
+        "boundary_hits_ref": "risk_ref:140bedbf9c3f6d56",
+        "candidate_only": true,
+        "cloud_candidate_only": true,
+        "cloud_compute_ref": "cloud_compute_ref:local_gateway_safe_stub",
+        "controller_ref": "controller_ref:xiaoj_member_browser_1b",
+        "generative_transmission_ref": "gt_ref:w7tp_member_browser_gateway_no_plaintext",
+        "intent_ref": "intent_ref:1f72f09916b9ddbc",
+        "management_fee_bill_ref": "management_fee_bill_ref:none",
+        "member_preference_ref": "preference_ref:member:concise",
+        "odoo_connector_mode": "ref_only_no_db",
+        "odoo_function_item_refs_csv": "odoo_function_ref:resident.notice_read,odoo_function_ref:resident.activity_query,odoo_function_ref:resident.activity_rsvp_candidate,odoo_function_ref:resident.benefit_masked_read,odoo_function_ref:resident.management_fee_masked_read,odoo_function_ref:resident.management_fee_payment_intent_candidate,odoo_function_ref:resident.service_request_draft,odoo_function_ref:resident.personal_status_masked",
+        "odoo_function_item_set_ref": "odoo_function_item_set_ref:dd2d1248caedef3c",
+        "odoo_function_scope_ref": "odoo_function_scope_ref:member_daily",
+        "odoo_identity_ref": "odoo_identity_ref:gateway_demo_member",
+        "odoo_member_plaintext_read": false,
+        "odoo_permission_bucket_ref": "odoo_permission_bucket_ref:resident_readonly",
+        "odoo_role_ref": "odoo_role_ref:resident",
+        "odoo_write_authority": false,
+        "payment_amount_bucket_ref": "payment_amount_bucket_ref:not_requested",
+        "payment_capture_authority": false,
+        "payment_data_transferred": false,
+        "payment_intent_ref": "payment_intent_ref:d45d7f53e4a252ca",
+        "payment_tool_ref": "payment_tool_ref:member_selected_external_tool",
+        "public_activity_cache_ref": "public_activity_cache_ref:none",
+        "quota_bucket_ref": "quota_bucket_ref:member_browser_gateway:daily",
+        "requires_total_field_verify": true,
+        "return_packet_schema": "w7tp.cloud_candidate_return_packet.v1",
+        "safe_context_ref": "redacted_ref:gateway_example",
+        "service_style_ref": "service_style_ref:community_xiaoj_warm_daily"
+      },
+      "submit_forbidden": true,
+      "target_ref": "target_ref:ea555e07a6e251eb"
+    },
+    "packet_type": "xiaoj_8d_action_packet"
+  },
+  "association_usage_admission_packet": {
+    "D1_identity": {
+      "association_ref": "association_ref:wuchang_community_governance",
+      "device_ref": "device_ref:member_browser_gateway:demo_device",
+      "member_ref": "actor_ref:member_browser_gateway:demo_member",
+      "plaintext_identity_forbidden": true
+    },
+    "D2_intent": {
+      "action_type_ref": "action_type_ref:59a21ed3eb0d2c87",
+      "consent_scope_ref": "consent_scope_ref:4e12a8d3904f3a42",
+      "intent_ref": "intent_ref:1f72f09916b9ddbc",
+      "service_scope_ref": "service_style_ref:community_xiaoj_warm_daily"
+    },
+    "D3_state": {
+      "benefit_ref": "benefit_ref:community_ai_member_daily",
+      "cloud_candidate_state": "CANDIDATE_READY",
+      "gateway_state": "CANDIDATE_READY",
+      "management_fee_bill_ref": "management_fee_bill_ref:none",
+      "odoo_function_item_set_ref": "odoo_function_item_set_ref:dd2d1248caedef3c",
+      "odoo_function_scope_ref": "odoo_function_scope_ref:member_daily",
+      "odoo_identity_ref": "odoo_identity_ref:gateway_demo_member",
+      "odoo_permission_bucket_ref": "odoo_permission_bucket_ref:resident_readonly",
+      "odoo_role_ref": "odoo_role_ref:resident",
+      "payment_amount_bucket_ref": "payment_amount_bucket_ref:not_requested",
+      "payment_intent_ref": "payment_intent_ref:d45d7f53e4a252ca",
+      "payment_tool_ref": "payment_tool_ref:member_selected_external_tool",
+      "quota_bucket_ref": "quota_bucket_ref:member_browser_gateway:daily",
+      "ttl_seconds": 300
+    },
+    "D4_evidence": {
+      "action_trace_ref": "ACTION_TRACE_REF:b2546302651d8f0a",
+      "behavior_info_ref": "BEHAVIOR_INFO_REF:550106b8c394ea28",
+      "browser_return_packet_hash": "return_packet_hash:912ef988103e3b6c",
+      "cloud_compute_ref": "CLOUD_COMPUTE_REF:5efe273a4ef8645c",
+      "cloud_return_packet_hash": "8be31559862010ca8e65c8a8dd4b50ccc224ffd877f95b4cee1ec7330e9e974c",
+      "compute_cost_bucket_ref": "COMPUTE_COST_BUCKET_REF:c02be63afee313bf",
+      "compute_provider_ref": "CLOUD_PROVIDER_REF:SAFE_LOCAL_STUB",
+      "gateway_ref": "gateway_ref:3190e11b6f92312a",
+      "member_tendency_ref": "MEMBER_TENDENCY_REF:0e479cfc704c9646",
+      "odoo_function_item_refs": [
+        "odoo_function_ref:resident.notice_read",
+        "odoo_function_ref:resident.activity_query",
+        "odoo_function_ref:resident.activity_rsvp_candidate",
+        "odoo_function_ref:resident.benefit_masked_read",
+        "odoo_function_ref:resident.management_fee_masked_read",
+        "odoo_function_ref:resident.management_fee_payment_intent_candidate",
+        "odoo_function_ref:resident.service_request_draft",
+        "odoo_function_ref:resident.personal_status_masked"
+      ],
+      "source_packet_hash": "69a8cc1972d0dd77bf4f8c90d72a26f5ad86af62bcf5546165139e524ae61c3f"
+    },
+    "D5_execution": {
+      "admission_decision": "ALLOW",
+      "allowed_next_actions": [
+        "present_candidate_to_member",
+        "ask_member_confirm",
+        "route_to_total_field_verifier"
+      ],
+      "execution_allowed": false,
+      "forbidden_actions": [
+        "member_plaintext_read",
+        "secret_read",
+        "raw_api_key_read",
+        "oauth_token_read",
+        "raw_browser_page_read",
+        "db_write",
+        "odoo_db_write",
+        "pos_write",
+        "payment_capture",
+        "deploy",
+        "service_restart"
+      ],
+      "human_confirm_required": false,
+      "odoo_member_plaintext_read": false,
+      "odoo_write_authority": false,
+      "payment_capture_authority": false,
+      "payment_data_transferred": false
+    },
+    "D6_generative_transmission": {
+      "cloud_candidate_only": true,
+      "member_plaintext_transferred": false,
+      "no_plaintext_context": true,
+      "reconstruction_hint_ref": "RECONSTRUCT_REF:304021f9410acbca",
+      "return_mode": "association_no_plaintext_usage_admission",
+      "secret_transferred": false
+    },
+    "D7_risk": {
+      "block_required": false,
+      "hold_required": false,
+      "legal_review_required": false,
+      "risk_flags": [
+        "candidate_ready"
+      ]
+    },
+    "D8_envelope": {
+      "created_at": "2026-06-27T10:42:45.714363+00:00",
+      "nonce": "nonce_ref:fc01e9fcaa814417a8a8e5e78ae71059",
+      "packet_hash": "admission_packet_hash:317866b001367c18",
+      "replay_protection": true,
+      "total_field_verifier_required": true,
+      "ttl_seconds": 300
+    },
+    "admission_packet_id": "ADM_44def6ec259445d3b310fb448702ce3b",
+    "candidate_only": true,
+    "execution_allowed": false,
+    "member_plaintext_transferred": false,
+    "oauth_token_transferred": false,
+    "packet_type": "ASSOCIATION_USAGE_ADMISSION_PACKET",
+    "raw_api_key_transferred": false,
+    "raw_audio_saved": false,
+    "raw_browser_page_transferred": false,
+    "requires_total_field_verify": true,
+    "schema_version": "xiaoj.association_usage_admission_packet.v1",
+    "secret_transferred": false
+  },
+  "browser_bridge_result": {
+    "action_type": "read_text_ref",
+    "browser_result_ref": "browser_result_ref:e1ddf15e82303c8e",
+    "candidate_only": true,
+    "decision": "ALLOW_LOCAL_MINIMUM_PRIVILEGE",
+    "execution_allowed": false,
+    "member_plaintext_transferred": false,
+    "ok": true,
+    "requires_total_field_verify": true,
+    "result": {
+      "page_title_ref": "page_title_ref:9ba2ba68e2d8e3f8",
+      "raw_text_returned": false,
+      "selected_text_length": 4,
+      "selected_text_ref": "selected_text_ref:e2ecc3e1ea2a7e5b"
+    },
+    "secret_transferred": false
+  },
+  "browser_bridge_return_packet": {
+    "D1_identity": {
+      "actor_ref": "actor_ref:member_browser_gateway:demo_member",
+      "device_ref": "device_ref:member_browser_extension:offline_simulator",
+      "plaintext_identity_forbidden": true
+    },
+    "D2_intent": {
+      "action_type_candidate": "read_text_ref",
+      "bridge_decision": "ALLOW_LOCAL_MINIMUM_PRIVILEGE",
+      "intent_ref": "intent_ref:1f72f09916b9ddbc"
+    },
+    "D3_state": {
+      "browser_result_ref": "browser_result_ref:e1ddf15e82303c8e",
+      "dry_run": true,
+      "execution_allowed": false,
+      "submit_forbidden": true
+    },
+    "D4_evidence": {
+      "action_trace_ref": "action_trace_ref:3358fced38f7d9c1",
+      "behavior_info_ref": "behavior_ref:90dcbdb548db7d44",
+      "draft_ref": "draft_ref:none",
+      "selected_text_ref": "selected_text_ref:e2ecc3e1ea2a7e5b"
+    },
+    "D5_execution": {
+      "allowed_next_actions": [
+        "present_candidate",
+        "route_to_total_field_verifier",
+        "ask_member_confirm"
+      ],
+      "execution_allowed": false,
+      "forbidden_actions": [
+        "click_ref",
+        "create_order_draft_ref",
+        "deploy",
+        "extract_ref",
+        "fill_ref",
+        "login_with_plaintext",
+        "payment_capture",
+        "read_raw_cookie",
+        "read_raw_local_storage",
+        "screenshot_ref",
+        "select_ref",
+        "service_restart",
+        "submit_order_without_human",
+        "submit_payment",
+        "write_database"
+      ],
+      "human_confirm_required": false
+    },
+    "D6_generative_transmission": {
+      "cloud_candidate_only": true,
+      "cloud_compute_ref": "cloud_compute_ref:local_gateway_safe_stub",
+      "member_plaintext_transferred": false,
+      "reconstruction_hint_ref": "reconstruct_ref:dd58e8cded2da547",
+      "return_mode": "browser_bridge_packetized_candidate_result",
+      "secret_transferred": false
+    },
+    "D7_risk": {
+      "bridge_ok": true,
+      "decision": "ALLOW_LOCAL_MINIMUM_PRIVILEGE",
+      "reason_ref": "reason_ref:30a0924a3360be68"
+    },
+    "D8_envelope": {
+      "created_at": "2026-06-27T10:42:45.714616+00:00",
+      "nonce": "nonce_ref:4ebe39e04aacc04f",
+      "replay_protection": true,
+      "return_packet_hash": "return_packet_hash:912ef988103e3b6c",
+      "total_field_verifier_required": true,
+      "ttl_seconds": 300
+    },
+    "candidate_only": true,
+    "member_plaintext_transferred": false,
+    "must_not_execute": true,
+    "packet_type": "BROWSER_BRIDGE_RETURN_PACKET",
+    "raw_browser_page_transferred": false,
+    "raw_text_returned": false,
+    "requires_total_field_verify": true,
+    "schema_version": "xiaoj.browser_bridge_return_packet.v1",
+    "secret_transferred": false
+  },
+  "candidate_only": true,
+  "cloud_candidate_return_packet": {
+    "candidate_id": "CAND_f16ce1886d5c440c958b8e2677867502",
+    "candidate_only": true,
+    "candidate_payload_hash": "8e3028456ddf3ff2291438ff435faf9cfe1f829dc94fd112bc2b907d9c5b3dbc",
+    "cloud_provider_ref": "CLOUD_PROVIDER_REF:SAFE_LOCAL_STUB",
+    "cloud_received_packet_only": true,
+    "d1_intent": {
+      "intent": "member_browser_gateway_candidate",
+      "intent_ref": "INTENT_REF:0e479cfc704c9646"
+    },
+    "d2_state": {
+      "candidate_state": "CANDIDATE_READY",
+      "input_state_ref": "STATE_REF:263605b1734fcd25"
+    },
+    "d3_coordinate": {
+      "authority": "candidate_only",
+      "cloud_compute_ref": "CLOUD_COMPUTE_REF:5efe273a4ef8645c",
+      "cloud_lane": "local_gateway_safe_stub",
+      "compute_cost_bucket_ref": "COMPUTE_COST_BUCKET_REF:c02be63afee313bf",
+      "compute_provider_ref": "CLOUD_PROVIDER_REF:SAFE_LOCAL_STUB",
+      "source": "openwebui_cloud_proxy"
+    },
+    "d4_evidence": {
+      "action_trace_ref": "ACTION_TRACE_REF:b2546302651d8f0a",
+      "behavior_info_ref": "BEHAVIOR_INFO_REF:550106b8c394ea28",
+      "candidate_payload_hash": "8e3028456ddf3ff2291438ff435faf9cfe1f829dc94fd112bc2b907d9c5b3dbc",
+      "evidence_ref": "EVIDENCE_REF:654ade9a6a3907e6",
+      "member_tendency_ref": "MEMBER_TENDENCY_REF:0e479cfc704c9646",
+      "source_packet_hash": "f60d774c712c88899fee7973d28c692b81c54a84fc1f883938a67457c145e024"
+    },
+    "d5_execution": {
+      "allowed_next_actions": [
+        "present_candidate",
+        "route_to_total_field_verifier",
+        "hold_for_human_review"
+      ],
+      "execution_allowed": false,
+      "forbidden_actions": [
+        "db_write",
+        "odoo_db_write",
+        "production_db_write",
+        "pos_write",
+        "payment_capture",
+        "deploy",
+        "service_restart",
+        "member_plaintext_read",
+        "secret_read"
+      ],
+      "human_confirm_required": false
+    },
+    "d6_generative_transmission": {
+      "cloud_candidate_only": true,
+      "member_plaintext_transferred": false,
+      "reconstruction_hint_ref": "RECONSTRUCT_REF:304021f9410acbca",
+      "return_mode": "packetized_candidate_result",
+      "secret_transferred": false
+    },
+    "d7_risk": {
+      "block_required": false,
+      "final_status_candidate": "CANDIDATE_READY",
+      "hold_required": false,
+      "risk_flags": [
+        "candidate_ready"
+      ]
+    },
+    "d8_envelope": {
+      "created_at": "2026-06-27T10:42:45.724389+00:00",
+      "nonce": "9a55ebf9b42744b490f135c9dfa1d0ce",
+      "replay_protection": true,
+      "return_packet_hash": "8be31559862010ca8e65c8a8dd4b50ccc224ffd877f95b4cee1ec7330e9e974c",
+      "total_field_verifier_required": true,
+      "ttl_seconds": 300
+    },
+    "job_id": "JOB_255d9775115443869ae43a5d731d73fb",
+    "member_plaintext_transferred": false,
+    "must_not_execute": true,
+    "packet_type": "CLOUD_CANDIDATE_RETURN_PACKET",
+    "raw_audio_transferred": false,
+    "requires_total_field_verify": true,
+    "return_packet_id": "RET_2f339c2dec034ce287a6fde4d32b7dba",
+    "schema_version": "w7tp.cloud_candidate_return_packet.v1",
+    "secret_transferred": false,
+    "source_packet_hash": "f60d774c712c88899fee7973d28c692b81c54a84fc1f883938a67457c145e024",
+    "source_packet_id": "PKT_a20aafb217294fa88f2ffaf0d4bf6845",
+    "task_id": "TASK_669004b8ebaf48e899aefb95c2281524"
+  },
+  "gateway_ref": "gateway_ref:3190e11b6f92312a",
+  "member_plaintext_transferred": false,
+  "packet_type": "XIAOJ_MEMBER_BROWSER_GATEWAY_RESULT",
+  "raw_audio_saved": false,
+  "requires_total_field_verify": true,
+  "safety_flags": {
+    "DB_WRITE": false,
+    "DEPLOY": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "PAYMENT_CAPTURE": false,
+    "RAW_AUDIO_SAVED": false,
+    "SECRET_READ": false,
+    "SERVICE_RESTART": false
+  },
+  "schema_version": "xiaoj.member_browser_gateway_result.v1",
+  "secret_transferred": false,
+  "state": "CANDIDATE_READY"
+}

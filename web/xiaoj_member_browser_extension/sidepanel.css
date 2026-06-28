@@ -1,0 +1,194 @@
+:root {
+  color-scheme: light;
+  --ink: #18222f;
+  --muted: #617083;
+  --line: #d8e0ea;
+  --surface: #ffffff;
+  --wash: #f4f7fb;
+  --teal: #007c78;
+  --blue: #255ec8;
+  --danger: #b43b5c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--wash);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Segoe UI", sans-serif;
+}
+
+button,
+select,
+textarea,
+input {
+  font: inherit;
+}
+
+.panel {
+  min-width: 320px;
+  max-width: 520px;
+  min-height: 100vh;
+  padding: 14px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: #eff8f7;
+  background: var(--teal);
+  font-size: 25px;
+  font-weight: 900;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 20px;
+  line-height: 1.15;
+}
+
+h2 {
+  margin: 14px 0 8px;
+  font-size: 15px;
+}
+
+p,
+label,
+.statusGrid span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.statusGrid div,
+.fieldGroup,
+.outputGroup {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.statusGrid div {
+  min-height: 54px;
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  padding: 9px;
+}
+
+.statusGrid strong {
+  font-size: 14px;
+}
+
+.fieldGroup,
+.outputGroup {
+  padding: 12px;
+}
+
+label {
+  display: block;
+  margin: 10px 0 6px;
+  font-weight: 800;
+}
+
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #cad4df;
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fbfdff;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 78px;
+  padding: 9px;
+  line-height: 1.45;
+}
+
+select {
+  min-height: 40px;
+  padding: 0 9px;
+}
+
+textarea:focus,
+select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(0, 124, 120, .14);
+}
+
+.checkLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 11px 0;
+  color: var(--ink);
+}
+
+.checkLine input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+button {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: var(--teal);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+pre {
+  min-height: 160px;
+  max-height: 280px;
+  margin: 0;
+  overflow: auto;
+  padding: 10px;
+  border: 1px solid #d4deea;
+  border-radius: 8px;
+  color: #152238;
+  background: #f8fbff;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.blocked {
+  color: var(--danger);
+}
+
+.allowed {
+  color: var(--teal);
+}

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小J會員主權 AI 瀏覽器座艙</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <aside class="rail" aria-label="小J狀態">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">J</div>
+        <div>
+          <h1>小J</h1>
+          <p>會員主權 AI</p>
+        </div>
+      </div>
+      <div class="railBlock">
+        <span class="label">模型座</span>
+        <strong id="modelSeat">1B 本地控制</strong>
+      </div>
+      <div class="railBlock">
+        <span class="label">總場</span>
+        <strong id="verifierState">待准駁</strong>
+      </div>
+      <div class="railBlock">
+        <span class="label">雲端</span>
+        <strong id="cloudState">未呼叫</strong>
+      </div>
+      <div class="railBlock">
+        <span class="label">上下文</span>
+        <strong id="plainState">無明文外送</strong>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">W7TP Generative Transmission</p>
+          <h2>社區小J日常協力座艙</h2>
+        </div>
+        <div class="topActions">
+          <button id="clearBtn" class="ghostBtn" type="button">清除</button>
+          <button id="verifyBtn" class="midBtn" type="button">總場准駁</button>
+          <button id="packetBtn" class="primaryBtn" type="button">產生封包</button>
+        </div>
+      </header>
+
+      <section class="intentBand" aria-label="會員需求">
+        <div class="intentInput">
+          <label for="intentText">會員需求</label>
+          <textarea id="intentText" rows="5">請幫我摘要選取的社區公告，口氣要簡潔，必要時提醒我是否需要請總幹事確認。</textarea>
+        </div>
+        <div class="controlStack">
+          <label for="memberRef">member_ref</label>
+          <input id="memberRef" value="actor_ref:member_browser_1b:demo_member">
+          <label for="contextRef">safe_context_ref</label>
+          <input id="contextRef" value="redacted_ref:selected_text_hash_demo">
+          <label for="keyRef">key_ref</label>
+          <input id="keyRef" value="key_ref:member_browser_1b:broker_managed_default">
+        </div>
+      </section>
+
+      <section class="settingsGrid" aria-label="會員傾向與算力">
+        <div class="module">
+          <div class="moduleHead">
+            <h3>會員傾向</h3>
+            <span id="preferenceRef">preference_ref:concise</span>
+          </div>
+          <div class="segmented" id="preferenceButtons" role="group" aria-label="會員傾向">
+            <button type="button" data-pref="concise" class="active">簡潔</button>
+            <button type="button" data-pref="elder">長輩友善</button>
+            <button type="button" data-pref="detail">細節</button>
+          </div>
+        </div>
+        <div class="module">
+          <div class="moduleHead">
+            <h3>服務風格</h3>
+            <span id="serviceStyleRef">service_style_ref:community_xiaoj_warm_daily</span>
+          </div>
+          <select id="serviceStyle">
+            <option value="community_xiaoj_warm_daily">熱誠日常</option>
+            <option value="calm_accessible">穩定無障礙</option>
+            <option value="staff_review_first">先送人工</option>
+          </select>
+        </div>
+        <div class="module">
+          <div class="moduleHead">
+            <h3>算力路徑</h3>
+            <span id="cloudComputeRef">cloud_compute_ref:local_1b_first</span>
+          </div>
+          <select id="computeLane">
+            <option value="local_1b_first">本地 1B 優先</option>
+            <option value="google_ultra_candidate">Google Ultra 候選</option>
+            <option value="member_byok_candidate">會員 BYOK 候選</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="resultGrid" aria-label="8D封包與准駁">
+        <div class="panel">
+          <div class="panelHead">
+            <h3>8D Action Packet</h3>
+            <span id="packetStatus" class="badge warn">WAIT</span>
+          </div>
+          <pre id="packetOut">尚未產生</pre>
+        </div>
+        <div class="panel">
+          <div class="panelHead">
+            <h3>總場准駁</h3>
+            <span id="decisionStatus" class="badge warn">WAIT</span>
+          </div>
+          <div id="decisionList" class="decisionList"></div>
+        </div>
+        <div class="panel">
+          <div class="panelHead">
+            <h3>雲端候選回傳</h3>
+            <button id="cloudBtn" class="smallBtn" type="button">封包化回傳</button>
+          </div>
+          <pre id="cloudOut">候選尚未封包化</pre>
+        </div>
+        <div class="panel">
+          <div class="panelHead">
+            <h3>Browser Action Bus</h3>
+            <span id="actionStatus" class="badge neutral">IDLE</span>
+          </div>
+          <div id="actionQueue" class="actionQueue"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

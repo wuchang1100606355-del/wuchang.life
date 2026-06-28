@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/browser/xiaoj_association_usage_admission_packet_v1.schema.json",
+  "title": "XiaoJ Association Usage Admission Packet V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "admission_packet_id",
+    "candidate_only",
+    "requires_total_field_verify",
+    "member_plaintext_transferred",
+    "secret_transferred",
+    "raw_browser_page_transferred",
+    "raw_audio_saved",
+    "raw_api_key_transferred",
+    "oauth_token_transferred",
+    "execution_allowed",
+    "D1_identity",
+    "D2_intent",
+    "D3_state",
+    "D4_evidence",
+    "D5_execution",
+    "D6_generative_transmission",
+    "D7_risk",
+    "D8_envelope"
+  ],
+  "properties": {
+    "schema_version": { "const": "xiaoj.association_usage_admission_packet.v1" },
+    "packet_type": { "const": "ASSOCIATION_USAGE_ADMISSION_PACKET" },
+    "admission_packet_id": { "type": "string", "pattern": "^ADM_[A-Fa-f0-9]+$" },
+    "candidate_only": { "const": true },
+    "requires_total_field_verify": { "const": true },
+    "member_plaintext_transferred": { "const": false },
+    "secret_transferred": { "const": false },
+    "raw_browser_page_transferred": { "const": false },
+    "raw_audio_saved": { "const": false },
+    "raw_api_key_transferred": { "const": false },
+    "oauth_token_transferred": { "const": false },
+    "execution_allowed": { "const": false },
+    "D1_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["association_ref", "member_ref", "device_ref", "plaintext_identity_forbidden"],
+      "properties": {
+        "association_ref": { "type": "string", "pattern": "^association_ref:[A-Za-z0-9_./:-]+$" },
+        "member_ref": { "type": "string", "pattern": "^actor_ref:[A-Za-z0-9_./:-]+$" },
+        "device_ref": { "type": "string", "pattern": "^device_ref:[A-Za-z0-9_./:-]+$" },
+        "plaintext_identity_forbidden": { "const": true }
+      }
+    },
+    "D2_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent_ref", "action_type_ref", "service_scope_ref", "consent_scope_ref"],
+      "properties": {
+        "intent_ref": { "type": "string", "pattern": "^intent_ref:[A-Za-z0-9_./:-]+$" },
+        "action_type_ref": { "type": "string", "pattern": "^action_type_ref:[A-Za-z0-9_./:-]+$" },
+        "service_scope_ref": { "type": "string", "pattern": "^service_style_ref:[A-Za-z0-9_./:-]+$" },
+        "consent_scope_ref": { "type": "string", "pattern": "^consent_scope_ref:[A-Za-z0-9_./:-]+$" }
+      }
+    },
+    "D3_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gateway_state",
+        "quota_bucket_ref",
+        "benefit_ref",
+        "odoo_identity_ref",
+        "odoo_role_ref",
+        "odoo_permission_bucket_ref",
+        "odoo_function_scope_ref",
+        "odoo_function_item_set_ref",
+        "payment_tool_ref",
+        "management_fee_bill_ref",
+        "payment_amount_bucket_ref",
+        "payment_intent_ref",
+        "cloud_candidate_state",
+        "ttl_seconds"
+      ],
+      "properties": {
+        "gateway_state": { "enum": ["CANDIDATE_READY", "HOLD", "BLOCK"] },
+        "quota_bucket_ref": { "type": "string", "pattern": "^quota_bucket_ref:[A-Za-z0-9_./:-]+$" },
+        "benefit_ref": { "type": "string", "pattern": "^benefit_ref:[A-Za-z0-9_./:-]+$" },
+        "odoo_identity_ref": { "type": "string", "pattern": "^odoo_identity_ref:[A-Za-z0-9_./:-]+$" },
+        "odoo_role_ref": { "type": "string", "pattern": "^odoo_role_ref:[A-Za-z0-9_./:-]+$" },
+        "odoo_permission_bucket_ref": { "type": "string", "pattern": "^odoo_permission_bucket_ref:[A-Za-z0-9_./:-]+$" },
+        "odoo_function_scope_ref": { "type": "string", "pattern": "^odoo_function_scope_ref:[A-Za-z0-9_./:-]+$" },
+        "odoo_function_item_set_ref": { "type": "string", "pattern": "^odoo_function_item_set_ref:[A-Za-z0-9_./:-]+$" },
+        "payment_tool_ref": { "type": "string", "pattern": "^payment_tool_ref:[A-Za-z0-9_./:-]+$" },
+        "management_fee_bill_ref": { "type": "string", "pattern": "^management_fee_bill_ref:[A-Za-z0-9_./:-]+$" },
+        "payment_amount_bucket_ref": { "type": "string", "pattern": "^payment_amount_bucket_ref:[A-Za-z0-9_./:-]+$" },
+        "payment_intent_ref": { "type": "string", "pattern": "^payment_intent_ref:[A-Za-z0-9_./:-]+$" },
+        "cloud_candidate_state": { "enum": ["CANDIDATE_READY", "BLOCKED", "HOLD", "DEAD_LETTER"] },
+        "ttl_seconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "D4_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gateway_ref",
+        "source_packet_hash",
+        "browser_return_packet_hash",
+        "cloud_return_packet_hash",
+        "behavior_info_ref",
+        "action_trace_ref",
+        "member_tendency_ref",
+        "odoo_function_item_refs",
+        "cloud_compute_ref",
+        "compute_provider_ref",
+        "compute_cost_bucket_ref"
+      ],
+      "properties": {
+        "gateway_ref": { "type": "string", "pattern": "^gateway_ref:[A-Za-z0-9_./:-]+$" },
+        "source_packet_hash": { "type": "string", "minLength": 16 },
+        "browser_return_packet_hash": { "type": "string", "pattern": "^return_packet_hash:[A-Za-z0-9_./:-]+$" },
+        "cloud_return_packet_hash": { "type": "string", "minLength": 16 },
+        "behavior_info_ref": { "type": "string", "pattern": "^BEHAVIOR_INFO_REF:[A-Za-z0-9_./:-]+$" },
+        "action_trace_ref": { "type": "string", "pattern": "^ACTION_TRACE_REF:[A-Za-z0-9_./:-]+$" },
+        "member_tendency_ref": { "type": "string", "pattern": "^MEMBER_TENDENCY_REF:[A-Za-z0-9_./:-]+$" },
+        "odoo_function_item_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^odoo_function_ref:[A-Za-z0-9_./:-]+$" }
+        },
+        "cloud_compute_ref": { "type": "string", "pattern": "^CLOUD_COMPUTE_REF:[A-Za-z0-9_./:-]+$" },
+        "compute_provider_ref": { "type": "string", "pattern": "^CLOUD_PROVIDER_REF:[A-Za-z0-9_./:-]+$" },
+        "compute_cost_bucket_ref": { "type": "string", "pattern": "^COMPUTE_COST_BUCKET_REF:[A-Za-z0-9_./:-]+$" }
+      }
+    },
+    "D5_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "admission_decision",
+        "execution_allowed",
+        "allowed_next_actions",
+        "forbidden_actions",
+        "human_confirm_required",
+        "odoo_write_authority",
+        "odoo_member_plaintext_read",
+        "payment_capture_authority",
+        "payment_data_transferred"
+      ],
+      "properties": {
+        "admission_decision": { "enum": ["ALLOW", "HOLD", "BLOCK"] },
+        "execution_allowed": { "const": false },
+        "allowed_next_actions": { "type": "array", "items": { "type": "string" } },
+        "forbidden_actions": { "type": "array", "items": { "type": "string" }, "minItems": 5 },
+        "human_confirm_required": { "type": "boolean" },
+        "odoo_write_authority": { "const": false },
+        "odoo_member_plaintext_read": { "const": false },
+        "payment_capture_authority": { "const": false },
+        "payment_data_transferred": { "const": false }
+      }
+    },
+    "D6_generative_transmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "return_mode",
+        "no_plaintext_context",
+        "cloud_candidate_only",
+        "reconstruction_hint_ref",
+        "member_plaintext_transferred",
+        "secret_transferred"
+      ],
+      "properties": {
+        "return_mode": { "const": "association_no_plaintext_usage_admission" },
+        "no_plaintext_context": { "const": true },
+        "cloud_candidate_only": { "const": true },
+        "reconstruction_hint_ref": { "type": "string", "pattern": "^RECONSTRUCT_REF:[A-Za-z0-9_./:-]+$" },
+        "member_plaintext_transferred": { "const": false },
+        "secret_transferred": { "const": false }
+      }
+    },
+    "D7_risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["risk_flags", "hold_required", "block_required", "legal_review_required"],
+      "properties": {
+        "risk_flags": { "type": "array", "items": { "type": "string" } },
+        "hold_required": { "type": "boolean" },
+        "block_required": { "type": "boolean" },
+        "legal_review_required": { "type": "boolean" }
+      }
+    },
+    "D8_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ttl_seconds", "nonce", "created_at", "packet_hash", "total_field_verifier_required", "replay_protection"],
+      "properties": {
+        "ttl_seconds": { "type": "integer", "minimum": 1 },
+        "nonce": { "type": "string", "pattern": "^nonce_ref:[A-Za-z0-9_./:-]+$" },
+        "created_at": { "type": "string" },
+        "packet_hash": { "type": "string", "pattern": "^admission_packet_hash:[A-Za-z0-9_./:-]+$" },
+        "total_field_verifier_required": { "const": true },
+        "replay_protection": { "const": true }
+      }
+    }
+  }
+}
