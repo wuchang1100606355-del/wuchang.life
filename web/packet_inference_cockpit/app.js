@@ -4,8 +4,9 @@ const demos = [
   ["會員明文", "我要查會員完整電話和地址"],
   ["過敏風險", "我對牛奶有點敏感，想喝順口的"],
   ["未知輸入", "qqq xyz 未知請求"],
-  ["資料狀態", "你沒有我的資訊嗎"],
-  ["身分聲明", "我是創辦人江政隆你認識我嗎"],
+  ["身分上下文", "你沒有我的資訊嗎"],
+  ["會員上下文", "你知道我的會員資料嗎"],
+  ["創辦人聲明", "我是創辦人江政隆你認識我嗎"],
   ["角色查詢", "我的角色是什麼"]
 ];
 
@@ -46,6 +47,27 @@ function renderSafety(flags) {
     item.className = value ? "flag bad" : "flag good";
     item.textContent = `${key}=${value}`;
     box.appendChild(item);
+  });
+}
+
+function renderSceneContext(scene) {
+  const box = el("sceneContextBox");
+  const data = scene || {};
+  el("sceneContextStatus").textContent = data.context_type || "UNKNOWN_CONTEXT";
+  box.innerHTML = "";
+  [
+    ["context_type", data.context_type || "UNKNOWN_CONTEXT"],
+    ["confidence_level", data.confidence_level || "L1"],
+    ["accepted_as_truth", data.accepted_as_truth === true],
+    ["requires_role_verification", data.requires_role_verification === true],
+    ["dev_identity_override", data.dev_identity_override?.enabled === true ? data.dev_identity_override.role_ref : "off"],
+    ["allowed_scope", (data.allowed_scope || []).join(", ") || "N/A"],
+    ["forbidden_scope", (data.forbidden_scope || []).join(", ") || "N/A"]
+  ].forEach(([key, value]) => {
+    const row = document.createElement("div");
+    row.className = "scene-row";
+    row.innerHTML = `<b>${escapeHtml(key)}</b><span>${escapeHtml(value)}</span>`;
+    box.appendChild(row);
   });
 }
 
@@ -106,22 +128,37 @@ function renderCockpit(data, originalText) {
   const badges = data.COCKPIT_VIEW?.badges || {};
   const decision = summary.decision || badges.decision || data.FINAL_VERIFIER?.decision || "UNKNOWN";
   const answer = data.LANGUAGE_RECONSTRUCTION?.zh_TW || summary.output || "無輸出";
+  const rawDraft = summary.raw_verified_draft || data.LANGUAGE_RECONSTRUCTION?.raw_verified_draft || answer;
+  const prAnswer = summary.pr_refined_answer || data.LANGUAGE_RECONSTRUCTION?.pr_refined_zh_TW || answer;
+  const decisionLocked = summary.decision_locked !== false;
+  const sceneContext = data.COCKPIT_VIEW?.scene_context || data.LANGUAGE_RECONSTRUCTION?.semantic_ir?.scene_context || {};
 
   el("decisionBadge").className = badgeClass(decision);
   el("decisionBadge").textContent = decision;
   el("answerText").textContent = answer;
+  el("rawDraftText").textContent = rawDraft;
+  el("prAnswerText").textContent = prAnswer;
+  el("decisionLockedBox").textContent = decisionLocked ? "TRUE" : "FALSE";
+  el("decisionLockedStatus").textContent = decisionLocked ? "TRUE" : "FALSE";
+  el("prLayerStatus").textContent = badges.pr_layer || data.PR_LAYER?.MODEL_LANE || "TEMPLATE_FALLBACK";
 
   renderJson(el("verifierBox"), data.FINAL_VERIFIER || {});
   renderTimeline(data.COCKPIT_VIEW?.timeline || []);
   renderSafety(data.SAFETY_FLAGS || {});
+  renderSceneContext(sceneContext);
   renderJson(el("semanticBox"), data.LANGUAGE_RECONSTRUCTION || {});
   renderJson(el("evidenceBox"), {
     input_hash: data.INPUT_TEXT_HASH,
     audit_file: summary.audit_file,
     run_mode: data.RUN_MODE,
     model_lane: badges.model_lane,
+    pr_layer: badges.pr_layer || data.PR_LAYER?.MODEL_LANE,
+    llm_authority: badges.llm_authority,
+    verifier_decision_locked: badges.verifier_decision_locked,
+    model_output: badges.model_output,
     lookup_lane: badges.lookup_lane,
-    verifier_authority: badges.verifier_authority
+    verifier_authority: badges.verifier_authority,
+    pr_response_packet: data.PR_LAYER?.RESPONSE_PACKET || {}
   });
 
   const line = document.createElement("div");
@@ -151,7 +188,9 @@ async function runChat() {
     text,
     branch: el("branch").value || "cafe_main",
     actor_role: el("actorRole").value || "counter_ai",
-    channel: el("channel").value || "web_cockpit"
+    channel: el("channel").value || "web_cockpit",
+    dev_role_ref: el("devRoleRef").value || "",
+    dev_identity_switch: el("devIdentitySwitch").checked === true
   };
 
   try {

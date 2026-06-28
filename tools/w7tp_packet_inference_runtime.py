@@ -32,16 +32,84 @@ SAFETY_FLAGS = {
     "LLM_AUTHORITY": False,
 }
 
+SCENE_ALIAS_TABLE = {
+    "STORE_CONTEXT": ["咖啡", "POS", "點餐", "結帳", "菜單", "客人", "店裡", "櫃台", "庫存", "外送", "訂單", "會員點數", "飲料", "拿鐵"],
+    "PROPERTY_CONTEXT": ["物業", "管委會", "住戶", "大樓", "社區", "公告", "管理費", "公設", "修繕", "報修", "車位", "門禁", "管理員"],
+    "ASSOCIATION_CONTEXT": ["協會", "公益", "會員治理", "志工", "補助", "社區發展", "活動報名", "服務使用", "資格審查"],
+    "FOUNDER_CONTEXT": ["總場", "架構", "專利", "發明", "生成式傳輸", "8D", "封包推理", "部署策略", "維護", "commit", "Codex", "技術路線"],
+    "CLAIMED_FOUNDER_CONTEXT": ["我是創辦人", "我是發明人", "我是江政隆", "我是隆哥", "我是理事長"],
+    "GENERAL_CHAT_CONTEXT": ["你好", "你在嗎", "陪我聊", "心情不好", "我有點累", "你會做什麼", "下一步"],
+}
+
+SCENE_SCOPE_TABLE = {
+    "STORE_CONTEXT": {
+        "allowed_scope": ["recommend_order", "menu_query", "draft_order", "store_status_chat"],
+        "forbidden_scope": ["payment_capture", "member_plaintext_read", "formal_pos_write_without_human_review"],
+    },
+    "PROPERTY_CONTEXT": {
+        "allowed_scope": ["property_service_request_candidate", "announcement_draft", "repair_request_candidate", "resident_no_plaintext_context"],
+        "forbidden_scope": ["resident_plaintext_read", "building_access_grant_without_verification", "payment_capture"],
+    },
+    "ASSOCIATION_CONTEXT": {
+        "allowed_scope": ["association_service_admission_candidate", "activity_rsvp_candidate", "volunteer_service_candidate", "no_plaintext_member_context"],
+        "forbidden_scope": ["member_plaintext_read", "subsidy_approval_without_verification"],
+    },
+    "FOUNDER_CONTEXT": {
+        "allowed_scope": ["architecture_discussion", "codex_task_builder", "patent_non_confidential_draft", "total_field_debug"],
+        "forbidden_scope": ["secret_read", "production_deploy_without_explicit_packet", "member_plaintext_read"],
+    },
+    "CLAIMED_FOUNDER_CONTEXT": {
+        "allowed_scope": ["create_claimed_identity_packet", "ask_role_verification"],
+        "forbidden_scope": ["grant_role_without_verification", "trust_claimed_identity", "secret_read", "member_plaintext_read"],
+    },
+    "GENERAL_CHAT_CONTEXT": {
+        "allowed_scope": ["general_chat", "supportive_reply", "capability_intro"],
+        "forbidden_scope": ["medical_diagnosis", "legal_advice", "financial_advice", "identity_verification_promise"],
+    },
+    "UNKNOWN_CONTEXT": {
+        "allowed_scope": ["ask_clarifying_question"],
+        "forbidden_scope": ["payment_capture", "member_plaintext_read", "secret_read"],
+    },
+}
+
+DEV_ROLE_REFS = {
+    "role_ref:dev:founder_maintainer": {
+        "developer_full_context_switch": True,
+        "verified_context_type": "FOUNDER_CONTEXT",
+        "developer_scope": ["architecture_discussion", "codex_task_builder", "patent_non_confidential_draft", "total_field_debug"],
+    },
+    "role_ref:dev:store_operator": {
+        "developer_full_context_switch": True,
+        "verified_context_type": "STORE_CONTEXT",
+        "developer_scope": ["recommend_order", "menu_query", "draft_order", "store_status_chat"],
+    },
+    "role_ref:dev:property_operator": {
+        "developer_full_context_switch": True,
+        "verified_context_type": "PROPERTY_CONTEXT",
+        "developer_scope": ["property_service_request_candidate", "announcement_draft", "repair_request_candidate"],
+    },
+    "role_ref:dev:association_operator": {
+        "developer_full_context_switch": True,
+        "verified_context_type": "ASSOCIATION_CONTEXT",
+        "developer_scope": ["association_service_admission_candidate", "activity_rsvp_candidate", "volunteer_service_candidate"],
+    },
+}
+
 INTENT_ALIAS_TABLE = {
     "recommend_order": ["推薦", "喝什麼", "好喝", "幫我配", "不苦", "清爽", "順口", "有點累", "想喝"],
     "ask_menu": ["菜單", "品項", "價格", "menu"],
-    "draft_order": ["幫我點", "我要一杯", "加入訂單", "下單"],
+    "draft_order": ["幫我點", "我要一杯", "加入訂單", "下單", "點餐"],
     "member_lookup_masked": ["查會員"],
     "member_plaintext_request": ["完整電話", "完整地址", "身份證", "身分證", "會員明文"],
     "identity_context_query": ["你知道我是誰", "你認識我", "我是誰", "認得我", "我的資訊", "你沒有我的資訊", "你有我的資訊"],
     "member_context_query": ["你知道我的會員資料", "我的會員資料", "會員資料", "會員狀態", "我的點數", "點數"],
     "claimed_founder_identity": ["我是創辦人", "我是發明人", "我是理事長", "我是江政隆", "我是隆哥", "創辦人江政隆"],
     "role_context_query": ["我的角色是什麼", "我是什麼角色", "我有什麼權限", "角色是什麼", "我的身份", "我的身分"],
+    "property_service_request": ["報修", "公設壞了", "修繕", "住戶說", "管理員"],
+    "association_activity_query": ["報名協會活動", "協會活動", "活動報名", "志工", "公益"],
+    "architecture_discussion": ["生成式傳輸", "封包推理", "架構", "總場", "技術路線", "下一步怎麼開發"],
+    "general_chat": ["你好", "陪我聊", "心情不好", "我有點累"],
+    "capability_intro": ["你會做什麼", "你能做什麼", "介紹能力"],
     "payment_request": ["結帳", "付款", "刷卡", "收錢", "付錢"],
 }
 
@@ -118,6 +186,36 @@ ROUTE_TABLE = {
         "template_ref": "templates/claimed_identity_hold_v1",
         "route": "claimed_identity_review_lane",
     },
+    "property_service_request": {
+        "rule_ref": "rules/property_service_candidate_v1",
+        "table_ref": "tables/property_context_v1",
+        "template_ref": "templates/property_service_hold_v1",
+        "route": "property_service_candidate_lane",
+    },
+    "association_activity_query": {
+        "rule_ref": "rules/association_activity_candidate_v1",
+        "table_ref": "tables/association_context_v1",
+        "template_ref": "templates/association_activity_hold_v1",
+        "route": "association_activity_candidate_lane",
+    },
+    "architecture_discussion": {
+        "rule_ref": "rules/architecture_discussion_v1",
+        "table_ref": "tables/founder_context_v1",
+        "template_ref": "templates/architecture_discussion_v1",
+        "route": "architecture_discussion_lane",
+    },
+    "general_chat": {
+        "rule_ref": "rules/general_chat_v1",
+        "table_ref": "tables/general_chat_v1",
+        "template_ref": "templates/general_chat_v1",
+        "route": "general_chat_lane",
+    },
+    "capability_intro": {
+        "rule_ref": "rules/capability_intro_v1",
+        "table_ref": "tables/capability_intro_v1",
+        "template_ref": "templates/capability_intro_v1",
+        "route": "capability_intro_lane",
+    },
     "payment_request": {
         "rule_ref": "rules/payment_human_review_v1",
         "table_ref": "tables/payment_boundary_v1",
@@ -140,6 +238,7 @@ RISK_POLICY_TABLE = {
     "identity_boundary": {"decision": "HOLD", "reasons": ["identity context requires role_ref or authenticated context"]},
     "member_context": {"decision": "HOLD", "reasons": ["member context requires member_ref or authenticated context"]},
     "role_context": {"decision": "HOLD", "reasons": ["role context requires role_ref or authenticated context"]},
+    "claimed_founder_context": {"decision": "HOLD", "reasons": ["claimed founder context requires role verification"]},
     "low_confidence": {"decision": "HOLD", "reasons": ["low intent confidence"]},
     "draft_order": {"decision": "HOLD", "reasons": ["formal order write requires counter confirmation"]},
     "none": {"decision": "CONTINUE", "reasons": ["packet verified"]},
@@ -180,7 +279,27 @@ CAPABILITY_TABLE = {
     },
     "claimed_founder_identity": {
         "allowed_actions": ["create_claimed_identity_packet", "ask_identity_verification"],
-        "forbidden_actions": ["trust_claimed_identity", "member_plaintext_read", "db_read", "write_identity_record"],
+        "forbidden_actions": ["trust_claimed_identity", "grant_role_without_verification", "member_plaintext_read", "db_read", "write_identity_record"],
+    },
+    "property_service_request": {
+        "allowed_actions": ["repair_request_candidate", "resident_no_plaintext_context"],
+        "forbidden_actions": ["resident_plaintext_read", "member_plaintext_read", "payment_capture"],
+    },
+    "association_activity_query": {
+        "allowed_actions": ["activity_rsvp_candidate", "association_service_admission_candidate"],
+        "forbidden_actions": ["member_plaintext_read", "subsidy_approval_without_verification"],
+    },
+    "architecture_discussion": {
+        "allowed_actions": ["architecture_discussion", "total_field_debug"],
+        "forbidden_actions": ["secret_read", "production_deploy_without_explicit_packet", "member_plaintext_read"],
+    },
+    "general_chat": {
+        "allowed_actions": ["general_chat", "supportive_reply"],
+        "forbidden_actions": ["medical_diagnosis", "legal_advice", "financial_advice", "identity_verification_promise"],
+    },
+    "capability_intro": {
+        "allowed_actions": ["capability_intro"],
+        "forbidden_actions": ["llm_authority", "member_plaintext_read", "payment_capture"],
     },
     "payment_request": {
         "allowed_actions": ["ask_human_confirmation"],
@@ -210,6 +329,11 @@ TEMPLATE_TABLE = {
     "member_context_hold": "我可以處理會員情境查詢，但目前只使用 member_ref / role_ref 這類去識別化參照；不讀 DB、不顯示會員明文資料，也不會輸出電話、地址或證件資料。",
     "role_context_hold": "我不能只靠這句話判定你的角色或權限。請提供已驗證的 role_ref、登入狀態或 8D 身分封包；通過 verifier 後才會決定可用功能。",
     "claimed_founder_hold": "我收到你的身分聲明，但不會直接把聲明視為已驗證身分。總場會先建立 claimed_identity_packet，並等待 role_ref、登入狀態或 verifier 驗證後，才決定可使用的功能。",
+    "property_service_hold": "我可以先建立物業服務候選脈絡，例如報修或公告草稿；但不讀住戶明文，也不授權門禁或付款。",
+    "association_activity_hold": "我可以協助建立協會活動或服務使用候選流程；資格、補助或會員治理仍需 verifier 與去識別化參照確認。",
+    "architecture_discussion": "這屬於總場工程/架構討論脈絡。我可以用封包、verifier、PR layer 與安全邊界來整理下一步，但不讀 secret、不部署。",
+    "general_chat": "我在，可以陪你聊一下。我會保持自然陪伴，但不提供醫療判斷、法律或金融建議，也不承諾身分驗證。",
+    "capability_intro": "我能把自然語言轉成 8D packet chain，經 verifier 決定 ALLOW/HOLD/BLOCK，再用 candidate-only PR layer 潤飾回答；不讀會員明文、不付款、不讓模型掌權。",
     "clarify_hold": "目前意圖不明，先進入補問流程。",
 }
 
@@ -232,9 +356,55 @@ def pick_slots(text: str) -> dict[str, str]:
             if any(word.lower() in lowered for word in words):
                 slots[slot_name] = slot_value
                 break
-    if any(word.lower() in lowered for word in INTENT_ALIAS_TABLE["claimed_identity_query"]):
+    if any(word.lower() in lowered for word in INTENT_ALIAS_TABLE["claimed_founder_identity"]):
         slots["claimed_identity_packet"] = "CLAIMED_IDENTITY_PACKET"
     return slots
+
+
+def detect_scene_context(text: str, dev_role_ref: str = "", dev_identity_switch: bool = False) -> dict[str, Any]:
+    lowered = text.lower()
+    scores = {
+        context_type: sum(1 for word in aliases if word.lower() in lowered)
+        for context_type, aliases in SCENE_ALIAS_TABLE.items()
+    }
+    if scores["CLAIMED_FOUNDER_CONTEXT"] > 0:
+        context_type = "CLAIMED_FOUNDER_CONTEXT"
+    else:
+        context_type = max(scores, key=scores.get)
+    score = scores.get(context_type, 0)
+    if score <= 0:
+        context_type = "UNKNOWN_CONTEXT"
+        confidence = "L1"
+    elif score == 1:
+        confidence = "L2"
+    else:
+        confidence = "L3"
+
+    dev_role = DEV_ROLE_REFS.get(dev_role_ref) if dev_identity_switch else None
+    if dev_role:
+        context_type = dev_role["verified_context_type"]
+        confidence = "L3"
+
+    scope = SCENE_SCOPE_TABLE[context_type]
+    scene_context = {
+        "context_type": context_type,
+        "confidence_level": confidence,
+        "accepted_as_truth": bool(dev_role),
+        "requires_role_verification": False if dev_role else context_type in {"FOUNDER_CONTEXT", "CLAIMED_FOUNDER_CONTEXT"},
+        "allowed_scope": list(scope["allowed_scope"]),
+        "forbidden_scope": list(scope["forbidden_scope"]),
+    }
+    if dev_role:
+        scene_context["dev_identity_override"] = {
+            "enabled": True,
+            "role_ref": dev_role_ref,
+            "verification_source": "explicit_dev_role_ref",
+            "production_authority": False,
+            "plaintext_access": False,
+            "db_read": False,
+        }
+        scene_context["allowed_scope"] = list(dict.fromkeys(scene_context["allowed_scope"] + dev_role["developer_scope"]))
+    return scene_context
 
 
 def parse_intent(text: str) -> tuple[str, dict[str, str], str]:
@@ -245,7 +415,7 @@ def parse_intent(text: str) -> tuple[str, dict[str, str], str]:
     if slots.get("risk_signal") == "payment":
         return "payment_request", slots, "L3"
     if slots.get("risk_signal") == "identity_claim":
-        return "claimed_identity_query", slots, "L3"
+        return "claimed_founder_identity", slots, "L3"
 
     scores = {intent: sum(1 for word in words if word.lower() in lowered) for intent, words in INTENT_ALIAS_TABLE.items()}
     intent = max(scores, key=scores.get)
@@ -294,6 +464,8 @@ def verifier(packet: dict[str, Any]) -> dict[str, Any]:
     slots = packet.get("D1_intent", {}).get("slots", {})
     confidence = packet.get("D1_intent", {}).get("confidence_level", "L1")
     risk_signal = slots.get("risk_signal", "none")
+    scene_context = packet.get("D2_state", {}).get("scene_context", {})
+    scene_type = scene_context.get("context_type")
 
     if risk_signal == "member_plaintext" or intent == "member_plaintext_request":
         policy = RISK_POLICY_TABLE["member_plaintext"]
@@ -301,10 +473,16 @@ def verifier(packet: dict[str, Any]) -> dict[str, Any]:
         policy = RISK_POLICY_TABLE["payment"]
     elif risk_signal == "allergy":
         policy = RISK_POLICY_TABLE["allergy"]
-    elif risk_signal == "identity_claim" or intent == "claimed_identity_query":
+    elif risk_signal == "identity_claim" or intent == "claimed_founder_identity":
         policy = RISK_POLICY_TABLE["identity_claim"]
-    elif intent in {"role_query", "identity_recognition_query"}:
+    elif intent == "identity_context_query":
         policy = RISK_POLICY_TABLE["identity_boundary"]
+    elif intent == "member_context_query":
+        policy = RISK_POLICY_TABLE["member_context"]
+    elif intent == "role_context_query":
+        policy = RISK_POLICY_TABLE["role_context"]
+    elif scene_type == "CLAIMED_FOUNDER_CONTEXT":
+        policy = RISK_POLICY_TABLE["claimed_founder_context"]
     elif confidence == "L1" or intent == "unknown":
         policy = RISK_POLICY_TABLE["low_confidence"]
     elif intent == "draft_order":
@@ -332,7 +510,7 @@ def transition_input_event(_: dict[str, Any] | None, ctx: dict[str, Any]) -> dic
     base = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": {"intent_id": "input_event", "slots": {}, "confidence_level": "L0"},
-        "D2_state": {"runtime_state": "input_received"},
+        "D2_state": {"runtime_state": "input_received", "scene_context": ctx["scene_context"]},
         "D3_coordinate": {"branch": ctx["branch"], "actor_role": ctx["actor_role"], "channel": ctx["channel"]},
         "D4_evidence": {"input_text_hash": sha(text), "input_length": len(text)},
         "D5_execution": {"candidate_only": True, "side_effects_allowed": False},
@@ -357,7 +535,7 @@ def transition_intent(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": {"intent_id": intent, "slots": slots, "confidence_level": confidence},
-        "D2_state": {"runtime_state": "intent_parsed"},
+        "D2_state": {"runtime_state": "intent_parsed", "scene_context": ctx["scene_context"]},
         "D3_coordinate": (prev or {})["D3_coordinate"],
         "D4_evidence": {
             "input_text_hash": sha(ctx["text"]),
@@ -377,7 +555,7 @@ def transition_route(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[s
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": prev["D1_intent"],
-        "D2_state": {"runtime_state": "route_selected", "route": route["route"]},
+        "D2_state": {"runtime_state": "route_selected", "route": route["route"], "scene_context": ctx["scene_context"]},
         "D3_coordinate": prev["D3_coordinate"],
         "D4_evidence": {**prev["D4_evidence"], "route_table_hash": sha(ROUTE_TABLE)},
         "D5_execution": prev["D5_execution"],
@@ -401,13 +579,14 @@ def transition_state(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[s
         "D1_intent": prev["D1_intent"],
         "D2_state": {
             **prev["D2_state"],
+            "scene_context": ctx["scene_context"],
             "state_refs": {
                 "menu_ref": "branch.menu.current",
                 "member_ref": "masked_or_none",
                 "inventory_ref": "branch.inventory.summary",
-                **({"profile_status_ref": "profile.status.masked_ref_only"} if intent in {"profile_existence_query", "role_query", "identity_recognition_query", "claimed_identity_query"} else {}),
+                **({"identity_context_ref": "identity.context.masked_ref_only"} if intent in {"identity_context_query", "member_context_query", "role_context_query", "claimed_founder_identity"} else {}),
             },
-            **({"profile_state": profile_state} if intent in {"profile_existence_query", "role_query", "identity_recognition_query", "claimed_identity_query"} else {}),
+            **({"profile_state": profile_state} if intent in {"identity_context_query", "member_context_query", "role_context_query", "claimed_founder_identity"} else {}),
         },
         "D3_coordinate": prev["D3_coordinate"],
         "D4_evidence": {**prev["D4_evidence"], "state_ref_mode": "refs_only_no_plaintext"},
@@ -423,12 +602,18 @@ def transition_risk(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[st
     risk_code = prev["D1_intent"].get("slots", {}).get("risk_signal", "none")
     if prev["D1_intent"]["intent_id"] == "unknown":
         risk_code = "low_confidence"
-    if prev["D1_intent"]["intent_id"] in {"role_query", "identity_recognition_query"}:
+    if prev["D1_intent"]["intent_id"] == "identity_context_query":
         risk_code = "identity_boundary"
+    if prev["D1_intent"]["intent_id"] == "member_context_query":
+        risk_code = "member_context"
+    if prev["D1_intent"]["intent_id"] == "role_context_query":
+        risk_code = "role_context"
+    if ctx["scene_context"]["context_type"] == "CLAIMED_FOUNDER_CONTEXT":
+        risk_code = "claimed_founder_context"
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": prev["D1_intent"],
-        "D2_state": prev["D2_state"],
+        "D2_state": {**prev["D2_state"], "scene_context": ctx["scene_context"]},
         "D3_coordinate": prev["D3_coordinate"],
         "D4_evidence": {**prev["D4_evidence"], "risk_policy_table_hash": sha(RISK_POLICY_TABLE)},
         "D5_execution": prev["D5_execution"],
@@ -441,15 +626,18 @@ def transition_risk(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[st
 def transition_capability(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[str, Any]:
     intent = prev["D1_intent"]["intent_id"]
     caps = CAPABILITY_TABLE.get(intent, CAPABILITY_TABLE["unknown"])
+    scene_forbidden = ctx["scene_context"].get("forbidden_scope", [])
+    forbidden_actions = list(dict.fromkeys(caps["forbidden_actions"] + scene_forbidden))
+    allowed_actions = list(dict.fromkeys(caps["allowed_actions"] + ctx["scene_context"].get("allowed_scope", [])))
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": prev["D1_intent"],
-        "D2_state": prev["D2_state"],
+        "D2_state": {**prev["D2_state"], "scene_context": ctx["scene_context"]},
         "D3_coordinate": prev["D3_coordinate"],
         "D4_evidence": {**prev["D4_evidence"], "capability_table_hash": sha(CAPABILITY_TABLE)},
         "D5_execution": {
-            "allowed_actions": caps["allowed_actions"],
-            "forbidden_actions": caps["forbidden_actions"],
+            "allowed_actions": allowed_actions,
+            "forbidden_actions": forbidden_actions,
             "candidate_only": True,
             "side_effects_allowed": False,
         },
@@ -470,21 +658,23 @@ def build_semantic_ir(packet: dict[str, Any]) -> dict[str, Any]:
         "decision": packet["D7_risk"].get("decision", "CONTINUE"),
         "recommendation": pairing,
         "route": packet["D2_state"].get("route", "unknown"),
+        "scene_context": packet["D2_state"].get("scene_context", {}),
     }
-    if semantic_ir["intent_id"] in {"profile_existence_query", "role_query", "identity_recognition_query", "claimed_identity_query"}:
+    if semantic_ir["intent_id"] in {"identity_context_query", "member_context_query", "role_context_query", "claimed_founder_identity"}:
         semantic_ir["identity_profile"] = {
             "profile_ref_mode": "masked_refs_only",
             "claimed_identity_packet": packet["D4_evidence"].get("claimed_identity_packet"),
             "accepted_as_truth": False,
             "member_plaintext_read": False,
             "db_read_performed": False,
-            "requires_verified_context": semantic_ir["intent_id"] != "profile_existence_query",
+            "requires_verified_context": True,
         }
     return semantic_ir
 
 
 def render_language(semantic_ir: dict[str, Any], final_decision: str, reasons: list[str]) -> str:
     intent = semantic_ir["intent_id"]
+    scene_type = (semantic_ir.get("scene_context") or {}).get("context_type")
     rec = semantic_ir["recommendation"]
     reason = "、".join(reasons)
     if intent == "recommend_order":
@@ -494,12 +684,26 @@ def render_language(semantic_ir: dict[str, Any], final_decision: str, reasons: l
         return TEMPLATE_TABLE["payment_hold"]
     if intent in {"member_lookup_masked", "member_plaintext_request"}:
         return TEMPLATE_TABLE["member_block"]
-    if intent == "profile_existence_query":
-        return TEMPLATE_TABLE["profile_status"]
-    if intent == "role_query":
-        return TEMPLATE_TABLE["role_hold"]
-    if intent in {"identity_recognition_query", "claimed_identity_query"}:
-        return TEMPLATE_TABLE["identity_hold"]
+    if intent == "identity_context_query":
+        return TEMPLATE_TABLE["identity_context_hold"]
+    if intent == "member_context_query":
+        return TEMPLATE_TABLE["member_context_hold"]
+    if intent == "role_context_query":
+        return TEMPLATE_TABLE["role_context_hold"]
+    if intent == "claimed_founder_identity":
+        return TEMPLATE_TABLE["claimed_founder_hold"]
+    if intent == "property_service_request":
+        return TEMPLATE_TABLE["property_service_hold"]
+    if intent == "association_activity_query":
+        return TEMPLATE_TABLE["association_activity_hold"]
+    if intent == "architecture_discussion":
+        return TEMPLATE_TABLE["architecture_discussion"]
+    if intent == "general_chat":
+        return TEMPLATE_TABLE["general_chat"]
+    if intent == "capability_intro":
+        return TEMPLATE_TABLE["capability_intro"]
+    if scene_type == "CLAIMED_FOUNDER_CONTEXT":
+        return TEMPLATE_TABLE["claimed_founder_hold"]
     if intent == "draft_order":
         return TEMPLATE_TABLE["draft_hold"]
     if intent == "ask_menu":
@@ -512,7 +716,7 @@ def transition_output(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": prev["D1_intent"],
-        "D2_state": {**prev["D2_state"], "semantic_ir": semantic_ir},
+        "D2_state": {**prev["D2_state"], "scene_context": ctx["scene_context"], "semantic_ir": semantic_ir},
         "D3_coordinate": prev["D3_coordinate"],
         "D4_evidence": {**prev["D4_evidence"], "template_table_hash": sha(TEMPLATE_TABLE)},
         "D5_execution": prev["D5_execution"],
@@ -529,6 +733,7 @@ def transition_feedback(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dic
         "D1_intent": prev["D1_intent"],
         "D2_state": {
             **prev["D2_state"],
+            "scene_context": ctx["scene_context"],
             "feedback_candidate": {
                 "capture_mode": "hash_and_refs_only",
                 "may_update_tables_after_review": True,
@@ -572,13 +777,23 @@ def final_verifier(verifier_results: list[dict[str, Any]]) -> dict[str, Any]:
     return {"decision": decision, "reasons": reasons or ["verified"]}
 
 
-def run(text: str, branch: str = "cafe_main", actor_role: str = "counter_ai", channel: str = "counter_voice") -> dict[str, Any]:
+def run(
+    text: str,
+    branch: str = "cafe_main",
+    actor_role: str = "counter_ai",
+    channel: str = "counter_voice",
+    dev_role_ref: str = "",
+    dev_identity_switch: bool = False,
+) -> dict[str, Any]:
     ctx = {
         "text": text,
         "branch": branch,
         "actor_role": actor_role,
         "channel": channel,
         "ttl_seconds": 300,
+        "dev_role_ref": dev_role_ref,
+        "dev_identity_switch": dev_identity_switch,
+        "scene_context": detect_scene_context(text, dev_role_ref=dev_role_ref, dev_identity_switch=dev_identity_switch),
     }
     packet_chain = []
     verifier_results = []
@@ -621,9 +836,18 @@ def main() -> int:
     parser.add_argument("--branch", default="cafe_main")
     parser.add_argument("--actor-role", default="counter_ai")
     parser.add_argument("--channel", default="counter_voice")
+    parser.add_argument("--dev-role-ref", default="")
+    parser.add_argument("--dev-identity-switch", action="store_true")
     args = parser.parse_args()
 
-    data = run(args.text, branch=args.branch, actor_role=args.actor_role, channel=args.channel)
+    data = run(
+        args.text,
+        branch=args.branch,
+        actor_role=args.actor_role,
+        channel=args.channel,
+        dev_role_ref=args.dev_role_ref,
+        dev_identity_switch=args.dev_identity_switch,
+    )
     rendered = json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True)
     print(rendered)
     if args.out:

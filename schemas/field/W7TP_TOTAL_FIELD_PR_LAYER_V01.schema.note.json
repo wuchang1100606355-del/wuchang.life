@@ -1,0 +1,44 @@
+{
+  "schema_note": "Human-readable schema note for W7TP Total Field PR Layer v0.1",
+  "fixed_statement": "LLM is the public-relations layer of Total Field, not the authority of Total Field. LLM 是總場的公關層，不是總場的權威層。",
+  "request_packet": {
+    "packet_type": "TOTAL_FIELD_PR_REQUEST_PACKET",
+    "version": "v0.1",
+    "fields": [
+      "input_text_hash",
+      "verified_decision",
+      "verifier_reasons",
+      "semantic_ir",
+      "safe_answer_draft",
+      "forbidden_actions",
+      "safety_flags",
+      "identity_state",
+      "semantic_ir.scene_context.dev_identity_override",
+      "public_context_only"
+    ]
+  },
+  "response_packet": {
+    "packet_type": "TOTAL_FIELD_PR_RESPONSE_PACKET",
+    "version": "v0.1",
+    "candidate_only": true,
+    "model_authority": false,
+    "verified_decision_unchanged": true,
+    "fields": [
+      "text_zh_TW",
+      "style",
+      "must_not_claim",
+      "requires_final_safety_check",
+      "model_lane"
+    ]
+  },
+  "safety_rules": [
+    "No model download",
+    "No external API call",
+    "No DB write",
+    "No payment capture",
+    "No member plaintext read",
+    "No verifier decision change",
+    "No trusted identity from user self-claim",
+    "Dev identity override is local-development role_ref only and has no production authority"
+  ]
+}

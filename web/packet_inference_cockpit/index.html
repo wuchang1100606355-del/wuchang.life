@@ -24,11 +24,13 @@
 
     <section class="lane-strip" aria-label="dual lane status">
       <div><b>Model Lane</b><span>OFF / CANDIDATE_ONLY</span></div>
+      <div><b>PR Layer</b><span id="prLayerStatus">TEMPLATE_FALLBACK</span></div>
       <div><b>Lookup Lane</b><span>ACTIVE</span></div>
-      <div><b>External API</b><span>FALSE</span></div>
-      <div><b>DB_WRITE</b><span>FALSE</span></div>
+      <div><b>LLM Authority</b><span>FALSE</span></div>
+      <div><b>Decision Locked</b><span id="decisionLockedStatus">TRUE</span></div>
       <div><b>PAYMENT_CAPTURE</b><span>FALSE</span></div>
       <div><b>MEMBER_PLAINTEXT_READ</b><span>FALSE</span></div>
+      <div><b>Scene Context</b><span id="sceneContextStatus">UNKNOWN_CONTEXT</span></div>
     </section>
 
     <section class="layout">
@@ -44,6 +46,22 @@
           <label>Actor<input id="actorRole" value="counter_ai"></label>
           <label>Channel<input id="channel" value="web_cockpit"></label>
         </div>
+        <div class="form-row dev-row">
+          <label>Dev Identity
+            <select id="devRoleRef">
+              <option value="">off</option>
+              <option value="role_ref:dev:founder_maintainer">founder maintainer</option>
+              <option value="role_ref:dev:store_operator">store operator</option>
+              <option value="role_ref:dev:property_operator">property operator</option>
+              <option value="role_ref:dev:association_operator">association operator</option>
+            </select>
+          </label>
+          <label class="check-label">
+            <input id="devIdentitySwitch" type="checkbox">
+            <span>dev identity switch</span>
+          </label>
+          <label>Mode<input value="local dev only" disabled></label>
+        </div>
         <button id="runBtn">RUN PACKET INFERENCE</button>
         <div id="chatLog" class="chat-log"></div>
       </section>
@@ -54,7 +72,14 @@
           <span>template renderer</span>
         </div>
         <div id="decisionBadge" class="decision">WAITING</div>
+        <h3>Final Answer</h3>
         <div id="answerText" class="answer">尚未執行。</div>
+        <h3>Raw Verified Draft</h3>
+        <div id="rawDraftText" class="answer compact">尚未執行。</div>
+        <h3>PR Layer Refined Answer</h3>
+        <div id="prAnswerText" class="answer compact">尚未執行。</div>
+        <h3>Decision Locked</h3>
+        <div id="decisionLockedBox" class="lock-box">TRUE</div>
         <h3>Verifier Decision</h3>
         <pre id="verifierBox">{}</pre>
       </section>
@@ -82,6 +107,14 @@
           <span>semantic_ir + slot filling</span>
         </div>
         <pre id="semanticBox">{}</pre>
+      </section>
+
+      <section class="panel scene-panel">
+        <div class="panel-head">
+          <h2>Scene Context</h2>
+          <span>context router</span>
+        </div>
+        <div id="sceneContextBox" class="scene-box"></div>
       </section>
 
       <section class="panel safety-panel">

@@ -24,6 +24,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = ROOT / "web" / "packet_inference_cockpit"
 RUNTIME = ROOT / "tools" / "w7tp_packet_inference_runtime.py"
+PR_LAYER = ROOT / "tools" / "w7tp_total_field_pr_layer.py"
 RUN_ROOT = ROOT / "runtime" / "total_field" / "packet_inference_cockpit"
 
 SAFETY_FLAGS = {
@@ -116,6 +117,8 @@ def normalize_runtime_output(data: dict[str, Any], text: str) -> dict[str, Any]:
 
     decision = final_verifier.get("decision") or data.get("decision") or "HOLD"
     zh_tw = language.get("zh_TW") or language.get("zh-TW") or language.get("text") or ""
+    semantic_ir = language.get("semantic_ir") if isinstance(language.get("semantic_ir"), dict) else {}
+    scene_context = semantic_ir.get("scene_context") or {}
     forbidden_actions = []
     if packet_chain:
         last_packet = packet_chain[-1] if isinstance(packet_chain[-1], dict) else {}
@@ -140,6 +143,10 @@ def normalize_runtime_output(data: dict[str, Any], text: str) -> dict[str, Any]:
                 "decision": decision,
                 "model_lane": "OFF",
                 "future_model_mode": "CANDIDATE_ONLY",
+                "pr_layer": "PENDING",
+                "llm_authority": False,
+                "verifier_decision_locked": True,
+                "model_output": "candidate-only",
                 "lookup_lane": "ACTIVE",
                 "verifier_authority": "TOTAL_FIELD",
                 "external_api": False,
@@ -150,10 +157,99 @@ def normalize_runtime_output(data: dict[str, Any], text: str) -> dict[str, Any]:
             "summary": {
                 "decision": decision,
                 "output": zh_tw,
+                "raw_verified_draft": zh_tw,
+                "pr_refined_answer": zh_tw,
+                "decision_locked": True,
                 "packet_count": len(timeline),
             },
+            "scene_context": scene_context,
         },
     }
+
+
+def build_pr_request(result: dict[str, Any]) -> dict[str, Any]:
+    verifier = result.get("FINAL_VERIFIER") or {}
+    language = result.get("LANGUAGE_RECONSTRUCTION") or {}
+    semantic_ir = language.get("semantic_ir") or {}
+    identity_profile = semantic_ir.get("identity_profile") or {}
+    scene_context = semantic_ir.get("scene_context") or {}
+    return {
+        "packet_type": "TOTAL_FIELD_PR_REQUEST_PACKET",
+        "version": "v0.1",
+        "input_text_hash": result.get("INPUT_TEXT_HASH", ""),
+        "verified_decision": verifier.get("decision", "HOLD"),
+        "verifier_reasons": verifier.get("reasons", []),
+        "semantic_ir": semantic_ir,
+        "safe_answer_draft": language.get("zh_TW", ""),
+        "forbidden_actions": verifier.get("forbidden_actions", []),
+        "safety_flags": result.get("SAFETY_FLAGS", SAFETY_FLAGS),
+        "identity_state": {
+            "claimed_identity": bool(identity_profile.get("claimed_identity_packet")),
+            "accepted_as_truth": bool(identity_profile.get("accepted_as_truth", False)),
+            "verified_role_ref": None,
+            "dev_identity_override": scene_context.get("dev_identity_override"),
+        },
+        "public_context_only": True,
+    }
+
+
+def apply_pr_layer(result: dict[str, Any]) -> dict[str, Any]:
+    if not PR_LAYER.exists():
+        result["COCKPIT_VIEW"]["badges"]["pr_layer"] = "TEMPLATE_FALLBACK"
+        return result
+
+    request_packet = build_pr_request(result)
+    try:
+        proc = subprocess.run(
+            ["python3", str(PR_LAYER), "--request-json", json.dumps(request_packet, ensure_ascii=False), "--disable-model"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=12,
+            check=False,
+        )
+        if proc.returncode != 0:
+            raise RuntimeError((proc.stderr or proc.stdout or "PR layer nonzero")[:1000])
+        pr_data = json.loads(proc.stdout)
+    except Exception as exc:
+        pr_data = {
+            "STATE": "HOLD_PR_LAYER_FALLBACK",
+            "MODEL_LANE": "TEMPLATE_FALLBACK",
+            "REQUEST_PACKET": request_packet,
+            "RESPONSE_PACKET": {
+                "packet_type": "TOTAL_FIELD_PR_RESPONSE_PACKET",
+                "candidate_only": True,
+                "model_authority": False,
+                "verified_decision_unchanged": True,
+                "text_zh_TW": request_packet["safe_answer_draft"],
+                "error": repr(exc),
+            },
+            "FINAL_TEXT": request_packet["safe_answer_draft"],
+        }
+
+    final_text = str(pr_data.get("FINAL_TEXT") or request_packet["safe_answer_draft"])
+    original_decision = result.get("FINAL_VERIFIER", {}).get("decision", "HOLD")
+    result["LANGUAGE_RECONSTRUCTION"]["raw_verified_draft"] = request_packet["safe_answer_draft"]
+    result["LANGUAGE_RECONSTRUCTION"]["pr_refined_zh_TW"] = final_text
+    result["LANGUAGE_RECONSTRUCTION"]["zh_TW"] = final_text
+    result["PR_LAYER"] = {
+        "STATE": pr_data.get("STATE"),
+        "MODEL_LANE": pr_data.get("MODEL_LANE", "TEMPLATE_FALLBACK"),
+        "REQUEST_PACKET": pr_data.get("REQUEST_PACKET", request_packet),
+        "RESPONSE_PACKET": pr_data.get("RESPONSE_PACKET", {}),
+        "decision_locked": True,
+        "verified_decision": original_decision,
+    }
+    result["COCKPIT_VIEW"]["badges"]["pr_layer"] = pr_data.get("MODEL_LANE", "TEMPLATE_FALLBACK")
+    result["COCKPIT_VIEW"]["badges"]["llm_authority"] = False
+    result["COCKPIT_VIEW"]["badges"]["verifier_decision_locked"] = True
+    result["COCKPIT_VIEW"]["badges"]["model_output"] = "candidate-only"
+    result["COCKPIT_VIEW"]["summary"]["output"] = final_text
+    result["COCKPIT_VIEW"]["summary"]["raw_verified_draft"] = request_packet["safe_answer_draft"]
+    result["COCKPIT_VIEW"]["summary"]["pr_refined_answer"] = final_text
+    result["COCKPIT_VIEW"]["summary"]["decision_locked"] = True
+    result["FINAL_VERIFIER"]["decision"] = original_decision
+    return result
 
 
 def fallback_response(text: str, reason: str) -> dict[str, Any]:
@@ -236,12 +332,24 @@ def fallback_response(text: str, reason: str) -> dict[str, Any]:
     }
 
 
-def run_runtime(text: str, branch: str, actor_role: str, channel: str) -> dict[str, Any]:
+def run_runtime(text: str, branch: str, actor_role: str, channel: str, dev_role_ref: str = "", dev_identity_switch: bool = False) -> dict[str, Any]:
     if not RUNTIME.exists():
         return fallback_response(text, "runtime file missing")
 
     cmd_variants = [
-        ["python3", str(RUNTIME), "--text", text, "--branch", branch, "--actor-role", actor_role, "--channel", channel],
+        [
+            "python3",
+            str(RUNTIME),
+            "--text",
+            text,
+            "--branch",
+            branch,
+            "--actor-role",
+            actor_role,
+            "--channel",
+            channel,
+            *(["--dev-role-ref", dev_role_ref, "--dev-identity-switch"] if dev_identity_switch and dev_role_ref else []),
+        ],
         ["python3", str(RUNTIME), "--text", text],
     ]
     last_error = ""
@@ -252,7 +360,7 @@ def run_runtime(text: str, branch: str, actor_role: str, channel: str) -> dict[s
                 last_error = (result.stderr or result.stdout or "runtime nonzero")[:2000]
                 continue
             data = json.loads(result.stdout)
-            return normalize_runtime_output(data, text)
+            return apply_pr_layer(normalize_runtime_output(data, text))
         except Exception as exc:  # Runtime fallback must never crash the UI.
             last_error = repr(exc)
     return fallback_response(text, last_error or "runtime failed")
@@ -319,10 +427,12 @@ class CockpitHandler(BaseHTTPRequestHandler):
             branch = str(body.get("branch", "cafe_main"))
             actor_role = str(body.get("actor_role", "counter_ai"))
             channel = str(body.get("channel", "web_cockpit"))
+            dev_role_ref = str(body.get("dev_role_ref", ""))
+            dev_identity_switch = bool(body.get("dev_identity_switch", False))
             if not text:
                 return safe_json_response(self, 400, {"STATE": "HOLD_EMPTY_TEXT"})
 
-            result = run_runtime(text, branch, actor_role, channel)
+            result = run_runtime(text, branch, actor_role, channel, dev_role_ref=dev_role_ref, dev_identity_switch=dev_identity_switch)
             RUN_ROOT.mkdir(parents=True, exist_ok=True)
             run_file = RUN_ROOT / f"chat_{int(time.time())}_{uuid.uuid4().hex[:8]}.json"
             audit = dict(result)

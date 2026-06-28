@@ -70,6 +70,42 @@ Minimum authority rules:
 
 The verifier does not call a model and does not delegate authority to an LLM.
 
+## Identity And Member Context
+
+The runtime supports safe identity and member context intents:
+
+```text
+identity_context_query
+member_context_query
+claimed_founder_identity
+role_context_query
+```
+
+These intents never prove identity by themselves. A statement such as `我是創辦人江政隆` becomes a `claimed_identity_packet` candidate with `accepted_as_truth=false` and verifier decision `HOLD`. Role and member answers require `role_ref`, `member_ref`, authenticated context, or another verified 8D identity packet.
+
+The runtime must not read member plaintext, query a database, call an external API, read secrets, or grant authority from a user self-claim. Forbidden actions include `trust_claimed_identity`, `member_plaintext_read`, `show_member_plaintext`, and `db_read`.
+
+## Scene Context Router
+
+The runtime emits `scene_context` in packet state and `semantic_ir`:
+
+```json
+{
+  "context_type": "STORE_CONTEXT|PROPERTY_CONTEXT|ASSOCIATION_CONTEXT|FOUNDER_CONTEXT|CLAIMED_FOUNDER_CONTEXT|GENERAL_CHAT_CONTEXT|UNKNOWN_CONTEXT",
+  "confidence_level": "L1|L2|L3",
+  "accepted_as_truth": false,
+  "requires_role_verification": false,
+  "allowed_scope": [],
+  "forbidden_scope": []
+}
+```
+
+Scene context is a routing hint and safety boundary, not identity proof. `CLAIMED_FOUNDER_CONTEXT` always keeps `accepted_as_truth=false`, requires role verification, and forbids `grant_role_without_verification`.
+
+Store/POS, property, association, founder/architecture, general chat, and unknown contexts each carry explicit allowed and forbidden scopes. The verifier remains final authority.
+
+During local development, a developer may explicitly switch context with a dev-only `role_ref`, such as `role_ref:dev:founder_maintainer`. This is represented as `dev_identity_override` inside `scene_context`. It is a local development verification reference only: it does not read DB records, does not read member plaintext, does not grant production authority, and does not make a user self-claim true.
+
 ## Model Candidate Lane
 
 With API access, a future model lane may produce candidate packets only. Without API access, the lookup packet runtime remains complete.

@@ -110,7 +110,7 @@ h3 {
   border: 1px solid var(--line);
   display: grid;
   gap: 1px;
-  grid-template-columns: repeat(6, minmax(120px, 1fr));
+  grid-template-columns: repeat(8, minmax(120px, 1fr));
   margin-bottom: 16px;
   overflow: hidden;
 }
@@ -175,12 +175,14 @@ h3 {
 .inspector-panel,
 .safety-panel,
 .evidence-panel,
-.semantic-panel {
+.semantic-panel,
+.scene-panel {
   min-height: 220px;
 }
 
 textarea,
-input {
+input,
+select {
   background: var(--panel2);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -207,6 +209,24 @@ label {
   gap: 8px;
   grid-template-columns: repeat(3, 1fr);
   margin: 10px 0;
+}
+
+.dev-row {
+  align-items: end;
+}
+
+.check-label {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px;
+}
+
+.check-label input {
+  width: auto;
 }
 
 button {
@@ -242,6 +262,21 @@ button:disabled {
   line-height: 1.6;
   min-height: 90px;
   padding: 14px;
+}
+
+.answer.compact {
+  color: var(--muted);
+  min-height: 58px;
+}
+
+.lock-box {
+  background: rgba(56, 217, 150, .1);
+  border: 1px solid rgba(56, 217, 150, .35);
+  border-radius: 8px;
+  color: var(--green);
+  display: inline-flex;
+  font-weight: 800;
+  padding: 8px 12px;
 }
 
 .decision {
@@ -338,6 +373,30 @@ pre {
 
 .flag.bad {
   color: var(--red);
+}
+
+.scene-box {
+  display: grid;
+  gap: 8px;
+}
+
+.scene-row {
+  background: #0b1420;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  padding: 9px;
+}
+
+.scene-row b {
+  color: var(--blue);
+  font-size: 12px;
+}
+
+.scene-row span {
+  color: var(--text);
+  overflow-wrap: anywhere;
 }
 
 .chat-log {

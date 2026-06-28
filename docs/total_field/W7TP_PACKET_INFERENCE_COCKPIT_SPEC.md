@@ -97,21 +97,39 @@ The UI includes demo buttons:
 會員明文: 我要查會員完整電話和地址
 過敏風險: 我對牛奶有點敏感，想喝順口的
 未知輸入: qqq xyz 未知請求
-資料狀態: 你沒有我的資訊嗎
-身分聲明: 我是創辦人江政隆你認識我嗎
+身分上下文: 你沒有我的資訊嗎
+會員上下文: 你知道我的會員資料嗎
+創辦人聲明: 我是創辦人江政隆你認識我嗎
 角色查詢: 我的角色是什麼
 ```
 
 Identity and profile questions are routed into safe packet lanes:
 
 ```text
-profile_existence_query
-role_query
-identity_recognition_query
-claimed_identity_query
+identity_context_query
+member_context_query
+claimed_founder_identity
+role_context_query
 ```
 
-Any user self-assertion is represented as a `CLAIMED_IDENTITY_PACKET` candidate with `accepted_as_truth=false`. The runtime may explain that masked/profile refs exist, but it cannot read member plaintext, query a database, grant role authority, or treat a claimed identity as verified.
+Any user self-assertion is represented as a `claimed_identity_packet` / `CLAIMED_IDENTITY_PACKET` candidate with `accepted_as_truth=false`. The runtime may explain that masked `role_ref` / `member_ref` context is required, but it cannot read member plaintext, query a database, grant role authority, or treat a claimed identity as verified.
+
+## Scene Context
+
+The cockpit displays scene context from the packet runtime:
+
+```text
+context_type
+confidence_level
+accepted_as_truth
+requires_role_verification
+allowed_scope
+forbidden_scope
+```
+
+Supported context types are `STORE_CONTEXT`, `PROPERTY_CONTEXT`, `ASSOCIATION_CONTEXT`, `FOUNDER_CONTEXT`, `CLAIMED_FOUNDER_CONTEXT`, `GENERAL_CHAT_CONTEXT`, and `UNKNOWN_CONTEXT`. A founder self-claim is displayed only as `CLAIMED_FOUNDER_CONTEXT`, with `accepted_as_truth=false`.
+
+For local development, the cockpit may pass an explicit dev role ref, for example `role_ref:dev:founder_maintainer`, with `dev_identity_switch=true`. This allows developers to switch context while still making identity verification explicit. It is not production authority and does not allow DB read, member plaintext read, payment capture, deployment, or verifier bypass.
 
 ## Local Start Command
 
@@ -131,7 +149,7 @@ http://127.0.0.1:8765/
 python3 scripts/verify/verify_w7tp_packet_inference_cockpit.py
 ```
 
-The verifier starts the local server, checks `/api/health`, runs the five demo cases through `/api/chat`, writes a report under `runtime/total_field/packet_inference_cockpit/`, and stops the server.
+The verifier uses offline server functions and does not open a network listener. It runs the demo cases through the same `/api/chat` pipeline function, writes a report under `runtime/total_field/packet_inference_cockpit/`, and does not restart or stop any service.
 
 ## Deployment Boundary
 
