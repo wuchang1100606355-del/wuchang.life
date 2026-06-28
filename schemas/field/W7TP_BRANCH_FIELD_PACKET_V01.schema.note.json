@@ -1,0 +1,22 @@
+{
+  "packet_type": "W7TP_BRANCH_FIELD_PACKET",
+  "version": "v0.1",
+  "authority": "BRANCH_FIELD_LIMITED",
+  "fields": {
+    "branch_id": "string",
+    "branch_type": "STORE|PROPERTY|ASSOCIATION|BROWSER|WEBSITE|VOICE|CUSTOM",
+    "allowed_capabilities": [],
+    "local_route_table_ref": "string",
+    "local_verifier_subset_ref": "string",
+    "template_set_ref": "string",
+    "risk_policy_subset_ref": "string",
+    "release_manifest_ref": "string"
+  },
+  "cannot_do": [
+    "grant_total_field_authority",
+    "read_member_plaintext",
+    "capture_payment_without_human_review",
+    "deploy",
+    "read_secret"
+  ]
+}

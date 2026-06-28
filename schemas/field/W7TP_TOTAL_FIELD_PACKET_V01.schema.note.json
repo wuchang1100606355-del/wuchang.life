@@ -1,0 +1,34 @@
+{
+  "packet_type": "W7TP_TOTAL_FIELD_PACKET",
+  "version": "v0.1",
+  "authority": "TOTAL_FIELD",
+  "fields": {
+    "total_field_id": "string",
+    "work_queue_ref": "string",
+    "schema_registry_ref": "string",
+    "verifier_registry_ref": "string",
+    "risk_policy_ref": "string",
+    "evidence_chain_ref": "string",
+    "commit_queue_ref": "string",
+    "release_manifest_ref": "string",
+    "seal_ref": "string"
+  },
+  "decisions": [
+    "ALLOW",
+    "HOLD",
+    "BLOCK",
+    "VERIFY_READY",
+    "STAGE_READY",
+    "COMMIT_READY",
+    "RELEASE_READY",
+    "SEALED"
+  ],
+  "forbidden": [
+    "secret_read",
+    "member_plaintext_read",
+    "payment_capture",
+    "db_write_without_packet",
+    "deploy_without_explicit_packet",
+    "codex_authority"
+  ]
+}
