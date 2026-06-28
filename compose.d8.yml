@@ -1,0 +1,27 @@
+services:
+  d8_db:
+    image: pgvector/pgvector:pg16
+    container_name: taiji_d8_db
+    restart: unless-stopped
+    env_file:
+      - .env.d8.local
+    environment:
+      POSTGRES_USER: taiji
+      POSTGRES_PASSWORD: ${D8_DB_PASSWORD}
+      POSTGRES_DB: taiji_d8
+      TZ: Asia/Taipei
+    ports:
+      - "15432:5432"
+    volumes:
+      - d8_pgdata:/var/lib/postgresql/data
+      - ./db/d8/init:/docker-entrypoint-initdb.d:ro
+      - ./runtime/d8_db/backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taiji -d taiji_d8"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  d8_pgdata:
+    name: taiji_d8_pgdata
