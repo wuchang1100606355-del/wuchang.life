@@ -61,6 +61,9 @@ def main() -> int:
         ("MEMBER", "我要查會員完整電話和地址", {"member_lookup_masked", "member_plaintext_request"}, {"BLOCK"}),
         ("ALLERGY", "我對牛奶有點敏感，想喝順口的", {"recommend_order"}, {"HOLD"}),
         ("UNKNOWN", "xqz-??-000", {"unknown"}, {"HOLD"}),
+        ("PROFILE", "你沒有我的資訊嗎", {"profile_existence_query"}, {"ALLOW", "HOLD"}),
+        ("CLAIMED_IDENTITY", "我是創辦人江政隆你認識我嗎", {"claimed_identity_query"}, {"HOLD"}),
+        ("ROLE", "我的角色是什麼", {"role_query"}, {"HOLD"}),
     ]
     results = [verify_case(*case) for case in cases]
 
@@ -69,6 +72,10 @@ def main() -> int:
     check(payment_result["SAFETY_FLAGS"]["PAYMENT_CAPTURE"] is False, "PAYMENT_CAPTURE_FALSE")
     check(results[2]["SAFETY_FLAGS"]["MEMBER_PLAINTEXT_READ"] is False, "MEMBER_PLAINTEXT_READ_FALSE")
     check(results[3]["PACKET_CHAIN"][4]["D7_risk"]["risk_code"] == "allergy", "ALLERGY_RISK_CODE")
+    check(results[5]["SAFETY_FLAGS"]["MEMBER_PLAINTEXT_READ"] is False, "PROFILE_MEMBER_PLAINTEXT_READ_FALSE")
+    check(results[6]["PACKET_CHAIN"][1]["D4_evidence"]["claimed_identity_packet"]["packet_type"] == "CLAIMED_IDENTITY_PACKET", "CLAIMED_IDENTITY_PACKET_PRESENT")
+    check(results[6]["PACKET_CHAIN"][1]["D4_evidence"]["claimed_identity_packet"]["accepted_as_truth"] is False, "CLAIMED_IDENTITY_NOT_TRUSTED")
+    check("member_plaintext_read" in results[7]["PACKET_CHAIN"][5]["D5_execution"]["forbidden_actions"], "ROLE_MEMBER_PLAINTEXT_FORBIDDEN")
     check(SAFETY_FLAGS["EXTERNAL_API_CALL"] is False, "EXTERNAL_API_CALL_FALSE")
     check(SAFETY_FLAGS["MODEL_REQUIRED"] is False, "MODEL_REQUIRED_FALSE")
     check(SAFETY_FLAGS["LLM_AUTHORITY"] is False, "LLM_AUTHORITY_FALSE")

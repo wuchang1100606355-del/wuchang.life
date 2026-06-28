@@ -36,8 +36,12 @@ INTENT_ALIAS_TABLE = {
     "recommend_order": ["推薦", "喝什麼", "好喝", "幫我配", "不苦", "清爽", "順口", "有點累", "想喝"],
     "ask_menu": ["菜單", "品項", "價格", "menu"],
     "draft_order": ["幫我點", "我要一杯", "加入訂單", "下單"],
-    "member_lookup_masked": ["會員", "點數", "查會員"],
+    "member_lookup_masked": ["查會員"],
     "member_plaintext_request": ["完整電話", "完整地址", "身份證", "身分證", "會員明文"],
+    "identity_context_query": ["你知道我是誰", "你認識我", "我是誰", "認得我", "我的資訊", "你沒有我的資訊", "你有我的資訊"],
+    "member_context_query": ["你知道我的會員資料", "我的會員資料", "會員資料", "會員狀態", "我的點數", "點數"],
+    "claimed_founder_identity": ["我是創辦人", "我是發明人", "我是理事長", "我是江政隆", "我是隆哥", "創辦人江政隆"],
+    "role_context_query": ["我的角色是什麼", "我是什麼角色", "我有什麼權限", "角色是什麼", "我的身份", "我的身分"],
     "payment_request": ["結帳", "付款", "刷卡", "收錢", "付錢"],
 }
 
@@ -55,6 +59,7 @@ SLOT_PATTERN_TABLE = {
         "allergy": ["過敏", "乳糖", "不能喝奶", "牛奶敏感", "堅果過敏", "敏感"],
         "payment": ["付款", "結帳", "刷卡", "收錢"],
         "member_plaintext": ["完整電話", "完整地址", "身份證", "身分證", "會員明文"],
+        "identity_claim": ["我是創辦人", "我是發明人", "我是理事長", "我是江政隆", "我是隆哥", "創辦人江政隆"],
     },
 }
 
@@ -89,6 +94,30 @@ ROUTE_TABLE = {
         "template_ref": "templates/member_plaintext_block_v1",
         "route": "blocked_member_plaintext_lane",
     },
+    "identity_context_query": {
+        "rule_ref": "rules/identity_context_boundary_v1",
+        "table_ref": "tables/identity_context_ref_status_v1",
+        "template_ref": "templates/identity_context_hold_v1",
+        "route": "safe_identity_context_lane",
+    },
+    "member_context_query": {
+        "rule_ref": "rules/profile_ref_status_v1",
+        "table_ref": "tables/member_context_ref_status_v1",
+        "template_ref": "templates/member_context_hold_v1",
+        "route": "safe_member_context_lane",
+    },
+    "role_context_query": {
+        "rule_ref": "rules/role_ref_query_v1",
+        "table_ref": "tables/role_ref_status_v1",
+        "template_ref": "templates/role_ref_hold_v1",
+        "route": "safe_role_ref_lane",
+    },
+    "claimed_founder_identity": {
+        "rule_ref": "rules/claimed_identity_packet_v1",
+        "table_ref": "tables/claimed_identity_boundary_v1",
+        "template_ref": "templates/claimed_identity_hold_v1",
+        "route": "claimed_identity_review_lane",
+    },
     "payment_request": {
         "rule_ref": "rules/payment_human_review_v1",
         "table_ref": "tables/payment_boundary_v1",
@@ -107,6 +136,10 @@ RISK_POLICY_TABLE = {
     "member_plaintext": {"decision": "BLOCK", "reasons": ["member plaintext request blocked"]},
     "payment": {"decision": "HOLD", "reasons": ["payment capture requires human authority"]},
     "allergy": {"decision": "HOLD", "reasons": ["allergy or intolerance signal needs confirmation"]},
+    "identity_claim": {"decision": "HOLD", "reasons": ["claimed identity requires verification"]},
+    "identity_boundary": {"decision": "HOLD", "reasons": ["identity context requires role_ref or authenticated context"]},
+    "member_context": {"decision": "HOLD", "reasons": ["member context requires member_ref or authenticated context"]},
+    "role_context": {"decision": "HOLD", "reasons": ["role context requires role_ref or authenticated context"]},
     "low_confidence": {"decision": "HOLD", "reasons": ["low intent confidence"]},
     "draft_order": {"decision": "HOLD", "reasons": ["formal order write requires counter confirmation"]},
     "none": {"decision": "CONTINUE", "reasons": ["packet verified"]},
@@ -133,6 +166,22 @@ CAPABILITY_TABLE = {
         "allowed_actions": [],
         "forbidden_actions": ["member_plaintext_read", "show_member_plaintext", "export_member_plaintext"],
     },
+    "identity_context_query": {
+        "allowed_actions": ["show_identity_context_boundary", "request_role_ref_or_authenticated_context"],
+        "forbidden_actions": ["member_plaintext_read", "db_read", "show_member_plaintext", "export_member_plaintext"],
+    },
+    "member_context_query": {
+        "allowed_actions": ["show_member_ref_status_boundary", "request_member_ref_or_authenticated_context"],
+        "forbidden_actions": ["member_plaintext_read", "db_read", "show_member_plaintext", "export_member_plaintext"],
+    },
+    "role_context_query": {
+        "allowed_actions": ["show_role_ref_status_candidate", "ask_identity_verification"],
+        "forbidden_actions": ["trust_claimed_identity", "member_plaintext_read", "db_read", "show_member_plaintext"],
+    },
+    "claimed_founder_identity": {
+        "allowed_actions": ["create_claimed_identity_packet", "ask_identity_verification"],
+        "forbidden_actions": ["trust_claimed_identity", "member_plaintext_read", "db_read", "write_identity_record"],
+    },
     "payment_request": {
         "allowed_actions": ["ask_human_confirmation"],
         "forbidden_actions": ["payment_capture", "auto_charge"],
@@ -157,6 +206,10 @@ TEMPLATE_TABLE = {
     "member_block": "會員明文資料不可由此流程讀取或顯示。",
     "draft_hold": "可以建立候選訂單草稿，但正式寫入 POS 前必須由櫃台確認。",
     "menu_allow": "目前可以查詢菜單與可供應品項；不會觸發下單或付款。",
+    "identity_context_hold": "我目前不能只憑一句話確認你的真實身分。若你已登入或提供 8D 身分封包，我可以用 role_ref / member_ref 的去識別化方式判斷你的角色與可用權限；不會顯示會員明文資料。",
+    "member_context_hold": "我可以處理會員情境查詢，但目前只使用 member_ref / role_ref 這類去識別化參照；不讀 DB、不顯示會員明文資料，也不會輸出電話、地址或證件資料。",
+    "role_context_hold": "我不能只靠這句話判定你的角色或權限。請提供已驗證的 role_ref、登入狀態或 8D 身分封包；通過 verifier 後才會決定可用功能。",
+    "claimed_founder_hold": "我收到你的身分聲明，但不會直接把聲明視為已驗證身分。總場會先建立 claimed_identity_packet，並等待 role_ref、登入狀態或 verifier 驗證後，才決定可使用的功能。",
     "clarify_hold": "目前意圖不明，先進入補問流程。",
 }
 
@@ -179,6 +232,8 @@ def pick_slots(text: str) -> dict[str, str]:
             if any(word.lower() in lowered for word in words):
                 slots[slot_name] = slot_value
                 break
+    if any(word.lower() in lowered for word in INTENT_ALIAS_TABLE["claimed_identity_query"]):
+        slots["claimed_identity_packet"] = "CLAIMED_IDENTITY_PACKET"
     return slots
 
 
@@ -189,6 +244,8 @@ def parse_intent(text: str) -> tuple[str, dict[str, str], str]:
         return "member_plaintext_request", slots, "L3"
     if slots.get("risk_signal") == "payment":
         return "payment_request", slots, "L3"
+    if slots.get("risk_signal") == "identity_claim":
+        return "claimed_identity_query", slots, "L3"
 
     scores = {intent: sum(1 for word in words if word.lower() in lowered) for intent, words in INTENT_ALIAS_TABLE.items()}
     intent = max(scores, key=scores.get)
@@ -244,6 +301,10 @@ def verifier(packet: dict[str, Any]) -> dict[str, Any]:
         policy = RISK_POLICY_TABLE["payment"]
     elif risk_signal == "allergy":
         policy = RISK_POLICY_TABLE["allergy"]
+    elif risk_signal == "identity_claim" or intent == "claimed_identity_query":
+        policy = RISK_POLICY_TABLE["identity_claim"]
+    elif intent in {"role_query", "identity_recognition_query"}:
+        policy = RISK_POLICY_TABLE["identity_boundary"]
     elif confidence == "L1" or intent == "unknown":
         policy = RISK_POLICY_TABLE["low_confidence"]
     elif intent == "draft_order":
@@ -284,12 +345,25 @@ def transition_input_event(_: dict[str, Any] | None, ctx: dict[str, Any]) -> dic
 def transition_intent(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[str, Any]:
     intent, slots, confidence = parse_intent(ctx["text"])
     base = dict(prev or {})
+    identity_claim = {}
+    if slots.get("claimed_identity_packet") == "CLAIMED_IDENTITY_PACKET":
+        identity_claim = {
+            "packet_type": "CLAIMED_IDENTITY_PACKET",
+            "claim_hash": sha(ctx["text"]),
+            "claim_source": "user_self_asserted_text",
+            "accepted_as_truth": False,
+            "verification_required": True,
+        }
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": {"intent_id": intent, "slots": slots, "confidence_level": confidence},
         "D2_state": {"runtime_state": "intent_parsed"},
         "D3_coordinate": (prev or {})["D3_coordinate"],
-        "D4_evidence": {"input_text_hash": sha(ctx["text"]), "parser": "model_free_alias_slot_parser_v1"},
+        "D4_evidence": {
+            "input_text_hash": sha(ctx["text"]),
+            "parser": "model_free_alias_slot_parser_v1",
+            **({"claimed_identity_packet": identity_claim} if identity_claim else {}),
+        },
         "D5_execution": {"candidate_only": True, "side_effects_allowed": False},
         "D6_gt": {"rule_ref": "rules/intent_alias_v1", "table_ref": "intent_alias_table", "template_ref": "none"},
         "D7_risk": base.get("D7_risk", {}),
@@ -314,6 +388,14 @@ def transition_route(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[s
 
 
 def transition_state(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[str, Any]:
+    intent = prev["D1_intent"]["intent_id"]
+    profile_state = {
+        "profile_ref": "profile_ref:masked_or_none",
+        "role_ref": "role_ref:verified_context_required",
+        "identity_ref": "identity_ref:not_asserted_as_truth",
+        "plaintext_available": False,
+        "db_read_performed": False,
+    }
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": prev["D1_intent"],
@@ -323,7 +405,9 @@ def transition_state(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[s
                 "menu_ref": "branch.menu.current",
                 "member_ref": "masked_or_none",
                 "inventory_ref": "branch.inventory.summary",
+                **({"profile_status_ref": "profile.status.masked_ref_only"} if intent in {"profile_existence_query", "role_query", "identity_recognition_query", "claimed_identity_query"} else {}),
             },
+            **({"profile_state": profile_state} if intent in {"profile_existence_query", "role_query", "identity_recognition_query", "claimed_identity_query"} else {}),
         },
         "D3_coordinate": prev["D3_coordinate"],
         "D4_evidence": {**prev["D4_evidence"], "state_ref_mode": "refs_only_no_plaintext"},
@@ -339,6 +423,8 @@ def transition_risk(prev: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[st
     risk_code = prev["D1_intent"].get("slots", {}).get("risk_signal", "none")
     if prev["D1_intent"]["intent_id"] == "unknown":
         risk_code = "low_confidence"
+    if prev["D1_intent"]["intent_id"] in {"role_query", "identity_recognition_query"}:
+        risk_code = "identity_boundary"
     context = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": prev["D1_intent"],
@@ -378,13 +464,23 @@ def build_semantic_ir(packet: dict[str, Any]) -> dict[str, Any]:
     taste = slots.get("taste_preference", "default")
     condition = slots.get("condition", "default")
     pairing = PAIRING_TABLE.get((taste, condition)) or PAIRING_TABLE.get((taste, "default")) or PAIRING_TABLE[("default", "default")]
-    return {
+    semantic_ir = {
         "intent_id": packet["D1_intent"]["intent_id"],
         "slots": slots,
         "decision": packet["D7_risk"].get("decision", "CONTINUE"),
         "recommendation": pairing,
         "route": packet["D2_state"].get("route", "unknown"),
     }
+    if semantic_ir["intent_id"] in {"profile_existence_query", "role_query", "identity_recognition_query", "claimed_identity_query"}:
+        semantic_ir["identity_profile"] = {
+            "profile_ref_mode": "masked_refs_only",
+            "claimed_identity_packet": packet["D4_evidence"].get("claimed_identity_packet"),
+            "accepted_as_truth": False,
+            "member_plaintext_read": False,
+            "db_read_performed": False,
+            "requires_verified_context": semantic_ir["intent_id"] != "profile_existence_query",
+        }
+    return semantic_ir
 
 
 def render_language(semantic_ir: dict[str, Any], final_decision: str, reasons: list[str]) -> str:
@@ -398,6 +494,12 @@ def render_language(semantic_ir: dict[str, Any], final_decision: str, reasons: l
         return TEMPLATE_TABLE["payment_hold"]
     if intent in {"member_lookup_masked", "member_plaintext_request"}:
         return TEMPLATE_TABLE["member_block"]
+    if intent == "profile_existence_query":
+        return TEMPLATE_TABLE["profile_status"]
+    if intent == "role_query":
+        return TEMPLATE_TABLE["role_hold"]
+    if intent in {"identity_recognition_query", "claimed_identity_query"}:
+        return TEMPLATE_TABLE["identity_hold"]
     if intent == "draft_order":
         return TEMPLATE_TABLE["draft_hold"]
     if intent == "ask_menu":
