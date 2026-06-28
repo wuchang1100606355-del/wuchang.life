@@ -1,0 +1,64 @@
+{
+  "schema_note": "W7TP_PACKET_INFERENCE_CHAIN_V01",
+  "status": "human_readable_schema_note",
+  "packet_chain": {
+    "required_steps": [
+      "S0_INPUT_EVENT",
+      "S1_INTENT_PACKET",
+      "S2_ROUTE_PACKET",
+      "S3_STATE_PACKET",
+      "S4_RISK_PACKET",
+      "S5_CAPABILITY_PACKET",
+      "S6_OUTPUT_PACKET",
+      "S7_FEEDBACK_CANDIDATE_PACKET"
+    ],
+    "required_packet_fields": [
+      "packet_type",
+      "version",
+      "step",
+      "parent_packet_hash",
+      "D1_intent",
+      "D2_state",
+      "D3_coordinate",
+      "D4_evidence",
+      "D5_execution",
+      "D6_gt",
+      "D7_risk",
+      "D8_envelope"
+    ],
+    "d8_envelope_required_fields": [
+      "packet_id",
+      "created_at_unix",
+      "ttl_seconds",
+      "nonce",
+      "packet_hash",
+      "seal"
+    ],
+    "chain_rule": "Every packet after S0 must set parent_packet_hash to the previous packet D8_envelope.packet_hash."
+  },
+  "verifier_decisions": [
+    "ALLOW",
+    "HOLD",
+    "BLOCK",
+    "CONTINUE"
+  ],
+  "safety_rules": {
+    "SECRET_READ": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "RAW_AUDIO_SAVED": false,
+    "DB_WRITE": false,
+    "PAYMENT_CAPTURE": false,
+    "SERVICE_RESTART": false,
+    "DEPLOY": false,
+    "PRODUCTION_RELEASE": false,
+    "EXTERNAL_API_CALL": false,
+    "MODEL_REQUIRED": false,
+    "LLM_AUTHORITY": false
+  },
+  "authority_rules": [
+    "Verifier is the only authority for ALLOW, HOLD, and BLOCK.",
+    "Model lane, when present, may only produce candidate packets.",
+    "Natural language reconstruction must use semantic_ir, template_table, and slot filling.",
+    "Runtime stores or emits schema, table, rule, hash, seal, and evidence_ref style data; it must not require full plaintext member data."
+  ]
+}
