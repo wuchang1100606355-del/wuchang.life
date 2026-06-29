@@ -27,7 +27,7 @@ ALIASES = {
 SLOTS = {
     "taste_preference": {
         "refreshing": ["清爽","輕一點","低酸","果香"],
-        "not_bitter": ["不苦","不要苦","順口"],
+        "not_bitter": ["不苦","不要苦","不太苦","順口"],
         "milky": ["拿鐵","牛奶","奶"],
     },
     "condition": {
