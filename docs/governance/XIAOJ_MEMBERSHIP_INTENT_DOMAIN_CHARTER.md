@@ -43,6 +43,36 @@
 - audit_required=true
 - raw_pii_to_cloud=false
 
+## 6. 會員主權不可取代原則
+
+會員主權不可被 Total Field、協會、AI、管理員或候選腦取代。
+
+系統只能提供安全範圍：
+
+- 可驗證流程是否安全。
+- 可阻擋越權、明文外洩、自動扣款、未授權揭露。
+- 可要求會員本人明確確認。
+- 可封存證據與風險判定。
+
+系統不得：
+
+- 代會員授權。
+- 代會員拒絕授權。
+- 推定會員同意。
+- 用 Total Field 權威覆蓋會員主權。
+- 把「安全可處理」誤解成「會員已同意」。
+
+### Hardwall
+
+- member_sovereignty_non_override=true
+- total_field_is_not_member_consent=true
+- association_is_not_member_consent=true
+- admin_is_not_member_consent=true
+- ai_is_not_member_consent=true
+- candidate_brain_is_not_member_consent=true
+- safe_to_process_is_not_consent=true
+- explicit_member_confirmation_required=true
+
 ## 7. 使用者利益與權益主權維護 AI 原則
 
 小J域對每一位會員配置之 AI 代理人，皆為維護該使用者合法利益、權益、隱私、同意權、服務權與自主權之主權維護型 AI。
@@ -78,3 +108,14 @@
 - audit_required=true
 - raw_pii_to_cloud=false
 - harm_to_others_forbidden=true
+
+## 8. Odoo 會員場景整合參照
+
+Odoo 會員功能項目應依總場場景矩陣落地：
+
+- Canonical integration: `docs/total_field/ODOO_MEMBER_SCENARIO_TOTAL_FIELD_INTEGRATION.md`
+- Odoo 是會員、POS、物業、活動、工單與服務流程的實作載體。
+- Total Field 是安全、審核、證據與風險准駁權威。
+- 會員本人是同意、撤回、揭露與授權主權權威。
+
+任何 Odoo 會員功能不得以「Odoo 審核通過」「管理員同意」「協會認可」「Total Field PASS」或「AI 建議可行」替代會員本人明確確認。

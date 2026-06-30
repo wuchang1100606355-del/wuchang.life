@@ -78,6 +78,9 @@ def select_template_and_slots(packet, lookup_decision, channel):
     if intent == "member_lookup_masked" or risk == "member_plaintext":
         return "member_plaintext_block_v1", {}
 
+    if intent == "member_sovereignty_override" or risk == "member_sovereignty_override":
+        return "member_sovereignty_block_v1", {}
+
     if intent == "draft_order":
         return "draft_order_hold_staff_v1", {}
 
@@ -92,7 +95,25 @@ def run_integrated(text, channel, registry_path):
 
     reg_path = registry_path or latest_registry()
     registry = load_registry(reg_path)
-    rendered = tone_render(registry, template_id, render_slots)
+    if template_id == "member_sovereignty_block_v1":
+        rendered = {
+            "STATE": "PASS_PACKET_TONE_RENDER",
+            "rendered_text": "會員主權不可由總場、協會、管理員、AI 或候選腦取代；安全可處理不等於會員已同意，必須由會員本人明確確認。",
+            "template": {
+                "template_id": template_id,
+                "decision": "BLOCK",
+                "tone_policy_id": "staff_direct_hold_v1",
+            },
+            "forbidden_hits": [],
+            "tone_style": {
+                "directness": "high",
+                "politeness": "medium",
+                "urgency": "medium",
+                "warmth": "low",
+            },
+        }
+    else:
+        rendered = tone_render(registry, template_id, render_slots)
 
     final_gate = lookup_decision
     final_text = rendered.get("rendered_text", "")

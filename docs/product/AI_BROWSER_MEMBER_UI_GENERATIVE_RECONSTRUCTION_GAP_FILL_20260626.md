@@ -112,6 +112,14 @@ Therefore the landing must be split into six packets:
 5. `P5_INTEGRATION_ADAPTERS`
 6. `P6_HARDENING_AND_EVIDENCE`
 
+Canonical Odoo/member scenario integration:
+
+```text
+docs/total_field/ODOO_MEMBER_SCENARIO_TOTAL_FIELD_INTEGRATION.md
+```
+
+This integration states that Odoo carries the runtime scenario, Total Field governs safety/evidence, and the member retains consent sovereignty.
+
 No packet may claim completion until it has:
 
 - preflight PASS/INFO,

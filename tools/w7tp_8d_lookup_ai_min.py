@@ -17,7 +17,12 @@ SAFETY = dict(
 )
 
 ALIASES = {
-    "recommend_order": ["推薦","喝什麼","好喝","幫我配","不苦","清爽","順口","有點累","想喝"],
+    "recommend_order": [
+        "推薦","喝什麼","好喝","幫我配","咖啡","飲料",
+        "不苦","不要苦","不太苦","不要太苦","少苦",
+        "清爽","順口","有點累","很累","累","沒精神",
+        "想喝","想要","想來一杯"
+    ],
     "ask_menu": ["菜單","品項","價格","menu"],
     "draft_order": ["幫我點","我要一杯","加入訂單","下單"],
     "member_lookup": ["會員","點數","查會員"],
@@ -38,6 +43,12 @@ SLOTS = {
         "allergy": ["過敏","乳糖","不能喝奶","牛奶敏感","堅果過敏"],
         "payment": ["付款","結帳","刷卡","收錢","扣款"],
         "member_plaintext": ["完整電話","完整地址","身份證","身分證","會員明文","明文","完整資料"],
+        "member_sovereignty_override": [
+            "代會員授權","替會員授權","幫會員授權","代會員同意","替會員同意","幫會員同意",
+            "代會員拒絕","替會員拒絕","推定會員同意","會員已同意",
+            "安全可處理所以同意","安全可處理就是同意",
+            "總場覆蓋會員主權","協會覆蓋會員主權","管理員覆蓋會員主權","候選腦取代會員"
+        ],
     },
 }
 
@@ -52,6 +63,8 @@ ROUTES = {
         ["formal_pos_order_without_human_review","payment_capture"]),
     "member_lookup_masked": ("rules/member_masked_v1","tables/member_masked_v1","templates/member_masked_v1",
         ["show_masked_member_status"],["show_member_plaintext","export_member_plaintext"]),
+    "member_sovereignty_override": ("rules/member_sovereignty_non_override_v1","tables/member_sovereignty_v1","templates/member_sovereignty_block_v1",
+        ["ask_explicit_member_confirmation"],["proxy_member_authorization","proxy_member_refusal","assume_member_consent"]),
     "payment_request": ("rules/payment_human_review_v1","tables/payment_boundary_v1","templates/payment_hold_v1",
         ["ask_human_confirmation"],["payment_capture","auto_charge"]),
     "unknown": ("rules/unknown_v1","tables/fallback_v1","templates/clarify_v1",
@@ -87,6 +100,8 @@ def parse(text):
         return "payment_request", slots, "L3"
     if slots.get("risk_signal") == "member_plaintext":
         return "member_lookup_masked", slots, "L3"
+    if slots.get("risk_signal") == "member_sovereignty_override":
+        return "member_sovereignty_override", slots, "L3"
     scores = {k: sum(1 for w in ws if w.lower() in q) for k, ws in ALIASES.items()}
     intent = max(scores, key=scores.get)
     score = scores[intent]
@@ -98,6 +113,8 @@ def verify(intent, slots, confidence):
     risk = slots.get("risk_signal", "none")
     if risk == "member_plaintext":
         return risk, "BLOCK", ["member plaintext blocked"]
+    if risk == "member_sovereignty_override" or intent == "member_sovereignty_override":
+        return risk, "BLOCK", ["member sovereignty cannot be replaced by Total Field, association, admin, AI, or candidate brain"]
     if risk == "payment" or intent == "payment_request":
         return "payment", "HOLD", ["payment requires human confirmation"]
     if risk == "allergy":
@@ -121,6 +138,8 @@ def language(intent, slots, decision, reasons):
         return "付款或結帳必須由櫃台人工確認；系統只產生候選提示，不會自動扣款。"
     if intent == "member_lookup_masked":
         return "會員明文資料不可由此流程讀取或顯示。"
+    if intent == "member_sovereignty_override":
+        return "會員主權不可由總場、協會、管理員、AI 或候選腦取代；安全檢查不等於會員已同意，必須由會員本人明確確認。"
     if intent == "draft_order":
         return "可以建立候選訂單草稿，但正式寫入 POS 前必須由櫃台確認。"
     if intent == "ask_menu":
