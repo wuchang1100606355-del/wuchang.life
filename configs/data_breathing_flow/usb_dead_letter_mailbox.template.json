@@ -1,0 +1,27 @@
+{
+  "template_name": "w7tp_usb_dead_letter_mailbox",
+  "mailbox_backend": "usb",
+  "usb_dead_letter_required": true,
+  "usb_mount_ref": "router_usb_mount_ref",
+  "mailbox_backend_path": "/mnt/router_usb/w7tp_dead_letter_mailbox",
+  "jffs_role": "pointer_status_only",
+  "jffs_pointer_path": "/jffs/w7tp/dead_letter_pointer.json",
+  "cloud_authority": false,
+  "local_authority": "discrete_state_core",
+  "source_redacted_required": true,
+  "candidate_only": true,
+  "safety_flags": {
+    "SECRET_READ": false,
+    "ENV_DUMP": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "RAW_AUDIO_READ": false,
+    "ROUTER_PASSWORD_SAVE": false,
+    "USB_DEAD_LETTER_REQUIRED": true,
+    "JFFS_POINTER_OR_STATUS_ONLY": true
+  },
+  "failure_behavior": {
+    "usb_unhealthy": "HOLD_USB_DEAD_LETTER_BACKEND_UNAVAILABLE",
+    "usb_healthy_jffs_healthy": "USB_MAILBOX_OK_JFFS_POINTER_OK",
+    "usb_healthy_jffs_degraded": "USB_MAILBOX_OK_JFFS_DEGRADED"
+  }
+}

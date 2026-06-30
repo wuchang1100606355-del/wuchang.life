@@ -1,0 +1,26 @@
+{
+  "node_id_ref": "router_edge_node_ref",
+  "node_type": "router",
+  "authority_scope": "edge_network_boundary",
+  "router_user_default": "coffeeboss",
+  "router_password_saved": false,
+  "router_password_interactive_only": true,
+  "cloud_authority": false,
+  "local_authority": "discrete_state_core",
+  "allowed_actions": [
+    "readonly_probe",
+    "status_report",
+    "usb_dead_letter_write",
+    "jffs_pointer_write_after_approval",
+    "jffs_health_check",
+    "usb_health_check"
+  ],
+  "denied_actions": [
+    "direct_cloud_control",
+    "secret_read",
+    "member_plaintext_read",
+    "unaudited_config_write",
+    "unaudited_restart"
+  ],
+  "evidence_ref": "runtime/data_breathing_flow/<RUN_ID>/reports/USB_DEAD_LETTER_VALIDATION_REPORT.json"
+}

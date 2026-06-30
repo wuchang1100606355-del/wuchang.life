@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_router_authority_node.schema.json",
+  "title": "W7TP Router Authority Node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "node_id_ref",
+    "node_type",
+    "authority_scope",
+    "allowed_actions",
+    "denied_actions",
+    "cloud_authority",
+    "local_authority",
+    "router_user_default",
+    "router_password_saved",
+    "router_password_interactive_only",
+    "evidence_ref"
+  ],
+  "properties": {
+    "node_id_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "node_type": {
+      "const": "router"
+    },
+    "authority_scope": {
+      "const": "edge_network_boundary"
+    },
+    "allowed_actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "readonly_probe",
+          "status_report",
+          "usb_dead_letter_write",
+          "jffs_pointer_write_after_approval",
+          "jffs_health_check",
+          "usb_health_check"
+        ]
+      }
+    },
+    "denied_actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "direct_cloud_control",
+          "secret_read",
+          "member_plaintext_read",
+          "unaudited_config_write",
+          "unaudited_restart"
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "const": "direct_cloud_control"
+          }
+        },
+        {
+          "contains": {
+            "const": "secret_read"
+          }
+        },
+        {
+          "contains": {
+            "const": "member_plaintext_read"
+          }
+        },
+        {
+          "contains": {
+            "const": "unaudited_config_write"
+          }
+        },
+        {
+          "contains": {
+            "const": "unaudited_restart"
+          }
+        }
+      ]
+    },
+    "cloud_authority": {
+      "const": false
+    },
+    "local_authority": {
+      "const": "discrete_state_core"
+    },
+    "router_user_default": {
+      "const": "coffeeboss"
+    },
+    "router_password_saved": {
+      "const": false
+    },
+    "router_password_interactive_only": {
+      "const": true
+    },
+    "evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
