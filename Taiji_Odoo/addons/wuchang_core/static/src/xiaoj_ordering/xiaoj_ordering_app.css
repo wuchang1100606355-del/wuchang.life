@@ -167,6 +167,32 @@ button.safe { background: #1e3a2c; border-color: #457a5d; }
 .item-card .price { color: #f6d28a; font-weight: 900; font-size: 24px; }
 .item-card .meta { color: var(--muted); font-size: 13px; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.lineworks-panel { grid-column: 1 / -1; }
+.candidate-form {
+  display: grid;
+  gap: 8px;
+}
+.candidate-form label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+.candidate-form textarea {
+  width: 100%;
+  min-height: 86px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #111815;
+  color: var(--text);
+  line-height: 1.5;
+}
+.lineworks-status { margin-top: 12px; }
+.lineworks-status code {
+  color: #cfe8d8;
+  overflow-wrap: anywhere;
+}
 .wide-list { display: grid; gap: 10px; }
 .wide-row {
   display: grid;

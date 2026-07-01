@@ -14,6 +14,9 @@
     "data": [
         "security/ir.model.access.csv",
         "views/wuchang_cafe_ai_eventbook_views.xml",
+        "views/lineworks_notification_views.xml",
+        "views/line_official_account_config_views.xml",
+        "views/total_product_handoff_views.xml",
     ],
     "installable": True,
     "application": False,

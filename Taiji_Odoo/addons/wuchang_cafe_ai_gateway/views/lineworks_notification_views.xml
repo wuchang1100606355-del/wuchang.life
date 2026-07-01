@@ -1,0 +1,183 @@
+<odoo>
+    <record id="view_wuchang_lineworks_notification_candidate_list" model="ir.ui.view">
+        <field name="name">wuchang.lineworks.notification.candidate.list</field>
+        <field name="model">wuchang.lineworks.notification.candidate</field>
+        <field name="arch" type="xml">
+            <list string="LINE WORKS Notification Candidates">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="channel"/>
+                <field name="message_hash"/>
+                <field name="target_ref_hash"/>
+                <field name="release_refs_draft_hash"/>
+                <field name="preflight_envelope_hash"/>
+                <field name="execution_envelope_hash"/>
+                <field name="runtime_result_hash"/>
+                <field name="operator_handoff_pack_hash"/>
+                <field name="runtime_resolver_contract_hash"/>
+                <field name="formal_lineworks_send"/>
+                <field name="external_api_call"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_lineworks_notification_candidate_form" model="ir.ui.view">
+        <field name="name">wuchang.lineworks.notification.candidate.form</field>
+        <field name="model">wuchang.lineworks.notification.candidate</field>
+        <field name="arch" type="xml">
+            <form string="LINE WORKS Notification Candidate">
+                <header>
+                    <button name="action_build_candidate"
+                            type="object"
+                            string="Build Candidate"
+                            class="btn-primary"
+                            invisible="state not in ('draft', 'candidate_ready', 'preflight_hold')"/>
+                    <button name="action_build_release_refs_draft"
+                            type="object"
+                            string="Build Release Refs Draft"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_run_preflight"
+                            type="object"
+                            string="Run Preflight"
+                            class="btn-secondary"
+                            invisible="state not in ('candidate_ready', 'preflight_hold', 'preflight_ready', 'envelope_hold')"/>
+                    <button name="action_build_execution_envelope"
+                            type="object"
+                            string="Build Execution Envelope"
+                            class="btn-secondary"
+                            invisible="state not in ('preflight_hold', 'preflight_ready', 'envelope_hold', 'envelope_ready', 'runtime_dry_run_hold')"/>
+                    <button name="action_build_runtime_activation_packet"
+                            type="object"
+                            string="Build Runtime Activation"
+                            class="btn-secondary"
+                            invisible="state not in ('envelope_ready', 'runtime_dry_run_hold', 'runtime_dry_run_ready')"/>
+                    <button name="action_build_runtime_resolver_contract"
+                            type="object"
+                            string="Build Resolver Contract"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_run_runtime_dry_run"
+                            type="object"
+                            string="Runtime Dry-Run"
+                            class="btn-secondary"
+                            invisible="state not in ('envelope_ready', 'runtime_dry_run_hold', 'runtime_dry_run_ready')"/>
+                    <button name="action_build_operator_handoff_pack"
+                            type="object"
+                            string="Build Handoff Pack"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_dead_letter"
+                            type="object"
+                            string="Dead Letter"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,candidate_ready,preflight_hold,preflight_ready,envelope_hold,envelope_ready,runtime_dry_run_hold,runtime_dry_run_ready,dead_letter"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="channel"/>
+                        <field name="target_ref_hash"/>
+                        <field name="actor_ref_hash"/>
+                    </group>
+                    <group string="Candidate Message">
+                        <field name="message_preview" placeholder="候選通知文字，不可包含 token、secret、會員明文。"/>
+                        <field name="message_hash" readonly="1"/>
+                        <field name="candidate_packet_hash" readonly="1"/>
+                    </group>
+                    <group string="P2 Connector Refs">
+                        <field name="lineworks_bot_ref" placeholder="BOT_REF_CAFE_XIAOJ_PILOT"/>
+                        <field name="lineworks_target_user_ref" placeholder="TARGET_REF_HASHED_PILOT"/>
+                        <field name="lineworks_access_token_runtime_ref" placeholder="RUNTIME_TOKEN_PROVIDER_REF_ONLY"/>
+                    </group>
+                    <group string="Human Activation For Runtime Dry-Run">
+                        <field name="runtime_activation_packet_hash" placeholder="64hex activation packet hash"/>
+                        <field name="runtime_operator_ref" placeholder="OPERATOR_REF_VERIFIED_PILOT"/>
+                    </group>
+                    <group string="Side Effect Boundary">
+                        <field name="formal_lineworks_send" readonly="1"/>
+                        <field name="external_api_call" readonly="1"/>
+                        <field name="secret_read" readonly="1"/>
+                        <field name="member_plaintext_read" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Verified Release Refs">
+                            <field name="release_refs_json" placeholder='{"lineworks_send": {"authenticated_staff_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true}}}'/>
+                            <field name="release_refs_draft_hash" readonly="1"/>
+                            <field name="release_refs_draft_warnings" readonly="1"/>
+                        </page>
+                        <page string="Candidate Payload">
+                            <field name="candidate_payload_json" readonly="1"/>
+                        </page>
+                        <page string="Preflight Payload">
+                            <field name="preflight_payload_json" readonly="1"/>
+                            <field name="preflight_envelope_hash" readonly="1"/>
+                        </page>
+                        <page string="Execution Envelope">
+                            <field name="execution_envelope_json" readonly="1"/>
+                            <field name="execution_envelope_hash" readonly="1"/>
+                        </page>
+                        <page string="Runtime Activation">
+                            <field name="runtime_activation_packet_json" readonly="1"/>
+                            <field name="runtime_activation_packet_hash" readonly="1"/>
+                        </page>
+                        <page string="Runtime Resolver">
+                            <field name="runtime_resolver_bindings_json" placeholder='{"lineworks_bot_ref": {"connector_ref": "BOT_REF...", "binding_ref": "VAULT_BINDING_REF...", "value_class": "lineworks_bot_id", "value_hash": "64hex", "verifier": "lineworks_secret_vault_binding", "verified": true}}'/>
+                            <field name="runtime_resolver_contract_json" readonly="1"/>
+                            <field name="runtime_resolver_contract_hash" readonly="1"/>
+                            <field name="runtime_resolver_warnings" readonly="1"/>
+                        </page>
+                        <page string="Runtime Dry-Run">
+                            <field name="runtime_dry_run_json" readonly="1"/>
+                            <field name="runtime_result_hash" readonly="1"/>
+                        </page>
+                        <page string="Operator Handoff">
+                            <field name="operator_handoff_pack_json" readonly="1"/>
+                            <field name="operator_handoff_pack_hash" readonly="1"/>
+                        </page>
+                        <page string="Failure Reasons">
+                            <field name="failure_reasons" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_lineworks_notification_candidate_search" model="ir.ui.view">
+        <field name="name">wuchang.lineworks.notification.candidate.search</field>
+        <field name="model">wuchang.lineworks.notification.candidate</field>
+        <field name="arch" type="xml">
+            <search string="LINE WORKS Notification Candidates">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="channel"/>
+                <field name="target_ref_hash"/>
+                <filter name="filter_preflight_hold" string="Preflight Hold" domain="[('state','=','preflight_hold')]"/>
+                <filter name="filter_preflight_ready" string="Preflight Ready" domain="[('state','=','preflight_ready')]"/>
+                <filter name="filter_envelope_ready" string="Envelope Ready" domain="[('state','=','envelope_ready')]"/>
+                <filter name="filter_runtime_dry_run_ready" string="Runtime Dry-Run Ready" domain="[('state','=','runtime_dry_run_ready')]"/>
+                <filter name="filter_dead_letter" string="Dead Letter" domain="[('state','=','dead_letter')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                    <filter name="group_channel" string="Channel" context="{'group_by': 'channel'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wuchang_lineworks_notification_candidate" model="ir.actions.act_window">
+        <field name="name">LINE WORKS Candidates</field>
+        <field name="res_model">wuchang.lineworks.notification.candidate</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_wuchang_lineworks_notification_candidate"
+              name="LINE WORKS Candidates"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_lineworks_notification_candidate"
+              sequence="20"/>
+</odoo>

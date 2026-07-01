@@ -5,6 +5,7 @@
     FORMAL_DB_WRITE: false,
     FORMAL_POS_WRITE: false,
     PAYMENT_CAPTURE: false,
+    FORMAL_LINEWORKS_SEND: false,
     SERVICE_RESTART: false,
     DEPLOY: false,
     PRODUCTION_RELEASE: false,
@@ -13,45 +14,36 @@
   };
 
   const menu = [
-    { code: "DR_RED_TEA", name: "紅茶", category: "飲料類", price: 30 },
-    { code: "DR_GREEN_TEA", name: "綠茶", category: "飲料類", price: 30 },
-    { code: "FO_C_DUMPLING", name: "煎餃", category: "中式餐點類", price: 30 },
-    { code: "FO_C_RADISH", name: "蘿蔔糕", category: "中式餐點類", price: 30 },
-    { code: "FO_W_BURGER", name: "漢堡", category: "西式餐點類", price: 30 },
-    { code: "FO_W_BURGER_EGG", name: "漢堡加蛋", category: "西式餐點類", price: 40 },
-    { code: "FO_W_CLUB", name: "總匯三明治", category: "西式餐點類", price: 45 },
-    { code: "SET_CHI_60", name: "中式套餐", category: "套餐類", price: 60 },
-    { code: "SET_WES_60", name: "西式套餐", category: "套餐類", price: 60 },
-    { code: "ODOO_PROD_SOY_MILK", name: "豆漿", category: "早餐", price: 25 },
-    { code: "ODOO_PROD_EGG_PANCAKE", name: "蛋餅", category: "早餐", price: 40 },
-    { code: "ODOO_PROD_COFFEE_LATTE", name: "拿鐵", category: "咖啡", price: 80 },
-    { code: "ODOO_PROD_COFFEE_AMERICANO", name: "美式咖啡", category: "咖啡", price: 60 },
+    { code: "quickclick_49180031", name: "招牌咖啡", category: "QuickClick", price: null, priceAuthority: false },
+    { code: "quickclick_49180033", name: "小沙彌素齋飯", category: "QuickClick", price: null, priceAuthority: false },
+    { code: "quickclick_49180034", name: "耶加雪夫 / 單品手沖", category: "QuickClick", price: null, priceAuthority: false },
+    { code: "quickclick_49180035", name: "黃金曼特寧 / 濾掛咖啡", category: "QuickClick", price: null, priceAuthority: false },
+    { code: "quickclick_49180036", name: "耶加雪夫 / 咖啡豆", category: "QuickClick", price: null, priceAuthority: false },
+    { code: "quickclick_49180038", name: "檸檬汁", category: "QuickClick", price: null, priceAuthority: false },
   ];
 
   const order = {
-    productName: "父親節早午餐咖啡套組",
+    productName: "QuickClick 候選點餐",
     items: [
-      { name: "熱拿鐵", qty: 1, price: 120 },
-      { name: "燕麥奶", qty: 1, price: 20 },
-      { name: "火腿起司吐司", qty: 1, price: 75 },
-      { name: "公益杯押金", qty: 1, price: 50 },
+      { name: "招牌咖啡", qty: 1, price: null, priceAuthority: false },
+      { name: "檸檬汁", qty: 1, price: null, priceAuthority: false },
     ],
-    subtotal: 265,
-    discount: 30,
-    payable: 235,
+    subtotal: null,
+    discount: null,
+    payable: null,
     d8: "76b0fd75...598e3f6c",
-    voice: "候選試算 235 元；公益杯押金不列入折扣。請店員確認後才可進正式 POS。",
+    voice: "候選訂單包含招牌咖啡與檸檬汁；價格待 QuickClick / Odoo 本地權威重算後，才可進正式 POS。",
   };
 
   const displayTicker = {
     top: [
-      "今日推薦：拿鐵 + 蛋餅組合",
+      "今日候選：招牌咖啡 + 檸檬汁",
       "團體會員掃八維碼可建立候選註冊",
       "雲端 AI 僅產生候選，本地驗證後才顯示",
-      "公益杯押金不列入折扣",
+      "價格待 QuickClick / Odoo 本地權威重算",
     ],
     bottom: [
-      "候選訂單：父親節早午餐咖啡套組，試算 235 元",
+      "候選訂單：QuickClick 來源鎖定，未取得價格權威前 HOLD",
       "叫號提示：請留意櫃台與小J語音",
       "維護公告：客顯為顯示模式，不處理付款",
       "正式 POS 寫入需店員確認 gate",
@@ -78,12 +70,38 @@
     page: document.body.dataset.startMode || "staff_pos",
     selectedCategory: "全部",
     dryRunMessage: "尚未確認",
+    lineworksMessage: "提醒服務人員明天 10:00 到聊國咖啡館集合",
+    lineworksStatus: "尚未建立候選",
+    lineworksCandidateHash: "",
+    lineworksTargetHash: "",
+    lineworksPreflightState: "PENDING",
+    lineworksPreflightHash: "",
+    lineworksFailureReasons: [],
+    capabilityState: {
+      loaded: false,
+      loadError: "",
+      totalFieldSubfieldQuery: "PENDING",
+      authorityPacket: "PENDING",
+      localVerifier: "PENDING",
+      evidenceSeal: "PENDING",
+      executionState: "PENDING",
+      subfieldCount: 0,
+      memberRelease: "PENDING",
+      posRelease: "PENDING",
+      paymentRelease: "PENDING",
+      lineworksRelease: "PENDING",
+    },
   };
 
   const app = document.getElementById("xiaoj-ordering-app");
 
   function money(value) {
+    if (value === null || value === undefined) return "待 QuickClick";
     return "$" + Number(value || 0).toLocaleString("zh-TW");
+  }
+
+  function priceLabel(item) {
+    return item.priceAuthority === false ? "待 QuickClick" : money(item.price);
   }
 
   function escapeHtml(value) {
@@ -102,6 +120,132 @@
   function dryRun(action) {
     state.dryRunMessage = action + "：CONFIRM_DRY_RUN / FORMAL_POS_WRITE=FALSE";
     render();
+  }
+
+  function setLineworksStatus(patch) {
+    Object.assign(state, patch);
+    render();
+  }
+
+  function jsonRpc(url, params) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "call",
+        params: params || {},
+        id: Date.now(),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => data.result || data);
+  }
+
+  function loadMerchantCapabilities() {
+    Promise.all([
+      jsonRpc("/wuchang/xiaoj/api/merchant-capabilities", {}),
+      jsonRpc("/wuchang/xiaoj/api/formal-release-status", {}),
+    ])
+      .then(([payload, releasePayload]) => {
+        const query = payload.total_field_subfield_query || {};
+        const gate = payload.execution_gate || {};
+        const releaseGates = releasePayload.formal_release_gates || {};
+        state.capabilityState = {
+          loaded: true,
+          loadError: "",
+          totalFieldSubfieldQuery: query.state || "UNKNOWN",
+          authorityPacket: payload.authority_packet ? "READY" : "MISSING",
+          localVerifier: payload.local_verifier ? payload.local_verifier.decision || "READY" : "MISSING",
+          evidenceSeal: payload.evidence_seal ? "SEALED" : "MISSING",
+          executionState: gate.state || "UNKNOWN",
+          subfieldCount: query.subfield_count || 0,
+          memberRelease: releaseGates.member_registration ? releaseGates.member_registration.decision : "UNKNOWN",
+          posRelease: releaseGates.pos_order ? releaseGates.pos_order.decision : "UNKNOWN",
+          paymentRelease: releaseGates.payment ? releaseGates.payment.decision : "UNKNOWN",
+          lineworksRelease: releaseGates.lineworks_send ? releaseGates.lineworks_send.decision : "UNKNOWN",
+        };
+        render();
+      })
+      .catch((error) => {
+        state.capabilityState = {
+          loaded: false,
+          loadError: error && error.message ? error.message : "LOAD_FAILED",
+          totalFieldSubfieldQuery: "HOLD",
+          authorityPacket: "HOLD",
+          localVerifier: "HOLD",
+          evidenceSeal: "HOLD",
+          executionState: "HOLD",
+          subfieldCount: 0,
+          memberRelease: "HOLD",
+          posRelease: "HOLD",
+          paymentRelease: "HOLD",
+          lineworksRelease: "HOLD",
+        };
+        render();
+      });
+  }
+
+  function runLineworksCandidate() {
+    setLineworksStatus({
+      lineworksStatus: "建立候選中",
+      lineworksPreflightState: "PENDING",
+      lineworksFailureReasons: [],
+    });
+    jsonRpc("/wuchang/xiaoj/api/lineworks-notify", {
+      message: state.lineworksMessage,
+      target_ref: "TARGET_REF_UI_MASKED",
+      channel: "member_service",
+      actor_ref: "ACTOR_REF_UI_MASKED",
+    })
+      .then((payload) => {
+        const candidate = payload.lineworks_notify_candidate || {};
+        setLineworksStatus({
+          lineworksStatus: payload.state || "CANDIDATE_READY",
+          lineworksCandidateHash: String(candidate.message_hash || "").slice(0, 16),
+          lineworksTargetHash: String(candidate.target_ref_hash || "").slice(0, 16),
+          lineworksPreflightState: "PENDING",
+          lineworksFailureReasons: [],
+        });
+      })
+      .catch((error) => {
+        setLineworksStatus({
+          lineworksStatus: "HOLD_LINEWORKS_CANDIDATE_FAILED",
+          lineworksFailureReasons: [error && error.message ? error.message : "candidate_api_failed"],
+        });
+      });
+  }
+
+  function runLineworksPreflight() {
+    setLineworksStatus({
+      lineworksPreflightState: "PREFLIGHT_RUNNING",
+      lineworksFailureReasons: [],
+    });
+    jsonRpc("/wuchang/xiaoj/api/lineworks-send-preflight", {
+      message: state.lineworksMessage,
+      target_ref: "TARGET_REF_UI_MASKED",
+      channel: "member_service",
+      actor_ref: "ACTOR_REF_UI_MASKED",
+      connector_refs: {
+        lineworks_bot_ref: "BOT_REF_UI_ONLY",
+        lineworks_target_user_ref: "TARGET_REF_UI_MASKED",
+        lineworks_access_token_runtime_ref: "RUNTIME_TOKEN_PROVIDER_REF_ONLY",
+      },
+      release_refs: {},
+    })
+      .then((payload) => {
+        setLineworksStatus({
+          lineworksPreflightState: payload.state || "HOLD_LINEWORKS_SEND_PREFLIGHT",
+          lineworksPreflightHash: String(payload.request_envelope_hash || "").slice(0, 16),
+          lineworksFailureReasons: payload.failure_reasons || [],
+        });
+      })
+      .catch((error) => {
+        setLineworksStatus({
+          lineworksPreflightState: "HOLD_LINEWORKS_PREFLIGHT_FAILED",
+          lineworksFailureReasons: [error && error.message ? error.message : "preflight_api_failed"],
+        });
+      });
   }
 
   function categories() {
@@ -142,21 +286,52 @@
         render();
       });
     });
+    const lineworksMessage = app.querySelector("[data-lineworks-message]");
+    if (lineworksMessage) {
+      lineworksMessage.addEventListener("input", () => {
+        state.lineworksMessage = lineworksMessage.value;
+      });
+    }
+    const lineworksCandidateButton = app.querySelector("[data-lineworks-candidate]");
+    if (lineworksCandidateButton) {
+      lineworksCandidateButton.addEventListener("click", runLineworksCandidate);
+    }
+    const lineworksPreflightButton = app.querySelector("[data-lineworks-preflight]");
+    if (lineworksPreflightButton) {
+      lineworksPreflightButton.addEventListener("click", runLineworksPreflight);
+    }
   }
 
   function leftRail() {
+    const cap = state.capabilityState;
+    const queryOk = cap.totalFieldSubfieldQuery === "TOTAL_FIELD_SUBFIELD_QUERY_OK";
+    const packetOk = cap.authorityPacket === "READY";
+    const verifierOk = cap.localVerifier !== "MISSING" && cap.localVerifier !== "HOLD";
+    const sealOk = cap.evidenceSeal === "SEALED";
+    const memberReady = cap.memberRelease === "RELEASE_READY_FOR_HUMAN_ACTIVATION";
+    const posReady = cap.posRelease === "RELEASE_READY_FOR_HUMAN_ACTIVATION";
+    const paymentReady = cap.paymentRelease === "RELEASE_READY_FOR_HUMAN_ACTIVATION";
+    const lineworksReady = cap.lineworksRelease === "RELEASE_READY_FOR_HUMAN_ACTIVATION";
     return `
       <aside class="panel pad">
         <h2 class="section-title">總場狀態</h2>
         <div class="status-list">
           <div class="status-row"><span>雲端 AI</span><b class="badge warn">候選苦力</b></div>
+          <div class="status-row"><span>分場查詢</span><b class="badge ${queryOk ? "ok" : "hold"}">${queryOk ? cap.subfieldCount + " 場" : cap.totalFieldSubfieldQuery}</b></div>
+          <div class="status-row"><span>Authority Packet</span><b class="badge ${packetOk ? "ok" : "hold"}">${cap.authorityPacket}</b></div>
           <div class="status-row"><span>No-LLM 後腦</span><b class="badge ok">本地權威</b></div>
+          <div class="status-row"><span>Local Verifier</span><b class="badge ${verifierOk ? "ok" : "hold"}">${cap.localVerifier}</b></div>
           <div class="status-row"><span>Human Gate</span><b class="badge ok">必須確認</b></div>
           <div class="status-row"><span>正式 POS</span><b class="badge hold">HOLD</b></div>
           <div class="status-row"><span>付款擷取</span><b class="badge hold">FALSE</b></div>
+          <div class="status-row"><span>Evidence Seal</span><b class="badge ${sealOk ? "ok" : "hold"}">${cap.evidenceSeal}</b></div>
+          <div class="status-row"><span>會員 release</span><b class="badge ${memberReady ? "ok" : "hold"}">${memberReady ? "READY" : "HOLD"}</b></div>
+          <div class="status-row"><span>POS release</span><b class="badge ${posReady ? "ok" : "hold"}">${posReady ? "READY" : "HOLD"}</b></div>
+          <div class="status-row"><span>付款 release</span><b class="badge ${paymentReady ? "ok" : "hold"}">${paymentReady ? "READY" : "HOLD"}</b></div>
+          <div class="status-row"><span>LINE WORKS release</span><b class="badge ${lineworksReady ? "ok" : "hold"}">${lineworksReady ? "READY" : "HOLD"}</b></div>
         </div>
         <h2 class="section-title" style="margin-top:18px">頁面封裝</h2>
-        <div class="proof-code">start_url=/wuchang/xiaoj/ordering<br/>display=standalone<br/>route_auth=user</div>
+        <div class="proof-code">start_url=/wuchang/xiaoj/ordering<br/>display=standalone<br/>route_auth=user<br/>capability_api=/wuchang/xiaoj/api/merchant-capabilities<br/>release_api=/wuchang/xiaoj/api/formal-release-status<br/>lineworks_api=/wuchang/xiaoj/api/lineworks-notify<br/>lineworks_preflight=/wuchang/xiaoj/api/lineworks-send-preflight</div>
       </aside>
     `;
   }
@@ -166,7 +341,7 @@
       <aside class="right-rail">
         <section class="panel pad">
           <h2 class="section-title">候選訂單</h2>
-          <div>${order.items.map((item) => `<div class="cart-line"><span>${escapeHtml(item.name)}</span><span>x${item.qty}</span><strong>${money(item.price)}</strong></div>`).join("")}</div>
+          <div>${order.items.map((item) => `<div class="cart-line"><span>${escapeHtml(item.name)}</span><span>x${item.qty}</span><strong>${priceLabel(item)}</strong></div>`).join("")}</div>
           <div class="total"><span>試算應付</span><strong>${money(order.payable)}</strong></div>
           <div class="toolbar">
             <button class="primary" data-dry-run="店員確認候選訂單">確認試算</button>
@@ -190,8 +365,8 @@
       <article class="item-card">
         <div class="badge">${escapeHtml(item.category)}</div>
         <h3>${escapeHtml(item.name)}</h3>
-        <div class="price">${money(item.price)}</div>
-        <div class="meta">${escapeHtml(item.code)}｜Odoo menu ref</div>
+        <div class="price">${priceLabel(item)}</div>
+        <div class="meta">${escapeHtml(item.code)}｜QuickClick source lock</div>
         <button data-dry-run="加入 ${escapeHtml(item.name)} 候選">加入候選</button>
       </article>
     `).join("");
@@ -308,6 +483,9 @@
   }
 
   function businessManagementPage() {
+    const lineworksFailure = state.lineworksFailureReasons.length
+      ? state.lineworksFailureReasons.map(escapeHtml).join("<br/>")
+      : "無";
     return `
       <div class="hero-band">
         <div class="hero-card">
@@ -339,9 +517,28 @@
         <section class="panel pad">
           <h2 class="section-title">商業資訊分析</h2>
           <div class="wide-list">
-            <div class="wide-row"><span>高毛利推薦：咖啡 + 早餐組合</span><strong>+18%</strong></div>
+            <div class="wide-row"><span>高毛利推薦：招牌咖啡 + 檸檬汁候選</span><strong>+18%</strong></div>
             <div class="wide-row"><span>維護風險：客顯 Chrome 心跳延遲</span><strong>中</strong></div>
             <div class="wide-row"><span>社群任務：團體會員 QR 推廣</span><strong>高</strong></div>
+          </div>
+        </section>
+        <section class="panel pad lineworks-panel">
+          <h2 class="section-title">LINE WORKS 候選通知</h2>
+          <div class="candidate-form">
+            <label for="lineworks-message">訊息候選</label>
+            <textarea id="lineworks-message" data-lineworks-message rows="3">${escapeHtml(state.lineworksMessage)}</textarea>
+          </div>
+          <div class="toolbar">
+            <button class="safe" data-lineworks-candidate>建立候選</button>
+            <button data-lineworks-preflight>Preflight</button>
+          </div>
+          <div class="wide-list lineworks-status">
+            <div class="wide-row"><span>Candidate state</span><b class="badge warn">${escapeHtml(state.lineworksStatus)}</b></div>
+            <div class="wide-row"><span>Message hash</span><code>${escapeHtml(state.lineworksCandidateHash || "PENDING")}</code></div>
+            <div class="wide-row"><span>Target ref</span><code>${escapeHtml(state.lineworksTargetHash || "TARGET_REF_UI_MASKED")}</code></div>
+            <div class="wide-row"><span>Preflight state</span><b class="badge hold">${escapeHtml(state.lineworksPreflightState)}</b></div>
+            <div class="wide-row"><span>Envelope hash</span><code>${escapeHtml(state.lineworksPreflightHash || "PENDING")}</code></div>
+            <div class="wide-row"><span>Failure reasons</span><code>${lineworksFailure}</code></div>
           </div>
         </section>
       </div>
@@ -363,7 +560,7 @@
         <div class="quick-stats">
           <div class="stat"><span>客顯</span><strong>Chrome</strong></div>
           <div class="stat"><span>聲音</span><strong>SUNMI</strong></div>
-          <div class="stat"><span>菜單品項</span><strong>25</strong></div>
+          <div class="stat"><span>菜單品項</span><strong>6</strong></div>
           <div class="stat"><span>正式控制</span><strong>Hold</strong></div>
         </div>
       </div>
@@ -400,6 +597,7 @@
   }
 
   render();
+  loadMerchantCapabilities();
 })();
 
 /* XiaoJ VRM browser runtime bootstrap */
