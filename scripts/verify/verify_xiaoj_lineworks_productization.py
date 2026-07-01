@@ -1027,7 +1027,7 @@ def main() -> int:
         def mock_post(url, headers, body, timeout):
             if "2000001" not in url or "userf7da" not in url:
                 fail("runtime_mock_url_missing_resolved_ids")
-            if headers.get("Authorization") != "Bearer BEARER_REF_TEST":
+            if headers.get("Authorization") != "Bearer " + runtime_token_ref:
                 fail("runtime_mock_authorization_header_wrong")
             if body.get("content", {}).get("type") != "text":
                 fail("runtime_mock_body_wrong")

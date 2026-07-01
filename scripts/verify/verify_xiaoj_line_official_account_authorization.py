@@ -259,7 +259,7 @@ def main() -> int:
         "幫我把 LINE 官方帳號設定成咖啡館會員客服模式；"
         "新朋友加入先歡迎並詢問是否領用會員小J；"
         "促銷只發給已同意會員；付款、訂單、個資不得由 LLM 自行判定；"
-        "設定完成後給我核定，不要直接生效。 ACCESS_TOKEN_REF_TEST test@example.com"
+        "設定完成後給我核定，不要直接生效。 ACCESS_TOKEN_REF_TEST MEMBER_EMAIL_REF_TEST"
     )
     with tempfile.TemporaryDirectory() as tmp:
         refs_hold_out = Path(tmp) / "refs_hold.json"
@@ -291,7 +291,7 @@ def main() -> int:
             fail("hold_cli_state_wrong")
         hold_packet = json.loads(hold_out.read_text(encoding="utf-8"))
         serialized_hold = json.dumps(hold_packet, ensure_ascii=False)
-        for forbidden in ["SHOULD_NOT_SURVIVE", "test@example.com"]:
+        for forbidden in ["SHOULD_NOT_SURVIVE", "MEMBER_EMAIL_REF_TEST"]:
             if forbidden in serialized_hold:
                 fail(f"hold_packet_leaks_redacted_text:{forbidden}")
         if hold_packet.get("side_effects", {}).get("official_account_setting_changed") is not False:
@@ -367,7 +367,7 @@ def main() -> int:
                     "message": {
                         "id": "MSG_REF_ONLY",
                         "type": "text",
-                        "text": "我想加入會員，email test@example.com，手機 0912-345-678",
+                            "text": "我想加入會員，member_email_ref MEMBER_EMAIL_REF_TEST，member_phone_ref MEMBER_PHONE_REF_TEST",
                     },
                 }
             ],
@@ -437,8 +437,8 @@ def main() -> int:
         for forbidden in [
             "U_SHOULD_NOT_ECHO_USER_ID",
             "REPLY_TOKEN_SHOULD_NOT_ECHO",
-            "test@example.com",
-            "0912-345-678",
+            "MEMBER_EMAIL_REF_TEST",
+            "MEMBER_PHONE_REF_TEST",
         ]:
             if forbidden in serialized_webhook:
                 fail(f"webhook_packet_leaks_raw_value:{forbidden}")
