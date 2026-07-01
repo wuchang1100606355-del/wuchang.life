@@ -8,6 +8,12 @@ Read-only staged diff classifier:
 - does not stage files
 - does not commit
 - outputs a JSON decision for staged files only
+
+Total Field boundaries:
+- af7d186 router USB governance is sealed; classify only, do not mutate.
+- a5fde27 member sovereignty + AI quality gates is sealed; classify only, do not mutate.
+- synthetic fixture tooling and mode-only permission hygiene must remain separate lanes.
+- runtime artifacts must not be staged.
 """
 
 import json
@@ -17,6 +23,7 @@ from typing import Dict, List
 
 
 CATEGORIES = {
+    # Sealed router USB governance lane. Classification only; no backfill.
     "router_usb_governance": [
         "configs/data_breathing_flow/",
         "configs/router/",
@@ -27,6 +34,7 @@ CATEGORIES = {
         "tools/w7tp_usb_dead_letter_",
         "docs/governance/W7TP_DATA_BREATHING_FLOW_ROUTER_",
     ],
+    # Sealed member sovereignty / AI quality lane. Classification only; no backfill.
     "member_sovereignty_quality": [
         "docs/governance/XIAOJ_",
         "docs/product/AI_BROWSER_",
@@ -37,12 +45,28 @@ CATEGORIES = {
         "tools/w7tp_big_tech_quality_tester.py",
         "tools/w7tp_candidate_packet_extractor.py",
     ],
+    # Synthetic generator sandbox lane. Must not mix with sealed governance lanes.
     "synthetic_fixture_tooling": [
         "tools/w7tp_synthetic_seed_fixture_generator.py",
     ],
+    # Repo gate tooling lane. Commit gates must be able to land independently.
     "repo_gate_tooling": [
         "tools/w7tp_staged_packet_classifier.py",
+        "tools/w7tp_commit_envelope_gate.py",
+        "tools/w7tp_mode_only_permission_decision.py",
+        "tools/w7tp_runtime_artifact_guard.py",
     ],
+    # Total Field governance suite observers/checkers. They are tooling, not
+    # sealed governance packets.
+    "total_field_governance_suite_tooling": [
+        "tools/w7tp_data_breathing_flow_guard.py",
+        "tools/w7tp_data_breathing_flow_monitor.py",
+        "tools/w7tp_flow_rhythm_aggregator.py",
+        "tools/w7tp_governance_packet_auditor.py",
+        "tools/w7tp_packet_coordinate_map.py",
+        "tools/w7tp_total_field_governance_engine_v2.py",
+    ],
+    # Permission hygiene lane. Not a functional change.
     "mode_only_permission": [
         "tools/w7tp_codex_task_adapter.py",
         "tools/w7tp_packet_inference_cockpit_server.py",
@@ -51,6 +75,7 @@ CATEGORIES = {
         "tools/w7tp_total_branch_runtime.py",
         "tools/w7tp_total_field_pr_layer.py",
     ],
+    # Runtime evidence/artifacts are ignored and must not enter git history.
     "runtime_artifact": [
         "runtime/",
     ],

@@ -1,0 +1,46 @@
+{
+  "config_id": "total_field_governance_engine_v2.template",
+  "mode": "sandbox_validation_only",
+  "cloud_candidate": {
+    "timeout_default_ms": 5000,
+    "max_latency_warning_ms": 3000,
+    "circuit_breaker_enabled": true,
+    "circuit_breaker_failure_threshold": 1,
+    "fallback_local_lookup_enabled": true,
+    "queue_candidate_enabled": true,
+    "dead_letter_required_when_queue_fails": true,
+    "candidate_only": true,
+    "cloud_authority": false
+  },
+  "router_capacity_guard": {
+    "required": true,
+    "required_before_execution": true,
+    "status": "HOLD_USB_STORAGE_ERRORS_DETECTED"
+  },
+  "defaults": {
+    "command_allowed": false,
+    "requires_human_approval": true,
+    "db_write": false,
+    "deploy": false,
+    "service_restart": false,
+    "router_write": false,
+    "usb_write": false,
+    "jffs_write": false,
+    "external_cloud_call": false
+  },
+  "endpoint_refs": {
+    "public_ip_ref": "220.135.21.74",
+    "ddns_ref": "Coffeeboss.asuscomm.com",
+    "lan_router_ref": "192.168.50.1",
+    "ssh_port_ref": 2222,
+    "router_user_default": "coffeeboss",
+    "router_password_saved": false,
+    "router_password_interactive_only": true
+  },
+  "policy": {
+    "usb_dead_letter_enable": "HOLD",
+    "jffs_pointer_write": "HOLD",
+    "router_write": "HOLD",
+    "service_restart": "HOLD"
+  }
+}
