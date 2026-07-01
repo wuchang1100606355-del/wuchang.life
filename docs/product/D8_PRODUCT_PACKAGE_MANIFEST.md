@@ -26,3 +26,8 @@ Primary tools:
 - tools/d8_odoo_pos_safe_bridge.py
 - tools/d8_total_field_console.sh
 - tools/d8_codex_mandatory_workflow.sh
+
+Primary merchant invention integration documents:
+
+- docs/product/XIAOJ_MERCHANT_SYSTEM_INVENTION_CAPABILITY_INTEGRATION.md
+- packets/product_av_ordering_ai/merchant_invention_capability_map.json

@@ -17,6 +17,31 @@ shadow rehearsal. It is not a single cloud model. It is a local Total Field
 pipeline that uses D8 reports, sealed operating rules, real menu references,
 training corrections, and human verification.
 
+## Merchant Invention Capability Integration
+
+XiaoJ should be treated as the merchant-system embodiment of the W7TP invention
+stack. The cafe AI waiter, sovereign member system, table-side ordering, Odoo/POS
+gate, social manager, and property/community assistant all share the same rule:
+
+```text
+total-field subfield query -> AI candidate -> authority packet
+-> local reconstruction -> local verifier -> EXECUTE / HOLD / QUARANTINE
+/ QUEUE / DEAD_LETTER -> evidence seal
+```
+
+The high-quality humanoid or voice layer may be supplied by a cloud subscription
+first. That cloud service is an interaction shell only: it can speak, render an
+avatar, understand natural language, and propose order or service candidates. It
+does not receive member plaintext and does not become authority for identity,
+discount, POS write, payment, social publication, or property/community access.
+Every generation must first query total-field level subfield information and
+embed the resulting query hash in the authority packet.
+
+Product integration reference:
+
+- `docs/product/XIAOJ_MERCHANT_SYSTEM_INVENTION_CAPABILITY_INTEGRATION.md`
+- `packets/product_av_ordering_ai/merchant_invention_capability_map.json`
+
 ## Coordinate
 
 Core surfaces:
@@ -163,3 +188,26 @@ Files:
 P0/P1 can rehearse and collect corrections. Live POS order creation, payment
 capture, Odoo DB write, service restart, deployment, external API calls, and
 commercial avatar release require separate human release packets.
+
+## Formal Release Gate Status
+
+The existing cafe AI gateway exposes a user-authenticated, no-side-effect formal
+release status API:
+
+```text
+/wuchang/xiaoj/api/formal-release-status
+```
+
+It checks three formal release lines:
+
+- member registration
+- POS order creation
+- payment
+
+Each line remains HOLD until its release packet refs, provider or POS refs,
+human confirmation refs, and total-field release refs are supplied as verified
+release reference objects. A string ref or unsigned placeholder ref returns
+`HOLD_RELEASE_REFS_UNVERIFIED`; a total-field packet with danger flags returns
+HOLD before human activation. Only verified refs plus an OK total-field subfield
+query can return `RELEASE_READY_FOR_HUMAN_ACTIVATION`; the P1 engine still does
+not write Odoo DB rows, create formal POS orders, or capture payment.

@@ -1,0 +1,121 @@
+{
+  "schema": "W7TP_XIAOJ_8D_TOTAL_SYSTEM_ASSEMBLY_CONTRACT_V1",
+  "state": "P1_8D_TOTAL_SYSTEM_ASSEMBLY_READY_FOR_HUMAN_REVIEW",
+  "title_zh": "8維度意圖場封包自然語言控制系統總成",
+  "title_en": "8D Intent-Field Packet Natural-Language Control System Assembly",
+  "service": "wuchang_cafe_ai_gateway.services.eightd_system_assembly.build_eightd_system_assembly_status",
+  "tool": "tools/xiaoj_8d_system_assembly_report.py",
+  "api": "/wuchang/xiaoj/api/8d-system-assembly-status",
+  "api_auth": "user",
+  "core_chain": [
+    "natural_language_input",
+    "total_field_subfield_query",
+    "8d_intent_field_packet",
+    "authority_packet",
+    "local_reconstruction",
+    "local_discrete_state_verifier",
+    "hold_or_human_release_or_dead_letter",
+    "evidence_seal_and_ui_status"
+  ],
+  "eightd_dimensions": [
+    "D1_identity",
+    "D2_intent",
+    "D3_state",
+    "D4_topology",
+    "D5_resource",
+    "D6_governance",
+    "D7_verification",
+    "D8_envelope"
+  ],
+  "product_systems": {
+    "merchant_management": {
+      "title_zh": "商家管理系統",
+      "status": "P1_CANDIDATE_AUTHORITY_CHAIN_READY",
+      "includes": [
+        "POS/table-side ordering candidate gate",
+        "member service candidate gate",
+        "LINE WORKS notification candidate and readiness gate",
+        "LINE Official Account config candidate gate",
+        "formal member/POS/payment release gates"
+      ],
+      "evidence": [
+        "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/p1_intent_engine.py",
+        "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/merchant_productization_readiness.py",
+        "packets/product_av_ordering_ai/xiaoj_merchant_productization_readiness_template.json",
+        "scripts/verify/verify_xiaoj_merchant_productization_readiness.py"
+      ]
+    },
+    "association_sovereign_member": {
+      "title_zh": "協會會員8維度主權會員系統",
+      "status": "P1_PARTIAL_LANDING_NOT_FULL_PRODUCT_RELEASE",
+      "includes": [
+        "8D member identity/ref packet",
+        "member-owned XiaoJ claim candidate",
+        "no-plaintext member context",
+        "user Gemini key-ref candidate worker",
+        "member sovereignty non-override rule"
+      ],
+      "evidence": [
+        "packets/product_av_ordering_ai/sovereign_member_llm_readiness_contract.json",
+        "tools/w7tp_8d_lookup_ai_min.py",
+        "schemas/8d/xiaoj_8d_packet.schema.json",
+        "scripts/verify/verify_xiaoj_sovereign_member_llm_readiness.py"
+      ]
+    },
+    "resident_property_management": {
+      "title_zh": "8維度主權住戶整合式物業管理系統",
+      "status": "P1_CANDIDATE_AND_EXISTING_ODOO_PROPERTY_MODULES_PRESENT_RELEASE_GATE_REQUIRED",
+      "includes": [
+        "resident/unit role candidate gate",
+        "facility/repair/parcel/visitor candidate workflow",
+        "association/community context",
+        "resident plaintext redaction boundary",
+        "local role-time-facility-evidence verifier"
+      ],
+      "evidence": [
+        "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/p1_intent_engine.py",
+        "Taiji_Odoo/addons/wuchang_property_local_cloud/__manifest__.py",
+        "Taiji_Odoo/addons/wuchang_property_manpower_surface/__manifest__.py",
+        "scripts/verify/verify_w7tp_packet_inference_runtime.py"
+      ]
+    }
+  },
+  "forbidden_in_p1": [
+    "secret_read",
+    "member_plaintext_read",
+    "resident_plaintext_read",
+    "raw_audio_saved",
+    "formal_db_write",
+    "formal_pos_write",
+    "payment_capture",
+    "formal_lineworks_send",
+    "formal_line_message_send",
+    "deploy",
+    "service_restart",
+    "cloud_model_authority",
+    "llm_direct_execution"
+  ],
+  "release_required_before_production": [
+    "verified member registration release refs",
+    "verified POS order release refs",
+    "verified payment release refs",
+    "verified LINE WORKS send refs and runtime resolver",
+    "LINE Official Account human owner/admin approval",
+    "sovereign XiaoJ claim/transfer/revoke release gate",
+    "resident property role-time-evidence release gate",
+    "Gemini key-ref vault connector"
+  ],
+  "p1_side_effects": {
+    "external_api_call": false,
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "formal_lineworks_send": false,
+    "formal_line_message_send": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

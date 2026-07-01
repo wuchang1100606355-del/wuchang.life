@@ -1,0 +1,389 @@
+{
+  "schema": "W7TP_CAPABILITY_RISK_EVIDENCE_FIELD_CONTRACT_V1",
+  "state": "P1_RISK_EVIDENCE_FIELD_MATRIX_READY_P2_RELEASE_HOLD",
+  "purpose": "Unify capability-governance risk controls into a single evidence-field contract for candidate ability, 8D packet, local reconstruction, local verification, owner approval, and sealed execution flows.",
+  "authority_boundary": {
+    "capability_governance_core": true,
+    "output_governance_only": false,
+    "cloud_model_candidate_only": true,
+    "external_candidate_execute_allowed": false,
+    "execution_permission_model": "EXECUTE_REQUEST_ONLY",
+    "local_discrete_verifier_is_authority": true,
+    "owner_admin_approval_required_for_release": true,
+    "real_claim_requires_evidence_ref": true,
+    "execution_claim_requires_local_gate": true,
+    "cloud_can_mark_real_verified": false,
+    "cloud_can_mark_executable_authorized": false
+  },
+  "required_evidence_fields": [
+    "risk_code",
+    "risk_level",
+    "intent_field_hash",
+    "packet_hash",
+    "candidate_hash",
+    "evidence_ref",
+    "evidence_hash",
+    "local_lookup_ref",
+    "local_reconstruction_hash",
+    "total_field_query_hash",
+    "verifier_policy_ref",
+    "verifier_state",
+    "failure_reasons",
+    "approval_ref",
+    "release_condition_ref",
+    "seal_hash",
+    "ttl",
+    "nonce",
+    "route_key"
+  ],
+  "global_hold_conditions": [
+    "evidence_ref_missing",
+    "evidence_hash_missing",
+    "packet_hash_missing",
+    "total_field_query_hash_missing",
+    "local_reconstruction_hash_missing",
+    "verifier_state_missing",
+    "local_verifier_not_passed",
+    "owner_approval_ref_missing_for_release",
+    "ttl_or_nonce_missing",
+    "danger_flags_present",
+    "secret_material_detected",
+    "member_or_resident_plaintext_detected",
+    "cloud_candidate_attempted_execute"
+  ],
+  "risk_controls": [
+    {
+      "risk_id": "cloud_candidate_overreach",
+      "surface": "cloud_model_and_group_intelligence",
+      "risk_code": "RISK_CLOUD_CANDIDATE_OVERREACH",
+      "required_evidence_fields": [
+        "candidate_hash",
+        "intent_field_hash",
+        "packet_hash",
+        "evidence_ref",
+        "evidence_hash",
+        "verifier_policy_ref",
+        "verifier_state",
+        "failure_reasons"
+      ],
+      "missing_policy": "HOLD_CLOUD_CANDIDATE_NOT_AUTHORITY",
+      "authorized_output": "EXECUTE_REQUEST_ONLY",
+      "forbidden_output": "EXECUTE",
+      "local_verifier_failure_reasons": [
+        "cloud_candidate_attempted_execute",
+        "cloud_claimed_real_verified",
+        "cloud_claimed_authority"
+      ]
+    },
+    {
+      "risk_id": "missing_evidence_anchor",
+      "surface": "reality_claim_and_execution_claim",
+      "risk_code": "RISK_MISSING_EVIDENCE_ANCHOR",
+      "required_evidence_fields": [
+        "evidence_ref",
+        "evidence_hash",
+        "local_lookup_ref",
+        "total_field_query_hash",
+        "verifier_state",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_EVIDENCE_ANCHOR_REQUIRED",
+      "authorized_output": "HOLD",
+      "forbidden_output": "REAL_VERIFIED_OR_EXECUTE",
+      "local_verifier_failure_reasons": [
+        "evidence_ref_missing",
+        "evidence_hash_missing",
+        "local_lookup_ref_missing"
+      ]
+    },
+    {
+      "risk_id": "total_field_subfield_danger",
+      "surface": "total_field_subfield_query",
+      "risk_code": "RISK_TOTAL_FIELD_DANGER_FLAGS",
+      "required_evidence_fields": [
+        "total_field_query_hash",
+        "risk_code",
+        "risk_level",
+        "evidence_hash",
+        "failure_reasons",
+        "verifier_state",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_TOTAL_FIELD_SUBFIELD_REQUIRED",
+      "authorized_output": "HOLD",
+      "forbidden_output": "EXECUTE",
+      "local_verifier_failure_reasons": [
+        "total_field_subfield_query_missing",
+        "total_field_subfield_query_not_ok",
+        "total_field_subfield_danger_flags"
+      ]
+    },
+    {
+      "risk_id": "member_personal_data_local_return",
+      "surface": "member_pii_return_to_local_vault",
+      "risk_code": "RISK_MEMBER_PERSONAL_DATA_RETURN",
+      "required_evidence_fields": [
+        "member_ref",
+        "consent_ref",
+        "local_vault_ref",
+        "encrypted_payload_hash",
+        "evidence_hash",
+        "ttl",
+        "nonce",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_ENCRYPTED_LOCAL_VAULT_REF_REQUIRED",
+      "authorized_output": "READY_FOR_HUMAN_REVIEW",
+      "forbidden_output": "PLAINTEXT_TO_PROMPT_OR_CLOUD",
+      "local_verifier_failure_reasons": [
+        "member_ref_missing",
+        "consent_ref_missing",
+        "local_vault_ref_missing",
+        "encrypted_payload_hash_missing",
+        "member_plaintext_detected"
+      ]
+    },
+    {
+      "risk_id": "delegate_rotation_revocation",
+      "surface": "8d_delegate_identity_replacement",
+      "risk_code": "RISK_8D_DELEGATE_ROTATION",
+      "required_evidence_fields": [
+        "old_packet_ref",
+        "new_packet_ref",
+        "revocation_ref",
+        "owner_admin_or_quorum_ref",
+        "evidence_chain_hash",
+        "approval_ref",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_DELEGATE_ROTATION_EVIDENCE_CHAIN_REQUIRED",
+      "authorized_output": "READY_FOR_HUMAN_REVIEW",
+      "forbidden_output": "ROTATE_WITHOUT_REVOCATION",
+      "local_verifier_failure_reasons": [
+        "old_packet_ref_missing",
+        "new_packet_ref_missing",
+        "revocation_ref_missing",
+        "owner_admin_or_quorum_ref_missing",
+        "evidence_chain_hash_missing"
+      ]
+    },
+    {
+      "risk_id": "sovereign_xiaoj_claim_activation",
+      "surface": "member_xiaoj_claim_bind_revoke_transfer",
+      "risk_code": "RISK_SOVEREIGN_XIAOJ_CLAIM",
+      "required_evidence_fields": [
+        "member_ref",
+        "xiaoj_instance_ref",
+        "device_ref",
+        "claim_packet_hash",
+        "revocation_ref",
+        "transfer_policy_ref",
+        "evidence_hash",
+        "approval_ref",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_SOVEREIGN_XIAOJ_CLAIM_REFS_REQUIRED",
+      "authorized_output": "READY_FOR_HUMAN_REVIEW",
+      "forbidden_output": "CLAIM_WITHOUT_MEMBER_DEVICE_BINDING",
+      "local_verifier_failure_reasons": [
+        "member_ref_missing",
+        "xiaoj_instance_ref_missing",
+        "device_ref_missing",
+        "claim_packet_hash_missing",
+        "revocation_ref_missing",
+        "transfer_policy_ref_missing"
+      ]
+    },
+    {
+      "risk_id": "formal_pos_order",
+      "surface": "merchant_pos_order_release",
+      "risk_code": "RISK_FORMAL_POS_ORDER",
+      "required_evidence_fields": [
+        "order_candidate_ref",
+        "menu_source_ref",
+        "merchant_manager_ref",
+        "approval_ref",
+        "evidence_hash",
+        "release_condition_ref",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_FORMAL_POS_RELEASE_REQUIRED",
+      "authorized_output": "EXECUTE_REQUEST_ONLY",
+      "forbidden_output": "POS_WRITE_WITHOUT_RELEASE",
+      "local_verifier_failure_reasons": [
+        "menu_source_ref_missing",
+        "merchant_manager_ref_missing",
+        "approval_ref_missing",
+        "formal_pos_release_required"
+      ]
+    },
+    {
+      "risk_id": "formal_payment",
+      "surface": "payment_capture_release",
+      "risk_code": "RISK_FORMAL_PAYMENT_CAPTURE",
+      "required_evidence_fields": [
+        "payment_intent_ref",
+        "amount_hash",
+        "payer_consent_ref",
+        "approval_ref",
+        "release_condition_ref",
+        "evidence_hash",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_PAYMENT_RELEASE_REQUIRED",
+      "authorized_output": "EXECUTE_REQUEST_ONLY",
+      "forbidden_output": "PAYMENT_CAPTURE_WITHOUT_RELEASE",
+      "local_verifier_failure_reasons": [
+        "payment_intent_ref_missing",
+        "amount_hash_missing",
+        "payer_consent_ref_missing",
+        "approval_ref_missing",
+        "payment_release_required"
+      ]
+    },
+    {
+      "risk_id": "lineworks_formal_send",
+      "surface": "lineworks_notification_send",
+      "risk_code": "RISK_LINEWORKS_FORMAL_SEND",
+      "required_evidence_fields": [
+        "lineworks_channel_ref",
+        "connector_ref",
+        "message_candidate_hash",
+        "approval_ref",
+        "release_condition_ref",
+        "evidence_hash",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_LINEWORKS_SEND_RELEASE_REQUIRED",
+      "authorized_output": "EXECUTE_REQUEST_ONLY",
+      "forbidden_output": "FORMAL_SEND_WITHOUT_RELEASE",
+      "local_verifier_failure_reasons": [
+        "connector_refs_missing",
+        "connector_refs_must_not_contain_secret_material",
+        "lineworks_send_release_required"
+      ]
+    },
+    {
+      "risk_id": "property_management_action",
+      "surface": "resident_property_management",
+      "risk_code": "RISK_PROPERTY_MANAGEMENT_ACTION",
+      "required_evidence_fields": [
+        "resident_ref",
+        "property_case_ref",
+        "property_case_evidence_ref",
+        "property_action_approval_ref",
+        "local_reconstruction_hash",
+        "evidence_hash",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_PROPERTY_ACTION_EVIDENCE_REQUIRED",
+      "authorized_output": "READY_FOR_HUMAN_REVIEW",
+      "forbidden_output": "PROPERTY_ACTION_WITH_RESIDENT_PLAINTEXT",
+      "local_verifier_failure_reasons": [
+        "resident_ref_missing",
+        "property_case_ref_missing",
+        "property_case_evidence_ref_missing",
+        "property_action_approval_ref_missing",
+        "resident_plaintext_detected"
+      ]
+    },
+    {
+      "risk_id": "llm_hallucination_boundary",
+      "surface": "truth_boundary_and_imagined_candidate",
+      "risk_code": "RISK_LLM_REALITY_CONFUSION",
+      "required_evidence_fields": [
+        "truth_boundary_ref",
+        "candidate_hash",
+        "evidence_ref",
+        "local_reconstruction_hash",
+        "verifier_state",
+        "failure_reasons"
+      ],
+      "missing_policy": "HOLD_REALITY_BOUNDARY_REQUIRED",
+      "authorized_output": "IMAGINED_CANDIDATE_OR_EXECUTE_REQUEST_ONLY",
+      "forbidden_output": "REAL_VERIFIED_BY_CLOUD",
+      "local_verifier_failure_reasons": [
+        "truth_boundary_ref_missing",
+        "cloud_claimed_real_verified",
+        "real_claim_without_local_evidence_ref"
+      ]
+    },
+    {
+      "risk_id": "secret_material_exposure",
+      "surface": "secret_redaction_and_prompt_boundary",
+      "risk_code": "RISK_SECRET_MATERIAL_EXPOSURE",
+      "required_evidence_fields": [
+        "redaction_policy_ref",
+        "prompt_redaction_hash",
+        "secret_scan_hash",
+        "evidence_hash",
+        "failure_reasons",
+        "seal_hash"
+      ],
+      "missing_policy": "HOLD_SECRET_REDACTION_REQUIRED",
+      "authorized_output": "HOLD",
+      "forbidden_output": "PROMPT_OR_CONTRACT_WITH_SECRET_MATERIAL",
+      "local_verifier_failure_reasons": [
+        "raw_api_key_detected",
+        "token_detected",
+        "router_password_detected",
+        "member_plaintext_detected",
+        "resident_plaintext_detected",
+        "raw_audio_detected",
+        "raw_video_detected"
+      ]
+    }
+  ],
+  "disclosure_boundary": {
+    "public_disclosure_allowed": [
+      "capability governance chain",
+      "candidate-only cloud model boundary",
+      "8D packet field categories",
+      "evidence ref/hash/seal requirement",
+      "local reconstruction and verifier requirement",
+      "HOLD/QUARANTINE/DEAD_LETTER failure governance"
+    ],
+    "abstract_public_only": [
+      "intent-field tensor mapping",
+      "ancient-math imprint mapping",
+      "route selection heuristics",
+      "risk scoring policy"
+    ],
+    "trade_secret_only": [
+      "WHY_IT_RUNS",
+      "complete lookup table",
+      "private weights",
+      "complete routing table",
+      "router password",
+      "API key",
+      "token",
+      "member plaintext",
+      "resident plaintext",
+      "raw audio",
+      "raw video",
+      "data that can re-identify a member or resident"
+    ]
+  },
+  "p1_side_effects": {
+    "external_api_call": false,
+    "model_invocation": false,
+    "formal_lineworks_send": false,
+    "formal_line_message_send": false,
+    "formal_member_registration": false,
+    "formal_db_write": false,
+    "db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "secret_read": false,
+    "raw_api_key_read": false,
+    "raw_api_key_saved": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "member_plaintext_to_prompt": false,
+    "resident_plaintext_to_prompt": false,
+    "raw_audio_saved": false,
+    "raw_video_saved": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

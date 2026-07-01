@@ -77,14 +77,39 @@ NO_MEMBER_PLAINTEXT_READ=TRUE
 
 ```text
 Browser GUI inside Odoo route / web asset / POS extension
+  -> total-field subfield query
   -> W7TP 8D operation packet
   -> cloud / 70B candidate brain
+  -> sovereign member and merchant capability boundary
   -> No-LLM backbrain lookup and verifier
   -> UI projection and voice/display adapter
   -> human confirm gate
   -> formal POS action only after separate authorization
   -> evidence seal
 ```
+
+## Merchant Invention Capability Layer
+
+The product architecture now treats W7TP / XiaoJ invention capabilities as
+merchant-system modules rather than patent-only abstractions:
+
+- AI candidate authority isolation for every merchant-impacting action.
+- Mandatory total-field subfield query before every generation.
+- Generative transmission and local reconstruction for cloud-minimized context.
+- Sovereign AI membership for identity, consent, benefit, discount, and
+  preference authority.
+- Cloud humanoid subscription as replaceable interaction shell, not authority.
+- Odoo/POS/table-side execution gate for formal order, payment, discount,
+  refund, inventory, and loyalty effects.
+- Merchant social governance for post, campaign, coupon, and member-message
+  publication gates.
+- Property/community governance for visitor, parcel, facility, repair, fee,
+  announcement, and resident-service workflows.
+- Dead-letter governance, evidence seal, and UI status for failed or risky
+  candidates.
+
+The integration map is recorded at
+`packets/product_av_ordering_ai/merchant_invention_capability_map.json`.
 
 ## Integration Priority
 
@@ -135,3 +160,20 @@ The product demonstration must show:
 6. Evidence seal preserves packet hash, candidate hash, verifier output, and gate result.
 7. Odoo/POS is the embodiment, not direct LLM-controlled DB.
 
+## Formal Release Status API
+
+The original Odoo-integrated gateway exposes a user-authenticated status route:
+
+```text
+/wuchang/xiaoj/api/formal-release-status
+```
+
+This endpoint checks whether formal member registration, formal POS ordering,
+and formal payment have verified release references. It does not perform DB
+writes, POS writes, payment capture, deployment, restart, secret read, or member
+plaintext read. Raw release refs are not echoed; the API returns ref keys and
+hashes only. Unsigned strings or placeholders return
+`HOLD_RELEASE_REFS_UNVERIFIED`, and total-field subfield danger flags return a
+HOLD state. A complete verified release check returns
+`RELEASE_READY_FOR_HUMAN_ACTIVATION`; actual activation remains a separate human
+release event.

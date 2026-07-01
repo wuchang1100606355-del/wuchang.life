@@ -1,0 +1,148 @@
+{
+  "schema": "W7TP_MERCHANT_INVENTION_CAPABILITY_MAP_V1",
+  "state": "READY_FOR_PRODUCT_INTEGRATION_REVIEW",
+  "product": "XiaoJ sovereign merchant AI operating system",
+  "core_rule": "AI output is candidate-only; merchant-impacting execution requires local authority.",
+  "execution_chain": [
+    "merchant_input",
+    "total_field_subfield_query",
+    "ai_candidate",
+    "protocol_carrying_authority_packet",
+    "local_reconstruction",
+    "local_discrete_authority_verifier",
+    "execution_gate",
+    "evidence_seal_ui_status"
+  ],
+  "capabilities": [
+    {
+      "id": "total_field_subfield_query",
+      "merchant_surface": ["ordering", "membership", "social", "property", "community", "POS", "humanoid"],
+      "ai_role": "no_generation_before_query",
+      "local_authority": "query_runtime_intent_subfields_and_embed_query_hash",
+      "execution_blocked_until": "total_field_subfield_query_ok"
+    },
+    {
+      "id": "candidate_authority_isolation",
+      "merchant_surface": ["ordering", "membership", "social", "property", "community", "POS"],
+      "ai_role": "candidate_generator_only",
+      "local_authority": "required",
+      "execution_blocked_until": "execution_allowed_true"
+    },
+    {
+      "id": "generative_transmission",
+      "merchant_surface": ["cloud_humanoid", "cloud_ordering", "member_personalization", "table_side_ordering"],
+      "ai_role": "receive_minimized_candidate_context",
+      "local_authority": "reconstruct_with_indexes_deltas_hashes_state_codes_route_keys",
+      "execution_blocked_until": "local_reconstruction_verified"
+    },
+    {
+      "id": "sovereign_ai_membership",
+      "merchant_surface": ["member_login", "loyalty", "discount", "preference", "coupon", "community_identity"],
+      "ai_role": "suggest_personalization_or_offer_candidate",
+      "local_authority": "member_identity_consent_benefit_discount_verifier",
+      "execution_blocked_until": "member_authority_pass"
+    },
+    {
+      "id": "cloud_humanoid_subscription_layer",
+      "merchant_surface": ["avatar", "voice", "vision", "customer_display", "staff_display"],
+      "ai_role": "interaction_shell_and_candidate_service",
+      "local_authority": "none_in_cloud",
+      "execution_blocked_until": "authority_packet_passes_local_verifier"
+    },
+    {
+      "id": "cafe_av_ordering_waiter",
+      "merchant_surface": ["audio_ordering", "video_ordering", "table_side_ordering", "customer_display"],
+      "ai_role": "produce_order_intent_candidate",
+      "local_authority": "menu_price_option_table_member_pos_verifier",
+      "execution_blocked_until": "staff_confirm_or_local_execute_gate"
+    },
+    {
+      "id": "odoo_pos_execution_gate",
+      "merchant_surface": ["Odoo", "POS", "table_QR", "payment_policy", "order_write"],
+      "ai_role": "draft_order_only",
+      "local_authority": "formal_order_payment_discount_refund_inventory_verifier",
+      "execution_blocked_until": "formal_gate_authorized"
+    },
+    {
+      "id": "merchant_social_governance",
+      "merchant_surface": ["LINE", "social_post", "campaign", "coupon", "member_message"],
+      "ai_role": "draft_content_or_campaign_candidate",
+      "local_authority": "audience_offer_channel_consent_risk_verifier",
+      "execution_blocked_until": "publication_gate_authorized"
+    },
+    {
+      "id": "property_community_governance",
+      "merchant_surface": ["visitor", "parcel", "facility", "repair", "fee_notice", "announcement"],
+      "ai_role": "service_workflow_candidate",
+      "local_authority": "resident_unit_role_time_facility_evidence_verifier",
+      "execution_blocked_until": "community_authority_pass"
+    },
+    {
+      "id": "dead_letter_failure_governance",
+      "merchant_surface": ["ordering", "membership", "POS", "social", "property", "edge"],
+      "ai_role": "none_for_failure_override",
+      "local_authority": "hold_quarantine_queue_dead_letter",
+      "execution_blocked_until": "manual_or_policy_recovery"
+    },
+    {
+      "id": "evidence_seal_ui_status",
+      "merchant_surface": ["customer_display", "staff_display", "admin", "audit", "demo"],
+      "ai_role": "may_explain_candidate_status",
+      "local_authority": "packet_hash_decision_failure_reason_verifier_state_seal",
+      "execution_blocked_until": "visible_status_and_seal_created"
+    }
+  ],
+  "cloud_humanoid_subscription_boundary": {
+    "allowed": [
+      "avatar_rendering",
+      "speech_to_text",
+      "text_to_speech",
+      "natural_language_response_candidate",
+      "menu_explanation_candidate",
+      "order_intent_candidate",
+      "polite_customer_interaction"
+    ],
+    "forbidden": [
+      "formal_pos_write",
+      "payment_capture",
+      "member_identity_authority",
+      "discount_authority",
+      "social_publication_authority",
+      "property_access_authority",
+      "secret_lookup_authority"
+    ],
+    "required_labels": {
+      "candidate_only": true,
+      "cloud_authority": false,
+      "local_authority": "discrete_state_core"
+    }
+  },
+  "minimum_commercial_mvp": {
+    "must_have": [
+      "Odoo_or_POS_menu_read",
+      "table_customer_staff_ordering_ui",
+      "total_field_subfield_query_before_generation",
+      "cloud_or_local_ai_candidate",
+      "authority_packet_generator",
+      "menu_price_table_member_verifier",
+      "staff_confirmation_gate",
+      "evidence_seal",
+      "ui_status"
+    ],
+    "blocked_until_later_phase": [
+      "autonomous_payment_capture",
+      "direct_cloud_to_pos_write",
+      "cloud_member_plaintext",
+      "cloud_discount_authority",
+      "autonomous_social_publication"
+    ]
+  },
+  "safety": {
+    "no_db_write": true,
+    "no_deploy": true,
+    "no_restart": true,
+    "no_secret_read": true,
+    "no_member_plaintext_to_cloud": true,
+    "no_raw_audio_default_retention": true
+  }
+}

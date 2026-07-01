@@ -1,0 +1,124 @@
+{
+  "schema": "W7TP_XIAOJ_LOW_COST_MODEL_RELEASE_SEQUENCE_CONTRACT_V1",
+  "state": "P1_RELEASE_SEQUENCE_FIXED_P2_GATES_HOLD",
+  "purpose": "Fix the low-cost model work method and the ordered P2 gates before any production model switch, member LLM release, POS write, payment capture, or personal-data return.",
+  "default_models": {
+    "total_field_planning_review": "gpt-5.5",
+    "codex_engineering_cost_saving": "gpt-5.4-mini",
+    "merchant_runtime_candidate_generation": "gemini-2.5-flash-lite",
+    "nano_utility_only": "gpt-5.4-nano"
+  },
+  "ordered_gates": [
+    {
+      "id": "llm_cost_saving_model_router",
+      "state": "P1_READY",
+      "required_artifacts": [
+        "packets/product_av_ordering_ai/llm_cost_saving_model_router_contract.json",
+        "docs/product/XIAOJ_LLM_COST_SAVING_MODEL_ROUTER_GUIDE.md",
+        "scripts/verify/verify_xiaoj_llm_cost_saving_model_router.py"
+      ]
+    },
+    {
+      "id": "gemini_key_ref_vault_binding",
+      "state": "P2_HOLD",
+      "required_fields": [
+        "member_ref",
+        "gemini_key_ref",
+        "model_ref",
+        "quota_ref",
+        "consent_ref",
+        "usage_scope_ref",
+        "revocation_ref",
+        "evidence_hash"
+      ],
+      "forbidden": [
+        "raw_google_api_key",
+        "raw_api_key_in_odoo_config_parameter",
+        "raw_api_key_in_prompt"
+      ]
+    },
+    {
+      "id": "member_llm_release_gate",
+      "state": "P2_HOLD",
+      "required_fields": [
+        "member_ref",
+        "model_ref",
+        "quota_ref",
+        "consent_ref",
+        "truth_boundary_ref",
+        "release_packet_hash"
+      ]
+    },
+    {
+      "id": "local_personal_data_return_packet",
+      "state": "P2_HOLD",
+      "required_fields": [
+        "member_ref",
+        "consent_ref",
+        "local_vault_ref",
+        "encrypted_payload_hash",
+        "expiry_ref",
+        "revocation_ref"
+      ],
+      "forbidden": [
+        "personal_data_to_cloud_llm",
+        "personal_data_in_prompt",
+        "personal_data_without_consent_ref"
+      ]
+    },
+    {
+      "id": "8d_delegate_rotation_and_revocation",
+      "state": "P2_HOLD",
+      "required_fields": [
+        "old_packet_ref",
+        "new_packet_ref",
+        "revocation_ref",
+        "owner_admin_or_quorum_ref",
+        "evidence_chain_hash"
+      ]
+    },
+    {
+      "id": "sovereign_xiaoj_claim_activation",
+      "state": "P2_HOLD",
+      "required_fields": [
+        "member_ref",
+        "xiaoj_instance_ref",
+        "device_ref",
+        "claim_packet_hash",
+        "revocation_ref",
+        "transfer_policy_ref"
+      ]
+    },
+    {
+      "id": "formal_pos_member_payment_release",
+      "state": "P3_HOLD_UNTIL_ALL_P2_GATES_PASS",
+      "required_fields": [
+        "pos_release_ref",
+        "member_registration_release_ref",
+        "payment_capture_release_ref",
+        "human_owner_admin_approval_ref"
+      ]
+    }
+  ],
+  "authority_boundary": {
+    "cloud_model_candidate_only": true,
+    "local_discrete_verifier_is_authority": true,
+    "llm_direct_execution": false,
+    "gemini_runtime_authority": false,
+    "nano_architecture_decision_allowed": false
+  },
+  "p1_side_effects": {
+    "external_api_call": false,
+    "model_invocation": false,
+    "raw_api_key_read": false,
+    "raw_api_key_saved": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "formal_db_write": false,
+    "runtime_model_changed": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

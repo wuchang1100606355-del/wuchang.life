@@ -1,0 +1,69 @@
+{
+  "schema": "W7TP_XIAOJ_LINE_WORKS_RELEASE_REFS_TEMPLATE_V1",
+  "state": "TEMPLATE_REQUIRES_HUMAN_FILLED_VERIFIED_REFS",
+  "usage": "Fill refs only. Do not paste access tokens, private keys, client secrets, raw LINE WORKS user IDs, or member plaintext.",
+  "lineworks_send": {
+    "authenticated_staff_ref": {
+      "ref": "REF_AUTHENTICATED_STAFF_REVIEW_PACKET",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    },
+    "lineworks_release_packet_ref": {
+      "ref": "REF_LINEWORKS_RELEASE_PACKET",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    },
+    "lineworks_app_config_ref": {
+      "ref": "REF_LINEWORKS_APP_CONFIG",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    },
+    "lineworks_bot_ref": {
+      "ref": "REF_LINEWORKS_BOT",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    },
+    "lineworks_target_user_ref": {
+      "ref": "REF_LINEWORKS_TARGET_USER_HASH_OR_MASKED_REF",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    },
+    "message_policy_ref": {
+      "ref": "REF_MESSAGE_POLICY",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    },
+    "consent_policy_ref": {
+      "ref": "REF_CONSENT_POLICY",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    },
+    "total_field_release_ref": {
+      "ref": "REF_TOTAL_FIELD_RELEASE",
+      "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verifier": "total_field_release_registry",
+      "verified": false
+    }
+  },
+  "connector_refs": {
+    "lineworks_bot_ref": "BOT_REF_ONLY_NO_SECRET",
+    "lineworks_target_user_ref": "TARGET_REF_ONLY_NO_MEMBER_PLAINTEXT",
+    "lineworks_access_token_runtime_ref": "RUNTIME_TOKEN_PROVIDER_REF_ONLY_NO_TOKEN_VALUE"
+  },
+  "p1_side_effects": {
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "deploy": false,
+    "service_restart": false,
+    "db_write": false
+  }
+}

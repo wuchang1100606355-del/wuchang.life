@@ -1,0 +1,115 @@
+{
+  "schema": "W7TP_XIAOJ_LINE_OFFICIAL_ACCOUNT_TOTAL_FIELD_AUTHORIZATION_CONTRACT_V1",
+  "state": "P1_AUTHORIZATION_MODEL_READY_FOR_HUMAN_REVIEW",
+  "surface": "LINE_OFFICIAL_ACCOUNT_MESSAGING_API",
+  "goal": "Allow the total field to understand operator intent in natural language, draft LINE Official Account configuration packets, and wait for human owner/admin approval before activation.",
+  "config_candidate_api": "/wuchang/xiaoj/api/line-official-account-config-candidate",
+  "config_candidate_api_auth": "user",
+  "webhook_candidate_api": "/wuchang/xiaoj/api/line-official-account-webhook-candidate",
+  "webhook_shell_route": "/wuchang/xiaoj/line-official-account/webhook",
+  "webhook_shell_auth": "public",
+  "refs_template": "packets/product_av_ordering_ai/line_official_account_refs_template.json",
+  "refs_builder": {
+    "tool": "tools/xiaoj_line_official_account_refs_builder.py",
+    "service": "wuchang_cafe_ai_gateway.services.line_official_account_refs.build_line_official_account_refs_draft",
+    "odoo_action": "action_build_refs_draft",
+    "accepts_secret_values": false,
+    "accepts_member_plaintext": false,
+    "external_api_call": false,
+    "official_account_setting_changed": false,
+    "db_write": false
+  },
+  "official_account_boundary": {
+    "line_official_account_is_not_lineworks": true,
+    "messaging_api_channel_required": true,
+    "webhook_required_for_inbound_events": true,
+    "human_owner_admin_root_of_trust": true,
+    "total_field_super_admin": false,
+    "total_field_can_accept_admin_invite": false,
+    "total_field_can_hold_plaintext_channel_access_token": false,
+    "total_field_can_change_production_settings_without_release_packet": false
+  },
+  "authorized_total_field_work": [
+    "natural_language_intent_confirmation",
+    "candidate_configuration_packet_generation",
+    "webhook_config_preflight",
+    "message_policy_preflight",
+    "audience_and_consent_ref_preflight",
+    "channel_access_token_ref_binding_check",
+    "human_approval_packet_generation",
+    "evidence_seal_and_ui_status"
+  ],
+  "forbidden_total_field_work": [
+    "store_channel_secret_plaintext",
+    "store_channel_access_token_plaintext",
+    "store_line_login_password",
+    "add_or_remove_official_account_admins",
+    "send_broadcast_without_human_release",
+    "change_webhook_url_without_human_release",
+    "read_member_plaintext_when_ref_or_hash_is_sufficient"
+  ],
+  "human_approval_flow": [
+    "operator_describes_intent_in_natural_language",
+    "total_field_converts_intent_to_candidate_config_packet",
+    "local_verifier_checks_scope_refs_webhook_policy_message_policy_audience_consent",
+    "state_becomes_HOLD_OR_READY_FOR_HUMAN_APPROVAL",
+    "human_owner_admin_reviews_diff_and_evidence_hash",
+    "human_owner_admin_applies_settings_in_LINE_console_or_confirms_release_packet",
+    "runtime_connector_uses_token_ref_from_vault_only_after_release"
+  ],
+  "minimum_refs": {
+    "line_official_account_ref": "OFFICIAL_ACCOUNT_REF_HASH_OR_MASKED",
+    "line_provider_ref": "LINE_PROVIDER_REF",
+    "messaging_api_channel_ref": "MESSAGING_API_CHANNEL_REF",
+    "webhook_endpoint_ref": "WEBHOOK_ENDPOINT_REF",
+    "channel_secret_ref": "CHANNEL_SECRET_REF_VAULT_ONLY",
+    "channel_access_token_runtime_ref": "CHANNEL_ACCESS_TOKEN_RUNTIME_REF_VAULT_ONLY",
+    "message_policy_ref": "MESSAGE_POLICY_REF",
+    "audience_policy_ref": "AUDIENCE_POLICY_REF",
+    "consent_policy_ref": "CONSENT_POLICY_REF",
+    "human_owner_admin_release_ref": "HUMAN_OWNER_ADMIN_RELEASE_REF"
+  },
+  "natural_language_intent_packet": {
+    "tool": "tools/xiaoj_line_official_account_config_candidate.py",
+    "service": "wuchang_cafe_ai_gateway.services.line_official_account_config.build_line_official_account_config_candidate",
+    "api": "/wuchang/xiaoj/api/line-official-account-config-candidate",
+    "input_allowed": "operator intent, desired account behavior, target audience refs, message style refs",
+    "input_forbidden": "raw channel access token, channel secret value, LINE password, raw member profile, payment data",
+    "output_state": [
+      "CONFIG_CANDIDATE",
+      "HOLD_NEEDS_HUMAN_APPROVAL",
+      "READY_FOR_HUMAN_APPROVAL",
+      "DEAD_LETTER"
+    ],
+    "execution_allowed_from_llm": false,
+    "execution_allowed_source": "human_owner_admin_release_packet_plus_local_verifier"
+  },
+  "webhook_candidate_packet": {
+    "tool": "tools/xiaoj_line_official_account_webhook_candidate.py",
+    "service": "wuchang_cafe_ai_gateway.services.line_official_account_webhook.build_line_official_account_webhook_candidate",
+    "api": "/wuchang/xiaoj/api/line-official-account-webhook-candidate",
+    "webhook_shell_route": "/wuchang/xiaoj/line-official-account/webhook",
+    "signature_secret_read": false,
+    "line_reply_sent": false,
+    "reply_token_echo": false,
+    "raw_user_id_echo": false,
+    "requires_signature_verification_ref_for_ready": true
+  },
+  "p1_side_effects": {
+    "external_api_call": false,
+    "formal_line_message_send": false,
+    "official_account_setting_changed": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "db_write": false,
+    "deploy": false,
+    "service_restart": false
+  },
+  "redaction_boundary": {
+    "channel_access_token_echo": false,
+    "channel_secret_echo": false,
+    "line_password_echo": false,
+    "member_plaintext_echo": false,
+    "raw_user_id_echo": false
+  }
+}

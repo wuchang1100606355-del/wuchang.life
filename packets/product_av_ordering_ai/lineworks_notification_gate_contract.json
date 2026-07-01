@@ -1,0 +1,210 @@
+{
+  "schema": "W7TP_XIAOJ_LINE_WORKS_NOTIFICATION_GATE_CONTRACT_V1",
+  "state": "LINE_WORKS_P1_CANDIDATE_GATE_READY",
+  "candidate_api": "/wuchang/xiaoj/api/lineworks-notify",
+  "candidate_api_auth": "user",
+  "send_preflight_api": "/wuchang/xiaoj/api/lineworks-send-preflight",
+  "send_preflight_api_auth": "user",
+  "release_refs_draft_api": "/wuchang/xiaoj/api/lineworks-release-refs-draft",
+  "release_refs_draft_api_auth": "user",
+  "execution_envelope_api": "/wuchang/xiaoj/api/lineworks-execution-envelope",
+  "execution_envelope_api_auth": "user",
+  "runtime_activation_draft_api": "/wuchang/xiaoj/api/lineworks-runtime-activation-draft",
+  "runtime_activation_draft_api_auth": "user",
+  "runtime_dry_run_api": "/wuchang/xiaoj/api/lineworks-runtime-dry-run",
+  "runtime_dry_run_api_auth": "user",
+  "operator_handoff_api": "/wuchang/xiaoj/api/lineworks-operator-handoff",
+  "operator_handoff_api_auth": "user",
+  "runtime_resolver_contract_api": "/wuchang/xiaoj/api/lineworks-runtime-resolver-contract",
+  "runtime_resolver_contract_api_auth": "user",
+  "intent": "lineworks_notify_candidate",
+  "formal_release_gate": "lineworks_send",
+  "total_field_delegate_boundary": {
+    "mode": "bounded_digital_delegate",
+    "allowed": [
+      "subfield_query",
+      "candidate_intent_classification",
+      "authority_packet_generation",
+      "local_verifier_decision",
+      "release_preflight",
+      "evidence_seal_status"
+    ],
+    "forbidden": [
+      "plaintext_google_workspace_credential_storage",
+      "plaintext_lineworks_credential_storage",
+      "plaintext_odoo_credential_storage",
+      "router_password_storage",
+      "payment_secret_storage",
+      "super_admin_self_grant",
+      "external_platform_change_without_verified_release_refs"
+    ],
+    "root_of_trust": "human_owner_admin",
+    "credential_material_in_repo": false
+  },
+  "official_api_endpoint_template": "POST https://www.worksapis.com/v1.0/bots/{botId}/users/{userId}/messages",
+  "required_scope_refs": [
+    "bot",
+    "bot.message"
+  ],
+  "required_verified_release_refs": [
+    "authenticated_staff_ref",
+    "lineworks_release_packet_ref",
+    "lineworks_app_config_ref",
+    "lineworks_bot_ref",
+    "lineworks_target_user_ref",
+    "message_policy_ref",
+    "consent_policy_ref",
+    "total_field_release_ref"
+  ],
+  "p1_side_effects": {
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "secret_read": false,
+    "token_read": false,
+    "member_plaintext_read": false,
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "service_restart": false,
+    "deploy": false
+  },
+  "connector_contract": {
+    "module": "wuchang_cafe_ai_gateway.services.lineworks_connector",
+    "function": "build_lineworks_send_preflight",
+    "external_http_call": false,
+    "release_status_payload_from_client_trusted": false,
+    "connector_ref_shape": "uppercase_opaque_ref_containing_REF",
+    "required_connector_refs": [
+      "lineworks_bot_ref",
+      "lineworks_target_user_ref",
+      "lineworks_access_token_runtime_ref"
+    ],
+    "request_body_shape": {
+      "content": {
+        "type": "text",
+        "text": "message_preview"
+      }
+    }
+  },
+  "execution_envelope_export": {
+    "tool": "tools/xiaoj_lineworks_execution_envelope_export.py",
+    "api": "/wuchang/xiaoj/api/lineworks-execution-envelope",
+    "writes_runtime_artifact": true,
+    "runtime_artifact_root": "runtime/product_av_ordering_ai/lineworks",
+    "runtime_send_enabled": false,
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "credential_values_in_export": false,
+    "raw_member_identity_in_export": false
+  },
+  "release_refs_builder": {
+    "tool": "tools/xiaoj_lineworks_release_refs_builder.py",
+    "service": "wuchang_cafe_ai_gateway.services.lineworks_release_refs.build_lineworks_release_refs_draft",
+    "api": "/wuchang/xiaoj/api/lineworks-release-refs-draft",
+    "writes_runtime_artifact": true,
+    "runtime_artifact_root": "runtime/product_av_ordering_ai/lineworks",
+    "accepts_secret_values": false,
+    "accepts_member_plaintext": false,
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "db_write": false
+  },
+  "p2_runtime_connector_contract": {
+    "module": "wuchang_cafe_ai_gateway.services.lineworks_connector",
+    "function": "execute_lineworks_send_envelope",
+    "dry_run_api": "/wuchang/xiaoj/api/lineworks-runtime-dry-run",
+    "default_external_api_call": false,
+    "default_formal_lineworks_send": false,
+    "dry_run_api_honors_client_enable_external_call": false,
+    "requires_enable_external_call_true": true,
+    "requires_human_activation": true,
+    "requires_activation_packet_hash": true,
+    "requires_runtime_resolver": true,
+    "runtime_values_must_not_echo": [
+      "bot_id",
+      "target_user_id",
+      "access_token",
+      "response_body"
+    ],
+    "official_api_shape_verified_from": "https://developers.worksmobile.com/en/docs/bot-user-message-send"
+  },
+  "runtime_resolver_contract": {
+    "tool": "tools/xiaoj_lineworks_runtime_resolver_contract_builder.py",
+    "service": "wuchang_cafe_ai_gateway.services.lineworks_runtime_resolver.build_lineworks_runtime_resolver_contract",
+    "api": "/wuchang/xiaoj/api/lineworks-runtime-resolver-contract",
+    "requires_connector_refs": [
+      "lineworks_bot_ref",
+      "lineworks_target_user_ref",
+      "lineworks_access_token_runtime_ref"
+    ],
+    "requires_runtime_binding_refs": true,
+    "requires_value_hashes": true,
+    "raw_runtime_values_in_contract": false,
+    "secret_read": false,
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "db_write": false
+  },
+  "runtime_activation_builder": {
+    "tool": "tools/xiaoj_lineworks_runtime_activation_builder.py",
+    "service": "wuchang_cafe_ai_gateway.services.lineworks_activation.build_lineworks_runtime_activation_packet",
+    "api": "/wuchang/xiaoj/api/lineworks-runtime-activation-draft",
+    "requires_safe_operator_ref": true,
+    "requires_execution_envelope_hash": true,
+    "accepts_secret_values": false,
+    "accepts_member_plaintext": false,
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "db_write": false
+  },
+  "operator_handoff_pack": {
+    "tool": "tools/xiaoj_lineworks_operator_handoff_pack.py",
+    "service": "wuchang_cafe_ai_gateway.services.lineworks_handoff.build_lineworks_operator_handoff_pack",
+    "api": "/wuchang/xiaoj/api/lineworks-operator-handoff",
+    "runtime_artifact_root": "runtime/product_av_ordering_ai/lineworks",
+    "aggregates": [
+      "release_refs_draft",
+      "readiness",
+      "execution_envelope",
+      "runtime_activation",
+      "runtime_dry_run",
+      "operator_next_actions"
+    ],
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "db_write": false
+  },
+  "odoo_operator_actions": {
+    "model": "wuchang.lineworks.notification.candidate",
+    "safe_actions": [
+      "action_build_candidate",
+      "action_build_release_refs_draft",
+      "action_run_preflight",
+      "action_build_execution_envelope",
+      "action_build_runtime_activation_packet",
+      "action_build_runtime_resolver_contract",
+      "action_run_runtime_dry_run",
+      "action_build_operator_handoff_pack",
+      "action_dead_letter"
+    ],
+    "formal_send_button_present": false,
+    "runtime_dry_run_external_api_call": false,
+    "runtime_dry_run_formal_lineworks_send": false
+  },
+  "redaction_boundary": {
+    "raw_target_ref_echo": false,
+    "member_plaintext_to_cloud": false,
+    "access_token_echo": false,
+    "client_secret_echo": false,
+    "private_key_echo": false
+  },
+  "red_team_controls": {
+    "reject_client_supplied_release_status_payload": true,
+    "reject_jwt_shaped_connector_ref": true,
+    "reject_long_bare_token_connector_ref": true,
+    "reject_lowercase_or_raw_connector_ref": true,
+    "odoo_model_constrains_secret_and_ref_shape": true
+  }
+}
