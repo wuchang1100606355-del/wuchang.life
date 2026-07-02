@@ -10,6 +10,7 @@
         "web",
         "point_of_sale",
         "product",
+        "wuchang_member_registration",
     ],
     "data": [
         "security/ir.model.access.csv",
@@ -17,6 +18,8 @@
         "views/lineworks_notification_views.xml",
         "views/line_official_account_config_views.xml",
         "views/total_product_handoff_views.xml",
+        "views/business_backend_optimization_views.xml",
+        "views/member_ticket_payment_gate_views.xml",
     ],
     "installable": True,
     "application": False,

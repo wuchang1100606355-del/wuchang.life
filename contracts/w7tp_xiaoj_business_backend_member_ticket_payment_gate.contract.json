@@ -1,0 +1,121 @@
+{
+  "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_MEMBER_TICKET_PAYMENT_GATE_PACKET_V1",
+  "packet": "W7TP_XIAOJ_BUSINESS_BACKEND_MEMBER_TICKET_PAYMENT_GATE_PACKET_V1",
+  "model": "wuchang.business.backend.member.ticket.payment.gate",
+  "action": "Build Member Ticket Payment Gate",
+  "version": 1,
+  "purpose": "Pre-payment member, ticket, entitlement, voucher, product/menu, price, option, photo, and consent gate for P1 dry-run only.",
+  "input_boundary": {
+    "allowed_shapes": [
+      "ref",
+      "state",
+      "hash",
+      "placeholder"
+    ],
+    "forbidden_plaintext": [
+      "member phone",
+      "member email",
+      "national id",
+      "access token",
+      "api key",
+      "password",
+      "payment card data"
+    ]
+  },
+  "required_refs": [
+    "member_identity_ref",
+    "ticket_ref",
+    "entitlement_ref",
+    "voucher_ref",
+    "happiness_coin_ref",
+    "cart_ref",
+    "product_menu_quality_ref",
+    "odoo_product_ref",
+    "price_ref",
+    "custom_options_ref",
+    "photo_evidence_ref",
+    "consent_ref"
+  ],
+  "required_states": [
+    "member_authority_state",
+    "ticket_state",
+    "entitlement_state",
+    "voucher_state",
+    "happiness_coin_state",
+    "product_menu_quality_state",
+    "photo_evidence_state",
+    "consent_state",
+    "pre_payment_gate_state",
+    "ai_candidate_state"
+  ],
+  "allowed_member_authority_states": [
+    "unknown",
+    "guest_ref_only",
+    "member_ref_only",
+    "verified_ref",
+    "hold"
+  ],
+  "allowed_ticket_like_states": [
+    "not_required",
+    "missing",
+    "ref_present",
+    "expired",
+    "mismatch",
+    "hold",
+    "pass"
+  ],
+  "allowed_pre_payment_gate_states": [
+    "draft",
+    "ready_for_dryrun",
+    "hold",
+    "rejected",
+    "approved_dryrun_only"
+  ],
+  "allowed_final_gate_decisions": [
+    "ALLOW_DRYRUN",
+    "HOLD",
+    "REJECT"
+  ],
+  "blockers": [
+    "blocker_generated_image_only",
+    "blocker_missing_member_authority",
+    "blocker_missing_ticket_or_entitlement",
+    "blocker_missing_price",
+    "blocker_missing_custom_options",
+    "blocker_missing_photo_evidence",
+    "blocker_missing_consent",
+    "blocker_product_menu_quality_not_pass",
+    "blocker_payment_action_requested"
+  ],
+  "decision_rules": [
+    "product_menu_quality_state must be pass, approved, or ready before ALLOW_DRYRUN",
+    "generated_image_only photo evidence must HOLD",
+    "payment_action_requested must REJECT",
+    "ALLOW_DRYRUN never authorizes payment capture, POS write, or ticket redemption"
+  ],
+  "forbidden_actions": [
+    "capture",
+    "charge",
+    "refund",
+    "redeem",
+    "write_pos",
+    "production_db_write",
+    "external_api_call"
+  ],
+  "side_effects": {
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "raw_audio_saved": false,
+    "db_write": false,
+    "pos_write": false,
+    "payment_capture": false,
+    "ticket_redeem": false,
+    "external_api_call": false,
+    "service_restart": false,
+    "deploy": false
+  },
+  "output": {
+    "packet_json": "packet body plus side_effects",
+    "packet_hash": "sha256 over stable json packet"
+  }
+}
