@@ -61,6 +61,15 @@ Required constants:
 
 The return packet must preserve the service value of cloud compute without returning sensitive context or authority.
 
+Cloud dependency must also preserve product quality:
+
+```text
+使用者體驗不可低於雲端。
+雲端依賴需又精準、又低、又無可回推。
+```
+
+This means cloud may improve polish, reasoning, summarization, translation, and service routing, but only through bounded candidate packets that cannot reconstruct the user or raw browser context.
+
 Required no-plaintext refs:
 
 - `cloud_compute_ref`: compute lane and candidate generation reference.
@@ -76,6 +85,38 @@ These fields allow Total Field to answer:
 - which action path the browser controller proposed.
 - whether member tendency influenced only service order/tone.
 - whether the candidate must be held for human or staff confirmation.
+
+## Cloud Dependency Gates
+
+Every cloud candidate request and return path must satisfy:
+
+- `cloud_dependency_precise=true`: the payload is limited to the current bounded task, output schema, and missing capability.
+- `cloud_dependency_low=true`: token count, call frequency, cost bucket, latency, and provider exposure are minimized.
+- `cloud_dependency_non_inferable=true`: cloud cannot infer member identity, raw browser page, exact household context, care/health details, payment context, or stable cross-session behavior.
+
+Forbidden cloud-bound values:
+
+- stable cloud user id,
+- raw browser page,
+- raw clickstream,
+- member plaintext,
+- exact address,
+- raw care / health details,
+- raw Odoo record,
+- payment data,
+- cookie, OAuth token, API key, or secret,
+- full total-field rule table.
+
+If any gate fails:
+
+```text
+HOLD_REQUIRED
+reason = "cloud_dependency_not_precise_low_non_inferable"
+```
+
+Reference policy:
+
+- `docs/total_field/W7TP_USER_EXPERIENCE_CLOUD_MINIMALITY_POLICY.md`
 
 ## Association Use Admission
 

@@ -1,0 +1,43 @@
+{
+  "schema": "WUCHANG_WISH_TREE_ADI_SIDECAR_EVENT_SCHEMA_V1",
+  "mode": "design_only",
+  "production_db_write": false,
+  "required_fields": [
+    "event_id",
+    "event_type",
+    "source_model_ref",
+    "source_id_ref",
+    "payload_ref",
+    "payload_hash",
+    "prev_hash",
+    "hmac_ref",
+    "risk_level",
+    "live_status"
+  ],
+  "allowed_event_types": [
+    "wish_submitted",
+    "wish_reviewed",
+    "wish_budget_checked",
+    "wish_approved",
+    "wish_dispatched",
+    "wish_completed",
+    "wish_coin_grant_demo",
+    "wish_coin_donation_demo"
+  ],
+  "forbidden_payload": [
+    "natural_person_plaintext",
+    "phone",
+    "address",
+    "db_password",
+    "oauth_token",
+    "private_key",
+    "h64_td_codebook",
+    "h64_td_mapping"
+  ],
+  "live_status_values": [
+    "repo_level",
+    "design_only",
+    "dry_run",
+    "live_hold"
+  ]
+}
