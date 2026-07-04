@@ -16,6 +16,7 @@ CORE_FILES = [
     "docs/total_field/WUCHANG_FOUNDER_DONOR_ROLE_AND_PUBLIC_INTEREST_IP_BOUNDARY.md",
     "docs/total_field/WUCHANG_SAME_PERSON_CLOSED_TEST_GOVERNANCE_BOUNDARY.md",
     "docs/total_field/TIANXIA_WEIGONG_LIVING_MINIMUM_BENEFIT_MODEL.md",
+    "docs/total_field/W7TP_AI_MAIN_ROAD_IP_DEFENSE_STRATEGY.md",
     "patent_poc/wuchang_adi_causal_sidecar/evidence/CLOUD_DRIVE_WISH_TREE_EVIDENCE.md",
     "patent_poc/wuchang_adi_causal_sidecar/state/VIRTUAL_STATE_TRANSITION.md",
     "patent_poc/wuchang_adi_causal_sidecar/community_design/WISH_TREE_COMMUNITY_DESIGN_UPDATE.md",
