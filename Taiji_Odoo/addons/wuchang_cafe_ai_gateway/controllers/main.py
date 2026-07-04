@@ -94,6 +94,24 @@ ROUTE_STATE = {
     "xiaoj_sovereign_xiaoj_claim_draft_api": "HOLD_SOVEREIGN_XIAOJ_CLAIM_REFS_REQUIRED",
 }
 
+PRE_SEAL_POLICY = {
+    "USER_OWNS_SYSTEM_AND_DEVICE": True,
+    "OWNER_INTENT_FIELD_IS_AUTHORITY_SOURCE": True,
+    "BEFORE_OWNER_SEAL_COMMAND": "REPORT_ONLY",
+    "AFTER_OWNER_SEAL_COMMAND": "STRICT_ENFORCEMENT",
+    "CODEX": "EXECUTOR_NOT_AUTHORITY",
+    "CHATGPT": "ADVISOR_NOT_GATEKEEPER",
+}
+
+STRICT_ENFORCEMENT_TRIGGERS = (
+    "系統封裝",
+    "seal",
+    "release gate",
+    "正式發布",
+    "嚴格執行安全層",
+    "送出前總場封裝",
+)
+
 
 SUPPORTED_INTENTS = {
     "menu_lookup",
@@ -170,11 +188,26 @@ def _lineworks_refs_from_params(params: dict) -> dict:
     return result
 
 
-def _page(title: str, state: str, body: str, payload: str) -> str:
+def _page(
+    title: str,
+    state: str,
+    body: str,
+    payload: str | None = None,
+    *,
+    show_payload: bool = False,
+    state_label: str | None = None,
+) -> str:
     safe_title = html.escape(title)
-    safe_state = html.escape(state)
+    safe_state = html.escape(state_label or state)
     safe_body = body
-    safe_payload = html.escape(payload)
+    payload_section = ""
+    if show_payload and payload:
+        safe_payload = html.escape(payload)
+        payload_section = f"""
+    <section class="internal-report">
+      <h2>Internal guard payload</h2>
+      <pre>{safe_payload}</pre>
+    </section>"""
     return f"""<!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -231,6 +264,31 @@ def _page(title: str, state: str, body: str, payload: str) -> str:
       color: #f7f9fb;
       padding: 14px;
     }}
+    .actions {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }}
+    .button {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 14px;
+      border: 1px solid #17466f;
+      color: #17466f;
+      text-decoration: none;
+      font-weight: 700;
+      background: #fff;
+    }}
+    .button.primary {{
+      background: #17466f;
+      color: #fff;
+    }}
+    .internal-report {{
+      border-color: #b45309;
+    }}
   </style>
 </head>
 <body>
@@ -243,14 +301,10 @@ def _page(title: str, state: str, body: str, payload: str) -> str:
       <span class="state">{safe_state}</span>
     </div>
     {safe_body}
-    <section>
-      <h2>Route payload</h2>
-      <pre>{safe_payload}</pre>
-    </section>
+    {payload_section}
   </main>
 </body>
 </html>"""
-
 
 def _auth_body(provider: str) -> str:
     return f"""
@@ -261,6 +315,38 @@ def _auth_body(provider: str) -> str:
         <tr><th>安全邊界</th><td>不讀 token、不讀 secret、不讀會員明文、不呼叫外部 API。</td></tr>
         <tr><th>下一步</th><td>接入 provider config ref，通過 D8 guard 後才啟用正式登入。</td></tr>
       </table>
+    </section>
+    """
+
+
+def _google_member_recruitment_body() -> str:
+    return """
+    <section>
+      <h2>五常會員招募與 Google 登入準備</h2>
+      <p>這個入口用於會員招募、現場協助註冊與 Google 登入串接準備。封裝前安全層採 report-only，不阻擋使用者授權的產品落地與公開說明。</p>
+      <table>
+        <tr><th>目前可做</th><td>了解會員服務、進入註冊流程、由現場人員協助完成資料確認。</td></tr>
+        <tr><th>Google 登入</th><td>OAuth 正式導向會在 provider 設定完成後啟用；未啟用前，本頁維持產品級招募與準備入口。</td></tr>
+        <tr><th>安全層狀態</th><td>封裝前為 report-only；只有使用者明確下令系統封裝、seal、release gate、正式發布或嚴格執行時，才進入 strict enforcement。</td></tr>
+      </table>
+      <div class="actions">
+        <a class="button primary" href="/wuchang/member/register/start">開始會員註冊</a>
+        <a class="button" href="/web/signup">建立網站帳號</a>
+        <a class="button" href="/web/login">已有帳號登入</a>
+      </div>
+    </section>
+    """
+
+
+def _google_member_welcome_body() -> str:
+    return """
+    <section>
+      <h2>會員入口準備完成</h2>
+      <p>此頁保留給 Google 會員登入完成後的產品級歡迎流程。封裝前不顯示工程 payload，也不將未落地安全規則當作公開頁阻擋理由。</p>
+      <div class="actions">
+        <a class="button primary" href="/wuchang/member/register/start">繼續會員服務</a>
+        <a class="button" href="/">回到首頁</a>
+      </div>
     </section>
     """
 
@@ -292,13 +378,41 @@ class WuchangCafeAiGatewayController(http.Controller):
 
     @http.route("/google/member/login", type="http", auth="public", csrf=False)
     def google_member_login(self, **_kwargs):
-        payload = _json_payload("google_member_login", ROUTE_STATE["google_login"])
-        return _page("Google 會員登入", ROUTE_STATE["google_login"], _auth_body("Google"), payload)
+        return _page(
+            "五常會員招募 / Google 登入準備",
+            ROUTE_STATE["google_login"],
+            _google_member_recruitment_body(),
+            state_label="會員招募開放",
+        )
 
     @http.route("/google/member/welcome", type="http", auth="public", csrf=False)
     def google_member_welcome(self, **_kwargs):
-        payload = _json_payload("google_member_welcome", ROUTE_STATE["google_welcome"])
-        return _page("Google 會員歡迎頁", ROUTE_STATE["google_welcome"], _auth_body("Google Welcome"), payload)
+        return _page(
+            "Google 會員歡迎頁",
+            ROUTE_STATE["google_welcome"],
+            _google_member_welcome_body(),
+            state_label="會員服務準備完成",
+        )
+
+    @http.route("/wuchang/internal/guard/google-member-login", type="http", auth="user", csrf=False)
+    def google_member_login_internal_guard(self, **_kwargs):
+        payload = _json_payload(
+            "google_member_login_internal_guard",
+            ROUTE_STATE["google_login"],
+            {
+                "pre_seal_policy": PRE_SEAL_POLICY,
+                "strict_enforcement_triggers": STRICT_ENFORCEMENT_TRIGGERS,
+                "public_route": "/google/member/login",
+            },
+        )
+        return _page(
+            "Google 會員入口工程檢查",
+            ROUTE_STATE["google_login"],
+            _auth_body("Google internal guard"),
+            payload,
+            show_payload=True,
+            state_label="REPORT_ONLY",
+        )
 
     @http.route("/wuchang/member/register/start", type="http", auth="public", csrf=False)
     def member_register_start(self, **_kwargs):
