@@ -82,6 +82,33 @@ h3 {
   justify-content: flex-end;
 }
 
+.public-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.public-nav a {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(16, 28, 40, .84);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.public-nav a:hover,
+.public-nav a:focus-visible {
+  outline: 3px solid rgba(93, 184, 255, .22);
+  border-color: rgba(93, 184, 255, .65);
+}
+
 .badge {
   background: #0b1420;
   border: 1px solid var(--line);
@@ -110,7 +137,7 @@ h3 {
   border: 1px solid var(--line);
   display: grid;
   gap: 1px;
-  grid-template-columns: repeat(9, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   margin-bottom: 16px;
   overflow: hidden;
 }
@@ -135,9 +162,11 @@ h3 {
 
 .lane-strip span {
   color: var(--green);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
-  overflow-wrap: anywhere;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .layout {
@@ -436,5 +465,9 @@ pre {
   .lane-strip,
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  .public-nav a {
+    flex: 1 1 180px;
   }
 }

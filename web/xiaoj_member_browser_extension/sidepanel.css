@@ -78,6 +78,26 @@ label,
   font-size: 12px;
 }
 
+.publicBoundary {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 12px;
+  padding: 10px;
+  border: 1px solid #d3e7e4;
+  border-radius: 8px;
+  background: #ecf8f5;
+}
+
+.publicBoundary strong {
+  color: var(--teal);
+  font-size: 13px;
+}
+
+.publicBoundary span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .statusGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
