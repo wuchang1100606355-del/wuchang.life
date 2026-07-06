@@ -22,6 +22,10 @@ import uuid
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
+from tools.intent_field.adi_5d_absolute_index_verifier import (
+    verify_packet as verify_adi_5d_absolute_index_packet,
+)
+
 
 DENY_SECRET_NOT_CONFIGURED = "DENY_SECRET_NOT_CONFIGURED"
 DENY_SCHEMA_INVALID = "DENY_SCHEMA_INVALID"
@@ -31,6 +35,11 @@ DENY_D7_SIGNATURE_INVALID = "DENY_D7_SIGNATURE_INVALID"
 DENY_REPLAY_ATTACK = "DENY_REPLAY_ATTACK"
 QUARANTINE_DENY_BY_DEFAULT = "QUARANTINE_DENY_BY_DEFAULT"
 EXEC_POS_ORDER = "EXEC_POS_ORDER"
+ALLOW = "ALLOW"
+HOLD = "HOLD"
+BLOCK = "BLOCK"
+HOLD_ADI_5D_REQUIRED = "HOLD_ADI_5D_REQUIRED"
+HOLD_GT_DEFINITION_DRIFT = "HOLD_GT_DEFINITION_DRIFT"
 
 
 def canonical_json(obj: Dict[str, Any]) -> str:
@@ -174,6 +183,73 @@ class Canonical8DVerifier:
             "governance_rule": "gov_strict",
         }
 
+    def check_gt_definition_drift(self, payload: Dict[str, Any]) -> List[str]:
+        text = canonical_json(payload).lower()
+        forbidden_core_terms = [
+            "cloud encrypted sync",
+            "encrypted cloud sync",
+            "file transfer",
+            "backup",
+            "download-decrypt restore",
+            "download and decrypt restore",
+            "decrypt restore",
+            "檔案搬運",
+            "雲端密文同步",
+            "備份",
+            "下載解密",
+        ]
+        core_markers = [
+            "generative_transmission_core",
+            "gt_core",
+            "core_technology",
+            "核心",
+        ]
+        forbidden_adi_terms = [
+            "adi neural network",
+            "5d neural network",
+            "ordinary json five fields",
+            "generic 5d schema",
+            "external tensor network",
+            "extra tensor network",
+            "普通 json 五欄位",
+            "神經網路",
+            "外掛張量網",
+        ]
+        errors: List[str] = []
+        if any(marker in text for marker in core_markers) and any(term in text for term in forbidden_core_terms):
+            errors.append("GT_CORE_DEFINITION_DRIFT_FILE_TRANSFER_OR_CLOUD_SYNC")
+        if any(term in text for term in forbidden_adi_terms):
+            errors.append("ADI_5D_DEFINITION_DRIFT")
+        return errors
+
+    def verify_adi_5d_gate(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        drift_errors = self.check_gt_definition_drift(payload)
+        if drift_errors:
+            return {
+                "decision": HOLD,
+                "result_code": HOLD_GT_DEFINITION_DRIFT,
+                "checks": {},
+                "errors": drift_errors,
+            }
+
+        adi_packet = payload.get("adi_5d_absolute_index")
+        if not isinstance(adi_packet, dict):
+            return {
+                "decision": HOLD,
+                "result_code": HOLD_ADI_5D_REQUIRED,
+                "checks": {},
+                "errors": ["ADI_5D_ABSOLUTE_INDEX_MISSING"],
+            }
+
+        adi_result = verify_adi_5d_absolute_index_packet(adi_packet)
+        errors = list(adi_result.get("ERRORS", []))
+        return {
+            "decision": ALLOW if adi_result.get("DRY_RUN") == "PASS" else HOLD,
+            "result_code": "ADI_5D_GATE_PASS" if adi_result.get("DRY_RUN") == "PASS" else HOLD_ADI_5D_REQUIRED,
+            "checks": adi_result.get("CHECKS", {}),
+            "errors": errors,
+        }
+
     def verify_payload(self, payload: Dict[str, Any], now: float, packet_hash: str) -> Tuple[str, str]:
         if not self.secrets.configured():
             return DENY_SECRET_NOT_CONFIGURED, "secret_guard"
@@ -211,6 +287,14 @@ class Canonical8DVerifier:
 
         decision, gate_stage = self.verify_payload(payload, current_time, packet_hash)
         trajectory_hmac: List[str] = []
+        execution_candidate: Optional[str] = None
+        adi_5d_gate_result: Dict[str, Any] = {}
+
+        if decision == "PASS":
+            adi_5d_gate_result = self.verify_adi_5d_gate(payload)
+            if adi_5d_gate_result["decision"] != ALLOW:
+                decision = HOLD
+                gate_stage = "adi_5d_gate"
 
         if decision == "PASS":
             reconstructed_8d = {
@@ -225,7 +309,8 @@ class Canonical8DVerifier:
             }
             tensor_vector = self.tensor_db.map_8d_to_5elements(reconstructed_8d)
             trajectory_hmac = self.tensor_db.trajectory_hmac(tensor_vector)
-            decision = self.tensor_db.evaluate(tensor_vector)
+            execution_candidate = self.tensor_db.evaluate(tensor_vector)
+            decision = ALLOW if execution_candidate == EXEC_POS_ORDER else BLOCK
             gate_stage = "tensor_collapse"
 
         log_core = canonical_json({
@@ -233,6 +318,8 @@ class Canonical8DVerifier:
             "packet_hash": packet_hash,
             "trajectory_hmac": trajectory_hmac,
             "collapse_result": decision,
+            "execution_candidate": execution_candidate,
+            "adi_5d_gate_result": adi_5d_gate_result,
             "gate_stage": gate_stage,
             "prev_log_hash": self.prev_log_hash,
             "verifier_version": self.config.verifier_version,
@@ -247,6 +334,8 @@ class Canonical8DVerifier:
             "packet_hash": packet_hash,
             "trajectory_hmac": trajectory_hmac,
             "collapse_result": decision,
+            "execution_candidate": execution_candidate,
+            "adi_5d_gate_result": adi_5d_gate_result,
             "verifier_version": self.config.verifier_version,
             "prev_log_hash": self.prev_log_hash,
             "log_hash": log_hash,
@@ -270,6 +359,8 @@ class Canonical8DVerifier:
                 "packet_hash": log["packet_hash"],
                 "trajectory_hmac": log["trajectory_hmac"],
                 "collapse_result": log["collapse_result"],
+                "execution_candidate": log.get("execution_candidate"),
+                "adi_5d_gate_result": log.get("adi_5d_gate_result", {}),
                 "gate_stage": log["gate_stage"],
                 "prev_log_hash": prev,
                 "verifier_version": log["verifier_version"],

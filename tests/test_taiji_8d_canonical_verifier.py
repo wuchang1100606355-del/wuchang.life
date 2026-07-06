@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 import copy
 import os
+import sys
 import tempfile
 import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tools.taiji_8d_canonical_verifier import (
     Canonical8DVerifier,
@@ -10,13 +16,14 @@ from tools.taiji_8d_canonical_verifier import (
     VerifierSecrets,
     VerifierConfig,
     sign_d7_packet,
-    EXEC_POS_ORDER,
+    ALLOW,
+    BLOCK,
     DENY_REPLAY_ATTACK,
     DENY_TTL_EXPIRED,
     DENY_D7_SIGNATURE_INVALID,
     DENY_SCHEMA_INVALID_D8_ENVELOPE,
-    QUARANTINE_DENY_BY_DEFAULT,
 )
+from tools.intent_field.adi_5d_absolute_index_verifier import base_pass_packet as base_adi_5d_packet
 
 D7_SECRET = b"dummy-d7-secret-for-test-only"
 TRAJ_SECRET = b"dummy-trajectory-secret-for-test-only"
@@ -44,6 +51,7 @@ def make_payload(now, nonce, task="intent_order_latte"):
             "nonce": nonce,
             "timestamp": now,
         },
+        "adi_5d_absolute_index": base_adi_5d_packet(),
     }
     payload["proof_D7"] = sign_d7_packet(payload, D7_SECRET)
     return payload
@@ -64,7 +72,7 @@ def main():
 
         valid = make_payload(now, "nonce-valid")
         decision, _ = verifier.process_transmission(valid, now=now)
-        assert_eq("VALID_PACKET", decision, EXEC_POS_ORDER)
+        assert_eq("VALID_PACKET", decision, ALLOW)
 
         restarted = make_verifier(db)
         decision, _ = restarted.process_transmission(valid, now=now + 1)
@@ -90,7 +98,7 @@ def main():
 
         unknown = make_payload(now, "nonce-unknown", task="intent_unknown")
         decision, _ = verifier.process_transmission(unknown, now=now)
-        assert_eq("UNKNOWN_TASK", decision, QUARANTINE_DENY_BY_DEFAULT)
+        assert_eq("UNKNOWN_TASK", decision, BLOCK)
 
         if not verifier.verify_audit_chain(verifier.logs):
             raise AssertionError("AUDIT_CHAIN_VERIFY failed")

@@ -30,6 +30,8 @@ SAFETY_FLAGS = {
     "EXTERNAL_API_CALL": False,
     "MODEL_REQUIRED": False,
     "LLM_AUTHORITY": False,
+    "RUNTIME_AUTHORITY": False,
+    "CANONICAL_8D_VERIFIER_REQUIRED": True,
 }
 
 SCENE_ALIAS_TABLE = {
@@ -795,20 +797,54 @@ STEPS = [
 ]
 
 
-def final_verifier(verifier_results: list[dict[str, Any]]) -> dict[str, Any]:
+def normalize_canonical_verifier_result(canonical_verifier_result: dict[str, Any] | None) -> dict[str, Any]:
+    if not canonical_verifier_result:
+        return {
+            "decision": "HOLD",
+            "reasons": ["canonical 8D verifier result required"],
+            "authority": "canonical_8d_verifier",
+            "runtime_authority": False,
+        }
+    decision = canonical_verifier_result.get("decision") or canonical_verifier_result.get("collapse_result")
+    if decision not in {"ALLOW", "HOLD", "BLOCK"}:
+        return {
+            "decision": "HOLD",
+            "reasons": ["canonical 8D verifier result invalid or missing ALLOW/HOLD/BLOCK"],
+            "authority": "canonical_8d_verifier",
+            "runtime_authority": False,
+            "canonical_verifier_result": canonical_verifier_result,
+        }
+    reasons = canonical_verifier_result.get("reasons")
+    if not isinstance(reasons, list) or not reasons:
+        reasons = [f"canonical 8D verifier decision: {decision}"]
+    return {
+        "decision": decision,
+        "reasons": reasons,
+        "authority": "canonical_8d_verifier",
+        "runtime_authority": False,
+        "canonical_verifier_result": canonical_verifier_result,
+    }
+
+
+def final_verifier(
+    verifier_results: list[dict[str, Any]],
+    canonical_verifier_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     reasons: list[str] = []
     decisions = [result["decision"] for result in verifier_results]
     for result in verifier_results:
         for reason in result["reasons"]:
             if reason not in reasons:
                 reasons.append(reason)
-    if "BLOCK" in decisions:
-        decision = "BLOCK"
-    elif "HOLD" in decisions:
-        decision = "HOLD"
-    else:
-        decision = "ALLOW"
-    return {"decision": decision, "reasons": reasons or ["verified"]}
+    canonical = normalize_canonical_verifier_result(canonical_verifier_result)
+    return {
+        **canonical,
+        "runtime_authority": False,
+        "runtime_advisory": {
+            "decisions": decisions,
+            "reasons": reasons or ["runtime advisory verified"],
+        },
+    }
 
 
 def run(
@@ -820,6 +856,7 @@ def run(
     dev_identity_switch: bool = False,
     authenticated_role_ref: str = "",
     signed_identity_packet_ref: str = "",
+    canonical_verifier_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     ctx = {
         "text": text,
@@ -855,7 +892,7 @@ def run(
         verifier_results.append({"step": step.name, **result})
         previous = packet
 
-    final = final_verifier(verifier_results)
+    final = final_verifier(verifier_results, canonical_verifier_result=canonical_verifier_result)
     semantic_ir = packet_chain[-2]["D2_state"]["semantic_ir"]
     zh_tw = render_language(semantic_ir, final["decision"], final["reasons"])
     return {
@@ -884,7 +921,12 @@ def main() -> int:
     parser.add_argument("--dev-identity-switch", action="store_true")
     parser.add_argument("--authenticated-role-ref", default="")
     parser.add_argument("--signed-identity-packet-ref", default="")
+    parser.add_argument("--canonical-verifier-result-json", default="")
     args = parser.parse_args()
+
+    canonical_verifier_result = None
+    if args.canonical_verifier_result_json:
+        canonical_verifier_result = json.loads(Path(args.canonical_verifier_result_json).read_text(encoding="utf-8"))
 
     data = run(
         args.text,
@@ -895,6 +937,7 @@ def main() -> int:
         dev_identity_switch=args.dev_identity_switch,
         authenticated_role_ref=args.authenticated_role_ref,
         signed_identity_packet_ref=args.signed_identity_packet_ref,
+        canonical_verifier_result=canonical_verifier_result,
     )
     rendered = json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True)
     print(rendered)
