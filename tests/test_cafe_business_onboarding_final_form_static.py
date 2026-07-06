@@ -54,12 +54,16 @@ class CafeBusinessOnboardingFinalFormStaticTest(unittest.TestCase):
             "/wuchang/business/onboarding/start",
             "/wuchang/business/onboarding/status/<string:packet_ref>",
             "/wuchang/business/onboarding/<string:packet_ref>/approve",
+            '"member_type": "individual"',
+            '"organization_role": "responsible_person"',
+            '"business_onboarding_enabled": True',
             'auth="public"',
             'auth="user"',
             "business_onboarding_status_payload",
             "total_field_review_then_operational_ready",
         ]:
             self.assertIn(required, text)
+        self.assertNotIn('"member_type": "organization"', text)
 
     def test_view_exposes_backend_review_and_service_settings(self):
         text = read(VIEW)

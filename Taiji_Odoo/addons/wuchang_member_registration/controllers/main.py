@@ -347,7 +347,7 @@ class WuchangMemberRegistrationController(http.Controller):
             "consent_version": params.get("consent_version") or "business_onboarding_v1",
             "review_name_hint": params.get("responsible_name_hint") or "",
             "review_contact_hint": params.get("responsible_contact_hint") or "",
-            "member_type": "organization",
+            "member_type": "individual",
             "organization_name": organization_name,
             "organization_role": "responsible_person",
             "membership_category": "business_organization",
