@@ -10,10 +10,65 @@ required_fields:
   - entitlement_ref
   - content_hash
   - claim_label
+  - identity_feature_marker_ref
 security_boundary:
   plaintext_identity_forbidden: true
   secret_material_forbidden: true
+  member_plaintext_forbidden: true
+feature_marker_boundary:
+  schema_ref: schemas/w7tp_8d_identity_feature_marker.schema.json
+  identity_feature_marker_ref_required: true
+  feature_assertion_mode: candidate_marker_only
+  supports_base_features:
+    - COMMUNITY_RESIDENT
+    - NON_COMMUNITY_RESIDENT
+    - COMMUNITY_MERCHANT
+    - NON_COMMUNITY_MERCHANT
+    - BASIC_PERSONAL_IDENTITY
+    - GROUP_IDENTITY
+  supports_merchant_functions:
+    - MERCHANT_RESPONSIBLE_PERSON
+    - MERCHANT_STORE_MANAGER
+    - MERCHANT_STAFF
+    - MERCHANT_TAGGED_MEMBER
+    - MERCHANT_MEMBER
+  supports_property_functions:
+    - PROPERTY_CHAIRPERSON
+    - PROPERTY_VICE_CHAIRPERSON
+    - PROPERTY_TREASURER
+    - PROPERTY_GENERAL_MANAGER
+    - PROPERTY_UNIT_OWNER
+    - PROPERTY_RESIDENT
+    - PROPERTY_VEHICLE_TYPE
+    - PROPERTY_VEHICLE_COLOR
+    - PROPERTY_EQUIPMENT
+    - PROPERTY_FACILITY
+  supports_association_functions:
+    - ASSOCIATION_IMMUTABLE_FOUNDER
+    - ASSOCIATION_CHAIRPERSON
+    - ASSOCIATION_SECRETARY_GENERAL
+    - ASSOCIATION_VICE_CHAIRPERSON
+    - ASSOCIATION_EXECUTIVE_DIRECTOR
+    - ASSOCIATION_DIRECTOR
+    - ASSOCIATION_EXECUTIVE_SUPERVISOR
+    - ASSOCIATION_SUPERVISOR
+    - ASSOCIATION_SECRETARY
+    - ASSOCIATION_STAFF
+    - ASSOCIATION_MEMBER
+  immutable_founder_boundary:
+    function: ASSOCIATION_IMMUTABLE_FOUNDER
+    immutable_founder_marker: true
+    founder_marker_mutable: false
+    role_rotation_can_override: false
+    ref_only: true
+  not_formal_authority:
+    - final_decision
+    - db_write
+    - secret_read
+    - member_plaintext_persist
+    - payment_execute
+    - formal_send
 verification_rule:
   content_hash_required: true
   claim_label_required: true
-
+  total_field_verify_required: true

@@ -1,0 +1,195 @@
+[
+  {
+    "case_id": "synthetic_community_resident_person",
+    "schema_version": "w7tp.8d_identity_feature_marker.p1",
+    "packet_type": "W7TP_8D_IDENTITY_FEATURE_MARKER",
+    "identity_code_ref": "8D_IDENTITY_REF:synthetic/community_resident",
+    "subject_ref": "SUBJECT_REF:synthetic/person/community_resident",
+    "role_ref": "ROLE_REF:synthetic/basic_member",
+    "subject_basis": "NATURAL_PERSON",
+    "identity_scope": "BASIC_PERSONAL_IDENTITY",
+    "residency_feature": "COMMUNITY_RESIDENT",
+    "merchant_feature": "NOT_MERCHANT",
+    "feature_domains": {
+      "merchant": { "enabled": false, "functions": [] },
+      "property": { "enabled": false, "functions": [], "vehicle_features": { "license_plate_plaintext_included": false }, "asset_features": [] },
+      "association": { "enabled": false, "functions": [] }
+    },
+    "evidence_refs": ["EVIDENCE_REF:synthetic/member_scope_review"],
+    "feature_assertion_mode": "candidate_marker_only",
+    "contains_member_plaintext": false,
+    "plaintext_identity_forbidden": true,
+    "requires_total_field_verify": true
+  },
+  {
+    "case_id": "synthetic_community_merchant_staff",
+    "schema_version": "w7tp.8d_identity_feature_marker.p1",
+    "packet_type": "W7TP_8D_IDENTITY_FEATURE_MARKER",
+    "identity_code_ref": "8D_IDENTITY_REF:synthetic/community_merchant_staff",
+    "subject_ref": "SUBJECT_REF:synthetic/person/merchant_staff",
+    "group_ref": "GROUP_REF:synthetic/community_merchant",
+    "role_ref": "ROLE_REF:synthetic/merchant_staff",
+    "subject_basis": "NATURAL_PERSON",
+    "identity_scope": "BASIC_PERSONAL_IDENTITY",
+    "residency_feature": "UNKNOWN_REQUIRES_REVIEW",
+    "merchant_feature": "COMMUNITY_MERCHANT",
+    "feature_domains": {
+      "merchant": { "enabled": true, "functions": ["MERCHANT_STAFF", "MERCHANT_TAGGED_MEMBER"] },
+      "property": { "enabled": false, "functions": [], "vehicle_features": { "license_plate_plaintext_included": false }, "asset_features": [] },
+      "association": { "enabled": false, "functions": [] }
+    },
+    "evidence_refs": ["EVIDENCE_REF:synthetic/merchant_role_review"],
+    "feature_assertion_mode": "candidate_marker_only",
+    "contains_member_plaintext": false,
+    "plaintext_identity_forbidden": true,
+    "requires_total_field_verify": true
+  },
+  {
+    "case_id": "synthetic_property_committee_vehicle_facility",
+    "schema_version": "w7tp.8d_identity_feature_marker.p1",
+    "packet_type": "W7TP_8D_IDENTITY_FEATURE_MARKER",
+    "identity_code_ref": "8D_IDENTITY_REF:synthetic/property_committee_vehicle_facility",
+    "subject_ref": "SUBJECT_REF:synthetic/group/property_committee",
+    "group_ref": "GROUP_REF:synthetic/building_committee",
+    "role_ref": "ROLE_REF:synthetic/property_chairperson",
+    "subject_basis": "GROUP_ENTITY",
+    "identity_scope": "GROUP_IDENTITY",
+    "residency_feature": "UNKNOWN_REQUIRES_REVIEW",
+    "merchant_feature": "NOT_MERCHANT",
+    "feature_domains": {
+      "merchant": { "enabled": false, "functions": [] },
+      "property": {
+        "enabled": true,
+        "functions": ["PROPERTY_CHAIRPERSON", "PROPERTY_UNIT_OWNER", "PROPERTY_VEHICLE_TYPE", "PROPERTY_VEHICLE_COLOR", "PROPERTY_EQUIPMENT", "PROPERTY_FACILITY"],
+        "vehicle_features": {
+          "vehicle_ref": "VEHICLE_REF:synthetic/no_plate_hash_ref",
+          "vehicle_type": "CAR",
+          "vehicle_color": "silver",
+          "license_plate_plaintext_included": false
+        },
+        "asset_features": [
+          { "asset_ref": "EQUIPMENT_REF:synthetic/elevator_controller", "asset_type": "EQUIPMENT", "label": "elevator controller" },
+          { "asset_ref": "FACILITY_REF:synthetic/community_room", "asset_type": "FACILITY", "label": "community room" }
+        ]
+      },
+      "association": { "enabled": false, "functions": [] }
+    },
+    "spatial_binding": {
+      "enabled": true,
+      "binding_mode": "STATIC_PROPERTY_OR_FACILITY_ANCHOR",
+      "positioning_subject": "PROPERTY_OR_BUILDING",
+      "geometry_scope": "POINT_ANCHOR",
+      "coordinate_ref": "COORDINATE_REF:synthetic/property/static_anchor",
+      "geometry_ref": "GEOMETRY_REF:synthetic/property/facility_anchor",
+      "jurisdiction_ref": "JURISDICTION_REF:synthetic/wuchang_service_area",
+      "coordinate_version": "2026-07-02",
+      "static_group_positioning_only": true,
+      "personal_positioning_allowed": false,
+      "contains_precise_person_location": false,
+      "contains_member_plaintext": false,
+      "masking_definition": "MASKED_DATA_IS_NON_IDENTIFIABLE_PERSONAL_DATA",
+      "reidentification_possible": false,
+      "masked_payload_can_identify_person": false,
+      "requires_total_field_verify": true
+    },
+    "evidence_refs": ["EVIDENCE_REF:synthetic/property_role_review"],
+    "feature_assertion_mode": "candidate_marker_only",
+    "contains_member_plaintext": false,
+    "plaintext_identity_forbidden": true,
+    "requires_total_field_verify": true
+  },
+  {
+    "case_id": "synthetic_association_director_staff",
+    "schema_version": "w7tp.8d_identity_feature_marker.p1",
+    "packet_type": "W7TP_8D_IDENTITY_FEATURE_MARKER",
+    "identity_code_ref": "8D_IDENTITY_REF:synthetic/association_director_staff",
+    "subject_ref": "SUBJECT_REF:synthetic/person/association_role",
+    "group_ref": "GROUP_REF:synthetic/association",
+    "role_ref": "ROLE_REF:synthetic/association_director",
+    "subject_basis": "NATURAL_PERSON",
+    "identity_scope": "BASIC_PERSONAL_IDENTITY",
+    "residency_feature": "UNKNOWN_REQUIRES_REVIEW",
+    "merchant_feature": "NOT_MERCHANT",
+    "feature_domains": {
+      "merchant": { "enabled": false, "functions": [] },
+      "property": { "enabled": false, "functions": [], "vehicle_features": { "license_plate_plaintext_included": false }, "asset_features": [] },
+      "association": {
+        "enabled": true,
+        "functions": ["ASSOCIATION_IMMUTABLE_FOUNDER", "ASSOCIATION_CHAIRPERSON", "ASSOCIATION_SECRETARY_GENERAL", "ASSOCIATION_DIRECTOR", "ASSOCIATION_MEMBER"],
+        "immutable_founder_marker": true,
+        "founder_marker_mutable": false,
+        "role_rotation_can_override": false,
+        "founder_ref": "FOUNDER_REF:synthetic/immutable_founder"
+      }
+    },
+    "evidence_refs": ["EVIDENCE_REF:synthetic/association_role_review"],
+    "feature_assertion_mode": "candidate_marker_only",
+    "contains_member_plaintext": false,
+    "plaintext_identity_forbidden": true,
+    "requires_total_field_verify": true
+  },
+  {
+    "case_id": "synthetic_association_jurisdiction_demographic_static_group",
+    "schema_version": "w7tp.8d_identity_feature_marker.p1",
+    "packet_type": "W7TP_8D_IDENTITY_FEATURE_MARKER",
+    "identity_code_ref": "8D_IDENTITY_REF:synthetic/association_jurisdiction_demographics",
+    "subject_ref": "SUBJECT_REF:synthetic/group/association_jurisdiction",
+    "group_ref": "GROUP_REF:synthetic/association",
+    "role_ref": "ROLE_REF:synthetic/community_service_planning",
+    "subject_basis": "GROUP_ENTITY",
+    "identity_scope": "GROUP_IDENTITY",
+    "residency_feature": "UNKNOWN_REQUIRES_REVIEW",
+    "merchant_feature": "NOT_MERCHANT",
+    "feature_domains": {
+      "merchant": { "enabled": false, "functions": [] },
+      "property": { "enabled": false, "functions": [], "vehicle_features": { "license_plate_plaintext_included": false }, "asset_features": [] },
+      "association": {
+        "enabled": true,
+        "functions": ["ASSOCIATION_MEMBER"]
+      }
+    },
+    "spatial_binding": {
+      "enabled": true,
+      "binding_mode": "STATIC_ORGANIZATION_JURISDICTION",
+      "positioning_subject": "ASSOCIATION_JURISDICTION",
+      "geometry_scope": "BOUNDARY_POLYGON",
+      "coordinate_ref": "COORDINATE_REF:wuchang/three_li/four_extreme_points_20260702",
+      "geometry_ref": "GEOJSON_REF:data/geospatial/wuchang_community_three_li_official_boundary_2026-05-24.geojson",
+      "jurisdiction_ref": "JURISDICTION_REF:wuchang/three_li/wuchang_wushun_renzhong",
+      "coordinate_version": "2026-07-02",
+      "aggregate_demographic_context": {
+        "enabled": true,
+        "analysis_purpose": "ELDERLY_CHILD_YOUTH_RESOURCE_ALLOCATION",
+        "aggregation_level": "LI_LEVEL",
+        "cohort_buckets": ["CHILDREN", "YOUTH", "YOUNG_ADULTS", "ELDERLY", "OLDER_ELDERLY"],
+        "statistic_ref": "STATISTIC_REF:wuchang/three_li/age_cohort_distribution",
+        "source_refs": [
+          "PUBLIC_DATA_REF:new_taipei_public_demographic_statistics",
+          "EVIDENCE_REF:synthetic/aggregate_demographic_source_review"
+        ],
+        "minimum_group_size": 3,
+        "ranking_allowed": true,
+        "person_level_data_allowed": false,
+        "household_level_data_allowed": false,
+        "contains_member_plaintext": false,
+        "masking_definition": "MASKED_DATA_IS_NON_IDENTIFIABLE_PERSONAL_DATA",
+        "reidentification_possible": false,
+        "masked_payload_can_identify_person": false,
+        "requires_total_field_verify": true
+      },
+      "static_group_positioning_only": true,
+      "personal_positioning_allowed": false,
+      "contains_precise_person_location": false,
+      "contains_member_plaintext": false,
+      "masking_definition": "MASKED_DATA_IS_NON_IDENTIFIABLE_PERSONAL_DATA",
+      "reidentification_possible": false,
+      "masked_payload_can_identify_person": false,
+      "requires_total_field_verify": true
+    },
+    "evidence_refs": ["EVIDENCE_REF:synthetic/aggregate_demographic_review"],
+    "feature_assertion_mode": "candidate_marker_only",
+    "contains_member_plaintext": false,
+    "plaintext_identity_forbidden": true,
+    "requires_total_field_verify": true
+  }
+]

@@ -1,0 +1,70 @@
+[
+  {
+    "case_id": "synthetic_community_activity_registration_status",
+    "agent_name": "小J",
+    "persona_projection": "COMMUNITY_SERVICE_STAFF",
+    "service_context": "community",
+    "role": "service_persona_language_layer",
+    "authority": "candidate_only",
+    "member_facing_message": "我幫你整理好了，請確認是不是要查詢最近一次活動報名狀態。",
+    "intent_packet": {
+      "intent_type": "query_activity_registration_status",
+      "requires_member_confirmation": true,
+      "required_checks": ["member_confirmation", "total_field_verify"]
+    },
+    "risk_flags": [],
+    "required_member_confirmation": true,
+    "requires_total_field_verify": true
+  },
+  {
+    "case_id": "synthetic_merchant_member_subsidy_explanation",
+    "agent_name": "小J",
+    "persona_projection": "MERCHANT_SERVICE_STAFF",
+    "service_context": "merchant",
+    "role": "service_persona_language_layer",
+    "authority": "candidate_only",
+    "member_facing_message": "我可以先幫你整理店內會員補助的可能說明，但最後還要由系統確認。",
+    "intent_packet": {
+      "intent_type": "explain_in_store_member_subsidy",
+      "requires_member_confirmation": true,
+      "required_checks": ["merchant_policy_ref", "total_field_verify"]
+    },
+    "risk_flags": [],
+    "required_member_confirmation": true,
+    "requires_total_field_verify": true
+  },
+  {
+    "case_id": "synthetic_personal_reminder_form_assist",
+    "agent_name": "小J",
+    "persona_projection": "PERSONAL_STEWARD",
+    "service_context": "personal",
+    "role": "service_persona_language_layer",
+    "authority": "candidate_only",
+    "member_facing_message": "我幫你把提醒和表單需求整理成候選內容，請你確認是不是這個意思。",
+    "intent_packet": {
+      "intent_type": "draft_personal_reminder_and_form_assist",
+      "requires_member_confirmation": true,
+      "required_checks": ["member_confirmation", "form_scope_check", "total_field_verify"]
+    },
+    "risk_flags": [],
+    "required_member_confirmation": true,
+    "requires_total_field_verify": true
+  },
+  {
+    "case_id": "synthetic_building_repair_ticket_explanation",
+    "agent_name": "小J",
+    "persona_projection": "BUILDING_DIGITAL_SECRETARY",
+    "service_context": "building",
+    "role": "service_persona_language_layer",
+    "authority": "candidate_only",
+    "member_facing_message": "這個修繕工單我可以先幫你整理說明，但不能直接替你送出正式申請。",
+    "intent_packet": {
+      "intent_type": "explain_building_repair_ticket",
+      "requires_member_confirmation": true,
+      "required_checks": ["resident_confirmation", "property_work_order_policy", "total_field_verify"]
+    },
+    "risk_flags": [],
+    "required_member_confirmation": true,
+    "requires_total_field_verify": true
+  }
+]

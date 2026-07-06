@@ -9,6 +9,9 @@
     "public_interest_metric",
     "authority_basis",
     "accounting_window",
+    "surplus_right_policy",
+    "living_necessity_reserved",
+    "community_reinvestment_required",
     "audit_required",
     "human_approval_required",
     "created_at"
@@ -59,6 +62,31 @@
     "private_gain_risk": {
       "type": "string",
       "enum": ["none", "checked", "needs_review", "blocked"]
+    },
+    "surplus_right_policy": {
+      "type": "string",
+      "enum": [
+        "living_necessity_and_reasonable_compensation_only",
+        "community_fund_pool_reinvestment",
+        "needs_review",
+        "blocked"
+      ]
+    },
+    "living_necessity_reserved": {
+      "type": "boolean"
+    },
+    "community_reinvestment_required": {
+      "type": "boolean"
+    },
+    "centralized_platform_negotiation_metric": {
+      "type": "string",
+      "enum": [
+        "not_applicable",
+        "local_bargaining_power_supported",
+        "needs_review",
+        "blocked"
+      ],
+      "default": "not_applicable"
     },
     "audit_required": {
       "type": "boolean"
