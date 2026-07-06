@@ -765,6 +765,46 @@ class WuchangMemberGroupRegistrationBatch(models.Model):
     evidence_ref = fields.Char(readonly=True)
     packet_ids = fields.One2many("wuchang.member.group.registration.packet", "batch_id")
 
+    business_onboarding_enabled = fields.Boolean(default=False, index=True)
+    business_onboarding_state = fields.Selection([
+        ("not_business", "Not Business Onboarding"),
+        ("draft", "Draft"),
+        ("pending_total_field", "Pending Total Field Review"),
+        ("operational_ready", "Operational Entry Ready"),
+        ("hold", "Hold"),
+        ("rejected", "Rejected"),
+    ], default="not_business", index=True)
+    responsible_registration_id = fields.Many2one("wuchang.member.registration", ondelete="set null")
+    responsible_person_ref = fields.Char(index=True)
+    responsible_role = fields.Selection([
+        ("responsible_person", "Responsible Person"),
+        ("authorized_manager", "Authorized Manager"),
+    ], default="responsible_person")
+    business_name = fields.Char()
+    business_ref = fields.Char(index=True)
+    business_address_ref = fields.Char()
+    business_registration_ref = fields.Char(
+        help="Reference only; this does not claim legal business registration is complete."
+    )
+    store_name = fields.Char()
+    store_ref = fields.Char(index=True)
+    service_area_ref = fields.Char()
+    service_items_json = fields.Text(default='["cafe_menu", "member_service", "line_ai_response", "odoo_pos_management"]')
+    line_official_account_ref = fields.Char()
+    odoo_service_ref = fields.Char()
+    pos_config_ref = fields.Char()
+    total_field_review_ref = fields.Char(readonly=True, index=True)
+    merchant_state_packet_json = fields.Text(readonly=True)
+    tenant_ref = fields.Char(readonly=True, index=True)
+    service_profile_ref = fields.Char(readonly=True, index=True)
+    container_config_ref = fields.Char(readonly=True, index=True)
+    url_routing_ref = fields.Char(readonly=True, index=True)
+    public_page_path = fields.Char(readonly=True)
+    member_entry_path = fields.Char(readonly=True)
+    line_ai_entry_ref = fields.Char(readonly=True)
+    odoo_pos_management_entry_ref = fields.Char(readonly=True)
+    ordering_or_service_entry_path = fields.Char(readonly=True)
+
     @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
@@ -865,6 +905,174 @@ class WuchangMemberGroupRegistrationBatch(models.Model):
             "production_release": False,
             "secret_read": False,
             "member_plaintext_read": False,
+        }
+
+    def _business_required_errors(self):
+        self.ensure_one()
+        errors = []
+        for name, value in [
+            ("responsible_person_ref", self.responsible_person_ref),
+            ("business_name", self.business_name),
+            ("business_ref", self.business_ref),
+            ("business_address_ref", self.business_address_ref),
+            ("store_name", self.store_name),
+            ("store_ref", self.store_ref),
+            ("service_area_ref", self.service_area_ref),
+            ("line_official_account_ref", self.line_official_account_ref),
+            ("odoo_service_ref", self.odoo_service_ref),
+            ("pos_config_ref", self.pos_config_ref),
+        ]:
+            if not value:
+                errors.append(name)
+        self._business_service_items()
+        return errors
+
+    def _business_service_items(self):
+        self.ensure_one()
+        try:
+            items = json.loads(self.service_items_json or "[]")
+        except json.JSONDecodeError as exc:
+            raise UserError(_("Service items JSON is invalid: %s") % exc) from exc
+        if not isinstance(items, list) or not items:
+            raise UserError(_("At least one business service item is required."))
+        return items
+
+    def _business_hash_ref(self, payload):
+        return "hash:" + self._packet_hash(payload)
+
+    def _business_slug(self):
+        self.ensure_one()
+        seed = self.business_name or self.name or self.group_ref
+        slug = "".join(ch if ch.isascii() and ch.isalnum() else "-" for ch in seed.lower()).strip("-")
+        return slug[:48] or ("merchant-" + self._packet_hash(self.group_ref)[:12])
+
+    def _build_business_8d_7d_packet(self):
+        self.ensure_one()
+        service_items = self._business_service_items()
+        return {
+            "packet_type": "CAFE_BUSINESS_8D_7D_MERCHANT_STATE_PACKET",
+            "state_subject": "MERCHANT_ORGANIZATION",
+            "natural_person_role": self.responsible_role,
+            "natural_person_ref": self.responsible_person_ref,
+            "group_ref": self.group_ref,
+            "organization_name": self.name,
+            "business_info_ref": self._business_hash_ref({
+                "business_name": self.business_name,
+                "business_ref": self.business_ref,
+                "business_address_ref": self.business_address_ref,
+                "business_registration_ref": self.business_registration_ref or "",
+            }),
+            "store_info_ref": self._business_hash_ref({
+                "store_name": self.store_name,
+                "store_ref": self.store_ref,
+                "service_area_ref": self.service_area_ref,
+            }),
+            "service_items_ref": self._business_hash_ref(service_items),
+            "functional_state_7d": {
+                "layer": "7D_FUNCTIONAL_STATE_LAYER",
+                "functional_state_type": "CAFE_BUSINESS_ONBOARDING",
+                "state_generation_mode": "MERCHANT_SERVICE_PROFILE_GENERATION",
+            },
+            "adi_5d_positioning": {
+                "positioning_type": "ADI_5D_ABSOLUTE_INDEX",
+                "absolute_index_ref": "adi_absolute_index_ref:" + self._packet_hash(self.group_ref)[:24],
+                "actual_index_rules_disclosed": False,
+                "h64_td_ref_only": True,
+            },
+            "authority_envelope_8d": {
+                "authority": "LOCAL_TOTAL_FIELD",
+                "review_ref": self.total_field_review_ref,
+                "final_authority": True,
+            },
+            "legal_boundary": {
+                "legal_business_registration_completed": False,
+                "food_license_completed": False,
+                "tax_registration_completed": False,
+                "payment_contract_completed": False,
+            },
+        }
+
+    def _build_business_service_config(self):
+        self.ensure_one()
+        slug = self._business_slug()
+        tenant_ref = "tenant:" + self._packet_hash(self.group_ref)[:24]
+        return {
+            "tenant_ref": tenant_ref,
+            "service_profile_ref": "service_profile:" + self._packet_hash(self.business_ref)[:24],
+            "container_config_ref": "container_config:" + self._packet_hash(f"{self.group_ref}:{self.pos_config_ref}")[:24],
+            "url_routing_ref": "url_routing:" + self._packet_hash(f"{self.group_ref}:{slug}")[:24],
+            "public_page_path": f"/merchant/{slug}",
+            "member_entry_path": f"/merchant/{slug}/member",
+            "line_ai_entry_ref": self.line_official_account_ref,
+            "odoo_pos_management_entry_ref": self.odoo_service_ref,
+            "ordering_or_service_entry_path": f"/merchant/{slug}/service",
+            "natural_person_container": False,
+            "container_is_business_qualification": False,
+        }
+
+    def action_submit_business_onboarding(self):
+        for rec in self:
+            if not rec.business_onboarding_enabled:
+                raise UserError(_("This batch is not a business onboarding record."))
+            errors = rec._business_required_errors()
+            if errors:
+                raise UserError(_("Business onboarding is incomplete: %s") % ", ".join(errors))
+            review_ref = rec.total_field_review_ref or rec._new_ref("TFREVIEW")
+            rec.write({
+                "state": "pending_review",
+                "business_onboarding_state": "pending_total_field",
+                "total_field_review_ref": review_ref,
+            })
+
+    def action_total_field_approve_business_onboarding(self):
+        for rec in self:
+            if rec.business_onboarding_state != "pending_total_field":
+                raise UserError(_("Only pending Total Field business onboarding can be approved."))
+            packet = rec._build_business_8d_7d_packet()
+            config = rec._build_business_service_config()
+            rec.write({
+                "state": "approved",
+                "business_onboarding_state": "operational_ready",
+                "merchant_state_packet_json": json.dumps(packet, ensure_ascii=False, sort_keys=True, indent=2),
+                "tenant_ref": config["tenant_ref"],
+                "service_profile_ref": config["service_profile_ref"],
+                "container_config_ref": config["container_config_ref"],
+                "url_routing_ref": config["url_routing_ref"],
+                "public_page_path": config["public_page_path"],
+                "member_entry_path": config["member_entry_path"],
+                "line_ai_entry_ref": config["line_ai_entry_ref"],
+                "odoo_pos_management_entry_ref": config["odoo_pos_management_entry_ref"],
+                "ordering_or_service_entry_path": config["ordering_or_service_entry_path"],
+            })
+
+    def business_onboarding_status_payload(self):
+        self.ensure_one()
+        return {
+            "status": "found",
+            "packet_ref": self.packet_ref,
+            "group_ref": self.group_ref,
+            "state": self.business_onboarding_state,
+            "responsible_person_ref": self.responsible_person_ref,
+            "organization_name": self.name,
+            "tenant_ref": self.tenant_ref or "",
+            "service_profile_ref": self.service_profile_ref or "",
+            "container_config_ref": self.container_config_ref or "",
+            "url_routing_ref": self.url_routing_ref or "",
+            "public_page_path": self.public_page_path or "",
+            "member_entry_path": self.member_entry_path or "",
+            "line_ai_entry_ref": self.line_ai_entry_ref or "",
+            "odoo_pos_management_entry_ref": self.odoo_pos_management_entry_ref or "",
+            "ordering_or_service_entry_path": self.ordering_or_service_entry_path or "",
+            "natural_person_container": False,
+            "container_is_business_qualification": False,
+            "legal_business_registration_completed": False,
+            "food_license_completed": False,
+            "tax_registration_completed": False,
+            "payment_contract_completed": False,
+            "payment_capture": False,
+            "formal_order": False,
+            "deploy": False,
+            "restart": False,
         }
 
 

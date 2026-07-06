@@ -1,8 +1,20 @@
-from odoo import http
+import html
+import json
+
+from odoo import fields, http
 from odoo.http import request
 
 
 class WuchangMemberRegistrationController(http.Controller):
+
+    def _request_payload(self, kw):
+        params = {}
+        params.update(getattr(request, "params", {}) or {})
+        json_request = getattr(request, "jsonrequest", None)
+        if isinstance(json_request, dict):
+            params.update(json_request)
+        params.update(kw)
+        return params
 
     def _wuchang_public_homepage_html(self):
         return """<!doctype html>
@@ -318,6 +330,171 @@ class WuchangMemberRegistrationController(http.Controller):
             "review_status": reg.review_status,
             "member_code_available": bool(reg.identity_code_id),
         }
+
+    def _create_business_onboarding(self, params):
+        organization_name = (
+            params.get("organization_name")
+            or params.get("business_name")
+            or "上品聊國咖啡館"
+        )
+        registration_channel = params.get("registration_channel") or "odoo"
+        if registration_channel not in {"line", "google", "odoo", "pwa", "staff_terminal"}:
+            registration_channel = "odoo"
+
+        responsible = request.env["wuchang.member.registration"].sudo().create({
+            "registration_channel": registration_channel,
+            "review_status": "pending_review",
+            "consent_version": params.get("consent_version") or "business_onboarding_v1",
+            "review_name_hint": params.get("responsible_name_hint") or "",
+            "review_contact_hint": params.get("responsible_contact_hint") or "",
+            "member_type": "organization",
+            "organization_name": organization_name,
+            "organization_role": "responsible_person",
+            "membership_category": "business_organization",
+            "role_scope": "responsible_person",
+            "service_scope": "cafe_business_onboarding",
+        })
+
+        batch = request.env["wuchang.member.group.registration.batch"].sudo().create({
+            "name": organization_name,
+            "topology_ref": "merchant/cafe/business_onboarding",
+            "registration_scope": "cafe_business_onboarding",
+            "expires_at": fields.Datetime.add(fields.Datetime.now(), days=30),
+            "business_onboarding_enabled": True,
+            "business_onboarding_state": "draft",
+            "responsible_registration_id": responsible.id,
+            "responsible_person_ref": responsible.provisional_member_id,
+            "responsible_role": params.get("responsible_role") or "responsible_person",
+            "business_name": params.get("business_name") or organization_name,
+            "business_ref": params.get("business_ref") or "business_ref:pending",
+            "business_address_ref": params.get("business_address_ref") or "",
+            "business_registration_ref": params.get("business_registration_ref") or "",
+            "store_name": params.get("store_name") or organization_name,
+            "store_ref": params.get("store_ref") or "store_ref:pending",
+            "service_area_ref": params.get("service_area_ref") or "service_area_ref:local",
+            "service_items_json": (
+                params.get("service_items_json")
+                or '["cafe_menu", "member_service", "line_ai_response", "odoo_pos_management"]'
+            ),
+            "line_official_account_ref": params.get("line_official_account_ref") or "",
+            "odoo_service_ref": params.get("odoo_service_ref") or "",
+            "pos_config_ref": params.get("pos_config_ref") or "",
+        })
+        if batch.business_ref == "business_ref:pending":
+            batch.business_ref = "business_ref:" + batch.group_ref
+        if batch.store_ref == "store_ref:pending":
+            batch.store_ref = "store_ref:" + batch.group_ref
+        batch.action_submit_business_onboarding()
+        return responsible, batch
+
+    @http.route("/wuchang/business/onboarding", type="http", auth="public", website=False, csrf=False)
+    def business_onboarding_form(self, **kw):
+        body = """<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>商家組織註冊</title>
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #f7f9fb; color: #17202a; }
+    main { max-width: 880px; margin: 0 auto; padding: 32px 20px; }
+    form { display: grid; gap: 14px; background: #fff; border: 1px solid #d8dee7; padding: 20px; border-radius: 8px; }
+    label { display: grid; gap: 6px; font-weight: 700; }
+    input, textarea, select { min-height: 42px; border: 1px solid #cbd5df; border-radius: 6px; padding: 9px 10px; font: inherit; }
+    textarea { min-height: 82px; }
+    button { min-height: 46px; border: 0; border-radius: 6px; background: #235789; color: #fff; font-weight: 800; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .note { background: #fff7e6; border: 1px solid #ead19a; padding: 12px; border-radius: 8px; color: #5c4617; margin: 14px 0; }
+    @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>商家組織註冊</h1>
+  <p>自然人先作為負責人或授權管理者建立商家組織；經總場核准後，才形成營運入口與服務設定。</p>
+  <div class="note">送出會建立待審申請，不會直接下單、扣款、部署、重啟或修改 router。</div>
+  <form method="post" action="/wuchang/business/onboarding/submit">
+    <div class="grid">
+      <label>負責人名稱提示<input name="responsible_name_hint" required></label>
+      <label>負責人聯絡提示<input name="responsible_contact_hint" required></label>
+    </div>
+    <label>商家組織名稱<input name="organization_name" value="上品聊國咖啡館" required></label>
+    <div class="grid">
+      <label>營業名稱<input name="business_name" value="上品聊國咖啡館" required></label>
+      <label>營業地址 ref<input name="business_address_ref" placeholder="address_ref:..." required></label>
+    </div>
+    <div class="grid">
+      <label>門市名稱<input name="store_name" value="上品聊國咖啡館" required></label>
+      <label>服務區域 ref<input name="service_area_ref" value="service_area_ref:local" required></label>
+    </div>
+    <label>服務項目 JSON<textarea name="service_items_json">["cafe_menu", "member_service", "line_ai_response", "odoo_pos_management"]</textarea></label>
+    <div class="grid">
+      <label>LINE 官方帳號 ref<input name="line_official_account_ref" placeholder="line_oa_ref:..." required></label>
+      <label>Odoo 服務 ref<input name="odoo_service_ref" placeholder="odoo_service_ref:..." required></label>
+    </div>
+    <label>POS 設定 ref<input name="pos_config_ref" placeholder="pos_config_ref:..." required></label>
+    <button type="submit">建立商家 onboarding 申請</button>
+  </form>
+</main>
+</body>
+</html>"""
+        return request.make_response(body, headers=[("Content-Type", "text/html; charset=utf-8")])
+
+    @http.route("/wuchang/business/onboarding/submit", type="http", auth="public", methods=["POST"], csrf=False)
+    def business_onboarding_submit(self, **kw):
+        try:
+            _responsible, batch = self._create_business_onboarding(self._request_payload(kw))
+        except Exception as exc:
+            return request.make_response(
+                "Business onboarding failed: %s" % exc,
+                status=400,
+                headers=[("Content-Type", "text/plain; charset=utf-8")],
+            )
+        return request.redirect(f"/wuchang/business/onboarding/result/{batch.packet_ref}")
+
+    @http.route("/wuchang/business/onboarding/start", type="json", auth="public", csrf=False)
+    def business_onboarding_start(self, **kw):
+        try:
+            responsible, batch = self._create_business_onboarding(self._request_payload(kw))
+        except Exception as exc:
+            return {"state": "HOLD_BUSINESS_ONBOARDING_INPUT", "error": str(exc)}
+        payload = batch.business_onboarding_status_payload()
+        payload.update({
+            "state": "BUSINESS_ONBOARDING_CREATED",
+            "responsible_provisional_member_id": responsible.provisional_member_id,
+            "next": "total_field_review_then_operational_ready",
+        })
+        return payload
+
+    @http.route("/wuchang/business/onboarding/status/<string:packet_ref>", type="json", auth="public", csrf=False)
+    def business_onboarding_status(self, packet_ref, **kw):
+        batch = request.env["wuchang.member.group.registration.batch"].sudo().search([
+            ("packet_ref", "=", packet_ref),
+            ("business_onboarding_enabled", "=", True),
+        ], limit=1)
+        if not batch:
+            return {"status": "not_found"}
+        return batch.business_onboarding_status_payload()
+
+    @http.route("/wuchang/business/onboarding/result/<string:packet_ref>", type="http", auth="public", csrf=False)
+    def business_onboarding_result(self, packet_ref, **kw):
+        payload = self.business_onboarding_status(packet_ref, **kw)
+        text = html.escape(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+        body = "<html><body><h1>Business onboarding status</h1><pre>%s</pre></body></html>" % text
+        return request.make_response(body, headers=[("Content-Type", "text/html; charset=utf-8")])
+
+    @http.route("/wuchang/business/onboarding/<string:packet_ref>/approve", type="json", auth="user", csrf=False)
+    def business_onboarding_approve(self, packet_ref, **kw):
+        batch = request.env["wuchang.member.group.registration.batch"].sudo().search([
+            ("packet_ref", "=", packet_ref),
+            ("business_onboarding_enabled", "=", True),
+        ], limit=1)
+        if not batch:
+            return {"state": "not_found"}
+        batch.action_total_field_approve_business_onboarding()
+        payload = batch.business_onboarding_status_payload()
+        payload["state"] = "BUSINESS_ONBOARDING_OPERATIONAL_READY"
+        return payload
 
     def _find_group_batch(self, packet_ref):
         return request.env["wuchang.member.group.registration.batch"].sudo().search([
