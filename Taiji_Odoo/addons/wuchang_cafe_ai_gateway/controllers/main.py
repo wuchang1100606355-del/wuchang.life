@@ -90,6 +90,11 @@ ROUTE_STATE = {
     "xiaoj_total_product_console_status_api": "HOLD_P2_RELEASE_REFS_REQUIRED",
     "xiaoj_member_llm_release_gate_api": "HOLD_MEMBER_LLM_RELEASE_REFS_REQUIRED",
     "xiaoj_local_personal_data_return_packet_api": "HOLD_ENCRYPTED_LOCAL_VAULT_REF_REQUIRED",
+    "xiaoj_member_preference_candidate_api": "P1_LOCAL_MEMBER_PREFERENCE_CANDIDATE_READY",
+    "xiaoj_member_memory_toggle_api": "P1_LOCAL_MEMBER_MEMORY_TOGGLE_READY",
+    "xiaoj_member_voucher_candidate_api": "P1_LOCAL_MEMBER_VOUCHER_CANDIDATE_READY",
+    "xiaoj_member_voucher_redeem_dry_run_api": "P1_LOCAL_MEMBER_VOUCHER_REDEEM_DRY_RUN_READY",
+    "xiaoj_community_feature_gate_api": "P1_COMMUNITY_CENTRAL_FEATURE_GATE_READY",
     "xiaoj_8d_delegate_rotation_draft_api": "HOLD_8D_DELEGATE_ROTATION_REFS_REQUIRED",
     "xiaoj_sovereign_xiaoj_claim_draft_api": "HOLD_SOVEREIGN_XIAOJ_CLAIM_REFS_REQUIRED",
 }
@@ -363,6 +368,45 @@ def _ordering_body() -> str:
       </table>
     </section>
     """
+
+
+def _error_candidate(state: str, **extra) -> dict:
+    payload = {
+        "state": state,
+        "candidate_only": True,
+        "member_plaintext": False,
+        "write_to_pos": False,
+        "payment_capture": False,
+        "requires_staff_confirmation": True,
+        "safety_flags": SAFETY_FLAGS,
+    }
+    payload.update(extra)
+    return payload
+
+
+def _member_identity_from_ref(member_ref: str):
+    env = http.request.env
+    member_ref = (member_ref or "").strip()
+    if not member_ref:
+        return env["wuchang.member.identity.code"].browse()
+    return env["wuchang.member.identity.code"].sudo().search([
+        "|", "|",
+        ("member_id", "=", member_ref),
+        ("identity_code_7d", "=", member_ref),
+        ("service_code_masked", "=", member_ref),
+    ], limit=1)
+
+
+def _community_feature_enabled(feature_key: str) -> bool:
+    return http.request.env["wuchang.community.feature.gate"].is_enabled(feature_key, default=False)
+
+
+def _feature_hold(feature_key: str) -> dict:
+    return _error_candidate(
+        "HOLD_COMMUNITY_FEATURE_DISABLED",
+        feature_key=feature_key,
+        community_central_control=True,
+    )
 
 
 class WuchangCafeAiGatewayController(http.Controller):
@@ -777,6 +821,90 @@ class WuchangCafeAiGatewayController(http.Controller):
         return build_local_personal_data_return_packet(
             refs=params.get("refs") if isinstance(params.get("refs"), dict) else params,
         )
+
+    @http.route("/wuchang/xiaoj/api/member-preference-candidate", type="json", auth="user", csrf=False)
+    def xiaoj_api_member_preference_candidate(self, **kwargs):
+        if not _community_feature_enabled("sovereign_member_preference"):
+            return _feature_hold("sovereign_member_preference")
+        params = _request_params()
+        params.update(kwargs)
+        member_ref = params.get("member_ref") or params.get("member_id") or ""
+        preference = http.request.env["wuchang.member.preference.vault"].find_by_member_ref(member_ref)
+        if not preference:
+            return _error_candidate(
+                "HOLD_MEMBER_PREFERENCE_NOT_FOUND",
+                member_ref_hash="",
+                route_state=ROUTE_STATE["xiaoj_member_preference_candidate_api"],
+            )
+        return preference.build_pos_candidate_context(params.get("utterance") or params.get("text") or "")
+
+    @http.route("/wuchang/xiaoj/api/member-memory-toggle", type="json", auth="user", csrf=False)
+    def xiaoj_api_member_memory_toggle(self, **kwargs):
+        if not _community_feature_enabled("sovereign_member_ai_memory"):
+            return _feature_hold("sovereign_member_ai_memory")
+        params = _request_params()
+        params.update(kwargs)
+        identity = _member_identity_from_ref(params.get("member_ref") or params.get("member_id") or "")
+        if not identity:
+            return _error_candidate("HOLD_MEMBER_IDENTITY_NOT_FOUND")
+        preference = http.request.env["wuchang.member.preference.vault"].sudo().search([
+            ("member_identity_id", "=", identity.id),
+        ], limit=1)
+        if not preference:
+            preference = http.request.env["wuchang.member.preference.vault"].sudo().create({
+                "member_identity_id": identity.id,
+            })
+        enabled = params.get("enabled")
+        if enabled is None:
+            enabled = params.get("ai_memory_enabled")
+        enabled = enabled is True or str(enabled).lower() in {"1", "true", "yes", "on"}
+        preference.sudo().write({
+            "ai_memory_enabled": enabled,
+            "pos_personalization_enabled": enabled,
+            "recommendation_enabled": enabled,
+            "cloud_context_allowed": False,
+        })
+        return preference.build_pos_candidate_context(params.get("utterance") or params.get("text") or "")
+
+    @http.route("/wuchang/xiaoj/api/member-voucher-candidate", type="json", auth="user", csrf=False)
+    def xiaoj_api_member_voucher_candidate(self, **kwargs):
+        if not _community_feature_enabled("sovereign_member_voucher"):
+            return _feature_hold("sovereign_member_voucher")
+        params = _request_params()
+        params.update(kwargs)
+        voucher = http.request.env["wuchang.member.voucher"].find_by_ref(params.get("voucher_ref") or "")
+        if not voucher:
+            return _error_candidate("HOLD_VOUCHER_NOT_FOUND")
+        return voucher.build_redeem_candidate(params.get("order_ref") or "")
+
+    @http.route("/wuchang/xiaoj/api/member-voucher-redeem-dry-run", type="json", auth="user", csrf=False)
+    def xiaoj_api_member_voucher_redeem_dry_run(self, **kwargs):
+        if not _community_feature_enabled("sovereign_member_voucher_redeem"):
+            return _feature_hold("sovereign_member_voucher_redeem")
+        params = _request_params()
+        params.update(kwargs)
+        voucher = http.request.env["wuchang.member.voucher"].find_by_ref(params.get("voucher_ref") or "")
+        if not voucher:
+            return _error_candidate("HOLD_VOUCHER_NOT_FOUND")
+        candidate = voucher.build_redeem_candidate(params.get("order_ref") or "")
+        candidate["dry_run"] = True
+        candidate["formal_redeem_executed"] = False
+        return candidate
+
+    @http.route("/wuchang/xiaoj/api/community-feature-gate", type="json", auth="user", csrf=False)
+    def xiaoj_api_community_feature_gate(self, **kwargs):
+        params = _request_params()
+        params.update(kwargs)
+        feature_key = params.get("feature_key") or params.get("key") or ""
+        enabled = params.get("enabled")
+        enabled = enabled is True or str(enabled).lower() in {"1", "true", "yes", "on"}
+        gate = http.request.env["wuchang.community.feature.gate"].set_gate(
+            feature_key=feature_key,
+            enabled=enabled,
+            reason_ref=params.get("reason_ref") or "COMMUNITY_CENTRAL_DECISION",
+            name=params.get("name") or feature_key,
+        )
+        return gate.build_status()
 
     @http.route("/wuchang/xiaoj/api/8d-delegate-rotation-draft", type="json", auth="user", csrf=False)
     def xiaoj_api_8d_delegate_rotation_draft(self, **kwargs):

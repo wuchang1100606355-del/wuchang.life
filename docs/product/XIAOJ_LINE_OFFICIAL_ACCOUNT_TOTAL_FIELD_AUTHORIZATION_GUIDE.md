@@ -23,6 +23,44 @@ Human owner/admin keeps LINE Official Account authority
 
 LINE 官方帳號與 LINE WORKS 是不同產品面。LINE 官方帳號對外服務會員、顧客與社群；LINE WORKS 比較偏內部員工/組織通知。兩者都可以接總場，但權限應分開。
 
+同時，LINE 官方帳號本身也要分主體。協會官方帳號與咖啡館商家官方帳號不是同一個帳號，也不是同一組 refs：
+
+```text
+Association LINE Official Account
+  -> association member service
+  -> public interest / governance notice
+  -> sovereign member onboarding
+  -> association activity notice
+
+Cafe LINE Official Account
+  -> cafe merchant customer service
+  -> cafe POS order candidate notice
+  -> consented cafe product promotion
+  -> payment / pickup notice only after Odoo authority gate
+```
+
+不得把協會官方帳號拿去承接咖啡館 POS、付款、商品促銷、商家會員營運或咖啡館客服。若咖啡館需要 LINE 官方帳號，必須使用獨立咖啡館商家帳號，或至少使用獨立 refs、獨立 owner/admin approval、獨立 audience/consent policy、獨立 webhook endpoint 與獨立 release packet。
+
+咖啡館公開入口仍必須掛在協會核准子域下。也就是說，咖啡館可有自己的商家 LINE 官方帳號與 Messaging API channel，但 LINE webhook、LINE Login/callback、點餐 landing、會員候選頁、POS 候選頁與商品頁，必須使用協會核准的子域與 DNS / reverse proxy release refs，不得使用未核准獨立網域。
+
+若操作者回報咖啡館 API、LINE Developers provider 或 channel 控制權疑似被第三方廠商佔據，或咖啡館管理角色不完整，這只能進入「協會保護性支援」流程。協會可以協助提供核准子域、DNS / reverse proxy、webhook relay、LINE Login callback relay、evidence seal、vendor access review 與 provider admin role review；但協會不能因此靜默接管咖啡館商業 owner 身份，不能保存明文 channel token / channel secret，也不能把協會官方帳號拿去跑咖啡館 POS、付款、促銷或商品客服。
+
+此類補救流程在完成下列 refs 前必須保持 HOLD：
+
+```text
+cafe_api_control_risk_ref
+association_api_support_release_ref
+provider_admin_role_review_ref
+vendor_access_review_ref
+association_gateway_ref
+association_subdomain_ref
+dns_or_reverse_proxy_release_ref
+webhook_relay_ref
+callback_relay_ref
+human_owner_admin_release_ref
+runtime_secret_rotation_ref
+```
+
 總場可以是你的數位代理，但不能成為保存明文 token、LINE 密碼或官方帳號超管權限的主體。總場的角色是：
 
 ```text
@@ -207,6 +245,11 @@ LLM 或 Gemini 只能產生候選設定文字，不能直接把設定改到 LINE
 - masked 或 hash 後的 target/user/channel refs
 - 是否已啟用 Messaging API
 - 是否已設定 webhook URL
+- 咖啡館要使用的協會核准子域 ref
+- DNS / reverse proxy / TLS certificate release refs
+- 咖啡館 API 控制權風險 ref
+- 協會保護性 gateway / relay release refs
+- vendor access review 與 provider admin role review refs
 
 ## Product Rule
 
@@ -215,4 +258,7 @@ Total field may draft and verify.
 Human owner/admin approves.
 Runtime resolver reads secrets only in memory after release.
 No plaintext token or member plaintext enters candidate packet.
+Association LINE Official Account and cafe merchant LINE Official Account are separate subjects.
+Cafe external endpoints must use association-approved subdomains.
+Association protective gateway support may mitigate cafe API control risk, but cannot mix subjects, hold plaintext secrets, or activate production without human owner/admin release.
 ```

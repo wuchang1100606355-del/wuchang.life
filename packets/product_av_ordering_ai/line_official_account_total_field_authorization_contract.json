@@ -21,13 +21,88 @@
   },
   "official_account_boundary": {
     "line_official_account_is_not_lineworks": true,
+    "association_line_official_account_is_not_cafe_line_official_account": true,
     "messaging_api_channel_required": true,
     "webhook_required_for_inbound_events": true,
     "human_owner_admin_root_of_trust": true,
     "total_field_super_admin": false,
     "total_field_can_accept_admin_invite": false,
     "total_field_can_hold_plaintext_channel_access_token": false,
-    "total_field_can_change_production_settings_without_release_packet": false
+    "total_field_can_change_production_settings_without_release_packet": false,
+    "association_account_can_handle_cafe_pos_or_payment": false,
+    "association_account_can_handle_cafe_product_promotion": false,
+    "association_account_can_share_cafe_channel_refs": false,
+    "cafe_must_use_association_approved_subdomain": true,
+    "cafe_can_use_unapproved_independent_domain": false,
+    "association_can_provide_cafe_api_protective_gateway": true,
+    "association_protective_gateway_is_cafe_commercial_takeover": false,
+    "vendor_controlled_api_can_write_pos_payment_member_or_line_send": false
+  },
+  "subject_separation": {
+    "association_public_domain_namespace": "wuchang.life",
+    "association_line_official_account_scope": [
+      "association_member_service",
+      "public_interest_governance_notice",
+      "sovereign_member_onboarding",
+      "association_activity_notice"
+    ],
+    "cafe_line_official_account_scope": [
+      "cafe_merchant_customer_service",
+      "cafe_pos_order_candidate_notice",
+      "cafe_product_promotion_with_consent",
+      "cafe_payment_or_pickup_notice_after_odoo_authority_gate"
+    ],
+    "required_separation": [
+      "owner_admin_authority",
+      "channel_access_token_runtime_ref",
+      "channel_secret_ref",
+      "audience_policy_ref",
+      "consent_policy_ref",
+      "webhook_endpoint_ref",
+      "human_owner_admin_release_ref"
+    ],
+    "cafe_domain_requirement": [
+      "association_domain_approval_ref",
+      "cafe_subdomain_ref",
+      "dns_or_reverse_proxy_release_ref",
+      "webhook_endpoint_ref",
+      "callback_endpoint_ref",
+      "tls_certificate_ref"
+    ]
+  },
+  "cafe_api_control_remediation": {
+    "trigger": "operator_reports_cafe_provider_channel_or_api_control_constrained_by_third_party_vendor_or_incomplete_role_assignment",
+    "evidence_status": "operator_reported_until_reviewed",
+    "allowed_association_support": [
+      "association_approved_subdomain",
+      "dns_or_reverse_proxy_release_ref",
+      "webhook_relay_candidate",
+      "line_login_callback_relay_candidate",
+      "evidence_seal",
+      "vendor_access_review_ref",
+      "provider_admin_role_review_ref"
+    ],
+    "forbidden_association_support": [
+      "silent_cafe_commercial_owner_takeover",
+      "plaintext_channel_token_custody",
+      "plaintext_channel_secret_custody",
+      "association_line_official_account_for_cafe_pos_payment_or_promotion",
+      "vendor_controlled_api_writes_to_pos_payment_member_or_line_send"
+    ],
+    "required_refs_before_activation": [
+      "cafe_api_control_risk_ref",
+      "association_api_support_release_ref",
+      "provider_admin_role_review_ref",
+      "vendor_access_review_ref",
+      "association_gateway_ref",
+      "association_subdomain_ref",
+      "dns_or_reverse_proxy_release_ref",
+      "webhook_relay_ref",
+      "callback_relay_ref",
+      "human_owner_admin_release_ref",
+      "runtime_secret_rotation_ref"
+    ],
+    "production_activation_ready": false
   },
   "authorized_total_field_work": [
     "natural_language_intent_confirmation",

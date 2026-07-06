@@ -43,6 +43,7 @@ def has_secret_or_plaintext_shape(value: Any) -> bool:
     return bool(
         re.search(r"sk-[A-Za-z0-9_-]{12,}", text)
         or re.search(r"(?i)(access|refresh|id)_token\s*[:=]\s*\S+", text)
+        or re.search(r"(?i)\bACCESS_TOKEN_REF[A-Z0-9_:-]*\b", text)
         or re.search(r"(?i)channel_secret\s*[:=]\s*\S+", text)
         or re.search(r"(?i)client_secret\s*[:=]\s*\S+", text)
         or re.search(r"(?i)-----BEGIN [A-Z ]*PRIVATE KEY-----", text)
@@ -50,6 +51,7 @@ def has_secret_or_plaintext_shape(value: Any) -> bool:
         or re.search(r"[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}", text)
         or re.search(r"09\d{2}[- ]?\d{3}[- ]?\d{3}", text)
         or re.search(r"\b[A-Z][12]\d{8}\b", text)
+        or re.search(r"(?i)\bMEMBER_(EMAIL|PHONE|ID)_REF[A-Z0-9_:-]*\b", text)
         or JWT_SHAPE_PATTERN.search(text)
         or LONG_TOKEN_SHAPE_PATTERN.search(text)
     )
@@ -61,12 +63,14 @@ def redact_text(text: Any, limit: int = 420) -> tuple[str, list[str]]:
     replacements = [
         (r"sk-[A-Za-z0-9_-]{12,}", "[SECRET_REF]", "secret_shape_redacted"),
         (r"(?i)(access|refresh|id)_token\s*[:=]\s*\S+", "[TOKEN_REF]", "token_shape_redacted"),
+        (r"(?i)\bACCESS_TOKEN_REF[A-Z0-9_:-]*\b", "[TOKEN_REF]", "token_shape_redacted"),
         (r"(?i)channel_secret\s*[:=]\s*\S+", "[CHANNEL_SECRET_REF]", "secret_shape_redacted"),
         (r"(?i)client_secret\s*[:=]\s*\S+", "[CLIENT_SECRET_REF]", "secret_shape_redacted"),
         (r"(?i)Bearer\s+[A-Za-z0-9._~+/=-]{12,}", "[BEARER_REF]", "token_shape_redacted"),
         (r"[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}", "[MEMBER_REF]", "member_plaintext_shape_redacted"),
         (r"09\d{2}[- ]?\d{3}[- ]?\d{3}", "[MEMBER_REF]", "member_plaintext_shape_redacted"),
         (r"\b[A-Z][12]\d{8}\b", "[MEMBER_REF]", "member_plaintext_shape_redacted"),
+        (r"(?i)\bMEMBER_(EMAIL|PHONE|ID)_REF[A-Z0-9_:-]*\b", "[MEMBER_REF]", "member_plaintext_shape_redacted"),
         (JWT_SHAPE_PATTERN.pattern, "[JWT_REF]", "token_shape_redacted"),
         (LONG_TOKEN_SHAPE_PATTERN.pattern, "[TOKEN_VALUE_REF]", "token_shape_redacted"),
     ]
