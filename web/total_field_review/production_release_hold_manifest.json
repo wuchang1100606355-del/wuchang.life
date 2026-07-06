@@ -1,0 +1,49 @@
+{
+  "schema_version": "wuchang.production_release_hold_manifest.v1",
+  "state": "PRODUCTION_RELEASE_HOLD_MANIFEST_ACTIVE",
+  "generated_at_utc": "2026-07-03T01:46:54Z",
+  "domain": "http://wuchang.life",
+  "human_authority": true,
+  "llm_authority": false,
+  "decision_locked": true,
+  "production_release": "HOLD",
+  "release_authority": "total_field_human_review",
+  "public_static_demo": true,
+  "not_production_ready_reasons": [
+    "HTTPS/TLS port 443 is not configured.",
+    "Formal nonprofit/legal registration evidence and annual report are not published.",
+    "Domain/Search Console ownership verification requires a separate authorized action.",
+    "Evidence seal and release approval manifest are not complete.",
+    "Verifier-backed identity/payment/member-data/DB-write/deploy flows remain locked.",
+    "Final hosting/server security headers still need production configuration."
+  ],
+  "forbidden_actions": [
+    "secret_read",
+    "member_plaintext_read",
+    "raw_audio_read",
+    "payment_capture",
+    "production_db_write",
+    "odoo_pos_write",
+    "production_deploy_without_explicit_packet",
+    "grant_identity_role"
+  ],
+  "allowed_public_scope": [
+    "public_static_demo_pages",
+    "human_readable_review_envelope",
+    "machine_readable_review_envelope",
+    "public_safety_boundary_documentation",
+    "redteam_polish_evidence_reports"
+  ],
+  "required_before_release": [
+    "configure_https_tls_443",
+    "publish_formal_nonprofit_or_legal_registration_evidence",
+    "publish_current_annual_or_status_report_when_available",
+    "complete_domain_or_search_console_ownership_verification",
+    "complete_evidence_seal_hash_manifest",
+    "complete_verifier_backed_identity_payment_member_data_db_write_deploy_flows",
+    "configure_production_hosting_security_headers",
+    "issue_total_field_human_release_approval_packet"
+  ],
+  "public_review_envelope": "http://wuchang.life/total_field_review/review_envelope.json",
+  "final_decision": "PUBLIC_HOLD_MANIFEST_ACTIVE__PRODUCTION_RELEASE_REMAINS_HOLD"
+}

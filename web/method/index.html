@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="技術方法頁，白話說明八維度意圖場封包重構、整數狀態機、候選封包、驗證鏈與人類確認邊界。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#164f3a">
+  <link rel="canonical" href="http://wuchang.life/method/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="stylesheet" href="../assets/wuchang-site-design.css">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常社區發展協會｜小J主權AI服務">
+  <meta property="og:title" content="技術方法｜五常社區發展協會｜小J主權AI服務">
+  <meta property="og:description" content="技術方法頁，白話說明八維度意圖場封包重構、整數狀態機、候選封包、驗證鏈與人類確認邊界。">
+  <meta property="og:url" content="http://wuchang.life/method/">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="技術方法｜五常社區發展協會｜小J主權AI服務">
+  <meta name="twitter:description" content="技術方法頁，白話說明八維度意圖場封包重構、整數狀態機、候選封包、驗證鏈與人類確認邊界。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>技術方法｜五常社區發展協會｜小J主權AI服務</title>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<div class="site-shell">
+  <header class="site-header">
+    <div class="brand-row">
+      <a class="brand-lockup" href="../" aria-label="回到首頁">
+        <span class="logo-mark" aria-hidden="true">五</span>
+        <span class="brand-text"><strong>五常社區發展協會｜小J主權AI服務</strong><span>社區公益、主權 AI、總場候選治理</span></span>
+      </a>
+      <a class="cafe-lockup" href="../founder_manifesto/" aria-label="查看創辦人宣言">
+        <span class="cafe-mark" aria-hidden="true">啡</span>
+        <span><strong>上品聊國咖啡</strong><span>技術測試場與 proof-of-use</span></span>
+      </a>
+    </div>
+    <nav class="site-nav" aria-label="主要導覽">
+      <div class="nav-links"><a href="../">首頁</a><a href="../about/">協會願景</a><a href="../programs/">服務預告</a><a href="../method/" aria-current="page">技術方法</a><a href="../founder_manifesto/">創辦人宣言</a><a href="../member_recruitment/">會員招募</a><a href="../contact/">聯絡我們</a></div>
+      <div class="nav-actions">
+        <a class="support" href="../impact/">表示支持</a>
+        <a class="join" href="../member_recruitment/">加入意願</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <div class="page-label">技術方法<small>Method</small></div>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">8D Intent Field Packet</p>
+        <h1 id="page-title">技術方法：八維度意圖場封包重構</h1>
+        <p class="lead">本方法以意圖狀態封包、多個狀態場整數狀態機、candidate_only 不可回推候選封包、非公開規則 ref 封套、verifier chain、rebuild_manifest 與 human_confirm_ref 形成可審查流程。重點不是高 GPU 堆算力，而是低算力通用 CPU 上可追蹤、可阻斷、可重構。</p>
+        <div class="hero-actions"><a class="button primary" href="../founder_manifesto/">查看創辦人宣言</a><a class="button support" href="../w7tp_8d_control_panel.html">查看控制台</a><a class="button support" href="../total_field_review/">查看審查封套</a></div>
+
+      </div>
+      <figure class="hero-media">
+        <picture>
+            <source srcset="../assets/homepage-intent-field-hero.webp" type="image/webp">
+            <img src="../assets/homepage-intent-field-hero.png" width="1672" height="941" alt="八維度空間封包拓樸圖：用狀態封包、驗證鏈與人類確認維持主權邊界。" decoding="async" fetchpriority="high">
+          </picture>
+      </figure>
+    </section>
+<section class="content-band" aria-labelledby="sec-method">
+  <div class="section-head"><div><p class="eyebrow">Technical Method</p><h2 id="sec-不是八欄位資料表">不是八欄位資料表</h2></div><p>意圖場是跨節點、跨系統、跨角色的狀態封包與驗證流程；不是把八個欄位塞進資料庫。</p></div>
+  <div class="method-grid"><article class="method-card"><div class="card-icon">1</div><h3>邊緣運算隔離</h3><p>公開頁與候選封包不讀會員明文，不把瀏覽器狀態、raw audio 或照護內容送入雲端。</p></article><article class="method-card"><div class="card-icon">2</div><h3>無浮點查表與候選治理</h3><p>以整數狀態、封包標記與 verifier 檢查降低算力需求，不把高 GPU 推論視為同級比較。</p></article><article class="method-card"><div class="card-icon">3</div><h3>分段流水線動態變卦</h3><p>跨節點、跨系統、跨檔案的變更先形成 rebuild_manifest，再由 human_confirm_ref 決定是否放行。</p></article></div>
+</section>
+<section class="content-band alt" aria-labelledby="sec-dimensions">
+  <div class="section-head"><div><p class="eyebrow">D1-D8</p><h2 id="sec-dimensions">八個維度如何約束 AI</h2></div><p>這張表用公開語言呈現，核心非公開規則只以 ref 方式留在總場。</p></div>
+  <div class="table-wrap"><table><thead><tr><th>維度</th><th>公開說法</th><th>落地邊界</th></tr></thead><tbody>
+    <tr><td>D1 意圖</td><td>人真正想完成什麼。</td><td>模糊聊天不能直接升級成正式操作。</td></tr>
+    <tr><td>D2 狀態</td><td>展示、沙盒、封測或正式狀態。</td><td>公開頁標示預告版與 release HOLD。</td></tr>
+    <tr><td>D3 座標</td><td>需求發生在哪個場域。</td><td>協會、物業、商家、小J與審查封套分流。</td></tr>
+    <tr><td>D4 證據</td><td>有什麼可查資料支持判斷。</td><td>使用 evidence ref、hash ref、review envelope。</td></tr>
+    <tr><td>D5 政策</td><td>ALLOW、HOLD、REVIEW 或 HUMAN_CONFIRM。</td><td>付款、DB、部署、角色升級預設 HOLD。</td></tr>
+    <tr><td>D6 生成</td><td>AI 產生候選與整理摘要。</td><td>候選不能直接變成授權或正式文件。</td></tr>
+    <tr><td>D7 紅隊</td><td>先找可能誤導或外洩的位置。</td><td>公開頁不得顯示工程 payload 或 secret。</td></tr>
+    <tr><td>D8 封套</td><td>將一次決策包成可審查紀錄。</td><td>沒有 seal 與人審，不宣稱正式發布。</td></tr>
+  </tbody></table></div>
+</section>
+  </main>
+  <footer class="system-footer">
+    <h2>系統資訊</h2>
+    <div class="system-info"><div><strong>專利聲明</strong><span>本頁為公開展示與送審準備，不等於專利核准；核心規則與營業秘密僅以 ref-only 留存。</span></div><div><strong>私隱權宣言</strong><span>不公開會員明文、secret、token、raw audio、付款資料或照護明細。</span></div><div><strong>組織名稱</strong><span>五常社區發展協會；社區、物業、商家與公益服務以總場治理分流。</span></div><div><strong>關聯組織名稱</strong><span>五常社區發展協會 × 小J主權 AI 服務開發團隊；上品聊國咖啡為測試場域。</span></div><div><strong>Google 非營利界線</strong><span>非營利資源僅可支援公益、教育、治理與無敏候選封包；不代表 Google 核准或保證。</span></div><div><strong>營運資格與補助</strong><span>預告版、招募中、部分功能準備中；正式補助、付款、DB 寫入與 release 仍 HOLD。</span></div></div>
+    <div class="footer-bottom">
+      <span>預告版</span><span>|</span><span>招募中</span><span>|</span><span>部分功能準備中</span>
+      <span>|</span><a href="../transparency/">透明狀態</a><span>|</span><a href="../total_field_review/">總場審查</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

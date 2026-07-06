@@ -3,7 +3,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>小J會員主權 AI 瀏覽器座艙</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="主權 AI 個人管家小J會員瀏覽器座艙，展示 8D 候選封包、總場准駁、無明文外送與本地優先的使用者端工作流。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#1f6d60">
+  <link rel="canonical" href="http://wuchang.life/xiaoj_member_browser_cockpit/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常智慧雲">
+  <meta property="og:title" content="主權 AI 個人管家小J｜會員瀏覽器座艙">
+  <meta property="og:description" content="小J協助個人整理社區、物業、商家與日常需求；候選先行，總場授權後再進正式流程。">
+  <meta property="og:url" content="http://wuchang.life/xiaoj_member_browser_cockpit/">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="主權 AI 個人管家小J｜會員瀏覽器座艙">
+  <meta name="twitter:description" content="8D 候選封包、總場准駁、無明文外送與本地優先的使用者端工作流。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>主權 AI 個人管家小J座艙｜五常智慧雲</title>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "http://wuchang.life/#organization",
+      "@type": "Organization",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
+      "sameAs": [],
+      "knowsAbout": [
+        "主權 AI 個人管家小J",
+        "八維度意圖場封包重構",
+        "人類意圖場治理 AI 幻覺",
+        "社區數位服務",
+        "物業管理與住戶服務"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "admin@wuchang.life",
+        "contactType": "public inquiry",
+        "availableLanguage": [
+          "zh-Hant"
+        ]
+      }
+    },
+    {
+      "@id": "http://wuchang.life/#website",
+      "@type": "WebSite",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "inLanguage": "zh-Hant",
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    },
+    {
+      "@id": "http://wuchang.life/xiaoj_member_browser_cockpit/#webpage",
+      "@type": "WebPage",
+      "url": "http://wuchang.life/xiaoj_member_browser_cockpit/",
+      "name": "主權 AI 個人管家小J座艙｜五常智慧雲",
+      "description": "主權 AI 個人管家小J會員瀏覽器座艙，展示 8D 候選封包、總場准駁、無明文外送與本地優先的使用者端工作流。",
+      "inLanguage": "zh-Hant",
+      "isPartOf": {
+        "@id": "http://wuchang.life/#website"
+      },
+      "about": {
+        "@id": "http://wuchang.life/#organization"
+      },
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    }
+  ]
+}
+  </script>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -14,9 +89,15 @@
         <div class="mark" aria-hidden="true">J</div>
         <div>
           <h1>小J</h1>
-          <p>會員主權 AI</p>
+          <p>主權 AI 個人管家</p>
         </div>
       </div>
+      <nav class="siteLinks" aria-label="公開網站導覽">
+        <a href="../">首頁</a>
+        <a href="../about/">使命</a>
+        <a href="../total_field_review/">審查狀態</a>
+        <a href="../privacy.html">隱私邊界</a>
+      </nav>
       <div class="railBlock">
         <span class="label">模型座</span>
         <strong id="modelSeat">1B 本地控制</strong>
@@ -33,13 +114,25 @@
         <span class="label">上下文</span>
         <strong id="plainState">無明文外送</strong>
       </div>
+      <div class="railBlock">
+        <span class="label">正式上線</span>
+        <strong class="holdCode">PRODUCTION_RELEASE=HOLD</strong>
+      </div>
     </aside>
 
     <section class="workspace">
+      <figure class="workspaceHero" role="img" aria-label="小J 服務視覺">
+        <img class="workspaceHeroImage" src="./../assets/community-vision-art-card.svg" width="1000" height="520" alt="社區與小J服務景象，顯示商業、物業與居民共生流動">
+        <figcaption class="workspaceHeroCopy">
+          <h2>主權 AI 個人管家小J</h2>
+          <p>以 8D 候選封包為核心，協助個人整理社區、物業、商家與日常需求；候選先行，總場授權後再進入正式流程，避免直接決策與資料外洩。</p>
+        </figcaption>
+      </figure>
+
       <header class="topbar">
         <div>
           <p class="eyebrow">W7TP Generative Transmission</p>
-          <h2>社區小J日常協力座艙</h2>
+          <h2>社區小J個人管家座艙</h2>
         </div>
         <div class="topActions">
           <button id="clearBtn" class="ghostBtn" type="button">清除</button>
@@ -80,6 +173,7 @@
             <h3>服務風格</h3>
             <span id="serviceStyleRef">service_style_ref:community_xiaoj_warm_daily</span>
           </div>
+          <label class="srOnly" for="serviceStyle">服務風格</label>
           <select id="serviceStyle">
             <option value="community_xiaoj_warm_daily">熱誠日常</option>
             <option value="calm_accessible">穩定無障礙</option>
@@ -91,6 +185,7 @@
             <h3>算力路徑</h3>
             <span id="cloudComputeRef">cloud_compute_ref:local_1b_first</span>
           </div>
+          <label class="srOnly" for="computeLane">算力路徑</label>
           <select id="computeLane">
             <option value="local_1b_first">本地 1B 優先</option>
             <option value="google_ultra_candidate">Google Ultra 候選</option>
@@ -132,6 +227,9 @@
     </section>
   </main>
 
+  <footer>
+    SAFETY: SECRET_READ=FALSE · MEMBER_PLAINTEXT_READ=FALSE · RAW_AUDIO_READ=FALSE · PAYMENT_CAPTURE=FALSE · PRODUCTION_DB_WRITE=FALSE · LLM_AUTHORITY=FALSE · PRODUCTION_RELEASE=HOLD
+  </footer>
   <script src="./app.js"></script>
 </body>
 </html>

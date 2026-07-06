@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="五常智慧雲公開審查封套，集中列出目前公開路由、紅隊打磨證據、HOLD 邊界與機器可讀 review envelope。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#1f6d60">
+  <link rel="canonical" href="http://wuchang.life/total_field_review/envelope.html">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常智慧雲">
+  <meta property="og:title" content="公開審查封套｜五常智慧雲">
+  <meta property="og:description" content="人審與機器可讀的公開 review envelope；展示可看，正式上線仍 HOLD。">
+  <meta property="og:url" content="http://wuchang.life/total_field_review/envelope.html">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="公開審查封套｜五常智慧雲">
+  <meta name="twitter:description" content="總場審查封套與公開路由狀態。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>公開審查封套｜五常智慧雲</title>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "http://wuchang.life/#organization",
+      "@type": "Organization",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
+      "sameAs": [],
+      "knowsAbout": [
+        "主權 AI 個人管家小J",
+        "八維度意圖場封包重構",
+        "人類意圖場治理 AI 幻覺",
+        "社區數位服務",
+        "物業管理與住戶服務"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "admin@wuchang.life",
+        "contactType": "public inquiry",
+        "availableLanguage": [
+          "zh-Hant"
+        ]
+      }
+    },
+    {
+      "@id": "http://wuchang.life/#website",
+      "@type": "WebSite",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "inLanguage": "zh-Hant",
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    },
+    {
+      "@id": "http://wuchang.life/total_field_review/envelope.html#webpage",
+      "@type": "WebPage",
+      "url": "http://wuchang.life/total_field_review/envelope.html",
+      "name": "公開審查封套｜五常智慧雲",
+      "description": "五常智慧雲公開審查封套，集中列出目前公開路由、紅隊打磨證據、HOLD 邊界與機器可讀 review envelope。",
+      "inLanguage": "zh-Hant",
+      "isPartOf": {
+        "@id": "http://wuchang.life/#website"
+      },
+      "about": {
+        "@id": "http://wuchang.life/#organization"
+      },
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root{--ink:#17253a;--muted:#5d6b7d;--line:#d8e1ea;--green:#1f6d60;--blue:#2157a8;--gold:#8c6430;--rose:#9f4f66;--page:#f3f7fb}
+    *{box-sizing:border-box}
+    body{margin:0;color:var(--ink);background:radial-gradient(circle at 20% 0%,rgba(255,234,195,.45),transparent 34%),linear-gradient(180deg,#f3f7fb,#e8eef6);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.7}
+    a{color:inherit}
+    header,main,footer{width:min(1120px,calc(100% - 32px));margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:28px 0 12px}
+    .button{min-height:40px;display:inline-flex;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;text-decoration:none;font-weight:850}
+    .hold{color:#684615;border-color:rgba(140,100,48,.32);background:#fff8e8}
+    .hero,.card,.tableWrap{border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.94);box-shadow:0 18px 42px rgba(22,36,54,.1)}
+    .hero{padding:clamp(26px,5vw,52px);margin:12px 0 16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.78fr);gap:18px;align-items:center}
+    .eyebrow{margin:0 0 10px;color:var(--green);font-weight:950}
+    h1,h2,h3,p{margin-top:0}
+    h1{max-width:10.5em;margin-bottom:14px;font-size:clamp(34px,5vw,64px);line-height:1.04;letter-spacing:0}
+    .lead{max-width:760px;color:var(--muted);font-size:18px}
+    .seal{padding:18px;border-radius:12px;color:#fff;background:linear-gradient(145deg,#163d62,#1f6d60)}
+    .seal strong{display:block;font-size:30px;line-height:1.15}
+    .seal span{display:block;margin-top:8px;color:rgba(255,255,255,.84);font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:16px 0}
+    .card{padding:16px}
+    .card b{display:inline-grid;min-width:46px;height:46px;place-items:center;margin-bottom:12px;padding:0 9px;border-radius:9px;color:#fff;background:var(--green);font-size:17px}
+    .card.info b{background:var(--blue)}.card.warn b{background:var(--gold)}.card.danger b{background:var(--rose)}
+    .card p,td,li{color:var(--muted)}
+    .tableWrap{overflow-x:auto;margin:16px 0}
+    table{width:100%;min-width:820px;border-collapse:collapse;background:#fff}
+    th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{color:var(--ink);background:#eef4f8}
+    .tag{display:inline-flex;min-height:26px;align-items:center;padding:3px 8px;border-radius:999px;color:#124d43;background:#e8f7f2;font-size:12px;font-weight:850}
+    .tag.hold{color:#684615;background:#fff2d2}
+    footer{color:var(--muted);padding:20px 0 34px}
+    @media(max-width:860px){.hero,.grid{grid-template-columns:1fr}h1{font-size:clamp(32px,10vw,42px)}}
+  </style>
+</head>
+<body>
+  <header>
+    <a class="button" href="./">回到總場審查狀態</a>
+    <a class="button" href="../">回到首頁</a>
+    <span class="button hold">PRODUCTION_RELEASE=HOLD</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Public review envelope</p>
+        <h1>公開審查封套</h1>
+        <p class="lead">此頁把首頁、展示入口、紅隊報告、HOLD 邊界與機器可讀狀態集中到一個公開封套。它不是 production release 核准書；它是總場送審前的人審入口。</p>
+      </div>
+      <aside class="seal" aria-label="封套摘要">
+        <strong>人類是主人，模型不是權威層。</strong>
+        <span>HUMAN_AUTHORITY=TRUE · LLM_AUTHORITY=FALSE · DECISION_LOCKED=TRUE · PRODUCTION_RELEASE=HOLD</span>
+      </aside>
+    </section>
+
+    <section class="grid" aria-label="封套狀態">
+      <article class="card"><b>49</b><h2>紅隊報告</h2><p>已彙整 49 份首頁、method 方法頁、治理流程頁、治理導覽一致性、Chromium render layout audit、security.txt trust boundary、icon asset envelope、sitemap lastmod consistency、demo safety footer、button type accessibility、extension prototype boundary、image dimension stability、structured data、metadata title、index metadata、文案 overclaim guard、公開輔助 artifact 封套、前端可執行資產封套、production release HOLD manifest、release approval manifest 文案一致性、demo entry、圖片 preload 與社群圖、機器可讀 artifact、安全聯絡一致性、互動元件 label 歸零、路由封套一致性、語意、目錄、公開子頁、demo 導覽一致性、表單 accessibility、透明狀態與 static security meta 打磨報告。</p></article>
+      <article class="card info"><b>22</b><h2>公開路由</h2><p>主要公開路由維持 22 條；另列 16 個輔助公開檔案與 8 個前端可執行資產供總場審查。</p></article>
+      <article class="card warn"><b>TLS</b><h2>HTTPS 待配置</h2><p>TLS/443 未完成前，不可宣稱 production ready。</p></article>
+      <article class="card danger"><b>HOLD</b><h2>高風險鎖定</h2><p>會員明文、secret、付款、production DB write、部署與身份授權仍由 verifier 鎖住。</p></article>
+    </section>
+
+    <section aria-labelledby="route-title">
+      <p class="eyebrow">Route envelope</p>
+      <h2 id="route-title">公開路由封套</h2>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>Route</th><th>Status</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><a href="../">/</a></td><td><span class="tag">PUBLIC_DEMO</span></td><td>homepage and public mission</td></tr>
+            <tr><td><a href="../about/">/about/</a></td><td><span class="tag">PUBLIC_MISSION</span></td><td>about, mission, human authority, and governance principles</td></tr>
+            <tr><td><a href="../method/">/method/</a></td><td><span class="tag">PUBLIC_METHOD</span></td><td>plain-language 8D intent-field packet reconstruction method page</td></tr>
+            <tr><td><a href="../governance/">/governance/</a></td><td><span class="tag">PUBLIC_GOVERNANCE_WORKFLOW</span></td><td>total-field and subfield governance workflow, human authority, verifier boundary, and production HOLD explanation</td></tr>
+            <tr><td><a href="./">/total_field_review/</a></td><td><span class="tag">PUBLIC_REVIEW_GATE</span></td><td>human-readable total-field status</td></tr>
+            <tr><td><a href="./envelope.html">/total_field_review/envelope.html</a></td><td><span class="tag">PUBLIC_REVIEW_ENVELOPE</span></td><td>review evidence envelope</td></tr>
+            <tr><td><a href="./review_envelope.json">/total_field_review/review_envelope.json</a></td><td><span class="tag">MACHINE_READABLE_ENVELOPE</span></td><td>machine-readable review status</td></tr>
+            <tr><td><a href="../property_management/">/property_management/</a></td><td><span class="tag">PUBLIC_DEMO</span></td><td>property management and resident services</td></tr>
+            <tr><td><a href="../programs/">/programs/</a></td><td><span class="tag">PUBLIC_PROGRAMS</span></td><td>public programs and services overview</td></tr>
+            <tr><td><a href="../impact/">/impact/</a></td><td><span class="tag">PUBLIC_IMPACT</span></td><td>public impact, evidence status, and landing roadmap</td></tr>
+            <tr><td><a href="../faq/">/faq/</a></td><td><span class="tag">PUBLIC_FAQ</span></td><td>public FAQ and misconception guard</td></tr>
+            <tr><td><a href="../transparency/">/transparency/</a></td><td><span class="tag">PUBLIC_TRANSPARENCY</span></td><td>plain-language public status and transparency summary</td></tr>
+            <tr><td><a href="../nonprofit_readiness/">/nonprofit_readiness/</a></td><td><span class="tag">PUBLIC_READINESS</span></td><td>public nonprofit readiness and review evidence</td></tr>
+            <tr><td><a href="../contact/">/contact/</a></td><td><span class="tag">PUBLIC_CONTACT</span></td><td>public contact and safety reporting boundary</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_cockpit/">/xiaoj_member_browser_cockpit/</a></td><td><span class="tag">STATIC_DEMO</span></td><td>sovereign XiaoJ member cockpit</td></tr>
+            <tr><td><a href="../pos_promo_sandbox/">/pos_promo_sandbox/</a></td><td><span class="tag">SANDBOX</span></td><td>POS promo sandbox without payment capture</td></tr>
+            <tr><td><a href="../w7tp_8d_control_panel.html">/w7tp_8d_control_panel.html</a></td><td><span class="tag">STATIC_DEMO</span></td><td>8D control panel</td></tr>
+            <tr><td><a href="../packet_inference_cockpit/">/packet_inference_cockpit/</a></td><td><span class="tag">HOLD_GATED</span></td><td>packet inference cockpit public fallback</td></tr>
+            <tr><td><a href="../xiaoj_delivery_review_card/">/xiaoj_delivery_review_card/</a></td><td><span class="tag">STATIC_DEMO</span></td><td>volunteer delivery review card</td></tr>
+            <tr><td><a href="../xiaoj_openwebui_workbench/">/xiaoj_openwebui_workbench/</a></td><td><span class="tag">STATIC_DEMO</span></td><td>local workbench candidate cards</td></tr>
+            <tr><td><a href="../privacy.html">/privacy.html</a></td><td><span class="tag">PUBLIC_POLICY</span></td><td>privacy and safety boundary</td></tr>
+            <tr><td><a href="../.well-known/security.txt">/.well-known/security.txt</a></td><td><span class="tag">SECURITY_CONTACT</span></td><td>security reporting contact</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <section aria-labelledby="artifact-title">
+      <p class="eyebrow">Auxiliary artifact envelope</p>
+      <h2 id="artifact-title">輔助公開檔案封套</h2>
+      <p class="lead">以下檔案可能由公開伺服器提供，但不列入主要 sitemap route；它們以 robots、noindex、directory guard 或 machine-readable artifact 方式納入總場審查。</p>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>Artifact</th><th>Status</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><a href="../.well-known/">/.well-known/</a></td><td><span class="tag hold">NOINDEX_GUARD</span></td><td>directory guard for well-known public metadata area</td></tr>
+            <tr><td><a href="../assets/">/assets/</a></td><td><span class="tag hold">NOINDEX_GUARD</span></td><td>directory guard for public visual assets</td></tr>
+            <tr><td><a href="../favicon.svg">/favicon.svg</a></td><td><span class="tag hold">PUBLIC_SITE_ICON</span></td><td>site favicon referenced by public pages and site.webmanifest; visual identity only, no script or data authority</td></tr>
+            <tr><td><a href="../community_activities.json">/community_activities.json</a></td><td><span class="tag hold">ROBOTS_DISALLOW_PUBLIC_JSON</span></td><td>public-only community activity seed; candidate-only, no member plaintext, disallowed from indexing</td></tr>
+            <tr><td><a href="../robots.txt">/robots.txt</a></td><td><span class="tag hold">CRAWL_POLICY</span></td><td>crawl policy for sitemap, extension guard, and public JSON exclusion</td></tr>
+            <tr><td><a href="../site.webmanifest">/site.webmanifest</a></td><td><span class="tag hold">WEB_APP_MANIFEST</span></td><td>site-level manifest for public homepage install metadata</td></tr>
+            <tr><td><a href="../sitemap.xml">/sitemap.xml</a></td><td><span class="tag hold">SITEMAP</span></td><td>indexable public route list</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_cockpit/manifest.webmanifest">/xiaoj_member_browser_cockpit/manifest.webmanifest</a></td><td><span class="tag hold">WEB_APP_MANIFEST</span></td><td>manifest for XiaoJ member cockpit static demo</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_cockpit/icon.svg">/xiaoj_member_browser_cockpit/icon.svg</a></td><td><span class="tag hold">PUBLIC_COCKPIT_ICON</span></td><td>XiaoJ cockpit manifest icon; visual identity only, no script or data authority</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/">/xiaoj_member_browser_extension/</a></td><td><span class="tag hold">ROBOTS_DISALLOW_NOINDEX_GUARD</span></td><td>browser extension directory guard; not a public member entry</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/manifest.json">/xiaoj_member_browser_extension/manifest.json</a></td><td><span class="tag hold">ROBOTS_DISALLOW_EXTENSION_MANIFEST</span></td><td>browser extension test manifest; excluded from public indexing</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/README.md">/xiaoj_member_browser_extension/README.md</a></td><td><span class="tag hold">ROBOTS_DISALLOW_EXTENSION_README</span></td><td>browser extension prototype README; documents permissions and safety boundaries, excluded from public indexing</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/native_host/">/xiaoj_member_browser_extension/native_host/</a></td><td><span class="tag hold">ROBOTS_DISALLOW_NOINDEX_GUARD</span></td><td>native host template directory guard; not an enabled local host</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/native_host/tw.taiji.xiaoj_member_browser_gateway.template.json">/xiaoj_member_browser_extension/native_host/tw.taiji.xiaoj_member_browser_gateway.template.json</a></td><td><span class="tag hold">ROBOTS_DISALLOW_TEMPLATE</span></td><td>native host template with placeholders only; no secrets, excluded from public indexing</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/sidepanel.html">/xiaoj_member_browser_extension/sidepanel.html</a></td><td><span class="tag hold">ROBOTS_DISALLOW_NOINDEX_PROTOTYPE</span></td><td>extension sidepanel prototype; noindex and not a public member entry</td></tr>
+            <tr><td><a href="./production_release_hold_manifest.json">/total_field_review/production_release_hold_manifest.json</a></td><td><span class="tag hold">MACHINE_READABLE_HOLD_MANIFEST</span></td><td>machine-readable public HOLD manifest; confirms production release is locked and lists release prerequisites</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <section aria-labelledby="exec-asset-title">
+      <p class="eyebrow">Executable asset envelope</p>
+      <h2 id="exec-asset-title">前端可執行資產封套</h2>
+      <p class="lead">以下 JS/CSS 會影響公開展示頁行為，因此獨立列為可審查資產；它們不等於後端 verifier、payment、DB write 或 production release。</p>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>Asset</th><th>Status</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><a href="../packet_inference_cockpit/app.js">/packet_inference_cockpit/app.js</a></td><td><span class="tag hold">STATIC_DEMO_SCRIPT</span></td><td>packet inference cockpit UI logic; calls same-origin API only and falls back to static HOLD-gated response</td></tr>
+            <tr><td><a href="../packet_inference_cockpit/styles.css">/packet_inference_cockpit/styles.css</a></td><td><span class="tag hold">STATIC_STYLE</span></td><td>packet inference cockpit presentation only</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_cockpit/app.js">/xiaoj_member_browser_cockpit/app.js</a></td><td><span class="tag hold">STATIC_DEMO_SCRIPT</span></td><td>sovereign XiaoJ cockpit packet builder and local safety simulation; no DB write or payment capture</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_cockpit/styles.css">/xiaoj_member_browser_cockpit/styles.css</a></td><td><span class="tag hold">STATIC_STYLE</span></td><td>sovereign XiaoJ cockpit presentation only</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_cockpit/sw.js">/xiaoj_member_browser_cockpit/sw.js</a></td><td><span class="tag hold">SAME_ORIGIN_SERVICE_WORKER</span></td><td>same-origin cache for cockpit demo assets only</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/background.js">/xiaoj_member_browser_extension/background.js</a></td><td><span class="tag hold">ROBOTS_DISALLOW_EXTENSION_SCRIPT</span></td><td>extension background prototype with blocked high-risk actions and no host permissions</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/sidepanel.css">/xiaoj_member_browser_extension/sidepanel.css</a></td><td><span class="tag hold">ROBOTS_DISALLOW_STATIC_STYLE</span></td><td>extension sidepanel presentation only</td></tr>
+            <tr><td><a href="../xiaoj_member_browser_extension/sidepanel.js">/xiaoj_member_browser_extension/sidepanel.js</a></td><td><span class="tag hold">ROBOTS_DISALLOW_EXTENSION_SCRIPT</span></td><td>extension sidepanel prototype; candidate-only ref actions with boundary detection</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="evidence-title">
+      <p class="eyebrow">Evidence envelope</p>
+      <h2 id="evidence-title">紅隊打磨證據摘要</h2>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>RUN_ID</th><th>STATE</th><th>DECISION</th></tr></thead>
+          <tbody>
+            <tr><td>DEMO_ENTRY_PRODUCT_POLISH_20260702_230121</td><td>PASS_DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_REVIEW</td><td>DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>DEMO_ENTRY_PRODUCT_POLISH_20260702_230302</td><td>PASS_DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_REVIEW</td><td>DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>HOMEPAGE_HUMAN_AI_AUTHORITY_20260702_223018</td><td>PASS_HOMEPAGE_HUMAN_AI_AUTHORITY_LIVE</td><td>HUMAN_AI_AUTHORITY_COPY_LIVE__READY_FOR_TOTAL_FIELD_REVIEW</td></tr>
+            <tr><td>HOMEPAGE_INTENT_FIELD_PHRASE_20260702_222826</td><td>PASS_HOMEPAGE_INTENT_FIELD_PHRASE_LIVE</td><td>LIVE_COPY_UPDATED__READY_FOR_TOTAL_FIELD_REVIEW</td></tr>
+            <tr><td>HOMEPAGE_PRODUCT_BITMAP_FINAL_20260702_231042</td><td>PASS_HOMEPAGE_PRODUCT_BITMAP_POLISH_READY_FOR_REVIEW</td><td>READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>HOMEPAGE_REDTEAM_POLISH_20260702_222624</td><td>PASS_HOMEPAGE_REDTEAM_POLISH_READY_FOR_TOTAL_FIELD_REVIEW</td><td>PUBLIC_HOMEPAGE_POLISH_READY_FOR_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_ABOUT_MISSION_POLISH_20260703_002256</td><td>PASS_PUBLIC_ABOUT_MISSION_READY_FOR_REVIEW</td><td>PUBLIC_ABOUT_MISSION=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_ACCESSIBILITY_FORM_LABEL_POLISH_20260703_005620</td><td>PASS_PUBLIC_ACCESSIBILITY_FORM_LABEL_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_ACCESSIBILITY_FORM_LABEL_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_ACCESSIBILITY_LABEL_ZERO_AUDIT_20260703_012025</td><td>PASS_PUBLIC_ACCESSIBILITY_LABEL_ZERO_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_ACCESSIBILITY_LABEL_ZERO_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_BUTTON_TYPE_ACCESSIBILITY_AUDIT_20260703_020754</td><td>PASS_PUBLIC_BUTTON_TYPE_ACCESSIBILITY_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_BUTTON_TYPE_ACCESSIBILITY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_CONTACT_SAFETY_POLISH_20260703_001038</td><td>PASS_PUBLIC_CONTACT_SAFETY_READY_FOR_REVIEW</td><td>PUBLIC_CONTACT_SAFETY=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_COPY_OVERCLAIM_GUARD_AUDIT_20260703_013539</td><td>PASS_PUBLIC_COPY_OVERCLAIM_GUARD_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_COPY_OVERCLAIM_GUARD_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_CRAWL_SECURITY_HARDENING_20260702_232736</td><td>PASS_PUBLIC_CRAWL_SECURITY_HARDENING_READY_FOR_REVIEW</td><td>PUBLIC_CRAWL_SECURITY_HARDENING_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_DEMO_NAV_CONSISTENCY_POLISH_20260703_005110</td><td>PASS_PUBLIC_DEMO_NAV_CONSISTENCY_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_DEMO_NAV_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_DEMO_RETURN_NAV_POLISH_20260703_004603</td><td>PASS_PUBLIC_DEMO_RETURN_NAV_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_DEMO_RETURN_NAV_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_DEMO_SAFETY_FOOTER_CONSISTENCY_20260703_020318</td><td>PASS_PUBLIC_DEMO_SAFETY_FOOTER_CONSISTENCY_READY_FOR_REVIEW</td><td>PUBLIC_DEMO_SAFETY_FOOTER_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_DIRECTORY_GUARD_POLISH_20260702_234251</td><td>PASS_PUBLIC_DIRECTORY_GUARD_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_DIRECTORY_GUARD_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_EXECUTABLE_ASSET_ENVELOPE_20260703_014412</td><td>PASS_PUBLIC_EXECUTABLE_ASSET_ENVELOPE_READY_FOR_REVIEW</td><td>PUBLIC_EXECUTABLE_ASSET_ENVELOPE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_EXTENSION_PROTOTYPE_BOUNDARY_AUDIT_20260703_021204</td><td>PASS_PUBLIC_EXTENSION_PROTOTYPE_BOUNDARY_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_EXTENSION_PROTOTYPE_BOUNDARY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_FAQ_MISCONCEPTION_GUARD_POLISH_20260703_003254</td><td>PASS_PUBLIC_FAQ_MISCONCEPTION_GUARD_READY_FOR_REVIEW</td><td>PUBLIC_FAQ_MISCONCEPTION_GUARD=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_ICON_ASSET_ENVELOPE_20260703_022119</td><td>PASS_PUBLIC_ICON_ASSET_ENVELOPE_READY_FOR_REVIEW</td><td>PUBLIC_ICON_ASSET_ENVELOPE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_IMAGE_DIMENSION_STABILITY_AUDIT_20260703_021521</td><td>PASS_PUBLIC_IMAGE_DIMENSION_STABILITY_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_IMAGE_DIMENSION_STABILITY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_IMAGE_PRELOAD_ASSET_AUDIT_20260703_011359</td><td>PASS_PUBLIC_IMAGE_PRELOAD_ASSET_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_IMAGE_PRELOAD_ASSET_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_IMPACT_ROADMAP_POLISH_20260703_002805</td><td>PASS_PUBLIC_IMPACT_ROADMAP_READY_FOR_REVIEW</td><td>PUBLIC_IMPACT_ROADMAP=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_INDEX_METADATA_CONSISTENCY_AUDIT_20260703_012808</td><td>PASS_PUBLIC_INDEX_METADATA_CONSISTENCY_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_INDEX_METADATA_CONSISTENCY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_MACHINE_READABLE_ARTIFACT_AUDIT_20260703_011039</td><td>PASS_PUBLIC_MACHINE_READABLE_ARTIFACT_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_MACHINE_READABLE_ARTIFACT_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_METADATA_TITLE_POLISH_20260703_010123</td><td>PASS_PUBLIC_METADATA_TITLE_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_METADATA_TITLE_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_METHOD_PAGE_8D_INTENT_FIELD_20260703_015938</td><td>PASS_PUBLIC_METHOD_PAGE_8D_INTENT_FIELD_READY_FOR_REVIEW</td><td>PUBLIC_METHOD_PAGE_8D_INTENT_FIELD_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_GOVERNANCE_WORKFLOW_PAGE_20260703_022916</td><td>PASS_PUBLIC_GOVERNANCE_WORKFLOW_PAGE_READY_FOR_REVIEW</td><td>PUBLIC_GOVERNANCE_WORKFLOW_PAGE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_GOVERNANCE_NAV_CONSISTENCY_20260703_023748</td><td>PASS_PUBLIC_GOVERNANCE_NAV_CONSISTENCY_READY_FOR_REVIEW</td><td>PUBLIC_GOVERNANCE_NAV_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_RENDER_LAYOUT_AUDIT_20260703_024200</td><td>PASS_PUBLIC_RENDER_LAYOUT_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_RENDER_LAYOUT_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_NONPROFIT_READINESS_POLISH_20260703_000451</td><td>PASS_PUBLIC_NONPROFIT_READINESS_READY_FOR_REVIEW</td><td>PUBLIC_NONPROFIT_READINESS=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_PRODUCTION_RELEASE_HOLD_MANIFEST_20260703_014950</td><td>PASS_PUBLIC_PRODUCTION_RELEASE_HOLD_MANIFEST_READY_FOR_REVIEW</td><td>PUBLIC_PRODUCTION_RELEASE_HOLD_MANIFEST_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_PROGRAMS_SERVICES_POLISH_20260703_001818</td><td>PASS_PUBLIC_PROGRAMS_SERVICES_READY_FOR_REVIEW</td><td>PUBLIC_PROGRAMS_SERVICES=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_RELEASE_MANIFEST_WORDING_CONSISTENCY_20260703_015330</td><td>PASS_PUBLIC_RELEASE_MANIFEST_WORDING_CONSISTENCY_READY_FOR_REVIEW</td><td>PUBLIC_RELEASE_MANIFEST_WORDING_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_REVIEW_ENVELOPE_POLISH_20260702_235400</td><td>PASS_PUBLIC_REVIEW_ENVELOPE_READY_FOR_REVIEW</td><td>PUBLIC_REVIEW_ENVELOPE=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_REVIEW_GATE_FINAL_20260702_232125</td><td>PASS_PUBLIC_REVIEW_GATE_READY_FOR_REVIEW</td><td>PUBLIC_REVIEW_GATE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_REVIEW_ROUTE_TABLE_CONSISTENCY_20260703_012450</td><td>PASS_PUBLIC_REVIEW_ROUTE_TABLE_CONSISTENCY_READY_FOR_REVIEW</td><td>PUBLIC_REVIEW_ROUTE_TABLE_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_SECURITY_TXT_TRUST_BOUNDARY_20260703_022441</td><td>PASS_PUBLIC_SECURITY_TXT_TRUST_BOUNDARY_READY_FOR_REVIEW</td><td>PUBLIC_SECURITY_TXT_TRUST_BOUNDARY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_SEMANTIC_ACCESSIBILITY_FINAL_20260702_233430</td><td>PASS_PUBLIC_SEMANTIC_ACCESSIBILITY_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_SEMANTIC_ACCESSIBILITY_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_SITEMAP_LASTMOD_CONSISTENCY_20260703_021826</td><td>PASS_PUBLIC_SITEMAP_LASTMOD_CONSISTENCY_READY_FOR_REVIEW</td><td>PUBLIC_SITEMAP_LASTMOD_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_STATIC_SECURITY_META_POLISH_20260702_234725</td><td>PASS_PUBLIC_STATIC_SECURITY_META_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_STATIC_SECURITY_META_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_STRUCTURED_DATA_SCHEMA_POLISH_20260703_013225</td><td>PASS_PUBLIC_STRUCTURED_DATA_SCHEMA_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_STRUCTURED_DATA_SCHEMA_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_SURFACE_AUXILIARY_ARTIFACT_ENVELOPE_20260703_014025</td><td>PASS_PUBLIC_SURFACE_AUXILIARY_ARTIFACT_ENVELOPE_READY_FOR_REVIEW</td><td>PUBLIC_SURFACE_AUXILIARY_ARTIFACT_ENVELOPE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>PUBLIC_TRANSPARENCY_STATUS_POLISH_20260703_003753</td><td>PASS_PUBLIC_TRANSPARENCY_STATUS_READY_FOR_REVIEW</td><td>PUBLIC_TRANSPARENCY_STATUS=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD</td></tr>
+            <tr><td>PUBLIC_TRUST_CONTACT_CONSISTENCY_AUDIT_20260703_010602</td><td>PASS_PUBLIC_TRUST_CONTACT_CONSISTENCY_AUDIT_READY_FOR_REVIEW</td><td>PUBLIC_TRUST_CONTACT_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>SITE_METADATA_SEO_POLISH_20260702_224852</td><td>PASS_SITE_METADATA_SEO_POLISH_READY_FOR_REVIEW</td><td>PUBLIC_SITE_METADATA_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>SITE_PRODUCT_GRADE_REDTEAM_20260702_224137</td><td>PASS_PRODUCT_GRADE_REDTEAM_POLISH_READY_FOR_TOTAL_FIELD_REVIEW</td><td>PUBLIC_SITE_PRODUCT_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+            <tr><td>SITE_SUBPAGE_METADATA_REDTEAM_20260702_225417</td><td>PASS_SUBPAGE_METADATA_AND_FALSE_SECRET_REVIEW_READY</td><td>PUBLIC_SUBPAGE_METADATA_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>完整機器可讀封套：<a href="./review_envelope.json">review_envelope.json</a>；公開 HOLD manifest：<a href="./production_release_hold_manifest.json">production_release_hold_manifest.json</a>。</p>
+    </section>
+
+    <section class="grid" aria-label="剩餘 HOLD">
+      <article class="card warn"><h2>仍需補齊</h2><ul><li>HTTPS/TLS port 443。</li><li>正式非營利/法人證據與年度報告。</li><li>網域或 Search Console 所有權驗證。</li><li>evidence seal 與 release approval manifest。</li><li>verifier-backed release gate。</li></ul></article>
+      <article class="card danger"><h2>不可越權</h2><ul><li>不可讀 secret / 會員明文 / raw audio。</li><li>不可付款或寫 production DB。</li><li>不可讓模型授權身份或覆寫 verifier。</li></ul></article>
+    </section>
+  </main>
+
+  <footer>
+    CONTACT: <a href="../contact/">聯絡與安全回報</a> · SECURITY: <a href="../.well-known/security.txt">security.txt</a> · JSON: <a href="./review_envelope.json">review_envelope.json</a>
+  </footer>
+</body>
+</html>

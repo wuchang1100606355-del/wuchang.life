@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#007c78">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <title>小J瀏覽器橋｜封測工具邊界</title>
+  <style>
+    body{margin:0;color:#17253a;background:#f3f7fb;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.7}
+    main{width:min(820px,calc(100% - 32px));margin:0 auto;padding:48px 0}
+    .card{padding:28px;border:1px solid #d8e1ea;border-radius:12px;background:#fff;box-shadow:0 18px 42px rgba(22,36,54,.1)}
+    .pill{display:inline-flex;margin:4px 6px 4px 0;padding:4px 10px;border-radius:999px;background:#ecf8f5;color:#007c78;font-weight:850}
+    a{color:inherit}
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <h1>小J瀏覽器橋是封測工具，不是公開會員入口</h1>
+      <p>此目錄不提供檔案瀏覽。側邊欄只展示 ref-only 候選動作，正式准駁仍需總場 verifier。</p>
+      <p>公開 manifest 與 README 只供總場審查與本機封測，不代表可正式安裝、授權、讀取會員明文或啟動 native host。</p>
+      <p>
+        <span class="pill">MEMBER_PLAINTEXT_READ=FALSE</span>
+        <span class="pill">SECRET_READ=FALSE</span>
+        <span class="pill">RAW_AUDIO_READ=FALSE</span>
+        <span class="pill">PAYMENT_CAPTURE=FALSE</span>
+        <span class="pill">DB_WRITE=FALSE</span>
+        <span class="pill">LLM_AUTHORITY=FALSE</span>
+        <span class="pill">PRODUCTION_RELEASE=HOLD</span>
+      </p>
+      <p><a href="./sidepanel.html">開啟封測側邊欄展示</a> · <a href="../total_field_review/">總場審查狀態</a></p>
+    </section>
+  </main>
+</body>
+</html>

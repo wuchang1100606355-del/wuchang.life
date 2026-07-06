@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="店端小J POS 行銷沙盒，展示記杯、會員確認、店員核銷與 POS 告警如何被整理成可審查流程；不扣款、不寫 production DB、不讀會員明文。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#1f6d60">
+  <link rel="canonical" href="http://wuchang.life/pos_promo_sandbox/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常智慧雲">
+  <meta property="og:title" content="店端小J POS 行銷沙盒｜五常智慧雲">
+  <meta property="og:description" content="展示記杯、核銷與 POS 告警如何進入總場可審查流程；公開頁不做正式交易。">
+  <meta property="og:url" content="http://wuchang.life/pos_promo_sandbox/">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="店端小J POS 行銷沙盒｜五常智慧雲">
+  <meta name="twitter:description" content="不扣款、不寫 production DB、不讀會員明文的店端展示沙盒。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>店端小J POS 行銷沙盒｜五常智慧雲</title>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "http://wuchang.life/#organization",
+      "@type": "Organization",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
+      "sameAs": [],
+      "knowsAbout": [
+        "主權 AI 個人管家小J",
+        "八維度意圖場封包重構",
+        "人類意圖場治理 AI 幻覺",
+        "社區數位服務",
+        "物業管理與住戶服務"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "admin@wuchang.life",
+        "contactType": "public inquiry",
+        "availableLanguage": [
+          "zh-Hant"
+        ]
+      }
+    },
+    {
+      "@id": "http://wuchang.life/#website",
+      "@type": "WebSite",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "inLanguage": "zh-Hant",
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    },
+    {
+      "@id": "http://wuchang.life/pos_promo_sandbox/#webpage",
+      "@type": "WebPage",
+      "url": "http://wuchang.life/pos_promo_sandbox/",
+      "name": "店端小J POS 行銷沙盒｜五常智慧雲",
+      "description": "店端小J POS 行銷沙盒，展示記杯、會員確認、店員核銷與 POS 告警如何被整理成可審查流程；不扣款、不寫 production DB、不讀會員明文。",
+      "inLanguage": "zh-Hant",
+      "isPartOf": {
+        "@id": "http://wuchang.life/#website"
+      },
+      "about": {
+        "@id": "http://wuchang.life/#organization"
+      },
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --ink: #17253a;
+      --muted: #607086;
+      --line: #d9e1ea;
+      --green: #1f6d60;
+      --blue: #2157a8;
+      --warn: #8a5a08;
+      --bad: #a33a3a;
+      --surface: #ffffff;
+      --page: #f3f7fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--page);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.65;
+    }
+
+    header,
+    main,
+    footer {
+      width: min(980px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0 12px;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .publicNav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .back {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .hero,
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: 0 18px 42px rgba(22, 36, 54, 0.1);
+    }
+
+    .hero {
+      padding: clamp(22px, 5vw, 42px);
+      margin: 12px 0;
+    }
+
+    h1,
+    h2 {
+      line-height: 1.15;
+      margin: 0 0 12px;
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-weight: 900;
+      margin: 0 0 10px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 760px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .card {
+      padding: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 4px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font: inherit;
+    }
+
+    button {
+      margin-top: 10px;
+      color: #fff;
+      background: var(--green);
+      border-color: var(--green);
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    button.secondary {
+      color: var(--ink);
+      background: #eef4ff;
+      border-color: #cbd8f0;
+    }
+
+    button.warn {
+      background: var(--warn);
+      border-color: var(--warn);
+    }
+
+    .alert {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fff8e8;
+      color: var(--warn);
+      font-weight: 900;
+    }
+
+    pre {
+      min-height: 220px;
+      margin: 0;
+      padding: 14px;
+      border-radius: 8px;
+      color: #d8ffe8;
+      background: #101923;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      color: var(--muted);
+      padding: 20px 0 32px;
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="publicNav" aria-label="公開網站導覽">
+      <a class="back" href="../">首頁</a>
+      <a class="back" href="../programs/">服務活動</a>
+      <a class="back" href="../total_field_review/">審查狀態</a>
+      <a class="back" href="../privacy.html">隱私邊界</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">POS sandbox / no payment capture</p>
+      <h1>店端小J POS 行銷沙盒</h1>
+      <p class="lead">
+        這個展示頁用來說明「記杯、會員確認、店員核銷、POS 告警」如何在小J與總場治理下被整理成可審查流程。
+        這不是正式交易系統，不會扣款、不會寫入 production DB，也不讀取會員明文。
+      </p>
+    </section>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="order-title">
+        <h2 id="order-title">建立沙盒記杯</h2>
+        <label for="member">會員末碼</label>
+        <input id="member" value="1234" inputmode="numeric">
+
+        <label for="product">商品</label>
+        <select id="product">
+          <option>拿鐵</option>
+          <option>美式</option>
+          <option>卡布</option>
+        </select>
+
+        <label for="qty">購買杯數</label>
+        <input id="qty" type="number" value="20" min="1">
+
+        <label for="promo">方案</label>
+        <select id="promo">
+          <option value="best">最佳優惠</option>
+          <option value="10">買十送一</option>
+          <option value="20">買二十送三</option>
+        </select>
+
+        <button type="button" onclick="createOrder()">建立記杯</button>
+      </section>
+
+      <section class="card" aria-labelledby="flow-title">
+        <h2 id="flow-title">小J確認與店員核銷</h2>
+        <button class="secondary" type="button" onclick="memberAck()">會員端小J確認單據</button>
+        <button class="secondary" type="button" onclick="redeemRequest()">會員端小J請求核銷 1 杯</button>
+        <button class="warn" type="button" onclick="staffConfirm()">店員確認扣杯</button>
+        <button class="secondary" type="button" onclick="resetAll()">重置沙盒</button>
+      </section>
+    </div>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="alert-title">
+        <h2 id="alert-title">POS 告警</h2>
+        <div id="alert" class="alert">等待事件</div>
+      </section>
+
+      <section class="card" aria-labelledby="state-title">
+        <h2 id="state-title">狀態封包</h2>
+        <pre id="out"></pre>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    SAFETY: PAYMENT_CAPTURE=FALSE · MEMBER_PLAINTEXT_READ=FALSE · DB_WRITE=FALSE · PRODUCTION_RELEASE=HOLD
+  </footer>
+
+  <script>
+    let state = { status: "empty", ledger: null, alert: null, events: [] };
+
+    function h(s) {
+      let x = 0;
+      for (let i = 0; i < s.length; i += 1) x = ((x << 5) - x + s.charCodeAt(i)) | 0;
+      return "hash_" + Math.abs(x);
+    }
+
+    function bestBonus(q, p) {
+      const a = Math.floor(q / 10) * 1;
+      const b = Math.floor(q / 20) * 3;
+      if (p === "10") return { promo: "buy_10_get_1", bonus: a };
+      if (p === "20") return { promo: "buy_20_get_3", bonus: b };
+      return b >= a ? { promo: "buy_20_get_3", bonus: b } : { promo: "buy_10_get_1", bonus: a };
+    }
+
+    function log(e) {
+      state.events.push({ ts: new Date().toISOString(), event: e });
+      render();
+    }
+
+    function createOrder() {
+      const q = parseInt(document.getElementById("qty").value, 10);
+      const p = document.getElementById("promo").value;
+      const m = document.getElementById("member").value;
+      const prod = document.getElementById("product").value;
+      const r = bestBonus(q, p);
+      const id = "cup_" + Date.now();
+      state.ledger = {
+        cup_record_id: id,
+        member_display: "會員末碼 " + m,
+        product: prod,
+        paid_qty: q,
+        bonus_qty: r.bonus,
+        total_qty: q + r.bonus,
+        remaining_qty: q + r.bonus,
+        promo_id: r.promo,
+        status: "pending_member_ack",
+        receipt_hash: h(id + m + prod + q + r.bonus)
+      };
+      state.status = "pending_member_ack";
+      state.alert = null;
+      log("POS 建立記杯紀錄，等待會員確認");
+    }
+
+    function memberAck() {
+      if (!state.ledger) return log("無記杯紀錄");
+      state.ledger.status = "active";
+      state.status = "active";
+      log("會員端小J確認單據，記杯生效");
+    }
+
+    function redeemRequest() {
+      if (!state.ledger || state.ledger.status !== "active") return log("不可核銷：尚未 active");
+      if (state.ledger.remaining_qty < 1) return log("不可核銷：餘額不足");
+      state.alert = {
+        type: "cup_redeem_request",
+        message: state.ledger.member_display + " 請求核銷 1 杯 " + state.ledger.product,
+        requires_staff_confirm: true
+      };
+      state.ledger.status = "redeem_requested";
+      state.status = "pos_alerted";
+      log("店端 POS 收到核銷告警，等待店員確認");
+    }
+
+    function staffConfirm() {
+      if (!state.alert) return log("沒有待確認告警");
+      state.ledger.remaining_qty -= 1;
+      state.ledger.status = "active";
+      state.alert = null;
+      state.status = "redeemed_then_active";
+      log("店員確認，POS 扣杯完成，剩餘 " + state.ledger.remaining_qty + " 杯");
+    }
+
+    function resetAll() {
+      state = { status: "empty", ledger: null, alert: null, events: [] };
+      render();
+    }
+
+    function render() {
+      document.getElementById("alert").textContent = state.alert ? state.alert.message : "等待事件";
+      document.getElementById("out").textContent = JSON.stringify(state, null, 2);
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+{
+  "schema_version": "wuchang.public_review_envelope.v1",
+  "state": "PUBLIC_REVIEW_ENVELOPE_READY_FOR_REVIEW",
+  "generated_at_utc": "2026-07-03T02:42:00Z",
+  "domain": "http://wuchang.life",
+  "human_authority": true,
+  "llm_authority": false,
+  "production_release": "HOLD",
+  "decision_locked": true,
+  "public_static_demo": true,
+  "https_443": "HOLD_NOT_CONFIGURED",
+  "public_route_count": 22,
+  "forbidden_actions": [
+    "secret_read",
+    "member_plaintext_read",
+    "raw_audio_read",
+    "payment_capture",
+    "production_db_write",
+    "production_deploy_without_explicit_packet",
+    "grant_identity_role",
+    "override_verifier_decision"
+  ],
+  "public_routes": [
+    {
+      "path": "/",
+      "status": "PUBLIC_DEMO",
+      "purpose": "homepage and public mission"
+    },
+    {
+      "path": "/about/",
+      "status": "PUBLIC_MISSION",
+      "purpose": "about, mission, human authority, and governance principles"
+    },
+    {
+      "path": "/method/",
+      "status": "PUBLIC_METHOD",
+      "purpose": "plain-language 8D intent-field packet reconstruction method page"
+    },
+    {
+      "path": "/governance/",
+      "status": "PUBLIC_GOVERNANCE_WORKFLOW",
+      "purpose": "total-field and subfield governance workflow, human authority, verifier boundary, and production HOLD explanation"
+    },
+    {
+      "path": "/total_field_review/",
+      "status": "PUBLIC_REVIEW_GATE",
+      "purpose": "human-readable total-field status"
+    },
+    {
+      "path": "/total_field_review/envelope.html",
+      "status": "PUBLIC_REVIEW_ENVELOPE",
+      "purpose": "review evidence envelope"
+    },
+    {
+      "path": "/total_field_review/review_envelope.json",
+      "status": "MACHINE_READABLE_ENVELOPE",
+      "purpose": "machine-readable review status"
+    },
+    {
+      "path": "/property_management/",
+      "status": "PUBLIC_DEMO",
+      "purpose": "property management and resident services"
+    },
+    {
+      "path": "/programs/",
+      "status": "PUBLIC_PROGRAMS",
+      "purpose": "public programs and services overview"
+    },
+    {
+      "path": "/impact/",
+      "status": "PUBLIC_IMPACT",
+      "purpose": "public impact, evidence status, and landing roadmap"
+    },
+    {
+      "path": "/faq/",
+      "status": "PUBLIC_FAQ",
+      "purpose": "public FAQ and misconception guard"
+    },
+    {
+      "path": "/transparency/",
+      "status": "PUBLIC_TRANSPARENCY",
+      "purpose": "plain-language public status and transparency summary"
+    },
+    {
+      "path": "/nonprofit_readiness/",
+      "status": "PUBLIC_READINESS",
+      "purpose": "public nonprofit readiness and review evidence"
+    },
+    {
+      "path": "/contact/",
+      "status": "PUBLIC_CONTACT",
+      "purpose": "public contact and safety reporting boundary"
+    },
+    {
+      "path": "/xiaoj_member_browser_cockpit/",
+      "status": "STATIC_DEMO",
+      "purpose": "sovereign XiaoJ member cockpit"
+    },
+    {
+      "path": "/pos_promo_sandbox/",
+      "status": "SANDBOX",
+      "purpose": "POS promo sandbox without payment capture"
+    },
+    {
+      "path": "/w7tp_8d_control_panel.html",
+      "status": "STATIC_DEMO",
+      "purpose": "8D control panel"
+    },
+    {
+      "path": "/packet_inference_cockpit/",
+      "status": "HOLD_GATED",
+      "purpose": "packet inference cockpit public fallback"
+    },
+    {
+      "path": "/xiaoj_delivery_review_card/",
+      "status": "STATIC_DEMO",
+      "purpose": "volunteer delivery review card"
+    },
+    {
+      "path": "/xiaoj_openwebui_workbench/",
+      "status": "STATIC_DEMO",
+      "purpose": "local workbench candidate cards"
+    },
+    {
+      "path": "/privacy.html",
+      "status": "PUBLIC_POLICY",
+      "purpose": "privacy and safety boundary"
+    },
+    {
+      "path": "/.well-known/security.txt",
+      "status": "SECURITY_CONTACT",
+      "purpose": "security reporting contact"
+    }
+  ],
+  "evidence_reports": [
+    {
+      "run_id": "DEMO_ENTRY_PRODUCT_POLISH_20260702_230121",
+      "state": "PASS_DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_REVIEW",
+      "final_decision": "DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "DEMO_ENTRY_PRODUCT_POLISH_20260702_230302",
+      "state": "PASS_DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_REVIEW",
+      "final_decision": "DEMO_ENTRY_PRODUCT_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "HOMEPAGE_HUMAN_AI_AUTHORITY_20260702_223018",
+      "state": "PASS_HOMEPAGE_HUMAN_AI_AUTHORITY_LIVE",
+      "final_decision": "HUMAN_AI_AUTHORITY_COPY_LIVE__READY_FOR_TOTAL_FIELD_REVIEW"
+    },
+    {
+      "run_id": "HOMEPAGE_INTENT_FIELD_PHRASE_20260702_222826",
+      "state": "PASS_HOMEPAGE_INTENT_FIELD_PHRASE_LIVE",
+      "final_decision": "LIVE_COPY_UPDATED__READY_FOR_TOTAL_FIELD_REVIEW"
+    },
+    {
+      "run_id": "HOMEPAGE_PRODUCT_BITMAP_FINAL_20260702_231042",
+      "state": "PASS_HOMEPAGE_PRODUCT_BITMAP_POLISH_READY_FOR_REVIEW",
+      "final_decision": "READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "HOMEPAGE_REDTEAM_POLISH_20260702_222624",
+      "state": "PASS_HOMEPAGE_REDTEAM_POLISH_READY_FOR_TOTAL_FIELD_REVIEW",
+      "final_decision": "PUBLIC_HOMEPAGE_POLISH_READY_FOR_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_ABOUT_MISSION_POLISH_20260703_002256",
+      "state": "PASS_PUBLIC_ABOUT_MISSION_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_ABOUT_MISSION=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_ACCESSIBILITY_FORM_LABEL_POLISH_20260703_005620",
+      "state": "PASS_PUBLIC_ACCESSIBILITY_FORM_LABEL_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_ACCESSIBILITY_FORM_LABEL_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_ACCESSIBILITY_LABEL_ZERO_AUDIT_20260703_012025",
+      "state": "PASS_PUBLIC_ACCESSIBILITY_LABEL_ZERO_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_ACCESSIBILITY_LABEL_ZERO_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_BUTTON_TYPE_ACCESSIBILITY_AUDIT_20260703_020754",
+      "state": "PASS_PUBLIC_BUTTON_TYPE_ACCESSIBILITY_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_BUTTON_TYPE_ACCESSIBILITY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_CONTACT_SAFETY_POLISH_20260703_001038",
+      "state": "PASS_PUBLIC_CONTACT_SAFETY_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_CONTACT_SAFETY=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_COPY_OVERCLAIM_GUARD_AUDIT_20260703_013539",
+      "state": "PASS_PUBLIC_COPY_OVERCLAIM_GUARD_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_COPY_OVERCLAIM_GUARD_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_CRAWL_SECURITY_HARDENING_20260702_232736",
+      "state": "PASS_PUBLIC_CRAWL_SECURITY_HARDENING_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_CRAWL_SECURITY_HARDENING_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_DEMO_NAV_CONSISTENCY_POLISH_20260703_005110",
+      "state": "PASS_PUBLIC_DEMO_NAV_CONSISTENCY_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_DEMO_NAV_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_DEMO_RETURN_NAV_POLISH_20260703_004603",
+      "state": "PASS_PUBLIC_DEMO_RETURN_NAV_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_DEMO_RETURN_NAV_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_DEMO_SAFETY_FOOTER_CONSISTENCY_20260703_020318",
+      "state": "PASS_PUBLIC_DEMO_SAFETY_FOOTER_CONSISTENCY_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_DEMO_SAFETY_FOOTER_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_DIRECTORY_GUARD_POLISH_20260702_234251",
+      "state": "PASS_PUBLIC_DIRECTORY_GUARD_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_DIRECTORY_GUARD_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_EXECUTABLE_ASSET_ENVELOPE_20260703_014412",
+      "state": "PASS_PUBLIC_EXECUTABLE_ASSET_ENVELOPE_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_EXECUTABLE_ASSET_ENVELOPE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_EXTENSION_PROTOTYPE_BOUNDARY_AUDIT_20260703_021204",
+      "state": "PASS_PUBLIC_EXTENSION_PROTOTYPE_BOUNDARY_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_EXTENSION_PROTOTYPE_BOUNDARY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_FAQ_MISCONCEPTION_GUARD_POLISH_20260703_003254",
+      "state": "PASS_PUBLIC_FAQ_MISCONCEPTION_GUARD_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_FAQ_MISCONCEPTION_GUARD=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_ICON_ASSET_ENVELOPE_20260703_022119",
+      "state": "PASS_PUBLIC_ICON_ASSET_ENVELOPE_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_ICON_ASSET_ENVELOPE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_IMAGE_DIMENSION_STABILITY_AUDIT_20260703_021521",
+      "state": "PASS_PUBLIC_IMAGE_DIMENSION_STABILITY_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_IMAGE_DIMENSION_STABILITY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_IMAGE_PRELOAD_ASSET_AUDIT_20260703_011359",
+      "state": "PASS_PUBLIC_IMAGE_PRELOAD_ASSET_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_IMAGE_PRELOAD_ASSET_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_IMPACT_ROADMAP_POLISH_20260703_002805",
+      "state": "PASS_PUBLIC_IMPACT_ROADMAP_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_IMPACT_ROADMAP=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_INDEX_METADATA_CONSISTENCY_AUDIT_20260703_012808",
+      "state": "PASS_PUBLIC_INDEX_METADATA_CONSISTENCY_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_INDEX_METADATA_CONSISTENCY_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_MACHINE_READABLE_ARTIFACT_AUDIT_20260703_011039",
+      "state": "PASS_PUBLIC_MACHINE_READABLE_ARTIFACT_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_MACHINE_READABLE_ARTIFACT_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_METADATA_TITLE_POLISH_20260703_010123",
+      "state": "PASS_PUBLIC_METADATA_TITLE_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_METADATA_TITLE_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_METHOD_PAGE_8D_INTENT_FIELD_20260703_015938",
+      "state": "PASS_PUBLIC_METHOD_PAGE_8D_INTENT_FIELD_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_METHOD_PAGE_8D_INTENT_FIELD_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_GOVERNANCE_WORKFLOW_PAGE_20260703_022916",
+      "state": "PASS_PUBLIC_GOVERNANCE_WORKFLOW_PAGE_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_GOVERNANCE_WORKFLOW_PAGE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_GOVERNANCE_NAV_CONSISTENCY_20260703_023748",
+      "state": "PASS_PUBLIC_GOVERNANCE_NAV_CONSISTENCY_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_GOVERNANCE_NAV_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_RENDER_LAYOUT_AUDIT_20260703_024200",
+      "state": "PASS_PUBLIC_RENDER_LAYOUT_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_RENDER_LAYOUT_AUDIT_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_NONPROFIT_READINESS_POLISH_20260703_000451",
+      "state": "PASS_PUBLIC_NONPROFIT_READINESS_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_NONPROFIT_READINESS=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_PRODUCTION_RELEASE_HOLD_MANIFEST_20260703_014950",
+      "state": "PASS_PUBLIC_PRODUCTION_RELEASE_HOLD_MANIFEST_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_PRODUCTION_RELEASE_HOLD_MANIFEST_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_PROGRAMS_SERVICES_POLISH_20260703_001818",
+      "state": "PASS_PUBLIC_PROGRAMS_SERVICES_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_PROGRAMS_SERVICES=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_RELEASE_MANIFEST_WORDING_CONSISTENCY_20260703_015330",
+      "state": "PASS_PUBLIC_RELEASE_MANIFEST_WORDING_CONSISTENCY_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_RELEASE_MANIFEST_WORDING_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_REVIEW_ENVELOPE_POLISH_20260702_235400",
+      "state": "PASS_PUBLIC_REVIEW_ENVELOPE_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_REVIEW_ENVELOPE=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_REVIEW_GATE_FINAL_20260702_232125",
+      "state": "PASS_PUBLIC_REVIEW_GATE_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_REVIEW_GATE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_REVIEW_ROUTE_TABLE_CONSISTENCY_20260703_012450",
+      "state": "PASS_PUBLIC_REVIEW_ROUTE_TABLE_CONSISTENCY_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_REVIEW_ROUTE_TABLE_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_SECURITY_TXT_TRUST_BOUNDARY_20260703_022441",
+      "state": "PASS_PUBLIC_SECURITY_TXT_TRUST_BOUNDARY_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_SECURITY_TXT_TRUST_BOUNDARY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_SEMANTIC_ACCESSIBILITY_FINAL_20260702_233430",
+      "state": "PASS_PUBLIC_SEMANTIC_ACCESSIBILITY_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_SEMANTIC_ACCESSIBILITY_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_SITEMAP_LASTMOD_CONSISTENCY_20260703_021826",
+      "state": "PASS_PUBLIC_SITEMAP_LASTMOD_CONSISTENCY_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_SITEMAP_LASTMOD_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_STATIC_SECURITY_META_POLISH_20260702_234725",
+      "state": "PASS_PUBLIC_STATIC_SECURITY_META_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_STATIC_SECURITY_META_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_STRUCTURED_DATA_SCHEMA_POLISH_20260703_013225",
+      "state": "PASS_PUBLIC_STRUCTURED_DATA_SCHEMA_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_STRUCTURED_DATA_SCHEMA_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_SURFACE_AUXILIARY_ARTIFACT_ENVELOPE_20260703_014025",
+      "state": "PASS_PUBLIC_SURFACE_AUXILIARY_ARTIFACT_ENVELOPE_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_SURFACE_AUXILIARY_ARTIFACT_ENVELOPE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "PUBLIC_TRANSPARENCY_STATUS_POLISH_20260703_003753",
+      "state": "PASS_PUBLIC_TRANSPARENCY_STATUS_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_TRANSPARENCY_STATUS=PASS_READY_FOR_HUMAN_REVIEW; PRODUCTION_RELEASE=HOLD"
+    },
+    {
+      "run_id": "PUBLIC_TRUST_CONTACT_CONSISTENCY_AUDIT_20260703_010602",
+      "state": "PASS_PUBLIC_TRUST_CONTACT_CONSISTENCY_AUDIT_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_TRUST_CONTACT_CONSISTENCY_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "SITE_METADATA_SEO_POLISH_20260702_224852",
+      "state": "PASS_SITE_METADATA_SEO_POLISH_READY_FOR_REVIEW",
+      "final_decision": "PUBLIC_SITE_METADATA_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "SITE_PRODUCT_GRADE_REDTEAM_20260702_224137",
+      "state": "PASS_PRODUCT_GRADE_REDTEAM_POLISH_READY_FOR_TOTAL_FIELD_REVIEW",
+      "final_decision": "PUBLIC_SITE_PRODUCT_POLISH_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    },
+    {
+      "run_id": "SITE_SUBPAGE_METADATA_REDTEAM_20260702_225417",
+      "state": "PASS_SUBPAGE_METADATA_AND_FALSE_SECRET_REVIEW_READY",
+      "final_decision": "PUBLIC_SUBPAGE_METADATA_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD"
+    }
+  ],
+  "evidence_report_count": 49,
+  "remaining_holds": [
+    "HTTPS/TLS port 443 is not configured.",
+    "Formal nonprofit/legal registration evidence and annual report are not published.",
+    "Domain or Search Console ownership verification is not sealed in public evidence.",
+    "Public HOLD manifest exists; evidence seal and release approval manifest are not complete.",
+    "Verifier-backed release gate is not complete.",
+    "Server-level security headers remain a production-hardening item."
+  ],
+  "final_decision": "PUBLIC_REVIEW_ENVELOPE_READY_FOR_TOTAL_FIELD_REVIEW__PRODUCTION_RELEASE_REMAINS_HOLD",
+  "evidence_scope": "Public static site polish runtime reports; envelope sync meta reports and local runtime paths are omitted from this public envelope.",
+  "auxiliary_public_artifacts": [
+    {
+      "path": "/.well-known/",
+      "status": "NOINDEX_GUARD",
+      "purpose": "directory guard for well-known public metadata area"
+    },
+    {
+      "path": "/assets/",
+      "status": "NOINDEX_GUARD",
+      "purpose": "directory guard for public visual assets"
+    },
+    {
+      "path": "/favicon.svg",
+      "status": "PUBLIC_SITE_ICON",
+      "purpose": "site favicon referenced by public pages and site.webmanifest; visual identity only, no script or data authority"
+    },
+    {
+      "path": "/community_activities.json",
+      "status": "ROBOTS_DISALLOW_PUBLIC_JSON",
+      "purpose": "public-only community activity seed; candidate-only, no member plaintext, disallowed from indexing"
+    },
+    {
+      "path": "/robots.txt",
+      "status": "CRAWL_POLICY",
+      "purpose": "crawl policy for sitemap, extension guard, and public JSON exclusion"
+    },
+    {
+      "path": "/site.webmanifest",
+      "status": "WEB_APP_MANIFEST",
+      "purpose": "site-level manifest for public homepage install metadata"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": "SITEMAP",
+      "purpose": "indexable public route list"
+    },
+    {
+      "path": "/xiaoj_member_browser_cockpit/manifest.webmanifest",
+      "status": "WEB_APP_MANIFEST",
+      "purpose": "manifest for XiaoJ member cockpit static demo"
+    },
+    {
+      "path": "/xiaoj_member_browser_cockpit/icon.svg",
+      "status": "PUBLIC_COCKPIT_ICON",
+      "purpose": "XiaoJ cockpit manifest icon; visual identity only, no script or data authority"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/",
+      "status": "ROBOTS_DISALLOW_NOINDEX_GUARD",
+      "purpose": "browser extension directory guard; not a public member entry"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/manifest.json",
+      "status": "ROBOTS_DISALLOW_EXTENSION_MANIFEST",
+      "purpose": "browser extension test manifest; excluded from public indexing"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/README.md",
+      "status": "ROBOTS_DISALLOW_EXTENSION_README",
+      "purpose": "browser extension prototype README; documents permissions and safety boundaries, excluded from public indexing"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/native_host/",
+      "status": "ROBOTS_DISALLOW_NOINDEX_GUARD",
+      "purpose": "native host template directory guard; not an enabled local host"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/native_host/tw.taiji.xiaoj_member_browser_gateway.template.json",
+      "status": "ROBOTS_DISALLOW_TEMPLATE",
+      "purpose": "native host template with placeholders only; no secrets, excluded from public indexing"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/sidepanel.html",
+      "status": "ROBOTS_DISALLOW_NOINDEX_PROTOTYPE",
+      "purpose": "extension sidepanel prototype; noindex and not a public member entry"
+    },
+    {
+      "path": "/total_field_review/production_release_hold_manifest.json",
+      "status": "MACHINE_READABLE_HOLD_MANIFEST",
+      "purpose": "machine-readable public HOLD manifest; confirms production release is locked and lists release prerequisites"
+    }
+  ],
+  "auxiliary_public_artifact_count": 16,
+  "auxiliary_public_artifact_scope": "Publicly retrievable support files, manifests, directory guards, and disallowed/noindex prototypes. These are not counted as primary public routes and are not included in sitemap unless indexable.",
+  "executable_public_assets": [
+    {
+      "path": "/packet_inference_cockpit/app.js",
+      "status": "STATIC_DEMO_SCRIPT",
+      "purpose": "packet inference cockpit UI logic; calls same-origin API only and falls back to static HOLD-gated response"
+    },
+    {
+      "path": "/packet_inference_cockpit/styles.css",
+      "status": "STATIC_STYLE",
+      "purpose": "packet inference cockpit presentation only"
+    },
+    {
+      "path": "/xiaoj_member_browser_cockpit/app.js",
+      "status": "STATIC_DEMO_SCRIPT",
+      "purpose": "sovereign XiaoJ cockpit packet builder and local safety simulation; no DB write or payment capture"
+    },
+    {
+      "path": "/xiaoj_member_browser_cockpit/styles.css",
+      "status": "STATIC_STYLE",
+      "purpose": "sovereign XiaoJ cockpit presentation only"
+    },
+    {
+      "path": "/xiaoj_member_browser_cockpit/sw.js",
+      "status": "SAME_ORIGIN_SERVICE_WORKER",
+      "purpose": "same-origin cache for cockpit demo assets only"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/background.js",
+      "status": "ROBOTS_DISALLOW_EXTENSION_SCRIPT",
+      "purpose": "extension background prototype with blocked high-risk actions and no host permissions"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/sidepanel.css",
+      "status": "ROBOTS_DISALLOW_STATIC_STYLE",
+      "purpose": "extension sidepanel presentation only"
+    },
+    {
+      "path": "/xiaoj_member_browser_extension/sidepanel.js",
+      "status": "ROBOTS_DISALLOW_EXTENSION_SCRIPT",
+      "purpose": "extension sidepanel prototype; candidate-only ref actions with boundary detection"
+    }
+  ],
+  "executable_public_asset_count": 8,
+  "executable_public_asset_scope": "Publicly retrievable JS/CSS assets that can affect static demo behavior. They are audited separately from primary public routes and remain subject to HOLD/no-secret/no-member-plaintext/no-payment/no-production-write boundaries.",
+  "production_release_hold_manifest": {
+    "path": "/total_field_review/production_release_hold_manifest.json",
+    "state": "PRODUCTION_RELEASE_HOLD_MANIFEST_ACTIVE",
+    "production_release": "HOLD",
+    "human_authority": true,
+    "llm_authority": false,
+    "decision_locked": true,
+    "purpose": "machine-readable public HOLD manifest; confirms production release is locked and lists release prerequisites",
+    "final_decision": "PUBLIC_HOLD_MANIFEST_ACTIVE__PRODUCTION_RELEASE_REMAINS_HOLD"
+  }
+}

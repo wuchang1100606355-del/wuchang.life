@@ -3,690 +3,84 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="五常社區發展協會願景形象首頁，連接商業聯合銷售、物業管理、會員登入、社區許願樹、社區幣票券兌換與社區活動平台。">
-  <title>五常社區發展協會｜社區願景與數位服務平台</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #16202d;
-      --muted: #5f6876;
-      --surface: #ffffff;
-      --wash: #f4f8f7;
-      --line: #d8e1e3;
-      --forest: #17634d;
-      --blue: #2559aa;
-      --gold: #94630a;
-      --rose: #a54658;
-      --plum: #623c87;
-      --teal: #0d6c78;
-      --shadow: 0 18px 46px rgba(18, 32, 48, .10);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: #edf4f2;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Segoe UI", sans-serif;
-      line-height: 1.65;
-    }
-
-    a {
-      color: inherit;
-    }
-
-    .skip {
-      position: absolute;
-      left: 12px;
-      top: -48px;
-      z-index: 10;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: #fff;
-      box-shadow: var(--shadow);
-      font-weight: 800;
-    }
-
-    .skip:focus {
-      top: 12px;
-    }
-
-    header {
-      border-bottom: 1px solid rgba(216, 225, 227, .88);
-      background: rgba(255, 255, 255, .95);
-    }
-
-    .nav,
-    main,
-    footer {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .nav {
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 230px;
-      text-decoration: none;
-    }
-
-    .mark {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      border-radius: 8px;
-      color: #fff;
-      background: var(--forest);
-      font-weight: 900;
-    }
-
-    .brand strong,
-    .brand span {
-      display: block;
-    }
-
-    .brand strong {
-      font-size: 16px;
-      line-height: 1.25;
-    }
-
-    .brand span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    nav ul {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    nav a,
-    .button {
-      min-height: 40px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 12px;
-      border: 1px solid transparent;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 850;
-    }
-
-    nav a {
-      color: var(--muted);
-    }
-
-    nav a:hover,
-    nav a:focus,
-    .button:focus {
-      outline: 3px solid rgba(23, 99, 77, .18);
-      color: var(--ink);
-      background: #eef4f2;
-    }
-
-    main {
-      padding: 24px 0 34px;
-    }
-
-    .hero {
-      min-height: calc(100vh - 118px);
-      display: grid;
-      grid-template-columns: minmax(0, 1.04fr) minmax(320px, .96fr);
-      gap: 22px;
-      align-items: stretch;
-      margin-bottom: 24px;
-    }
-
-    .vision,
-    .visionPanel,
-    .platformCard,
-    .panel,
-    .promise {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-    }
-
-    .vision {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: clamp(24px, 5vw, 48px);
-    }
-
-    .eyebrow {
-      margin: 0 0 12px;
-      color: var(--forest);
-      font-weight: 900;
-      letter-spacing: 0;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin-top: 0;
-    }
-
-    h1 {
-      max-width: 12em;
-      margin-bottom: 16px;
-      font-size: clamp(36px, 6vw, 70px);
-      line-height: 1.04;
-      letter-spacing: 0;
-    }
-
-    .lead {
-      max-width: 42em;
-      color: #394656;
-      font-size: 19px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 24px;
-      flex-wrap: wrap;
-    }
-
-    .button.primary {
-      color: #fff;
-      background: var(--forest);
-    }
-
-    .button.secondary {
-      color: #fff;
-      background: var(--blue);
-    }
-
-    .button.ghost {
-      border-color: var(--line);
-      background: #f8fbfa;
-    }
-
-    .motto {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 28px;
-    }
-
-    .motto div {
-      min-height: 92px;
-      padding: 12px;
-      border: 1px solid #d9e5e4;
-      border-radius: 8px;
-      background: #f9fcfb;
-    }
-
-    .motto strong {
-      display: block;
-      font-size: 20px;
-    }
-
-    .motto span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .visionPanel {
-      min-height: 100%;
-      padding: 18px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.96)),
-        radial-gradient(circle at 28% 22%, rgba(23, 99, 77, .18), transparent 30%),
-        radial-gradient(circle at 78% 70%, rgba(148, 99, 10, .16), transparent 28%);
-    }
-
-    .photoLike {
-      min-height: 320px;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      border: 1px solid #d8e3df;
-      border-radius: 8px;
-      background:
-        linear-gradient(145deg, rgba(21, 80, 61, .86), rgba(32, 83, 110, .82)),
-        linear-gradient(45deg, #d7eee6, #f6ead1);
-      color: #fff;
-      text-align: center;
-    }
-
-    .photoLike strong {
-      display: block;
-      font-size: clamp(24px, 4vw, 42px);
-      line-height: 1.12;
-    }
-
-    .photoLike span {
-      display: block;
-      max-width: 22em;
-      margin: 12px auto 0;
-      color: rgba(255, 255, 255, .84);
-    }
-
-    .visionList {
-      display: grid;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .visionItem {
-      display: grid;
-      grid-template-columns: 38px minmax(0, 1fr);
-      gap: 10px;
-      align-items: start;
-      padding: 12px;
-      border: 1px solid #d9e4e2;
-      border-radius: 8px;
-      background: #fbfdfc;
-    }
-
-    .visionItem b {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border-radius: 8px;
-      color: #fff;
-      background: var(--forest);
-      font-size: 13px;
-    }
-
-    .visionItem strong {
-      display: block;
-    }
-
-    .visionItem span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .sectionHead {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 26px 0 14px;
-    }
-
-    .sectionHead h2 {
-      margin-bottom: 0;
-      font-size: clamp(24px, 3vw, 34px);
-      line-height: 1.18;
-    }
-
-    .sectionHead p {
-      max-width: 45em;
-      margin-bottom: 0;
-      color: var(--muted);
-    }
-
-    .platforms {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-      gap: 14px;
-    }
-
-    .platformCard {
-      min-height: 312px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 16px;
-      text-decoration: none;
-    }
-
-    .platformCard:hover,
-    .platformCard:focus {
-      border-color: #a8c8c0;
-      outline: 3px solid rgba(23, 99, 77, .18);
-    }
-
-    .platformIcon {
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      border-radius: 8px;
-      color: #fff;
-      background: var(--forest);
-      font-weight: 900;
-      font-size: 20px;
-    }
-
-    .platformCard.sales .platformIcon {
-      background: var(--rose);
-    }
-
-    .platformCard.property .platformIcon {
-      background: var(--blue);
-    }
-
-    .platformCard.member .platformIcon {
-      background: var(--plum);
-    }
-
-    .platformCard.wish .platformIcon {
-      background: var(--gold);
-    }
-
-    .platformCard.coin .platformIcon {
-      background: #5b6f21;
-    }
-
-    .platformCard.activity .platformIcon {
-      background: var(--teal);
-    }
-
-    .tagRow {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      min-height: 24px;
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 8px;
-      border-radius: 8px;
-      color: #253247;
-      background: #eaf0f2;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .platformCard h3 {
-      margin-bottom: 0;
-      font-size: 20px;
-    }
-
-    .platformCard p {
-      color: var(--muted);
-      margin-bottom: auto;
-    }
-
-    .platformLink {
-      color: var(--blue);
-      font-size: 13px;
-      font-weight: 900;
-      overflow-wrap: anywhere;
-    }
-
-    .qualityGrid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 14px;
-    }
-
-    .panel,
-    .promise {
-      padding: 16px;
-    }
-
-    .checkList,
-    .promiseList {
-      display: grid;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .checkList li,
-    .promiseList li {
-      padding: 10px 12px;
-      border: 1px solid #dce5e7;
-      border-radius: 8px;
-      background: #fbfdfd;
-    }
-
-    .checkList strong,
-    .promiseList strong {
-      display: block;
-    }
-
-    .checkList span,
-    .promiseList span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    footer {
-      padding: 20px 0 30px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    @media (max-width: 1080px) {
-      .platforms {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 800px) {
-      .platforms {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 940px) {
-      .hero,
-      .qualityGrid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        min-height: auto;
-      }
-
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 14px 0;
-      }
-
-      nav ul {
-        justify-content: flex-start;
-      }
-    }
-
-    @media (max-width: 620px) {
-      .motto,
-      .platforms {
-        grid-template-columns: 1fr;
-      }
-
-      .actions .button {
-        width: 100%;
-      }
-
-      .sectionHead {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-  </style>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="五常社區發展協會與小J主權AI服務公開網站，整理協會願景、服務預告、技術方法、創辦人宣言、會員招募與聯絡方式。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#164f3a">
+  <link rel="canonical" href="http://wuchang.life/">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./site.webmanifest">
+  <link rel="stylesheet" href="./assets/wuchang-site-design.css">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常社區發展協會｜小J主權AI服務">
+  <meta property="og:title" content="五常社區發展協會｜小J主權AI服務">
+  <meta property="og:description" content="五常社區發展協會與小J主權AI服務公開網站，整理協會願景、服務預告、技術方法、創辦人宣言、會員招募與聯絡方式。">
+  <meta property="og:url" content="http://wuchang.life/">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="五常社區發展協會｜小J主權AI服務">
+  <meta name="twitter:description" content="五常社區發展協會與小J主權AI服務公開網站，整理協會願景、服務預告、技術方法、創辦人宣言、會員招募與聯絡方式。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>五常社區發展協會｜小J主權AI服務</title>
 </head>
 <body>
-  <a class="skip" href="#main">跳到主要內容</a>
-  <header>
-    <div class="nav">
-      <a class="brand" href="./index.html" aria-label="回到五常社區發展協會首頁">
-        <span class="mark" aria-hidden="true">五</span>
-        <span>
-          <strong>五常社區發展協會</strong>
-          <span>願景、服務、平台入口</span>
-        </span>
+<a class="skip" href="#main">跳到主要內容</a>
+<div class="site-shell">
+  <header class="site-header">
+    <div class="brand-row">
+      <a class="brand-lockup" href="./" aria-label="回到首頁">
+        <span class="logo-mark" aria-hidden="true">五</span>
+        <span class="brand-text"><strong>五常社區發展協會｜小J主權AI服務</strong><span>社區公益、主權 AI、總場候選治理</span></span>
       </a>
-      <nav aria-label="主要導覽">
-        <ul>
-          <li><a href="#vision">協會願景</a></li>
-          <li><a href="#platforms">六大平台</a></li>
-          <li><a href="#quality">網站品質</a></li>
-          <li><a href="/google/member/login">會員登入</a></li>
-        </ul>
-      </nav>
+      <a class="cafe-lockup" href="./founder_manifesto/" aria-label="查看創辦人宣言">
+        <span class="cafe-mark" aria-hidden="true">啡</span>
+        <span><strong>上品聊國咖啡</strong><span>技術測試場與 proof-of-use</span></span>
+      </a>
     </div>
+    <nav class="site-nav" aria-label="主要導覽">
+      <div class="nav-links"><a href="./" aria-current="page">首頁</a><a href="./about/">協會願景</a><a href="./programs/">服務預告</a><a href="./method/">技術方法</a><a href="./founder_manifesto/">創辦人宣言</a><a href="./member_recruitment/">會員招募</a><a href="./contact/">聯絡我們</a></div>
+      <div class="nav-actions">
+        <a class="support" href="./impact/">表示支持</a>
+        <a class="join" href="./member_recruitment/">加入意願</a>
+      </div>
+    </nav>
   </header>
-
   <main id="main">
-    <section class="hero" id="vision" aria-labelledby="site-title">
-      <div class="vision">
-        <p class="eyebrow">Community First, Technology With Care</p>
-        <h1 id="site-title">讓社區成為守護家的公共力量</h1>
-        <p class="lead">
-          五常社區發展協會以在地互助、公益循環、數位主權與透明治理為核心，
-          把商家、物業、會員、許願樹、社區幣票券兌換與活動參與連成一個可以被信任、被參與、被稽核的生活服務網。
-        </p>
-        <div class="actions" aria-label="主要入口">
-          <a class="button primary" href="#platforms">查看六大平台</a>
-          <a class="button secondary" href="/google/member/login">加入或登入會員</a>
-          <a class="button ghost" href="./xiaoj_member_browser_cockpit/">啟用小J</a>
-        </div>
-        <div class="motto" aria-label="協會定位">
-          <div><strong>家</strong><span>讓住戶安心取得服務、資訊與協助。</span></div>
-          <div><strong>店</strong><span>讓在地商家加入聯合銷售與票券循環。</span></div>
-          <div><strong>聚</strong><span>讓活動、志工與願望形成可持續的社區參與。</span></div>
-        </div>
-      </div>
+    <div class="page-label">首頁<small>Home</small></div>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">五常社區發展協會 × 小J主權AI服務</p>
+        <h1 id="page-title">科技善用，在地共好<br>AI 助力社區，讓生活更美好</h1>
+        <p class="lead">五常智慧雲把社區公益、物業協作、在地商家、會員招募與主權 AI 個人管家小J整理成同一個可審查入口。公開頁只呈現方向與候選服務；正式身份、付款、DB 寫入、部署與 release 仍回到人類確認與總場 verifier。</p>
+        <div class="hero-actions"><a class="button primary" href="./member_recruitment/">加入意願</a><a class="button support" href="./impact/">表示支持</a><a class="button support" href="./total_field_review/">查看審查</a></div>
 
-      <aside class="visionPanel" aria-labelledby="vision-panel-title">
-        <div class="photoLike">
-          <div>
-            <strong id="vision-panel-title">協會願景形象頁</strong>
-            <span>首頁先建立公共信任，再導向商業聯合銷售、物業管理、會員登入、社區許願樹、社區幣票券兌換與社區活動。</span>
-          </div>
-        </div>
-        <div class="visionList">
-          <div class="visionItem"><b>公</b><span><strong>公益治理</strong><span>協會統籌公共願景、志工、活動、公益幣、許願樹與設備升級。</span></span></div>
-          <div class="visionItem"><b>商</b><span><strong>在地經濟</strong><span>商家平台承接聯合銷售、待用餐、服務商品與回饋機制。</span></span></div>
-          <div class="visionItem"><b>住</b><span><strong>住戶服務</strong><span>物業平台承接公告、報修、包裹、管理費支付意圖與管委會協作。</span></span></div>
-          <div class="visionItem"><b>AI</b><span><strong>主權小J</strong><span>會員以 8D 無敏封包使用 AI，雲端只回候選，本地總場准駁。</span></span></div>
-        </div>
-      </aside>
+      </div>
+      <figure class="hero-media">
+        <picture>
+            <source srcset="./assets/homepage-intent-field-hero.webp" type="image/webp">
+            <img src="./assets/homepage-intent-field-hero.png" width="1672" height="941" alt="本源意圖場 8 維度空間封包拓樸圖：把社區服務、能力驗證、候選封包與人類確認放回同一張可審查地圖。" decoding="async" fetchpriority="high">
+          </picture>
+      </figure>
     </section>
-
-    <section id="platforms" aria-labelledby="platform-title">
-      <div class="sectionHead">
-        <div>
-          <p class="eyebrow">Service Platforms</p>
-          <h2 id="platform-title">六大平台入口</h2>
-        </div>
-        <p>首頁不直接承載所有後台功能，而是用清楚的形象與入口，把不同使用者送到正確平台。</p>
-      </div>
-
-      <div class="platforms">
-        <a class="platformCard sales" href="/shop">
-          <span class="platformIcon" aria-hidden="true">商</span>
-          <div class="tagRow"><span class="tag">商業聯合</span><span class="tag">POS</span><span class="tag">公益回饋</span></div>
-          <h3>商業聯合銷售平台</h3>
-          <p>串接在地商家、咖啡館、服務商品、待用餐與社區回饋。銷售資料與會員資料分窗治理。</p>
-          <span class="platformLink">/shop</span>
-        </a>
-
-        <a class="platformCard property" href="/web">
-          <span class="platformIcon" aria-hidden="true">物</span>
-          <div class="tagRow"><span class="tag">物業</span><span class="tag">公告報修</span><span class="tag">管理費</span></div>
-          <h3>物業管理平台</h3>
-          <p>承接社區、棟別、戶號、公告、包裹、住戶反映與管理費支付意圖。支付需住戶確認。</p>
-          <span class="platformLink">/web</span>
-        </a>
-
-        <a class="platformCard member" href="/google/member/login">
-          <span class="platformIcon" aria-hidden="true">會</span>
-          <div class="tagRow"><span class="tag">會員</span><span class="tag">登入</span><span class="tag">小J</span></div>
-          <h3>會員登入平台</h3>
-          <p>會員加入後取得 8D member_ref 與小J服務入口。API/OAuth/BYOK 只以 ref 連接，不公開密鑰。</p>
-          <span class="platformLink">/google/member/login</span>
-        </a>
-
-        <a class="platformCard wish" href="/web">
-          <span class="platformIcon" aria-hidden="true">願</span>
-          <div class="tagRow"><span class="tag">許願樹</span><span class="tag">公益幣</span><span class="tag">審核</span></div>
-          <h3>社區許願樹平台</h3>
-          <p>居民提出願望，協會審核願望牌，公益幣支持可實現的公共需求，不公開提案人敏感資料。</p>
-          <span class="platformLink">Odoo: 社區許願樹公益幣</span>
-        </a>
-
-        <a class="platformCard coin" href="/wuchang/tickets">
-          <span class="platformIcon" aria-hidden="true">券</span>
-          <div class="tagRow"><span class="tag">社區幣</span><span class="tag">票券</span><span class="tag">兌換</span></div>
-          <h3>社區幣/票券兌換平台</h3>
-          <p>承接幸福幣、商家票券、折抵憑證、準備金保付、兌換、過期、核銷與錯帳更正，避免被誤認為金融商品。</p>
-          <span class="platformLink">/wuchang/tickets</span>
-        </a>
-
-        <a class="platformCard activity" href="/web">
-          <span class="platformIcon" aria-hidden="true">活</span>
-          <div class="tagRow"><span class="tag">活動</span><span class="tag">報名</span><span class="tag">熱舞社</span></div>
-          <h3>社區活動平台</h3>
-          <p>固定活動：每週一至週五 20:00-21:00，五常公園熱舞社運動社團，可供社區婦女參與。報名送出需會員確認。</p>
-          <span class="platformLink">Odoo: community_event / volunteer</span>
-        </a>
-      </div>
-    </section>
-
-    <section id="quality" aria-labelledby="quality-title">
-      <div class="sectionHead">
-        <div>
-          <p class="eyebrow">Website Quality</p>
-          <h2 id="quality-title">品質與安全邊界</h2>
-        </div>
-        <p>網站品質不只看漂亮，也要可用、可讀、可維護、可稽核，並且不把敏感資訊放到公開頁。</p>
-      </div>
-
-      <div class="qualityGrid">
-        <div class="panel">
-          <h3>形象頁品質</h3>
-          <ul class="checkList">
-            <li><strong>第一屏先講協會願景</strong><span>公共信任與服務方向優先，工程工具收在平台入口之後。</span></li>
-            <li><strong>六平台清楚分流</strong><span>商業聯合銷售、物業管理、會員登入、社區許願樹、社區幣/票券兌換、社區活動各有明確目標。</span></li>
-            <li><strong>手機與鍵盤可操作</strong><span>語意導覽、skip link、穩定卡片尺寸與清楚 focus 狀態。</span></li>
-          </ul>
-        </div>
-
-        <div class="promise">
-          <h3>安全承諾</h3>
-          <ul class="promiseList">
-            <li><strong>會員資料不公開</strong><span>姓名、電話、地址、ID、raw audio、cookie、OAuth token、API key 不進首頁。</span></li>
-            <li><strong>支付不自動扣款</strong><span>管理費只能產生候選支付意圖與支付工具參照，扣款需會員確認與正式流程。</span></li>
-            <li><strong>AI 不繞過總場</strong><span>小J與雲端候選算力需回到本地 verifier 決定 ALLOW / HOLD / BLOCK。</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <p>SAFETY_FLAGS: SECRET_READ=FALSE · MEMBER_PLAINTEXT_READ=FALSE · RAW_API_KEY_OUTPUT=FALSE · DB_WRITE=FALSE · PAYMENT_CAPTURE=FALSE · DEPLOY=FALSE</p>
-    </footer>
+<section class="content-band" aria-labelledby="sec-home-focus">
+  <div class="section-head"><div><p class="eyebrow">Total Field Extract</p><h2 id="sec-首頁重點">首頁重點</h2></div><p>系統資訊來自總場文件與公開展示現況，不把預告當作正式上線。</p></div>
+  <div class="card-grid"><article class="card"><div class="card-icon">心</div><h3>在地共好</h3><p>連接居民、長輩、志工、協會、物業與在地商家，建立能被看懂與追蹤的公共入口。</p></article><article class="card"><div class="card-icon">J</div><h3>AI 智慧助力</h3><p>小J是候選層服務人設，可協助理解、整理、提醒，但不是總場、資料庫或正式決策者。</p></article><article class="card"><div class="card-icon">啡</div><h3>商業支持公益</h3><p>上品聊國咖啡可作為技術開發商測試場與 proof-of-use，但不得與協會非營利資源混同。</p></article><article class="card"><div class="card-icon">盾</div><h3>隱私與安全</h3><p>會員明文、secret、token、raw audio、付款、正式 DB 寫入與 production release 均維持 HOLD。</p></article></div>
+</section>
+<section class="content-band alt" aria-labelledby="sec-position">
+  <div class="section-head"><div><p class="eyebrow">Positioning</p><h2 id="sec-我們的定位在地居民的支持夥伴">我們的定位：在地居民的支持夥伴</h2></div><p>社區總場不是單一店家頁，也不是普通聊天機器人。</p></div>
+  <div class="promise-grid"><article class="notice"><h3>真實社區脈絡</h3><p>五常社區總場可包含協會、物業、商業、地域、創辦人推算與社區文獻庫；這些只作候選路由與設計依據，不自動變成正式身份或權限。</p></article><article class="notice"><h3>清楚公開邊界</h3><p>公開網站可展示願景、服務預告、技術方法與會員意願；正式身份、付款、角色升級、formal send、deploy、TIPO submission 均需另包授權。</p></article></div>
+</section>
   </main>
+  <footer class="system-footer">
+    <h2>系統資訊</h2>
+    <div class="system-info"><div><strong>專利聲明</strong><span>本頁為公開展示與送審準備，不等於專利核准；核心規則與營業秘密僅以 ref-only 留存。</span></div><div><strong>私隱權宣言</strong><span>不公開會員明文、secret、token、raw audio、付款資料或照護明細。</span></div><div><strong>組織名稱</strong><span>五常社區發展協會；社區、物業、商家與公益服務以總場治理分流。</span></div><div><strong>關聯組織名稱</strong><span>五常社區發展協會 × 小J主權 AI 服務開發團隊；上品聊國咖啡為測試場域。</span></div><div><strong>Google 非營利界線</strong><span>非營利資源僅可支援公益、教育、治理與無敏候選封包；不代表 Google 核准或保證。</span></div><div><strong>營運資格與補助</strong><span>預告版、招募中、部分功能準備中；正式補助、付款、DB 寫入與 release 仍 HOLD。</span></div></div>
+    <div class="footer-bottom">
+      <span>預告版</span><span>|</span><span>招募中</span><span>|</span><span>部分功能準備中</span>
+      <span>|</span><a href="./transparency/">透明狀態</a><span>|</span><a href="./total_field_review/">總場審查</a>
+    </div>
+  </footer>
+</div>
 </body>
 </html>

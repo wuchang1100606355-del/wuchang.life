@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="五常智慧雲總場審查狀態頁，公開說明目前可展示入口、仍需 HOLD 的 production gate、安全邊界與下一步驗證。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#1f6d60">
+  <link rel="canonical" href="http://wuchang.life/total_field_review/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常智慧雲">
+  <meta property="og:title" content="總場審查狀態｜五常智慧雲">
+  <meta property="og:description" content="公開展示哪些入口已可檢視、哪些流程仍由總場 HOLD、哪些安全邊界不得越權。">
+  <meta property="og:url" content="http://wuchang.life/total_field_review/">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="總場審查狀態｜五常智慧雲">
+  <meta name="twitter:description" content="五常智慧雲公開審查狀態：展示可看，production release 仍 HOLD。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>總場審查狀態｜五常智慧雲</title>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "http://wuchang.life/#organization",
+      "@type": "Organization",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
+      "sameAs": [],
+      "knowsAbout": [
+        "主權 AI 個人管家小J",
+        "八維度意圖場封包重構",
+        "人類意圖場治理 AI 幻覺",
+        "社區數位服務",
+        "物業管理與住戶服務"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "admin@wuchang.life",
+        "contactType": "public inquiry",
+        "availableLanguage": [
+          "zh-Hant"
+        ]
+      }
+    },
+    {
+      "@id": "http://wuchang.life/#website",
+      "@type": "WebSite",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "inLanguage": "zh-Hant",
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    },
+    {
+      "@id": "http://wuchang.life/total_field_review/#webpage",
+      "@type": "WebPage",
+      "url": "http://wuchang.life/total_field_review/",
+      "name": "總場審查狀態｜五常智慧雲",
+      "description": "五常智慧雲總場審查狀態頁，公開說明目前可展示入口、仍需 HOLD 的 production gate、安全邊界與下一步驗證。",
+      "inLanguage": "zh-Hant",
+      "isPartOf": {
+        "@id": "http://wuchang.life/#website"
+      },
+      "about": {
+        "@id": "http://wuchang.life/#organization"
+      },
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --ink: #17253a;
+      --muted: #5d6b7d;
+      --line: #d8e1ea;
+      --green: #1f6d60;
+      --blue: #2157a8;
+      --gold: #8c6430;
+      --rose: #9f4f66;
+      --surface: #ffffff;
+      --page: #f3f7fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(255, 234, 195, 0.48), transparent 34%),
+        radial-gradient(circle at 88% 8%, rgba(165, 224, 255, 0.33), transparent 30%),
+        var(--page);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.72;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    header,
+    main,
+    footer {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .back,
+    .statusPill {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      text-decoration: none;
+      font-weight: 850;
+    }
+
+    .statusPill {
+      color: #684615;
+      border-color: rgba(140, 100, 48, 0.32);
+      background: #fff8e8;
+    }
+
+    .hero,
+    .card,
+    .tableWrap {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 18px 42px rgba(22, 36, 54, 0.1);
+    }
+
+    .hero {
+      padding: clamp(26px, 5vw, 52px);
+      margin: 12px 0 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-weight: 950;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 11em;
+      margin-bottom: 14px;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      line-height: 1.18;
+      margin-bottom: 10px;
+    }
+
+    .lead {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .sealBox {
+      padding: 18px;
+      border-radius: 12px;
+      color: #fff;
+      background: linear-gradient(145deg, #163d62, #1f6d60);
+    }
+
+    .sealBox strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    .sealBox span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 14px;
+    }
+
+    .statusGrid,
+    .laneGrid {
+      display: grid;
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .statusGrid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .laneGrid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 16px;
+    }
+
+    .card b {
+      display: inline-grid;
+      width: auto;
+      min-width: 46px;
+      height: 46px;
+      place-items: center;
+      padding: 0 9px;
+      margin-bottom: 12px;
+      border-radius: 9px;
+      color: #fff;
+      background: var(--green);
+      font-size: 17px;
+    }
+
+    .card.hold b {
+      background: var(--gold);
+    }
+
+    .card.warn b {
+      background: var(--rose);
+    }
+
+    .card.info b {
+      background: var(--blue);
+    }
+
+    .card h3 {
+      margin-bottom: 6px;
+    }
+
+    .card p,
+    td,
+    li {
+      color: var(--muted);
+    }
+
+    .tableWrap {
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--ink);
+      background: #eef4f8;
+    }
+
+    .tag {
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: #124d43;
+      background: #e8f7f2;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .tag.hold {
+      color: #684615;
+      background: #fff2d2;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    footer {
+      color: var(--muted);
+      padding: 20px 0 34px;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .statusGrid,
+      .laneGrid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(32px, 10vw, 42px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back" href="../">回到五常智慧雲首頁</a>
+    <span class="statusPill">PRODUCTION_RELEASE=HOLD</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Total Field public review</p>
+        <h1>總場審查狀態與公開邊界</h1>
+        <p class="lead">
+          這一頁不是正式上線核准書，而是讓外部審查者、社區成員與協作夥伴快速看懂：
+          哪些頁面已能公開展示，哪些能力仍只是沙盒或候選，哪些行為仍由總場 verifier 鎖住。
+        </p>
+      </div>
+      <aside class="sealBox" aria-label="總場審查摘要">
+        <strong>展示可看，准駁不交給模型。</strong>
+        <span>人類才是 AI 的主人。小J、LLM、全域代理與網域部署都只能輔助整理候選，不能取得最終權威。</span>
+      </aside>
+    </section>
+
+    <section class="statusGrid" aria-label="目前公開狀態">
+      <article class="card">
+        <b>HTTP</b>
+        <h2>首頁已可開啟</h2>
+        <p>wuchang.life 目前已有公開首頁與展示入口，可作為概念、產品方向與審查入口。</p>
+      </article>
+
+      <article class="card hold">
+        <b>TLS</b>
+        <h2>HTTPS 仍待配置</h2>
+        <p>TLS/443 尚未完成前，不可宣稱 production ready，也不應接正式會員或付款流程。</p>
+      </article>
+
+      <article class="card info">
+        <b>8D</b>
+        <h2>八維度封包治理</h2>
+        <p>公開頁展示意圖、座標、證據、政策、紅隊與封套觀念；正式決策仍需 evidence seal。</p>
+      </article>
+
+      <article class="card warn">
+        <b>HOLD</b>
+        <h2>高風險動作鎖定</h2>
+        <p>會員明文、secret、付款、production DB write、部署與身份授權不能由公開頁或模型直接執行。</p>
+      </article>
+    </section>
+
+    <section aria-labelledby="route-title">
+      <p class="eyebrow">Review map</p>
+      <h2 id="route-title">公開展示路由與狀態</h2>
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>入口</th>
+              <th>用途</th>
+              <th>狀態</th>
+              <th>不可誤解</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="../">首頁</a></td>
+              <td>說明五常智慧雲、主權 AI 個人管家小J與八維度意圖場封包重構。</td>
+              <td><span class="tag">PUBLIC DEMO</span></td>
+              <td>首頁是公開說明，不是正式服務合約。</td>
+            </tr>
+            <tr>
+              <td><a href="../about/">關於與使命</a></td>
+              <td>公開說明使命、服務對象、創辦歷程、人類掌權與8D治理原則。</td>
+              <td><span class="tag">PUBLIC MISSION</span></td>
+              <td>使命敘事可公開；正式資格與 production release 仍 HOLD。</td>
+            </tr>
+            <tr>
+              <td><a href="../governance/">總場與分場治理流程</a></td>
+              <td>公開說明人類意圖、小J候選、8D封包、分場補全、verifier與總場准駁流程。</td>
+              <td><span class="tag">PUBLIC GOVERNANCE</span></td>
+              <td>治理頁是審查工作流說明，不是模型授權、部署或 release approval。</td>
+            </tr>
+            <tr>
+              <td><a href="../property_management/">物業管理</a></td>
+              <td>公告、報修、包裹、管委會協作與住戶服務方向。</td>
+              <td><span class="tag">PUBLIC DEMO</span></td>
+              <td>不顯示住戶明文，不連 production 物業資料庫。</td>
+            </tr>
+            <tr>
+              <td><a href="../programs/">服務與活動</a></td>
+              <td>公開整理社區公共服務、物業管理、志工、商家、小J與8D治理服務包。</td>
+              <td><span class="tag">PUBLIC PROGRAMS</span></td>
+              <td>服務設計可公開；正式營運、付款、會員與 DB 寫入仍 HOLD。</td>
+            </tr>
+            <tr>
+              <td><a href="../impact/">公益影響與落地路線</a></td>
+              <td>公開整理預期公共影響、目前證據狀態、待蒐證指標與落地路線。</td>
+              <td><span class="tag">PUBLIC IMPACT</span></td>
+              <td>不把願景說成成果；正式成效仍需年度報告與可審計證據。</td>
+            </tr>
+            <tr>
+              <td><a href="../faq/">常見問題</a></td>
+              <td>集中回答小J、8D、會員資料、付款、非營利資格與 production release 的常見誤解。</td>
+              <td><span class="tag">PUBLIC FAQ</span></td>
+              <td>FAQ 是紅隊邊界，不是正式授權或服務合約。</td>
+            </tr>
+            <tr>
+              <td><a href="../transparency/">公開透明狀態</a></td>
+              <td>白話列出已公開、展示、沙盒、未啟用與仍 HOLD 的項目。</td>
+              <td><span class="tag">PUBLIC TRANSPARENCY</span></td>
+              <td>透明頁不是 release approval；正式上線仍需總場封印。</td>
+            </tr>
+            <tr>
+              <td><a href="../xiaoj_member_browser_cockpit/">主權小J座艙</a></td>
+              <td>展示小J如何整理候選與去識別化上下文。</td>
+              <td><span class="tag">STATIC DEMO</span></td>
+              <td>不等於已驗證自然人身份，不讀會員明文。</td>
+            </tr>
+            <tr>
+              <td><a href="../pos_promo_sandbox/">POS 沙盒</a></td>
+              <td>展示店端記杯、核銷與促銷流程方向。</td>
+              <td><span class="tag">SANDBOX</span></td>
+              <td>不付款、不刷卡、不寫 Odoo/POS production DB。</td>
+            </tr>
+            <tr>
+              <td><a href="../nonprofit_readiness/">公益與非營利送審資料</a></td>
+              <td>集中整理使命、服務對象、活動內容、網站品質與尚待補齊的正式證據。</td>
+              <td><span class="tag">PUBLIC READINESS</span></td>
+              <td>不宣稱已取得 Google 或主管機關核准；HTTPS 與法人/登記證據仍 HOLD。</td>
+            </tr>
+            <tr>
+              <td><a href="../contact/">聯絡與安全回報</a></td>
+              <td>公開一般聯絡、內容修正、安全回報與不可提交敏感資料的邊界。</td>
+              <td><span class="tag">PUBLIC CONTACT</span></td>
+              <td>無公開表單，不收會員明文、secret、付款資料或 raw audio。</td>
+            </tr>
+            <tr>
+              <td><a href="../w7tp_8d_control_panel.html">8D 控制台</a></td>
+              <td>展示 8D 封包與總場控制觀念。</td>
+              <td><span class="tag">STATIC DEMO</span></td>
+              <td>LLM_AUTHORITY=FALSE，decision locked by verifier。</td>
+            </tr>
+            <tr>
+              <td><a href="../packet_inference_cockpit/">封包推理座艙</a></td>
+              <td>展示自然語言進入封包推理的公開 fallback。</td>
+              <td><span class="tag hold">HOLD GATED</span></td>
+              <td>沒有 verifier 時只能安全回覆，不能准駁高風險動作。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="laneGrid" aria-label="分場審查方向">
+      <article class="card">
+        <b>社</b>
+        <h2>社區與公益分場</h2>
+        <p>審查使命、服務對象、非營利準備、志工流程與社區公共利益是否清楚。</p>
+      </article>
+
+      <article class="card info">
+        <b>技</b>
+        <h2>技術與 8D 分場</h2>
+        <p>審查封包語義、runtime evidence、路由、metadata、展示 fallback 與安全 gate。</p>
+      </article>
+
+      <article class="card hold">
+        <b>法</b>
+        <h2>安全與授權分場</h2>
+        <p>審查身份驗證、會員資料、付款、DB write、deployment、secret 與正式 release gate。</p>
+      </article>
+    </section>
+
+    <section class="laneGrid" aria-label="下一步">
+      <article class="card">
+        <h2>下一步可做</h2>
+        <ul>
+          <li><a href="./envelope.html">查看公開審查封套與機器可讀 review envelope</a>。</li>
+          <li><a href="../about/">查看關於與使命</a>。</li>
+          <li><a href="../governance/">查看總場與分場治理流程</a>。</li>
+          <li><a href="../programs/">查看服務與活動</a>。</li>
+          <li><a href="../impact/">查看公益影響與落地路線</a>。</li>
+          <li><a href="../faq/">查看常見問題</a>。</li>
+          <li><a href="../transparency/">查看公開透明狀態</a>。</li>
+          <li><a href="../nonprofit_readiness/">查看公益與非營利送審資料</a>。</li>
+          <li><a href="../contact/">查看聯絡與安全回報</a>。</li>
+          <li>補齊 HTTPS/TLS 與網站所有權驗證。</li>
+          <li>公開 production release HOLD manifest；正式 release approval manifest 與 evidence seal 仍需總場另包封印。</li>
+          <li>把 runtime report 封成可送審 evidence package。</li>
+        </ul>
+      </article>
+
+      <article class="card warn">
+        <h2>現在不可做</h2>
+        <ul>
+          <li>不可讀 secret、會員明文或 raw audio。</li>
+          <li>不可付款、扣款或寫入 production DB。</li>
+          <li>不可讓模型授權身份或覆寫 verifier decision。</li>
+        </ul>
+      </article>
+
+      <article class="card hold">
+        <h2>總場結論</h2>
+        <p>公開展示與審查入口可繼續打磨；正式上線仍需 TLS、evidence seal、release approval manifest、verifier 與人審。</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    CONTACT: <a href="../contact/">聯絡與安全回報</a> · SECURITY: <a href="../.well-known/security.txt">security.txt</a> · ENVELOPE: <a href="./envelope.html">public review envelope</a> · HUMAN_AUTHORITY=TRUE · LLM_AUTHORITY=FALSE · PRODUCTION_RELEASE=HOLD
+  </footer>
+</body>
+</html>

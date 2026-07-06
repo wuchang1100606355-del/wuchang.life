@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="五常智慧雲公益影響與落地路線頁，公開說明預期公共影響、目前證據狀態、待蒐證指標與production release HOLD邊界。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#1f6d60">
+  <link rel="canonical" href="http://wuchang.life/impact/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常智慧雲">
+  <meta property="og:title" content="公益影響與落地路線｜五常智慧雲">
+  <meta property="og:description" content="公開列出五常智慧雲預期公共影響、目前證據狀態、待蒐證指標與總場HOLD邊界。">
+  <meta property="og:url" content="http://wuchang.life/impact/">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="公益影響與落地路線｜五常智慧雲">
+  <meta name="twitter:description" content="不誇大成果；清楚列出已公開、待驗證與仍HOLD的落地路線。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>公益影響與落地路線｜五常智慧雲</title>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "http://wuchang.life/#organization",
+      "@type": "Organization",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
+      "sameAs": [],
+      "knowsAbout": [
+        "主權 AI 個人管家小J",
+        "八維度意圖場封包重構",
+        "人類意圖場治理 AI 幻覺",
+        "社區數位服務",
+        "物業管理與住戶服務"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "admin@wuchang.life",
+        "contactType": "public inquiry",
+        "availableLanguage": [
+          "zh-Hant"
+        ]
+      }
+    },
+    {
+      "@id": "http://wuchang.life/#website",
+      "@type": "WebSite",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "inLanguage": "zh-Hant",
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    },
+    {
+      "@id": "http://wuchang.life/impact/#webpage",
+      "@type": "WebPage",
+      "url": "http://wuchang.life/impact/",
+      "name": "公益影響與落地路線｜五常智慧雲",
+      "description": "五常智慧雲公益影響與落地路線頁，公開說明預期公共影響、目前證據狀態、待蒐證指標與production release HOLD邊界。",
+      "inLanguage": "zh-Hant",
+      "isPartOf": {
+        "@id": "http://wuchang.life/#website"
+      },
+      "about": {
+        "@id": "http://wuchang.life/#organization"
+      },
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --ink: #17253a;
+      --muted: #5d6b7d;
+      --line: #d8e1ea;
+      --green: #1f6d60;
+      --blue: #2157a8;
+      --gold: #8c6430;
+      --page: #f3f7fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: linear-gradient(135deg, rgba(255,247,230,.82), rgba(238,247,250,.92)), var(--page);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.75;
+    }
+
+    a { color: inherit; }
+
+    header, main, footer {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 28px 0 12px;
+    }
+
+    .button, .statusPill {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.92);
+      text-decoration: none;
+      font-weight: 850;
+    }
+
+    .statusPill {
+      color: #684615;
+      border-color: rgba(140,100,48,.32);
+      background: #fff8e8;
+    }
+
+    .hero, .card, .tableWrap, .notice {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 18px 42px rgba(22,36,54,.1);
+    }
+
+    .hero {
+      margin: 12px 0 16px;
+      padding: clamp(26px, 5vw, 52px);
+      display: grid;
+      grid-template-columns: minmax(0,1.12fr) minmax(280px,.88fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-weight: 950;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 10em;
+      margin-bottom: 14px;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h2, h3 { line-height: 1.18; }
+
+    .lead {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .sealBox {
+      padding: 18px;
+      border-radius: 12px;
+      color: #fff;
+      background: linear-gradient(145deg, #163d62, #1f6d60);
+    }
+
+    .sealBox strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    .sealBox span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255,255,255,.84);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .card, .notice { padding: 18px; }
+
+    .card b {
+      display: inline-grid;
+      min-width: 48px;
+      height: 46px;
+      place-items: center;
+      padding: 0 10px;
+      margin-bottom: 12px;
+      border-radius: 9px;
+      color: #fff;
+      background: var(--green);
+      font-size: 16px;
+    }
+
+    .card.info b { background: var(--blue); }
+    .card.hold b { background: var(--gold); }
+    .card p, td, li { color: var(--muted); }
+
+    .tableWrap {
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 780px;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--ink);
+      background: #eef5f7;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: #175246;
+      background: #e7f5ef;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .tag.hold {
+      color: #6f4612;
+      background: #fff4d6;
+    }
+
+    .tag.need {
+      color: #84324a;
+      background: #fde8ef;
+    }
+
+    .notice {
+      margin: 16px 0;
+      background: #fffaf0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 16px 0 0;
+    }
+
+    footer {
+      padding: 20px 0 30px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid rgba(207,216,227,.9);
+      margin-top: 24px;
+    }
+
+    @media (max-width: 820px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+      .sealBox strong { font-size: 24px; }
+      .button, .statusPill { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="button" href="../">回到首頁</a>
+    <a class="button" href="../programs/">服務與活動</a>
+    <a class="button" href="../governance/">治理流程</a>
+    <a class="button" href="../faq/">FAQ</a>
+    <span class="statusPill">PRODUCTION_RELEASE=HOLD</span>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Impact and landing roadmap</p>
+        <h1 id="page-title">公益影響與落地路線</h1>
+        <p class="lead">
+          本頁說明五常智慧雲希望產生的公共影響、目前能公開證明的狀態，以及未來需要補齊的驗證指標。
+          不把願景說成成果，不把展示原型說成正式營運。
+        </p>
+      </div>
+      <div class="sealBox">
+        <strong>先公開邊界，再累積證據</strong>
+        <span>影響力必須由可查證資料支撐；模型不能替代年度報告、法人證明或總場封印。</span>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="影響摘要">
+      <article class="card">
+        <b>公共性</b>
+        <h2>讓社區需求被看見</h2>
+        <p>把公告、活動、報修、志工、照顧與商家協作整理成入口，降低居民找不到資訊與服務窗口的成本。</p>
+      </article>
+      <article class="card info">
+        <b>信任</b>
+        <h2>讓 AI 有治理邊界</h2>
+        <p>小J協助整理需求，但身份、付款、會員資料、DB 寫入與 release 權限都必須回到人審與總場 verifier。</p>
+      </article>
+      <article class="card hold">
+        <b>證據</b>
+        <h2>目前不宣稱正式成效</h2>
+        <p>尚未發布年度報告、服務人次、捐款或正式營運成效；後續需用可審計資料補齊。</p>
+      </article>
+    </section>
+
+    <section aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title">落地路線與待蒐證指標</h2>
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>階段</th>
+              <th>目前狀態</th>
+              <th>應蒐證指標</th>
+              <th>紅隊邊界</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>公開說明與入口</td>
+              <td><span class="tag">PUBLIC_READY</span> 首頁、關於、服務、送審、聯絡與審查封套已公開。</td>
+              <td>可用路由、可讀內容、無敏掃描、手機/桌面截圖、公開審查封套。</td>
+              <td>公開頁不能宣稱已 production ready。</td>
+            </tr>
+            <tr>
+              <td>社區服務封測</td>
+              <td><span class="tag hold">PLANNED</span> 需要人審、授權與資料最小化設計。</td>
+              <td>活動紀錄、服務需求分類、志工參與紀錄、居民回饋、處理時間。</td>
+              <td>不能收集不必要個資，不能公開會員明文。</td>
+            </tr>
+            <tr>
+              <td>物業與商家協作</td>
+              <td><span class="tag hold">SANDBOX</span> 目前只公開展示方向。</td>
+              <td>沙盒測試、店端核銷案例、報修流程測試、人工核准紀錄。</td>
+              <td>不付款、不刷卡、不寫 Odoo/POS production DB。</td>
+            </tr>
+            <tr>
+              <td>小J個人管家</td>
+              <td><span class="tag hold">HOLD_GATED</span> 候選理解可展示，正式身份仍需 verifier。</td>
+              <td>去識別化測試案例、HOLD/BLOCK 率、誤判案例、人審修正紀錄。</td>
+              <td>不能把使用者自稱視為已驗證身份。</td>
+            </tr>
+            <tr>
+              <td>正式送審與交付</td>
+              <td><span class="tag need">NOT_READY</span> 仍缺 HTTPS、正式證據、封印與 release gate。</td>
+              <td>法人/非營利證據、年度報告、隱私政策、TLS、evidence seal、release approval manifest。</td>
+              <td>沒有總場封印前不可 production release。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="notice" aria-labelledby="truth-title">
+      <h2 id="truth-title">真實狀態</h2>
+      <p>
+        五常智慧雲目前已能公開展示使命、服務設計、審查邊界與多個靜態原型；但正式公共影響仍需透過封測、紀錄、年度報告與總場封印逐步證明。
+        這頁的價值是讓審查者清楚看到：哪些已公開，哪些待驗證，哪些不能誇大。
+      </p>
+      <div class="actions">
+        <a class="button" href="../about/">關於與使命</a>
+        <a class="button" href="../governance/">總場治理流程</a>
+        <a class="button" href="../faq/">常見問題</a>
+        <a class="button" href="../nonprofit_readiness/">公益送審資料</a>
+        <a class="button" href="../total_field_review/envelope.html">公開審查封套</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    CONTACT: <a href="../contact/">聯絡與安全回報</a> · HUMAN_AUTHORITY=TRUE · LLM_AUTHORITY=FALSE · MEMBER_PLAINTEXT_READ=FALSE · PAYMENT_CAPTURE=FALSE · PRODUCTION_RELEASE=HOLD
+  </footer>
+</body>
+</html>

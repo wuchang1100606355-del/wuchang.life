@@ -3,67 +3,403 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>W7TP 8D Control Panel</title>
-  <style>
-    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif;background:#0B0F19;color:#e5e7eb;margin:0;padding:20px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .card{background:#161B2D;border:1px solid #2A3352;border-radius:12px;padding:16px}
-    textarea,input,select,button{width:100%;box-sizing:border-box;margin-top:8px;border-radius:8px;border:1px solid #2A3352;background:#0f172a;color:#e5e7eb;padding:10px}
-    button{background:#065f46;border-color:#10b981;font-weight:700;cursor:pointer}
-    pre{white-space:pre-wrap;word-break:break-word;background:#020617;border:1px solid #1e293b;border-radius:8px;padding:12px;min-height:120px}
-    .ok{color:#10b981}.bad{color:#ef4444}.warn{color:#f59e0b}
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="W7TP 8D Control Panel 公開展示 8D 封包、候選優先、總場授權與安全邊界，說明系統不是一般聊天機器人。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#1f6d60">
+  <link rel="canonical" href="http://wuchang.life/w7tp_8d_control_panel.html">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常智慧雲">
+  <meta property="og:title" content="W7TP 8D Control Panel｜五常智慧雲">
+  <meta property="og:description" content="8D 封包、候選優先與總場授權控制的公開展示。">
+  <meta property="og:url" content="http://wuchang.life/w7tp_8d_control_panel.html">
+  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="W7TP 8D Control Panel｜五常智慧雲">
+  <meta name="twitter:description" content="以人類意圖場治理 AI 幻覺的 8D 控制展示頁。">
+  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <title>W7TP 8D 意圖場控制台｜五常智慧雲</title>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "http://wuchang.life/#organization",
+      "@type": "Organization",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
+      "sameAs": [],
+      "knowsAbout": [
+        "主權 AI 個人管家小J",
+        "八維度意圖場封包重構",
+        "人類意圖場治理 AI 幻覺",
+        "社區數位服務",
+        "物業管理與住戶服務"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "admin@wuchang.life",
+        "contactType": "public inquiry",
+        "availableLanguage": [
+          "zh-Hant"
+        ]
+      }
+    },
+    {
+      "@id": "http://wuchang.life/#website",
+      "@type": "WebSite",
+      "name": "五常智慧雲",
+      "url": "http://wuchang.life/",
+      "inLanguage": "zh-Hant",
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    },
+    {
+      "@id": "http://wuchang.life/w7tp_8d_control_panel.html#webpage",
+      "@type": "WebPage",
+      "url": "http://wuchang.life/w7tp_8d_control_panel.html",
+      "name": "W7TP 8D 意圖場控制台｜五常智慧雲",
+      "description": "W7TP 8D Control Panel 公開展示 8D 封包、候選優先、總場授權與安全邊界，說明系統不是一般聊天機器人。",
+      "inLanguage": "zh-Hant",
+      "isPartOf": {
+        "@id": "http://wuchang.life/#website"
+      },
+      "about": {
+        "@id": "http://wuchang.life/#organization"
+      },
+      "publisher": {
+        "@id": "http://wuchang.life/#organization"
+      }
+    }
+  ]
+}
+  </script>
+<style>
+    :root {
+      --ink: #1f2d45;
+      --ink-soft: #4e5f77;
+      --line: #c8d3e0;
+      --ok: #1e8e4d;
+      --bad: #e05255;
+      --warn: #c97d19;
+      --teal: #0f7a80;
+      --blue: #255ec0;
+      --surface: linear-gradient(155deg, rgba(255,255,255,.92), rgba(244,250,255,.93));
+    }
+
+    body {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "SF Pro Text", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 22% 10%, rgba(214, 234, 255, 0.45), transparent 40%),
+        radial-gradient(circle at 78% 18%, rgba(255, 223, 163, 0.45), transparent 40%),
+        linear-gradient(180deg, #edf3f8 0%, #e9eef7 100%);
+      color: var(--ink);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .hero {
+      border: 1px solid rgba(200, 211, 224, 0.84);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(17, 34, 55, 0.03), rgba(17, 34, 55, 0.36)),
+        var(--surface);
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      box-shadow: 0 20px 44px rgba(17, 30, 49, 0.15);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .topbar h1 {
+      margin: 0;
+    }
+
+    .publicNav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .back {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, .86);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .statusStrip {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0 0 16px;
+    }
+
+    .statusPill {
+      display: inline-flex;
+      min-height: 32px;
+      align-items: center;
+      padding: 5px 10px;
+      border: 1px solid rgba(200, 211, 224, .9);
+      border-radius: 999px;
+      background: rgba(255,255,255,.86);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .hero-art {
+      display: block;
+      width: min(100%, 820px);
+      max-height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 0 0 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 16px 36px rgba(17, 30, 49, 0.12);
+    }
+
+    textarea,
+    input,
+    select,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px solid #c7d4e2;
+      background: #fbfdff;
+      color: var(--ink);
+      padding: 10px;
+      font: inherit;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    button {
+      border-color: var(--teal);
+      background: linear-gradient(145deg, #0f7a80, #0a5f64);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      box-shadow: 0 8px 18px rgba(13, 76, 83, 0.24);
+      transform: translateY(-1px);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: rgba(246, 250, 255, 0.92);
+      border: 1px solid #d0d9e8;
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 120px;
+    }
+
+    .ok { color: var(--ok); }
+    .bad { color: var(--bad); }
+    .warn { color: var(--warn); }
+
+    #status {
+      color: var(--warn);
+    }
+
+    .hero-title {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .heroCopy {
+      margin: 0;
+      color: #2f3d5a;
+    }
+
+    .outputCard {
+      margin-top: 16px;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 14px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>W7TP 8D Control Panel</h1>
-  <p id="status" class="warn">BACKEND_CHECK_PENDING</p>
+<main>
+  <header class="topbar">
+    <h1>W7TP 8D Control Panel</h1>
+    <nav class="publicNav" aria-label="公開網站導覽">
+      <a class="back" href="./">首頁</a>
+      <a class="back" href="./about/">使命</a>
+      <a class="back" href="./total_field_review/">審查狀態</a>
+      <a class="back" href="./privacy.html">隱私邊界</a>
+    </nav>
+  </header>
+  <div class="statusStrip" aria-label="公開展示狀態">
+    <span id="status" class="statusPill warn">PUBLIC STATIC DEMO</span>
+    <span class="statusPill">LLM Authority FALSE</span>
+    <span class="statusPill">Decision Locked TRUE</span>
+    <span class="statusPill">PRODUCTION_RELEASE=HOLD</span>
+  </div>
+
+  <section class="hero" aria-label="高級視覺主題區">
+    <img class="hero-art" src="./assets/community-vision-art-card.svg" width="1000" height="520" alt="社區、物業、商家與會員共生的運作意象">
+    <h2 class="hero-title">候選優先 / 總場授權控制</h2>
+    <p class="heroCopy">
+      可視化每一次意圖封包、稽核決策與封存流程，維持候選層與正式層分離，先展示後執行。
+    </p>
+  </section>
 
   <div class="grid">
     <section class="card">
       <h2>Intent Compile</h2>
+      <label for="intent">Intent text</label>
       <textarea id="intent" rows="5">我想將社區照護任務轉成 W7TP 8D 封包，需本地治理審查後才落地。</textarea>
-      <button onclick="compileIntent()">Compile Intent</button>
+      <button type="button" onclick="compileIntent()">Compile Intent</button>
     </section>
 
     <section class="card">
       <h2>D6 Hardwall Lint</h2>
+      <label for="lintInput">Lint input</label>
       <textarea id="lintInput" rows="5">safe community care workflow</textarea>
-      <button onclick="lintIntent()">Run D6 Linter</button>
-      <button onclick="injectSecret()">Inject Fake Secret Test</button>
+      <button type="button" onclick="lintIntent()">Run D6 Linter</button>
+      <button type="button" onclick="injectSecret()">Inject Fake Secret Test</button>
     </section>
 
     <section class="card">
       <h2>State Hash / Seal</h2>
+      <label for="node">Node</label>
       <input id="node" value="taiji01">
+      <label for="state">State</label>
       <select id="state">
         <option>TRANSACTION_COMMITTED</option>
         <option>HARDWALL_BLOCKED</option>
         <option>PHASE_SYNCING</option>
         <option>DATA_REDACTED_BLIND</option>
       </select>
-      <button onclick="sealState()">Generate State Seal</button>
+      <button type="button" onclick="sealState()">Generate State Seal</button>
     </section>
 
     <section class="card">
       <h2>Evidence Commit</h2>
-      <button onclick="commitEvidence()">Commit Evidence</button>
-      <button onclick="fullFlow()">Run Full Flow</button>
+      <button type="button" onclick="commitEvidence()">Commit Evidence</button>
+      <button type="button" onclick="fullFlow()">Run Full Flow</button>
     </section>
   </div>
 
-  <section class="card" style="margin-top:16px">
+  <section class="card outputCard">
     <h2>Output</h2>
     <pre id="out">READY</pre>
   </section>
+</main>
 
 <script>
 let lastPacket = null;
 let lastDecision = null;
 let lastHash = null;
+const publicStaticDemo = location.hostname === "wuchang.life" || location.hostname === "www.wuchang.life";
 
 function out(obj){ document.getElementById("out").textContent = typeof obj === "string" ? obj : JSON.stringify(obj,null,2); }
 
+function publicFallback(url, payload){
+  const now = new Date().toISOString();
+  if (url.includes("/intent/compile")) {
+    return {
+      STATE: "PASS_PUBLIC_STATIC_DEMO_PACKET",
+      public_static_demo: true,
+      api_write: false,
+      verifier_decision_locked: true,
+      packet: {
+        D1_intent: payload.intent,
+        D3_coordinate: "public_static_control_panel",
+        D5_policy: "candidate_only",
+        D7_safety: ["no_secret_read", "no_member_plaintext", "no_db_write", "no_deploy"],
+        D8_envelope: {created_at: now, production_release: "HOLD"}
+      }
+    };
+  }
+  if (url.includes("/security/lint")) {
+    return {
+      STATE: "HOLD_PUBLIC_STATIC_DEMO_LINT",
+      decision: "HOLD",
+      reason: "public static route does not execute backend verifier",
+      secret_read: false,
+      member_plaintext_read: false,
+      db_write: false,
+      production_deploy: false,
+      created_at: now
+    };
+  }
+  if (url.includes("/hash/seal")) {
+    return {
+      STATE: "PASS_PUBLIC_STATIC_DEMO_SEAL",
+      public_static_demo: true,
+      seal_preview: "seal_ref:public_static_demo",
+      hash_is_preview_only: true,
+      created_at: now
+    };
+  }
+  return {
+    STATE: "PASS_PUBLIC_STATIC_DEMO_EVIDENCE",
+    public_static_demo: true,
+    evidence_preview: "evidence_ref:public_static_demo",
+    production_release: "HOLD",
+    created_at: now
+  };
+}
+
 async function post(url, payload){
+  if (publicStaticDemo) {
+    return publicFallback(url, payload || {});
+  }
   const r = await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload||{})});
   const text = await r.text();
   let data;
@@ -73,13 +409,25 @@ async function post(url, payload){
 }
 
 async function checkBackend(){
+  if (publicStaticDemo) {
+    document.getElementById("status").textContent = "PUBLIC STATIC DEMO";
+    document.getElementById("status").className = "statusPill warn";
+    out({
+      STATE: "PUBLIC_STATIC_DEMO",
+      verifier_api: "not exposed on public route",
+      llm_authority: false,
+      decision_locked: true,
+      production_release: "HOLD"
+    });
+    return;
+  }
   try{
     const r = await post("/api/w7tp/security/lint",{intent:"health check"});
     document.getElementById("status").textContent = "REAL_W7TP_API_CONNECTED";
     document.getElementById("status").className = "ok";
     out(r);
   }catch(e){
-    document.getElementById("status").textContent = "BACKEND_OFFLINE_OR_ROUTE_NOT_SERVED";
+    document.getElementById("status").textContent = "LOCAL_API_UNAVAILABLE";
     document.getElementById("status").className = "bad";
     out(String(e));
   }
@@ -100,7 +448,7 @@ async function lintIntent(){
 }
 
 function injectSecret(){
-  document.getElementById("lintInput").value = "sk-proj-FAKE_REDTEAM_SECRET must be blocked";
+  document.getElementById("lintInput").value = "REDACTED_KEY_SHAPED_STRING must be blocked";
 }
 
 async function sealState(){
@@ -138,5 +486,8 @@ async function fullFlow(){
 
 checkBackend();
 </script>
+<footer>
+  SAFETY: SECRET_READ=FALSE · MEMBER_PLAINTEXT_READ=FALSE · RAW_AUDIO_READ=FALSE · PAYMENT_CAPTURE=FALSE · PRODUCTION_DB_WRITE=FALSE · LLM_AUTHORITY=FALSE · PRODUCTION_RELEASE=HOLD
+</footer>
 </body>
 </html>

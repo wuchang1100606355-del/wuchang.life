@@ -35,6 +35,10 @@ function badgeClass(decision) {
   return "decision";
 }
 
+function statusText(value) {
+  return String(value || "").replace(/_/g, " ");
+}
+
 function renderJson(node, data) {
   node.textContent = JSON.stringify(data || {}, null, 2);
 }
@@ -53,7 +57,7 @@ function renderSafety(flags) {
 function renderSceneContext(scene) {
   const box = el("sceneContextBox");
   const data = scene || {};
-  el("sceneContextStatus").textContent = data.context_type || "UNKNOWN_CONTEXT";
+  el("sceneContextStatus").textContent = statusText(data.context_type || "UNKNOWN_CONTEXT");
   el("identityVerifiedStatus").textContent = data.identity_verified === true ? "TRUE" : "FALSE";
   box.innerHTML = "";
   [
@@ -144,7 +148,7 @@ function renderCockpit(data, originalText) {
   el("prAnswerText").textContent = prAnswer;
   el("decisionLockedBox").textContent = decisionLocked ? "TRUE" : "FALSE";
   el("decisionLockedStatus").textContent = decisionLocked ? "TRUE" : "FALSE";
-  el("prLayerStatus").textContent = badges.pr_layer || data.PR_LAYER?.MODEL_LANE || "TEMPLATE_FALLBACK";
+  el("prLayerStatus").textContent = statusText(badges.pr_layer || data.PR_LAYER?.MODEL_LANE || "TEMPLATE_FALLBACK");
 
   renderJson(el("verifierBox"), data.FINAL_VERIFIER || {});
   renderTimeline(data.COCKPIT_VIEW?.timeline || []);
@@ -174,11 +178,67 @@ function renderCockpit(data, originalText) {
 async function health() {
   try {
     const response = await fetch("/api/health");
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
     const data = await response.json();
+    el("healthBadge").className = "badge badge-green";
     el("healthBadge").textContent = data.STATE || "HEALTH";
   } catch {
-    el("healthBadge").textContent = "HEALTH_FAIL";
+    el("healthBadge").className = "badge badge-amber";
+    el("healthBadge").textContent = "PUBLIC STATIC DEMO";
   }
+}
+
+function renderStaticDemoFallback(text, err) {
+  const answer = "公開網域目前是靜態展示入口，未連接本機 /api/chat 封包推理服務。這不代表 verifier 已准駁；正式推理、身份驗證、會員上下文、付款與 production 動作仍需回到總場授權通道。";
+  el("decisionBadge").className = "decision hold";
+  el("decisionBadge").textContent = "HOLD";
+  el("answerText").textContent = answer;
+  el("rawDraftText").textContent = "PUBLIC_STATIC_DEMO: API unavailable on public static route.";
+  el("prAnswerText").textContent = answer;
+  el("decisionLockedBox").textContent = "TRUE";
+  el("decisionLockedStatus").textContent = "TRUE";
+  el("prLayerStatus").textContent = "STATIC DEMO FALLBACK";
+  renderJson(el("verifierBox"), {
+    decision: "HOLD",
+    reason: "public static route has no verifier API",
+    llm_authority: false,
+    decision_locked: true
+  });
+  renderTimeline([]);
+  renderSafety({
+    payment_capture: false,
+    member_plaintext_read: false,
+    secret_read: false,
+    db_write: false,
+    production_deploy: false
+  });
+  renderSceneContext({
+    context_type: "PUBLIC_STATIC_DEMO",
+    confidence_level: "L0",
+    accepted_as_truth: false,
+    device_trust: false,
+    identity_verified: false,
+    accepted_as_person_identity: false,
+    requires_role_verification: true,
+    allowed_scope: ["public_demo_view"],
+    forbidden_scope: ["secret_read", "member_plaintext_read", "payment_capture", "production_deploy", "grant_identity_role"]
+  });
+  renderJson(el("semanticBox"), {
+    input_preview: text,
+    fallback_error: String(err || "API unavailable"),
+    model_authority: false
+  });
+  renderJson(el("evidenceBox"), {
+    route: "public_static_demo",
+    api_chat: "unavailable",
+    verifier_decision_locked: true
+  });
+  const line = document.createElement("div");
+  line.className = "chat-line";
+  line.innerHTML = `<b>你：</b>${escapeHtml(text)}<br><b>總場：</b>${escapeHtml(answer)}`;
+  el("chatLog").prepend(line);
 }
 
 async function runChat() {
@@ -203,12 +263,13 @@ async function runChat() {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(payload)
     });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
     const data = await response.json();
     renderCockpit(data, text);
   } catch (err) {
-    el("decisionBadge").className = "decision block";
-    el("decisionBadge").textContent = "ERROR";
-    el("answerText").textContent = String(err);
+    renderStaticDemoFallback(text, err);
   } finally {
     el("runBtn").disabled = false;
     el("runBtn").textContent = "RUN PACKET INFERENCE";
