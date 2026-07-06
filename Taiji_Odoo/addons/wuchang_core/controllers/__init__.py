@@ -8,3 +8,5 @@ from . import device_app_controller
 from . import device_enrollment_controller
 from . import device_query_controller
 from . import ui_proxy_controller
+from . import order_site
+from . import ticket_controller

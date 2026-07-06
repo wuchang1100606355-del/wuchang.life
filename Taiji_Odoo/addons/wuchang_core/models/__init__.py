@@ -10,6 +10,9 @@ from . import finance
 from . import coin_ledger
 from . import volunteer
 from . import delivery_team
+from . import order
+from . import pos_expense
+from . import delivery
 from . import supervisor_description_patch
 from . import pos_config_ext
 from . import member_registration

@@ -1764,7 +1764,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans,Arial;backgro
         rec = Expense.create(vals)
         return http.Response(json.dumps({'ok': True, 'ref': rec.name}), status=200, content_type='application/json')
 
-    @http.route('/delivery', type='http', auth='public', website=True)
+    @http.route(['/delivery', '/wuchang/delivery'], type='http', auth='public', website=True)
     def delivery_home(self, config_id=None, **kw):
         configs = []
         try:
