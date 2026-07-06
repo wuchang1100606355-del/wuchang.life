@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/intent_field/product_intent_dry_run_request.schema.json",
+  "title": "Product Intent Field Dry-Run Request",
+  "type": "object",
+  "required": [
+    "run_id",
+    "intent_request_id",
+    "intent_text_ref",
+    "dry_run_only",
+    "candidate_only",
+    "db_write",
+    "deploy",
+    "restart"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "intent_request_id": { "type": "string", "pattern": "^intent_request_id:" },
+    "intent_text_ref": { "type": "string", "pattern": "^intent_text_ref:" },
+    "raw_intent_text": { "type": "string" },
+    "dry_run_only": { "const": true },
+    "candidate_only": { "const": true },
+    "force_hold": { "type": "boolean" },
+    "db_write": { "const": false },
+    "deploy": { "const": false },
+    "restart": { "const": false },
+    "h64_td_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "trade_secret_ref:h64_codebook",
+          "trade_secret_ref:td_hash_runtime"
+        ]
+      }
+    }
+  },
+  "additionalProperties": true
+}

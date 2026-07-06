@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/cloud_candidate_request.schema.json",
+  "title": "Intent Field Cloud Candidate Request",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "request_id",
+    "active_patent_packet_ref",
+    "product_target_refs",
+    "current_system_refs",
+    "gap_items",
+    "candidate_request",
+    "forbidden_data_policy",
+    "redaction_policy",
+    "field_lock",
+    "technical_means_lock",
+    "patent_type_conformity_lock",
+    "sovereign_identity_agent",
+    "spacetime_state_index_database",
+    "isolated_plaintext_archive_boundary",
+    "accountable_access_record_fields",
+    "verifier_requirements",
+    "cloud_authority_boundary"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "request_id": { "type": "string" },
+    "active_patent_packet_ref": { "$ref": "#/$defs/file_ref" },
+    "product_target_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/file_ref" }
+    },
+    "current_system_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/file_ref" }
+    },
+    "gap_items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/gap_item" }
+    },
+    "candidate_request": {
+      "type": "object",
+      "required": ["mode", "task", "expected_outputs", "dry_run_only"],
+      "properties": {
+        "mode": { "const": "cloud_candidate_code_completion" },
+        "task": { "type": "string" },
+        "expected_outputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "dry_run_only": { "const": true }
+      }
+    },
+    "forbidden_data_policy": { "type": "object" },
+    "redaction_policy": { "type": "object" },
+    "field_lock": { "type": "object" },
+    "technical_means_lock": { "type": "object" },
+    "patent_type_conformity_lock": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "patent_type",
+        "independent_claim_subject",
+        "candidate_output_sections",
+        "cloud_candidate_only",
+        "total_field_final_authority"
+      ],
+      "properties": {
+        "enabled": { "const": true },
+        "patent_type": {
+          "const": "人工智慧候選行動之多狀態場封包化控管方法、系統及非暫態電腦可讀取媒體"
+        },
+        "independent_claim_subject": { "const": "多個狀態場/多狀態場" },
+        "candidate_output_sections": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "patent_type_alignment",
+              "product_completion_plan",
+              "claim_support_matrix",
+              "forbidden_output_check"
+            ]
+          },
+          "minItems": 4
+        },
+        "cloud_candidate_only": { "const": true },
+        "total_field_final_authority": { "const": true }
+      }
+    },
+    "sovereign_identity_agent": { "type": "object" },
+    "spacetime_state_index_database": { "type": "object" },
+    "isolated_plaintext_archive_boundary": { "type": "object" },
+    "accountable_access_record_fields": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "verifier_requirements": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "cloud_authority_boundary": {
+      "type": "object",
+      "required": [
+        "cloud_candidate_only",
+        "total_field_final_authority",
+        "external_model_can_execute_business_system",
+        "cloud_call_executed"
+      ],
+      "properties": {
+        "cloud_candidate_only": { "const": true },
+        "total_field_final_authority": { "const": true },
+        "external_model_can_execute_business_system": { "const": false },
+        "cloud_call_executed": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "file_ref": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "role": { "type": "string" },
+        "state": { "type": "string" }
+      }
+    },
+    "gap_item": {
+      "type": "object",
+      "required": [
+        "gap_id",
+        "classification",
+        "patent_claim_ref",
+        "product_module_ref",
+        "repo_evidence_ref",
+        "suggested_next_action",
+        "risk_level"
+      ],
+      "properties": {
+        "gap_id": { "type": "string" },
+        "classification": {
+          "enum": [
+            "IMPLEMENTED",
+            "PARTIAL_IMPLEMENTED",
+            "DESIGN_EXISTS",
+            "NOT_IMPLEMENTED",
+            "UPPER_PROTECTION_ONLY",
+            "NEEDS_HUMAN_REVIEW"
+          ]
+        },
+        "patent_claim_ref": { "type": "string" },
+        "product_module_ref": { "type": "string" },
+        "repo_evidence_ref": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/file_ref" }
+        },
+        "suggested_next_action": { "type": "string" },
+        "risk_level": { "enum": ["LOW", "MEDIUM", "HIGH", "REVIEW"] }
+      }
+    }
+  }
+}
