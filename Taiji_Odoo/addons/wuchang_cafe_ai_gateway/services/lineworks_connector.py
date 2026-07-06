@@ -47,6 +47,7 @@ def _has_secret_shape(value: Any) -> bool:
     return bool(
         re.search(r"sk-[A-Za-z0-9_-]{12,}", text)
         or re.search(r"(?i)(access|refresh|id)_token\s*[:=]\s*\S+", text)
+        or re.search(r"(?i)(^|[^A-Z0-9])ACCESS_TOKEN_REF($|[^A-Z0-9])", text)
         or re.search(r"(?i)client_secret\s*[:=]\s*\S+", text)
         or re.search(r"(?i)-----BEGIN [A-Z ]*PRIVATE KEY-----", text)
         or re.search(r"(?i)Bearer\s+[A-Za-z0-9._~+/=-]{12,}", text)
