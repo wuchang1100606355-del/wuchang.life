@@ -1,0 +1,506 @@
+<odoo>
+    <record id="view_wuchang_business_backend_optimization_list" model="ir.ui.view">
+        <field name="name">wuchang.business.backend.optimization.list</field>
+        <field name="model">wuchang.business.backend.optimization</field>
+        <field name="arch" type="xml">
+            <list string="Business Backend Optimization">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="packet_hash"/>
+                <field name="panel_count"/>
+                <field name="flow_step_count"/>
+                <field name="ai_feature_count"/>
+                <field name="required_ref_count"/>
+                <field name="checklist_item_count"/>
+                <field name="kpi_snapshot_count"/>
+                <field name="blocked_checklist_count"/>
+                <field name="needs_action_kpi_count"/>
+                <field name="improvement_item_count"/>
+                <field name="critical_improvement_count"/>
+                <field name="ai_merchant_readiness_score"/>
+                <field name="blocked_improvement_count"/>
+                <field name="critical_open_improvement_count"/>
+                <field name="daily_signal_count"/>
+                <field name="daily_signal_needs_action_count"/>
+                <field name="daily_signal_observed_day_count"/>
+                <field name="regressing_signal_count"/>
+                <field name="insufficient_signal_count"/>
+                <field name="management_decision_count"/>
+                <field name="critical_decision_count"/>
+                <field name="high_decision_count"/>
+                <field name="operator_runbook_step_count"/>
+                <field name="operator_runbook_daily_step_count"/>
+                <field name="operator_runbook_weekly_step_count"/>
+                <field name="av_candidate_count"/>
+                <field name="low_confidence_candidate_count"/>
+                <field name="failed_validation_candidate_count"/>
+                <field name="generated_image_hold_count"/>
+                <field name="staff_review_required_candidate_count"/>
+                <field name="product_quality_count"/>
+                <field name="product_quality_ready_count"/>
+                <field name="product_quality_blocked_count"/>
+                <field name="missing_custom_options_count"/>
+                <field name="missing_photo_evidence_count"/>
+                <field name="checkout_preflight_count"/>
+                <field name="checkout_preflight_ready_count"/>
+                <field name="checkout_preflight_blocked_count"/>
+                <field name="production_activation_ready"/>
+                <field name="external_api_call"/>
+                <field name="formal_pos_write"/>
+                <field name="payment_capture"/>
+                <field name="raw_audio_saved"/>
+                <field name="raw_video_saved"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_business_backend_optimization_form" model="ir.ui.view">
+        <field name="name">wuchang.business.backend.optimization.form</field>
+        <field name="model">wuchang.business.backend.optimization</field>
+        <field name="arch" type="xml">
+            <form string="Business Backend Optimization">
+                <header>
+                    <button name="action_build_review_packet"
+                            type="object"
+                            string="Build Review Packet"
+                            class="btn-primary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_operating_review"
+                            type="object"
+                            string="Build Operating Review"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_process_walkthrough"
+                            type="object"
+                            string="Build Process Walkthrough"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_readiness_scorecard"
+                            type="object"
+                            string="Build Readiness Scorecard"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_daily_signal_review"
+                            type="object"
+                            string="Build Daily Signal Review"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_av_candidate_quality_review"
+                            type="object"
+                            string="Build AV Candidate Quality"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_product_menu_quality_review"
+                            type="object"
+                            string="Build Product Menu Quality"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_member_voucher_payment_preflight"
+                            type="object"
+                            string="Build Checkout Preflight"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_signal_trend_review"
+                            type="object"
+                            string="Build Signal Trend Review"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_management_decision_queue"
+                            type="object"
+                            string="Build Decision Queue"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_operator_runbook"
+                            type="object"
+                            string="Build Operator Runbook"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_dead_letter"
+                            type="object"
+                            string="Dead Letter"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review_ready,dead_letter"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="actor_ref"/>
+                        <field name="input_ref"/>
+                        <field name="packet_hash" readonly="1"/>
+                    </group>
+                    <group string="Review Counts">
+                        <field name="panel_count" readonly="1"/>
+                        <field name="flow_step_count" readonly="1"/>
+                        <field name="ai_feature_count" readonly="1"/>
+                        <field name="required_ref_count" readonly="1"/>
+                        <field name="checklist_item_count" readonly="1"/>
+                        <field name="kpi_snapshot_count" readonly="1"/>
+                        <field name="blocked_checklist_count" readonly="1"/>
+                        <field name="needs_action_kpi_count" readonly="1"/>
+                        <field name="improvement_item_count" readonly="1"/>
+                        <field name="critical_improvement_count" readonly="1"/>
+                        <field name="ai_merchant_readiness_score" readonly="1"/>
+                        <field name="blocked_improvement_count" readonly="1"/>
+                        <field name="critical_open_improvement_count" readonly="1"/>
+                        <field name="daily_signal_count" readonly="1"/>
+                        <field name="daily_signal_needs_action_count" readonly="1"/>
+                        <field name="daily_signal_observed_day_count" readonly="1"/>
+                        <field name="regressing_signal_count" readonly="1"/>
+                        <field name="insufficient_signal_count" readonly="1"/>
+                        <field name="management_decision_count" readonly="1"/>
+                        <field name="critical_decision_count" readonly="1"/>
+                        <field name="high_decision_count" readonly="1"/>
+                        <field name="operator_runbook_step_count" readonly="1"/>
+                        <field name="operator_runbook_daily_step_count" readonly="1"/>
+                        <field name="operator_runbook_weekly_step_count" readonly="1"/>
+                        <field name="av_candidate_count" readonly="1"/>
+                        <field name="low_confidence_candidate_count" readonly="1"/>
+                        <field name="failed_validation_candidate_count" readonly="1"/>
+                        <field name="generated_image_hold_count" readonly="1"/>
+                        <field name="staff_review_required_candidate_count" readonly="1"/>
+                        <field name="product_quality_count" readonly="1"/>
+                        <field name="product_quality_ready_count" readonly="1"/>
+                        <field name="product_quality_blocked_count" readonly="1"/>
+                        <field name="missing_custom_options_count" readonly="1"/>
+                        <field name="missing_photo_evidence_count" readonly="1"/>
+                        <field name="checkout_preflight_count" readonly="1"/>
+                        <field name="checkout_preflight_ready_count" readonly="1"/>
+                        <field name="checkout_preflight_blocked_count" readonly="1"/>
+                        <field name="production_activation_ready" readonly="1"/>
+                    </group>
+                    <group string="P1 Side Effect Boundary">
+                        <field name="external_api_call" readonly="1"/>
+                        <field name="model_invocation" readonly="1"/>
+                        <field name="formal_lineworks_send" readonly="1"/>
+                        <field name="formal_line_message_send" readonly="1"/>
+                        <field name="formal_member_registration" readonly="1"/>
+                        <field name="formal_db_write" readonly="1"/>
+                        <field name="formal_pos_write" readonly="1"/>
+                        <field name="pos_order_created" readonly="1"/>
+                        <field name="payment_capture" readonly="1"/>
+                        <field name="voucher_redemption" readonly="1"/>
+                        <field name="secret_read" readonly="1"/>
+                        <field name="member_plaintext_read" readonly="1"/>
+                        <field name="resident_plaintext_read" readonly="1"/>
+                        <field name="raw_audio_saved" readonly="1"/>
+                        <field name="raw_video_saved" readonly="1"/>
+                        <field name="deploy" readonly="1"/>
+                        <field name="service_restart" readonly="1"/>
+                        <field name="odoo_upgrade" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Operator Notes">
+                            <field name="operator_notes" placeholder="Use safe summaries and refs only. Do not paste tokens, passwords, member plaintext, payment data, raw audio, or raw video."/>
+                        </page>
+                        <page string="Backend Panels">
+                            <field name="recommended_backend_panels_json" readonly="1"/>
+                        </page>
+                        <page string="Checklist Items">
+                            <field name="checklist_item_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="panel"/>
+                                    <field name="item_key"/>
+                                    <field name="title"/>
+                                    <field name="required_ref"/>
+                                    <field name="operator_status"/>
+                                    <field name="success_metric"/>
+                                    <field name="operator_note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="KPI Snapshots">
+                            <field name="kpi_snapshot_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="snapshot_date"/>
+                                    <field name="snapshot_type"/>
+                                    <field name="state"/>
+                                    <field name="numeric_value"/>
+                                    <field name="target_value"/>
+                                    <field name="unit"/>
+                                    <field name="evidence_ref"/>
+                                    <field name="summary"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Daily Signals">
+                            <field name="daily_signal_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="signal_date"/>
+                                    <field name="signal_type"/>
+                                    <field name="state"/>
+                                    <field name="numeric_value"/>
+                                    <field name="unit"/>
+                                    <field name="evidence_ref"/>
+                                    <field name="summary"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="AV AI Candidates">
+                            <field name="av_candidate_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="candidate_ref"/>
+                                    <field name="modality"/>
+                                    <field name="review_state"/>
+                                    <field name="confidence_score"/>
+                                    <field name="odoo_validation_state"/>
+                                    <field name="product_photo_evidence_state"/>
+                                    <field name="red_flags"/>
+                                    <field name="evidence_ref"/>
+                                    <field name="operator_note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Product Menu Quality">
+                            <field name="product_quality_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_ref"/>
+                                    <field name="odoo_product_ref"/>
+                                    <field name="menu_category_ref"/>
+                                    <field name="price_ref"/>
+                                    <field name="custom_options_ref"/>
+                                    <field name="photo_evidence_ref"/>
+                                    <field name="photo_evidence_state"/>
+                                    <field name="availability_state"/>
+                                    <field name="ai_candidate_state"/>
+                                    <field name="operator_note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Checkout Preflights">
+                            <field name="checkout_preflight_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="candidate_order_ref"/>
+                                    <field name="member_ref"/>
+                                    <field name="consent_ref"/>
+                                    <field name="voucher_dry_run_ref"/>
+                                    <field name="payment_method_ref"/>
+                                    <field name="pos_draft_ref"/>
+                                    <field name="preflight_state"/>
+                                    <field name="requested_mutation"/>
+                                    <field name="operator_note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Process Improvements">
+                            <field name="improvement_item_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="stage_key"/>
+                                    <field name="improvement_key"/>
+                                    <field name="title"/>
+                                    <field name="priority"/>
+                                    <field name="owner_scope"/>
+                                    <field name="kpi_type"/>
+                                    <field name="operator_status"/>
+                                    <field name="success_metric"/>
+                                    <field name="operator_note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="End-To-End Flow">
+                            <field name="end_to_end_flow_json" readonly="1"/>
+                        </page>
+                        <page string="AV AI Features">
+                            <field name="ai_technology_features_json" readonly="1"/>
+                        </page>
+                        <page string="Quality Gates">
+                            <field name="quality_gates_json" readonly="1"/>
+                        </page>
+                        <page string="Required Refs">
+                            <field name="required_refs_json" readonly="1"/>
+                        </page>
+                        <page string="Business Context">
+                            <field name="business_context_json" readonly="1"/>
+                        </page>
+                        <page string="First Backoffice Enhancements">
+                            <field name="first_backoffice_enhancements_json" readonly="1"/>
+                        </page>
+                        <page string="Review Packet">
+                            <field name="review_packet_json" readonly="1"/>
+                        </page>
+                        <page string="Operating Review">
+                            <field name="operating_review_next_actions" readonly="1"/>
+                            <field name="operating_review_json" readonly="1"/>
+                        </page>
+                        <page string="Process Walkthrough">
+                            <field name="process_improvement_next_actions" readonly="1"/>
+                            <field name="process_walkthrough_json" readonly="1"/>
+                        </page>
+                        <page string="Readiness Scorecard">
+                            <field name="ai_merchant_readiness_score" readonly="1"/>
+                            <field name="readiness_activation_blockers" readonly="1"/>
+                            <field name="readiness_scorecard_next_actions" readonly="1"/>
+                            <field name="readiness_scorecard_json" readonly="1"/>
+                        </page>
+                        <page string="Daily Signal Review">
+                            <field name="daily_signal_next_actions" readonly="1"/>
+                            <field name="daily_signal_review_json" readonly="1"/>
+                        </page>
+                        <page string="AV Candidate Quality Review">
+                            <field name="av_candidate_quality_next_actions" readonly="1"/>
+                            <field name="av_candidate_quality_json" readonly="1"/>
+                        </page>
+                        <page string="Product Menu Quality Review">
+                            <field name="product_menu_quality_next_actions" readonly="1"/>
+                            <field name="product_menu_quality_json" readonly="1"/>
+                        </page>
+                        <page string="Checkout Preflight Review">
+                            <field name="member_voucher_payment_preflight_next_actions" readonly="1"/>
+                            <field name="member_voucher_payment_preflight_json" readonly="1"/>
+                        </page>
+                        <page string="Signal Trend Review">
+                            <field name="signal_trend_next_actions" readonly="1"/>
+                            <field name="signal_trend_review_json" readonly="1"/>
+                        </page>
+                        <page string="Decision Queue">
+                            <field name="management_decision_item_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="priority"/>
+                                    <field name="source"/>
+                                    <field name="decision_key"/>
+                                    <field name="title"/>
+                                    <field name="operator_status"/>
+                                    <field name="owner_scope"/>
+                                    <field name="due_date"/>
+                                    <field name="evidence_ref"/>
+                                    <field name="recommended_action"/>
+                                    <field name="operator_note"/>
+                                </list>
+                            </field>
+                            <field name="management_decision_next_actions" readonly="1"/>
+                            <field name="management_decision_queue_json" readonly="1"/>
+                        </page>
+                        <page string="Operator Runbook">
+                            <field name="operator_runbook_next_actions" readonly="1"/>
+                            <field name="operator_runbook_json" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_business_backend_optimization_search" model="ir.ui.view">
+        <field name="name">wuchang.business.backend.optimization.search</field>
+        <field name="model">wuchang.business.backend.optimization</field>
+        <field name="arch" type="xml">
+            <search string="Business Backend Optimization">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="packet_hash"/>
+                <filter name="filter_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="filter_review_ready" string="Review Ready" domain="[('state','=','review_ready')]"/>
+                <filter name="filter_dead_letter" string="Dead Letter" domain="[('state','=','dead_letter')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_wuchang_business_backend_management_decision_item_list" model="ir.ui.view">
+        <field name="name">wuchang.business.backend.management.decision.item.list</field>
+        <field name="model">wuchang.business.backend.management.decision.item</field>
+        <field name="arch" type="xml">
+            <list string="Management Decision Items">
+                <field name="due_date"/>
+                <field name="priority"/>
+                <field name="operator_status"/>
+                <field name="source"/>
+                <field name="decision_key"/>
+                <field name="title"/>
+                <field name="owner_scope"/>
+                <field name="evidence_ref"/>
+                <field name="optimization_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_business_backend_management_decision_item_form" model="ir.ui.view">
+        <field name="name">wuchang.business.backend.management.decision.item.form</field>
+        <field name="model">wuchang.business.backend.management.decision.item</field>
+        <field name="arch" type="xml">
+            <form string="Management Decision Item">
+                <sheet>
+                    <group>
+                        <field name="optimization_id" readonly="1"/>
+                        <field name="decision_key" readonly="1"/>
+                        <field name="source" readonly="1"/>
+                        <field name="priority" readonly="1"/>
+                        <field name="title" readonly="1"/>
+                    </group>
+                    <group string="Management Tracking">
+                        <field name="operator_status"/>
+                        <field name="owner_scope"/>
+                        <field name="due_date"/>
+                        <field name="evidence_ref"/>
+                    </group>
+                    <group string="Decision Detail">
+                        <field name="recommended_action" readonly="1"/>
+                        <field name="operator_note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_business_backend_management_decision_item_search" model="ir.ui.view">
+        <field name="name">wuchang.business.backend.management.decision.item.search</field>
+        <field name="model">wuchang.business.backend.management.decision.item</field>
+        <field name="arch" type="xml">
+            <search string="Management Decision Items">
+                <field name="decision_key"/>
+                <field name="title"/>
+                <field name="source"/>
+                <field name="owner_scope"/>
+                <filter name="filter_priority_critical" string="Critical" domain="[('priority','=','critical')]"/>
+                <filter name="filter_priority_high" string="High" domain="[('priority','=','high')]"/>
+                <filter name="filter_status_blocked" string="Blocked" domain="[('operator_status','=','blocked')]"/>
+                <filter name="filter_ready_for_review" string="Ready For Review" domain="[('operator_status','=','ready_for_review')]"/>
+                <filter name="filter_open" string="Open" domain="[('operator_status','not in',('done','ready_for_review'))]"/>
+                <filter name="filter_overdue" string="Overdue" domain="[('due_date','&lt;',context_today()),('operator_status','not in',('done','ready_for_review'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_priority" string="Priority" context="{'group_by': 'priority'}"/>
+                    <filter name="group_status" string="Status" context="{'group_by': 'operator_status'}"/>
+                    <filter name="group_source" string="Source" context="{'group_by': 'source'}"/>
+                    <filter name="group_owner" string="Owner Scope" context="{'group_by': 'owner_scope'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wuchang_business_backend_optimization" model="ir.actions.act_window">
+        <field name="name">Business Backend Optimization</field>
+        <field name="res_model">wuchang.business.backend.optimization</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_wuchang_business_backend_management_decision_item" model="ir.actions.act_window">
+        <field name="name">Management Decision Items</field>
+        <field name="res_model">wuchang.business.backend.management.decision.item</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_priority_critical': 1, 'search_default_filter_priority_high': 1, 'search_default_filter_open': 1}</field>
+    </record>
+
+    <menuitem id="menu_wuchang_business_backend_optimization"
+              name="Business Backend Optimization"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_business_backend_optimization"
+              sequence="45"/>
+
+    <menuitem id="menu_wuchang_business_backend_management_decision_item"
+              name="Management Decision Items"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_business_backend_management_decision_item"
+              sequence="46"/>
+</odoo>
