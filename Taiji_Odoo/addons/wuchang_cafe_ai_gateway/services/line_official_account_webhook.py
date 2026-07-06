@@ -10,7 +10,9 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import sys
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 
@@ -18,6 +20,13 @@ SAFE_REF_PATTERN = re.compile(r"[A-Z0-9_:-]{6,180}")
 HEX64_PATTERN = re.compile(r"[a-f0-9]{64}")
 JWT_SHAPE_PATTERN = re.compile(r"[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}")
 LONG_TOKEN_SHAPE_PATTERN = re.compile(r"(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9_~+/=-]{40,}")
+
+
+def _ensure_repo_root_on_path() -> None:
+    root = Path(__file__).resolve().parents[4]
+    root_text = str(root)
+    if root_text not in sys.path:
+        sys.path.insert(0, root_text)
 
 
 def stable_hash(value: Any) -> str:
@@ -97,6 +106,44 @@ def _event_candidate(event: dict) -> dict:
         "groupId": source.get("groupId", ""),
         "roomId": source.get("roomId", ""),
     }
+
+
+def _render_total_field_line_response(candidate: dict) -> tuple[dict, dict]:
+    try:
+        _ensure_repo_root_on_path()
+        from tools.total_field.final_state_gate import run_line_candidate_gate
+        from tools.total_field.human_response_renderer import render_human_response
+    except Exception as exc:  # pragma: no cover - defensive Odoo runtime fallback
+        gate = {
+            "state": "TOTAL_FIELD_FINAL_STATE_GATE_RESULT",
+            "decision": "HOLD",
+            "gate_code": "HOLD_TOTAL_FIELD_GATE_IMPORT",
+            "risk_level": "MEDIUM",
+            "errors": [f"TOTAL_FIELD_GATE_IMPORT_FAILED:{type(exc).__name__}"],
+            "side_effects": {
+                "db_write": False,
+                "odoo_write": False,
+                "deploy": False,
+                "restart": False,
+                "external_api_call": False,
+                "line_reply_sent": False,
+            },
+        }
+        response = {
+            "state": "HUMAN_RESPONSE_RENDERED",
+            "decision": "HOLD",
+            "risk_level": "MEDIUM",
+            "channel": "LINE",
+            "reply_text": "這個候選需要再確認，我先暫停，不會執行任何正式動作。",
+            "requires_confirmation": True,
+            "candidate_reply_only": True,
+            "formal_send_executed": False,
+            "line_reply_sent": False,
+        }
+        return gate, response
+
+    gate = run_line_candidate_gate(candidate)
+    return gate, render_human_response(gate, channel="line")
     return {
         "event_ref_hash": stable_hash(event),
         "event_type": str(event.get("type") or ""),
@@ -144,7 +191,7 @@ def build_line_official_account_webhook_candidate(
         "failure_reasons": failure_reasons,
     }
     packet_hash = stable_hash(packet_seed)
-    return {
+    candidate = {
         "schema": "W7TP_XIAOJ_LINE_OFFICIAL_ACCOUNT_WEBHOOK_CANDIDATE_V1",
         "state": state,
         "generated_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -196,3 +243,11 @@ def build_line_official_account_webhook_candidate(
             "member_plaintext_echo": False,
         },
     }
+    gate, response = _render_total_field_line_response(candidate)
+    candidate["total_field_gate"] = gate
+    candidate["human_response"] = response
+    candidate["local_verifier"]["line_reply_allowed"] = False
+    candidate["local_verifier"]["human_release_required_for_reply"] = True
+    candidate["side_effects"]["formal_line_message_send"] = False
+    candidate["side_effects"]["line_reply_sent"] = False
+    return candidate
