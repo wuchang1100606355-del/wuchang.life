@@ -1,6 +1,2 @@
-# -*- coding: utf-8 -*-
-from . import main
-from . import sister_controller
-from . import line_webhook_controller
-from . import voice_interface_controller
-
+from . import pos_mvp_api
+from . import line_webhook
