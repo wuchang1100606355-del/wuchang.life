@@ -1,0 +1,85 @@
+{
+  "state": "ODOO_HIGH_RISK_AND_STARTUP_HOLD_MAP_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "hold_map_only",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "production_activation": false
+  },
+  "hold_groups": {
+    "pm3_base": {
+      "paths": [
+        "Taiji_Odoo/pm3_base"
+      ],
+      "decision": "HOLD",
+      "reason": "base runtime/source bundle requires separate owner review before exact seal",
+      "allowed_now": false
+    },
+    "pm3_reload": {
+      "paths": [
+        "Taiji_Odoo/pm3_reload.sh"
+      ],
+      "decision": "HOLD",
+      "reason": "reload script may imply restart/deploy operation; source review only in separate packet",
+      "allowed_now": false
+    },
+    "startup_state_packets": {
+      "paths": [
+        "W7TP_FIELD_ATLAS/runtime_status/latest_startup_state_packet.yaml",
+        "W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_*.yaml"
+      ],
+      "decision": "HOLD",
+      "reason": "startup runtime evidence; preserve as evidence, do not bulk-add or regenerate",
+      "allowed_now": false
+    },
+    "boot_login_check": {
+      "paths": [
+        "boot/taiji_login_readonly_check.sh"
+      ],
+      "decision": "HOLD",
+      "reason": "boot/login path affects startup behavior; exact packet required before seal",
+      "allowed_now": false
+    },
+    "dead_letter_evidence": {
+      "paths": [
+        "evidence/dead_letter"
+      ],
+      "decision": "HOLD",
+      "reason": "evidence archive; preserve, do not bulk-add, delete, move, or compress",
+      "allowed_now": false
+    },
+    "gt8d_lookup_installer": {
+      "paths": [
+        "install_gt8d_lookup_rule.sh"
+      ],
+      "decision": "HOLD",
+      "reason": "installer script may alter lookup/rule state; separate source packet required",
+      "allowed_now": false
+    },
+    "web_cockpit_frontend_drift": {
+      "paths": [
+        "web/packet_inference_cockpit/app.js",
+        "web/packet_inference_cockpit/index.html",
+        "web/packet_inference_cockpit/styles.css"
+      ],
+      "decision": "HOLD_DETOUR_ALERT",
+      "reason": "frontend cockpit drift ownership unresolved; no restore, no commit, no delete",
+      "allowed_now": false
+    }
+  },
+  "allowed_current_outcome": {
+    "seal_map_only": true,
+    "touch_held_paths": false,
+    "commit_held_paths": false,
+    "restore_held_paths": false,
+    "delete_held_paths": false
+  },
+  "next": "FINAL_FORWARD_STATUS_SEAL_EXISTING_EVIDENCE_ONLY"
+}
