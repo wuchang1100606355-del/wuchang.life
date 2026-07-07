@@ -1,0 +1,291 @@
+{
+  "state": "WUCHANG_PROPERTY_MULTIBRAIN_INTENT_FIELD_MAP_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_runtime_action",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "live_wifi_change": false,
+    "payment_capture": false,
+    "formal_approval": false,
+    "member_plaintext_exposure": false,
+    "secret_exposure": false,
+    "production_activation": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false
+  },
+  "design_principle": {
+    "from_pos_design": "multi_brain_and_intent_field_distributed_compute",
+    "target_scene": "property_management_cloud",
+    "execution": "candidate_only",
+    "total_field_decides": true
+  },
+  "distributed_compute_devices": {
+    "lobby_audio_video_ai_xiaoj": {
+      "name": "影音 AI 大廳迎賓小J",
+      "device_role": "lobby_greeter_ai",
+      "allowed": [
+        "welcome",
+        "visitor_intent_precheck",
+        "mail_package_pickup_guidance",
+        "community_service_guidance",
+        "rookie_escalation"
+      ],
+      "forbidden": [
+        "formal_approval",
+        "db_write",
+        "router_write",
+        "live_wifi_change",
+        "payment_capture"
+      ]
+    },
+    "router_guest_network_ai_registration": {
+      "name": "路由器訪客網路 AI 登記",
+      "device_role": "router_guest_registration_ai",
+      "allowed": [
+        "guest_registration_candidate",
+        "visitor_identity_ref_candidate",
+        "notify_approver_candidate",
+        "temporary_access_request_candidate"
+      ],
+      "forbidden": [
+        "router_write",
+        "live_wifi_change",
+        "issue_real_wifi_credential_without_approval"
+      ]
+    },
+    "frontdesk_mail_package_node": {
+      "name": "郵件物品收領節點",
+      "device_role": "mail_package_receiving_node",
+      "allowed": [
+        "mail_item_intake_candidate",
+        "package_pickup_candidate",
+        "recipient_notify_candidate",
+        "pickup_confirmation_candidate"
+      ],
+      "forbidden": [
+        "final_pickup_without_identity_check",
+        "member_plaintext_exposure"
+      ]
+    },
+    "secretariat_operator_node": {
+      "name": "秘書處操作節點",
+      "device_role": "secretariat_operator",
+      "allowed": [
+        "review_candidate",
+        "document_candidate",
+        "notice_candidate",
+        "mail_package_policy_review"
+      ],
+      "forbidden": [
+        "formal_submission_without_total_field_pass"
+      ]
+    },
+    "chairperson_authority_node": {
+      "name": "主委權威節點",
+      "device_role": "chairperson_authority",
+      "allowed": [
+        "high_authority_review_candidate",
+        "committee_scope_approval_candidate",
+        "household_head_transfer_review"
+      ],
+      "forbidden": [
+        "bypass_total_field"
+      ]
+    }
+  },
+  "role_ai_mapping_from_pos": {
+    "pos_store_manager_ai": "secretary_general_ai",
+    "pos_responsible_person_ai": "chairperson_ai",
+    "pos_order_pickup": "mail_package_receiving",
+    "pos_customer_greeting": "lobby_audio_video_ai_xiaoj",
+    "pos_member_checkin": "router_guest_network_ai_registration"
+  },
+  "property_ai_roles": {
+    "secretary_general_ai": {
+      "zh": "總幹事AI",
+      "authority_level": 70,
+      "can_review": [
+        "mail_package_policy",
+        "resident_service_candidate",
+        "document_candidate",
+        "secretariat_task_candidate"
+      ],
+      "requires_total_field": true
+    },
+    "chairperson_ai": {
+      "zh": "主委AI",
+      "authority_level": 90,
+      "can_review": [
+        "committee_scope_candidate",
+        "high_authority_candidate",
+        "household_head_transfer_candidate",
+        "router_guest_policy_candidate"
+      ],
+      "requires_total_field": true
+    },
+    "lobby_xiaoj_ai": {
+      "zh": "大廳迎賓小J",
+      "authority_level": 20,
+      "can_review": [],
+      "can_generate": [
+        "visitor_registration_candidate",
+        "mail_package_pickup_candidate",
+        "community_guidance_candidate"
+      ],
+      "requires_total_field": true
+    },
+    "router_guest_ai": {
+      "zh": "訪客網路AI",
+      "authority_level": 30,
+      "can_generate": [
+        "guest_wifi_registration_candidate",
+        "approver_notification_candidate"
+      ],
+      "requires_total_field": true
+    }
+  },
+  "identity_permission_model": {
+    "household": {
+      "zh": "家",
+      "role": "smallest_group",
+      "default_household_head": "unit_owner",
+      "household_head_transferable_to": "household_member",
+      "transfer_requires": [
+        "current_household_head_candidate",
+        "target_household_member_ref",
+        "chairperson_ai_review_candidate",
+        "total_field_pass"
+      ]
+    },
+    "unit_owner": {
+      "zh": "區分所有權人",
+      "default_permissions": [
+        "view_own_household",
+        "assign_household_head_candidate",
+        "receive_mail_package_notice",
+        "approve_household_guest_candidate",
+        "request_facility_booking_candidate"
+      ]
+    },
+    "household_head": {
+      "zh": "戶長",
+      "default_holder": "unit_owner",
+      "permissions": [
+        "manage_household_members_candidate",
+        "approve_household_guest_candidate",
+        "delegate_household_package_pickup_candidate",
+        "transfer_household_head_candidate"
+      ]
+    },
+    "household_member": {
+      "zh": "戶內成員",
+      "permissions": [
+        "view_authorized_household_notice",
+        "receive_personal_package_notice",
+        "request_guest_registration_candidate",
+        "accept_transferred_household_head_candidate"
+      ]
+    },
+    "visitor": {
+      "zh": "訪客",
+      "permissions": [
+        "submit_visit_registration_candidate",
+        "request_guest_wifi_candidate"
+      ]
+    },
+    "security_guard": {
+      "zh": "保全",
+      "permissions": [
+        "frontdesk_check_candidate",
+        "mail_package_intake_candidate",
+        "visitor_arrival_candidate"
+      ]
+    },
+    "secretary_general": {
+      "zh": "總幹事",
+      "permissions": [
+        "secretariat_review_candidate",
+        "mail_package_policy_review",
+        "resident_service_review",
+        "notice_candidate_review"
+      ]
+    },
+    "chairperson": {
+      "zh": "主委",
+      "permissions": [
+        "committee_high_authority_review",
+        "household_head_transfer_review",
+        "guest_policy_review",
+        "final_committee_candidate_review"
+      ]
+    }
+  },
+  "intent_field_routes": {
+    "visitor_greeting": {
+      "brain": "lobby_xiaoj_ai",
+      "device": "lobby_audio_video_ai_xiaoj",
+      "approver_selector": "by_registration_target"
+    },
+    "guest_wifi_registration": {
+      "brain": "router_guest_ai",
+      "device": "router_guest_network_ai_registration",
+      "approver_selector": "household_or_secretariat_or_chairperson"
+    },
+    "mail_package_receiving": {
+      "brain": "secretary_general_ai",
+      "device": "frontdesk_mail_package_node",
+      "approver_selector": "recipient_or_household_head_or_secretariat"
+    },
+    "household_head_transfer": {
+      "brain": "chairperson_ai",
+      "device": "chairperson_authority_node",
+      "approver_selector": "chairperson_and_total_field"
+    },
+    "community_service_guidance": {
+      "brain": "lobby_xiaoj_ai",
+      "device": "lobby_audio_video_ai_xiaoj",
+      "approver_selector": "none_candidate_only"
+    }
+  },
+  "approver_rules": {
+    "visitor_to_household": [
+      "household_head",
+      "unit_owner"
+    ],
+    "visitor_to_committee": [
+      "chairperson",
+      "secretary_general"
+    ],
+    "visitor_to_secretariat": [
+      "secretary_general",
+      "secretary"
+    ],
+    "visitor_to_merchant_or_vendor": [
+      "responsible_contact_candidate",
+      "secretariat"
+    ],
+    "mail_package_to_household": [
+      "recipient",
+      "household_head"
+    ],
+    "mail_package_unknown_recipient": [
+      "secretary_general_ai",
+      "security_guard"
+    ],
+    "guest_wifi_for_household": [
+      "household_head",
+      "unit_owner"
+    ],
+    "guest_wifi_for_public_event": [
+      "secretary_general_ai",
+      "chairperson_ai"
+    ]
+  },
+  "member_facing_fallback": "這個我不懂，我只是個菜鳥，我幫你問店長或學長",
+  "next": "WIRE_PROPERTY_MULTIBRAIN_INTENT_FIELD_TO_8D_PACKET_SOURCE_ONLY"
+}
