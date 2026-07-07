@@ -164,6 +164,7 @@ DETOUR_ALERT_HARD_GATE_CODES = (
     "MIN_LANDING_BUT_REPORT_OR_ARCHITECTURE_EXPANSION",
     "USER_OPERATION_BURDEN_INCREASED",
     "NON_GENERATIVE_RECONSTRUCTION_PATH",
+    "PASTE_BURDEN_WHEN_RECONSTRUCTABLE",
 )
 DETOUR_FRONTEND_PATH_PREFIXES = ("web/", "frontend/", "ui/", "static/", "assets/")
 DETOUR_COCKPIT_UI_PREFIX = "web/packet_inference_cockpit/"
@@ -173,6 +174,35 @@ GENERATIVE_RECONSTRUCTION_MODES = {
     "generative-reconstruction",
     "生成式重構",
 }
+PASTE_BURDEN_REQUEST_TERMS = (
+    "貼給 codex",
+    "貼給codex",
+    "再貼一次",
+    "轉給新 thread",
+    "轉給新thread",
+    "轉給新的 thread",
+    "轉給新的thread",
+    "重跑給我看",
+    "把這段貼回來",
+    "paste this back",
+    "paste it back",
+    "paste again",
+    "send to new thread",
+    "new thread",
+    "rerun and paste",
+)
+PASTE_BURDEN_RECONSTRUCTABLE_TERMS = (
+    "run_id",
+    "tests=",
+    "git_status",
+    "git status",
+    "existing evidence",
+    "current diff",
+    "現有 diff",
+    "既有證據",
+    "總場判斷",
+    "生成式重構",
+)
 
 
 @dataclass
@@ -271,8 +301,14 @@ def _detour_context_text(detour_context: dict[str, Any], candidate_packet: dict[
             detour_context.get("task_layer", ""),
             detour_context.get("required_mode", ""),
             detour_context.get("actual_mode", ""),
+            detour_context.get("assistant_request", ""),
+            detour_context.get("run_id", ""),
+            detour_context.get("tests", ""),
+            detour_context.get("git_status", ""),
+            detour_context.get("diff_summary", ""),
             " ".join(detour_context.get("added_features", [])),
             " ".join(detour_context.get("touched_paths", [])),
+            " ".join(detour_context.get("evidence_refs", [])),
         )
         if piece
     ).lower()
@@ -297,6 +333,19 @@ def _build_detour_context(source: dict[str, Any], text: str) -> dict[str, Any]:
         "architecture_expansion",
         "user_operation_burden_increased",
         "non_generative_reconstruction_path",
+        "assistant_requested_paste",
+        "assistant_requested_repost",
+        "assistant_requested_transfer",
+        "assistant_requested_rerun",
+        "paste_request",
+        "total_field_can_decide",
+        "existing_evidence_available",
+        "run_id_available",
+        "tests_available",
+        "git_status_available",
+        "diff_reconstructable",
+        "generative_reconstruction_available",
+        "reconstructable",
     )
     flags = {key: _bool_flag(source.get(key)) for key in bool_keys if key in source}
     touched_paths = [_clean_rel_path(path) for path in _source_text_list(
@@ -318,10 +367,19 @@ def _build_detour_context(source: dict[str, Any], text: str) -> dict[str, Any]:
         "task_layer": _source_first_text(source, ("task_layer", "task_type", "work_layer")),
         "required_mode": _source_first_text(source, ("required_mode", "expected_mode", "path_mode")),
         "actual_mode": _source_first_text(source, ("actual_mode", "taken_mode", "implemented_mode")),
+        "assistant_request": _source_first_text(
+            source,
+            ("assistant_request", "assistant_next_step", "requested_user_action", "proposed_next"),
+        ),
+        "run_id": _source_first_text(source, ("run_id", "RUN_ID")),
+        "tests": _source_first_text(source, ("tests", "TESTS", "test_result", "test_results")),
+        "git_status": _source_first_text(source, ("git_status", "GIT_STATUS")),
+        "diff_summary": _source_first_text(source, ("diff_summary", "existing_diff", "current_diff")),
         "touched_paths": touched_paths,
         "allowed_paths": allowed_paths,
         "out_of_scope_paths": out_of_scope_paths,
         "added_features": _source_text_list(source, ("added_features", "new_features", "feature_expansion")),
+        "evidence_refs": _source_text_list(source, ("evidence_refs", "existing_evidence", "total_field_evidence")),
         "flags": flags,
     }
 
@@ -586,6 +644,33 @@ def check_detour_alert_hard_gate(candidate_packet: dict[str, Any]) -> list[str]:
     ):
         errors.append("NON_GENERATIVE_RECONSTRUCTION_PATH")
 
+    paste_burden_requested = (
+        flags.get("assistant_requested_paste")
+        or flags.get("assistant_requested_repost")
+        or flags.get("assistant_requested_transfer")
+        or flags.get("assistant_requested_rerun")
+        or flags.get("paste_request")
+        or any(term in text_blob for term in PASTE_BURDEN_REQUEST_TERMS)
+    )
+    reconstructable_without_user_paste = (
+        flags.get("total_field_can_decide")
+        or flags.get("existing_evidence_available")
+        or flags.get("run_id_available")
+        or flags.get("tests_available")
+        or flags.get("git_status_available")
+        or flags.get("diff_reconstructable")
+        or flags.get("generative_reconstruction_available")
+        or flags.get("reconstructable")
+        or bool(detour_context.get("run_id"))
+        or bool(detour_context.get("tests"))
+        or bool(detour_context.get("git_status"))
+        or bool(detour_context.get("diff_summary"))
+        or bool(detour_context.get("evidence_refs"))
+        or any(term in text_blob for term in PASTE_BURDEN_RECONSTRUCTABLE_TERMS)
+    )
+    if paste_burden_requested and reconstructable_without_user_paste:
+        errors.append("PASTE_BURDEN_WHEN_RECONSTRUCTABLE")
+
     return [code for code in DETOUR_ALERT_HARD_GATE_CODES if code in set(errors)]
 
 
@@ -750,7 +835,12 @@ def run_total_field_gate(request: str | dict[str, Any] | None, now: float | None
     if isinstance(canonical_adi, dict):
         errors.extend(error for error in canonical_adi.get("errors", []) if error not in errors)
 
-    if detour_errors:
+    paste_burden_hold = "PASTE_BURDEN_WHEN_RECONSTRUCTABLE" in detour_errors
+    if paste_burden_hold:
+        decision = HOLD
+        gate_code = "HOLD_DETOUR_ALERT"
+        risk_level = "CRITICAL"
+    elif detour_errors:
         decision = BLOCK
         gate_code = "BLOCK_DETOUR_ALERT_HARD_GATE"
         risk_level = "CRITICAL"
@@ -787,8 +877,23 @@ def run_total_field_gate(request: str | dict[str, Any] | None, now: float | None
         gate_code = "HOLD_CANONICAL_8D_VERIFIER"
         risk_level = "MEDIUM"
 
+    detour_alert_details = {
+        "priority": "HIGHEST",
+        "alerts": detour_errors,
+    }
+    if paste_burden_hold:
+        detour_alert_details.update(
+            {
+                "STATE": "HOLD_DETOUR_ALERT",
+                "REASON": "PASTE_BURDEN_WHEN_RECONSTRUCTABLE",
+                "RULE": "凡可不貼而要使用者貼，即為繞路",
+                "REQUIRED_PATH": "SOURCE → PACKET → RECONSTRUCT → VERIFY → TOTAL_FIELD_DECIDES → SEAL/HOLD",
+                "NEXT": "改由總場/現有證據/生成式重構判斷，不再要求使用者搬運",
+            }
+        )
+
     return {
-        "state": STATE,
+        "state": "HOLD_DETOUR_ALERT" if paste_burden_hold else STATE,
         "run_id": run_id,
         "decision": decision,
         "gate_code": gate_code,
@@ -809,10 +914,7 @@ def run_total_field_gate(request: str | dict[str, Any] | None, now: float | None
             "lookup_reference_reconstruction_conditions": "PASS",
             "no_side_effects": "PASS",
         },
-        "detour_alert_hard_gate": {
-            "priority": "HIGHEST",
-            "alerts": detour_errors,
-        },
+        "detour_alert_hard_gate": detour_alert_details,
         "canonical_verifier": {
             "decision": canonical_decision,
             "gate_stage": canonical_log.get("gate_stage"),

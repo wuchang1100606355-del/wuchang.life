@@ -170,6 +170,35 @@ class TotalFieldFinalStateGateTest(unittest.TestCase):
         self.assertTrue(expected_alerts.issubset(set(gate["errors"])))
         self.assertEqual(set(gate["detour_alert_hard_gate"]["alerts"]), expected_alerts)
 
+    def test_paste_burden_when_reconstructable_holds_detour_alert(self) -> None:
+        gate = run_total_field_gate(
+            {
+                "text": "助手要求把這段貼回來，但 RUN_ID / TESTS / GIT_STATUS 和現有 diff 已可重構",
+                "assistant_request": "請貼給 Codex，再貼一次到新 thread，重跑給我看",
+                "run_id": "RUN_ID=TOTAL_FIELD_GATE_EXAMPLE",
+                "tests": "TESTS=PASS",
+                "git_status": "GIT_STATUS=dirty",
+                "diff_summary": "current diff reconstructable",
+                "total_field_can_decide": True,
+                "generative_reconstruction_available": True,
+            },
+            now=1004.7,
+        )
+
+        self.assertEqual(gate["state"], "HOLD_DETOUR_ALERT")
+        self.assertEqual(gate["decision"], "HOLD")
+        self.assertEqual(gate["gate_code"], "HOLD_DETOUR_ALERT")
+        self.assertIn("PASTE_BURDEN_WHEN_RECONSTRUCTABLE", gate["errors"])
+        alert = gate["detour_alert_hard_gate"]
+        self.assertEqual(alert["STATE"], "HOLD_DETOUR_ALERT")
+        self.assertEqual(alert["REASON"], "PASTE_BURDEN_WHEN_RECONSTRUCTABLE")
+        self.assertEqual(alert["RULE"], "凡可不貼而要使用者貼，即為繞路")
+        self.assertEqual(
+            alert["REQUIRED_PATH"],
+            "SOURCE → PACKET → RECONSTRUCT → VERIFY → TOTAL_FIELD_DECIDES → SEAL/HOLD",
+        )
+        self.assertEqual(alert["NEXT"], "改由總場/現有證據/生成式重構判斷，不再要求使用者搬運")
+
     def test_line_candidate_goes_through_gate_and_renderer(self) -> None:
         service = load_line_webhook_service()
         candidate = service.build_line_official_account_webhook_candidate(
