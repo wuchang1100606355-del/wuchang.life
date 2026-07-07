@@ -1,0 +1,137 @@
+{
+  "state": "CONTAINER_DEPLOYMENT_MAP_MIN_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "version": "w7tp_container_field_v1",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "web_touch": false,
+    "runtime_bulk_output": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "production_activation": false
+  },
+  "hard_boundary": {
+    "container": "execution_carrier",
+    "volume": "persistence",
+    "eight_d_seven_d": "state_packet_and_governance_contract",
+    "adi_5d": "absolute_index",
+    "total_field": "final_authority"
+  },
+  "execution_service_fields": {
+    "odoo_pos": {
+      "container_governance": "required",
+      "target_role": "service_container",
+      "known_container_refs": [
+        "wuchang_os_odoo_18"
+      ],
+      "persistent_state": "external_volume_or_database",
+      "authority_owned_by_container": false
+    },
+    "d8_db_postgres": {
+      "container_governance": "required",
+      "target_role": "database_container_with_persistent_volume",
+      "known_container_refs": [
+        "taiji_d8_db",
+        "wuchang_os_pg"
+      ],
+      "persistent_state": "external_volume",
+      "authority_owned_by_container": false
+    },
+    "cafe_gateway": {
+      "container_governance": "required",
+      "target_role": "service_container",
+      "known_container_refs": [],
+      "persistent_state": "external_volume_or_total_field_refs",
+      "authority_owned_by_container": false
+    },
+    "line_webhook_gateway": {
+      "container_governance": "required",
+      "target_role": "edge_service_container",
+      "known_container_refs": [],
+      "persistent_state": "externalized_event_refs",
+      "authority_owned_by_container": false
+    },
+    "ai_candidate_lane": {
+      "container_governance": "required",
+      "target_role": "candidate_compute_container",
+      "known_container_refs": [],
+      "persistent_state": "candidate_output_refs_only",
+      "authority_owned_by_container": false
+    },
+    "verifier_redteam_gate": {
+      "container_governance": "required_or_sidecar",
+      "target_role": "verifier_service_or_sidecar",
+      "known_container_refs": [],
+      "persistent_state": "rules_and_evidence_externalized",
+      "authority_owned_by_container": false
+    },
+    "openwebui_workbench": {
+      "container_governance": "required",
+      "target_role": "operator_workbench_container",
+      "known_container_refs": [],
+      "persistent_state": "external_profile_and_packet_refs",
+      "authority_owned_by_container": false
+    },
+    "tailscale_vpn": {
+      "container_governance": "host_or_sidecar",
+      "target_role": "private_transport_layer",
+      "known_container_refs": [],
+      "persistent_state": "host_network_identity",
+      "authority_owned_by_container": false
+    }
+  },
+  "externalized_authority_fields": {
+    "total_field_authority": {
+      "container_governance": "forbidden_as_container_owned_authority",
+      "role": "final_decision_chain",
+      "reconstructable_outside_container": true
+    },
+    "eight_d_seven_d_packet": {
+      "container_governance": "forbidden_as_container_payload_only",
+      "role": "state_envelope_and_governance_contract",
+      "reconstructable_outside_container": true
+    },
+    "adi_5d_absolute_index": {
+      "container_governance": "forbidden_as_container_local_only",
+      "role": "absolute_index_authority_reference",
+      "reconstructable_outside_container": true
+    },
+    "member_identity": {
+      "container_governance": "forbidden_as_long_running_member_container",
+      "role": "identity_and_consent_subject",
+      "reconstructable_outside_container": true
+    },
+    "merchant_organization": {
+      "container_governance": "forbidden_as_unapproved_production_container",
+      "role": "organization_state_subject",
+      "reconstructable_outside_container": true
+    },
+    "runtime_evidence": {
+      "container_governance": "forbidden_as_container_only_filesystem",
+      "role": "external_mounted_evidence_or_archive",
+      "reconstructable_outside_container": true
+    }
+  },
+  "forbidden_patterns": [
+    "one_member_one_long_running_container",
+    "one_merchant_one_production_container_without_total_field_pass",
+    "authority_inside_ephemeral_container_filesystem_only",
+    "candidate_packet_directly_deploys_container",
+    "candidate_packet_directly_creates_live_url",
+    "cloud_sync_mislabeled_as_generative_transmission",
+    "file_transfer_mislabeled_as_state_reconstruction"
+  ],
+  "required_runtime_path": [
+    "VPN_OR_PRIVATE_TRANSPORT",
+    "CONTAINERIZED_EXECUTION_SERVICE",
+    "PERSISTENT_VOLUME_OR_EXTERNALIZED_STATE",
+    "EIGHT_D_SEVEN_D_PACKET_GATE",
+    "ADI_5D_AUTHORITY_REFERENCE",
+    "VERIFIER_REDTEAM_FINAL_STATE_GATE",
+    "TOTAL_FIELD_DECIDES"
+  ],
+  "next": "container_compose_candidate_map_without_deploy"
+}
