@@ -169,10 +169,68 @@ h3 {
   word-break: normal;
 }
 
+.product-intro {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.poetic-hero {
+  background: linear-gradient(135deg, rgba(23, 58, 94, 0.44), rgba(15, 28, 43, 0.82));
+  border: 1px solid rgba(145, 191, 255, 0.28);
+  border-radius: 10px;
+  color: #d9ecff;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  padding: 12px;
+}
+
 .layout {
   display: grid;
   gap: 16px;
   grid-template-columns: minmax(300px, 1.05fr) minmax(300px, .95fr);
+}
+
+.scenario-deck {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  margin-bottom: 12px;
+}
+
+.scenario-card {
+  background: #0b1420;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+}
+
+.scenario-card strong {
+  color: var(--blue);
+  display: block;
+  font-size: 13px;
+}
+
+.scenario-card .media-hint {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.scenario-card button {
+  justify-self: start;
+  padding: 8px 10px;
+  width: fit-content;
+}
+
+.run-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
 .panel {
@@ -268,6 +326,11 @@ button {
   padding: 10px 12px;
 }
 
+.secondary-btn {
+  background: #122e44;
+  border: 1px solid var(--line);
+}
+
 button:disabled {
   cursor: not-allowed;
   opacity: .55;
@@ -296,6 +359,190 @@ button:disabled {
 .answer.compact {
   color: var(--muted);
   min-height: 58px;
+}
+
+.extension-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.experience-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.extension-item {
+  background: #0b1420;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.extension-item h4 {
+  color: var(--blue);
+  font-size: 12px;
+  margin: 0 0 4px;
+}
+
+.extension-item p {
+  color: var(--text);
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.reply-variants-panel {
+  display: grid;
+  gap: 8px;
+}
+
+.reply-variant-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reply-variant-btn {
+  background: #142538;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.reply-variant-btn.active {
+  border-color: rgba(93, 184, 255, .6);
+  color: var(--blue);
+  background: #0f2942;
+}
+
+.reply-variant {
+  color: var(--text);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(138, 160, 182, .28);
+}
+
+.reply-variant:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.reply-variant.active {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.media-panel {
+  display: grid;
+  gap: 8px;
+  min-height: 76px;
+}
+
+.translator-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.translator-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.translator-text {
+  background: #071018;
+  margin: 0;
+  padding: 10px;
+  min-height: 92px;
+  white-space: pre-wrap;
+  overflow: auto;
+}
+
+.translator-status {
+  min-height: 20px;
+}
+
+.media-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.media-toolbar button {
+  background: #1a334f;
+  border: 1px solid var(--line);
+}
+
+.media-toolbar button:disabled {
+  opacity: 0.4;
+}
+
+.media-hint {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.action-mode {
+  color: var(--blue);
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.action-section {
+  background: #0b1420;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  padding: 8px;
+}
+
+.action-section-title {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.action-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.action-item {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.action-extra-row {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 6px 0;
+}
+
+.action-fill-btn {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.action-fill-input-btn {
+  margin-left: 8px;
+}
+
+.action-fill-status {
+  display: block;
+  margin-top: 8px;
 }
 
 .lock-box {
@@ -432,6 +679,107 @@ pre {
   display: grid;
   gap: 8px;
   margin-top: 14px;
+}
+
+.assistant-tone {
+  color: var(--blue);
+  font-weight: 800;
+}
+
+.value-block {
+  display: grid;
+  gap: 6px;
+}
+
+.value-list {
+  color: var(--text);
+  margin: 0;
+  padding-left: 18px;
+}
+
+.value-list li {
+  margin: 4px 0;
+  font-size: 12px;
+}
+
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.scenario-chips {
+  display: grid;
+  gap: 8px;
+}
+
+.scenario-chip {
+  background: #10263b;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 8px;
+}
+
+.scenario-chip-title {
+  color: var(--blue);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.emotion-panel {
+  display: grid;
+  gap: 8px;
+}
+
+.emotion-row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.emotion-meter {
+  background: #0b1420;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.emotion-meter::before {
+  background: linear-gradient(90deg, #4cc9ff, #9d8cff, #ffb95a);
+  border-radius: 999px;
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  transition: width 240ms ease;
+  top: 0;
+  width: var(--emotion-percent, 40%);
+}
+
+.emotion-label {
+  color: var(--blue);
+  font-size: 12px;
+}
+
+.suggestion-chip {
+  background: #122741;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+.suggestion-chip:hover {
+  border-color: rgba(93, 184, 255, .72);
 }
 
 .chat-line {

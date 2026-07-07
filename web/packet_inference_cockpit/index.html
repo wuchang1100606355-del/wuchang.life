@@ -125,6 +125,13 @@
           <h2>自然語言對話</h2>
           <span>8D input packet</span>
         </div>
+        <div class="product-intro">
+          小J 像會陪你對話的店務 AI，不直接做正式送件；先把你需求轉成可核對候選，讓下一步變得乾淨、好理解、好接續。
+        </div>
+        <div id="literaryWelcome" class="poetic-hero" role="status" aria-live="polite">
+          先幫你鋪一條「能被執行」的路線：你講一句，就會得到可理解、可檢查、可回填的回覆。
+        </div>
+        <div id="scenarioDeck" class="scenario-deck" aria-label="場景導引"></div>
         <div id="demoButtons" class="demo-buttons"></div>
         <label for="inputText">自然語言輸入</label>
         <textarea id="inputText" rows="5" placeholder="輸入一句話，例如：我今天有點累，想喝不太苦的，幫我推薦"></textarea>
@@ -149,16 +156,54 @@
           </label>
           <label for="localMode">Mode<input id="localMode" value="local dev only" disabled></label>
         </div>
-          <button id="runBtn" type="button">RUN PACKET INFERENCE</button>
+        <div class="form-row">
+          <label for="aiKeyRef">會員 AI Key（登入角色）</label>
+          <select id="aiKeyRef">
+            <option value="">未選擇（僅封包預設）</option>
+            <option value="member_ai_key_ref:demo:local_lite">member-demo-local-lite</option>
+            <option value="member_ai_key_ref:demo:balanced">member-demo-balanced</option>
+            <option value="member_ai_key_ref:demo:creative">member-demo-creative</option>
+          </select>
+          <label for="aiKeyCustom">或輸入自訂 AI Key Ref</label>
+          <input id="aiKeyCustom" placeholder="member_ai_key_ref:member_xxx:plan_xxx">
+        </div>
+        <div class="form-row">
+          <label for="cloudTranslatorProfile">雲端模型轉譯器</label>
+          <select id="cloudTranslatorProfile">
+            <option value="raw">原文保留</option>
+            <option value="human">擬人化口語</option>
+            <option value="poetic">文學化</option>
+            <option value="compact">精簡摘要</option>
+          </select>
+          <label for="responseTone">回覆語氣</label>
+          <select id="responseTone">
+            <option value="natural">自然語氣</option>
+            <option value="concise">簡潔版</option>
+            <option value="poetic">文學版</option>
+          </select>
+        </div>
+          <div class="run-row">
+            <button id="runBtn" type="button">RUN PACKET INFERENCE</button>
+            <button id="copyAnswerBtn" type="button" class="secondary-btn">複製最新回覆</button>
+            <button id="clearChatBtn" type="button" class="secondary-btn">清除對話</button>
+          </div>
         <div id="chatLog" class="chat-log"></div>
       </section>
 
-      <section class="panel output-panel">
+    <section class="panel output-panel">
         <div class="panel-head">
           <h2>總場回應</h2>
           <span>template renderer</span>
         </div>
         <div id="decisionBadge" class="decision">WAITING</div>
+        <h3>你這次可以直接得到什麼</h3>
+        <div id="valueOutcome" class="answer compact">尚未執行。</div>
+        <h3>可立即衍伸能力</h3>
+        <div id="extensionList" class="extension-grid answer compact">尚未執行。</div>
+        <h3>這次先為你解決了什麼</h3>
+        <div id="solvedProblems" class="extension-grid answer compact">尚未執行。</div>
+        <h3>目前不會做（保留邊界）</h3>
+        <div id="notCovered" class="extension-grid answer compact">尚未執行。</div>
         <h3>Final Answer</h3>
         <div id="answerText" class="answer">尚未執行。</div>
         <h3>Raw Verified Draft</h3>
@@ -167,6 +212,57 @@
         <div id="prAnswerText" class="answer compact">尚未執行。</div>
         <h3>Decision Locked</h3>
         <div id="decisionLockedBox" class="lock-box">TRUE</div>
+        <h3>AI 會員設定</h3>
+        <div id="aiProfileSummary" class="answer compact">尚未執行。</div>
+        <h3>Persona Tone</h3>
+        <div id="personaTone" class="answer compact">尚未執行。</div>
+        <h3>AI 語氣</h3>
+        <div id="assistantTone" class="answer compact">尚未執行。</div>
+        <h3>Persona Projection</h3>
+        <div id="personaProjection" class="answer compact">尚未執行。</div>
+        <h3>Member Facing Message</h3>
+        <div id="memberFacingMessage" class="answer compact">尚未執行。</div>
+        <h3>Quick Copy</h3>
+        <div id="answerCopyStatus" class="media-hint">尚未產生可複製文字。</div>
+        <h3>Cloud Model Response</h3>
+        <pre id="cloudModelPacket" class="answer compact">尚未執行。</pre>
+        <h3>Cloud Model Translator</h3>
+        <div id="cloudTranslatorPanel" class="translator-panel answer compact">
+          <div id="cloudTranslatorMode" class="media-hint">模式：raw</div>
+          <pre id="cloudModelTranslatorText" class="translator-text">尚未執行。</pre>
+          <div class="translator-actions">
+            <button id="copyCloudTranslatorText" type="button" class="action-fill-btn">複製轉譯文字</button>
+            <span id="cloudTranslatorCopyStatus" class="media-hint translator-status"></span>
+          </div>
+        </div>
+        <h3>Next Action</h3>
+        <div id="nextActionHint" class="answer compact">尚未執行。</div>
+        <h3>AI 情緒曲線</h3>
+        <div id="emotionProfile" class="answer compact">尚未執行。</div>
+        <h3>Reply Variants</h3>
+        <div class="reply-variants-panel">
+          <div id="replyVariantControls" class="reply-variant-controls" role="tablist" aria-label="回覆版本切換"></div>
+          <div id="replyVariants" class="answer compact">尚未執行。</div>
+        </div>
+        <h3>LITERARY FLOW</h3>
+        <div id="literaryFlow" class="answer compact">尚未執行。</div>
+        <h3>產品保證與衍伸價值</h3>
+        <div id="experienceGuarantee" class="answer compact">尚未執行。</div>
+        <h3>會員價值亮點</h3>
+        <div id="valueLayer" class="answer compact">尚未執行。</div>
+        <h3>可解決場景</h3>
+        <div id="solutionScenarios" class="answer compact">尚未執行。</div>
+        <h3>可執行候選草稿</h3>
+        <div id="actionPack" class="answer compact">尚未執行。</div>
+        <h3>草稿欄位一鍵回填</h3>
+        <div class="answer compact">
+          <div id="actionChecklist"></div>
+          <div id="actionCopyHint" class="media-hint">尚未執行。</div>
+        </div>
+        <h3>快速接續建議</h3>
+        <div id="suggestionChips" class="suggestion-chips" aria-live="polite"></div>
+        <h3>Media Response</h3>
+        <div id="mediaResponse" class="media-panel answer compact">尚未執行。</div>
         <h3>Verifier Decision</h3>
         <pre id="verifierBox">{}</pre>
       </section>

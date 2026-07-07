@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>太極神級語音終端 - 本地封包接收器</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background: #121212;
+      color: #fff;
+    }
+    h1 { margin-bottom: 12px; }
+    .mic-btn, .action-btn {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      font-size: 32px;
+      background: #bb86fc;
+      border: none;
+      margin-top: 20px;
+      cursor: pointer;
+      color: #111;
+      font-weight: bold;
+    }
+    .action-btn {
+      width: 220px;
+      height: auto;
+      border-radius: 16px;
+      padding: 18px 14px;
+    }
+    #status {
+      margin-top: 30px;
+      font-size: 24px;
+      color: #cf6679;
+      min-height: 1.4em;
+    }
+    #ai-result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #03dac6;
+    }
+    #packetReceiver {
+      max-width: 760px;
+      margin: 40px auto 0;
+      text-align: left;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    #packetInput {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #packetLog {
+      margin-top: 10px;
+      padding: 10px;
+      min-height: 58px;
+      background: #020617;
+      border: 1px solid #273449;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #93c5fd;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>太極語音接收器 8.0</h1>
+  <button id="micBtn" class="mic-btn" onclick="startDictation()">按住說話</button>
+  <div id="status">等待語音指令...</div>
+  <div id="ai-result"></div>
+
+  <section id="packetReceiver">
+    <h2 style="margin:4px 0 12px; font-size: 24px;">本地封包接收器</h2>
+    <label for="packetInput">貼上 JSON 封包</label>
+    <textarea id="packetInput" placeholder='例如：{"status":"PASS"} 或 {"state_id":1}'></textarea>
+    <div style="text-align:center; margin-top: 12px;">
+      <button class="action-btn" id="parsePacketBtn" onclick="parsePacket()">解析封包</button>
+    </div>
+    <div id="packetLog" aria-live="polite" role="status"></div>
+  </section>
+
+  <script>
+    function appendLog(message) {
+      const log = document.getElementById("packetLog");
+      if (log) {
+        log.textContent = String(message || "");
+      }
+      if (message === "封包解析失敗") {
+        console.error(message);
+      } else {
+        console.log(message);
+      }
+    }
+
+    function triggerStateLUT(stateId) {
+      const stateMap = {
+        0: "IDLE / 待機",
+        1: "PASS / 驗證通過",
+        2: "CLOUD_SYNC / 雲端同步",
+        99: "HOLD / 阻斷"
+      };
+      const stateText = stateMap[stateId] || "未知";
+      document.getElementById("status").textContent = `VRM 狀態切換：${stateText}`;
+      const result = document.getElementById("ai-result");
+      if (result) result.textContent = `triggerStateLUT(${stateId}) 執行完成`;
+      return stateId;
+    }
+
+    function normalizeStateToken(value) {
+      if (value === null || value === undefined) return "";
+      if (typeof value === "number") return String(value);
+      if (typeof value === "string") return value.trim();
+      return "";
+    }
+
+    function resolveStateId(rawState) {
+      const n = Number(rawState);
+      if (Number.isInteger(n)) {
+        if (n === 0) return 0;
+        if (n === 1) return 1;
+        if (n === 2) return 2;
+        if (n === 99) return 99;
+      }
+
+      const normalized = normalizeStateToken(rawState).toUpperCase();
+      const valueMap = {
+        "IDLE": 0,
+        "WAIT": 0,
+        "待機": 0,
+        "PASS": 1,
+        "PASS_INTENT": 1,
+        "OK": 1,
+        "驗證通過": 1,
+        "CLOUD_SYNC": 2,
+        "SYNC": 2,
+        "雲端同步": 2,
+        "HOLD": 99,
+        "ERROR": 99,
+        "DLQ": 99,
+        "DEAD_LETTER": 99,
+        "BLOCK": 99,
+        "阻斷": 99,
+        "死信箱": 99,
+      };
+      return Object.prototype.hasOwnProperty.call(valueMap, normalized) ? valueMap[normalized] : null;
+    }
+
+    function parsePacket() {
+      const raw = document.getElementById("packetInput").value || "";
+      if (!raw.trim()) {
+        appendLog("封包解析失敗");
+        return;
+      }
+      try {
+        const packet = JSON.parse(raw);
+        const candidates = [packet.status, packet.state, packet.state_id, packet.code, packet.stateId];
+        const hit = candidates.find(v => v !== undefined && v !== null && String(v).trim() !== "");
+        if (hit === undefined) {
+          appendLog("封包解析失敗");
+          return;
+        }
+        const stateId = resolveStateId(hit);
+        if (stateId === null) {
+          appendLog("封包解析失敗");
+          return;
+        }
+        triggerStateLUT(stateId);
+        appendLog(`封包已解析：stateId=${stateId}`);
+      } catch (error) {
+        appendLog("封包解析失敗");
+      }
+    }
+
+    function startDictation() {
+      const sr = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!sr) {
+        alert("不支援語音");
+        return;
+      }
+      const r = new sr();
+      r.lang = "zh-TW";
+      document.getElementById("micBtn").innerText = "聆聽中...";
+      r.start();
+      r.onresult = function (e) {
+        const txt = e.results[0][0].transcript;
+        document.getElementById("status").innerText = "您說了: " + txt;
+        document.getElementById("ai-result").innerText = "大腦解析中...";
+        document.getElementById("ai-result").innerText = "本地已接收，不外呼 API。";
+      };
+      r.onerror = function () {
+        document.getElementById("status").innerText = "語音辨識失敗";
+      };
+      r.onend = function () {
+        document.getElementById("micBtn").innerText = "按住說話";
+      };
+    }
+  </script>
+</body>
+</html>
