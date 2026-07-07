@@ -1,0 +1,205 @@
+{
+  "state": "CONTAINER_COMPOSE_CANDIDATE_MAP_WITHOUT_DEPLOY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_deploy",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "web_touch": false,
+    "runtime_bulk_output": false,
+    "production_activation": false
+  },
+  "compose_candidate": {
+    "project_name": "w7tp_total_field_candidate",
+    "deployable_now": false,
+    "services": {
+      "odoo_pos": {
+        "candidate_service_name": "wuchang_os_odoo_18",
+        "container_role": "odoo_pos_service",
+        "image_or_build": "existing_or_candidate_only",
+        "network": "w7tp_private_transport",
+        "volumes_required": [
+          "odoo_addons_volume",
+          "odoo_filestore_volume"
+        ],
+        "depends_on": [
+          "wuchang_os_pg"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      },
+      "postgres_main": {
+        "candidate_service_name": "wuchang_os_pg",
+        "container_role": "persistent_database",
+        "image_or_build": "existing_postgres",
+        "volumes_required": [
+          "postgres_data_volume"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      },
+      "d8_db": {
+        "candidate_service_name": "taiji_d8_db",
+        "container_role": "d8_status_database",
+        "image_or_build": "existing_or_candidate_only",
+        "volumes_required": [
+          "d8_db_data_volume"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      },
+      "cafe_gateway": {
+        "candidate_service_name": "wuchang_cafe_ai_gateway",
+        "container_role": "cafe_gateway_service",
+        "image_or_build": "candidate_build_only",
+        "volumes_required": [
+          "total_field_config_mount",
+          "external_evidence_mount"
+        ],
+        "depends_on": [
+          "odoo_pos",
+          "d8_db"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      },
+      "line_webhook_gateway": {
+        "candidate_service_name": "wuchang_line_webhook_gateway",
+        "container_role": "edge_webhook_service",
+        "image_or_build": "candidate_build_only",
+        "volumes_required": [
+          "total_field_config_mount"
+        ],
+        "depends_on": [
+          "cafe_gateway"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      },
+      "ai_candidate_lane": {
+        "candidate_service_name": "w7tp_ai_candidate_lane",
+        "container_role": "candidate_compute_only",
+        "image_or_build": "candidate_build_only",
+        "volumes_required": [
+          "candidate_packet_mount"
+        ],
+        "depends_on": [
+          "cafe_gateway"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      },
+      "verifier_redteam_gate": {
+        "candidate_service_name": "w7tp_verifier_redteam_gate",
+        "container_role": "verifier_sidecar_or_service",
+        "image_or_build": "candidate_build_only",
+        "volumes_required": [
+          "total_field_rules_mount",
+          "external_evidence_mount"
+        ],
+        "depends_on": [
+          "d8_db"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      },
+      "openwebui_workbench": {
+        "candidate_service_name": "w7tp_openwebui_workbench",
+        "container_role": "operator_workbench",
+        "image_or_build": "candidate_or_existing",
+        "volumes_required": [
+          "operator_profile_mount",
+          "packet_ref_mount"
+        ],
+        "authority_inside_container": false,
+        "create_now": false,
+        "restart_now": false
+      }
+    },
+    "networks": {
+      "w7tp_private_transport": {
+        "type": "private_network_candidate",
+        "vpn": "tailscale_or_host_private_transport",
+        "create_now": false
+      }
+    },
+    "volumes": {
+      "odoo_addons_volume": {
+        "persistent": true,
+        "create_now": false
+      },
+      "odoo_filestore_volume": {
+        "persistent": true,
+        "create_now": false
+      },
+      "postgres_data_volume": {
+        "persistent": true,
+        "create_now": false
+      },
+      "d8_db_data_volume": {
+        "persistent": true,
+        "create_now": false
+      },
+      "total_field_config_mount": {
+        "persistent": true,
+        "externalized_authority": true,
+        "create_now": false
+      },
+      "total_field_rules_mount": {
+        "persistent": true,
+        "externalized_authority": true,
+        "create_now": false
+      },
+      "external_evidence_mount": {
+        "persistent": true,
+        "externalized_authority": true,
+        "create_now": false
+      },
+      "candidate_packet_mount": {
+        "persistent": true,
+        "externalized_authority": true,
+        "create_now": false
+      },
+      "operator_profile_mount": {
+        "persistent": true,
+        "create_now": false
+      },
+      "packet_ref_mount": {
+        "persistent": true,
+        "externalized_authority": true,
+        "create_now": false
+      }
+    }
+  },
+  "forbidden_runtime_actions": [
+    "docker compose up",
+    "docker compose down",
+    "docker compose restart",
+    "docker system prune",
+    "docker volume rm",
+    "database migration",
+    "router write",
+    "live url create",
+    "payment capture"
+  ],
+  "required_gate_before_deploy": [
+    "8D_7D_PACKET_PASS",
+    "ADI_5D_REF_PASS",
+    "VERIFIER_PASS",
+    "REDTEAM_PASS",
+    "TOTAL_FIELD_PASS",
+    "OWNER_ADMIN_APPROVAL"
+  ],
+  "next": "CONTAINER_COMPOSE_GENERATOR_DRY_SOURCE_ONLY"
+}
