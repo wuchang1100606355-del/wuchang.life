@@ -17,7 +17,41 @@ from typing import Any, Dict
 
 
 def coordinate_value(packet: Dict[str, Any]) -> Any:
-    return packet.get("coordinate") or packet.get("D3_coordinate")
+    return packet.get("coordinate") or packet.get("D3_coordinate") or packet.get("spatial_binding")
+
+
+def spatial_binding_summary(packet: Dict[str, Any]) -> Dict[str, Any]:
+    spatial = packet.get("spatial_binding")
+    if not isinstance(spatial, dict):
+        return {
+            "present": False,
+            "static_group_positioning_only": None,
+            "personal_positioning_allowed": None,
+            "aggregate_demographic_context_present": False,
+        }
+    demographic = spatial.get("aggregate_demographic_context")
+    return {
+        "present": True,
+        "binding_mode": spatial.get("binding_mode"),
+        "positioning_subject": spatial.get("positioning_subject"),
+        "geometry_scope": spatial.get("geometry_scope"),
+        "coordinate_ref": spatial.get("coordinate_ref"),
+        "geometry_ref": spatial.get("geometry_ref"),
+        "jurisdiction_ref": spatial.get("jurisdiction_ref"),
+        "static_group_positioning_only": spatial.get("static_group_positioning_only"),
+        "personal_positioning_allowed": spatial.get("personal_positioning_allowed"),
+        "contains_precise_person_location": spatial.get("contains_precise_person_location"),
+        "reidentification_possible": spatial.get("reidentification_possible"),
+        "aggregate_demographic_context_present": isinstance(demographic, dict),
+        "aggregate_demographic_context": {
+            "analysis_purpose": demographic.get("analysis_purpose"),
+            "aggregation_level": demographic.get("aggregation_level"),
+            "cohort_buckets": demographic.get("cohort_buckets"),
+            "statistic_ref": demographic.get("statistic_ref"),
+            "person_level_data_allowed": demographic.get("person_level_data_allowed"),
+            "household_level_data_allowed": demographic.get("household_level_data_allowed"),
+        } if isinstance(demographic, dict) else None,
+    }
 
 
 def evidence_present(packet: Dict[str, Any]) -> bool:
@@ -33,6 +67,7 @@ def coordinate_map(packet: Dict[str, Any]) -> Dict[str, Any]:
         "D1_intent": packet.get("intent") or packet.get("D1_intent"),
         "D2_state": packet.get("state") or packet.get("D2_state"),
         "D3_coordinate": coordinate_value(packet),
+        "D3_spatial_binding": spatial_binding_summary(packet),
         "D4_evidence_ref": evidence_present(packet),
         "D5_policy_flags": packet.get("policy_flags", []),
         "D5_execution": packet.get("D5_execution"),
