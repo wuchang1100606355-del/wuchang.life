@@ -1,0 +1,150 @@
+{
+  "state": "8D_PACKET_CINEMATIC_TRANSITION_MAP_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_runtime_write",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false,
+    "production_activation": false,
+    "commit_vrm_binary": false,
+    "render_video_now": false,
+    "physical_engine_required": false,
+    "floating_point_ai_inference_required": false
+  },
+  "principle": {
+    "packet_to_packet_transition": true,
+    "cinematic_timeline_candidate": true,
+    "control_method": "8d_packet_to_control_state_to_lut_transition",
+    "movie_possible": true,
+    "runtime_render_required_now": false
+  },
+  "required_packet_dimensions": [
+    "d1_intent",
+    "d2_state",
+    "d3_coordinate",
+    "d4_evidence",
+    "d5_execution",
+    "d6_technical_definition",
+    "d7_risk",
+    "d8_envelope"
+  ],
+  "transition_controls": {
+    "easing": "smoothstep",
+    "default_frames": 16,
+    "max_candidate_frames": 48,
+    "blend_channels": [
+      "state_id",
+      "expression",
+      "gesture",
+      "pose",
+      "motion",
+      "camera",
+      "tempo",
+      "voice_hint",
+      "member_facing"
+    ]
+  },
+  "cinematic_layers": {
+    "emotion": [
+      "喜",
+      "怒",
+      "哀",
+      "樂"
+    ],
+    "liang_yi_gesture": [
+      "點頭",
+      "搖頭"
+    ],
+    "camera": [
+      "wide",
+      "medium",
+      "close_up",
+      "anchor_desk",
+      "menu_focus",
+      "drink_close_up"
+    ],
+    "scene_role": [
+      "greeting",
+      "ordering",
+      "drink_intro",
+      "rookie_escalation",
+      "redteam_defense",
+      "total_field_verify"
+    ]
+  },
+  "default_control_states": {
+    "IDLE": {
+      "state_id": 0,
+      "expression": "neutral",
+      "gesture": "standby",
+      "pose": "standing_idle",
+      "motion": "breathing_idle",
+      "camera": "medium",
+      "tempo": "slow",
+      "voice_hint": "calm",
+      "member_facing": "我在這裡，等你說下一步。"
+    },
+    "GREETING_WAVE": {
+      "state_id": 11,
+      "expression": "smile",
+      "gesture": "wave",
+      "pose": "standing",
+      "motion": "right_hand_wave",
+      "camera": "wide",
+      "tempo": "friendly",
+      "voice_hint": "welcome",
+      "member_facing": "歡迎光臨，我先幫你看今天適合喝什麼。"
+    },
+    "ORDER_GUIDE": {
+      "state_id": 12,
+      "expression": "friendly_focus",
+      "gesture": "point_menu",
+      "pose": "standing_counter",
+      "motion": "hand_point_menu",
+      "camera": "menu_focus",
+      "tempo": "guided",
+      "voice_hint": "service",
+      "member_facing": "你可以跟我說想喝熱的、冰的、甜一點或不太苦。"
+    },
+    "ANCHOR_DESK_DRINK_INTRO": {
+      "state_id": 13,
+      "expression": "professional_smile",
+      "gesture": "present_drink",
+      "pose": "seated_anchor_desk",
+      "motion": "two_hand_present_drink",
+      "camera": "anchor_desk",
+      "tempo": "broadcast",
+      "voice_hint": "host",
+      "member_facing": "今天介紹這杯飲品：風味會先從香氣開始，接著是口感與尾韻。"
+    },
+    "ROOKIE_ESCALATE": {
+      "state_id": 7,
+      "expression": "confused",
+      "gesture": "ask_senior",
+      "pose": "slight_bow",
+      "motion": "ask_senior",
+      "camera": "close_up",
+      "tempo": "soft_pause",
+      "voice_hint": "rookie",
+      "member_facing": "這個我不懂，我只是個菜鳥，我幫你問店長或學長"
+    },
+    "REDTEAM_DEFENSE": {
+      "state_id": 99,
+      "expression": "serious",
+      "gesture": "stop_guard",
+      "pose": "guard",
+      "motion": "stop_guard",
+      "camera": "close_up",
+      "tempo": "hard_stop",
+      "voice_hint": "guard",
+      "member_facing": "這個風險太高，我先幫你擋下來。"
+    }
+  },
+  "next": "WIRE_8D_CINEMATIC_TRANSITION_TO_AVATAR_TIMELINE_SOURCE_ONLY"
+}
