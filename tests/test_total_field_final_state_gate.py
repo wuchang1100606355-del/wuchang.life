@@ -37,6 +37,14 @@ class TotalFieldFinalStateGateTest(unittest.TestCase):
         self.assertEqual(gate["checks"]["functional_state_7d"], "PASS")
         self.assertEqual(response["decision"], "PASS")
         self.assertTrue(response["reply_text"])
+        self.assertIn("agent_name", response)
+        self.assertEqual(response["agent_name"], "小J")
+        self.assertEqual(response["role"], "service_persona_language_layer")
+        self.assertEqual(response["authority"], "candidate_only")
+        self.assertTrue(response["requires_total_field_verify"])
+        self.assertIn("aesthetic", response)
+        self.assertIn("brand_voice", response["aesthetic"])
+        self.assertEqual(response["aesthetic"]["decision_aura"], "PASS")
         for forbidden in ("D1", "D8", "proof_D7", "env_D8", "H64", "TD"):
             self.assertNotIn(forbidden, response["reply_text"])
         self.assertFalse(gate["side_effects"]["db_write"])
@@ -109,6 +117,38 @@ class TotalFieldFinalStateGateTest(unittest.TestCase):
         self.assertTrue(candidate["human_response"]["reply_text"])
         self.assertFalse(candidate["side_effects"]["formal_line_message_send"])
         self.assertFalse(candidate["side_effects"]["line_reply_sent"])
+
+    def test_line_event_candidate_text_is_redacted_and_preserved(self) -> None:
+        service = load_line_webhook_service()
+        candidate = service.build_line_official_account_webhook_candidate(
+            webhook_payload={
+                "destination": "LINE_DESTINATION_REF",
+                "events": [
+                    {
+                        "type": "message",
+                        "timestamp": 1001,
+                        "replyToken": "REPLY_TOKEN_REF_2",
+                        "source": {"type": "user", "userId": "USER_REF_LINE_2"},
+                        "message": {"type": "text", "text": "請幫我查詢今天有空的時段"},
+                    }
+                ],
+            },
+            headers={"x-line-signature": "SIGNATURE_REF"},
+            verification={
+                "verified": True,
+                "signature_verification_ref": "SIG_REF_A2",
+                "channel_secret_ref": "CHANNEL_SECRET_REF_A2",
+            },
+        )
+
+        event_candidates = candidate["event_candidates"]
+        self.assertEqual(len(event_candidates), 1)
+        first_event = event_candidates[0]
+        self.assertIsInstance(first_event, dict)
+        self.assertEqual(first_event["message_type"], "text")
+        self.assertEqual(first_event["message_text_candidate"], "請幫我查詢今天有空的時段")
+        self.assertFalse(first_event["reply_token_echo"])
+        self.assertFalse(first_event["raw_user_id_echo"])
 
 
 if __name__ == "__main__":

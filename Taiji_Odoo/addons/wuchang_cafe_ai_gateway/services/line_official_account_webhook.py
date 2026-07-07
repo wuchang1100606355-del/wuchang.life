@@ -106,6 +106,28 @@ def _event_candidate(event: dict) -> dict:
         "groupId": source.get("groupId", ""),
         "roomId": source.get("roomId", ""),
     }
+    reply_token = str(event.get("replyToken") or "")
+    event_ref_input = {
+        "timestamp": event.get("timestamp", ""),
+        "source": source_seed,
+        "event_type": str(event.get("type") or ""),
+    }
+    event_ref_hash = stable_hash(event_ref_input)
+    reply_token_hash = stable_hash({"replyToken": reply_token}) if reply_token else ""
+    return {
+        "event_ref_hash": event_ref_hash,
+        "event_type": str(event.get("type") or ""),
+        "timestamp_hash": stable_hash({"timestamp": event.get("timestamp", "")}),
+        "source_type": str(source.get("type") or ""),
+        "source_ref_hash": stable_hash(source_seed),
+        "reply_token_hash": reply_token_hash,
+        "reply_token_echo": False,
+        "message_type": str(message.get("type") or ""),
+        "message_text_candidate": message_text,
+        "message_text_redaction_flags": redaction_flags,
+        "raw_user_id_echo": False,
+        "member_plaintext_echo": False,
+    }
 
 
 def _render_total_field_line_response(candidate: dict) -> tuple[dict, dict]:
@@ -144,20 +166,6 @@ def _render_total_field_line_response(candidate: dict) -> tuple[dict, dict]:
 
     gate = run_line_candidate_gate(candidate)
     return gate, render_human_response(gate, channel="line")
-    return {
-        "event_ref_hash": stable_hash(event),
-        "event_type": str(event.get("type") or ""),
-        "timestamp_hash": stable_hash({"timestamp": event.get("timestamp", "")}),
-        "source_type": str(source.get("type") or ""),
-        "source_ref_hash": stable_hash(source_seed),
-        "reply_token_hash": stable_hash({"replyToken": event.get("replyToken", "")}) if event.get("replyToken") else "",
-        "reply_token_echo": False,
-        "message_type": str(message.get("type") or ""),
-        "message_text_candidate": message_text,
-        "message_text_redaction_flags": redaction_flags,
-        "raw_user_id_echo": False,
-        "member_plaintext_echo": False,
-    }
 
 
 def build_line_official_account_webhook_candidate(
