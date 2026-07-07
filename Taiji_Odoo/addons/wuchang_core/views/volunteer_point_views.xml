@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_volunteer_point_tree" model="ir.ui.view">
+        <field name="name">wuchang.volunteer.point.tree</field>
+        <field name="model">wuchang.volunteer.point</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="volunteer_id"/>
+                <field name="points"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_volunteer_point_form" model="ir.ui.view">
+        <field name="name">wuchang.volunteer.point.form</field>
+        <field name="model">wuchang.volunteer.point</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve_captain" string="隊長初核" type="object" class="oe_highlight"/>
+                    <button name="action_approve_sg" string="總幹事批示" type="object" class="oe_highlight"/>
+                    <button name="action_approve_chairman" string="理事長批示" type="object" class="oe_highlight"/>
+                    <button name="action_approve_committee" string="常務理事會追認" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="volunteer_id"/>
+                        <field name="points"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_volunteer_point" model="ir.actions.act_window">
+        <field name="name">志工點數派發</field>
+        <field name="res_model">wuchang.volunteer.point</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_wuchang_core_root" name="五常志工"/>
+    <menuitem id="menu_volunteer_point" name="點數簽核" parent="menu_wuchang_core_root" action="action_volunteer_point"/>
+</odoo>
