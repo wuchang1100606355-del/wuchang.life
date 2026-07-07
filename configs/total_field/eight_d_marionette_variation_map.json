@@ -1,0 +1,163 @@
+{
+  "state": "8D_MARIONETTE_MASTER_VARIATION_MAP_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_runtime_write",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false,
+    "production_activation": false,
+    "commit_vrm_binary": false,
+    "render_video_now": false,
+    "physical_engine_required": false,
+    "floating_point_ai_inference_required": false
+  },
+  "principle": {
+    "eight_d_packet_controls_avatar": true,
+    "marionette_master_variation": true,
+    "variation_method": "8d_packet_dimensions_to_control_vector_to_lut",
+    "runtime_render_required_now": false,
+    "movie_possible": true
+  },
+  "required_packet_dimensions": [
+    "d1_intent",
+    "d2_state",
+    "d3_coordinate",
+    "d4_evidence",
+    "d5_execution",
+    "d6_technical_definition",
+    "d7_risk",
+    "d8_envelope"
+  ],
+  "dimensions": {
+    "d1_intent": {
+      "control_axis": "scene_goal",
+      "choices": ["greeting", "ordering", "drink_intro", "member_help", "rookie_escalation", "redteam_defense"]
+    },
+    "d2_state": {
+      "control_axis": "avatar_state",
+      "choices": ["idle", "pass_candidate", "hold", "block", "verify", "cinematic_transition"]
+    },
+    "d3_coordinate": {
+      "control_axis": "spatial_camera_target",
+      "choices": ["counter_front", "menu_focus", "anchor_desk", "drink_close_up", "member_facing"]
+    },
+    "d4_evidence": {
+      "control_axis": "prop_or_reference",
+      "choices": ["none", "menu_ref", "drink_ref", "member_ref"]
+    },
+    "d5_execution": {
+      "control_axis": "motion_permission",
+      "choices": ["candidate_only", "wave", "point_menu", "present_drink", "nod", "shake_head"]
+    },
+    "d6_technical_definition": {
+      "control_axis": "gesture_grammar",
+      "choices": ["liang_yi", "si_xiang", "san_cai", "wu_xing", "ba_gua"]
+    },
+    "d7_risk": {
+      "control_axis": "guard_emotion",
+      "choices": ["low", "hold", "detour_alert", "redteam", "rookie_escalate"]
+    },
+    "d8_envelope": {
+      "control_axis": "authority_tempo",
+      "choices": ["total_field_pass", "total_field_hold", "owner_admin_review", "seal", "block"]
+    }
+  },
+  "control_states": {
+    "IDLE": {
+      "state_id": 0,
+      "face": "neutral",
+      "head": "center",
+      "hands": "rest",
+      "body": "standing_idle",
+      "gaze": "front",
+      "camera": "medium",
+      "voice": "calm",
+      "tempo": "slow",
+      "member_facing": "我在這裡，等你說下一步。"
+    },
+    "GREETING_WAVE": {
+      "state_id": 11,
+      "face": "smile",
+      "head": "small_nod",
+      "hands": "right_hand_wave",
+      "body": "standing_open",
+      "gaze": "member",
+      "camera": "wide",
+      "voice": "welcome",
+      "tempo": "friendly",
+      "member_facing": "歡迎光臨，我先幫你看今天適合喝什麼。"
+    },
+    "ORDER_GUIDE": {
+      "state_id": 12,
+      "face": "friendly_focus",
+      "head": "small_nod",
+      "hands": "point_menu",
+      "body": "counter_service",
+      "gaze": "menu_then_member",
+      "camera": "menu_focus",
+      "voice": "service",
+      "tempo": "guided",
+      "member_facing": "你可以跟我說想喝熱的、冰的、甜一點或不太苦。"
+    },
+    "ANCHOR_DESK_DRINK_INTRO": {
+      "state_id": 13,
+      "face": "professional_smile",
+      "head": "host_focus",
+      "hands": "two_hand_present_drink",
+      "body": "seated_anchor_desk",
+      "gaze": "camera_then_drink",
+      "camera": "anchor_desk",
+      "voice": "broadcast_host",
+      "tempo": "cinematic",
+      "member_facing": "今天介紹這杯飲品：風味會先從香氣開始，接著是口感與尾韻。"
+    },
+    "ROOKIE_ESCALATE": {
+      "state_id": 7,
+      "face": "confused",
+      "head": "slight_bow",
+      "hands": "ask_senior",
+      "body": "humble_pause",
+      "gaze": "member_soft",
+      "camera": "close_up",
+      "voice": "rookie",
+      "tempo": "soft_pause",
+      "member_facing": "這個我不懂，我只是個菜鳥，我幫你問店長或學長"
+    },
+    "TOTAL_FIELD_DECIDES": {
+      "state_id": 64,
+      "face": "focus",
+      "head": "still",
+      "hands": "verify_hold",
+      "body": "guarded_wait",
+      "gaze": "front",
+      "camera": "medium_close",
+      "voice": "verify",
+      "tempo": "hold",
+      "member_facing": "這一步要先等總場確認。"
+    },
+    "REDTEAM_DEFENSE": {
+      "state_id": 99,
+      "face": "serious",
+      "head": "firm",
+      "hands": "stop_guard",
+      "body": "guard",
+      "gaze": "direct",
+      "camera": "close_up",
+      "voice": "guard",
+      "tempo": "hard_stop",
+      "member_facing": "這個風險太高，我先幫你擋下來。"
+    }
+  },
+  "manual_puppet_reference": {
+    "symbolic_baseline_actions": 1024,
+    "claim_type": "engineering_comparison_not_legal_measurement",
+    "reason": "8D dimensions compose control vectors rather than pulling one physical string at a time"
+  },
+  "next": "WIRE_8D_MARIONETTE_VARIATION_TO_CINEMATIC_TIMELINE_SOURCE_ONLY"
+}
