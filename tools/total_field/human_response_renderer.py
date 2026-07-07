@@ -80,13 +80,25 @@ SCENARIO_KEYWORDS = {
         "註冊",
         "註冊會員",
         "加入會員",
-        "會員資料",
+        "建立帳號",
         "sign up",
         "signup",
         "register",
         "register me",
         "create account",
         "建立帳號",
+    ),
+    "member_value": (
+        "會員系統",
+        "會員價值",
+        "會員附加價值",
+        "會員權益",
+        "會員商機",
+        "會員服務",
+        "會員策略",
+        "會員分析",
+        "你知道會員",
+        "會員可見值",
     ),
     "support_complaint": (
         "抱怨",
@@ -125,6 +137,12 @@ SCENARIO_LITERARY_HINT = {
         "cta": "要不要我先幫你整理一版註冊流程的最小欄位清單？",
         "poetic_tail": "有了名字與同意，我們就能把第一道門打開。",
     },
+    "member_value": {
+        "tone": "共創引導",
+        "scene": "像把會員帳號變成你自己可以持續利用的生活引擎。",
+        "cta": "如果你要，我可以幫你先整理一份你能拿來直接上線的會員價值清單。",
+        "poetic_tail": "先把價值定義清楚，下一步才不會走歪。",
+    },
     "order_or_booking": {
         "tone": "體貼服務",
         "scene": "像在櫃台逐筆確認需求，先對齊口味、時間與人數。",
@@ -149,6 +167,11 @@ MEMBER_VALUE_BRIEF = {
         "先幫你整理可核對項目，讓下單/預約少一步折返。",
         "同時保留時間、口味、人數與配送邊界，方便你快速修正。",
         "候選答案會保持可追蹤版本，避免因一次訊息錯漏而中斷。",
+    ),
+    "member_value": (
+        "把會員系統轉成可持續價值層，降低客服反覆詢問的摩擦。",
+        "把權益、偏好、行為脈絡串在一起，讓對話更貼近個人化服務。",
+        "你可以直接用這個基底做留存、回訪、轉單與服務分流。",
     ),
     "support_complaint": (
         "把問題拆成可驗證步驟，先穩定情緒再往下判定。",
@@ -185,6 +208,27 @@ REGISTRATION_ACTION_DRAFT = {
     ),
     "human_confirmation": "請回覆『我同意並補齊』進入下一輪候選核可。",
     "candidate_note": "僅保留草稿，不進行正式建立。",
+}
+
+MEMBER_VALUE_ACTION_DRAFT = {
+    "mode": "member_value_draft",
+    "goal": "整理會員價值主張與可實作的服務加值項目",
+    "required_fields": (
+        "會員目標",
+        "核心場景",
+        "可量化指標",
+    ),
+    "optional_fields": (
+        "權益設定",
+        "訊息偏好",
+        "回訪節點",
+    ),
+    "verification_checks": (
+        "場景是否可被服務邊界支撐",
+        "可用資料是否可安全聚合",
+    ),
+    "human_confirmation": "回覆這三項，我幫你轉成可落地的會員價值草案。",
+    "candidate_note": "先保留價值規劃草稿，供人工核可。",
 }
 
 BOOKING_ACTION_DRAFT = {
@@ -299,6 +343,8 @@ def _action_draft_for_scenario(scenario: str, decision: str) -> dict[str, Any]:
 
     if scenario == "member_registration":
         return dict(REGISTRATION_ACTION_DRAFT)
+    if scenario == "member_value":
+        return dict(MEMBER_VALUE_ACTION_DRAFT)
     if scenario == "order_or_booking":
         return dict(BOOKING_ACTION_DRAFT)
     if scenario == "support_complaint":
@@ -456,18 +502,23 @@ def _build_pass_text(
 ) -> tuple[str, str, str]:
     base = _clean_text(base_body)
     concise = f"{base}，我會先把候選保留在可追蹤狀態。"
-    poetic = f"{base}。風景尚未定格，先讓安全感先落座，再把你的場景慢慢鋪開。"
+    poetic = f"{base}，先把安全感先鋪開，讓節奏慢慢對齊，接著把你的場景推進到可執行草稿。"
     if channel_name == "LINE":
-        friendly = f"收到！{base} 目前沒有執行付款、寫入、部署或重啟。我先幫你整理成可回覆版本。"
+        friendly = f"收到！{base}，我先幫你整理成可回覆版本，先保留在候選草稿。"
         concise = f"收到，我先整理了：{base}"
-        poetic = f"{base}，讓一句可理解的文字先到位，先不做正式動作。"
+        poetic = f"先讓一句可理解的文字先到位，讓安全邊界陪著你把問題走穩，再推進。"
     elif channel_name == "ODOO":
         friendly = f"已收到，先幫你整理可落地的候選回覆版本，並保持未執行正式提交。{base}"
         concise = f"{base}。我先卡在草稿階段，方便你核對。"
-        poetic = f"{base}，如同簽呈前先做一次內部對齊。"
+        poetic = f"{base}，如同簽呈前先做一次內部對齊，保留可追溯與人工確認節奏。"
     else:
-        friendly = f"{base} 目前沒有執行付款、寫入、部署或重啟。"
+        friendly = f"{base}，我先把候選留在安全通道，下一步再由人工核可。"
 
+    if scenario == "member_value":
+        friendly = f"{base}，我可以先替你把『會員價值』拆成可行候選清單，先把邊界守住再讓策略更快落地。"
+        concise = f"{base}，我先整理出可直接採用的會員價值草案。"
+        poetic = f"{poetic}，先把價值語言講清楚，再把服務設計慢慢接上。"
+        poetic = f"{poetic} {SCENARIO_LITERARY_HINT['member_value']['poetic_tail']}"
     if scenario in SCENARIO_LITERARY_HINT:
         hint = SCENARIO_LITERARY_HINT[scenario]
         poetic = f"{poetic}{(' ' + hint.get('poetic_tail', '')) if hint.get('poetic_tail') else ''}"

@@ -75,6 +75,30 @@ class HumanResponseRendererTest(unittest.TestCase):
         self.assertEqual(response["action_pack"]["mode"], "registration_draft")
         self.assertIn("顯示名稱", response["action_pack"]["required_fields"][0])
 
+    def test_member_value_query_surfaces_value_draft(self) -> None:
+        response = render_human_response(
+            {
+                "decision": "PASS",
+                "risk_level": "LOW",
+                "reply_candidate": {
+                    "text": "你知道會員系統有什麼附加價值嗎？",
+                },
+            },
+            channel="web",
+        )
+
+        self.assertEqual(response["decision"], "PASS")
+        self.assertEqual(response["scenario"], "member_value")
+        self.assertEqual(response["action_pack"]["mode"], "member_value_draft")
+        self.assertIn("共創", response["aesthetic"]["tone"])
+        self.assertTrue(
+            "留存" in response["value_layer"]["member_advantage"]
+            or "轉單" in response["value_layer"]["member_advantage"]
+            or "服務" in response["value_layer"]["member_advantage"]
+        )
+        self.assertIn("邊界", response["reply_text"])
+        self.assertNotIn("註冊", response["reply_text"])
+
     def test_order_booking_pass_highlights_candidate_next_step(self) -> None:
         response = render_human_response(
             {
