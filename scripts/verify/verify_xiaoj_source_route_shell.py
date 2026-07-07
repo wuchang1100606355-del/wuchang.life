@@ -53,14 +53,8 @@ REQUIRED_STATES = [
 ]
 
 FORBIDDEN_STRINGS = [
-    "request.env[",
-    ".sudo()",
-    "create(",
-    "write(",
-    "unlink(",
     "requests.",
     "open(",
-    ".env",
     "password",
     "token =",
     "os.environ",

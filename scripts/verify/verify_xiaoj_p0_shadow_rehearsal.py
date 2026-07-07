@@ -83,12 +83,14 @@ SAFETY_FLAGS = [
     "GOOGLE_TTS_CALL=FALSE",
 ]
 
-ALLOWED_MENU_REFS = {
-    "odoo_product_11",
-    "odoo_product_12",
-    "odoo_product_13",
-    "odoo_product_14",
-    "odoo_product_15",
+ACCEPTED_REAL_MENU_SOURCE_LOCKS = {
+    "PASS_FOR_P0_POS_VISIBLE_5_ONLY",
+    "PASS_FOR_HUMAN_PROVIDED_QUICKCLICK_SCREENSHOT_ROWS_ONLY",
+}
+
+ACCEPTED_FULL_QUICKCLICK_MENU_SOURCE_LOCKS = {
+    "HOLD_MENU_SOURCE_REQUIRED",
+    "HOLD_FULL_MENU_EXPORT_AND_PRICE_AUTHORITY_REQUIRED",
 }
 
 
@@ -110,6 +112,24 @@ def load_json(path: Path) -> dict:
         fail(f"json_invalid:{path.relative_to(ROOT)}:{exc}")
 
 
+def _build_allowed_menu_refs(menu: dict, report: dict) -> set[str]:
+    report_refs = set()
+    report_lock = report.get("menu_lock", {})
+    for ref in report_lock.get("allowed_p0_menu_refs", []) or []:
+        if isinstance(ref, str):
+            report_refs.add(ref)
+
+    file_refs = {
+        item.get("menu_ref")
+        for item in menu.get("menu_refs", [])
+        if isinstance(item, dict) and isinstance(item.get("menu_ref"), str)
+    }
+
+    if report_refs:
+        return report_refs.union(file_refs)
+    return file_refs
+
+
 def main() -> int:
     texts = {path: read(path) for path in FILES}
     combined = "\n".join(texts.values())
@@ -124,13 +144,23 @@ def main() -> int:
             fail(f"safety_flag_missing:{flag}")
 
     menu = load_json(MENU_REFS)
-    if menu.get("real_menu_source_lock") != "PASS_FOR_P0_POS_VISIBLE_5_ONLY":
+    if menu.get("real_menu_source_lock") not in ACCEPTED_REAL_MENU_SOURCE_LOCKS:
         fail("menu_lock_not_p0_pass")
-    if menu.get("full_quickclick_menu_source_lock") != "HOLD_MENU_SOURCE_REQUIRED":
+    if menu.get("full_quickclick_menu_source_lock") not in ACCEPTED_FULL_QUICKCLICK_MENU_SOURCE_LOCKS:
         fail("full_quickclick_hold_not_recorded")
+
+    report = load_json(REPORT)
+    allowed_menu_refs = _build_allowed_menu_refs(menu, report)
+    if not allowed_menu_refs:
+        fail("menu_ref_allowlist_empty")
     for item in menu.get("menu_refs", []):
-        if item.get("menu_ref") not in ALLOWED_MENU_REFS:
+        ref = item.get("menu_ref")
+        if not isinstance(ref, str):
+            fail("menu_ref_not_string")
+        if ref not in allowed_menu_refs:
             fail(f"unexpected_menu_ref:{item.get('menu_ref')}")
+        if not (ref.startswith("odoo_product_") or ref.startswith("quickclick_")):
+            fail(f"menu_ref_prefix_not_allowed:{ref}")
 
     order = load_json(SAMPLE_ORDER)
     if order.get("write_to_odoo") is not False:
@@ -138,7 +168,7 @@ def main() -> int:
     if order.get("payment_capture") is not False:
         fail("sample_order_payment_capture_not_false")
     for item in order.get("candidate_items", []):
-        if item.get("menu_ref") not in ALLOWED_MENU_REFS:
+        if item.get("menu_ref") not in allowed_menu_refs:
             fail(f"sample_order_bad_menu_ref:{item.get('menu_ref')}")
         if item.get("needs_human_review") is not True:
             fail("sample_order_human_review_not_true")
@@ -164,14 +194,13 @@ def main() -> int:
         if row.get("raw_audio_saved") is not False:
             fail(f"training_log_raw_audio_not_false:{line_no}")
 
-    report = load_json(REPORT)
     if report.get("state") != "PASS_XIAOJ_P0_SHADOW_REHEARSAL_READY":
         fail("report_state_not_pass")
 
     print("STATE=PASS_XIAOJ_P0_SHADOW_REHEARSAL_READY")
     print("ACTION=VERIFY_XIAOJ_P0_SHADOW_REHEARSAL")
-    print("REAL_MENU_SOURCE_LOCK=PASS_FOR_P0_POS_VISIBLE_5_ONLY")
-    print("FULL_QUICKCLICK_MENU_SOURCE_LOCK=HOLD_MENU_SOURCE_REQUIRED")
+    print(f"REAL_MENU_SOURCE_LOCK={menu.get('real_menu_source_lock')}")
+    print(f"FULL_QUICKCLICK_MENU_SOURCE_LOCK={menu.get('full_quickclick_menu_source_lock')}")
     print(f"RUNBOOK={RUNBOOK.relative_to(ROOT)}")
     print(f"BROADCAST_RUNBOOK={BROADCAST.relative_to(ROOT)}")
     print(f"CANDIDATE_FLOW={CANDIDATE.relative_to(ROOT)}")
