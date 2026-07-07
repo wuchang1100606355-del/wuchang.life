@@ -75,6 +75,33 @@ class WuchangCafeOptionItem(models.Model):
     w5c_authority = fields.Char(index=True)
 
 
+class WuchangCafeAiVirtualVariant(models.Model):
+    _name = "wuchang.cafe.ai.virtual.variant"
+    _description = "WuChang Cafe AI W5C Virtual Variant"
+    _order = "last_order_time desc, usage_count desc, id desc"
+
+    active = fields.Boolean(default=True, index=True)
+    product_template_id = fields.Many2one("product.template", required=True, index=True, ondelete="cascade")
+    quickclick_product_id = fields.Char(index=True)
+    quickclick_sku = fields.Char(index=True)
+    option_group_code = fields.Char(index=True)
+    selected_option_json = fields.Json()
+    virtual_variant_signature = fields.Char(index=True)
+    virtual_variant_hash = fields.Char(index=True)
+    w5c_code = fields.Char(index=True)
+    price_delta_total = fields.Float(default=0.0)
+    price_total = fields.Float(default=0.0)
+    usage_count = fields.Integer(default=0)
+    last_order_time = fields.Datetime(index=True)
+    ai_recommend_score = fields.Float(default=0.0)
+    w5c_domain = fields.Char(index=True, default="CAFE")
+    w5c_entity = fields.Char(index=True, default="VIRTUAL_VARIANT")
+    w5c_topology = fields.Char(index=True)
+    w5c_time_state = fields.Char(index=True)
+    w5c_authority = fields.Char(index=True)
+    note = fields.Text()
+
+
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
