@@ -1,0 +1,142 @@
+{
+  "state": "WUCHANG_THREE_ORG_CONTAINER_SCENE_MAP_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_live_container_action",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false,
+    "docker_compose_up": false,
+    "docker_restart": false,
+    "live_container_switch": false,
+    "production_activation": false,
+    "payment_capture": false,
+    "formal_public_service_claim": false,
+    "member_plaintext_exposure": false,
+    "secret_exposure": false
+  },
+  "odoo_community_core": {
+    "name": "Odoo 社區",
+    "supporting_modules": [
+      "business_organization",
+      "property_organization",
+      "public_welfare_organization"
+    ],
+    "authority": "total_field",
+    "scene_switch_method": "local_device_container_profile_candidate"
+  },
+  "three_org_modules": {
+    "business_organization": {
+      "zh": "商業組織",
+      "cloud": "商業雲",
+      "purpose": [
+        "商家資料",
+        "商品服務",
+        "票券",
+        "幸福幣候選交換",
+        "社區商業資訊共享"
+      ],
+      "container_profile": "container_profile:business_cloud_candidate",
+      "demo_role": "primary_landing_showcase"
+    },
+    "property_organization": {
+      "zh": "物業組織",
+      "cloud": "物業雲",
+      "purpose": [
+        "社區公道伯",
+        "物業案例查詢AI",
+        "物業補助候選",
+        "優良社區申報候選",
+        "物業法令收集"
+      ],
+      "container_profile": "container_profile:property_cloud_candidate",
+      "demo_role": "showcase_from_business_landing"
+    },
+    "public_welfare_organization": {
+      "zh": "公益組織",
+      "cloud": "協會公益場",
+      "purpose": [
+        "志願工作服務隊",
+        "社工",
+        "照服員",
+        "公益申報候選",
+        "社區數位發展基金",
+        "許願樹"
+      ],
+      "container_profile": "container_profile:association_public_welfare_candidate",
+      "demo_role": "showcase_from_business_landing"
+    }
+  },
+  "local_device_scene_profiles": {
+    "business_scene": {
+      "zh": "商業場景",
+      "container_profile": "container_profile:business_cloud_candidate",
+      "primary_module": "business_organization",
+      "visible_modules": [
+        "business_organization",
+        "property_organization",
+        "public_welfare_organization"
+      ],
+      "landing_message": "商業落地展示，並帶出物業雲與協會公益。"
+    },
+    "property_scene": {
+      "zh": "物業場景",
+      "container_profile": "container_profile:property_cloud_candidate",
+      "primary_module": "property_organization",
+      "visible_modules": [
+        "property_organization",
+        "business_organization",
+        "public_welfare_organization"
+      ],
+      "landing_message": "物業雲場景，連動商業服務與協會公益支援。"
+    },
+    "association_scene": {
+      "zh": "協會公益場景",
+      "container_profile": "container_profile:association_public_welfare_candidate",
+      "primary_module": "public_welfare_organization",
+      "visible_modules": [
+        "public_welfare_organization",
+        "business_organization",
+        "property_organization"
+      ],
+      "landing_message": "協會公益場景，連動商業養公益與物業社區服務。"
+    }
+  },
+  "local_device_roles": {
+    "lobby_xiaoj": "scene_facing_ai_avatar",
+    "counter_or_frontdesk": "member_service_entry",
+    "router_guest_ai": "visitor_network_registration_candidate",
+    "node_c": "community_service_edge_node",
+    "node_o": "secretariat_operator_node",
+    "node_s": "security_or_sensor_node"
+  },
+  "scene_switch_rules": {
+    "switch_by_intent": true,
+    "switch_by_container_profile_candidate": true,
+    "live_container_action": false,
+    "same_authority": "TOTAL_FIELD",
+    "same_identity_rule": "8D_packet_and_ADI_5D_ref_required",
+    "same_review_chain": [
+      "AI candidate",
+      "module owner review",
+      "Total Field PASS/HOLD/BLOCK",
+      "explicit activation only in separate packet"
+    ]
+  },
+  "required_candidate_fields": [
+    "intent_goal",
+    "target_scene",
+    "primary_module",
+    "visible_modules",
+    "local_device_ref",
+    "container_profile_candidate",
+    "review_chain"
+  ],
+  "fallback_member_message": "這個我不懂，我只是個菜鳥，我幫你問店長或學長",
+  "next": "WIRE_THREE_ORG_CONTAINER_SCENE_TO_8D_PACKET_SOURCE_ONLY"
+}
