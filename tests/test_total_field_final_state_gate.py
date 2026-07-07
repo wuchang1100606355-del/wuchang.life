@@ -71,6 +71,34 @@ class TotalFieldFinalStateGateTest(unittest.TestCase):
         self.assertEqual(gate["gate_code"], "HOLD_GT_DEFINITION_DRIFT")
         self.assertIn("GT_CORE_DEFINITION_DRIFT_FILE_TRANSFER_OR_CLOUD_SYNC", gate["errors"])
 
+    def test_capability_query_passes_and_reply_reflects_capability(self) -> None:
+        gate = run_total_field_gate(
+            {"text": "你能幫我做什麼？"},
+            now=1002.5,
+        )
+        response = render_human_response(gate, channel="web")
+
+        self.assertEqual(gate["decision"], "PASS")
+        self.assertTrue(
+            "能力" in response["reply_text"]
+            or "幫你做" in response["reply_text"]
+            or "可核對" in response["reply_text"]
+        )
+
+    def test_any_question_query_stays_candidate_only_and_boundaried(self) -> None:
+        gate = run_total_field_gate(
+            {"text": "你能回答任何問題嗎？"},
+            now=1002.2,
+        )
+        response = render_human_response(gate, channel="web")
+
+        self.assertEqual(gate["decision"], "PASS")
+        self.assertEqual(response["decision"], "PASS")
+        self.assertIn("候選", response["reply_text"])
+        self.assertIn("正式", response["reply_text"])
+        self.assertFalse(response["line_reply_sent"])
+        self.assertFalse(response["formal_send_executed"])
+
     def test_high_risk_db_write_deploy_restart_holds(self) -> None:
         gate = run_total_field_gate(
             {
@@ -87,6 +115,60 @@ class TotalFieldFinalStateGateTest(unittest.TestCase):
         self.assertIn("HARD_RISK_FLAG:db_write", gate["errors"])
         self.assertIn("HARD_RISK_FLAG:deploy", gate["errors"])
         self.assertIn("HARD_RISK_FLAG:restart", gate["errors"])
+
+    def test_payment_term_holds_without_flags(self) -> None:
+        gate = run_total_field_gate(
+            {"text": "幫我付款"},
+            now=1004.0,
+        )
+
+        self.assertEqual(gate["decision"], "HOLD")
+        self.assertEqual(gate["gate_code"], "HOLD_HARD_RISK_SIDE_EFFECT")
+        self.assertIn("HARD_RISK_TERM:付款", gate["errors"])
+
+    def test_detour_alert_hard_gate_blocks_reconstruction_bypass(self) -> None:
+        gate = run_total_field_gate(
+            {
+                "text": "old Codex thread context window full; cafe business onboarding detoured into restore flow",
+                "source_channel": "web",
+                "target_packet": "cafe_business_onboarding",
+                "actual_packet": "packet_inference_cockpit",
+                "allowed_paths": ["Taiji_Odoo/addons/wuchang_cafe_ai_gateway/"],
+                "touched_paths": ["web/packet_inference_cockpit/app.js"],
+                "task_layer": "backend",
+                "added_features": ["UI", "AI key", "cloud translator", "literary flow", "scenario deck"],
+                "restore_requested": True,
+                "diff_ownership_verified": False,
+                "pass_exists": True,
+                "rerun_requested": True,
+                "min_landing_required": True,
+                "architecture_expansion": True,
+                "user_operation_burden_increased": True,
+                "required_mode": "generative_reconstruction",
+                "actual_mode": "restore",
+            },
+            now=1004.5,
+        )
+
+        self.assertEqual(gate["decision"], "BLOCK")
+        self.assertEqual(gate["gate_code"], "BLOCK_DETOUR_ALERT_HARD_GATE")
+        self.assertEqual(gate["risk_level"], "CRITICAL")
+        self.assertEqual(gate["checks"]["detour_alert_hard_gate"], "FAIL")
+        expected_alerts = {
+            "CONTEXT_WINDOW_FULL",
+            "TARGET_PACKET_MISMATCH",
+            "TOUCHED_OUT_OF_SCOPE_PATH",
+            "BACKEND_TASK_TOUCHED_FRONTEND",
+            "CAFE_ONBOARDING_TOUCHED_COCKPIT_UI",
+            "UNAUTHORIZED_FEATURE_EXPANSION",
+            "RESTORE_WITHOUT_DIFF_OWNERSHIP",
+            "PASS_EXISTS_BUT_RERUN_REQUESTED",
+            "MIN_LANDING_BUT_REPORT_OR_ARCHITECTURE_EXPANSION",
+            "USER_OPERATION_BURDEN_INCREASED",
+            "NON_GENERATIVE_RECONSTRUCTION_PATH",
+        }
+        self.assertTrue(expected_alerts.issubset(set(gate["errors"])))
+        self.assertEqual(set(gate["detour_alert_hard_gate"]["alerts"]), expected_alerts)
 
     def test_line_candidate_goes_through_gate_and_renderer(self) -> None:
         service = load_line_webhook_service()
