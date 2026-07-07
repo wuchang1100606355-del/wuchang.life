@@ -1,33 +1,10 @@
 import hashlib
-import base64
-import urllib.request
+import json
 import secrets
+import time
+from pathlib import Path
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-
-
-
-def _fetch_image_b64_from_url(image_url, max_bytes=2_000_000):
-    """Fetch LINE/Google profile image into Odoo Image base64 without storing raw URL."""
-    if not image_url or not isinstance(image_url, str):
-        return False, False
-    if not image_url.startswith(("https://", "http://")):
-        return False, False
-
-    req = urllib.request.Request(
-        image_url,
-        headers={"User-Agent": "WuchangMemberRegistration/1.0"}
-    )
-    with urllib.request.urlopen(req, timeout=8) as res:
-        content_type = (res.headers.get("Content-Type") or "").lower()
-        if "image" not in content_type:
-            return False, False
-        raw = res.read(max_bytes + 1)
-        if len(raw) > max_bytes:
-            return False, False
-
-    digest = hashlib.sha256(raw).hexdigest()
-    return base64.b64encode(raw), digest
 
 
 class WuchangMemberRegistration(models.Model):
@@ -60,46 +37,36 @@ class WuchangMemberRegistration(models.Model):
     review_name_hint = fields.Char("Review Name Hint")
     review_contact_hint = fields.Char("Review Contact Hint")
     membership_category = fields.Char()
-    member_nickname = fields.Char(
-        string="會員暱稱",
-        help="會員可自行修改的顯示暱稱；不得作為正式身份核驗資料。"
-    )
-    member_avatar = fields.Image(
-        string="會員縮圖",
-        max_width=512,
-        max_height=512,
-        help="會員可手動貼圖/上傳；也可由 LINE 或 Google 頭像預設帶入同一欄位。"
-    )
-    member_avatar_source = fields.Selection([
-        ("manual", "Manual Upload"),
-        ("line", "LINE"),
-        ("google", "Google"),
-        ("odoo", "Odoo"),
-    ], default="manual", string="縮圖來源")
-    member_avatar_url_hash = fields.Char(readonly=True)
-    member_avatar_updated_at = fields.Datetime(readonly=True)
-
-    is_founder_claim = fields.Boolean(
-        string="創辦人註冊請求",
-        default=False,
-        help="僅作為創辦人身份請求；不得由 OAuth 或一般註冊自動通過。"
-    )
-    founder_claim_status = fields.Selection([
-        ("none", "None"),
-        ("pending_review", "Pending Founder Review"),
-        ("verified", "Founder Verified"),
-        ("rejected", "Rejected"),
-        ("dead_letter", "Dead Letter"),
-    ], default="none", string="創辦人核驗狀態", index=True)
-    founder_verification_note = fields.Text(string="創辦人核驗備註")
-    founder_verified_at = fields.Datetime(readonly=True)
-
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
 
+    member_type = fields.Selection([
+        ("individual", "Individual Member"),
+        ("organization", "Organization Member"),
+    ], default="individual", required=True, index=True)
+
+    organization_name = fields.Char("Organization / Affiliation")
+    organization_role = fields.Selection([
+        ("none", "None"),
+        ("responsible_person", "Responsible Person"),
+        ("representative", "Representative"),
+        ("position_responsible", "Position Responsible"),
+        ("staff", "Staff"),
+        ("volunteer", "Volunteer"),
+        ("resident", "Resident"),
+        ("other", "Other"),
+    ], default="none", index=True)
+
+    review_level = fields.Selection([
+        ("manager_allowed", "Manager Allowed"),
+        ("owner_required", "Owner Required"),
+        ("org_responsible_required", "Organization Responsible Required"),
+    ], default="manager_allowed", readonly=True, index=True)
+
+    reviewed_at = fields.Datetime(readonly=True)
+    review_reason = fields.Text("Review Reason")
+
     identity_code_id = fields.Many2one("wuchang.member.identity.code", readonly=True)
-    consent_ledger_ids = fields.One2many("wuchang.member.consent.ledger", "registration_id")
-    external_auth_ids = fields.One2many("wuchang.member.external.auth", "registration_id")
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -112,55 +79,30 @@ class WuchangMemberRegistration(models.Model):
     def _new_provisional_id(self):
         return "PROV-" + secrets.token_hex(8).upper()
 
-    def set_member_avatar_from_provider(self, provider, image_url):
-        if provider not in ("line", "google", "odoo", "manual"):
-            provider = "manual"
-        image_b64, digest = _fetch_image_b64_from_url(image_url)
-        if not image_b64:
-            return False
-        self.write({
-            "member_avatar": image_b64,
-            "member_avatar_source": provider,
-            "member_avatar_url_hash": digest,
-            "member_avatar_updated_at": fields.Datetime.now(),
-        })
-        return True
+    def _compute_review_level_value(self):
+        self.ensure_one()
+        owner_roles = {"responsible_person", "representative", "position_responsible"}
+        if self.member_type == "organization" or self.organization_role in owner_roles or self.role_scope in owner_roles:
+            return "owner_required"
+        if self.organization_name:
+            return "org_responsible_required"
+        return "manager_allowed"
 
-    def action_request_founder_review(self):
-        for rec in self:
-            rec.write({
-                "is_founder_claim": True,
-                "founder_claim_status": "pending_review",
-                "review_status": "pending_review",
-                "role_scope": "founder_candidate",
-                "founder_verification_note": rec.founder_verification_note or "Founder review requested. OAuth/login alone is not sufficient.",
-            })
+    def _is_owner_reviewer(self):
+        return self.env.user.has_group("wuchang_member_registration.group_wuchang_member_admin")
 
-    def action_approve_founder(self):
-        if not self.env.user.has_group("base.group_system"):
-            raise UserError(_("Only system administrators may approve founder registration."))
-        for rec in self:
-            existing = self.env["wuchang.member.identity.code"].search([
-                ("founder_authority_status", "=", "founder_verified")
-            ], limit=1)
-            if existing:
-                raise UserError(_("A verified founder identity already exists."))
-            rec.write({
-                "is_founder_claim": True,
-                "founder_claim_status": "verified",
-                "founder_verified_at": fields.Datetime.now(),
-                "review_status": "pending_review",
-                "role_scope": "founder",
-            })
+    def _check_approval_governance(self):
+        self.ensure_one()
+        if self.create_uid and self.create_uid == self.env.user:
+            raise UserError(_("Reviewer cannot approve their own registration."))
 
-    def action_reject_founder(self):
-        if not self.env.user.has_group("base.group_system"):
-            raise UserError(_("Only system administrators may reject founder registration."))
-        for rec in self:
-            rec.write({
-                "founder_claim_status": "rejected",
-                "founder_verification_note": rec.founder_verification_note or "Founder claim rejected.",
-            })
+        level = self.review_level or self._compute_review_level_value()
+
+        if level == "owner_required" and not self._is_owner_reviewer():
+            raise UserError(_("Organization members and responsible persons require owner/admin review."))
+
+        if level == "org_responsible_required" and not self._is_owner_reviewer():
+            raise UserError(_("Organization-affiliated members require approved organization responsible-person review. Responsible-person binding is not enabled yet."))
 
     def action_submit_review(self):
         for rec in self:
@@ -170,6 +112,7 @@ class WuchangMemberRegistration(models.Model):
                 raise UserError(_("Consent version is required."))
             rec.write({
                 "review_status": "pending_review",
+                "review_level": rec._compute_review_level_value(),
                 "consent_timestamp": fields.Datetime.now(),
             })
 
@@ -177,14 +120,17 @@ class WuchangMemberRegistration(models.Model):
         for rec in self:
             if rec.review_status != "pending_review":
                 raise UserError(_("Only pending registrations can be approved."))
+            rec._check_approval_governance()
             identity = self.env["wuchang.member.identity.code"].create_from_registration(rec)
             rec.write({
                 "review_status": "approved",
                 "reviewer_id": self.env.user.id,
+                "reviewed_at": fields.Datetime.now(),
                 "identity_code_id": identity.id,
             })
             self.env["wuchang.member.consent.ledger"].create({
-                "registration_id": rec.id,
+                "registration_ref_id": rec.id,
+                "provisional_member_ref": rec.provisional_member_id,
                 "member_identity_id": identity.id,
                 "consent_type": "registration",
                 "purpose": "membership_service",
@@ -220,41 +166,6 @@ class WuchangMemberIdentityCode(models.Model):
     member_id = fields.Char(readonly=True, index=True)
     identity_code_7d = fields.Char(readonly=True, index=True)
     service_code_masked = fields.Char(readonly=True, index=True)
-    member_nickname = fields.Char(
-        string="會員暱稱",
-        help="會員可自行修改的顯示暱稱；不等於法定姓名或身份核驗資料。"
-    )
-    nickname_updated_at = fields.Datetime(readonly=True)
-    member_avatar = fields.Image(
-        string="會員縮圖",
-        max_width=512,
-        max_height=512,
-        help="會員可手動貼圖/上傳；也可由 LINE 或 Google 頭像預設帶入同一欄位。"
-    )
-    member_avatar_source = fields.Selection([
-        ("manual", "Manual Upload"),
-        ("line", "LINE"),
-        ("google", "Google"),
-        ("odoo", "Odoo"),
-    ], default="manual", string="縮圖來源")
-    member_avatar_url_hash = fields.Char(readonly=True)
-    member_avatar_updated_at = fields.Datetime(readonly=True)
-
-    is_founder_claim = fields.Boolean(
-        string="創辦人註冊請求",
-        default=False,
-        help="僅作為創辦人身份請求；不得由 OAuth 或一般註冊自動通過。"
-    )
-    founder_claim_status = fields.Selection([
-        ("none", "None"),
-        ("pending_review", "Pending Founder Review"),
-        ("verified", "Founder Verified"),
-        ("rejected", "Rejected"),
-        ("dead_letter", "Dead Letter"),
-    ], default="none", string="創辦人核驗狀態", index=True)
-    founder_verification_note = fields.Text(string="創辦人核驗備註")
-    founder_verified_at = fields.Datetime(readonly=True)
-
     role_scope = fields.Char(default="member")
     service_scope = fields.Char(default="basic_member_service")
     active_status = fields.Selection([
@@ -263,57 +174,21 @@ class WuchangMemberIdentityCode(models.Model):
         ("recovery_pending", "Recovery Pending"),
         ("closed", "Closed"),
     ], default="active", index=True)
-    registration_id = fields.Many2one("wuchang.member.registration", readonly=True)
-
-    def set_identity_avatar_from_provider(self, provider, image_url):
-        if provider not in ("line", "google", "odoo", "manual"):
-            provider = "manual"
-        image_b64, digest = _fetch_image_b64_from_url(image_url)
-        if not image_b64:
-            return False
-        self.write({
-            "member_avatar": image_b64,
-            "member_avatar_source": provider,
-            "member_avatar_url_hash": digest,
-            "member_avatar_updated_at": fields.Datetime.now(),
-        })
-        return True
-
-    @api.constrains("founder_authority_status")
-    def _check_single_verified_founder(self):
-        for rec in self:
-            if rec.founder_authority_status == "founder_verified":
-                existing = self.search([
-                    ("founder_authority_status", "=", "founder_verified"),
-                    ("id", "!=", rec.id),
-                ], limit=1)
-                if existing:
-                    raise UserError(_("Only one verified founder identity is allowed."))
+    registration_ref_id = fields.Integer(readonly=True, index=True)
+    provisional_member_ref = fields.Char(readonly=True, index=True)
 
     @api.model
     def create_from_registration(self, registration):
         seed = f"{registration.provisional_member_id}:{registration.create_date}:{secrets.token_hex(8)}"
         digest = hashlib.sha256(seed.encode("utf-8")).hexdigest()
-
-    def action_update_nickname(self):
-        for rec in self:
-            rec.nickname_updated_at = fields.Datetime.now()
-
         return self.create({
             "member_id": "M-" + digest[:12].upper(),
             "identity_code_7d": "7D-" + digest[12:28].upper(),
             "service_code_masked": "SVC-" + digest[28:44].upper(),
             "role_scope": registration.role_scope or "member",
             "service_scope": registration.service_scope or "basic_member_service",
-            "member_nickname": registration.member_nickname,
-            "member_avatar": registration.member_avatar,
-            "member_avatar_source": registration.member_avatar_source or "manual",
-            "member_avatar_url_hash": registration.member_avatar_url_hash,
-            "member_avatar_updated_at": registration.member_avatar_updated_at,
-            "founder_authority_status": "founder_verified" if registration.founder_claim_status == "verified" else "none",
-            "founder_authority_scope": "system_owner" if registration.founder_claim_status == "verified" else "none",
-            "founder_verified_at": registration.founder_verified_at,
-            "registration_id": registration.id,
+            "registration_ref_id": registration.id,
+            "provisional_member_ref": registration.provisional_member_id,
         })
 
 
@@ -322,7 +197,8 @@ class WuchangMemberExternalAuth(models.Model):
     _description = "Wuchang Member External Auth Binding"
     _order = "create_date desc"
 
-    registration_id = fields.Many2one("wuchang.member.registration", ondelete="cascade")
+    registration_ref_id = fields.Integer(index=True)
+    provisional_member_ref = fields.Char(index=True)
     member_identity_id = fields.Many2one("wuchang.member.identity.code", ondelete="cascade")
     provider = fields.Selection([
         ("line", "LINE"),
@@ -336,10 +212,6 @@ class WuchangMemberExternalAuth(models.Model):
         ("revoked", "Revoked"),
     ], default="pending", index=True)
     consent_ref = fields.Char()
-    provider_picture_url_hash = fields.Char(
-        readonly=True,
-        help="LINE/Google picture URL or fetched image hash; raw URL should not be exported."
-    )
     last_login_at = fields.Datetime()
 
     _sql_constraints = [
@@ -362,7 +234,8 @@ class WuchangMemberConsentLedger(models.Model):
     _description = "Wuchang Member Consent Ledger"
     _order = "create_date desc"
 
-    registration_id = fields.Many2one("wuchang.member.registration", ondelete="cascade")
+    registration_ref_id = fields.Integer(index=True)
+    provisional_member_ref = fields.Char(index=True)
     member_identity_id = fields.Many2one("wuchang.member.identity.code", ondelete="cascade")
     consent_type = fields.Char(required=True)
     purpose = fields.Char(required=True)
@@ -427,3 +300,286 @@ class WuchangMemberRecoveryCase(models.Model):
                 "review_status": "sealed_again",
                 "sealed_again_at": fields.Datetime.now(),
             })
+
+
+class WuchangMemberGroupRegistrationBatch(models.Model):
+    _name = "wuchang.member.group.registration.batch"
+    _description = "W7TP Group Member 8D Registration Batch"
+    _order = "create_date desc"
+
+    name = fields.Char(string="Group Name", required=True)
+    packet_ref = fields.Char(readonly=True, index=True, copy=False)
+    group_ref = fields.Char(readonly=True, index=True, copy=False)
+    issuer_user_id = fields.Many2one("res.users", default=lambda self: self.env.user, readonly=True)
+    topology_ref = fields.Char(default="association/branch/shop/group")
+    registration_scope = fields.Char(default="group_member_registration")
+    expires_at = fields.Datetime(required=True)
+    state = fields.Selection([
+        ("provisional", "Provisional"),
+        ("pending_review", "Pending Review"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+        ("expired", "Expired"),
+    ], default="provisional", index=True)
+    packet_hash = fields.Char(readonly=True, index=True, copy=False)
+    d8_ref = fields.Char(readonly=True, index=True, copy=False)
+    qr_payload = fields.Text(readonly=True)
+    evidence_ref = fields.Char(readonly=True)
+    packet_ids = fields.One2many("wuchang.member.group.registration.packet", "batch_id")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._ensure_group_8d_code()
+        return records
+
+    @api.model
+    def _new_ref(self, prefix):
+        return f"{prefix}-{secrets.token_hex(10).upper()}"
+
+    @api.model
+    def _packet_hash(self, payload):
+        normalized = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+    def _short_qr_payload(self, packet_ref, group_ref, expires_at, d8_ref):
+        return {
+            "type": "W7TP_GROUP_MEMBER_REG",
+            "version": "1",
+            "packet_ref": packet_ref,
+            "group_ref": group_ref,
+            "nonce": secrets.token_urlsafe(16),
+            "expires_at": fields.Datetime.to_string(expires_at),
+            "d8_ref": d8_ref,
+            "verify_url": f"/wuchang/member/register/group/{packet_ref}",
+        }
+
+    def _ensure_group_8d_code(self):
+        for rec in self:
+            packet_ref = rec.packet_ref or self._new_ref("G8D")
+            group_ref = rec.group_ref or self._new_ref("GROUP")
+            d8_seed = f"{packet_ref}:{group_ref}:{fields.Datetime.now()}:{secrets.token_hex(8)}"
+            d8_ref = rec.d8_ref or "D8-" + hashlib.sha256(d8_seed.encode("utf-8")).hexdigest()[:20].upper()
+            payload = rec._short_qr_payload(packet_ref, group_ref, rec.expires_at, d8_ref)
+            packet_hash = rec._packet_hash(payload)
+            rec.write({
+                "packet_ref": packet_ref,
+                "group_ref": group_ref,
+                "d8_ref": d8_ref,
+                "packet_hash": packet_hash,
+                "qr_payload": json.dumps(payload, ensure_ascii=False, sort_keys=True),
+                "evidence_ref": rec._write_group_8d_evidence(payload, packet_hash, d8_ref),
+            })
+
+    def _write_group_8d_evidence(self, payload, packet_hash, d8_ref):
+        root = Path(
+            self.env["ir.config_parameter"].sudo().get_param(
+                "wuchang_member_registration.total_field_evidence_root",
+                "runtime/total_field/evidence",
+            )
+        )
+        run_id = f"TOTAL_FIELD_GROUP_MEMBER_8D_REGISTRATION_{int(time.time())}"
+        out_dir = root / run_id
+        out_dir.mkdir(parents=True, exist_ok=True)
+        seal = {
+            "schema": "W7TP_GROUP_MEMBER_8D_CODE_SEAL_V1",
+            "state": "GROUP_MEMBER_8D_CODE_SEALED",
+            "run_id": run_id,
+            "group_ref": payload["group_ref"],
+            "packet_ref": payload["packet_ref"],
+            "packet_hash": packet_hash,
+            "d8_ref": d8_ref,
+            "verify_url": payload["verify_url"],
+            "safety": self._safety_flags(),
+        }
+        seal_path = out_dir / "GROUP_MEMBER_8D_CODE_SEAL.json"
+        readme_path = out_dir / "README_GROUP_MEMBER_8D_REGISTRATION.md"
+        seal_path.write_text(json.dumps(seal, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        readme_path.write_text(
+            "# Group Member 8D Registration Evidence\n\n"
+            "STATE=GROUP_MEMBER_8D_CODE_SEALED\n"
+            f"RUN_ID={run_id}\n"
+            "FORMAL_DB_WRITE=FALSE\n"
+            "FORMAL_POS_WRITE=FALSE\n"
+            "PAYMENT_CAPTURE=FALSE\n"
+            "SERVICE_RESTART=FALSE\n"
+            "DEPLOY=FALSE\n"
+            "PRODUCTION_RELEASE=FALSE\n"
+            "SECRET_READ=FALSE\n"
+            "MEMBER_PLAINTEXT_READ=FALSE\n",
+            encoding="utf-8",
+        )
+        manifest = []
+        for path in [seal_path, readme_path]:
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            manifest.append(f"{digest}  {path.name}")
+        (out_dir / "sha256_manifest.txt").write_text("\n".join(manifest) + "\n", encoding="utf-8")
+        return str(seal_path)
+
+    @api.model
+    def _safety_flags(self):
+        return {
+            "formal_db_write": False,
+            "formal_pos_write": False,
+            "payment_capture": False,
+            "service_restart": False,
+            "deploy": False,
+            "production_release": False,
+            "secret_read": False,
+            "member_plaintext_read": False,
+        }
+
+
+class WuchangMemberGroupRegistrationPacket(models.Model):
+    _name = "wuchang.member.group.registration.packet"
+    _description = "W7TP Group Member 8D Registration Packet"
+    _order = "create_date desc"
+
+    name = fields.Char(default="New", readonly=True)
+    batch_id = fields.Many2one("wuchang.member.group.registration.batch", required=True, ondelete="cascade")
+    packet_ref = fields.Char(readonly=True, index=True, copy=False)
+    group_ref = fields.Char(readonly=True, index=True, copy=False)
+    provider = fields.Selection([
+        ("google", "Google"),
+        ("line", "LINE"),
+        ("manual", "Manual"),
+    ], required=True, default="manual", index=True)
+    provider_user_ref = fields.Char(readonly=True, index=True)
+    registration_ref_id = fields.Integer(readonly=True, index=True)
+    provisional_member_ref = fields.Char(readonly=True, index=True)
+    state = fields.Selection([
+        ("provisional", "Provisional"),
+        ("pending_review", "Pending Review"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ], default="provisional", index=True)
+    packet_json = fields.Text(readonly=True)
+    packet_hash = fields.Char(readonly=True, index=True)
+    d8_ref = fields.Char(readonly=True, index=True)
+    evidence_ref = fields.Char(readonly=True)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals.setdefault("name", vals.get("packet_ref") or self.env["wuchang.member.group.registration.batch"]._new_ref("GM8D"))
+        return super().create(vals_list)
+
+    @api.model
+    def hash_provider_ref(self, provider, provider_user_ref):
+        if not provider_user_ref:
+            provider_user_ref = secrets.token_urlsafe(24)
+        return hashlib.sha256(f"{provider}:{provider_user_ref}".encode("utf-8")).hexdigest()
+
+    @api.model
+    def create_from_group_claim(self, batch, provider="manual", provider_user_ref=None, display_ref=None):
+        if batch.state not in ("provisional", "pending_review"):
+            raise UserError(_("This group registration batch is not open."))
+        if batch.expires_at and fields.Datetime.now() > batch.expires_at:
+            batch.state = "expired"
+            raise UserError(_("This group registration batch has expired."))
+
+        provider_hash = self.hash_provider_ref(provider, provider_user_ref)
+        duplicate = self.search([
+            ("batch_id", "=", batch.id),
+            ("provider", "=", provider),
+            ("provider_user_ref", "=", provider_hash),
+        ], limit=1)
+        if duplicate:
+            return duplicate
+
+        registration = self.env["wuchang.member.registration"].sudo().create({
+            "registration_channel": provider if provider in ("google", "line") else "odoo",
+            "review_status": "pending_review",
+            "consent_version": "group_member_v1",
+            "membership_category": "group_member",
+            "role_scope": "group_member",
+            "service_scope": batch.registration_scope or "group_member_registration",
+        })
+        packet_ref = self.env["wuchang.member.group.registration.batch"]._new_ref("GM8D")
+        d8_seed = f"{packet_ref}:{batch.group_ref}:{provider_hash}:{secrets.token_hex(8)}"
+        d8_ref = "D8-" + hashlib.sha256(d8_seed.encode("utf-8")).hexdigest()[:20].upper()
+        envelope = self._build_8d_envelope(batch, registration, packet_ref, provider, provider_hash, display_ref, d8_ref)
+        packet_hash = batch._packet_hash(envelope)
+        envelope["D8_ENVELOPE"]["packet_hash"] = packet_hash
+        envelope["D8_ENVELOPE"]["seal_ref"] = batch.evidence_ref or ""
+        record = self.create({
+            "batch_id": batch.id,
+            "packet_ref": packet_ref,
+            "group_ref": batch.group_ref,
+            "provider": provider,
+            "provider_user_ref": provider_hash,
+            "registration_ref_id": registration.id,
+            "provisional_member_ref": registration.provisional_member_id,
+            "state": "pending_review",
+            "packet_json": json.dumps(envelope, ensure_ascii=False, sort_keys=True),
+            "packet_hash": packet_hash,
+            "d8_ref": d8_ref,
+            "evidence_ref": batch.evidence_ref,
+        })
+        self.env["wuchang.member.external.auth"].sudo().create({
+            "registration_ref_id": registration.id,
+            "provisional_member_ref": registration.provisional_member_id,
+            "provider": provider if provider in ("google", "line") else "odoo",
+            "provider_subject_hash": provider_hash,
+            "binding_status": "pending",
+            "consent_ref": record.packet_ref,
+            "last_login_at": fields.Datetime.now(),
+        })
+        return record
+
+    def _build_8d_envelope(self, batch, registration, packet_ref, provider, provider_hash, display_ref, d8_ref):
+        return {
+            "D1_IDENTITY": {
+                "provider": provider,
+                "provider_user_ref": provider_hash,
+                "display_ref": display_ref or "masked",
+                "member_ref": registration.provisional_member_id,
+            },
+            "D2_INTENT": "group_member_registration",
+            "D3_STATE": "pending_review",
+            "D4_TOPOLOGY": {
+                "association": "wuchang",
+                "branch": batch.topology_ref or "branch_ref",
+                "shop": "shop_ref",
+                "group": batch.group_ref,
+                "source_channel": provider,
+            },
+            "D5_RESOURCE": {
+                "registration_scope": batch.registration_scope,
+                "available_permissions": ["view_only"],
+                "default": "view_only",
+            },
+            "D6_GOVERNANCE": {
+                "privacy_boundary": "no_member_plaintext_in_payload",
+                "member_plaintext_policy": "hash_or_ref_only",
+                "operator_gate": "human_confirm_required",
+            },
+            "D7_VERIFICATION": {
+                "nonce": secrets.token_urlsafe(16),
+                "expires_at": fields.Datetime.to_string(batch.expires_at),
+                "signature_check": "hmac_ref_required",
+                "duplicate_check": "provider_user_ref_batch_unique",
+            },
+            "D8_ENVELOPE": {
+                "packet_hash": "",
+                "hmac_ref": "ir.config_parameter:wuchang_member_registration.hmac_key_ref",
+                "ttl": fields.Datetime.to_string(batch.expires_at),
+                "seal_ref": "",
+                "version": "1",
+                "d8_ref": d8_ref,
+            },
+            "packet_ref": packet_ref,
+        }
+
+    def action_confirm_dry_run(self):
+        return {
+            "state": "CONFIRM_DRY_RUN",
+            "packet_ref": self.packet_ref,
+            "group_ref": self.group_ref,
+            "formal_db_write": False,
+            "formal_pos_write": False,
+            "payment_capture": False,
+            "service_restart": False,
+            "deploy": False,
+            "production_release": False,
+        }

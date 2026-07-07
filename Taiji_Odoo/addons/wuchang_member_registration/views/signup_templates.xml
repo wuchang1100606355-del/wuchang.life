@@ -1,0 +1,42 @@
+<odoo>
+  <template id="wuchang_auth_signup_fields" inherit_id="auth_signup.fields" name="Wuchang Signup Fields Copy">
+    <xpath expr="//div[contains(@class, 'field-login')]/label" position="replace">
+      <label for="login">會員 Email</label>
+    </xpath>
+    <xpath expr="//input[@id='login']" position="attributes">
+      <attribute name="placeholder">請輸入常用 Email</attribute>
+    </xpath>
+    <xpath expr="//div[contains(@class, 'field-name')]/label" position="replace">
+      <label for="name">姓名或稱呼</label>
+    </xpath>
+    <xpath expr="//input[@id='name']" position="attributes">
+      <attribute name="placeholder">例：王小明 / Nguyen Van A</attribute>
+    </xpath>
+    <xpath expr="//label[@for='password']" position="replace">
+      <label for="password">設定密碼</label>
+    </xpath>
+    <xpath expr="//label[@for='confirm_password']" position="replace">
+      <label for="confirm_password">再次確認密碼</label>
+    </xpath>
+  </template>
+
+  <template id="wuchang_auth_signup_form" inherit_id="auth_signup.signup" name="Wuchang Signup Form Copy">
+    <xpath expr="//form[contains(@class, 'oe_signup_form')]" position="before">
+      <div class="wuchang-signup-context">
+        <h3>社區會員服務註冊</h3>
+        <p>
+          本入口用於五常社區會員服務、活動通知、公益參與與權益確認。資料使用以協會治理規則與總場安全邊界為準。
+        </p>
+      </div>
+    </xpath>
+    <xpath expr="//button[@type='submit' and contains(@class, 'btn-primary')]" position="replace">
+      <button type="submit" class="btn btn-primary">送出會員註冊</button>
+    </xpath>
+    <xpath expr="//a[contains(@t-attf-href, '/web/login')]" position="replace">
+      <a t-attf-href="/web/login?{{ keep_query() }}" class="btn btn-link btn-sm" role="button">已有帳號，前往登入</a>
+    </xpath>
+    <xpath expr="//div[contains(@class, 'o_login_auth')]" position="replace">
+      <div class="o_login_auth d-none"/>
+    </xpath>
+  </template>
+</odoo>

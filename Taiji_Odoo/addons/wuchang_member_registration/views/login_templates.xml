@@ -1,0 +1,98 @@
+<odoo>
+  <template id="wuchang_auth_login_layout" inherit_id="web.login_layout" name="Wuchang Branded Login Layout" priority="90">
+    <xpath expr="t" position="replace">
+      <t t-call="web.layout">
+        <style>
+          body { margin: 0; background: #102139; }
+          .wuchang-auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(420px, .95fr); gap: 40px; padding: 56px clamp(24px,5vw,72px); background: linear-gradient(135deg, rgba(19,41,75,.96), rgba(35,68,60,.94)); color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+          .wuchang-auth-hero, .wuchang-auth-panel { display: flex; align-items: center; }
+          .wuchang-auth-hero { flex-direction: column; justify-content: center; align-items: flex-start; max-width: 720px; }
+          .wuchang-auth-kicker { margin: 0 0 12px; color: #e8c36a; font-size: .9rem; font-weight: 700; letter-spacing: 0; }
+          .wuchang-auth-brand h1 { margin: 0; font-size: clamp(2.1rem, 4.6vw, 4.5rem); line-height: 1.05; letter-spacing: 0; }
+          .wuchang-auth-lead { margin: 22px 0 0; color: #dbeafe; font-size: 1.18rem; line-height: 1.7; }
+          .wuchang-auth-mission { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: 100%; margin: 36px 0 0; }
+          .wuchang-auth-mission div { min-height: 112px; padding: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.08); }
+          .wuchang-auth-mission strong { display: block; color: #fff; font-size: 1.05rem; }
+          .wuchang-auth-mission span { display: block; margin-top: 10px; color: #cbd5e1; line-height: 1.55; }
+          .wuchang-auth-note { max-width: 680px; margin: 28px 0 0; color: #cbd5e1; line-height: 1.75; }
+          .wuchang-auth-panel { justify-content: center; }
+          .wuchang-auth-card { width: min(100%, 520px); padding: 30px; border-radius: 8px; background: #fff; color: #172033; box-shadow: 0 24px 80px rgba(2,8,23,.28); }
+          .wuchang-auth-card-header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; }
+          .wuchang-auth-card h2 { margin: 0; color: #111827; font-size: 1.45rem; letter-spacing: 0; }
+          .wuchang-auth-lang { flex: 0 0 auto; color: #64748b; font-size: .82rem; white-space: nowrap; }
+          .wuchang-auth-card form { margin: 0; }
+          .wuchang-auth-card .mb-3 { display: block; margin-bottom: 14px !important; }
+          .wuchang-auth-card label { display: block; margin-bottom: 7px; color: #0f172a; font-weight: 700; }
+          .wuchang-auth-card .form-control { display: block; width: 100%; min-height: 46px; border-radius: 6px; font-size: 1rem; }
+          .wuchang-auth-card .oe_login_buttons, .wuchang-auth-card .oe_signup_form .oe_login_buttons { display: grid !important; gap: 8px; margin-top: 16px; }
+          .wuchang-auth-card .oe_login_buttons .btn, .wuchang-auth-card .oe_signup_form .oe_login_buttons .btn { width: 100%; min-height: 44px; }
+          .wuchang-auth-card .oe_login_form > p.mt-2.text-center { display: none !important; }
+          .wuchang-auth-card .btn-link { color: #17466f; font-weight: 700; text-decoration: none; }
+          .wuchang-auth-card .btn-primary, .wuchang-auth-action.primary { border-color: #17466f; background: #17466f; color: #fff; }
+          .wuchang-auth-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+          .wuchang-auth-action { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 14px; border: 1px solid #d8dee8; border-radius: 6px; color: #172033; background: #f8fafc; font-weight: 700; text-align: center; text-decoration: none; }
+          .wuchang-auth-action.line { border-color: #04b900; color: #027a11; }
+          .wuchang-auth-action.google { border-color: #d7b15b; color: #8a5a00; }
+          .wuchang-auth-card .o_login_auth { display: none !important; }
+          @media (max-width: 980px) { .wuchang-auth-page { grid-template-columns: 1fr; padding: 28px 18px; } .wuchang-auth-mission { grid-template-columns: 1fr; } }
+          @media (max-width: 560px) { .wuchang-auth-card { padding: 22px; } .wuchang-auth-actions, .wuchang-auth-card-header { display: grid; grid-template-columns: 1fr; } }
+        </style>
+        <main class="wuchang-auth-page" role="main">
+          <section class="wuchang-auth-hero" aria-label="Wuchang community digital entry">
+            <div class="wuchang-auth-brand">
+              <p class="wuchang-auth-kicker">五常社區發展協會 × 聊國咖啡館重新總店</p>
+              <h1>數位公益營運入口</h1>
+              <p class="wuchang-auth-lead">店務營運、會員註冊、公益治理，由總場守門。</p>
+            </div>
+            <div class="wuchang-auth-mission">
+              <div><strong>店員</strong><span>現場 POS、現金收款、訂單查詢</span></div>
+              <div><strong>店長</strong><span>店務管理、會員協助、異常回報</span></div>
+              <div><strong>協會</strong><span>公益治理、會員服務、數位主權</span></div>
+            </div>
+            <p class="wuchang-auth-note">本入口用於社區會員服務、活動通知、公益參與與店內營運協助。咖啡館營收支持社區公益與協會數位服務建置。</p>
+          </section>
+
+          <section class="wuchang-auth-panel" aria-label="Account access">
+            <div class="wuchang-auth-card">
+              <div class="wuchang-auth-card-header">
+                <div>
+                  <p class="wuchang-auth-kicker">正式入口</p>
+                  <h2>登入與註冊</h2>
+                </div>
+                <div class="wuchang-auth-lang">中文 / Tiếng Việt / English</div>
+              </div>
+              <t t-out="0"/>
+              <div class="wuchang-auth-actions" aria-label="Quick access">
+                <a class="wuchang-auth-action primary" href="/web/login">店員 / 店長登入</a>
+                <a class="wuchang-auth-action" href="/web/signup">會員註冊</a>
+                <a class="wuchang-auth-action line" href="/line/login">LINE 會員入口</a>
+                <a class="wuchang-auth-action google" href="/google/member/login">Google 會員入口</a>
+              </div>
+            </div>
+          </section>
+        </main>
+      </t>
+    </xpath>
+  </template>
+
+  <template id="wuchang_auth_login_form" inherit_id="web.login" name="Wuchang Login Form Copy">
+    <xpath expr="//label[@for='login']" position="replace">
+      <label for="login" class="form-label d-flex justify-content-between">帳號 / Email</label>
+    </xpath>
+    <xpath expr="//input[@id='login']" position="attributes">
+      <attribute name="placeholder">請輸入店員、店長或管理員帳號</attribute>
+    </xpath>
+    <xpath expr="//label[@for='password']" position="replace">
+      <label for="password" class="form-label d-flex justify-content-between">密碼</label>
+    </xpath>
+    <xpath expr="//input[@id='password']" position="attributes">
+      <attribute name="placeholder">請輸入密碼</attribute>
+    </xpath>
+    <xpath expr="//button[@type='submit' and contains(@class, 'btn-primary')]" position="replace">
+      <button type="submit" class="btn btn-primary">進入店務系統</button>
+    </xpath>
+    <xpath expr="//div[contains(@class, 'o_login_auth')]" position="replace">
+      <div class="o_login_auth d-none"/>
+    </xpath>
+  </template>
+</odoo>
