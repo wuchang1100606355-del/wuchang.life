@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_property_sovereign_ai_amplification.schema.json",
+  "title": "W7TP Property Sovereign AI Amplification Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "version",
+    "final_authority",
+    "property_container_ref",
+    "management_committee_authorization_status",
+    "local_total_field_authority",
+    "adi_5d_metric_ref",
+    "edge_xiaoj_gateway_ref",
+    "resident_identity_ref",
+    "household_role_ref",
+    "visitor_flow_ref",
+    "access_control_policy_ref",
+    "raw_image_policy",
+    "evidence_ref_policy",
+    "dlq_policy",
+    "cloud_candidate_policy",
+    "total_field_decision",
+    "redteam_status",
+    "human_review_required"
+  ],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": [
+        "PROPERTY_SOVEREIGN_AI_AMPLIFICATION_CANDIDATE",
+        "PROPERTY_SOVEREIGN_AI_AMPLIFICATION_PASS",
+        "PROPERTY_SOVEREIGN_AI_AMPLIFICATION_HOLD",
+        "PROPERTY_SOVEREIGN_AI_AMPLIFICATION_BLOCK"
+      ]
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "final_authority": {
+      "const": "total_field_verifier"
+    },
+    "property_container_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "management_committee_authorization_status": {
+      "const": "HOLD_UNTIL_AUTHORIZED"
+    },
+    "local_total_field_authority": {
+      "const": true
+    },
+    "adi_5d_metric_ref": {
+      "type": "string",
+      "pattern": "^ADI_5D_METRIC_REF:"
+    },
+    "edge_xiaoj_gateway_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resident_identity_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "household_role_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "visitor_flow_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "access_control_policy_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "raw_image_policy": {
+      "const": "LOCAL_ONLY_NO_CLOUD_NO_TOTAL_FIELD"
+    },
+    "evidence_ref_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed_refs",
+        "hash_required",
+        "seal_required"
+      ],
+      "properties": {
+        "allowed_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "pHash_ref",
+              "morphology_ref",
+              "evidence_ref",
+              "hash_ref",
+              "seal_ref"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "hash_required": {
+          "const": true
+        },
+        "seal_required": {
+          "const": true
+        }
+      }
+    },
+    "dlq_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "append_only_intent",
+        "hash_chain",
+        "seal",
+        "permission_isolation",
+        "external_seal_option",
+        "root_absolute_delete_impossible_claim"
+      ],
+      "properties": {
+        "append_only_intent": {
+          "const": true
+        },
+        "hash_chain": {
+          "const": true
+        },
+        "seal": {
+          "const": true
+        },
+        "permission_isolation": {
+          "const": true
+        },
+        "external_seal_option": {
+          "type": "string",
+          "enum": [
+            "available",
+            "not_configured"
+          ]
+        },
+        "root_absolute_delete_impossible_claim": {
+          "const": false
+        }
+      }
+    },
+    "cloud_candidate_policy": {
+      "const": "CANDIDATE_ONLY_NO_AUTHORITY"
+    },
+    "total_field_decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "PASS_SAFE_CONTACT",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "redteam_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "human_review_required": {
+      "type": "boolean"
+    },
+    "safe_action": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "humanized_response": {
+      "type": "string"
+    },
+    "public_projection": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "STRUCTURE_ONLY",
+        "PUBLIC_REF_ONLY"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
