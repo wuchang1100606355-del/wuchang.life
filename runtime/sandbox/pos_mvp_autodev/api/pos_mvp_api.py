@@ -14,6 +14,9 @@ from xml.etree import ElementTree as ET
 
 ROOT = Path("/home/taiji_admin/Taiji_Hub")
 BASELINE_SANDBOX = ROOT / "runtime/sandbox/pos_mvp_autodev"
+# Allow importing ``runtime`` package when script is executed directly from deep paths.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 RUN_DIR = Path(os.environ.get("POS_MVP_RUN_DIR", str(ROOT / "runtime/sandbox/pos_mvp_autodev_run")))
 MENU_JSON = BASELINE_SANDBOX / "menu/menu.json"
 PHOTO_DIR = BASELINE_SANDBOX / "menu/product_photos"
@@ -574,6 +577,16 @@ def append_event(action_ref: str, node_ref: str, payload_ref: str, claim_label: 
 def append_dead_letter(reason, payload=None, source=None, **kwargs):
     """24h hash-only dead letter writer. No plaintext payload is stored."""
     from runtime.dead_letter.dead_letter_24h_hash_writer import append_24h_hash_dead_letter
+    payload_ref = canonical_hash(payload or {})
+    queue_row = {
+        "reason": reason,
+        "source": source,
+        "payload_ref": payload_ref,
+        "retry_count": 0,
+        "max_retry_count": 2,
+        "silent_drop": False,
+    }
+    append_jsonl(DEAD_LETTER, queue_row)
     return append_24h_hash_dead_letter(
         reason=reason,
         payload=payload,

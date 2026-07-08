@@ -26,6 +26,15 @@ WEB_DIR = ROOT / "web" / "packet_inference_cockpit"
 RUNTIME = ROOT / "tools" / "w7tp_packet_inference_runtime.py"
 PR_LAYER = ROOT / "tools" / "w7tp_total_field_pr_layer.py"
 RUN_ROOT = ROOT / "runtime" / "total_field" / "packet_inference_cockpit"
+CANONICAL_GATE_AVAILABLE = False
+try:
+    from tools.total_field.final_state_gate import run_total_field_gate
+    from tools.total_field.human_response_renderer import render_human_response
+
+    CANONICAL_GATE_AVAILABLE = True
+except Exception:  # pragma: no cover - defensive import guard for environment issues
+    run_total_field_gate = None
+    render_human_response = None
 
 SAFETY_FLAGS = {
     "SECRET_READ": False,
@@ -41,6 +50,49 @@ SAFETY_FLAGS = {
     "MODEL_REQUIRED": False,
     "LLM_AUTHORITY": False,
 }
+
+
+def _render_human_response_payload(final_verifier: dict[str, Any], source_channel: str = "web") -> dict[str, Any]:
+    channel = source_channel or "web"
+    try:
+        from tools.total_field.human_response_renderer import render_human_response
+
+        return render_human_response(
+            {
+                **final_verifier,
+                "source_channel": final_verifier.get("source_channel") or channel,
+            },
+            channel=channel,
+        )
+    except Exception:
+        return {
+            "state": "HUMAN_RESPONSE_RENDERED",
+            "decision": "HOLD",
+            "risk_level": "MEDIUM",
+            "channel": "WEB",
+            "reply_text": "這個候選需要再確認，我先暫停，不會執行任何正式動作。",
+            "requires_confirmation": True,
+            "candidate_reply_only": True,
+            "formal_send_executed": False,
+            "line_reply_sent": False,
+            "db_write": False,
+            "odoo_write": False,
+            "deploy": False,
+            "restart": False,
+            "persona_voice_hint": "系統保守回退中，保持高風險提示。",
+            "media_response": {
+                "mode": "TEXT_ONLY",
+                "audio_script": "",
+                "voice_hint": "no_audio",
+                "video_mode": "NONE",
+                "video_hint": "高風險情況下不提供影像回覆。",
+            },
+            "redaction": {
+                "raw_d_dimensions_exposed": False,
+                "verifier_internals_exposed": False,
+                "h64_td_exposed": False,
+            },
+        }
 
 
 def sha256_text(text: str) -> str:
@@ -125,6 +177,11 @@ def normalize_runtime_output(data: dict[str, Any], text: str) -> dict[str, Any]:
         forbidden_actions = packet_field(last_packet, "D5_execution", "forbidden_actions") or []
     requires_human_review = decision in {"HOLD", "BLOCK"}
 
+    human_response = _render_human_response_payload(
+        final_verifier,
+        source_channel=str(data.get("CHANNEL") or data.get("channel") or "web"),
+    )
+    answer_text = human_response.get("reply_text") or zh_tw or "無法產生候選回覆。"
     return {
         "STATE": "PASS_W7TP_PACKET_INFERENCE_COCKPIT_CHAT",
         "RUN_MODE": "MODEL_FREE_PACKET_BY_PACKET_INFERENCE",
@@ -156,12 +213,13 @@ def normalize_runtime_output(data: dict[str, Any], text: str) -> dict[str, Any]:
             },
             "summary": {
                 "decision": decision,
-                "output": zh_tw,
-                "raw_verified_draft": zh_tw,
-                "pr_refined_answer": zh_tw,
+                "output": answer_text,
+                "raw_verified_draft": zh_tw or answer_text,
+                "pr_refined_answer": answer_text,
                 "decision_locked": True,
                 "packet_count": len(timeline),
             },
+            "human_response": human_response,
             "scene_context": scene_context,
         },
     }
@@ -189,19 +247,113 @@ def build_pr_request(result: dict[str, Any]) -> dict[str, Any]:
             "verified_role_ref": None,
             "dev_identity_override": scene_context.get("dev_identity_override"),
         },
+        "cloud_model_ref": str(result.get("requested_ai_key_ref") or ""),
         "public_context_only": True,
     }
 
 
-def apply_pr_layer(result: dict[str, Any]) -> dict[str, Any]:
+def _safe_ai_key_ref(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    if len(text) > 200:
+        return ""
+    return text
+
+
+def _safe_translator_profile(value: str) -> str:
+    profile = str(value or "").strip().lower()
+    if profile in {"raw", "human", "poetic", "compact"}:
+        return profile
+    return "raw"
+
+
+def _render_gate_human_summary(
+    payload: dict[str, Any],
+    request_text: str,
+    channel: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    if not CANONICAL_GATE_AVAILABLE or run_total_field_gate is None or render_human_response is None:
+        return payload, payload.get("FINAL_VERIFIER") if isinstance(payload.get("FINAL_VERIFIER"), dict) else {}
+
+    try:
+        gate_request = {
+            "text": request_text,
+            "source_channel": channel,
+            "channel": channel,
+            "include_adi_5d": True,
+        }
+        total_field_gate = run_total_field_gate(gate_request)
+        human_response = render_human_response(total_field_gate, channel=channel)
+
+        # Keep runtime verifier for traceability while replacing authority decision with total-field.
+        runtime_verifier = payload.get("FINAL_VERIFIER") if isinstance(payload.get("FINAL_VERIFIER"), dict) else {}
+        total_field_gate = dict(total_field_gate)
+        if runtime_verifier:
+            total_field_gate["runtime_verifier"] = runtime_verifier
+
+        payload["FINAL_VERIFIER"] = total_field_gate
+        payload["FINAL_VERIFIER"]["authority"] = "total_field_gate"
+
+        decision = str(total_field_gate.get("decision") or "HOLD")
+        reply_text = str(human_response.get("reply_text") or "")
+        if not reply_text:
+            reply_text = payload.get("LANGUAGE_RECONSTRUCTION", {}).get("zh_TW", "") or request_text
+
+        payload.setdefault("LANGUAGE_RECONSTRUCTION", {})
+        payload["LANGUAGE_RECONSTRUCTION"]["zh_TW"] = reply_text
+        payload["LANGUAGE_RECONSTRUCTION"]["raw_verified_draft"] = reply_text
+        payload["LANGUAGE_RECONSTRUCTION"]["pr_refined_zh_TW"] = reply_text
+        payload.setdefault("COCKPIT_VIEW", {}).setdefault("summary", {})
+        summary = payload["COCKPIT_VIEW"]["summary"]
+        summary["decision"] = decision
+        summary["output"] = reply_text
+        summary["raw_verified_draft"] = reply_text
+        summary["pr_refined_answer"] = reply_text
+        summary["decision_locked"] = True
+        payload["COCKPIT_VIEW"]["human_response"] = human_response
+        payload["COCKPIT_VIEW"]["badges"]["decision"] = decision
+        payload["COCKPIT_VIEW"]["badges"]["verifier_decision_locked"] = True
+        payload["COCKPIT_VIEW"]["badges"]["verifier_authority"] = "TOTAL_FIELD"
+        payload["COCKPIT_VIEW"]["summary"]["packet_count"] = len(payload.get("COCKPIT_VIEW", {}).get("timeline", []))
+        payload["TOTAL_FIELD_GATE"] = total_field_gate
+        return payload, human_response
+    except Exception:
+        # Keep legacy behavior if gate layer fails; never fail public API rendering.
+        return payload, payload.get("FINAL_VERIFIER") if isinstance(payload.get("FINAL_VERIFIER"), dict) else {}
+
+
+def apply_pr_layer(
+    result: dict[str, Any], ai_key_ref: str = "", cloud_translator_profile: str = ""
+) -> dict[str, Any]:
     if not PR_LAYER.exists():
         result["COCKPIT_VIEW"]["badges"]["pr_layer"] = "TEMPLATE_FALLBACK"
+        result["COCKPIT_VIEW"]["badges"]["model_lane"] = "OFF"
+        result["COCKPIT_VIEW"]["cloud_model"] = {
+            "requested": False,
+            "requested_ai_key_ref": "",
+            "translator_profile": _safe_translator_profile(cloud_translator_profile),
+            "response_model_lane": "OFF",
+            "response_text": "",
+            "response_text_available": False,
+            "response_packet": {},
+        }
         return result
 
     request_packet = build_pr_request(result)
+    model_ref = _safe_ai_key_ref(ai_key_ref)
+    if model_ref:
+        request_packet["cloud_model_ref"] = model_ref
+        result["requested_ai_key_ref"] = model_ref
     try:
         proc = subprocess.run(
-            ["python3", str(PR_LAYER), "--request-json", json.dumps(request_packet, ensure_ascii=False), "--disable-model"],
+            [
+                "python3",
+                str(PR_LAYER),
+                "--request-json",
+                json.dumps(request_packet, ensure_ascii=False),
+                *(["--model", model_ref] if model_ref else ["--disable-model"]),
+            ],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -229,6 +381,9 @@ def apply_pr_layer(result: dict[str, Any]) -> dict[str, Any]:
 
     final_text = str(pr_data.get("FINAL_TEXT") or request_packet["safe_answer_draft"])
     original_decision = result.get("FINAL_VERIFIER", {}).get("decision", "HOLD")
+    response_packet = pr_data.get("RESPONSE_PACKET") if isinstance(pr_data.get("RESPONSE_PACKET"), dict) else {}
+    model_lane = str(pr_data.get("MODEL_LANE") or "TEMPLATE_FALLBACK")
+    response_text = str(response_packet.get("text_zh_TW") or final_text or request_packet["safe_answer_draft"]).strip()
     result["LANGUAGE_RECONSTRUCTION"]["raw_verified_draft"] = request_packet["safe_answer_draft"]
     result["LANGUAGE_RECONSTRUCTION"]["pr_refined_zh_TW"] = final_text
     result["LANGUAGE_RECONSTRUCTION"]["zh_TW"] = final_text
@@ -236,19 +391,30 @@ def apply_pr_layer(result: dict[str, Any]) -> dict[str, Any]:
         "STATE": pr_data.get("STATE"),
         "MODEL_LANE": pr_data.get("MODEL_LANE", "TEMPLATE_FALLBACK"),
         "REQUEST_PACKET": pr_data.get("REQUEST_PACKET", request_packet),
-        "RESPONSE_PACKET": pr_data.get("RESPONSE_PACKET", {}),
+        "RESPONSE_PACKET": response_packet,
         "decision_locked": True,
         "verified_decision": original_decision,
     }
     result["COCKPIT_VIEW"]["badges"]["pr_layer"] = pr_data.get("MODEL_LANE", "TEMPLATE_FALLBACK")
+    result["COCKPIT_VIEW"]["badges"]["model_lane"] = model_lane
     result["COCKPIT_VIEW"]["badges"]["llm_authority"] = False
     result["COCKPIT_VIEW"]["badges"]["verifier_decision_locked"] = True
     result["COCKPIT_VIEW"]["badges"]["model_output"] = "candidate-only"
+    result["COCKPIT_VIEW"]["cloud_model"] = {
+        "requested": bool(model_ref),
+        "requested_ai_key_ref": model_ref,
+        "translator_profile": _safe_translator_profile(cloud_translator_profile),
+        "response_model_lane": model_lane,
+        "response_text": response_text,
+        "response_text_available": bool(response_text),
+        "response_packet": response_packet,
+    }
     result["COCKPIT_VIEW"]["summary"]["output"] = final_text
     result["COCKPIT_VIEW"]["summary"]["raw_verified_draft"] = request_packet["safe_answer_draft"]
     result["COCKPIT_VIEW"]["summary"]["pr_refined_answer"] = final_text
     result["COCKPIT_VIEW"]["summary"]["decision_locked"] = True
     result["FINAL_VERIFIER"]["decision"] = original_decision
+    result["CLOUD_MODEL_REF"] = model_ref
     return result
 
 
@@ -325,7 +491,12 @@ def fallback_response(text: str, reason: str) -> dict[str, Any]:
                 "payment_capture": False,
                 "member_plaintext_read": False,
             },
-            "summary": {"decision": "HOLD", "output": output, "packet_count": 1},
+            "summary": {
+                "decision": "HOLD",
+                "output": _render_human_response_payload({"decision": "HOLD", "risk_level": "HIGH"}, "web").get("reply_text", output),
+                "packet_count": 1,
+            },
+            "human_response": _render_human_response_payload({"decision": "HOLD", "risk_level": "HIGH"}, "web"),
         },
         "fallback": True,
         "error": reason,
@@ -341,6 +512,8 @@ def run_runtime(
     dev_identity_switch: bool = False,
     authenticated_role_ref: str = "",
     signed_identity_packet_ref: str = "",
+    ai_key_ref: str = "",
+    cloud_translator_profile: str = "",
 ) -> dict[str, Any]:
     if not RUNTIME.exists():
         return fallback_response(text, "runtime file missing")
@@ -371,7 +544,16 @@ def run_runtime(
                 last_error = (result.stderr or result.stdout or "runtime nonzero")[:2000]
                 continue
             data = json.loads(result.stdout)
-            return apply_pr_layer(normalize_runtime_output(data, text))
+            payload = normalize_runtime_output(data, text)
+            payload, _ = _render_gate_human_summary(payload, text, channel)
+            payload["requested_ai_key_ref"] = _safe_ai_key_ref(ai_key_ref)
+            payload["CLOUD_MODEL_REF"] = _safe_ai_key_ref(ai_key_ref)
+            payload["cloud_translator_profile"] = _safe_translator_profile(cloud_translator_profile)
+            return apply_pr_layer(
+                payload,
+                ai_key_ref=_safe_ai_key_ref(ai_key_ref),
+                cloud_translator_profile=_safe_translator_profile(cloud_translator_profile),
+            )
         except Exception as exc:  # Runtime fallback must never crash the UI.
             last_error = repr(exc)
     return fallback_response(text, last_error or "runtime failed")
@@ -442,6 +624,8 @@ class CockpitHandler(BaseHTTPRequestHandler):
             dev_identity_switch = bool(body.get("dev_identity_switch", False))
             authenticated_role_ref = str(body.get("authenticated_role_ref", ""))
             signed_identity_packet_ref = str(body.get("signed_identity_packet_ref", ""))
+            ai_key_ref = str(body.get("ai_key_ref", ""))
+            cloud_translator_profile = str(body.get("cloud_translator_profile", "raw"))
             if not text:
                 return safe_json_response(self, 400, {"STATE": "HOLD_EMPTY_TEXT"})
 
@@ -454,6 +638,8 @@ class CockpitHandler(BaseHTTPRequestHandler):
                 dev_identity_switch=dev_identity_switch,
                 authenticated_role_ref=authenticated_role_ref,
                 signed_identity_packet_ref=signed_identity_packet_ref,
+                ai_key_ref=ai_key_ref,
+                cloud_translator_profile=cloud_translator_profile,
             )
             RUN_ROOT.mkdir(parents=True, exist_ok=True)
             run_file = RUN_ROOT / f"chat_{int(time.time())}_{uuid.uuid4().hex[:8]}.json"

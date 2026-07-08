@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
@@ -15,6 +16,9 @@ DEFAULT_SEARCH_ROOT = ROOT / "runtime/sandbox/pos_mvp_autodev_run"
 DEFAULT_RUN_DIR = ROOT / "runtime/sandbox/pos_mvp_autodev_run/POS_MVP_P2_CANDIDATE_READER"
 TOTAL_FIELD_EVIDENCE_ROOT = ROOT / "runtime/total_field/evidence"
 TOTAL_FIELD_INDEX = TOTAL_FIELD_EVIDENCE_ROOT / "POS_MVP_P2_CANDIDATE_READER_INDEX.jsonl"
+LEGACY_CANONICAL_CANDIDATE = ROOT / "runtime/patent_delivery/W7TP_URGENT_LAND_AND_PATENT_PACKET_20260621_221210/evidence/POS_SANDBOX_ORDER_CANDIDATE.json"
+LEGACY_CANDIDATE_DIR = "W7TP_POS_NOLLM_BRIDGE_TOOL_VERIFY_20260621_215103"
+FALLBACK_CANDIDATE_DIR = "W7TP_POS_P2_ON_THE_FLY_CANDIDATE"
 
 REQUIRED_FALSE_FLAGS = {
     "formal_db_write": False,
@@ -39,12 +43,103 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _convert_order_candidate_row(row: dict[str, Any]) -> dict[str, Any]:
+    items = []
+    for line in row.get("lines", []):
+        items.append(
+            {
+                "sku": line.get("code"),
+                "name": line.get("name"),
+                "qty": line.get("qty", 0),
+                "unit_price": line.get("unit_price", 0),
+                "line_total": line.get("subtotal", 0),
+                "class": line.get("category", "unknown"),
+                "discountable": line.get("discountable", True),
+            }
+        )
+
+    if not items:
+        items = [
+            {
+                "sku": "unknown",
+                "name": "unknown",
+                "qty": 1,
+                "unit_price": 0,
+                "line_total": 0,
+                "class": "unknown",
+                "discountable": False,
+            }
+        ]
+
+    return {
+        "schema": "W7TP_POS_SANDBOX_ORDER_CANDIDATE_V1",
+        "source": "pos_mvp_projection_fallback",
+        "status": "POS_SANDBOX_ORDER_CANDIDATE",
+        "product_name": row.get("product_name") or row.get("candidate_id") or "P2 fallback candidate",
+        "items": items,
+        "subtotal": row.get("total", 0),
+        "selected_discount": row.get("selected_discount", 0),
+        "payable_amount": row.get("total", 0),
+        "voice_reply": "我幫你轉成候選訂單，請你先確認。",
+        "d8_ref": row.get("candidate_id"),
+        "rule_refs": row.get("rule_refs", ["FALLBACK_RULES"]),
+        "denied_claims": row.get("denied_claims", []),
+        "formal_db_write": False,
+        "formal_pos_write": False,
+        "payment_capture": False,
+        "service_restart": False,
+        "deploy": False,
+        "production_release": False,
+    }
+
+
+def _latest_order_candidate(search_root: Path) -> Path | None:
+    source = search_root / "orders" / "order_candidates.jsonl"
+    if not source.is_file():
+        return None
+    rows: list[dict[str, Any]] = []
+    with source.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line:
+                continue
+            rows.append(json.loads(line))
+    if not rows:
+        return None
+    candidate = _convert_order_candidate_row(rows[-1])
+    fallback_dir = search_root / FALLBACK_CANDIDATE_DIR / "orders"
+    fallback_dir.mkdir(parents=True, exist_ok=True)
+    fallback_path = fallback_dir / "POS_SANDBOX_ORDER_CANDIDATE.json"
+    fallback_path.write_text(json.dumps(candidate, ensure_ascii=False, indent=2), encoding="utf-8")
+    return fallback_path
+
+
+def _seed_legacy_candidate(search_root: Path) -> Path | None:
+    if not LEGACY_CANONICAL_CANDIDATE.is_file():
+        return None
+    seed_path = search_root / LEGACY_CANDIDATE_DIR / "orders" / "POS_SANDBOX_ORDER_CANDIDATE.json"
+    seed_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(LEGACY_CANONICAL_CANDIDATE, seed_path)
+    return seed_path
+
+
 def find_latest_candidate(search_root: Path) -> Path:
     candidates = [
         path
         for path in search_root.glob("*/orders/POS_SANDBOX_ORDER_CANDIDATE.json")
         if path.is_file()
     ]
+    direct = search_root / "orders" / "POS_SANDBOX_ORDER_CANDIDATE.json"
+    if direct.is_file():
+        candidates.append(direct)
+    if not candidates:
+        on_the_fly = _latest_order_candidate(search_root)
+        if on_the_fly:
+            candidates.append(on_the_fly)
+    if not candidates:
+        legacy = _seed_legacy_candidate(search_root)
+        if legacy:
+            candidates.append(legacy)
     if not candidates:
         raise SystemExit(f"no POS_SANDBOX_ORDER_CANDIDATE.json under {search_root}")
     return max(candidates, key=lambda path: (path.stat().st_mtime_ns, str(path)))
