@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/sovereign_ai_member_xiaoj_translator.schema.json",
+  "title": "Sovereign AI Member XiaoJ Translator Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "authority",
+    "final_authority",
+    "org_container_ref",
+    "member_identity_ref",
+    "intent_field",
+    "state_field",
+    "coordinate_field",
+    "evidence_field",
+    "execution_field",
+    "generative_transport_field",
+    "risk_field",
+    "envelope_field",
+    "adi_5d_ref",
+    "cloud_support_mode",
+    "byok_mode",
+    "key_ref_only",
+    "prohibited_content_check",
+    "redteam_status",
+    "total_field_decision",
+    "humanized_response",
+    "safe_alternatives",
+    "candidate_only",
+    "requires_total_field_verify",
+    "management_committee_authorization_status"
+  ],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": [
+        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_CANDIDATE",
+        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_PASS",
+        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_HOLD",
+        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_BLOCK"
+      ]
+    },
+    "authority": {
+      "const": "TOTAL_FIELD"
+    },
+    "final_authority": {
+      "const": "total_field_verifier"
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "requires_total_field_verify": {
+      "const": true
+    },
+    "org_container_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "member_identity_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intent_field": {
+      "$ref": "#/$defs/field_ref"
+    },
+    "state_field": {
+      "$ref": "#/$defs/field_ref"
+    },
+    "coordinate_field": {
+      "$ref": "#/$defs/field_ref"
+    },
+    "evidence_field": {
+      "$ref": "#/$defs/field_ref"
+    },
+    "execution_field": {
+      "$ref": "#/$defs/execution_field"
+    },
+    "generative_transport_field": {
+      "$ref": "#/$defs/generative_transport_field"
+    },
+    "risk_field": {
+      "$ref": "#/$defs/risk_field"
+    },
+    "envelope_field": {
+      "$ref": "#/$defs/envelope_field"
+    },
+    "adi_5d_ref": {
+      "type": "string",
+      "pattern": "^ADI_5D_REF:"
+    },
+    "cloud_support_mode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "candidate_packet_completion",
+        "tone_completion",
+        "safe_alternative_completion"
+      ]
+    },
+    "byok_mode": {
+      "type": "string",
+      "enum": [
+        "member_provider_ref_only",
+        "association_lane_ref_only",
+        "none"
+      ]
+    },
+    "key_ref_only": {
+      "const": true
+    },
+    "prohibited_content_check": {
+      "$ref": "#/$defs/prohibited_content_check"
+    },
+    "redteam_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "total_field_decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "humanized_response": {
+      "type": "string",
+      "minLength": 1
+    },
+    "safe_alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "management_committee_authorization_status": {
+      "const": "HOLD_UNTIL_AUTHORIZED"
+    }
+  },
+  "$defs": {
+    "field_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field_ref",
+        "summary"
+      ],
+      "properties": {
+        "field_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        }
+      }
+    },
+    "execution_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_allowed",
+        "db_write",
+        "deploy",
+        "restart",
+        "router_write"
+      ],
+      "properties": {
+        "execution_allowed": {
+          "const": false
+        },
+        "db_write": {
+          "const": false
+        },
+        "deploy": {
+          "const": false
+        },
+        "restart": {
+          "const": false
+        },
+        "router_write": {
+          "const": false
+        }
+      }
+    },
+    "generative_transport_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transport_type",
+        "state_packet_ref",
+        "reconstruction_ref",
+        "equivalent_state_ref",
+        "total_field_verify"
+      ],
+      "properties": {
+        "transport_type": {
+          "const": "state_packet_ref_reconstruction_equivalent_state"
+        },
+        "state_packet_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reconstruction_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "equivalent_state_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "total_field_verify": {
+          "const": true
+        }
+      }
+    },
+    "risk_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "risk_level",
+        "hard_boundary"
+      ],
+      "properties": {
+        "risk_level": {
+          "type": "string",
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "CRITICAL"
+          ]
+        },
+        "hard_boundary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "envelope_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ttl_seconds",
+        "nonce_ref",
+        "verifier_ref"
+      ],
+      "properties": {
+        "ttl_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "nonce_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verifier_ref": {
+          "const": "total_field_verifier"
+        }
+      }
+    },
+    "prohibited_content_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "secret",
+        "member_plaintext",
+        "resident_plaintext",
+        "private_contact",
+        "private_address",
+        "credential_value"
+      ],
+      "properties": {
+        "secret": {
+          "const": false
+        },
+        "member_plaintext": {
+          "const": false
+        },
+        "resident_plaintext": {
+          "const": false
+        },
+        "private_contact": {
+          "const": false
+        },
+        "private_address": {
+          "const": false
+        },
+        "credential_value": {
+          "const": false
+        }
+      }
+    }
+  }
+}
