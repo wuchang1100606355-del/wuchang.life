@@ -51,6 +51,28 @@ The 8-in-1 Total Field is expressed as fields:
 
 These are governance fields, not ordinary database columns.
 
+## 8 State Field Completion
+
+Each property amplification packet must expose these keys with `summary`, `refs`, and `status`:
+
+| Key | Field | Required content |
+| --- | --- | --- |
+| `intent_field` | 意圖場 | property service intent, visitor intent, committee intent, or access intent |
+| `state_field` | 狀態場 | candidate, hold, warning, block, or pass-safe-contact state |
+| `coordinate_field` | 座標場 | property container ref, role ref, device ref, household ref, or scene ref |
+| `evidence_field` | 證據場 | evidence refs, hash refs, seal refs, pHash refs, or morphology refs |
+| `execution_field` | 執行場 | execution is disabled until verifier and authorized human review pass |
+| `generative_transport_field` | 生成式傳輸場 | `mode=state_packet_ref_reconstruction_equivalent_state` with ref-based reconstruction |
+| `risk_field` | 風險禁錮場 | no secret, no member plaintext, no resident plaintext, no raw image, no DB write, no release, no restart, no router write |
+| `envelope_field` | 封套驗證場 | `final_authority=total_field_verifier`, `human_review_required=true`, `candidate_only=true` |
+
+The generative transport field must set:
+
+```text
+mode=state_packet_ref_reconstruction_equivalent_state
+not=file_copy/cloud_sync/plaintext_transport
+```
+
 ## ADI 5D Boundary
 
 ADI is a 5D metric index layer. It indexes resident refs, household refs, roles, devices, evidence refs, risk positions, and authority coordinates.

@@ -86,6 +86,28 @@ state_packet + ref + reconstruction + equivalent_state + total_field_verify
 
 It is not a storage transport or sensitive-content transfer design.
 
+### 8 State Field Completion
+
+Every translator packet must expose these keys with `summary`, `refs`, and `status`:
+
+| Key | Field | Required content |
+| --- | --- | --- |
+| `intent_field` | intent field | member request intent and compliance translation target |
+| `state_field` | state field | candidate, hold, warning, block, or pass state |
+| `coordinate_field` | coordinate field | organization container ref, member identity ref, policy ref, or scene ref |
+| `evidence_field` | evidence field | source refs, consent refs, verifier refs, or sealed evidence refs |
+| `execution_field` | execution field | no DB write, no release, no restart, no router write |
+| `generative_transport_field` | generative transport field | `mode=state_packet_ref_reconstruction_equivalent_state` |
+| `risk_field` | risk quarantine field | no secret, no member plaintext, no resident plaintext, no raw image, no DB write, no release, no restart, no router write |
+| `envelope_field` | envelope verification field | `final_authority=total_field_verifier`, `human_review_required=true`, `candidate_only=true` |
+
+The generative transport field must set:
+
+```text
+mode=state_packet_ref_reconstruction_equivalent_state
+not=file_copy/cloud_sync/plaintext_transport
+```
+
 ## 4. BYOK Mode
 
 BYOK means bring-your-own-key by reference only.

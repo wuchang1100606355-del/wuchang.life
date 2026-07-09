@@ -1,15 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://wuchang.life/schemas/field/sovereign_ai_member_xiaoj_translator.schema.json",
-  "title": "Sovereign AI Member XiaoJ Translator Packet",
+  "$id": "https://wuchang.life/schemas/field/w7tp_dual_module_property_merchant_governance.schema.json",
+  "title": "W7TP Dual Module Property Merchant Governance Packet",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "state",
-    "authority",
+    "version",
     "final_authority",
-    "org_container_ref",
-    "member_identity_ref",
+    "candidate_only",
+    "human_review_required",
+    "property_container_ref",
+    "merchant_container_ref",
+    "management_committee_authorization_status",
+    "merchant_activation_status",
+    "total_field_decision",
+    "redteam_status",
     "intent_field",
     "state_field",
     "coordinate_field",
@@ -17,33 +23,20 @@
     "execution_field",
     "generative_transport_field",
     "risk_field",
-    "envelope_field",
-    "adi_5d_ref",
-    "cloud_support_mode",
-    "byok_mode",
-    "key_ref_only",
-    "prohibited_content_check",
-    "redteam_status",
-    "total_field_decision",
-    "humanized_response",
-    "safe_alternatives",
-    "candidate_only",
-    "requires_total_field_verify",
-    "management_committee_authorization_status",
-    "human_review_required"
+    "envelope_field"
   ],
   "properties": {
     "state": {
       "type": "string",
       "enum": [
-        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_CANDIDATE",
-        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_PASS",
-        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_HOLD",
-        "SOVEREIGN_AI_MEMBER_XIAOJ_TRANSLATOR_BLOCK"
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_CANDIDATE",
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_HOLD",
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_PASS",
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_BLOCK"
       ]
     },
-    "authority": {
-      "const": "TOTAL_FIELD"
+    "version": {
+      "const": "1.0.0"
     },
     "final_authority": {
       "const": "total_field_verifier"
@@ -51,31 +44,58 @@
     "candidate_only": {
       "const": true
     },
-    "requires_total_field_verify": {
-      "const": true
-    },
     "human_review_required": {
       "const": true
     },
-    "org_container_ref": {
+    "property_container_ref": {
       "type": "string",
       "minLength": 1
     },
-    "member_identity_ref": {
+    "merchant_container_ref": {
       "type": "string",
       "minLength": 1
+    },
+    "management_committee_authorization_status": {
+      "const": "HOLD_UNTIL_AUTHORIZED"
+    },
+    "merchant_activation_status": {
+      "type": "string",
+      "enum": [
+        "pending_group_member",
+        "inactive",
+        "active_after_total_field_seal"
+      ]
+    },
+    "total_field_decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "PASS_SAFE_CONTACT",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "redteam_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
     },
     "intent_field": {
-      "$ref": "#/$defs/field_ref"
+      "$ref": "#/$defs/state_field_node"
     },
     "state_field": {
-      "$ref": "#/$defs/field_ref"
+      "$ref": "#/$defs/state_field_node"
     },
     "coordinate_field": {
-      "$ref": "#/$defs/field_ref"
+      "$ref": "#/$defs/state_field_node"
     },
     "evidence_field": {
-      "$ref": "#/$defs/field_ref"
+      "$ref": "#/$defs/state_field_node"
     },
     "execution_field": {
       "$ref": "#/$defs/execution_field"
@@ -88,84 +108,21 @@
     },
     "envelope_field": {
       "$ref": "#/$defs/envelope_field"
-    },
-    "adi_5d_ref": {
-      "type": "string",
-      "pattern": "^ADI_5D_REF:"
-    },
-    "cloud_support_mode": {
-      "type": "string",
-      "enum": [
-        "none",
-        "candidate_packet_completion",
-        "tone_completion",
-        "safe_alternative_completion"
-      ]
-    },
-    "byok_mode": {
-      "type": "string",
-      "enum": [
-        "member_provider_ref_only",
-        "association_lane_ref_only",
-        "none"
-      ]
-    },
-    "key_ref_only": {
-      "const": true
-    },
-    "prohibited_content_check": {
-      "$ref": "#/$defs/prohibited_content_check"
-    },
-    "redteam_status": {
-      "type": "string",
-      "enum": [
-        "PASS",
-        "HOLD",
-        "WARN",
-        "BLOCK"
-      ]
-    },
-    "total_field_decision": {
-      "type": "string",
-      "enum": [
-        "PASS",
-        "HOLD",
-        "WARN",
-        "BLOCK"
-      ]
-    },
-    "humanized_response": {
-      "type": "string",
-      "minLength": 1
-    },
-    "safe_alternatives": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      }
-    },
-    "management_committee_authorization_status": {
-      "const": "HOLD_UNTIL_AUTHORIZED"
     }
   },
   "$defs": {
-    "field_ref": {
+    "state_field_node": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "field_ref",
         "summary",
         "refs",
         "status"
       ],
       "properties": {
-        "field_ref": {
+        "summary": {
           "type": "string",
           "minLength": 1
-        },
-        "summary": {
-          "type": "string"
         },
         "refs": {
           "type": "array",
@@ -232,12 +189,7 @@
         "refs",
         "status",
         "mode",
-        "not",
-        "transport_type",
-        "state_packet_ref",
-        "reconstruction_ref",
-        "equivalent_state_ref",
-        "total_field_verify"
+        "not"
       ],
       "properties": {
         "summary": {
@@ -269,24 +221,6 @@
           },
           "minItems": 3,
           "uniqueItems": true
-        },
-        "transport_type": {
-          "const": "state_packet_ref_reconstruction_equivalent_state"
-        },
-        "state_packet_ref": {
-          "type": "string",
-          "minLength": 1
-        },
-        "reconstruction_ref": {
-          "type": "string",
-          "minLength": 1
-        },
-        "equivalent_state_ref": {
-          "type": "string",
-          "minLength": 1
-        },
-        "total_field_verify": {
-          "const": true
         }
       }
     },
@@ -297,8 +231,6 @@
         "summary",
         "refs",
         "status",
-        "risk_level",
-        "hard_boundary",
         "no_secret",
         "no_member_plaintext",
         "no_resident_plaintext",
@@ -322,21 +254,6 @@
         "status": {
           "type": "string",
           "minLength": 1
-        },
-        "risk_level": {
-          "type": "string",
-          "enum": [
-            "LOW",
-            "MEDIUM",
-            "HIGH",
-            "CRITICAL"
-          ]
-        },
-        "hard_boundary": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "no_secret": {
           "const": true
@@ -371,9 +288,6 @@
         "summary",
         "refs",
         "status",
-        "ttl_seconds",
-        "nonce_ref",
-        "verifier_ref",
         "final_authority",
         "human_review_required",
         "candidate_only"
@@ -393,17 +307,6 @@
           "type": "string",
           "minLength": 1
         },
-        "ttl_seconds": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "nonce_ref": {
-          "type": "string",
-          "minLength": 1
-        },
-        "verifier_ref": {
-          "const": "total_field_verifier"
-        },
         "final_authority": {
           "const": "total_field_verifier"
         },
@@ -412,38 +315,6 @@
         },
         "candidate_only": {
           "const": true
-        }
-      }
-    },
-    "prohibited_content_check": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "secret",
-        "member_plaintext",
-        "resident_plaintext",
-        "private_contact",
-        "private_address",
-        "credential_value"
-      ],
-      "properties": {
-        "secret": {
-          "const": false
-        },
-        "member_plaintext": {
-          "const": false
-        },
-        "resident_plaintext": {
-          "const": false
-        },
-        "private_contact": {
-          "const": false
-        },
-        "private_address": {
-          "const": false
-        },
-        "credential_value": {
-          "const": false
         }
       }
     }
