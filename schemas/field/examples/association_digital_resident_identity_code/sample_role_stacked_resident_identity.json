@@ -1,0 +1,210 @@
+{
+  "state": "ASSOCIATION_DIGITAL_RESIDENT_IDENTITY_CODE_HOLD",
+  "version": "1.0.0",
+  "primary_technology": "8D_STATE_FIELD_PACKET",
+  "final_authority": "total_field_verifier",
+  "digital_resident_identity_code": {
+    "identity_code_ref": "resident_identity_ref:sealed_local_individual",
+    "local_identity_root_ref": "local_identity_root_ref:association_local_boundary",
+    "plaintext_policy": "LOCAL_ONLY_NO_CLOUD_NO_TOTAL_FIELD",
+    "one_person_one_body": true,
+    "roles_are_mounts_not_accounts": true
+  },
+  "contact_refs": [
+    {
+      "contact_ref": "contact_ref:mailbox_entry",
+      "contact_role": "mailbox_contact_entry",
+      "contact_value_stored": false
+    }
+  ],
+  "role_mounts": [
+    {
+      "role_type": "resident_role",
+      "role_ref": "resident_identity_ref:sealed_local_individual#resident_role",
+      "capability_refs": [
+        "policy_ref:resident_service_candidate"
+      ],
+      "policy_ref": "policy_ref:resident_role_policy",
+      "seal_ref": "seal_ref:resident_role_pending"
+    },
+    {
+      "role_type": "member_role",
+      "role_ref": "resident_identity_ref:sealed_local_individual#member_role",
+      "capability_refs": [
+        "association_ref:member_service_candidate"
+      ],
+      "policy_ref": "policy_ref:member_role_policy",
+      "seal_ref": "seal_ref:member_role_pending"
+    },
+    {
+      "role_type": "merchant_responsible_person_role",
+      "role_ref": "resident_identity_ref:sealed_local_individual#merchant_responsible_person_role",
+      "capability_refs": [
+        "merchant_ref:responsible_person_candidate"
+      ],
+      "policy_ref": "policy_ref:merchant_responsible_person_policy",
+      "seal_ref": "seal_ref:merchant_role_pending"
+    },
+    {
+      "role_type": "association_responsible_person_role",
+      "role_ref": "resident_identity_ref:sealed_local_individual#association_responsible_person_role",
+      "capability_refs": [
+        "association_ref:responsible_person_candidate"
+      ],
+      "policy_ref": "policy_ref:association_responsible_person_policy",
+      "seal_ref": "seal_ref:association_role_pending"
+    },
+    {
+      "role_type": "consumer_role",
+      "role_ref": "resident_identity_ref:sealed_local_individual#consumer_role",
+      "capability_refs": [
+        "merchant_ref:consumer_service_candidate"
+      ],
+      "policy_ref": "policy_ref:consumer_role_policy",
+      "seal_ref": "seal_ref:consumer_role_pending"
+    },
+    {
+      "role_type": "developer_role",
+      "role_ref": "resident_identity_ref:sealed_local_individual#developer_role",
+      "capability_refs": [
+        "policy_ref:developer_candidate_scope"
+      ],
+      "policy_ref": "policy_ref:developer_role_policy",
+      "seal_ref": "seal_ref:developer_role_pending"
+    }
+  ],
+  "group_8d_identity_mounts": [
+    {
+      "group_ref": "association_ref:wuchang_association_candidate",
+      "mount_type": "association_ref",
+      "status": "candidate_ref_only"
+    },
+    {
+      "group_ref": "merchant_ref:public_merchant_candidate",
+      "mount_type": "merchant_ref",
+      "status": "candidate_ref_only"
+    },
+    {
+      "group_ref": "property_ref:property_container_candidate",
+      "mount_type": "property_ref",
+      "status": "candidate_ref_only"
+    }
+  ],
+  "scene_container": {
+    "summary": "User system is the hard frontend and UI is a sovereign identity field.",
+    "refs": [
+      "policy_ref:user_system_hard_frontend",
+      "policy_ref:sovereign_identity_ui"
+    ],
+    "status": "candidate"
+  },
+  "capability_projection": {
+    "summary": "Capabilities are projected from role refs and verifier decisions.",
+    "refs": [
+      "policy_ref:role_mount_projection",
+      "evidence_ref:capability_projection_hash",
+      "seal_ref:capability_projection_pending"
+    ],
+    "status": "hold_until_verifier"
+  },
+  "intent_field": {
+    "summary": "Same individual requests multi-role identity projection without duplicating accounts.",
+    "refs": [
+      "resident_identity_ref:sealed_local_individual",
+      "policy_ref:one_person_multi_role_mount"
+    ],
+    "status": "candidate"
+  },
+  "state_field": {
+    "summary": "The packet remains on hold until Total Field verifies role capabilities.",
+    "refs": [
+      "state_ref:role_stacked_identity_hold"
+    ],
+    "status": "HOLD"
+  },
+  "coordinate_field": {
+    "summary": "Coordinate uses resident, association, merchant, property, and policy refs only.",
+    "refs": [
+      "resident_identity_ref:sealed_local_individual",
+      "association_ref:wuchang_association_candidate",
+      "merchant_ref:public_merchant_candidate",
+      "property_ref:property_container_candidate",
+      "policy_ref:role_mount_coordinate"
+    ],
+    "status": "ref_only"
+  },
+  "evidence_field": {
+    "summary": "Evidence is sealed refs and policy refs without identifiable payload.",
+    "refs": [
+      "evidence_ref:role_mount_evidence_hash",
+      "seal_ref:role_mount_packet_pending",
+      "policy_ref:local_identity_boundary"
+    ],
+    "status": "sealed_candidate"
+  },
+  "execution_field": {
+    "summary": "No formal action executes from the identity projection packet.",
+    "refs": [
+      "policy_ref:no_live_write"
+    ],
+    "status": "blocked_until_verifier",
+    "execution_allowed": false,
+    "db_write": false,
+    "deploy": false,
+    "restart": false,
+    "router_write": false
+  },
+  "generative_transport_field": {
+    "summary": "Receiver reconstructs equivalent role-mounted candidate state from refs.",
+    "refs": [
+      "packet_ref:association_digital_resident_identity_code",
+      "state_ref:role_stacked_identity_hold",
+      "evidence_ref:role_mount_evidence_hash"
+    ],
+    "status": "candidate_only",
+    "mode": "incomplete_information_equivalent_state_transmission",
+    "packet_ref": "packet_ref:association_digital_resident_identity_code",
+    "state_ref": "state_ref:role_stacked_identity_hold",
+    "evidence_ref": "evidence_ref:role_mount_evidence_hash",
+    "reconstruction_condition": "receiver_has_schema_and_authorized_ref_access",
+    "equivalent_state_condition": "same_individual_multi_role_candidate_state",
+    "verification_condition": "total_field_verifier_required",
+    "full_data_required": false,
+    "plaintext_required": false
+  },
+  "risk_field": {
+    "summary": "Hard risk flags are closed for cloud and Total Field packets.",
+    "refs": [
+      "policy_ref:no_identifiable_payload",
+      "policy_ref:no_live_write",
+      "seal_ref:risk_policy_pending"
+    ],
+    "status": "hold_safe",
+    "no_secret": true,
+    "no_member_plaintext": true,
+    "no_resident_plaintext": true,
+    "no_raw_image": true,
+    "no_raw_voice": true,
+    "no_raw_credentials": true,
+    "no_db_write": true,
+    "no_deploy": true,
+    "no_restart": true,
+    "no_router_write": true
+  },
+  "envelope_field": {
+    "summary": "Total Field verifier decides every action.",
+    "refs": [
+      "verifier_ref:total_field_verifier",
+      "seal_ref:role_stacked_identity_pending"
+    ],
+    "status": "candidate_sealed",
+    "final_authority": "total_field_verifier",
+    "human_review_required": true,
+    "candidate_only": true
+  },
+  "privacy_boundary": "ALL_IDENTIFIABLE_PLAINTEXT_LOCAL_ONLY",
+  "cloud_candidate_policy": "CANDIDATE_ONLY_NO_AUTHORITY_NO_PLAINTEXT",
+  "redteam_status": "HOLD",
+  "human_review_required": true,
+  "total_field_decision": "HOLD"
+}
