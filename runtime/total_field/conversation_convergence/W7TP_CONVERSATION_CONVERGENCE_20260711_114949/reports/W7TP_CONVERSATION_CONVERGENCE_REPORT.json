@@ -1,0 +1,41 @@
+{
+  "state": "PASS_LOCAL_LAND_AND_AUTOREVIEW",
+  "run_id": "W7TP_CONVERSATION_CONVERGENCE_20260711_114949",
+  "branch": "design/wish-tree-adi-thaw-launch-20260703-185047",
+  "base_head": "de44044c47b16ea247249fda491efd259ab91a17",
+  "packet_sha256": "98cfcfbb4cf2825c50aa271be24e848cdc546164931770872d8390a97d42719b",
+  "checks": {
+    "tests": "PASS_24",
+    "json_parse": "PASS",
+    "diff_check": "PASS",
+    "autoreview": "PASS",
+    "immutable_hindbrain_check": "PASS",
+    "xiaoj_2b_5b_fusion_check": "PASS",
+    "dual_channel_check": "PASS",
+    "packet_native_check": "PASS",
+    "pull_only_check": "PASS",
+    "no_uplink_check": "PASS",
+    "local_reconstruction_check": "PASS",
+    "multilayer_audit_check": "PASS",
+    "non_floating_ai_check": "PASS",
+    "active_question_check": "PASS",
+    "service_account_isolation_check": "PASS",
+    "frontend_contract_check": "PASS",
+    "no_member_plaintext": "PASS",
+    "no_secret": "PASS",
+    "no_db_write": "PASS",
+    "no_deploy": "PASS",
+    "no_restart": "PASS",
+    "no_router_write": "PASS"
+  },
+  "side_effects": {
+    "credential_read": false,
+    "live_cloud_probe": false,
+    "database_write": false,
+    "deployment": false,
+    "restart": false,
+    "router_write": false,
+    "unrelated_staged_changes_modified": false
+  },
+  "errors": []
+}

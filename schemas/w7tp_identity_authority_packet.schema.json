@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_identity_authority_packet.schema.json",
+  "title": "W7TP Identity Authority Packet",
+  "type": "object",
+  "required": ["packet_id", "schema_version", "identity_ref", "role_refs", "authority_scope", "consent_state", "revocation_state", "device_binding_ref", "scenario_ref", "envelope_verified"],
+  "properties": {
+    "packet_id": {"type": "string", "minLength": 8},
+    "schema_version": {"const": "W7TP-IDENTITY-AUTHORITY/1.0"},
+    "identity_ref": {"type": "string", "pattern": "^identity:[A-Za-z0-9._-]+$"},
+    "role_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^role:[A-Za-z0-9._-]+$"}},
+    "authority_scope": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "consent_state": {"enum": ["ACTIVE", "LIMITED", "DENIED"]},
+    "revocation_state": {"enum": ["CLEAR", "REVOKED"]},
+    "device_binding_ref": {"type": "string", "pattern": "^device:[A-Za-z0-9._-]+$"},
+    "scenario_ref": {"type": "string", "pattern": "^scenario:[A-Z0-9_]+$"},
+    "envelope_verified": {"type": "boolean"}
+  },
+  "additionalProperties": false
+}

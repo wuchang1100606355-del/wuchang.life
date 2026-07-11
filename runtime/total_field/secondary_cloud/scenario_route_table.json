@@ -1,0 +1,45 @@
+{
+  "schema_version": "W7TP-SCENARIO-ROUTE-TABLE/1.0",
+  "node_ref": "taiji01",
+  "cloud_mode": "PULL_PACKET_ONLY",
+  "member_upload": "DENY",
+  "reconstruct": "TAIJI01_LOCAL",
+  "verify": "LOCAL_OR_TOTAL_FIELD",
+  "routes": {
+    "ASSOCIATION": {
+      "scenario_refs": ["scenario:ASSOCIATION"],
+      "packet_type": "ASSOCIATION_SERVICE_PACKET",
+      "capability_ref": "CAP_ASSOCIATION_SERVICE_V1",
+      "destination_field": "ASSOCIATION_SERVICE_FIELD",
+      "service_contract_ref": "contract:association.local"
+    },
+    "PROPERTY": {
+      "scenario_refs": ["scenario:PROPERTY"],
+      "packet_type": "PROPERTY_SERVICE_PACKET",
+      "capability_ref": "CAP_PROPERTY_SERVICE_V1",
+      "destination_field": "PROPERTY_SERVICE_FIELD",
+      "service_contract_ref": "contract:property.local"
+    },
+    "CAFE_POS": {
+      "scenario_refs": ["scenario:CAFE_POS"],
+      "packet_type": "CAFE_POS_SERVICE_PACKET",
+      "capability_ref": "CAP_CAFE_POS_SERVICE_V1",
+      "destination_field": "CAFE_POS_SERVICE_FIELD",
+      "service_contract_ref": "contract:cafe_pos.local"
+    },
+    "HOUSEHOLD": {
+      "scenario_refs": ["scenario:HOUSEHOLD"],
+      "packet_type": "HOUSEHOLD_SERVICE_PACKET",
+      "capability_ref": "CAP_HOUSEHOLD_SERVICE_V1",
+      "destination_field": "HOUSEHOLD_SERVICE_FIELD",
+      "service_contract_ref": "contract:household.local"
+    },
+    "GENERIC": {
+      "scenario_refs": ["scenario:GENERIC"],
+      "packet_type": "GENERIC_INTENT_PACKET",
+      "capability_ref": "CAP_GENERIC_INTENT_V1",
+      "destination_field": "GENERIC_SERVICE_FIELD",
+      "service_contract_ref": "contract:generic.local"
+    }
+  }
+}

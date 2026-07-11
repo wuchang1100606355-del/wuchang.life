@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_local_reconstruction_packet.schema.json",
+  "title": "W7TP Local Reconstruction Packet",
+  "type": "object",
+  "required": ["packet_id", "schema_version", "source_packet_id", "capability_ref", "reconstruction_location", "mode", "result_ref", "effect_contract_ref", "comparison_result", "local_verified", "candidate_only", "sha256"],
+  "properties": {
+    "packet_id": {"type": "string", "minLength": 8},
+    "schema_version": {"const": "W7TP-LOCAL-RECONSTRUCTION/1.0"},
+    "source_packet_id": {"type": "string"},
+    "capability_ref": {"type": "string"},
+    "reconstruction_location": {"const": "TAIJI01_LOCAL"},
+    "mode": {"enum": ["L1_FULL", "L2_EQUIVALENT", "L3_CANDIDATE"]},
+    "result_ref": {"type": "string"},
+    "effect_contract_ref": {"type": "string"},
+    "comparison_result": {"enum": ["MATCH", "EQUIVALENT", "CANDIDATE", "MISMATCH"]},
+    "local_verified": {"type": "boolean"},
+    "candidate_only": {"type": "boolean"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "additionalProperties": false
+}

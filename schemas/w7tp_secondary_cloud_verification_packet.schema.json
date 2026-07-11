@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_secondary_cloud_verification_packet.schema.json",
+  "title": "W7TP Secondary Cloud Verification Packet",
+  "type": "object",
+  "required": ["state", "run_id", "packet_id", "selected_container", "packet_type", "capability_ref", "current_stage", "verification_result", "evidence_refs", "sha256", "seal_status", "confidence", "cloud_mode", "member_upload", "reconstruct", "verify", "audit_layers"],
+  "properties": {
+    "state": {"enum": ["PASS", "HOLD"]},
+    "run_id": {"type": "string", "minLength": 8},
+    "packet_id": {"type": "string", "minLength": 8},
+    "selected_container": {"enum": ["ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC"]},
+    "packet_type": {"enum": ["ASSOCIATION_SERVICE_PACKET", "PROPERTY_SERVICE_PACKET", "CAFE_POS_SERVICE_PACKET", "HOUSEHOLD_SERVICE_PACKET", "GENERIC_INTENT_PACKET"]},
+    "capability_ref": {"type": "string"},
+    "current_stage": {"enum": ["LOCAL_VERIFY", "HOLD", "SEAL"]},
+    "verification_result": {"enum": ["VERIFIED", "UNVERIFIED", "REJECTED"]},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "seal_status": {"enum": ["SEALED", "NOT_SEALED"]},
+    "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+    "cloud_mode": {"const": "PULL_PACKET_ONLY"},
+    "member_upload": {"const": "DENY"},
+    "reconstruct": {"const": "TAIJI01_LOCAL"},
+    "verify": {"const": "LOCAL_OR_TOTAL_FIELD"},
+    "audit_layers": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"type": "object", "required": ["layer", "state", "evidence"], "properties": {"layer": {"type": "string"}, "state": {"enum": ["PASS", "HOLD"]}, "evidence": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false}}
+  },
+  "additionalProperties": false
+}

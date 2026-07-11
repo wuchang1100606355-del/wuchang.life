@@ -1,0 +1,70 @@
+{
+  "schema_version": "W7TP-CAPABILITY-REGISTRY/1.0",
+  "node_ref": "taiji01",
+  "privacy_boundary": "REFERENCE_ONLY_NO_MEMBER_DATA",
+  "capabilities": [
+    {
+      "capability_ref": "CAP_ASSOCIATION_SERVICE_V1",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["frontend-contract:gemini-app/service-container/ASSOCIATION"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "CAP_PROPERTY_SERVICE_V1",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["frontend-contract:gemini-app/service-container/PROPERTY"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "CAP_CAFE_POS_SERVICE_V1",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["frontend-contract:gemini-app/service-container/CAFE_POS"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "CAP_HOUSEHOLD_SERVICE_V1",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["frontend-contract:gemini-app/service-container/HOUSEHOLD"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "CAP_GENERIC_INTENT_V1",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["frontend-contract:gemini-app/service-container/GENERIC"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "capability:language.base.zh-TW",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["registry-source:language-local-approved"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "capability:code.component.base",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["registry-source:code-component-reviewed"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "capability:research.candidate.base",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["registry-source:research-candidate-reviewed"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "capability:professional.rule.base",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": ["registry-source:professional-rule-approved"],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    }
+  ]
+}
