@@ -1,0 +1,56 @@
+packet_id: STARTUP_STATE_PACKET
+timestamp: 2026-06-29T20:03:47+08:00
+host: MSI
+user: taiji_admin
+pwd: /home/taiji_admin/Taiji_Hub
+
+d1_identity:
+  owner: CHIANG_CHENG_LUNG
+  field: WUCHANG_UNIVERSE_TOTAL_FIELD
+  mode: startup_readonly_state_capture
+
+d2_intent:
+  purpose: read Linux startup state into W7TP field
+  no_deploy: true
+  no_restart: true
+  no_secret_read: true
+
+d3_state:
+  git_root: /home/taiji_admin/Taiji_Hub
+  git_branch: main
+  git_head: 116562c
+
+d4_topology:
+  docker_containers:
+- name: wuchang_os_odoo_18 | status: Up 1 second
+- name: xiaoj-intent-field | status: Up 1 second
+- name: wuchang_os_pg | status: Up 1 second
+- name: taiji_syslog | status: Up 1 second
+- name: taiji_worklist | status: Up 1 second
+- name: taiji_audit | status: Up 1 second
+- name: taiji_progress | status: Up 1 second
+- name: taiji_voice_gateway | status: Up 1 second
+- name: taiji_device_resilience_adapter | status: Up 1 second
+- name: taiji_pos_google_voice_tool | status: Up 1 second
+- name: taiji_claw_safe | status: Up Less than a second
+- name: wuchang_gpu_brain | status: Up 1 second
+
+d5_resources:
+  disk:
+    root_used: 475G
+    root_avail: 482G
+    root_use_percent: 50%
+  memory:
+    mem_total: 23Gi
+    mem_used: 2.1Gi
+    mem_available: 21Gi
+
+d6_governance:
+  readonly: true
+  no_delete: true
+  no_db_write: true
+  no_service_restart: true
+
+d7_validation:
+  startup_packet_written: true
+  output: /home/taiji_admin/Taiji_Hub/W7TP_FIELD_ATLAS/runtime_status/startup_state_packet_20260629_200347.yaml

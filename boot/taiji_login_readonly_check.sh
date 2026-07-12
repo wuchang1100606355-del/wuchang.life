@@ -66,7 +66,7 @@ check_port() {
 }
 
 echo "======================================================"
-echo "     Taiji Login Readonly Check - CURRENT"
+echo "     太極登入唯讀檢查｜目前狀態"
 echo "======================================================"
 echo "[workspace] actual_cwd: $ACTUAL_CWD"
 echo "[workspace] configured_canonical: $CONFIGURED_CANONICAL"
