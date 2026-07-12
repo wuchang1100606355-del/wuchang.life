@@ -1,0 +1,19 @@
+{
+  "created_at": "20260621_115306",
+  "dead_letter_hash": "9852214bd82d76021b72db1a583a413cbeac5d2de6ae25a7839b9b53e21a80f8",
+  "decision": "DEAD_LETTER",
+  "governance": {
+    "dlq": "router_dead_letter_queue",
+    "open_claw": "blocked_before_execution",
+    "redteam_state_field": "may_reference_dead_letter_record"
+  },
+  "host": "MSI",
+  "packet_hash": null,
+  "packet_ref": null,
+  "packet_type": "w7tp_router_dead_letter_v1",
+  "reason": "path_policy_violation",
+  "verify": "FAIL",
+  "violations": [
+    "path_scope_not_in_allowed_roots"
+  ]
+}
