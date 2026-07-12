@@ -25,3 +25,17 @@ published without overwrite. Seal reports contain no payload, recipe block,
 raw key, or absolute local path.
 
 No model call, database write, deployment action, member plaintext, or private lookup data is part of this public converter.
+
+## 本機瀏覽器介面
+
+```bash
+python3 -m w7tp_runtime.gt_converter_ui --host 127.0.0.1 --port 8787
+```
+
+開啟 `http://127.0.0.1:8787/`。服務只允許 loopback bind，使用 Python
+標準庫，不載入 CDN、字型、遙測或外部 API。工作在背景執行，不依賴瀏覽器
+連線；完成索引以去識別 canonical JSON 原子保存，可用 `run_id` 重新查詢。
+來源攝取只是本機輸入步驟，不等同生成式傳輸。ledger 不保存來源內容、封包
+payload、`block_hex`、raw path 或秘密；成品與報告只可由固定 run_id artifact
+端點取得。未配置受信簽章時，介面固定顯示「內容完整性：PASS」與
+「來源真實性：尚未驗證」。
