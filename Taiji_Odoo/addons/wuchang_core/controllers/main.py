@@ -1764,7 +1764,7 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans,Arial;backgro
         rec = Expense.create(vals)
         return http.Response(json.dumps({'ok': True, 'ref': rec.name}), status=200, content_type='application/json')
 
-    @http.route(['/delivery', '/wuchang/delivery'], type='http', auth='public', website=True)
+    @http.route('/delivery', type='http', auth='public', website=True)
     def delivery_home(self, config_id=None, **kw):
         configs = []
         try:
@@ -5605,3 +5605,122 @@ class JulesController(http.Controller):
              return {'status': 'error', 'message': 'create_order_failed', 'detail': str(e)}
 
 
+
+# P1_CONTAINER_ACTIVE_ROUTE_LAND_START
+class WuchangP1ContainerActiveRouteController(http.Controller):
+
+    def _p1_html(self, title, state, body):
+        return f"""
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{title}</title>
+  <style>
+    body{{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",Arial,sans-serif;margin:0;background:#020617;color:#e5e7eb;}}
+    main{{max-width:980px;margin:0 auto;padding:32px 18px;}}
+    h1{{font-size:28px;margin:0 0 10px;}}
+    h2{{font-size:21px;margin-top:26px;}}
+    p,li{{line-height:1.75;color:#cbd5e1;}}
+    .grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px;}}
+    .card,.box{{border:1px solid #334155;background:#0f172a;border-radius:16px;padding:18px;}}
+    .card{{display:block;text-decoration:none;color:#e5e7eb;}}
+    .card strong{{display:block;font-size:18px;margin-bottom:8px;}}
+    .card span{{display:block;color:#94a3b8;line-height:1.5;}}
+    a{{color:#93c5fd;}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>{title}</h1>
+  <div class="box">
+    STATE={state}<br/>
+    NO_SECRET=TRUE · NO_MEMBER_PLAINTEXT=TRUE · NO_DB_WRITE=TRUE
+  </div>
+  {body}
+</main>
+</body>
+</html>
+"""
+
+    @http.route('/wuchang/p1', type='http', auth='public', csrf=False)
+    def wuchang_p1_entry_container_active(self, **kw):
+        body = """
+<p>五常總場 P1 產品級封閉試營運入口。核心路徑：Odoo POS、既有會員入口、既有 8D Gate、協會、物業、商家與公開安全證據頁。</p>
+<section class="grid">
+  <a class="card" href="/web"><strong>Odoo / POS</strong><span>進入既有 Odoo 與 POS。</span></a>
+  <a class="card" href="/web"><strong>會員入口</strong><span>沿用既有 Odoo / 會員流程，不補 placeholder。</span></a>
+  <a class="card" href="/wuchang/agent/status"><strong>8D Gate</strong><span>沿用既有 agent/status 與狀態 gate。</span></a>
+  <a class="card" href="/wuchang/association"><strong>協會場景</strong><span>協會服務與公益流程展示。</span></a>
+  <a class="card" href="/wuchang/property"><strong>物業場景</strong><span>物業、管委會、住戶服務流程展示。</span></a>
+  <a class="card" href="/wuchang/merchant"><strong>商家場景</strong><span>商家、POS、會員與協會共同支撐。</span></a>
+  <a class="card" href="/wuchang/p1/evidence"><strong>公開安全證據頁</strong><span>給記者、合作方、商家與物業看懂。</span></a>
+</section>
+"""
+        return self._p1_html("五常總場 P1 產品級封閉試營運入口", "P1_CONTAINER_ENTRY_ACTIVE", body)
+
+    @http.route('/wuchang/p1/evidence', type='http', auth='public', csrf=False)
+    def wuchang_p1_evidence_container_active(self, **kw):
+        body = """
+<p>本頁用於記者、合作方、商家、物業與協會成員快速理解：目前系統已進入 P1 產品級封閉試營運路徑。</p>
+<h2>已鎖定產品主線</h2>
+<ul>
+  <li>Odoo / POS：使用既有 Odoo 與 POS，不另開 demo site。</li>
+  <li>會員入口：沿用既有 Odoo / 會員流程，不補假入口。</li>
+  <li>8D Gate：沿用既有 /wuchang/agent/status。</li>
+  <li>協會、物業、商家三場景已具備公開安全展示頁。</li>
+</ul>
+<h2>公開安全邊界</h2>
+<ul>
+  <li>不公開密鑰、token、password。</li>
+  <li>不公開會員明文資料。</li>
+  <li>不在本頁執行資料庫寫入。</li>
+  <li>不在本頁執行付款、正式審核或正式送件。</li>
+</ul>
+<p><a href="/wuchang/p1">返回 P1 產品入口</a></p>
+"""
+        return self._p1_html("五常總場 P1 公開安全證據頁", "P1_CONTAINER_EVIDENCE_ACTIVE", body)
+
+    @http.route('/wuchang/association', type='http', auth='public', csrf=False)
+    def wuchang_p1_association_container_active(self, **kw):
+        body = """
+<p>協會場景已納入 P1 產品級封閉試營運路徑。</p>
+<ul>
+  <li>五常社區發展協會服務展示。</li>
+  <li>支持者、會員、志工與社區服務流程展示。</li>
+  <li>公益流程以商業養公益與專利／咖啡店支撐為核心，不作募款頁。</li>
+  <li>正式會員資料與審核仍保留人工 gate。</li>
+</ul>
+<p><a href="/wuchang/p1">返回 P1 產品入口</a></p>
+"""
+        return self._p1_html("五常總場 P1 協會場景", "P1_CONTAINER_ASSOCIATION_ACTIVE", body)
+
+    @http.route('/wuchang/property', type='http', auth='public', csrf=False)
+    def wuchang_p1_property_container_active(self, **kw):
+        body = """
+<p>物業場景已納入 P1 產品級封閉試營運路徑。</p>
+<ul>
+  <li>物業管理、管委會、住戶與服務流程展示。</li>
+  <li>可展示工單、公告、住戶服務與權限分層概念。</li>
+  <li>正式個資、住戶明文與管理資料不在公開頁顯示。</li>
+  <li>正式物業流程仍保留人工 gate。</li>
+</ul>
+<p><a href="/wuchang/p1">返回 P1 產品入口</a></p>
+"""
+        return self._p1_html("五常總場 P1 物業場景", "P1_CONTAINER_PROPERTY_ACTIVE", body)
+
+    @http.route('/wuchang/merchant', type='http', auth='public', csrf=False)
+    def wuchang_p1_merchant_container_active(self, **kw):
+        body = """
+<p>商家場景已納入 P1 產品級封閉試營運路徑。</p>
+<ul>
+  <li>商家、Odoo POS、會員與協會共同支撐展示。</li>
+  <li>可展示商家加入、POS 使用、會員互動與公益回流概念。</li>
+  <li>正式收款、正式交易與正式會員資料不在公開頁處理。</li>
+  <li>正式商家流程仍保留人工 gate。</li>
+</ul>
+<p><a href="/wuchang/p1">返回 P1 產品入口</a></p>
+"""
+        return self._p1_html("五常總場 P1 商家場景", "P1_CONTAINER_MERCHANT_ACTIVE", body)
+# P1_CONTAINER_ACTIVE_ROUTE_LAND_END

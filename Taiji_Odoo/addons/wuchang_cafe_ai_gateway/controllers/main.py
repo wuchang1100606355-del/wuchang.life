@@ -921,3 +921,240 @@ class WuchangCafeAiGatewayController(http.Controller):
         return build_sovereign_xiaoj_claim_draft(
             refs=params.get("refs") if isinstance(params.get("refs"), dict) else params,
         )
+
+# P1_ENTRY_PAGE_ROLE_ROUTING_PATCH_START
+class WuchangP1EntryPageRoleRoutingController(http.Controller):
+    @http.route('/wuchang/p1', type='http', auth='public', csrf=False)
+    def wuchang_p1_entry_page(self, **kw):
+        return """
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>五常總場 P1 產品入口</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",Arial,sans-serif;margin:0;background:#0f172a;color:#e5e7eb;}
+    main{max-width:980px;margin:0 auto;padding:32px 18px;}
+    h1{font-size:28px;margin:0 0 10px;}
+    p{line-height:1.7;color:#cbd5e1;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:24px;}
+    .card{display:block;text-decoration:none;color:#e5e7eb;background:#111827;border:1px solid #334155;border-radius:16px;padding:18px;}
+    .card strong{display:block;font-size:19px;margin-bottom:8px;}
+    .card span{display:block;color:#94a3b8;line-height:1.5;}
+    .seal{margin-top:26px;padding:14px;border:1px dashed #64748b;border-radius:12px;color:#cbd5e1;font-size:14px;}
+  </style>
+</head>
+<body>
+<main>
+  <h1>五常總場 P1 產品級封閉試營運入口</h1>
+  <p>本頁為 P1 單一產品路徑入口：Odoo POS、會員入口、8D Gate、協會、物業、商家與公開安全證據頁。</p>
+
+  <section class="grid">
+    <a class="card" href="/web">
+      <strong>Odoo / POS</strong>
+      <span>進入 Odoo 後台與既有 POS 流程，不另開 demo site。</span>
+    </a>
+    <a class="card" href="/web">
+      <strong>會員入口</strong>
+      <span>會員申請、會員狀態與人工審核 gate。</span>
+    </a>
+    <a class="card" href="/wuchang/agent/status">
+      <strong>8D Gate 驗證</strong>
+      <span>狀態封包、證據、權限與封印驗證入口。</span>
+    </a>
+    <a class="card" href="/wuchang/association">
+      <strong>協會場景</strong>
+      <span>五常社區發展協會服務、支持者與公益流程展示。</span>
+    </a>
+    <a class="card" href="/wuchang/property">
+      <strong>物業場景</strong>
+      <span>物業、管委會、住戶與服務流程展示。</span>
+    </a>
+    <a class="card" href="/wuchang/merchant">
+      <strong>商家場景</strong>
+      <span>商家、POS、會員與協會共同支撐場景。</span>
+    </a>
+    <a class="card" href="/wuchang/p1/evidence">
+      <strong>公開安全證據頁</strong>
+      <span>給記者、合作方、商家與物業看懂的公開安全證據。</span>
+    </a>
+  </section>
+
+  <div class="seal">
+    STATE=P1_ENTRY_PAGE_ROLE_ROUTING_ACTIVE<br/>
+    ROUTE=/wuchang/p1<br/>
+    NO_SECRET=TRUE · NO_MEMBER_PLAINTEXT=TRUE · NO_DB_WRITE=TRUE
+  </div>
+</main>
+</body>
+</html>
+"""
+# P1_ENTRY_PAGE_ROLE_ROUTING_PATCH_END
+
+# P1_EVIDENCE_PAGE_PATCH_START
+class WuchangP1EvidencePageController(http.Controller):
+    @http.route('/wuchang/p1/evidence', type='http', auth='public', csrf=False)
+    def wuchang_p1_evidence_page(self, **kw):
+        return """
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>五常總場 P1 公開安全證據頁</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",Arial,sans-serif;margin:0;background:#020617;color:#e5e7eb;}
+    main{max-width:980px;margin:0 auto;padding:32px 18px;}
+    h1{font-size:28px;margin:0 0 10px;}
+    h2{font-size:21px;margin-top:28px;color:#f8fafc;}
+    p,li{line-height:1.75;color:#cbd5e1;}
+    .box{border:1px solid #334155;background:#0f172a;border-radius:16px;padding:18px;margin-top:16px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px;}
+    .item{border:1px solid #334155;background:#111827;border-radius:14px;padding:16px;}
+    .item strong{display:block;font-size:18px;margin-bottom:8px;color:#f1f5f9;}
+    code{background:#111827;border:1px solid #334155;border-radius:8px;padding:2px 6px;color:#e2e8f0;}
+    a{color:#93c5fd;}
+  </style>
+</head>
+<body>
+<main>
+  <h1>五常總場 P1 公開安全證據頁</h1>
+  <p>本頁用於記者、合作方、商家、物業與協會成員快速理解：目前系統已進入 P1 產品級封閉試營運路徑。</p>
+
+  <div class="box">
+    <strong>目前狀態</strong>
+    <p>
+      STATE=P1_PUBLIC_SAFE_EVIDENCE_ACTIVE<br/>
+      PRODUCT_PATH=Odoo POS + Member Entry + 8D Gate + Association + Property + Merchant<br/>
+      ROUTE=/wuchang/p1/evidence
+    </p>
+  </div>
+
+  <h2>已鎖定產品主線</h2>
+  <div class="grid">
+    <div class="item"><strong>Odoo / POS</strong><span>使用既有 Odoo 與 POS，不另開 demo site。</span></div>
+    <div class="item"><strong>會員入口</strong><span>會員申請、會員狀態、人工審核 gate。</span></div>
+    <div class="item"><strong>8D Gate</strong><span>狀態封包、權限、證據與封印驗證。</span></div>
+    <div class="item"><strong>協會場景</strong><span>五常社區發展協會服務展示。</span></div>
+    <div class="item"><strong>物業場景</strong><span>物業、管委會、住戶與服務流程。</span></div>
+    <div class="item"><strong>商家場景</strong><span>商家、POS、會員與協會共同支撐。</span></div>
+  </div>
+
+  <h2>公開安全邊界</h2>
+  <ul>
+    <li>不公開密鑰、token、password。</li>
+    <li>不公開會員明文資料。</li>
+    <li>不在本頁執行資料庫寫入。</li>
+    <li>不在本頁執行付款、正式審核或正式送件。</li>
+    <li>本頁只作為 P1 封閉試營運的公開安全說明入口。</li>
+  </ul>
+
+  <h2>可對外說明的一句話</h2>
+  <div class="box">
+    <p>五常總場已完成 P1 產品級封閉試營運入口，核心路徑為 Odoo POS、會員入口、8D Gate、協會、物業與商家場景整合，並保留人工 gate 與公開安全證據頁。</p>
+  </div>
+
+  <p><a href="/wuchang/p1">返回 P1 產品入口</a></p>
+</main>
+</body>
+</html>
+"""
+# P1_EVIDENCE_PAGE_PATCH_END
+
+# P1_SCENE_PLACEHOLDER_ROUTES_PATCH_START
+class WuchangP1ScenePlaceholderRoutesController(http.Controller):
+
+    def _p1_scene_page(self, title, state, scene_name, lines):
+        items = "".join([f"<li>{line}</li>" for line in lines])
+        return f"""
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{title}</title>
+  <style>
+    body{{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",Arial,sans-serif;margin:0;background:#020617;color:#e5e7eb;}}
+    main{{max-width:920px;margin:0 auto;padding:32px 18px;}}
+    h1{{font-size:28px;margin:0 0 10px;}}
+    p,li{{line-height:1.75;color:#cbd5e1;}}
+    .box{{border:1px solid #334155;background:#0f172a;border-radius:16px;padding:18px;margin-top:16px;}}
+    a{{color:#93c5fd;}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>{title}</h1>
+  <p>{scene_name}已納入 P1 產品級封閉試營運路徑。本頁為公開安全展示入口，不含密鑰、不含會員明文、不執行資料庫寫入。</p>
+
+  <div class="box">
+    <strong>狀態</strong>
+    <p>
+      STATE={state}<br/>
+      PRODUCT_PATH=Odoo POS + Member Entry + 8D Gate + Association + Property + Merchant<br/>
+      NO_SECRET=TRUE · NO_MEMBER_PLAINTEXT=TRUE · NO_DB_WRITE=TRUE
+    </p>
+  </div>
+
+  <div class="box">
+    <strong>P1 場景範圍</strong>
+    <ul>{items}</ul>
+  </div>
+
+  <p>
+    <a href="/wuchang/p1">返回 P1 產品入口</a>　
+    <a href="/wuchang/p1/evidence">查看公開安全證據頁</a>
+  </p>
+</main>
+</body>
+</html>
+"""
+
+    @http.route('/wuchang/association', type='http', auth='public', csrf=False)
+    def wuchang_p1_association_scene(self, **kw):
+        return self._p1_scene_page(
+            "五常總場 P1 協會場景",
+            "P1_ASSOCIATION_SCENE_ACTIVE",
+            "協會場景",
+            [
+                "五常社區發展協會服務展示。",
+                "支持者、會員、志工與社區服務流程展示。",
+                "公益流程以商業養公益與專利／咖啡店支撐為核心，不作募款頁。",
+                "正式會員資料與審核仍保留人工 gate。"
+            ]
+        )
+
+    @http.route('/wuchang/property', type='http', auth='public', csrf=False)
+    def wuchang_p1_property_scene(self, **kw):
+        return self._p1_scene_page(
+            "五常總場 P1 物業場景",
+            "P1_PROPERTY_SCENE_ACTIVE",
+            "物業場景",
+            [
+                "物業管理、管委會、住戶與服務流程展示。",
+                "可展示工單、公告、住戶服務與權限分層概念。",
+                "正式個資、住戶明文與管理資料不在公開頁顯示。",
+                "正式物業流程仍保留人工 gate。"
+            ]
+        )
+
+    @http.route('/wuchang/merchant', type='http', auth='public', csrf=False)
+    def wuchang_p1_merchant_scene(self, **kw):
+        return self._p1_scene_page(
+            "五常總場 P1 商家場景",
+            "P1_MERCHANT_SCENE_ACTIVE",
+            "商家場景",
+            [
+                "商家、Odoo POS、會員與協會共同支撐展示。",
+                "可展示商家加入、POS 使用、會員互動與公益回流概念。",
+                "正式收款、正式交易與正式會員資料不在公開頁處理。",
+                "正式商家流程仍保留人工 gate。"
+            ]
+        )
+# P1_SCENE_PLACEHOLDER_ROUTES_PATCH_END
+
+# P1_BIND_ENTRY_LINKS_TO_EXISTING_ROUTES_ONLY
+# MEMBER_LINK_BOUND_TO=/web
+# EIGHTD_LINK_BOUND_TO=/wuchang/agent/status
+# NO_PLACEHOLDER_ROUTE_CREATED=TRUE
