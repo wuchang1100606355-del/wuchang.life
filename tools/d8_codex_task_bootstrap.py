@@ -37,7 +37,7 @@ def parse_kv(stdout: str) -> dict:
     return parsed
 
 
-def run_preflight(task_name: str, mode: str, scope_json: str, run_id: str) -> tuple[dict, int, str, str]:
+def run_preflight(task_name: str, mode: str, scope_json: str, run_id: str, preflight_mode: str) -> tuple[dict, int, str, str]:
     cmd = [
         "python3",
         "tools/d8_codex_preflight_gate.py",
@@ -49,6 +49,8 @@ def run_preflight(task_name: str, mode: str, scope_json: str, run_id: str) -> tu
         mode,
         "--scope-json",
         scope_json,
+        "--preflight-mode",
+        preflight_mode,
     ]
     proc = subprocess.run(cmd, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return parse_kv(proc.stdout), proc.returncode, proc.stdout, proc.stderr
@@ -59,6 +61,7 @@ def main() -> int:
     parser.add_argument("--task-name", required=True)
     parser.add_argument("--mode", choices=["sandbox", "land", "production", "review"], required=True)
     parser.add_argument("--scope-json", required=True)
+    parser.add_argument("--preflight-mode", choices=["PERSIST", "READ_ONLY"], default="PERSIST")
     parser.add_argument("--allowed-paths-json", default="[]")
     parser.add_argument("--forbidden-paths-json", default="[]")
     parser.add_argument("--expected-output", default="")
@@ -69,7 +72,7 @@ def main() -> int:
     allowed_paths = json.loads(args.allowed_paths_json)
     forbidden_paths = json.loads(args.forbidden_paths_json)
     task_id = "D8_CODEX_TASK_" + dt.datetime.now(dt.UTC).strftime("%Y%m%d_%H%M%S") + "_" + slug(args.task_name)
-    preflight, exit_code, stdout, stderr = run_preflight(args.task_name, args.mode, args.scope_json, task_id)
+    preflight, exit_code, stdout, stderr = run_preflight(args.task_name, args.mode, args.scope_json, task_id, args.preflight_mode)
     decision = preflight.get("DECISION", "ERROR")
     if decision not in EXIT_CODES:
         decision = "ERROR"
@@ -79,6 +82,7 @@ def main() -> int:
         "task_id": task_id,
         "task_name": args.task_name,
         "mode": args.mode,
+        "preflight_mode": args.preflight_mode,
         "scope_json": scope,
         "allowed_paths": allowed_paths,
         "forbidden_paths": forbidden_paths,
@@ -94,7 +98,7 @@ def main() -> int:
             "MEMBER_PLAINTEXT_READ": False,
             "RAW_AUDIO_SAVED": False,
             "PRODUCTION_DB_WRITE": False,
-            "D8_LOCAL_DB_WRITE": True,
+            "D8_LOCAL_DB_WRITE": args.preflight_mode == "PERSIST",
             "SERVICE_RESTART": False,
             "DEPLOY": False,
             "PRODUCTION_RELEASE": False,

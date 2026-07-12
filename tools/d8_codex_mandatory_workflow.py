@@ -57,13 +57,13 @@ def permission(decision: str) -> dict:
     return {"allow_sandbox": False, "allow_land": False, "requires_human_review": True, "stop": True, "error": True}
 
 
-def safety_flags() -> dict:
+def safety_flags(*, d8_local_db_write: bool = True) -> dict:
     return {
         "SECRET_READ": False,
         "MEMBER_PLAINTEXT_READ": False,
         "RAW_AUDIO_SAVED": False,
         "PRODUCTION_DB_WRITE": False,
-        "D8_LOCAL_DB_WRITE": True,
+        "D8_LOCAL_DB_WRITE": d8_local_db_write,
         "SERVICE_RESTART": False,
         "DEPLOY": False,
         "PRODUCTION_RELEASE": False,
@@ -108,9 +108,11 @@ def cmd_start(args: argparse.Namespace) -> int:
     scope_json = json.dumps(scope, ensure_ascii=False)
     preflight = run([
         "tools/d8_total_field_console.sh", "preflight",
+        "--run-id", task_id,
         "--task-name", args.task_name,
         "--mode", args.mode,
         "--scope-json", scope_json,
+        "--preflight-mode", args.preflight_mode,
     ])
     pre = kv(preflight.stdout)
     decision = pre.get("DECISION") or pre.get("STATE") or "ERROR"
@@ -122,6 +124,7 @@ def cmd_start(args: argparse.Namespace) -> int:
         "--allowed-paths-json", args.allowed_paths_json,
         "--forbidden-paths-json", args.forbidden_paths_json,
         "--expected-output", args.expected_output,
+        "--preflight-mode", args.preflight_mode,
         "--dry-run",
     ])
     boot_kv = kv(boot.stdout)
@@ -140,7 +143,7 @@ def cmd_start(args: argparse.Namespace) -> int:
         "bootstrap_capsule": boot_kv.get("CAPSULE"),
         "preflight_stdout": preflight.stdout,
         "bootstrap_stdout": boot.stdout,
-        "safety_flags": safety_flags(),
+        "safety_flags": safety_flags(d8_local_db_write=args.preflight_mode == "PERSIST"),
         "created_at": dt.datetime.now(dt.UTC).isoformat(),
     }
     out_dir = ROOT / "runtime/total_field/codex_mandatory_workflow/tasks"
@@ -306,6 +309,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("command", nargs="?", default="help")
     parser.add_argument("--task-name", default="")
     parser.add_argument("--mode", default="sandbox")
+    parser.add_argument("--preflight-mode", choices=["PERSIST", "READ_ONLY"], default="PERSIST")
     parser.add_argument("--scope-json", default="{}")
     parser.add_argument("--allowed-paths-json", default="[]")
     parser.add_argument("--forbidden-paths-json", default="[]")
