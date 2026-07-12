@@ -1,74 +1,59 @@
-"""Command-line entrypoint for the fail-closed W7TP-GTF converter."""
+"""Stable product CLI for the offline W7TP-GTF converter."""
 
 from __future__ import annotations
 
 import argparse
-import json
-from typing import Any
+from dataclasses import asdict
+from pathlib import Path
 
-from .gt_converter import ConverterHold, NotGenerativelyReducible, pack, reconstruct, seal, verify
+from .gt_converter import ConverterFailure, GTConverter, OperationResult, PROTOCOL_VERSION
+
+EXIT_CODES = {"PASS": 0, "HOLD": 10, "BLOCK": 20, "ERROR": 40}
 
 
-def _print(result: dict[str, Any]) -> None:
-    for key, value in result.items():
-        print(f"{key.upper()}={value}")
+def _print(result: OperationResult) -> None:
+    for key, value in asdict(result).items():
+        if value is not None:
+            text = str(value).replace("\r", "\\r").replace("\n", "\\n")
+            print(f"{key.upper()}={text}")
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="W7TP-GTF deterministic L1 converter")
+    parser = argparse.ArgumentParser(description="W7TP-GTF deterministic offline converter")
     sub = parser.add_subparsers(dest="command", required=True)
-    pack_cmd = sub.add_parser("pack")
-    pack_cmd.add_argument("source")
-    pack_cmd.add_argument("packet")
-    pack_cmd.add_argument("--run-id")
-    pack_cmd.add_argument("--target", default="reconstructed.bin")
-    reconstruct_cmd = sub.add_parser("reconstruct")
-    reconstruct_cmd.add_argument("packet")
-    reconstruct_cmd.add_argument("output_root")
-    verify_cmd = sub.add_parser("verify")
-    verify_cmd.add_argument("packet")
-    verify_cmd.add_argument("output")
-    run_cmd = sub.add_parser("run")
-    run_cmd.add_argument("source")
-    run_cmd.add_argument("packet")
-    run_cmd.add_argument("output_root")
-    run_cmd.add_argument("seal")
-    run_cmd.add_argument("--target", default="reconstructed.bin")
-    run_cmd.add_argument("--run-id")
+    sub.add_parser("capabilities")
+    pack = sub.add_parser("pack"); pack.add_argument("--source", required=True); pack.add_argument("--packet", required=True); pack.add_argument("--target", default="reconstructed.bin"); pack.add_argument("--run-id")
+    inspect = sub.add_parser("inspect"); inspect.add_argument("--packet", required=True)
+    reconstruct = sub.add_parser("reconstruct"); reconstruct.add_argument("--packet", required=True); reconstruct.add_argument("--output-root", required=True)
+    verify = sub.add_parser("verify"); verify.add_argument("--packet", required=True); verify.add_argument("--reconstructed", required=True)
+    run = sub.add_parser("run"); run.add_argument("--source", required=True); run.add_argument("--packet", required=True); run.add_argument("--output-root", required=True); run.add_argument("--report", required=True); run.add_argument("--target", default="reconstructed.bin"); run.add_argument("--run-id")
     return parser
 
 
 def main() -> int:
     args = build_parser().parse_args()
+    converter = GTConverter()
     try:
-        if args.command == "pack":
-            packet = pack(args.source, args.packet, run_id=args.run_id, target_relative_path=args.target)
-            _print({"state": "PASS", "run_id": packet["run_id"], "packet_path": args.packet})
-        elif args.command == "reconstruct":
-            _print({"state": "PASS", **reconstruct(args.packet, args.output_root)})
-        elif args.command == "verify":
-            result = verify(args.packet, args.output)
-            _print({"state": result["verifier_decision"], **result})
+        if args.command == "capabilities":
+            print(f"STATE=PASS\nPROTOCOL_VERSION={PROTOCOL_VERSION}\nNETWORK_ALLOWED=False\nAUTHENTICITY=UNVERIFIED")
+            return 0
+        if args.command == "pack": result = converter.pack(Path(args.source), Path(args.packet), run_id=args.run_id, target_relative_path=args.target)
+        elif args.command == "inspect": result = converter.inspect(Path(args.packet))
+        elif args.command == "reconstruct": result = converter.reconstruct(Path(args.packet), Path(args.output_root))
+        elif args.command == "verify": result = converter.verify(Path(args.packet), Path(args.reconstructed))
         else:
-            packet = pack(
-                args.source,
-                args.packet,
-                run_id=args.run_id,
-                target_relative_path=args.target,
-            )
-            reconstructed = reconstruct(args.packet, args.output_root)
-            result = verify(args.packet, reconstructed["output_path"])
-            record = seal(args.packet, reconstructed["output_path"], args.seal, result)
-            _print(record)
-            return 0 if record["verifier_decision"] == "PASS" else 20
-    except NotGenerativelyReducible:
-        print("STATE=HOLD_NOT_GENERATIVELY_REDUCIBLE")
-        return 20
-    except (ConverterHold, OSError, ValueError, json.JSONDecodeError) as exc:
-        print("STATE=HOLD")
-        print(f"ERROR_CLASS={exc.__class__.__name__}")
-        return 20
-    return 0
+            packed = converter.pack(Path(args.source), Path(args.packet), run_id=args.run_id, target_relative_path=args.target)
+            reconstructed = converter.reconstruct(Path(args.packet), Path(args.output_root))
+            result = converter.verify(Path(args.packet), reconstructed.output_path)
+            converter.seal(result, Path(args.report))
+        _print(result)
+        return EXIT_CODES[result.state]
+    except ConverterFailure as exc:
+        print(f"STATE={exc.state}\nREASON_CODE={exc.reason_code}")
+        return EXIT_CODES[exc.state]
+    except (OSError, ValueError) as exc:
+        print(f"STATE=ERROR\nREASON_CODE={exc.__class__.__name__.upper()}")
+        return EXIT_CODES["ERROR"]
 
 
 if __name__ == "__main__":

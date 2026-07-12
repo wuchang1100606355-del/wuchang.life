@@ -1,4 +1,4 @@
-# W7TP Generative Transfer Converter v0.1
+# W7TP Generative Transfer Converter Core v1
 
 Public deterministic L1 path:
 
@@ -11,8 +11,17 @@ It is not a general file copier, compressor, backup format, download mechanism, 
 Integrity and authenticity are separate. SHA-256 can verify reconstructed bytes and canonical packet consistency; an unsigned packet always reports `AUTHENTICITY=UNVERIFIED`.
 
 ```bash
-python3 -m w7tp_runtime.gt_converter_cli run SOURCE PACKET OUTPUT_ROOT SEAL \
+python3 -m w7tp_runtime.gt_converter_cli capabilities
+python3 -m w7tp_runtime.gt_converter_cli run \
+  --source SOURCE --packet PACKET --output-root OUTPUT_ROOT --report REPORT \
   --target reconstructed.bin
 ```
+
+Commands are `capabilities`, `pack`, `inspect`, `reconstruct`, `verify`, and
+`run`. Stable exit codes are PASS=0, HOLD=10, BLOCK=20, and ERROR=40. Packet and
+seal JSON use sorted-key compact UTF-8 canonical serialization. Reconstruction
+is chunked, output-root confined, lock protected, hash checked, and atomically
+published without overwrite. Seal reports contain no payload, recipe block,
+raw key, or absolute local path.
 
 No model call, database write, deployment action, member plaintext, or private lookup data is part of this public converter.
