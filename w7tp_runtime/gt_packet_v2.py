@@ -45,7 +45,7 @@ class PacketV2:
             block,count=rule; decision:Decision="W7TP_GENERATIVE"
             generation={"provider":"repeat_block","block_bytes":list(block),"repeat_count":count,"residual_bytes":[]}
         else:
-            decision="DIRECT_TRANSFER"
+            decision="DIRECT_TRANSFER" if intent=="DIRECT_TRANSFER_ALLOWED" else "NOT_ECONOMIC"
             generation={"provider":"direct_residual","block_bytes":[],"repeat_count":0,"residual_bytes":list(data)}
         packet={
           "D1_intent":{"target":"verified_file","operation":"reconstruct","reconstruction_scope":"complete","equivalence_level":"L1_BYTE_EXACT","authority":"LOCAL_USER","result_intent":intent},
@@ -53,7 +53,7 @@ class PacketV2:
           "D3_coordinate":{"spatial":None,"temporal":None,"structural":{"byte_length":len(data)},"logical":{"domain_profile":"binary"},"relational":[]},
           "D4_evidence":{"source_hash":expected,"expected_hash":expected,"table_hash":None,"rule_hash":hashlib.sha256(canonical(generation)).hexdigest(),"execution_record":None,"verification_record":"BYTE_EXACT"},
           "D5_execution":{"bootstrap":"embedded_browser_gateway_v1","steps":["GATEWAY_START","RECONSTRUCT","BYTE_EXACT","TOTAL_FIELD_SEAL"],"dependencies":[],"output_action":"USER_DOWNLOAD","completion_action":"MATERIALIZE_AFTER_PASS","abort_action":"NO_OUTPUT"},
-          "D6_generative_transmission":{"protocol":{"name":PROTOCOL,"version":VERSION,"mode":"SINGLE_PACKET","order":"STRICT","completion":"TOTAL_FIELD_SEAL"},"routing":{"carrier":"LOCAL_FILE","network_bytes_after_receive":0},"lookup":{"capability":"embedded_generation_rule_registry","keys":[generation["provider"]]},"references":{"approved_local_resources":[]},"reconstruction_contract":{"expected_bytes":len(data),"filename":Path(filename).name},"generation_rules":generation,"verification_contract":{"mode":"BYTE_EXACT","method":"SHA-256","expected_sha256":expected},"residual":{"present":decision=="DIRECT_TRANSFER"},"refill_policy":"NONE"},
+          "D6_generative_transmission":{"protocol":{"name":PROTOCOL,"version":VERSION,"mode":"SINGLE_PACKET","order":"STRICT","completion":"TOTAL_FIELD_SEAL"},"routing":{"carrier":"LOCAL_FILE","network_bytes_after_receive":0},"lookup":{"capability":"embedded_generation_rule_registry","keys":[generation["provider"]]},"references":{"approved_local_resources":[]},"reconstruction_contract":{"expected_bytes":len(data),"filename":Path(filename).name},"generation_rules":generation,"verification_contract":{"mode":"BYTE_EXACT","method":"SHA-256","expected_sha256":expected},"residual":{"present":generation["provider"]=="direct_residual"},"refill_policy":"NONE"},
           "D7_risk":{"secret_risk":"NOT_SCANNED_CONTENT_OPAQUE","privacy_risk":"LOCAL_ONLY","destructive_action":False,"write_boundary":"USER_INITIATED_DOWNLOAD","execution_boundary":"NO_NETWORK"},
           "D8_envelope":{"packet_id":run_id,"version":VERSION,"nonce":uuid.uuid4().hex,"ttl":86400,"authority":"LOCAL_USER","receiver_binding":"BROWSER_WEB_CRYPTO","integrity":{"method":"SHA-256","packet_sha256":""},"replay_policy":"USER_INITIATED","scope":"SINGLE_FILE","verification_entrypoint":"w7tpGateway"},
           "adjudication":decision,"authenticity":"UNVERIFIED"

@@ -31,10 +31,10 @@ class V2UITests(unittest.TestCase):
  def test_oversized_and_invalid_run(self):
   self.assertEqual(self.request("POST","/api/w7tp/v2/jobs",b"x",{"Content-Length":str(MAX_REQUEST_BYTES+1),"Content-Type":"multipart/form-data; boundary=x","X-CSRF-Token":self.service.csrf_token})[0],413)
   self.assertEqual(self.request("GET","/api/w7tp/v2/jobs/../../secret")[0],400)
- def test_random_input_direct_transfer_end_to_end(self):
+ def test_random_input_is_not_false_product_pass(self):
   payload=os.urandom(65537);status,raw=self.post(payload);self.assertEqual(status,202);run=json.loads(raw)["run_id"];job=self.wait(run)
-  self.assertEqual(job["state"],"PASS");self.assertEqual(job["adjudication"],"DIRECT_TRANSFER");self.assertEqual(job["generated_bytes"],len(payload));self.assertEqual(job["network_bytes"],0);self.assertEqual(job["expected_sha256"],hashlib.sha256(payload).hexdigest());self.assertEqual(job["expected_sha256"],job["actual_sha256"]);self.assertEqual(job["verifier_decision"],"PASS");self.assertEqual(job["total_field_seal"],"PASS")
-  status,packet=self.request("GET",f"/api/w7tp/v2/jobs/{run}/packet");self.assertEqual(status,200);self.assertIn(b"w7tpGateway",packet);self.assertNotIn(str(self.root).encode(),packet)
+  self.assertEqual(job["state"],"HOLD");self.assertEqual(job["adjudication"],"NOT_ECONOMIC");self.assertEqual(job["generated_bytes"],len(payload));self.assertEqual(job["expected_sha256"],hashlib.sha256(payload).hexdigest());self.assertEqual(job["expected_sha256"],job["actual_sha256"]);self.assertEqual(job["verifier_decision"],"PASS");self.assertEqual(job["total_field_seal"],"PASS");self.assertEqual(job["reason_code"],"NOT_ECONOMIC_NO_GENERATIVE_PROVIDER")
+  status,packet=self.request("GET",f"/api/w7tp/v2/jobs/{run}/packet");self.assertEqual(status,404)
  def test_repeat_block_is_provider_not_gate(self):
   status,raw=self.post(b"RULE"*20000);job=self.wait(json.loads(raw)["run_id"]);self.assertEqual(job["state"],"PASS");self.assertEqual(job["adjudication"],"W7TP_GENERATIVE")
  def test_packet_has_d1_d8_and_contracts(self):

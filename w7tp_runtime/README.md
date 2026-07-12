@@ -7,6 +7,9 @@ Public deterministic L1 path:
 V2 accepts every input for analysis and adjudicates it as `W7TP_GENERATIVE`,
 `W7TP_HYBRID`, `DIRECT_TRANSFER`, or `NOT_ECONOMIC`. Repeat-block is one
 generation-rule provider, never an eligibility gate.
+Inputs for which no bound generative/lookup/reference provider exists are verified in
+the isolated receiver but finish as `NOT_ECONOMIC`/`HOLD`; a full-residual packet is
+not presented as a successful generative-transmission product.
 
 It is not a general file copier, compressor, backup format, download mechanism, or full-source Base64/hex wrapper. Unsupported, insufficiently reduced, oversized, malformed, tampered, or path-escaping packets fail closed. Reconstruction uses a temporary file and atomically publishes it only after SHA-256 verification. Existing outputs are never overwritten.
 

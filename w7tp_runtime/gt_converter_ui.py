@@ -39,7 +39,8 @@ class Service:
    job.update(state="PACKET_BUILD",progress=25);self.store.save(job);composer=PacketV2();document=composer.compose(source,packet,job["run_id"],job["source_name"],intent)
    job.update(state="GATEWAY_START",progress=50,packet_bytes=packet.stat().st_size,adjudication=document["adjudication"],expected_sha256=document["D4_evidence"]["expected_hash"]);self.store.save(job)
    received=composer.isolated_receive(packet,directory/"isolated_receiver")
-   job.update(state="PASS",progress=100,generated_bytes=received.generated_bytes,actual_sha256=received.actual_sha256,verifier_decision=received.verifier_decision,total_field_seal=received.total_field_seal,integrity="PASS",packet_ready=True)
+   economic=document["adjudication"]!="NOT_ECONOMIC"
+   job.update(state="PASS" if economic else "HOLD",progress=100,generated_bytes=received.generated_bytes,actual_sha256=received.actual_sha256,verifier_decision=received.verifier_decision,total_field_seal=received.total_field_seal,integrity="PASS",packet_ready=economic,reason_code=None if economic else "NOT_ECONOMIC_NO_GENERATIVE_PROVIDER")
   except Exception as exc:job.update(state="HOLD" if isinstance(exc,(ValueError,FileExistsError)) else "ERROR",progress=100,reason_code=exc.args[0] if exc.args and isinstance(exc.args[0],str) else "INTERNAL_ERROR",packet_ready=False)
   finally:source.unlink(missing_ok=True);self.store.save(job)
  def close(self):self.executor.shutdown(wait=True)
