@@ -26,16 +26,22 @@ raw key, or absolute local path.
 
 No model call, database write, deployment action, member plaintext, or private lookup data is part of this public converter.
 
-## 本機瀏覽器介面
+## W7TP單一自重構封包建構驗證台
 
 ```bash
 python3 -m w7tp_runtime.gt_converter_ui --host 127.0.0.1 --port 8787
 ```
+
+Founder canonical目標為「一個封包｜直接開啟｜自行重構｜自行驗證」，封包應
+攜帶8D狀態、引用能力、查表能力、傳輸協定、重構條件與驗證方法。目前底層
+單一封包binding尚未完成，本介面是建構驗證台，不宣稱未知binding已完成。
 
 開啟 `http://127.0.0.1:8787/`。服務只允許 loopback bind，使用 Python
 標準庫，不載入 CDN、字型、遙測或外部 API。工作在背景執行，不依賴瀏覽器
 連線；完成索引以去識別 canonical JSON 原子保存，可用 `run_id` 重新查詢。
 來源攝取只是本機輸入步驟，不等同生成式傳輸。ledger 不保存來源內容、封包
 payload、`block_hex`、raw path 或秘密；成品與報告只可由固定 run_id artifact
-端點取得。未配置受信簽章時，介面固定顯示「內容完整性：PASS」與
+端點取得。舊實作回報`NOT_GENERATIVELY_REDUCIBLE`時，介面說明為「目前產品
+實作尚未完成此檔案的單封包建構方式；不是檔案不能重構。」未配置受信簽章
+時，介面固定顯示「內容完整性：PASS」與
 「來源真實性：尚未驗證」。

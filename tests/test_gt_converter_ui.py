@@ -48,6 +48,27 @@ class GTConverterUITests(unittest.TestCase):
             time.sleep(.02)
         self.fail("job timeout")
 
+    def test_ui_discloses_canonical_target_and_current_limit(self):
+        status, raw, _ = self.request("GET", "/")
+        page = raw.decode("utf-8")
+        self.assertEqual(status, 200)
+        self.assertIn("W7TP單一自重構封包建構驗證台", page)
+        self.assertIn("一個封包｜直接開啟｜自行重構｜自行驗證", page)
+        self.assertIn("底層單一封包binding尚未完成，本介面為建構驗證台", page)
+        for capability in ("8D狀態", "引用能力", "查表能力", "傳輸協定", "重構條件", "驗證方法"):
+            self.assertIn(capability, page)
+        self.assertNotIn('name="os"', page)
+        self.assertNotIn('id="target"', page)
+
+    def test_ui_maps_legacy_reasons_and_gates_artifacts(self):
+        status, raw, _ = self.request("GET", "/app.js")
+        script = raw.decode("utf-8")
+        self.assertEqual(status, 200)
+        self.assertIn("目前產品實作尚未完成此檔案的單封包建構方式；不是檔案不能重構。", script)
+        self.assertIn("工作尚未完成，請等待工作狀態更新。", script)
+        self.assertIn("removeAttribute('href')", script)
+        self.assertIn("disabled=!terminalStates.has(job.state)", script)
+
     def test_reject_non_local_bind(self):
         with self.assertRaisesRegex(ValueError, "NON_LOCAL_BIND"): LocalServer(("0.0.0.0", 0), ConverterService(self.root / "other"))
 
