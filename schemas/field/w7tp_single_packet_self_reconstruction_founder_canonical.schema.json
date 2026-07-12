@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_single_packet_self_reconstruction_founder_canonical.schema.json",
+  "title": "W7TP Single Packet Self Reconstruction Founder Canonical",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonical_id",
+    "authority",
+    "single_packet",
+    "direct_open_and_reconstruct",
+    "packet_carried",
+    "external_w7tp_executor_required",
+    "external_runtime_required",
+    "universal_file_reconstruction",
+    "forbidden_definition_drift",
+    "implementation_binding"
+  ],
+  "properties": {
+    "canonical_id": {
+      "const": "W7TP_SINGLE_PACKET_SELF_RECONSTRUCTION"
+    },
+    "authority": {
+      "const": "FOUNDER_EXPLICIT_TECHNICAL_CORRECTION"
+    },
+    "single_packet": {
+      "const": true
+    },
+    "direct_open_and_reconstruct": {
+      "const": true
+    },
+    "packet_carried": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intent_state_tensor",
+        "references",
+        "lookup_capability",
+        "transport_protocol",
+        "reconstruction_conditions",
+        "generation_rules",
+        "verification_method",
+        "verification_conditions"
+      ],
+      "properties": {
+        "intent_state_tensor": {
+          "const": true
+        },
+        "references": {
+          "const": true
+        },
+        "lookup_capability": {
+          "const": true
+        },
+        "transport_protocol": {
+          "const": true
+        },
+        "reconstruction_conditions": {
+          "const": true
+        },
+        "generation_rules": {
+          "const": true
+        },
+        "verification_method": {
+          "const": true
+        },
+        "verification_conditions": {
+          "const": true
+        }
+      }
+    },
+    "external_w7tp_executor_required": {
+      "const": false
+    },
+    "external_runtime_required": {
+      "const": false
+    },
+    "universal_file_reconstruction": {
+      "const": true
+    },
+    "forbidden_definition_drift": {
+      "const": [
+        "FILE_COPY",
+        "COMPRESSION_ONLY",
+        "BACKUP",
+        "SYNC",
+        "DOWNLOAD_DECRYPT",
+        "UNRECONSTRUCTABLE_FILE_CLASS"
+      ]
+    },
+    "implementation_binding": {
+      "const": "UNSPECIFIED_BY_FOUNDER"
+    }
+  }
+}
