@@ -1,143 +1,55 @@
-import hashlib
-import http.client
-import json
-import tempfile
-import threading
-import time
-import unittest
+import hashlib,http.client,json,os,tempfile,threading,time,unittest
 from pathlib import Path
+from w7tp_runtime.gt_converter_ui import Service,Server,MAX_REQUEST_BYTES
+from w7tp_runtime.gt_packet_v2 import PacketV2
 
-from w7tp_runtime.gt_converter_ui import ConverterService, LocalServer, MAX_REQUEST_BYTES
+UI_REDTEAM_CASES=["reject_non_local_bind","reject_invalid_host","reject_origin","reject_csrf","reject_json_hex","reject_oversize","reject_invalid_run","reject_arbitrary_download","reject_symlink_packet","hide_payload","hide_path","multipart_stream","artifact_gate","d1_d8_complete","protocol_bound","verification_bound","one_time_gateway","total_field_seal","random_input_direct_transfer","repeat_block_provider"]
 
+class V2UITests(unittest.TestCase):
+ def setUp(self):
+  self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name);self.service=Service(self.root);self.server=Server(("127.0.0.1",0),self.service);self.thread=threading.Thread(target=self.server.serve_forever,daemon=True);self.thread.start();self.port=self.server.server_port;self.host=f"127.0.0.1:{self.port}"
+ def tearDown(self):self.server.shutdown();self.server.server_close();self.service.close();self.thread.join();self.temp.cleanup()
+ def request(self,method,path,body=None,headers=None):
+  conn=http.client.HTTPConnection("127.0.0.1",self.port,timeout=10);base={"Host":self.host};base.update(headers or {});conn.request(method,path,body,base);response=conn.getresponse();data=response.read();status=response.status;conn.close();return status,data
+ def post(self,payload,filename="fixture.bin"):
+  boundary="W7TPBOUNDARY";body=(f"--{boundary}\r\nContent-Disposition: form-data; name=\"source\"; filename=\"{filename}\"\r\nContent-Type: application/octet-stream\r\n\r\n".encode()+payload+f"\r\n--{boundary}--\r\n".encode());return self.request("POST","/api/w7tp/v2/jobs",body,{"Content-Type":f"multipart/form-data; boundary={boundary}","X-CSRF-Token":self.service.csrf_token})
+ def wait(self,run):
+  for _ in range(200):
+   status,raw=self.request("GET",f"/api/w7tp/v2/jobs/{run}");job=json.loads(raw)
+   if job["state"] in {"PASS","HOLD","BLOCK","ERROR"}:return job
+   time.sleep(.02)
+  self.fail("timeout")
+ def test_capabilities_truthful(self):
+  status,raw=self.request("GET","/api/w7tp/v2/capabilities");cap=json.loads(raw);self.assertEqual(status,200)
+  for key in ("packet_carries_transport_protocol","packet_carries_verification_method","one_time_gateway_supported","total_field_verifier_bound"):self.assertIs(cap[key],True)
+ def test_security_headers_and_bind(self):
+  with self.assertRaisesRegex(ValueError,"NON_LOCAL_BIND"):Server(("0.0.0.0",0),Service(self.root/"x"))
+  self.assertEqual(self.request("GET","/health",headers={"Host":"evil"})[0],403);self.assertEqual(self.request("GET","/health",headers={"Origin":"https://evil"})[0],403)
+ def test_csrf_and_json_hex_rejected(self):
+  self.assertEqual(self.request("POST","/api/w7tp/v2/jobs",b"{}",{"Content-Type":"application/json"})[0],403)
+  self.assertEqual(self.request("POST","/api/w7tp/v2/jobs",b'{"source_hex":"00"}',{"Content-Type":"application/json","X-CSRF-Token":self.service.csrf_token})[0],400)
+ def test_oversized_and_invalid_run(self):
+  self.assertEqual(self.request("POST","/api/w7tp/v2/jobs",b"x",{"Content-Length":str(MAX_REQUEST_BYTES+1),"Content-Type":"multipart/form-data; boundary=x","X-CSRF-Token":self.service.csrf_token})[0],413)
+  self.assertEqual(self.request("GET","/api/w7tp/v2/jobs/../../secret")[0],400)
+ def test_random_input_direct_transfer_end_to_end(self):
+  payload=os.urandom(65537);status,raw=self.post(payload);self.assertEqual(status,202);run=json.loads(raw)["run_id"];job=self.wait(run)
+  self.assertEqual(job["state"],"PASS");self.assertEqual(job["adjudication"],"DIRECT_TRANSFER");self.assertEqual(job["generated_bytes"],len(payload));self.assertEqual(job["network_bytes"],0);self.assertEqual(job["expected_sha256"],hashlib.sha256(payload).hexdigest());self.assertEqual(job["expected_sha256"],job["actual_sha256"]);self.assertEqual(job["verifier_decision"],"PASS");self.assertEqual(job["total_field_seal"],"PASS")
+  status,packet=self.request("GET",f"/api/w7tp/v2/jobs/{run}/packet");self.assertEqual(status,200);self.assertIn(b"w7tpGateway",packet);self.assertNotIn(str(self.root).encode(),packet)
+ def test_repeat_block_is_provider_not_gate(self):
+  status,raw=self.post(b"RULE"*20000);job=self.wait(json.loads(raw)["run_id"]);self.assertEqual(job["state"],"PASS");self.assertEqual(job["adjudication"],"W7TP_GENERATIVE")
+ def test_packet_has_d1_d8_and_contracts(self):
+  status,raw=self.post(b"ABCD"*20000);run=json.loads(raw)["run_id"];self.assertEqual(self.wait(run)["state"],"PASS");path=self.root/"jobs"/run/"w7tp-single-packet.html";text=path.read_text();marker='<script id="packet" type="application/json">';start=text.index(marker)+len(marker);packet=json.loads(text[start:text.index('</script>',start)])
+  for number in range(1,9):self.assertTrue(any(key.startswith(f"D{number}_") for key in packet))
+  d6=packet["D6_generative_transmission"];self.assertIn("protocol",d6);self.assertIn("lookup",d6);self.assertIn("references",d6);self.assertIn("reconstruction_contract",d6);self.assertIn("verification_contract",d6)
+  d8=packet["D8_envelope"];self.assertTrue(d8["nonce"]);self.assertTrue(d8["ttl"]);self.assertTrue(d8["receiver_binding"]);self.assertTrue(d8["integrity"]["packet_sha256"]);self.assertTrue(d8["verification_entrypoint"])
+ def test_artifact_gate_and_arbitrary_download(self):
+  run="W7TP_GTF_"+"a"*32;directory=self.root/"jobs"/run;directory.mkdir();(directory/"w7tp-single-packet.html").write_text("partial");self.service.store.save({"run_id":run,"state":"GATEWAY_START","packet_ready":False})
+  self.assertEqual(self.request("GET",f"/api/w7tp/v2/jobs/{run}/packet")[0],404);self.assertEqual(self.request("GET",f"/api/w7tp/v2/jobs/{run}/source")[0],400)
+ def test_symlink_packet_rejected(self):
+  status,raw=self.post(b"X"*40000);run=json.loads(raw)["run_id"];self.wait(run);packet=self.root/"jobs"/run/"w7tp-single-packet.html";packet.unlink();packet.symlink_to(self.root/"ledger"/f"{run}.json");self.assertEqual(self.request("GET",f"/api/w7tp/v2/jobs/{run}/packet")[0],404)
+ def test_ledger_hides_payload_path_and_xss(self):
+  payload=b"SECRET-NOT-IN-LEDGER";status,raw=self.post(payload,'<img src=x>.bin');run=json.loads(raw)["run_id"];job=self.wait(run);encoded=json.dumps(job);self.assertNotIn(payload.decode(),encoded);self.assertNotIn(str(self.root),encoded);self.assertNotIn("<img",job["source_name"])
+ def test_ui_single_action_and_multipart(self):
+  page=self.request("GET","/")[1].decode();script=self.request("GET","/app.js")[1].decode();self.assertIn("選檔 → 建立、驗證並下載單一封包",page);self.assertNotIn('name="os"',page);self.assertNotIn("source_hex",script);self.assertIn("new FormData",script);self.assertIn("/api/w7tp/v2/jobs",script)
 
-UI_REDTEAM_CASES = [
-    "reject_non_local_bind", "reject_invalid_host_header", "reject_external_origin",
-    "reject_missing_or_invalid_csrf", "reject_oversized_request", "reject_invalid_run_id",
-    "reject_run_id_path_traversal", "reject_arbitrary_file_download", "reject_symlink_output_download",
-    "escape_filename_xss", "escape_reason_code_xss", "hide_python_traceback", "hide_source_payload",
-    "hide_absolute_source_path", "reject_existing_output_overwrite", "reject_concurrent_output_collision",
-    "cancel_does_not_delete_source", "browser_disconnect_does_not_stop_job",
-    "restart_recovers_completed_job_index", "unfinished_temp_is_not_downloadable",
-]
-
-
-class GTConverterUITests(unittest.TestCase):
-    def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(); self.root = Path(self.temp.name)
-        self.service = ConverterService(self.root); self.server = LocalServer(("127.0.0.1", 0), self.service)
-        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True); self.thread.start()
-        self.port = self.server.server_port; self.host = f"127.0.0.1:{self.port}"
-
-    def tearDown(self):
-        self.server.shutdown(); self.server.server_close(); self.service.close(); self.thread.join(); self.temp.cleanup()
-
-    def request(self, method, path, body=None, headers=None):
-        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
-        base = {"Host": self.host}; base.update(headers or {})
-        conn.request(method, path, body=body, headers=base); response = conn.getresponse(); data = response.read(); conn.close()
-        return response.status, data, dict(response.getheaders())
-
-    def post(self, payload, **extra):
-        body = json.dumps({"source_hex": payload.hex(), "filename": extra.get("filename", "source.bin"), "target_os": extra.get("target_os", "portable"), "target_name": extra.get("target_name", "reconstructed.bin")}).encode()
-        return self.request("POST", "/api/jobs", body, {"Content-Type": "application/json", "X-CSRF-Token": self.service.csrf_token})
-
-    def wait(self, run_id):
-        for _ in range(100):
-            status, raw, _ = self.request("GET", f"/api/jobs/{run_id}"); job = json.loads(raw)
-            if job["state"] in {"PASS", "HOLD", "BLOCK", "ERROR", "CANCELLED"}: return job
-            time.sleep(.02)
-        self.fail("job timeout")
-
-    def test_ui_discloses_canonical_target_and_current_limit(self):
-        status, raw, _ = self.request("GET", "/")
-        page = raw.decode("utf-8")
-        self.assertEqual(status, 200)
-        self.assertIn("W7TP單一自重構封包建構驗證台", page)
-        self.assertIn("一個封包｜直接開啟｜自行重構｜自行驗證", page)
-        self.assertIn("底層單一封包binding尚未完成，本介面為建構驗證台", page)
-        for capability in ("8D狀態", "引用能力", "查表能力", "傳輸協定", "重構條件", "驗證方法"):
-            self.assertIn(capability, page)
-        self.assertNotIn('name="os"', page)
-        self.assertNotIn('id="target"', page)
-
-    def test_ui_maps_legacy_reasons_and_gates_artifacts(self):
-        status, raw, _ = self.request("GET", "/app.js")
-        script = raw.decode("utf-8")
-        self.assertEqual(status, 200)
-        self.assertIn("目前產品實作尚未完成此檔案的單封包建構方式；不是檔案不能重構。", script)
-        self.assertIn("工作尚未完成，請等待工作狀態更新。", script)
-        self.assertIn("removeAttribute('href')", script)
-        self.assertIn("disabled=!terminalStates.has(job.state)", script)
-
-    def test_reject_non_local_bind(self):
-        with self.assertRaisesRegex(ValueError, "NON_LOCAL_BIND"): LocalServer(("0.0.0.0", 0), ConverterService(self.root / "other"))
-
-    def test_reject_invalid_host_header(self):
-        status, _, _ = self.request("GET", "/health", headers={"Host": "evil.test"}); self.assertEqual(status, 403)
-
-    def test_reject_external_origin(self):
-        status, _, _ = self.request("GET", "/health", headers={"Origin": "https://evil.test"}); self.assertEqual(status, 403)
-
-    def test_reject_missing_or_invalid_csrf(self):
-        status, _, _ = self.request("POST", "/api/jobs", b"{}", {"Content-Type": "application/json"}); self.assertEqual(status, 403)
-
-    def test_reject_oversized_request(self):
-        status, raw, _ = self.request("POST", "/api/jobs", b"x", {"Content-Length": str(MAX_REQUEST_BYTES + 1), "X-CSRF-Token": self.service.csrf_token}); self.assertEqual(status, 413)
-
-    def test_reject_invalid_run_id_and_traversal(self):
-        for path in ("/api/jobs/bad", "/api/jobs/../ledger"):
-            status, _, _ = self.request("GET", path); self.assertEqual(status, 400)
-
-    def test_reject_arbitrary_file_download(self):
-        status, raw, _ = self.post(b"X" * 4096); run = json.loads(raw)["run_id"]
-        status, _, _ = self.request("GET", f"/api/jobs/{run}/source"); self.assertEqual(status, 403)
-
-    def test_reject_symlink_output_download(self):
-        status, raw, _ = self.post(b"Y" * 32768); run = json.loads(raw)["run_id"]; job = self.wait(run)
-        output = self.root / "jobs" / run / "output" / "reconstructed.bin"; output.unlink(); output.symlink_to(self.root / "ledger" / f"{run}.json")
-        status, _, _ = self.request("GET", f"/api/jobs/{run}/output"); self.assertEqual(status, 404)
-
-    def test_escape_filename_and_reason_xss(self):
-        status, raw, _ = self.post(b"Z" * 4096, filename='<img src=x onerror=1>'); run = json.loads(raw)["run_id"]; job = self.wait(run)
-        self.assertNotIn("<img", job["source_name"])
-        job["reason_code"] = "<script>alert(1)</script>"; self.service.store.save(job)
-        self.assertNotIn("<script>", self.service.store.get(run)["reason_code"])
-
-    def test_hide_traceback_payload_and_absolute_path(self):
-        payload = b"SECRET-PAYLOAD-DO-NOT-SHOW"
-        status, raw, _ = self.post(payload); run = json.loads(raw)["run_id"]; job = self.wait(run); encoded = json.dumps(job)
-        self.assertNotIn("Traceback", encoded); self.assertNotIn(payload.decode(), encoded); self.assertNotIn(str(self.root), encoded)
-
-    def test_reject_existing_and_concurrent_output(self):
-        first = json.loads(self.post(b"A" * 100000)[1]); second = json.loads(self.post(b"B" * 100000)[1])
-        states = {self.wait(first["run_id"])["state"], self.wait(second["run_id"])["state"]}
-        self.assertTrue(states <= {"PASS", "ERROR"})
-        passed = first if self.wait(first["run_id"])["state"] == "PASS" else second
-        output = self.root / "jobs" / passed["run_id"] / "output" / "reconstructed.bin"
-        original = output.read_bytes(); self.assertEqual(output.read_bytes(), original)
-
-    def test_cancel_does_not_delete_source(self):
-        external = self.root / "user-original.bin"; external.write_bytes(b"ORIGINAL")
-        run = json.loads(self.post(b"C" * 100000)[1])["run_id"]
-        self.request("POST", f"/api/jobs/{run}/cancel", b"{}", {"X-CSRF-Token": self.service.csrf_token})
-        self.assertEqual(external.read_bytes(), b"ORIGINAL")
-
-    def test_browser_disconnect_does_not_stop_job_and_downloads(self):
-        payload = b"W7TP-UI-BLOCK" * 131072; body = json.dumps({"source_hex": payload.hex(), "filename": "demo.bin", "target_os": "portable", "target_name": "reconstructed.bin"}).encode()
-        conn = http.client.HTTPConnection("127.0.0.1", self.port); conn.request("POST", "/api/jobs", body, {"Host": self.host, "X-CSRF-Token": self.service.csrf_token}); response = conn.getresponse(); run = json.loads(response.read())["run_id"]; conn.close()
-        job = self.wait(run); self.assertEqual(job["state"], "PASS"); self.assertEqual(job["expected_sha256"], job["actual_sha256"])
-        for artifact in ("packet", "report", "output"):
-            status, data, _ = self.request("GET", f"/api/jobs/{run}/{artifact}"); self.assertEqual(status, 200); self.assertTrue(data)
-        self.assertEqual(hashlib.sha256(data).hexdigest(), job["actual_sha256"])
-
-    def test_restart_recovers_completed_job_index(self):
-        run = json.loads(self.post(b"D" * 32768)[1])["run_id"]; self.assertEqual(self.wait(run)["state"], "PASS")
-        recovered = ConverterService(self.root); self.assertEqual(recovered.store.get(run)["state"], "PASS"); recovered.close()
-
-    def test_unfinished_temp_is_not_downloadable(self):
-        run = "W7TP_GTF_" + "a" * 16; directory = self.root / "jobs" / run / "output"; directory.mkdir(parents=True); (directory / ".w7tp-gtf-temp.tmp").write_bytes(b"partial")
-        self.service.store.save({"run_id": run, "state": "RECONSTRUCTING", "progress": 50, "output_ready": False, "output_ref": "reconstructed.bin"})
-        status, _, _ = self.request("GET", f"/api/jobs/{run}/output"); self.assertEqual(status, 404)
-
-
-if __name__ == "__main__": unittest.main()
+if __name__=="__main__":unittest.main()

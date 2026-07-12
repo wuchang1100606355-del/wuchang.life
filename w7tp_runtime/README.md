@@ -4,7 +4,9 @@ Public deterministic L1 path:
 
 `SOURCE -> STATE-FIELD PACKET -> RECONSTRUCT -> VERIFY -> SEAL`
 
-The converter accepts only inputs that reduce to a deterministic repeated-byte or repeated-block recipe. W7TP-GTF 1.0.0 packets carry a portable relative target, reconstruction conditions, a canonical packet hash, and the expected result SHA-256. The default minimum source-to-packet reduction is 16x.
+V2 accepts every input for analysis and adjudicates it as `W7TP_GENERATIVE`,
+`W7TP_HYBRID`, `DIRECT_TRANSFER`, or `NOT_ECONOMIC`. Repeat-block is one
+generation-rule provider, never an eligibility gate.
 
 It is not a general file copier, compressor, backup format, download mechanism, or full-source Base64/hex wrapper. Unsupported, insufficiently reduced, oversized, malformed, tampered, or path-escaping packets fail closed. Reconstruction uses a temporary file and atomically publishes it only after SHA-256 verification. Existing outputs are never overwritten.
 
@@ -32,9 +34,9 @@ No model call, database write, deployment action, member plaintext, or private l
 python3 -m w7tp_runtime.gt_converter_ui --host 127.0.0.1 --port 8787
 ```
 
-Founder canonical目標為「一個封包｜直接開啟｜自行重構｜自行驗證」，封包應
-攜帶8D狀態、引用能力、查表能力、傳輸協定、重構條件與驗證方法。目前底層
-單一封包binding尚未完成，本介面是建構驗證台，不宣稱未知binding已完成。
+單一HTML封包攜帶D1-D8、傳輸協定、lookup/reference、重構與BYTE_EXACT驗證
+契約，以及瀏覽器one-time gateway。服務在允許下載前，先於隔離接收端完成
+`GATEWAY_START → RECONSTRUCT → BYTE_EXACT → TOTAL_FIELD_SEAL`。
 
 開啟 `http://127.0.0.1:8787/`。服務只允許 loopback bind，使用 Python
 標準庫，不載入 CDN、字型、遙測或外部 API。工作在背景執行，不依賴瀏覽器
