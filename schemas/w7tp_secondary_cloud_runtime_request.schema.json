@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_secondary_cloud_runtime_request.schema.json",
+  "title": "W7TP Taiji01 Secondary Cloud Runtime Request",
+  "type": "object",
+  "required": [
+    "run_id",
+    "channel",
+    "owner_explicit_authorization",
+    "capability_id",
+    "capability_ref",
+    "packet_type",
+    "domain_code",
+    "language_code",
+    "compatibility_profile",
+    "request_nonce",
+    "member_entry_packet",
+    "identity_authority_packet",
+    "scenario_translation_packet",
+    "active_question_refs"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 8},
+    "channel": {"enum": ["OWNER_XIAOJ", "TOTAL_FIELD"]},
+    "owner_explicit_authorization": {"type": "boolean"},
+    "capability_id": {"type": "string", "pattern": "^(capability:[A-Za-z0-9._-]+|CAP_[A-Z0-9_]+)$"},
+    "capability_ref": {"type": "string", "pattern": "^(capability:[A-Za-z0-9._-]+|CAP_[A-Z0-9_]+)$"},
+    "packet_type": {"enum": ["LANGUAGE_CAPABILITY_PACKET", "CODE_COMPONENT_PACKET", "RESEARCH_CANDIDATE_PACKET", "PROFESSIONAL_RULE_PACKET"]},
+    "domain_code": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+    "language_code": {"type": "string", "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$"},
+    "compatibility_profile": {"type": "string", "minLength": 3},
+    "request_nonce": {"type": "string", "minLength": 8},
+    "member_entry_packet": {"type": "object"},
+    "identity_authority_packet": {"type": "object"},
+    "scenario_translation_packet": {"type": "object"},
+    "active_question_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  },
+  "additionalProperties": false
+}
