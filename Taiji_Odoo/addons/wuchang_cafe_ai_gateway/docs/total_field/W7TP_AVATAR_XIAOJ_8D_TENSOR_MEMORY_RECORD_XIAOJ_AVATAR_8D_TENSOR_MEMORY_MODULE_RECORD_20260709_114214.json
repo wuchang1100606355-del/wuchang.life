@@ -1,0 +1,112 @@
+{
+  "STATE": "W7TP_AVATAR_XIAOJ_8D_TENSOR_MEMORY_RECORD",
+  "AUTHORITY": "TOTAL_FIELD",
+  "MODE": "STRUCTURED_MEMORY_ONLY_NO_RAW_TRANSCRIPT",
+  "RECORD_ID": "MEMORY_XIAOJ_AVATAR_CHOREOGRAPHY_001",
+  "CONCEPT_SUMMARY": "大廳影音AI小J實體化：J.vroid 3D模型渲染、Google商用授權語音容器化、雲端代碼式拉取、8D張量數位編舞。",
+  "SAFETY_FLAGS": {
+    "RAW_TRANSCRIPT_EMBEDDED": false,
+    "RAW_IMAGE_CLOUD": false,
+    "RAW_AUDIO_CLOUD": false,
+    "LIVE_CONTAINER_SWITCH": false,
+    "DB_WRITE": false,
+    "PUBLIC_CONTROLLER_PATCH": false,
+    "CONTAINER_DIRECT_PATCH": false
+  },
+  "TENSOR_NETWORK": {
+    "notation": "T^{D1..D8} * A^{ADI} * R^{role} * C^{container} * E^{evidence}",
+    "decision": "Contract(T, G, RiskGate, TotalField)",
+    "local_baseline_state": "Brain_4_XiaoJ_UI_Proxy"
+  },
+  "EIGHT_DIMENSION_PACKETS": [
+    {
+      "packet_id": "PKT_XIAOJ_01_CONTAINERIZATION",
+      "D1_Intent": "Google商用授權語音引擎容器化與實體載體綁定。",
+      "D2_State": "PASS_CANDIDATE",
+      "D3_Coordinate": "coord:brain_4_xiaoj_ui_proxy_sunmi_pos",
+      "D4_Evidence": "evidence_ref:google_commercial_container_license_hash",
+      "D5_Execution": {
+        "mode": "source_only",
+        "isolation": "local_docker_k8s_sandbox"
+      },
+      "D6_GenerativeTransmission": "本地端執行高品質STT/TTS，阻斷原始對話錄音上雲。",
+      "D7_RiskQuarantine": {
+        "hard_risk_gate": true,
+        "raw_audio_exfiltration": "BLOCK"
+      },
+      "D8_Envelope": {
+        "adi_5d_ref": "adi5d:hash_container_bind_01",
+        "h64_code": "H64_KW_01_乾"
+      }
+    },
+    {
+      "packet_id": "PKT_XIAOJ_02_PULL_ARCHITECTURE",
+      "D1_Intent": "雲端代碼式回應封包拉取。",
+      "D2_State": "PASS_CANDIDATE",
+      "D3_Coordinate": "coord:total_field_gateway",
+      "D4_Evidence": "evidence_ref:pull_mechanism_architecture",
+      "D5_Execution": {
+        "mode": "source_only",
+        "inbound_firewall": "DENY_ALL"
+      },
+      "D6_GenerativeTransmission": "前端主動拉取結構化JSON，靈肉分離：avatar_performance只做UI渲染，candidate_action交由總場裁決。",
+      "D7_RiskQuarantine": {
+        "hard_risk_gate": true,
+        "webhook_push_execution": "BLOCK"
+      },
+      "D8_Envelope": {
+        "adi_5d_ref": "adi5d:hash_pull_arch_02",
+        "h64_code": "H64_KW_11_泰"
+      }
+    },
+    {
+      "packet_id": "PKT_XIAOJ_03_CHOREOGRAPHY",
+      "D1_Intent": "J.vroid主權級數位編舞與表情防呆。",
+      "D2_State": "PASS_CANDIDATE",
+      "D3_Coordinate": "coord:edge_ui_renderer_webgl",
+      "D4_Evidence": "evidence_ref:file_J_vroid_blendshapes",
+      "D5_Execution": {
+        "mode": "source_only",
+        "render": "local_hardware_acceleration"
+      },
+      "D6_GenerativeTransmission": "解析8D封包D6維度，驅動Blendshapes、motion_clip、tts_prosody。",
+      "D7_RiskQuarantine": {
+        "hard_risk_gate": true,
+        "tensor_distance_anomaly_override": "FORCE_DEFAULT_SERIOUS_EXPRESSION"
+      },
+      "D8_Envelope": {
+        "adi_5d_ref": "adi5d:hash_choreography_03",
+        "h64_code": "H64_KW_14_大有"
+      }
+    },
+    {
+      "packet_id": "PKT_XIAOJ_04_ZERO_HALLUCINATION_GATE",
+      "D1_Intent": "總場攔截雲端代碼動作之零幻覺裁決。",
+      "D2_State": "PASS_CANDIDATE",
+      "D3_Coordinate": "coord:brain_0_total_field",
+      "D4_Evidence": "evidence_ref:candidate_action_odoo_method",
+      "D5_Execution": {
+        "mode": "source_only",
+        "action": "wuchang.sister.control"
+      },
+      "D6_GenerativeTransmission": "審查candidate_action，比對Odoo權限與ADI基準；合法才允許呼叫wuchang.sister.control，例如action_wake_up或其他實體控制指令。",
+      "D7_RiskQuarantine": {
+        "hard_risk_gate": true,
+        "unauthorized_door_open": "BLOCK_CRITICAL_DLQ_WRITE"
+      },
+      "D8_Envelope": {
+        "adi_5d_ref": "adi5d:hash_zero_hallucination_04",
+        "h64_code": "H64_KW_28_大過"
+      }
+    }
+  ],
+  "SYSTEM_ROUTING_REQUIREMENT": "影音AI小J僅為UI代理節點Brain 4。所有實體控制，包括門禁與IoT，必須經由Total Field Brain 0解析8D封包並通過度規張量運算後，方可呼叫Odoo的wuchang.sister.control模組執行。",
+  "MODULE_LANDING": {
+    "target_module": "wuchang_cafe_ai_gateway",
+    "landing_mode": "docs_total_field_source_only",
+    "no_manifest_change": true,
+    "no_db_write": true,
+    "no_restart": true
+  },
+  "NEXT_SUGGESTED_ACTION": "人工審閱後，可再決定是否新增Odoo backend menu/action/view入口；不得再走public controller route。"
+}

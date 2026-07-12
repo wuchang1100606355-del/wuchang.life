@@ -1,0 +1,138 @@
+{
+  "state": "W7TP_UNIVERSAL_ORG_AV_XIAOJ_MODULE_CONTRACT",
+  "authority": "TOTAL_FIELD",
+  "version": "0.1.0",
+  "mode": "source_only_no_db_no_restart",
+  "module": {
+    "technical_name": "universal_org_av_xiaoj",
+    "target_addon": "wuchang_cafe_ai_gateway",
+    "landing": "docs/contracts/services source-only",
+    "public_controller_patch": false,
+    "container_direct_patch": false,
+    "manifest_change": false,
+    "db_write": false,
+    "restart": false,
+    "deploy": false
+  },
+  "roles": {
+    "business_counter_xiaoj": {
+      "label": "商業櫃台小J",
+      "allowed": [
+        "greeting",
+        "menu_explain",
+        "member_onboarding_guidance",
+        "pos_preflight_guidance",
+        "queue_support",
+        "human_handoff"
+      ],
+      "blocked": [
+        "pos_order_create",
+        "payment_capture",
+        "refund",
+        "member_approval",
+        "member_plaintext_read",
+        "price_write"
+      ]
+    },
+    "property_counter_xiaoj": {
+      "label": "物業櫃台小J",
+      "allowed": [
+        "visitor_guidance",
+        "bulletin_reading",
+        "package_guidance",
+        "repair_ticket_guidance",
+        "emergency_handoff",
+        "property_staff_handoff"
+      ],
+      "blocked": [
+        "door_open",
+        "gate_open",
+        "resident_plaintext_read",
+        "visitor_approval",
+        "property_record_write",
+        "committee_decision_submit"
+      ]
+    },
+    "community_bulletin_xiaoj": {
+      "label": "社區布告欄小J",
+      "allowed": [
+        "association_intro",
+        "public_notice",
+        "volunteer_intro",
+        "local_service_map",
+        "public_safe_evidence",
+        "supporter_entry_no_fundraising"
+      ],
+      "blocked": [
+        "fundraising_payment",
+        "political_mobilization",
+        "case_plaintext_disclosure",
+        "unreviewed_notice_publish",
+        "formal_document_commitment"
+      ]
+    },
+    "developer_total_field_ui_xiaoj": {
+      "label": "開發者總場 UI 小J",
+      "allowed": [
+        "command_to_8d_packet",
+        "pass_hold_block_display",
+        "run_id_locator",
+        "evidence_locator",
+        "dry_run_builder",
+        "verify_builder",
+        "seal_builder",
+        "redteam_drift_guard"
+      ],
+      "blocked": [
+        "unconfirmed_restart",
+        "unconfirmed_deploy",
+        "unconfirmed_db_write",
+        "unconfirmed_router_write",
+        "unconfirmed_delete_overwrite_move",
+        "raw_secret_read",
+        "member_plaintext_read",
+        "raw_audio_read"
+      ]
+    }
+  },
+  "eight_d_gate": {
+    "D1_intent": "direct_result",
+    "D2_state": "pass_hold_block_run_id",
+    "D3_coordinate": "scene_and_system_coordinate",
+    "D4_evidence": "report_seal_hash_ref_only",
+    "D5_execution": "candidate_only_until_total_field_approval",
+    "D6_generative_transmission": "state_packet_ref_lookup_reconstruct_equivalent_state_total_field_verify",
+    "D7_risk": "hard_risk_quarantine",
+    "D8_envelope": "short_complete_pasteable_no_detour"
+  },
+  "av_layer": {
+    "brain": "Brain_4_XiaoJ_UI_Proxy",
+    "avatar": ["J.vroid", "VRoid-compatible", "WebGL-renderer"],
+    "expression": ["blendshapes", "motion_clip", "tts_prosody"],
+    "authority": "performance_ui_only"
+  },
+  "total_field_layer": {
+    "brain": "Brain_0_Total_Field",
+    "authority": [
+      "risk_gate",
+      "adi_metric",
+      "permission_check",
+      "evidence_check",
+      "odoo_method_gate"
+    ]
+  },
+  "safety": {
+    "raw_audio_saved": false,
+    "raw_audio_cloud": false,
+    "raw_video_saved": false,
+    "member_plaintext_read": false,
+    "secret_read": false,
+    "db_write": false,
+    "restart": false,
+    "deploy": false,
+    "router_write": false,
+    "payment_capture": false,
+    "door_open_without_total_field": false
+  },
+  "next": "OPTIONAL_BACKEND_MENU_ACTION_VIEW_XML_ONLY"
+}
