@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json",
+  "title": "W7TP 8D Multipurpose Generative Transmission Packet Canonical V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonical_id",
+    "version",
+    "packet_core",
+    "technology_flags",
+    "dimensions",
+    "domain_profile",
+    "generation_packet",
+    "transmission_packet",
+    "composition_mode",
+    "reconstruction",
+    "verification",
+    "risk",
+    "envelope"
+  ],
+  "properties": {
+    "canonical_id": {
+      "const": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2"
+    },
+    "version": {
+      "const": "2.0.0"
+    },
+    "packet_core": {
+      "const": "UNIFIED_MULTIPURPOSE_8D_PACKET"
+    },
+    "technology_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_carries_transport_protocol",
+        "packet_carries_reconstruction_conditions",
+        "packet_carries_reconstruction_contract",
+        "packet_carries_verification_method",
+        "packet_carries_verification_contract",
+        "model_required",
+        "llm_required",
+        "neural_network_required",
+        "floating_point_inference_required",
+        "diffusion_required",
+        "latent_codec",
+        "neural_codec"
+      ],
+      "properties": {
+        "packet_carries_transport_protocol": { "const": true },
+        "packet_carries_reconstruction_conditions": { "const": true },
+        "packet_carries_reconstruction_contract": { "const": true },
+        "packet_carries_verification_method": { "const": true },
+        "packet_carries_verification_contract": { "const": true },
+        "model_required": { "const": false },
+        "llm_required": { "const": false },
+        "neural_network_required": { "const": false },
+        "floating_point_inference_required": { "const": false },
+        "diffusion_required": { "const": false },
+        "latent_codec": { "const": false },
+        "neural_codec": { "const": false }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "D1_INTENT",
+        "D2_STATE",
+        "D3_COORDINATE",
+        "D4_EVIDENCE",
+        "D5_EXECUTION",
+        "D6_GENERATIVE_TRANSMISSION",
+        "D7_RISK",
+        "D8_ENVELOPE"
+      ],
+      "properties": {
+        "D1_INTENT": { "$ref": "#/$defs/profileRef" },
+        "D2_STATE": { "$ref": "#/$defs/profileRef" },
+        "D3_COORDINATE": { "$ref": "#/$defs/profileRef" },
+        "D4_EVIDENCE": { "$ref": "#/$defs/profileRef" },
+        "D5_EXECUTION": { "$ref": "#/$defs/profileRef" },
+        "D6_GENERATIVE_TRANSMISSION": { "$ref": "#/$defs/d6" },
+        "D7_RISK": { "$ref": "#/$defs/d7" },
+        "D8_ENVELOPE": { "$ref": "#/$defs/envelope" }
+      }
+    },
+    "domain_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "state_profile",
+        "coordinate_profile",
+        "lookup_profile",
+        "generation_profile",
+        "reconstruction_profile",
+        "verification_profile"
+      ],
+      "properties": {
+        "domain": {
+          "enum": [
+            "DOCUMENT", "IMAGE", "AUDIO", "VIDEO", "AUDIOVISUAL", "PROGRAM",
+            "DATABASE", "WEBSITE", "CONTAINER", "SYSTEM_IMAGE", "VM", "ODOO",
+            "POS", "IOT", "ROUTER", "IDENTITY", "AUTHORITY",
+            "MULTI_BRAIN_CANDIDATE", "TOTAL_FIELD_DECISION", "GENERIC_BINARY"
+          ]
+        },
+        "state_profile": { "$ref": "#/$defs/profileRef" },
+        "coordinate_profile": { "$ref": "#/$defs/profileRef" },
+        "lookup_profile": { "$ref": "#/$defs/profileRef" },
+        "generation_profile": { "$ref": "#/$defs/profileRef" },
+        "reconstruction_profile": { "$ref": "#/$defs/profileRef" },
+        "verification_profile": { "$ref": "#/$defs/profileRef" }
+      }
+    },
+    "generation_packet": { "$ref": "#/$defs/generationPacket" },
+    "transmission_packet": { "$ref": "#/$defs/transmissionPacket" },
+    "composition_mode": {
+      "enum": ["SEPARATE", "NESTED", "MERGED_AS_SELF_CONTAINED_PACKET"]
+    },
+    "reconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core", "zero_prior_content_receiver", "materialization", "economic_mode"],
+      "properties": {
+        "core": {
+          "const": [
+            "NON_FLOAT_DETERMINISTIC_LOOKUP",
+            "INTEGER_STATE_TRANSITION",
+            "RULE_EXPANSION",
+            "REFERENCE_RESOLUTION",
+            "COORDINATE_RECONSTRUCTION",
+            "EQUIVALENT_STATE_GENERATION",
+            "TOTAL_FIELD_VERIFICATION"
+          ]
+        },
+        "zero_prior_content_receiver": { "const": true },
+        "materialization": {
+          "enum": [
+            "LIMITED_RECONSTRUCTION", "LAYERED_RECONSTRUCTION",
+            "PARTIAL_RECONSTRUCTION", "FULL_RECONSTRUCTION",
+            "ON_DEMAND_MATERIALIZATION"
+          ]
+        },
+        "economic_mode": {
+          "enum": ["W7TP_GENERATIVE", "W7TP_HYBRID", "DIRECT_TRANSFER", "NOT_ECONOMIC"]
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "method_ref", "contract_ref", "decision"],
+      "properties": {
+        "level": { "enum": ["L1_FULL", "L2_EQUIVALENT", "L3_CANDIDATE"] },
+        "method_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "contract_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "decision": { "enum": ["PASS", "HOLD", "BLOCK"] }
+      }
+    },
+    "risk": { "$ref": "#/$defs/d7" },
+    "envelope": { "$ref": "#/$defs/envelope" }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "profileRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_ref"],
+      "properties": {
+        "profile_ref": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "d6": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol", "routing", "segmentation", "merge_conditions", "lookup",
+        "references", "generation_rules", "reconstruction_contract",
+        "verification_contract", "residual", "refill_policy", "on_demand_materialization"
+      ],
+      "properties": {
+        "protocol": { "$ref": "#/$defs/nonEmptyString" },
+        "routing": { "$ref": "#/$defs/nonEmptyString" },
+        "segmentation": { "$ref": "#/$defs/nonEmptyString" },
+        "merge_conditions": { "$ref": "#/$defs/stringArray" },
+        "lookup": { "$ref": "#/$defs/profileRef" },
+        "references": { "$ref": "#/$defs/stringArray" },
+        "generation_rules": { "$ref": "#/$defs/stringArray" },
+        "reconstruction_contract": { "$ref": "#/$defs/nonEmptyString" },
+        "verification_contract": { "$ref": "#/$defs/nonEmptyString" },
+        "residual": { "$ref": "#/$defs/stringArray" },
+        "refill_policy": { "$ref": "#/$defs/nonEmptyString" },
+        "on_demand_materialization": { "type": "boolean" }
+      }
+    },
+    "d7": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hard_risks", "decision"],
+      "properties": {
+        "hard_risks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "RAW_SECRET", "MEMBER_PLAINTEXT", "SOURCE_FILE_DELETE", "FILE_OVERWRITE",
+              "FILE_MOVE", "DB_WRITE", "DEPLOY", "RESTART", "REBOOT", "ROUTER_WRITE",
+              "FORMAL_SUBMISSION_WITHOUT_OWNER_CONFIRMATION",
+              "DELETE_LOCAL_BEFORE_CLOUD_VERIFICATION"
+            ]
+          }
+        },
+        "decision": { "enum": ["PASS", "HOLD", "BLOCK"] }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packet_id", "authority_ref", "version", "ttl_seconds", "nonce", "sha256", "verifier_ref", "seal_policy"],
+      "properties": {
+        "packet_id": { "$ref": "#/$defs/nonEmptyString" },
+        "authority_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "ttl_seconds": { "type": "integer", "minimum": 1 },
+        "nonce": { "$ref": "#/$defs/nonEmptyString" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "verifier_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "seal_policy": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "generationPacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "coordinate", "lookup", "generation_rule", "reconstruction_contract", "verification_contract", "target_equivalence"],
+      "properties": {
+        "state": { "$ref": "#/$defs/profileRef" },
+        "coordinate": { "$ref": "#/$defs/profileRef" },
+        "lookup": { "$ref": "#/$defs/profileRef" },
+        "generation_rule": { "$ref": "#/$defs/stringArray" },
+        "reconstruction_contract": { "$ref": "#/$defs/nonEmptyString" },
+        "verification_contract": { "$ref": "#/$defs/nonEmptyString" },
+        "target_equivalence": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "transmissionPacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["routing", "path", "segment", "order", "ttl", "reference", "hash", "merge_condition", "delivery_state"],
+      "properties": {
+        "routing": { "$ref": "#/$defs/nonEmptyString" },
+        "path": { "$ref": "#/$defs/stringArray" },
+        "segment": { "type": "integer", "minimum": 0 },
+        "order": { "type": "integer", "minimum": 0 },
+        "ttl": { "type": "integer", "minimum": 1 },
+        "reference": { "$ref": "#/$defs/stringArray" },
+        "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "merge_condition": { "$ref": "#/$defs/stringArray" },
+        "delivery_state": { "enum": ["READY", "IN_TRANSIT", "DELIVERED", "MERGED", "VERIFIED", "HOLD", "BLOCK"] }
+      }
+    }
+  }
+}

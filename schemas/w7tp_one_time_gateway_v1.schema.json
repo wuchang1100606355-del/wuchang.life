@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_one_time_gateway_v1.schema.json",
+  "title": "W7TP One Time Ephemeral Generative Reconstruction Gateway V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gateway_id", "one_time_object", "persistent_object", "zero_prior_content_receiver",
+    "packet_carried", "flow", "cleanup_policy", "source_protection", "final_state"
+  ],
+  "properties": {
+    "gateway_id": { "const": "ONE_TIME_EPHEMERAL_GENERATIVE_RECONSTRUCTION_GATEWAY" },
+    "one_time_object": { "const": "GATEWAY" },
+    "persistent_object": { "const": "VERIFIED_RECONSTRUCTED_OUTPUT" },
+    "zero_prior_content_receiver": { "const": true },
+    "packet_carried": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bootstrap", "minimal_parser", "minimal_lookup", "rules", "state", "coordinates", "verifier", "required_residual"],
+      "properties": {
+        "bootstrap": { "$ref": "#/$defs/ref" },
+        "minimal_parser": { "$ref": "#/$defs/ref" },
+        "minimal_lookup": { "$ref": "#/$defs/ref" },
+        "rules": { "$ref": "#/$defs/refList" },
+        "state": { "$ref": "#/$defs/ref" },
+        "coordinates": { "$ref": "#/$defs/refList" },
+        "verifier": { "$ref": "#/$defs/ref" },
+        "required_residual": { "$ref": "#/$defs/refList" }
+      }
+    },
+    "flow": {
+      "const": [
+        "SMALL_W7TP_PACKET", "USER_ACTIVATION", "BOOTSTRAP", "START_EPHEMERAL_GATEWAY",
+        "CREATE_TEMPORARY_RECONSTRUCTION_FIELD", "LOAD_PACKET_PROTOCOL", "LOAD_LOOKUP_AND_RULES",
+        "NON_FLOAT_DETERMINISTIC_RECONSTRUCTION", "PACKET_CARRIED_VERIFICATION", "PASS",
+        "MATERIALIZE_VERIFIED_ORIGINAL_FILE", "CLEAN_PACKET_COPY_GATEWAY_AND_TEMPORARY_STATE",
+        "RETAIN_ONLY_VERIFIED_OUTPUT", "FINAL_SEAL"
+      ]
+    },
+    "cleanup_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delete_packet_copy", "stop_gateway", "delete_temporary_state", "retain_verified_output"],
+      "properties": {
+        "delete_packet_copy": { "const": true },
+        "stop_gateway": { "const": true },
+        "delete_temporary_state": { "const": true },
+        "retain_verified_output": { "const": true }
+      }
+    },
+    "source_protection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_file_delete", "unique_cloud_copy_delete", "other_user_file_delete"],
+      "properties": {
+        "source_file_delete": { "const": false },
+        "unique_cloud_copy_delete": { "const": false },
+        "other_user_file_delete": { "const": false }
+      }
+    },
+    "final_state": { "enum": ["PASS", "HOLD", "BLOCK", "SEALED"] }
+  },
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1 },
+    "refList": { "type": "array", "items": { "$ref": "#/$defs/ref" }, "uniqueItems": true }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_image_domain_profile_v1.schema.json",
+  "title": "W7TP Image Domain Profile V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "domain", "image_state", "object_state", "composition_state", "layer_state",
+    "geometric_coordinate", "region_coordinate", "color_coordinate", "color_vector",
+    "integer_tensor_state", "relationship_state", "boundary_state", "lookup_profile",
+    "generation_rule", "modification_rule", "reconstruction_contract", "verification_profile"
+  ],
+  "properties": {
+    "domain": { "const": "IMAGE" },
+    "image_state": { "$ref": "#/$defs/ref" },
+    "object_state": { "$ref": "#/$defs/refList" },
+    "composition_state": { "$ref": "#/$defs/ref" },
+    "layer_state": { "$ref": "#/$defs/refList" },
+    "geometric_coordinate": { "$ref": "#/$defs/integerVector" },
+    "region_coordinate": { "$ref": "#/$defs/integerVector" },
+    "color_coordinate": { "$ref": "#/$defs/integerVector" },
+    "color_vector": { "$ref": "#/$defs/integerVector" },
+    "integer_tensor_state": { "$ref": "#/$defs/integerTensor" },
+    "relationship_state": { "$ref": "#/$defs/refList" },
+    "boundary_state": { "$ref": "#/$defs/ref" },
+    "lookup_profile": { "$ref": "#/$defs/ref" },
+    "generation_rule": { "$ref": "#/$defs/refList" },
+    "modification_rule": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ADD_OBJECT", "REMOVE_OBJECT", "REPLACE_OBJECT", "MOVE_OBJECT", "RESIZE_OBJECT",
+          "RECOLOR_OBJECT", "CHANGE_COMPOSITION", "CHANGE_LAYER", "CHANGE_LIGHT_STATE",
+          "CHANGE_REGION", "CHANGE_RELATIONSHIP"
+        ]
+      }
+    },
+    "reconstruction_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "rule_ref", "target_equivalence"],
+      "properties": {
+        "scope": {
+          "enum": ["PARTIAL_RECONSTRUCTION", "REGION_RECONSTRUCTION", "OBJECT_RECONSTRUCTION", "FULL_RECONSTRUCTION", "ON_DEMAND_RECONSTRUCTION"]
+        },
+        "rule_ref": { "$ref": "#/$defs/ref" },
+        "target_equivalence": { "$ref": "#/$defs/ref" }
+      }
+    },
+    "verification_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "verifier_ref"],
+      "properties": {
+        "mode": {
+          "enum": ["PIXEL_EXACT", "STRUCTURAL_EXACT", "COMPOSITION_EQUIVALENT", "OBJECT_EQUIVALENT", "COLOR_VECTOR_EQUIVALENT", "REGION_EQUIVALENT", "STATE_EQUIVALENT"]
+        },
+        "verifier_ref": { "$ref": "#/$defs/ref" }
+      }
+    }
+  },
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1 },
+    "refList": { "type": "array", "items": { "$ref": "#/$defs/ref" }, "uniqueItems": true },
+    "integerVector": { "type": "array", "items": { "type": "integer" }, "minItems": 1 },
+    "integerTensor": {
+      "type": "array",
+      "items": { "type": "array", "items": { "type": "integer" }, "minItems": 1 },
+      "minItems": 1
+    }
+  }
+}
