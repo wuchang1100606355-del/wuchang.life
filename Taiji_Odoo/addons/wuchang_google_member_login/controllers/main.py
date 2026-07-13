@@ -6,6 +6,8 @@ from urllib.request import Request, urlopen
 from odoo import http
 from odoo.http import request
 
+from ..services.oauth_config import build_callback_uri
+
 
 GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
@@ -74,8 +76,12 @@ class WuchangGoogleMemberLogin(http.Controller):
         return (configured or web_base_url or request.httprequest.host_url).rstrip("/")
 
     def _redirect_uri(self):
-        configured = self._param("wuchang_google_member_login.redirect_uri")
-        return configured or f"{self._base_url()}/google/member/callback"
+        return build_callback_uri(
+            explicit_redirect_uri=self._param("wuchang_google_member_login.redirect_uri"),
+            configured_base_url=self._param("wuchang_google_member_login.base_url"),
+            web_base_url=self._param("web.base.url"),
+            request_base_url=request.httprequest.host_url,
+        )
 
     @http.route("/google/member/login", type="http", auth="public", csrf=False)
     def google_member_login(self, **kw):
@@ -134,8 +140,8 @@ class WuchangGoogleMemberLogin(http.Controller):
             )
 
         provider = self._google_provider()
-        client_secret = self._param("wuchang_google_member_login.client_secret")
-        if not provider or not provider.enabled or not provider.client_id or not client_secret:
+        secret_value = self._param("wuchang_google_member_login.client_secret")
+        if not provider or not provider.enabled or not provider.client_id or not secret_value:
             return self._status_page(
                 "Google 會員入口尚未完成正式串接",
                 "目前 Google OAuth 尚未完成正式設定。公開頁面不顯示技術細節，請洽系統管理員。",
@@ -147,7 +153,7 @@ class WuchangGoogleMemberLogin(http.Controller):
             {
                 "code": code,
                 "client_id": provider.client_id,
-                "client_secret": client_secret,
+                "client_secret": secret_value,
                 "redirect_uri": self._redirect_uri(),
                 "grant_type": "authorization_code",
             }
@@ -161,10 +167,10 @@ class WuchangGoogleMemberLogin(http.Controller):
         try:
             with urlopen(token_req, timeout=10) as response:
                 token_data = json.loads(response.read().decode("utf-8"))
-            access_token = token_data["access_token"]
+            access_value = token_data["access_token"]
             user_req = Request(
                 provider.data_endpoint or provider.validation_endpoint or GOOGLE_USERINFO_URL,
-                headers={"Authorization": f"Bearer {access_token}"},
+                headers={"Authorization": f"Bearer {access_value}"},
             )
             with urlopen(user_req, timeout=10) as response:
                 userinfo = json.loads(response.read().decode("utf-8"))

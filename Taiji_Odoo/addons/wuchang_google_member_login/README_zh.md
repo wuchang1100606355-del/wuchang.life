@@ -30,6 +30,19 @@
 
 若未設定上述兩者，才使用 `web.base.url`，最後才使用當前 request host。正式環境不得使用 loopback URL。
 
+## 正式設定工具
+
+工具位於 `tools/odoo/configure_google_member_provider.py`。預設 check 只讀取狀態；它會在 Odoo 容器內沿用官方 entrypoint 的既有資料庫連線設定，以 stdin 執行 Odoo shell，不使用本機 PostgreSQL socket、`psql` 或暫存檔。
+
+```bash
+python3 tools/odoo/configure_google_member_provider.py --plan
+python3 tools/odoo/configure_google_member_provider.py --check
+```
+
+Apply 僅更新既有 `auth_oauth.provider_google`，不會建立重複 Provider。它需要明確確認字串、公開 HTTPS base URL，以及由執行環境提供的 `WUCHANG_GOOGLE_CLIENT_ID`、`WUCHANG_GOOGLE_CLIENT_SECRET`；工具只輸出 `PRESENT`、`MISSING`、`INVALID_REF`、`INACTIVE` 與健康狀態，不輸出 credential 原文。
+
+管理員可由 **主權 AI 會員系統 → Google 登入健康狀態** 查看 Provider、Client ID、Secret、Callback URI、Public base URL 與登入健康狀態。該頁為唯讀狀態介面。
+
 Google Console 的 redirect URI 應對應：
 
 ```text

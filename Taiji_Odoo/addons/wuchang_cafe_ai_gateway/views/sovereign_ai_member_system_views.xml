@@ -38,4 +38,11 @@
               action="action_wuchang_total_product_operator_handoff"
               groups="base.group_user"
               sequence="40"/>
+
+    <menuitem id="menu_wuchang_sovereign_ai_google_member_settings"
+              name="Google 登入健康狀態"
+              parent="menu_wuchang_sovereign_ai_member_system"
+              action="wuchang_google_member_login.action_wuchang_google_member_settings"
+              groups="base.group_system"
+              sequence="50"/>
 </odoo>

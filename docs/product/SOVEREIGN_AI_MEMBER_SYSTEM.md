@@ -33,6 +33,7 @@ English name: **Sovereign AI Member System**
 | No-plaintext boundary | `tools/xiaoj_gemini_no_plaintext_candidate_packet.py` | Ref-only candidate packet and explicit no-plaintext flags |
 | Local execution gate | `tools/w7tp_packet_inference_runtime.py` | Local `ALLOW` / `HOLD` / `BLOCK` decision boundary |
 | Evidence and operator console | AI Eventbook and Total Product Handoff views | Existing backend actions exposed under one product menu |
+| Google login health | Google member settings view | Read-only Provider, credential-presence, callback, public-origin, and health states |
 
 The requested `Taiji_Odoo/addons/wuchang_member_ai_portal` path is not present in this checkout. This product integration therefore uses the verified login surface and existing Odoo modules; it does not create a parallel portal, public controller, or duplicate member model.
 
@@ -54,25 +55,27 @@ After the source is installed through the owner-approved Odoo change path, autho
 - **會員註冊審查** opens the existing registration list/form action.
 - **候選與證據鏈** opens the existing AI Eventbook action.
 - **操作員交接與健康狀態** opens the existing Total Product Handoff action.
+- **Google 登入健康狀態** opens the administrator-only, non-secret configuration status page.
 
 An operator must not treat a cloud response as approval. HOLD and manual-confirmation states remain local decisions. Any identity, payment, role, production write, or release action requires its existing human/local gate.
 
 ## Configuration
 
-- Configure Google member login through the existing module and provider-ref process. Do not place credentials in documentation or candidate packets.
+- Use `tools/odoo/configure_google_member_provider.py --plan` and `--check` before any configuration action. The tool reuses the container's existing Odoo database connection through the official entrypoint and Odoo shell stdin; it does not use a local PostgreSQL socket or a temporary script.
+- Apply mode updates only the existing `auth_oauth.provider_google` record and requires explicit operator confirmation plus environment-provided credential values. It never prints those values.
 - Keep member data, credential material, cookies, and session secrets local.
 - Use only `member_ref`, `intent_code`, schema refs, policy refs, evidence refs, and other de-identified technical context for cloud candidates.
 - Preserve existing Odoo access groups for registration review and backend actions.
 
 ## Installation and upgrade boundary
 
-This changeset is source-only and introduces no Python model field or schema change. `DB_MIGRATION_REQUIRED=NO` for these files. Installation still requires an owner-approved Odoo module update, which is outside this task because live DB writes, module updates, deploys, and restarts are prohibited by repository policy.
+The Google administrator fields are computed, non-stored status fields, so this source completion introduces no persistent business-model field or custom migration. Installation still requires an owner-approved Odoo module update, which is outside this local completion stage.
 
 Safe owner sequence:
 
 1. Review the exact commit and changed files.
 2. Back up the target Odoo database according to the existing operator procedure.
-3. Use the established Odoo module-update path for `wuchang_member_registration` and `wuchang_cafe_ai_gateway` in an approved maintenance window.
+3. Use the established Odoo module-update path for `wuchang_member_registration`, `wuchang_google_member_login`, and `wuchang_cafe_ai_gateway` in an approved maintenance window.
 4. Verify login, registration, Google configuration, menu visibility, access rules, AI Eventbook, Total Product Handoff, and Odoo health.
 5. If any live route, access rule, or health check fails, keep production state at HOLD and preserve the evidence.
 
@@ -81,7 +84,9 @@ Safe owner sequence:
 ```bash
 python3 -m py_compile scripts/verify/verify_sovereign_ai_member_product.py
 python3 scripts/verify/verify_sovereign_ai_member_product.py
+python3 scripts/verify/verify_sovereign_ai_member_local_completion.py
 python3 -m pytest -q tests/test_sovereign_ai_member_product.py
+python3 -m pytest -q tests/test_google_member_provider_configuration.py tests/test_sovereign_ai_member_end_to_end_local_flow.py
 ```
 
 The verifier parses the changed XML and manifest, verifies source routes/actions, checks candidate-only and local-gate markers, and performs a changed-surface forbidden-copy scan. It does not write a database or call a live service.

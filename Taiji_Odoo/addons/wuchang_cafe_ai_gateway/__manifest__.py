@@ -11,6 +11,7 @@
         "point_of_sale",
         "product",
         "wuchang_member_registration",
+        "wuchang_google_member_login",
     ],
     "data": [
         "security/ir.model.access.csv",

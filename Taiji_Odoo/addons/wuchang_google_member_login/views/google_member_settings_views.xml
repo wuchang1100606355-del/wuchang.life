@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wuchang_google_member_settings" model="ir.ui.view">
+        <field name="name">wuchang.google.member.res.config.settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <div class="app_settings_block" data-string="Google 會員登入" groups="base.group_system">
+                    <h2>Google 會員登入健康狀態</h2>
+                    <div class="alert alert-info" role="status">
+                        此頁只顯示狀態與非敏感 URI；不顯示 Client ID 或 Secret 原文。
+                    </div>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6">
+                            <div class="o_setting_box">
+                                <div class="o_setting_left">
+                                    <label for="google_member_login_health_state"/>
+                                </div>
+                                <div class="o_setting_right">
+                                    <field name="google_member_login_health_state" readonly="1"/>
+                                    <field name="google_member_provider_state" readonly="1"/>
+                                    <field name="google_member_provider_active_state" readonly="1"/>
+                                    <field name="google_member_client_id_state" readonly="1"/>
+                                    <field name="google_member_client_secret_state" readonly="1"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="o_setting_box">
+                                <div class="o_setting_left">
+                                    <label for="google_member_callback_uri"/>
+                                </div>
+                                <div class="o_setting_right">
+                                    <field name="google_member_callback_uri" readonly="1"/>
+                                    <field name="google_member_callback_uri_state" readonly="1"/>
+                                    <field name="google_member_public_base_url" readonly="1"/>
+                                    <field name="google_member_public_base_url_state" readonly="1"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning" role="alert">
+                        HOLD 時請使用正式設定工具更新既有 Provider；不得建立第二筆 Google Provider。
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_wuchang_google_member_settings" model="ir.actions.act_window">
+        <field name="name">Google 會員登入設定狀態</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{"module":"wuchang_google_member_login"}</field>
+    </record>
+</odoo>

@@ -31,6 +31,8 @@
           .wuchang-auth-card .btn-primary, .wuchang-auth-action.primary { border-color: #17466f; background: #17466f; color: #fff; }
           .wuchang-auth-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
           .wuchang-auth-action { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 14px; border: 1px solid #d8dee8; border-radius: 6px; color: #172033; background: #f8fafc; font-weight: 700; text-align: center; text-decoration: none; }
+          .wuchang-auth-guide { margin-top: 22px; padding: 16px; border: 1px solid #dbe7f4; background: #f8fafc; color: #334155; line-height: 1.65; }
+          .wuchang-auth-guide strong { display: block; color: #172033; margin-bottom: 6px; }
           .wuchang-auth-action.line { border-color: #04b900; color: #027a11; }
           .wuchang-auth-action.google { border-color: #d7b15b; color: #8a5a00; }
           .wuchang-auth-card .o_login_auth { display: none !important; }
@@ -67,6 +69,10 @@
                 <a class="wuchang-auth-action" href="/web/signup">會員註冊</a>
                 <a class="wuchang-auth-action line" href="/line/login">LINE 會員入口</a>
                 <a class="wuchang-auth-action google" href="/google/member/login">Google 會員入口</a>
+              </div>
+              <div class="wuchang-auth-guide" role="note">
+                <strong>操作說明</strong>
+                登入或完成會員註冊後，服務意圖會先由小J建立本地候選；雲端只回傳候選結果，正式操作仍由本地總場裁決。若顯示 HOLD、人工確認或錯誤，請保留參考代碼並由現場人員協助。
               </div>
             </div>
           </section>

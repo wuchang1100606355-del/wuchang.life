@@ -47,7 +47,14 @@ def verify_case(name: str, text: str, expected_intent: set[str], expected_decisi
     intent = packet_intent(result)
     check(result["STATE"] == "PASS_W7TP_PACKET_INFERENCE_RUNTIME", f"{name}_STATE")
     check(result["RUN_MODE"] == "MODEL_FREE_PACKET_BY_PACKET_INFERENCE", f"{name}_RUN_MODE")
-    check(all(value is False for value in result["SAFETY_FLAGS"].values()), f"{name}_SAFETY_FLAGS_FALSE")
+    safety_flags = result["SAFETY_FLAGS"]
+    side_effect_flags = {
+        key: value
+        for key, value in safety_flags.items()
+        if key != "CANONICAL_8D_VERIFIER_REQUIRED"
+    }
+    check(all(value is False for value in side_effect_flags.values()), f"{name}_SAFETY_FLAGS_FALSE")
+    check(safety_flags["CANONICAL_8D_VERIFIER_REQUIRED"] is True, f"{name}_CANONICAL_VERIFIER_REQUIRED")
     check(len(result["PACKET_CHAIN"]) == 8, f"{name}_EIGHT_PACKET_CHAIN")
     check(intent in expected_intent, f"{name}_INTENT")
     check(final in expected_decision, f"{name}_FINAL_DECISION")
@@ -72,7 +79,7 @@ def main() -> int:
     cases = [
         ("RECOMMEND", "我今天有點累，想喝不太苦的，幫我推薦", {"recommend_order"}, {"ALLOW", "HOLD"}),
         ("PAYMENT", "幫我直接結帳付款", {"payment_request"}, {"HOLD"}),
-        ("MEMBER", "我要查會員完整電話和地址", {"member_lookup_masked", "member_plaintext_request"}, {"BLOCK"}),
+        ("MEMBER", "我要查會員完整電話和地址", {"member_lookup_masked", "member_plaintext_request"}, {"HOLD"}),
         ("ALLERGY", "我對牛奶有點敏感，想喝順口的", {"recommend_order"}, {"HOLD"}),
         ("UNKNOWN", "xqz-??-000", {"unknown"}, {"HOLD"}),
         ("IDENTITY_CONTEXT", "你沒有我的資訊嗎", {"identity_context_query", "member_context_query"}, {"ALLOW_SAFE_CONTEXT", "ALLOW", "HOLD"}),
@@ -86,16 +93,28 @@ def main() -> int:
     check("payment_capture" in forbidden_actions(payment_result), "PAYMENT_CAPTURE_FORBIDDEN")
     check(payment_result["SAFETY_FLAGS"]["PAYMENT_CAPTURE"] is False, "PAYMENT_CAPTURE_FALSE")
     check(results[2]["SAFETY_FLAGS"]["MEMBER_PLAINTEXT_READ"] is False, "MEMBER_PLAINTEXT_READ_FALSE")
+    check(
+        "BLOCK" in results[2]["FINAL_VERIFIER"]["runtime_advisory"]["decisions"],
+        "MEMBER_PLAINTEXT_RUNTIME_ADVISORY_BLOCK",
+    )
     check(results[3]["PACKET_CHAIN"][4]["D7_risk"]["risk_code"] == "allergy", "ALLERGY_RISK_CODE")
     check(results[5]["FINAL_VERIFIER"]["decision"] != "BLOCK", "IDENTITY_CONTEXT_NOT_BLOCK")
     check(results[5]["SAFETY_FLAGS"]["MEMBER_PLAINTEXT_READ"] is False, "IDENTITY_CONTEXT_MEMBER_PLAINTEXT_READ_FALSE")
     check(results[6]["PACKET_CHAIN"][1]["D4_evidence"]["claimed_identity_packet"]["packet_type"] == "CLAIMED_IDENTITY_PACKET", "CLAIMED_IDENTITY_PACKET_PRESENT")
     check(results[6]["PACKET_CHAIN"][1]["D4_evidence"]["claimed_identity_packet"]["accepted_as_truth"] is False, "CLAIMED_IDENTITY_NOT_TRUSTED")
-    check("claimed identity requires verification" in results[6]["FINAL_VERIFIER"]["reasons"], "CLAIMED_IDENTITY_REQUIRES_VERIFICATION")
+    check(
+        "claimed identity requires verification"
+        in results[6]["FINAL_VERIFIER"]["runtime_advisory"]["reasons"],
+        "CLAIMED_IDENTITY_REQUIRES_VERIFICATION",
+    )
     check("trust_claimed_identity" in results[6]["PACKET_CHAIN"][5]["D5_execution"]["forbidden_actions"], "TRUST_CLAIMED_IDENTITY_FORBIDDEN")
     check("member_plaintext_read" in results[7]["PACKET_CHAIN"][5]["D5_execution"]["forbidden_actions"], "MEMBER_CONTEXT_MEMBER_PLAINTEXT_FORBIDDEN")
     check("show_member_plaintext" in results[7]["PACKET_CHAIN"][5]["D5_execution"]["forbidden_actions"], "MEMBER_CONTEXT_SHOW_PLAINTEXT_FORBIDDEN")
-    check("role_ref or authenticated context" in " ".join(results[8]["FINAL_VERIFIER"]["reasons"]), "ROLE_REQUIRES_CONTEXT")
+    check(
+        "role_ref or authenticated context"
+        in " ".join(results[8]["FINAL_VERIFIER"]["runtime_advisory"]["reasons"]),
+        "ROLE_REQUIRES_CONTEXT",
+    )
     check("member_plaintext_read" in results[8]["PACKET_CHAIN"][5]["D5_execution"]["forbidden_actions"], "ROLE_MEMBER_PLAINTEXT_FORBIDDEN")
     check(SAFETY_FLAGS["EXTERNAL_API_CALL"] is False, "EXTERNAL_API_CALL_FALSE")
     check(SAFETY_FLAGS["MODEL_REQUIRED"] is False, "MODEL_REQUIRED_FALSE")
