@@ -1,0 +1,41 @@
+<odoo>
+    <record id="action_wuchang_sovereign_ai_member_entry" model="ir.actions.act_url">
+        <field name="name">主權 AI 會員入口</field>
+        <field name="url">/web/login</field>
+        <field name="target">self</field>
+    </record>
+
+    <menuitem id="menu_wuchang_sovereign_ai_member_system"
+              name="主權 AI 會員系統"
+              parent="menu_wuchang_cafe_root"
+              groups="base.group_user"
+              sequence="5"/>
+
+    <menuitem id="menu_wuchang_sovereign_ai_member_entry"
+              name="會員入口"
+              parent="menu_wuchang_sovereign_ai_member_system"
+              action="action_wuchang_sovereign_ai_member_entry"
+              groups="base.group_user"
+              sequence="10"/>
+
+    <menuitem id="menu_wuchang_sovereign_ai_member_review"
+              name="會員註冊審查"
+              parent="menu_wuchang_sovereign_ai_member_system"
+              action="wuchang_member_registration.action_wuchang_member_registration"
+              groups="wuchang_member_registration.group_wuchang_member_staff"
+              sequence="20"/>
+
+    <menuitem id="menu_wuchang_sovereign_ai_evidence"
+              name="候選與證據鏈"
+              parent="menu_wuchang_sovereign_ai_member_system"
+              action="action_wuchang_cafe_ai_eventbook"
+              groups="base.group_user"
+              sequence="30"/>
+
+    <menuitem id="menu_wuchang_sovereign_ai_operator_handoff"
+              name="操作員交接與健康狀態"
+              parent="menu_wuchang_sovereign_ai_member_system"
+              action="action_wuchang_total_product_operator_handoff"
+              groups="base.group_user"
+              sequence="40"/>
+</odoo>

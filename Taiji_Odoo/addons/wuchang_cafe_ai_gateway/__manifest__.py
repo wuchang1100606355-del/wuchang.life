@@ -20,6 +20,7 @@
         "views/total_product_handoff_views.xml",
         "views/business_backend_optimization_views.xml",
         "views/member_ticket_payment_gate_views.xml",
+        "views/sovereign_ai_member_system_views.xml",
     ],
     "installable": True,
     "application": False,
