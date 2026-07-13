@@ -5,7 +5,7 @@
     "summary": "Google one-click member join/login for Wuchang governance.",
     "author": "WuChang / Taiji",
     "license": "LGPL-3",
-    "depends": ["base", "web", "wuchang_member_registration"],
+    "depends": ["base", "web", "auth_oauth", "wuchang_member_registration"],
     "data": [
         "security/ir.model.access.csv",
         "views/res_partner_views.xml",

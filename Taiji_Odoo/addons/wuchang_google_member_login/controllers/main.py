@@ -64,9 +64,14 @@ class WuchangGoogleMemberLogin(http.Controller):
     def _param(self, key):
         return request.env["ir.config_parameter"].sudo().get_param(key)
 
+    def _google_provider(self):
+        provider = request.env.ref("auth_oauth.provider_google", raise_if_not_found=False)
+        return provider.sudo() if provider else provider
+
     def _base_url(self):
         configured = self._param("wuchang_google_member_login.base_url")
-        return (configured or request.httprequest.host_url.rstrip("/")).rstrip("/")
+        web_base_url = self._param("web.base.url")
+        return (configured or web_base_url or request.httprequest.host_url).rstrip("/")
 
     def _redirect_uri(self):
         configured = self._param("wuchang_google_member_login.redirect_uri")
@@ -74,8 +79,8 @@ class WuchangGoogleMemberLogin(http.Controller):
 
     @http.route("/google/member/login", type="http", auth="public", csrf=False)
     def google_member_login(self, **kw):
-        client_id = self._param("wuchang_google_member_login.client_id")
-        if not client_id:
+        provider = self._google_provider()
+        if not provider or not provider.enabled or not provider.client_id:
             return self._status_page(
                 "Google 會員入口尚未完成正式串接",
                 "目前 Google 會員登入尚未完成正式設定。請改用現場協助註冊、LINE 入口，或洽店長與系統管理員。",
@@ -89,15 +94,15 @@ class WuchangGoogleMemberLogin(http.Controller):
         if group_packet_ref:
             request.session["wuchang_group_packet_ref"] = group_packet_ref
         params = {
-            "client_id": client_id,
+            "client_id": provider.client_id,
             "redirect_uri": self._redirect_uri(),
             "response_type": "code",
-            "scope": "openid email profile",
+            "scope": provider.scope or "openid profile email",
             "state": state,
             "access_type": "offline",
             "prompt": "select_account",
         }
-        return request.redirect(f"{GOOGLE_AUTH_URL}?{urlencode(params)}")
+        return request.redirect(f"{provider.auth_endpoint or GOOGLE_AUTH_URL}?{urlencode(params)}")
 
     @http.route("/google/member/callback", type="http", auth="public", csrf=False)
     def google_member_callback(self, **kw):
@@ -128,9 +133,9 @@ class WuchangGoogleMemberLogin(http.Controller):
                 status=400,
             )
 
-        client_id = self._param("wuchang_google_member_login.client_id")
+        provider = self._google_provider()
         client_secret = self._param("wuchang_google_member_login.client_secret")
-        if not client_id or not client_secret:
+        if not provider or not provider.enabled or not provider.client_id or not client_secret:
             return self._status_page(
                 "Google 會員入口尚未完成正式串接",
                 "目前 Google OAuth 尚未完成正式設定。公開頁面不顯示技術細節，請洽系統管理員。",
@@ -141,7 +146,7 @@ class WuchangGoogleMemberLogin(http.Controller):
         token_payload = urlencode(
             {
                 "code": code,
-                "client_id": client_id,
+                "client_id": provider.client_id,
                 "client_secret": client_secret,
                 "redirect_uri": self._redirect_uri(),
                 "grant_type": "authorization_code",
@@ -158,12 +163,12 @@ class WuchangGoogleMemberLogin(http.Controller):
                 token_data = json.loads(response.read().decode("utf-8"))
             access_token = token_data["access_token"]
             user_req = Request(
-                GOOGLE_USERINFO_URL,
+                provider.data_endpoint or provider.validation_endpoint or GOOGLE_USERINFO_URL,
                 headers={"Authorization": f"Bearer {access_token}"},
             )
             with urlopen(user_req, timeout=10) as response:
                 userinfo = json.loads(response.read().decode("utf-8"))
-        except Exception as exc:
+        except Exception:
             return self._status_page(
                 "Google 登入暫時無法完成",
                 "外部 Google 授權回應未通過。公開頁面不顯示技術細節，請洽系統管理員檢查設定。",

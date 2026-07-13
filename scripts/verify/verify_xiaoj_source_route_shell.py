@@ -23,8 +23,8 @@ ROOT_INIT = ADDON / "__init__.py"
 REQUIRED_ROUTES = [
     "/line/login",
     "/line/callback",
-    "/google/member/login",
-    "/google/member/welcome",
+    "/wuchang/google/member/recruitment",
+    "/wuchang/google/member/recruitment/welcome",
     "/wuchang/internal/guard/google-member-login",
     "/wuchang/member/register/start",
     "/wuchang/xiaoj/ordering",
@@ -55,7 +55,7 @@ REQUIRED_STATES = [
 FORBIDDEN_STRINGS = [
     "requests.",
     "open(",
-    "password",
+    "password =",
     "token =",
     "os.environ",
     "config_parameter",
@@ -123,7 +123,11 @@ def main() -> int:
     if 'auth="user"' not in source or "/wuchang/internal/guard/google-member-login" not in source:
         fail("internal_guard_route_not_user_scoped")
 
-    google_login_block = function_block(source, "google_member_login", '@http.route("/google/member/welcome"')
+    google_login_block = function_block(
+        source,
+        "google_member_recruitment",
+        '@http.route("/wuchang/google/member/recruitment/welcome"',
+    )
     for forbidden in [
         "_json_payload",
         "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",

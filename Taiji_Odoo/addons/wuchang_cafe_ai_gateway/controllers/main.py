@@ -420,8 +420,8 @@ class WuchangCafeAiGatewayController(http.Controller):
         payload = _json_payload("line_callback", ROUTE_STATE["line_callback"])
         return _page("LINE Callback", ROUTE_STATE["line_callback"], _auth_body("LINE Callback"), payload)
 
-    @http.route("/google/member/login", type="http", auth="public", csrf=False)
-    def google_member_login(self, **_kwargs):
+    @http.route("/wuchang/google/member/recruitment", type="http", auth="public", csrf=False)
+    def google_member_recruitment(self, **_kwargs):
         return _page(
             "五常會員招募 / Google 登入準備",
             ROUTE_STATE["google_login"],
@@ -429,8 +429,8 @@ class WuchangCafeAiGatewayController(http.Controller):
             state_label="會員招募開放",
         )
 
-    @http.route("/google/member/welcome", type="http", auth="public", csrf=False)
-    def google_member_welcome(self, **_kwargs):
+    @http.route("/wuchang/google/member/recruitment/welcome", type="http", auth="public", csrf=False)
+    def google_member_recruitment_welcome(self, **_kwargs):
         return _page(
             "Google 會員歡迎頁",
             ROUTE_STATE["google_welcome"],
