@@ -1,42 +1,55 @@
 services:
+  wuchang_os_pg:
+    image: postgres:15
+    container_name: wuchang_os_pg
+    restart: unless-stopped
+    env_file:
+      - ${TAIJI_ODOO_ENV_FILE:?Set the mode-600 production env file}
+    volumes:
+      - fused_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      w7tp.stage: FUSED
+      w7tp.live_cutover: AUTHORIZED
 
   wuchang_os_odoo_18:
     image: odoo:18.0
     container_name: wuchang_os_odoo_18
-    restart: always
+    restart: unless-stopped
+    depends_on:
+      wuchang_os_pg:
+        condition: service_healthy
     command:
       - odoo
       - -d
-      - postgres
-      - --db-filter=^postgres$
+      - ${POSTGRES_DB:-wuchang_odoo}
+      - --db-filter=^${POSTGRES_DB:-wuchang_odoo}$
       - --no-database-list
-    depends_on:
-      - wuchang_os_pg
-
-    ports:
-      - "127.0.0.1:8069:8069"
-
-    volumes:
-      - ./addons:/mnt/extra-addons
-      - ./odoo_data:/var/lib/odoo
-      - /mnt/c/Taiji_Runtime:/mnt/taiji_runtime:ro
-      - ./config/odoo.conf:/etc/odoo/odoo.conf:ro
-
+    env_file:
+      - ${TAIJI_ODOO_ENV_FILE:?Set the mode-600 production env file}
     environment:
       HOST: wuchang_os_pg
-      USER: odoo
-      PASSWORD: taiji_secret
-      PM3_IDENTITY_HMAC_SECRET: "2e5d42e5c3d3ad716d1fa18a5c41f814eddcae7e60b44fee4e5706490e478d21"
-
-  wuchang_os_pg:
-    image: postgres:15
-    container_name: wuchang_os_pg
-    restart: always
-
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: odoo
-      POSTGRES_PASSWORD: taiji_secret
-
+      USER: ${POSTGRES_USER:-odoo}
+    ports:
+      - "127.0.0.1:8069:8069"
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - ${TAIJI_ODOO_ADDONS_DIR:?Set the fused addon directory}:/mnt/extra-addons:ro
+      - ${TAIJI_ODOO_DATA_DIR:?Set the fused Odoo data directory}:/var/lib/odoo
+    labels:
+      w7tp.stage: FUSED
+      w7tp.live_cutover: AUTHORIZED
+
+volumes:
+  fused_pgdata:
+    external: true
+    name: taiji_odoo_fusion_candidate_pgdata
+
+networks:
+  default:
+    name: taiji_odoo_default
