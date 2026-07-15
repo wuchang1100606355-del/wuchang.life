@@ -1,0 +1,12 @@
+[Unit]
+Description=W7TP Small Agent
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/share/w7tp-small-agent/current/bin/w7tp-small-agent service-run
+Restart=on-failure
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

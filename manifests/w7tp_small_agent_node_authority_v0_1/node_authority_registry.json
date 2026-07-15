@@ -1,0 +1,192 @@
+{
+  "schema_version": "w7tp.small-agent.node-authority-registry/v0.1",
+  "run_id": "W7TP_SMALL_AGENT_ALL_NODE_DEPLOYMENT_V0_1_D27230ABA7A4",
+  "owner_confirmation": "YES",
+  "owner_authority_grant": "FORMAL_NON_ROUTER_NODES_W7TP_SMALL_AGENT_INSTALL_ONLY",
+  "owner_authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+  "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+  "formal_node_ids": [
+    "taiji01",
+    "MSI",
+    "penguin",
+    "localhost",
+    "DESKTOP-OHE05SC",
+    "wuchang-us-free-node",
+    "V3_MIX_EDLA_GL",
+    "RT-BE86U-7428"
+  ],
+  "not_in_active_canonical": [
+    {
+      "subject": "taiji03",
+      "reason_code": "NOT_IN_ACTIVE_CANONICAL"
+    },
+    {
+      "subject": "商米 POS",
+      "reason_code": "NOT_IN_ACTIVE_CANONICAL"
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "taiji01",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=taiji01",
+      "kind": "linux",
+      "hostname": "taiji01",
+      "address": "taiji01",
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:w7tp-small-agent-install/v0.1/taiji01",
+      "connection_method": "LOCAL_SHELL",
+      "deployment_eligibility": true,
+      "evidence_refs": [
+        "owner-prompt:OWNER_AUTHORITY_GRANT",
+        "active-canonical:node=taiji01",
+        "local-command:hostname:exact=taiji01",
+        "local-command:hostnamectl-static:exact=taiji01",
+        "local-command:tailscale-status-json:self:hostname=taiji01:ipv4=100.71.224.18:online=true"
+      ],
+      "alias_of": null,
+      "reason_code": "ELIGIBLE_OWNER_AUTHORIZED_LOCAL_SHELL"
+    },
+    {
+      "node_id": "MSI",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=MSI",
+      "kind": "windows",
+      "hostname": "MSI",
+      "address": null,
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:w7tp-small-agent-install/v0.1/MSI",
+      "connection_method": "SSH",
+      "deployment_eligibility": false,
+      "evidence_refs": [
+        "owner-prompt:OWNER_AUTHORITY_GRANT",
+        "active-canonical:node=MSI",
+        "local-command:tailscale-status-json:exact-hostname=MSI:ipv4=100.105.82.28:online=true",
+        "local-command:tailscale-status-json:exact-hostname=MSI:ipv4=100.107.187.76:online=true",
+        "local-command:ssh-G:alias=MSI:hostname=msi:port=22:parsed=true"
+      ],
+      "alias_of": null,
+      "reason_code": "HOLD_AMBIGUOUS_VERIFIED_ADDRESS"
+    },
+    {
+      "node_id": "penguin",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=penguin",
+      "kind": "linux",
+      "hostname": "penguin",
+      "ssh_user": "taiji_02",
+      "address": "100.111.139.7",
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:w7tp-small-agent-install/v0.1/penguin",
+      "connection_method": "SSH",
+      "deployment_eligibility": true,
+      "evidence_refs": [
+        "owner-prompt:OWNER_AUTHORITY_GRANT",
+        "active-canonical:node=penguin",
+        "local-command:tailscale-status-json:exact-hostname=penguin:ipv4=100.111.139.7:online=true",
+        "local-command:ssh-G:alias=penguin:hostname=penguin:port=22:parsed=true"
+      ],
+      "alias_of": null,
+      "reason_code": "READY_FOR_DEPLOYMENT"
+    },
+    {
+      "node_id": "localhost",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=localhost",
+      "kind": "iOS",
+      "hostname": "localhost",
+      "address": "100.94.212.10",
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:w7tp-small-agent-install/v0.1/localhost",
+      "connection_method": null,
+      "deployment_eligibility": false,
+      "evidence_refs": [
+        "owner-prompt:OWNER_AUTHORITY_GRANT",
+        "active-canonical:node=localhost",
+        "local-command:tailscale-status-json:exact-hostname=localhost:ipv4=100.94.212.10:online=true",
+        "identity-comparison:localhost-is-distinct-ios-peer-from-taiji01"
+      ],
+      "alias_of": null,
+      "reason_code": "HOLD_UNSUPPORTED_DEPLOYMENT_TRANSPORT"
+    },
+    {
+      "node_id": "DESKTOP-OHE05SC",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=DESKTOP-OHE05SC",
+      "kind": "linux",
+      "hostname": "DESKTOP-OHE05SC",
+      "address": null,
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:w7tp-small-agent-install/v0.1/DESKTOP-OHE05SC",
+      "connection_method": null,
+      "deployment_eligibility": false,
+      "evidence_refs": [
+        "owner-prompt:OWNER_AUTHORITY_GRANT",
+        "active-canonical:node=DESKTOP-OHE05SC",
+        "local-command:tailscale-status-json:exact-hostname=DESKTOP-OHE05SC:ipv4=100.76.49.107:online=false",
+        "local-command:tailscale-status-json:exact-hostname=DESKTOP-OHE05SC:ipv4=100.89.229.2:online=false",
+        "local-command:ssh-G:alias=DESKTOP-OHE05SC:hostname=desktop-ohe05sc:port=22:parsed=true"
+      ],
+      "alias_of": null,
+      "reason_code": "HOLD_AMBIGUOUS_VERIFIED_ADDRESS"
+    },
+    {
+      "node_id": "wuchang-us-free-node",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=wuchang-us-free-node",
+      "kind": "linux",
+      "hostname": "wuchang-us-free-node",
+      "address": "100.94.209.106",
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:w7tp-small-agent-install/v0.1/wuchang-us-free-node",
+      "connection_method": null,
+      "deployment_eligibility": false,
+      "evidence_refs": [
+        "owner-prompt:OWNER_AUTHORITY_GRANT",
+        "active-canonical:node=wuchang-us-free-node",
+        "local-command:tailscale-status-json:exact-hostname=wuchang-us-free-node:ipv4=100.94.209.106:online=false",
+        "local-command:ssh-G:alias=wuchang-us-free-node:hostname=wuchang-us-free-node:port=22:parsed=true"
+      ],
+      "alias_of": null,
+      "reason_code": "HOLD_NODE_UNREACHABLE"
+    },
+    {
+      "node_id": "V3_MIX_EDLA_GL",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=V3_MIX_EDLA_GL",
+      "kind": "android",
+      "hostname": "V3_MIX_EDLA_GL",
+      "address": "100.98.69.115",
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:w7tp-small-agent-install/v0.1/V3_MIX_EDLA_GL",
+      "connection_method": null,
+      "deployment_eligibility": false,
+      "evidence_refs": [
+        "owner-prompt:OWNER_AUTHORITY_GRANT",
+        "active-canonical:node=V3_MIX_EDLA_GL",
+        "local-command:tailscale-status-json:exact-hostname=V3_MIX_EDLA_GL:ipv4=100.98.69.115:online=false",
+        "local-command:ssh-G:alias=V3_MIX_EDLA_GL:hostname=v3_mix_edla_gl:port=22:parsed=true"
+      ],
+      "alias_of": null,
+      "reason_code": "HOLD_UNSUPPORTED_DEPLOYMENT_TRANSPORT"
+    },
+    {
+      "node_id": "RT-BE86U-7428",
+      "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json#node=RT-BE86U-7428",
+      "kind": "ASUSWRT-Merlin router",
+      "hostname": "RT-BE86U-7428",
+      "address": "192.168.50.1",
+      "authority": "OWNER_AUTHORIZED",
+      "authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
+      "observation_domain": "observation-domain:router-read-only/v0.1/RT-BE86U-7428",
+      "connection_method": "ROUTER_READ_ONLY",
+      "deployment_eligibility": false,
+      "evidence_refs": [
+        "owner-prompt:ROUTER_WRITE=NO",
+        "active-canonical:node=RT-BE86U-7428:address=192.168.50.1:ssh-port=2222"
+      ],
+      "alias_of": null,
+      "reason_code": "HOLD_ROUTER_WRITE_NOT_AUTHORIZED"
+    }
+  ]
+}

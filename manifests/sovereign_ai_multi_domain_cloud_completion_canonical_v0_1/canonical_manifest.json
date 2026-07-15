@@ -1,0 +1,38 @@
+{
+  "canonical_scope": "SOVEREIGN_AI_MULTI_DOMAIN_CLOUD_COMPLETION_GOVERNANCE",
+  "canonical_version": "v0.1",
+  "cloud_completion": "SUPPORTED_AS_CANDIDATE_ONLY",
+  "domains": {
+    "COMMERCE": "ACTIVE_CANONICAL",
+    "COMMUNITY": "ACTIVE_CANONICAL",
+    "PROPERTY": "ACTIVE_CANONICAL"
+  },
+  "owner_confirmation": "YES",
+  "patent_candidate_review_required": true,
+  "run_id": "SOVEREIGN_AI_MULTI_DOMAIN_CLOUD_COMPLETION_CANONICAL_V0_1",
+  "schema_version": "sovereign-ai.multi-domain-cloud-completion-canonical-manifest/0.1",
+  "semantic_locks": {
+    "ALLOW_ONLY_COMMIT": "REQUIRED",
+    "CLOUD_COMPLETION": "SUPPORTED_AS_CANDIDATE_ONLY",
+    "CLOUD_LLM_AUTHORITY": "NONE",
+    "D4_EVIDENCE_GATE": "REQUIRED",
+    "D6_PRIVACY_GATE": "REQUIRED",
+    "D8_ADJUDICATION": "REQUIRED",
+    "DB_WRITE": "OWNER_OR_FORMAL_GATE_REQUIRED",
+    "FINANCIAL_ATTRIBUTES": "FINANCIAL_REVIEW_REQUIRED",
+    "LEGAL_ATTRIBUTES": "LEGAL_REVIEW_REQUIRED",
+    "OWNER_ATTRIBUTES": "OWNER_CONFIRMATION_REQUIRED",
+    "SENSITIVE_ATTRIBUTES": "PRIVACY_RESTRICTED",
+    "TOTAL_FIELD_GATEWAY": "REQUIRED",
+    "XIAOJ_FINAL_AUTHORITY": "NO"
+  },
+  "side_effects": {
+    "db_write": false,
+    "deploy": false,
+    "restart": false,
+    "router_write": false
+  },
+  "source_policy": "runtime/total_field/candidate/sovereign_ai_domain_completion_policy_v0_1.json",
+  "source_policy_sha256": "795d86f1ab04047a4c212fa6c11231539119b5a0b96561981902d67aabad868a",
+  "status": "ACTIVE_CANONICAL"
+}

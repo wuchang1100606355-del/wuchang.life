@@ -75,6 +75,46 @@ def verify_scene_case(name: str, text: str, expected_scene: set[str]) -> dict:
     return result
 
 
+def verify_d3_replay() -> dict:
+    inputs = {
+        "text": "固定 D3 runtime verifier replay input",
+        "branch": "cafe_main",
+        "actor_role": "counter_ai",
+        "channel": "counter_voice",
+        "event_id": "evt-runtime-verifier-replay-001",
+        "logical_time": "logical:runtime-verifier-replay:001",
+    }
+    first = run(**inputs)
+    second = run(**inputs)
+    first_packet = first["PACKET_CHAIN"][0]
+    second_packet = second["PACKET_CHAIN"][0]
+    first_metadata = first["D3_TRANSITION_METADATA"]
+    second_metadata = second["D3_TRANSITION_METADATA"]
+    legacy_packet_keys = {
+        "packet_type", "version", "step", "parent_packet_hash",
+        "D1_intent", "D2_state", "D3_coordinate", "D4_evidence",
+        "D5_execution", "D6_gt", "D7_risk", "D8_envelope",
+    }
+
+    check(first_packet["D3_coordinate"] == second_packet["D3_coordinate"], "D3_REPLAY_COORDINATE_MATCH")
+    check(first_metadata["committed"] == second_metadata["committed"], "D3_REPLAY_COMMITTED_MATCH")
+    check(first_metadata["final_decision"] == second_metadata["final_decision"], "D3_REPLAY_DECISION_MATCH")
+    check(first_metadata["transition_hash"] == second_metadata["transition_hash"], "D3_REPLAY_HASH_MATCH")
+    check(first_metadata["final_decision"] == "ALLOW", "D3_REPLAY_ALLOW")
+    check(first_metadata["commit_applied"] is True, "D3_REPLAY_COMMIT_APPLIED")
+    check(first_packet["D3_coordinate"] == first_metadata["committed"], "D3_REPLAY_ALLOW_COMMITTED")
+    check("D3_transition_metadata" not in first_packet["D3_coordinate"], "D3_REPLAY_BODY_CLEAN")
+    check(legacy_packet_keys.issubset(first_packet), "D3_REPLAY_LEGACY_SCHEMA_COMPATIBLE")
+    return {
+        "coordinate_match": True,
+        "committed_match": True,
+        "decision_match": True,
+        "hash_match": True,
+        "d3_body_clean": True,
+        "legacy_schema_compatible": True,
+    }
+
+
 def main() -> int:
     cases = [
         ("RECOMMEND", "我今天有點累，想喝不太苦的，幫我推薦", {"recommend_order"}, {"ALLOW", "HOLD"}),
@@ -88,6 +128,7 @@ def main() -> int:
         ("ROLE_CONTEXT", "我的角色是什麼", {"role_context_query"}, {"HOLD"}),
     ]
     results = [verify_case(*case) for case in cases]
+    d3_replay = verify_d3_replay()
 
     payment_result = results[1]
     check("payment_capture" in forbidden_actions(payment_result), "PAYMENT_CAPTURE_FORBIDDEN")
@@ -185,6 +226,7 @@ def main() -> int:
             "CLAIMED_FOUNDER_CONTEXT": scene_context(claimed),
             "GENERAL_CHAT_CONTEXT": scene_context(general),
         },
+        "d3_replay": d3_replay,
         "safety_flags": SAFETY_FLAGS,
     }
     (report_dir / "VERIFY_REPORT.json").write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")

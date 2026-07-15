@@ -1,0 +1,199 @@
+{
+  "allowed_source_modes": [
+    "TOTAL_FIELD_PULL",
+    "LLM_PUSH",
+    "XIAOJ_LOCAL",
+    "RULE_LOOKUP",
+    "HUMAN_INPUT"
+  ],
+  "authority_forbidden_keys": [
+    "committed",
+    "commit_applied",
+    "D8",
+    "tfid",
+    "total_field_hash",
+    "db_write",
+    "deploy",
+    "restart",
+    "router_write",
+    "canonical_write",
+    "pointer_write",
+    "permission_escalation",
+    "physical_control"
+  ],
+  "cloud_completion": "SUPPORTED_AS_CANDIDATE_ONLY",
+  "decision_priority": [
+    "QUARANTINE",
+    "BLOCK",
+    "HOLD",
+    "ALLOW"
+  ],
+  "domains": {
+    "COMMERCE": [
+      "商品",
+      "服務",
+      "價格",
+      "POS",
+      "訂單",
+      "顧客候選輪廓",
+      "庫存",
+      "促銷",
+      "供應商",
+      "分店",
+      "工作流程",
+      "商業任務",
+      "營運指標"
+    ],
+    "COMMUNITY": [
+      "社區組織",
+      "居民服務",
+      "志工",
+      "派送",
+      "活動",
+      "公共空間",
+      "公積金",
+      "社區資產",
+      "社區通知",
+      "社區任務",
+      "場域節點",
+      "權限與角色"
+    ],
+    "PROPERTY": [
+      "建物",
+      "樓層",
+      "公共設施",
+      "設備",
+      "維修",
+      "巡檢",
+      "保全",
+      "清潔",
+      "能源",
+      "租賃",
+      "管理費",
+      "住戶／承租人權限",
+      "報修事件",
+      "物業節點"
+    ]
+  },
+  "gate_rules": {
+    "EVIDENCE_REQUIRED": {
+      "decision": "HOLD",
+      "evidence_required": true,
+      "human_confirmation_required": false,
+      "reason_code": "HOLD_DOMAIN_EVIDENCE_REQUIRED"
+    },
+    "FINANCIAL_REVIEW_REQUIRED": {
+      "decision": "HOLD",
+      "evidence_required": true,
+      "human_confirmation_required": true,
+      "reason_code": "HOLD_DOMAIN_FINANCIAL_REVIEW_REQUIRED"
+    },
+    "LEGAL_REVIEW_REQUIRED": {
+      "decision": "HOLD",
+      "evidence_required": true,
+      "human_confirmation_required": true,
+      "reason_code": "HOLD_DOMAIN_LEGAL_REVIEW_REQUIRED"
+    },
+    "OWNER_CONFIRMATION_REQUIRED": {
+      "decision": "HOLD",
+      "evidence_required": false,
+      "human_confirmation_required": true,
+      "reason_code": "HOLD_DOMAIN_OWNER_CONFIRMATION_REQUIRED"
+    },
+    "PRIVACY_RESTRICTED": {
+      "decision": "HOLD",
+      "evidence_required": true,
+      "human_confirmation_required": true,
+      "reason_code": "HOLD_DOMAIN_PRIVACY_RESTRICTED"
+    },
+    "SAFE_DERIVED": {
+      "decision": "ALLOW",
+      "evidence_required": false,
+      "human_confirmation_required": false,
+      "reason_code": "SAFE_DERIVED_CANDIDATE_ALLOWED"
+    },
+    "UNSUPPORTED": {
+      "decision": "QUARANTINE",
+      "evidence_required": false,
+      "human_confirmation_required": false,
+      "reason_code": "QUARANTINE_DOMAIN_ATTRIBUTE_UNSUPPORTED"
+    }
+  },
+  "restricted_attributes": {
+    "EVIDENCE_REQUIRED": [
+      "security_alarm_final_conclusion",
+      "equipment_safety_status",
+      "maintenance_completion_status",
+      "side_effect_trigger_field"
+    ],
+    "FINANCIAL_REVIEW_REQUIRED": [
+      "financial_amount",
+      "accounting_recognition",
+      "payment_status",
+      "bank_data"
+    ],
+    "LEGAL_REVIEW_REQUIRED": [
+      "ownership",
+      "property_right",
+      "leasehold_right",
+      "contract",
+      "legal_liability"
+    ],
+    "OWNER_CONFIRMATION_REQUIRED": [
+      "real_person_identity",
+      "ownership",
+      "property_right",
+      "leasehold_right",
+      "permission",
+      "access_control_result"
+    ],
+    "PRIVACY_RESTRICTED": [
+      "real_person_identity",
+      "member_plaintext",
+      "member_data",
+      "contact_data",
+      "address",
+      "bank_data",
+      "biometric_data",
+      "medical_or_mental_health_data"
+    ],
+    "SECRET_BLOCK": [
+      "password",
+      "token",
+      "raw_token",
+      "api_key",
+      "raw_key",
+      "private_key",
+      "credential"
+    ]
+  },
+  "run_id": "SOVEREIGN_AI_MULTI_DOMAIN_CLOUD_COMPLETION_CANDIDATE_V0_1",
+  "runtime_hold_marker_keys": [
+    "domain_evidence_required",
+    "domain_owner_confirmation_required",
+    "domain_privacy_restricted",
+    "domain_legal_review_required",
+    "domain_financial_review_required",
+    "domain_candidate_conflict",
+    "domain_unsupported"
+  ],
+  "schema_version": "sovereign-ai.domain-completion-policy.candidate/0.1",
+  "sensitivity_classes": [
+    "SAFE_DERIVED",
+    "EVIDENCE_REQUIRED",
+    "OWNER_CONFIRMATION_REQUIRED",
+    "PRIVACY_RESTRICTED",
+    "LEGAL_REVIEW_REQUIRED",
+    "FINANCIAL_REVIEW_REQUIRED",
+    "UNSUPPORTED"
+  ],
+  "side_effects": {
+    "canonical_write": false,
+    "db_write": false,
+    "deploy": false,
+    "pointer_write": false,
+    "restart": false,
+    "router_write": false
+  },
+  "status": "CANDIDATE"
+}

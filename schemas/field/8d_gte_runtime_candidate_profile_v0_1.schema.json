@@ -1,0 +1,474 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:field:8d-gte-runtime-candidate-profile:0.1",
+  "title": "8D-GTE Runtime Candidate Profile V0.1",
+  "description": "Closed candidate-only request and result profile compatible with the existing 8D-GTE representation contract.",
+  "$comment": "The gte property references schemas/field/8d_governance_tensor_expression_candidate.schema.json by its declared absolute identifier.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/runtime_request"
+    },
+    {
+      "$ref": "#/$defs/runtime_result"
+    }
+  ],
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "json_value": {
+      "oneOf": [
+        {
+          "type": [
+            "null",
+            "boolean",
+            "string",
+            "number"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/json_value"
+          }
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "event_ref",
+        "event_code",
+        "logical_time"
+      ],
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "event_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "event_code": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "logical_time": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        }
+      }
+    },
+    "resolved_fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "properties": {
+        "D1": {
+          "$ref": "#/$defs/json_value"
+        },
+        "D2": {
+          "$ref": "#/$defs/json_value"
+        },
+        "D3": {
+          "$ref": "#/$defs/json_value"
+        },
+        "D4": {
+          "$ref": "#/$defs/json_value"
+        },
+        "D5": {
+          "$ref": "#/$defs/json_value"
+        },
+        "D6": {
+          "$ref": "#/$defs/json_value"
+        },
+        "D7": {
+          "$ref": "#/$defs/json_value"
+        },
+        "D8": {
+          "$ref": "#/$defs/json_value"
+        }
+      }
+    },
+    "constraint_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constraint_ref",
+        "outcome",
+        "reason_code",
+        "affected_fields",
+        "evidence"
+      ],
+      "properties": {
+        "constraint_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "outcome": {
+          "enum": [
+            "PASS",
+            "HOLD",
+            "BLOCK",
+            "QUARANTINE"
+          ]
+        },
+        "reason_code": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "affected_fields": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5",
+              "D6",
+              "D7",
+              "D8"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/json_value"
+          }
+        }
+      }
+    },
+    "d3_transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transition_hash",
+        "event_id",
+        "logical_time",
+        "commit_applied",
+        "final_decision",
+        "decision_reason",
+        "rule_ref",
+        "verification_reason_code"
+      ],
+      "properties": {
+        "transition_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "event_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "logical_time": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/non_empty_string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "commit_applied": {
+          "type": "boolean"
+        },
+        "final_decision": {
+          "enum": [
+            "ALLOW",
+            "HOLD",
+            "BLOCK",
+            "QUARANTINE"
+          ]
+        },
+        "decision_reason": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "rule_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "verification_reason_code": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "runtime_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_schema_version",
+        "profile_type",
+        "gte",
+        "source_mode",
+        "event",
+        "rule_set_ref",
+        "resolved_fields",
+        "context",
+        "adi_requested"
+      ],
+      "properties": {
+        "profile_schema_version": {
+          "const": "8d-gte-runtime-candidate-profile/0.1"
+        },
+        "profile_type": {
+          "const": "RUNTIME_REQUEST"
+        },
+        "gte": {
+          "$ref": "urn:w7tp:schemas:field:8d-governance-tensor-expression:candidate:0.1"
+        },
+        "source_mode": {
+          "enum": [
+            "TOTAL_FIELD_PULL",
+            "LLM_PUSH"
+          ]
+        },
+        "event": {
+          "$ref": "#/$defs/event"
+        },
+        "rule_set_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "resolved_fields": {
+          "$ref": "#/$defs/resolved_fields"
+        },
+        "context": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        "adi_requested": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "properties": {
+            "gte": {
+              "properties": {
+                "lifecycle": {
+                  "const": "CANDIDATE"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "runtime_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 23,
+      "required": [
+        "profile_schema_version",
+        "profile_type",
+        "gte",
+        "schema_version",
+        "event_ref",
+        "observation_domain_ref",
+        "rule_set_ref",
+        "priority_policy_ref",
+        "previous",
+        "proposed",
+        "committed",
+        "fixed_point_status",
+        "final_decision",
+        "decision_reason_codes",
+        "commit_applied",
+        "iterations",
+        "state_fingerprints",
+        "constraint_results",
+        "d3_transition",
+        "state_ref",
+        "tfid",
+        "total_field_hash",
+        "consensus_mode"
+      ],
+      "properties": {
+        "profile_schema_version": {
+          "const": "8d-gte-runtime-candidate-profile/0.1"
+        },
+        "profile_type": {
+          "const": "RUNTIME_RESULT"
+        },
+        "gte": {
+          "$ref": "urn:w7tp:schemas:field:8d-governance-tensor-expression:candidate:0.1"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "event_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "observation_domain_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "rule_set_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "priority_policy_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "previous": {
+          "$ref": "#/$defs/resolved_fields"
+        },
+        "proposed": {
+          "$ref": "#/$defs/resolved_fields"
+        },
+        "committed": {
+          "$ref": "#/$defs/resolved_fields"
+        },
+        "fixed_point_status": {
+          "enum": [
+            "REACHED",
+            "NOT_REACHED",
+            "CYCLE_DETECTED",
+            "MAX_ITERATIONS_REACHED"
+          ]
+        },
+        "final_decision": {
+          "enum": [
+            "ALLOW",
+            "HOLD",
+            "BLOCK",
+            "QUARANTINE"
+          ]
+        },
+        "decision_reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "uniqueItems": true
+        },
+        "commit_applied": {
+          "type": "boolean"
+        },
+        "iterations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state_fingerprints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sha256"
+          }
+        },
+        "constraint_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraint_result"
+          }
+        },
+        "d3_transition": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/d3_transition"
+            }
+          ]
+        },
+        "state_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "tfid": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^tfid:candidate:v0\\.1:[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "total_field_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "consensus_mode": {
+          "const": "LOCAL_EQUIVALENCE_ONLY"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "commit_applied": {
+                "const": true
+              }
+            },
+            "required": [
+              "commit_applied"
+            ]
+          },
+          "then": {
+            "properties": {
+              "fixed_point_status": {
+                "const": "REACHED"
+              },
+              "final_decision": {
+                "const": "ALLOW"
+              },
+              "tfid": {
+                "type": "string",
+                "pattern": "^tfid:candidate:v0\\.1:[0-9a-f]{64}$"
+              },
+              "gte": {
+                "properties": {
+                  "lifecycle": {
+                    "const": "COMMITTED"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "final_decision": {
+                "enum": [
+                  "HOLD",
+                  "BLOCK",
+                  "QUARANTINE"
+                ]
+              },
+              "gte": {
+                "properties": {
+                  "lifecycle": {
+                    "const": "CANDIDATE"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

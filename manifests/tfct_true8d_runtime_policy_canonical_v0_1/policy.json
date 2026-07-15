@@ -1,0 +1,249 @@
+{
+  "adi_mode": "DISABLED_UNLESS_EXPLICIT_TEST_FIXTURE",
+  "allowed_source_modes": [
+    "TOTAL_FIELD_PULL",
+    "LLM_PUSH"
+  ],
+  "authority_forbidden_keys": [
+    "commit_applied",
+    "committed",
+    "tfid",
+    "total_field_hash"
+  ],
+  "candidate_only_sources": [
+    "LLM_PUSH",
+    "SMALL_TRANSPORT_AGENT",
+    "TOTAL_FIELD_PULL",
+    "XIAOJ_CANDIDATE"
+  ],
+  "commit_rule": {
+    "action": "COMMIT_PROPOSED_ONLY",
+    "final_decision": "ALLOW",
+    "fixed_point_status": "REACHED",
+    "status": "CANDIDATE"
+  },
+  "consensus_mode": "LOCAL_EQUIVALENCE_ONLY",
+  "constraint_hypergraph_ref": "constraints/tfct/runtime-hypergraph/v0_1",
+  "constraint_refs": [
+    {
+      "affected_fields": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "evaluator": "REQUIRED_FIELDS",
+      "order": 10,
+      "ref": "constraints/tfct/required_fields_v0_1",
+      "status": "CANDIDATE"
+    },
+    {
+      "affected_fields": [
+        "D4",
+        "D8"
+      ],
+      "evaluator": "AUTHORITY_GUARD",
+      "order": 20,
+      "ref": "constraints/tfct/authority_guard_v0_1",
+      "status": "CANDIDATE"
+    },
+    {
+      "affected_fields": [
+        "D6"
+      ],
+      "evaluator": "D6_SOVEREIGN_PRIVACY",
+      "order": 30,
+      "ref": "constraints/tfct/d6_sovereign_privacy_v0_1",
+      "status": "CANDIDATE"
+    },
+    {
+      "affected_fields": [
+        "D7"
+      ],
+      "evaluator": "D7_REFERENCE_ONLY",
+      "order": 40,
+      "ref": "constraints/tfct/d7_reference_only_v0_1",
+      "status": "CANDIDATE"
+    },
+    {
+      "affected_fields": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "evaluator": "OPEN_PROBLEM_GATE",
+      "order": 50,
+      "ref": "constraints/tfct/open_problem_gate_v0_1",
+      "status": "CANDIDATE"
+    }
+  ],
+  "convergence_operator_ref": "convergence/tfct/finite-fixed-point/v0_1",
+  "cycle_policy": {
+    "decision": "HOLD",
+    "fixed_point_status": "CYCLE_DETECTED",
+    "reason_code": "CONVERGENCE_CYCLE_DETECTED",
+    "status": "CANDIDATE"
+  },
+  "d7_allowed_reference_keys": [
+    "asset_ref",
+    "capability_ref",
+    "equivalence_ref",
+    "reconstruction_condition",
+    "reconstructor_ref",
+    "routing_ref",
+    "rule_ref",
+    "state_field_packet_ref",
+    "table_ref",
+    "template_ref"
+  ],
+  "d7_raw_channel_keys": [
+    "binary_payload",
+    "payload",
+    "raw_bytes",
+    "raw_channel_payload",
+    "raw_payload"
+  ],
+  "decision_priority": [
+    "QUARANTINE",
+    "BLOCK",
+    "HOLD",
+    "ALLOW"
+  ],
+  "dimension_refs": {
+    "D1_ref": "field/tfct/D1/v0_1",
+    "D2_ref": "field/tfct/D2/v0_1",
+    "D3_ref": "field/tfct/D3/v0_1",
+    "D4_ref": "field/tfct/D4/v0_1",
+    "D5_ref": "field/tfct/D5/v0_1",
+    "D6_ref": "field/tfct/D6/v0_1",
+    "D7_ref": "field/tfct/D7/v0_1",
+    "D8_ref": "field/tfct/D8/v0_1"
+  },
+  "distributed_consensus_status": "OPEN_PROBLEM",
+  "hard_risk_codes": [
+    "CANONICAL_WRITE_REQUESTED",
+    "DB_WRITE_REQUESTED",
+    "DEPLOY_REQUESTED",
+    "FORMAL_SUBMISSION_REQUESTED",
+    "MEMBER_PLAINTEXT_PRESENT",
+    "RAW_SECRET_PRESENT",
+    "RESTART_REQUESTED",
+    "ROUTER_WRITE_REQUESTED"
+  ],
+  "max_iterations": 8,
+  "open_problem_gates": [
+    {
+      "condition": "OBSERVATION_DOMAIN_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_OBSERVATION_DOMAIN_NOT_CONFIGURED",
+      "status": "CANDIDATE"
+    },
+    {
+      "condition": "RULE_SET_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_RULE_SET_NOT_CONFIGURED",
+      "status": "CANDIDATE"
+    },
+    {
+      "condition": "PRIORITY_POLICY_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_PRIORITY_POLICY_NOT_CONFIGURED",
+      "status": "CANDIDATE"
+    },
+    {
+      "condition": "DISTRIBUTED_CONSENSUS_REQUESTED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_DISTRIBUTED_CONSENSUS_OPEN_PROBLEM",
+      "status": "CANDIDATE"
+    },
+    {
+      "condition": "ADI_REQUESTED_WITHOUT_RESULT",
+      "decision": "HOLD",
+      "reason_code": "HOLD_ADI_NOT_CONFIGURED",
+      "status": "CANDIDATE"
+    },
+    {
+      "condition": "DIMENSION_PROJECTION_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_DIMENSION_PROJECTION_NOT_CONFIGURED",
+      "status": "CANDIDATE"
+    },
+    {
+      "condition": "CONSTRAINT_HYPERGRAPH_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_CONSTRAINT_HYPERGRAPH_NOT_CONFIGURED",
+      "status": "CANDIDATE"
+    },
+    {
+      "condition": "CONVERGENCE_OPERATOR_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_CONVERGENCE_OPERATOR_NOT_CONFIGURED",
+      "status": "CANDIDATE"
+    }
+  ],
+  "policy_version": "TFCT_TRUE8D_RUNTIME_POLICY_V0_1",
+  "priority_policy_ref": "priority/tfct/candidate/v0_1",
+  "rule_refs": {
+    "identity": {
+      "operation": "IDENTITY",
+      "ref": "rules/tfct/identity_v0_1",
+      "status": "CANDIDATE",
+      "test_only": false
+    },
+    "normalize": {
+      "operation": "NORMALIZE_JSON",
+      "ref": "rules/tfct/normalize_v0_1",
+      "status": "CANDIDATE",
+      "test_only": false
+    },
+    "test_cycle": {
+      "operation": "TEST_CYCLE_D5_MARKER",
+      "ref": "rules/tfct/test_cycle_v0_1",
+      "status": "CANDIDATE",
+      "test_only": true
+    },
+    "test_timeout": {
+      "operation": "TEST_TIMEOUT_D5_COUNTER",
+      "ref": "rules/tfct/test_timeout_v0_1",
+      "status": "CANDIDATE",
+      "test_only": true
+    }
+  },
+  "schema_version": "tfct.true8d.runtime-policy.candidate/0.1",
+  "sensitive_key_names": [
+    "api_key",
+    "credential",
+    "member_plaintext",
+    "password",
+    "private_key",
+    "raw_credentials",
+    "raw_key",
+    "raw_secret",
+    "raw_token",
+    "resident_plaintext",
+    "secret",
+    "token"
+  ],
+  "stable_decisions": [
+    "ALLOW",
+    "HOLD",
+    "BLOCK",
+    "QUARANTINE"
+  ],
+  "status": "CANDIDATE",
+  "timeout_policy": {
+    "decision": "HOLD",
+    "fixed_point_status": "MAX_ITERATIONS_REACHED",
+    "reason_code": "CONVERGENCE_TIMEOUT",
+    "status": "CANDIDATE"
+  }
+}

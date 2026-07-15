@@ -17,6 +17,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+try:
+    from .d3_coordinate_transition_candidate import transition_coordinate
+except ImportError:  # pragma: no cover - direct script execution
+    from d3_coordinate_transition_candidate import transition_coordinate
+
 
 SAFETY_FLAGS = {
     "SECRET_READ": False,
@@ -481,6 +486,8 @@ def blank_8d(packet_type: str, step: str, parent_packet_hash: str | None, contex
             "nonce": uuid.uuid4().hex,
         },
     }
+    if "D3_transition_metadata" in context:
+        packet["D3_transition_metadata"] = dict(context["D3_transition_metadata"])
     packet_hash = sha(packet)
     packet["D8_envelope"]["packet_hash"] = packet_hash
     packet["D8_envelope"]["seal"] = sha(packet_hash + ":" + packet["D8_envelope"]["nonce"])
@@ -543,14 +550,48 @@ class PacketStep:
 
 def transition_input_event(_: dict[str, Any] | None, ctx: dict[str, Any]) -> dict[str, Any]:
     text = ctx["text"]
+    initial_coordinate = {
+        "branch": ctx["branch"],
+        "actor_role": ctx["actor_role"],
+        "channel": ctx["channel"],
+    }
+    d7_reference = {
+        "rule_ref": "rules/input_event_v1",
+        "table_ref": "tables/input_event_v1",
+        "template_ref": "templates/input_event_v1",
+    }
+    transition = transition_coordinate(
+        previous_coord={},
+        event_code="STATE_UPDATE",
+        event_id=ctx["d3_event_id"],
+        logical_time=ctx["d3_logical_time"],
+        rule_ref=d7_reference["rule_ref"],
+        context={
+            "coordinate_delta": initial_coordinate,
+            "d7_reference": d7_reference,
+        },
+    )
+    coordinate = (
+        transition["committed"]
+        if transition["final_decision"] == "ALLOW"
+        else transition["previous"]
+    )
     base = {
         "ttl_seconds": ctx["ttl_seconds"],
         "D1_intent": {"intent_id": "input_event", "slots": {}, "confidence_level": "L0"},
         "D2_state": {"runtime_state": "input_received", "scene_context": ctx["scene_context"]},
-        "D3_coordinate": {"branch": ctx["branch"], "actor_role": ctx["actor_role"], "channel": ctx["channel"]},
+        "D3_coordinate": coordinate,
+        "D3_transition_metadata": {
+            "transition_hash": transition["transition_hash"],
+            "event_id": transition["event_id"],
+            "logical_time": transition["logical_time"],
+            "committed": transition["committed"],
+            "commit_applied": transition["commit_applied"],
+            "final_decision": transition["final_decision"],
+        },
         "D4_evidence": {"input_text_hash": sha(text), "input_length": len(text)},
         "D5_execution": {"candidate_only": True, "side_effects_allowed": False},
-        "D6_gt": {"rule_ref": "rules/input_event_v1", "table_ref": "tables/input_event_v1", "template_ref": "templates/input_event_v1"},
+        "D6_gt": d7_reference,
         "D7_risk": {"risk_code": "not_evaluated", "decision": "CONTINUE", "reasons": []},
     }
     return blank_8d("input_event_packet", "S0_INPUT_EVENT", None, base)
@@ -857,7 +898,21 @@ def run(
     authenticated_role_ref: str = "",
     signed_identity_packet_ref: str = "",
     canonical_verifier_result: dict[str, Any] | None = None,
+    event_id: str = "",
+    logical_time: Any = None,
 ) -> dict[str, Any]:
+    event_basis = {
+        "text": text,
+        "branch": branch,
+        "actor_role": actor_role,
+        "channel": channel,
+    }
+    resolved_event_id = event_id or "evt_" + sha(event_basis)[:32]
+    resolved_logical_time = (
+        logical_time
+        if logical_time is not None and logical_time != ""
+        else "logical:" + sha({"event_id": resolved_event_id, "step": "S0_INPUT_EVENT"})[:32]
+    )
     ctx = {
         "text": text,
         "branch": branch,
@@ -868,6 +923,8 @@ def run(
         "dev_identity_switch": dev_identity_switch,
         "authenticated_role_ref": authenticated_role_ref,
         "signed_identity_packet_ref": signed_identity_packet_ref,
+        "d3_event_id": resolved_event_id,
+        "d3_logical_time": resolved_logical_time,
         "scene_context": detect_scene_context(
             text,
             dev_role_ref=dev_role_ref,
@@ -900,6 +957,7 @@ def run(
         "RUN_MODE": "MODEL_FREE_PACKET_BY_PACKET_INFERENCE",
         "SAFETY_FLAGS": SAFETY_FLAGS,
         "INPUT_TEXT_HASH": sha(text),
+        "D3_TRANSITION_METADATA": packet_chain[0]["D3_transition_metadata"],
         "PACKET_CHAIN": packet_chain,
         "STEP_VERIFIERS": verifier_results,
         "FINAL_VERIFIER": final,

@@ -1,0 +1,165 @@
+{
+  "run_id": "TFCT_TRUE8D_RUNTIME_CANDIDATE_V0_1",
+  "gte_candidate": {
+    "schema_version": "8d-gte-candidate/0.1",
+    "lifecycle": "CANDIDATE",
+    "event_ref": "event:fixture:001",
+    "observation_domain_ref": "observation-domain:fixture:v0.1",
+    "dimensions": {
+      "D1_ref": "field/tfct/D1/v0_1",
+      "D2_ref": "field/tfct/D2/v0_1",
+      "D3_ref": "field/tfct/D3/v0_1",
+      "D4_ref": "field/tfct/D4/v0_1",
+      "D5_ref": "field/tfct/D5/v0_1",
+      "D6_ref": "field/tfct/D6/v0_1",
+      "D7_ref": "field/tfct/D7/v0_1",
+      "D8_ref": "field/tfct/D8/v0_1"
+    },
+    "constraint_hypergraph_ref": "constraints/tfct/runtime-hypergraph/v0_1",
+    "convergence_operator_ref": "convergence/tfct/finite-fixed-point/v0_1",
+    "priority_policy_ref": "priority/tfct/candidate/v0_1",
+    "fixed_point_status": "PENDING",
+    "verification": {
+      "final_decision": "PENDING",
+      "commit_applied": false
+    },
+    "tfs_result": null
+  },
+  "event": {
+    "event_id": "event-id:fixture:001",
+    "event_ref": "event:fixture:001",
+    "event_code": "STATE_UPDATE",
+    "logical_time": "logical-time:fixture:001"
+  },
+  "rule_set_ref": "rules/tfct/identity_v0_1",
+  "previous": {
+    "D1": {
+      "intent_ref": "intent:fixture:v0.1"
+    },
+    "D2": {
+      "state_ref": "state:previous:fixture:v0.1"
+    },
+    "D3": {
+      "node_ref": "node:fixture:a",
+      "x": 0,
+      "nested": {
+        "lane": "alpha"
+      }
+    },
+    "D4": {
+      "evidence_ref": "evidence:fixture:v0.1"
+    },
+    "D5": {
+      "execution_ref": "execution:fixture:v0.1"
+    },
+    "D6": {
+      "privacy_boundary_ref": "privacy:fixture:v0.1"
+    },
+    "D7": {
+      "rule_ref": "reconstruction-rule:fixture:v0.1",
+      "routing_ref": "routing:fixture:v0.1",
+      "reconstruction_condition": "condition:fixture:v0.1"
+    },
+    "D8": {
+      "adjudication_policy_ref": "d8-policy:fixture:v0.1"
+    }
+  },
+  "resolved_fields": {
+    "D1": {
+      "intent_ref": "intent:fixture:v0.1"
+    },
+    "D2": {
+      "state_ref": "state:candidate:fixture:v0.1"
+    },
+    "D3": {
+      "x": 1,
+      "nested": {
+        "lane": "beta"
+      }
+    },
+    "D4": {
+      "evidence_ref": "evidence:fixture:v0.1"
+    },
+    "D5": {
+      "execution_ref": "execution:fixture:v0.1"
+    },
+    "D6": {
+      "privacy_boundary_ref": "privacy:fixture:v0.1"
+    },
+    "D7": {
+      "rule_ref": "reconstruction-rule:fixture:v0.1",
+      "routing_ref": "routing:fixture:v0.1",
+      "reconstruction_condition": "condition:fixture:v0.1"
+    },
+    "D8": {
+      "adjudication_policy_ref": "d8-policy:fixture:v0.1"
+    }
+  },
+  "context": {
+    "request_ref": "request:fixture:001",
+    "d3_context": {
+      "projection_ref": "projection:fixture:v0.1"
+    }
+  },
+  "observation_domains": {
+    "observation-domain:fixture:v0.1": {
+      "configured": true,
+      "observations": {
+        "observation_ref": "observation:fixture:v0.1"
+      }
+    }
+  },
+  "small_agent": {
+    "manifest": {
+      "agent_ref": "agent:small-transport:fixture",
+      "agent_version": "0.1.0",
+      "protocol_version": "w7tp-candidate/0.1",
+      "supported_schema_version": "8d-gte-candidate/0.1",
+      "rule_ref": "reconstruction-rule:fixture:v0.1",
+      "reconstructor_ref": "reconstructor:fixture:v0.1",
+      "asset_ref": "asset:fixture:v0.1",
+      "observation_domain_ref": "observation-domain:fixture:v0.1",
+      "privacy_boundary_ref": "privacy:fixture:v0.1"
+    },
+    "candidate": {
+      "candidate_ref": "transport-candidate:fixture:001",
+      "schema_version": "8d-gte-candidate/0.1",
+      "protocol_version": "w7tp-candidate/0.1",
+      "required_agent_version": "0.1.0",
+      "rule_ref": "reconstruction-rule:fixture:v0.1",
+      "reconstructor_ref": "reconstructor:fixture:v0.1",
+      "reconstruction_mode": "L2",
+      "observation_domain_ref": "observation-domain:fixture:v0.1",
+      "privacy_boundary_ref": "privacy:fixture:v0.1",
+      "asset_refs": [
+        "asset:fixture:v0.1"
+      ],
+      "lookup_refs": [
+        "lookup:fixture:v0.1"
+      ],
+      "reconstruction_condition_refs": [
+        "condition:fixture:v0.1"
+      ],
+      "routing_refs": [
+        "routing:fixture:v0.1"
+      ],
+      "requires_raw_channel": false,
+      "raw_channel_ref": null
+    }
+  },
+  "adi_fixture": {
+    "requested": true,
+    "origin_ref": "origin:fixture:v0.1",
+    "metric_ref": "metric:fixture:v0.1",
+    "topology_ref": "topology:fixture:v0.1",
+    "quantization_rule_ref": "quantization:fixture:v0.1",
+    "tie_break_rule_ref": "tie-break:fixture:v0.1",
+    "strategy_ref": "adi-strategy:fixture:v0.1",
+    "strategy_version": "0.1.0-test",
+    "source_coordinate_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+    "candidate_refs": [
+      "coordinate:fixture:a:v0.1",
+      "coordinate:fixture:b:v0.1"
+    ]
+  }
+}
