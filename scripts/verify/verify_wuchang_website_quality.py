@@ -31,9 +31,9 @@ REQUIRED_SITE_SNIPPETS = [
     "會員招募",
     "聯絡我們",
     "系統資訊",
-    "預告版",
-    "招募中",
-    "部分功能準備中",
+    "公開資訊",
+    "內容持續更新",
+    "服務狀態透明揭露",
 ]
 
 REQUIRED_HOME_SNIPPETS = [
@@ -166,7 +166,7 @@ def main() -> None:
     if missing_home:
         fail(f"index missing homepage snippets: {missing_home}")
     sitemap = read(WEB / "sitemap.xml")
-    if "http://wuchang.life/member_recruitment/" not in sitemap:
+    if "https://wuchang.life/member_recruitment/" not in sitemap:
         fail("sitemap missing member recruitment page")
     check_activity_json()
     print("STATE=PASS_WUCHANG_WEBSITE_QUALITY")

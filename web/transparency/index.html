@@ -5,33 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="description" content="五常智慧雲公開透明狀態頁，白話列出目前已公開、展示中、沙盒中、尚未啟用與仍由總場HOLD的項目。">
+  <meta name="description" content="五常社區發展協會公開透明狀態頁，白話列出網站、公益內容、技術展示與尚未啟用服務的真實邊界。">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#1f6d60">
-  <link rel="canonical" href="http://wuchang.life/transparency/">
+  <link rel="canonical" href="https://wuchang.life/transparency/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="../site.webmanifest">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_TW">
   <meta property="og:site_name" content="五常智慧雲">
   <meta property="og:title" content="公開透明狀態｜五常智慧雲">
-  <meta property="og:description" content="白話列出五常智慧雲目前哪些已公開、哪些只是展示、哪些尚未啟用、哪些仍由總場HOLD。">
-  <meta property="og:url" content="http://wuchang.life/transparency/">
-  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta property="og:description" content="白話列出公開網站、公益內容、技術展示與尚未啟用服務的真實邊界。">
+  <meta property="og:url" content="https://wuchang.life/transparency/">
+  <meta property="og:image" content="https://wuchang.life/assets/wuchang-og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="公開透明狀態｜五常智慧雲">
-  <meta name="twitter:description" content="公開展示可看；會員明文、付款、DB寫入、部署與release仍HOLD。">
-  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:description" content="公開網站已提供 HTTPS；交易、會員核准與敏感資料服務未在公開頁啟用。">
+  <meta name="twitter:image" content="https://wuchang.life/assets/wuchang-og-card.png">
   <title>公開透明狀態｜五常智慧雲</title>
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@id": "http://wuchang.life/#organization",
+      "@id": "https://wuchang.life/#organization",
       "@type": "Organization",
       "name": "五常智慧雲",
-      "url": "http://wuchang.life/",
+      "url": "https://wuchang.life/",
       "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
       "sameAs": [],
       "knowsAbout": [
@@ -51,30 +51,30 @@
       }
     },
     {
-      "@id": "http://wuchang.life/#website",
+      "@id": "https://wuchang.life/#website",
       "@type": "WebSite",
       "name": "五常智慧雲",
-      "url": "http://wuchang.life/",
+      "url": "https://wuchang.life/",
       "inLanguage": "zh-Hant",
       "publisher": {
-        "@id": "http://wuchang.life/#organization"
+        "@id": "https://wuchang.life/#organization"
       }
     },
     {
-      "@id": "http://wuchang.life/transparency/#webpage",
+      "@id": "https://wuchang.life/transparency/#webpage",
       "@type": "WebPage",
-      "url": "http://wuchang.life/transparency/",
+      "url": "https://wuchang.life/transparency/",
       "name": "公開透明狀態｜五常智慧雲",
       "description": "五常智慧雲公開透明狀態頁，白話列出目前已公開、展示中、沙盒中、尚未啟用與仍由總場HOLD的項目。",
       "inLanguage": "zh-Hant",
       "isPartOf": {
-        "@id": "http://wuchang.life/#website"
+        "@id": "https://wuchang.life/#website"
       },
       "about": {
-        "@id": "http://wuchang.life/#organization"
+        "@id": "https://wuchang.life/#organization"
       },
       "publisher": {
-        "@id": "http://wuchang.life/#organization"
+        "@id": "https://wuchang.life/#organization"
       }
     }
   ]
@@ -298,10 +298,14 @@
 </head>
 <body>
   <header>
-    <a class="button" href="../">回到首頁</a>
-    <a class="button" href="../governance/">治理流程</a>
-    <a class="button" href="../faq/">FAQ</a>
-    <span class="statusPill">PRODUCTION_RELEASE=HOLD</span>
+    <nav aria-label="主要導覽">
+      <a class="button" href="../">首頁</a>
+      <a class="button" href="../about/">協會願景</a>
+      <a class="button" href="../programs/">計畫與服務</a>
+      <a class="button" href="../method/">技術方法</a>
+      <a class="button" href="../contact/">聯絡我們</a>
+    </nav>
+    <span class="statusPill">PUBLIC_WEBSITE=LIVE_HTTPS</span>
   </header>
 
   <main>
@@ -310,13 +314,13 @@
         <p class="eyebrow">Public transparency status</p>
         <h1 id="page-title">公開透明狀態</h1>
         <p class="lead">
-          這頁用白話列出五常智慧雲目前哪些已公開、哪些只是展示、哪些是沙盒、哪些尚未啟用。
+          這頁用白話列出五常社區發展協會目前哪些公開內容已上線、哪些只是技術展示、哪些服務尚未啟用。
           它給居民、協作夥伴與審查者一個不用讀技術封套也能理解的狀態頁。
         </p>
       </div>
       <div class="sealBox">
-        <strong>公開可看，不等於正式上線</strong>
-        <span>production release 仍由總場 HOLD；模型不能把展示狀態升級成正式授權。</span>
+        <strong>公開網站已上線，不等於所有服務都已啟用</strong>
+        <span>網站與 HTTPS 可用；交易、會員核准與正式資料處理仍依各自服務狀態與人類授權。</span>
       </div>
     </section>
 
@@ -382,9 +386,9 @@
             </tr>
             <tr>
               <td>正式上線</td>
-              <td><span class="tag stop">NOT_READY</span></td>
-              <td>目前只能審查與補證據。</td>
-              <td>HTTPS/443、evidence seal、release approval manifest、伺服器安全標頭仍待補齊；公開 HOLD manifest 已標示尚未正式上線。</td>
+              <td><span class="tag">PUBLIC_SITE_LIVE</span></td>
+              <td>透過 HTTPS 閱讀使命、計畫、技術、參與與透明資訊。</td>
+              <td>公開網站上線不代表交易、會員核准、資料庫寫入或其他後台服務已啟用。</td>
             </tr>
           </tbody>
         </table>

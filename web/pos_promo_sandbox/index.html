@@ -1,415 +1,271 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-product="SHANGPIN-LIAOGUO-CAFE-POS-DEMO">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="description" content="店端小J POS 行銷沙盒，展示記杯、會員確認、店員核銷與 POS 告警如何被整理成可審查流程；不扣款、不寫 production DB、不讀會員明文。">
-  <meta name="robots" content="index,follow">
-  <meta name="theme-color" content="#1f6d60">
-  <link rel="canonical" href="http://wuchang.life/pos_promo_sandbox/">
+  <meta name="description" content="上品聊國咖啡館重新總店商業 POS 產品示範：採 QuickClick 雲端原始匯出驗證的權威菜單，以合成交易情境操作來源選項、裝置端語句候選、記杯、離線佇列、8D 總場驗證及常駐紅隊；不付款、不寫 production DB。">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#162c27">
+  <link rel="canonical" href="https://business.wuchang.life/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <link rel="manifest" href="../site.webmanifest">
+  <link rel="stylesheet" href="../assets/cafe-pos-demo.css">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_TW">
-  <meta property="og:site_name" content="五常智慧雲">
-  <meta property="og:title" content="店端小J POS 行銷沙盒｜五常智慧雲">
-  <meta property="og:description" content="展示記杯、核銷與 POS 告警如何進入總場可審查流程；公開頁不做正式交易。">
-  <meta property="og:url" content="http://wuchang.life/pos_promo_sandbox/">
-  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="店端小J POS 行銷沙盒｜五常智慧雲">
-  <meta name="twitter:description" content="不扣款、不寫 production DB、不讀會員明文的店端展示沙盒。">
-  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
-  <title>店端小J POS 行銷沙盒｜五常智慧雲</title>
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@id": "http://wuchang.life/#organization",
-      "@type": "Organization",
-      "name": "五常智慧雲",
-      "url": "http://wuchang.life/",
-      "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
-      "sameAs": [],
-      "knowsAbout": [
-        "主權 AI 個人管家小J",
-        "八維度意圖場封包重構",
-        "人類意圖場治理 AI 幻覺",
-        "社區數位服務",
-        "物業管理與住戶服務"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "admin@wuchang.life",
-        "contactType": "public inquiry",
-        "availableLanguage": [
-          "zh-Hant"
-        ]
-      }
-    },
-    {
-      "@id": "http://wuchang.life/#website",
-      "@type": "WebSite",
-      "name": "五常智慧雲",
-      "url": "http://wuchang.life/",
-      "inLanguage": "zh-Hant",
-      "publisher": {
-        "@id": "http://wuchang.life/#organization"
-      }
-    },
-    {
-      "@id": "http://wuchang.life/pos_promo_sandbox/#webpage",
-      "@type": "WebPage",
-      "url": "http://wuchang.life/pos_promo_sandbox/",
-      "name": "店端小J POS 行銷沙盒｜五常智慧雲",
-      "description": "店端小J POS 行銷沙盒，展示記杯、會員確認、店員核銷與 POS 告警如何被整理成可審查流程；不扣款、不寫 production DB、不讀會員明文。",
-      "inLanguage": "zh-Hant",
-      "isPartOf": {
-        "@id": "http://wuchang.life/#website"
-      },
-      "about": {
-        "@id": "http://wuchang.life/#organization"
-      },
-      "publisher": {
-        "@id": "http://wuchang.life/#organization"
-      }
-    }
-  ]
-}
-  </script>
-  <style>
-    :root {
-      --ink: #17253a;
-      --muted: #607086;
-      --line: #d9e1ea;
-      --green: #1f6d60;
-      --blue: #2157a8;
-      --warn: #8a5a08;
-      --bad: #a33a3a;
-      --surface: #ffffff;
-      --page: #f3f7fb;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--page);
-      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
-      line-height: 1.65;
-    }
-
-    header,
-    main,
-    footer {
-      width: min(980px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    header {
-      padding: 28px 0 12px;
-    }
-
-    a {
-      color: inherit;
-    }
-
-    .publicNav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .back {
-      display: inline-flex;
-      min-height: 40px;
-      align-items: center;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      text-decoration: none;
-      font-weight: 800;
-    }
-
-    .hero,
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--surface);
-      box-shadow: 0 18px 42px rgba(22, 36, 54, 0.1);
-    }
-
-    .hero {
-      padding: clamp(22px, 5vw, 42px);
-      margin: 12px 0;
-    }
-
-    h1,
-    h2 {
-      line-height: 1.15;
-      margin: 0 0 12px;
-    }
-
-    .eyebrow {
-      color: var(--green);
-      font-weight: 900;
-      margin: 0 0 10px;
-    }
-
-    .lead {
-      color: var(--muted);
-      font-size: 18px;
-      max-width: 760px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin: 16px 0;
-    }
-
-    .card {
-      padding: 16px;
-    }
-
-    label {
-      display: block;
-      margin: 10px 0 4px;
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    input,
-    select,
-    button {
-      width: 100%;
-      min-height: 44px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 9px 11px;
-      font: inherit;
-    }
-
-    button {
-      margin-top: 10px;
-      color: #fff;
-      background: var(--green);
-      border-color: var(--green);
-      cursor: pointer;
-      font-weight: 900;
-    }
-
-    button.secondary {
-      color: var(--ink);
-      background: #eef4ff;
-      border-color: #cbd8f0;
-    }
-
-    button.warn {
-      background: var(--warn);
-      border-color: var(--warn);
-    }
-
-    .alert {
-      min-height: 48px;
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      border-radius: 8px;
-      background: #fff8e8;
-      color: var(--warn);
-      font-weight: 900;
-    }
-
-    pre {
-      min-height: 220px;
-      margin: 0;
-      padding: 14px;
-      border-radius: 8px;
-      color: #d8ffe8;
-      background: #101923;
-      overflow: auto;
-      white-space: pre-wrap;
-    }
-
-    footer {
-      color: var(--muted);
-      padding: 20px 0 32px;
-    }
-
-    @media (max-width: 720px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <meta property="og:site_name" content="上品聊國咖啡館">
+  <meta property="og:title" content="上品聊國咖啡館｜商業 POS 互動示範">
+  <meta property="og:description" content="QuickClick 權威菜單、來源選項、裝置端語句候選、無付款、無 production DB write 的咖啡館 POS 管理系統展示、除錯與優化驗證。">
+  <meta property="og:url" content="https://business.wuchang.life/">
+  <title>上品聊國咖啡館｜商業 POS 互動示範</title>
 </head>
 <body>
-  <header>
-    <nav class="publicNav" aria-label="公開網站導覽">
-      <a class="back" href="../">首頁</a>
-      <a class="back" href="../programs/">服務活動</a>
-      <a class="back" href="../total_field_review/">審查狀態</a>
-      <a class="back" href="../privacy.html">隱私邊界</a>
-    </nav>
+  <a class="skip-link" href="#main">跳至 POS 工作區</a>
+
+  <header class="product-header">
+    <a class="brand" href="#main" aria-label="上品聊國咖啡館 POS 示範首頁">
+      <span class="brand-mark" aria-hidden="true">聊</span>
+      <span><strong>上品聊國咖啡館</strong><small>POS CONTROL DESK</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="demo-badge">雲端權威菜單 · 合成交易</span>
+      <button class="quiet-button" id="reset-demo" type="button">重置班次</button>
+    </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <p class="eyebrow">POS sandbox / no payment capture</p>
-      <h1>店端小J POS 行銷沙盒</h1>
-      <p class="lead">
-        這個展示頁用來說明「記杯、會員確認、店員核銷、POS 告警」如何在小J與總場治理下被整理成可審查流程。
-        這不是正式交易系統，不會扣款、不會寫入 production DB，也不讀取會員明文。
-      </p>
+  <main id="main">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">BUSINESS POS · PRODUCT DEMO</p>
+        <h1 id="page-title">把櫃檯速度、店員判斷與總場治理放進同一個畫面</h1>
+        <p class="hero-copy">這是「上品聊國咖啡館重新總店」商業管理系統的可操作 POS 示範。商品代碼、中文名稱、原始分類、來源價以及口味、甜度、溫度等選項，皆取自總場封印之 QuickClick 雲端原始匯出；桌號、記杯、候選單與事件仍為合成資料。目前只作系統展示、除錯與優化驗證，不建立真實訂單、不扣款、不讀會員明文，也不寫入 production DB。</p>
+        <div class="public-purpose-declaration" aria-labelledby="public-purpose-title">
+          <span>PUBLIC TEST · COMMUNITY PURPOSE</span>
+          <h2 id="public-purpose-title">這不是一般咖啡店促銷頁</h2>
+          <p>這是由新北市三重區五常社區發展協會推動之數位系統開發團隊所進行的公開測試場域，以「上品聊國咖啡館」作為寫實營運案例，驗證商業管理、POS 與總場治理能否形成可稽核的產品。</p>
+          <p>由專利權利人規劃：待協會完成法人化，並經正式決議、權利移轉或授權契約及獨立會計制度確立後，未來系統訂閱所產生的可支配淨收益，除依正式契約支付少部分發明人授權金及必要營運成本外，原則上將納入規劃成立的「社區數位發展基金」，回到社區數位發展與公益用途。</p>
+          <strong>以商以智養公益、以商養公；以 AI 科技抵禦 AI 時代的衝擊，以科技服務社區。</strong>
+          <small>這是待完成法人化、協會決議、權利契約與獨立核算程序的治理承諾，不是募款、投資邀請或收益保證。</small>
+        </div>
+      </div>
+      <aside class="hero-proof" aria-label="示範安全邊界">
+        <span>DEPLOY TARGET</span>
+        <strong>business.wuchang.life</strong>
+        <dl>
+          <div><dt>正式訂單</dt><dd>0</dd></div>
+          <div><dt>付款擷取</dt><dd>0</dd></div>
+          <div><dt>DB 寫入</dt><dd>0</dd></div>
+        </dl>
+      </aside>
     </section>
 
-    <div class="grid">
-      <section class="card" aria-labelledby="order-title">
-        <h2 id="order-title">建立沙盒記杯</h2>
-        <label for="member">會員末碼</label>
-        <input id="member" value="1234" inputmode="numeric">
+    <section class="system-strip" aria-label="POS 系統即時狀態">
+      <div><small>班次</small><strong>SYN-SHIFT-07</strong></div>
+      <div><small>連線</small><strong id="connection-state">TAIJI01 LINKED / DEMO</strong></div>
+      <div><small>總場</small><strong id="total-field-state">HOLD · CANDIDATE ONLY</strong></div>
+      <div><small>常駐紅隊</small><strong id="strip-redteam-state">MONITORING CLEAR</strong></div>
+    </section>
 
-        <label for="product">商品</label>
-        <select id="product">
-          <option>拿鐵</option>
-          <option>美式</option>
-          <option>卡布</option>
-        </select>
-
-        <label for="qty">購買杯數</label>
-        <input id="qty" type="number" value="20" min="1">
-
-        <label for="promo">方案</label>
-        <select id="promo">
-          <option value="best">最佳優惠</option>
-          <option value="10">買十送一</option>
-          <option value="20">買二十送三</option>
-        </select>
-
-        <button type="button" onclick="createOrder()">建立記杯</button>
+    <section class="pos-workspace" aria-label="咖啡館 POS 工作區">
+      <section class="catalog-panel" aria-labelledby="catalog-title">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-overline">VERIFIED QUICKCLICK CLOUD EXPORT</p>
+            <h2 id="catalog-title">重新總店權威商品菜單</h2>
+          </div>
+          <span>58 筆啟用／64 筆來源</span>
+        </div>
+        <p class="boundary-note">來源：兩份 QuickClick 雲端 XLSX 原始位元組 SHA-256 完全一致。總場保留 64 筆原始商品；依商品策略停用 6 筆濾掛咖啡，公開操作 58 筆。來源中的重複列與選項代碼重用已隔離告警，不拿來猜商品。實際供應與價格仍由現場 POS 人員確認。</p>
+        <div class="category-tabs" role="tablist" aria-label="商品分類">
+          <button type="button" role="tab" aria-selected="true" data-category="all">全部</button>
+          <button type="button" role="tab" aria-selected="false" data-category="coffee">咖啡飲品</button>
+          <button type="button" role="tab" aria-selected="false" data-category="tea-other">茶與無咖啡因</button>
+          <button type="button" role="tab" aria-selected="false" data-category="food">餐食與點心</button>
+          <button type="button" role="tab" aria-selected="false" data-category="beans">咖啡豆</button>
+          <button type="button" role="tab" aria-selected="false" data-category="drip">濾掛咖啡 · 暫停販售</button>
+        </div>
+        <p class="subcategory-key">咖啡飲品細分為「義式咖啡」與「單品手沖」；每個啟用來源 SKU 只對應一張商品卡，尺寸、溫度、甜度與口味只作客製選項。商品身分先以 QuickClick 來源主鍵追溯；ADI 正式契約完成後只接入不透明 ref，不另造第二套商品碼。</p>
+        <div class="menu-grid" id="menu-grid" aria-live="polite"></div>
+        <noscript><p class="noscript">此產品示範需要瀏覽器 JavaScript；不會向伺服器送出任何訂單或個資。</p></noscript>
       </section>
 
-      <section class="card" aria-labelledby="flow-title">
-        <h2 id="flow-title">小J確認與店員核銷</h2>
-        <button class="secondary" type="button" onclick="memberAck()">會員端小J確認單據</button>
-        <button class="secondary" type="button" onclick="redeemRequest()">會員端小J請求核銷 1 杯</button>
-        <button class="warn" type="button" onclick="staffConfirm()">店員確認扣杯</button>
-        <button class="secondary" type="button" onclick="resetAll()">重置沙盒</button>
-      </section>
-    </div>
+      <section class="cart-panel" aria-labelledby="cart-title">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-overline">COUNTER CANDIDATE</p>
+            <h2 id="cart-title">櫃檯候選單</h2>
+          </div>
+          <span id="cart-count">0 項</span>
+        </div>
 
-    <div class="grid">
-      <section class="card" aria-labelledby="alert-title">
-        <h2 id="alert-title">POS 告警</h2>
-        <div id="alert" class="alert">等待事件</div>
+        <div class="order-context">
+          <label for="service-mode">服務方式
+            <select id="service-mode">
+              <option value="dine_in">內用 · 合成桌號 08</option>
+              <option value="takeaway">外帶 · 合成取餐號 A07</option>
+            </select>
+          </label>
+        </div>
+
+        <section class="intent-assistant" aria-labelledby="intent-title">
+          <div><p class="panel-overline">DEVICE INTENT ASSIST</p><h3 id="intent-title">人說一句，系統只填來源候選</h3></div>
+          <label for="intent-input">裝置端點單語句</label>
+          <textarea id="intent-input" rows="2" maxlength="120" placeholder="例如：招牌咖啡 大杯 少冰 半糖"></textarea>
+          <button class="secondary-button" id="parse-intent" type="button">解析為可覆核候選</button>
+          <p id="intent-status" role="status" aria-live="polite">輸入範例：招牌咖啡 大杯 少冰 半糖。語句只留在本裝置。</p>
+          <small>人類端採 Odoo 操作契約，AI 端採 ADI 固定候選索引展示；兩者最後都送入同一總場整流器。現階段未寫 Odoo、未載入 LLM、無網路傳送、無自動送單，production ADI 與正式 POS 寫單皆維持 HOLD；8D 只封裝整筆訂單候選。</small>
+        </section>
+
+        <section class="item-configurator" id="item-configurator" aria-labelledby="config-product-name" hidden>
+          <div class="config-heading">
+            <div><p class="panel-overline">SOURCE-BOUND OPTIONS</p><h3 id="config-product-name">商品選項</h3><small id="config-product-source"></small></div>
+            <strong id="config-price">NT$ 0</strong>
+          </div>
+          <div id="option-questions"></div>
+          <p class="config-summary" id="config-summary">等待來源選項</p>
+          <div class="config-actions">
+            <button class="quiet-button" id="cancel-config" type="button">取消</button>
+            <button class="primary-button" id="confirm-config" type="button" disabled>確認加入候選</button>
+          </div>
+        </section>
+
+        <div class="cart-lines" id="cart-lines">
+          <p class="empty-state">點選左側商品，建立本機記憶體中的合成候選。</p>
+        </div>
+        <div class="cart-total"><span>候選合計</span><strong id="cart-total">NT$ 0</strong></div>
+        <div class="cart-actions">
+          <button class="secondary-button" id="clear-cart" type="button">清除候選</button>
+          <button class="primary-button" id="build-candidate" type="button">建立 8D 訂單候選</button>
+        </div>
+        <p class="boundary-note">按下按鈕只在本頁建立 L3 候選，不會建立 Odoo／POS 訂單、不會付款，也不會寫入任何資料庫。</p>
       </section>
 
-      <section class="card" aria-labelledby="state-title">
-        <h2 id="state-title">狀態封包</h2>
-        <pre id="out"></pre>
-      </section>
-    </div>
+      <aside class="verification-panel" aria-labelledby="packet-title">
+        <div class="verification-heading">
+          <div>
+            <p class="panel-overline">TOTAL FIELD ENVELOPE</p>
+            <h2 id="packet-title">8D 候選封套</h2>
+          </div>
+          <span id="packet-state">EMPTY</span>
+        </div>
+        <dl class="packet-grid">
+          <div><dt>D1 意圖</dt><dd id="packet-d1">等待櫃檯候選</dd></div>
+          <div><dt>D2 狀態</dt><dd id="packet-d2">LINKED_DEMO</dd></div>
+          <div><dt>D3 座標</dt><dd id="packet-d3">SYN-SHIFT-07 / counter</dd></div>
+          <div><dt>D4 證據</dt><dd id="packet-d4">QUICKCLICK-M387676 · SHA256 18798f9fe998</dd></div>
+          <div><dt>D5 執行</dt><dd id="packet-d5">不執行正式交易</dd></div>
+          <div><dt>D6 生成式傳輸</dt><dd id="packet-d6">L3 candidate reconstruction</dd></div>
+          <div><dt>D7 風險</dt><dd id="packet-d7">付款／價格／權限漂移</dd></div>
+          <div><dt>D8 封套</dt><dd id="packet-d8">HOLD · FORMAL POS RELEASE</dd></div>
+        </dl>
+        <div class="hash-box">
+          <span>CONTENT SHA-256</span>
+          <code id="candidate-hash">尚未建立候選</code>
+          <small>固定合成輸入產生固定內容雜湊；執行序號不混入 content hash。</small>
+        </div>
+      </aside>
+    </section>
+
+    <section class="operations-band" aria-labelledby="operations-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">DAILY OPERATIONS LAB</p><h2 id="operations-title">一個班次，三種寫實演練</h2></div>
+        <p>店員看操作、管理者看狀態、總場看證據與風險；三者不產生彼此漂移的訂單事實。</p>
+      </div>
+
+      <div class="workflow-tabs" role="tablist" aria-label="營運演練">
+        <button type="button" role="tab" aria-selected="true" data-workflow="counter">櫃檯覆核</button>
+        <button type="button" role="tab" aria-selected="false" data-workflow="cup">記杯核銷</button>
+        <button type="button" role="tab" aria-selected="false" data-workflow="offline">離線接班</button>
+      </div>
+
+      <div class="workflow-layout">
+        <article class="workflow-card" role="tabpanel" id="workflow-panel" tabindex="0">
+          <p class="panel-overline" id="workflow-overline">HUMAN COUNTER REVIEW</p>
+          <h3 id="workflow-title">店員先覆核，候選才可進展示佇列</h3>
+          <p id="workflow-description">核對品項、修飾與服務方式；即使覆核完成，仍不等於正式 POS 訂單或付款授權。</p>
+          <ol id="workflow-steps">
+            <li>選擇 QuickClick 權威商品與來源選項</li>
+            <li>建立具來源與風險的 8D 候選</li>
+            <li>由店員執行人工覆核</li>
+          </ol>
+          <div class="workflow-actions">
+            <button class="primary-button" id="staff-review" type="button">店員覆核候選</button>
+            <button class="secondary-button" id="queue-candidate" type="button">送入合成班次佇列</button>
+            <button class="danger-button" id="test-payment-boundary" type="button">測試付款阻擋</button>
+          </div>
+          <p class="action-result" id="action-result" role="status" aria-live="polite">等待操作</p>
+        </article>
+
+        <article class="cup-card" aria-labelledby="cup-title">
+          <div class="panel-heading">
+            <div><p class="panel-overline">SYNTHETIC CUP LEDGER</p><h3 id="cup-title">匿名記杯演練</h3></div>
+            <span id="cup-state">ACTIVE DEMO</span>
+          </div>
+          <p>案例 <strong>SYN-CUP-014</strong> · 招牌咖啡（P_49180031）· 無會員姓名、電話或末碼。</p>
+          <div class="cup-balance"><small>展示剩餘杯數</small><strong id="cup-remaining">12</strong></div>
+          <div class="workflow-actions">
+            <button class="secondary-button" id="request-redeem" type="button">提出核銷 1 杯</button>
+            <button class="primary-button" id="confirm-redeem" type="button" disabled>店員確認核銷</button>
+          </div>
+        </article>
+
+        <article class="queue-card" aria-labelledby="queue-title">
+          <div class="panel-heading">
+            <div><p class="panel-overline">EDGE CONTINUITY</p><h3 id="queue-title">離線候選佇列</h3></div>
+            <span id="queue-count">0 PACKETS</span>
+          </div>
+          <p>離線時仍可整理合成 L3 候選；沒有 taiji01 總場就不能形成正式 D8，回線後必須重驗與去重。</p>
+          <button class="secondary-button" id="toggle-offline" type="button">模擬離線</button>
+          <ol class="queue-flow">
+            <li class="is-complete">sealed snapshot</li>
+            <li id="edge-step">hash-chain queue</li>
+            <li id="revalidate-step">taiji01 revalidate</li>
+            <li>human D8</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section class="governance-band" aria-labelledby="governance-title">
+      <article class="redteam-monitor" id="cafe-redteam-monitor" data-state="MONITORING_CLEAR" role="status" aria-live="polite">
+        <div>
+          <p class="panel-overline">ALWAYS-ON REDTEAM</p>
+          <h2 id="governance-title">常駐紅隊觀點</h2>
+        </div>
+        <strong id="redteam-state">MONITORING CLEAR</strong>
+        <p id="redteam-message">每次商品、候選、覆核、記杯、離線與付款邊界轉換都重新檢驗。</p>
+        <code id="redteam-cycle">cycle 0 · INITIAL</code>
+        <small>使用裝置端確定性規則；不使用伺服器 LLM，不回傳原始輸入。</small>
+      </article>
+
+      <article class="event-card" aria-labelledby="event-title">
+        <div class="panel-heading"><div><p class="panel-overline">AUDIT TRAIL</p><h2 id="event-title">本機事件序列</h2></div><span>NO TIMESTAMP</span></div>
+        <ol id="event-log" aria-live="polite"><li>SEQ-000 · DEMO_READY</li></ol>
+      </article>
+    </section>
+
+    <section class="product-boundaries" aria-labelledby="boundary-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">REAL PRODUCT BOUNDARY</p><h2 id="boundary-title">目前做得到與刻意不做的事</h2></div>
+      </div>
+      <div class="boundary-grid">
+        <article><span class="status-ready">可操作</span><h3>櫃檯候選與人工覆核</h3><p>58 筆啟用商品、來源題組、合計、8D、hash、紅隊、記杯與離線流程可直接演練。</p></article>
+        <article><span class="status-hold">保持 HOLD</span><h3>正式 POS 與付款</h3><p>不建立真實訂單、不連金流、不開發票、不寫 Odoo／POS production DB。</p></article>
+        <article><span class="status-pending">待人工部署</span><h3>商業子網域</h3><p><code>business.wuchang.life</code> 仍需依 DNS 手動政策完成 DNS、HTTPS 與正式驗收。</p></article>
+        <article><span class="status-ready">裝置端</span><h3>AI 與資料最小化</h3><p>目前不載入模型；未來 LLM 僅在使用者設備形成候選，伺服器不執行 LLM。</p></article>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    SAFETY: PAYMENT_CAPTURE=FALSE · MEMBER_PLAINTEXT_READ=FALSE · DB_WRITE=FALSE · PRODUCTION_RELEASE=HOLD
+  <footer class="product-footer">
+    <div><strong>上品聊國咖啡館 POS Demo</strong><span>商業管理系統展示、除錯與優化驗證</span></div>
+    <p>FORMAL_POS_ORDER=FALSE · PAYMENT_CAPTURE=FALSE · MEMBER_PLAINTEXT=FALSE · DB_WRITE=FALSE · SERVER_LLM=FALSE</p>
   </footer>
 
-  <script>
-    let state = { status: "empty", ledger: null, alert: null, events: [] };
-
-    function h(s) {
-      let x = 0;
-      for (let i = 0; i < s.length; i += 1) x = ((x << 5) - x + s.charCodeAt(i)) | 0;
-      return "hash_" + Math.abs(x);
-    }
-
-    function bestBonus(q, p) {
-      const a = Math.floor(q / 10) * 1;
-      const b = Math.floor(q / 20) * 3;
-      if (p === "10") return { promo: "buy_10_get_1", bonus: a };
-      if (p === "20") return { promo: "buy_20_get_3", bonus: b };
-      return b >= a ? { promo: "buy_20_get_3", bonus: b } : { promo: "buy_10_get_1", bonus: a };
-    }
-
-    function log(e) {
-      state.events.push({ ts: new Date().toISOString(), event: e });
-      render();
-    }
-
-    function createOrder() {
-      const q = parseInt(document.getElementById("qty").value, 10);
-      const p = document.getElementById("promo").value;
-      const m = document.getElementById("member").value;
-      const prod = document.getElementById("product").value;
-      const r = bestBonus(q, p);
-      const id = "cup_" + Date.now();
-      state.ledger = {
-        cup_record_id: id,
-        member_display: "會員末碼 " + m,
-        product: prod,
-        paid_qty: q,
-        bonus_qty: r.bonus,
-        total_qty: q + r.bonus,
-        remaining_qty: q + r.bonus,
-        promo_id: r.promo,
-        status: "pending_member_ack",
-        receipt_hash: h(id + m + prod + q + r.bonus)
-      };
-      state.status = "pending_member_ack";
-      state.alert = null;
-      log("POS 建立記杯紀錄，等待會員確認");
-    }
-
-    function memberAck() {
-      if (!state.ledger) return log("無記杯紀錄");
-      state.ledger.status = "active";
-      state.status = "active";
-      log("會員端小J確認單據，記杯生效");
-    }
-
-    function redeemRequest() {
-      if (!state.ledger || state.ledger.status !== "active") return log("不可核銷：尚未 active");
-      if (state.ledger.remaining_qty < 1) return log("不可核銷：餘額不足");
-      state.alert = {
-        type: "cup_redeem_request",
-        message: state.ledger.member_display + " 請求核銷 1 杯 " + state.ledger.product,
-        requires_staff_confirm: true
-      };
-      state.ledger.status = "redeem_requested";
-      state.status = "pos_alerted";
-      log("店端 POS 收到核銷告警，等待店員確認");
-    }
-
-    function staffConfirm() {
-      if (!state.alert) return log("沒有待確認告警");
-      state.ledger.remaining_qty -= 1;
-      state.ledger.status = "active";
-      state.alert = null;
-      state.status = "redeemed_then_active";
-      log("店員確認，POS 扣杯完成，剩餘 " + state.ledger.remaining_qty + " 杯");
-    }
-
-    function resetAll() {
-      state = { status: "empty", ledger: null, alert: null, events: [] };
-      render();
-    }
-
-    function render() {
-      document.getElementById("alert").textContent = state.alert ? state.alert.message : "等待事件";
-      document.getElementById("out").textContent = JSON.stringify(state, null, 2);
-    }
-
-    render();
-  </script>
+  <p class="sr-status" id="announcement" aria-live="polite"></p>
+  <script src="../assets/cafe-pos-menu-data.js" defer></script>
+  <script src="../assets/cafe-pos-staff-flow.js" defer></script>
+  <script src="../assets/cafe-pos-ai-intent.js" defer></script>
+  <script src="../assets/cafe-pos-demo.js" defer></script>
 </body>
 </html>

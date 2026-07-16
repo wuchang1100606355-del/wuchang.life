@@ -28,9 +28,9 @@ REQUIRED_TEXT = [
     "會員招募",
     "聯絡我們",
     "系統資訊",
-    "預告版",
-    "招募中",
-    "部分功能準備中",
+    "公開資訊",
+    "內容持續更新",
+    "服務狀態透明揭露",
 ]
 
 FORBIDDEN_PUBLIC_PAYLOAD = [
@@ -113,7 +113,7 @@ def main() -> None:
     for page in CORE_PAGES:
         check_page(page)
     sitemap = WEB / "sitemap.xml"
-    if "http://wuchang.life/member_recruitment/" not in sitemap.read_text(encoding="utf-8"):
+    if "https://wuchang.life/member_recruitment/" not in sitemap.read_text(encoding="utf-8"):
         fail("sitemap missing member_recruitment")
     print("VERIFY_WUCHANG_PUBLIC_SITE_DESIGN_PASS")
     print(f"CORE_PAGE_COUNT={len(CORE_PAGES)}")

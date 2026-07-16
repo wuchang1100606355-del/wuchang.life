@@ -37,6 +37,13 @@ body {
 
 a {
   color: inherit;
+  text-underline-offset: .2em;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #1f6fd1;
+  outline-offset: 3px;
 }
 
 .skip {
@@ -146,7 +153,7 @@ a {
 .nav-links a,
 .nav-actions a,
 .button {
-  min-height: 36px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -169,7 +176,8 @@ a {
 .nav-links a:focus-visible {
   color: var(--green);
   border-bottom-color: var(--green);
-  outline: none;
+  outline: 3px solid #1f6fd1;
+  outline-offset: 3px;
 }
 
 .nav-actions a.support,
@@ -275,6 +283,14 @@ h3 {
   font-size: 18px;
 }
 
+.phase-banner {
+  max-width: 720px;
+  padding: 12px 14px;
+  border-left: 5px solid var(--gold);
+  color: var(--ink);
+  background: #fff3d8;
+}
+
 .hero-actions,
 .actions {
   display: flex;
@@ -357,6 +373,15 @@ h3 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.audience-grid,
+.portal-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.architecture-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .service-grid,
 .method-grid,
 .recruit-grid,
@@ -370,6 +395,10 @@ h3 {
 
 .info-grid {
   grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.info-grid.architecture-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .card,
@@ -482,6 +511,312 @@ li {
 .pill.block {
   color: #8a2632;
   background: #ffe7eb;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 11px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.status-badge.validating {
+  color: #154f75;
+  background: #e7f4ff;
+}
+
+.status-badge.building {
+  color: #744915;
+  background: #fff0d1;
+}
+
+.status-badge.inactive {
+  color: #5a5148;
+  background: #f3eee7;
+}
+
+.status-badge.limited {
+  color: #70401e;
+  background: #ffe8d4;
+}
+
+caption {
+  padding: 12px 14px;
+  color: var(--ink);
+  background: #fffdf7;
+  font-size: 18px;
+  font-weight: 950;
+  text-align: left;
+}
+
+.patent-notice {
+  margin-top: 16px;
+}
+
+.patent-disclaimer {
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border: 2px solid #9a5a1b;
+  border-radius: 8px;
+  color: #673909;
+  background: #fff0d1;
+}
+
+.ip-category + .ip-category {
+  margin-top: 24px;
+}
+
+.ip-category > h3 {
+  margin-bottom: 12px;
+}
+
+.patent-card {
+  padding: 22px;
+  border: 1px solid rgba(223, 211, 191, .95);
+  border-top: 5px solid var(--blue);
+  border-radius: 8px;
+  background: #fffdf7;
+  box-shadow: 0 8px 18px rgba(62, 43, 24, .06);
+}
+
+.patent-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.patent-card h4 {
+  margin: 4px 0 14px;
+  font-size: 22px;
+}
+
+.patent-type {
+  margin: 0;
+  color: var(--blue);
+  font-weight: 950;
+}
+
+.patent-status {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.patent-status.granted {
+  color: #124d43;
+  background: #e7f4ed;
+}
+
+.patent-status.filed {
+  color: #744915;
+  background: #fff0d1;
+}
+
+.patent-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+  margin: 0 0 16px;
+}
+
+.patent-facts div {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.patent-facts dt {
+  color: var(--ink);
+  font-weight: 950;
+}
+
+.patent-facts dd {
+  margin: 4px 0 0;
+}
+
+.official-pending {
+  display: inline-flex;
+  align-items: center;
+  color: #744915;
+  font-weight: 900;
+}
+
+.disabled-link {
+  cursor: not-allowed;
+  opacity: .72;
+}
+
+.ip-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.ip-boundary-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.ip-boundary-card.withheld {
+  border-left: 5px solid #70401e;
+}
+
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.evidence-card {
+  padding: 22px;
+  border: 1px solid rgba(223, 211, 191, .95);
+  border-top: 5px solid var(--green);
+  border-radius: 8px;
+  background: #fffdf7;
+  box-shadow: 0 8px 18px rgba(62, 43, 24, .06);
+}
+
+.profile-list {
+  margin: 0;
+}
+
+.profile-list div {
+  display: grid;
+  grid-template-columns: minmax(130px, .42fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-list dt {
+  color: var(--ink);
+  font-weight: 950;
+}
+
+.profile-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.pending {
+  color: #7a4313;
+  font-weight: 950;
+}
+
+.pending.prominent {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  padding: 5px 12px;
+  border: 2px solid #9a5a1b;
+  border-radius: 999px;
+  background: #fff0d1;
+}
+
+.evidence-meta {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--blue);
+  color: #384f5e;
+  background: #edf6fb;
+  font-size: 14px;
+}
+
+.evidence-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evidence-list li {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.evidence-list strong,
+.evidence-list span,
+.evidence-list small {
+  display: block;
+}
+
+.evidence-list small {
+  margin-top: 6px;
+  color: var(--blue);
+  overflow-wrap: anywhere;
+}
+
+.profile-source-link {
+  margin: 18px 0 0;
+}
+
+.governance-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.governance-checklist li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.check-state {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.check-state.verified {
+  color: #124d43;
+  background: #e7f4ed;
+}
+
+.check-state.partial {
+  color: #744915;
+  background: #fff0d1;
+}
+
+main a:not(.button) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.contact-card a,
+.system-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .table-wrap {
@@ -625,7 +960,14 @@ td {
   }
 
   .card-grid,
-  .info-grid {
+  .info-grid,
+  .audience-grid,
+  .portal-grid,
+  .architecture-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .info-grid.architecture-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -660,11 +1002,22 @@ td {
   }
 
   .cafe-lockup {
-    margin-top: 12px;
+    margin-top: 7px;
   }
 
   .nav-actions {
     margin-top: 10px;
+  }
+
+  .nav-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .nav-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .brand-text strong,
@@ -694,8 +1047,28 @@ td {
   .method-grid,
   .recruit-grid,
   .contact-grid,
+  .evidence-grid,
+  .patent-facts,
+  .ip-boundary-grid,
+  .governance-checklist,
+  .audience-grid,
+  .portal-grid,
+  .architecture-grid,
   .info-grid,
   .system-info {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid.architecture-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-list div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .governance-checklist li {
     grid-template-columns: 1fr;
   }
 
@@ -714,5 +1087,25 @@ td {
   .hero-actions .button,
   .actions .button {
     width: 100%;
+  }
+
+  .nav-links a {
+    min-height: 38px;
+    padding: 4px 5px;
+    font-size: 12.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
   }
 }

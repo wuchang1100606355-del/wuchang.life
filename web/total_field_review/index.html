@@ -8,7 +8,7 @@
 <meta name="description" content="五常智慧雲總場審查狀態頁，公開說明目前可展示入口、仍需 HOLD 的 production gate、安全邊界與下一步驗證。">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#1f6d60">
-  <link rel="canonical" href="http://wuchang.life/total_field_review/">
+  <link rel="canonical" href="https://wuchang.life/total_field_review/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="../site.webmanifest">
   <meta property="og:type" content="website">
@@ -16,22 +16,22 @@
   <meta property="og:site_name" content="五常智慧雲">
   <meta property="og:title" content="總場審查狀態｜五常智慧雲">
   <meta property="og:description" content="公開展示哪些入口已可檢視、哪些流程仍由總場 HOLD、哪些安全邊界不得越權。">
-  <meta property="og:url" content="http://wuchang.life/total_field_review/">
-  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta property="og:url" content="https://wuchang.life/total_field_review/">
+  <meta property="og:image" content="https://wuchang.life/assets/wuchang-og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="總場審查狀態｜五常智慧雲">
   <meta name="twitter:description" content="五常智慧雲公開審查狀態：展示可看，production release 仍 HOLD。">
-  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:image" content="https://wuchang.life/assets/wuchang-og-card.png">
   <title>總場審查狀態｜五常智慧雲</title>
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@id": "http://wuchang.life/#organization",
+      "@id": "https://wuchang.life/#organization",
       "@type": "Organization",
       "name": "五常智慧雲",
-      "url": "http://wuchang.life/",
+      "url": "https://wuchang.life/",
       "description": "五常智慧雲公開說明社區公益、物業管理、在地商家協作與主權 AI 個人管家小J的展示入口。",
       "sameAs": [],
       "knowsAbout": [
@@ -51,30 +51,30 @@
       }
     },
     {
-      "@id": "http://wuchang.life/#website",
+      "@id": "https://wuchang.life/#website",
       "@type": "WebSite",
       "name": "五常智慧雲",
-      "url": "http://wuchang.life/",
+      "url": "https://wuchang.life/",
       "inLanguage": "zh-Hant",
       "publisher": {
-        "@id": "http://wuchang.life/#organization"
+        "@id": "https://wuchang.life/#organization"
       }
     },
     {
-      "@id": "http://wuchang.life/total_field_review/#webpage",
+      "@id": "https://wuchang.life/total_field_review/#webpage",
       "@type": "WebPage",
-      "url": "http://wuchang.life/total_field_review/",
+      "url": "https://wuchang.life/total_field_review/",
       "name": "總場審查狀態｜五常智慧雲",
       "description": "五常智慧雲總場審查狀態頁，公開說明目前可展示入口、仍需 HOLD 的 production gate、安全邊界與下一步驗證。",
       "inLanguage": "zh-Hant",
       "isPartOf": {
-        "@id": "http://wuchang.life/#website"
+        "@id": "https://wuchang.life/#website"
       },
       "about": {
-        "@id": "http://wuchang.life/#organization"
+        "@id": "https://wuchang.life/#organization"
       },
       "publisher": {
-        "@id": "http://wuchang.life/#organization"
+        "@id": "https://wuchang.life/#organization"
       }
     }
   ]
@@ -422,10 +422,10 @@
               <td>治理頁是審查工作流說明，不是模型授權、部署或 release approval。</td>
             </tr>
             <tr>
-              <td><a href="../property_management/">物業管理</a></td>
-              <td>公告、報修、包裹、管委會協作與住戶服務方向。</td>
-              <td><span class="tag">PUBLIC DEMO</span></td>
-              <td>不顯示住戶明文，不連 production 物業資料庫。</td>
+              <td><code>property.wuchang.life</code></td>
+              <td>物業管理展示規劃設於獨立子網域。</td>
+              <td><span class="tag">HOLD DNS／HTTPS</span></td>
+              <td>人工完成 DNS 與 HTTPS 前不列為正式入口；不顯示住戶明文，不連 production 物業資料庫。</td>
             </tr>
             <tr>
               <td><a href="../programs/">服務與活動</a></td>
@@ -458,10 +458,10 @@
               <td>不等於已驗證自然人身份，不讀會員明文。</td>
             </tr>
             <tr>
-              <td><a href="../pos_promo_sandbox/">POS 沙盒</a></td>
-              <td>展示店端記杯、核銷與促銷流程方向。</td>
-              <td><span class="tag">SANDBOX</span></td>
-              <td>不付款、不刷卡、不寫 Odoo/POS production DB。</td>
+              <td><code>business.wuchang.life</code></td>
+              <td>商業管理系統展示、除錯與優化驗證規劃設於獨立子網域。</td>
+              <td><span class="tag">HOLD DNS／HTTPS</span></td>
+              <td>人工完成 DNS 與 HTTPS 前不列為正式入口；不付款、不刷卡、不寫 Odoo/POS production DB。</td>
             </tr>
             <tr>
               <td><a href="../nonprofit_readiness/">公益與非營利送審資料</a></td>

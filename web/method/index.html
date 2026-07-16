@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="description" content="技術方法頁，白話說明八維度意圖場封包重構、整數狀態機、候選封包、驗證鏈與人類確認邊界。">
+  <meta name="description" content="從零基礎生活例子到前沿工程驗證，說明 W7TP 八維度意圖場封包、L1/L2/L3 重構、離線 edge、雜湊鏈與總場權限邊界。">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#164f3a">
-  <link rel="canonical" href="http://wuchang.life/method/">
+  <link rel="canonical" href="https://wuchang.life/method/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="../site.webmanifest">
   <link rel="stylesheet" href="../assets/wuchang-site-design.css">
@@ -17,12 +17,12 @@
   <meta property="og:site_name" content="五常社區發展協會｜小J主權AI服務">
   <meta property="og:title" content="技術方法｜五常社區發展協會｜小J主權AI服務">
   <meta property="og:description" content="技術方法頁，白話說明八維度意圖場封包重構、整數狀態機、候選封包、驗證鏈與人類確認邊界。">
-  <meta property="og:url" content="http://wuchang.life/method/">
-  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta property="og:url" content="https://wuchang.life/method/">
+  <meta property="og:image" content="https://wuchang.life/assets/wuchang-og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="技術方法｜五常社區發展協會｜小J主權AI服務">
   <meta name="twitter:description" content="技術方法頁，白話說明八維度意圖場封包重構、整數狀態機、候選封包、驗證鏈與人類確認邊界。">
-  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:image" content="https://wuchang.life/assets/wuchang-og-card.png">
   <title>技術方法｜五常社區發展協會｜小J主權AI服務</title>
 </head>
 <body>
@@ -53,7 +53,7 @@
       <div class="hero-copy">
         <p class="eyebrow">8D Intent Field Packet</p>
         <h1 id="page-title">技術方法：八維度意圖場封包重構</h1>
-        <p class="lead">本方法以意圖狀態封包、多個狀態場整數狀態機、candidate_only 不可回推候選封包、非公開規則 ref 封套、verifier chain、rebuild_manifest 與 human_confirm_ref 形成可審查流程。重點不是高 GPU 堆算力，而是低算力通用 CPU 上可追蹤、可阻斷、可重構。</p>
+        <p class="lead">先說最重要的：這不是把檔案壓小、搬走或丟到雲端。系統把「要得到什麼結果、目前狀態、可引用什麼、如何重構、怎樣才算通過」放進同一個八維度意圖場封包；接收端只重構封包需要的部分，再由本地總場驗證。</p>
         <div class="hero-actions"><a class="button primary" href="../founder_manifesto/">查看創辦人宣言</a><a class="button support" href="../w7tp_8d_control_panel.html">查看控制台</a><a class="button support" href="../total_field_review/">查看審查封套</a></div>
 
       </div>
@@ -64,9 +64,19 @@
           </picture>
       </figure>
     </section>
+<section class="content-band" aria-labelledby="sec-zero-network">
+  <div class="section-head"><div><p class="eyebrow">Zero-network knowledge</p><h2 id="sec-zero-network">完全不懂網路，也能先懂這四步</h2></div><p>把它想成一張「可驗收的工作單」，不是把整間倉庫寄出去。</p></div>
+  <div class="method-grid">
+    <article class="method-card"><div class="card-icon">1</div><h3>先問結果</h3><p>例如「產生一份不含居民姓名的本週活動提醒」。缺一項只問一題，不替使用者猜答案。</p></article>
+    <article class="method-card"><div class="card-icon">2</div><h3>只帶必要規則</h3><p>封包帶著來源參照、限制、重構條件與驗收方式；密碼、token、會員明文和原始私密影音在進入封包前就被阻擋。</p></article>
+    <article class="method-card"><div class="card-icon">3</div><h3>在本地重構</h3><p>接收端依自己已有的資料與能力，只產生這張工作單需要的結果。沒有網路時，edge 仍可產生 L3 候選並排隊。</p></article>
+    <article class="method-card"><div class="card-icon">4</div><h3>驗證後才算數</h3><p>候選不等於正式決定。taiji01 回線後會驗證來源快照、雜湊鏈與重複結果；只有總場能處理正式 D8。</p></article>
+  </div>
+  <div class="notice"><h3>一句話版本</h3><p><strong>小傳輸量，可產生大檔案結果</strong>描述的是封包驅動的結果重構；不是宣稱任意既有檔案都能靠小封包下載，也不是雲端同步、備份或差分搬運。</p></div>
+</section>
 <section class="content-band" aria-labelledby="sec-method">
-  <div class="section-head"><div><p class="eyebrow">Technical Method</p><h2 id="sec-不是八欄位資料表">不是八欄位資料表</h2></div><p>意圖場是跨節點、跨系統、跨角色的狀態封包與驗證流程；不是把八個欄位塞進資料庫。</p></div>
-  <div class="method-grid"><article class="method-card"><div class="card-icon">1</div><h3>邊緣運算隔離</h3><p>公開頁與候選封包不讀會員明文，不把瀏覽器狀態、raw audio 或照護內容送入雲端。</p></article><article class="method-card"><div class="card-icon">2</div><h3>無浮點查表與候選治理</h3><p>以整數狀態、封包標記與 verifier 檢查降低算力需求，不把高 GPU 推論視為同級比較。</p></article><article class="method-card"><div class="card-icon">3</div><h3>分段流水線動態變卦</h3><p>跨節點、跨系統、跨檔案的變更先形成 rebuild_manifest，再由 human_confirm_ref 決定是否放行。</p></article></div>
+  <div class="section-head"><div><p class="eyebrow">Technical Method</p><h2 id="sec-method">不是八欄位資料表</h2></div><p>意圖場是跨節點、跨系統、跨角色的狀態封包與驗證流程；不是把八個欄位塞進資料庫。</p></div>
+  <div class="method-grid"><article class="method-card"><div class="card-icon">1</div><h3>LLM 在使用者設備執行</h3><p>原始提示、模型上下文與權重留在使用者設備；只有使用者確認的最小意圖候選與 evidence ref 可送交總場。taiji01 與其他伺服器不載入或執行 LLM。</p></article><article class="method-card"><div class="card-icon">2</div><h3>無浮點查表與候選治理</h3><p>伺服器以整數狀態、封包標記與 verifier 完成查表、驗證和封印，不依賴伺服器端 LLM，也不把高 GPU 推論視為同級比較。</p></article><article class="method-card"><div class="card-icon">3</div><h3>分段流水線動態變卦</h3><p>跨節點、跨系統、跨檔案的變更先形成 rebuild_manifest，再由 human_confirm_ref 決定是否放行。</p></article></div>
 </section>
 <section class="content-band alt" aria-labelledby="sec-dimensions">
   <div class="section-head"><div><p class="eyebrow">D1-D8</p><h2 id="sec-dimensions">八個維度如何約束 AI</h2></div><p>這張表用公開語言呈現，核心非公開規則只以 ref 方式留在總場。</p></div>
@@ -76,17 +86,118 @@
     <tr><td>D3 座標</td><td>需求發生在哪個場域。</td><td>協會、物業、商家、小J與審查封套分流。</td></tr>
     <tr><td>D4 證據</td><td>有什麼可查資料支持判斷。</td><td>使用 evidence ref、hash ref、review envelope。</td></tr>
     <tr><td>D5 政策</td><td>ALLOW、HOLD、REVIEW 或 HUMAN_CONFIRM。</td><td>付款、DB、部署、角色升級預設 HOLD。</td></tr>
-    <tr><td>D6 生成</td><td>AI 產生候選與整理摘要。</td><td>候選不能直接變成授權或正式文件。</td></tr>
+    <tr><td>D6 生成</td><td>使用者設備上的 LLM 產生候選與整理摘要。</td><td>伺服器不執行 LLM；候選不能直接變成授權或正式文件。</td></tr>
     <tr><td>D7 紅隊</td><td>先找可能誤導或外洩的位置。</td><td>公開頁不得顯示工程 payload 或 secret。</td></tr>
     <tr><td>D8 封套</td><td>將一次決策包成可審查紀錄。</td><td>沒有 seal 與人審，不宣稱正式發布。</td></tr>
   </tbody></table></div>
 </section>
+<section class="content-band" aria-labelledby="sec-reconstruction-levels">
+  <div class="section-head"><div><p class="eyebrow">Verification levels</p><h2 id="sec-reconstruction-levels">L1／L2／L3 不是畫質等級，而是驗證契約</h2></div><p>封包先指定「這次要證明到哪一層」，系統才知道可以接受什麼結果。</p></div>
+  <div class="table-wrap"><table><thead><tr><th>層級</th><th>必須相符</th><th>適用邊界</th></tr></thead><tbody>
+    <tr><td>L1 完整重構</td><td>當封包定義完整結果時，hash／bit-level 結果一致。</td><td>只在協定已完整定義結果時使用；不是傳統檔案搬運。</td></tr>
+    <tr><td>L2 等價重構</td><td>任務、狀態、控制與效果一致，不要求 byte identity。</td><td>不同設備可用不同本地表示，仍須滿足同一效果契約。</td></tr>
+    <tr><td>L3 候選重構</td><td>使用者設備只產生候選，交由本地狀態機與總場判斷。</td><td>裝置端 LLM、離線 edge 與非 LLM GPU 工作一律停在候選權限。</td></tr>
+  </tbody></table></div>
+</section>
+<section class="content-band alt" aria-labelledby="sec-frontier">
+  <div class="section-head"><div><p class="eyebrow">For frontier engineers</p><h2 id="sec-frontier">真正反直覺的地方：把算力、傳輸與裁決權拆開</h2></div><p>以下內容可被測試與雜湊驗證，不靠「AI 很聰明」作為安全假設。</p></div>
+  <div class="method-grid">
+    <article class="method-card"><div class="card-icon">A</div><h3>封包自帶協定與驗證</h3><p>D1–D8 同時表達意圖、狀態、座標、證據、執行、重構、風險與封套；route table 與 capability registry 的快照雜湊把查表事實綁進內容身分。</p></article>
+    <article class="method-card"><div class="card-icon">B</div><h3>語義雜湊與執行事實分離</h3><p>Unicode NFC、排序鍵與拒絕浮點值形成跨節點一致的 content SHA256；觀測時間與執行節點屬 execution metadata，不污染同一意圖的語義身分。</p></article>
+    <article class="method-card"><div class="card-icon">C</div><h3>離線仍運作，但不偷升權</h3><p>edge 只持有 sealed read-only snapshot，可引導補全、形成 L3 並寫入前後相接的 hash-chain queue；回線後由 taiji01 重驗與去重，edge 永遠不能自稱正式 PASS。</p></article>
+    <article class="method-card"><div class="card-icon">D</div><h3>裝置端 LLM 與 D8 完全解耦</h3><p>LLM 只在使用者設備形成候選；伺服器 CPU 執行總場驗證，伺服器 GPU 僅可增援明確標記的非 LLM 影音或批次工作。任何模型、遠端節點或套件都不能取得總場修改權。</p></article>
+  </div>
+  <div class="notice"><h3>工程邊界</h3><p>程式部署仍使用 byte-exact、SHA256 驗證的版本化 artifact；這是軟體供應鏈傳送，與 W7TP 生成式傳輸是兩件不同的事。Founder 修改總場則另需裝置公鑰指紋與 Google OIDC issuer／subject hash 的雙根驗證。</p></div>
+</section>
+<section class="content-band" aria-labelledby="sec-public-proof">
+  <div class="section-head"><div><p class="eyebrow">Public proof boundary</p><h2 id="sec-public-proof">公開到足以檢驗，保留到不洩漏營業秘密</h2></div><p>公開頁說明可驗證結構與失敗條件；私有查表索引、完整重構規則、密鑰與請求項策略不公開。</p></div>
+  <div class="method-grid">
+    <article class="method-card"><h3>固定正典</h3><p>公開技術語義以 W7TP 多用途生成式傳輸封包 Canonical V2 為準；目前內容 SHA256 為 <code>a5281f…d5d0</code>。</p></article>
+    <article class="method-card"><h3>可觀察的失敗</h3><p>未知場域、缺 route、缺 capability、快照不符、雜湊鏈斷裂、敏感資料或權限偽造都必須 HOLD、BLOCK 或 QUARANTINE，不能靜默改送 GENERIC。</p></article>
+    <article class="method-card"><h3>法律狀態分開</h3><p>技術公開說明、已取得的新型專利與申請中的發明專利分開標示；提出申請不等於已取得專利權。</p></article>
+  </div>
+  <div class="hero-actions"><a class="button support" href="../#intellectual-property-and-patents">查看專利法律狀態</a><a class="button support" href="../transparency/">查看透明狀態</a><a class="button support" href="../total_field_review/">查看總場審查邊界</a></div>
+</section>
+<section class="content-band alt" aria-labelledby="sec-developed-value">
+  <div class="section-head"><div><p class="eyebrow">What we have developed</p><h2 id="sec-developed-value">我們已研發的，不只是一個概念</h2></div><p>以下是已形成程式與驗證契約的能力；「已研發」不等於已在所有產業正式部署。</p></div>
+  <div class="table-wrap"><table><thead><tr><th>已研發能力</th><th>現在可驗證的價值</th><th>目前成熟邊界</th></tr></thead><tbody>
+    <tr><td>單一 8D runtime、五種場域 profile</td><td>協會、物業、商業展示、家庭與通用需求共用同一核心，不必維護五套彼此漂移的決策系統。</td><td>程式與測試可驗證；正式場域交易仍須另行授權。</td></tr>
+    <tr><td>一次一題的安全意圖補全</td><td>降低使用門檻，同時避免 AI 自行補姓名、憑證、付款資料或正式決定。</td><td>候選輸出；不取代人類責任。</td></tr>
+    <tr><td>可重現的內容雜湊與來源快照</td><td>同一語義在不同節點保有相同內容身分，能查出來源或規則是否被悄悄更換。</td><td>驗證契約已實作；不是跨組織法律信任的自動替代品。</td></tr>
+    <tr><td>離線 L3 edge 與 hash-chain queue</td><td>主節點離線時仍可整理需求與形成候選；回線後再驗證、去重與收斂，不必用雲端維持基本功能。</td><td>edge 永遠沒有正式 D8；公開入口仍可能有單點限制。</td></tr>
+    <tr><td>使用者設備 LLM、伺服器零模型推論</td><td>提示與上下文不必集中到伺服器；總場只處理最小候選、來源參照、驗證與封印。</td><td>目前公開頁不載入 LLM；正式裝置端模型、效能與平台相容性仍須逐設備驗證。</td></tr>
+  </tbody></table></div>
+  <div class="notice" id="commercial-public-test">
+    <h3>專利技術如何落地：進入商業公開測試</h3>
+    <p>上品聊國咖啡館 POS 將 8D 候選、裝置端雜湊、人工覆核、離線佇列與常駐紅隊放進同一個寫實流程。下列入口目前是可操作的過渡公開測試路徑；正式商業首頁預定設於 <code>business.wuchang.life</code>，與協會非營利首頁分流。</p>
+    <div class="actions"><a class="button primary" href="../pos_promo_sandbox/" rel="nofollow">操作上品聊國咖啡館 POS 公開測試</a></div>
+  </div>
+</section>
+<section class="content-band" aria-labelledby="sec-future-value-map">
+  <div class="section-head"><div><p class="eyebrow">Future value map</p><h2 id="sec-future-value-map">未來可運用的產業價值地圖</h2></div><p>共同核心是「少帶敏感原文、把意圖與驗證契約帶到需要工作的地方」；每一產業仍須自己的法規、資料治理與驗收。</p></div>
+  <div class="card-grid">
+    <article class="card"><div class="card-icon">訊</div><h3>電信業</h3><p><strong>價值提示：</strong>把服務意圖、網路狀態、能力參照與驗收條件包成候選，可用於 edge 協作、障礙處理與跨設備服務編排，降低不必要的原始資料暴露。</p><p><small>未來候選：不取代 3GPP、電信核心網或業者既有控制權；需與正式網管、資安及 SLA 驗證整合。</small></p></article>
+    <article class="card"><div class="card-icon">雲</div><h3>雲端產業</h3><p><strong>價值提示：</strong>在節點已有共同基底與能力 registry 的條件下，以狀態、引用和重構契約協調工作，可減少重複搬運，並讓跨雲候選結果可追溯、可去重。</p><p><small>未來候選：不是雲端同步、備份或任意資料壓縮；實際頻寬、成本與效能須逐案量測。</small></p></article>
+    <article class="card"><div class="card-icon">公</div><h3>政府與公共服務機構</h3><p><strong>價值提示：</strong>跨單位服務可先交換最小化意圖、證據參照與責任封套，再由各單位在自身權限內重構候選，提升可稽核性並降低資料過度集中。</p><p><small>未來候選：不繞過法定職權、採購、檔案、個資或資安規範，也不表示任何政府機關採用或背書。</small></p></article>
+    <article class="card"><div class="card-icon">醫</div><h3>醫療與照護管理</h3><p><strong>價值提示：</strong>可用於設備巡檢、照護工作流、排程與跨角色交接的去識別化候選，讓每一步帶著來源、風險與人類確認條件。</p><p><small>未來候選：不作診斷、處方或治療決定；需醫療專業、倫理、資安、個資與法規審查。</small></p></article>
+    <article class="card"><div class="card-icon">災</div><h3>災防與韌性協作</h3><p><strong>價值提示：</strong>網路不穩時，edge 可保存具來源快照的 L3 需求候選；主節點恢復後統一驗證與去重，避免離線紀錄被誤當正式命令。</p><p><small>未來候選：不能取代緊急通訊、指揮體系或生命安全認證設備。</small></p></article>
+    <article class="card"><div class="card-icon">製</div><h3>製造與設備服務</h3><p><strong>價值提示：</strong>把任務、設備匿名座標、能力與驗收效果分離，可支援異質設備上的等價工作結果與可追蹤維護候選。</p><p><small>未來候選：涉及安全控制時仍須 PLC、工控資安與功能安全機制獨立驗證。</small></p></article>
+  </div>
+  <div class="notice"><h3>長期願景</h3><p>我們希望讓數位協作從「把更多資料集中到伺服器模型」轉向「LLM 留在使用者設備，只把使用者確認的最小意圖、來源與驗證契約交給總場」。價值不只在節省傳輸或算力，而在原始脈絡不必離開設備、離線仍可工作、權限不隨算力擴張、結果可追溯，並讓人保有最後責任。</p></div>
+</section>
+<section class="content-band alt" aria-labelledby="sec-medical-adi">
+  <div class="section-head"><div><p class="eyebrow">Physician-only AI service vision</p><h2 id="sec-medical-adi">醫師專用 AI 服務：病歷價值與私隱保密同時設計</h2></div><p>ADI 張量狀態資料庫可管理個人病歷的授權狀態與證據關係；服務只開放給醫療機構驗證的醫師角色，不把原始病歷變成可任意流通的 AI 訓練資料。</p></div>
+  <div class="notice"><h3>推論位置是產品硬邊界</h3><p>醫師端或病人端 LLM 只在各自經授權的使用者設備執行；taiji01、醫療合作伺服器及遠端 GPU 不執行 LLM。設備只可送出使用者確認且最小化的 8D 候選、狀態與 evidence ref，由總場驗證；原始提示、完整上下文、模型權重與未最小化病歷不得上傳。</p></div>
+  <div class="notice"><h3>讓專業知識成為醫師與病人溝通的橋樑與基石</h3><p>同一份醫療事實可保留醫師需要的專業術語、證據與不確定性，同時產生病人看得懂的白話解釋、問題清單與醫囑提醒。每段解釋都能回到原始紀錄與醫師確認，不把「說得容易懂」變成刪掉風險、誇大確定性或偷偷改變醫療意義。</p></div>
+  <div class="notice"><h3>醫師看到的是可覆核工作台，不是替醫師下決定的黑盒</h3><p>服務可整理病程時間線、重要變化、檢查與用藥關聯、證據來源、AI 候選與不確定性，並支援醫師註記接受、修正或否決。診斷、處方、治療、轉診與緊急處置仍由醫師依完整臨床資訊與專業責任決定。</p></div>
+  <div class="method-grid">
+    <article class="method-card"><div class="card-icon">1</div><h3>醫師診斷是人工權威證據</h3><p>診斷內容在合規醫療系統內由醫師建立、簽署與更正；8D 封包只引用已授權的診斷狀態、版本與證據雜湊。AI 可以形成判斷候選，不能把自己的推論覆寫成醫師診斷。</p></article>
+    <article class="method-card"><div class="card-icon">2</div><h3>ADI 保存狀態關係，不外洩病歷原文</h3><p>個人識別資訊與原始病歷留在醫療機構控制的加密資料邊界。ADI 對外只提供最小必要的匿名座標、狀態向量、權限、來源 ref 與統計條件；可再識別對照機制必須隔離並限權。</p></article>
+    <article class="method-card"><div class="card-icon">3</div><h3>人工智能判斷可統計、可追溯</h3><p>每一候選記錄模型／規則版本、輸入證據範圍、輸出狀態、信心表示、醫師覆核與最後結果；統計使用去識別群體資料，讓準確、遺漏、偏差與不確定性可被分層檢查。</p></article>
+    <article class="method-card"><div class="card-icon">4</div><h3>失敗案例成為紅隊告警</h3><p>誤判、漏判、資料漂移、越權存取與流程延誤先轉成去識別化 failure signature、風險向量與再現條件，再進入紅隊規則；不能把病人姓名或完整病歷複製到告警、log、edge 或 GPU 節點。</p></article>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th>資料層</th><th>允許內容</th><th>禁止內容／權限</th></tr></thead><tbody>
+    <tr><td>醫療機構病歷庫</td><td>依法保存的原始病歷、醫師診斷、檢查與處置；細緻角色權限與完整稽核。</td><td>不得因接入 AI 而變成全節點可讀。</td></tr>
+    <tr><td>ADI 張量狀態層</td><td>受目的限制的狀態向量、匿名座標、版本、證據 ref、同意與存取政策。</td><td>不得把可識別病歷原文當作一般封包內容。</td></tr>
+    <tr><td>AI／統計候選層</td><td>去識別群體統計、候選判斷、偏差與失敗模式。</td><td>不得自動診斷、開藥、治療、拒絕照護或指定正式 D8。</td></tr>
+    <tr><td>紅隊告警層</td><td>去識別 failure signature、風險等級、重現條件與修正證據。</td><td>不得用告警之名建立第二份病歷庫或洩漏再識別鍵。</td></tr>
+  </tbody></table></div>
+  <div class="table-wrap"><table><thead><tr><th>醫師工作階段</th><th>AI 可提供</th><th>醫師保留的最終責任</th></tr></thead><tbody>
+    <tr><td>看診前</td><td>依授權病歷產生可追溯摘要、時間線、缺漏資料與需優先查看的風險候選。</td><td>確認摘要是否完整，決定問診與檢查方向。</td></tr>
+    <tr><td>看診中</td><td>呈現證據 ref、狀態趨勢、可能衝突、指引查核候選與不確定性。</td><td>結合病人表達、理學檢查與專業判斷作診斷與處置。</td></tr>
+    <tr><td>看診後</td><td>整理追蹤條件、異常變化候選、覆核紀錄與去識別統計。</td><td>簽署病歷、醫囑與追蹤安排，決定哪些內容可進一步使用。</td></tr>
+    <tr><td>品質改善</td><td>將被否決、誤判、漏判與延遲案例轉為去識別紅隊告警與模型／規則改善候選。</td><td>判定臨床嚴重度、可接受風險與是否允許更新正式策略。</td></tr>
+  </tbody></table></div>
+  <div class="notice"><h3>同一核心、兩個隔離介面：醫師工作台與病人健康同行入口</h3><p>病人可註冊成為「病人本人」使用者，但不因此取得醫師 AI 權限。系統依醫療機構驗證的身分與病歷關聯，只開放本人被授權的病程內容；家屬、照顧者或代理人必須另有可撤銷的法定／書面授權，不能靠姓名或關係字串升權。</p></div>
+  <div class="table-wrap"><table><thead><tr><th>病人功能</th><th>可提供的價值</th><th>安全與醫療邊界</th></tr></thead><tbody>
+    <tr><td>註冊與本人病歷連結</td><td>經驗證後連結本人在該醫療機構可提供的病歷範圍，清楚顯示來源、日期與授權狀態。</td><td>登入成功不等於自動取得病歷；每一資料範圍仍須依身分、目的、同意與機構政策授權。</td></tr>
+    <tr><td>醫囑提醒</td><td>把醫師已簽署的用藥、檢查、復診與照護醫囑轉成易懂提醒，保留原始醫囑 ref、版本與變更通知。</td><td>AI 不得新增、刪除或改寫醫囑；有疑問、惡化或緊急情況應聯絡醫療專業人員，不依提醒自行調藥。</td></tr>
+    <tr><td>詳細病程查找</td><td>依時間、就診、診斷、檢查、治療與追蹤關係呈現個人病程時間線，並讓病人回到原始醫療紀錄來源。</td><td>摘要須標示缺漏與不確定性；病人可提出更正請求，但正式病歷修正仍由依法有權的人員處理。</td></tr>
+    <tr><td>個人狀態追蹤</td><td>將本人填寫的症狀、量測與提醒完成狀態形成候選，供後續看診時由醫師參考。</td><td>病人自填內容與醫師診斷分層保存；AI 不得把自填資料自動升級成正式診斷或緊急處置結論。</td></tr>
+    <tr><td>私隱控制</td><td>查看誰在何種目的下存取資料，管理同意、通知、代理與撤銷候選。</td><td>撤銷、保存、刪除與法定留存可能有不同效力，須由機構依適用法規與醫療責任處理。</td></tr>
+  </tbody></table></div>
+  <div class="method-grid">
+    <article class="method-card"><h3>共同病程視圖</h3><p>醫師看到完整臨床結構；病人看到經授權的個人時間線與白話層。兩者指向同一來源 ref，避免各說各話。</p></article>
+    <article class="method-card"><h3>看診前問題準備</h3><p>病人可把不懂的名詞、症狀變化與醫囑疑問形成候選問題；醫師快速掌握溝通重點，但 AI 不替病人或醫師預先下結論。</p></article>
+    <article class="method-card"><h3>理解確認</h3><p>用 teach-back 方式請病人以自己的話確認理解，將誤解標成待澄清狀態；只有醫師確認後才更新正式解釋或醫囑版本。</p></article>
+    <article class="method-card"><h3>語言與可近性</h3><p>可提供分級文字、語音輔助與多語候選，同時保留醫療原意、版本與人工覆核，讓高齡者與不同識讀程度者更容易參與。</p></article>
+  </div>
+  <div class="notice"><h3>兼具的關鍵不是「先集中再匿名」，而是從封包入口就最小化</h3><p>蒐集目的、病人知情與授權、最小權限、存取紀錄、保存期限、刪除／更正、去識別風險與醫療人員最終覆核，都必須成為可驗證狀態。台灣的病歷、醫療與健康檢查資料屬高度受保護個人資料；真正導入前仍須由醫療、法律、資安、倫理與資料治理專業人員共同驗證。</p></div>
+  <div class="section-head"><div><p class="eyebrow">Care-system transformation</p><h3>轉成醫病日常照護與護理系統：核心可重用，臨床落地要逐關驗證</h3></div><p>不需要另造第二套 8D runtime；醫療資料契約與角色只能在總場核准後接入同一核心。</p></div>
+  <div class="table-wrap"><table><thead><tr><th>可直接重用</th><th>醫療領域必須新增</th><th>通過條件</th></tr></thead><tbody>
+    <tr><td>8D 意圖、來源 ref、狀態雜湊、一次一題補全、離線候選、權限與紅隊鏈。</td><td>病人、醫師、護理師、藥師、照顧者與代理人的細緻角色／目的／同意契約。</td><td>任何角色都只能看見工作所需的最小資料，且每次存取可追溯、可撤銷或依法保存。</td></tr>
+    <tr><td>ADI 狀態關係與候選統計。</td><td>符合臺灣 TW Core IG／FHIR R4 的資料映射、術語、版本與醫療機構既有系統介接。</td><td>交換資料經 profile 驗證；8D 封包不取代正式電子病歷標準。</td></tr>
+    <tr><td>候選與正式 D8 分離。</td><td>醫囑、用藥、生命徵象、護理評估、照護計畫、交班、異常升級與緊急處理規則。</td><td>臨床嚴重度、誤警／漏警、可用性、偏差、資安及人因均完成實地驗證。</td></tr>
+    <tr><td>內容 SHA256、證據鏈與失敗回復。</td><td>醫療機構責任、病歷保存、事件通報、備援、稽核、供應鏈與變更管理。</td><td>法規、倫理、資安、醫療專業與機構治理共同核准，不由模型自行上線。</td></tr>
+  </tbody></table></div>
+  <div class="notice"><h3>最短安全落地順序</h3><p>先做不下診斷的病程查找與醫囑提醒沙盒，再接 TW Core／FHIR 測試資料與護理工作流；之後用去識別案例做臨床與紅隊驗證，最後才由合格醫療機構在自身資料與責任邊界內啟用。技術核心的轉用不難，真正的產品價值來自把每一道高風險門檻也做成可驗證工程。</p><div class="actions"><a class="button primary" href="../medical_care_demo/">操作合成照護案例</a><a class="button support" href="../medical_care_demo/#co-design">醫療與護理合作組織招募</a></div></div>
+</section>
   </main>
   <footer class="system-footer">
     <h2>系統資訊</h2>
-    <div class="system-info"><div><strong>專利聲明</strong><span>本頁為公開展示與送審準備，不等於專利核准；核心規則與營業秘密僅以 ref-only 留存。</span></div><div><strong>私隱權宣言</strong><span>不公開會員明文、secret、token、raw audio、付款資料或照護明細。</span></div><div><strong>組織名稱</strong><span>五常社區發展協會；社區、物業、商家與公益服務以總場治理分流。</span></div><div><strong>關聯組織名稱</strong><span>五常社區發展協會 × 小J主權 AI 服務開發團隊；上品聊國咖啡為測試場域。</span></div><div><strong>Google 非營利界線</strong><span>非營利資源僅可支援公益、教育、治理與無敏候選封包；不代表 Google 核准或保證。</span></div><div><strong>營運資格與補助</strong><span>預告版、招募中、部分功能準備中；正式補助、付款、DB 寫入與 release 仍 HOLD。</span></div></div>
+    <div class="system-info"><div><strong>專利聲明</strong><span>本頁分別揭露已取得、申請中與研究中的法律狀態；申請不等於核准，核心規則與營業秘密僅以 ref-only 留存。</span></div><div><strong>私隱權宣言</strong><span>不公開會員可識別資料、登入憑證、原始私密影音、付款資料或照護明細。</span></div><div><strong>組織名稱</strong><span>五常社區發展協會；社區、物業、商家與公益服務以總場治理分流。</span></div><div><strong>關聯組織名稱</strong><span>五常社區發展協會 × 小J主權 AI 服務開發團隊；上品聊國咖啡為測試場域。</span></div><div><strong>Google 非營利界線</strong><span>非營利資源僅可支援公益、教育、治理與無敏候選封包；不代表 Google 核准或保證。</span></div><div><strong>公開資訊狀態</strong><span>網站提供可直接閱讀的使命、計畫、技術、參與方式與透明資訊；個別服務的實際狀態以頁面說明為準。</span></div></div>
     <div class="footer-bottom">
-      <span>預告版</span><span>|</span><span>招募中</span><span>|</span><span>部分功能準備中</span>
+      <span>公開資訊</span><span>|</span><span>內容持續更新</span><span>|</span><span>服務狀態透明揭露</span>
       <span>|</span><a href="../transparency/">透明狀態</a><span>|</span><a href="../total_field_review/">總場審查</a>
     </div>
   </footer>

@@ -3,27 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self' 'sha256-SZJgh+Rla4aRfjlpkt47SR7nqmCRN931/QLtMCXfIdU='; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="description" content="五常社區發展協會與小J主權AI服務公開網站，整理協會願景、服務預告、技術方法、創辦人宣言、會員招募與聯絡方式。">
+  <meta name="description" content="五常社區發展協會非營利公開網站：說明社區公益使命、服務計畫、參與方式、透明治理與主權 AI 公益實證。">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#164f3a">
-  <link rel="canonical" href="http://wuchang.life/">
+  <link rel="canonical" href="https://wuchang.life/">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="./site.webmanifest">
   <link rel="stylesheet" href="./assets/wuchang-site-design.css">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_TW">
   <meta property="og:site_name" content="五常社區發展協會｜小J主權AI服務">
-  <meta property="og:title" content="五常社區發展協會｜小J主權AI服務">
-  <meta property="og:description" content="五常社區發展協會與小J主權AI服務公開網站，整理協會願景、服務預告、技術方法、創辦人宣言、會員招募與聯絡方式。">
-  <meta property="og:url" content="http://wuchang.life/">
-  <meta property="og:image" content="http://wuchang.life/assets/wuchang-og-card.png">
+  <meta property="og:title" content="五常社區發展協會｜分階段落地公開入口">
+  <meta property="og:description" content="說明五常社區發展協會的社區公益使命、服務計畫、參與方式與透明治理。">
+  <meta property="og:url" content="https://wuchang.life/">
+  <meta property="og:image" content="https://wuchang.life/assets/wuchang-og-card.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="五常社區發展協會｜小J主權AI服務">
-  <meta name="twitter:description" content="五常社區發展協會與小J主權AI服務公開網站，整理協會願景、服務預告、技術方法、創辦人宣言、會員招募與聯絡方式。">
-  <meta name="twitter:image" content="http://wuchang.life/assets/wuchang-og-card.png">
-  <title>五常社區發展協會｜小J主權AI服務</title>
+  <meta name="twitter:title" content="五常社區發展協會｜分階段落地公開入口">
+  <meta name="twitter:description" content="說明五常社區發展協會的社區公益使命、服務計畫、參與方式與透明治理。">
+  <meta name="twitter:image" content="https://wuchang.life/assets/wuchang-og-card.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://wuchang.life/#organization",
+        "name": "五常社區發展協會",
+        "url": "https://wuchang.life/",
+        "email": "admin@wuchang.life"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://wuchang.life/#website",
+        "name": "五常社區發展協會公開網站",
+        "url": "https://wuchang.life/",
+        "publisher": {"@id": "https://wuchang.life/#organization"}
+      }
+    ]
+  }
+  </script>
+  <title>五常社區發展協會｜分階段落地公開入口</title>
 </head>
 <body>
 <a class="skip" href="#main">跳到主要內容</a>
@@ -36,7 +57,7 @@
       </a>
       <a class="cafe-lockup" href="./founder_manifesto/" aria-label="查看創辦人宣言">
         <span class="cafe-mark" aria-hidden="true">啡</span>
-        <span><strong>上品聊國咖啡</strong><span>技術測試場與 proof-of-use</span></span>
+        <span><strong>上品聊國咖啡</strong><span>商業管理系統展示、除錯與優化驗證場</span></span>
       </a>
     </div>
     <nav class="site-nav" aria-label="主要導覽">
@@ -51,10 +72,12 @@
     <div class="page-label">首頁<small>Home</small></div>
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
-        <p class="eyebrow">五常社區發展協會 × 小J主權AI服務</p>
-        <h1 id="page-title">科技善用，在地共好<br>AI 助力社區，讓生活更美好</h1>
-        <p class="lead">五常智慧雲把社區公益、物業協作、在地商家、會員招募與主權 AI 個人管家小J整理成同一個可審查入口。公開頁只呈現方向與候選服務；正式身份、付款、DB 寫入、部署與 release 仍回到人類確認與總場 verifier。</p>
-        <div class="hero-actions"><a class="button primary" href="./member_recruitment/">加入意願</a><a class="button support" href="./impact/">表示支持</a><a class="button support" href="./total_field_review/">查看審查</a></div>
+        <p class="eyebrow">五常社區發展協會</p>
+        <h1 id="page-title">以 AI 科技抵禦 AI 時代的衝擊，以科技服務社區</h1>
+        <p class="phase-banner"><strong>五常社區發展協會非營利公開首頁</strong>：不募款、婉謝捐款，以商以智養公益；商業與物業示範分流至各自子域。</p>
+        <p>科技善用，在地共好；AI 助力社區，讓生活更美好。小J只提供候選服務，正式狀態仍交由人類程序與總場 verifier 驗證。</p>
+        <p class="lead">聊國咖啡館老闆的私家傳輸技術，小傳輸量，可產生大檔案結果。生成式傳輸只重構封包需要的部分，並依封包要求的驗證層級交由本地狀態機與總場判定。</p>
+        <div class="hero-actions"><a class="button primary" href="./w7tp_8d_control_panel.html">立即測試生成式傳輸</a><a class="button support" href="#current-status">查看落地狀態</a><a class="button support" href="./contact/">聯絡與合作</a></div>
 
       </div>
       <figure class="hero-media">
@@ -64,21 +87,161 @@
           </picture>
       </figure>
     </section>
-<section class="content-band" aria-labelledby="sec-home-focus">
-  <div class="section-head"><div><p class="eyebrow">Total Field Extract</p><h2 id="sec-首頁重點">首頁重點</h2></div><p>系統資訊來自總場文件與公開展示現況，不把預告當作正式上線。</p></div>
-  <div class="card-grid"><article class="card"><div class="card-icon">心</div><h3>在地共好</h3><p>連接居民、長輩、志工、協會、物業與在地商家，建立能被看懂與追蹤的公共入口。</p></article><article class="card"><div class="card-icon">J</div><h3>AI 智慧助力</h3><p>小J是候選層服務人設，可協助理解、整理、提醒，但不是總場、資料庫或正式決策者。</p></article><article class="card"><div class="card-icon">啡</div><h3>商業支持公益</h3><p>上品聊國咖啡可作為技術開發商測試場與 proof-of-use，但不得與協會非營利資源混同。</p></article><article class="card"><div class="card-icon">盾</div><h3>隱私與安全</h3><p>會員明文、secret、token、raw audio、付款、正式 DB 寫入與 production release 均維持 HOLD。</p></article></div>
+<section class="content-band" aria-labelledby="system-architecture">
+  <div class="section-head"><div><p class="eyebrow">System Architecture</p><h2 id="system-architecture">非營利使命優先，同一個總場邊界</h2></div><p>主網域公開使命、計畫、參與方式與透明治理；商業及物業示範不在主首頁營運。</p></div>
+  <div class="info-grid architecture-grid">
+    <article class="card"><div class="card-icon">AI</div><h3>會員主權 AI</h3><p>會員掌握同意、授權與撤回；AI 只提出候選，不代替本人或協會裁決。</p></article>
+    <article class="card"><div class="card-icon">協</div><h3>協會系統</h3><p>承接公益參與、會務治理與合作意願，正式資格仍由人類程序確認。</p></article>
+    <article class="card"><div class="card-icon">社</div><h3>社區系統</h3><p>連結居民、志工、管委會與物業需求，避免公開個人敏感資料。</p></article>
+    <article class="card"><div class="card-icon">商</div><h3>商業管理示範</h3><p>目前只作系統展示、除錯與優化驗證；商業首頁規劃於 business.wuchang.life，並與協會非營利資源分流。</p></article>
+    <article class="card"><div class="card-icon">物</div><h3>物業管理示範</h3><p>目前只作候選流程與介面驗證；示範首頁規劃於 property.wuchang.life，不在主網域提供正式物業服務。</p></article>
+    <article class="card"><div class="card-icon">網</div><h3>公開網站</h3><p>發布可公開資訊、落地狀態與安全聯絡入口，不處理正式交易。</p></article>
+    <article class="card"><div class="card-icon">總</div><h3>總場治理</h3><p>將本地候選正規化、比對、重構與驗證，再交由人類閘門決定。</p></article>
+  </div>
 </section>
-<section class="content-band alt" aria-labelledby="sec-position">
-  <div class="section-head"><div><p class="eyebrow">Positioning</p><h2 id="sec-我們的定位在地居民的支持夥伴">我們的定位：在地居民的支持夥伴</h2></div><p>社區總場不是單一店家頁，也不是普通聊天機器人。</p></div>
-  <div class="promise-grid"><article class="notice"><h3>真實社區脈絡</h3><p>五常社區總場可包含協會、物業、商業、地域、創辦人推算與社區文獻庫；這些只作候選路由與設計依據，不自動變成正式身份或權限。</p></article><article class="notice"><h3>清楚公開邊界</h3><p>公開網站可展示願景、服務預告、技術方法與會員意願；正式身份、付款、角色升級、formal send、deploy、TIPO submission 均需另包授權。</p></article></div>
+<section class="content-band alt" aria-labelledby="service-audiences">
+  <div class="section-head"><div><p class="eyebrow">Who We Serve</p><h2 id="service-audiences">服務對象</h2></div><p>主要資訊由首頁可直接到達，不依賴滑鼠 hover 或隱藏操作。</p></div>
+  <div class="service-grid audience-grid">
+    <article class="service-card"><h3>居民</h3><p>查閱服務方向、落地狀態與安全參與方式。</p></article>
+    <article class="service-card"><h3>會員與支持者</h3><p>表示支持、登記參與或了解申請加入的邊界。</p></article>
+    <article class="service-card"><h3>志工</h3><p>了解辦志工隊與在地公益協作方向。</p></article>
+    <article class="service-card"><h3>商家</h3><p>提出合作意向，參與以商以智養公益的在地實證。</p></article>
+    <article class="service-card"><h3>管委會／物業</h3><p>提出社區協作、場域需求與物業合作意向。</p></article>
+    <article class="service-card"><h3>公益與合作單位</h3><p>供公益、技術、媒體及政府實證單位了解可公開合作範圍。</p></article>
+  </div>
+</section>
+<section class="content-band" id="current-status" aria-labelledby="current-status-title">
+  <div class="section-head"><div><p class="eyebrow">Current Status</p><h2 id="current-status-title">目前公開狀態</h2></div><p>公開網站與 HTTPS 已上線；個別服務、資格與交易能力仍依真實狀態分開揭露。</p></div>
+  <div class="table-wrap"><table><caption>五常系統公開模組狀態</caption><thead><tr><th scope="col">模組</th><th scope="col">狀態</th><th scope="col">公開說明</th></tr></thead><tbody>
+    <tr><th scope="row">公開網站</th><td><span class="status-badge active">已上線</span></td><td>https://wuchang.life/ 已提供 HTTPS、行動版導覽、使命、計畫、技術、參與與透明資訊。</td></tr>
+    <tr><th scope="row">會員主權 AI</th><td><span class="status-badge validating">驗證中</span></td><td>候選與權威閘門持續本地驗證，不公開會員明文。</td></tr>
+    <tr><th scope="row">協會系統</th><td><span class="status-badge building">建置中</span></td><td>公開參與入口已規劃，正式會務與資格核准尚未啟用。</td></tr>
+    <tr><th scope="row">社區系統</th><td><span class="status-badge building">建置中</span></td><td>社區及物業協作內容分階段整理。</td></tr>
+    <tr><th scope="row">商業管理系統</th><td><span class="status-badge limited">展示驗證</span></td><td>目前只作展示、除錯與優化驗證；business.wuchang.life 尚待人工 DNS 與 HTTPS 設定。</td></tr>
+    <tr><th scope="row">物業管理系統</th><td><span class="status-badge limited">展示驗證</span></td><td>目前只作候選流程示範；property.wuchang.life 尚待人工 DNS 與 HTTPS 設定。</td></tr>
+  </tbody></table></div>
+</section>
+<section class="content-band alt" id="public-organization-information" aria-labelledby="public-organization-title">
+  <div class="section-head"><div><p class="eyebrow">Verified Public Information</p><h2 id="public-organization-title">公開組織資訊</h2></div><p>只投影具來源、日期、狀態與證據引用的公開安全資料；其餘欄位維持資料待補。</p></div>
+  <div class="evidence-grid">
+    <article class="evidence-card">
+      <h3>公開聯絡資訊</h3>
+      <dl class="profile-list">
+        <div><dt>組織正式名稱</dt><dd>五常社區發展協會</dd></div>
+        <div><dt>公開 Email</dt><dd><a href="mailto:admin@wuchang.life">admin@wuchang.life</a></dd></div>
+        <div><dt>官方網站</dt><dd><a href="https://wuchang.life/">https://wuchang.life/</a></dd></div>
+        <div><dt>公開服務區域</dt><dd class="pending">資料待補</dd></div>
+        <div><dt>公開地址</dt><dd class="pending">資料待補</dd></div>
+        <div><dt>公開電話</dt><dd class="pending">資料待補</dd></div>
+        <div><dt>公開服務時間</dt><dd class="pending">資料待補</dd></div>
+      </dl>
+      <p class="evidence-meta"><strong>來源：</strong>既有公開首頁與聯絡頁｜<strong>來源日期：</strong>2026-07-06｜<strong>驗證狀態：</strong>名稱、Email、網站已確認；其他欄位待補｜<strong>最後確認：</strong>2026-07-15</p>
+    </article>
+    <article class="evidence-card">
+      <h3>得獎與表揚</h3>
+      <p class="pending prominent">資料待補</p>
+      <p>目前沒有可公開安全證據，未將參賽、申請、推薦或候選狀態寫成獲獎。</p>
+      <p class="evidence-meta"><strong>來源：</strong>總場公開資料查核｜<strong>查核日期：</strong>2026-07-15｜<strong>驗證狀態：</strong>未確認｜<strong>證據：</strong>EVIDENCE_PENDING_AWARDS</p>
+    </article>
+    <article class="evidence-card">
+      <h3>組織資格與證明</h3>
+      <ul class="evidence-list">
+        <li><strong>Google for Nonprofits</strong><span>使用治理要求已確認；可公開資格文件與安全識別資訊仍為資料待補。</span><small>SOURCE:FOUNDER_GOVERNANCE_DIRECTIVE_2026-07-15</small></li>
+        <li><strong>協會依法設立或登記資訊</strong><span class="pending">資料待補</span><small>EVIDENCE_PENDING_LEGAL_REGISTRATION</small></li>
+      </ul>
+      <p class="evidence-meta"><strong>狀態：</strong>法人與非營利資格證明待補；專利與智慧財產另依法律狀態獨立揭露。</p>
+    </article>
+    <article class="evidence-card">
+      <h3>補助資訊</h3>
+      <p class="pending prominent">資料待補</p>
+      <p>目前沒有補助核定、公開金額、執行期間或公開成果的安全證據；諮詢、提案與申請中均不視為已獲補助。</p>
+      <p class="evidence-meta"><strong>來源：</strong>總場公開資料查核｜<strong>查核日期：</strong>2026-07-15｜<strong>驗證狀態：</strong>未確認｜<strong>證據：</strong>EVIDENCE_PENDING_GRANTS</p>
+    </article>
+  </div>
+  <p class="profile-source-link"><a class="button support" href="./data/public_organization_profile.json">查看公開資料證據表（JSON）</a></p>
+</section>
+<section class="content-band" id="intellectual-property-and-patents" data-section="INTELLECTUAL_PROPERTY_AND_PATENTS" aria-labelledby="intellectual-property-title">
+  <div class="section-head"><div><p class="eyebrow">Intellectual Property and Patents</p><h2 id="intellectual-property-title">專利、技術成果與智慧財產</h2></div><p>依本地正式證據投影公開安全欄位；官方公開資料尚未取得時，明確保留待查核狀態。</p></div>
+  <p class="patent-disclaimer"><strong>本技術已於 2026 年 7 月 8 日向經濟部智慧財產局提出台灣發明專利申請，申請號為 115127138。主管機關公開資料與後續審查狀態將依官方進度更新。專利申請不等同已取得專利權。</strong></p>
+  <div class="ip-category" aria-labelledby="granted-patents-title">
+    <h3 id="granted-patents-title">A. 已取得／已公告專利</h3>
+    <article class="patent-card">
+      <div class="patent-card-head"><div><p class="patent-type">台灣新型專利</p><h4>整合式物業管理系統</h4></div><span class="patent-status granted">GRANTED</span></div>
+      <dl class="patent-facts">
+        <div><dt>編號</dt><dd>M663678</dd></div>
+        <div><dt>真實狀態</dt><dd>本地智慧財產局證書支持已授予；官方公開系統的即時權利狀態待查核</dd></div>
+        <div><dt>日期</dt><dd>公告／授予日期：官方資料待查核</dd></div>
+        <div><dt>最後驗證日期</dt><dd>2026-07-15</dd></div>
+      </dl>
+      <p>用於整合物業管理作業與系統協作；僅公開用途層級摘要，不揭露實作細節、演算法或關鍵參數。</p>
+      <div class="actions"><a class="button support" href="https://tiponet.tipo.gov.tw/S092_OUT/query" target="_blank" rel="noopener noreferrer">智慧財產局官方查詢</a><span class="official-pending">即時狀態待查核</span></div>
+    </article>
+  </div>
+  <div class="ip-category" aria-labelledby="pending-applications-title">
+    <h3 id="pending-applications-title">B. 已提出申請（官方公開狀態待更新）</h3>
+    <article class="patent-card">
+      <div class="patent-card-head"><div><p class="patent-type">台灣發明專利申請</p><h4>多維度結構封包及其安全裁決方法與應用程式</h4></div><span class="patent-status filed">FILED_LOCAL_EVIDENCE_VERIFIED</span></div>
+      <dl class="patent-facts">
+        <div><dt>編號</dt><dd>申請案號 115127138</dd></div>
+        <div><dt>真實狀態</dt><dd>本地電子送件證據確認已提出申請；官方公開狀態待更新</dd></div>
+        <div><dt>日期</dt><dd>申請日 2026-07-08</dd></div>
+        <div><dt>最後驗證日期</dt><dd>2026-07-15</dd></div>
+      </dl>
+      <p>以多維度結構封包承載狀態、引用、查表、重構與驗證條件，用於安全裁決與應用程式協作；不公開內層規則、完整重構方法或關鍵參數。</p>
+      <div class="actions"><span class="button support disabled-link" aria-disabled="true">官方資料待公開</span><span class="official-pending">不表示審查中、已公開或已核准</span></div>
+    </article>
+  </div>
+  <div class="ip-boundary-grid">
+    <article class="ip-boundary-card"><h3>C. 僅可公開摘要的研發成果</h3><p>W7TP 生成式傳輸的公開定義限於狀態場封包、引用、查表、重構條件、等價狀態生成、封包攜帶協定與驗證條件，以及總場或接收端驗證。它不是檔案搬運、雲端密文同步、備份或下載解密。</p></article>
+    <article class="ip-boundary-card withheld"><h3>D. 不公開的營業秘密</h3><p>封包內層生成規則、查表索引秘密、完整重構方法、未公開演算法、關鍵參數、私有 schema、完整請求項與內部專利策略均不公開。</p></article>
+  </div>
+  <p class="evidence-meta"><strong>本地證據：</strong>智慧財產局證書、總場專利封印及電子送件收件證據｜<strong>官方查核：</strong>record-level 公開結果待取得｜<strong>最後查核：</strong>2026-07-15</p>
+</section>
+<section class="content-band" aria-labelledby="google-governance-title">
+  <div class="section-head"><div><p class="eyebrow">Google for Nonprofits Boundary</p><h2 id="google-governance-title">Google 非營利組織方案治理邊界</h2></div><p>這是公開治理檢查，不是「完全合規」、Google 核准、保證或背書聲明。</p></div>
+  <ul class="governance-checklist">
+    <li><span class="check-state verified">已檢查</span><span>主網域以五常社區發展協會使命、計畫、參與方式與透明治理為主，商業品牌沒有取代協會身分。</span></li>
+    <li><span class="check-state partial">部分確認</span><span>公開名稱、Email 與網站可辨識；地址、電話、服務區域與時間仍待證據。</span></li>
+    <li><span class="check-state verified">已檢查</span><span>沒有把未驗證資格、得獎、補助或尚未啟用服務寫成正式事實。</span></li>
+    <li><span class="check-state verified">已檢查</span><span>Google／LINE 僅作登入通道，不代表會員資格、角色或服務自動核准。</span></li>
+    <li><span class="check-state verified">已檢查</span><span>首頁沒有公開會員名冊、會員明文、未同意追蹤、廣告 SDK 或轉售非營利方案的內容。</span></li>
+    <li><span class="check-state verified">已檢查</span><span>商業與物業管理僅為展示、除錯及優化驗證，分別規劃於 business 與 property 子域，不在主網域執行交易或正式服務。</span></li>
+  </ul>
+  <p class="evidence-meta"><strong>來源：</strong>Founder 治理規則與首頁靜態查核｜<strong>查核日期：</strong>2026-07-15｜<strong>狀態：</strong>治理邊界已套用；公開資格文件與正式聯絡證據仍待補。</p>
+</section>
+<section class="content-band alt" aria-labelledby="participation-title">
+  <div class="section-head"><div><p class="eyebrow">Participation</p><h2 id="participation-title">協會參與</h2></div><p>轄區居民可表示支持、登記參與或申請加入；這些入口不等於正式會員核准。</p></div>
+  <div class="promise-grid">
+    <article class="notice"><h3>安全參與方式</h3><p>公開資訊以免費訂閱意願、一般聯絡與合作說明為主；請勿提交身分證字號、完整地址、會員明文或付款資料。</p><div class="actions"><a class="button primary" href="./member_recruitment/">查看參與方式</a><a class="button support" href="./contact/">安全聯絡</a></div></article>
+    <article class="notice"><h3>公益方向與智慧財產回流</h3><p>以 AI 科技抵禦 AI 時代的衝擊，以科技服務社區。不募款、婉謝捐款，以商以智養公益。未來若產生專利或技術授權收入，完成契約分配、法定稅費、權利維護與必要研發成本後，協會依法可支配的淨收入將經正式治理程序納入「五常社區數位發展基金」內部專款，透過基金挹注社區，規劃聘請照服員、辦志工隊及推動社區數位近用。</p><div class="actions"><a class="button support" href="./medical_care_demo/#patent-community-title">查看授權收入公益回流原則</a></div></article>
+  </div>
+</section>
+<section class="content-band" aria-labelledby="cooperation-title">
+  <div class="section-head"><div><p class="eyebrow">Cooperation</p><h2 id="cooperation-title">社區、技術與照護合作</h2></div><p>公開招募合作組織，但只提供安全聯絡入口，不建立會寫入資料庫的表單。</p></div>
+  <div class="card-grid">
+    <article class="card"><h3>商家合作意向</h3><p>在地服務、技術測試與公益支持的候選合作。</p></article>
+    <article class="card"><h3>社區／管委會合作意向</h3><p>場域需求、物業協作與社區服務的前期交流。</p></article>
+    <article class="card"><h3>志工參與</h3><p>以公開安全方式說明可投入的時間與專長。</p></article>
+    <article class="card"><h3>醫療與護理合作組織</h3><p>以合成資料共同驗證醫病日常照護、護理交班與醫病溝通；我們願以依法可合作的專利技術與研發成果配合，不收真實病歷。</p></article>
+  </div>
+  <div class="actions"><a class="button primary" href="./medical_care_demo/">操作照護示範</a><a class="button support" href="./contact/">聯絡與合作說明</a></div>
+</section>
+<section class="content-band alt" id="generative-transfer-test" aria-labelledby="technology-title">
+  <div class="section-head"><div><p class="eyebrow">生成式傳輸測試與技術</p><h2 id="technology-title">技術與智慧財產</h2></div><p>只呈現公開安全敘述，不揭露私有查表、完整 schema、密鑰或營業秘密演算法。</p></div>
+  <div class="method-grid">
+    <article class="method-card"><h3>W7TP 8D 狀態場封包</h3><p>封包包含意圖、狀態、座標、證據、執行、生成式傳輸、風險與封裝邊界。</p></article>
+    <article class="method-card"><h3>LLM 只在使用者設備</h3><p>模型、原始提示與上下文不送到 taiji01；taiji01 等伺服器不載入模型、不執行推論。使用者確認的最小意圖候選與 evidence ref 才交給總場查表、驗證與封印。</p></article>
+    <article class="method-card"><h3>生成式傳輸與本地重構</h3><p>以狀態場封包、引用、查表、重構條件與等價狀態生成運作；封包攜帶協定及驗證條件，並由總場或接收端驗證。它不是檔案搬運、雲端密文同步、備份或下載解密。</p></article>
+  </div>
+  <div class="notice patent-notice"><h3>公開專利資訊</h3><p>專利、新型專利與發明專利申請依各自證據及法律狀態分開呈現；未確認欄位不以推測補齊。</p><div class="actions"><a class="button support" href="#intellectual-property-and-patents">查看專利與智慧財產</a><a class="button support" href="./method/">了解技術方法</a><a class="button support" href="./medical_care_demo/">醫病照護研發示範</a></div></div>
 </section>
   </main>
   <footer class="system-footer">
     <h2>系統資訊</h2>
-    <div class="system-info"><div><strong>專利聲明</strong><span>本頁為公開展示與送審準備，不等於專利核准；核心規則與營業秘密僅以 ref-only 留存。</span></div><div><strong>私隱權宣言</strong><span>不公開會員明文、secret、token、raw audio、付款資料或照護明細。</span></div><div><strong>組織名稱</strong><span>五常社區發展協會；社區、物業、商家與公益服務以總場治理分流。</span></div><div><strong>關聯組織名稱</strong><span>五常社區發展協會 × 小J主權 AI 服務開發團隊；上品聊國咖啡為測試場域。</span></div><div><strong>Google 非營利界線</strong><span>非營利資源僅可支援公益、教育、治理與無敏候選封包；不代表 Google 核准或保證。</span></div><div><strong>營運資格與補助</strong><span>預告版、招募中、部分功能準備中；正式補助、付款、DB 寫入與 release 仍 HOLD。</span></div></div>
+    <div class="system-info"><div><strong>專利聲明</strong><span>本頁分別揭露已取得、申請中與研究中的法律狀態；申請不等於核准，核心規則與營業秘密僅以 ref-only 留存。</span></div><div><strong>私隱權宣言</strong><span>不公開會員可識別資料、登入憑證、原始私密影音、付款資料或照護明細。</span></div><div><strong>推論位置</strong><span>LLM 僅在使用者設備執行；伺服器只提供總場驗證、雜湊與封印，不是模型執行環境。</span></div><div><strong>組織名稱</strong><span>五常社區發展協會；社區、物業、商家與公益服務以總場治理分流。</span></div><div><strong>關聯組織名稱</strong><span>五常社區發展協會 × 小J主權 AI 服務開發團隊；上品聊國咖啡為測試場域。</span></div><div><strong>Google 非營利界線</strong><span>非營利資源僅可支援公益、教育、治理與無敏候選封包；不代表 Google 核准或保證。</span></div><div><strong>公開資訊狀態</strong><span>網站提供可直接閱讀的使命、計畫、技術、參與方式與透明資訊；個別服務的實際狀態以頁面說明為準。</span></div></div>
     <div class="footer-bottom">
-      <span>預告版</span><span>|</span><span>招募中</span><span>|</span><span>部分功能準備中</span>
-      <span>|</span><a href="./transparency/">透明狀態</a><span>|</span><a href="./total_field_review/">總場審查</a>
+      <span>公開資訊</span><span>|</span><span>內容持續更新</span><span>|</span><span>服務狀態透明揭露</span>
+      <span>|</span><a href="./">公開首頁</a><span>|</span><a href="./transparency/">透明狀態</a><span>|</span><a href="./total_field_review/">總場審查</a>
     </div>
   </footer>
 </div>
