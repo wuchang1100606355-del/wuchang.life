@@ -1,13 +1,402 @@
 <odoo>
-    <record id="action_wuchang_cafe_option_group" model="ir.actions.act_window">
-        <field name="name">WuChang POS Option Groups</field>
-        <field name="res_model">wuchang.cafe.option.group</field>
-        <field name="view_mode">list,form</field>
+    <!-- Merchant-facing product library: one item per card, no full ERP form. -->
+    <record id="view_wuchang_cafe_menu_product_search" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.product.search</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <search string="搜尋咖啡館菜單">
+                <field name="name" string="商品名稱"/>
+                <field name="pos_categ_ids" string="POS 分類"/>
+                <field name="wuchang_option_group_id" string="客製化規格"/>
+                <filter name="active_menu" string="上架中" domain="[('active', '=', True), ('available_in_pos', '=', True)]"/>
+                <filter name="paused_menu" string="暫停販售" domain="[('active', '=', True), ('available_in_pos', '=', False)]"/>
+                <filter name="archived_menu" string="已封存" domain="[('active', '=', False)]"/>
+                <group expand="1" string="分組">
+                    <filter name="group_pos_category" string="POS 分類" context="{'group_by': 'pos_categ_ids'}"/>
+                    <filter name="group_option" string="客製化規格" context="{'group_by': 'wuchang_option_group_id'}"/>
+                </group>
+            </search>
+        </field>
     </record>
 
+    <record id="view_wuchang_cafe_menu_product_kanban" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.product.kanban</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" records_draggable="0" sample="0">
+                <field name="name"/>
+                <field name="list_price"/>
+                <field name="image_128"/>
+                <field name="pos_categ_ids"/>
+                <field name="wuchang_option_group_id"/>
+                <field name="available_in_pos"/>
+                <field name="active"/>
+                <field name="w5c_time_state"/>
+                <templates>
+                    <t t-name="card" class="p-0">
+                        <div class="d-flex gap-3 p-3">
+                            <field name="image_128" widget="image" options="{'img_class': 'rounded o_image_64_contain'}" alt="商品圖片"/>
+                            <main class="flex-grow-1 min-w-0">
+                                <div class="d-flex justify-content-between gap-2 align-items-start">
+                                    <strong class="fs-5 text-truncate"><field name="name"/></strong>
+                                    <span class="fw-bold text-nowrap"><field name="list_price"/></span>
+                                </div>
+                                <div class="mt-2"><field name="pos_categ_ids" widget="many2many_tags"/></div>
+                                <div class="text-muted mt-2" t-if="record.wuchang_option_group_id.value">
+                                    客製化：<field name="wuchang_option_group_id"/>
+                                </div>
+                                <span class="badge text-bg-success mt-2" t-if="record.active.raw_value and record.available_in_pos.raw_value">上架中</span>
+                                <span class="badge text-bg-warning mt-2" t-elif="record.active.raw_value">暫停販售</span>
+                                <span class="badge text-bg-secondary mt-2" t-else="">已封存</span>
+                            </main>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_menu_product_list" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.product.list</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <list string="咖啡館菜單" create="1" delete="0" duplicate="0" multi_edit="0">
+                <field name="active" column_invisible="True"/>
+                <field name="image_128" widget="image" string="圖片"/>
+                <field name="name" string="商品名稱"/>
+                <field name="list_price" string="售價"/>
+                <field name="pos_categ_ids" widget="many2many_tags" string="POS 分類"/>
+                <field name="wuchang_option_group_id" string="客製化規格"/>
+                <field name="available_in_pos" string="POS 上架"/>
+                <field name="w5c_time_state" string="編碼狀態" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_menu_product_form" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.product.safe.form</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <form string="單項菜單維護" create="1" delete="0" duplicate="0">
+                <header>
+                    <button name="action_wuchang_menu_archive" type="object" string="封存商品" class="btn-secondary" invisible="not active" confirm="封存後商品會停止 POS 販售，但編碼與歷史證據會保留。確定封存嗎？"/>
+                    <button name="action_wuchang_menu_reactivate" type="object" string="重新上架" class="btn-primary" invisible="active and available_in_pos" confirm="確定要重新啟用並上架這個商品嗎？"/>
+                </header>
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="type" invisible="1"/>
+                    <div class="alert alert-info" role="status">
+                        一張卡就是一個商品。修改名稱或價格不會更換底層編碼；不再販售請用「封存商品」，不要刪除。
+                    </div>
+                    <div class="d-flex flex-column flex-lg-row gap-4 align-items-start">
+                        <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128', 'convert_to_webp': True}"/>
+                        <div class="flex-grow-1 w-100">
+                            <label for="name" string="商品名稱"/>
+                            <h1><field name="name" placeholder="輸入實際商品名稱"/></h1>
+                            <group>
+                                <group string="販售資訊">
+                                    <field name="list_price" string="售價" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="pos_categ_ids" string="POS 分類" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="available_in_pos" string="在 POS 上架"/>
+                                </group>
+                                <group string="客製化">
+                                    <field name="wuchang_option_group_id" string="口味／甜度／溫度規格" options="{'no_create_edit': True}"/>
+                                    <div class="text-muted">規格另由「客製化規格」集中管理，避免每個商品重複建立造成店員混亂。</div>
+                                </group>
+                            </group>
+                        </div>
+                    </div>
+                    <notebook>
+                        <page string="來源與總場證據" name="wuchang_menu_evidence">
+                            <div class="alert alert-secondary" role="status">以下欄位由系統管理，店長不需要理解或修改。</div>
+                            <group>
+                                <group>
+                                    <field name="w5c_code" string="穩定事物碼" readonly="1"/>
+                                    <field name="w5c_domain" readonly="1"/>
+                                    <field name="w5c_entity" readonly="1"/>
+                                    <field name="w5c_time_state" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="w5c_topology" readonly="1"/>
+                                    <field name="w5c_authority" readonly="1"/>
+                                    <field name="quickclick_menu_id" readonly="1"/>
+                                    <field name="quickclick_product_id" readonly="1"/>
+                                    <field name="quickclick_raw_category" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_cafe_menu_products" model="ir.actions.act_window">
+        <field name="name">咖啡館菜單</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">['|', ('available_in_pos', '=', True), ('w5c_domain', '=', 'CAFE')]</field>
+        <field name="context">{'active_test': False, 'search_default_active_menu': 1, 'default_available_in_pos': True}</field>
+        <field name="search_view_id" ref="view_wuchang_cafe_menu_product_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_wuchang_cafe_menu_product_kanban')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_wuchang_cafe_menu_product_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_wuchang_cafe_menu_product_form')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">新增第一個菜單商品</p>
+            <p>每個商品只建立一張卡；名稱、售價、分類、圖片與客製化都在同一頁完成。</p>
+        </field>
+    </record>
+
+    <!-- Human-readable remote-support review queue. -->
+    <record id="view_wuchang_cafe_menu_change_request_list" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.change.request.list</field>
+        <field name="model">wuchang.cafe.menu.change.request</field>
+        <field name="arch" type="xml">
+            <list string="遠端修正審核" create="1" delete="0" duplicate="0" decoration-warning="state == 'pending_responsible_review'" decoration-success="state == 'applied'" decoration-muted="state in ['rejected', 'dead_letter']">
+                <field name="name" string="修正單"/>
+                <field name="state" string="狀態"/>
+                <field name="origin" string="事件情境"/>
+                <field name="change_type" string="動作"/>
+                <field name="group_batch_id" string="商家"/>
+                <field name="product_template_id" string="商品"/>
+                <field name="requester_user_id" string="誰"/>
+                <field name="submitted_location_ref" string="哪裡"/>
+                <field name="submitted_at" string="何時"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_menu_change_request_search" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.change.request.search</field>
+        <field name="model">wuchang.cafe.menu.change.request</field>
+        <field name="arch" type="xml">
+            <search string="搜尋遠端修正">
+                <field name="name"/>
+                <field name="group_batch_id"/>
+                <field name="product_template_id"/>
+                <filter name="pending" string="待負責人審核" domain="[('state', '=', 'pending_responsible_review')]"/>
+                <filter name="applied" string="已套用" domain="[('state', '=', 'applied')]"/>
+                <filter name="rejected" string="已拒絕" domain="[('state', '=', 'rejected')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_menu_change_request_form" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.change.request.form</field>
+        <field name="model">wuchang.cafe.menu.change.request</field>
+        <field name="arch" type="xml">
+            <form string="單項菜單修正審核" create="1" delete="0" duplicate="0">
+                <header>
+                    <button name="action_submit_for_responsible_review" type="object" string="送負責人審核" class="btn-primary" invisible="state != 'draft'" groups="wuchang_cafe_menu_options.group_wuchang_cafe_remote_support,wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
+                    <button name="action_responsible_approve_and_apply" type="object" string="核准並套用" class="btn-primary" invisible="state != 'pending_responsible_review'" confirm="請確認已逐項比較修改前與修改後內容。核准後才會寫入 Odoo 菜單；不會建立訂單或收款。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
+                    <button name="action_responsible_reject" type="object" string="拒絕修正" class="btn-secondary" invisible="state != 'pending_responsible_review'" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
+                    <button name="action_dead_letter" type="object" string="封存異常單" class="btn-secondary" invisible="state == 'dead_letter'" groups="wuchang_member_registration.group_wuchang_member_admin"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending_responsible_review,applied,rejected,dead_letter"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning" role="status" invisible="origin != 'remote_support' or state == 'draft'">
+                        人就是人，一個人只用一個帳號。遠端修正不會自動生效；即使同一人兼任全部職務，也要在同一帳號內重新看過前後差異，再執行一次明確確認。
+                    </div>
+                    <group>
+                        <group string="修正對象">
+                            <field name="name" readonly="1"/>
+                            <field name="origin" string="本次做什麼" readonly="state != 'draft'"/>
+                            <field name="change_type" readonly="state != 'draft'"/>
+                            <field name="group_batch_id" readonly="state != 'draft'" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="product_template_id" readonly="state != 'draft'" invisible="change_type == 'create'" options="{'no_create': True}"/>
+                        </group>
+                        <group string="誰、哪裡、何時、做什麼">
+                            <field name="requester_user_id" string="誰" readonly="1"/>
+                            <field name="submitted_location_ref" string="哪裡" readonly="1"/>
+                            <field name="submitted_at" string="何時提出" readonly="1"/>
+                            <field name="change_type" string="做什麼" readonly="1"/>
+                            <field name="responsible_person_ref" string="人員治理識別" readonly="1"/>
+                            <field name="candidate_sha256" readonly="1"/>
+                            <field name="approval_sha256" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="建議修改" invisible="change_type in ['archive', 'reactivate']">
+                        <group>
+                            <field name="change_name" readonly="state != 'draft'" invisible="change_type == 'create'"/>
+                            <field name="proposed_name" string="商品名稱" readonly="state != 'draft'" invisible="change_type != 'create' and not change_name"/>
+                            <field name="change_price" readonly="state != 'draft'" invisible="change_type == 'create'"/>
+                            <field name="proposed_list_price" readonly="state != 'draft'" invisible="change_type != 'create' and not change_price"/>
+                            <field name="change_image" readonly="state != 'draft'" invisible="change_type == 'create'"/>
+                            <field name="proposed_image_1920" widget="image" readonly="state != 'draft'" invisible="change_type != 'create' and not change_image"/>
+                        </group>
+                        <group>
+                            <field name="change_pos_categories" readonly="state != 'draft'" invisible="change_type == 'create'"/>
+                            <field name="proposed_pos_category_ids" widget="many2many_tags" readonly="state != 'draft'" invisible="change_type != 'create' and not change_pos_categories" options="{'no_create': True}"/>
+                            <field name="change_option_group" readonly="state != 'draft'" invisible="change_type == 'create'"/>
+                            <field name="proposed_option_group_id" readonly="state != 'draft'" invisible="change_type != 'create' and not change_option_group" options="{'no_create_edit': True}"/>
+                        </group>
+                    </group>
+
+                    <group string="診斷與人審">
+                        <field name="support_reason" readonly="state != 'draft'" placeholder="說明觀察到的問題與建議修正；不得貼入密碼、token、付款資料或會員明文。"/>
+                        <field name="responsible_review_note" placeholder="負責人逐項核對後的結論；遠端修正核准前必填。" readonly="state not in ['pending_responsible_review']"/>
+                    </group>
+
+                    <notebook>
+                        <page string="前後差異" name="menu_change_diff">
+                            <group>
+                                <field name="current_snapshot_json" string="修改前" readonly="1"/>
+                                <field name="proposed_values_json" string="修改後" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="8D 候選封包" name="menu_change_candidate">
+                            <field name="candidate_packet_json" readonly="1"/>
+                        </page>
+                        <page string="負責人核准封印" name="menu_change_approval">
+                            <field name="approval_seal_json" readonly="1"/>
+                            <group>
+                                <field name="reviewed_by_user_id" string="誰確認" readonly="1"/>
+                                <field name="reviewed_at" string="何時確認" readonly="1"/>
+                                <field name="applied_at" string="何時生效" readonly="1"/>
+                                <field name="applied_product_template_id" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="安全邊界" name="menu_change_safety">
+                            <group>
+                                <field name="remote_support_direct_write" readonly="1"/>
+                                <field name="single_account_multi_role" string="同一人單一帳號多職務" readonly="1"/>
+                                <field name="formal_pos_order" readonly="1"/>
+                                <field name="payment_capture" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_cafe_menu_change_request" model="ir.actions.act_window">
+        <field name="name">遠端修正審核</field>
+        <field name="res_model">wuchang.cafe.menu.change.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_wuchang_cafe_menu_change_request_search"/>
+        <field name="context">{'search_default_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">目前沒有待審修正</p>
+            <p>遠端支援只能提出候選；商家團體會員負責人核准後才會套用。</p>
+        </field>
+    </record>
+
+    <!-- Reusable modifiers are managed separately so staff never rebuild them per item. -->
+    <record id="view_wuchang_cafe_option_group_list" model="ir.ui.view">
+        <field name="name">wuchang.cafe.option.group.list</field>
+        <field name="model">wuchang.cafe.option.group</field>
+        <field name="arch" type="xml">
+            <list string="客製化規格" delete="0" duplicate="0">
+                <field name="sequence" widget="handle"/>
+                <field name="active"/>
+                <field name="name" string="規格名稱"/>
+                <field name="code" string="穩定代碼"/>
+                <field name="question_ids" string="問題數"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_option_group_form" model="ir.ui.view">
+        <field name="name">wuchang.cafe.option.group.form</field>
+        <field name="model">wuchang.cafe.option.group</field>
+        <field name="arch" type="xml">
+            <form string="客製化規格" delete="0" duplicate="0">
+                <sheet>
+                    <div class="alert alert-info" role="status">口味、甜度、溫度等共用規格集中維護；商品只選用規格，不複製選項。</div>
+                    <group>
+                        <group>
+                            <field name="name" string="規格名稱"/>
+                            <field name="code" string="穩定代碼"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="source" readonly="1"/>
+                            <field name="w5c_code" readonly="1"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <field name="question_ids" nolabel="1">
+                        <list string="依序詢問" editable="bottom" delete="0">
+                            <field name="sequence" widget="handle"/>
+                            <field name="active"/>
+                            <field name="name" string="問題"/>
+                            <field name="display_name" string="店員看到的文字"/>
+                            <field name="selection_type" string="選擇方式"/>
+                            <field name="required" string="必填"/>
+                        </list>
+                        <form string="客製化問題" delete="0">
+                            <sheet>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="display_name"/>
+                                    <field name="selection_type"/>
+                                    <field name="required"/>
+                                    <field name="active"/>
+                                </group>
+                                <field name="item_ids" nolabel="1">
+                                    <list string="可選內容" editable="bottom" delete="0">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="active"/>
+                                        <field name="name" string="選項"/>
+                                        <field name="display_name" string="店員看到的文字"/>
+                                        <field name="price_delta" string="加價"/>
+                                        <field name="child_group_id" string="下一層規格"/>
+                                    </list>
+                                </field>
+                            </sheet>
+                        </form>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_cafe_option_group" model="ir.actions.act_window">
+        <field name="name">客製化規格</field>
+        <field name="res_model">wuchang.cafe.option.group</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_wuchang_cafe_option_group_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_wuchang_cafe_option_group_form')})]"/>
+    </record>
+
+    <record id="view_wuchang_group_batch_menu_reviewer_binding" model="ir.ui.view">
+        <field name="name">wuchang.group.batch.menu.reviewer.binding</field>
+        <field name="model">wuchang.member.group.registration.batch</field>
+        <field name="inherit_id" ref="wuchang_member_registration.view_wuchang_member_group_registration_batch_form"/>
+        <field name="arch" type="xml">
+            <field name="responsible_person_ref" position="after">
+                <field name="menu_company_id" groups="wuchang_member_registration.group_wuchang_member_admin" options="{'no_create': True}"/>
+                <field name="responsible_menu_reviewer_user_id" groups="wuchang_member_registration.group_wuchang_member_admin" options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem id="menu_wuchang_cafe_menu_products"
+              name="咖啡館菜單"
+              parent="wuchang_cafe_ai_gateway.menu_wuchang_cafe_root"
+              action="action_wuchang_cafe_menu_products"
+              groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"
+              sequence="10"/>
+
+    <menuitem id="menu_wuchang_cafe_menu_change_request"
+              name="遠端修正審核"
+              parent="wuchang_cafe_ai_gateway.menu_wuchang_cafe_root"
+              action="action_wuchang_cafe_menu_change_request"
+              groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible,wuchang_cafe_menu_options.group_wuchang_cafe_remote_support,wuchang_member_registration.group_wuchang_member_admin"
+              sequence="20"/>
+
     <menuitem id="menu_wuchang_cafe_menu_options"
-              name="POS Menu Options"
+              name="客製化規格"
               parent="wuchang_cafe_ai_gateway.menu_wuchang_cafe_root"
               action="action_wuchang_cafe_option_group"
-              sequence="40"/>
+              groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"
+              sequence="30"/>
 </odoo>

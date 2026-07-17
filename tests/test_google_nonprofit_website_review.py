@@ -19,7 +19,18 @@ class GoogleNonprofitWebsiteReviewTest(unittest.TestCase):
         }
         self.assertEqual(report["state"], "PASS_STATIC_WITH_EXTERNAL_EVIDENCE_PENDING")
         self.assertEqual(set(criteria), {f"GNP-WEB-{index:02d}" for index in range(1, 11)})
-        self.assertEqual(criteria["GNP-WEB-03"]["status"], "PASS")
+        self.assertEqual(
+            criteria["GNP-WEB-03"]["status"],
+            "HOLD_LEGAL_REGISTRATION_OR_ANNUAL_REPORT_EVIDENCE_REQUIRED",
+        )
+        self.assertIn(
+            "mission_content=PASS",
+            criteria["GNP-WEB-03"]["evidence"],
+        )
+        self.assertIn(
+            "legal_registration_or_annual_report=HOLD_MANUAL_EVIDENCE_REQUIRED",
+            criteria["GNP-WEB-03"]["evidence"],
+        )
         self.assertEqual(criteria["GNP-WEB-04"]["status"], "PASS_STATIC")
         self.assertEqual(criteria["GNP-WEB-07"]["status"], "PASS_SOURCE_HTTPS")
         self.assertEqual(criteria["GNP-WEB-08"]["status"], "PASS_STATIC_BOUNDARY")
@@ -40,6 +51,26 @@ class GoogleNonprofitWebsiteReviewTest(unittest.TestCase):
             criteria["GNP-WEB-05"]["status"],
             "HOLD_LIVE_PAGESPEED_EVIDENCE_REQUIRED",
         )
+        self.assertFalse(
+            report["dns_policy_interpretation"][
+                "blanket_dns_record_change_prohibition_found"
+            ]
+        )
+        self.assertFalse(
+            report["dns_policy_interpretation"]["dns_changed_by_verifier"]
+        )
+
+    def test_public_review_copy_matches_current_https_evidence(self) -> None:
+        readiness = (ROOT / "web/nonprofit_readiness/index.html").read_text(
+            encoding="utf-8"
+        )
+        transparency = (ROOT / "web/transparency/index.html").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("HTTPS/443 已可公開讀取", readiness)
+        self.assertIn("PUBLIC_HTTP_REDIRECT_EDGE_HOLD", readiness)
+        self.assertNotIn("TLS/443 尚未配置", readiness)
+        self.assertNotIn("仍需完成 HTTPS/TLS", transparency)
 
     def test_business_and_property_legacy_routes_are_not_nonprofit_entrypoints(self) -> None:
         sitemap = (ROOT / "web/sitemap.xml").read_text(encoding="utf-8")

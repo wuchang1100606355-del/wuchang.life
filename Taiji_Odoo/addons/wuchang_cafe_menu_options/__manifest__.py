@@ -1,6 +1,6 @@
 {
     "name": "WuChang Cafe Menu Options",
-    "version": "18.0.1.0.0",
+    "version": "18.0.2.0.0",
     "category": "Point of Sale",
     "summary": "WuChang POS menu normalization, option groups, price deltas, and W5C codes without product variants.",
     "author": "WuChang / Liaoguo Cafe",
@@ -9,9 +9,11 @@
         "base",
         "product",
         "point_of_sale",
-        "wuchang_cafe_ai_gateway"
+        "wuchang_cafe_ai_gateway",
+        "wuchang_member_registration"
     ],
     "data": [
+        "security/menu_change_security.xml",
         "security/ir.model.access.csv",
         "views/menu_option_views.xml"
     ],

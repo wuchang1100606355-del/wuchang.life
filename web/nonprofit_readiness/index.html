@@ -383,7 +383,7 @@
       <article class="card hold">
         <b>HOLD</b>
         <h2>正式資格待補證據</h2>
-        <p>法人或協會登記、稅籍/公益資格、年度報告、正式 HTTPS、evidence seal 與 release approval manifest 仍需總場另包補齊；公開 HOLD manifest 已標示尚未正式上線。</p>
+        <p>HTTPS/443 已可公開讀取；法人或協會登記、稅籍/公益資格、年度報告、evidence seal 與 release approval manifest 仍需總場另包補齊。公開 HOLD manifest 不把網站可讀誤寫成所有營運服務均已啟用。</p>
       </article>
     </section>
 
@@ -422,7 +422,7 @@
               <td>隱私與安全說明</td>
               <td><span class="tag">READY_FOR_REVIEW</span></td>
               <td><a href="../privacy.html">隱私與安全說明</a>、<a href="../contact/">聯絡與安全回報</a>與 <a href="../.well-known/security.txt">security.txt</a> 已公開。</td>
-              <td>正式上線前補伺服器安全標頭與 HTTPS。</td>
+              <td>維持 HTTPS 與伺服器安全標頭，補齊外部 HTTP 轉 HTTPS 的可達證據。</td>
             </tr>
             <tr>
               <td>網站所有權與網域控制</td>
@@ -432,9 +432,9 @@
             </tr>
             <tr>
               <td>HTTPS/TLS</td>
-              <td><span class="tag need">HOLD</span></td>
-              <td>目前 HTTP 可用；TLS/443 尚未配置。</td>
-              <td>配置憑證與 443 後再更新 public review envelope。</td>
+              <td><span class="tag need">PARTIAL</span></td>
+              <td>HTTPS/443 已可公開讀取；本機入口可將 HTTP 308 轉向 HTTPS，但外部 HTTP/80 仍不可達（PUBLIC_HTTP_REDIRECT_EDGE_HOLD）。</td>
+              <td>由授權網路管理者檢查外部 80 連接埠、NAT 與防火牆；不在網站程式或模型中擅改 DNS。</td>
             </tr>
             <tr>
               <td>法人/非營利登記與年度報告</td>

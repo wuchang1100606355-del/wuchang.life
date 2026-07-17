@@ -54,6 +54,7 @@ COMMERCIAL_TEST_DISCLOSURE_MARKERS = (
     "business.wuchang.life",
     "與協會非營利首頁分流",
 )
+LEGAL_EVIDENCE_PENDING_MARKER = "EVIDENCE_PENDING_LEGAL_REGISTRATION"
 
 
 MISSION_MARKERS = (
@@ -263,8 +264,24 @@ def static_review() -> dict[str, Any]:
         _result(
             "GNP-WEB-03",
             "The mission, activities, services, and served audience are clear and prominent.",
-            "PASS" if all(marker in home for marker in MISSION_MARKERS) else "HOLD_MISSION_CONTENT_MISSING",
-            [f"marker:{marker}" for marker in MISSION_MARKERS if marker in home],
+            (
+                "HOLD_LEGAL_REGISTRATION_OR_ANNUAL_REPORT_EVIDENCE_REQUIRED"
+                if all(marker in home for marker in MISSION_MARKERS)
+                and LEGAL_EVIDENCE_PENDING_MARKER in home
+                else "PASS"
+                if all(marker in home for marker in MISSION_MARKERS)
+                else "HOLD_MISSION_CONTENT_MISSING"
+            ),
+            [f"marker:{marker}" for marker in MISSION_MARKERS if marker in home]
+            + [
+                "mission_content=PASS"
+                if all(marker in home for marker in MISSION_MARKERS)
+                else "mission_content=HOLD",
+                "legal_registration_or_annual_report=HOLD_MANUAL_EVIDENCE_REQUIRED"
+                if LEGAL_EVIDENCE_PENDING_MARKER in home
+                else "legal_registration_or_annual_report=NOT_MARKED_PENDING",
+            ],
+            verification_class="MANUAL_OR_ACCOUNT_EVIDENCE",
         ),
         _result(
             "GNP-WEB-04",
@@ -345,6 +362,12 @@ def static_review() -> dict[str, Any]:
         "hard_hold_ids": hard_holds,
         "disclaimer": "This evidence does not constitute Google approval; Google may approve or reject at its discretion.",
         "commercial_boundary_scope": list(BOUNDARY_AUDIT_PATHS),
+        "dns_policy_interpretation": {
+            "official_rule": "The organization must own and control its destination domain; additional Google Ad Grants destination domains require review.",
+            "blanket_dns_record_change_prohibition_found": False,
+            "inference": "DNS records are not immutable under the cited website policy, but ownership, control, HTTPS, availability, and approved ad destinations must be preserved.",
+            "dns_changed_by_verifier": False,
+        },
     }
     report["content_sha256"] = hashlib.sha256(
         json.dumps(report, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")

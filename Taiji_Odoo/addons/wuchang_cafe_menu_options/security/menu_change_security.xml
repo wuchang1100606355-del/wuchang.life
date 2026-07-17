@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_wuchang_cafe_menu" model="ir.module.category">
+        <field name="name">WuChang Cafe Menu</field>
+        <field name="description">Least-privilege roles for merchant menu maintenance and remote support review.</field>
+        <field name="sequence">82</field>
+    </record>
+
+    <record id="group_wuchang_cafe_menu_responsible" model="res.groups">
+        <field name="name">Cafe Menu Responsible Person</field>
+        <field name="category_id" ref="module_category_wuchang_cafe_menu"/>
+        <field name="comment">Maintains only the safe cafe menu fields for one bound operational merchant company. This role does not imply Point of Sale Administrator.</field>
+    </record>
+
+    <record id="group_wuchang_cafe_remote_support" model="res.groups">
+        <field name="name">Cafe Remote Support Candidate Operator</field>
+        <field name="category_id" ref="module_category_wuchang_cafe_menu"/>
+        <field name="comment">Can diagnose and submit menu correction candidates but cannot write products. One human keeps one account; a remote-support candidate still needs one later explicit human confirmation event, even when the same person holds every responsibility.</field>
+    </record>
+
+    <record id="rule_wuchang_cafe_menu_change_remote_own" model="ir.rule">
+        <field name="name">Cafe remote support sees own menu requests</field>
+        <field name="model_id" ref="model_wuchang_cafe_menu_change_request"/>
+        <field name="groups" eval="[(4, ref('group_wuchang_cafe_remote_support'))]"/>
+        <field name="domain_force">[('requester_user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_wuchang_cafe_menu_change_responsible" model="ir.rule">
+        <field name="name">Cafe responsible person sees assigned menu requests</field>
+        <field name="model_id" ref="model_wuchang_cafe_menu_change_request"/>
+        <field name="groups" eval="[(4, ref('group_wuchang_cafe_menu_responsible'))]"/>
+        <field name="domain_force">['|', ('responsible_reviewer_user_id', '=', user.id), ('requester_user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_wuchang_cafe_menu_change_governance_admin" model="ir.rule">
+        <field name="name">Member governance admin sees all cafe menu requests</field>
+        <field name="model_id" ref="model_wuchang_cafe_menu_change_request"/>
+        <field name="groups" eval="[(4, ref('wuchang_member_registration.group_wuchang_member_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>
