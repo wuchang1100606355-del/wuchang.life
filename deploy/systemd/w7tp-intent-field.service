@@ -1,0 +1,28 @@
+[Unit]
+Description=W7TP shared 8D intent-field service on existing localhost port 9107
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/taiji_admin/.local/share/w7tp-intent-field/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=W7TP_STATE_ROOT=/home/taiji_admin/Taiji_Hub
+ExecStart=/usr/bin/python3 /home/taiji_admin/.local/share/w7tp-intent-field/current/tools/cloud_proxy/w7tp_openwebui_cloud_proxy.py --host 127.0.0.1 --port 9107
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=10
+KillSignal=SIGTERM
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadOnlyPaths=/home/taiji_admin/.local/share/w7tp-intent-field
+ReadWritePaths=/home/taiji_admin/Taiji_Hub/runtime/cloud_proxy
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=default.target

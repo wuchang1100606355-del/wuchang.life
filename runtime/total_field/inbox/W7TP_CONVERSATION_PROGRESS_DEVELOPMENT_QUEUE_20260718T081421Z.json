@@ -1,0 +1,541 @@
+{
+  "schema_version": "W7TP-CONVERSATION-PROGRESS-DEVELOPMENT-QUEUE/1.0",
+  "state": "SUBMITTED_FOR_TOTAL_FIELD_REVIEW",
+  "run_id": "W7TP_CONVERSATION_PROGRESS_DEVELOPMENT_QUEUE_20260718T081421Z",
+  "source_run_id": "W7TP_TECH_SOURCE_CLOUD_CANDIDATE_FUSION_20260718T075015Z",
+  "mode": "SANITIZED_PROGRESS_RECORD_AND_DEVELOPMENT_QUEUE_NO_IMPLEMENTATION",
+  "authority": {
+    "founder_final_authority_count": 1,
+    "total_field_convergence_core_count": 1,
+    "cloud_and_local_llm_candidate_only": true,
+    "projection_fields_have_final_authority": false,
+    "adi_is_ninth_field_or_authority": false,
+    "final_decision": null,
+    "implementation_authorized": false,
+    "deployment_authorized": false
+  },
+  "conversation_record_policy": {
+    "record_type": "DEIDENTIFIED_SEMANTIC_PROGRESS_NOT_VERBATIM_TRANSCRIPT",
+    "verbatim_conversation_embedded": false,
+    "endpoint_values_embedded": false,
+    "credentials_embedded": false,
+    "member_plaintext_embedded": false,
+    "raw_private_documents_embedded": false,
+    "opaque_payload_decoded": false,
+    "only_preserved": [
+      "FOUNDER_CORRECTIONS",
+      "VERIFIED_STATE",
+      "EVIDENCE_HASHES",
+      "HOLD_REASONS",
+      "CANDIDATE_CAPABILITIES",
+      "DEVELOPMENT_DEPENDENCIES_AND_ACCEPTANCE_GATES"
+    ]
+  },
+  "dimensions": {
+    "D1_INTENT": {
+      "original_intent_summary": "將目前對話中的技術方向、Founder 更正、驗證進度與阻塞狀態寫入總場，並安排後續系統開發工作。",
+      "normalized_intent": "建立去識別化 8D 進度封包與依賴式開發佇列，送入既有總場 inbox；不直接實作、部署或升權。",
+      "intent_alignment_status": "EXACT",
+      "semantic_delta": "NONE",
+      "founder_corrections": [
+        "DEVELOPER_LAPTOP_IS_WINDOWS_PLUS_WSL_AND_CONNECTS_TO_TAIJI01_BY_SSH",
+        "LOCAL_DEVELOPER_LLM_RUNS_ON_LAPTOP_GPU_NOT_TAIJI01",
+        "SOVEREIGN_AI_MEMBER_SYSTEM_IS_THE_MEMBER_ENTRY_CANDIDATE",
+        "GOOGLE_LOGIN_IS_ONE_IDENTITY_EVIDENCE_SOURCE_NOT_AUTOMATIC_HIGHEST_AUTHORITY",
+        "INCOMPLETE_IDENTITY_EVIDENCE_DOES_NOT_BY_ITSELF_PROVE_IMPERSONATION",
+        "PRIVILEGED_EFFECT_WITH_INSUFFICIENT_EVIDENCE_STAYS_HOLD",
+        "POSITIVE_CONTRADICTION_OR_REDTEAM_IMPERSONATION_EVIDENCE_CAN_BLOCK_OR_QUARANTINE",
+        "HIGH_RISK_STEP_UP_MAY_USE_NO_RETENTION_IMAGE_VERIFICATION",
+        "RAW_IMAGE_MUST_NOT_ENTER_OR_BE_STORED_IN_THE_8D_PACKET",
+        "D2_BUSINESS_STATE_CONTENT_VARIES_BY_SCENE_BUT_REQUIRES_A_MINIMUM_META_CONTRACT",
+        "D1_THROUGH_D8_ARE_PROJECTIONS_OF_ONE_CORE_NOT_EIGHT_AUTHORITIES",
+        "ADI_IS_SHARED_5D_METRIC_COORDINATE_INDEX_AND_STATE_EVIDENCE_BASE",
+        "GENERATIVE_TRANSMISSION_IS_PROTOCOL_NATIVE_8D_STATE_REFERENCE_RECONSTRUCTION_AND_VERIFICATION"
+      ]
+    },
+    "D2_STATE": {
+      "eight_field_containerization_plan": "PASS_PLAN_APPROVED",
+      "containerization_implementation": "NOT_STARTED_REQUIRES_EXPLICIT_FOUNDER_COMMAND",
+      "google_drive_technical_review": "NINETEEN_DOCUMENT_REFERENCES_CLASSIFIED",
+      "historical_founder_research": "REVIEWED_AND_SPLIT_INTO_SALVAGE_CORRECT_HOLD_REJECT",
+      "onedrive_folder_existence": "CONFIRMED_BY_FOUNDER_SCREENSHOT_ON_DEVELOPER_LAPTOP",
+      "onedrive_document_content": "NOT_ACCESSED_FROM_TAIJI01",
+      "member_login_base_url": "PLACEHOLDER_NOT_VALIDATED",
+      "taiji_gateway_base_url": "PLACEHOLDER_NOT_VALIDATED",
+      "endpoint_preflight": "NOT_RUN_ON_DEVELOPER_LAPTOP",
+      "technical_source_completeness": "PARTIAL",
+      "current_worktree_review": "ONE_HUNDRED_THIRTEEN_INVENTORIED_ONE_HUNDRED_TEN_PUSH_CANDIDATES_THREE_EMPTY_ARTIFACTS_HELD",
+      "current_worktree_test_state": "ONE_KNOWN_GNP_WEB_04_STATIC_LINK_TEST_HOLD",
+      "advisory_disposition": "HOLD_SOURCE_COMPLETION_REQUIRED"
+    },
+    "D3_COORDINATE": {
+      "current_execution_host": "taiji01",
+      "current_execution_environment": "UBUNTU_NOT_WSL",
+      "developer_laptop": "WINDOWS_PLUS_WSL_SEPARATE_COORDINATE",
+      "developer_laptop_onedrive_path_ref": "WINDOWS_USER_ONEDRIVE_DOCUMENTS_PATH_WITH_VALUE_WITHHELD_FROM_PACKET",
+      "total_field_review_entry": "runtime/total_field/inbox",
+      "member_login_coordinate": "LOCAL_BASE_URL_PLACEHOLDER_PENDING_LAPTOP_PREFLIGHT",
+      "taiji_gateway_coordinate": "LOCAL_BASE_URL_PLACEHOLDER_PENDING_LAPTOP_PREFLIGHT"
+    },
+    "D4_EVIDENCE": {
+      "references": [
+        {
+          "path": "runtime/total_field/inbox/W7TP_TECH_SOURCE_CLOUD_CANDIDATE_FUSION_20260718T075015Z.json",
+          "sha256": "c1eea87fa0dd7d14b6cb4545e6a3fb99d309f25e509ef7c68bddb88ab6c43458",
+          "result": "PASS_JSON_SCHEMA_AND_INTERNAL_HASHES_WITH_ADVISORY_HOLD"
+        },
+        {
+          "path": "runtime/total_field/inbox/W7TP_TRUE8D_EIGHT_FIELD_CONTAINERIZATION_PLAN_V2_20260717T140655Z.json",
+          "sha256": "d6add5ac5a818d27edbc5d18fe0748189340cc81ac3b026fd5bebbee0c5785d4",
+          "result": "SUBMITTED_PLAN_V2"
+        },
+        {
+          "path": "runtime/total_field/inbox/TOTAL_FIELD_REVIEW_W7TP_TRUE8D_EIGHT_FIELD_CONTAINERIZATION_PLAN_V2_20260717T140655Z.json",
+          "sha256": "6b59523dd7d5ef2dcc32186f35d51632d7ddfcf9d89699951c70246b5f9506f7",
+          "result": "PASS_PLAN_APPROVED"
+        },
+        {
+          "ref": "FOUNDER_SUPPLIED_HISTORICAL_RESEARCH_ATTACHMENT",
+          "sha256": "647036a36c9c48065c6bc8000f7a7483dbcafd65e30be59582470e3f7bd218c7",
+          "result": "REVIEWED_WITHOUT_DECODE_OR_EXECUTION"
+        },
+        {
+          "ref": "FOUNDER_SCREENSHOT_OF_DEVELOPER_LAPTOP_ONEDRIVE_FOLDER",
+          "result": "FOLDER_EXISTENCE_VISIBLE_CONTENT_NOT_MACHINE_READ"
+        },
+        {
+          "path": "runtime/total_field/inbox/W7TP_WORKTREE_CHANGE_REVIEW_MANIFEST_20260718T081421Z.json",
+          "sha256": "88c47ed11b15ac3347014ff9542e159761fbe38eae26a6339b6a5af0cef34d65",
+          "result": "ONE_HUNDRED_THIRTEEN_FILES_SUBMITTED_FOR_REVIEW_WITH_THREE_PUSH_HOLDS"
+        }
+      ],
+      "verified_technical_corrections": [
+        "DIRECT_SLOT_CALCULATION_MAY_BE_CONSTANT_TIME_BUT_COLLISION_BUCKET_LOOKUP_IS_NOT_UNCONDITIONALLY_O1",
+        "WARP_METRIC_FORMULA_IS_NOT_ENCRYPTION_OR_TAMPER_PROOF_BY_ITSELF",
+        "TEMPORAL_INTEGRITY_REQUIRES_VERIFIABLE_HASH_SIGNATURE_TRUSTED_TIME_OR_APPEND_ONLY_BINDING",
+        "BASE64_IS_NOT_ENCRYPTION",
+        "DESTRUCTIVE_SELF_DELETE_OR_OVERWRITE_IS_NOT_AN_ACCEPTABLE_SECURITY_MECHANISM"
+      ]
+    },
+    "D5_EXECUTION": {
+      "completed": [
+        "GOOGLE_DOC_REFERENCE_CLASSIFICATION",
+        "HISTORICAL_RESEARCH_REDTEAM_CLASSIFICATION",
+        "VARIABLE_D2_STATE_META_CONTRACT_SANDBOX",
+        "TAIJI01_VS_DEVELOPER_LAPTOP_COORDINATE_CHECK",
+        "TECH_SOURCE_CLOUD_CANDIDATE_FUSION_PACKET_SUBMISSION",
+        "CURRENT_WORKTREE_CHANGE_REVIEW_MANIFEST_SUBMISSION",
+        "SANITIZED_PROGRESS_AND_DEVELOPMENT_QUEUE_PACKET_CREATION"
+      ],
+      "not_executed": [
+        "ONEDRIVE_CONTENT_EXTRACTION",
+        "MEMBER_LOGIN_NETWORK_PREFLIGHT",
+        "TAIJI_GATEWAY_NETWORK_PREFLIGHT",
+        "CODE_IMPLEMENTATION",
+        "DB_WRITE",
+        "DEPLOY",
+        "RESTART",
+        "GIT_COMMIT_OR_PUSH"
+      ]
+    },
+    "D6_GENERATIVE_TRANSMISSION": {
+      "protocol": "W7TP_PROTOCOL_NATIVE_8D_INTENT_FIELD_PACKET",
+      "routing": [
+        "SANITIZED_CONVERSATION_STATE",
+        "EVIDENCE_HASH_REFERENCES",
+        "CAPABILITY_DIFF_CANDIDATES",
+        "DEPENDENCY_ORDERED_DEVELOPMENT_QUEUE",
+        "TOTAL_FIELD_REVIEW"
+      ],
+      "reconstruction_conditions": [
+        "PRESERVE_FOUNDER_CORRECTIONS",
+        "RESOLVE_EVIDENCE_BY_REFERENCE",
+        "DO_NOT_RECONSTRUCT_WITHHELD_ENDPOINTS_CREDENTIALS_OR_RAW_PRIVATE_DOCUMENTS",
+        "HOLD_WHEN_REQUIRED_SOURCE_OR_VERIFIER_EVIDENCE_IS_MISSING"
+      ],
+      "verification_level": "L3_CANDIDATE",
+      "full_file_copy_present": false,
+      "backup_or_cloud_sync": false,
+      "download_decryption": false
+    },
+    "D7_RISK": {
+      "current_hard_risks_triggered": [],
+      "hold_reasons": [
+        "DEVELOPER_LAPTOP_ONEDRIVE_TECH_MANIFEST_MISSING",
+        "MEMBER_LOGIN_BASE_URL_NOT_VALIDATED",
+        "TAIJI_GATEWAY_BASE_URL_NOT_VALIDATED",
+        "CAPABILITY_REGISTRY_DIFF_NOT_RUN",
+        "GNP_WEB_04_ENCODED_PDF_TARGET_STATIC_CHECK_HOLD",
+        "CONTRACT_SANDBOX_AND_READ_ONLY_SHADOW_EVIDENCE_PENDING"
+      ],
+      "forbidden": [
+        "SECRET_OR_CREDENTIAL_READ",
+        "MEMBER_PLAINTEXT_READ",
+        "RAW_IMAGE_OR_PRIVATE_DOCUMENT_UPLINK",
+        "LLM_AUTHORITY_ELEVATION",
+        "CANONICAL_DRIFT",
+        "DB_WRITE",
+        "DEPLOY",
+        "RESTART",
+        "ROUTER_OR_DNS_WRITE",
+        "PARTIAL_COMMIT"
+      ],
+      "decision": "HOLD"
+    },
+    "D8_ENVELOPE": {
+      "packet_id": "W7TP_CONVERSATION_PROGRESS_DEVELOPMENT_QUEUE_20260718T081421Z",
+      "authority_ref": "FOUNDER_COMMAND_REQUIRES_TOTAL_FIELD_REVIEW_AND_SEPARATE_IMPLEMENTATION_AUTHORIZATION",
+      "version": "1.0",
+      "ttl_seconds": 604800,
+      "nonce": "W7TP_CONVERSATION_PROGRESS_DEVELOPMENT_QUEUE_20260718T081421Z",
+      "sha256": "b7b16dd4f9fb720b7c48b2faf1b0729949ce33fb0bccf0d343d6bf4595a83723",
+      "verifier_ref": "TOTAL_FIELD_PROGRESS_QUEUE_CANONICAL_AUTHORITY_SOURCE_AND_DEPENDENCY_REVIEW",
+      "seal_policy": "NO_IMPLEMENTATION_DEPLOYMENT_COMMIT_OR_SEAL_FROM_THIS_PROGRESS_PACKET"
+    }
+  },
+  "conversation_development_progress": [
+    {
+      "sequence": 1,
+      "topic": "TRUE8D eight-field containerization plan",
+      "progress": "V2 plan submitted and received PASS_PLAN_APPROVED for plan scope only",
+      "remaining": "Contract sandbox read-only shadow fault isolation and separate Founder switchover authorization",
+      "implementation_state": "NOT_STARTED"
+    },
+    {
+      "sequence": 2,
+      "topic": "Developer-laptop local LLM",
+      "progress": "Laptop boundary GPU target system prefix candidate-only authority and localhost binding requirements defined",
+      "remaining": "Locate and configure the existing laptop model only from a laptop WSL session",
+      "implementation_state": "NOT_EXECUTED_FROM_TAIJI01"
+    },
+    {
+      "sequence": 3,
+      "topic": "taiji01 sovereign AI and Total Field connectivity",
+      "progress": "Existing governance core and tests were reported present while a network candidate intake API was not evidenced",
+      "remaining": "Validate the real member-login and candidate-gateway entrypoints without inventing routes",
+      "implementation_state": "HOLD_ENDPOINT_EVIDENCE"
+    },
+    {
+      "sequence": 4,
+      "topic": "Sovereign member identity and authority",
+      "progress": "Member entry Google identity evidence device connection behavior and high-risk step-up concepts normalized into candidate-only authority rules",
+      "remaining": "Contract sandbox for hashed OIDC subject device principal evidence bundle and Total Field authority resolution",
+      "implementation_state": "DESIGN_CANDIDATE"
+    },
+    {
+      "sequence": 5,
+      "topic": "Privacy no-retention image step-up",
+      "progress": "Raw-image exclusion volatile local lifecycle and result-reference-hash-only 8D boundary defined",
+      "remaining": "Verify zero persistence zero uplink zero demographic profiling and deterministic HOLD or BLOCK semantics",
+      "implementation_state": "DESIGN_CANDIDATE"
+    },
+    {
+      "sequence": 6,
+      "topic": "Google Drive technical inventory and Total Field comparison",
+      "progress": "Nineteen primary document references classified into reusable correction-required research-only and authority-drift groups",
+      "remaining": "Merge with the laptop OneDrive manifest and run capability-registry diff",
+      "implementation_state": "PASS_REFERENCE_REVIEW_PARTIAL_SOURCE_SET"
+    },
+    {
+      "sequence": 7,
+      "topic": "Variable D2 state and community original mechanism",
+      "progress": "Sandbox showed structured identity POS and image-step-up profiles deterministic while arbitrary scalar D2 was too permissive; a five-key minimum meta-contract held invalid inputs",
+      "remaining": "Formalize Scene State Genesis Contract in contract sandbox without changing Canonical",
+      "implementation_state": "PASS_HYPOTHESIS_SANDBOX"
+    },
+    {
+      "sequence": 8,
+      "topic": "Google plus OneDrive cloud-candidate technology fusion",
+      "progress": "Google reference catalog historical research corrections and capability candidates submitted to the existing Total Field inbox",
+      "remaining": "Developer laptop must provide a deidentified OneDrive technology manifest",
+      "implementation_state": "HOLD_SOURCE_COMPLETION_REQUIRED"
+    },
+    {
+      "sequence": 9,
+      "topic": "Developer laptop versus taiji01 coordinate correction",
+      "progress": "Founder screenshot confirms the OneDrive folder exists on the Windows laptop while command evidence confirms the current execution host is taiji01 not WSL",
+      "remaining": "Run source extraction and endpoint preflight only in the laptop-local WSL terminal",
+      "implementation_state": "PASS_COORDINATE_CLASSIFICATION"
+    },
+    {
+      "sequence": 10,
+      "topic": "Earliest ADI warp-metric research redteam",
+      "progress": "Direct slot lookup and coordinate atoms retained; unconditional O1 encryption causality self-delete Base64 and fictional-demo claims corrected rejected or quarantined",
+      "remaining": "ADI collision-boundary sandbox and corrected temporal evidence-chain sandbox",
+      "implementation_state": "PASS_HISTORICAL_CANDIDATE_CLASSIFICATION"
+    },
+    {
+      "sequence": 11,
+      "topic": "Member login and Taiji gateway Base URL preflight",
+      "progress": "Safe format and status-only preflight procedure prepared",
+      "remaining": "Actual local Base URLs must be configured on the laptop without placing credentials in URLs or conversation",
+      "implementation_state": "HOLD_PLACEHOLDER_URLS"
+    },
+    {
+      "sequence": 12,
+      "topic": "Total Field progress recording and development scheduling",
+      "progress": "Sanitized conversation state evidence references and dependency-ordered TFDEV-01 through TFDEV-11 queue created",
+      "remaining": "Total Field reviews the queue once; no automatic implementation start",
+      "implementation_state": "SUBMITTED_FOR_TOTAL_FIELD_REVIEW"
+    },
+    {
+      "sequence": 13,
+      "topic": "Related and unrelated worktree review submission",
+      "progress": "One hundred thirteen current worktree files inventoried with hashes; one hundred ten classified as push candidates and three zero-byte unexplained root artifacts held from push",
+      "remaining": "Total Field and human reviewers resolve the known GNP-WEB-04 encoded PDF target test HOLD and review all submitted changes before merge or deployment",
+      "implementation_state": "SUBMITTED_WITH_KNOWN_TEST_HOLD"
+    }
+  ],
+  "development_queue": {
+    "queue_policy": {
+      "dependency_order_required": true,
+      "automatic_start": false,
+      "parallel_side_effects_forbidden": true,
+      "each_item_requires_evidence_and_verifier_result": true,
+      "current_next_item": "TFDEV-01",
+      "post_queue_runtime_switch_requires_separate_founder_authorization": true
+    },
+    "items": [
+      {
+        "id": "TFDEV-01",
+        "priority": "P0",
+        "title": "Developer laptop source manifest and endpoint preflight",
+        "owner_lane": "DEVELOPER_LAPTOP_CODEX",
+        "status": "READY_WAITING_LOCAL_EXECUTION",
+        "dependencies": [],
+        "scope": [
+          "Confirm Windows WSL and reject taiji01 or Remote SSH",
+          "Build deidentified OneDrive technology manifest with relative refs hashes summaries and evidence level",
+          "Validate MEMBER_LOGIN_BASE_URL and TAIJI_GATEWAY_BASE_URL syntax DNS TLS and HTTP status without credentials",
+          "Do not upload raw documents endpoint values tokens cookies redirects or authorization headers"
+        ],
+        "acceptance": [
+          "MANIFEST_JSON_PARSE_PASS",
+          "SOURCE_FILE_HASHES_PRESENT",
+          "CLOUD_ONLY_PLACEHOLDERS_HOLD_NOT_FORCE_DOWNLOADED",
+          "ENDPOINT_RESULTS_CONTAIN_STATUS_ONLY",
+          "SECRET_AND_PRIVATE_CONTENT_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-02",
+        "priority": "P0",
+        "title": "Source ingestion and Canonical drift classification",
+        "owner_lane": "TOTAL_FIELD_READ_ONLY_VERIFIER",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-01"],
+        "scope": [
+          "Verify laptop manifest hashes and merge with nineteen Google document references and historical attachment",
+          "Classify each technical atom as REUSE UPGRADE NEW_CANDIDATE HOLD or REJECT",
+          "Reject alternate D1-D8 authority ADI authority unrestricted LLM and file-transfer drift"
+        ],
+        "acceptance": [
+          "SOURCE_COMPLETENESS_EVIDENCED_OR_EXPLICIT_HOLD",
+          "NO_RAW_PRIVATE_DOCUMENT_MATERIALIZATION",
+          "CANONICAL_V2_DRIFT_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-03",
+        "priority": "P0",
+        "title": "Capability registry diff and duplicate-engine prevention",
+        "owner_lane": "TOTAL_FIELD_CAPABILITY_VERIFIER",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-02"],
+        "scope": [
+          "Compare candidate effects with the existing capability registry and runtime surfaces",
+          "Upgrade existing capability when equivalent effect exists",
+          "Create a new candidate only for a verifier-evidenced capability gap"
+        ],
+        "acceptance": [
+          "EVERY_CANDIDATE_HAS_EXISTING_TARGET_OR_VERIFIED_GAP",
+          "DUPLICATE_ENGINE_COUNT_ZERO",
+          "AUTHORITY_INCREASE_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-04",
+        "priority": "P1",
+        "title": "Scene state genesis contract sandbox",
+        "owner_lane": "CONTRACT_SANDBOX",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-03"],
+        "scope": [
+          "Validate profile_ref source baseline proposed and transition minimum D2 meta-contract",
+          "Exercise member POS property community medical business and image-step-up scene profiles",
+          "Preserve variable business state without accepting arbitrary scalar D2"
+        ],
+        "acceptance": [
+          "STRUCTURED_SCENE_PROFILES_DETERMINISTIC_PASS",
+          "ARBITRARY_SCALAR_D2_HOLD",
+          "MISSING_TRANSITION_HOLD",
+          "CANONICAL_CHANGE_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-05",
+        "priority": "P1",
+        "title": "Sovereign member login and candidate gateway contract sandbox",
+        "owner_lane": "IDENTITY_AND_AUTHORITY_SANDBOX",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-03", "TFDEV-04"],
+        "scope": [
+          "Model member login as natural-person evidence intake and gateway as candidate packet intake",
+          "Use hashed OIDC subject device principal session connection and explicit intent references",
+          "Prevent single login role or model output from granting Founder or final authority",
+          "Treat insufficient privileged proof as HOLD and positive impersonation contradiction as BLOCK or QUARANTINE"
+        ],
+        "acceptance": [
+          "NO_SINGLE_FACTOR_HIGHEST_AUTHORITY",
+          "NO_CREDENTIAL_OR_MEMBER_PLAINTEXT_IN_PACKET",
+          "CANDIDATE_GATEWAY_DIRECT_EXECUTION_FALSE",
+          "IDENTITY_AUTHORITY_DECISION_REQUIRES_TOTAL_FIELD_VERIFIER"
+        ]
+      },
+      {
+        "id": "TFDEV-06",
+        "priority": "P1",
+        "title": "No-retention image step-up evidence sandbox",
+        "owner_lane": "PRIVACY_IDENTITY_SANDBOX",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-05"],
+        "scope": [
+          "Run only for policy-defined elevated re-verification need",
+          "Keep raw frames in device-local volatile lifecycle",
+          "Return only result reference verification state and hash to 8D",
+          "Exclude demographic profiling silent capture and retained abstract images"
+        ],
+        "acceptance": [
+          "RAW_IMAGE_PERSISTENCE_AND_UPLINK_COUNT_ZERO",
+          "VOLATILE_LIFECYCLE_AND_ZEROIZATION_EVIDENCE_PRESENT",
+          "INCOMPLETE_STEP_UP_HOLD_NOT_IMPERSONATION_CLAIM",
+          "PRIVACY_PROFILING_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-07",
+        "priority": "P1",
+        "title": "ADI direct-slot lookup correction sandbox",
+        "owner_lane": "ADI_METRIC_SANDBOX",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-03"],
+        "scope": [
+          "Test finite interval direct-slot calculation as a replaceable lookup profile",
+          "Test collisions out-of-range timestamps interval rescaling segmentation and worst-case bucket behavior",
+          "Keep ADI as shared five-dimensional metric coordinate index and state evidence base"
+        ],
+        "acceptance": [
+          "NO_UNCONDITIONAL_O1_CLAIM",
+          "COLLISION_AND_BOUNDARY_BEHAVIOR_DETERMINISTIC",
+          "ADI_AUTHORITY_AND_DATABASE_PROMOTION_COUNT_ZERO",
+          "FLOAT_DEPENDENT_AUTHORITY_DECISION_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-08",
+        "priority": "P1",
+        "title": "Corrected temporal evidence-chain sandbox",
+        "owner_lane": "EVIDENCE_INTEGRITY_SANDBOX",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-07"],
+        "scope": [
+          "Treat early warp-metric output only as a non-authoritative anomaly feature",
+          "Evaluate hash-chain signature trusted-time reference append-only ordering and replay controls",
+          "Separate confidentiality integrity causality and performance claims"
+        ],
+        "acceptance": [
+          "METRIC_AS_ENCRYPTION_CLAIM_COUNT_ZERO",
+          "INSERT_REORDER_REPLAY_AND_COLLISION_TESTS_DEFINED",
+          "EVERY_SECURITY_CLAIM_HAS_A_VERIFIER_OR_IS_HOLD"
+        ]
+      },
+      {
+        "id": "TFDEV-09",
+        "priority": "P2",
+        "title": "Five-profile and community-scene read-only shadow",
+        "owner_lane": "READ_ONLY_SHADOW",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-04", "TFDEV-05", "TFDEV-06", "TFDEV-07", "TFDEV-08"],
+        "scope": [
+          "Run ASSOCIATION CAFE_POS GENERIC HOUSEHOLD PROPERTY and community application scenarios in shadow",
+          "Compare semantic result state hash authority effect and side-effect count",
+          "Do not write DB deploy restart or mutate profiles"
+        ],
+        "acceptance": [
+          "SEMANTIC_RESULT_EQUIVALENT",
+          "PROFILE_MUTATION_COUNT_ZERO",
+          "AUTHORITY_INCREASE_COUNT_ZERO",
+          "SIDE_EFFECT_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-10",
+        "priority": "P2",
+        "title": "Fail-closed fault isolation and quarantine verification",
+        "owner_lane": "REDTEAM_AND_TOTAL_FIELD_VERIFIER",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-09"],
+        "scope": [
+          "Inject missing field conflict timeout stale reference verifier failure replay and identity mismatch",
+          "Require all eight projections and prohibit quorum or partial commit",
+          "Verify HOLD BLOCK and QUARANTINE precedence without state mutation"
+        ],
+        "acceptance": [
+          "MISSING_CONFLICT_TIMEOUT_OR_VALIDATION_FAILURE_HOLD",
+          "HARD_RISK_BLOCK",
+          "REPLAY_OR_IDENTITY_MISMATCH_QUARANTINE",
+          "PARTIAL_COMMIT_COUNT_ZERO"
+        ]
+      },
+      {
+        "id": "TFDEV-11",
+        "priority": "P3",
+        "title": "Founder go-no-go review for read-only canary",
+        "owner_lane": "TOTAL_FIELD_AND_FOUNDER",
+        "status": "PENDING_DEPENDENCY",
+        "dependencies": ["TFDEV-10"],
+        "scope": [
+          "Consolidate source contract shadow privacy identity ADI temporal and failure evidence",
+          "Issue one review decision for whether a read-only canary may be proposed",
+          "Keep runtime switch deployment and production authority in a separate Founder command"
+        ],
+        "acceptance": [
+          "TOTAL_FIELD_REVIEW_DECISION_PRESENT",
+          "FOUNDER_EXPLICIT_AUTHORIZATION_REQUIRED_FOR_NEXT_STAGE",
+          "DEPLOY_RESTART_DB_WRITE_AND_RUNTIME_SWITCH_COUNT_ZERO"
+        ]
+      }
+    ]
+  },
+  "review_request": {
+    "review_entry": "runtime/total_field/inbox",
+    "review_count_requested": 1,
+    "requested_decision": "ACCEPT_DEVELOPMENT_QUEUE_OR_RETURN_REQUIRED_CHANGES",
+    "allowed_decisions": [
+      "PASS_DEVELOPMENT_QUEUE_APPROVED",
+      "HOLD_DEVELOPMENT_QUEUE_CHANGES_REQUIRED",
+      "BLOCK_AUTHORITY_OR_TECHNICAL_DRIFT"
+    ],
+    "final_decision": null,
+    "current_advisory_decision": "HOLD_UNTIL_TFDEV_01_EVIDENCE",
+    "automatic_work_start": false
+  },
+  "excluded_actions": [
+    "CODE_IMPLEMENTATION",
+    "CANONICAL_CHANGE",
+    "DB_WRITE",
+    "DEPLOY",
+    "RESTART",
+    "DNS_WRITE",
+    "ROUTER_WRITE",
+    "TAILNET_POLICY_WRITE",
+    "GIT_COMMIT",
+    "GIT_PUSH",
+    "SECRET_READ",
+    "MEMBER_PLAINTEXT_READ",
+    "RAW_PRIVATE_DOCUMENT_OR_IMAGE_UPLINK"
+  ],
+  "packet_sha256_basis": "SHA256_CANONICAL_JSON_WITH_DIMENSIONS_D8_ENVELOPE_SHA256_AND_PACKET_SHA256_REMOVED",
+  "packet_sha256": "b7b16dd4f9fb720b7c48b2faf1b0729949ce33fb0bccf0d343d6bf4595a83723",
+  "next": "TFDEV-01_RUN_ONLY_ON_DEVELOPER_LAPTOP_WSL_AND_RETURN_DEIDENTIFIED_MANIFEST_PLUS_STATUS_ONLY_ENDPOINT_PREFLIGHT"
+}

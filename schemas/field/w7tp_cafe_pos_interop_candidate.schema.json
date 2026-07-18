@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_cafe_pos_interop_candidate.schema.json",
+  "title": "W7TP Cafe POS Odoo and ADI Interoperability Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "state", "profile", "candidate_only", "surface",
+    "binding_registry", "source_snapshot", "total_field", "semantic_candidate",
+    "semantic_content_sha256", "production_gate", "D8", "execution_metadata",
+    "redteam_drift_monitor", "side_effects", "envelope_content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-CAFE-POS-INTEROP-CANDIDATE/1.0"},
+    "state": {"const": "L3_CANDIDATE_HUMAN_D8_REQUIRED"},
+    "profile": {"const": "CAFE_POS"},
+    "candidate_only": {"const": true},
+    "surface": {"enum": ["ODOO_HUMAN", "ADI_AI"]},
+    "binding_registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "content_sha256", "encoding_version", "encoding_registry_sha256", "total_field_binding_seal_ref", "product_count", "question_count", "option_count"],
+      "properties": {
+        "state": {"enum": ["DERIVED_NON_AUTHORITATIVE_PREVIEW", "PROVISIONED_VERIFIED_READ_ONLY_BINDINGS"]},
+        "content_sha256": {"$ref": "#/$defs/sha256"},
+        "encoding_version": {"const": "W7TP-CORE-ENCODING/1.0"},
+        "encoding_registry_sha256": {"$ref": "#/$defs/sha256"},
+        "total_field_binding_seal_ref": {
+          "type": ["string", "null"],
+          "pattern": "^total-field-binding-seal-sha256:[a-f0-9]{64}$"
+        },
+        "product_count": {"type": "integer", "minimum": 1},
+        "question_count": {"type": "integer", "minimum": 0},
+        "option_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["menu_id", "source_export_sha256", "snapshot_file_sha256", "authority_state", "scenario_route_table_sha256", "capability_registry_sha256"],
+      "properties": {
+        "menu_id": {"type": "string", "minLength": 1},
+        "source_export_sha256": {"$ref": "#/$defs/sha256"},
+        "snapshot_file_sha256": {"$ref": "#/$defs/sha256"},
+        "authority_state": {"enum": ["VERIFIED_CLOUD_EXPORT", "VERIFIED_CLOUD_EXPORT_WITH_SOURCE_WARNINGS"]},
+        "scenario_route_table_sha256": {"$ref": "#/$defs/sha256"},
+        "capability_registry_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "total_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shared_runtime", "profile", "rectifier", "same_semantic_flow"],
+      "properties": {
+        "shared_runtime": {"const": "tools/total_field/w7tp_field_application_runtime.py"},
+        "profile": {"const": "CAFE_POS"},
+        "rectifier": {"const": "W7TP_CAFE_POS_TOTAL_FIELD_RECTIFIER"},
+        "same_semantic_flow": {"const": true}
+      }
+    },
+    "semantic_candidate": {"$ref": "#/$defs/semantic_candidate"},
+    "semantic_content_sha256": {"$ref": "#/$defs/sha256"},
+    "production_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "binding_readiness", "reason_codes", "formal_pos_order", "human_d8_confirmation_required"],
+      "properties": {
+        "state": {"const": "HOLD"},
+        "binding_readiness": {"enum": ["PREVIEW_ONLY", "VERIFIED_READ_ONLY"]},
+        "reason_codes": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "formal_pos_order": {"const": false},
+        "human_d8_confirmation_required": {"const": true}
+      }
+    },
+    "D8": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "formal_execution_authority"],
+      "properties": {
+        "decision": {"const": "PENDING_TOTAL_FIELD_REVIEW"},
+        "formal_execution_authority": {"const": false}
+      }
+    },
+    "execution_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_surface", "surface_specific_data_excluded_from_semantic_hash", "llm_execution"],
+      "properties": {
+        "input_surface": {"enum": ["ODOO_HUMAN", "ADI_AI"]},
+        "surface_specific_data_excluded_from_semantic_hash": {"const": true},
+        "llm_execution": {"enum": ["NONE", "USER_DEVICE_ONLY"]}
+      }
+    },
+    "redteam_drift_monitor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "status", "checked_boundaries"],
+      "properties": {
+        "mode": {"const": "ALWAYS_ON_EVERY_STATE_TRANSITION"},
+        "status": {"const": "MONITORING_CLEAR"},
+        "checked_boundaries": {"type": "array", "minItems": 8, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "side_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["db_write", "odoo_write", "adi_write", "formal_pos_order", "payment_capture", "network_call", "server_llm"],
+      "properties": {
+        "db_write": {"const": false},
+        "odoo_write": {"const": false},
+        "adi_write": {"const": false},
+        "formal_pos_order": {"const": false},
+        "payment_capture": {"const": false},
+        "network_call": {"const": false},
+        "server_llm": {"const": false}
+      }
+    },
+    "envelope_content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "money": {"type": "string", "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"},
+    "semantic_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "profile", "source_authority", "product", "quantity", "selections", "pricing_candidate", "line_key"],
+      "properties": {
+        "schema_version": {"const": "W7TP-CAFE-POS-RECTIFIED-LINE/1.0"},
+        "profile": {"const": "CAFE_POS"},
+        "source_authority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["menu_id", "source_export_sha256", "snapshot_file_sha256"],
+          "properties": {
+            "menu_id": {"type": "string", "minLength": 1},
+            "source_export_sha256": {"$ref": "#/$defs/sha256"},
+            "snapshot_file_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "product": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_product_ref", "source_product_id", "source_product_code", "name", "major_category", "source_category"],
+          "properties": {
+            "source_product_ref": {"type": "string", "pattern": "^QUICKCLICK:"},
+            "source_product_id": {"type": "string", "minLength": 1},
+            "source_product_code": {"type": ["string", "null"]},
+            "name": {"type": "string", "minLength": 1},
+            "major_category": {"enum": ["coffee", "tea-other", "food", "beans", "drip"]},
+            "source_category": {"type": "string", "minLength": 1}
+          }
+        },
+        "quantity": {"type": "integer", "minimum": 1, "maximum": 99},
+        "selections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_question_ref", "source_option_ref", "product_question_coordinate", "product_option_coordinate", "question_name", "option_name", "selection_mode", "price_delta"],
+            "properties": {
+              "source_question_ref": {"type": "string", "pattern": "^QUICKCLICK:"},
+              "source_option_ref": {"type": "string", "pattern": "^QUICKCLICK:"},
+              "product_question_coordinate": {"type": "string", "pattern": "^QUICKCLICK:"},
+              "product_option_coordinate": {"type": "string", "pattern": "^QUICKCLICK:"},
+              "question_name": {"type": "string", "minLength": 1},
+              "option_name": {"type": "string", "minLength": 1},
+              "selection_mode": {"enum": ["single", "multiple"]},
+              "price_delta": {"$ref": "#/$defs/money"}
+            }
+          }
+        },
+        "pricing_candidate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["currency", "base_price", "option_delta_total", "unit_price", "line_total"],
+          "properties": {
+            "currency": {"const": "TWD"},
+            "base_price": {"$ref": "#/$defs/money"},
+            "option_delta_total": {"$ref": "#/$defs/money"},
+            "unit_price": {"$ref": "#/$defs/money"},
+            "line_total": {"$ref": "#/$defs/money"}
+          }
+        },
+        "line_key": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

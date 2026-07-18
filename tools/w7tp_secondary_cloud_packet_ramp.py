@@ -169,6 +169,14 @@ def resolve_identity_authority(
     comparisons = {
         "identity_ref": member_entry_packet.get("identity_ref")
         == identity_authority_packet.get("identity_ref"),
+        "consent_ref": member_entry_packet.get("consent_ref")
+        == identity_authority_packet.get("consent_ref"),
+        "authorization_ref": member_entry_packet.get("authorization_ref")
+        == identity_authority_packet.get("authorization_ref"),
+        "withdrawal_ref": member_entry_packet.get("withdrawal_ref")
+        == identity_authority_packet.get("withdrawal_ref"),
+        "qualification_ref": member_entry_packet.get("qualification_ref")
+        == identity_authority_packet.get("qualification_ref"),
         "scenario_ref": member_entry_packet.get("scenario_ref")
         == identity_authority_packet.get("scenario_ref"),
         "device_binding_ref": member_entry_packet.get("device_binding_ref")

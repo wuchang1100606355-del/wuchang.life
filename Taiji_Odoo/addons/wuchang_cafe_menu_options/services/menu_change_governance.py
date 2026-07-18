@@ -65,22 +65,37 @@ def stable_sha256(value: Any) -> str:
     return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
 
 
-def build_odoo_product_thing_code(company_id: int, product_template_id: int) -> str:
-    """Build the same authority-scoped thing code as the Total Field core."""
+def build_odoo_thing_code(
+    thing_class: str, company_id: int, stable_coordinate: str
+) -> str:
+    """Build an authority-scoped Total Field code for one Odoo thing."""
 
+    if not re.fullmatch(r"[A-Z][A-Z0-9_]{2,63}", str(thing_class or "")):
+        raise MenuChangeGovernanceError("THING_CLASS_INVALID")
     if not isinstance(company_id, int) or company_id <= 0:
         raise MenuChangeGovernanceError("COMPANY_ID_INVALID")
-    if not isinstance(product_template_id, int) or product_template_id <= 0:
-        raise MenuChangeGovernanceError("PRODUCT_TEMPLATE_ID_INVALID")
+    stable_coordinate = str(stable_coordinate or "").strip()
+    if not REF_PATTERN.fullmatch(stable_coordinate):
+        raise MenuChangeGovernanceError("STABLE_COORDINATE_INVALID")
     digest = stable_sha256(
         {
             "encoding_version": ENCODING_REGISTRY_VERSION,
-            "thing_class": "PRODUCT",
+            "thing_class": thing_class,
             "authority_namespace": f"ODOO_COMPANY_{company_id}",
-            "stable_coordinate": f"product.template:{product_template_id}",
+            "stable_coordinate": stable_coordinate,
         }
     )
-    return f"W7TP_THING_REF:v1:PRODUCT:sha256:{digest}"
+    return f"W7TP_THING_REF:v1:{thing_class}:sha256:{digest}"
+
+
+def build_odoo_product_thing_code(company_id: int, product_template_id: int) -> str:
+    """Build the same authority-scoped product code as the Total Field core."""
+
+    if not isinstance(product_template_id, int) or product_template_id <= 0:
+        raise MenuChangeGovernanceError("PRODUCT_TEMPLATE_ID_INVALID")
+    return build_odoo_thing_code(
+        "PRODUCT", company_id, f"product.template:{product_template_id}"
+    )
 
 
 def _opaque_ref(value: Any, field_name: str) -> str:
@@ -327,3 +342,51 @@ def build_responsible_approval_seal(
     }
     seal["approval_sha256"] = stable_sha256(seal)
     return seal
+
+
+def build_responsible_authorization_event(
+    *,
+    candidate_sha256: str,
+    responsible_person_ref: str,
+    same_principal_dual_role: bool,
+    review_note_sha256: str,
+    actor_ref: str,
+    action_location_ref: str,
+    reviewed_at_utc: str,
+) -> dict[str, Any]:
+    """Seal approval without applying the candidate to the formal product."""
+
+    if not re.fullmatch(r"[a-f0-9]{64}", str(candidate_sha256 or "")):
+        raise MenuChangeGovernanceError("CANDIDATE_SHA256_INVALID")
+    responsible_person_ref = _opaque_ref(
+        responsible_person_ref, "responsible_person_ref"
+    )
+    if same_principal_dual_role is not True:
+        raise MenuChangeGovernanceError("SAME_ACCOUNT_CONFIRMATION_REQUIRED")
+    if not re.fullmatch(r"[a-f0-9]{64}", str(review_note_sha256 or "")):
+        raise MenuChangeGovernanceError("REVIEW_NOTE_SHA256_INVALID")
+    actor_ref = _opaque_ref(actor_ref, "actor_ref")
+    action_location_ref = _opaque_ref(
+        action_location_ref, "action_location_ref"
+    )
+    reviewed_at_utc = _utc_event_time(reviewed_at_utc, "reviewed_at_utc")
+    authorization: dict[str, Any] = {
+        "schema_version": "W7TP-ODOO-CAFE-MENU-RESPONSIBLE-AUTHORIZATION/1.0",
+        "state": "APPROVED_NOT_APPLIED",
+        "candidate_sha256": candidate_sha256,
+        "responsible_person_ref": responsible_person_ref,
+        "single_human_identity_single_account": True,
+        "same_principal_dual_role": True,
+        "event": {
+            "who": actor_ref,
+            "where": action_location_ref,
+            "when": reviewed_at_utc,
+            "what": "APPROVE_ONE_ODOO_MENU_ITEM_CHANGE",
+        },
+        "review_note_sha256": review_note_sha256,
+        "formal_product_write": False,
+        "automatic_apply_after_approval": False,
+        "payment_capture": False,
+    }
+    authorization["authorization_event_ref"] = stable_sha256(authorization)
+    return authorization

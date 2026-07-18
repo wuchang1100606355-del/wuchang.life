@@ -80,6 +80,15 @@ class CafePosDemoTest(unittest.TestCase):
             "依商品策略停用 6 筆濾掛咖啡",
             "咖啡飲品細分為「義式咖啡」與「單品手沖」",
             "人說一句，系統只填來源候選",
+            "AI影音、影像、自然語言與商米語音點餐",
+            "加入影像／影片候選證據",
+            "網頁只接收候選文字，不錄製或保存原始音訊",
+            "voice.say_candidate.v1",
+            "正式播放仍需總場 D8 ALLOW",
+            "8D封包驅動3D模型、場景與商米語音候選",
+            "W7TP_AVATAR_DISPLAY_CONTAINER",
+            "display.render_candidate.v1",
+            "不得據此自動猜商品",
             "人類端採 Odoo 操作契約",
             "AI 端採 ADI 固定候選索引展示",
             "兩者最後都送入同一總場整流器",
@@ -250,6 +259,49 @@ class CafePosDemoTest(unittest.TestCase):
         self.assertNotIn("state.cart.push", self.ai_script)
         self.assertNotIn("payment", self.ai_script.lower())
 
+    def test_sunmi_multimodal_ordering_stays_candidate_only_and_local(self) -> None:
+        for marker in (
+            'SUNMI_VOICE_NODE_REF = "V3_MIX_EDLA_GL"',
+            'SUNMI_TRANSCRIPT_SCHEMA = "w7tp.sunmi-voice-transcript-candidate/v0.1"',
+            "WUCHANG_CAFE_POS_SUNMI_VOICE",
+            'window.addEventListener("w7tp:sunmi-voice-candidate"',
+            'window.dispatchEvent(new CustomEvent("w7tp:sunmi-voice-playback-candidate"',
+            'function_code: "voice.say_candidate.v1"',
+            'd8_allow_required_for_playback: true',
+            'playback_executed: false',
+            "file.arrayBuffer().then(sha256Buffer)",
+            'raw_audio_saved: false',
+            'raw_media_in_packet: false',
+            'product_recognition: "NOT_PERFORMED"',
+            'source_state: "USER_DEVICE_LOCAL_PREVIEW"',
+            "HOLD_MEDIA_HASH_FAILED",
+            "HOLD_SUNMI_VOICE_CANDIDATE_INVALID",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, self.script)
+        self.assertIn("connect-src 'none'", self.page)
+        self.assertNotIn("file.name", self.script)
+        self.assertNotIn("SpeechRecognition", self.script)
+        self.assertNotIn("speechSynthesis", self.script)
+
+    def test_8d_avatar_container_is_display_only_and_whitelisted(self) -> None:
+        for marker in (
+            'AVATAR_GESTURES = Object.freeze(["greet", "recommend", "confirm", "wait", "thank"])',
+            'schema: "W7TP_8D_AVATAR_CONTROL_CANDIDATE/1.0"',
+            'container_ref: "W7TP_AVATAR_DISPLAY_CONTAINER"',
+            'authority: "DISPLAY_ONLY"',
+            'runtime_mutation_authority: false',
+            'function_code: "display.render_candidate.v1"',
+            'generative_transmission: "PROTOCOL_NATIVE_8D_STATE_FIELD_PACKET"',
+            'decision: "DISPLAY_PREVIEW_ONLY"',
+            'formal_authority: false',
+            'total_field_canonical_write: false',
+            'window.dispatchEvent(new CustomEvent("w7tp:avatar-control-candidate"',
+            "HOLD_AVATAR_GESTURE_NOT_ALLOWED",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, self.script)
+
     def test_user_device_llm_guard_blocks_taiji01_execution_contract(self) -> None:
         source = (
             ROOT / "tools/total_field/cafe_pos_local_llm_acceptance.py"
@@ -308,6 +360,22 @@ class CafePosDemoTest(unittest.TestCase):
             "announcement",
             "intent-input",
             "parse-intent",
+            "voice-order",
+            "speak-candidate",
+            "sunmi-voice-state",
+            "media-order-input",
+            "clear-media",
+            "media-preview",
+            "image-order-preview",
+            "video-order-preview",
+            "media-evidence-status",
+            "avatar-control-title",
+            "avatar-stage",
+            "avatar-model",
+            "avatar-gesture-state",
+            "avatar-d8-state",
+            "avatar-control-hash",
+            "avatar-control-status",
             "intent-status",
             "item-configurator",
             "option-questions",

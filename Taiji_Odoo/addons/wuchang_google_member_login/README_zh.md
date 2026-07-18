@@ -46,7 +46,7 @@ Apply 僅更新既有 `auth_oauth.provider_google`，不會建立重複 Provider
 Google Console 的 redirect URI 應對應：
 
 ```text
-https://你的網域/google/member/callback
+https://wuchang.life/google/member/callback
 ```
 
 ## 目前狀態

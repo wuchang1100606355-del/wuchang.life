@@ -4,10 +4,38 @@ from urllib.parse import urlsplit, urlunsplit
 
 GOOGLE_MEMBER_CALLBACK_PATH = "/google/member/callback"
 LOCAL_HOSTNAMES = {"localhost", "localhost.localdomain"}
+GOOGLE_AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth"
+GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
+TRUSTED_GOOGLE_AUTHORIZATION_URLS = {
+    "https://accounts.google.com/o/oauth2/auth",
+    GOOGLE_AUTHORIZATION_URL,
+}
+TRUSTED_GOOGLE_USERINFO_URLS = {
+    "https://www.googleapis.com/oauth2/v1/userinfo",
+    "https://www.googleapis.com/oauth2/v2/userinfo",
+    GOOGLE_USERINFO_URL,
+}
 
 
 def _normalized(value):
     return (value or "").strip().rstrip("/")
+
+
+def trusted_google_authorization_url(configured_url):
+    candidate = _normalized(configured_url)
+    return (
+        candidate
+        if candidate in TRUSTED_GOOGLE_AUTHORIZATION_URLS
+        else GOOGLE_AUTHORIZATION_URL
+    )
+
+
+def trusted_google_userinfo_url(data_endpoint=None, validation_endpoint=None):
+    for value in (data_endpoint, validation_endpoint):
+        candidate = _normalized(value)
+        if candidate in TRUSTED_GOOGLE_USERINFO_URLS:
+            return candidate
+    return GOOGLE_USERINFO_URL
 
 
 def build_callback_uri(

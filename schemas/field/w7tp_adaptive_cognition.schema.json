@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_adaptive_cognition.schema.json",
+  "title": "W7TP Adaptive Cognition Update Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "state", "base_policy_hash", "changes", "evidence_refs", "adoption", "candidate_only", "policy_hash"],
+  "properties": {
+    "schema_version": {"const": "W7TP-ADAPTIVE-COGNITION/1.0"},
+    "state": {"const": "COGNITION_UPDATE_CANDIDATE"},
+    "base_policy_hash": {"$ref": "#/$defs/sha256"},
+    "changes": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "question_order": {},
+        "safe_explanations": {},
+        "evidence_candidate_order": {},
+        "cpu_gpu_assignment": {},
+        "ui_detail_level": {},
+        "sourced_memory_candidates": {}
+      }
+    },
+    "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "adoption": {"const": "REQUIRES_VERIFIED_FOUNDER_AND_TOTAL_FIELD"},
+    "candidate_only": {"const": true},
+    "policy_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

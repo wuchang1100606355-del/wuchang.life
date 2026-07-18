@@ -108,26 +108,9 @@
                             </group>
                         </div>
                     </div>
-                    <notebook>
-                        <page string="來源與總場證據" name="wuchang_menu_evidence">
-                            <div class="alert alert-secondary" role="status">以下欄位由系統管理，店長不需要理解或修改。</div>
-                            <group>
-                                <group>
-                                    <field name="w5c_code" string="穩定事物碼" readonly="1"/>
-                                    <field name="w5c_domain" readonly="1"/>
-                                    <field name="w5c_entity" readonly="1"/>
-                                    <field name="w5c_time_state" readonly="1"/>
-                                </group>
-                                <group>
-                                    <field name="w5c_topology" readonly="1"/>
-                                    <field name="w5c_authority" readonly="1"/>
-                                    <field name="quickclick_menu_id" readonly="1"/>
-                                    <field name="quickclick_product_id" readonly="1"/>
-                                    <field name="quickclick_raw_category" readonly="1"/>
-                                </group>
-                            </group>
-                        </page>
-                    </notebook>
+                    <group string="總場追蹤">
+                        <field name="w5c_code" string="穩定事物碼" readonly="1"/>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -155,7 +138,7 @@
         <field name="name">wuchang.cafe.menu.change.request.list</field>
         <field name="model">wuchang.cafe.menu.change.request</field>
         <field name="arch" type="xml">
-            <list string="遠端修正審核" create="1" delete="0" duplicate="0" decoration-warning="state == 'pending_responsible_review'" decoration-success="state == 'applied'" decoration-muted="state in ['rejected', 'dead_letter']">
+            <list string="遠端修正審核" create="1" delete="0" duplicate="0" decoration-warning="state == 'pending_responsible_review'" decoration-info="state == 'approved'" decoration-success="state == 'applied'" decoration-muted="state in ['rejected', 'dead_letter']">
                 <field name="name" string="修正單"/>
                 <field name="state" string="狀態"/>
                 <field name="origin" string="事件情境"/>
@@ -178,6 +161,7 @@
                 <field name="group_batch_id"/>
                 <field name="product_template_id"/>
                 <filter name="pending" string="待負責人審核" domain="[('state', '=', 'pending_responsible_review')]"/>
+                <filter name="approved" string="已核准待套用" domain="[('state', '=', 'approved')]"/>
                 <filter name="applied" string="已套用" domain="[('state', '=', 'applied')]"/>
                 <filter name="rejected" string="已拒絕" domain="[('state', '=', 'rejected')]"/>
             </search>
@@ -191,10 +175,11 @@
             <form string="單項菜單修正審核" create="1" delete="0" duplicate="0">
                 <header>
                     <button name="action_submit_for_responsible_review" type="object" string="送負責人審核" class="btn-primary" invisible="state != 'draft'" groups="wuchang_cafe_menu_options.group_wuchang_cafe_remote_support,wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
-                    <button name="action_responsible_approve_and_apply" type="object" string="核准並套用" class="btn-primary" invisible="state != 'pending_responsible_review'" confirm="請確認已逐項比較修改前與修改後內容。核准後才會寫入 Odoo 菜單；不會建立訂單或收款。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
-                    <button name="action_responsible_reject" type="object" string="拒絕修正" class="btn-secondary" invisible="state != 'pending_responsible_review'" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
+                    <button name="action_responsible_approve" type="object" string="核准候選（尚不套用）" class="btn-primary" invisible="state != 'pending_responsible_review'" confirm="請確認已逐項比較修改前與修改後內容。本次只核准候選，不會改動正式菜單；套用仍需同一帳號再次明確確認。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
+                    <button name="action_responsible_apply" type="object" string="再次確認並套用" class="btn-primary" invisible="state != 'approved'" confirm="這是第二次明確確認。系統將重新比對正式商品，僅在基準狀態未變時套用；不會建立訂單或收款。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
+                    <button name="action_responsible_reject" type="object" string="拒絕修正" class="btn-secondary" invisible="state not in ['pending_responsible_review', 'approved']" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
                     <button name="action_dead_letter" type="object" string="封存異常單" class="btn-secondary" invisible="state == 'dead_letter'" groups="wuchang_member_registration.group_wuchang_member_admin"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,pending_responsible_review,applied,rejected,dead_letter"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending_responsible_review,approved,applied,rejected,dead_letter"/>
                 </header>
                 <sheet>
                     <div class="alert alert-warning" role="status" invisible="origin != 'remote_support' or state == 'draft'">
@@ -312,12 +297,11 @@
                     <group>
                         <group>
                             <field name="name" string="規格名稱"/>
-                            <field name="code" string="穩定代碼"/>
+                            <field name="code" string="穩定代碼" readonly="id"/>
                             <field name="active"/>
                             <field name="sequence"/>
                         </group>
                         <group>
-                            <field name="source" readonly="1"/>
                             <field name="w5c_code" readonly="1"/>
                             <field name="note"/>
                         </group>

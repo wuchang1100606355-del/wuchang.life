@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_node_capability.schema.json",
+  "title": "W7TP Privacy-Minimized Node And Container Capability Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "state", "privacy", "scope", "total_field_authority", "runtime_mutation_authority", "nodes", "containers", "container_probe", "single_node_failure_isolated", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "W7TP-NODE-CAPABILITY/1.0"},
+    "state": {"const": "READ_ONLY_INVENTORY"},
+    "privacy": {"const": "NO_OWNER_EMAIL_NO_IP_NO_SECRET"},
+    "scope": {"const": "ALL_NODES_AND_CONTAINERS"},
+    "total_field_authority": {"const": "OBSERVE_INDEX_CLASSIFY_ROUTE_WARN_SEAL"},
+    "runtime_mutation_authority": {"const": false},
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["node_id", "os", "online", "ownership", "management_channel", "ping", "base_transport_state", "protocol_version", "manifest_sha256", "validator_compatible", "cpu", "gpu"],
+        "properties": {
+          "node_id": {"type": "string", "minLength": 1},
+          "os": {"type": "string"},
+          "online": {"type": "boolean"},
+          "ownership": {"enum": ["VERIFIED", "UNVERIFIED"]},
+          "management_channel": {"type": "string"},
+          "ping": {"enum": ["REACHABLE", "UNREACHABLE", "NOT_RUN"]},
+          "base_transport_state": {"enum": ["INSTALLED_USABLE", "INSTALLED_UNUSABLE", "REACHABLE_NOT_INSTALLED", "REACHABLE_PROBE_UNAVAILABLE", "OFFLINE", "CLIENT_ONLY", "UNVERIFIED"]},
+          "protocol_version": {"type": ["string", "null"]},
+          "manifest_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+          "validator_compatible": {"type": ["boolean", "null"]},
+          "cpu": {"type": ["string", "object"]},
+          "gpu": {"type": ["string", "object"]}
+        }
+      }
+    },
+    "containers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["container_ref", "name", "image", "runtime_state", "observed_status", "port_scope", "role", "risk_level", "governance_state", "total_field_authority", "runtime_mutation_authority", "allowed_default", "forbidden_default", "observation_source"],
+        "properties": {
+          "container_ref": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "image": {"type": "string", "minLength": 1},
+          "runtime_state": {"type": "string", "minLength": 1},
+          "observed_status": {"type": "string", "minLength": 1},
+          "port_scope": {"enum": ["NONE_OBSERVED", "HOST_EXPOSED_REQUIRES_BOUNDARY_CHECK", "LOCAL_ONLY", "CONTAINER_INTERNAL_OR_UNCLASSIFIED"]},
+          "role": {"type": "string", "minLength": 1},
+          "risk_level": {"type": "string", "minLength": 1},
+          "governance_state": {"const": "TOTAL_FIELD_GOVERNED_READ_ONLY"},
+          "total_field_authority": {"const": "OBSERVE_INDEX_CLASSIFY_ROUTE_WARN_SEAL"},
+          "runtime_mutation_authority": {"const": false},
+          "allowed_default": {"type": "array", "items": {"type": "string"}},
+          "forbidden_default": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "observation_source": {"enum": ["LIVE_DOCKER_PS_READ_ONLY", "SEALED_MANIFEST_ONLY"]}
+        }
+      }
+    },
+    "container_probe": {"type": "string", "minLength": 1},
+    "single_node_failure_isolated": {"const": true},
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

@@ -11,13 +11,14 @@ from odoo.exceptions import UserError
 from ..services.menu_change_governance import (
     MenuChangeGovernanceError,
     build_menu_change_candidate,
-    build_responsible_approval_seal,
-    stable_sha256,
+    build_responsible_authorization_event,
 )
 from .menu_manager import (
     GOVERNANCE_ADMIN_GROUP,
     REMOTE_SUPPORT_GROUP,
     RESPONSIBLE_GROUP,
+    build_human_menu_event_values,
+    schedule_rejected_menu_event,
 )
 
 
@@ -36,6 +37,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
         [
             ("draft", "Draft"),
             ("pending_responsible_review", "Pending Responsible Review"),
+            ("approved", "Approved — Awaiting Explicit Apply"),
             ("applied", "Applied"),
             ("rejected", "Rejected"),
             ("dead_letter", "Dead Letter"),
@@ -291,6 +293,35 @@ class WuchangCafeMenuChangeRequest(models.Model):
         return result
 
     def unlink(self):
+        for request in self:
+            before = (
+                request._current_values()
+                if request.change_type != "create" and request.product_template_id
+                else {}
+            )
+            schedule_rejected_menu_event(
+                self.env,
+                build_human_menu_event_values(
+                    actor_user_id=self.env.user.id,
+                    action="REJECT_DELETE_MENU_CHANGE_EVIDENCE",
+                    result="rejected",
+                    event_time=fields.Datetime.now(),
+                    where={
+                        "group_ref": request.group_batch_id.group_ref,
+                        "store_ref": request.group_batch_id.store_ref,
+                        "company_id": request.company_id.id,
+                    },
+                    target_model="wuchang.cafe.menu.change.request",
+                    target_record_id=request.id,
+                    target_thing_code=before.get("thing_code"),
+                    before=before,
+                    after=before,
+                    source="odoo_safe_menu_review",
+                    source_ref=f"menu-change-request:{request.id}",
+                    candidate_ref=request.candidate_sha256 or None,
+                    authorization_event_ref=request.approval_sha256 or None,
+                ),
+            )
         raise UserError(_("Menu change requests are audit evidence and cannot be deleted."))
 
     @api.model
@@ -304,47 +335,44 @@ class WuchangCafeMenuChangeRequest(models.Model):
     def _event_time_utc(self, value):
         return fields.Datetime.to_string(value).replace(" ", "T") + "Z"
 
-    def _log_eventbook_event(self, *, action, result, event_time, payload):
+    def _log_eventbook_event(
+        self,
+        *,
+        action,
+        result,
+        event_time,
+        before,
+        after,
+        candidate_ref=None,
+        authorization_event_ref=None,
+        detail=None,
+    ):
         self.ensure_one()
-        event_ref = self.candidate_sha256 or f"menu-change-request:{self.id}"
-        event_payload = {
-            "schema_version": "W7TP-ODOO-CAFE-MENU-REVIEW-EVENT/1.0",
-            "who": f"odoo-user:{self.env.user.id}",
-            "where": {
+        target = self.product_template_id or self.applied_product_template_id
+        target_thing_code = target.w5c_code if target else None
+        self.env["wuchang.cafe.ai.eventbook"].sudo().create(
+            build_human_menu_event_values(
+                actor_user_id=self.env.user.id,
+                action=action,
+                result=result,
+                event_time=event_time,
+                where={
                 "group_ref": self.group_batch_id.group_ref,
                 "store_ref": self.group_batch_id.store_ref,
                 "company_id": self.company_id.id,
-            },
-            "when": self._event_time_utc(event_time),
-            "what": action,
-            "request_ref": self.name,
-            "evidence": payload,
-            "single_human_identity_single_account": True,
-        }
-        event_payload["content_sha256"] = stable_sha256(event_payload)
-        self.env["wuchang.cafe.ai.eventbook"].sudo().create(
-            {
-                "name": f"{action}:{event_ref[-12:]}",
-                "event_type": "human_menu_action",
-                "source": "odoo_safe_menu_review",
-                "session_ref": event_ref,
-                "user_role": "SINGLE_ACCOUNT_MULTI_ROLE",
-                "intent": action,
-                "tool_name": "wuchang_cafe_menu_change_request",
-                "risk_level": "medium" if self.origin == "remote_support" else "low",
-                "confirmation_required": self.origin == "remote_support",
-                "confirmation_result": result.upper(),
-                "target_model": "product.template",
-                "target_record_id": str(
-                    self.product_template_id.id
-                    or self.applied_product_template_id.id
-                    or "new"
-                ),
-                "result": result,
-                "payload_json": json.dumps(
-                    event_payload, ensure_ascii=False, indent=2, sort_keys=True
-                ),
-            }
+                },
+                target_model="product.template",
+                target_record_id=target.id if target else "new",
+                target_thing_code=target_thing_code,
+                before=before,
+                after=after,
+                source="odoo_safe_menu_review",
+                source_ref=f"menu-change-request:{self.id}",
+                candidate_ref=candidate_ref or self.candidate_sha256 or None,
+                authorization_event_ref=authorization_event_ref,
+                detail=detail,
+                confirmation_required=self.origin == "remote_support",
+            )
         )
 
     def _proposed_values(self):
@@ -462,7 +490,9 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 action="SUBMIT_ONE_MENU_ITEM_CHANGE_CANDIDATE",
                 result="pending",
                 event_time=submitted_at,
-                payload={"candidate_sha256": packet["candidate_sha256"]},
+                before=current,
+                after=proposed,
+                candidate_ref=packet["candidate_sha256"],
             )
         return True
 
@@ -474,6 +504,10 @@ class WuchangCafeMenuChangeRequest(models.Model):
             raise UserError(_("Only the responsible person bound to this merchant group can review this change."))
         if self.group_batch_id.responsible_menu_reviewer_user_id != self.env.user:
             raise UserError(_("The merchant responsible-person binding changed; submit a new request."))
+        if self.requester_user_id != self.env.user:
+            raise UserError(
+                _("The same account that submitted this candidate must explicitly confirm it.")
+            )
 
     def _apply_values(self):
         self.ensure_one()
@@ -495,38 +529,68 @@ class WuchangCafeMenuChangeRequest(models.Model):
             values["available_in_pos"] = proposed["available_in_pos"]
         return values
 
-    def action_responsible_approve_and_apply(self):
+    def _revalidate_candidate_or_reject(self, *, authorization_event_ref=None):
+        self.ensure_one()
+        current = self._current_values()
+        try:
+            current_check = build_menu_change_candidate(
+                change_type=self.change_type,
+                group_ref=self.group_batch_id.group_ref,
+                store_ref=self.group_batch_id.store_ref,
+                requester_ref=f"odoo-user:{self.requester_user_id.id}",
+                responsible_person_ref=self.responsible_person_ref,
+                same_principal_dual_role=(
+                    self.requester_user_id == self.responsible_reviewer_user_id
+                ),
+                action_at_utc=self._event_time_utc(self.submitted_at),
+                support_reason_sha256=self.support_reason_sha256,
+                current_values=current,
+                proposed_values=self._proposed_values(),
+            )
+        except MenuChangeGovernanceError as exc:
+            raise UserError(_("Menu change revalidation blocked: %s") % exc) from exc
+        conflict = None
+        if current_check["D2"]["current_sha256"] != self.current_snapshot_sha256:
+            conflict = "BASE_STATE_CHANGED"
+        elif current_check["candidate_sha256"] != self.candidate_sha256:
+            conflict = "CANDIDATE_EVIDENCE_CHANGED"
+        if conflict:
+            original = json.loads(self.current_snapshot_json or "{}")
+            schedule_rejected_menu_event(
+                self.env,
+                build_human_menu_event_values(
+                    actor_user_id=self.env.user.id,
+                    action="REJECT_MENU_CANDIDATE_CONFLICT",
+                    result="rejected",
+                    event_time=fields.Datetime.now(),
+                    where={
+                        "group_ref": self.group_batch_id.group_ref,
+                        "store_ref": self.group_batch_id.store_ref,
+                        "company_id": self.company_id.id,
+                    },
+                    target_model="product.template",
+                    target_record_id=self.product_template_id.id or "new",
+                    target_thing_code=current.get("thing_code"),
+                    before=original,
+                    after=current,
+                    source="odoo_safe_menu_review",
+                    source_ref=f"menu-change-request:{self.id}",
+                    candidate_ref=self.candidate_sha256,
+                    authorization_event_ref=authorization_event_ref,
+                    detail={"conflict": conflict},
+                    confirmation_required=True,
+                ),
+            )
+            raise UserError(
+                _("The formal menu item changed after submission. No candidate values were applied.")
+            )
+        return current
+
+    def action_responsible_approve(self):
         for request in self:
             if request.state != "pending_responsible_review":
-                raise UserError(_("Only a pending request can be applied."))
+                raise UserError(_("Only a pending request can be approved."))
             request._assert_responsible_reviewer()
-            current = request._current_values()
-            try:
-                current_check = build_menu_change_candidate(
-                    change_type=request.change_type,
-                    group_ref=request.group_batch_id.group_ref,
-                    store_ref=request.group_batch_id.store_ref,
-                    requester_ref=f"odoo-user:{request.requester_user_id.id}",
-                    responsible_person_ref=request.responsible_person_ref,
-                    same_principal_dual_role=(
-                        request.requester_user_id
-                        == request.responsible_reviewer_user_id
-                    ),
-                    action_at_utc=request._event_time_utc(request.submitted_at),
-                    support_reason_sha256=request.support_reason_sha256,
-                    current_values=current,
-                    proposed_values=request._proposed_values(),
-                )
-            except MenuChangeGovernanceError as exc:
-                raise UserError(_("Menu change revalidation blocked: %s") % exc) from exc
-            if current_check["D2"]["current_sha256"] != request.current_snapshot_sha256:
-                raise UserError(
-                    _("The menu item changed after this request was submitted. No values were applied; create a fresh request.")
-                )
-            if current_check["candidate_sha256"] != request.candidate_sha256:
-                raise UserError(
-                    _("The submitted event evidence no longer matches this request. No values were applied; create a fresh request.")
-                )
             if request.origin == "remote_support" and not str(
                 request.responsible_review_note or ""
             ).strip():
@@ -535,7 +599,86 @@ class WuchangCafeMenuChangeRequest(models.Model):
                         "Record the responsible-person review conclusion before applying a remote support correction."
                     )
                 )
+            current = request._revalidate_candidate_or_reject()
+            reviewed_at = fields.Datetime.now()
+            review_note_sha256 = hashlib.sha256(
+                str(request.responsible_review_note or "").strip().encode("utf-8")
+            ).hexdigest()
+            try:
+                authorization = build_responsible_authorization_event(
+                    candidate_sha256=request.candidate_sha256,
+                    responsible_person_ref=request.responsible_person_ref,
+                    same_principal_dual_role=True,
+                    review_note_sha256=review_note_sha256,
+                    actor_ref=f"odoo-user:{self.env.user.id}",
+                    action_location_ref=request.submitted_location_ref,
+                    reviewed_at_utc=request._event_time_utc(reviewed_at),
+                )
+            except MenuChangeGovernanceError as exc:
+                raise UserError(_("Approval authorization blocked: %s") % exc) from exc
+            super(
+                WuchangCafeMenuChangeRequest,
+                request.with_context(wuchang_menu_request_internal_write=True),
+            ).write(
+                {
+                    "state": "approved",
+                    "approval_seal_json": json.dumps(
+                        authorization, ensure_ascii=False, indent=2, sort_keys=True
+                    ),
+                    "approval_sha256": authorization["authorization_event_ref"],
+                    "reviewed_by_user_id": self.env.user.id,
+                    "reviewed_at": reviewed_at,
+                    "single_account_multi_role": True,
+                }
+            )
+            request._log_eventbook_event(
+                action="APPROVE_ONE_MENU_ITEM_CHANGE",
+                result="success",
+                event_time=reviewed_at,
+                before=current,
+                after=current,
+                candidate_ref=request.candidate_sha256,
+                authorization_event_ref=authorization["authorization_event_ref"],
+                detail={"formal_product_write": False},
+            )
+        return True
 
+    def action_responsible_apply(self):
+        for request in self:
+            if request.state != "approved":
+                before = request._current_values() if request.change_type != "create" else {}
+                schedule_rejected_menu_event(
+                    self.env,
+                    build_human_menu_event_values(
+                        actor_user_id=self.env.user.id,
+                        action="REJECT_UNAPPROVED_OR_REAPPLIED_CANDIDATE",
+                        result="rejected",
+                        event_time=fields.Datetime.now(),
+                        where={
+                            "group_ref": request.group_batch_id.group_ref,
+                            "store_ref": request.group_batch_id.store_ref,
+                            "company_id": request.company_id.id,
+                        },
+                        target_model="product.template",
+                        target_record_id=request.product_template_id.id or "new",
+                        target_thing_code=before.get("thing_code"),
+                        before=before,
+                        after=before,
+                        source="odoo_safe_menu_review",
+                        source_ref=f"menu-change-request:{request.id}",
+                        candidate_ref=request.candidate_sha256 or None,
+                        authorization_event_ref=request.approval_sha256 or None,
+                        detail={"candidate_state": request.state},
+                        confirmation_required=True,
+                    ),
+                )
+                raise UserError(_("Only an explicitly approved candidate can be applied once."))
+            request._assert_responsible_reviewer()
+            if request.reviewed_by_user_id != self.env.user or not request.approval_sha256:
+                raise UserError(_("The approving account and applying account must be the same."))
+            current = request._revalidate_candidate_or_reject(
+                authorization_event_ref=request.approval_sha256
+            )
             values = request._apply_values()
             if request.change_type == "create":
                 values.update(
@@ -562,28 +705,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 product.with_context(wuchang_menu_internal_write=True).write(values)
             product._wuchang_ensure_menu_identity()
             applied = product.wuchang_menu_snapshot()
-            reviewed_at = fields.Datetime.now()
-            try:
-                seal = build_responsible_approval_seal(
-                    candidate_sha256=request.candidate_sha256,
-                    responsible_person_ref=request.responsible_person_ref,
-                    product_thing_code=product.w5c_code,
-                    applied_values=applied,
-                    same_principal_dual_role=(
-                        request.requester_user_id
-                        == request.responsible_reviewer_user_id
-                    ),
-                    review_note_sha256=hashlib.sha256(
-                        str(request.responsible_review_note or "").strip().encode(
-                            "utf-8"
-                        )
-                    ).hexdigest(),
-                    actor_ref=f"odoo-user:{self.env.user.id}",
-                    action_location_ref=request.submitted_location_ref,
-                    reviewed_at_utc=request._event_time_utc(reviewed_at),
-                )
-            except MenuChangeGovernanceError as exc:
-                raise UserError(_("Approval seal blocked: %s") % exc) from exc
+            applied_at = fields.Datetime.now()
             super(
                 WuchangCafeMenuChangeRequest,
                 request.with_context(wuchang_menu_request_internal_write=True),
@@ -591,36 +713,33 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 {
                     "state": "applied",
                     "applied_product_template_id": product.id,
-                    "approval_seal_json": json.dumps(seal, ensure_ascii=False, indent=2, sort_keys=True),
-                    "approval_sha256": seal["approval_sha256"],
-                    "reviewed_by_user_id": self.env.user.id,
-                    "reviewed_at": reviewed_at,
-                    "applied_at": reviewed_at,
+                    "applied_at": applied_at,
                     "remote_support_direct_write": False,
-                    "single_account_multi_role": (
-                        request.requester_user_id
-                        == request.responsible_reviewer_user_id
-                    ),
+                    "single_account_multi_role": True,
                     "formal_pos_order": False,
                     "payment_capture": False,
                 }
             )
             request._log_eventbook_event(
-                action="APPROVE_AND_APPLY_ONE_MENU_ITEM_CHANGE",
+                action="APPLY_ONE_APPROVED_MENU_ITEM_CHANGE",
                 result="success",
-                event_time=reviewed_at,
-                payload={
-                    "candidate_sha256": request.candidate_sha256,
-                    "approval_sha256": seal["approval_sha256"],
-                    "product_thing_code": product.w5c_code,
-                },
+                event_time=applied_at,
+                before=current,
+                after=applied,
+                candidate_ref=request.candidate_sha256,
+                authorization_event_ref=request.approval_sha256,
             )
         return True
 
+    def action_responsible_approve_and_apply(self):
+        """Compatibility entrypoint: approval is now intentionally separate."""
+
+        return self.action_responsible_approve()
+
     def action_responsible_reject(self):
         for request in self:
-            if request.state != "pending_responsible_review":
-                raise UserError(_("Only a pending request can be rejected."))
+            if request.state not in {"pending_responsible_review", "approved"}:
+                raise UserError(_("Only a pending or approved request can be rejected."))
             request._assert_responsible_reviewer()
             if not str(request.responsible_review_note or "").strip():
                 raise UserError(_("Enter a review reason before rejecting the request."))
@@ -638,7 +757,10 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 action="REJECT_ONE_MENU_ITEM_CHANGE",
                 result="rejected",
                 event_time=request.reviewed_at,
-                payload={"candidate_sha256": request.candidate_sha256},
+                before=request._current_values() if request.change_type != "create" else {},
+                after=request._current_values() if request.change_type != "create" else {},
+                candidate_ref=request.candidate_sha256,
+                authorization_event_ref=request.approval_sha256 or None,
             )
         return True
 
@@ -657,6 +779,8 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 action="DEAD_LETTER_ONE_MENU_ITEM_CHANGE",
                 result="rejected",
                 event_time=event_time,
-                payload={"candidate_sha256": request.candidate_sha256 or None},
+                before=request._current_values() if request.change_type != "create" else {},
+                after=request._current_values() if request.change_type != "create" else {},
+                candidate_ref=request.candidate_sha256 or None,
             )
         return result

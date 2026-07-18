@@ -36,11 +36,13 @@ services:
     environment:
       HOST: wuchang_os_pg
       USER: ${POSTGRES_USER:-odoo}
+      WUCHANG_GOOGLE_CLIENT_SECRET_FILE: /run/secrets/google_member_client_secret
     ports:
       - "127.0.0.1:8069:8069"
     volumes:
       - ${TAIJI_ODOO_ADDONS_DIR:?Set the fused addon directory}:/mnt/extra-addons:ro
       - ${TAIJI_ODOO_DATA_DIR:?Set the fused Odoo data directory}:/var/lib/odoo
+      - /home/taiji_admin/.config/wuchang/secrets/google_member_client_secret:/run/secrets/google_member_client_secret:ro
     labels:
       w7tp.stage: FUSED
       w7tp.live_cutover: AUTHORIZED

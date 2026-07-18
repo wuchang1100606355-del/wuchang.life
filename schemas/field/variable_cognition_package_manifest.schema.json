@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/variable_cognition_package_manifest.schema.json",
+  "title": "Variable Cognition Package Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "package_id",
+    "name",
+    "version",
+    "sha256",
+    "source_ref",
+    "capability_scope",
+    "requested_permissions",
+    "allowed_nodes",
+    "compatibility",
+    "reconstruction_conditions",
+    "packet_carried_protocol",
+    "packet_carried_validation",
+    "evidence_refs",
+    "risk_status",
+    "installed_by",
+    "founder_command_ref",
+    "lifecycle_state",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "package_id": {"type": "string", "pattern": "^vcp:[a-z0-9][a-z0-9._-]{2,127}$"},
+    "name": {"type": "string", "minLength": 1, "maxLength": 160},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_ref": {"type": "string", "minLength": 1},
+    "capability_scope": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "requested_permissions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "read_public_reference",
+          "read_package_state",
+          "emit_candidate",
+          "execute_local_verified_reconstruction",
+          "write_package_evidence"
+        ]
+      }
+    },
+    "allowed_nodes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["taiji01", "FOUNDER_GPU_EXECUTION_NODE"]}
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cpu_baseline_required", "required_dependencies", "conflicts"],
+      "properties": {
+        "cpu_baseline_required": {"const": true},
+        "required_dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "conflicts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "reconstruction_conditions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": ["string", "number", "integer", "boolean", "array", "object", "null"]}
+    },
+    "packet_carried_protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "protocol_native", "references", "lookup", "reconstruction_contract"],
+      "properties": {
+        "kind": {"const": "W7TP_8D_STATE_FIELD_PACKET"},
+        "protocol_native": {"const": true},
+        "references": {"const": true},
+        "lookup": {"const": true},
+        "reconstruction_contract": {"const": true}
+      }
+    },
+    "packet_carried_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_field_verification", "before_state_sha256", "after_state_sha256"],
+      "properties": {
+        "total_field_verification": {"const": true},
+        "before_state_sha256": {"const": true},
+        "after_state_sha256": {"const": true}
+      }
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "source_packages",
+        "permission_boundary",
+        "output_state",
+        "total_field_verification_required"
+      ],
+      "properties": {
+        "mode": {"const": "STACK_AND_FUSE"},
+        "source_packages": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["package_id", "version", "sha256"],
+            "properties": {
+              "package_id": {"type": "string", "pattern": "^vcp:[a-z0-9][a-z0-9._-]{2,127}$"},
+              "version": {"type": "string"},
+              "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+            }
+          }
+        },
+        "permission_boundary": {"const": "NO_PERMISSION_EXPANSION"},
+        "output_state": {"const": "CANDIDATE"},
+        "total_field_verification_required": {"const": true}
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "risk_status": {"enum": ["CLEAR", "HOLD", "QUARANTINED"]},
+    "installed_by": {"type": ["string", "null"]},
+    "founder_command_ref": {"type": ["string", "null"]},
+    "lifecycle_state": {
+      "enum": ["DISCOVERED", "CANDIDATE", "VERIFIED", "ENABLED", "DISABLED", "QUARANTINED"]
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}

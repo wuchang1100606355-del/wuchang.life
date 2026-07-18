@@ -6,10 +6,158 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
+import urllib.error
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[2]
+CONFIG_PATH = ROOT / "config/w7tp_vertex_candidate_gateway.json"
+RESOURCE_TOKEN = re.compile(r"^[A-Za-z0-9._:-]+$")
+
+
+class VertexGatewayError(ValueError):
+    """Stable transport/configuration failure without credential material."""
+
+
+def load_gateway_config(path: Path = CONFIG_PATH) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise VertexGatewayError("VERTEX_GATEWAY_CONFIG_READ_FAILED") from exc
+    expected = {
+        "schema_version",
+        "provider",
+        "project",
+        "location",
+        "model",
+        "credential_file_ref",
+        "cloud_output_authority",
+        "formal_execution_authority",
+        "founder_authorization_per_request",
+        "auto_cloud_call",
+    }
+    if not isinstance(value, dict) or set(value) != expected:
+        raise VertexGatewayError("VERTEX_GATEWAY_CONFIG_INVALID")
+    fixed = {
+        "schema_version": "W7TP-VERTEX-CANDIDATE-GATEWAY/1.0",
+        "provider": "GOOGLE_VERTEX_AI",
+        "cloud_output_authority": "CANDIDATE_ONLY",
+        "formal_execution_authority": "LOCAL_TOTAL_FIELD_ONLY",
+        "founder_authorization_per_request": True,
+        "auto_cloud_call": False,
+    }
+    if any(value.get(key) != expected_value for key, expected_value in fixed.items()):
+        raise VertexGatewayError("VERTEX_GATEWAY_GOVERNANCE_INVALID")
+    for key in ("project", "location", "model"):
+        token = value.get(key)
+        if not isinstance(token, str) or not RESOURCE_TOKEN.fullmatch(token):
+            raise VertexGatewayError("VERTEX_GATEWAY_RESOURCE_INVALID")
+    credential_ref = value.get("credential_file_ref")
+    if not isinstance(credential_ref, str) or not credential_ref:
+        raise VertexGatewayError("VERTEX_GATEWAY_CREDENTIAL_REF_INVALID")
+    return value
+
+
+def generate_with_gcloud_rest(
+    *,
+    project: str,
+    location: str,
+    model: str,
+    prompt: str,
+    system_instruction: list[str],
+    credential_file: Path,
+) -> str:
+    """Call Vertex generateContent through gcloud ADC without logging a token."""
+
+    for token in (project, location, model):
+        if not RESOURCE_TOKEN.fullmatch(token):
+            raise VertexGatewayError("VERTEX_REST_RESOURCE_INVALID")
+    if not credential_file.is_file():
+        raise VertexGatewayError("VERTEX_REST_CREDENTIAL_FILE_MISSING")
+
+    command_env = os.environ.copy()
+    command_env["CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE"] = str(credential_file)
+    try:
+        token_result = subprocess.run(
+            ["gcloud", "auth", "print-access-token", "--quiet"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            env=command_env,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise VertexGatewayError("VERTEX_REST_ACCESS_TOKEN_FAILED") from exc
+    access_token = token_result.stdout.strip()
+    if not access_token:
+        raise VertexGatewayError("VERTEX_REST_ACCESS_TOKEN_EMPTY")
+
+    host = (
+        "aiplatform.googleapis.com"
+        if location == "global"
+        else f"{location}-aiplatform.googleapis.com"
+    )
+    endpoint = (
+        f"https://{host}/v1/projects/{project}/locations/{location}"
+        f"/publishers/google/models/{model}:generateContent"
+    )
+    request_body = {
+        "systemInstruction": {
+            "parts": [{"text": "\n".join(system_instruction)}]
+        },
+        "contents": [
+            {"role": "user", "parts": [{"text": prompt}]}
+        ],
+        "generationConfig": {
+            "temperature": 0.1,
+            "responseMimeType": "application/json",
+            "maxOutputTokens": 16384,
+            "thinkingConfig": {"thinkingBudget": 0},
+        },
+    }
+    request = urllib.request.Request(
+        endpoint,
+        data=json.dumps(request_body, ensure_ascii=False).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=90) as response:
+            response_body = json.loads(response.read().decode("utf-8"))
+        candidate = response_body["candidates"][0]
+        finish_reason = candidate.get("finishReason")
+        if finish_reason != "STOP":
+            raise VertexGatewayError(
+                f"VERTEX_REST_FINISH_REASON:{finish_reason or 'MISSING'}"
+            )
+        parts = candidate["content"]["parts"]
+        if not isinstance(parts, list):
+            raise TypeError("candidate parts must be a list")
+        text = "".join(
+            part.get("text", "")
+            for part in parts
+            if isinstance(part, dict) and isinstance(part.get("text"), str)
+        )
+    except (
+        OSError,
+        UnicodeError,
+        json.JSONDecodeError,
+        KeyError,
+        IndexError,
+        TypeError,
+    ) as exc:
+        raise VertexGatewayError("VERTEX_REST_GENERATION_FAILED") from exc
+    if not isinstance(text, str) or not text.strip():
+        raise VertexGatewayError("VERTEX_REST_RESPONSE_EMPTY")
+    return text
 
 
 def emit(key: str, value: Any) -> None:
@@ -54,6 +202,13 @@ def extract_json(text: str) -> tuple[Any, bool]:
 
 
 def main() -> int:
+    try:
+        gateway_config = load_gateway_config()
+    except VertexGatewayError as exc:
+        emit("STATE", "HOLD_VERTEX_GATEWAY_CONFIG_INVALID")
+        emit("REASON_CODE", str(exc))
+        return 7
+
     parser = argparse.ArgumentParser(
         description="W7TP unified Vertex candidate gateway"
     )
@@ -61,15 +216,15 @@ def main() -> int:
     parser.add_argument("--output-dir", required=True)
     parser.add_argument(
         "--project",
-        default=os.environ.get("GOOGLE_CLOUD_PROJECT", "my-j-483304"),
+        default=os.environ.get("GOOGLE_CLOUD_PROJECT", gateway_config["project"]),
     )
     parser.add_argument(
         "--location",
-        default=os.environ.get("W7TP_VERTEX_LOCATION", "us-central1"),
+        default=os.environ.get("W7TP_VERTEX_LOCATION", gateway_config["location"]),
     )
     parser.add_argument(
         "--model",
-        default=os.environ.get("W7TP_VERTEX_MODEL", ""),
+        default=os.environ.get("W7TP_VERTEX_MODEL", gateway_config["model"]),
     )
     args = parser.parse_args()
 
@@ -110,51 +265,62 @@ def main() -> int:
     }
     write_json(out / "CLOUD_REQUEST_RECORD.json", request_record)
 
+    sdk_available = True
     try:
         from google.oauth2 import service_account
         import google.auth
         import vertexai
         from vertexai.generative_models import GenerationConfig, GenerativeModel
-    except Exception as exc:
-        emit("STATE", "HOLD_VERTEX_SDK_IMPORT_FAILED")
-        emit("ERROR_TYPE", type(exc).__name__)
-        emit("ERROR", str(exc))
-        return 4
+    except Exception:
+        sdk_available = False
 
     credentials = None
     credential_source = "APPLICATION_DEFAULT_CREDENTIALS"
 
     configured_key = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
-    repo_key = Path("secrets/gcp-sa-key.json")
+    configured_ref = Path(gateway_config["credential_file_ref"])
+    repo_key = configured_ref if configured_ref.is_absolute() else ROOT / configured_ref
+    rest_credential_file: Path | None = None
 
-    try:
+    if sdk_available:
+        try:
+            if configured_key and Path(configured_key).is_file():
+                credentials = service_account.Credentials.from_service_account_file(
+                    configured_key
+                )
+                credential_source = "GOOGLE_APPLICATION_CREDENTIALS"
+            elif repo_key.is_file():
+                credentials = service_account.Credentials.from_service_account_file(
+                    str(repo_key)
+                )
+                credential_source = "REPO_SERVICE_ACCOUNT_FILE"
+            else:
+                credentials, detected_project = google.auth.default(
+                    scopes=["https://www.googleapis.com/auth/cloud-platform"]
+                )
+                if not args.project and detected_project:
+                    args.project = detected_project
+        except Exception:
+            emit("STATE", "HOLD_GOOGLE_AUTH_FAILED")
+            emit("REASON_CODE", "GOOGLE_AUTH_INITIALIZATION_FAILED")
+            return 5
+
+        vertexai.init(
+            project=args.project,
+            location=args.location,
+            credentials=credentials,
+        )
+    else:
         if configured_key and Path(configured_key).is_file():
-            credentials = service_account.Credentials.from_service_account_file(
-                configured_key
-            )
-            credential_source = "GOOGLE_APPLICATION_CREDENTIALS"
+            rest_credential_file = Path(configured_key)
+            credential_source = "GOOGLE_APPLICATION_CREDENTIALS_GCLOUD_REST"
         elif repo_key.is_file():
-            credentials = service_account.Credentials.from_service_account_file(
-                str(repo_key)
-            )
-            credential_source = "REPO_SERVICE_ACCOUNT_FILE"
+            rest_credential_file = repo_key
+            credential_source = "REPO_SERVICE_ACCOUNT_GCLOUD_REST"
         else:
-            credentials, detected_project = google.auth.default(
-                scopes=["https://www.googleapis.com/auth/cloud-platform"]
-            )
-            if not args.project and detected_project:
-                args.project = detected_project
-    except Exception as exc:
-        emit("STATE", "HOLD_GOOGLE_AUTH_FAILED")
-        emit("ERROR_TYPE", type(exc).__name__)
-        emit("ERROR", str(exc))
-        return 5
-
-    vertexai.init(
-        project=args.project,
-        location=args.location,
-        credentials=credentials,
-    )
+            emit("STATE", "HOLD_GOOGLE_AUTH_FAILED")
+            emit("REASON_CODE", "VERTEX_REST_CREDENTIAL_FILE_MISSING")
+            return 5
 
     requested_models = []
     if args.model:
@@ -187,19 +353,30 @@ def main() -> int:
 
     for model_name in models:
         try:
-            model = GenerativeModel(
-                model_name,
-                system_instruction=system_instruction,
-            )
-            response = model.generate_content(
-                prompt,
-                generation_config=GenerationConfig(
-                    temperature=0.1,
-                    response_mime_type="application/json",
-                    max_output_tokens=8192,
-                ),
-            )
-            response_text = response.text or ""
+            if sdk_available:
+                model = GenerativeModel(
+                    model_name,
+                    system_instruction=system_instruction,
+                )
+                response = model.generate_content(
+                    prompt,
+                    generation_config=GenerationConfig(
+                        temperature=0.1,
+                        response_mime_type="application/json",
+                        max_output_tokens=8192,
+                    ),
+                )
+                response_text = response.text or ""
+            else:
+                assert rest_credential_file is not None
+                response_text = generate_with_gcloud_rest(
+                    project=args.project,
+                    location=args.location,
+                    model=model_name,
+                    prompt=prompt,
+                    system_instruction=system_instruction,
+                    credential_file=rest_credential_file,
+                )
             used_model = model_name
             if response_text.strip():
                 break

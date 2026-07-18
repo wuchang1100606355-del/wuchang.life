@@ -54,7 +54,10 @@ COMMERCIAL_TEST_DISCLOSURE_MARKERS = (
     "business.wuchang.life",
     "與協會非營利首頁分流",
 )
-LEGAL_EVIDENCE_PENDING_MARKER = "EVIDENCE_PENDING_LEGAL_REGISTRATION"
+LEGAL_REGISTRATION_MARKERS = (
+    "新北市社區補字第1100606355號",
+    "EVIDENCE_TOTAL_FIELD_ASSOCIATION_REGISTRATION",
+)
 
 
 MISSION_MARKERS = (
@@ -177,6 +180,19 @@ def static_review() -> dict[str, Any]:
         path: _load_page(path) for path in CORE_PATHS
     }
     home = pages["/"][0]
+    transparency = pages["/transparency/"][0]
+    public_profile = json.loads(
+        (WEB / "data/public_organization_profile.json").read_text(encoding="utf-8")
+    )
+    legal_registration = public_profile["organization"]["legal_registration"]
+    legal_registration_pass = (
+        all(marker in home + transparency for marker in LEGAL_REGISTRATION_MARKERS)
+        and legal_registration.get("value") == "新北市社區補字第1100606355號"
+        and legal_registration.get("status")
+        == "VERIFIED_TOTAL_FIELD_PUBLIC_SAFE_PROJECTION"
+        and bool(legal_registration.get("source_sha256"))
+        and bool(legal_registration.get("source_lock_sha256"))
+    )
     boundary_pages: dict[str, tuple[str, PublicPageParser]] = {
         path: _load_page(path) for path in BOUNDARY_AUDIT_PATHS
     }
@@ -264,24 +280,25 @@ def static_review() -> dict[str, Any]:
         _result(
             "GNP-WEB-03",
             "The mission, activities, services, and served audience are clear and prominent.",
-            (
-                "HOLD_LEGAL_REGISTRATION_OR_ANNUAL_REPORT_EVIDENCE_REQUIRED"
-                if all(marker in home for marker in MISSION_MARKERS)
-                and LEGAL_EVIDENCE_PENDING_MARKER in home
-                else "PASS"
-                if all(marker in home for marker in MISSION_MARKERS)
-                else "HOLD_MISSION_CONTENT_MISSING"
-            ),
+            "PASS_MISSION_AND_TOTAL_FIELD_REGISTRATION_PROJECTION"
+            if all(marker in home for marker in MISSION_MARKERS)
+            and legal_registration_pass
+            else "HOLD_LEGAL_REGISTRATION_PROJECTION_REQUIRED"
+            if all(marker in home for marker in MISSION_MARKERS)
+            else "HOLD_MISSION_CONTENT_MISSING",
             [f"marker:{marker}" for marker in MISSION_MARKERS if marker in home]
             + [
                 "mission_content=PASS"
                 if all(marker in home for marker in MISSION_MARKERS)
                 else "mission_content=HOLD",
-                "legal_registration_or_annual_report=HOLD_MANUAL_EVIDENCE_REQUIRED"
-                if LEGAL_EVIDENCE_PENDING_MARKER in home
-                else "legal_registration_or_annual_report=NOT_MARKED_PENDING",
+                "legal_registration=PASS_TOTAL_FIELD_PUBLIC_SAFE_PROJECTION"
+                if legal_registration_pass
+                else "legal_registration=HOLD_SOURCE_CHAIN_OR_PUBLIC_PROJECTION",
+                "annual_report=NOT_FOUND_IN_TOTAL_FIELD_SEARCH_SCOPE",
+                f"legal_registration_source_sha256={legal_registration.get('source_sha256')}",
+                f"legal_registration_source_lock_sha256={legal_registration.get('source_lock_sha256')}",
             ],
-            verification_class="MANUAL_OR_ACCOUNT_EVIDENCE",
+            verification_class="AUTOMATED_SOURCE_CHAIN_PLUS_EXTERNAL_REVIEW",
         ),
         _result(
             "GNP-WEB-04",

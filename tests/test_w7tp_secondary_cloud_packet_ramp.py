@@ -31,6 +31,10 @@ def member_entry():
         "scenario_ref": "scenario:ASSOCIATION",
         "requested_service_ref": "service:association.activity",
         "device_binding_ref": "device:binding-0001",
+        "consent_ref": "consent:member-0001-v1",
+        "authorization_ref": "authorization:association-activity-0001",
+        "withdrawal_ref": "withdrawal:member-0001-current",
+        "qualification_ref": "qualification:association-member-0001",
         "envelope": {
             "authority_scope": ["association:activity:read"],
             "consent_state": "ACTIVE",
@@ -52,6 +56,10 @@ def identity_authority():
         "authority_scope": ["association:activity:read"],
         "consent_state": "ACTIVE",
         "revocation_state": "CLEAR",
+        "consent_ref": "consent:member-0001-v1",
+        "authorization_ref": "authorization:association-activity-0001",
+        "withdrawal_ref": "withdrawal:member-0001-current",
+        "qualification_ref": "qualification:association-member-0001",
         "device_binding_ref": "device:binding-0001",
         "scenario_ref": "scenario:ASSOCIATION",
         "envelope_verified": True,
@@ -171,6 +179,26 @@ def test_valid_identity_reference_passes():
     result = ramp.resolve_identity_authority(member_entry(), identity_authority())
     assert result["state"] == "PASS"
     assert result["identity_ref"] == "identity:member-0001"
+
+
+def test_member_sovereignty_refs_must_match_verified_authority_packet():
+    fields = ("consent_ref", "authorization_ref", "withdrawal_ref", "qualification_ref")
+    for field in fields:
+        authority = identity_authority()
+        authority[field] = f"{field.removesuffix('_ref')}:mismatch"
+        result = ramp.resolve_identity_authority(member_entry(), authority)
+        assert result["state"] == "HOLD"
+        assert f"AUTHORITY_MISMATCH:{field}" in result["errors"]
+
+
+def test_denied_consent_or_withdrawn_identity_cannot_pass_member_gate():
+    denied = member_entry()
+    denied["envelope"]["consent_state"] = "DENIED"
+    assert "CONSENT_DENIED" in ramp.validate_member_entry_packet(denied)["errors"]
+
+    withdrawn = member_entry()
+    withdrawn["envelope"]["revocation_state"] = "REVOKED"
+    assert "IDENTITY_REVOKED" in ramp.validate_member_entry_packet(withdrawn)["errors"]
 
 
 def test_member_plaintext_entering_packet_holds():

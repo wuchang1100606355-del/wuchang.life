@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="description" content="上品聊國咖啡館重新總店商業 POS 產品示範：採 QuickClick 雲端原始匯出驗證的權威菜單，以合成交易情境操作來源選項、裝置端語句候選、記杯、離線佇列、8D 總場驗證及常駐紅隊；不付款、不寫 production DB。">
   <meta name="robots" content="noindex,nofollow,noarchive">
@@ -108,12 +108,26 @@
         </div>
 
         <section class="intent-assistant" aria-labelledby="intent-title">
-          <div><p class="panel-overline">DEVICE INTENT ASSIST</p><h3 id="intent-title">人說一句，系統只填來源候選</h3></div>
+          <div><p class="panel-overline">SUNMI MULTIMODAL INTENT ASSIST</p><h3 id="intent-title">AI影音、影像、自然語言與商米語音點餐：人說一句，系統只填來源候選</h3></div>
           <label for="intent-input">裝置端點單語句</label>
           <textarea id="intent-input" rows="2" maxlength="120" placeholder="例如：招牌咖啡 大杯 少冰 半糖"></textarea>
           <button class="secondary-button" id="parse-intent" type="button">解析為可覆核候選</button>
-          <p id="intent-status" role="status" aria-live="polite">輸入範例：招牌咖啡 大杯 少冰 半糖。語句只留在本裝置。</p>
-          <small>人類端採 Odoo 操作契約，AI 端採 ADI 固定候選索引展示；兩者最後都送入同一總場整流器。現階段未寫 Odoo、未載入 LLM、無網路傳送、無自動送單，production ADI 與正式 POS 寫單皆維持 HOLD；8D 只封裝整筆訂單候選。</small>
+          <div class="multimodal-actions" aria-label="多模態點餐輸入">
+            <button class="secondary-button" id="voice-order" type="button">接收商米語音候選</button>
+            <button class="quiet-button" id="speak-candidate" type="button" disabled>建立商米朗讀候選</button>
+            <label class="media-input-label" for="media-order-input">加入影像／影片候選證據
+              <input id="media-order-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm">
+            </label>
+            <button class="quiet-button" id="clear-media" type="button" disabled>清除媒體</button>
+          </div>
+          <div class="media-preview" id="media-preview" hidden>
+            <img id="image-order-preview" alt="點餐影像的本機預覽" hidden>
+            <video id="video-order-preview" controls muted playsinline aria-label="點餐影片的本機預覽" hidden></video>
+          </div>
+          <p id="sunmi-voice-state" role="status" aria-live="polite">商米語音節點：V3_MIX_EDLA_GL · CANDIDATE · 等待裝置橋接候選。</p>
+          <p id="media-evidence-status" role="status" aria-live="polite">尚未加入影像或影片；媒體不是正式商品證據。</p>
+          <p id="intent-status" role="status" aria-live="polite">輸入範例：招牌咖啡 大杯 少冰 半糖。文字與辨識結果只存在本頁記憶體。</p>
+          <small>人類端採 Odoo 操作契約，AI 端採 ADI 固定候選索引展示；兩者最後都送入同一總場整流器。語音主路徑使用商米機 `V3_MIX_EDLA_GL` 的裝置語音能力，網頁只接收候選文字，不錄製或保存原始音訊；商米朗讀只建立 `voice.say_candidate.v1` 的 D7 參照候選，正式播放仍需總場 D8 ALLOW。影像與影片只在本頁預覽並計算 SHA-256，未載入裝置端影像模型時不得據此自動猜商品。現階段未寫 Odoo、未載入 LLM、無網路傳送、無自動送單；伺服器模型、production ADI 與正式 POS 寫單皆維持 HOLD。8D 只封裝整筆訂單候選及媒體雜湊證據。</small>
         </section>
 
         <section class="item-configurator" id="item-configurator" aria-labelledby="config-product-name" hidden>
@@ -164,6 +178,55 @@
           <small>固定合成輸入產生固定內容雜湊；執行序號不混入 content hash。</small>
         </div>
       </aside>
+    </section>
+
+    <section class="avatar-control-band" aria-labelledby="avatar-control-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">8D AVATAR CONTROL CONTAINER</p>
+          <h2 id="avatar-control-title">8D封包驅動3D模型、場景與商米語音候選</h2>
+        </div>
+        <p>不是模型自行控制系統；是總場白名單封包控制顯示容器。每個姿態都有來源、條件、雜湊與D8顯示邊界。</p>
+      </div>
+      <div class="avatar-control-layout">
+        <article class="avatar-stage" id="avatar-stage" data-gesture="wait" aria-label="小J 3D模型控制預覽">
+          <div class="avatar-grid" aria-hidden="true"></div>
+          <div class="avatar-model" id="avatar-model" aria-hidden="true">
+            <div class="avatar-head"><span></span><span></span></div>
+            <div class="avatar-torso"></div>
+            <div class="avatar-arm avatar-arm-left"></div>
+            <div class="avatar-arm avatar-arm-right"></div>
+            <div class="avatar-base"></div>
+          </div>
+          <div class="avatar-stage-status">
+            <span id="avatar-gesture-state">WAIT · DISPLAY PREVIEW</span>
+            <code>avatar_ref=/wuchang_core/static/src/xiaoj_ordering/avatar/lung.vrm</code>
+          </div>
+        </article>
+        <article class="avatar-command-panel">
+          <p class="panel-overline">WHITELISTED SKELETON CONTROL</p>
+          <h3>模型動作控制台</h3>
+          <p>容器只接受五種正典手勢。點擊後先產生8D控制候選與SHA-256，再更新本頁3D預覽；實際VRM、商米聲音與正式播放仍由各自適配器及閘門裁決。</p>
+          <div class="avatar-gesture-buttons" aria-label="3D模型白名單動作">
+            <button type="button" data-avatar-gesture="greet">迎賓</button>
+            <button type="button" data-avatar-gesture="recommend">推薦</button>
+            <button type="button" data-avatar-gesture="confirm">確認</button>
+            <button type="button" data-avatar-gesture="wait">等待</button>
+            <button type="button" data-avatar-gesture="thank">致謝</button>
+          </div>
+          <dl class="avatar-container-facts">
+            <div><dt>容器</dt><dd>W7TP_AVATAR_DISPLAY_CONTAINER</dd></div>
+            <div><dt>權限</dt><dd>DISPLAY_ONLY</dd></div>
+            <div><dt>函式</dt><dd>display.render_candidate.v1</dd></div>
+            <div><dt>D8</dt><dd id="avatar-d8-state">PENDING_CONTROL_CANDIDATE</dd></div>
+          </dl>
+          <div class="hash-box avatar-hash-box">
+            <span>8D AVATAR CONTROL SHA-256</span>
+            <code id="avatar-control-hash">尚未建立控制候選</code>
+            <small id="avatar-control-status">容器待命；未執行POS、付款、資料庫、部署或總場修改。</small>
+          </div>
+        </article>
+      </div>
     </section>
 
     <section class="operations-band" aria-labelledby="operations-title">

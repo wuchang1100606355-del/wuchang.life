@@ -228,6 +228,61 @@ class WuchangMemberExternalAuth(models.Model):
             raise UserError(_("Provider and subject are required."))
         return hashlib.sha256(f"{provider}:{subject}".encode("utf-8")).hexdigest()
 
+    @api.model
+    def resolve_provider_subject(self, provider, subject):
+        """Resolve an existing local link without creating or changing one."""
+        subject_hash = self.hash_subject(provider, subject)
+        provider_ref = f"provider:{provider}:sha256:{subject_hash}"
+        binding = self.sudo().search([
+            ("provider", "=", provider),
+            ("provider_subject_hash", "=", subject_hash),
+        ], limit=1)
+        if not binding:
+            return {
+                "provider_subject_reference": provider_ref,
+                "local_subject_reference": None,
+                "link_state": "LINKING_PENDING",
+                "consent_reference": None,
+                "verifier_result": "HOLD",
+            }
+        if binding.binding_status == "revoked":
+            return {
+                "provider_subject_reference": provider_ref,
+                "local_subject_reference": None,
+                "link_state": "LINK_DENIED",
+                "consent_reference": binding.consent_ref or None,
+                "revoked_at": fields.Datetime.to_string(binding.write_date),
+                "verifier_result": "BLOCK",
+            }
+        if binding.binding_status != "bound":
+            return {
+                "provider_subject_reference": provider_ref,
+                "local_subject_reference": None,
+                "link_state": "EXPLICIT_LINK_CONSENT_REQUIRED",
+                "consent_reference": binding.consent_ref or None,
+                "verifier_result": "HOLD",
+            }
+        identity = binding.member_identity_id
+        if not identity or identity.active_status != "active":
+            return {
+                "provider_subject_reference": provider_ref,
+                "local_subject_reference": None,
+                "link_state": "HUMAN_REVIEW_REQUIRED",
+                "consent_reference": binding.consent_ref or None,
+                "verifier_result": "HOLD",
+            }
+        local_seed = f"member:{identity.id}:{identity.service_code_masked or ''}"
+        local_ref = "subject:sha256:" + hashlib.sha256(local_seed.encode("utf-8")).hexdigest()
+        return {
+            "provider_subject_reference": provider_ref,
+            "local_subject_reference": local_ref,
+            "link_state": "PROVIDER_LINK_FOUND",
+            "consent_reference": binding.consent_ref or None,
+            "linked_at": fields.Datetime.to_string(binding.create_date),
+            "last_verified_at": fields.Datetime.to_string(binding.last_login_at),
+            "verifier_result": "PASS",
+        }
+
 
 class WuchangMemberConsentLedger(models.Model):
     _name = "wuchang.member.consent.ledger"

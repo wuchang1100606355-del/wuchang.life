@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import Any, Sequence
 from unittest import mock
 
+from jsonschema import Draft202012Validator
+
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -22,6 +24,9 @@ if str(ROOT) not in sys.path:
 AUTHORITY_REGISTRY = (
     ROOT
     / "manifests/w7tp_small_agent_node_authority_v0_1/node_authority_registry.json"
+)
+CANDIDATE_SCHEMA = (
+    ROOT / "schemas/w7tp_small_agent_node_authority_registry_candidate.schema.json"
 )
 RELEASE = ROOT / "manifests/w7tp_small_agent_release_v0_1_d27230aba7a4"
 EXPECTED_NODE_IDS = (
@@ -191,7 +196,7 @@ class FakeRemoteExecutor:
 
 
 class W7TPSmallAgentNodeAuthorityTests(unittest.TestCase):
-    """Exactly fifteen checks for registry authority and deployment gating."""
+    """Exactly eighteen checks for authority and remote mapping gates."""
 
     def test_01_formal_node_list_is_complete(self) -> None:
         records = deployment.resolve_formal_nodes(
@@ -384,6 +389,38 @@ class W7TPSmallAgentNodeAuthorityTests(unittest.TestCase):
                 "HOLD_RELEASE_RUNTIME_ENTRYPOINT_MISSING",
             )
             self.assertEqual(executor.calls, [])
+
+    def test_16_candidate_schema_accepts_remote_platform_mappings(self) -> None:
+        schema = json.loads(CANDIDATE_SCHEMA.read_text(encoding="utf-8"))
+        registry = _load_registry()
+        Draft202012Validator.check_schema(schema)
+        Draft202012Validator(schema).validate(registry)
+
+    def test_17_drallion_remains_nonformal_mapping(self) -> None:
+        registry = _load_registry()
+        mapping = next(
+            item
+            for item in registry["remote_platform_role_mappings"]
+            if item["node_id"] == "drallion"
+        )
+        self.assertEqual(mapping["formal_status"], "NONFORMAL_MAPPING")
+        self.assertNotIn("drallion", registry["formal_node_ids"])
+        self.assertNotIn("drallion", [item["node_id"] for item in registry["nodes"]])
+        self.assertNotIn("SUNMI_POS", mapping.values())
+
+    def test_18_offline_mappings_are_ineligible_and_taiji01_untouched(self) -> None:
+        registry = _load_registry()
+        mappings = registry["remote_platform_role_mappings"]
+        self.assertEqual(
+            {item["node_id"] for item in mappings},
+            {"V3_MIX_EDLA_GL", "drallion"},
+        )
+        for mapping in mappings:
+            self.assertFalse(mapping["deployment_eligibility"])
+            self.assertEqual(mapping["hold_reason"], "HOLD_NODE_OFFLINE")
+        self.assertNotIn("taiji01", {item["node_id"] for item in mappings})
+        taiji01 = _registry_node(registry, "taiji01")
+        self.assertEqual(taiji01["reason_code"], "ELIGIBLE_OWNER_AUTHORIZED_LOCAL_SHELL")
 
 
 if __name__ == "__main__":

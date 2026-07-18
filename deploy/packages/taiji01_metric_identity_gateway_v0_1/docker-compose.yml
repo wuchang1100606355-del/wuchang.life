@@ -1,8 +1,8 @@
 services:
   taiji01_metric_identity_gateway:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../../..
+      dockerfile: deploy/packages/taiji01_metric_identity_gateway_v0_1/Dockerfile
     image: taiji01-metric-identity-gateway:v0.1
     container_name: taiji01_metric_identity_gateway
     restart: unless-stopped

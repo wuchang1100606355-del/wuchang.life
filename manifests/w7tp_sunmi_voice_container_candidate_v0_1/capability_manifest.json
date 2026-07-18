@@ -1,0 +1,32 @@
+{
+  "schema_version": "w7tp.sunmi-voice-container-capability/v0.1",
+  "status": "CANDIDATE",
+  "device_role": "SUNMI_POS",
+  "node_id_ref": "V3_MIX_EDLA_GL",
+  "governance_identity_ref": "TDI-NODE-sunmi-pos",
+  "platform": "Android 13",
+  "identity_state": "OWNER_CONFIRMED_WITH_DIRECT_MANUFACTURER_EVIDENCE",
+  "capabilities": [
+    "W7TP_SMALL_TRANSPORT_AGENT_CANDIDATE",
+    "D7_VOICE_REFERENCE_RECONSTRUCTION_CANDIDATE",
+    "TOTAL_FIELD_GATEWAY_SUBMISSION",
+    "LOCAL_OR_CONTROLLED_CLOUD_VOICE_GENERATION_CANDIDATE"
+  ],
+  "supported_source_modes": [
+    "TOTAL_FIELD_PULL",
+    "LLM_PUSH_CANDIDATE_ONLY"
+  ],
+  "voice_references": [
+    "tts_script_ref",
+    "voice_profile_ref",
+    "asset_ref",
+    "language_ref"
+  ],
+  "direct_commit": false,
+  "allow_only_commit": true,
+  "total_field_gateway_required": true,
+  "d8_allow_required_for_playback": true,
+  "credential_embedded": false,
+  "deployment_eligibility": false,
+  "hold_reason": "HOLD_NODE_OFFLINE_AND_DEPLOYMENT_TRANSPORT_UNAVAILABLE"
+}

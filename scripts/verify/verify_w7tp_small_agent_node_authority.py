@@ -17,6 +17,9 @@ import sys
 import tempfile
 from typing import Any, NoReturn
 
+from jsonschema import Draft202012Validator
+from jsonschema.exceptions import SchemaError, ValidationError
+
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -27,6 +30,10 @@ RUN_ID = "W7TP_SMALL_AGENT_ALL_NODE_DEPLOYMENT_V0_1_D27230ABA7A4"
 REGISTRY = Path(
     "manifests/w7tp_small_agent_node_authority_v0_1/"
     "node_authority_registry.json"
+)
+SCHEMA = Path("schemas/w7tp_small_agent_node_authority_registry_candidate.schema.json")
+MAPPING_REPORT = Path(
+    "docs/total_field/W7TP_REMOTE_PLATFORM_ROLE_MAPPING_CANDIDATE_REPORT.md"
 )
 DEPLOYER = Path("tools/deploy_w7tp_small_agent_all_nodes.py")
 TEST = Path("tests/test_w7tp_small_agent_node_authority.py")
@@ -75,8 +82,10 @@ REGISTRY_KEYS = frozenset(
         "owner_authority_grant",
         "owner_authority_scope",
         "canonical_source",
+        "candidate_schema_ref",
         "formal_node_ids",
         "not_in_active_canonical",
+        "remote_platform_role_mappings",
         "nodes",
     }
 )
@@ -188,7 +197,15 @@ def _check_protected() -> None:
 
 def _check_registry() -> dict[str, Any]:
     registry = _load_json(REGISTRY)
+    schema = _load_json(SCHEMA)
     active = _load_json(ACTIVE)
+    if not isinstance(schema, dict):
+        _fail("AUTHORITY_CANDIDATE_SCHEMA_INVALID", SCHEMA)
+    try:
+        Draft202012Validator.check_schema(schema)
+        Draft202012Validator(schema).validate(registry)
+    except (SchemaError, ValidationError):
+        _fail("AUTHORITY_CANDIDATE_SCHEMA_VALIDATION_FAILED", SCHEMA)
     if not isinstance(registry, dict) or frozenset(registry) != REGISTRY_KEYS:
         _fail("AUTHORITY_REGISTRY_SHAPE_INVALID", REGISTRY)
     fixed = {
@@ -210,9 +227,55 @@ def _check_registry() -> dict[str, Any]:
     excluded = registry.get("not_in_active_canonical")
     if excluded != [
         {"subject": "taiji03", "reason_code": "NOT_IN_ACTIVE_CANONICAL"},
-        {"subject": "商米 POS", "reason_code": "NOT_IN_ACTIVE_CANONICAL"},
+        {"subject": "drallion", "reason_code": "NOT_IN_ACTIVE_CANONICAL"},
     ]:
         _fail("NON_ACTIVE_RECORD_MISMATCH", REGISTRY)
+    mappings = registry.get("remote_platform_role_mappings")
+    if not isinstance(mappings, list) or len(mappings) != 2:
+        _fail("REMOTE_PLATFORM_MAPPING_COUNT_INVALID", REGISTRY)
+    mapping_by_id = {
+        item.get("node_id"): item for item in mappings if isinstance(item, dict)
+    }
+    if set(mapping_by_id) != {"V3_MIX_EDLA_GL", "drallion"}:
+        _fail("REMOTE_PLATFORM_MAPPING_NODE_SET_INVALID", REGISTRY)
+    v3_mapping = mapping_by_id["V3_MIX_EDLA_GL"]
+    expected_v3 = {
+        "node_role": "SUNMI_POS",
+        "platform": "ANDROID_13",
+        "voice_capabilities": ["GOOGLE_COMMERCIAL_VOICE_AUTHORIZED"],
+        "containerization": "SUPPORTED",
+        "container_transport": (
+            "ANDROID_COMPATIBLE_CONTAINER_OR_EXISTING_FORMAL_APPLICATION_ONLY"
+        ),
+        "mapping_source": "OWNER_CONFIRMED",
+        "deployment_eligibility": False,
+        "hold_reason": "HOLD_NODE_OFFLINE",
+    }
+    if any(v3_mapping.get(key) != value for key, value in expected_v3.items()):
+        _fail("V3_PLATFORM_ROLE_MAPPING_INVALID", REGISTRY)
+    drallion_mapping = mapping_by_id["drallion"]
+    expected_drallion = {
+        "node_role": "CHROMEOS_NODE",
+        "platform": "CHROMEOS",
+        "platform_variant": "ANDROID_ARC_CLIENT_VISIBLE_TO_TAILSCALE",
+        "container_transport": "CHROMEOS_CROSTINI_OR_EXISTING_CONTAINER_ONLY",
+        "formal_status": "NONFORMAL_MAPPING",
+        "mapping_source": "OWNER_CONFIRMED",
+        "deployment_eligibility": False,
+        "hold_reason": "HOLD_NODE_OFFLINE",
+    }
+    if any(
+        drallion_mapping.get(key) != value
+        for key, value in expected_drallion.items()
+    ):
+        _fail("DRALLION_PLATFORM_ROLE_MAPPING_INVALID", REGISTRY)
+    if "drallion" in registry.get("formal_node_ids", []) or any(
+        isinstance(item, dict) and item.get("node_id") == "drallion"
+        for item in registry.get("nodes", [])
+    ):
+        _fail("DRALLION_FORMAL_PROMOTION_FORBIDDEN", REGISTRY)
+    if "taiji01" in mapping_by_id:
+        _fail("TAIJI01_REMOTE_MAPPING_WRITE_FORBIDDEN", REGISTRY)
     nodes = registry.get("nodes")
     if not isinstance(nodes, list) or len(nodes) != len(FORMAL_NODE_IDS):
         _fail("AUTHORITY_NODE_COUNT_MISMATCH", REGISTRY)
@@ -282,6 +345,8 @@ def _check_registry() -> dict[str, Any]:
             "HOLD_DEPLOYMENT_NOT_AUTHORIZED",
         }:
             _fail("OWNER_AUTHORITY_NOT_APPLIED", REGISTRY)
+    if by_id["V3_MIX_EDLA_GL"].get("reason_code") != "HOLD_NODE_OFFLINE":
+        _fail("V3_OFFLINE_HOLD_INVALID", REGISTRY)
     return registry
 
 
@@ -368,6 +433,8 @@ def _check_sensitive_material() -> None:
 
     inspected = (
         REGISTRY,
+        SCHEMA,
+        MAPPING_REPORT,
         DEPLOYER,
         TEST,
         Path(__file__).resolve().relative_to(ROOT),
@@ -397,7 +464,7 @@ def _check_compile_and_tests() -> None:
         and node.name.startswith("test_")
         for node in ast.walk(tree)
     )
-    if count != 15:
+    if count != 18:
         _fail("FOCUSED_TEST_COUNT_MISMATCH", TEST)
     with tempfile.TemporaryDirectory(prefix="w7tp-authority-pyc-") as directory:
         for index, path in enumerate((DEPLOYER, TEST, Path(__file__).resolve().relative_to(ROOT))):
@@ -422,7 +489,7 @@ def _check_compile_and_tests() -> None:
         timeout=180,
     )
     transcript = result.stdout + result.stderr
-    if result.returncode != 0 or not re.search(r"Ran\s+15\s+tests?\b", transcript) or not re.search(r"(?m)^OK$", transcript):
+    if result.returncode != 0 or not re.search(r"Ran\s+18\s+tests?\b", transcript) or not re.search(r"(?m)^OK$", transcript):
         _fail("FOCUSED_TEST_FAILED", TEST)
 
 
@@ -451,7 +518,9 @@ def main() -> int:
     print("FORMAL_NODES=8")
     print("ELIGIBLE_NODES=2")
     print("ROUTER_NODES_HELD=1")
-    print("TEST_COUNT=15")
+    print("TEST_COUNT=18")
+    print(f"CANDIDATE_SCHEMA={SCHEMA.as_posix()}")
+    print("REMOTE_PLATFORM_MAPPINGS=2")
     print("RELEASE_RUNTIME_ENTRYPOINT=HOLD_RELEASE_RUNTIME_ENTRYPOINT_MISSING")
     print("REMOTE_COMMANDS_EXECUTED=0")
     return 0

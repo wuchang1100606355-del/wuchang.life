@@ -5,6 +5,7 @@
   "owner_authority_grant": "FORMAL_NON_ROUTER_NODES_W7TP_SMALL_AGENT_INSTALL_ONLY",
   "owner_authority_scope": "W7TP_SMALL_AGENT_INSTALL_V0_1_ONLY",
   "canonical_source": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+  "candidate_schema_ref": "schemas/w7tp_small_agent_node_authority_registry_candidate.schema.json",
   "formal_node_ids": [
     "taiji01",
     "MSI",
@@ -21,8 +22,47 @@
       "reason_code": "NOT_IN_ACTIVE_CANONICAL"
     },
     {
-      "subject": "商米 POS",
+      "subject": "drallion",
       "reason_code": "NOT_IN_ACTIVE_CANONICAL"
+    }
+  ],
+  "remote_platform_role_mappings": [
+    {
+      "node_id": "V3_MIX_EDLA_GL",
+      "node_role": "SUNMI_POS",
+      "platform": "ANDROID_13",
+      "voice_capabilities": [
+        "GOOGLE_COMMERCIAL_VOICE_AUTHORIZED"
+      ],
+      "containerization": "SUPPORTED",
+      "container_transport": "ANDROID_COMPATIBLE_CONTAINER_OR_EXISTING_FORMAL_APPLICATION_ONLY",
+      "mapping_source": "OWNER_CONFIRMED",
+      "evidence_refs": [
+        "owner-confirmation:V3_MIX_EDLA_GL=SUNMI_POS",
+        "owner-confirmation:platform=ANDROID_13",
+        "owner-confirmation:google-commercial-voice=AUTHORIZED",
+        "owner-confirmation:containerization=SUPPORTED",
+        "tailscale-observation:V3_MIX_EDLA_GL:online=false"
+      ],
+      "deployment_eligibility": false,
+      "hold_reason": "HOLD_NODE_OFFLINE"
+    },
+    {
+      "node_id": "drallion",
+      "node_role": "CHROMEOS_NODE",
+      "platform": "CHROMEOS",
+      "platform_variant": "ANDROID_ARC_CLIENT_VISIBLE_TO_TAILSCALE",
+      "container_transport": "CHROMEOS_CROSTINI_OR_EXISTING_CONTAINER_ONLY",
+      "formal_status": "NONFORMAL_MAPPING",
+      "mapping_source": "OWNER_CONFIRMED",
+      "evidence_refs": [
+        "owner-confirmation:drallion=CHROMEOS_NODE",
+        "owner-confirmation:platform=CHROMEOS",
+        "owner-confirmation:tailscale-android=ANDROID_ARC_CLIENT",
+        "tailscale-observation:drallion:online=false"
+      ],
+      "deployment_eligibility": false,
+      "hold_reason": "HOLD_NODE_OFFLINE"
     }
   ],
   "nodes": [
@@ -168,7 +208,7 @@
         "local-command:ssh-G:alias=V3_MIX_EDLA_GL:hostname=v3_mix_edla_gl:port=22:parsed=true"
       ],
       "alias_of": null,
-      "reason_code": "HOLD_UNSUPPORTED_DEPLOYMENT_TRANSPORT"
+      "reason_code": "HOLD_NODE_OFFLINE"
     },
     {
       "node_id": "RT-BE86U-7428",

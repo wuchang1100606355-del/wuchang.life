@@ -22,6 +22,9 @@ DEFAULT_HOST_CONFIG = ROOT / "Taiji_Odoo/config/odoo.conf"
 DEFAULT_CONTAINER = "wuchang_os_odoo_18"
 DEFAULT_CONTAINER_CONFIG = "/etc/odoo/odoo.conf"
 CALLBACK_PATH = "/google/member/callback"
+CANONICAL_CALLBACK_URL = "https://wuchang.life/google/member/callback"
+GOOGLE_CLIENT_SECRET_FILE_ENV = "WUCHANG_GOOGLE_CLIENT_SECRET_FILE"
+GOOGLE_CLIENT_SECRET_FILE = "/run/secrets/google_member_client_secret"
 RESULT_PREFIX = "WUCHANG_GOOGLE_PROVIDER_RESULT="
 DATABASE_PREFIX = "WUCHANG_ODOO_DATABASE_RESULT="
 APPLY_CONFIRMATION = "APPLY_EXISTING_GOOGLE_PROVIDER"
@@ -143,6 +146,48 @@ def build_odoo_shell_program(mode: str, payload: dict[str, str] | None = None) -
     ).decode("ascii")
     return f'''import base64
 import json
+import os
+import stat
+from pathlib import Path
+from urllib.parse import urlsplit
+
+
+def google_endpoint_state(value, endpoint_kind):
+    try:
+        parsed = urlsplit((value or "").strip())
+    except ValueError:
+        return "INVALID_REF" if value else "MISSING"
+    allowed_paths = {{
+        "authorization": {{"/o/oauth2/auth", "/o/oauth2/v2/auth"}},
+        "userinfo": {{"/oauth2/v1/userinfo", "/oauth2/v2/userinfo", "/oauth2/v3/userinfo"}},
+    }}
+    allowed_host = "accounts.google.com" if endpoint_kind == "authorization" else "www.googleapis.com"
+    if (
+        parsed.scheme == "https"
+        and parsed.hostname == allowed_host
+        and not parsed.username
+        and not parsed.password
+        and parsed.path in allowed_paths[endpoint_kind]
+        and not parsed.query
+        and not parsed.fragment
+    ):
+        return "PRESENT_TRUSTED_GOOGLE_HTTPS"
+    return "INVALID_REF" if value else "MISSING"
+
+
+def secret_file_state():
+    configured_path = os.environ.get({GOOGLE_CLIENT_SECRET_FILE_ENV!r}, "")
+    if configured_path != {GOOGLE_CLIENT_SECRET_FILE!r}:
+        return "INVALID_REF" if configured_path else "MISSING"
+    try:
+        file_status = Path(configured_path).lstat()
+    except OSError:
+        return "MISSING"
+    if not stat.S_ISREG(file_status.st_mode):
+        return "INVALID_TYPE"
+    if stat.S_IMODE(file_status.st_mode) != 0o600:
+        return "INVALID_MODE"
+    return "PRESENT" if file_status.st_size > 0 else "EMPTY"
 
 payload = json.loads(base64.urlsafe_b64decode({encoded_payload!r}).decode("utf-8"))
 provider = env.ref("auth_oauth.provider_google", raise_if_not_found=False)
@@ -167,25 +212,44 @@ if {mode!r} == "apply":
 provider = env.ref("auth_oauth.provider_google", raise_if_not_found=False)
 public_base_url = params.get_param("wuchang_google_member_login.base_url") or ""
 redirect_uri = params.get_param("wuchang_google_member_login.redirect_uri") or ""
-secret_present = bool(params.get_param("wuchang_google_member_login.client_secret"))
 provider_exists = bool(provider)
 provider_active = bool(provider and provider.enabled)
 client_id_present = bool(provider and provider.client_id)
 callback_present = bool(redirect_uri and redirect_uri.endswith("/google/member/callback"))
 public_base_present = bool(public_base_url.startswith("https://"))
+auth_endpoint_state = google_endpoint_state(
+    provider.auth_endpoint if provider else "", "authorization"
+)
+userinfo_endpoint = ""
+if provider:
+    userinfo_endpoint = provider.data_endpoint or provider.validation_endpoint or ""
+userinfo_endpoint_state = google_endpoint_state(userinfo_endpoint, "userinfo")
+runtime_secret_file_state = secret_file_state()
+canonical_callback_state = "PRESENT" if {CANONICAL_CALLBACK_URL!r}.startswith("https://wuchang.life/") else "INVALID_REF"
+runtime_login_ready = all((
+    provider_exists,
+    provider_active,
+    client_id_present,
+    runtime_secret_file_state == "PRESENT",
+    auth_endpoint_state == "PRESENT_TRUSTED_GOOGLE_HTTPS",
+    userinfo_endpoint_state == "PRESENT_TRUSTED_GOOGLE_HTTPS",
+    canonical_callback_state == "PRESENT",
+))
 result = {{
     "provider_exists": "PRESENT" if provider_exists else "MISSING",
     "provider_active": "PRESENT" if provider_active else "INACTIVE",
     "client_id_state": "PRESENT" if client_id_present else "MISSING",
-    "client_secret_state": "PRESENT" if secret_present else "MISSING",
-    "auth_endpoint_state": "PRESENT" if provider and provider.auth_endpoint else "MISSING",
+    "client_secret_state": runtime_secret_file_state,
+    "auth_endpoint_state": auth_endpoint_state,
     "validation_endpoint_state": "PRESENT" if provider and provider.validation_endpoint else "MISSING",
     "data_endpoint_state": "PRESENT" if provider and provider.data_endpoint else "MISSING",
+    "userinfo_endpoint_state": userinfo_endpoint_state,
     "scope_state": "PRESENT" if provider and provider.scope else "MISSING",
     "body_state": "PRESENT" if provider and provider.body else "MISSING",
     "public_base_url_state": "PRESENT" if public_base_present else "INVALID_REF" if public_base_url else "MISSING",
     "callback_uri_state": "PRESENT" if callback_present and public_base_present else "INVALID_REF" if redirect_uri else "MISSING",
-    "login_health": "PASS" if all((provider_exists, provider_active, client_id_present, secret_present, callback_present, public_base_present)) else "HOLD_CONFIGURATION_REQUIRED",
+    "canonical_callback_state": canonical_callback_state,
+    "login_health": "PASS" if runtime_login_ready else "HOLD_CONFIGURATION_REQUIRED",
     "db_write_executed": False,
     "secret_output": False,
 }}

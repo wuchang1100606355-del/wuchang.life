@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
 
+from tools.total_field.w7tp_core_encoding import build_source_coordinate
+
 
 MAIN_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 REL_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -36,6 +38,25 @@ SOURCE_CATEGORY_TO_MAJOR = {
     "濾掛咖啡": "drip",
 }
 EXCLUDED_SOURCE_CATEGORIES = {"濾掛咖啡"}
+SOURCE_COORDINATE_NAMESPACE = "QUICKCLICK"
+
+
+def source_product_ref(menu_id: str, product_coordinate: str) -> str:
+    """Return the stable bottom-up coordinate for one source product."""
+
+    return build_source_coordinate("PRODUCT", menu_id, product_coordinate)
+
+
+def source_question_ref(menu_id: str, question_coordinate: str) -> str:
+    """Return the stable bottom-up coordinate for one source option question."""
+
+    return build_source_coordinate("QUESTION", menu_id, question_coordinate)
+
+
+def source_option_ref(menu_id: str, option_coordinate: str) -> str:
+    """Return the stable bottom-up coordinate for one source option value."""
+
+    return build_source_coordinate("OPTION", menu_id, option_coordinate)
 
 
 def _text_nodes(element: ET.Element) -> str:
@@ -448,12 +469,9 @@ def build_web_data(snapshot: dict[str, Any]) -> dict[str, Any]:
             "id": product["sku"] or f"P_{product['product_id']}",
             "sourceProductId": product["product_id"],
             "sourceProductCode": product["product_code"],
-            "sourceRef": ":".join(
-                [
-                    "QUICKCLICK",
-                    snapshot["menu"]["menu_id"],
-                    product["sku"] or f"P_{product['product_id']}",
-                ]
+            "sourceRef": source_product_ref(
+                snapshot["menu"]["menu_id"],
+                product["sku"] or f"P_{product['product_id']}",
             ),
             "name": product["name"],
             "category": SOURCE_CATEGORY_TO_MAJOR[product["category"]],

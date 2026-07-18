@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_cafe_pos_binding_seal.schema.json",
+  "title": "W7TP Cafe POS Production Binding Seal",
+  "oneOf": [
+    {"$ref": "#/$defs/request"},
+    {"$ref": "#/$defs/evaluation"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "surface": {"enum": ["ODOO_HUMAN", "ADI_AI"]},
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "content_sha256", "product_count", "question_count", "option_count"],
+      "properties": {
+        "state": {"const": "PROVISIONED_VERIFIED_READ_ONLY_BINDINGS"},
+        "content_sha256": {"$ref": "#/$defs/sha256"},
+        "product_count": {"type": "integer", "minimum": 1},
+        "question_count": {"type": "integer", "minimum": 0},
+        "option_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["menu_id", "source_export_sha256", "snapshot_file_sha256", "authority_state"],
+      "properties": {
+        "menu_id": {"type": "string", "minLength": 1},
+        "source_export_sha256": {"$ref": "#/$defs/sha256"},
+        "snapshot_file_sha256": {"$ref": "#/$defs/sha256"},
+        "authority_state": {"enum": ["VERIFIED_CLOUD_EXPORT", "VERIFIED_CLOUD_EXPORT_WITH_SOURCE_WARNINGS"]}
+      }
+    },
+    "authority_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "authority_sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario_route_table", "capability_registry"],
+      "properties": {
+        "scenario_route_table": {"$ref": "#/$defs/authority_record"},
+        "capability_registry": {"$ref": "#/$defs/authority_record"}
+      }
+    },
+    "encoding_registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "content_sha256"],
+      "properties": {
+        "version": {"const": "W7TP-CORE-ENCODING/1.0"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "side_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["secret_read", "db_write", "odoo_write", "adi_write", "formal_pos_order", "payment_capture", "network_call"],
+      "properties": {
+        "secret_read": {"const": false},
+        "db_write": {"const": false},
+        "odoo_write": {"const": false},
+        "adi_write": {"const": false},
+        "formal_pos_order": {"const": false},
+        "payment_capture": {"const": false},
+        "network_call": {"const": false}
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "state", "profile", "surface", "binding_registry", "source_snapshot", "authority_sources", "encoding_registry", "requested_effect", "governance_authority", "D8", "candidate_only", "side_effects", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "W7TP-CAFE-POS-BINDING-SEAL-REQUEST/1.0"},
+        "state": {"const": "NEEDS_FOUNDER_DUAL_ROOT_AUTHORIZATION"},
+        "profile": {"const": "CAFE_POS"},
+        "surface": {"$ref": "#/$defs/surface"},
+        "binding_registry": {"$ref": "#/$defs/counts"},
+        "source_snapshot": {"$ref": "#/$defs/source_snapshot"},
+        "authority_sources": {"$ref": "#/$defs/authority_sources"},
+        "encoding_registry": {"$ref": "#/$defs/encoding_registry"},
+        "requested_effect": {"const": "ENABLE_VERIFIED_READ_ONLY_BINDINGS_FOR_L3_RECTIFICATION"},
+        "governance_authority": {"const": "VERIFIED_FOUNDER_DUAL_ROOT_ONLY"},
+        "D8": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["decision", "formal_execution_authority"],
+          "properties": {
+            "decision": {"const": "PENDING_FOUNDER_TOTAL_FIELD_SEAL"},
+            "formal_execution_authority": {"const": false}
+          }
+        },
+        "candidate_only": {"const": true},
+        "side_effects": {"$ref": "#/$defs/side_effects"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "identity_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "reason_code", "checks", "principal_ref"],
+      "properties": {
+        "decision": {"enum": ["ALLOW", "BLOCK", "HOLD"]},
+        "reason_code": {"type": "string", "minLength": 1},
+        "checks": {
+          "type": "object",
+          "minProperties": 10,
+          "additionalProperties": {"type": "boolean"}
+        },
+        "principal_ref": {
+          "type": ["string", "null"],
+          "pattern": "^founder-root-sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "state", "decision", "reason_code", "profile", "surface", "seal_request_content_sha256", "binding_registry_content_sha256", "identity_gate", "founder_command_ref_sha256", "binding_seal_ref", "candidate_only", "formal_execution_authority", "side_effects", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "W7TP-CAFE-POS-BINDING-SEAL-EVALUATION/1.0"},
+        "state": {"enum": ["VERIFIED_TOTAL_FIELD_BINDING_SEAL", "HOLD_FOUNDER_ROOT_NOT_PROVISIONED_OR_INVALID", "BLOCK_FOUNDER_DUAL_ROOT_VERIFICATION_FAILED"]},
+        "decision": {"enum": ["ALLOW", "BLOCK", "HOLD"]},
+        "reason_code": {"type": "string", "minLength": 1},
+        "profile": {"const": "CAFE_POS"},
+        "surface": {"$ref": "#/$defs/surface"},
+        "seal_request_content_sha256": {"$ref": "#/$defs/sha256"},
+        "binding_registry_content_sha256": {"$ref": "#/$defs/sha256"},
+        "identity_gate": {"$ref": "#/$defs/identity_gate"},
+        "founder_command_ref_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "binding_seal_ref": {"type": ["string", "null"], "pattern": "^total-field-binding-seal-sha256:[a-f0-9]{64}$"},
+        "candidate_only": {"const": true},
+        "formal_execution_authority": {"const": false},
+        "side_effects": {"$ref": "#/$defs/side_effects"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

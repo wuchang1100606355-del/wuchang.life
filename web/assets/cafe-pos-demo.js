@@ -29,6 +29,25 @@
   });
   var MENU = MENU_DATA.products;
   var OPTION_GROUPS = MENU_DATA.optionGroups;
+  var MEDIA_MAX_BYTES = 12 * 1024 * 1024;
+  var MEDIA_TYPES = Object.freeze({
+    "image/jpeg": "IMAGE",
+    "image/png": "IMAGE",
+    "image/webp": "IMAGE",
+    "video/mp4": "VIDEO",
+    "video/webm": "VIDEO"
+  });
+  var SUNMI_VOICE_NODE_REF = "V3_MIX_EDLA_GL";
+  var SUNMI_TRANSCRIPT_SCHEMA = "w7tp.sunmi-voice-transcript-candidate/v0.1";
+  var AVATAR_GESTURES = Object.freeze(["greet", "recommend", "confirm", "wait", "thank"]);
+  var AVATAR_GESTURE_LABELS = Object.freeze({
+    greet: "GREET",
+    recommend: "RECOMMEND",
+    confirm: "CONFIRM",
+    wait: "WAIT",
+    thank: "THANK"
+  });
+  var mediaPreviewUrl = "";
   var CATEGORY_LABELS = MENU_DATA.categories.reduce(function (result, category) {
     result[category.id] = category.label;
     return result;
@@ -65,6 +84,12 @@
       candidate: null,
       candidateCanonical: "",
       candidateHash: "",
+      inputModality: "TEXT",
+      sunmiVoiceArmed: false,
+      mediaEvidence: null,
+      mediaHashing: false,
+      avatarControlPacket: null,
+      avatarControlHash: "",
       staffReviewed: false,
       queue: [],
       offline: false,
@@ -545,6 +570,17 @@
     });
   }
 
+  function sha256Buffer(buffer) {
+    if (!window.crypto || !window.crypto.subtle) {
+      return Promise.reject(new Error("WEB_CRYPTO_UNAVAILABLE"));
+    }
+    return window.crypto.subtle.digest("SHA-256", buffer).then(function (digest) {
+      return Array.from(new Uint8Array(digest)).map(function (byte) {
+        return byte.toString(16).padStart(2, "0");
+      }).join("");
+    });
+  }
+
   function selectedValue(id) {
     return byId(id).value;
   }
@@ -571,7 +607,15 @@
         D8: "HOLD · FORMAL POS RELEASE"
       },
       context: {
-        service_mode: selectedValue("service-mode")
+        service_mode: selectedValue("service-mode"),
+        multimodal_input: {
+          modality: state.inputModality,
+          voice_node_ref: state.inputModality === "SUNMI_VOICE_CANDIDATE" ? SUNMI_VOICE_NODE_REF : null,
+          voice_candidate_state: state.inputModality === "SUNMI_VOICE_CANDIDATE" ? "CANDIDATE_ONLY" : null,
+          raw_audio_saved: false,
+          raw_media_in_packet: false,
+          media_evidence: state.mediaEvidence
+        }
       },
       cart: state.cart.map(function (line) {
         var product = productFor(line.productId);
@@ -613,6 +657,11 @@
       announce("尚未建立候選，候選單為空。");
       return;
     }
+    if (state.mediaHashing) {
+      byId("action-result").textContent = "媒體 SHA-256 尚未完成；候選保持 HOLD。";
+      announce("請等待媒體內容雜湊完成，再建立候選。");
+      return;
+    }
 
     state.candidate = createCandidate();
     state.candidateCanonical = canonicalJson(state.candidate);
@@ -649,6 +698,8 @@
     byId("staff-review").disabled = !state.candidate || !state.candidateHash;
     byId("queue-candidate").disabled = !state.candidate || !state.candidateHash || !state.staffReviewed;
     byId("confirm-redeem").disabled = !state.redeemPending;
+    byId("speak-candidate").disabled = state.cart.length === 0;
+    byId("clear-media").disabled = !state.mediaEvidence && !state.mediaHashing;
   }
 
   function reviewCandidate() {
@@ -762,6 +813,226 @@
     announce("AI 意圖檔已填入員工選項卡，尚未加入候選單。");
   }
 
+  function toggleSunmiVoiceCandidate() {
+    state.sunmiVoiceArmed = !state.sunmiVoiceArmed;
+    byId("voice-order").textContent = state.sunmiVoiceArmed ? "停止接收商米候選" : "接收商米語音候選";
+    byId("sunmi-voice-state").textContent = state.sunmiVoiceArmed
+      ? "商米語音節點：V3_MIX_EDLA_GL · 等待 CANDIDATE_ONLY 文字候選。"
+      : "商米語音節點：V3_MIX_EDLA_GL · CANDIDATE · 等待裝置橋接候選。";
+    logEvent(state.sunmiVoiceArmed ? "SUNMI_VOICE_BRIDGE_ARMED" : "SUNMI_VOICE_BRIDGE_DISARMED");
+    evaluateRedteam("SUNMI_VOICE_BRIDGE");
+  }
+
+  function acceptSunmiVoiceCandidate(candidate) {
+    var valid = state.sunmiVoiceArmed && candidate && typeof candidate === "object" &&
+      candidate.schema === SUNMI_TRANSCRIPT_SCHEMA &&
+      candidate.status === "CANDIDATE" &&
+      candidate.device_role === "SUNMI_POS" &&
+      candidate.node_id_ref === SUNMI_VOICE_NODE_REF &&
+      candidate.candidate_only === true &&
+      candidate.raw_audio_saved === false &&
+      candidate.direct_commit === false &&
+      candidate.total_field_gateway_required === true &&
+      typeof candidate.transcript === "string" &&
+      candidate.transcript.trim().length > 0 &&
+      candidate.transcript.trim().length <= 120;
+    if (!valid) {
+      byId("sunmi-voice-state").textContent = "HOLD_SUNMI_VOICE_CANDIDATE_INVALID：未接受候選，也未回顯內容。";
+      evaluateRedteam("SUNMI_VOICE_CANDIDATE", "HOLD_SUNMI_VOICE_CANDIDATE_INVALID");
+      return false;
+    }
+    invalidateCandidate("商米語音候選已更新");
+    byId("intent-input").value = candidate.transcript.trim();
+    state.inputModality = "SUNMI_VOICE_CANDIDATE";
+    state.sunmiVoiceArmed = false;
+    byId("voice-order").textContent = "接收商米語音候選";
+    byId("sunmi-voice-state").textContent = "商米語音文字候選已接收；原始音訊未進入網頁，請人工核對。";
+    byId("intent-status").textContent = "商米候選文字已填入；請先核對，再解析為來源商品候選。";
+    logEvent("SUNMI_VOICE_CANDIDATE_READY_LOCAL");
+    evaluateRedteam("SUNMI_VOICE_CANDIDATE_READY");
+    announce("商米語音候選已填入點餐欄位，尚未解析或送單。");
+    return true;
+  }
+
+  function clearMediaEvidence() {
+    if (mediaPreviewUrl) {
+      URL.revokeObjectURL(mediaPreviewUrl);
+      mediaPreviewUrl = "";
+    }
+    state.mediaEvidence = null;
+    state.mediaHashing = false;
+    byId("media-order-input").value = "";
+    byId("image-order-preview").removeAttribute("src");
+    byId("video-order-preview").removeAttribute("src");
+    byId("image-order-preview").hidden = true;
+    byId("video-order-preview").hidden = true;
+    byId("media-preview").hidden = true;
+    byId("media-evidence-status").textContent = "尚未加入影像或影片；媒體不是正式商品證據。";
+    updateActionAvailability();
+  }
+
+  function selectMediaEvidence(event) {
+    var file = event.target.files && event.target.files[0];
+    invalidateCandidate("媒體候選證據已變更");
+    clearMediaEvidence();
+    if (!file) {
+      return;
+    }
+    var mediaKind = MEDIA_TYPES[file.type];
+    if (!mediaKind || file.size <= 0 || file.size > MEDIA_MAX_BYTES) {
+      byId("media-evidence-status").textContent = "HOLD_MEDIA_INVALID：只接受 12MB 以下的 JPEG、PNG、WebP、MP4 或 WebM。";
+      evaluateRedteam("MEDIA_INPUT_INVALID");
+      return;
+    }
+    var preview = mediaKind === "IMAGE" ? byId("image-order-preview") : byId("video-order-preview");
+    mediaPreviewUrl = URL.createObjectURL(file);
+    preview.src = mediaPreviewUrl;
+    preview.hidden = false;
+    byId("media-preview").hidden = false;
+    state.mediaHashing = true;
+    byId("media-evidence-status").textContent = "正在本頁計算媒體 SHA-256；不會上傳原始媒體。";
+    updateActionAvailability();
+    file.arrayBuffer().then(sha256Buffer).then(function (hash) {
+      state.mediaEvidence = {
+        media_kind: mediaKind,
+        mime_type: file.type,
+        byte_size: file.size,
+        content_sha256: hash,
+        source_state: "USER_DEVICE_LOCAL_PREVIEW",
+        product_recognition: "NOT_PERFORMED"
+      };
+      state.mediaHashing = false;
+      byId("media-evidence-status").textContent = mediaKind === "IMAGE"
+        ? "影像 SHA-256 已建立；只作候選證據，仍須用文字或語音指定商品。"
+        : "影片 SHA-256 已建立；只作候選證據，仍須用文字或語音指定商品。";
+      logEvent("MEDIA_EVIDENCE_HASHED_LOCAL:" + mediaKind);
+      evaluateRedteam("MEDIA_EVIDENCE_READY");
+      updateActionAvailability();
+    }).catch(function () {
+      clearMediaEvidence();
+      byId("media-evidence-status").textContent = "HOLD_MEDIA_HASH_FAILED：未建立媒體證據，也未偽造雜湊。";
+      evaluateRedteam("MEDIA_HASH_FAILED");
+    });
+  }
+
+  function buildSunmiPlaybackCandidate() {
+    if (!state.cart.length) {
+      return;
+    }
+    var summary = state.cart.map(function (line) {
+      return productFor(line.productId).name + " " + String(line.quantity) + " 份";
+    }).join("，");
+    var safeText = "請確認候選：" + summary + "。候選合計 " + String(totalValue()) + " 元。尚未正式下單或付款。";
+    sha256(safeText).then(function (hash) {
+      var playbackCandidate = {
+        schema: "w7tp.sunmi-voice-playback-candidate/v0.1",
+        status: "CANDIDATE",
+        device_role: "SUNMI_POS",
+        node_id_ref: SUNMI_VOICE_NODE_REF,
+        function_code: "voice.say_candidate.v1",
+        tts_script_ref: "sha256:" + hash,
+        language_ref: "zh-TW",
+        candidate_only: true,
+        direct_commit: false,
+        total_field_gateway_required: true,
+        d8_allow_required_for_playback: true,
+        playback_executed: false
+      };
+      window.dispatchEvent(new CustomEvent("w7tp:sunmi-voice-playback-candidate", { detail: playbackCandidate }));
+      byId("sunmi-voice-state").textContent = "商米 D7 朗讀候選已建立；等待總場 D8 ALLOW，本頁未直接播放。";
+      logEvent("SUNMI_PLAYBACK_CANDIDATE_BUILT");
+      evaluateRedteam("SUNMI_PLAYBACK_CANDIDATE");
+    }).catch(function () {
+      byId("sunmi-voice-state").textContent = "HOLD_SUNMI_PLAYBACK_HASH_FAILED：未建立朗讀候選。";
+      evaluateRedteam("SUNMI_PLAYBACK_HASH_FAILED");
+    });
+  }
+
+  function buildAvatarControlCandidate(gesture) {
+    if (AVATAR_GESTURES.indexOf(gesture) === -1) {
+      byId("avatar-control-status").textContent = "HOLD_AVATAR_GESTURE_NOT_ALLOWED：動作不在容器白名單。";
+      evaluateRedteam("AVATAR_CONTROL", "HOLD_AVATAR_GESTURE_NOT_ALLOWED");
+      return;
+    }
+    var packet = {
+      schema: "W7TP_8D_AVATAR_CONTROL_CANDIDATE/1.0",
+      state: "CANDIDATE",
+      function_code: "display.render_candidate.v1",
+      container: {
+        container_ref: "W7TP_AVATAR_DISPLAY_CONTAINER",
+        authority: "DISPLAY_ONLY",
+        runtime_mutation_authority: false,
+        allowed_gesture_track: AVATAR_GESTURES.slice()
+      },
+      D1_IDENTITY: {
+        avatar_ref: "/wuchang_core/static/src/xiaoj_ordering/avatar/lung.vrm",
+        operator_ref: "LOCAL_OPERATOR_PREVIEW",
+        display_device_ref: "BROWSER_DISPLAY_CONTAINER"
+      },
+      D2_INTENT: {
+        action: gesture === "recommend"
+          ? "avatar.play_menu_intro"
+          : (gesture === "confirm" || gesture === "thank" ? "avatar.play_order_candidate" : "avatar.play_script"),
+        gesture: gesture
+      },
+      D3_STATE: {
+        avatar_state: gesture === "wait" ? "idle" : "confirming",
+        candidate_only: true
+      },
+      D4_TOPOLOGY: {
+        store_ref: "QUICKCLICK:M387676",
+        screen_ref: "web:pos_promo_sandbox:avatar-stage",
+        audio_ref: "SUNMI_POS:V3_MIX_EDLA_GL",
+        customer_display_ref: "W7TP_AVATAR_DISPLAY_CONTAINER"
+      },
+      D5_RESOURCE: {
+        skeleton_ref: "W7TP_IMAGE_SKELETON_PROCESSING_CONTRACT_V1:skeleton_track",
+        face_ref: "W7TP_IMAGE_SKELETON_PROCESSING_CONTRACT_V1:face_track",
+        mouth_ref: "W7TP_IMAGE_SKELETON_PROCESSING_CONTRACT_V1:mouth_track",
+        audio_ref: "voice.say_candidate.v1",
+        scene_ref: state.candidateHash ? "sha256:" + state.candidateHash : "CAFE_POS_CANDIDATE_PENDING",
+        source_media_ref: state.mediaEvidence ? "sha256:" + state.mediaEvidence.content_sha256 : null
+      },
+      D6_GOVERNANCE: {
+        approved_script_only: true,
+        no_member_plaintext: true,
+        no_payment_data: true,
+        no_secret: true,
+        generative_transmission: "PROTOCOL_NATIVE_8D_STATE_FIELD_PACKET"
+      },
+      D7_VERIFICATION: {
+        gesture_whitelisted: true,
+        packet_carried_protocol: true,
+        packet_carried_validation: true,
+        human_gate: "LOCAL_OPERATOR_DISPLAY_PREVIEW_CONFIRM"
+      },
+      D8_ENVELOPE: {
+        decision: "DISPLAY_PREVIEW_ONLY",
+        formal_authority: false,
+        total_field_canonical_write: false,
+        pos_write: false,
+        payment_capture: false
+      }
+    };
+    sha256(canonicalJson(packet)).then(function (hash) {
+      packet.packet_sha256 = hash;
+      state.avatarControlPacket = packet;
+      state.avatarControlHash = hash;
+      byId("avatar-stage").dataset.gesture = gesture;
+      byId("avatar-gesture-state").textContent = AVATAR_GESTURE_LABELS[gesture] + " · 8D DISPLAY PREVIEW";
+      byId("avatar-d8-state").textContent = "DISPLAY_PREVIEW_ONLY";
+      byId("avatar-control-hash").textContent = hash;
+      byId("avatar-control-status").textContent = "8D控制候選已驗證白名單並驅動顯示容器；正式系統權限仍為零。";
+      window.dispatchEvent(new CustomEvent("w7tp:avatar-control-candidate", { detail: packet }));
+      logEvent("AVATAR_8D_CONTROL:" + gesture.toUpperCase());
+      evaluateRedteam("AVATAR_8D_CONTROL");
+      announce("8D模型控制候選已建立並更新顯示預覽。");
+    }).catch(function () {
+      byId("avatar-control-status").textContent = "HOLD_AVATAR_CONTROL_HASH_FAILED：未執行模型控制。";
+      evaluateRedteam("AVATAR_CONTROL_HASH_FAILED");
+    });
+  }
+
   function selectWorkflow(name) {
     state.workflow = name;
     var workflow = WORKFLOWS[name];
@@ -783,10 +1054,18 @@
   }
 
   function resetDemo() {
+    clearMediaEvidence();
     state = initialState();
     byId("service-mode").value = "dine_in";
     byId("intent-input").value = "";
-    byId("intent-status").textContent = "輸入範例：招牌咖啡 大杯 少冰 半糖。語句只留在本裝置。";
+    byId("voice-order").textContent = "接收商米語音候選";
+    byId("sunmi-voice-state").textContent = "商米語音節點：V3_MIX_EDLA_GL · CANDIDATE · 等待裝置橋接候選。";
+    byId("avatar-stage").dataset.gesture = "wait";
+    byId("avatar-gesture-state").textContent = "WAIT · DISPLAY PREVIEW";
+    byId("avatar-d8-state").textContent = "PENDING_CONTROL_CANDIDATE";
+    byId("avatar-control-hash").textContent = "尚未建立控制候選";
+    byId("avatar-control-status").textContent = "容器待命；未執行POS、付款、資料庫、部署或總場修改。";
+    byId("intent-status").textContent = "輸入範例：招牌咖啡 大杯 少冰 半糖。文字與辨識結果只存在本頁記憶體。";
     byId("connection-state").textContent = "TAIJI01 LINKED / DEMO";
     byId("total-field-state").textContent = "HOLD · CANDIDATE ONLY";
     byId("toggle-offline").textContent = "模擬離線";
@@ -811,6 +1090,7 @@
     var categoryButton = event.target.closest("[data-category]");
     var workflowButton = event.target.closest("[data-workflow]");
     var optionButton = event.target.closest("[data-option-id]");
+    var avatarButton = event.target.closest("[data-avatar-gesture]");
 
     if (addButton) {
       selectProduct(addButton.dataset.addProduct);
@@ -833,6 +1113,10 @@
     }
     if (optionButton) {
       chooseOption(optionButton.dataset.questionId, optionButton.dataset.optionId);
+      return;
+    }
+    if (avatarButton) {
+      buildAvatarControlCandidate(avatarButton.dataset.avatarGesture);
     }
   });
 
@@ -842,6 +1126,17 @@
     evaluateRedteam("MODIFIER_CHANGE");
   });
   byId("parse-intent").addEventListener("click", parseIntent);
+  byId("voice-order").addEventListener("click", toggleSunmiVoiceCandidate);
+  byId("speak-candidate").addEventListener("click", buildSunmiPlaybackCandidate);
+  byId("media-order-input").addEventListener("change", selectMediaEvidence);
+  byId("clear-media").addEventListener("click", function () {
+    invalidateCandidate("媒體候選證據已清除");
+    clearMediaEvidence();
+  });
+  byId("intent-input").addEventListener("input", function () {
+    invalidateCandidate("文字點餐內容已變更");
+    state.inputModality = "TEXT";
+  });
   byId("confirm-config").addEventListener("click", confirmConfiguration);
   byId("cancel-config").addEventListener("click", function () {
     closeConfigurator();
@@ -857,6 +1152,15 @@
   byId("confirm-redeem").addEventListener("click", confirmRedeem);
   byId("toggle-offline").addEventListener("click", toggleOffline);
   byId("reset-demo").addEventListener("click", resetDemo);
+
+  window.addEventListener("w7tp:sunmi-voice-candidate", function (event) {
+    acceptSunmiVoiceCandidate(event.detail);
+  });
+  window.WUCHANG_CAFE_POS_SUNMI_VOICE = Object.freeze({
+    schema: SUNMI_TRANSCRIPT_SCHEMA,
+    node_id_ref: SUNMI_VOICE_NODE_REF,
+    acceptCandidate: acceptSunmiVoiceCandidate
+  });
 
   renderMenu();
   renderConfigurator();

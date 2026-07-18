@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 from pathlib import Path
 
@@ -21,14 +22,18 @@ class GoogleNonprofitWebsiteReviewTest(unittest.TestCase):
         self.assertEqual(set(criteria), {f"GNP-WEB-{index:02d}" for index in range(1, 11)})
         self.assertEqual(
             criteria["GNP-WEB-03"]["status"],
-            "HOLD_LEGAL_REGISTRATION_OR_ANNUAL_REPORT_EVIDENCE_REQUIRED",
+            "PASS_MISSION_AND_TOTAL_FIELD_REGISTRATION_PROJECTION",
         )
         self.assertIn(
             "mission_content=PASS",
             criteria["GNP-WEB-03"]["evidence"],
         )
         self.assertIn(
-            "legal_registration_or_annual_report=HOLD_MANUAL_EVIDENCE_REQUIRED",
+            "legal_registration=PASS_TOTAL_FIELD_PUBLIC_SAFE_PROJECTION",
+            criteria["GNP-WEB-03"]["evidence"],
+        )
+        self.assertIn(
+            "annual_report=NOT_FOUND_IN_TOTAL_FIELD_SEARCH_SCOPE",
             criteria["GNP-WEB-03"]["evidence"],
         )
         self.assertEqual(criteria["GNP-WEB-04"]["status"], "PASS_STATIC")
@@ -71,6 +76,30 @@ class GoogleNonprofitWebsiteReviewTest(unittest.TestCase):
         self.assertIn("PUBLIC_HTTP_REDIRECT_EDGE_HOLD", readiness)
         self.assertNotIn("TLS/443 尚未配置", readiness)
         self.assertNotIn("仍需完成 HTTPS/TLS", transparency)
+
+    def test_registration_projection_uses_total_field_source_chain(self) -> None:
+        home = (ROOT / "web/index.html").read_text(encoding="utf-8")
+        transparency = (ROOT / "web/transparency/index.html").read_text(
+            encoding="utf-8"
+        )
+        profile = json.loads(
+            (ROOT / "web/data/public_organization_profile.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        registration = profile["organization"]["legal_registration"]
+        self.assertEqual(registration["value"], "新北市社區補字第1100606355號")
+        self.assertEqual(
+            registration["status"],
+            "VERIFIED_TOTAL_FIELD_PUBLIC_SAFE_PROJECTION",
+        )
+        self.assertEqual(
+            registration["source_sha256"],
+            "9b87af6ae15fabaee04e652dfb2eb66306939a886d50e787b942a33670bafef1",
+        )
+        self.assertIn("EVIDENCE_TOTAL_FIELD_ASSOCIATION_REGISTRATION", home)
+        self.assertIn("id=\"legal-registration-evidence\"", transparency)
+        self.assertIn("NOT_FOUND_IN_TOTAL_FIELD_SEARCH_SCOPE", transparency)
 
     def test_business_and_property_legacy_routes_are_not_nonprofit_entrypoints(self) -> None:
         sitemap = (ROOT / "web/sitemap.xml").read_text(encoding="utf-8")

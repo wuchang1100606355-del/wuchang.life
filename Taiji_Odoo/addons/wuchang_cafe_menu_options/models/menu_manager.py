@@ -5,8 +5,9 @@ from __future__ import annotations
 import hashlib
 import json
 
-from odoo import api, fields, models, _
+from odoo import SUPERUSER_ID, api, fields, models, _
 from odoo.exceptions import UserError
+from odoo.modules.registry import Registry
 
 from ..services.menu_change_governance import (
     build_odoo_product_thing_code,
@@ -17,6 +18,80 @@ from ..services.menu_change_governance import (
 RESPONSIBLE_GROUP = "wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"
 REMOTE_SUPPORT_GROUP = "wuchang_cafe_menu_options.group_wuchang_cafe_remote_support"
 GOVERNANCE_ADMIN_GROUP = "wuchang_member_registration.group_wuchang_member_admin"
+
+
+def build_human_menu_event_values(
+    *,
+    actor_user_id,
+    action,
+    result,
+    event_time,
+    where,
+    target_model,
+    target_record_id,
+    target_thing_code,
+    before,
+    after,
+    source,
+    source_ref=None,
+    candidate_ref=None,
+    authorization_event_ref=None,
+    detail=None,
+    confirmation_required=False,
+):
+    """Build one deterministic, public-safe eventbook value mapping."""
+
+    payload = {
+        "schema_version": "W7TP-ODOO-CAFE-MENU-HUMAN-EVENT/2.0",
+        "actor": f"odoo-user:{actor_user_id}",
+        "where": where,
+        "when": fields.Datetime.to_string(event_time).replace(" ", "T") + "Z",
+        "what": action,
+        "target_thing_code": target_thing_code or None,
+        "before": before,
+        "after": after,
+        "source_ref": source_ref,
+        "candidate_ref": candidate_ref,
+        "authorization_event_ref": authorization_event_ref,
+        "single_human_identity_single_account": True,
+    }
+    if detail:
+        payload["detail"] = detail
+    payload["content_sha256"] = stable_sha256(payload)
+    event_ref = target_thing_code or candidate_ref or source_ref or payload["content_sha256"]
+    return {
+        "name": f"{action}:{payload['content_sha256'][:12]}",
+        "event_type": "human_menu_action",
+        "source": source,
+        "session_ref": event_ref,
+        "user_role": "SINGLE_ACCOUNT_MULTI_ROLE",
+        "intent": action,
+        "tool_name": "wuchang_cafe_menu_governance",
+        "risk_level": "medium" if result != "success" else "low",
+        "confirmation_required": confirmation_required,
+        "confirmation_result": result.upper(),
+        "target_model": target_model,
+        "target_record_id": str(target_record_id),
+        "result": result,
+        "payload_json": json.dumps(
+            payload, ensure_ascii=False, indent=2, sort_keys=True
+        ),
+    }
+
+
+def schedule_rejected_menu_event(env, event_values):
+    """Persist a true rejection only after the failed RPC transaction rolls back."""
+
+    dbname = env.cr.dbname
+    safe_values = dict(event_values)
+
+    def _persist_after_rollback():
+        with Registry(dbname).cursor() as cursor:
+            callback_env = api.Environment(cursor, SUPERUSER_ID, {})
+            callback_env["wuchang.cafe.ai.eventbook"].sudo().create(safe_values)
+            cursor.commit()
+
+    env.cr.postrollback.add(_persist_after_rollback)
 
 
 class WuchangCafeAiEventbookMenuAction(models.Model):
@@ -158,6 +233,25 @@ class ProductTemplateMenuGovernance(models.Model):
         )
         unknown = set(values) - allowed
         if unknown:
+            before = [record.wuchang_menu_snapshot() for record in self]
+            schedule_rejected_menu_event(
+                self.env,
+                build_human_menu_event_values(
+                    actor_user_id=self.env.user.id,
+                    action="REJECT_UNAUTHORIZED_MENU_FIELDS",
+                    result="rejected",
+                    event_time=fields.Datetime.now(),
+                    where={"company_id": self.env.company.id, "entrypoint": "odoo_rpc"},
+                    target_model="product.template",
+                    target_record_id=",".join(str(record.id) for record in self) or "new",
+                    target_thing_code=self[:1].w5c_code if self else None,
+                    before=before,
+                    after=before,
+                    source="odoo_safe_menu_manager",
+                    source_ref="product.template:create" if creating else "product.template:write",
+                    detail={"rejected_fields": sorted(unknown)},
+                ),
+            )
             raise UserError(
                 _("The safe cafe menu surface does not allow these fields: %s")
                 % ", ".join(sorted(unknown))
@@ -173,7 +267,7 @@ class ProductTemplateMenuGovernance(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if self.env.context.get("wuchang_menu_internal_write"):
+        if self.env.context.get("wuchang_menu_internal_write") and self.env.su:
             records = super().create(vals_list)
             records._wuchang_ensure_menu_identity()
             return records
@@ -181,6 +275,24 @@ class ProductTemplateMenuGovernance(models.Model):
             self._wuchang_menu_is_remote_support()
             and not self._wuchang_menu_is_responsible()
         ):
+            schedule_rejected_menu_event(
+                self.env,
+                build_human_menu_event_values(
+                    actor_user_id=self.env.user.id,
+                    action="REJECT_REMOTE_SUPPORT_DIRECT_CREATE",
+                    result="rejected",
+                    event_time=fields.Datetime.now(),
+                    where={"company_id": self.env.company.id, "entrypoint": "odoo_rpc"},
+                    target_model="product.template",
+                    target_record_id="new",
+                    target_thing_code=None,
+                    before={},
+                    after={},
+                    source="odoo_safe_menu_manager",
+                    source_ref="remote-support:candidate-only",
+                    confirmation_required=True,
+                ),
+            )
             raise UserError(
                 _("Remote support must submit a menu change request; direct product creation is blocked.")
             )
@@ -219,12 +331,55 @@ class ProductTemplateMenuGovernance(models.Model):
         return records
 
     def write(self, values):
-        if self.env.context.get("wuchang_menu_internal_write"):
+        if self.env.context.get("wuchang_menu_internal_write") and self.env.su:
             return super().write(values)
+        if "w5c_code" in values and any(
+            record.w5c_code and values.get("w5c_code") != record.w5c_code
+            for record in self
+        ):
+            before = [record.wuchang_menu_snapshot() for record in self]
+            schedule_rejected_menu_event(
+                self.env,
+                build_human_menu_event_values(
+                    actor_user_id=self.env.user.id,
+                    action="REJECT_THING_CODE_REWRITE",
+                    result="rejected",
+                    event_time=fields.Datetime.now(),
+                    where={"company_id": self.env.company.id, "entrypoint": "odoo_rpc"},
+                    target_model="product.template",
+                    target_record_id=",".join(str(record.id) for record in self),
+                    target_thing_code=self[:1].w5c_code if self else None,
+                    before=before,
+                    after=before,
+                    source="odoo_safe_menu_manager",
+                    source_ref="product.template:write",
+                    detail={"rejected_fields": ["w5c_code"]},
+                ),
+            )
+            raise UserError(_("The Total Field product thing code is immutable after creation."))
         if (
             self._wuchang_menu_is_remote_support()
             and not self._wuchang_menu_is_responsible()
         ):
+            before = [record.wuchang_menu_snapshot() for record in self]
+            schedule_rejected_menu_event(
+                self.env,
+                build_human_menu_event_values(
+                    actor_user_id=self.env.user.id,
+                    action="REJECT_REMOTE_SUPPORT_DIRECT_WRITE",
+                    result="rejected",
+                    event_time=fields.Datetime.now(),
+                    where={"company_id": self.env.company.id, "entrypoint": "odoo_rpc"},
+                    target_model="product.template",
+                    target_record_id=",".join(str(record.id) for record in self),
+                    target_thing_code=self[:1].w5c_code if self else None,
+                    before=before,
+                    after=before,
+                    source="odoo_safe_menu_manager",
+                    source_ref="remote-support:candidate-only",
+                    confirmation_required=True,
+                ),
+            )
             raise UserError(
                 _("Remote support must submit a menu change request; direct product editing is blocked.")
             )
@@ -263,11 +418,51 @@ class ProductTemplateMenuGovernance(models.Model):
         return result
 
     def unlink(self):
-        if self._wuchang_menu_is_responsible() or self._wuchang_menu_is_remote_support():
+        managed = self.filtered(
+            lambda record: record.available_in_pos
+            or record.w5c_domain == "CAFE"
+            or record.wuchang_option_group_id
+        )
+        if managed and not self.env.context.get("module_uninstall"):
+            before = [record.wuchang_menu_snapshot() for record in managed]
+            schedule_rejected_menu_event(
+                self.env,
+                build_human_menu_event_values(
+                    actor_user_id=self.env.user.id,
+                    action="REJECT_DELETE_MENU_ITEM",
+                    result="rejected",
+                    event_time=fields.Datetime.now(),
+                    where={"company_id": self.env.company.id, "entrypoint": "odoo_rpc"},
+                    target_model="product.template",
+                    target_record_id=",".join(str(record.id) for record in managed),
+                    target_thing_code=managed[:1].w5c_code,
+                    before=before,
+                    after=before,
+                    source="odoo_safe_menu_manager",
+                    source_ref="product.template:unlink",
+                ),
+            )
             raise UserError(
                 _("Cafe menu items cannot be deleted from this surface. Archive the item to preserve its code and audit history.")
             )
         return super().unlink()
+
+    def copy(self, default=None):
+        self.ensure_one()
+        default = dict(default or {})
+        default.update(
+            {
+                "w5c_code": False,
+                "w5c_time_state": False,
+                "w5c_authority": "ODOO_DUPLICATE",
+            }
+        )
+        copied = super(
+            ProductTemplateMenuGovernance,
+            self.sudo().with_context(wuchang_menu_internal_write=True),
+        ).copy(default)
+        copied._wuchang_ensure_menu_identity()
+        return copied.with_env(self.env)
 
     def _wuchang_ensure_menu_identity(self):
         for record in self.sudo():
@@ -334,38 +529,23 @@ class ProductTemplateMenuGovernance(models.Model):
         self.ensure_one()
         after = self.wuchang_menu_snapshot()
         event_time = fields.Datetime.now()
-        payload = {
-            "schema_version": "W7TP-ODOO-CAFE-MENU-HUMAN-EVENT/1.0",
-            "who": f"odoo-user:{self.env.user.id}",
-            "where": {
-                "group_ref": batch.group_ref,
-                "store_ref": batch.store_ref,
-                "company_id": batch.menu_company_id.id,
-            },
-            "when": fields.Datetime.to_string(event_time).replace(" ", "T") + "Z",
-            "what": action,
-            "before": before,
-            "after": after,
-            "single_human_identity_single_account": True,
-        }
-        payload["content_sha256"] = stable_sha256(payload)
         self.env["wuchang.cafe.ai.eventbook"].sudo().create(
-            {
-                "name": f"{action}:{self.w5c_code[-12:]}",
-                "event_type": "human_menu_action",
-                "source": "odoo_safe_menu_manager",
-                "session_ref": self.w5c_code,
-                "user_role": "SINGLE_ACCOUNT_MULTI_ROLE",
-                "intent": action,
-                "tool_name": "wuchang_cafe_menu_safe_manager",
-                "risk_level": "low",
-                "confirmation_required": False,
-                "confirmation_result": "EXPLICIT_HUMAN_ACTION",
-                "target_model": "product.template",
-                "target_record_id": str(self.id),
-                "result": "success",
-                "payload_json": json.dumps(
-                    payload, ensure_ascii=False, indent=2, sort_keys=True
-                ),
-            }
+            build_human_menu_event_values(
+                actor_user_id=self.env.user.id,
+                action=action,
+                result="success",
+                event_time=event_time,
+                where={
+                    "group_ref": batch.group_ref,
+                    "store_ref": batch.store_ref,
+                    "company_id": batch.menu_company_id.id,
+                },
+                target_model="product.template",
+                target_record_id=self.id,
+                target_thing_code=self.w5c_code,
+                before=before,
+                after=after,
+                source="odoo_safe_menu_manager",
+                source_ref=f"product.template:{self.id}",
+            )
         )

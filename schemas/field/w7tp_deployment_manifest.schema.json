@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_deployment_manifest.schema.json",
+  "title": "W7TP Byte-Exact Deployment Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "artifact_transport", "w7tp_generative_transmission", "files", "entrypoint", "deployment_scope", "cpu_baseline_required", "cloud_fallback", "db_write", "dns_write", "router_write", "tailnet_policy_write", "formal_transaction", "rollback", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "W7TP-DEPLOYMENT-MANIFEST/1.0"},
+    "run_id": {"type": "string", "pattern": "^[A-Z0-9_-]{8,128}$"},
+    "artifact_transport": {"const": "BYTE_EXACT_SHA256"},
+    "w7tp_generative_transmission": {"const": "PROTOCOL_NATIVE_8D_INTENT_FIELD_PACKET"},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "size"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "size": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "entrypoint": {"const": "tools/total_field/w7tp_field_application_runtime.py"},
+    "deployment_scope": {"const": "SHARED_RUNTIME_ONLY"},
+    "cpu_baseline_required": {"const": true},
+    "cloud_fallback": {"const": false},
+    "db_write": {"const": false},
+    "dns_write": {"const": false},
+    "router_write": {"const": false},
+    "tailnet_policy_write": {"const": false},
+    "formal_transaction": {"const": false},
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "health_failure_action", "caddy_failure_action", "node_failure_isolation"],
+      "properties": {
+        "mode": {"const": "ATOMIC_RELEASE_POINTER_RESTORE"},
+        "health_failure_action": {"const": "RESTORE_PREVIOUS_RELEASE"},
+        "caddy_failure_action": {"const": "RESTORE_BACKUP_VALIDATE_THEN_RELOAD"},
+        "node_failure_isolation": {"const": true}
+      }
+    },
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "size": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

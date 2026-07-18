@@ -1,17 +1,32 @@
 import json
+import os
 import secrets
+import stat
+from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from odoo import http
 from odoo.http import request
 
-from ..services.oauth_config import build_callback_uri
+from ..services.account_linking import (
+    CANONICAL_CALLBACK_URL,
+    callback_security_decision,
+    transient_link_context,
+)
+from ..services.oauth_config import (
+    build_callback_uri,
+    trusted_google_authorization_url,
+    trusted_google_userinfo_url,
+)
 
 
 GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_TOKENINFO_URL = "https://oauth2.googleapis.com/tokeninfo"
 GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
+GOOGLE_CLIENT_SECRET_FILE_ENV = "WUCHANG_GOOGLE_CLIENT_SECRET_FILE"
+GOOGLE_CLIENT_SECRET_FILE = Path("/run/secrets/google_member_client_secret")
 
 
 class WuchangGoogleMemberLogin(http.Controller):
@@ -49,8 +64,8 @@ class WuchangGoogleMemberLogin(http.Controller):
         <div><strong>現場協助</strong><span>請由店長或櫃台協助完成會員服務流程。</span></div>
         <div><strong>安全邊界</strong><span>公開頁面不顯示技術密鑰、會員明文或外部服務錯誤細節。</span></div>
       </div>
-      <a class="primary" href="/web/login">回到登入入口</a>
-      <a class="secondary" href="/web/signup">前往會員註冊</a>
+      <a class="primary" href="https://wuchang.life/">回到公開首頁</a>
+      <a class="secondary" href="https://member.wuchang.life/">回到會員入口</a>
       <div class="ref">參考代碼：{reference}</div>
     </section>
   </main>
@@ -76,12 +91,22 @@ class WuchangGoogleMemberLogin(http.Controller):
         return (configured or web_base_url or request.httprequest.host_url).rstrip("/")
 
     def _redirect_uri(self):
-        return build_callback_uri(
-            explicit_redirect_uri=self._param("wuchang_google_member_login.redirect_uri"),
-            configured_base_url=self._param("wuchang_google_member_login.base_url"),
-            web_base_url=self._param("web.base.url"),
-            request_base_url=request.httprequest.host_url,
-        )
+        return CANONICAL_CALLBACK_URL
+
+    def _client_secret(self):
+        configured_path = Path(os.environ.get(GOOGLE_CLIENT_SECRET_FILE_ENV, ""))
+        if configured_path != GOOGLE_CLIENT_SECRET_FILE:
+            return None
+        try:
+            file_status = configured_path.lstat()
+            if not stat.S_ISREG(file_status.st_mode):
+                return None
+            if stat.S_IMODE(file_status.st_mode) != 0o600:
+                return None
+            secret_value = configured_path.read_text(encoding="utf-8").strip()
+        except (OSError, UnicodeError):
+            return None
+        return secret_value or None
 
     @http.route("/google/member/login", type="http", auth="public", csrf=False)
     def google_member_login(self, **kw):
@@ -95,7 +120,9 @@ class WuchangGoogleMemberLogin(http.Controller):
             )
 
         state = secrets.token_urlsafe(24)
+        nonce = secrets.token_urlsafe(24)
         request.session["wuchang_google_oauth_state"] = state
+        request.session["wuchang_google_oidc_nonce"] = nonce
         group_packet_ref = kw.get("group_packet_ref")
         if group_packet_ref:
             request.session["wuchang_group_packet_ref"] = group_packet_ref
@@ -103,12 +130,17 @@ class WuchangGoogleMemberLogin(http.Controller):
             "client_id": provider.client_id,
             "redirect_uri": self._redirect_uri(),
             "response_type": "code",
-            "scope": provider.scope or "openid profile email",
+            "scope": "openid profile email",
             "state": state,
+            "nonce": nonce,
             "access_type": "offline",
             "prompt": "select_account",
         }
-        return request.redirect(f"{provider.auth_endpoint or GOOGLE_AUTH_URL}?{urlencode(params)}")
+        authorization_url = trusted_google_authorization_url(provider.auth_endpoint)
+        return request.redirect(
+            f"{authorization_url}?{urlencode(params)}",
+            local=False,
+        )
 
     @http.route("/google/member/callback", type="http", auth="public", csrf=False)
     def google_member_callback(self, **kw):
@@ -122,6 +154,7 @@ class WuchangGoogleMemberLogin(http.Controller):
             )
 
         expected_state = request.session.pop("wuchang_google_oauth_state", None)
+        expected_nonce = request.session.pop("wuchang_google_oidc_nonce", None)
         if not expected_state or kw.get("state") != expected_state:
             return self._status_page(
                 "Google 登入安全檢查未通過",
@@ -140,12 +173,20 @@ class WuchangGoogleMemberLogin(http.Controller):
             )
 
         provider = self._google_provider()
-        secret_value = self._param("wuchang_google_member_login.client_secret")
+        secret_value = self._client_secret()
         if not provider or not provider.enabled or not provider.client_id or not secret_value:
             return self._status_page(
                 "Google 會員入口尚未完成正式串接",
                 "目前 Google OAuth 尚未完成正式設定。公開頁面不顯示技術細節，請洽系統管理員。",
                 "GOOGLE_OAUTH_CREDENTIALS_REQUIRED",
+                status=503,
+            )
+        callback_url = self._redirect_uri()
+        if callback_url != CANONICAL_CALLBACK_URL:
+            return self._status_page(
+                "Google 登入安全檢查未通過",
+                "Google callback 尚未鎖定正式會員網域，請洽系統管理員完成確認。",
+                "GOOGLE_CALLBACK_HOST_MISMATCH",
                 status=503,
             )
 
@@ -154,7 +195,7 @@ class WuchangGoogleMemberLogin(http.Controller):
                 "code": code,
                 "client_id": provider.client_id,
                 "client_secret": secret_value,
-                "redirect_uri": self._redirect_uri(),
+                "redirect_uri": callback_url,
                 "grant_type": "authorization_code",
             }
         ).encode("utf-8")
@@ -167,9 +208,19 @@ class WuchangGoogleMemberLogin(http.Controller):
         try:
             with urlopen(token_req, timeout=10) as response:
                 token_data = json.loads(response.read().decode("utf-8"))
+            id_token_value = token_data["id_token"]
+            tokeninfo_req = Request(
+                f"{GOOGLE_TOKENINFO_URL}?{urlencode({'id_token': id_token_value})}",
+                method="GET",
+            )
+            with urlopen(tokeninfo_req, timeout=10) as response:
+                token_claims = json.loads(response.read().decode("utf-8"))
             access_value = token_data["access_token"]
             user_req = Request(
-                provider.data_endpoint or provider.validation_endpoint or GOOGLE_USERINFO_URL,
+                trusted_google_userinfo_url(
+                    provider.data_endpoint,
+                    provider.validation_endpoint,
+                ),
                 headers={"Authorization": f"Bearer {access_value}"},
             )
             with urlopen(user_req, timeout=10) as response:
@@ -182,14 +233,41 @@ class WuchangGoogleMemberLogin(http.Controller):
                 status=502,
             )
 
-        partner = request.env["res.partner"].sudo()._wuchang_get_or_create_google_member(userinfo)
-        request.session["wuchang_google_member_partner_id"] = partner.id
+        security = callback_security_decision(
+            expected_state=expected_state,
+            received_state=kw.get("state"),
+            expected_nonce=expected_nonce,
+            token_claims=token_claims,
+            expected_audience=provider.client_id,
+            userinfo_subject=userinfo.get("sub"),
+            callback_url=callback_url,
+        )
+        if security["decision"] != "PASS":
+            return self._status_page(
+                "Google 登入安全檢查未通過",
+                "Google 身分驗證結果不一致，請重新從正式入口操作。",
+                security["reason"],
+                status=400,
+            )
+
+        authority = request.env["wuchang.member.external.auth"].sudo()
+        resolution = authority.resolve_provider_subject("google", userinfo.get("sub"))
+        link_context = transient_link_context(userinfo, resolution)
+        request.session["wuchang_google_link_context"] = link_context
+        # Legacy _wuchang_get_or_create_google_member is intentionally not used:
+        # the callback never creates or email-merges a partner.
+        if link_context["link_state"] not in {"PROVIDER_LINK_FOUND", "LINK_CONFIRMED"}:
+            return self._status_page(
+                "Google 帳戶需要本地確認",
+                "Google 身分已驗證，但尚未取得本地會員綁定授權。請重新驗證既有帳戶或由授權人員審閱。",
+                link_context["link_state"],
+                status=202,
+            )
         group_packet_ref = request.session.get("wuchang_group_packet_ref")
         if group_packet_ref:
-            subject_hash = request.env["wuchang.member.external.auth"].sudo().hash_subject("google", userinfo.get("sub"))
             request.session["wuchang_group_auth_ref"] = {
                 "provider": "google",
-                "provider_user_ref": subject_hash,
+                "provider_user_ref": link_context["provider_subject_reference"],
                 "display_ref": "google_member_masked",
             }
             return request.redirect(f"/wuchang/member/register/group/{group_packet_ref}")
@@ -197,17 +275,15 @@ class WuchangGoogleMemberLogin(http.Controller):
 
     @http.route("/google/member/welcome", type="http", auth="public", csrf=False)
     def google_member_welcome(self, **kw):
-        partner_id = request.session.get("wuchang_google_member_partner_id")
-        partner = partner_id and request.env["res.partner"].sudo().browse(partner_id)
-        if not partner or not partner.exists():
+        link_context = request.session.get("wuchang_google_link_context") or {}
+        if link_context.get("link_state") not in {"PROVIDER_LINK_FOUND", "LINK_CONFIRMED"}:
             return self._status_page(
                 "Google 會員狀態尚未啟用",
                 "目前找不到有效的 Google 會員登入狀態。請從正式入口重新操作。",
                 "GOOGLE_SESSION_INACTIVE",
                 status=401,
             )
-        name = partner.display_name or "Google member"
         return self._success_page(
             "Google 會員入口已完成",
-            "%s，會員登入已完成，請依現場指示繼續。" % name,
+            "Google 身分驗證與本地綁定引用已確認，請依現場指示繼續。",
         )

@@ -1,12 +1,37 @@
 #!/usr/bin/env python3
-import argparse, datetime as dt, hashlib, json, re, sqlite3, time, uuid
+import argparse, datetime as dt, hashlib, json, os, re, sqlite3, sys, time, uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import urlsplit
 
-ROOT = Path(__file__).resolve().parents[2]
-DB = ROOT / "runtime/cloud_proxy/w7tp_cloud_proxy.sqlite3"
-MODEL = "w7tp-cloud-desensitized"
+CODE_ROOT = Path(__file__).resolve().parents[2]
+STATE_ROOT = Path(os.environ.get("W7TP_STATE_ROOT", CODE_ROOT)).expanduser().resolve()
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CODE_ROOT))
+
+from tools.total_field.w7tp_intent_field_suite.api import (
+    PRODUCT_HTML,
+    PRODUCT_ICON_SVG,
+    capabilities_payload,
+    health_payload,
+    node_payload,
+    process_http_request,
+    ready_payload,
+)
+from tools.total_field.w7tp_field_application_runtime import device_llm_execution_policy
+
+DB = STATE_ROOT / "runtime/cloud_proxy/w7tp_cloud_proxy.sqlite3"
+MODEL = "w7tp-device-llm-boundary"
 RETURN_PACKET_SCHEMA = "w7tp.cloud_candidate_return_packet.v1"
+REQUIRED_TABLES = frozenset({
+    "nl_intake",
+    "w7tp_packet",
+    "masking_map",
+    "cloud_job",
+    "cloud_candidate",
+    "cloud_candidate_return_packet",
+    "local_verification",
+})
 PHONE = re.compile(r"(?:\+?886[- ]?)?09\d{2}[- ]?\d{3}[- ]?\d{3}")
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 SECRET = re.compile(r"(sk-[A-Za-z0-9_\-]{8,}|api[_-]?key\s*[:=]\s*\S+|password\s*[:=]\s*\S+|secret\s*[:=]\s*\S+)", re.I)
@@ -46,6 +71,24 @@ CREATE TABLE IF NOT EXISTS local_verification(id INTEGER PRIMARY KEY, verify_id 
 """)
     con.commit()
     con.close()
+
+def verify_existing_db_read_only():
+    """Verify the legacy schema without mutating or creating the database."""
+    if not DB.is_file():
+        return False
+    try:
+        con = sqlite3.connect(DB.resolve().as_uri() + "?mode=ro", uri=True, timeout=3)
+        con.execute("PRAGMA query_only=ON")
+        tables = {
+            row[0]
+            for row in con.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+            )
+        }
+        con.close()
+    except (OSError, sqlite3.Error):
+        return False
+    return REQUIRED_TABLES.issubset(tables)
 
 def table_count():
     init_db()
@@ -320,34 +363,69 @@ def process_messages(messages):
     con.close()
     return {"candidate": candidate, "candidate_return_packet": return_packet, "return_packet_verify": return_packet_reason, "final_status": final_status, "local_verify": "PASS", "member_plaintext_sent": False, "secret_sent": False, "cloud_received_packet_only": True}
 
-def chat_response(payload):
-    r = process_messages(payload.get("messages") or [])
-    status_zh = "候選已就緒" if r["final_status"] == "CANDIDATE_READY" else "已由地端阻擋"
-    summary_zh = "僅產生候選建議；最終權限仍在地端驗證器。" if r["final_status"] == "CANDIDATE_READY" else "地端已在送雲端前阻擋此請求，原因是涉及會員明文或密鑰。"
-    c = "\n".join([
-        "【W7TP 雲地代理沙盒】",
-        "地端驗證=通過",
-        "最終狀態=" + status_zh,
-        "雲端模式=安全本地候選 stub（尚未接真雲端）",
-        "雲端供應商可達=false",
-        "會員明文送出=false",
-        "密鑰送出=false",
-        "摘要=" + summary_zh,
-        "",
-        "技術旗標：LOCAL_VERIFY=PASS; FINAL_STATUS=" + r["final_status"] + "; CLOUD_ADAPTER_MODE=SAFE_LOCAL_STUB; MEMBER_PLAINTEXT_SENT=false; SECRET_SENT=false"
-        + "; RETURN_PACKETIZED=true; RETURN_PACKET_VERIFY=" + r["return_packet_verify"]
-    ])
-    return {"id":"chatcmpl-"+uuid.uuid4().hex, "object":"chat.completion", "created":int(time.time()), "model":MODEL, "choices":[{"index":0, "message":{"role":"assistant","content":c}, "finish_reason":"stop"}], "usage":{"prompt_tokens":0,"completion_tokens":0,"total_tokens":0}}
+def chat_response(_payload=None):
+    """Return the immutable boundary without reading or processing a prompt."""
+
+    return {
+        "state": "HOLD",
+        "reason_code": "DEVICE_LLM_REQUIRED",
+        "message": "LLM 只在使用者設備執行；伺服器不讀取 prompt 或執行模型。",
+        "llm_execution": device_llm_execution_policy(),
+        "candidate_endpoint": "/api/intent-field",
+    }
 
 class H(BaseHTTPRequestHandler):
     def out(self, code, obj):
         b = json.dumps(obj, ensure_ascii=False).encode()
-        self.send_response(code); self.send_header("content-type","application/json"); self.send_header("content-length",str(len(b))); self.end_headers(); self.wfile.write(b)
+        self.send_response(code)
+        self.send_header("content-type","application/json; charset=utf-8")
+        self.send_header("content-length",str(len(b)))
+        self.send_header("cache-control", "no-store")
+        self.send_header("x-content-type-options", "nosniff")
+        self.send_header("x-frame-options", "DENY")
+        self.send_header("referrer-policy", "no-referrer")
+        self.end_headers()
+        self.wfile.write(b)
+
+    def html(self, code, content):
+        b = content.encode("utf-8")
+        self.send_response(code)
+        self.send_header("content-type", "text/html; charset=utf-8")
+        self.send_header("content-length", str(len(b)))
+        self.send_header("cache-control", "no-store")
+        self.send_header("x-content-type-options", "nosniff")
+        self.send_header("x-frame-options", "DENY")
+        self.send_header("referrer-policy", "no-referrer")
+        self.send_header("content-security-policy", "default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'")
+        self.end_headers()
+        self.wfile.write(b)
+
+    def svg(self, code, content):
+        b = content.encode("utf-8")
+        self.send_response(code)
+        self.send_header("content-type", "image/svg+xml; charset=utf-8")
+        self.send_header("content-length", str(len(b)))
+        self.send_header("cache-control", "public, max-age=86400")
+        self.send_header("x-content-type-options", "nosniff")
+        self.end_headers()
+        self.wfile.write(b)
+
     def do_GET(self):
-        if self.path == "/healthz":
-            self.out(200, {"status":"ok","model_id":MODEL,"cloud_adapter_mode":"SAFE_LOCAL_STUB","cloud_provider_reachable":False})
-        elif self.path == "/v1/models":
-            self.out(200, {"object":"list","data":[{"id":MODEL,"object":"model","owned_by":"local-w7tp"}]})
+        path = urlsplit(self.path).path
+        if path == "/healthz":
+            self.out(200, {"status":"ok","model_id":None,"compatibility_boundary_id":MODEL,"llm_inference_location":"USER_DEVICE_ONLY","server_llm_execution":False,"cloud_adapter_mode":"BLOCK_DEVICE_ONLY","cloud_provider_reachable":False,"db_startup_mode":"READ_ONLY_SCHEMA_CHECK_NO_WRITE","db_schema_read_only_verified":verify_existing_db_read_only(),"shared_intent_field":health_payload()})
+        elif path == "/readyz":
+            self.out(200, ready_payload())
+        elif path == "/capabilities":
+            self.out(200, capabilities_payload())
+        elif path == "/api/nodes":
+            self.out(200, node_payload())
+        elif path == "/wuchang/intent-field":
+            self.html(200, PRODUCT_HTML)
+        elif path == "/favicon.svg":
+            self.svg(200, PRODUCT_ICON_SVG)
+        elif path == "/v1/models":
+            self.out(200, {"object":"list","data":[],"llm_execution":device_llm_execution_policy()})
         else:
             self.out(404, {"error":"not_found"})
     def do_OPTIONS(self):
@@ -363,34 +441,19 @@ class H(BaseHTTPRequestHandler):
         self.wfile.flush()
 
     def do_POST(self):
-        if self.path != "/v1/chat/completions":
-            self.out(404, {"error":"not_found"}); return
-        n = int(self.headers.get("content-length","0"))
-        payload = json.loads(self.rfile.read(n).decode() or "{}")
-        resp = chat_response(payload)
-
-        if payload.get("stream"):
-            self.send_response(200)
-            self.send_header("content-type", "text/event-stream; charset=utf-8")
-            self.send_header("cache-control", "no-cache")
-            self.send_header("access-control-allow-origin", "*")
-            self.end_headers()
-
-            base = {
-                "id": resp["id"],
-                "object": "chat.completion.chunk",
-                "created": resp["created"],
-                "model": MODEL
-            }
-            self.sse({**base, "choices":[{"index":0, "delta":{"role":"assistant"}, "finish_reason":None}]})
-            content = resp["choices"][0]["message"]["content"]
-            self.sse({**base, "choices":[{"index":0, "delta":{"content":content}, "finish_reason":None}]})
-            self.sse({**base, "choices":[{"index":0, "delta":{}, "finish_reason":"stop"}]})
-            self.wfile.write(b"data: [DONE]\n\n")
-            self.wfile.flush()
+        path = urlsplit(self.path).path
+        if path == "/api/intent-field":
+            try:
+                length = int(self.headers.get("content-length", "0"))
+            except ValueError:
+                length = 0
+            payload = self.rfile.read(length) if 0 < length <= 64 * 1024 else b""
+            code, result = process_http_request(payload)
+            self.out(code, result)
             return
-
-        self.out(200, resp)
+        if path != "/v1/chat/completions":
+            self.out(404, {"error":"not_found"}); return
+        self.out(409, chat_response())
 
 def smoke():
     if DB.exists():
@@ -421,19 +484,19 @@ def smoke():
     all_expected = all(x["actual"] == x["expected"] for x in results)
     return_packetized = return_packet_count == len(cases) and return_packet_schema_ok
     state = "PASS" if table_count() == 7 and return_packetized and not member_sent and not secret_sent and packet_only and malicious_blocked and raw_phone_blocked and all_expected and mask_pass else "FAIL"
-    out = ROOT / "runtime/cloud_proxy/reports"
+    out = STATE_ROOT / "runtime/cloud_proxy/reports"
     out.mkdir(parents=True, exist_ok=True)
     report = out / "W7TP_CLOUD_PROXY_DB_SMOKE_REPORT.json"
     seal = out / "W7TP_CLOUD_PROXY_DB_SMOKE_SEAL.md"
     verifier = out / "W7TP_CLOUD_PROXY_DB_VERIFIER_SUMMARY.json"
-    data = {"state":state, "openwebui_model_id":MODEL, "db_path":str(DB.relative_to(ROOT)), "table_count":table_count(), "cloud_provider_reachable":False, "cloud_adapter_mode":"SAFE_LOCAL_STUB", "candidate_return_packetized":return_packetized, "return_packet_count":return_packet_count, "return_packet_schema_ok":return_packet_schema_ok, "masking_gate":"PASS" if mask_pass else "FAIL", "local_verify":"PASS", "member_plaintext_sent":member_sent, "secret_read":False, "secret_sent":secret_sent, "production_db_write":False, "odoo_db_write":False, "pos_write":False, "payment_capture":False, "service_restart":False, "deploy":False, "production_release":False, "cloud_received_packet_only":packet_only, "malicious_member_plaintext_request":"BLOCKED" if malicious_blocked else "NOT_BLOCKED", "raw_phone_openwebui_input":"BLOCKED" if raw_phone_blocked else "NOT_BLOCKED", "all_cases_match_expected":all_expected, "results":results}
+    data = {"state":state, "openwebui_model_id":MODEL, "db_path":str(DB.relative_to(STATE_ROOT)), "table_count":table_count(), "cloud_provider_reachable":False, "cloud_adapter_mode":"SAFE_LOCAL_STUB", "candidate_return_packetized":return_packetized, "return_packet_count":return_packet_count, "return_packet_schema_ok":return_packet_schema_ok, "masking_gate":"PASS" if mask_pass else "FAIL", "local_verify":"PASS", "member_plaintext_sent":member_sent, "secret_read":False, "secret_sent":secret_sent, "production_db_write":False, "odoo_db_write":False, "pos_write":False, "payment_capture":False, "service_restart":False, "deploy":False, "production_release":False, "cloud_received_packet_only":packet_only, "malicious_member_plaintext_request":"BLOCKED" if malicious_blocked else "NOT_BLOCKED", "raw_phone_openwebui_input":"BLOCKED" if raw_phone_blocked else "NOT_BLOCKED", "all_cases_match_expected":all_expected, "results":results}
     report.write_text(json.dumps(data, ensure_ascii=False, indent=2)+"\n")
     verifier.write_text(json.dumps({"state":state, "checks":data}, ensure_ascii=False, indent=2)+"\n")
-    seal.write_text(f"# W7TP Cloud Proxy DB Smoke Seal\n\nSTATE={state}\nOPENWEBUI_MODEL_ID={MODEL}\nDB_PATH={DB.relative_to(ROOT)}\nTABLE_COUNT={table_count()}\nCANDIDATE_RETURN_PACKETIZED={str(return_packetized).lower()}\nMASKING_GATE={'PASS' if mask_pass else 'FAIL'}\nLOCAL_VERIFY=PASS\n")
+    seal.write_text(f"# W7TP Cloud Proxy DB Smoke Seal\n\nSTATE={state}\nOPENWEBUI_MODEL_ID={MODEL}\nDB_PATH={DB.relative_to(STATE_ROOT)}\nTABLE_COUNT={table_count()}\nCANDIDATE_RETURN_PACKETIZED={str(return_packetized).lower()}\nMASKING_GATE={'PASS' if mask_pass else 'FAIL'}\nLOCAL_VERIFY=PASS\n")
     print("STATE="+state)
     print("TASK_ID=D8_MANDATORY_TASK_20260624_145232_W7TP_OPENWEBUI_DESENSITIZED_CLOUD_PROXY_DB_MVP")
     print("OPENWEBUI_MODEL_ID="+MODEL)
-    print("DB_PATH="+str(DB.relative_to(ROOT)))
+    print("DB_PATH="+str(DB.relative_to(STATE_ROOT)))
     print("TABLE_COUNT="+str(table_count()))
     print("CLOUD_PROVIDER_REACHABLE=false")
     print("CLOUD_ADAPTER_MODE=SAFE_LOCAL_STUB")
@@ -450,9 +513,9 @@ def smoke():
     print("SERVICE_RESTART=false")
     print("DEPLOY=false")
     print("PRODUCTION_RELEASE=false")
-    print("REPORT="+str(report.relative_to(ROOT)))
-    print("SEAL="+str(seal.relative_to(ROOT)))
-    print("VERIFIER="+str(verifier.relative_to(ROOT)))
+    print("REPORT="+str(report.relative_to(STATE_ROOT)))
+    print("SEAL="+str(seal.relative_to(STATE_ROOT)))
+    print("VERIFIER="+str(verifier.relative_to(STATE_ROOT)))
     return 0 if state == "PASS" else 1
 
 def main():
@@ -463,10 +526,14 @@ def main():
     p.add_argument("--port", type=int, default=9107)
     a = p.parse_args()
     if a.init_db:
-        init_db(); print("STATE=PASS"); print("OPENWEBUI_MODEL_ID="+MODEL); print("DB_PATH="+str(DB.relative_to(ROOT))); print("TABLE_COUNT="+str(table_count())); return 0
+        init_db(); print("STATE=PASS"); print("OPENWEBUI_MODEL_ID="+MODEL); print("DB_PATH="+str(DB.relative_to(STATE_ROOT))); print("TABLE_COUNT="+str(table_count())); return 0
     if a.smoke:
         return smoke()
-    init_db(); print("STATE=SERVING"); print("OPENWEBUI_MODEL_ID="+MODEL); print(f"BASE_URL=http://{a.host}:{a.port}/v1")
+    if not verify_existing_db_read_only():
+        print("STATE=HOLD_EXISTING_DB_SCHEMA_NOT_READABLE")
+        print("DB_STARTUP_MODE=READ_ONLY_SCHEMA_CHECK_NO_WRITE")
+        return 2
+    print("STATE=SERVING"); print("OPENWEBUI_MODEL_ID="+MODEL); print("DB_STARTUP_MODE=READ_ONLY_SCHEMA_CHECK_NO_WRITE"); print(f"BASE_URL=http://{a.host}:{a.port}/v1")
     ThreadingHTTPServer((a.host, a.port), H).serve_forever()
     return 0
 

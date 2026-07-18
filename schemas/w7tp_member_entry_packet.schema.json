@@ -3,7 +3,7 @@
   "$id": "wuchang.life/schemas/w7tp_member_entry_packet.schema.json",
   "title": "W7TP Member Entry Packet",
   "type": "object",
-  "required": ["packet_id", "schema_version", "identity_ref", "scenario_ref", "requested_service_ref", "envelope"],
+  "required": ["packet_id", "schema_version", "identity_ref", "scenario_ref", "requested_service_ref", "consent_ref", "authorization_ref", "withdrawal_ref", "qualification_ref", "envelope"],
   "properties": {
     "packet_id": {"type": "string", "minLength": 8},
     "schema_version": {"const": "W7TP-MEMBER-ENTRY/1.0"},
@@ -11,6 +11,10 @@
     "scenario_ref": {"type": "string", "pattern": "^scenario:[A-Z0-9_]+$"},
     "requested_service_ref": {"type": "string", "pattern": "^service:[A-Za-z0-9._-]+$"},
     "device_binding_ref": {"type": "string", "pattern": "^device:[A-Za-z0-9._-]+$"},
+    "consent_ref": {"type": "string", "pattern": "^consent:[A-Za-z0-9._-]+$"},
+    "authorization_ref": {"type": "string", "pattern": "^authorization:[A-Za-z0-9._-]+$"},
+    "withdrawal_ref": {"type": "string", "pattern": "^withdrawal:[A-Za-z0-9._-]+$"},
+    "qualification_ref": {"type": "string", "pattern": "^qualification:[A-Za-z0-9._-]+$"},
     "envelope": {
       "type": "object",
       "required": ["authority_scope", "consent_state", "revocation_state", "ttl_seconds", "nonce", "protocol", "verifier_ref"],

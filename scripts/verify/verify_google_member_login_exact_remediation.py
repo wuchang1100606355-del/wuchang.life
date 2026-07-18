@@ -49,11 +49,13 @@ def verify() -> list[str]:
         'request.env.ref("auth_oauth.provider_google", raise_if_not_found=False)',
         "provider.enabled",
         "provider.client_id",
-        "provider.auth_endpoint",
-        "provider.scope",
-        "provider.data_endpoint or provider.validation_endpoint",
+        "trusted_google_authorization_url(provider.auth_endpoint)",
+        '"scope": "openid profile email"',
+        "trusted_google_userinfo_url(",
         'self._param("web.base.url")',
-        'self._param("wuchang_google_member_login.client_secret")',
+        "GOOGLE_CLIENT_SECRET_FILE_ENV",
+        "stat.S_IMODE(file_status.st_mode) != 0o600",
+        "local=False",
         '"/google/member/callback"',
     )
     for marker in required_google:

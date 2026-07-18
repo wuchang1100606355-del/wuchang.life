@@ -20,7 +20,10 @@ from typing import Any, Callable
 try:
     from .d3_coordinate_transition_candidate import transition_coordinate
 except ImportError:  # pragma: no cover - direct script execution
-    from d3_coordinate_transition_candidate import transition_coordinate
+    try:
+        from tools.d3_coordinate_transition_candidate import transition_coordinate
+    except ModuleNotFoundError:
+        from d3_coordinate_transition_candidate import transition_coordinate
 
 
 SAFETY_FLAGS = {

@@ -1,11 +1,20 @@
-import json
 import secrets
 import requests
+from datetime import datetime, timezone
 from urllib.parse import urlencode
 
 from odoo import http
 from odoo.http import request
 
+from ..services.profile_minimization import (
+    CANONICAL_CALLBACK_URL,
+    authorization_decision,
+    callback_security_decision,
+    minimized_link_record,
+)
+
+
+LINE_ID_TOKEN_VERIFY_URL = 'https://api.line.me/oauth2/v2.1/verify'
 
 class WuchangLineLogin(http.Controller):
     def _html_page(self, title, message, reference):
@@ -42,8 +51,8 @@ class WuchangLineLogin(http.Controller):
         <div><strong>現場協助</strong><span>請由店長或櫃台協助完成會員服務流程。</span></div>
         <div><strong>安全邊界</strong><span>公開頁面不顯示技術密鑰、會員明文或外部服務錯誤細節。</span></div>
       </div>
-      <a class="primary" href="/web/login">回到登入入口</a>
-      <a class="secondary" href="/web/signup">前往會員註冊</a>
+      <a class="primary" href="https://wuchang.life/">回到公開首頁</a>
+      <a class="secondary" href="https://member.wuchang.life/">回到會員入口</a>
       <div class="ref">參考代碼：{reference}</div>
     </section>
   </main>
@@ -68,9 +77,18 @@ class WuchangLineLogin(http.Controller):
                 "LINE_CONFIG_REQUIRED",
                 status=503,
             )
+        if redirect_uri != CANONICAL_CALLBACK_URL:
+            return self._status_page(
+                "LINE 登入安全檢查未通過",
+                "LINE callback 尚未鎖定正式會員網域，請洽系統管理員完成確認。",
+                "LINE_CALLBACK_HOST_MISMATCH",
+                status=503,
+            )
 
         state = secrets.token_urlsafe(24)
+        nonce = secrets.token_urlsafe(24)
         request.session['wuchang_line_state'] = state
+        request.session['wuchang_line_nonce'] = nonce
         group_packet_ref = kw.get('group_packet_ref')
         if group_packet_ref:
             request.session['wuchang_group_packet_ref'] = group_packet_ref
@@ -80,6 +98,7 @@ class WuchangLineLogin(http.Controller):
             'client_id': channel_id,
             'redirect_uri': redirect_uri,
             'state': state,
+            'nonce': nonce,
             'scope': 'profile openid',
         }
 
@@ -89,7 +108,8 @@ class WuchangLineLogin(http.Controller):
     def line_callback(self, **kw):
         code = kw.get('code')
         state = kw.get('state')
-        saved_state = request.session.get('wuchang_line_state')
+        saved_state = request.session.pop('wuchang_line_state', None)
+        expected_nonce = request.session.pop('wuchang_line_nonce', None)
 
         if not code:
             return self._status_page(
@@ -110,6 +130,13 @@ class WuchangLineLogin(http.Controller):
         channel_id = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.channel_id')
         channel_secret = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.channel_secret')
         redirect_uri = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.redirect_uri')
+        if not channel_id or not channel_secret or redirect_uri != CANONICAL_CALLBACK_URL:
+            return self._status_page(
+                "LINE 會員入口尚未完成正式串接",
+                "LINE OAuth 或 callback 尚未完成正式設定，請洽系統管理員。",
+                "LINE_OAUTH_CONFIGURATION_REQUIRED",
+                status=503,
+            )
 
         token_res = requests.post(
             'https://api.line.me/oauth2/v2.1/token',
@@ -132,7 +159,35 @@ class WuchangLineLogin(http.Controller):
                 status=502,
             )
 
-        access_token = token_res.json().get('access_token')
+        token_data = token_res.json()
+        access_token = token_data.get('access_token')
+        id_token_value = token_data.get('id_token')
+        if not access_token or not id_token_value:
+            return self._status_page(
+                "LINE 登入安全檢查未通過",
+                "LINE 身分驗證資料不完整，請重新從正式入口操作。",
+                "LINE_ID_TOKEN_REQUIRED",
+                status=400,
+            )
+
+        verify_res = requests.post(
+            LINE_ID_TOKEN_VERIFY_URL,
+            data={
+                'id_token': id_token_value,
+                'client_id': channel_id,
+                'nonce': expected_nonce,
+            },
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            timeout=20,
+        )
+        if verify_res.status_code != 200:
+            return self._status_page(
+                "LINE 登入安全檢查未通過",
+                "LINE nonce 或身分聲明未通過驗證，請重新操作。",
+                "LINE_ID_TOKEN_VERIFY_FAILED",
+                status=400,
+            )
+        token_claims = verify_res.json()
 
         profile_res = requests.get(
             'https://api.line.me/v2/profile',
@@ -150,34 +205,49 @@ class WuchangLineLogin(http.Controller):
 
         profile = profile_res.json()
         line_user_id = profile.get('userId')
+        security = callback_security_decision(
+            expected_state=saved_state,
+            received_state=state,
+            expected_nonce=expected_nonce,
+            token_claims=token_claims,
+            expected_audience=channel_id,
+            profile_subject=line_user_id,
+            callback_url=redirect_uri,
+        )
+        if security['decision'] != 'PASS':
+            return self._status_page(
+                "LINE 登入安全檢查未通過",
+                "LINE 身分驗證結果不一致，請重新從正式入口操作。",
+                security['reason'],
+                status=400,
+            )
 
-        user_model = request.env['wuchang.line.user'].sudo()
-        user = user_model.search([('line_user_id', '=', line_user_id)], limit=1)
-
-        vals = {
-            'display_name': profile.get('displayName'),
-            'line_user_id': line_user_id,
-            'picture_url': profile.get('pictureUrl'),
-            'status_message': profile.get('statusMessage'),
-            'raw_profile': json.dumps(profile, ensure_ascii=False),
-        }
-
-        if user:
-            user.write(vals)
-        else:
-            user = user_model.create(vals)
+        authority = request.env['wuchang.member.external.auth'].sudo()
+        resolution = authority.resolve_provider_subject('line', line_user_id)
+        link_context = minimized_link_record(
+            profile,
+            resolution,
+            datetime.now(timezone.utc).isoformat(),
+        )
+        request.session['wuchang_line_link_context'] = link_context
+        if authorization_decision(link_context['link_state']) != 'ALLOW':
+            return self._status_page(
+                "LINE 帳戶需要本地確認",
+                "LINE 身分已驗證，但尚未取得本地會員綁定授權。請重新驗證既有帳戶或由授權人員審閱。",
+                link_context['link_state'],
+                status=202,
+            )
 
         group_packet_ref = request.session.get('wuchang_group_packet_ref')
         if group_packet_ref:
-            subject_hash = request.env['wuchang.member.external.auth'].sudo().hash_subject('line', line_user_id)
             request.session['wuchang_group_auth_ref'] = {
                 'provider': 'line',
-                'provider_user_ref': subject_hash,
+                'provider_user_ref': link_context['provider_subject_reference'],
                 'display_ref': 'line_member_masked',
             }
             return request.redirect('/wuchang/member/register/group/%s' % group_packet_ref)
 
         return self._success_page(
             "LINE 會員入口已完成",
-            "LINE 會員登入已完成，請依現場指示繼續。",
+            "LINE 身分驗證與本地綁定引用已確認，請依現場指示繼續。",
         )

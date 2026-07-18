@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_guided_completion.schema.json",
+  "title": "W7TP Guided Completion Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state",
+    "packet_type",
+    "profile",
+    "state_id",
+    "intent_content_sha256",
+    "source_snapshot",
+    "remaining_field_count",
+    "question",
+    "candidate_only",
+    "redteam_drift_monitor",
+    "side_effects",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-GUIDED-COMPLETION/1.1"},
+    "state": {"const": "NEEDS_USER_GUIDED_COMPLETION"},
+    "packet_type": {"const": "GUIDED_COMPLETION_PACKET"},
+    "profile": {"enum": ["ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC"]},
+    "state_id": {"$ref": "#/$defs/sha256"},
+    "intent_content_sha256": {"$ref": "#/$defs/sha256"},
+    "source_snapshot": {"$ref": "#/$defs/source_snapshot"},
+    "remaining_field_count": {"type": "integer", "minimum": 1},
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question_id", "field", "prompt", "reason", "options", "free_input_allowed", "sensitive_data_notice"],
+      "properties": {
+        "question_id": {"type": "string", "minLength": 3},
+        "field": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "prompt": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "options": {"type": "array", "minItems": 2, "maxItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "free_input_allowed": {"const": true},
+        "sensitive_data_notice": {"type": "string", "minLength": 1}
+      }
+    },
+    "candidate_only": {"const": true},
+    "redteam_drift_monitor": {"$ref": "#/$defs/redteam_drift_monitor"},
+    "side_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["db_write", "formal_transaction", "network_call"],
+      "properties": {
+        "db_write": {"const": false},
+        "formal_transaction": {"const": false},
+        "network_call": {"const": false}
+      }
+    },
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "redteam_drift_monitor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "mode",
+        "perspective",
+        "status",
+        "alert_count",
+        "alerts",
+        "checked_boundaries",
+        "decision_authority",
+        "llm_execution",
+        "input_retained",
+        "input_echoed"
+      ],
+      "properties": {
+        "schema_version": {"const": "W7TP-REDTEAM-DRIFT-MONITOR/1.0"},
+        "mode": {"const": "ALWAYS_ON_EVERY_STATE_TRANSITION"},
+        "perspective": {"const": "REDTEAM"},
+        "status": {"enum": ["MONITORING_CLEAR", "DRIFT_ALERT"]},
+        "alert_count": {"type": "integer", "minimum": 0},
+        "alerts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "severity", "required_action"],
+            "properties": {
+              "code": {"type": "string", "minLength": 1},
+              "severity": {"enum": ["HIGH", "CRITICAL"]},
+              "required_action": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "checked_boundaries": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "decision_authority": {"const": "LOCAL_TOTAL_FIELD_ONLY"},
+        "llm_execution": {"const": "NONE_DETERMINISTIC_RULES"},
+        "input_retained": {"const": false},
+        "input_echoed": {"const": false}
+      }
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario_route_table_sha256", "capability_registry_sha256"],
+      "properties": {
+        "scenario_route_table_sha256": {"$ref": "#/$defs/sha256"},
+        "capability_registry_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}
