@@ -1,0 +1,29 @@
+# SOURCE_CANDIDATE_ONLY — do not apply directly to /etc/caddy.
+# This replaces only the existing /api/intent-field handle after review.
+# The Odoo forward-auth response must be built by
+# account_linking.identity_projection_response_headers().
+
+(w7tp_odoo_identity_projection_candidate) {
+	route {
+		request_header -X-W7TP-Identity-Schema
+		request_header -X-W7TP-Identity-Ref
+		request_header -X-W7TP-Canonical-Ref
+		request_header -X-W7TP-Prefix-Ref
+		request_header -X-W7TP-Prefix-Version
+		request_header -X-W7TP-Issuer-Ref
+		request_header -X-W7TP-Projection-Ref
+		request_header -X-W7TP-Projection-SHA256
+		request_header -X-W7TP-Issued-At
+		request_header -X-W7TP-Expires-At
+		request_header -X-W7TP-Nonce
+		request_header -X-W7TP-Projection-Boundary
+
+		forward_auth 127.0.0.1:8069 {
+			uri /google/member/welcome
+			copy_headers X-W7TP-Identity-Schema X-W7TP-Identity-Ref X-W7TP-Canonical-Ref X-W7TP-Prefix-Ref X-W7TP-Prefix-Version X-W7TP-Issuer-Ref X-W7TP-Projection-Ref X-W7TP-Projection-SHA256 X-W7TP-Issued-At X-W7TP-Expires-At X-W7TP-Nonce
+		}
+
+		request_header X-W7TP-Projection-Boundary "caddy:wuchang.life:odoo-forward-auth:v1"
+		reverse_proxy 127.0.0.1:9107
+	}
+}

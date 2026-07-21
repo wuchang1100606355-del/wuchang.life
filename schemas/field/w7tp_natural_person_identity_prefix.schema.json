@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_natural_person_identity_prefix.schema.json",
+  "title": "W7TP Natural Person Immutable Identity Prefix",
+  "$comment": "Immutable prefix projection of the existing 8D identity-packet canonical; not a parallel identity system.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "D7",
+    "D8"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-NATURAL-PERSON-IDENTITY-PREFIX/1.0"},
+    "packet_type": {"const": "NATURAL_PERSON_IDENTITY_IMMUTABLE_PREFIX"},
+    "D1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_type",
+        "identity_packet_ref",
+        "protected_plaintext_binding_ref",
+        "one_natural_person_one_packet",
+        "plaintext_identity_visible"
+      ],
+      "properties": {
+        "subject_type": {"const": "NATURAL_PERSON"},
+        "identity_packet_ref": {
+          "type": "string",
+          "pattern": "^identity_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "protected_plaintext_binding_ref": {
+          "type": "string",
+          "pattern": "^identity_binding_ref:sha256:[0-9a-f]{64}$"
+        },
+        "one_natural_person_one_packet": {"const": true},
+        "plaintext_identity_visible": {"const": false}
+      }
+    },
+    "D2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_state", "revocation_state"],
+      "properties": {
+        "identity_state": {"enum": ["ACTIVE", "SUSPENDED", "RECOVERY_PENDING"]},
+        "revocation_state": {"enum": ["CLEAR", "REVOKED"]}
+      }
+    },
+    "D3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_registry_ref", "field_context_ref"],
+      "properties": {
+        "identity_registry_ref": {
+          "type": "string",
+          "pattern": "^identity_registry_ref:sha256:[0-9a-f]{64}$"
+        },
+        "field_context_ref": {
+          "type": "string",
+          "pattern": "^field_context_ref:[A-Za-z0-9._:-]+$"
+        }
+      }
+    },
+    "D4": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_refs", "binding_evidence_refs"],
+      "properties": {
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^source_ref:sha256:[0-9a-f]{64}$"}
+        },
+        "binding_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^evidence_ref:sha256:[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "D5": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_prefix_writer",
+        "llm_writable_region",
+        "llm_may_create_prefix",
+        "llm_may_modify_prefix"
+      ],
+      "properties": {
+        "identity_prefix_writer": {"const": "TOTAL_FIELD_IDENTITY_ISSUER_ONLY"},
+        "llm_writable_region": {"const": "CANDIDATE_BODY_ONLY"},
+        "llm_may_create_prefix": {"const": false},
+        "llm_may_modify_prefix": {"const": false}
+      }
+    },
+    "D6": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "device_bindings",
+        "provider_bindings",
+        "device_and_provider_are_carriers",
+        "plaintext_inside_packet",
+        "credential_material_inside_packet"
+      ],
+      "properties": {
+        "device_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["device_ref", "binding_ref", "state"],
+            "properties": {
+              "device_ref": {"type": "string", "pattern": "^device_ref:sha256:[0-9a-f]{64}$"},
+              "binding_ref": {"type": "string", "pattern": "^binding_ref:sha256:[0-9a-f]{64}$"},
+              "state": {"enum": ["ACTIVE", "SUSPENDED", "REVOKED"]}
+            }
+          }
+        },
+        "provider_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["provider_ref", "provider_subject_sha256", "binding_ref", "state"],
+            "properties": {
+              "provider_ref": {"type": "string", "pattern": "^provider_ref:[a-z0-9][a-z0-9._-]{0,63}$"},
+              "provider_subject_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "binding_ref": {"type": "string", "pattern": "^binding_ref:sha256:[0-9a-f]{64}$"},
+              "state": {"enum": ["ACTIVE", "SUSPENDED", "REVOKED"]}
+            }
+          }
+        },
+        "device_and_provider_are_carriers": {"const": true},
+        "plaintext_inside_packet": {"const": false},
+        "credential_material_inside_packet": {"const": false}
+      }
+    },
+    "D7": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "missing_binding_evidence_state",
+        "missing_evidence_is_denial",
+        "binding_conflict_decision",
+        "prefix_mismatch_decision"
+      ],
+      "properties": {
+        "missing_binding_evidence_state": {"const": "NOT_YET_EVIDENCED"},
+        "missing_evidence_is_denial": {"const": false},
+        "binding_conflict_decision": {"const": "HOLD_IDENTITY_PACKET_CONFLICT"},
+        "prefix_mismatch_decision": {"const": "HOLD_IDENTITY_PREFIX_INTEGRITY"}
+      }
+    },
+    "D8": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prefix_position",
+        "llm_mutable",
+        "verify_on_every_state_transition",
+        "requires_total_field_verify",
+        "prefix_sha256"
+      ],
+      "properties": {
+        "prefix_position": {"const": "SYSTEM_IMMUTABLE_PREFIX"},
+        "llm_mutable": {"const": false},
+        "verify_on_every_state_transition": {"const": true},
+        "requires_total_field_verify": {"const": true},
+        "prefix_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

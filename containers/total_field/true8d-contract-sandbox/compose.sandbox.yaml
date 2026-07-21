@@ -1,0 +1,57 @@
+name: w7tp-true8d-contract-sandbox
+
+x-common: &common
+  build:
+    context: ../../..
+    dockerfile: containers/total_field/true8d-contract-sandbox/Containerfile
+  profiles: ["explicit-sandbox-only"]
+  network_mode: none
+  read_only: true
+  restart: "no"
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: ["ALL"]
+  tmpfs: ["/tmp:rw,noexec,nosuid,size=16m"]
+  pids_limit: 32
+
+x-d1-d7-budget: &d1_d7_budget
+  deploy:
+    resources:
+      reservations: {cpus: "0.140", memory: 176M}
+      limits: {cpus: "0.350", memory: 384M, pids: 32}
+
+services:
+  d1:
+    <<: [*common, *d1_d7_budget]
+    command: ["--field", "D1"]
+  d2:
+    <<: [*common, *d1_d7_budget]
+    command: ["--field", "D2"]
+  d3:
+    <<: [*common, *d1_d7_budget]
+    command: ["--field", "D3"]
+  d4:
+    <<: [*common, *d1_d7_budget]
+    command: ["--field", "D4"]
+  d5:
+    <<: [*common, *d1_d7_budget]
+    command: ["--field", "D5"]
+  d6:
+    <<: [*common, *d1_d7_budget]
+    command: ["--field", "D6"]
+  d7:
+    <<: [*common, *d1_d7_budget]
+    command: ["--field", "D7"]
+  d8:
+    <<: *common
+    command: ["--field", "D8"]
+    deploy:
+      resources:
+        reservations: {cpus: "0.170", memory: 176M}
+        limits: {cpus: "0.550", memory: 384M, pids: 32}
+  total-field-core:
+    <<: *common
+    command: ["--core"]
+    deploy:
+      resources:
+        reservations: {cpus: "0.500", memory: 512M}
+        limits: {cpus: "1.000", memory: 1024M, pids: 32}

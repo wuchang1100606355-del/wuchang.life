@@ -20,7 +20,7 @@ import urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import unquote, urljoin, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -138,12 +138,17 @@ class PublicPageParser(HTMLParser):
 
 def _page_file(path: str) -> Path:
     parsed = urlsplit(path)
-    relative = parsed.path.lstrip("/")
+    decoded_path = unquote(parsed.path)
+    relative = decoded_path.lstrip("/")
     if not relative:
         return WEB / "index.html"
     target = WEB / relative
-    if parsed.path.endswith("/"):
+    if decoded_path.endswith("/"):
         target /= "index.html"
+    try:
+        target.resolve().relative_to(WEB.resolve())
+    except ValueError:
+        return WEB / "__INVALID_INTERNAL_TARGET__"
     return target
 
 

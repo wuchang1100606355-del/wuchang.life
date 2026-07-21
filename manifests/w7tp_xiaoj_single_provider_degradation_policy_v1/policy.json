@@ -1,0 +1,75 @@
+{
+  "schema_version": "w7tp-xiaoj-single-provider-degradation-policy/1.0",
+  "run_id": "W7TP_XIAOJ_DUAL_LLM_GOVERNED_NLIO_P1_POLICY_V1",
+  "status": "APPROVED_LOCAL_NON_LIVE",
+  "degradable_failure_classes": [
+    "PROVIDER_TIMEOUT",
+    "PROVIDER_UNAVAILABLE",
+    "TRANSPORT_UNREACHABLE",
+    "RATE_LIMIT_NO_CANDIDATE_RETURNED"
+  ],
+  "non_degradable_failure_classes": [
+    "DOMAIN_CANDIDATE_CONFLICT",
+    "INVALID_SCHEMA",
+    "FORBIDDEN_AUTHORITY",
+    "SECRET_OR_MEMBER_PLAINTEXT_BOUNDARY",
+    "IDENTITY_OR_PERMISSION_MISMATCH",
+    "HASH_OR_ENVELOPE_MISMATCH",
+    "PROVIDER_RETURNED_INVALID_CANDIDATE"
+  ],
+  "request_modes": {
+    "CHAT_ONLY": {
+      "single_provider": "TOTAL_FIELD_GATE_THEN_NATURAL_LANGUAGE_REPLY",
+      "candidate_only": true,
+      "side_effects": false
+    },
+    "CODE_DRAFT_ONLY": {
+      "single_provider": "CANDIDATE_ONLY_TEXT",
+      "file_write": false,
+      "execution": false,
+      "commit": false,
+      "deploy": false
+    },
+    "ACTION_REQUEST": {
+      "single_provider": "HOLD_SINGLE_PROVIDER_ACTION_NOT_AUTHORIZED"
+    }
+  },
+  "required_path": [
+    "receive_candidate",
+    "total_field_final_gate",
+    "render_human_response"
+  ],
+  "metadata": [
+    "available_provider",
+    "missing_provider",
+    "failure_class",
+    "degraded_mode",
+    "dual_convergence"
+  ],
+  "member_messages": {
+    "chat_degraded": "目前使用備援模式完成回覆。",
+    "action_hold": "目前僅有單一路徑可用，執行部分已暫停。"
+  },
+  "authority": {
+    "provider_is_authority": false,
+    "total_field_is_authority": true,
+    "persona_in_governance_payload": false,
+    "persona_in_tfs_or_hash": false
+  },
+  "forbidden_effects": {
+    "tool_execution": false,
+    "process_execution": false,
+    "file_write": false,
+    "db_write": false,
+    "network_write": false,
+    "router_write": false,
+    "service_change": false,
+    "credential_access": false,
+    "secret_access": false,
+    "member_plaintext_access": false,
+    "canonical_change": false,
+    "pointer_change": false,
+    "permission_change": false,
+    "identity_change": false
+  }
+}

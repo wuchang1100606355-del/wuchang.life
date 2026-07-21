@@ -38,6 +38,8 @@ RESULT_SCHEMA_VERSION = "sovereign-ai-domain-completion-result/0.1"
 GATEWAY_REF = "tools.total_field_candidate_gateway.receive_candidate"
 ADAPTER_GATEWAY_REF = "tools.domain_completion_total_field_gateway.receive_candidate"
 DECISION_PRIORITY = ("QUARANTINE", "BLOCK", "HOLD", "ALLOW")
+SINGLE_PROVIDER_ACTION_HOLD_REASON = "HOLD_SINGLE_PROVIDER_ACTION_NOT_AUTHORIZED"
+SINGLE_PROVIDER_ACTION_HOLD_MARKER = "single_provider_action_not_authorized"
 
 
 def _load_domain_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
@@ -189,6 +191,18 @@ def _more_restrictive(left: str, right: str) -> str:
     return left if DECISION_PRIORITY.index(left) <= DECISION_PRIORITY.index(right) else right
 
 
+def _candidate_semantic_fingerprint(candidate: GovernanceCandidate) -> str:
+    """Identify governance-equivalent candidates without provider provenance."""
+
+    return canonical_sha256(
+        {
+            "candidate_value": candidate.candidate_value,
+            "requires_human_confirmation": candidate.requires_human_confirmation,
+            "sensitivity": candidate.sensitivity,
+        }
+    )
+
+
 def _safe_candidate_value(
     candidate: GovernanceCandidate, effective_sensitivity: str
 ) -> JSONValue:
@@ -325,10 +339,27 @@ class DomainCompletionTotalFieldGateway:
         *,
         previous_value: JSONValue,
         conflict: bool = False,
+        forced_hold_reason: str | None = None,
     ) -> dict[str, JSONValue]:
         effective, requested_decision, requested_reason, marker = _classification(
             candidate, self._domain_policy, conflict=conflict
         )
+        runtime_policy = self._runtime_policy
+        if forced_hold_reason is not None:
+            if forced_hold_reason != SINGLE_PROVIDER_ACTION_HOLD_REASON:
+                raise DomainCompletionError("FORCED_HOLD_REASON_UNSUPPORTED")
+            requested_decision = "HOLD"
+            requested_reason = forced_hold_reason
+            marker = SINGLE_PROVIDER_ACTION_HOLD_MARKER
+            runtime_policy = replace(
+                runtime_policy,
+                sensitive_key_names=tuple(
+                    sorted(
+                        frozenset(runtime_policy.sensitive_key_names)
+                        | {SINGLE_PROVIDER_ACTION_HOLD_MARKER}
+                    )
+                ),
+            )
         safe_value = _safe_candidate_value(candidate, effective)
         previous_fields = _state_fields(
             candidate,
@@ -344,13 +375,13 @@ class DomainCompletionTotalFieldGateway:
             marker=marker,
             previous=False,
         )
-        request = _runtime_request(candidate, proposed_fields, self._runtime_policy)
+        request = _runtime_request(candidate, proposed_fields, runtime_policy)
         try:
             runtime_result = total_field_receive_candidate(
                 request,
                 previous_state=previous_fields,
                 observation_domains=self._observation_domains,
-                policy=self._runtime_policy,
+                policy=runtime_policy,
             )
         except TotalFieldGatewayError as exc:
             raise DomainCompletionError(exc.reason_code, exc.path) from exc
@@ -415,6 +446,7 @@ class DomainCompletionTotalFieldGateway:
         candidates: Sequence[Mapping[str, Any]],
         *,
         previous_values: Mapping[str, Any],
+        forced_hold_reason: str | None = None,
     ) -> tuple[dict[str, JSONValue], ...]:
         """Independently adjudicate unique candidates; one failure cannot commit peers."""
 
@@ -445,9 +477,11 @@ class DomainCompletionTotalFieldGateway:
                 continue
             seen_hashes.add(item.candidate_hash)
             accepted.append(item)
-        counts: dict[str, int] = {}
+        fingerprints: dict[str, set[str]] = {}
         for item in accepted:
-            counts[item.identity_key] = counts.get(item.identity_key, 0) + 1
+            fingerprints.setdefault(item.identity_key, set()).add(
+                _candidate_semantic_fingerprint(item)
+            )
         results: list[dict[str, JSONValue]] = []
         for item in accepted:
             previous_value = cast(JSONValue, previous.get(item.identity_key))
@@ -455,7 +489,8 @@ class DomainCompletionTotalFieldGateway:
                 self._receive_validated(
                     item,
                     previous_value=previous_value,
-                    conflict=counts[item.identity_key] > 1,
+                    conflict=len(fingerprints[item.identity_key]) > 1,
+                    forced_hold_reason=forced_hold_reason,
                 )
             )
         results.extend(rejected)

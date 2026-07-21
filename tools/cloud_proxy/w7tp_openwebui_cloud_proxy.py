@@ -2,6 +2,7 @@
 import argparse, datetime as dt, hashlib, json, os, re, sqlite3, sys, time, uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from typing import Any, Callable, Mapping
 from urllib.parse import urlsplit
 
 CODE_ROOT = Path(__file__).resolve().parents[2]
@@ -19,6 +20,11 @@ from tools.total_field.w7tp_intent_field_suite.api import (
     ready_payload,
 )
 from tools.total_field.w7tp_field_application_runtime import device_llm_execution_policy
+from tools.total_field.w7tp_intent_field_suite.identity_projection import (
+    PROJECTION_HEADER_NAMES,
+    projection_headers_present,
+    trusted_caddy_boundary,
+)
 
 DB = STATE_ROOT / "runtime/cloud_proxy/w7tp_cloud_proxy.sqlite3"
 MODEL = "w7tp-device-llm-boundary"
@@ -47,6 +53,29 @@ RETURN_FORBIDDEN_ACTIONS = [
     "member_plaintext_read",
     "secret_read",
 ]
+TRUSTED_IDENTITY_PREFIX_RESOLVER: Callable[
+    [str], Mapping[str, Any] | None
+] | None = None
+TRUSTED_IDENTITY_REGISTRY_SNAPSHOT: Mapping[str, Any] | None = None
+
+
+def configure_trusted_identity_projection(
+    *,
+    prefix_resolver: Callable[[str], Mapping[str, Any] | None],
+    identity_registry_snapshot: Mapping[str, Any],
+) -> None:
+    """Inject the existing Total Field resolver without creating a registry."""
+
+    if not callable(prefix_resolver) or not isinstance(
+        identity_registry_snapshot, Mapping
+    ):
+        raise ValueError("trusted_identity_projection_configuration_invalid")
+    global TRUSTED_IDENTITY_PREFIX_RESOLVER
+    global TRUSTED_IDENTITY_REGISTRY_SNAPSHOT
+    TRUSTED_IDENTITY_PREFIX_RESOLVER = prefix_resolver
+    TRUSTED_IDENTITY_REGISTRY_SNAPSHOT = json.loads(
+        json.dumps(identity_registry_snapshot, ensure_ascii=False)
+    )
 
 def now():
     return dt.datetime.now(dt.timezone.utc).isoformat()
@@ -448,7 +477,23 @@ class H(BaseHTTPRequestHandler):
             except ValueError:
                 length = 0
             payload = self.rfile.read(length) if 0 < length <= 64 * 1024 else b""
-            code, result = process_http_request(payload)
+            if projection_headers_present(self.headers):
+                projection_headers = {
+                    header: self.headers.get(header)
+                    for header in PROJECTION_HEADER_NAMES
+                    if self.headers.get(header) is not None
+                }
+                peer = str(self.client_address[0]) if self.client_address else ""
+                trusted_boundary = trusted_caddy_boundary(self.headers, peer)
+                code, result = process_http_request(
+                    payload,
+                    trusted_identity_projection_headers=projection_headers,
+                    trusted_boundary=trusted_boundary,
+                    identity_prefix_resolver=TRUSTED_IDENTITY_PREFIX_RESOLVER,
+                    identity_registry_snapshot=TRUSTED_IDENTITY_REGISTRY_SNAPSHOT,
+                )
+            else:
+                code, result = process_http_request(payload)
             self.out(code, result)
             return
         if path != "/v1/chat/completions":

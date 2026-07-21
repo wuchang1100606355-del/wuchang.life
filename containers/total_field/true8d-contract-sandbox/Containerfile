@@ -1,0 +1,11 @@
+FROM python:3.12-slim
+
+WORKDIR /sandbox
+COPY tools/total_field/w7tp_true8d_contract_sandbox.py /sandbox/tools/total_field/w7tp_true8d_contract_sandbox.py
+COPY runtime/total_field/inbox/W7TP_TRUE8D_EIGHT_FIELD_CONTAINERIZATION_PLAN_V2_20260717T140655Z.json /sandbox/runtime/total_field/inbox/W7TP_TRUE8D_EIGHT_FIELD_CONTAINERIZATION_PLAN_V2_20260717T140655Z.json
+COPY runtime/total_field/secondary_cloud/scenario_route_table.json /sandbox/runtime/total_field/secondary_cloud/scenario_route_table.json
+COPY runtime/total_field/secondary_cloud/capability_registry.json /sandbox/runtime/total_field/secondary_cloud/capability_registry.json
+
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+USER 65534:65534
+ENTRYPOINT ["python", "/sandbox/tools/total_field/w7tp_true8d_contract_sandbox.py"]

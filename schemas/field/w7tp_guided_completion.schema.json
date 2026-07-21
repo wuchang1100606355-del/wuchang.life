@@ -54,6 +54,16 @@
         "network_call": {"const": false}
       }
     },
+    "identity_prefix": {
+      "type": "object",
+      "$comment": "Validated by w7tp_natural_person_identity_prefix.schema.json before the shared builder attaches it."
+    },
+    "identity_prefix_sha256": {"$ref": "#/$defs/sha256"},
+    "identity_binding_evidence_state": {
+      "enum": ["PASS_IDENTITY_PREFIX_VERIFIED", "NOT_YET_EVIDENCED"]
+    },
+    "identity_formal_adoption_allowed": {"type": "boolean"},
+    "llm_identity_prefix_mutable": {"const": false},
     "content_sha256": {"$ref": "#/$defs/sha256"}
   },
   "$defs": {

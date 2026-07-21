@@ -430,6 +430,8 @@ def _build_solution_scenario(decision: str, scenario: str) -> dict[str, str]:
 
 def _hold_text(gate_result: dict[str, Any]) -> str:
     code = str(gate_result.get("gate_code") or "")
+    if code == "HOLD_SINGLE_PROVIDER_ACTION_NOT_AUTHORIZED":
+        return "目前僅有單一路徑可用，執行部分已暫停，沒有進行任何正式動作。"
     if code == "HOLD_GT_DEFINITION_DRIFT":
         return "這個說法會混淆核心技術定義，我先暫停，只保留為候選內容，需人工確認後才能繼續。"
     if code == "HOLD_HARD_RISK_SIDE_EFFECT":

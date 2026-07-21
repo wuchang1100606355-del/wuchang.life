@@ -663,6 +663,11 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
             "tools/total_field/cafe_pos_local_llm_acceptance.py",
             "tools/total_field/w7tp_bundle_installer.py",
             "docs/operations/CAFE_POS_HUMAN_AI_DESIGN_BENCHMARK_20260716.md",
+            "tools/total_field/w7tp_intent_field_suite/identity_prefix.py",
+            "schemas/field/w7tp_natural_person_identity_prefix.schema.json",
+            "tests/test_w7tp_natural_person_identity_prefix.py",
+            "docs/total_field/W7TP_MEMBER_AI_LLM_PREFIX_POLICY.md",
+            "configs/w7tp_member_llm_prefix_policy.example.json",
             "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/quickclick-menu-snapshot.json",
             "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/README.md",
         }

@@ -4,7 +4,7 @@ import json
 import unittest
 from pathlib import Path
 
-from scripts.verify.verify_google_nonprofit_website import static_review
+from scripts.verify.verify_google_nonprofit_website import _page_file, static_review
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,6 +13,20 @@ CARE_DEMO = ROOT / "web/medical_care_demo/index.html"
 
 
 class GoogleNonprofitWebsiteReviewTest(unittest.TestCase):
+    def test_percent_encoded_internal_evidence_link_resolves_without_path_escape(self) -> None:
+        target = _page_file(
+            "/evidence/patents/877-24-0046.UTW_%E8%AD%89%E6%9B%B8(3).PDF"
+        )
+        self.assertEqual(
+            target,
+            ROOT / "web/evidence/patents/877-24-0046.UTW_證書(3).PDF",
+        )
+        self.assertTrue(target.is_file())
+        self.assertEqual(
+            _page_file("/%2e%2e/AGENTS.md"),
+            ROOT / "web/__INVALID_INTERNAL_TARGET__",
+        )
+
     def test_all_official_website_policy_criteria_are_individually_reported(self) -> None:
         report = static_review()
         criteria = {

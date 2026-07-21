@@ -37,6 +37,8 @@ SCHEMA_FILES = (
     "schemas/field/w7tp_cafe_pos_binding_seal.schema.json",
     "schemas/field/w7tp_core_encoding_registry.schema.json",
     "schemas/field/w7tp_deployment_manifest.schema.json",
+    "schemas/field/w7tp_natural_person_identity_prefix.schema.json",
+    "schemas/field/w7tp_identity_projection.schema.json",
 )
 
 
@@ -72,6 +74,9 @@ def _release_files() -> list[Path]:
         ROOT / "tests/test_medical_care_demo.py",
         ROOT / "tests/test_w7tp_field_application_runtime.py",
         ROOT / "tests/test_w7tp_intent_field_suite.py",
+        ROOT / "tests/test_w7tp_natural_person_identity_prefix.py",
+        ROOT / "tests/test_w7tp_identity_projection_landing.py",
+        ROOT / "deploy/caddy/w7tp-odoo-identity-projection.caddy",
         ROOT / "tests/test_wuchang_nonprofit_homepage_boundaries.py",
         ROOT / "web/index.html",
         ROOT / "web/method/index.html",
@@ -104,6 +109,8 @@ def _release_files() -> list[Path]:
         ROOT / "docs/total_field/W7TP_CORE_FIELD_ENCODING_MANAGEMENT_V1.md",
         ROOT / "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md",
         ROOT / "docs/total_field/W7TP_FOUNDER_IDENTITY_ROOT_AND_VARIABLE_COGNITION_PACKAGE_CANONICAL.md",
+        ROOT / "docs/total_field/W7TP_MEMBER_AI_LLM_PREFIX_POLICY.md",
+        ROOT / "configs/w7tp_member_llm_prefix_policy.example.json",
         ROOT / "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/quickclick-menu-snapshot.json",
         ROOT / "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/README.md",
     ]

@@ -110,6 +110,37 @@ All LLM prefix profiles must keep:
 - `db_write=false`
 - `memory_authority=false`
 
+## Natural Person Immutable Identity Prefix
+
+每位進入本系統的自然人只對應一個專用 8D 身分封包。帳號、設備與登入來源都是該封包的承載或綁定，不得因同一人同時使用 Odoo、Google、LINE 或其他社群帳號，就拆成多個自然人或多套權限。
+
+身分封包與依法受控的身分明文紀錄可以有關聯，但封包、LLM context、候選正文、log、API 與公開投影只可出現 opaque ref、subject SHA-256、binding ref 與 evidence ref；不得出現姓名、email、LINE raw subject、token、password 或其他身分明文與 credential。受保護的明文對照關係存在於 LLM 之外，封包內只記不可反推的關聯引用。
+
+身分封包在 LLM context 中的位置固定為：
+
+```text
+SYSTEM_IMMUTABLE_PREFIX
+→ W7TP_MEMBER_AI_LLM_PREFIX_POLICY
+→ LLM_WRITABLE_CANDIDATE_BODY
+```
+
+硬性規則：
+
+- `one_natural_person_one_dedicated_identity_packet=true`
+- `device_and_social_accounts_are_bindings=true`
+- `provider_subject_representation=SHA256_ONLY`
+- `plaintext_identity_visible=false`
+- `prefix_writer=TOTAL_FIELD_IDENTITY_ISSUER_ONLY`
+- `llm_mutable=false`
+- `llm_may_create_prefix=false`
+- `llm_may_replace_prefix=false`
+- `llm_writable_region=CANDIDATE_BODY_ONLY`
+- `verify_on_every_state_transition=true`
+
+每次意圖續接、候選輸出與總場驗證，都必須重新核對 prefix SHA-256。LLM 若嘗試建立、覆寫、替換或重排身分前綴，結果固定為 `HOLD_IDENTITY_PREFIX_INTEGRITY`；同一受保護自然人 binding 若正向證據顯示對應兩個不同封包，固定為 `HOLD_IDENTITY_PACKET_CONFLICT`。
+
+若只是尚未取得 registry 或 binding 證據，狀態只能是 `NOT_YET_EVIDENCED`，不得擴張成拒絕或宣稱不存在。候選整理仍可繼續，但不得正式採納身分權限。
+
 ## Prefix Profiles
 
 ### 0_5B_BROWSER_LANGUAGE_PLANE

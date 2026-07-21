@@ -280,5 +280,118 @@ class CloudCandidateProvider:
             "candidate_only": True,
         }
 
+    def generate_fill_response(
+        self,
+        packet: Mapping[str, Any],
+        transport_context: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        """Fill one governed packet without exposing the Total Field rule core."""
+
+        from tools.total_field_cloud_fill_packet import (
+            build_cloud_fill_response,
+            validate_cloud_fill_request,
+        )
+
+        validated = validate_cloud_fill_request(packet)
+        locked = cast(dict[str, Any], validated["locked"])
+        context_copy = _copy_json(dict(transport_context))
+        if not isinstance(context_copy, dict):
+            raise CloudCandidateProviderError("CLOUD_CONTEXT_REQUIRED")
+        if _matching_key_path(context_copy, SENSITIVE_INPUT_KEYS) is not None:
+            raise CloudCandidateProviderError("CLOUD_SENSITIVE_CONTEXT_BLOCKED")
+        session, adc_project_id = self._authorized_session()
+        endpoint, configured_model = self._endpoint(context_copy, adc_project_id)
+        model_ref = context_copy.get("cloud_model_ref", MODEL_REF)
+        model_version = context_copy.get("cloud_model_version")
+        if not isinstance(model_ref, str) or not model_ref:
+            raise CloudCandidateProviderError("CLOUD_RESOURCE_CONFIGURATION_INVALID")
+        if not isinstance(model_version, str) or not model_version:
+            raise CloudCandidateProviderError("CLOUD_RESOURCE_CONFIGURATION_INVALID")
+        if PROVIDER_REF not in locked["allowed_provider_refs"]:
+            raise CloudCandidateProviderError("CLOUD_PROVIDER_NOT_AUTHORIZED")
+        if f"{model_ref}@{model_version}" not in locked["allowed_model_refs"]:
+            raise CloudCandidateProviderError("CLOUD_MODEL_VERSION_NOT_AUTHORIZED")
+        cloud_input = {
+            "instruction": (
+                "Fill only the declared cloud_fillable fields. Return concise rationale, "
+                "assumptions, uncertainties, risk candidates, verification candidates, "
+                "and evidence references. Do not return chain of thought or any authority, "
+                "commit, deployment, canonical, pointer, TFS, TFID, or Total Field claim."
+            ),
+            "packet_id": locked["packet_id"],
+            "question_type_ref": locked["question_type_ref"],
+            "sanitized_question": locked["sanitized_question"],
+            "product_output_contract": locked["product_output_contract"],
+            "static_rule_capsule_ref": locked["static_rule_capsule_ref"],
+            "dynamic_rule_projection": locked["dynamic_rule_projection"],
+            "allowed_information_scope": locked["allowed_information_scope"],
+            "fillable_paths": locked["fillable_paths"],
+            "reconstruction_conditions": locked["reconstruction_conditions"],
+            "verification_conditions": locked["verification_conditions"],
+            "max_output_tokens": locked["max_output_tokens"],
+        }
+        request_body = {
+            "contents": [
+                {
+                    "role": "user",
+                    "parts": [
+                        {
+                            "text": json.dumps(
+                                cloud_input,
+                                sort_keys=True,
+                                ensure_ascii=False,
+                                separators=(",", ":"),
+                                allow_nan=False,
+                            )
+                        }
+                    ],
+                }
+            ],
+            "generationConfig": {
+                "temperature": 0,
+                "maxOutputTokens": locked["max_output_tokens"],
+                "responseMimeType": "application/json",
+            },
+        }
+        try:
+            response = session.post(
+                endpoint, json=request_body, timeout=self._timeout_seconds
+            )
+            response.raise_for_status()
+            response_body = response.json()
+            text = response_body["candidates"][0]["content"]["parts"][0]["text"]
+            generated = json.loads(
+                text,
+                parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+            )
+            usage = response_body["usageMetadata"]
+            input_tokens = usage["promptTokenCount"]
+            output_tokens = usage["candidatesTokenCount"]
+        except Exception as exc:
+            raise CloudCandidateProviderError("CLOUD_FILL_GENERATION_FAILED") from exc
+        if not isinstance(generated, dict):
+            raise CloudCandidateProviderError("CLOUD_FILL_RESPONSE_SCHEMA_INVALID")
+        if (
+            not isinstance(input_tokens, int)
+            or isinstance(input_tokens, bool)
+            or not isinstance(output_tokens, int)
+            or isinstance(output_tokens, bool)
+        ):
+            raise CloudCandidateProviderError("CLOUD_USAGE_ACCOUNTING_INVALID")
+        if configured_model != context_copy.get("cloud_model_name"):
+            raise CloudCandidateProviderError("CLOUD_MODEL_CONFIGURATION_DRIFT")
+        return cast(
+            dict[str, Any],
+            build_cloud_fill_response(
+                validated,
+                cloud_fillable=generated,
+                provider_ref=PROVIDER_REF,
+                model_ref=model_ref,
+                model_version=model_version,
+                model_input_tokens=input_tokens,
+                model_output_tokens=output_tokens,
+            ),
+        )
+
 
 __all__ = ["CloudCandidateProvider", "CloudCandidateProviderError"]

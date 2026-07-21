@@ -22,6 +22,10 @@ from .guided_completion import (
     continue_guided_completion,
     validate_safe_content,
 )
+from .identity_prefix import (
+    assert_llm_candidate_does_not_mutate_identity,
+    identity_prefix_projection,
+)
 
 
 def _source_snapshot(route_table: Mapping[str, Any], registry: Mapping[str, Any]) -> dict[str, str]:
@@ -70,6 +74,38 @@ def _drift_hold_packet(
     return content
 
 
+def _attach_identity_prefix(
+    packet: dict[str, Any],
+    projection: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    if projection is None:
+        return packet
+    execution_metadata = packet.pop("execution_metadata", None)
+    packet.pop("content_sha256", None)
+    packet.update(normalize_content(dict(projection)))
+    if isinstance(packet.get("D1"), dict):
+        packet["D1"]["identity_packet_ref"] = projection["identity_prefix"]["D1"][
+            "identity_packet_ref"
+        ]
+        packet["D1"]["plaintext_identity_visible"] = False
+    if isinstance(packet.get("D8"), dict):
+        packet["D8"]["identity_prefix_sha256"] = projection[
+            "identity_prefix_sha256"
+        ]
+        packet["D8"]["identity_binding_evidence_state"] = projection[
+            "identity_binding_evidence_state"
+        ]
+        packet["D8"]["identity_formal_adoption_allowed"] = projection[
+            "identity_formal_adoption_allowed"
+        ]
+        packet["D8"]["llm_identity_prefix_mutable"] = False
+    content = normalize_content(packet)
+    content["content_sha256"] = canonical_sha256(content)
+    if execution_metadata is not None:
+        content["execution_metadata"] = normalize_content(execution_metadata)
+    return content
+
+
 def process_intent(
     profile: str,
     intent: Mapping[str, Any],
@@ -78,6 +114,8 @@ def process_intent(
     question_id: str | None = None,
     answer: Any = None,
     execution_metadata: Mapping[str, Any] | None = None,
+    trusted_identity_prefix: Mapping[str, Any] | None = None,
+    identity_registry_snapshot: Mapping[str, Any] | None = None,
     route_table_path: Path = SCENARIO_ROUTE_TABLE_PATH,
     capability_registry_path: Path = CAPABILITY_REGISTRY_PATH,
 ) -> dict[str, Any]:
@@ -96,6 +134,20 @@ def process_intent(
         raise FieldApplicationError("PROFILE_ROUTE_PACKET_TYPE_MISMATCH")
     snapshot = _source_snapshot(route_table, registry)
     safe_intent = validate_safe_content(dict(intent))
+    assert_llm_candidate_does_not_mutate_identity(safe_intent)
+    prefix_projection = (
+        identity_prefix_projection(
+            trusted_identity_prefix,
+            identity_registry_snapshot=identity_registry_snapshot,
+        )
+        if trusted_identity_prefix is not None
+        else None
+    )
+    prefix_sha256 = (
+        str(prefix_projection["identity_prefix_sha256"])
+        if prefix_projection is not None
+        else None
+    )
 
     continuation_values = (state_id, question_id)
     if any(value is not None for value in continuation_values):
@@ -108,21 +160,31 @@ def process_intent(
             state_id=str(state_id),
             question_id=str(question_id),
             answer=answer,
+            identity_prefix_sha256=prefix_sha256,
         )
+        assert_llm_candidate_does_not_mutate_identity(safe_intent)
 
     redteam_monitor = evaluate_drift(safe_intent)
     if redteam_monitor["status"] == "DRIFT_ALERT":
-        return _drift_hold_packet(
-            profile,
-            safe_intent,
-            snapshot,
-            redteam_monitor,
-            execution_metadata,
+        return _attach_identity_prefix(
+            _drift_hold_packet(
+                profile,
+                safe_intent,
+                snapshot,
+                redteam_monitor,
+                execution_metadata,
+            ),
+            prefix_projection,
         )
 
-    guided = build_guided_completion_packet(profile, safe_intent, snapshot)
+    guided = build_guided_completion_packet(
+        profile,
+        safe_intent,
+        snapshot,
+        identity_prefix_sha256=prefix_sha256,
+    )
     if guided is not None:
-        return guided
+        return _attach_identity_prefix(guided, prefix_projection)
 
     base = build_field_application_packet(
         profile,
@@ -154,6 +216,26 @@ def process_intent(
         profile,
         base["D2"]["intent_state_id"],
     )
+    if prefix_projection is not None:
+        base.update(normalize_content(dict(prefix_projection)))
+        base["D1"]["identity_packet_ref"] = prefix_projection["identity_prefix"][
+            "D1"
+        ]["identity_packet_ref"]
+        base["D1"]["plaintext_identity_visible"] = False
+        base["D8"].update(
+            {
+                "identity_prefix_sha256": prefix_projection[
+                    "identity_prefix_sha256"
+                ],
+                "identity_binding_evidence_state": prefix_projection[
+                    "identity_binding_evidence_state"
+                ],
+                "identity_formal_adoption_allowed": prefix_projection[
+                    "identity_formal_adoption_allowed"
+                ],
+                "llm_identity_prefix_mutable": False,
+            }
+        )
     content = normalize_content(base)
     content["content_sha256"] = canonical_sha256(content)
     content["execution_metadata"] = normalize_content(dict(execution_metadata or {}))

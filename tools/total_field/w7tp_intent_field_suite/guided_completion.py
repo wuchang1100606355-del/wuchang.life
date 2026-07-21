@@ -69,6 +69,8 @@ def build_guided_completion_packet(
     profile: str,
     intent: Mapping[str, Any],
     source_snapshot: Mapping[str, str],
+    *,
+    identity_prefix_sha256: str | None = None,
 ) -> dict[str, Any] | None:
     normalized_intent = validate_safe_content(dict(intent))
     contract = get_contract(profile)
@@ -82,6 +84,8 @@ def build_guided_completion_packet(
         "source_snapshot": dict(source_snapshot),
         "missing_fields": missing,
     }
+    if identity_prefix_sha256 is not None:
+        state_basis["identity_prefix_sha256"] = identity_prefix_sha256
     packet: dict[str, Any] = {
         "schema_version": "W7TP-GUIDED-COMPLETION/1.1",
         "state": "NEEDS_USER_GUIDED_COMPLETION",
@@ -108,6 +112,8 @@ def build_guided_completion_packet(
             "network_call": False,
         },
     }
+    if identity_prefix_sha256 is not None:
+        packet["identity_prefix_sha256"] = identity_prefix_sha256
     packet["content_sha256"] = canonical_sha256(packet)
     return packet
 
@@ -120,8 +126,14 @@ def continue_guided_completion(
     state_id: str,
     question_id: str,
     answer: Any,
+    identity_prefix_sha256: str | None = None,
 ) -> dict[str, Any]:
-    current = build_guided_completion_packet(profile, intent, source_snapshot)
+    current = build_guided_completion_packet(
+        profile,
+        intent,
+        source_snapshot,
+        identity_prefix_sha256=identity_prefix_sha256,
+    )
     if current is None:
         raise FieldApplicationError("GUIDED_COMPLETION_NOT_REQUIRED")
     if state_id != current["state_id"]:

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:total-field-non-live-candidates:1",
+  "title": "W7TP Total Field Non-Live Candidate Contracts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scene_state", "identity_evidence", "image_step_up", "adi_lookup", "temporal_evidence"],
+  "properties": {
+    "scene_state": {"$ref": "#/$defs/scene_state"},
+    "identity_evidence": {"$ref": "#/$defs/identity_evidence"},
+    "image_step_up": {"$ref": "#/$defs/image_step_up"},
+    "adi_lookup": {"$ref": "#/$defs/adi_lookup"},
+    "temporal_evidence": {"$ref": "#/$defs/temporal_evidence"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ref": {"type": "string", "minLength": 1},
+    "scene_state": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile_ref", "source", "baseline", "proposed", "transition"],
+      "properties": {"profile_ref": {"$ref": "#/$defs/ref"}, "source": {"$ref": "#/$defs/ref"}, "baseline": {"type": "object"}, "proposed": {"type": "object"}, "transition": {"type": "object", "minProperties": 1}}
+    },
+    "identity_evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["issuer_hash", "subject_hash", "device_principal_hash", "session_ref_hash", "connection_ref_hash", "explicit_intent_hash", "local_natural_person_verifier_ref", "authority_state_ref"],
+      "properties": {"issuer_hash": {"$ref": "#/$defs/sha256"}, "subject_hash": {"$ref": "#/$defs/sha256"}, "device_principal_hash": {"$ref": "#/$defs/sha256"}, "session_ref_hash": {"$ref": "#/$defs/sha256"}, "connection_ref_hash": {"$ref": "#/$defs/sha256"}, "explicit_intent_hash": {"$ref": "#/$defs/sha256"}, "local_natural_person_verifier_ref": {"$ref": "#/$defs/ref"}, "authority_state_ref": {"$ref": "#/$defs/ref"}}
+    },
+    "image_step_up": {
+      "type": "object", "additionalProperties": false,
+      "required": ["result_state", "evidence_ref", "algorithm_version_ref", "result_hash", "volatile_lifecycle_complete", "zeroization_evidence_ref"],
+      "properties": {"result_state": {"enum": ["PASS", "HOLD", "BLOCK"]}, "evidence_ref": {"$ref": "#/$defs/ref"}, "algorithm_version_ref": {"$ref": "#/$defs/ref"}, "result_hash": {"$ref": "#/$defs/sha256"}, "volatile_lifecycle_complete": {"type": "boolean"}, "zeroization_evidence_ref": {"$ref": "#/$defs/ref"}}
+    },
+    "adi_lookup": {
+      "type": "object", "additionalProperties": false,
+      "required": ["interval_start", "interval_end", "timestamp", "slot_count", "collision_refs"],
+      "properties": {"interval_start": {"type": "integer"}, "interval_end": {"type": "integer"}, "timestamp": {"type": "integer"}, "slot_count": {"type": "integer", "minimum": 1}, "collision_refs": {"type": "array", "items": {"$ref": "#/$defs/ref"}}}
+    },
+    "temporal_evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["record_ref", "previous_hash", "payload_hash", "logical_index", "nonce", "ttl_seconds", "trusted_time_ref", "signature_ref"],
+      "properties": {"record_ref": {"$ref": "#/$defs/ref"}, "previous_hash": {"$ref": "#/$defs/sha256"}, "payload_hash": {"$ref": "#/$defs/sha256"}, "logical_index": {"type": "integer", "minimum": 0}, "nonce": {"$ref": "#/$defs/ref"}, "ttl_seconds": {"type": "integer", "minimum": 1}, "trusted_time_ref": {"$ref": "#/$defs/ref"}, "signature_ref": {"$ref": "#/$defs/ref"}}
+    }
+  }
+}

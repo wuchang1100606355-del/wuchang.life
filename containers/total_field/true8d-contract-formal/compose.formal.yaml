@@ -1,0 +1,204 @@
+name: w7tp-true8d-formal-dark-launch
+
+x-common: &common
+  image: w7tp-indexer@sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e
+  pull_policy: never
+  profiles: ["formal-dark-launch"]
+  user: "65534:65534"
+  working_dir: /formal
+  command: ["sh", "-c", "sleep infinity"]
+  networks:
+    - true8d_formal_internal
+  volumes:
+    - type: bind
+      source: ../../..
+      target: /formal
+      read_only: true
+  read_only: true
+  restart: "no"
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: ["ALL"]
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,size=16m
+  pids_limit: 32
+  labels:
+    w7tp.run_id: "W7TP_TRUE8D_FORMAL_DEPLOYMENT_MANIFEST_V1"
+    w7tp.source_run: "W7TP_TOTAL_FIELD_NON_LIVE_BUILD_20260718T110758Z"
+    w7tp.target_hostname: "taiji01"
+    w7tp.formal_profile: "formal-dark-launch"
+    w7tp.deployment_phase: "dark-launch"
+    w7tp.server_llm: "BLOCK"
+    w7tp.msi_ollama_candidate_migration: "BLOCK"
+
+x-projection-budget: &projection_budget
+  cpus: "0.350"
+  mem_limit: 384m
+  mem_reservation: 176m
+
+x-d8-budget: &d8_budget
+  cpus: "0.550"
+  mem_limit: 384m
+  mem_reservation: 176m
+
+x-core-budget: &core_budget
+  cpus: "1.000"
+  mem_limit: 1024m
+  mem_reservation: 512m
+
+services:
+  d1:
+    <<: [*common, *projection_budget]
+    container_name: w7tp_true8d_formal_d1
+    labels:
+      w7tp.field_id: "D1"
+      w7tp.authority: "non-authoritative-projection"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  d2:
+    <<: [*common, *projection_budget]
+    container_name: w7tp_true8d_formal_d2
+    labels:
+      w7tp.field_id: "D2"
+      w7tp.authority: "non-authoritative-projection"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D2"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  d3:
+    <<: [*common, *projection_budget]
+    container_name: w7tp_true8d_formal_d3
+    labels:
+      w7tp.field_id: "D3"
+      w7tp.authority: "non-authoritative-projection"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D3"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  d4:
+    <<: [*common, *projection_budget]
+    container_name: w7tp_true8d_formal_d4
+    labels:
+      w7tp.field_id: "D4"
+      w7tp.authority: "non-authoritative-projection"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D4"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  d5:
+    <<: [*common, *projection_budget]
+    container_name: w7tp_true8d_formal_d5
+    labels:
+      w7tp.field_id: "D5"
+      w7tp.authority: "non-authoritative-projection"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D5"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  d6:
+    <<: [*common, *projection_budget]
+    container_name: w7tp_true8d_formal_d6
+    labels:
+      w7tp.field_id: "D6"
+      w7tp.authority: "non-authoritative-projection"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D6"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  d7:
+    <<: [*common, *projection_budget]
+    container_name: w7tp_true8d_formal_d7
+    labels:
+      w7tp.field_id: "D7"
+      w7tp.authority: "non-authoritative-projection"
+      w7tp.hard_risk_disposition: "BLOCK"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D7"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  d8:
+    <<: [*common, *d8_budget]
+    container_name: w7tp_true8d_formal_d8
+    entrypoint: ["python3", "tools/total_field/w7tp_d8_reviewer_entrypoint.py"]
+    command:
+      - "serve"
+      - "--intake-dir"
+      - "/formal/runtime/total_field/d8_reviewer_intake"
+      - "--output-root"
+      - "/evidence"
+      - "--repo-root"
+      - "/formal"
+    volumes:
+      - type: bind
+        source: ../../..
+        target: /formal
+        read_only: true
+      - type: bind
+        source: ../../../runtime/total_field/d8_reviewer_decisions
+        target: /evidence
+        read_only: false
+    labels:
+      w7tp.run_id: "W7TP_TRUE8D_FORMAL_DEPLOYMENT_MANIFEST_V1"
+      w7tp.source_run: "W7TP_TOTAL_FIELD_NON_LIVE_BUILD_20260718T110758Z"
+      w7tp.target_hostname: "taiji01"
+      w7tp.formal_profile: "formal-dark-launch"
+      w7tp.deployment_phase: "dark-launch"
+      w7tp.server_llm: "BLOCK"
+      w7tp.msi_ollama_candidate_migration: "BLOCK"
+      w7tp.authorization_id: "FOUNDER_AUTHORIZATION_W7TP_TRUE8D_FORMAL_DARK_LAUNCH_V1"
+      w7tp.authorization_nonce: "w7tp-fdav1-20260718T135509Z-49cbec460efd43109ce4366d8c8edd5b"
+      w7tp.authorization_sha256: "f62903b717d155c48ce1ea26c7dbc9e897b1c8ddab5deb9e4613a2e598bed542"
+      w7tp.field_id: "D8"
+      w7tp.authority: "canonical-envelope-only"
+      w7tp.final_decision_field: "absent"
+      w7tp.reviewer.version: "w7tp-true8d-d8-reviewer-entrypoint/1.0"
+      w7tp.reviewer.llm: "BLOCK"
+    healthcheck:
+      test:
+        - "CMD"
+        - "python3"
+        - "tools/total_field/w7tp_d8_reviewer_entrypoint.py"
+        - "status"
+        - "--intake-dir"
+        - "/formal/runtime/total_field/d8_reviewer_intake"
+        - "--output-root"
+        - "/evidence"
+        - "--healthcheck"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  total-field-core:
+    <<: [*common, *core_budget]
+    container_name: w7tp_true8d_formal_total_field_core
+    labels:
+      w7tp.field_id: "total-field-core"
+      w7tp.authority: "single-convergence-core-founder-final-authority-retained"
+      w7tp.canonical_authority_change: "BLOCK"
+    healthcheck:
+      test: ["CMD", "python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--core"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  true8d_formal_internal:
+    name: w7tp_true8d_formal_internal
+    driver: bridge
+    internal: true

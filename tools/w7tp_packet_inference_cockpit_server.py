@@ -52,6 +52,36 @@ SAFETY_FLAGS = {
 }
 
 
+def run_dual_llm_governed_nlio(
+    request_text: str,
+    *,
+    local_provider: Any,
+    cloud_provider: Any,
+    domain_gateway: Any,
+    previous_values: dict[str, Any],
+    persona_text: str = "",
+    channel: str = "web",
+    request_mode: str = "CHAT_ONLY",
+    requested_effects: dict[str, bool] | None = None,
+) -> dict[str, Any]:
+    """Expose injected dual-candidate NLIO without adding another server route."""
+
+    from tools.xiaoj_candidate_adapter import DualLLMGovernedNLIOCoordinator
+
+    return DualLLMGovernedNLIOCoordinator(
+        local_provider=local_provider,
+        cloud_provider=cloud_provider,
+        domain_gateway=domain_gateway,
+    ).process(
+        request_text,
+        previous_values=previous_values,
+        persona_text=persona_text,
+        channel=channel,
+        request_mode=request_mode,
+        requested_effects=requested_effects,
+    )
+
+
 def _render_human_response_payload(final_verifier: dict[str, Any], source_channel: str = "web") -> dict[str, Any]:
     channel = source_channel or "web"
     try:

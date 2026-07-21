@@ -1,0 +1,75 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-CLOUD-FILL-RED-TEAM-EVIDENCE/1.0",
+  "packet_type": "RED_TEAM_EVIDENCE",
+  "run_id": "W7TP_TOTAL_FIELD_CLOUD_FILL_PACKET_P1_STATIC_CANDIDATE_V1",
+  "created_at": "2026-07-19T13:36:35Z",
+  "state": "PASS_STATIC_CANDIDATE_RED_TEAM",
+  "candidate_manifest": "manifests/total_field/w7tp_total_field_cloud_fill_packet_p1_v1/CANDIDATE_MANIFEST.json",
+  "candidate_manifest_sha256": "37311ffd74a7aae107246f31d2383345e44127b76eccaccd8aa5d1b5a2691f74",
+  "red_team_pre_construction": {
+    "state": "PASS_BASELINE_WITH_IDENTIFIED_P1_GAP",
+    "command": "PYTHONPATH=/usr/lib/python3/dist-packages .venv-health/bin/python -m pytest -q tests/test_cloud_agent_integration.py tests/test_sovereign_ai_domain_completion_candidate.py tests/test_human_response_renderer.py",
+    "result": "47 passed in 2.17s",
+    "identified_gap": "NO_STRICT_LOCKED_FILLABLE_CLOUD_PULL_PACKET_CAPSULE_TTL_REPLAY_OR_SEPARATE_ACCOUNTING_LAYER",
+    "existing_gateway_preserved": "tools.total_field_candidate_gateway.receive_candidate"
+  },
+  "required_checks": [
+    {"id": 1, "check": "LOCKED_FIELD_MUTATION_REJECTED", "state": "PASS", "test": "test_01_locked_field_mutation_is_rejected"},
+    {"id": 2, "check": "UNAUTHORIZED_FILLABLE_FIELD_REJECTED", "state": "PASS", "test": "test_02_undeclared_fillable_field_is_rejected"},
+    {"id": 3, "check": "ADDITIONAL_PROPERTIES_REJECTED", "state": "PASS", "test": "test_03_additional_properties_are_rejected"},
+    {"id": 4, "check": "AUTHORITY_INJECTION_REJECTED", "state": "PASS", "test": "test_04_authority_injection_claims_are_rejected"},
+    {"id": 5, "check": "EXPIRY_REPLAY_NONCE_AND_SINGLE_USE_REJECTED", "state": "PASS", "tests": ["test_05_expired_pull_is_rejected", "test_06_pull_replay_is_rejected", "test_07_nonce_and_single_use_response_replay_are_rejected"]},
+    {"id": 6, "check": "REQUEST_CAPSULE_MODEL_AND_SCHEMA_DRIFT_REJECTED", "state": "PASS", "tests": ["test_08_request_hash_binding_mismatch_is_rejected", "test_09_capsule_hash_drift_is_rejected_without_reconstruction", "test_10_model_version_drift_is_rejected"]},
+    {"id": 7, "check": "PROTECTED_CONTEXT_REJECTED_WITHOUT_VALUE_COPY", "state": "PASS", "tests": ["test_11_protected_context_is_rejected_without_value_echo", "test_12_credential_adi_and_h64_boundaries_are_rejected"]},
+    {"id": 8, "check": "RETRIEVED_INSTRUCTION_CANNOT_CHANGE_LOCKED_RULES", "state": "PASS", "test": "test_13_retrieved_instruction_cannot_change_locked_rules"},
+    {"id": 9, "check": "EXACT_VALID_RESULT_REUSED_WITHOUT_SECOND_CALL", "state": "PASS", "test": "test_14_exact_valid_result_is_reused_without_second_cloud_call"},
+    {"id": 10, "check": "ORDINARY_CHAT_ZERO_CLOUD_CALL_DEFAULT", "state": "PASS", "test": "test_15_ordinary_chat_defaults_to_zero_cloud_calls"},
+    {"id": 11, "check": "ONE_CLOUD_CALL_MAXIMUM", "state": "PASS", "test": "test_16_each_packet_allows_at_most_one_cloud_call"},
+    {"id": 12, "check": "CLOUD_CANNOT_CALL_ADAPTER_OR_EXECUTE_EFFECT", "state": "PASS", "test": "test_17_cloud_cannot_call_effect_adapter_or_execute_effect"},
+    {"id": 13, "check": "LEGAL_CANDIDATE_ENTERS_EXISTING_RECEIVE_CANDIDATE", "state": "PASS", "test": "test_18_legal_candidate_uses_existing_receive_candidate_path"},
+    {"id": 14, "check": "CONFLICT_REMAINS_HOLD_NOT_PROVIDER_FAILURE", "state": "PASS", "test": "test_19_conflict_remains_hold_not_provider_failure"},
+    {"id": 15, "check": "LOCAL_STATIC_XIAOJ_NATURAL_TRADITIONAL_CHINESE", "state": "PASS", "test": "test_20_local_static_xiaoj_renders_natural_traditional_chinese"},
+    {"id": 16, "check": "BYTES_RECONSTRUCTION_AND_TOKENS_SEPARATELY_MEASURED", "state": "PASS", "test": "test_21_bytes_and_tokens_are_accounted_separately"},
+    {"id": 17, "check": "MISSING_CAPSULE_ONE_ACTIONABLE_NATURAL_HOLD", "state": "PASS", "test": "test_22_missing_capsule_has_one_actionable_natural_hold"},
+    {"id": 18, "check": "TOTAL_FIELD_PULL_AND_CANDIDATE_REGRESSION_PRESERVED", "state": "PASS", "tests": ["test_18_legal_candidate_uses_existing_receive_candidate_path", "test_23_legacy_llm_push_normalizes_to_same_fill_response", "existing regression 173 passed"]}
+  ],
+  "additional_checks": [
+    {"check": "CLOUD_PROVIDER_MINIMUM_FILL_CONTEXT_AND_ONE_CALL", "state": "PASS", "test": "test_24_cloud_provider_adapter_sends_minimum_fill_context_once"},
+    {"check": "STATIC_CAPSULE_LOCAL_CONTENT_HASH", "state": "PASS", "test": "test_25_capsule_file_is_locally_hash_bound"}
+  ],
+  "red_team_post_reconstruction": {
+    "targeted_command": "PYTHONPATH=/usr/lib/python3/dist-packages .venv-health/bin/python -m pytest -q tests/test_w7tp_total_field_cloud_fill_packet.py",
+    "targeted_result": "25 passed, 7 subtests passed in 1.69s",
+    "regression_command": "PYTHONPATH=/usr/lib/python3/dist-packages .venv-health/bin/python -m pytest -q tests/test_w7tp_total_field_cloud_fill_packet.py tests/test_cloud_agent_integration.py tests/test_sovereign_ai_domain_completion_candidate.py tests/test_sovereign_ai_member_candidate_intake.py tests/test_human_response_renderer.py tests/test_tfct_true8d_runtime_candidate.py tests/test_w7tp_secondary_cloud_runtime_integration.py tests/test_w7tp_secondary_cloud_packet_ramp.py tests/test_w7tp_xiaoj_dual_llm_governed_nlio.py",
+    "regression_result": "173 passed, 7 subtests passed in 7.37s",
+    "offline_verifiers": [
+      "PASS_CLOUD_AGENT_INTEGRATED TEST_COUNT=10",
+      "PASS_VERIFY_SOVEREIGN_AI_DOMAIN_COMPLETION_CANDIDATE TEST_COUNT=30"
+    ]
+  },
+  "red_team_pre_landing": {
+    "state": "NOT_APPLICABLE_WITH_EVIDENCE",
+    "reason": "THIS_RUN_HAS_NO_LIVE_LANDING_AND_RUNTIME_ACTIVATION_IS_NOT_AUTHORIZED",
+    "evidence": {
+      "production_deploy": false,
+      "runtime_activation": false,
+      "live_cloud_call": false,
+      "live_ollama_call": false,
+      "container_start": false,
+      "service_restart": false,
+      "database_write": false
+    }
+  },
+  "static_validation": {
+    "strict_json": "PASS_4_OF_4",
+    "schema_meta_validation": "PASS_2_OF_2",
+    "nfc": "PASS_ALL_CHANGED_TEXT",
+    "accounting_integer_fields": "PASS",
+    "capsule_content_sha256": "3f2022c894697751719217674a197971c6d85ae24ba245eaac22193df75ef44a",
+    "secret_pattern_scan": "PASS_NO_PATTERN_MATCH",
+    "py_compile": "PASS_3_OF_3",
+    "git_diff_check": "PASS"
+  },
+  "final_decision": null,
+  "next": "SUBMIT_EXACT_HASH_BOUND_CANDIDATE_TO_TOTAL_FIELD_REVIEW"
+}

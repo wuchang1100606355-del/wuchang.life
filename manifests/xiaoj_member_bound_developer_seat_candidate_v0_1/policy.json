@@ -1,0 +1,61 @@
+{
+  "schema_version": "W7TP-XIAOJ-MEMBER-BOUND-POLICY/1.0",
+  "state": "CANDIDATE_NOT_ACTIVATED",
+  "member_only_server_session": true,
+  "required_binding_fields": [
+    "member_ref",
+    "xiaoj_agent_ref",
+    "member_role_refs",
+    "organization_context",
+    "device_or_channel_binding",
+    "delegation_envelope",
+    "ttl_seconds",
+    "nonce",
+    "revocation_state"
+  ],
+  "permission_derivation": "INTERSECTION_OF_VERIFIED_MEMBER_ROLES_AND_EXISTING_ROLE_TABLE",
+  "self_declared_permission_allowed": false,
+  "inherited_other_member_permission_allowed": false,
+  "d7_block_conditions": [
+    "NON_MEMBER",
+    "INACTIVE_MEMBER",
+    "IDENTITY_MISMATCH",
+    "XIAOJ_NOT_BOUND",
+    "DELEGATION_EXPIRED",
+    "DELEGATION_REVOKED",
+    "CROSS_MEMBER_ACCESS",
+    "SUBDELEGATION_FORBIDDEN"
+  ],
+  "cloud_candidate": {
+    "founder_explicit_authorization_required": true,
+    "member_ref_forbidden": true,
+    "direct_connection_forbidden": true,
+    "accepted_fragment_types": ["CANDIDATE", "EVIDENCE_FRAGMENT"],
+    "intake": "receive_candidate"
+  },
+  "founder_developer_seat": {
+    "principal_ref": "member_ref:founder",
+    "role_ref": "role_ref:founder_developer",
+    "max_seats": 1,
+    "exclusive": true,
+    "transferable": false,
+    "subdelegation": false,
+    "permissions": [
+      "LOCAL_SOURCE_CHANGE",
+      "LOCAL_TEST",
+      "LOCAL_SANDBOX",
+      "LOCAL_EVIDENCE_WRITE"
+    ]
+  },
+  "independent_founder_authorization_required": [
+    "DB_WRITE",
+    "DEPLOY",
+    "RESTART",
+    "ROUTER_WRITE",
+    "CANONICAL_CHANGE",
+    "FORMAL_SUBMISSION"
+  ],
+  "server_llm": "BLOCK",
+  "member_plaintext": "FORBIDDEN",
+  "role_activated": false
+}

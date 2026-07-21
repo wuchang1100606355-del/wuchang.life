@@ -21,6 +21,69 @@ from tools.total_field_candidate_gateway import (
 
 SOURCE_MODES = frozenset({"TOTAL_FIELD_PULL", "LLM_PUSH"})
 PRIVILEGED_RESULT_KEYS = frozenset({"committed", "tfid", "total_field_hash"})
+DUAL_NLIO_RUN_ID = "W7TP_XIAOJ_DUAL_LLM_GOVERNED_NLIO_P1_POLICY_V1"
+DEGRADATION_POLICY_VERSION = "w7tp-xiaoj-single-provider-degradation-policy/1.0"
+DEGRADABLE_FAILURE_CLASSES = frozenset(
+    {
+        "PROVIDER_TIMEOUT",
+        "PROVIDER_UNAVAILABLE",
+        "TRANSPORT_UNREACHABLE",
+        "RATE_LIMIT_NO_CANDIDATE_RETURNED",
+    }
+)
+NON_DEGRADABLE_FAILURE_CLASSES = frozenset(
+    {
+        "DOMAIN_CANDIDATE_CONFLICT",
+        "INVALID_SCHEMA",
+        "FORBIDDEN_AUTHORITY",
+        "SECRET_OR_MEMBER_PLAINTEXT_BOUNDARY",
+        "IDENTITY_OR_PERMISSION_MISMATCH",
+        "HASH_OR_ENVELOPE_MISMATCH",
+        "PROVIDER_RETURNED_INVALID_CANDIDATE",
+    }
+)
+DUAL_NLIO_REQUEST_MODES = frozenset(
+    {"CHAT_ONLY", "CODE_DRAFT_ONLY", "ACTION_REQUEST"}
+)
+DEGRADATION_FORBIDDEN_EFFECTS = frozenset(
+    {
+        "tool_execution",
+        "process_execution",
+        "file_write",
+        "db_write",
+        "network_write",
+        "router_write",
+        "service_change",
+        "credential_access",
+        "secret_access",
+        "member_plaintext_access",
+        "canonical_change",
+        "pointer_change",
+        "permission_change",
+        "identity_change",
+    }
+)
+DEGRADATION_BOUNDARY_KEYS = frozenset(
+    {
+        "password",
+        "token",
+        "raw_token",
+        "api_key",
+        "raw_key",
+        "private_key",
+        "credential",
+        "real_person_identity",
+        "member_plaintext",
+        "member_data",
+        "contact_data",
+        "address",
+        "bank_data",
+        "biometric_data",
+        "medical_or_mental_health_data",
+        "permission",
+        "access_control_result",
+    }
+)
 
 
 class XiaoJCandidateError(ValueError):
@@ -31,6 +94,17 @@ class XiaoJCandidateError(ValueError):
 
         super().__init__(reason_code)
         self.reason_code = reason_code
+
+
+class CandidateProviderFailure(RuntimeError):
+    """Typed provider failure carrying only one approved non-sensitive class."""
+
+    def __init__(self, failure_class: str):
+        allowed = DEGRADABLE_FAILURE_CLASSES | NON_DEGRADABLE_FAILURE_CLASSES
+        if failure_class not in allowed:
+            raise XiaoJCandidateError("PROVIDER_FAILURE_CLASS_UNSUPPORTED")
+        super().__init__(failure_class)
+        self.failure_class = failure_class
 
 
 def _canonical_json(value: Any) -> str:
@@ -163,6 +237,30 @@ class TotalFieldGatewayProtocol(Protocol):
     ) -> Mapping[str, Any]:
         """Submit an LLM push candidate through the unified receiver."""
         raise XiaoJCandidateError("LLM_PUSH_METHOD_NOT_BOUND")
+
+
+class DomainCompletionProviderProtocol(Protocol):
+    """Candidate-only source contract shared by LOCAL and CLOUD providers."""
+
+    def candidates_for(
+        self, request_ref: str, source_mode: str
+    ) -> tuple[dict[str, Any], ...]:
+        """Return candidate envelopes without Total Field authority."""
+        raise XiaoJCandidateError("DOMAIN_COMPLETION_PROVIDER_METHOD_NOT_BOUND")
+
+
+class DomainCompletionBatchGatewayProtocol(Protocol):
+    """Existing domain-completion batch receiver contract."""
+
+    def receive_batch(
+        self,
+        candidates: tuple[Mapping[str, Any], ...],
+        *,
+        previous_values: Mapping[str, Any],
+        forced_hold_reason: str | None = None,
+    ) -> tuple[dict[str, Any], ...]:
+        """Submit candidates through the existing Total Field receiver."""
+        raise XiaoJCandidateError("DOMAIN_COMPLETION_GATEWAY_METHOD_NOT_BOUND")
 
 
 @dataclass(frozen=True)
@@ -422,6 +520,461 @@ class XiaoJCandidateAdapter:
             "persona_text": str(persona_text),
             "governance_result": result_copy,
             "authority": "TOTAL_FIELD_GATEWAY",
+        }
+
+
+def dual_nlio_request_ref(request_text: str) -> str:
+    """Derive an opaque local coordinate without disclosing natural-language input."""
+
+    if not isinstance(request_text, str) or not request_text.strip():
+        raise XiaoJCandidateError("DUAL_NLIO_REQUEST_TEXT_REQUIRED")
+    digest = hashlib.sha256(request_text.strip().encode("utf-8")).hexdigest()
+    return f"nlio:sha256:{digest}"
+
+
+def _provider_failure_class(exc: Exception) -> str:
+    """Map one provider or envelope failure to the closed policy vocabulary."""
+
+    if isinstance(exc, CandidateProviderFailure):
+        return exc.failure_class
+    if isinstance(exc, TimeoutError):
+        return "PROVIDER_TIMEOUT"
+    if isinstance(exc, ConnectionError):
+        return "TRANSPORT_UNREACHABLE"
+    reason_code = str(getattr(exc, "reason_code", ""))
+    if reason_code == "EXTERNAL_AUTHORITY_CLAIM_BLOCKED":
+        return "FORBIDDEN_AUTHORITY"
+    if "HASH" in reason_code or "ENVELOPE" in reason_code:
+        return "HASH_OR_ENVELOPE_MISMATCH"
+    if "IDENTITY" in reason_code or "PERMISSION" in reason_code:
+        return "IDENTITY_OR_PERMISSION_MISMATCH"
+    if "SCHEMA" in reason_code:
+        return "INVALID_SCHEMA"
+    return "PROVIDER_RETURNED_INVALID_CANDIDATE"
+
+
+def _contains_degradation_boundary(value: Any) -> bool:
+    """Detect prohibited identity, permission, secret, or member-data keys."""
+
+    if isinstance(value, Mapping):
+        for key, nested in value.items():
+            normalized = str(key).strip().casefold().replace("-", "_")
+            if normalized in DEGRADATION_BOUNDARY_KEYS:
+                return True
+            if _contains_degradation_boundary(nested):
+                return True
+    elif isinstance(value, (tuple, list)):
+        return any(_contains_degradation_boundary(item) for item in value)
+    return False
+
+
+@dataclass(frozen=True)
+class DualLLMGovernedNLIOCoordinator:
+    """Sequence two candidate sources through the existing governed receiver."""
+
+    local_provider: DomainCompletionProviderProtocol
+    cloud_provider: DomainCompletionProviderProtocol
+    domain_gateway: DomainCompletionBatchGatewayProtocol
+
+    @staticmethod
+    def _render(
+        decision: str,
+        *,
+        member_text: str,
+        channel: str,
+        gate_code: str | None = None,
+    ) -> dict[str, Any]:
+        from tools.total_field.human_response_renderer import render_human_response
+
+        renderer_decision = {
+            "ALLOW": "PASS",
+            "HOLD": "HOLD",
+            "BLOCK": "BLOCK",
+            "QUARANTINE": "BLOCK",
+        }.get(decision, "HOLD")
+        gate_result: dict[str, Any] = {
+            "decision": renderer_decision,
+            "risk_level": "LOW" if renderer_decision == "PASS" else "MEDIUM",
+        }
+        if renderer_decision == "PASS":
+            gate_result["reply_candidate"] = {
+                "text": member_text or "候選已由總場完成驗證。"
+            }
+        if gate_code is not None:
+            gate_result["gate_code"] = gate_code
+        return render_human_response(gate_result, channel=channel)
+
+    @staticmethod
+    def _provider_candidates(
+        provider: DomainCompletionProviderProtocol,
+        *,
+        request_ref: str,
+        persona_text: str,
+        layer: str,
+        provider_call_order: list[str],
+    ) -> tuple[tuple[dict[str, Any], ...], str | None]:
+        from tools.sovereign_ai_domain_completion_candidate import (
+            build_xiaoj_envelope,
+            with_source_mode,
+        )
+
+        provider_call_order.append(layer)
+        source_mode = "XIAOJ_LOCAL" if layer == "LOCAL" else "LLM_PUSH"
+        try:
+            raw_candidates = provider.candidates_for(request_ref, source_mode)
+            if not isinstance(raw_candidates, tuple) or not raw_candidates:
+                raise CandidateProviderFailure("PROVIDER_RETURNED_INVALID_CANDIDATE")
+            if layer == "LOCAL":
+                candidates = tuple(
+                    build_xiaoj_envelope(persona_text, item).governance_payload()
+                    for item in raw_candidates
+                )
+            else:
+                candidates = tuple(
+                    with_source_mode(item, "LLM_PUSH") for item in raw_candidates
+                )
+            return tuple(cast(dict[str, Any], item) for item in candidates), None
+        except Exception as exc:
+            return (), _provider_failure_class(exc)
+
+    def _hold_result(
+        self,
+        *,
+        state: str,
+        request_ref: str,
+        channel: str,
+        provider_call_order: list[str],
+        available_provider: str | None,
+        missing_provider: str | list[str] | None,
+        failure_class: str | dict[str, str],
+        request_mode: str,
+        gate_code: str | None = None,
+    ) -> dict[str, Any]:
+        rendered = self._render(
+            "HOLD",
+            member_text="",
+            channel=channel,
+            gate_code=gate_code,
+        )
+        return {
+            "STATE": state,
+            "RUN_ID": DUAL_NLIO_RUN_ID,
+            "policy_version": DEGRADATION_POLICY_VERSION,
+            "request_ref": request_ref,
+            "provider_call_order": provider_call_order,
+            "local_candidate_hashes": [],
+            "cloud_candidate_hashes": [],
+            "candidate_results": [],
+            "total_field_final_decision": None,
+            "renderer_decision": "HOLD",
+            "reply_text": rendered["reply_text"],
+            "both_received": False,
+            "degraded_mode": False,
+            "dual_convergence": False,
+            "available_provider": available_provider,
+            "missing_provider": missing_provider,
+            "failure_class": failure_class,
+            "request_mode": request_mode,
+            "candidate_sources_are_authority": False,
+            "total_field_authority": True,
+            "persona_tfs_hash_exclusion": "PASS",
+            "side_effects_performed": False,
+            "internal_error_exposed": False,
+        }
+
+    @staticmethod
+    def _degraded_evidence(
+        results: tuple[dict[str, Any], ...]
+    ) -> list[dict[str, Any]]:
+        """Expose decision evidence without formal state identifiers or hashes."""
+
+        permitted = {
+            "schema_version",
+            "run_id",
+            "candidate_hash",
+            "domain",
+            "entity_ref",
+            "attribute_name",
+            "source_mode",
+            "sensitivity",
+            "fixed_point_status",
+            "runtime_final_decision",
+            "final_decision",
+            "decision_reason_codes",
+            "candidate_source_is_authority",
+            "cloud_llm_is_committer",
+            "xiaoj_is_final_authority",
+            "persona_governance_separation",
+            "total_field_gateway",
+        }
+        return [
+            {key: _copy_json(value) for key, value in item.items() if key in permitted}
+            for item in results
+        ]
+
+    def process(
+        self,
+        request_text: str,
+        *,
+        previous_values: Mapping[str, Any],
+        persona_text: str = "",
+        channel: str = "web",
+        request_mode: str = "CHAT_ONLY",
+        requested_effects: Mapping[str, bool] | None = None,
+    ) -> dict[str, Any]:
+        """Return governed final state plus a natural-language presentation."""
+
+        from tools.sovereign_ai_domain_completion_candidate import (
+            validate_candidate,
+        )
+
+        request_ref = dual_nlio_request_ref(request_text)
+        if request_mode not in DUAL_NLIO_REQUEST_MODES:
+            raise XiaoJCandidateError("DUAL_NLIO_REQUEST_MODE_UNSUPPORTED")
+        provider_call_order: list[str] = []
+        local_candidates, local_failure = self._provider_candidates(
+            self.local_provider,
+            request_ref=request_ref,
+            persona_text=persona_text,
+            layer="LOCAL",
+            provider_call_order=provider_call_order,
+        )
+        cloud_candidates, cloud_failure = self._provider_candidates(
+            self.cloud_provider,
+            request_ref=request_ref,
+            persona_text=persona_text,
+            layer="CLOUD",
+            provider_call_order=provider_call_order,
+        )
+        available = {
+            layer: candidates
+            for layer, candidates in (
+                ("LOCAL", local_candidates),
+                ("CLOUD", cloud_candidates),
+            )
+            if candidates
+        }
+        failures = {
+            layer: failure
+            for layer, failure in (
+                ("LOCAL", local_failure),
+                ("CLOUD", cloud_failure),
+            )
+            if failure is not None
+        }
+
+        if not available:
+            return self._hold_result(
+                state="HOLD_BOTH_PROVIDERS_UNAVAILABLE",
+                request_ref=request_ref,
+                channel=channel,
+                provider_call_order=provider_call_order,
+                available_provider=None,
+                missing_provider=["LOCAL", "CLOUD"],
+                failure_class=failures,
+                request_mode=request_mode,
+            )
+
+        if len(available) == 1:
+            available_provider, single_candidates = next(iter(available.items()))
+            missing_provider = "CLOUD" if available_provider == "LOCAL" else "LOCAL"
+            failure_class = failures[missing_provider]
+            if failure_class not in DEGRADABLE_FAILURE_CLASSES:
+                return self._hold_result(
+                    state="HOLD_NON_DEGRADABLE_PROVIDER_FAILURE",
+                    request_ref=request_ref,
+                    channel=channel,
+                    provider_call_order=provider_call_order,
+                    available_provider=available_provider,
+                    missing_provider=missing_provider,
+                    failure_class=failure_class,
+                    request_mode=request_mode,
+                )
+            validated = tuple(validate_candidate(item) for item in single_candidates)
+            if any(
+                item.attribute_name.strip().casefold().replace("-", "_")
+                in DEGRADATION_BOUNDARY_KEYS
+                or _contains_degradation_boundary(item.candidate_value)
+                for item in validated
+            ):
+                return self._hold_result(
+                    state="HOLD_NON_DEGRADABLE_PROVIDER_FAILURE",
+                    request_ref=request_ref,
+                    channel=channel,
+                    provider_call_order=provider_call_order,
+                    available_provider=available_provider,
+                    missing_provider=missing_provider,
+                    failure_class="SECRET_OR_MEMBER_PLAINTEXT_BOUNDARY",
+                    request_mode=request_mode,
+                )
+            effects = {} if requested_effects is None else dict(requested_effects)
+            invalid_effects = {
+                key for key, enabled in effects.items()
+                if key not in DEGRADATION_FORBIDDEN_EFFECTS
+                or not isinstance(enabled, bool)
+            }
+            if invalid_effects:
+                return self._hold_result(
+                    state="HOLD_NON_DEGRADABLE_PROVIDER_FAILURE",
+                    request_ref=request_ref,
+                    channel=channel,
+                    provider_call_order=provider_call_order,
+                    available_provider=available_provider,
+                    missing_provider=missing_provider,
+                    failure_class="IDENTITY_OR_PERMISSION_MISMATCH",
+                    request_mode=request_mode,
+                )
+            action_requested = request_mode == "ACTION_REQUEST" or any(effects.values())
+            forced_hold_reason = (
+                "HOLD_SINGLE_PROVIDER_ACTION_NOT_AUTHORIZED"
+                if action_requested else None
+            )
+            results = self.domain_gateway.receive_batch(
+                single_candidates,
+                previous_values=_copy_json(dict(previous_values)),
+                forced_hold_reason=forced_hold_reason,
+            )
+            final_decisions = {str(item.get("final_decision")) for item in results}
+            if len(results) != len(single_candidates) or len(final_decisions) != 1:
+                return self._hold_result(
+                    state="HOLD_NON_DEGRADABLE_PROVIDER_FAILURE",
+                    request_ref=request_ref,
+                    channel=channel,
+                    provider_call_order=provider_call_order,
+                    available_provider=available_provider,
+                    missing_provider=missing_provider,
+                    failure_class="PROVIDER_RETURNED_INVALID_CANDIDATE",
+                    request_mode=request_mode,
+                )
+            final_decision = final_decisions.pop()
+            if action_requested:
+                member_text = ""
+                state = "HOLD_SINGLE_PROVIDER_ACTION_NOT_AUTHORIZED"
+                gate_code = state
+            elif request_mode == "CODE_DRAFT_ONLY":
+                member_text = "目前使用備援模式完成程式碼候選草稿，未寫檔或執行。"
+                state = "PASS"
+                gate_code = None
+            else:
+                member_text = (
+                    "目前使用備援模式完成回覆。 "
+                    + (persona_text or "候選已由總場完成驗證。")
+                )
+                state = "PASS"
+                gate_code = None
+            rendered = self._render(
+                final_decision,
+                member_text=member_text,
+                channel=channel,
+                gate_code=gate_code,
+            )
+            result: dict[str, Any] = {
+                "STATE": state,
+                "RUN_ID": DUAL_NLIO_RUN_ID,
+                "policy_version": DEGRADATION_POLICY_VERSION,
+                "request_ref": request_ref,
+                "provider_call_order": provider_call_order,
+                "local_candidate_hashes": [
+                    item.candidate_hash for item in validated
+                ] if available_provider == "LOCAL" else [],
+                "cloud_candidate_hashes": [
+                    item.candidate_hash for item in validated
+                ] if available_provider == "CLOUD" else [],
+                "candidate_results": self._degraded_evidence(results),
+                "total_field_final_decision": final_decision,
+                "renderer_decision": rendered["decision"],
+                "reply_text": rendered["reply_text"],
+                "both_received": False,
+                "degraded_mode": True,
+                "dual_convergence": False,
+                "available_provider": available_provider,
+                "missing_provider": missing_provider,
+                "failure_class": failure_class,
+                "request_mode": request_mode,
+                "candidate_sources_are_authority": False,
+                "total_field_authority": True,
+                "persona_tfs_hash_exclusion": "PASS",
+                "side_effects_performed": False,
+                "formal_state_material_exposed": False,
+                "internal_error_exposed": False,
+            }
+            if request_mode == "CODE_DRAFT_ONLY" and not action_requested:
+                draft_values = [item.candidate_value for item in validated]
+                draft_text = "\n\n".join(
+                    value if isinstance(value, str) else _canonical_json(value)
+                    for value in draft_values
+                )
+                result["code_draft_candidate"] = {
+                    "status": "CANDIDATE_ONLY",
+                    "text": draft_text,
+                    "file_write": False,
+                    "execution": False,
+                    "commit": False,
+                    "deploy": False,
+                }
+            return result
+
+        combined: tuple[Mapping[str, Any], ...] = (
+            *local_candidates,
+            *cloud_candidates,
+        )
+        results = self.domain_gateway.receive_batch(
+            combined,
+            previous_values=_copy_json(dict(previous_values)),
+        )
+        final_decisions = {str(item.get("final_decision")) for item in results}
+        if len(results) != len(combined) or len(final_decisions) != 1:
+            return self._hold_result(
+                state="HOLD_NON_UNIFORM_TOTAL_FIELD_RESULTS",
+                request_ref=request_ref,
+                channel=channel,
+                provider_call_order=provider_call_order,
+                available_provider=None,
+                missing_provider=None,
+                failure_class="PROVIDER_RETURNED_INVALID_CANDIDATE",
+                request_mode=request_mode,
+            )
+        final_decision = final_decisions.pop()
+        conflict = any(
+            "HOLD_CANDIDATE_CONFLICT_DETECTED"
+            in cast(list[str], item.get("decision_reason_codes", []))
+            for item in results
+        )
+        rendered = self._render(
+            final_decision,
+            member_text=persona_text,
+            channel=channel,
+        )
+        local_hashes = [
+            validate_candidate(item).candidate_hash for item in local_candidates
+        ]
+        cloud_hashes = [
+            validate_candidate(item).candidate_hash for item in cloud_candidates
+        ]
+        return {
+            "STATE": "PASS",
+            "RUN_ID": DUAL_NLIO_RUN_ID,
+            "policy_version": DEGRADATION_POLICY_VERSION,
+            "request_ref": request_ref,
+            "provider_call_order": provider_call_order,
+            "local_candidate_hashes": local_hashes,
+            "cloud_candidate_hashes": cloud_hashes,
+            "candidate_results": _copy_json(list(results)),
+            "total_field_final_decision": final_decision,
+            "renderer_decision": rendered["decision"],
+            "reply_text": rendered["reply_text"],
+            "both_received": True,
+            "degraded_mode": False,
+            "dual_convergence": not conflict,
+            "available_provider": ["LOCAL", "CLOUD"],
+            "missing_provider": None,
+            "failure_class": "DOMAIN_CANDIDATE_CONFLICT" if conflict else None,
+            "request_mode": request_mode,
+            "candidate_sources_are_authority": False,
+            "total_field_authority": True,
+            "persona_tfs_hash_exclusion": "PASS",
+            "side_effects_performed": False,
+            "internal_error_exposed": False,
         }
 
 

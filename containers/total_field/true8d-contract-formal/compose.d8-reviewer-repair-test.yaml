@@ -1,0 +1,25 @@
+name: w7tp-true8d-d8-reviewer-repair-test
+
+services:
+  d8-reviewer-repair-test:
+    image: w7tp-indexer@sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e
+    pull_policy: never
+    user: "65534:65534"
+    working_dir: /formal
+    entrypoint: ["python3"]
+    command: ["-m", "unittest", "tests.test_w7tp_d8_reviewer_entrypoint"]
+    network_mode: "none"
+    volumes:
+      - type: bind
+        source: ../../..
+        target: /formal
+        read_only: true
+    read_only: true
+    restart: "no"
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+      - /evidence:rw,noexec,nosuid,size=16m
+    pids_limit: 32
+    ports: []

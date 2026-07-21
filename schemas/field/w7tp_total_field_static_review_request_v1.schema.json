@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_total_field_static_review_request_v1.schema.json",
+  "title": "W7TP Total Field Static Review Request V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_type",
+    "run_id",
+    "packet_id",
+    "event_id",
+    "created_at",
+    "expires_at",
+    "state",
+    "requested_decision",
+    "only_request",
+    "purpose",
+    "single_use",
+    "single_use_id",
+    "request_self_hash_algorithm",
+    "request_self_sha256",
+    "source_manifest_path",
+    "source_manifest_sha256",
+    "owner_seal_path",
+    "non_execution_assertions"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-TOTAL-FIELD-STATIC-REVIEW-REQUEST/1.0"},
+    "packet_type": {"const": "TOTAL_FIELD_STATIC_REVIEW_REQUEST"},
+    "run_id": {"type": "string", "minLength": 1},
+    "packet_id": {"type": "string", "minLength": 1},
+    "event_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "state": {"const": "PENDING_TOTAL_FIELD_STATIC_REVIEW"},
+    "requested_decision": {
+      "enum": [
+        "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY",
+        "ACCEPT_STATIC_D8_REVIEWER_ENTRYPOINT_REPAIR_CANDIDATE_ONLY",
+        "ACCEPT_GOOGLE_EXTERNAL_CANDIDATE_DUAL_CHANNEL_AS_STATIC_IMPLEMENTATION_AND_ISOLATED_TEST_BASELINE"
+      ]
+    },
+    "only_request": {
+      "enum": [
+        "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY",
+        "ACCEPT_STATIC_D8_REVIEWER_ENTRYPOINT_REPAIR_CANDIDATE_ONLY",
+        "ACCEPT_GOOGLE_EXTERNAL_CANDIDATE_DUAL_CHANNEL_AS_STATIC_IMPLEMENTATION_AND_ISOLATED_TEST_BASELINE"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_:-]+$",
+      "minLength": 1
+    },
+    "single_use": {"const": true},
+    "single_use_id": {"type": "string", "minLength": 1},
+    "request_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
+    },
+    "request_self_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_manifest_path": {"type": "string", "minLength": 1},
+    "source_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "owner_seal_path": {"type": "string", "minLength": 1},
+    "non_execution_assertions": {
+      "type": "object",
+      "required": [
+        "runtime_activation",
+        "image_build",
+        "image_pull",
+        "image_tag",
+        "container_start",
+        "deploy",
+        "restart",
+        "db_write",
+        "canonical_change",
+        "pointer_change",
+        "git_commit",
+        "git_push"
+      ],
+      "properties": {
+        "runtime_activation": {"const": false},
+        "image_build": {"const": false},
+        "image_pull": {"const": false},
+        "image_tag": {"const": false},
+        "container_start": {"const": false},
+        "deploy": {"const": false},
+        "restart": {"const": false},
+        "db_write": {"const": false},
+        "canonical_change": {"const": false},
+        "pointer_change": {"const": false},
+        "git_commit": {"const": false},
+        "git_push": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "requested_decision": {"const": "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY"},
+        "only_request": {"const": "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY"}
+      }
+    },
+    {
+      "properties": {
+        "requested_decision": {"const": "ACCEPT_STATIC_D8_REVIEWER_ENTRYPOINT_REPAIR_CANDIDATE_ONLY"},
+        "only_request": {"const": "ACCEPT_STATIC_D8_REVIEWER_ENTRYPOINT_REPAIR_CANDIDATE_ONLY"}
+      }
+    },
+    {
+      "properties": {
+        "requested_decision": {"const": "ACCEPT_GOOGLE_EXTERNAL_CANDIDATE_DUAL_CHANNEL_AS_STATIC_IMPLEMENTATION_AND_ISOLATED_TEST_BASELINE"},
+        "only_request": {"const": "ACCEPT_GOOGLE_EXTERNAL_CANDIDATE_DUAL_CHANNEL_AS_STATIC_IMPLEMENTATION_AND_ISOLATED_TEST_BASELINE"}
+      }
+    }
+  ],
+  "additionalProperties": false
+}

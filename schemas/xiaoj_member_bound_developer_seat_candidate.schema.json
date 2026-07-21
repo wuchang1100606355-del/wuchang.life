@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:xiaoj-member-bound-developer-seat-candidate:1",
+  "title": "XiaoJ Member-Bound Session Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "member_ref",
+    "xiaoj_agent_ref",
+    "member_role_refs",
+    "organization_context",
+    "device_or_channel_binding",
+    "delegation_envelope",
+    "ttl_seconds",
+    "nonce",
+    "revocation_state",
+    "membership_state",
+    "principal_verified",
+    "command_ref",
+    "verification_refs"
+  ],
+  "properties": {
+    "member_ref": {"type": "string", "pattern": "^member_ref:[A-Za-z0-9._:-]+$"},
+    "xiaoj_agent_ref": {"type": "string", "pattern": "^xiaoj_agent_ref:[A-Za-z0-9._:-]+$"},
+    "member_role_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^role_ref:[A-Za-z0-9._:-]+$"}
+    },
+    "organization_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["organization_ref", "scope_refs"],
+      "properties": {
+        "organization_ref": {"type": "string", "pattern": "^organization_ref:[A-Za-z0-9._:-]+$"},
+        "scope_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^scope_ref:[A-Za-z0-9._:-]+$"}}
+      }
+    },
+    "device_or_channel_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["binding_type", "binding_ref", "binding_hash"],
+      "properties": {
+        "binding_type": {"enum": ["DEVICE", "CHANNEL"]},
+        "binding_ref": {"type": "string", "pattern": "^(device|channel)_ref:[A-Za-z0-9._:-]+$"},
+        "binding_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "delegation_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delegation_ref", "issuer_member_ref", "subject_member_ref", "bound_xiaoj_agent_ref", "allowed_role_refs", "issued_at_epoch", "expires_at_epoch", "nonce", "revoked", "subdelegation"],
+      "properties": {
+        "delegation_ref": {"type": "string", "pattern": "^delegation_ref:[A-Za-z0-9._:-]+$"},
+        "issuer_member_ref": {"type": "string", "pattern": "^member_ref:[A-Za-z0-9._:-]+$"},
+        "subject_member_ref": {"type": "string", "pattern": "^member_ref:[A-Za-z0-9._:-]+$"},
+        "bound_xiaoj_agent_ref": {"type": "string", "pattern": "^xiaoj_agent_ref:[A-Za-z0-9._:-]+$"},
+        "allowed_role_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^role_ref:[A-Za-z0-9._:-]+$"}},
+        "issued_at_epoch": {"type": "integer", "minimum": 0},
+        "expires_at_epoch": {"type": "integer", "minimum": 1},
+        "nonce": {"type": "string", "pattern": "^nonce:[A-Za-z0-9._:-]+$"},
+        "revoked": {"type": "boolean"},
+        "subdelegation": {"const": false}
+      }
+    },
+    "ttl_seconds": {"type": "integer", "minimum": 1, "maximum": 3600},
+    "nonce": {"type": "string", "pattern": "^nonce:[A-Za-z0-9._:-]+$"},
+    "revocation_state": {"enum": ["ACTIVE", "REVOKED"]},
+    "membership_state": {"enum": ["ACTIVE", "INACTIVE", "EXPIRED", "REVOKED"]},
+    "principal_verified": {"type": "boolean"},
+    "command_ref": {"type": "string", "pattern": "^command_ref:[A-Za-z0-9._:-]+$"},
+    "verification_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^evidence_ref:[A-Za-z0-9._:-]+$"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

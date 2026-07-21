@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://w7tp.local/schemas/w7tp_true8d_formal_deployment_manifest_v1.schema.json",
+  "title": "W7TP TRUE8D Formal Deployment Manifest V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "source_binding",
+    "target",
+    "formal_profile",
+    "compose",
+    "image",
+    "services",
+    "resource_budget",
+    "network_port_volume_boundary",
+    "health_checks",
+    "authority_boundary",
+    "collision_guard",
+    "rollback",
+    "excluded_actions"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP_TRUE8D_FORMAL_DEPLOYMENT_MANIFEST_V1"},
+    "run_id": {"const": "W7TP_TRUE8D_FORMAL_DEPLOYMENT_MANIFEST_V1"},
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoritative_source_run", "source_sha256_manifest", "source_sha256_manifest_hash", "source_hash_match", "canary_evidence_review_seal", "canary_evidence_review_seal_hash", "canary_evidence"],
+      "properties": {
+        "authoritative_source_run": {"const": "W7TP_TOTAL_FIELD_NON_LIVE_BUILD_20260718T110758Z"},
+        "source_sha256_manifest": {"type": "string"},
+        "source_sha256_manifest_hash": {"pattern": "^[0-9a-f]{64}$"},
+        "source_hash_match": {"const": "PASS"},
+        "canary_evidence_review_seal": {"type": "string"},
+        "canary_evidence_review_seal_hash": {"pattern": "^[0-9a-f]{64}$"},
+        "canary_evidence": {"const": "PASS_9_OF_9_ACCEPTED"}
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hostname", "repo", "node_match_required"],
+      "properties": {
+        "hostname": {"const": "taiji01"},
+        "repo": {"const": "/home/taiji_admin/Taiji_Hub"},
+        "node_match_required": {"const": true}
+      }
+    },
+    "formal_profile": {"const": "formal-dark-launch"},
+    "compose": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "static_validation_required", "persistent_start_authorized"],
+      "properties": {
+        "path": {"const": "containers/total_field/true8d-contract-formal/compose.formal.yaml"},
+        "sha256": {"pattern": "^[0-9a-f]{64}$"},
+        "static_validation_required": {"const": true},
+        "persistent_start_authorized": {"const": false}
+      }
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "immutable_digest", "server_llm", "msi_ollama_candidate_migration"],
+      "properties": {
+        "name": {"const": "w7tp-indexer"},
+        "immutable_digest": {"pattern": "^sha256:[0-9a-f]{64}$"},
+        "server_llm": {"const": "BLOCK"},
+        "msi_ollama_candidate_migration": {"const": "BLOCK"}
+      }
+    },
+    "services": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/service"}
+    },
+    "resource_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projection_totals", "total_ceiling", "container_start_count"],
+      "properties": {
+        "projection_totals": {"type": "object"},
+        "total_ceiling": {"type": "object"},
+        "container_start_count": {"const": 0}
+      }
+    },
+    "network_port_volume_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "network", "host_ports", "production_db_volume", "production_data_volume", "source_mount", "root_filesystem_read_only", "cap_drop_all", "no_new_privileges"],
+      "properties": {
+        "phase": {"const": "dark-launch"},
+        "network": {"const": "internal-only"},
+        "host_ports": {"const": []},
+        "production_db_volume": {"const": false},
+        "production_data_volume": {"const": false},
+        "source_mount": {"const": "repo-read-only"},
+        "root_filesystem_read_only": {"const": true},
+        "cap_drop_all": {"const": true},
+        "no_new_privileges": {"const": true}
+      }
+    },
+    "health_checks": {"type": "array", "minItems": 9, "maxItems": 9, "items": {"type": "object"}},
+    "authority_boundary": {"type": "object"},
+    "collision_guard": {"type": "object"},
+    "rollback": {"type": "object"},
+    "excluded_actions": {"type": "object"}
+  },
+  "$defs": {
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["service_name", "container_name", "role", "image_digest", "source_sha256", "resource_limits", "health_check"],
+      "properties": {
+        "service_name": {"type": "string"},
+        "container_name": {"type": "string"},
+        "role": {"enum": ["projection-non-authoritative", "total-field-core-convergence-only"]},
+        "image_digest": {"pattern": "^sha256:[0-9a-f]{64}$"},
+        "source_sha256": {"pattern": "^[0-9a-f]{64}$"},
+        "resource_limits": {"type": "object"},
+        "health_check": {"type": "object"}
+      }
+    }
+  }
+}

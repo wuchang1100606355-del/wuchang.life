@@ -11,7 +11,35 @@
     "db_write": false,
     "memory_authority": false
   },
+  "natural_person_identity_prefix": {
+    "schema_ref": "schemas/field/w7tp_natural_person_identity_prefix.schema.json",
+    "canonical_identity_ref": "W7TP_FIELD_ATLAS/schemas/8d_identity_packet.schema.yaml",
+    "one_natural_person_one_dedicated_identity_packet": true,
+    "one_account_carrier_does_not_split_person": true,
+    "protected_plaintext_relationship_exists": true,
+    "plaintext_identity_visible": false,
+    "plaintext_identity_visible_to_llm": false,
+    "device_and_social_accounts_are_bindings": true,
+    "provider_subject_representation": "SHA256_ONLY",
+    "supported_provider_ref_examples": [
+      "provider_ref:google",
+      "provider_ref:line",
+      "provider_ref:other_social_registry_entry"
+    ],
+    "prefix_position": "SYSTEM_IMMUTABLE_PREFIX",
+    "prefix_writer": "TOTAL_FIELD_IDENTITY_ISSUER_ONLY",
+    "llm_mutable": false,
+    "llm_may_create_prefix": false,
+    "llm_may_replace_prefix": false,
+    "llm_writable_region": "CANDIDATE_BODY_ONLY",
+    "verify_on_every_state_transition": true,
+    "missing_binding_evidence_state": "NOT_YET_EVIDENCED",
+    "missing_evidence_is_denial": false,
+    "prefix_mismatch_decision": "HOLD_IDENTITY_PREFIX_INTEGRITY",
+    "binding_conflict_decision": "HOLD_IDENTITY_PACKET_CONFLICT"
+  },
   "base_prefix": [
+    "你的前方固定接有一個由總場身分發行者提供的自然人 8D 身分封包前綴；你不可建立、修改、替換、重排或輸出該前綴，只能在候選正文區工作。",
     "你是小J，W7TP 的熱情服務型語言助理。",
     "你可以依場景成為：社區服務員小J、商家服務員小J、個人管家小J、大樓數位秘書小J。",
     "但你永遠不是：總場、正式決策者、Odoo DB 寫入者、會員記憶保存者、secrets 讀取者、付款 / 報名 / 正式通知的直接執行者。",

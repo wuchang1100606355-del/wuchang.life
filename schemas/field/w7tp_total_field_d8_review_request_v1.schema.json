@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_total_field_d8_review_request_v1.schema.json",
+  "title": "W7TP Total Field D8 Review Request V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_type",
+    "run_id",
+    "created_at",
+    "expires_at",
+    "state",
+    "requested_decision",
+    "only_request",
+    "canary_started",
+    "d8_decision",
+    "single_use",
+    "request_self_hash_algorithm",
+    "request_self_sha256",
+    "bindings",
+    "atomic_gate",
+    "non_execution_assertions"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-D8-REVIEW-REQUEST/1.0"},
+    "packet_type": {"const": "D8_REVIEW_REQUEST"},
+    "run_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "state": {"const": "PENDING_TOTAL_FIELD_D8_DECISION"},
+    "requested_decision": {
+      "enum": [
+        "ALLOW_P2_ISOLATED_CANARY_EXECUTION_ONLY",
+        "ALLOW_NO_NETWORK_OFFLINE_CANARY_IMAGE_BUILD_ONLY"
+      ]
+    },
+    "only_request": {
+      "enum": [
+        "ALLOW_P2_ISOLATED_CANARY_EXECUTION_ONLY",
+        "ALLOW_NO_NETWORK_OFFLINE_CANARY_IMAGE_BUILD_ONLY"
+      ]
+    },
+    "canary_started": {"const": false},
+    "d8_decision": {"const": "PENDING"},
+    "single_use": {"const": true},
+    "request_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
+    },
+    "request_self_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "bindings": {
+      "type": "object",
+      "required": [
+        "new_archive_path",
+        "complete_handoff_receipt_path",
+        "complete_handoff_receipt_sha256",
+        "complete_landing_manifest_path",
+        "complete_landing_manifest_sha256",
+        "new_archive_manifest_path",
+        "new_archive_manifest_sha256",
+        "landing_payload_count",
+        "landing_payload_aggregate_sha256",
+        "aggregate_algorithm_version",
+        "aggregate_ordering",
+        "landing_payload_input_paths"
+      ],
+      "properties": {
+        "new_archive_path": {"type": "string", "minLength": 1},
+        "complete_handoff_receipt_path": {"type": "string", "minLength": 1},
+        "complete_handoff_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "complete_landing_manifest_path": {"type": "string", "minLength": 1},
+        "complete_landing_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "new_archive_manifest_path": {"type": "string", "minLength": 1},
+        "new_archive_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "landing_payload_count": {"const": 10},
+        "landing_payload_aggregate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "aggregate_algorithm_version": {"const": "W7TP-LANDING-PAYLOAD-AGGREGATE/1.0"},
+        "aggregate_ordering": {"const": "COMPLETE_LANDING_MANIFEST_FILES_ARRAY_ORDER"},
+        "landing_payload_input_paths": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": true
+    },
+    "offline_build_scope": {
+      "type": "object",
+      "required": [
+        "base_image_reference",
+        "base_image_digest",
+        "wheelhouse_path",
+        "wheelhouse_sha256",
+        "wheelhouse_file_count",
+        "containerfile_path",
+        "containerfile_sha256",
+        "network",
+        "network_download",
+        "pull",
+        "pip_no_index",
+        "single_use_build",
+        "image_qualification",
+        "qualification_network",
+        "c1_c9_execution",
+        "production_deploy",
+        "existing_service_restart",
+        "db_write",
+        "canonical_change",
+        "pointer_change"
+      ],
+      "properties": {
+        "base_image_reference": {
+          "type": "string",
+          "pattern": "^.+@sha256:[0-9a-f]{64}$"
+        },
+        "base_image_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "wheelhouse_path": {"type": "string", "minLength": 1},
+        "wheelhouse_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "wheelhouse_file_count": {"type": "integer", "minimum": 1},
+        "containerfile_path": {"type": "string", "minLength": 1},
+        "containerfile_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "network": {"const": "none"},
+        "network_download": {"const": false},
+        "pull": {"const": false},
+        "pip_no_index": {"const": true},
+        "single_use_build": {"const": true},
+        "image_qualification": {"const": true},
+        "qualification_network": {"const": "none"},
+        "c1_c9_execution": {"const": false},
+        "production_deploy": {"const": false},
+        "existing_service_restart": {"const": false},
+        "db_write": {"const": false},
+        "canonical_change": {"const": false},
+        "pointer_change": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "atomic_gate": {"type": "object"},
+    "non_execution_assertions": {"type": "object"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "requested_decision": {"const": "ALLOW_P2_ISOLATED_CANARY_EXECUTION_ONLY"}
+        },
+        "required": ["requested_decision"]
+      },
+      "then": {
+        "properties": {
+          "only_request": {"const": "ALLOW_P2_ISOLATED_CANARY_EXECUTION_ONLY"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "requested_decision": {"const": "ALLOW_NO_NETWORK_OFFLINE_CANARY_IMAGE_BUILD_ONLY"}
+        },
+        "required": ["requested_decision"]
+      },
+      "then": {
+        "required": ["offline_build_scope"],
+        "properties": {
+          "only_request": {"const": "ALLOW_NO_NETWORK_OFFLINE_CANARY_IMAGE_BUILD_ONLY"}
+        }
+      }
+    }
+  ],
+  "not": {
+    "anyOf": [
+      {"required": ["final_decision"]},
+      {"required": ["execution_authority"]},
+      {"required": ["production_deploy_authorized"]}
+    ]
+  },
+  "additionalProperties": true
+}

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any
+from typing import Any, Mapping
 
 from tools.total_field.w7tp_field_application_runtime import (
     FieldApplicationError,
@@ -12,6 +12,11 @@ from tools.total_field.w7tp_field_application_runtime import (
 
 from .contracts import CONTRACTS
 from .drift_monitor import client_drift_rules, evaluate_drift
+from .identity_prefix import assert_llm_candidate_does_not_mutate_identity
+from .identity_projection import (
+    IdentityPrefixResolver,
+    verify_trusted_identity_projection,
+)
 from .node_inventory import collect_inventory
 from .packet_builder import process_intent
 
@@ -139,6 +144,18 @@ def capabilities_payload() -> dict[str, Any]:
             "llm_execution": "NONE_DETERMINISTIC_RULES",
             "decision_authority": "LOCAL_TOTAL_FIELD_ONLY",
         },
+        "natural_person_identity_prefix": {
+            "one_natural_person_one_dedicated_packet": True,
+            "device_and_social_accounts_are_bindings": True,
+            "plaintext_identity_visible": False,
+            "position": "SYSTEM_IMMUTABLE_PREFIX",
+            "llm_mutable": False,
+            "llm_writable_region": "CANDIDATE_BODY_ONLY",
+            "http_body_prefix_accepted": False,
+            "trusted_gateway_injection_required": True,
+            "trusted_gateway_binding_state": "NOT_YET_EVIDENCED",
+            "trusted_gateway_source_state": "SOURCE_INTERFACE_LANDED_NOT_DEPLOYED",
+        },
     }
 
 
@@ -160,16 +177,56 @@ def node_payload() -> dict[str, Any]:
     }
 
 
-def process_http_request(payload: bytes) -> tuple[int, dict[str, Any]]:
+def _projection_http_status(reason_code: str) -> int:
+    if reason_code in {
+        "IDENTITY_PROJECTION_UNTRUSTED_SOURCE",
+        "IDENTITY_PROJECTION_HEADER_REQUIRED",
+        "IDENTITY_PROJECTION_EXPIRED",
+        "IDENTITY_PROJECTION_NOT_YET_VALID",
+    }:
+        return 401
+    if reason_code in {
+        "IDENTITY_PREFIX_RESOLVER_REQUIRED",
+        "IDENTITY_PREFIX_NOT_FOUND",
+        "IDENTITY_PREFIX_REGISTRY_EVIDENCE_REQUIRED",
+    }:
+        return 503
+    if reason_code in {
+        "HOLD_IDENTITY_PREFIX_CONFLICT",
+        "HOLD_IDENTITY_PACKET_CONFLICT",
+    }:
+        return 409
+    return 422
+
+
+def process_http_request(
+    payload: bytes,
+    *,
+    trusted_identity_projection_headers: Mapping[str, Any] | None = None,
+    trusted_boundary: bool = False,
+    identity_prefix_resolver: IdentityPrefixResolver | None = None,
+    identity_registry_snapshot: Mapping[str, Any] | None = None,
+    projection_now: str | None = None,
+) -> tuple[int, dict[str, Any]]:
     """Process one shared API request without owning a second HTTP server."""
 
     if len(payload) < 2 or len(payload) > MAX_REQUEST_BYTES:
         return 400, {"state": "HOLD", "reason_code": "REQUEST_SIZE_INVALID"}
     redteam_monitor = evaluate_drift({})
+    projection_verification: dict[str, Any] | None = None
     try:
+        if trusted_identity_projection_headers is not None or trusted_boundary:
+            projection_verification = verify_trusted_identity_projection(
+                trusted_identity_projection_headers or {},
+                trusted_boundary=trusted_boundary,
+                identity_prefix_resolver=identity_prefix_resolver,
+                identity_registry_snapshot=identity_registry_snapshot,
+                now=projection_now,
+            )
         request = json.loads(payload)
         if not isinstance(request, dict) or not isinstance(request.get("intent"), dict):
             raise FieldApplicationError("INTENT_OBJECT_REQUIRED")
+        assert_llm_candidate_does_not_mutate_identity(request)
         redteam_monitor = evaluate_drift(
             {"intent": request["intent"], "answer": request.get("answer")}
         )
@@ -183,10 +240,42 @@ def process_http_request(payload: bytes) -> tuple[int, dict[str, Any]]:
                 "surface": "EXISTING_INTENT_SERVICE_9107",
                 "llm_inference_location": "USER_DEVICE_ONLY",
                 "server_llm_execution": "BLOCK",
+                **(
+                    {
+                        "identity_projection_state": projection_verification["state"],
+                        "identity_projection_ref": projection_verification[
+                            "projection"
+                        ]["projection_ref"],
+                        "identity_projection_sha256": projection_verification[
+                            "projection"
+                        ]["projection_sha256"],
+                        "identity_projection_issuer_ref": projection_verification[
+                            "projection"
+                        ]["issuer_ref"],
+                    }
+                    if projection_verification is not None
+                    else {}
+                ),
             },
+            trusted_identity_prefix=(
+                projection_verification["identity_prefix"]
+                if projection_verification is not None
+                else None
+            ),
+            identity_registry_snapshot=(
+                projection_verification["identity_registry_snapshot"]
+                if projection_verification is not None
+                else None
+            ),
         )
     except FieldApplicationError as exc:
-        return 422, {
+        status = (
+            _projection_http_status(exc.reason_code)
+            if exc.reason_code.startswith("IDENTITY_")
+            or exc.reason_code.startswith("HOLD_IDENTITY_")
+            else 422
+        )
+        return status, {
             "state": "HOLD",
             "reason_code": exc.reason_code,
             "path": exc.path,

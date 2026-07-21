@@ -1,0 +1,39 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-CLOUD-FILL-P1-DECISION-MANIFEST/1.0",
+  "run_id": "W7TP_TOTAL_FIELD_CLOUD_FILL_PACKET_P1_STATIC_CANDIDATE_V1_TOTAL_FIELD_DECISION",
+  "created_at": "2026-07-19T13:51:50Z",
+  "state": "PASS_EXACT_HASH_BOUND_P1_STATIC_BASELINE_ACCEPTED",
+  "content_hash_rule": "SHA256_OF_SHA256SUM_OUTPUT_LINES_IN_LISTED_ORDER",
+  "content_sha256": "af1c151a2d2b17736cb7728508d988bfb6a5b2b1ad76d48f9225ed7a78e0efe3",
+  "files": [
+    {
+      "path": "manifests/total_field/w7tp_total_field_cloud_fill_packet_p1_v1/SHA256_MANIFEST.json",
+      "sha256": "00dd831f74134994d958d6ce01696d7d7ac3a9320322810262b373c5e220d756",
+      "size": 3837,
+      "role": "reviewed_source_manifest"
+    },
+    {
+      "path": "manifests/total_field/w7tp_total_field_cloud_fill_packet_p1_v1_total_field_decision/TOTAL_FIELD_REVIEW_RESULT.json",
+      "sha256": "f85c69cf47fa685e56d70e25e353ca8c20b683b6d90f769dd1e0d175c5c9d585",
+      "size": 2786,
+      "role": "total_field_final_review_result"
+    },
+    {
+      "path": "manifests/total_field/w7tp_total_field_cloud_fill_packet_p1_v1_total_field_decision/REVIEW_EVIDENCE.json",
+      "sha256": "58869bcc5c2ae41ea93f6e5e3957d8a90901ba37b40129c6355cc8c09a786851",
+      "size": 1830,
+      "role": "sealed_static_review_evidence"
+    }
+  ],
+  "final_decision": "ACCEPT_EXACT_HASH_BOUND_CLOUD_FILL_PACKET_CANDIDATE_AS_IMPLEMENTATION_AND_ISOLATED_TEST_DESIGN_BASELINE_ONLY",
+  "p2_next_phase": "P2_ISOLATED_CANARY",
+  "p2_runtime_execution_authorized_by_this_manifest": false,
+  "canonical_write": false,
+  "runtime_activation": false,
+  "deploy": false,
+  "model_reload": false,
+  "database_write": false,
+  "test_rerun": false,
+  "redesign": false,
+  "next": "CREATE_EXACT_HASH_BOUND_P2_ISOLATED_CANARY_EXECUTION_PACKET"
+}

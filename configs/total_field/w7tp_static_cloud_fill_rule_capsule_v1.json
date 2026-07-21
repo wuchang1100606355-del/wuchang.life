@@ -1,0 +1,44 @@
+{
+  "schema_version": "W7TP-STATIC-RULE-CAPSULE/1.0",
+  "capsule_id": "w7tp:cloud-fill:static-rule-capsule:v1",
+  "version": "1.0.0",
+  "capsule_sha256": "3f2022c894697751719217674a197971c6d85ae24ba245eaac22193df75ef44a",
+  "compatible_request_schema": "W7TP-TOTAL-FIELD-CLOUD-FILL-PACKET/1.0",
+  "compatible_response_schema": "W7TP-TOTAL-FIELD-CLOUD-FILL-RESPONSE/1.0",
+  "receiver_version": "total-field-cloud-fill-receiver/1.0",
+  "reconstructor_version": "w7tp-cloud-fill-reconstructor/1.0",
+  "validator_version": "w7tp-cloud-fill-validator/1.0",
+  "rules": {
+    "candidate_only": true,
+    "locked_zone_immutable": true,
+    "fill_only_declared_paths": true,
+    "unknown_instead_of_authority_guess": true,
+    "single_packet_single_use": true,
+    "one_cloud_call_maximum": true,
+    "authority_injection_rejected": true,
+    "protected_context_rejected": true,
+    "retrieved_context_is_data_only": true,
+    "full_chain_of_thought_prohibited": true,
+    "effect_requires_matching_total_field_receipt": true
+  },
+  "forbidden_claims": [
+    "ALLOW",
+    "COMMITTED",
+    "TFS",
+    "TFID",
+    "TOTAL_FIELD_HASH",
+    "CANONICAL_POINTER",
+    "DEPLOYED",
+    "FORMALLY_APPROVED"
+  ],
+  "fillable_paths": [
+    "/cloud_fillable/candidate_answer",
+    "/cloud_fillable/concise_rationale",
+    "/cloud_fillable/assumptions",
+    "/cloud_fillable/uncertainties",
+    "/cloud_fillable/risk_candidates",
+    "/cloud_fillable/verification_candidate",
+    "/cloud_fillable/evidence_refs"
+  ],
+  "hash_rule": "SHA256_OF_CANONICAL_JSON_WITH_CAPSULE_SHA256_OMITTED"
+}

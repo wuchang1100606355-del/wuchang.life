@@ -1,0 +1,178 @@
+{
+  "schema_version": "W7TP_TRUE8D_FORMAL_DEPLOYMENT_MANIFEST_V1",
+  "run_id": "W7TP_TRUE8D_FORMAL_DEPLOYMENT_MANIFEST_V1",
+  "source_binding": {
+    "authoritative_source_run": "W7TP_TOTAL_FIELD_NON_LIVE_BUILD_20260718T110758Z",
+    "source_sha256_manifest": "runtime/total_field/inbox/W7TP_TOTAL_FIELD_NON_LIVE_BUILD_20260718T110758Z_SHA256_MANIFEST.json",
+    "source_sha256_manifest_hash": "832f0cd0cd032a203bc4f08fc90b41217099368d095b9d80c3889c5e2c8048aa",
+    "source_hash_match": "PASS",
+    "canary_evidence_review_seal": "runtime/total_field/inbox/FOUNDER_REVIEW_SEAL_W7TP_TOTAL_FIELD_NON_LIVE_BUILD_20260718T_CANARY_ACCEPTED.json",
+    "canary_evidence_review_seal_hash": "9145836427997554f192cf181e455b0de5e50b53e76da16d172795aeaca87609",
+    "canary_evidence": "PASS_9_OF_9_ACCEPTED"
+  },
+  "target": {
+    "hostname": "taiji01",
+    "repo": "/home/taiji_admin/Taiji_Hub",
+    "node_match_required": true
+  },
+  "formal_profile": "formal-dark-launch",
+  "compose": {
+    "path": "containers/total_field/true8d-contract-formal/compose.formal.yaml",
+    "sha256": "36d406ebc7d05d50ae45ac126d286103c97533b8efadd6888bded92a43ce1cb4",
+    "static_validation_required": true,
+    "persistent_start_authorized": false
+  },
+  "image": {
+    "name": "w7tp-indexer",
+    "immutable_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+    "server_llm": "BLOCK",
+    "msi_ollama_candidate_migration": "BLOCK"
+  },
+  "services": [
+    {
+      "service_name": "d1",
+      "container_name": "w7tp_true8d_formal_d1",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 350, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D1"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "d2",
+      "container_name": "w7tp_true8d_formal_d2",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 350, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D2"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "d3",
+      "container_name": "w7tp_true8d_formal_d3",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 350, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D3"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "d4",
+      "container_name": "w7tp_true8d_formal_d4",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 350, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D4"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "d5",
+      "container_name": "w7tp_true8d_formal_d5",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 350, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D5"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "d6",
+      "container_name": "w7tp_true8d_formal_d6",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 350, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D6"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "d7",
+      "container_name": "w7tp_true8d_formal_d7",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 350, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D7"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "d8",
+      "container_name": "w7tp_true8d_formal_d8",
+      "role": "projection-non-authoritative",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 550, "memory_limit_mib": 384, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--field", "D8"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    },
+    {
+      "service_name": "total-field-core",
+      "container_name": "w7tp_true8d_formal_total_field_core",
+      "role": "total-field-core-convergence-only",
+      "image_digest": "sha256:2a963ec0cfd2c8558c0912fc8098cef7da4d50cb359a53c052849efb3c8e151e",
+      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
+      "resource_limits": {"cpu_limit_m": 1000, "memory_limit_mib": 1024, "pids_limit": 32},
+      "health_check": {"command": ["python3", "tools/total_field/w7tp_true8d_contract_sandbox.py", "--core"], "expected_state": "SANDBOX_DEFINITION_VALID"}
+    }
+  ],
+  "resource_budget": {
+    "projection_totals": {"cpu_request_m": 1150, "cpu_limit_m": 3000, "memory_request_mib": 1408, "memory_limit_mib": 3072},
+    "total_ceiling": {"cpu_m": 4250, "memory_mib": 4608, "disk_mib": 2048},
+    "container_start_count": 0
+  },
+  "network_port_volume_boundary": {
+    "phase": "dark-launch",
+    "network": "internal-only",
+    "host_ports": [],
+    "production_db_volume": false,
+    "production_data_volume": false,
+    "source_mount": "repo-read-only",
+    "root_filesystem_read_only": true,
+    "cap_drop_all": true,
+    "no_new_privileges": true
+  },
+  "health_checks": [
+    {"service_name": "d1", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D1", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "d2", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D2", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "d3", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D3", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "d4", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D4", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "d5", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D5", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "d6", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D6", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "d7", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D7", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "d8", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --field D8", "expected_state": "SANDBOX_DEFINITION_VALID"},
+    {"service_name": "total-field-core", "command": "python3 tools/total_field/w7tp_true8d_contract_sandbox.py --core", "expected_state": "SANDBOX_DEFINITION_VALID"}
+  ],
+  "authority_boundary": {
+    "projection_fields": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+    "projection_authority": "non-authoritative",
+    "single_total_field_core": "total-field-core",
+    "total_field_core_authority": "convergence-only",
+    "founder_final_authority_retained": true,
+    "d7_hard_risk_codes_disposition": "BLOCK",
+    "d8_canonical_authority": "canonical-envelope-only-no-final-decision-field",
+    "canonical_authority_change": "BLOCK"
+  },
+  "collision_guard": {
+    "must_not_restart_or_collide": ["wuchang_os_odoo_18", "wuchang_os_pg", "taiji_d8_db", "Intent Field", "Gateway", "Open WebUI"],
+    "new_container_names": ["w7tp_true8d_formal_d1", "w7tp_true8d_formal_d2", "w7tp_true8d_formal_d3", "w7tp_true8d_formal_d4", "w7tp_true8d_formal_d5", "w7tp_true8d_formal_d6", "w7tp_true8d_formal_d7", "w7tp_true8d_formal_d8", "w7tp_true8d_formal_total_field_core"],
+    "new_network_name": "w7tp_true8d_formal_internal",
+    "host_port_collision_possible": false
+  },
+  "rollback": {
+    "scope": "new-formal-containers-and-new-network-only",
+    "stop_containers": ["w7tp_true8d_formal_d1", "w7tp_true8d_formal_d2", "w7tp_true8d_formal_d3", "w7tp_true8d_formal_d4", "w7tp_true8d_formal_d5", "w7tp_true8d_formal_d6", "w7tp_true8d_formal_d7", "w7tp_true8d_formal_d8", "w7tp_true8d_formal_total_field_core"],
+    "remove_containers": ["w7tp_true8d_formal_d1", "w7tp_true8d_formal_d2", "w7tp_true8d_formal_d3", "w7tp_true8d_formal_d4", "w7tp_true8d_formal_d5", "w7tp_true8d_formal_d6", "w7tp_true8d_formal_d7", "w7tp_true8d_formal_d8", "w7tp_true8d_formal_total_field_core"],
+    "remove_network": "w7tp_true8d_formal_internal",
+    "delete_existing_volume_or_data": false,
+    "delete_new_named_volume": false,
+    "touch_existing_services": false
+  },
+  "excluded_actions": {
+    "formal_deployment": true,
+    "persistent_container_start": true,
+    "db_write": true,
+    "existing_service_restart": true,
+    "router_write": true,
+    "dns_write": true,
+    "git_commit": true,
+    "git_push": true,
+    "secret_read": true,
+    "member_plaintext_read": true
+  }
+}
