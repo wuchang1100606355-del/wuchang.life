@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_five_skill_id_binding_matrix_v1.schema.json",
+  "title": "W7TP Five Skill ID Binding Matrix V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "mapping_id",
+    "state",
+    "binding_count",
+    "hash_canonicalization",
+    "identity_binding_hash_algorithm",
+    "binding_matrix_self_hash_algorithm",
+    "canonical_target",
+    "package_manifest_schema",
+    "bindings",
+    "manifest_file_hashes_embedded",
+    "non_execution_assertions",
+    "binding_matrix_self_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-FIVE-SKILL-ID-BINDING-MATRIX/1.0"
+    },
+    "mapping_id": {
+      "const": "W7TP_FIVE_SKILL_ID_SOURCE_KEY_VCP_PACKAGE_ID_BINDING_V1"
+    },
+    "state": {
+      "const": "CANDIDATE_HASH_BOUND_IDENTITY_MAPPING"
+    },
+    "binding_count": {
+      "const": 5
+    },
+    "hash_canonicalization": {
+      "const": "NFC_SORTED_COMPACT_JSON_NO_FLOAT/1.0"
+    },
+    "identity_binding_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_IDENTITY_BINDING_SHA256/1.0"
+    },
+    "binding_matrix_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_BINDING_MATRIX_SELF_SHA256/1.0"
+    },
+    "canonical_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_id",
+        "version",
+        "canonical_doc_ref",
+        "canonical_doc_file_sha256",
+        "machine_schema_ref",
+        "machine_schema_file_sha256"
+      ],
+      "properties": {
+        "canonical_id": {
+          "const": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2"
+        },
+        "version": {
+          "const": "2.0.0"
+        },
+        "canonical_doc_ref": {
+          "const": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"
+        },
+        "canonical_doc_file_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "machine_schema_ref": {
+          "const": "schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json"
+        },
+        "machine_schema_file_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "package_manifest_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "file_sha256"],
+      "properties": {
+        "ref": {
+          "const": "schemas/field/variable_cognition_package_manifest.schema.json"
+        },
+        "file_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w7tp.total-field.skill-governance",
+        "w7tp.intent-field-construction",
+        "w7tp.reconstruct-private-media",
+        "w7tp.wuchang.community-announcement-xiaoj",
+        "w7tp.generative-transmission"
+      ],
+      "properties": {
+        "w7tp.total-field.skill-governance": {
+          "allOf": [
+            {"$ref": "#/$defs/binding"},
+            {
+              "properties": {
+                "target_skill_id": {"const": "w7tp.total-field.skill-governance"},
+                "source_key": {"const": "govern-total-field-skills"},
+                "package_id": {"const": "vcp:w7tp.total-field.skill-governance"},
+                "manifest_path": {"const": "govern-total-field-skills/total-field-skill-manifest.json"}
+              }
+            }
+          ]
+        },
+        "w7tp.intent-field-construction": {
+          "allOf": [
+            {"$ref": "#/$defs/binding"},
+            {
+              "properties": {
+                "target_skill_id": {"const": "w7tp.intent-field-construction"},
+                "source_key": {"const": "build-intent-field"},
+                "package_id": {"const": "vcp:w7tp.intent-field-construction"},
+                "manifest_path": {"const": "build-intent-field/total-field-skill-manifest.json"}
+              }
+            }
+          ]
+        },
+        "w7tp.reconstruct-private-media": {
+          "allOf": [
+            {"$ref": "#/$defs/binding"},
+            {
+              "properties": {
+                "target_skill_id": {"const": "w7tp.reconstruct-private-media"},
+                "source_key": {"const": "reconstruct-private-media"},
+                "package_id": {"const": "vcp:w7tp.reconstruct-private-media"},
+                "manifest_path": {"const": "reconstruct-private-media/total-field-skill-manifest.json"}
+              }
+            }
+          ]
+        },
+        "w7tp.wuchang.community-announcement-xiaoj": {
+          "allOf": [
+            {"$ref": "#/$defs/binding"},
+            {
+              "properties": {
+                "target_skill_id": {"const": "w7tp.wuchang.community-announcement-xiaoj"},
+                "source_key": {"const": "wuchang.community-announcement-xiaoj"},
+                "package_id": {"const": "vcp:w7tp.wuchang.community-announcement-xiaoj"},
+                "manifest_path": {"const": "wuchang.community-announcement-xiaoj/total-field-skill-manifest.json"}
+              }
+            }
+          ]
+        },
+        "w7tp.generative-transmission": {
+          "allOf": [
+            {"$ref": "#/$defs/binding"},
+            {
+              "properties": {
+                "target_skill_id": {"const": "w7tp.generative-transmission"},
+                "source_key": {"const": "w7tp-generative-transmission"},
+                "package_id": {"const": "vcp:w7tp.generative-transmission"},
+                "manifest_path": {"const": "w7tp-generative-transmission/total-field-skill-manifest.json"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "manifest_file_hashes_embedded": {
+      "const": false
+    },
+    "non_execution_assertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lifecycle_transition",
+        "registry_write",
+        "canonical_change",
+        "deploy",
+        "database_write",
+        "router_write"
+      ],
+      "properties": {
+        "lifecycle_transition": {"const": false},
+        "registry_write": {"const": false},
+        "canonical_change": {"const": false},
+        "deploy": {"const": false},
+        "database_write": {"const": false},
+        "router_write": {"const": false}
+      }
+    },
+    "binding_matrix_self_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_skill_id",
+        "source_key",
+        "package_id",
+        "manifest_path",
+        "manifest_schema_ref",
+        "identity_binding_sha256"
+      ],
+      "properties": {
+        "target_skill_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_key": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+        },
+        "package_id": {
+          "type": "string",
+          "pattern": "^vcp:[a-z0-9][a-z0-9._-]{2,127}$"
+        },
+        "manifest_path": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}/total-field-skill-manifest\\.json$"
+        },
+        "manifest_schema_ref": {
+          "const": "schemas/field/variable_cognition_package_manifest.schema.json"
+        },
+        "identity_binding_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

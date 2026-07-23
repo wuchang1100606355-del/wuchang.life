@@ -1,0 +1,459 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_review_candidate_v2_3_adapter_request_v1.schema.json",
+  "title": "W7TP Review Candidate 2.3 to Canonical V2 Adapter Request V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "adapter_contract_version",
+    "source_packet",
+    "source_packet_raw_sha256",
+    "source_packet_canonical_sha256",
+    "identity_map_ref",
+    "identity_map_self_sha256",
+    "manifest_bindings",
+    "canonical_requirements",
+    "normalization_rules",
+    "request_self_hash_algorithm",
+    "request_self_sha256"
+  ],
+  "properties": {
+    "adapter_contract_version": {
+      "const": "W7TP-REVIEW-CANDIDATE-2.3-TO-CANONICAL-V2/1.0"
+    },
+    "source_packet": {
+      "$ref": "#/$defs/sourcePacket"
+    },
+    "source_packet_raw_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "source_packet_canonical_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "identity_map_ref": {
+      "const": "manifests/total_field/w7tp_five_skill_id_binding_matrix_v1/BINDING_MATRIX.json"
+    },
+    "identity_map_self_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "manifest_bindings": {
+      "$ref": "#/$defs/manifestBindings"
+    },
+    "canonical_requirements": {
+      "$ref": "#/$defs/canonicalRequirements"
+    },
+    "normalization_rules": {
+      "const": [
+        "PACKET_CANONICAL_ID_TO_CANONICAL_ID_EXACT",
+        "SOURCE_2_3_RETAINED_AS_ADAPTER_RECEIPT",
+        "D1_TO_D5_AS_CANONICAL_HASH_PROFILE_REFS",
+        "SOURCE_STATE_AND_COORDINATE_PROFILE_EXACT_WRAP",
+        "SOURCE_D6_PROTOCOL_EXACT",
+        "SOURCE_D6_REMAINDER_AS_HASH_BOUND_REFERENCE",
+        "LIVE_DB_WRITE_TO_DB_WRITE_EXACT_ALIAS",
+        "SOURCE_TIME_WINDOW_TO_POSITIVE_INTEGER_TTL",
+        "SOURCE_NONCE_TO_ENVELOPE_NONCE_EXACT",
+        "CANONICAL_TECHNOLOGY_FLAGS_FROM_SCHEMA_CONST",
+        "CANONICAL_PACKET_HASH_EXCLUDES_BOTH_ENVELOPE_SHA256_FIELDS",
+        "CANDIDATE_REVIEW_DECISION_ALWAYS_HOLD"
+      ]
+    },
+    "request_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
+    },
+    "request_self_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/nonEmptyString"},
+      "uniqueItems": true
+    },
+    "profileRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_ref"],
+      "properties": {
+        "profile_ref": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "sourcePacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "packet_canonical_id",
+        "schema_version",
+        "d1_intent",
+        "d2_state",
+        "d3_coordinate",
+        "d4_evidence",
+        "d5_execution",
+        "d6_transmission",
+        "d7_risk",
+        "d8_envelope"
+      ],
+      "properties": {
+        "packet_id": {"$ref": "#/$defs/nonEmptyString"},
+        "packet_canonical_id": {
+          "const": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2"
+        },
+        "schema_version": {"const": "2.3"},
+        "d1_intent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["intent", "product_outcome"],
+          "properties": {
+            "intent": {"const": "SUBMIT_FOR_ISOLATED_TOTAL_FIELD_REVIEW"},
+            "product_outcome": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        "d2_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state_profile", "baseline", "proposed"],
+          "properties": {
+            "state_profile": {"const": "LIFECYCLE_TRANSITION"},
+            "baseline": {"const": ["CANDIDATE_FOR_TOTAL_FIELD_REVIEW"]},
+            "proposed": {"const": ["ALLOW_ISOLATED_CANARY_ONLY"]}
+          }
+        },
+        "d3_coordinate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["coordinate_profile", "target_node", "target_workspace", "receiver"],
+          "properties": {
+            "coordinate_profile": {"const": "SOVEREIGN_NODE_DEPLOYMENT"},
+            "target_node": {"const": "taiji01"},
+            "target_workspace": {"const": "/home/taiji_admin/Taiji_Hub"},
+            "receiver": {"const": "TOTAL_FIELD_RECEIVE_CANDIDATE_AND_DECISION_GATEWAY"}
+          }
+        },
+        "d4_evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["evidence_contract", "skill_manifest_hashes"],
+          "properties": {
+            "evidence_contract": {"const": "EXACT_HASH_BOUND_MANIFEST_SUBMISSION"},
+            "skill_manifest_hashes": {"$ref": "#/$defs/skillManifestHashes"}
+          }
+        },
+        "d5_execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["action", "forbidden_effects"],
+          "properties": {
+            "action": {"const": "AUTHORIZE_ISOLATED_CANARY_REVIEW"},
+            "forbidden_effects": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": {"enum": ["ACTIVE", "LIVE_DB_WRITE", "DEPLOY", "ROUTER_WRITE"]},
+              "allOf": [
+                {"contains": {"const": "ACTIVE"}},
+                {"contains": {"const": "LIVE_DB_WRITE"}},
+                {"contains": {"const": "DEPLOY"}},
+                {"contains": {"const": "ROUTER_WRITE"}}
+              ]
+            }
+          }
+        },
+        "d6_transmission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["protocol", "routing", "reconstruction", "verification"],
+          "properties": {
+            "protocol": {"const": "W7TP_GOVERNANCE_PACKET"},
+            "routing": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source", "destination"],
+              "properties": {
+                "source": {"const": "taiji01_local"},
+                "destination": {"const": "total_field_inbox"}
+              }
+            },
+            "reconstruction": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode"],
+              "properties": {
+                "mode": {"const": "EXACT_BYTES"}
+              }
+            },
+            "verification": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["procedure"],
+              "properties": {
+                "procedure": {"const": "validate_skill_manifest.py"}
+              }
+            }
+          }
+        },
+        "d7_risk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_candidates", "duplicate_action", "nonce", "issued_at", "expires_at", "replay_window"],
+          "properties": {
+            "max_candidates": {"const": 5},
+            "duplicate_action": {"const": "HOLD_REPLAY_DETECTED"},
+            "nonce": {"type": "string", "pattern": "^[A-Za-z0-9._:-]{8,192}$"},
+            "issued_at": {"type": "string", "format": "date-time"},
+            "expires_at": {"type": "string", "format": "date-time"},
+            "replay_window": {"type": "string", "pattern": "^[1-9][0-9]{0,8}$"}
+          }
+        },
+        "d8_envelope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["auth_algorithm", "domain_separator", "signature_scope", "key_registry_id", "signature"],
+          "properties": {
+            "auth_algorithm": {"const": "FOUNDER_DIGITAL_SIGNATURE_PROFILE"},
+            "domain_separator": {"const": "W7TP_TOTAL_FIELD_REVIEW_V1"},
+            "signature_scope": {"const": "FULL_PACKET_EXCLUDING_D8_SIGNATURE"},
+            "key_registry_id": {"const": "FOUNDER_TRUST_ROOT_REGISTRY"},
+            "signature": {"const": "PENDING_FOUNDER_LOCAL_SEAL"}
+          }
+        }
+      }
+    },
+    "skillManifestHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "govern-total-field-skills",
+        "build-intent-field",
+        "reconstruct-private-media",
+        "wuchang.community-announcement-xiaoj",
+        "w7tp-generative-transmission"
+      ],
+      "properties": {
+        "govern-total-field-skills": {"$ref": "#/$defs/sha256"},
+        "build-intent-field": {"$ref": "#/$defs/sha256"},
+        "reconstruct-private-media": {"$ref": "#/$defs/sha256"},
+        "wuchang.community-announcement-xiaoj": {"$ref": "#/$defs/sha256"},
+        "w7tp-generative-transmission": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "manifestBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "govern-total-field-skills",
+        "build-intent-field",
+        "reconstruct-private-media",
+        "wuchang.community-announcement-xiaoj",
+        "w7tp-generative-transmission"
+      ],
+      "properties": {
+        "govern-total-field-skills": {
+          "$ref": "#/$defs/governManifestBinding"
+        },
+        "build-intent-field": {
+          "$ref": "#/$defs/intentManifestBinding"
+        },
+        "reconstruct-private-media": {
+          "$ref": "#/$defs/mediaManifestBinding"
+        },
+        "wuchang.community-announcement-xiaoj": {
+          "$ref": "#/$defs/communityManifestBinding"
+        },
+        "w7tp-generative-transmission": {
+          "$ref": "#/$defs/transmissionManifestBinding"
+        }
+      }
+    },
+    "manifestBindingBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_path", "manifest_file_sha256", "package_id"],
+      "properties": {
+        "manifest_path": {"type": "string", "minLength": 1},
+        "manifest_file_sha256": {"$ref": "#/$defs/sha256"},
+        "package_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "governManifestBinding": {
+      "allOf": [
+        {"$ref": "#/$defs/manifestBindingBase"},
+        {"properties": {
+          "manifest_path": {"const": "govern-total-field-skills/total-field-skill-manifest.json"},
+          "package_id": {"const": "vcp:w7tp.total-field.skill-governance"}
+        }}
+      ]
+    },
+    "intentManifestBinding": {
+      "allOf": [
+        {"$ref": "#/$defs/manifestBindingBase"},
+        {"properties": {
+          "manifest_path": {"const": "build-intent-field/total-field-skill-manifest.json"},
+          "package_id": {"const": "vcp:w7tp.intent-field-construction"}
+        }}
+      ]
+    },
+    "mediaManifestBinding": {
+      "allOf": [
+        {"$ref": "#/$defs/manifestBindingBase"},
+        {"properties": {
+          "manifest_path": {"const": "reconstruct-private-media/total-field-skill-manifest.json"},
+          "package_id": {"const": "vcp:w7tp.reconstruct-private-media"}
+        }}
+      ]
+    },
+    "communityManifestBinding": {
+      "allOf": [
+        {"$ref": "#/$defs/manifestBindingBase"},
+        {"properties": {
+          "manifest_path": {"const": "wuchang.community-announcement-xiaoj/total-field-skill-manifest.json"},
+          "package_id": {"const": "vcp:w7tp.wuchang.community-announcement-xiaoj"}
+        }}
+      ]
+    },
+    "transmissionManifestBinding": {
+      "allOf": [
+        {"$ref": "#/$defs/manifestBindingBase"},
+        {"properties": {
+          "manifest_path": {"const": "w7tp-generative-transmission/total-field-skill-manifest.json"},
+          "package_id": {"const": "vcp:w7tp.generative-transmission"}
+        }}
+      ]
+    },
+    "canonicalRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "lookup_profile_ref",
+        "generation_profile_ref",
+        "reconstruction_profile_ref",
+        "verification_profile_ref",
+        "d6",
+        "generation",
+        "transmission",
+        "composition_mode",
+        "reconstruction",
+        "verification",
+        "envelope"
+      ],
+      "properties": {
+        "domain": {"const": "TOTAL_FIELD_DECISION"},
+        "lookup_profile_ref": {"$ref": "#/$defs/nonEmptyString"},
+        "generation_profile_ref": {"$ref": "#/$defs/nonEmptyString"},
+        "reconstruction_profile_ref": {"$ref": "#/$defs/nonEmptyString"},
+        "verification_profile_ref": {"$ref": "#/$defs/nonEmptyString"},
+        "d6": {"$ref": "#/$defs/d6Requirements"},
+        "generation": {"$ref": "#/$defs/generationRequirements"},
+        "transmission": {"$ref": "#/$defs/transmissionRequirements"},
+        "composition_mode": {
+          "enum": ["SEPARATE", "NESTED", "MERGED_AS_SELF_CONTAINED_PACKET"]
+        },
+        "reconstruction": {"$ref": "#/$defs/reconstructionRequirements"},
+        "verification": {"$ref": "#/$defs/verificationRequirements"},
+        "envelope": {"$ref": "#/$defs/envelopeRequirements"}
+      }
+    },
+    "d6Requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routing",
+        "segmentation",
+        "merge_conditions",
+        "references",
+        "generation_rules",
+        "reconstruction_contract",
+        "verification_contract",
+        "residual",
+        "refill_policy",
+        "on_demand_materialization"
+      ],
+      "properties": {
+        "routing": {"const": "route:taiji01-local-to-total-field-inbox:v1"},
+        "segmentation": {"$ref": "#/$defs/nonEmptyString"},
+        "merge_conditions": {"$ref": "#/$defs/stringArray"},
+        "references": {"$ref": "#/$defs/stringArray"},
+        "generation_rules": {"$ref": "#/$defs/stringArray"},
+        "reconstruction_contract": {"$ref": "#/$defs/nonEmptyString"},
+        "verification_contract": {"$ref": "#/$defs/nonEmptyString"},
+        "residual": {"$ref": "#/$defs/stringArray"},
+        "refill_policy": {"$ref": "#/$defs/nonEmptyString"},
+        "on_demand_materialization": {"type": "boolean"}
+      }
+    },
+    "generationRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generation_rules", "reconstruction_contract", "verification_contract", "target_equivalence"],
+      "properties": {
+        "generation_rules": {"$ref": "#/$defs/stringArray"},
+        "reconstruction_contract": {"$ref": "#/$defs/nonEmptyString"},
+        "verification_contract": {"$ref": "#/$defs/nonEmptyString"},
+        "target_equivalence": {"const": "L3_CANDIDATE_NO_AUTHORITY"}
+      }
+    },
+    "transmissionRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["routing", "path", "segment", "order", "references", "merge_conditions"],
+      "properties": {
+        "routing": {"const": "route:taiji01-local-to-total-field-inbox:v1"},
+        "path": {"const": ["taiji01_local", "total_field_inbox"]},
+        "segment": {"type": "integer", "minimum": 0},
+        "order": {"type": "integer", "minimum": 0},
+        "references": {"$ref": "#/$defs/stringArray"},
+        "merge_conditions": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "reconstructionRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zero_prior_content_receiver", "materialization", "economic_mode"],
+      "properties": {
+        "zero_prior_content_receiver": {"const": true},
+        "materialization": {
+          "enum": ["LIMITED_RECONSTRUCTION", "LAYERED_RECONSTRUCTION", "PARTIAL_RECONSTRUCTION", "FULL_RECONSTRUCTION", "ON_DEMAND_MATERIALIZATION"]
+        },
+        "economic_mode": {
+          "enum": ["W7TP_GENERATIVE", "W7TP_HYBRID"]
+        }
+      }
+    },
+    "verificationRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "method_ref", "contract_ref"],
+      "properties": {
+        "level": {"const": "L3_CANDIDATE"},
+        "method_ref": {
+          "const": "tools.total_field.w7tp_review_candidate_v2_3_adapter.inspect_skill_manifest_bindings"
+        },
+        "contract_ref": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "envelopeRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_ref", "version", "verifier_ref", "seal_policy"],
+      "properties": {
+        "authority_ref": {"const": "FOUNDER_TRUST_ROOT_REGISTRY"},
+        "version": {"const": "2.3-to-2.0.0-candidate/1.0"},
+        "verifier_ref": {
+          "const": "tools.total_field.w7tp_review_candidate_v2_3_adapter.verify_canonical_packet_hash"
+        },
+        "seal_policy": {"const": "PENDING_FOUNDER_LOCAL_SEAL_NO_AUTHORITY"}
+      }
+    }
+  }
+}
