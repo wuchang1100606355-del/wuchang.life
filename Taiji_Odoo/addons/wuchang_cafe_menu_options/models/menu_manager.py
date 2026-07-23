@@ -3,14 +3,22 @@
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
+import secrets
+from urllib import error as urllib_error
+from urllib import parse as urllib_parse
+from urllib import request as urllib_request
 
 from odoo import SUPERUSER_ID, api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.modules.registry import Registry
 
 from ..services.menu_change_governance import (
+    MenuChangeGovernanceError,
+    build_cafe_pos_intent_field_request,
     build_odoo_product_thing_code,
+    project_cafe_pos_total_field_response,
     stable_sha256,
 )
 
@@ -18,6 +26,11 @@ from ..services.menu_change_governance import (
 RESPONSIBLE_GROUP = "wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"
 REMOTE_SUPPORT_GROUP = "wuchang_cafe_menu_options.group_wuchang_cafe_remote_support"
 GOVERNANCE_ADMIN_GROUP = "wuchang_member_registration.group_wuchang_member_admin"
+
+
+class _WuchangNoRedirect(urllib_request.HTTPRedirectHandler):
+    def redirect_request(self, request, file_pointer, code, message, headers, new_url):
+        return None
 
 
 def build_human_menu_event_values(
@@ -508,6 +521,155 @@ class ProductTemplateMenuGovernance(models.Model):
         if not self._wuchang_menu_is_responsible():
             raise UserError(_("Only the bound cafe menu responsible person can reactivate an item."))
         return self.write({"active": True, "available_in_pos": True})
+
+    @api.model
+    def _wuchang_total_field_endpoint(self):
+        endpoint = str(
+            self.env["ir.config_parameter"].sudo().get_param(
+                "wuchang_cafe_menu_options.intent_field_endpoint", ""
+            )
+            or ""
+        ).strip()
+        try:
+            parsed = urllib_parse.urlsplit(endpoint)
+            host = parsed.hostname or ""
+            port = parsed.port
+            address = ipaddress.ip_address(host)
+        except (ValueError, TypeError) as exc:
+            raise UserError(_("The private Total Field endpoint is invalid.")) from exc
+        if (
+            parsed.scheme != "http"
+            or port != 9107
+            or parsed.path != "/api/intent-field"
+            or parsed.query
+            or parsed.fragment
+            or parsed.username
+            or parsed.password
+            or address.is_unspecified
+            or address.is_multicast
+            or not (address.is_private or address.is_loopback)
+        ):
+            raise UserError(_("Only the exact private 9107 intent-field endpoint is allowed."))
+        return endpoint
+
+    @api.model
+    def _wuchang_total_field_caller(self):
+        caller_ref = str(
+            self.env["ir.config_parameter"].sudo().get_param(
+                "wuchang_cafe_menu_options.total_field_caller_ref", ""
+            )
+            or ""
+        ).strip()
+        prefix = "odoo-pos-config:"
+        if not caller_ref.startswith(prefix):
+            raise UserError(_("A configured Odoo POS caller reference is required."))
+        pos_config = self.env.ref(
+            caller_ref[len(prefix):], raise_if_not_found=False
+        )
+        if not pos_config or pos_config._name != "pos.config":
+            raise UserError(_("The configured Odoo POS caller reference does not resolve."))
+        return caller_ref, pos_config
+
+    @api.model
+    def _wuchang_post_intent_field(self, endpoint, payload):
+        encoded = json.dumps(
+            payload,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        outbound = urllib_request.Request(
+            endpoint,
+            data=encoded,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib_request.build_opener(_WuchangNoRedirect).open(
+                outbound, timeout=5
+            ) as response:
+                if response.status != 200:
+                    raise UserError(_("Total Field returned a non-success status."))
+                raw = response.read(256 * 1024 + 1)
+        except (urllib_error.HTTPError, urllib_error.URLError, OSError) as exc:
+            raise UserError(_("The private Total Field service is unavailable.")) from exc
+        if len(raw) > 256 * 1024:
+            raise UserError(_("The Total Field response exceeded the safe size limit."))
+        try:
+            result = json.loads(raw.decode("utf-8"))
+        except (UnicodeError, ValueError) as exc:
+            raise UserError(_("The Total Field response is not valid JSON.")) from exc
+        if not isinstance(result, dict):
+            raise UserError(_("The Total Field response must be an object."))
+        return result
+
+    def action_wuchang_submit_cafe_pos_candidate(self):
+        self.ensure_one()
+        if not (self.env.su or self._wuchang_menu_is_responsible()):
+            raise UserError(_("Only the cafe menu responsible person can submit a Total Field candidate."))
+        if not self.available_in_pos:
+            raise UserError(_("An existing POS menu item is required."))
+        caller_ref, pos_config = self._wuchang_total_field_caller()
+        if (
+            self.company_id
+            and pos_config.company_id
+            and self.company_id != pos_config.company_id
+        ):
+            raise UserError(_("The menu item belongs to a different Odoo POS company."))
+        product_thing_code = self.w5c_code or build_odoo_product_thing_code(
+            self.company_id.id or self.env.company.id,
+            self.id,
+        )
+        request_id = f"odoo-cafe:{secrets.token_hex(16)}"
+        observation_domain_ref = (
+            "observation-domain:odoo-cafe:"
+            + stable_sha256({"caller_ref": caller_ref})[:24]
+        )
+        try:
+            payload = build_cafe_pos_intent_field_request(
+                request_id=request_id,
+                caller_ref=caller_ref,
+                observation_domain_ref=observation_domain_ref,
+                product_thing_code=product_thing_code,
+                product_snapshot_sha256=stable_sha256(
+                    self.wuchang_menu_snapshot()
+                ),
+                pos_category_sha256=stable_sha256(
+                    sorted(self.pos_categ_ids.ids)
+                ),
+            )
+            response = self._wuchang_post_intent_field(
+                self._wuchang_total_field_endpoint(), payload
+            )
+            projection = project_cafe_pos_total_field_response(
+                response,
+                request_id=request_id,
+                caller_ref=caller_ref,
+            )
+        except MenuChangeGovernanceError as exc:
+            raise UserError(_("Total Field candidate blocked: %s") % exc) from exc
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Total Field candidate receipt"),
+                "message": _(
+                    "Request %(request_id)s · decision %(decision)s · receipt %(receipt)s"
+                )
+                % {
+                    "request_id": projection["request_id"],
+                    "decision": projection["total_field_decision"],
+                    "receipt": projection["receipt_sha256"],
+                },
+                "type": (
+                    "success"
+                    if projection["total_field_decision"] == "ALLOW"
+                    else "warning"
+                ),
+                "sticky": True,
+                "w7tp_projection": projection,
+            },
+        }
 
     def wuchang_menu_snapshot(self):
         self.ensure_one()

@@ -39,6 +39,8 @@ SCHEMA_FILES = (
     "schemas/field/w7tp_deployment_manifest.schema.json",
     "schemas/field/w7tp_natural_person_identity_prefix.schema.json",
     "schemas/field/w7tp_identity_projection.schema.json",
+    "schemas/field/8d_gte_runtime_candidate_profile_v0_1.schema.json",
+    "schemas/field/8d_governance_tensor_expression_candidate.schema.json",
 )
 
 
@@ -105,6 +107,10 @@ def _release_files() -> list[Path]:
         ROOT / "tools/total_field/cafe_pos_local_llm_acceptance.py",
         ROOT / "tools/total_field/w7tp_bundle_installer.py",
         ROOT / "tools/total_field/w7tp_core_encoding.py",
+        ROOT / "tools/total_field_candidate_gateway.py",
+        ROOT / "tools/eightd_gte_parser_candidate.py",
+        ROOT / "tools/tfct_true8d_runtime_candidate.py",
+        ROOT / "tools/d3_coordinate_transition_candidate.py",
         ROOT / "docs/operations/CAFE_POS_HUMAN_AI_DESIGN_BENCHMARK_20260716.md",
         ROOT / "docs/total_field/W7TP_CORE_FIELD_ENCODING_MANAGEMENT_V1.md",
         ROOT / "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md",
@@ -120,6 +126,8 @@ def _release_files() -> list[Path]:
         [
             ROOT / "runtime/total_field/secondary_cloud/scenario_route_table.json",
             ROOT / "runtime/total_field/secondary_cloud/capability_registry.json",
+            ROOT / "runtime/total_field/candidate/tfct_true8d_runtime_policy_v0_1.json",
+            ROOT / "runtime/total_field/candidate/d3_coordinate_transition_rules_v0_3.json",
         ]
     )
     return files

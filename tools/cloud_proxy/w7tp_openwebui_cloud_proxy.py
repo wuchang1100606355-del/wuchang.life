@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, datetime as dt, hashlib, json, os, re, sqlite3, sys, time, uuid
+import argparse, datetime as dt, hashlib, ipaddress, json, os, re, sqlite3, sys, threading, time, uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Callable, Mapping
@@ -563,12 +563,56 @@ def smoke():
     print("VERIFIER="+str(verifier.relative_to(STATE_ROOT)))
     return 0 if state == "PASS" else 1
 
+def _validated_internal_host(host, primary_host):
+    if not host:
+        return None
+    try:
+        address = ipaddress.ip_address(host)
+    except ValueError as exc:
+        raise ValueError("INTERNAL_LISTEN_HOST_IP_REQUIRED") from exc
+    if (
+        host == primary_host
+        or address.is_unspecified
+        or address.is_multicast
+        or not address.is_private
+    ):
+        raise ValueError("INTERNAL_LISTEN_HOST_PRIVATE_DISTINCT_REQUIRED")
+    return host
+
+
+def _serve_http(primary_host, port, internal_host=None):
+    internal_host = _validated_internal_host(internal_host, primary_host)
+    if internal_host is None:
+        ThreadingHTTPServer((primary_host, port), H).serve_forever()
+        return
+    primary = ThreadingHTTPServer((primary_host, port), H)
+    try:
+        internal = ThreadingHTTPServer((internal_host, port), H)
+    except Exception:
+        primary.server_close()
+        raise
+    internal_thread = threading.Thread(
+        target=internal.serve_forever,
+        name="w7tp-intent-field-internal-listener",
+        daemon=True,
+    )
+    internal_thread.start()
+    try:
+        primary.serve_forever()
+    finally:
+        internal.shutdown()
+        internal.server_close()
+        internal_thread.join(timeout=5)
+        primary.server_close()
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--init-db", action="store_true")
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--host", default="127.0.0.1")
     p.add_argument("--port", type=int, default=9107)
+    p.add_argument("--internal-host")
     a = p.parse_args()
     if a.init_db:
         init_db(); print("STATE=PASS"); print("OPENWEBUI_MODEL_ID="+MODEL); print("DB_PATH="+str(DB.relative_to(STATE_ROOT))); print("TABLE_COUNT="+str(table_count())); return 0
@@ -579,7 +623,9 @@ def main():
         print("DB_STARTUP_MODE=READ_ONLY_SCHEMA_CHECK_NO_WRITE")
         return 2
     print("STATE=SERVING"); print("OPENWEBUI_MODEL_ID="+MODEL); print("DB_STARTUP_MODE=READ_ONLY_SCHEMA_CHECK_NO_WRITE"); print(f"BASE_URL=http://{a.host}:{a.port}/v1")
-    ThreadingHTTPServer((a.host, a.port), H).serve_forever()
+    if a.internal_host:
+        print(f"INTERNAL_BASE_URL=http://{a.internal_host}:{a.port}/api/intent-field")
+    _serve_http(a.host, a.port, a.internal_host)
     return 0
 
 if __name__ == "__main__":

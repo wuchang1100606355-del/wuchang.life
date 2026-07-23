@@ -79,6 +79,7 @@
         <field name="arch" type="xml">
             <form string="單項菜單維護" create="1" delete="0" duplicate="0">
                 <header>
+                    <button name="action_wuchang_submit_cafe_pos_candidate" type="object" string="送交總場候選" class="btn-primary" invisible="not available_in_pos" confirm="只會送出商品與商家不透明引用，建立 CAFE_POS 候選及總場回執；不建立訂單、付款、發票、會員資料或社區幣交易。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
                     <button name="action_wuchang_menu_archive" type="object" string="封存商品" class="btn-secondary" invisible="not active" confirm="封存後商品會停止 POS 販售，但編碼與歷史證據會保留。確定封存嗎？"/>
                     <button name="action_wuchang_menu_reactivate" type="object" string="重新上架" class="btn-primary" invisible="active and available_in_pos" confirm="確定要重新啟用並上架這個商品嗎？"/>
                 </header>

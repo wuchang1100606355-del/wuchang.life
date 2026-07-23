@@ -3,13 +3,20 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any, Mapping
 
+from tools.tfct_true8d_runtime_candidate import RuntimeCandidateError
+from tools.total_field_candidate_gateway import (
+    TotalFieldGatewayError,
+    receive_candidate,
+)
 from tools.total_field.w7tp_field_application_runtime import (
     FieldApplicationError,
     device_llm_execution_policy,
 )
 
+from .canonical_hash import canonical_sha256
 from .contracts import CONTRACTS
 from .drift_monitor import client_drift_rules, evaluate_drift
 from .identity_prefix import assert_llm_candidate_does_not_mutate_identity
@@ -22,6 +29,32 @@ from .packet_builder import process_intent
 
 
 MAX_REQUEST_BYTES = 64 * 1024
+CAFE_POS_TOTAL_FIELD_RECEIVER = "receive_candidate"
+CAFE_POS_TOTAL_FIELD_RECEIVER_REF = (
+    "tools.total_field_candidate_gateway.receive_candidate"
+)
+CAFE_POS_RECEIVER_CONTEXT_KEYS = frozenset(
+    {
+        "request_id",
+        "caller_ref",
+        "observation_domain_ref",
+        "receiver_ref",
+        "merchant_mode",
+        "community_happiness_coin_accepted",
+        "consumer_happiness_coin_issued",
+        "community_merchant_ticket_quota",
+        "fund_1_to_1_to_1_binding",
+    }
+)
+CAFE_POS_REQUEST_ID_PATTERN = re.compile(r"^odoo-cafe:[a-f0-9]{32}$")
+OPAQUE_REF_PATTERN = re.compile(r"^[A-Za-z0-9_.:/-]{3,180}$")
+INDEPENDENT_MERCHANT_MODE = "INDEPENDENT_MERCHANT_OUTSIDE_COMMUNITY"
+INDEPENDENT_MERCHANT_FALSE_FLAGS = (
+    "community_happiness_coin_accepted",
+    "consumer_happiness_coin_issued",
+    "community_merchant_ticket_quota",
+    "fund_1_to_1_to_1_binding",
+)
 
 PRODUCT_HTML = """<!doctype html>
 <html lang="zh-Hant" data-llm-execution="USER_DEVICE_ONLY">
@@ -177,6 +210,188 @@ def node_payload() -> dict[str, Any]:
     }
 
 
+def _validated_cafe_pos_receiver_context(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        raise FieldApplicationError(
+            "CAFE_POS_RECEIVER_CONTEXT_REQUIRED", "$.receiver_context"
+        )
+    context = dict(value)
+    if frozenset(context) != CAFE_POS_RECEIVER_CONTEXT_KEYS:
+        raise FieldApplicationError(
+            "CAFE_POS_RECEIVER_CONTEXT_INVALID", "$.receiver_context"
+        )
+    request_id = context.get("request_id")
+    caller_ref = context.get("caller_ref")
+    observation_domain_ref = context.get("observation_domain_ref")
+    if not CAFE_POS_REQUEST_ID_PATTERN.fullmatch(str(request_id or "")):
+        raise FieldApplicationError(
+            "CAFE_POS_REQUEST_ID_INVALID", "$.receiver_context.request_id"
+        )
+    for field_name, field_value in (
+        ("caller_ref", caller_ref),
+        ("observation_domain_ref", observation_domain_ref),
+    ):
+        if not OPAQUE_REF_PATTERN.fullmatch(str(field_value or "")):
+            raise FieldApplicationError(
+                "CAFE_POS_OPAQUE_REF_INVALID",
+                f"$.receiver_context.{field_name}",
+            )
+    if context.get("receiver_ref") != CAFE_POS_TOTAL_FIELD_RECEIVER_REF:
+        raise FieldApplicationError(
+            "CAFE_POS_RECEIVER_REF_INVALID", "$.receiver_context.receiver_ref"
+        )
+    if context.get("merchant_mode") != INDEPENDENT_MERCHANT_MODE:
+        raise FieldApplicationError(
+            "CAFE_POS_MERCHANT_MODE_INVALID", "$.receiver_context.merchant_mode"
+        )
+    for field_name in INDEPENDENT_MERCHANT_FALSE_FLAGS:
+        if context.get(field_name) is not False:
+            raise FieldApplicationError(
+                "CAFE_POS_COMMUNITY_VALUE_BOUNDARY_REQUIRED",
+                f"$.receiver_context.{field_name}",
+            )
+    return context
+
+
+def _cafe_pos_reference_only_fields(
+    result: Mapping[str, Any],
+) -> dict[str, dict[str, Any]]:
+    return {
+        "D1": {"intent_ref": f"sha256:{result['D2']['intent_sha256']}"},
+        "D2": {"state_ref": f"sha256:{result['D2']['intent_state_id']}"},
+        "D3": {
+            "node_ref": result["D3"]["node_ref"],
+            "routing_ref": result["D3"]["scenario_ref"],
+        },
+        "D4": {"evidence_ref": f"sha256:{result['content_sha256']}"},
+        "D5": {"execution_ref": "execution:cafe-pos-candidate-only"},
+        "D6": {"privacy_boundary_ref": "privacy:reference-only"},
+        "D7": {
+            "capability_ref": result["D4"]["capability_ref"],
+            "routing_ref": result["D3"]["scenario_ref"],
+            "reconstruction_condition": "L3_CANDIDATE_LOCAL_STATE_MACHINE",
+        },
+        "D8": {
+            "adjudication_policy_ref": "priority/tfct/candidate/v0_1"
+        },
+    }
+
+
+def _cafe_pos_gateway_request(
+    result: Mapping[str, Any], context: Mapping[str, Any]
+) -> dict[str, Any]:
+    request_id = str(context["request_id"])
+    resolved_fields = _cafe_pos_reference_only_fields(result)
+    return {
+        "profile_schema_version": "8d-gte-runtime-candidate-profile/0.1",
+        "profile_type": "RUNTIME_REQUEST",
+        "gte": {
+            "schema_version": "8d-gte-candidate/0.1",
+            "lifecycle": "CANDIDATE",
+            "event_ref": request_id,
+            "observation_domain_ref": context["observation_domain_ref"],
+            "dimensions": {
+                f"D{index}_ref": f"field/tfct/D{index}/v0_1"
+                for index in range(1, 9)
+            },
+            "constraint_hypergraph_ref": "constraints/tfct/runtime-hypergraph/v0_1",
+            "convergence_operator_ref": "convergence/tfct/finite-fixed-point/v0_1",
+            "priority_policy_ref": "priority/tfct/candidate/v0_1",
+            "fixed_point_status": "PENDING",
+            "verification": {
+                "final_decision": "PENDING",
+                "commit_applied": False,
+            },
+            "tfs_result": None,
+        },
+        "source_mode": "TOTAL_FIELD_PULL",
+        "event": {
+            "event_id": request_id,
+            "event_ref": request_id,
+            "event_code": "STATE_UPDATE",
+            "logical_time": request_id,
+        },
+        "rule_set_ref": "rules/tfct/identity_v0_1",
+        "resolved_fields": resolved_fields,
+        "context": {
+            "request_ref": request_id,
+            "caller_ref": context["caller_ref"],
+            "merchant_mode": context["merchant_mode"],
+            **{
+                field: context[field]
+                for field in INDEPENDENT_MERCHANT_FALSE_FLAGS
+            },
+        },
+        "adi_requested": False,
+    }
+
+
+def _attach_cafe_pos_total_field_receipt(
+    result: dict[str, Any], context: Mapping[str, Any]
+) -> None:
+    request_id = str(context["request_id"])
+    gateway_request = _cafe_pos_gateway_request(result, context)
+    gateway_result = receive_candidate(
+        gateway_request,
+        previous_state=gateway_request["resolved_fields"],
+        observation_domains={},
+    )
+    d3_transition = gateway_result.get("d3_transition")
+    d3_event_id = (
+        d3_transition.get("event_id")
+        if isinstance(d3_transition, Mapping)
+        else None
+    )
+    same_request_id_chain = (
+        gateway_result.get("event_ref") == request_id
+        and gateway_result.get("gte", {}).get("event_ref") == request_id
+        and d3_event_id == request_id
+        and gateway_request["context"]["request_ref"] == request_id
+    )
+    if not same_request_id_chain:
+        raise FieldApplicationError("TOTAL_FIELD_REQUEST_ID_CHAIN_MISMATCH")
+    receipt = {
+        "schema_version": "w7tp.odoo-cafe-total-field-receipt.v1",
+        "receipt_state": "PASS",
+        "request_id": request_id,
+        "caller_ref": context["caller_ref"],
+        "receiver": CAFE_POS_TOTAL_FIELD_RECEIVER,
+        "receiver_ref": CAFE_POS_TOTAL_FIELD_RECEIVER_REF,
+        "event_ref": gateway_result["event_ref"],
+        "d3_event_id": d3_event_id,
+        "same_request_id_chain": True,
+        "total_field_decision": gateway_result["final_decision"],
+        "decision_reason_codes": gateway_result["decision_reason_codes"],
+        "fixed_point_status": gateway_result["fixed_point_status"],
+        "commit_applied": gateway_result["commit_applied"],
+        "state_ref": gateway_result["state_ref"],
+        "tfid": gateway_result["tfid"],
+        "total_field_hash": gateway_result["total_field_hash"],
+        "gte_lifecycle": gateway_result["gte"]["lifecycle"],
+        "gateway_result_sha256": canonical_sha256(gateway_result),
+        "observation_domain_bound": False,
+        "candidate_runtime_only": True,
+        "real_order_created": False,
+        "payment_transaction": False,
+        "invoice_created": False,
+        "member_plaintext": False,
+        "canonical_write": False,
+        "community_happiness_coin_accepted": False,
+        "consumer_happiness_coin_issued": False,
+        "community_merchant_ticket_quota": False,
+        "fund_1_to_1_to_1_binding": False,
+    }
+    receipt["receipt_sha256"] = canonical_sha256(receipt)
+    execution_metadata = result.setdefault("execution_metadata", {})
+    execution_metadata.update(
+        {
+            "request_id": request_id,
+            "caller_ref": context["caller_ref"],
+            "total_field_receipt": receipt,
+        }
+    )
+
+
 def _projection_http_status(reason_code: str) -> int:
     if reason_code in {
         "IDENTITY_PROJECTION_UNTRUSTED_SOURCE",
@@ -268,6 +483,25 @@ def process_http_request(
                 else None
             ),
         )
+        receiver_context = request.get("receiver_context")
+        if receiver_context is not None:
+            if request.get("profile") != "CAFE_POS":
+                raise FieldApplicationError(
+                    "TOTAL_FIELD_RECEIVER_CAFE_POS_ONLY", "$.receiver_context"
+                )
+            if (
+                result.get("D8", {}).get("decision")
+                != "PENDING_TOTAL_FIELD_REVIEW"
+                or not result.get("content_sha256")
+            ):
+                raise FieldApplicationError(
+                    "CAFE_POS_COMPLETE_CANDIDATE_REQUIRED",
+                    "$.receiver_context",
+                )
+            _attach_cafe_pos_total_field_receipt(
+                result,
+                _validated_cafe_pos_receiver_context(receiver_context),
+            )
     except FieldApplicationError as exc:
         status = (
             _projection_http_status(exc.reason_code)
@@ -279,6 +513,14 @@ def process_http_request(
             "state": "HOLD",
             "reason_code": exc.reason_code,
             "path": exc.path,
+            "candidate_only": True,
+            "redteam_drift_monitor": redteam_monitor,
+        }
+    except (TotalFieldGatewayError, RuntimeCandidateError) as exc:
+        return 422, {
+            "state": "HOLD",
+            "reason_code": exc.reason_code,
+            "path": getattr(exc, "path", "$"),
             "candidate_only": True,
             "redteam_drift_monitor": redteam_monitor,
         }

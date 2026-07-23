@@ -32,6 +32,18 @@ THING_CODE_PATTERN = re.compile(
 UTC_EVENT_TIME_PATTERN = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$"
 )
+CAFE_POS_REQUEST_ID_PATTERN = re.compile(r"^odoo-cafe:[a-f0-9]{32}$")
+CAFE_POS_TOTAL_FIELD_RECEIVER = "receive_candidate"
+CAFE_POS_TOTAL_FIELD_RECEIVER_REF = (
+    "tools.total_field_candidate_gateway.receive_candidate"
+)
+INDEPENDENT_MERCHANT_MODE = "INDEPENDENT_MERCHANT_OUTSIDE_COMMUNITY"
+INDEPENDENT_MERCHANT_FALSE_FLAGS = (
+    "community_happiness_coin_accepted",
+    "consumer_happiness_coin_issued",
+    "community_merchant_ticket_quota",
+    "fund_1_to_1_to_1_binding",
+)
 
 
 class MenuChangeGovernanceError(ValueError):
@@ -110,6 +122,122 @@ def _utc_event_time(value: Any, field_name: str) -> str:
     if not UTC_EVENT_TIME_PATTERN.fullmatch(normalized):
         raise MenuChangeGovernanceError(f"{field_name.upper()}_INVALID")
     return normalized
+
+
+def build_cafe_pos_intent_field_request(
+    *,
+    request_id: str,
+    caller_ref: str,
+    observation_domain_ref: str,
+    product_thing_code: str,
+    product_snapshot_sha256: str,
+    pos_category_sha256: str,
+) -> dict[str, Any]:
+    """Build one private CAFE_POS request containing references only."""
+
+    request_id = str(request_id or "").strip()
+    if not CAFE_POS_REQUEST_ID_PATTERN.fullmatch(request_id):
+        raise MenuChangeGovernanceError("CAFE_POS_REQUEST_ID_INVALID")
+    caller_ref = _opaque_ref(caller_ref, "caller_ref")
+    observation_domain_ref = _opaque_ref(
+        observation_domain_ref, "observation_domain_ref"
+    )
+    if not THING_CODE_PATTERN.fullmatch(str(product_thing_code or "")):
+        raise MenuChangeGovernanceError("PRODUCT_THING_CODE_INVALID")
+    if not re.fullmatch(r"[a-f0-9]{64}", str(product_snapshot_sha256 or "")):
+        raise MenuChangeGovernanceError("PRODUCT_SNAPSHOT_SHA256_INVALID")
+    if not re.fullmatch(r"[a-f0-9]{64}", str(pos_category_sha256 or "")):
+        raise MenuChangeGovernanceError("POS_CATEGORY_SHA256_INVALID")
+    receiver_context = {
+        "request_id": request_id,
+        "caller_ref": caller_ref,
+        "observation_domain_ref": observation_domain_ref,
+        "receiver_ref": CAFE_POS_TOTAL_FIELD_RECEIVER_REF,
+        "merchant_mode": INDEPENDENT_MERCHANT_MODE,
+        **{field: False for field in INDEPENDENT_MERCHANT_FALSE_FLAGS},
+    }
+    return {
+        "profile": "CAFE_POS",
+        "intent": {
+            "requested_result": "ODOO_CAFE_MENU_REFERENCE_ONLY_CANDIDATE",
+            "product_candidate": product_thing_code,
+            "category": f"sha256:{pos_category_sha256}",
+            "price_candidate": f"sha256:{product_snapshot_sha256}",
+        },
+        "receiver_context": receiver_context,
+    }
+
+
+def project_cafe_pos_total_field_response(
+    response: Mapping[str, Any],
+    *,
+    request_id: str,
+    caller_ref: str,
+) -> dict[str, Any]:
+    """Validate and minimize one 9107 receiver result for Odoo display."""
+
+    if not isinstance(response, Mapping):
+        raise MenuChangeGovernanceError("TOTAL_FIELD_RESPONSE_INVALID")
+    execution_metadata = response.get("execution_metadata")
+    if not isinstance(execution_metadata, Mapping):
+        raise MenuChangeGovernanceError("TOTAL_FIELD_EXECUTION_METADATA_MISSING")
+    receipt = execution_metadata.get("total_field_receipt")
+    if not isinstance(receipt, Mapping):
+        raise MenuChangeGovernanceError("TOTAL_FIELD_RECEIPT_MISSING")
+    if (
+        execution_metadata.get("request_id") != request_id
+        or execution_metadata.get("caller_ref") != caller_ref
+        or receipt.get("request_id") != request_id
+        or receipt.get("caller_ref") != caller_ref
+        or receipt.get("event_ref") != request_id
+        or receipt.get("d3_event_id") != request_id
+    ):
+        raise MenuChangeGovernanceError("TOTAL_FIELD_REQUEST_ID_CHAIN_MISMATCH")
+    if (
+        receipt.get("receiver") != CAFE_POS_TOTAL_FIELD_RECEIVER
+        or receipt.get("receiver_ref") != CAFE_POS_TOTAL_FIELD_RECEIVER_REF
+        or receipt.get("receipt_state") != "PASS"
+        or receipt.get("same_request_id_chain") is not True
+    ):
+        raise MenuChangeGovernanceError("TOTAL_FIELD_RECEIVER_RECEIPT_INVALID")
+    if receipt.get("commit_applied") is not False:
+        raise MenuChangeGovernanceError("TOTAL_FIELD_CANDIDATE_COMMIT_BLOCKED")
+    for field_name in (
+        "real_order_created",
+        "payment_transaction",
+        "invoice_created",
+        "member_plaintext",
+        "canonical_write",
+        *INDEPENDENT_MERCHANT_FALSE_FLAGS,
+    ):
+        if receipt.get(field_name) is not False:
+            raise MenuChangeGovernanceError(
+                f"TOTAL_FIELD_{field_name.upper()}_BLOCKED"
+            )
+    receipt_sha256 = receipt.get("receipt_sha256")
+    unsigned_receipt = dict(receipt)
+    unsigned_receipt.pop("receipt_sha256", None)
+    if (
+        not re.fullmatch(r"[a-f0-9]{64}", str(receipt_sha256 or ""))
+        or stable_sha256(unsigned_receipt) != receipt_sha256
+    ):
+        raise MenuChangeGovernanceError("TOTAL_FIELD_RECEIPT_SHA256_INVALID")
+    decision = receipt.get("total_field_decision")
+    if decision not in {"ALLOW", "HOLD", "BLOCK", "QUARANTINE"}:
+        raise MenuChangeGovernanceError("TOTAL_FIELD_DECISION_INVALID")
+    return {
+        "request_id": request_id,
+        "caller_ref": caller_ref,
+        "receiver": CAFE_POS_TOTAL_FIELD_RECEIVER,
+        "total_field_decision": decision,
+        "receipt_sha256": receipt_sha256,
+        "same_request_id_chain": True,
+        "real_order_created": False,
+        "community_happiness_coin_accepted": False,
+        "consumer_happiness_coin_issued": False,
+        "community_merchant_ticket_quota": False,
+        "fund_1_to_1_to_1_binding": False,
+    }
 
 
 def _menu_values(value: Mapping[str, Any] | None, field_name: str) -> dict[str, Any]:

@@ -23,6 +23,9 @@ SPEC.loader.exec_module(GOVERNANCE)
 
 
 class CafeMenuGovernanceTest(unittest.TestCase):
+    REQUEST_ID = "odoo-cafe:" + "a" * 32
+    CALLER_REF = "odoo-pos-config:wuchang_core.pos_config_re_main"
+
     def _candidate(self, **overrides):
         values = {
             "change_type": "update",
@@ -48,6 +51,48 @@ class CafeMenuGovernanceTest(unittest.TestCase):
         }
         values.update(overrides)
         return GOVERNANCE.build_menu_change_candidate(**values)
+
+    def _total_field_response(self, **receipt_overrides):
+        receipt = {
+            "schema_version": "w7tp.odoo-cafe-total-field-receipt.v1",
+            "receipt_state": "PASS",
+            "request_id": self.REQUEST_ID,
+            "caller_ref": self.CALLER_REF,
+            "receiver": "receive_candidate",
+            "receiver_ref": "tools.total_field_candidate_gateway.receive_candidate",
+            "event_ref": self.REQUEST_ID,
+            "d3_event_id": self.REQUEST_ID,
+            "same_request_id_chain": True,
+            "total_field_decision": "HOLD",
+            "decision_reason_codes": ["HOLD_OBSERVATION_DOMAIN_NOT_CONFIGURED"],
+            "fixed_point_status": "REACHED",
+            "commit_applied": False,
+            "state_ref": "tfs-state:candidate:v0.1:" + "b" * 64,
+            "tfid": "tfid:candidate:v0.1:" + "c" * 64,
+            "total_field_hash": "d" * 64,
+            "gte_lifecycle": "CANDIDATE",
+            "gateway_result_sha256": "e" * 64,
+            "observation_domain_bound": False,
+            "candidate_runtime_only": True,
+            "real_order_created": False,
+            "payment_transaction": False,
+            "invoice_created": False,
+            "member_plaintext": False,
+            "canonical_write": False,
+            "community_happiness_coin_accepted": False,
+            "consumer_happiness_coin_issued": False,
+            "community_merchant_ticket_quota": False,
+            "fund_1_to_1_to_1_binding": False,
+        }
+        receipt.update(receipt_overrides)
+        receipt["receipt_sha256"] = GOVERNANCE.stable_sha256(receipt)
+        return {
+            "execution_metadata": {
+                "request_id": self.REQUEST_ID,
+                "caller_ref": self.CALLER_REF,
+                "total_field_receipt": receipt,
+            }
+        }
 
     def test_odoo_product_code_matches_total_field_core(self):
         self.assertEqual(
@@ -83,6 +128,61 @@ class CafeMenuGovernanceTest(unittest.TestCase):
                     GOVERNANCE.MenuChangeGovernanceError, expected
                 ):
                     self._candidate(**overrides)
+
+    def test_cafe_pos_intent_field_request_is_reference_only(self):
+        product_ref = GOVERNANCE.build_odoo_product_thing_code(3, 27)
+        request = GOVERNANCE.build_cafe_pos_intent_field_request(
+            request_id=self.REQUEST_ID,
+            caller_ref=self.CALLER_REF,
+            observation_domain_ref="observation-domain:odoo-cafe:opaque",
+            product_thing_code=product_ref,
+            product_snapshot_sha256="1" * 64,
+            pos_category_sha256="2" * 64,
+        )
+        self.assertEqual(request["profile"], "CAFE_POS")
+        self.assertEqual(request["intent"]["product_candidate"], product_ref)
+        self.assertEqual(
+            request["receiver_context"]["merchant_mode"],
+            "INDEPENDENT_MERCHANT_OUTSIDE_COMMUNITY",
+        )
+        for field_name in GOVERNANCE.INDEPENDENT_MERCHANT_FALSE_FLAGS:
+            self.assertIs(request["receiver_context"][field_name], False)
+        serialized = GOVERNANCE.canonical_json(request)
+        for forbidden in ("member_plaintext", "founder_identity", "raw_audio", "付款"):
+            self.assertNotIn(forbidden, serialized)
+
+    def test_total_field_hold_receipt_projects_to_existing_odoo_action(self):
+        projection = GOVERNANCE.project_cafe_pos_total_field_response(
+            self._total_field_response(),
+            request_id=self.REQUEST_ID,
+            caller_ref=self.CALLER_REF,
+        )
+        self.assertEqual(projection["request_id"], self.REQUEST_ID)
+        self.assertEqual(projection["receiver"], "receive_candidate")
+        self.assertEqual(projection["total_field_decision"], "HOLD")
+        self.assertTrue(projection["same_request_id_chain"])
+        self.assertFalse(projection["real_order_created"])
+
+    def test_total_field_projection_rejects_mismatch_commit_and_community_value(self):
+        mismatch = self._total_field_response()
+        mismatch["execution_metadata"]["request_id"] = "odoo-cafe:" + "f" * 32
+        with self.assertRaisesRegex(
+            GOVERNANCE.MenuChangeGovernanceError,
+            "TOTAL_FIELD_REQUEST_ID_CHAIN_MISMATCH",
+        ):
+            GOVERNANCE.project_cafe_pos_total_field_response(
+                mismatch,
+                request_id=self.REQUEST_ID,
+                caller_ref=self.CALLER_REF,
+            )
+        for field_name in ("commit_applied", "community_happiness_coin_accepted"):
+            with self.subTest(field_name=field_name):
+                with self.assertRaises(GOVERNANCE.MenuChangeGovernanceError):
+                    GOVERNANCE.project_cafe_pos_total_field_response(
+                        self._total_field_response(**{field_name: True}),
+                        request_id=self.REQUEST_ID,
+                        caller_ref=self.CALLER_REF,
+                    )
 
     def test_approval_seal_records_four_w_event_without_second_account(self):
         candidate = self._candidate()
@@ -168,6 +268,14 @@ class CafeMenuGovernanceTest(unittest.TestCase):
             "招牌咖啡",
             (ADDON / "views/menu_option_views.xml").read_text(encoding="utf-8"),
         )
+        total_field_button = views.find(
+            ".//button[@name='action_wuchang_submit_cafe_pos_candidate']"
+        )
+        self.assertIsNotNone(total_field_button)
+        self.assertEqual(
+            total_field_button.attrib.get("groups"),
+            "wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible",
+        )
 
         with (ADDON / "security/ir.model.access.csv").open(
             encoding="utf-8", newline=""
@@ -220,6 +328,9 @@ class CafeMenuGovernanceTest(unittest.TestCase):
             "reapply_blocked": "REJECT_UNAPPROVED_OR_REAPPLIED_CANDIDATE" in request_source,
             "product_code_immutable": "REJECT_THING_CODE_REWRITE" in manager_source,
             "duplicate_gets_new_code": '"w5c_code": False' in manager_source,
+            "read_only_thing_code_fallback": "self.w5c_code or build_odoo_product_thing_code" in manager_source,
+            "superuser_canary_without_acl_write": "self.env.su or self._wuchang_menu_is_responsible()" in manager_source,
+            "private_endpoint_redirect_blocked": "build_opener(_WuchangNoRedirect)" in manager_source,
             "option_delete_rejected": "REJECT_DELETE_FORMAL_CAFE_SPECIFICATION" in options_source,
             "option_code_immutable": "REJECT_OPTION_THING_CODE_REWRITE" in options_source,
             "rollback_rejection_ledger": "postrollback.add" in manager_source,

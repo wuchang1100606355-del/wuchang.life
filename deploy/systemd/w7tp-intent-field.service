@@ -1,5 +1,5 @@
 [Unit]
-Description=W7TP shared 8D intent-field service on existing localhost port 9107
+Description=W7TP shared 8D intent-field service on private port 9107
 After=network.target
 
 [Service]
@@ -7,7 +7,7 @@ Type=simple
 WorkingDirectory=/home/taiji_admin/.local/share/w7tp-intent-field/current
 Environment=PYTHONDONTWRITEBYTECODE=1
 Environment=W7TP_STATE_ROOT=/home/taiji_admin/Taiji_Hub
-ExecStart=/usr/bin/python3 /home/taiji_admin/.local/share/w7tp-intent-field/current/tools/cloud_proxy/w7tp_openwebui_cloud_proxy.py --host 127.0.0.1 --port 9107
+ExecStart=/usr/bin/python3 /home/taiji_admin/.local/share/w7tp-intent-field/current/tools/cloud_proxy/w7tp_openwebui_cloud_proxy.py --host 127.0.0.1 --port 9107 --internal-host 172.28.0.1
 Restart=on-failure
 RestartSec=2
 TimeoutStopSec=10

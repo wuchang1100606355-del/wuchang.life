@@ -90,6 +90,26 @@ COMPLETE_INTENTS = {
 
 
 class W7TPIntentFieldSuiteTest(unittest.TestCase):
+    @staticmethod
+    def _cafe_pos_total_field_request(**context_overrides):
+        context = {
+            "request_id": "odoo-cafe:" + "a" * 32,
+            "caller_ref": "odoo-pos-config:wuchang_core.pos_config_re_main",
+            "observation_domain_ref": "observation-domain:odoo-cafe:opaque",
+            "receiver_ref": "tools.total_field_candidate_gateway.receive_candidate",
+            "merchant_mode": "INDEPENDENT_MERCHANT_OUTSIDE_COMMUNITY",
+            "community_happiness_coin_accepted": False,
+            "consumer_happiness_coin_issued": False,
+            "community_merchant_ticket_quota": False,
+            "fund_1_to_1_to_1_binding": False,
+        }
+        context.update(context_overrides)
+        return {
+            "profile": "CAFE_POS",
+            "intent": COMPLETE_INTENTS["CAFE_POS"],
+            "receiver_context": context,
+        }
+
     def test_a01_a02_five_profiles_share_runtime_and_correct_packet_types(self) -> None:
         route_table = json.loads(SCENARIO_ROUTE_TABLE_PATH.read_text(encoding="utf-8"))
         self.assertEqual(set(route_table["routes"]), set(COMPLETE_INTENTS))
@@ -726,6 +746,92 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
             release_paths,
         )
 
+    def test_cafe_pos_receiver_chain_uses_same_request_id_and_stays_candidate_only(self) -> None:
+        request = self._cafe_pos_total_field_request()
+        request_id = request["receiver_context"]["request_id"]
+        status, result = cloud_proxy.process_http_request(
+            json.dumps(request).encode()
+        )
+        self.assertEqual(status, 200, result)
+        self.assertEqual(result["D8"]["decision"], "PENDING_TOTAL_FIELD_REVIEW")
+        metadata = result["execution_metadata"]
+        receipt = metadata["total_field_receipt"]
+        self.assertEqual(metadata["request_id"], request_id)
+        self.assertEqual(receipt["request_id"], request_id)
+        self.assertEqual(receipt["event_ref"], request_id)
+        self.assertEqual(receipt["d3_event_id"], request_id)
+        self.assertTrue(receipt["same_request_id_chain"])
+        self.assertEqual(receipt["receipt_state"], "PASS")
+        self.assertEqual(receipt["receiver"], "receive_candidate")
+        self.assertEqual(
+            receipt["receiver_ref"],
+            "tools.total_field_candidate_gateway.receive_candidate",
+        )
+        self.assertEqual(receipt["total_field_decision"], "HOLD")
+        self.assertIn(
+            "HOLD_OBSERVATION_DOMAIN_NOT_CONFIGURED",
+            receipt["decision_reason_codes"],
+        )
+        self.assertEqual(receipt["gte_lifecycle"], "CANDIDATE")
+        for field_name in (
+            "commit_applied",
+            "real_order_created",
+            "payment_transaction",
+            "invoice_created",
+            "member_plaintext",
+            "canonical_write",
+            "community_happiness_coin_accepted",
+            "consumer_happiness_coin_issued",
+            "community_merchant_ticket_quota",
+            "fund_1_to_1_to_1_binding",
+        ):
+            self.assertIs(receipt[field_name], False, field_name)
+        unsigned = dict(receipt)
+        receipt_sha256 = unsigned.pop("receipt_sha256")
+        self.assertEqual(receipt_sha256, canonical_sha256(unsigned))
+
+    def test_cafe_pos_receiver_rejects_profile_and_value_boundary_escalation(self) -> None:
+        generic = self._cafe_pos_total_field_request()
+        generic["profile"] = "GENERIC"
+        generic["intent"] = COMPLETE_INTENTS["GENERIC"]
+        status, result = cloud_proxy.process_http_request(json.dumps(generic).encode())
+        self.assertEqual(status, 422)
+        self.assertEqual(result["reason_code"], "TOTAL_FIELD_RECEIVER_CAFE_POS_ONLY")
+
+        escalated = self._cafe_pos_total_field_request(
+            community_happiness_coin_accepted=True
+        )
+        status, result = cloud_proxy.process_http_request(
+            json.dumps(escalated).encode()
+        )
+        self.assertEqual(status, 422)
+        self.assertEqual(
+            result["reason_code"],
+            "CAFE_POS_COMMUNITY_VALUE_BOUNDARY_REQUIRED",
+        )
+
+        malformed = self._cafe_pos_total_field_request(request_id="odoo-cafe:bad")
+        status, result = cloud_proxy.process_http_request(
+            json.dumps(malformed).encode()
+        )
+        self.assertEqual(status, 422)
+        self.assertEqual(result["reason_code"], "CAFE_POS_REQUEST_ID_INVALID")
+
+    def test_release_includes_receive_candidate_runtime_closure(self) -> None:
+        release_paths = {path.relative_to(ROOT).as_posix() for path in _release_files()}
+        self.assertTrue(
+            {
+                "tools/total_field_candidate_gateway.py",
+                "tools/eightd_gte_parser_candidate.py",
+                "tools/tfct_true8d_runtime_candidate.py",
+                "tools/d3_coordinate_transition_candidate.py",
+                "schemas/field/8d_gte_runtime_candidate_profile_v0_1.schema.json",
+                "schemas/field/8d_governance_tensor_expression_candidate.schema.json",
+                "runtime/total_field/candidate/tfct_true8d_runtime_policy_v0_1.json",
+                "runtime/total_field/candidate/d3_coordinate_transition_rules_v0_3.json",
+            }.issubset(release_paths)
+        )
+
     def test_shared_http_api_health_capabilities_and_candidate(self) -> None:
         server = ThreadingHTTPServer(("127.0.0.1", 0), H)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -838,6 +944,19 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
             "ExecStart=/usr/bin/python3 /home/taiji_admin/Taiji_Hub/tools/",
             unit,
         )
+        self.assertIn("--host 127.0.0.1", unit)
+        self.assertIn("--internal-host 172.28.0.1", unit)
+        self.assertNotIn("0.0.0.0", unit)
+
+    def test_internal_listener_accepts_only_a_distinct_private_ip(self) -> None:
+        self.assertEqual(
+            cloud_proxy._validated_internal_host("172.28.0.1", "127.0.0.1"),
+            "172.28.0.1",
+        )
+        for host in ("0.0.0.0", "224.0.0.1", "127.0.0.1"):
+            with self.subTest(host=host):
+                with self.assertRaises(ValueError):
+                    cloud_proxy._validated_internal_host(host, "127.0.0.1")
 
 
 if __name__ == "__main__":
