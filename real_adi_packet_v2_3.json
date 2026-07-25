@@ -1,0 +1,243 @@
+{
+  "packet_id": "W7TP_ADI_REQ_REAL_001",
+  "packet_canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2",
+  "adi_profile_id": "ADI_INDEX_STATE_FIELD_CANONICAL_V2_3",
+  "schema_version": "2.3",
+  "d1_intent": {
+    "intent": "ADI_SEARCH"
+  },
+  "d2_state": {
+    "state_profile": "GENERIC_8D_TENSOR",
+    "state_integer_domain": "UINT_DECIMAL_STRING",
+    "baseline": [
+      "12",
+      "5",
+      "127",
+      "0",
+      "42",
+      "8",
+      "19",
+      "3"
+    ],
+    "proposed": [
+      "12",
+      "5",
+      "127",
+      "0",
+      "42",
+      "8",
+      "19",
+      "3"
+    ],
+    "adi_tolerance_threshold": "2",
+    "distance_metric": "CHEBYSHEV"
+  },
+  "d3_coordinate": {
+    "coordinate_profile": "Z_ORDER_SPACETIME",
+    "adi_algorithm": "ADI_MORTON_V1",
+    "bits_per_dimension": "8",
+    "state_projection_table_id": "TBL_PROJ_8D_V1",
+    "state_projection_table_version": "1.0",
+    "axis_binding": {
+      "baseline": [
+        {
+          "state_field": "D1",
+          "axis": "axis_1",
+          "axis_value": "12",
+          "projection_subject": "D1_INTENT_PROFILE_STATE",
+          "projection_entry_key": "12_INTENT_REF",
+          "projection_entry_digest": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        {
+          "state_field": "D2",
+          "axis": "axis_2",
+          "axis_value": "5",
+          "projection_subject": "D2_STATE_PROFILE_STATE",
+          "projection_entry_key": "5_STATE_REF",
+          "projection_entry_digest": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        {
+          "state_field": "D3",
+          "axis": "axis_3",
+          "axis_value": "127",
+          "projection_subject": "D3_COORDINATE_PROFILE_STATE",
+          "projection_entry_key": "127_COORD_REF",
+          "projection_entry_digest": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        {
+          "state_field": "D4",
+          "axis": "axis_4",
+          "axis_value": "0",
+          "projection_subject": "D4_EVIDENCE_PROFILE_STATE_PRE_DIGEST",
+          "projection_entry_key": "0_EVID_REF",
+          "projection_entry_digest": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        {
+          "state_field": "D5",
+          "axis": "axis_5",
+          "axis_value": "42",
+          "projection_subject": "D5_EXECUTION_PROFILE_STATE",
+          "projection_entry_key": "42_EXEC_REF",
+          "projection_entry_digest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        {
+          "state_field": "D6",
+          "axis": "axis_6",
+          "axis_value": "8",
+          "projection_subject": "D6_TRANSMISSION_PROFILE_STATE",
+          "projection_entry_key": "8_TRANS_REF",
+          "projection_entry_digest": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        {
+          "state_field": "D7",
+          "axis": "axis_7",
+          "axis_value": "19",
+          "projection_subject": "D7_RISK_PROFILE_STATE",
+          "projection_entry_key": "19_RISK_REF",
+          "projection_entry_digest": "7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        {
+          "state_field": "D8",
+          "axis": "axis_8",
+          "axis_value": "3",
+          "projection_subject": "D8_AUTH_PROFILE_STATE_PRE_SIGNATURE",
+          "projection_entry_key": "3_AUTH_REF",
+          "projection_entry_digest": "8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      ],
+      "proposed": [
+        {
+          "state_field": "D1",
+          "axis": "axis_1",
+          "axis_value": "12",
+          "projection_subject": "D1_INTENT_PROFILE_STATE",
+          "projection_entry_key": "12_INTENT_REF",
+          "projection_entry_digest": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        {
+          "state_field": "D2",
+          "axis": "axis_2",
+          "axis_value": "5",
+          "projection_subject": "D2_STATE_PROFILE_STATE",
+          "projection_entry_key": "5_STATE_REF",
+          "projection_entry_digest": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        {
+          "state_field": "D3",
+          "axis": "axis_3",
+          "axis_value": "127",
+          "projection_subject": "D3_COORDINATE_PROFILE_STATE",
+          "projection_entry_key": "127_COORD_REF",
+          "projection_entry_digest": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        {
+          "state_field": "D4",
+          "axis": "axis_4",
+          "axis_value": "0",
+          "projection_subject": "D4_EVIDENCE_PROFILE_STATE_PRE_DIGEST",
+          "projection_entry_key": "0_EVID_REF",
+          "projection_entry_digest": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        {
+          "state_field": "D5",
+          "axis": "axis_5",
+          "axis_value": "42",
+          "projection_subject": "D5_EXECUTION_PROFILE_STATE",
+          "projection_entry_key": "42_EXEC_REF",
+          "projection_entry_digest": "5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        {
+          "state_field": "D6",
+          "axis": "axis_6",
+          "axis_value": "8",
+          "projection_subject": "D6_TRANSMISSION_PROFILE_STATE",
+          "projection_entry_key": "8_TRANS_REF",
+          "projection_entry_digest": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        {
+          "state_field": "D7",
+          "axis": "axis_7",
+          "axis_value": "19",
+          "projection_subject": "D7_RISK_PROFILE_STATE",
+          "projection_entry_key": "19_RISK_REF",
+          "projection_entry_digest": "7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        {
+          "state_field": "D8",
+          "axis": "axis_8",
+          "axis_value": "3",
+          "projection_subject": "D8_AUTH_PROFILE_STATE_PRE_SIGNATURE",
+          "projection_entry_key": "3_AUTH_REF",
+          "projection_entry_digest": "8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      ]
+    },
+    "bit_interleaving_formula": "Z = \\sum_{b=0}^{B-1}\\sum_{i=0}^{7} ((x_i \\gg b) & 1) 2^{8b+i}",
+    "transport_index_encoding": "UINT_DECIMAL_STRING",
+    "database_index_encoding": "UINT64_BIG_ENDIAN",
+    "decimal_decode_target": "UINT64_OR_BIGINT_ONLY",
+    "adi_z_order_index": "1148183086879942",
+    "spiral_search_intervals": [
+      {
+        "z_min": "1148183086879900",
+        "z_max": "1148183086880000"
+      }
+    ]
+  },
+  "d4_evidence": {
+    "evidence_contract": "LOOKUP_TABLE_ENTRY_EXACT_MATCH",
+    "interval_coverage_validation": "LOOKUP_ENTRY_EXACT_MATCH",
+    "coverage_scope": "INDEX_DATASET_SNAPSHOT",
+    "dataset_snapshot_id": "DB_SNAP_20260721_1200",
+    "index_epoch": "1784635200",
+    "snapshot_access_profile": "IMMUTABLE_INDEX_SNAPSHOT_V1",
+    "snapshot_unavailable_action": "HOLD_SNAPSHOT_UNAVAILABLE",
+    "index_root_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "coverage_guarantee": "NO_FALSE_NEGATIVES_WITHIN_BOUND_SNAPSHOT",
+    "lookup_proof": {
+      "construction_table_id": "TBL_ADI_MORTON_V1",
+      "construction_table_version": "1.0",
+      "entry_key": "1148183086879942_T2_CHEBYSHEV_DB_SNAP_20260721_1200",
+      "entry_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "expected_interval_set_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "bound_index_root_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "expected_state_id": "STATE_REF_098"
+    }
+  },
+  "d5_execution": {
+    "action": "VERIFY_AND_SEARCH"
+  },
+  "d6_transmission": {
+    "protocol": "W7TP_ADI_SEARCH"
+  },
+  "d7_risk": {
+    "max_intervals": "10",
+    "max_total_span": "1000",
+    "max_candidates": "50",
+    "budget_exceeded": "HOLD_QUERY_BUDGET_EXCEEDED",
+    "partial_result_on_overflow": "FORBIDDEN",
+    "nonce": "nonce_real_8f7d",
+    "nonce_scope": "W7TP_ADI_TOTAL_FIELD",
+    "nonce_store_profile": "STRICT_SET_V1",
+    "nonce_operation": "ATOMIC_CHECK_AND_SET",
+    "duplicate_action": "HOLD_REPLAY_DETECTED",
+    "store_unavailable_action": "HOLD_REPLAY_STORE_UNAVAILABLE",
+    "nonce_write_point": "AFTER_SIGNATURE_BEFORE_LOOKUP",
+    "issued_at": "2026-07-21T12:00:00Z",
+    "expires_at": "2026-07-21T12:10:00Z",
+    "replay_window": "600"
+  },
+  "d8_envelope": {
+    "auth_algorithm": "ED25519",
+    "signature_encoding": "RAW_64_BYTES_LOWERCASE_HEX",
+    "signature_input_format": "JCS_ARRAY_[DOMAIN_SEPARATOR,PACKET_CANONICAL_ID,PACKET_WITHOUT_D8_SIGNATURE]",
+    "signature_scope": "FULL_PACKET_EXCLUDING_D8_SIGNATURE",
+    "key_registry_id": "FOUNDER_TRUST_ROOT_REGISTRY",
+    "key_registry_version": "1.0",
+    "public_key_fingerprint_algorithm": "SHA256",
+    "public_key_fingerprint": "1111111111111111111111111111111111111111111111111111111111111111",
+    "revoked_key_action": "HOLD_SIGNING_KEY_REVOKED",
+    "domain_separator": "W7TP_TOTAL_FIELD_V2",
+    "signature": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

@@ -1,9 +1,14 @@
 # W7TP 總場系統白皮書
 
 STATE=W7TP_SYSTEM_WHITEPAPER
-VERSION=2026-07-07
+VERSION=2026-07-22
 LANG=zh-TW
-SCOPE=LOCAL_ENGINEERING_WHITEPAPER
+SCOPE=LOCAL_ENGINEERING_WHITEPAPER_WITH_LIVE_HEALTH_BASELINE
+EVIDENCE_SNAPSHOT=2026-07-22T22:05:40Z
+CANONICAL_REF=docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md
+CANONICAL_SHA256=a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0
+
+> 2026-07-22 更新聲明：W7TP 的技術定義以 Canonical V2 為唯一依據。D1–D8 固定為 Intent、State、Coordinate、Evidence、Execution、Generative Transmission、Risk、Envelope。ADI 是索引與重構實作能力，不是第九維度，也不是獨立裁決權威。本文件第 21 節以後是本次 live evidence 更新；涉及目前運行狀態時，以該部分為準。
 
 ## 摘要
 
@@ -411,3 +416,272 @@ W7TP 的最終形態不是「更聰明的聊天系統」，而是「更可治理
 如果把它看成團隊協作規格，它要求每個模組都尊重邊界：AI 做候選，本地 verifier 做裁決，human response 做表達，LINE / Web / Odoo 做通道。
 
 這就是 W7TP 的白皮書級定義。
+
+## 21. 2026-07-22 證據狀態模型
+
+本次盤點使用五層狀態，避免把「有程式碼」直接寫成「已正式上線」。
+
+| 狀態 | 定義 |
+| --- | --- |
+| `SOURCE_PRESENT` | repo 內存在可讀程式、設定或 Schema。 |
+| `PROCESS_ACTIVE` | systemd 或容器程序正在運行。 |
+| `ENDPOINT_PASS` | 本次 GET-only 探測取得預期 HTTP 200／健康內容。 |
+| `AUTHORITY_VERIFIED` | 有可解析的 Total Field decision／receipt 與治理邊界。 |
+| `CANONICAL_ACTIVE` | 既有 canonical owner、active pointer 與 release contract 全部完成切換。 |
+
+本次總結：
+
+```text
+SYSTEM_HEALTH=DEGRADED
+CORE_RUNTIME=PASS
+DATA_PLANE=PASS_OBSERVED
+PUBLIC_PRODUCT_SURFACE=PARTIAL
+PRODUCT_ROOT_AUTHORITY=ALLOW_COMMITTED
+PRODUCT_ROOT_CANONICAL_ACTIVE=HOLD_OWNER_NOT_RESOLVED
+```
+
+`DEGRADED` 的原因不是核心 9002／9107／9110／Odoo 中斷，而是公開產品路由部分為 404、Google OAuth redirect URI 不一致、舊健康清單已落後於現行端口，以及產品根尚未綁定既有 canonical owner。
+
+## 22. 系統健康檢查
+
+### 22.1 主機資源
+
+| 指標 | 觀測值 | 判定 |
+| --- | --- | --- |
+| Uptime | 61 天 9 小時 | 穩定運行中 |
+| Load average | 0.60 / 0.51 / 0.42 | 正常 |
+| 記憶體 | 23 GiB，18 GiB available | 正常 |
+| Swap | 4.0 GiB，使用 1.1 GiB | 可用，應觀察長期趨勢 |
+| 根檔案系統 | 226 GiB，使用 117 GiB，55% | 正常 |
+| User failed units | 0 | PASS |
+| System failed units | 2 | `nvidia-persistenced`、`openwebui` 需釐清 |
+
+### 22.2 核心服務與端點
+
+| 服務 | 運行方式 | 綁定位址／端點 | 本次結果 | 說明 |
+| --- | --- | --- | --- | --- |
+| Taiji Edge Gateway | 現有程序 | `0.0.0.0:9002/healthz` | 200 PASS | 回報 `taiji_edge_gateway`、`w7tp_runtime`。 |
+| Edge model surface | 現有程序 | `0.0.0.0:9002/v1/models` | 200 PASS | 回報一個 Wuchang-Taiji model entry；只證明介面可讀。 |
+| Shared Intent Field | `w7tp-intent-field.service` | `127.0.0.1:9107/readyz` | 200 PASS | 權威 route table 與 capability registry 可讀。 |
+| Intent capabilities | 同上 | `127.0.0.1:9107/capabilities` | 200 PASS | 五個 profile 可解析。 |
+| Native ADI | `w7tp-native-adi.service` | `127.0.0.1:9110/health` | 200 PASS | 回報 Total Field master、production service 與 W7TP protocol。 |
+| Small Agent | `w7tp-small-agent.service` | systemd active | PROCESS_ACTIVE | 本輪未呼叫會改變狀態的功能。 |
+| Odoo 18 | Docker | `127.0.0.1:8069/web/login` | 200 PASS | Odoo Web runtime 可達。 |
+| Odoo proxy | `odoo8070proxy.service` | `127.0.0.1:8070/web/login` | 200 PASS | 代理鏈可達。 |
+| Open WebUI-facing health | 現有 8080 listener | `:8080/health` | 200 PASS | 與 system-scope `openwebui.service` failed 並存，實際 owner 待確認。 |
+| D8 DB | Docker `taiji_d8_db` | `:15432` | container healthy | 資料庫容器健康；本輪未查會員或業務資料。 |
+| Formal D1–D8 + core | 9 個 Docker containers | internal | 全部 healthy | 證明容器 healthcheck 通過，不等同全部產品場景驗收。 |
+| Odoo PostgreSQL | Docker `wuchang_os_pg` | container 5432 | healthy | 本輪未執行 DB write。 |
+
+`9107/health` 回傳 404 是路由名稱差異，不是服務故障；該服務的既有健康契約是 `/readyz`。同理，9002 的有效健康路徑是 `/healthz`，不是 `/health`。
+
+### 22.3 公開網域
+
+`https://wuchang.life/` 與 `https://wuchang.life/wuchang/intent-field` 本輪均回應 200，TLS 驗證通過。下列產品路徑回應 404：
+
+- `/web/login`
+- `/wuchang/p1`
+- `/wuchang/property`
+- `/wuchang/merchant`
+- `/wuchang/association`
+- `/wuchang/home`
+- `/taiji/member/login`
+- `/pos/ui`
+
+`/google/member/login` 能進入 Google OAuth，但最終顯示 `redirect_uri_mismatch`。因此登入入口存在，OAuth 設定尚未健康。
+
+### 22.4 舊探針與現況差異
+
+既有 `tools/service_health_readonly.py` 取得 `1/8 OK`，但其中 8081、8091、8098、8099、11434 目前沒有 listener；9002 與 8080 又使用了錯誤路徑。這份結果應解讀為「健康清單需要更新」，不能直接解讀為現行核心只有 1/8 正常。
+
+原始 GET-only 證據：
+
+- `runtime/reports/service_health_readonly_20260722_220540.json`
+- `runtime/reports/service_health_readonly_20260722_220540.md`
+
+## 23. 現行邏輯架構
+
+```mermaid
+flowchart LR
+    U[居民／會員／商家／管理者] --> P[wuchang.life 公開入口]
+    P --> I[9107 Shared Intent Field]
+    U --> O[Odoo 18 / 8069]
+    I --> R[Scenario Route Table]
+    R --> C[Capability Registry]
+    C --> B[8D Candidate Packet Builder]
+    B --> G[Total Field Candidate Gateway]
+    G --> D{ALLOW / HOLD / BLOCK}
+    D --> H[Human Response Renderer]
+    A[9110 Native ADI] --> X[Absolute-time index / packet / reconstruct]
+    X --> G
+    E[9002 Edge Gateway] --> I
+    F[D1-D8 Formal Containers] --> G
+    V[Canonical V2] -. governs .-> B
+    V -. governs .-> G
+    V -. governs .-> A
+```
+
+關鍵邊界：
+
+1. 生成式傳輸是 protocol-native 8D intent-field packet，不是檔案搬運、雲端同步或備份。
+2. L1 是封包定義完整結果時的 hash／bit-level match；L2 是任務、狀態、控制與效果等價；L3 僅是候選，必須經本地狀態機判定。
+3. 模型、Web、LINE、Odoo 與外部雲只可作候選或通道，不能自行產生 Total Field authority。
+4. D7 只承載真實硬風險；D8 綁定 identity、authority、TTL、nonce、hash、verifier 與 seal policy。
+
+## 24. 核心模組詳解
+
+### 24.1 協定、封包與權威層
+
+| 模組 | 主要位置 | 職責 | 現況 |
+| --- | --- | --- | --- |
+| Canonical V2 | `docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md` | 固定 unified 8D packet、packet-carried protocol／reconstruction／verification contracts、Domain Profile、風險與經濟門檻。 | `CANONICAL_LOCKED`；SHA-256 已核對。 |
+| Field Application Runtime | `tools/total_field/w7tp_field_application_runtime.py` | 讀取唯一 route table 與 capability registry，建立 deterministic candidate packet；拒絕敏感鍵與權威提升。 | SOURCE_PRESENT；9107 installed release active。 |
+| Intent Field Suite | `tools/total_field/w7tp_intent_field_suite/` | packet builder、guided completion、identity projection、edge queue、GPU scheduling、drift monitoring、POS interop 與 API façade。 | SOURCE_PRESENT；部分能力由 9107 暴露。 |
+| Candidate Gateway | `tools/total_field_candidate_gateway.py` | 驗證 8D-GTE profile、解析 observation domain、執行 constraint／convergence，輸出 ALLOW／HOLD／BLOCK。 | SOURCE_PRESENT；V3 receipt 已有 ALLOW／COMMITTED 證據。 |
+| Final State Gate | `tools/total_field/final_state_gate.py` | 最終狀態門檻與 hard-risk 收斂。 | SOURCE_PRESENT；本輪未重跑功能測試。 |
+| D8 Reviewer | `tools/total_field/w7tp_d8_reviewer_entrypoint.py` | D8 風險、detour 與 reviewer 決策入口。 | SOURCE_PRESENT；工作樹目前有既存未提交修改，本輪未碰觸。 |
+| Human Response Renderer | `tools/total_field/human_response_renderer.py` | 把 gate 結果轉為不洩漏內部 refs／rule trace 的使用者回覆。 | SOURCE_PRESENT。 |
+
+### 24.2 運行服務層
+
+#### Shared Intent Field（9107）
+
+既有 user service 從 content-addressed release 啟動 `w7tp_openwebui_cloud_proxy.py`。它提供 `/readyz`、`/capabilities` 與候選處理入口；route table 固定 `ASSOCIATION`、`PROPERTY`、`CAFE_POS`、`HOUSEHOLD`、`GENERIC` 五個 profile，capability registry 本輪讀得 9 筆能力。服務以 loopback 綁定、systemd hardening 啟動，repo 僅允許寫入 `runtime/cloud_proxy`。
+
+#### Native ADI（9110）
+
+`SpacetimeADI` 以 absolute integer time slot 建立 append-only bucket，碰撞使用 Founder-native center-out spiral ordinal。核心提供 deterministic canonical JSON／SHA-256、insert、range search、packet、reconstruct、snapshot 與事件鏈。HTTP 面提供：
+
+- `GET /health`
+- `GET /metrics`
+- `POST /v1/adi/insert`
+- `POST /v1/adi/search`
+- `POST /v1/adi/packet`
+- `POST /v1/adi/reconstruct`
+
+它拒絕非 JSON type、非有限數、raw credential key、過大 payload、append-only 衝突與完整性不一致。服務只綁 `127.0.0.1:9110`，state directory 是唯一可寫區。
+
+#### Edge Gateway（9002）
+
+Edge Gateway 提供 OpenAI-compatible model discovery 與 W7TP runtime health。它是入口與路由面，不是 Canonical 或 Total Field authority。`/healthz` 與 `/v1/models` 本輪均正常。
+
+#### Formal D1–D8 containers
+
+`w7tp_true8d_formal_d1` 至 `d8` 與 `w7tp_true8d_formal_total_field_core` 共九個容器全部 healthy。它們用於維度分工與 formal contract 驗證；container health 不代表產品根已完成 canonical promotion。
+
+#### Small Agent
+
+`w7tp-small-agent.service` 由既有 release symlink 啟動，systemd 顯示 active。它是受治理的小型執行代理，不能繞過 Total Field gate。本輪未驗證其所有行為路徑。
+
+### 24.3 二級輕雲、身分與節點適配
+
+| 模組 | 位置 | 職責與限制 |
+| --- | --- | --- |
+| Secondary Cloud Runtime | `runtime_adapters/w7tp_secondary_cloud_runtime.py` | 拉取 capability packet、本地重構與比較；credential 未配置時 HOLD，禁止自動雲端呼叫。 |
+| taiji01 Metric Identity Gateway | `runtime_adapters/taiji01_metric_identity_gateway.py` | IP／allowlist／hash 授權、模型請求阻擋、audit 與 secondary-cloud runtime 接入。 |
+| Identity Projection | `tools/total_field/w7tp_intent_field_suite/identity_projection.py` | 只投影 identity／role／consent 等 refs，不把會員明文當權限。 |
+| Node Inventory | `tools/total_field/w7tp_intent_field_suite/node_inventory.py` | 描述節點與能力狀態；節點可達不等同取得執行權。 |
+| Edge Queue | `tools/total_field/w7tp_intent_field_suite/edge_queue.py` | 本地候選排隊與狀態隔離。 |
+| GPU Scheduler | `tools/total_field/w7tp_intent_field_suite/gpu_scheduler.py` | 候選算力排程；GPU 服務失敗時不可把模型結果提升為權威。 |
+| Pull Packet Architecture | `docs/total_field/W7TP_PULL_PACKET_NATIVE_SECONDARY_CLOUD_ARCHITECTURE.md` | 固定「資料不離場、能力封包進場」及 `PULL_PACKET_ONLY` 邊界。 |
+
+### 24.4 Odoo 18 業務模組
+
+Odoo 與 PostgreSQL 容器目前運行，但本輪沒有讀取 DB 內已安裝模組清單。因此下表的 `SOURCE_PRESENT` 只代表 addon 原始碼與 manifest 存在，不代表該模組已在 production database 安裝或升級。
+
+| Addon | 功能 | 主要模型／介面 | 狀態 |
+| --- | --- | --- | --- |
+| `pm3_base` | PM3 治理基底與封包歷史。 | `pm3.packet.history` | SOURCE_PRESENT |
+| `pm3_runtime_sync` | runtime sync、memory index、去敏儀表資料與登入橋接。 | `pm3.memory.index`、LINE／Google auth routes | SOURCE_PRESENT |
+| `taiji_member_login` | Odoo 登入頁的 Taiji／Wuchang 會員狀態入口。 | `/taiji/member/status`、`/taiji/member/login` | SOURCE_PRESENT；公開 route 404 |
+| `wuchang_member_registration` | privacy-first 入會、同意 ledger、外部身份 ref、團體入會、復原與券計畫。 | 11 個業務模型；`/wuchang/member/register/*` | SOURCE_PRESENT |
+| `wuchang_google_member_login` | Google OAuth 會員入口。 | login／callback／welcome routes | SOURCE_PRESENT；live OAuth redirect mismatch |
+| `wuchang_line_login` | LINE OAuth 身分連結。 | `wuchang.line.user`、login／callback | SOURCE_PRESENT；live 未驗證 |
+| `wuchang_cafe_ai_gateway` | 咖啡館 AI／POS 行為 eventbook、結帳 preflight、KPI、品質與候選通知。 | 14 個治理／候選模型；小J ordering／payment／receipt APIs | SOURCE_PRESENT；live 安裝未驗證 |
+| `wuchang_cafe_menu_options` | 菜單規格化、選項群組、價差、問題與虛擬變體，不依賴 product variant 爆炸。 | 6 個 menu option models | SOURCE_PRESENT |
+| `wuchang_pos_topology` | 分離不同店點／公益分支的 POS 拓樸與治理。 | POS configuration extension | SOURCE_PRESENT |
+| `wuchang_core` | 統一社區應用核心，涵蓋 AI agent、治理、設備、物業、志工、菜單、訂單、看板與稽核。 | 77 個 Python files、70+ model names、多組 public／user routes | SOURCE_PRESENT；應分域審查，不等同全部 live |
+| `wuchang_property_local_cloud` | 會員主權型本地設備、permission proof、trusted node、franchise 與 field verification。 | 11 個 property／device／proof models | SOURCE_PRESENT |
+| `wuchang_property_manpower_surface` | 社區物業人力面與預算計畫。 | plan、line models | SOURCE_PRESENT |
+| `wuchang_wish_tree_coin` | 社區許願樹公益幣週期、ledger、policy 與核准 target。 | 4 個治理模型 | SOURCE_PRESENT |
+| `wuchang_fund_allocation` | 基金收入分配 ledger。 | `wuchang.fund.allocation.ledger` | SOURCE_PRESENT；其 manifest 依賴的 `wuchang_fund_reserve` 未在本次 examined addon root 找到 |
+| `wuchang_knowledge_sync` | 將既有知識來源建立安全索引。 | knowledge source／item | SOURCE_PRESENT；路徑與 runtime binding 待確認 |
+
+### 24.5 網站與通道
+
+| 通道 | 角色 | 本次狀態 |
+| --- | --- | --- |
+| `wuchang.life` | 公開入口與社區產品門面 | 根頁 200；部分產品路由 404 |
+| `/wuchang/intent-field` | 公開 Intent Field 入口 | 200 PASS |
+| Odoo Web | 業務後台與流程承載 | local 8069／8070 200；public `/web/login` 404 |
+| Google OAuth | 外部身份入口 | 可跳轉，但 redirect URI mismatch |
+| LINE | 候選入口與回覆通道 | 原始碼存在；本輪未發送訊息或執行 live OAuth |
+| Caddy identity projection config | Odoo forward-auth 後把 ref-only headers 送往 9107 | source candidate 存在；本輪未把 source existence 當 live wiring proof |
+
+## 25. 產品根與正典狀態
+
+產品根 `ROOT_IMPL_20260722T211410Z` 的 root packet SHA-256 是 `a073f824d77e89b024f8f43415af857272e8a59d6f6de8b518ee1aba90971a3d`。V3 gateway receipt SHA-256 是 `2156d81a2b7fe5674e24b3846cf154cbe85e0538f8109f26493c51e95db5ef58`，內容證明：
+
+- `TOTAL_FIELD_DECISION=ALLOW`
+- `GATEWAY_LIFECYCLE=COMMITTED`
+- `GATEWAY_COMMIT_APPLIED=true`
+- `D7_REFERENCE_ONLY=PASS`
+- `OBSERVATION_DOMAIN_CALLER_BINDING=PASS`
+
+但現有 master-index active pointer 是另一個 `m1_m36.gt_8d_pointer.v1` 封包，既有 promotion producer 又只擁有 TFCT runtime policy scope；Native ADI release 沒有可把該產品根反向解析為 release 的 manifest。因此目前是：
+
+```text
+AUTHORITY_DECISION=ALLOW_COMMITTED
+CANONICAL_PROMOTED=false
+DEPLOYED=false
+STATE=HOLD_EXISTING_CANONICAL_OWNER_NOT_RESOLVED
+```
+
+這是治理／release ownership 缺口，不是 9110 runtime 故障。
+
+## 26. 資料、身份與權限邊界
+
+1. 會員、居民、商家與管理者身份以 ref-only projection 進入封包；明文身份資料留在授權業務系統。
+2. `member_ref`、登入成功或管理員核准都不能自動推導跨會員 consent。
+3. Candidate Gateway 接受候選，不接受模型自帶的 `ALLOW`、`commit_applied=true` 或權威結果。
+4. Total Field receipt、Founder authorization、canonical promotion、release deployment 是四個不同層級；任何一層不能代替其他層。
+5. DB、會員資料、會計資料、router 與服務重啟必須有精確 Owner scope；健康檢查不得寫入這些面。
+6. 健康端點只回傳非敏感 service state，不應回傳 secret、raw member data 或 credential。
+
+## 27. 主要風險與修正優先序
+
+| 優先 | 風險 | 證據 | 建議處置 |
+| --- | --- | --- | --- |
+| P0 | Product root canonical owner 未解析 | cutover evidence 為 HOLD | 在既有 master index／release owner 中定義單一 product-root contract，完成前不建立第二套 pointer。 |
+| P0 | 公開 Google 登入失敗 | `redirect_uri_mismatch` | 核對 Google Console 已登記 redirect URI 與實際 callback；變更前保存設定證據。 |
+| P1 | 公開產品路由不完整 | 多個 `/wuchang/*`、member、POS routes 為 404 | 逐條核對實際產品 owner、Odoo 安裝狀態與 ingress mapping，不以 source route 冒充 live route。 |
+| P1 | 健康清單落後 | 既有工具僅 1/8 OK，但現行核心端點皆可達 | 更新既有 `service_health_readonly.py` targets，保留 9002 `/healthz`、9107 `/readyz`、9110 `/health`、8069／8070、8080 `/health`。 |
+| P1 | system unit 與實際 8080 health 不一致 | `openwebui.service` failed，但 8080 PASS | 查清 8080 的真正 process／release owner，移除或修復殘留 unit，避免監控誤報。 |
+| P1 | GPU persistence failed | `nvidia-persistenced.service` failed | 只有在 GPU workload 被 release manifest 宣告為必要時才修復；不要為健康分數盲目重啟。 |
+| P2 | Odoo source 與 live 安裝狀態未對齊 | addon 原始碼存在，但本輪未查 installed modules | 建立只讀 installed-module inventory 與 route smoke matrix。 |
+| P2 | Addon dependency 缺口 | `wuchang_fund_allocation` 依賴項未在 examined root 找到 | 解析依賴來源，未解析前維持不可安裝判定。 |
+
+## 28. 建議運維基線
+
+日常健康檢查應分成四組，而不是只用單一總分：
+
+1. **Process**：systemd active、container healthy、無反覆 restart。
+2. **Protocol**：9002 `/healthz`、9107 `/readyz`、9110 `/health` 回傳預期 schema。
+3. **Product**：公開根頁、Intent Field、Odoo、會員登入、OAuth callback 與 POS 路由逐一驗證。
+4. **Governance**：Canonical hash、active pointer、receipt reverse resolution、release manifest 與 rollback point 可解析。
+
+只有四組都 PASS，才能宣告整體 production health PASS。現況是 Process／Protocol 大致 PASS，Product PARTIAL，Governance 因 product-root owner unresolved 而 HOLD。
+
+## 29. 本次檢查邊界與證據
+
+本次只執行 GET、systemctl status/list、Docker list、socket list、檔案讀取、SHA-256 與靜態原始碼盤點。未執行：
+
+- service restart／daemon-reload
+- deploy／release symlink 切換
+- DB write／migration／Odoo module upgrade
+- router write／firmware update
+- POST 業務請求
+- 完整 pytest、benchmark 或既有 convergence 重跑
+- 會員、居民、商家或會計明文查詢
+
+健康結果是 2026-07-22 的時間點證據，不是永久 SLA 保證。

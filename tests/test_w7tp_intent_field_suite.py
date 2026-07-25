@@ -895,6 +895,16 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
         self.assertIn("本頁不在伺服器載入或執行模型", PRODUCT_HTML)
         self.assertIn('data-llm-execution="USER_DEVICE_ONLY"', PRODUCT_HTML)
         self.assertIn("單一共用意圖場", PRODUCT_HTML)
+        self.assertIn('href="#intent">立即測試生成式傳輸</a>', PRODUCT_HTML)
+        self.assertIn("整理成安全候選", PRODUCT_HTML)
+        self.assertIn('aria-errormessage="intent-error"', PRODUCT_HTML)
+        self.assertIn('data-example="整理一份不含個資的社區活動流程', PRODUCT_HTML)
+        self.assertIn("$('preview-title').focus()", PRODUCT_HTML)
+        self.assertIn("window.location.hash==='#workspace'", PRODUCT_HTML)
+        self.assertLess(
+            PRODUCT_HTML.index('id="workspace"'),
+            PRODUCT_HTML.index('id="redteam-monitor"'),
+        )
         self.assertIn('id="dimension-grid"', PRODUCT_HTML)
         self.assertIn('id="evidence-list"', PRODUCT_HTML)
         self.assertIn('id="risk-list"', PRODUCT_HTML)

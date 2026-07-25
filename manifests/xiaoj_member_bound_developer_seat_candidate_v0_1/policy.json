@@ -44,8 +44,34 @@
       "LOCAL_SOURCE_CHANGE",
       "LOCAL_TEST",
       "LOCAL_SANDBOX",
-      "LOCAL_EVIDENCE_WRITE"
+      "LOCAL_EVIDENCE_WRITE",
+      "TOTAL_FIELD_TRANSLATION",
+      "FOUNDER_AUTHORIZED_CLOUD_MODEL_ENHANCEMENT"
     ]
+  },
+  "capability_conditions": {
+    "TOTAL_FIELD_TRANSLATION": {
+      "developer_card_required": true,
+      "founder_command_required": true,
+      "lawful_scope_required": true,
+      "output": "DEIDENTIFIED_INCOMPLETE_REFERENCE_ONLY_8D_CANDIDATE",
+      "formal_execution_authority": false
+    },
+    "FOUNDER_AUTHORIZED_CLOUD_MODEL_ENHANCEMENT": {
+      "developer_card_required": true,
+      "founder_command_required": true,
+      "lawful_scope_required": true,
+      "cost_budget_ref_required": true,
+      "user_experience_target_ref_required": true,
+      "cloud_model_self_authorization": false,
+      "formal_execution_authority": false
+    }
+  },
+  "execution_authority": {
+    "holder": "FOUNDER",
+    "no_founder_command_no_execution": true,
+    "model_or_total_field_may_substitute_founder_command": false,
+    "developer_card_may_self_elevate": false
   },
   "independent_founder_authorization_required": [
     "DB_WRITE",

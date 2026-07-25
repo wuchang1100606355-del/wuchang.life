@@ -30,6 +30,7 @@ from tools.total_field.w7tp_candidate_fine_grain_reviewer import (
 
 REVIEWER_VERSION = "w7tp-true8d-d8-reviewer-entrypoint/1.1"
 REQUEST_SCHEMA_VERSION = "W7TP-D8-REVIEW-REQUEST/1.0"
+SKILL_LIFECYCLE_SCOPE_VERSION = "W7TP-D8-SKILL-LIFECYCLE-CANDIDATE/1.0"
 AGGREGATE_ALGORITHM_VERSION = "W7TP-LANDING-PAYLOAD-AGGREGATE/1.0"
 AGGREGATE_ORDERING = "COMPLETE_LANDING_MANIFEST_FILES_ARRAY_ORDER"
 REQUEST_SELF_HASH_ALGORITHM = "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
@@ -263,6 +264,105 @@ def recursive_authority_injection(value: Any, path: str = "$") -> str | None:
             if found is not None:
                 return found
     return None
+
+
+def review_skill_lifecycle_candidate_scope(candidate: dict[str, Any]) -> dict[str, Any]:
+    """Review the closed five-skill candidate scope without granting authority."""
+
+    required_types: dict[str, type] = {
+        "schema_version": str,
+        "packet_type": str,
+        "run_id": str,
+        "state": str,
+        "parent_packet_sha256": str,
+        "mapping_set_sha256": str,
+        "skills": list,
+        "non_execution_assertions": dict,
+        "founder_seal_present": bool,
+    }
+    if set(candidate) != set(required_types):
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_FIELD_SET", "$")
+    for key, expected_type in required_types.items():
+        if not isinstance(candidate[key], expected_type):
+            raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_REQUIRED_FIELD", f"$.{key}")
+    if candidate["schema_version"] != SKILL_LIFECYCLE_SCOPE_VERSION:
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_VERSION", "$.schema_version")
+    if candidate["packet_type"] != "D8_SKILL_LIFECYCLE_CANDIDATE_REVIEW":
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_PACKET_TYPE", "$.packet_type")
+    if candidate["state"] != "PENDING_FOUNDER_G8_SEAL":
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_STATE", "$.state")
+    for key in ("parent_packet_sha256", "mapping_set_sha256"):
+        if not is_sha256(candidate[key]):
+            raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_SHA256", f"$.{key}")
+    if candidate["founder_seal_present"] is not False:
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_PREMATURE_FOUNDER_SEAL", "$.founder_seal_present")
+    injection_path = recursive_authority_injection(candidate)
+    if injection_path is not None:
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_FORBIDDEN_AUTHORITY_INJECTION", injection_path)
+
+    expected_assertions = {
+        "canonical_write",
+        "pointer_change",
+        "registry_write",
+        "db_write",
+        "deploy",
+        "restart",
+        "router_write",
+        "publication",
+        "c1_c9_execution",
+    }
+    assertions = candidate["non_execution_assertions"]
+    if set(assertions) != expected_assertions or any(value is not False for value in assertions.values()):
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_FORBIDDEN_EFFECT", "$.non_execution_assertions")
+
+    expected_skill_fields = {
+        "package_id",
+        "target_skill_id",
+        "source_manifest_sha256",
+        "contract_payload_sha256",
+        "manifest_sha256",
+        "lifecycle_state",
+    }
+    skills = candidate["skills"]
+    if len(skills) != 5:
+        raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_COUNT", "$.skills")
+    package_ids: set[str] = set()
+    for index, skill in enumerate(skills):
+        path = f"$.skills[{index}]"
+        if not isinstance(skill, dict) or set(skill) != expected_skill_fields:
+            raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_SKILL_FIELDS", path)
+        target_skill_id = skill.get("target_skill_id")
+        package_id = skill.get("package_id")
+        if not isinstance(target_skill_id, str) or package_id != f"vcp:{target_skill_id}":
+            raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_IDENTITY_BINDING", path)
+        if package_id in package_ids:
+            raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_DUPLICATE_PACKAGE", f"{path}.package_id")
+        package_ids.add(package_id)
+        if skill.get("lifecycle_state") != "CANDIDATE":
+            raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_LIFECYCLE_EXPANSION", f"{path}.lifecycle_state")
+        for key in ("source_manifest_sha256", "contract_payload_sha256", "manifest_sha256"):
+            if not is_sha256(skill.get(key)):
+                raise D8ReviewError(DECISION_BLOCK, "BLOCK_SKILL_SCOPE_SHA256", f"{path}.{key}")
+
+    return {
+        "state": "PASS_D8_SKILL_LIFECYCLE_CANDIDATE_SCOPE_REVIEW",
+        "reviewer_version": REVIEWER_VERSION,
+        "review_scope": "SKILL_REVIEW_LIFECYCLE_CANDIDATE_ONLY",
+        "final_decision": DECISION_HOLD,
+        "reason_codes": [
+            "PASS_FIVE_SKILL_HASH_BOUND_CANDIDATE_SCOPE",
+            "HOLD_G8_FOUNDER_SEAL_REQUIRED",
+        ],
+        "skills_reviewed": 5,
+        "lifecycle_state": "CANDIDATE",
+        "founder_seal_required": True,
+        "authority_granted": False,
+        "c1_c9_execution_authorized": False,
+        "db_write": False,
+        "deploy": False,
+        "restart": False,
+        "registry_write": False,
+    }
 
 
 def validate_request_schema(request: dict[str, Any]) -> None:

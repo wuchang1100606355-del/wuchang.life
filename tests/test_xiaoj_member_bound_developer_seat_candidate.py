@@ -113,7 +113,18 @@ class XiaoJMemberBoundDeveloperSeatCandidateTest(unittest.TestCase):
         self.assertFalse(seat["transferable"])
         self.assertFalse(seat["subdelegation"])
         permissions = result["d8_capability_envelope_candidate"]["capability_refs"]
-        self.assertEqual(permissions, ["LOCAL_SOURCE_CHANGE", "LOCAL_TEST", "LOCAL_SANDBOX", "LOCAL_EVIDENCE_WRITE"])
+        self.assertEqual(permissions, [
+            "LOCAL_SOURCE_CHANGE",
+            "LOCAL_TEST",
+            "LOCAL_SANDBOX",
+            "LOCAL_EVIDENCE_WRITE",
+            "TOTAL_FIELD_TRANSLATION",
+            "FOUNDER_AUTHORIZED_CLOUD_MODEL_ENHANCEMENT",
+        ])
+        envelope = result["d8_capability_envelope_candidate"]
+        self.assertFalse(envelope["capability_conditions"]["TOTAL_FIELD_TRANSLATION"]["formal_execution_authority"])
+        self.assertTrue(envelope["execution_authority"]["no_founder_command_no_execution"])
+        self.assertFalse(envelope["execution_authority"]["model_or_total_field_may_substitute_founder_command"])
         forbidden = set(self.policy["independent_founder_authorization_required"])
         self.assertFalse(forbidden & set(permissions))
 

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-cd "$HOME/Taiji_Hub"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+cd "$REPO_ROOT"
 mkdir -p runtime logs
 
 AUDIT="logs/wuchang_pos_terminal_enable.jsonl"
@@ -53,37 +55,48 @@ if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "303" ] && [ "$HTTP_CODE" != "
   echo "[warn] Odoo HTTP check unusual: $HTTP_CODE"
 fi
 
-echo "[3] 取得 Tailscale / LAN 入口"
+echo "[3] 取得 Tailscale Serve 私有 HTTPS 入口"
 
-TS_IP="$(tailscale ip -4 2>/dev/null | head -n 1 | tr -d '\r' || true)"
-
-WIN_LAN_IP="$(powershell.exe -NoProfile -Command 'Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike "127.*" -and $_.IPAddress -notlike "169.254.*" -and $_.InterfaceAlias -notmatch "Loopback|vEthernet|Tailscale|WSL|Docker" } | Sort-Object InterfaceMetric | Select-Object -First 1 -ExpandProperty IPAddress' 2>/dev/null | tr -d '\r' | head -n 1 || true)"
+TAILSCALE_DNS_NAME="$(
+  tailscale status --json 2>/dev/null |
+    python3 -c 'import json, sys; print((json.load(sys.stdin).get("Self") or {}).get("DNSName", "").rstrip("."))' \
+    2>/dev/null || true
+)"
+TAILSCALE_HTTPS_URL=""
+TAILSCALE_HTTP_CODE=""
+if [ -n "$TAILSCALE_DNS_NAME" ] &&
+   tailscale serve status --json 2>/dev/null | grep -q '"127.0.0.1:8069"'; then
+  TAILSCALE_HTTPS_URL="https://${TAILSCALE_DNS_NAME}:8443"
+  TAILSCALE_HTTP_CODE="$(
+    curl -sS --connect-timeout 5 --max-time 10 -o /tmp/wuchang_odoo_tailscale_check.html \
+      -w '%{http_code}' "${TAILSCALE_HTTPS_URL}/web/login" || true
+  )"
+fi
 
 {
   echo "WUCHANG POS TERMINAL ACCESS"
   echo "TIME=$(ts)"
   echo ""
-  echo "PRIMARY_MODE=TAILSCALE_VPN"
-  echo "TAILSCALE_IP=${TS_IP:-UNKNOWN}"
-  if [ -n "${TS_IP:-}" ]; then
-    echo "POS_URL_TAILSCALE=http://${TS_IP}:8069/web"
-    echo "POS_LOGIN_TAILSCALE=http://${TS_IP}:8069/web/login"
+  echo "PRIMARY_MODE=TAILSCALE_SERVE_PRIVATE_HTTPS"
+  if [ -n "$TAILSCALE_HTTPS_URL" ]; then
+    echo "POS_URL_TAILSCALE=${TAILSCALE_HTTPS_URL}/web"
+    echo "POS_LOGIN_TAILSCALE=${TAILSCALE_HTTPS_URL}/web/login"
+    echo "TAILSCALE_LOGIN_HTTP_CODE=${TAILSCALE_HTTP_CODE:-UNKNOWN}"
+  else
+    echo "POS_URL_TAILSCALE=UNAVAILABLE"
+    echo "TAILSCALE_SERVE_REQUIRED=TRUE"
   fi
   echo ""
-  echo "LAN_MODE=SAME_WIFI_PRIVATE_NETWORK"
-  echo "WINDOWS_LAN_IP=${WIN_LAN_IP:-UNKNOWN}"
-  if [ -n "${WIN_LAN_IP:-}" ]; then
-    echo "POS_URL_LAN=http://${WIN_LAN_IP}:8069/web"
-    echo "POS_LOGIN_LAN=http://${WIN_LAN_IP}:8069/web/login"
-  fi
+  echo "LAN_MODE=DISABLED_BY_LOOPBACK_BINDING"
+  echo "LAN_NOTE=Odoo 目前只綁定本機，未建立未驗證的 LAN 入口"
   echo ""
   echo "ODOO_LOCAL=http://127.0.0.1:8069/web"
   echo ""
   echo "OPERATION:"
-  echo "1. 小三機若已安裝 Tailscale，優先開 POS_URL_TAILSCALE"
-  echo "2. 小三機若只在同 Wi-Fi，開 POS_URL_LAN"
+  echo "1. 小三機先登入已授權的 Tailscale 網路"
+  echo "2. 使用 POS_URL_TAILSCALE 的私有 HTTPS 入口"
   echo "3. 登入 Odoo 後進入 Point of Sale / 銷售點"
-  echo "4. 開啟對應 POS Session"
+  echo "4. 開啟「聊國咖啡館重新總店 POS」工作階段"
   echo ""
   echo "SECURITY:"
   echo "No Tailscale Funnel"

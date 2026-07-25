@@ -113,6 +113,8 @@ def evaluate_session(
         "xiaoj_agent_ref": agent_ref,
         "effective_member_roles": effective_roles,
         "capability_refs": permissions,
+        "capability_conditions": policy.get("capability_conditions", {}),
+        "execution_authority": policy.get("execution_authority", {}),
         "organization_context_hash": canonical_sha256(request["organization_context"]),
         "device_or_channel_binding_hash": canonical_sha256(request["device_or_channel_binding"]),
         "delegation_ref": delegation["delegation_ref"],

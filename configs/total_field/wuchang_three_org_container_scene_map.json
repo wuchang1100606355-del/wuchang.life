@@ -105,6 +105,18 @@
         "property_organization"
       ],
       "landing_message": "協會公益場景，連動商業養公益與物業社區服務。"
+    },
+    "founder_scene": {
+      "zh": "創辦人本機場景",
+      "container_profile": "container_profile:business_cloud_candidate",
+      "primary_module": "business_organization",
+      "visible_modules": [
+        "business_organization",
+        "property_organization",
+        "public_welfare_organization"
+      ],
+      "scene_role": "cross_organization_founder_local_console",
+      "landing_message": "創辦人本機自然語言影音 AI 場景，統覽商業、物業與公益三組織候選。"
     }
   },
   "local_device_roles": {
@@ -114,6 +126,685 @@
     "node_c": "community_service_edge_node",
     "node_o": "secretariat_operator_node",
     "node_s": "security_or_sensor_node"
+  },
+  "taiji04_audiovisual_natural_language_service": {
+    "state": "SOURCE_CANDIDATE_ENABLED",
+    "node_ref": "node_ref:taiji04",
+    "node_role": "sunmi_pos_clerk_human_controlled_checkout_and_google_commercial_voice_endpoint",
+    "organization_node_roles": {
+      "node_ref:taiji04": "sunmi_pos_clerk_human_controlled_checkout_workstation_and_google_commercial_voice_hardware",
+      "node_ref:taiji03": "organization_super_administrator_control_device",
+      "node_ref:drallion": "organization_service_desk_audiovisual_ai_execution_point"
+    },
+    "organization_node_role_titles": {
+      "node_ref:taiji04": "商米 POS 店員人控結帳作業台及 Google 商用語音硬體",
+      "node_ref:taiji03": "組織超級管理員控制設備",
+      "node_ref:drallion": "組織服務台自然語言影音 AI 執行點"
+    },
+    "platform": {
+      "host_os": "ANDROID",
+      "os_version": "13",
+      "hardware_class": "SUNMI_POS",
+      "google_commercial_voice_hardware_license": true,
+      "clerk_human_controlled_checkout_workstation": true,
+      "member_checkout_requires_purchasing_member_confirmation": true,
+      "clerk_may_substitute_member_confirmation": false,
+      "ai_may_substitute_member_confirmation": false,
+      "administrator_may_substitute_member_confirmation": false,
+      "identity_verification_equals_checkout_consent": false,
+      "autonomous_checkout": false,
+      "payment_execution": false,
+      "network_node_ref": "node_ref:taiji04",
+      "network_role": "LOCAL_CONTROL_AND_VOICE_HARDWARE_NOT_PUBLIC_ENDPOINT",
+      "public_endpoint": false,
+      "linux_runtime": null,
+      "touchscreen": true,
+      "external_hdmi_display": true
+    },
+    "checkout_paths": {
+      "member_mobile_browser_ai": {
+        "enabled_as_source_candidate": true,
+        "purchasing_member_confirmation_required": true,
+        "ai_assistance": true,
+        "ai_may_confirm_for_member": false
+      },
+      "counter_xiaoj_audiovisual_natural_language": {
+        "enabled_as_source_candidate": true,
+        "merchant_service_xiaoj_assistance": true,
+        "purchasing_member_confirmation_required": true,
+        "xiaoj_may_confirm_for_member": false
+      },
+      "clerk_phone_last_three_digits": {
+        "enabled_as_source_candidate": true,
+        "input_purpose": "MEMBER_LOOKUP_HINT_ONLY",
+        "identity_authentication": false,
+        "checkout_consent": false,
+        "purchasing_member_confirmation_required": true
+      },
+      "non_member_guest": {
+        "enabled_as_source_candidate": true,
+        "phone_last_three_digits_input": "BLANK",
+        "checkout_label": "一般路人",
+        "member_identity_packet_access": false,
+        "member_resource_access": false
+      }
+    },
+    "member_centered_sovereign_ai": {
+      "member_is_system_participant": true,
+      "identity_packet_policy_ref": "manifest_ref:xiaoj_member_bound_developer_seat_candidate_v0_1",
+      "system_bound_identity_packet_required_for_member_resource_access": true,
+      "resource_access_mode": "CAPABILITY_AND_RESOURCE_REFERENCES_ONLY",
+      "resource_scope_must_match_purchasing_member": true,
+      "cross_member_resource_access": false,
+      "member_plaintext_to_cloud": false,
+      "raw_identity_material_to_cloud": false,
+      "identity_verification_equals_checkout_consent": false,
+      "phone_last_three_digits_are_lookup_hint_only": true,
+      "non_member_guest_has_member_resource_access": false
+    },
+    "workspace_host_node_ref": "node_ref:taiji03",
+    "role_workspaces": {
+      "merchant_backend": "商家後台",
+      "clerk_human_controlled_checkout_workspace": "店員人控結帳作業台",
+      "community_secretary_backend": "社區總幹事業務後台",
+      "chair_and_secretary_backend": "主委及總幹事後台",
+      "founder_local_audiovisual_workspace": "創辦人本機自然語言影音 AI 工作台"
+    },
+    "founder_scene_control": {
+      "principal_ref": "member_ref:founder",
+      "identity_gate_ref": "gate_ref:existing_local_founder_root",
+      "explicit_founder_command_per_action": true,
+      "total_field_review_required": true,
+      "local_only": true,
+      "runtime_bound": false,
+      "authority_increase": false,
+      "production_activation": false,
+      "direct_db_write": false,
+      "raw_founder_identity_to_cloud": false,
+      "founder_private_detail_on_hdmi": false
+    },
+    "organization_audiovisual_execution_point": {
+      "node_ref": "node_ref:drallion",
+      "machine_name": "drallion",
+      "node_role": "organization_service_desk_audiovisual_ai_execution_point",
+      "hardware_relation": "SEPARATE_ORGANIZATION_AUDIOVISUAL_EXECUTION_NODE",
+      "hardware_class_evidence_state": "UNKNOWN_NOT_SHOWN",
+      "google_commercial_voice_hardware_license_evidence_state": "UNKNOWN_NOT_SHOWN",
+      "platform": "ANDROID",
+      "os_version": "13",
+      "display_hardware": {
+        "display_count": 2,
+        "touchscreen": true,
+        "external_hdmi_display": true,
+        "touchscreen_purpose": "local_operator_interaction_and_confirmation",
+        "hdmi_purpose": "deidentified_service_status_projection",
+        "founder_private_detail_on_hdmi": false,
+        "member_plaintext_on_hdmi": false,
+        "secret_on_hdmi": false,
+        "raw_media_on_hdmi": false
+      },
+      "private_network": "TAILSCALE",
+      "assignment_state": "FOUNDER_DECLARED_EXECUTION_POINT",
+      "connectivity_evidence_state": "USER_SUPPLIED_CONSOLE_SCREENSHOT_CONNECTED",
+      "assigned_execution_point": true,
+      "service_runtime_verified": false,
+      "runtime_enabled": false,
+      "address_ref": null,
+      "service_port_ref": null,
+      "packet_input": "DEIDENTIFIED_REFERENCE_ONLY_8D_AUDIOVISUAL_ENVELOPE",
+      "raw_audio_input": false,
+      "raw_video_input": false,
+      "member_plaintext_input": false,
+      "founder_identity_input": false,
+      "invite_url_stored": false,
+      "creator_identity_stored": false,
+      "node_id_stored": false,
+      "node_key_stored": false,
+      "execution_without_founder_command": false
+    },
+    "input_modes": [
+      "text",
+      "voice",
+      "image_event",
+      "audiovisual_event",
+      "three_d_scene"
+    ],
+    "local_pipeline": [
+      "local_capture",
+      "local_minimization",
+      "natural_language_intent_parse",
+      "scene_and_role_resolution",
+      "xiaoj_advice_candidate",
+      "reference_only_8d_packet",
+      "total_field_review",
+      "local_reconstruction"
+    ],
+    "touchscreen_window": {
+      "purpose": "private_operator_and_human_confirmation",
+      "member_plaintext_allowed_without_authorization": false,
+      "payment_execution": false,
+      "direct_db_write": false
+    },
+    "hdmi_window": {
+      "purpose": "public_scene_status_and_service_projection",
+      "member_plaintext": false,
+      "payment_data": false,
+      "governance_private_detail": false,
+      "operator_secret": false
+    },
+    "cloud_boundary": {
+      "raw_audio_to_cloud": false,
+      "raw_video_to_cloud": false,
+      "member_plaintext_to_cloud": false,
+      "wifi_account_plaintext_to_cloud": false,
+      "allowed_payload": "incomplete_deidentified_reference_only_8d_state_packet"
+    },
+    "eight_d_media_transport_basis": {
+      "canonical_packet_schema_ref": "schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json",
+      "packet_core": "UNIFIED_MULTIPURPOSE_8D_PACKET",
+      "composition_mode": "SEPARATE",
+      "image_packet": {
+        "domain": "IMAGE",
+        "domain_profile_schema_ref": "schemas/w7tp_image_domain_profile_v1.schema.json",
+        "transmission": "8d_image_state_coordinate_reference_rule_reconstruction_and_verification_contract",
+        "raw_image_file_transfer": false
+      },
+      "audio_packet": {
+        "domain": "AUDIO",
+        "domain_profile_schema_ref": "schemas/w7tp_audiovisual_domain_profile_v1.schema.json",
+        "transmission": "8d_audio_timeline_sample_coordinate_state_reference_reconstruction_and_verification_contract",
+        "default_reconstruction": "L2_EQUIVALENT_NON_SOURCE_AUDIO",
+        "target_equivalence": "semantic_timing_prosody_and_service_effect_equivalent",
+        "speech_control_profile": {
+          "language_and_locale_ref": true,
+          "pronunciation_lexicon_ref": true,
+          "proper_noun_phoneme_ref": true,
+          "phrase_boundary_ref": true,
+          "stress_and_emphasis_ref": true,
+          "speech_rate_ref": true,
+          "prosody_ref": true,
+          "emotion_class_and_bounded_intensity_ref": true,
+          "volume_ceiling_ref": true,
+          "user_experience_timing_ref": true
+        },
+        "source_waveform_required": false,
+        "source_sample_identity_required": false,
+        "source_speaker_identity_required": false,
+        "speaker_impersonation": false,
+        "raw_audio_file_transfer": false
+      },
+      "audiovisual_sync_packet": {
+        "domain": "AUDIOVISUAL",
+        "domain_profile_schema_ref": "schemas/w7tp_audiovisual_domain_profile_v1.schema.json",
+        "transmission": "8d_timeline_frame_audio_sample_and_sync_state_contract",
+        "required_when_image_and_audio_are_synchronized": true
+      },
+      "three_d_scene_film_packet": {
+        "domain": "VIDEO",
+        "domain_profile_schema_ref": "schemas/w7tp_audiovisual_domain_profile_v1.schema.json",
+        "scene_inputs": [
+          "scene_graph_ref",
+          "object_relationship_ref",
+          "geometry_coordinate_ref",
+          "camera_trajectory_ref",
+          "lighting_state_ref",
+          "actor_motion_ref",
+          "timeline_ref",
+          "audio_sync_ref"
+        ],
+        "asset_candidates": [
+          {
+            "asset_ref": "asset_ref:J.vroid_user_supplied",
+            "asset_name": "J.vroid",
+            "source_location_class": "user_supplied_windows_onedrive_reference",
+            "binary_available_on_current_linux_node": false,
+            "sha256": null,
+            "raw_asset_transfer": false
+          }
+        ],
+        "reconstruction": "local_3d_scene_to_verified_film_candidate",
+        "l1_when_complete_result_defined": "frame_hash_and_timeline_exact",
+        "l2_when_equivalent_result_required": "scene_motion_and_audio_visual_sync_equivalent",
+        "raw_video_file_transfer": false,
+        "formal_film_release": false
+      },
+      "verification_levels": ["L1_FULL", "L2_EQUIVALENT", "L3_CANDIDATE"],
+      "direct_file_upload_is_generative_transmission": false
+    },
+    "authorized_commercial_voice_endpoint_candidate": {
+      "hardware_class": "SUNMI_POS",
+      "execution_node_ref": "node_ref:taiji04",
+      "same_as_taiji04_hardware": true,
+      "google_commercial_voice_hardware_license": true,
+      "network_scope": "authorized_vpn_node_only",
+      "vpn_role": "connectivity_only_not_authority",
+      "authorization_evidence_required": true,
+      "runtime_bound": false,
+      "command_transport": "reference_only_8d_audio_packet",
+      "synthesis_location": "authorized_local_endpoint",
+      "reconstruction": "L2_EQUIVALENT_NON_SOURCE_AUDIO",
+      "pronunciation_goal": "lexicon_phoneme_phrase_boundary_stress_and_rate_consistent",
+      "experience_goal": "bounded_emotion_prosody_volume_and_response_timing_consistent",
+      "source_voice_copy": false,
+      "speaker_impersonation": false,
+      "raw_audio_to_vpn": false,
+      "actuation_without_authorization": false
+    },
+    "linux_total_field_scheduling": {
+      "scope": "authorized_registered_linux_crostini_and_container_nodes_only",
+      "authority": "TOTAL_FIELD",
+      "vpn_role": "connectivity_only_not_authority",
+      "service_object_is_remote_control": false,
+      "generative_transmission": "protocol_native_8d_intent_field_packet_with_reconstruction_and_verification_contract",
+      "file_moving": false,
+      "cloud_sync": false,
+      "backup": false,
+      "download_decryption": false
+    },
+    "runtime_activation": false,
+    "live_microphone_stream": false,
+    "live_camera_stream": false,
+    "db_write": false,
+    "deploy": false,
+    "restart": false,
+    "router_write": false
+  },
+  "three_major_scene_product": {
+    "schema_version": "w7tp.three-major-scenes.product-candidate.v1",
+    "canonical_product_root": {
+      "base_run_id": "CANONICAL_BIND_20260723T052820Z",
+      "packet_sha256": "a073f824d77e89b024f8f43415af857272e8a59d6f6de8b518ee1aba90971a3d",
+      "pointer_ref": "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json",
+      "reference_only": true
+    },
+    "shared_sovereign_ai_skill_contract": {
+      "contract_ref": "skill-contract:three-major-scenes:sovereign-ai:v1",
+      "identity_mode": "VERIFIED_8D_INTENT_FIELD_TENSOR_PACKET",
+      "central_real_name_identity_graph": false,
+      "skills": [
+        "skill_ref:personal_xiaoj",
+        "skill_ref:personal_calendar",
+        "skill_ref:community_wish_tree",
+        "skill_ref:community_happiness_coin",
+        "skill_ref:line_invoice_reference",
+        "skill_ref:community_discussion",
+        "skill_ref:personal_qa_document_proposal",
+        "skill_ref:meeting_realtime_secretariat",
+        "skill_ref:personal_data_boundary",
+        "skill_ref:family_and_scene_mount"
+      ],
+      "resource_access_mode": "SYSTEM_BOUND_IDENTITY_PACKET_CAPABILITY_AND_RESOURCE_REFS_ONLY",
+      "member_plaintext_to_cloud": false,
+      "raw_media_to_cloud": false
+    },
+    "three_party_collaboration": {
+      "xiaoj_cloud_candidate": {
+        "candidate_generation_capability": "COMPLETE_WITHIN_ALLOWED_CODE_ZONES",
+        "formal_execution_authority": false,
+        "accounting_authority": false,
+        "identity_authority": false,
+        "database_authority": false,
+        "total_field_authority": false
+      },
+      "local_user_sovereignty": {
+        "holds_personal_plaintext": true,
+        "holds_personal_xiaoj": true,
+        "controls_data_boundary": true,
+        "local_reconstruction_confirmation_and_withdrawal": true
+      },
+      "total_field_authority": {
+        "provides_state_rules_observation_domain_and_acceptance_contract": true,
+        "candidate_decisions": ["ACCEPT", "REJECT", "PRECONDITION_MISSING"],
+        "cloud_may_rewrite_authority_rules": false
+      }
+    },
+    "audiovisual_natural_language_service_desk": {
+      "existing_entry_ref": "entry_ref:taiji04_local_audiovisual_natural_language",
+      "input_modes": ["text", "voice", "audiovisual_event"],
+      "functions": [
+        "natural_language_intent_parse",
+        "user_scene_resolution",
+        "xiaoj_realtime_staff_advice",
+        "form_announcement_record_proposal_and_qa_candidate_generation"
+      ],
+      "raw_media_retention": false,
+      "cloud_payload": "INCOMPLETE_DEIDENTIFIED_REFERENCE_ONLY_8D_STATE_PACKET",
+      "transport": "EXISTING_VPN_AND_PROTOCOL_NATIVE_8D_GENERATIVE_TRANSMISSION",
+      "ordinary_file_movement": false,
+      "cloud_ciphertext_sync": false,
+      "backup": false,
+      "download_decryption": false
+    },
+    "fund_conservation_contract": {
+      "ratio": "1:1:1",
+      "base_unit": "FIAT",
+      "consumer_happiness_coin_limit": "REFERENCE_ONLY_VALUE_REQUIRED",
+      "merchant_ticket_generation_limit": "REFERENCE_ONLY_VALUE_REQUIRED",
+      "fund_bank_fiat_ring_fence_limit": "REFERENCE_ONLY_VALUE_REQUIRED",
+      "authority": "LOCAL_TOTAL_FIELD_ONLY",
+      "cloud_fill": "FORBIDDEN",
+      "preconditions": [
+        "fund_rule_ref",
+        "blood_engine_rule_ref",
+        "bank_account_ref",
+        "ring_fence_evidence_ref",
+        "happiness_coin_issuance_rule_ref",
+        "merchant_ticket_limit_rule_ref",
+        "reconciliation_formula_ref",
+        "audit_rule_ref"
+      ]
+    },
+    "scenes": {
+      "public_benefit": {
+        "packet_type": "COMMUNITY_ASSOCIATION_PUBLIC_BENEFIT_SCENE_PACKET",
+        "scene_ref": "scene_ref:community-association-public-benefit",
+        "branch_total_field_ref": "branch-total-field:wuchang-community-association",
+        "product_positioning": "五常社區數位發展基金之社區服務與商業造血產品面",
+        "required_capabilities": [
+          "official_document_workflow",
+          "board_member_and_work_meetings",
+          "agenda_realtime_minutes_and_resolutions",
+          "community_announcement_candidate",
+          "annual_plan_outcome_report_and_qa",
+          "legal_and_organization_document_reference_list",
+          "member_form_and_proposal_assistance",
+          "community_wish_tree",
+          "community_discussion",
+          "volunteer_need_and_resource_matching",
+          "financial_transparency_budget_and_alerts",
+          "community_happiness_coin_and_blood_engine",
+          "community_digital_development_fund_audit"
+        ],
+        "product_features": {
+          "dedicated_service_team": {
+            "title": "專勤隊",
+            "functions": [
+              "community_service_intake",
+              "case_triage",
+              "task_dispatch",
+              "service_level_tracking",
+              "completion_evidence_reference",
+              "exception_escalation"
+            ],
+            "case_states": [
+              "RECEIVED",
+              "TRIAGED",
+              "ASSIGNED",
+              "IN_SERVICE",
+              "EVIDENCE_PENDING",
+              "COMPLETED",
+              "EXCEPTION_HOLD"
+            ]
+          },
+          "commercial_volunteer_team": {
+            "title": "商業志工隊",
+            "functions": [
+              "volunteer_profile_and_skill_refs",
+              "shift_and_availability",
+              "merchant_service_assignment",
+              "delivery_assignment",
+              "training_and_safety_acknowledgement",
+              "service_hours_and_outcome_evidence",
+              "withdrawal_and_reassignment"
+            ],
+            "business_scope": [
+              "merchant_campaign_assistance",
+              "community_event_assistance",
+              "order_fulfilment_assistance",
+              "delivery_assistance",
+              "digital_guidance"
+            ],
+            "volunteer_is_employee_claim": false,
+            "commercial_task_requires_explicit_acceptance": true
+          },
+          "delivery_service": {
+            "title": "社區外送服務",
+            "system_description": "以會員或一般路人訂單候選為起點，經商家承接、商業志工或授權外送員派工、取件、送達證據參照與結算候選形成可追蹤服務鏈；手機末三碼只作會員查找提示，不作身分驗證或付款同意。",
+            "roles": [
+              "purchasing_member_or_guest",
+              "merchant_operator",
+              "commercial_volunteer_or_authorized_courier",
+              "service_desk_xiaoj",
+              "total_field_reviewer"
+            ],
+            "states": [
+              "DRAFT",
+              "PURCHASER_CONFIRMED",
+              "MERCHANT_ACCEPTED",
+              "COURIER_ASSIGNED",
+              "PICKED_UP",
+              "DELIVERED",
+              "SETTLEMENT_CANDIDATE",
+              "CANCELLED",
+              "EXCEPTION_HOLD"
+            ],
+            "transitions": [
+              "DRAFT->PURCHASER_CONFIRMED",
+              "PURCHASER_CONFIRMED->MERCHANT_ACCEPTED",
+              "MERCHANT_ACCEPTED->COURIER_ASSIGNED",
+              "COURIER_ASSIGNED->PICKED_UP",
+              "PICKED_UP->DELIVERED",
+              "DELIVERED->SETTLEMENT_CANDIDATE"
+            ],
+            "dispatch_features": [
+              "service_zone_ref",
+              "pickup_and_dropoff_window_ref",
+              "batching_candidate",
+              "capacity_and_accessibility_ref",
+              "contact_boundary_ref",
+              "proof_of_delivery_ref",
+              "exception_and_reassignment"
+            ],
+            "member_checkout_confirmation_required": true,
+            "guest_label_when_phone_last_three_blank": "一般路人",
+            "phone_last_three_is_lookup_hint_only": true,
+            "autonomous_payment_execution": false
+          },
+          "renyi_cafe_branch": {
+            "title": "上品聊國咖啡館仁義分店",
+            "branch_ref": "merchant_ref:shangpin-liaoguo-cafe-renyi",
+            "role": "COMMERCIAL_BLOOD_ENGINE_DEMONSTRATION_BRANCH",
+            "functions": [
+              "cafe_pos_order_candidate",
+              "audiovisual_natural_language_ordering",
+              "community_event_and_volunteer_service_point",
+              "merchant_ticket_limit_reference",
+              "fund_contribution_evidence_reference",
+              "transparent_operating_outcome_candidate"
+            ],
+            "community_happiness_coin_central_bank_concept": {
+              "classification": "COMMUNITY_GOVERNANCE_AND_CLEARING_CONCEPT_NOT_A_LEGAL_BANK",
+              "issuance_and_limit_authority": "LOCAL_TOTAL_FIELD_ONLY",
+              "actual_currency_or_bank_claim": false,
+              "one_to_one_to_one_contract_required": true
+            }
+          },
+          "community_digital_development_fund": {
+            "title": "五常社區數位發展基金",
+            "functions": [
+              "fund_state_reference",
+              "budget_candidate",
+              "restricted_use_category_ref",
+              "merchant_blood_engine_contribution_evidence",
+              "happiness_coin_and_ticket_reconciliation_candidate",
+              "audit_evidence_chain",
+              "alert_threshold_and_recipient_level"
+            ],
+            "actual_bank_account_data_embedded": false,
+            "actual_balance_embedded": false,
+            "cloud_fill_financial_rules": false
+          },
+          "workflow_catalog": {
+            "official_document": [
+              "DRAFT->REVIEW",
+              "REVIEW->SIGNED_CANDIDATE",
+              "SIGNED_CANDIDATE->ARCHIVED"
+            ],
+            "meeting_and_resolution": [
+              "AGENDA_DRAFT->CONVENED",
+              "CONVENED->MINUTES_CANDIDATE",
+              "MINUTES_CANDIDATE->RESOLUTION_REVIEW",
+              "RESOLUTION_REVIEW->SEALED"
+            ],
+            "volunteer_assignment": [
+              "REQUESTED->MATCHED",
+              "MATCHED->ACCEPTED",
+              "ACCEPTED->IN_SERVICE",
+              "IN_SERVICE->COMPLETED"
+            ],
+            "fund_audit": [
+              "PRECONDITION_MISSING->EVIDENCE_READY",
+              "EVIDENCE_READY->RECONCILIATION_CANDIDATE",
+              "RECONCILIATION_CANDIDATE->AUDIT_REVIEW"
+            ]
+          }
+        }
+      },
+      "property": {
+        "packet_type": "INTEGRATED_PROPERTY_MANAGEMENT_SCENE_PACKET",
+        "scene_ref": "scene_ref:integrated-property-management",
+        "branch_total_field_ref": "branch-total-field:one-management-committee-one-branch",
+        "product_positioning": "家庭最小組織場到一個管委會一個分總場的整合式物業服務",
+        "family_is_smallest_organization_field": true,
+        "required_capabilities": [
+          "member_sovereign_packet_and_personal_xiaoj",
+          "family_shared_calendar_notification_and_todo",
+          "google_family_candidate_source_not_authoritative_master",
+          "management_committee_and_unit_owner_meetings",
+          "meeting_function_customization",
+          "official_document_approval_announcement_and_minutes",
+          "legal_document_and_form_references",
+          "package_letter_visitor_and_greeting_notifications",
+          "repair_maintenance_and_facility_application",
+          "financial_transparency_annual_plan_and_qa",
+          "financial_alert_threshold_and_recipient_level",
+          "camera_review_request_reason_scope_term_and_approval",
+          "resident_qa_and_proposal_assistance",
+          "family_opinion_aggregation_to_community_proposal",
+          "one_committee_one_independent_branch_total_field"
+        ],
+        "product_features": {
+          "organization_chain": [
+            "verified_personal_8d_packet",
+            "family_minimum_organization_field",
+            "community_or_building_property_field",
+            "management_committee_branch_total_field"
+          ],
+          "camera_review_request_requires": [
+            "reason_ref",
+            "scope_ref",
+            "term_ref",
+            "review_state_ref"
+          ],
+          "legal_source_policy": "EXISTING_VERIFIABLE_REFERENCES_ONLY",
+          "workflow_catalog": {
+            "committee_meeting": [
+              "AGENDA_DRAFT->CONVENED",
+              "CONVENED->MINUTES_CANDIDATE",
+              "MINUTES_CANDIDATE->RESOLUTION_REVIEW",
+              "RESOLUTION_REVIEW->SEALED"
+            ],
+            "parcel_and_visitor": [
+              "RECEIVED->NOTIFIED",
+              "NOTIFIED->ACKNOWLEDGED",
+              "ACKNOWLEDGED->CLOSED"
+            ],
+            "repair_and_facility": [
+              "REQUESTED->TRIAGED",
+              "TRIAGED->APPROVED_CANDIDATE",
+              "APPROVED_CANDIDATE->IN_SERVICE",
+              "IN_SERVICE->COMPLETED"
+            ],
+            "camera_review": [
+              "REQUESTED->SCOPE_REVIEW",
+              "SCOPE_REVIEW->APPROVED_OR_REJECTED",
+              "APPROVED_OR_REJECTED->EXPIRED_OR_CLOSED"
+            ],
+            "family_proposal": [
+              "FAMILY_DRAFT->FAMILY_AGGREGATED",
+              "FAMILY_AGGREGATED->COMMUNITY_PROPOSAL_CANDIDATE"
+            ]
+          }
+        }
+      },
+      "merchant": {
+        "packet_type": "COMMUNITY_MERCHANT_MANAGEMENT_SCENE_PACKET",
+        "scene_ref": "scene_ref:community-merchant-management",
+        "branch_total_field_ref": "branch-total-field:community-merchant-management",
+        "product_positioning": "社區商家、Odoo 18、POS、影音服務台與幸福幣票券守恆的營運候選",
+        "required_capabilities": [
+          "merchant_audiovisual_natural_language_service_desk",
+          "voice_ordering_and_menu_qa",
+          "odoo18_and_pos_binding_state",
+          "merchant_menu_order_ticket_and_operation_events",
+          "line_invoice_reference_and_consumption_summary",
+          "consumer_happiness_coin",
+          "merchant_ticket_generation_limit",
+          "merchant_announcement_event_and_community_proposal",
+          "merchant_ai_responsible_person_and_bounded_authorization",
+          "non_sensitive_image_feature_and_wifi_account_reference_response",
+          "raw_media_minimization_and_cloud_boundary",
+          "association_total_field_versioned_merchant_skill_rules"
+        ],
+        "product_features": {
+          "odoo_version": "18_REFERENCE_ONLY_BINDING_STATE",
+          "pos_state": "SOURCE_CANDIDATE_NOT_PRODUCTION_ENABLED",
+          "checkout_paths_ref": "taiji04_audiovisual_natural_language_service.checkout_paths",
+          "merchant_ai_authority": "BOUNDED_CANDIDATE_ONLY",
+          "wifi_account_plaintext_to_cloud": false,
+          "raw_media_retention": false,
+          "one_to_one_to_one_contract_required": true,
+          "workflow_catalog": {
+            "order": [
+              "DRAFT->PURCHASER_CONFIRMED",
+              "PURCHASER_CONFIRMED->MERCHANT_ACCEPTED",
+              "MERCHANT_ACCEPTED->FULFILMENT",
+              "FULFILMENT->COMPLETED"
+            ],
+            "ticket_and_happiness_coin": [
+              "PRECONDITION_MISSING->AUTHORITY_REFS_READY",
+              "AUTHORITY_REFS_READY->RECONCILIATION_CANDIDATE",
+              "RECONCILIATION_CANDIDATE->TOTAL_FIELD_REVIEW"
+            ],
+            "merchant_announcement": [
+              "DRAFT->RESPONSIBLE_PERSON_REVIEW",
+              "RESPONSIBLE_PERSON_REVIEW->PUBLICATION_CANDIDATE"
+            ],
+            "bounded_ai_operation": [
+              "REQUESTED->AUTHORIZATION_CHECK",
+              "AUTHORIZATION_CHECK->CANDIDATE_ACTION",
+              "CANDIDATE_ACTION->HUMAN_CONFIRMATION"
+            ]
+          }
+        }
+      }
+    },
+    "cloud_fill_policy": {
+      "allowed": [
+        "serializer",
+        "parser",
+        "ui_view_model",
+        "reference_resolver_adapter",
+        "pure_validation_helper"
+      ],
+      "forbidden": [
+        "fund_rules_or_values",
+        "blood_engine_rules",
+        "one_to_one_to_one_formula",
+        "bank_account_balance_or_ring_fence_data",
+        "happiness_coin_or_merchant_ticket_actual_limits",
+        "member_plaintext_or_identifying_data",
+        "legal_document_content_or_legal_duty",
+        "protected_codebook",
+        "deploy_restart_db_or_router_authority"
+      ]
+    },
+    "runtime_activation": false,
+    "database_write": false,
+    "deploy": false,
+    "restart": false,
+    "router_write": false,
+    "canonical_write": false
   },
   "scene_switch_rules": {
     "switch_by_intent": true,

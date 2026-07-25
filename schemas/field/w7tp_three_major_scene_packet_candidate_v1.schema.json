@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://w7tp.local/schemas/field/w7tp_three_major_scene_packet_candidate_v1.schema.json",
+  "title": "W7TP Three Major Scene Packet Candidate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "scene",
+    "shared_skill_contract_ref",
+    "shared_skill_contract_sha256",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "D7",
+    "D8"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "w7tp.three-major-scene-packet-candidate.v1"
+    },
+    "packet_type": {
+      "enum": [
+        "COMMUNITY_ASSOCIATION_PUBLIC_BENEFIT_SCENE_PACKET",
+        "INTEGRATED_PROPERTY_MANAGEMENT_SCENE_PACKET",
+        "COMMUNITY_MERCHANT_MANAGEMENT_SCENE_PACKET"
+      ]
+    },
+    "scene": {
+      "enum": ["public_benefit", "property", "merchant"]
+    },
+    "shared_skill_contract_ref": {"type": "string", "minLength": 1},
+    "shared_skill_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "D1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "TOTAL_FIELD_DESCRIPTION",
+        "D1_INTENT",
+        "identity_packet_ref",
+        "identity_packet_sha256"
+      ],
+      "properties": {
+        "TOTAL_FIELD_DESCRIPTION": {"type": "string", "minLength": 1},
+        "D1_INTENT": {"type": "string", "minLength": 1},
+        "identity_packet_ref": {
+          "type": "string",
+          "pattern": "^identity-packet-ref:"
+        },
+        "identity_packet_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "D2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "missing_preconditions",
+        "candidate_only",
+        "runtime_enabled"
+      ],
+      "properties": {
+        "state": {"enum": ["CANDIDATE_READY", "PRECONDITION_MISSING"]},
+        "missing_preconditions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "candidate_only": {"const": true},
+        "runtime_enabled": {"const": false}
+      }
+    },
+    "D3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "D3_COORDINATE",
+        "branch_total_field_ref",
+        "canonical_product_root_sha256",
+        "canonical_product_root_reference_only"
+      ],
+      "properties": {
+        "D3_COORDINATE": {"type": "string", "pattern": "^scene_ref:"},
+        "branch_total_field_ref": {
+          "type": "string",
+          "pattern": "^branch-total-field:"
+        },
+        "canonical_product_root_sha256": {"$ref": "#/$defs/sha256"},
+        "canonical_product_root_reference_only": {"const": true}
+      }
+    },
+    "D4": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_skill_refs",
+        "scene_capabilities",
+        "product_features",
+        "event_refs",
+        "authority_refs"
+      ],
+      "properties": {
+        "required_skill_refs": {
+          "type": "array",
+          "minItems": 10,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^skill_ref:"}
+        },
+        "scene_capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "product_features": {"type": "object"},
+        "event_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "authority_refs": {"type": "object"}
+      }
+    },
+    "D5": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["EVENT", "STATE_TRANSITION", "flow"],
+      "properties": {
+        "EVENT": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["event_type", "event_refs"],
+          "properties": {
+            "event_type": {"type": "string", "minLength": 1},
+            "event_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "STATE_TRANSITION": {"type": "string", "minLength": 1},
+        "flow": {
+          "const": [
+            "TOTAL_FIELD_DESCRIPTION",
+            "D1_INTENT",
+            "D3_COORDINATE",
+            "REQUIRED_SKILL_REFS",
+            "EVENT",
+            "STATE_TRANSITION",
+            "CLOUD_FILLABLE_CODE_ZONE",
+            "LOCAL_RECONSTRUCTION",
+            "D7_VERIFICATION",
+            "D8_RECEIPT"
+          ]
+        }
+      }
+    },
+    "D6": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "CLOUD_FILLABLE_CODE_ZONE",
+        "cloud_fill_forbidden",
+        "generative_transmission",
+        "ordinary_file_movement",
+        "cloud_sync",
+        "backup",
+        "download_decryption",
+        "cloud_payload"
+      ],
+      "properties": {
+        "CLOUD_FILLABLE_CODE_ZONE": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "cloud_fill_forbidden": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"}
+        },
+        "generative_transmission": {
+          "const": "PROTOCOL_NATIVE_8D_INTENT_FIELD_PACKET_WITH_RECONSTRUCTION_AND_VERIFICATION"
+        },
+        "ordinary_file_movement": {"const": false},
+        "cloud_sync": {"const": false},
+        "backup": {"const": false},
+        "download_decryption": {"const": false},
+        "cloud_payload": {
+          "const": "INCOMPLETE_DEIDENTIFIED_REFERENCE_ONLY_8D_STATE_PACKET"
+        }
+      }
+    },
+    "D7": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "D7_VERIFICATION",
+        "fund_conservation_contract",
+        "precondition_policy",
+        "raw_media_to_cloud",
+        "member_plaintext_to_cloud",
+        "database_write",
+        "deploy",
+        "restart",
+        "router_write",
+        "canonical_write"
+      ],
+      "properties": {
+        "D7_VERIFICATION": {"type": "string", "minLength": 1},
+        "fund_conservation_contract": {"type": "object"},
+        "precondition_policy": {
+          "const": "MISSING_AUTHORITY_INPUT_RETURNS_PRECONDITION_MISSING"
+        },
+        "raw_media_to_cloud": {"const": false},
+        "member_plaintext_to_cloud": {"const": false},
+        "database_write": {"const": false},
+        "deploy": {"const": false},
+        "restart": {"const": false},
+        "router_write": {"const": false},
+        "canonical_write": {"const": false}
+      }
+    },
+    "D8": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "D8_RECEIPT",
+        "authorization_id",
+        "nonce",
+        "ttl_seconds",
+        "created_at",
+        "expires_at",
+        "candidate_only",
+        "canonical_status",
+        "integrity"
+      ],
+      "properties": {
+        "D8_RECEIPT": {"const": "TOTAL_FIELD_CANDIDATE_RECEIPT_REQUIRED"},
+        "authorization_id": {
+          "const": "FOUNDER_THREE_SCENE_PRODUCT_EXPANSION_20260723"
+        },
+        "nonce": {"type": "string", "minLength": 16},
+        "ttl_seconds": {"type": "integer", "minimum": 60, "maximum": 86400},
+        "created_at": {"type": "string", "format": "date-time"},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "candidate_only": {"const": true},
+        "canonical_status": {"const": "CANDIDATE_NOT_CANONICAL"},
+        "integrity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "packet_sha256"],
+          "properties": {
+            "algorithm": {"const": "sha256"},
+            "packet_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}
