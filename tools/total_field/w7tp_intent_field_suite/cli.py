@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -39,8 +40,14 @@ SCHEMA_FILES = (
     "schemas/field/w7tp_deployment_manifest.schema.json",
     "schemas/field/w7tp_natural_person_identity_prefix.schema.json",
     "schemas/field/w7tp_identity_projection.schema.json",
+    "schemas/field/w7tp_true8d_projection_contract_v2.schema.json",
+    "schemas/field/w7tp_true8d_projection_contract_v2_1.schema.json",
     "schemas/field/8d_gte_runtime_candidate_profile_v0_1.schema.json",
     "schemas/field/8d_governance_tensor_expression_candidate.schema.json",
+)
+
+WORKTREE_REVIEW_QUEUE_PATH = (
+    ROOT / "runtime/total_field/inbox/W7TP_WORKTREE_CHANGE_REVIEW_QUEUE.json"
 )
 
 
@@ -51,12 +58,42 @@ def _json_object(value: str) -> dict[str, Any]:
     return parsed
 
 
+def _collect_changed_file_paths(*, include_untracked: bool, repo_root: Path = ROOT) -> list[str]:
+    try:
+        diff_output = subprocess.check_output(
+            ["git", "diff", "--name-only", "HEAD"],
+            cwd=str(repo_root),
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise FieldApplicationError("WORKTREE_DIFF_LIST_FAILED", "$.execution") from exc
+
+    files = [line.strip() for line in diff_output.splitlines() if line.strip()]
+    if include_untracked:
+        try:
+            untracked_output = subprocess.check_output(
+                ["git", "ls-files", "--others", "--exclude-standard"],
+                cwd=str(repo_root),
+                text=True,
+            )
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise FieldApplicationError("WORKTREE_UNTRACKED_LIST_FAILED", "$.execution") from exc
+        files.extend(
+            line.strip() for line in untracked_output.splitlines() if line.strip()
+        )
+
+    return list(dict.fromkeys(files))
+
+
 def _release_files() -> list[Path]:
     suite = ROOT / "tools/total_field/w7tp_intent_field_suite"
     files = [
         ROOT / "tools/deploy_w7tp_small_agent_all_nodes.py",
         ROOT / "tools/total_field/w7tp_field_application_runtime.py",
         ROOT / "tools/total_field/founder_variable_cognition_gate.py",
+        ROOT / "tools/total_field/final_state_gate.py",
+        ROOT / "tools/intent_field/adi_5d_absolute_index_verifier.py",
+        ROOT / "tools/taiji_8d_canonical_verifier.py",
         ROOT / "tools/cloud_proxy/w7tp_openwebui_cloud_proxy.py",
         ROOT / "tools/odoo/configure_google_member_provider.py",
         ROOT / "deploy/systemd/w7tp-intent-field.service",
@@ -107,15 +144,29 @@ def _release_files() -> list[Path]:
         ROOT / "tools/total_field/cafe_pos_local_llm_acceptance.py",
         ROOT / "tools/total_field/w7tp_bundle_installer.py",
         ROOT / "tools/total_field/w7tp_core_encoding.py",
+        ROOT / "tools/total_field/w7tp_canonical_v2_1_legacy_adapter.py",
+        ROOT / "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
+        ROOT / "tools/total_field/w7tp_true8d_contract_sandbox.py",
         ROOT / "tools/total_field_candidate_gateway.py",
         ROOT / "tools/eightd_gte_parser_candidate.py",
         ROOT / "tools/tfct_true8d_runtime_candidate.py",
         ROOT / "tools/d3_coordinate_transition_candidate.py",
+        ROOT / "scripts/verify/verify_w7tp_canonical_v2_1.py",
         ROOT / "docs/operations/CAFE_POS_HUMAN_AI_DESIGN_BENCHMARK_20260716.md",
         ROOT / "docs/total_field/W7TP_CORE_FIELD_ENCODING_MANAGEMENT_V1.md",
+        ROOT / "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md",
         ROOT / "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md",
+        ROOT / "docs/total_field/W7TP_SYSTEM_WHITEPAPER_ZH_V2_1_ALIGNMENT_20260728.md",
         ROOT / "docs/total_field/W7TP_FOUNDER_IDENTITY_ROOT_AND_VARIABLE_COGNITION_PACKAGE_CANONICAL.md",
         ROOT / "docs/total_field/W7TP_MEMBER_AI_LLM_PREFIX_POLICY.md",
+        ROOT / "schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json",
+        ROOT / "schemas/field/w7tp_canonical_v2_to_v2_1_legacy_adapter_v1.schema.json",
+        ROOT / "schemas/field/w7tp_review_candidate_v2_3_adapter_request_v2_1.schema.json",
+        ROOT / "schemas/field/w7tp_five_skill_id_binding_matrix_v2_1.schema.json",
+        ROOT / "manifests/total_field/w7tp_canonical_v2_1/CANONICAL_MANIFEST.json",
+        ROOT / "manifests/total_field/w7tp_canonical_v2_1/V2_CONSUMER_INVENTORY.json",
+        ROOT / "manifests/total_field/w7tp_canonical_v2_1/SHA256_MANIFEST.json",
+        ROOT / "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json",
         ROOT / "configs/w7tp_member_llm_prefix_policy.example.json",
         ROOT / "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/quickclick-menu-snapshot.json",
         ROOT / "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/README.md",
@@ -152,6 +203,22 @@ def main(argv: list[str] | None = None) -> int:
     queue.add_argument("intent_json")
     queue.add_argument("--node-id", required=True)
     queue.add_argument("--queue", type=Path, required=True)
+    worktree_queue = subparsers.add_parser("edge-queue-worktree")
+    worktree_queue.add_argument("--node-id", required=True)
+    worktree_queue.add_argument(
+        "--queue",
+        type=Path,
+        default=WORKTREE_REVIEW_QUEUE_PATH,
+    )
+    worktree_queue.add_argument(
+        "--profile",
+        default="GENERIC",
+    )
+    worktree_queue.add_argument(
+        "--include-untracked",
+        action="store_true",
+        help="include currently untracked files",
+    )
     revalidate = subparsers.add_parser("edge-revalidate")
     revalidate.add_argument("--queue", type=Path, required=True)
     install = subparsers.add_parser("install")
@@ -217,6 +284,35 @@ def main(argv: list[str] | None = None) -> int:
                 snapshot,
                 node_id=args.node_id,
             )
+        elif args.command == "edge-queue-worktree":
+            changed_files = _collect_changed_file_paths(
+                include_untracked=args.include_untracked,
+            )
+            if not changed_files:
+                result = {
+                    "state": "HOLD",
+                    "reason_code": "WORKTREE_CHANGES_EMPTY",
+                    "path": "$.evidence_refs",
+                    "changed_file_count": 0,
+                }
+            else:
+                snapshot = build_sealed_snapshot()
+                intent = {
+                    "requested_result": f"送交本地變更檔案進行總場審查（共 {len(changed_files)} 檔）。",
+                    "constraints": "只提交變更檔名與目錄清單，不含密碼、token、憑證、DB 寫入內容或明文個資，僅用於總場候選審查。",
+                    "evidence_refs": changed_files,
+                }
+                packet = process_intent(
+                    args.profile,
+                    intent,
+                    execution_metadata={"surface": "OFFLINE_EDGE_WORKTREE_QUEUE"},
+                )
+                result = enqueue_packet(
+                    args.queue,
+                    packet,
+                    snapshot,
+                    node_id=args.node_id,
+                )
         elif args.command == "edge-revalidate":
             result = revalidate_queue_file(
                 args.queue,

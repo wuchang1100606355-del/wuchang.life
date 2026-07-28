@@ -42,6 +42,30 @@ XIAOJ_DEVELOPER_CARD_REF = (
     "manifest_ref:xiaoj_member_bound_developer_seat_candidate_v0_1"
 )
 ROOKIE_MESSAGE = "這個我不懂，我只是個菜鳥，我幫你問店長或學長"
+CANONICAL_V2_1_ID = (
+    "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1"
+)
+CANONICAL_V2_1_VERSION = "2.1"
+CANONICAL_V2_1_PATH = (
+    "docs/total_field/"
+    "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"
+)
+CANONICAL_V2_1_SHA256 = (
+    "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba"
+)
+PARENT_CANONICAL_V2_PATH = (
+    "docs/total_field/"
+    "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"
+)
+PARENT_CANONICAL_V2_SHA256 = (
+    "a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0"
+)
+
+VERIFICATION_MODES = {
+    "L1_FULL": "L1_EXACT_BYTE",
+    "L2_EQUIVALENT": "L2_EFFECT_EQUIVALENT",
+    "L3_CANDIDATE": "L3_CANDIDATE",
+}
 
 HARD_RISK_ACTIONS = {
     "delete",
@@ -82,6 +106,365 @@ def _actions(values: Sequence[str] | None) -> set[str]:
         str(value).strip().lower().replace("-", "_")
         for value in (values or [])
         if str(value).strip()
+    }
+
+
+def _canonical_v2_1_binding() -> Dict[str, Any]:
+    return {
+        "canonical_id": CANONICAL_V2_1_ID,
+        "version": CANONICAL_V2_1_VERSION,
+        "path": CANONICAL_V2_1_PATH,
+        "sha256": CANONICAL_V2_1_SHA256,
+        "parent_version": "2.0.0",
+        "parent_path": PARENT_CANONICAL_V2_PATH,
+        "parent_sha256": PARENT_CANONICAL_V2_SHA256,
+        "migration_mode": "APPEND_ONLY_SUCCESSOR",
+    }
+
+
+def _append_only_lineage(packet_id: str, packet_hash: str) -> Dict[str, Any]:
+    logical_time = f"logical-time:{packet_hash[:16]}"
+    return {
+        "mode": "APPEND_ONLY",
+        "packet_ref": packet_id,
+        "parent_ref": "parent_ref:none_initial_packet",
+        "parent_sha256": None,
+        "logical_time": logical_time,
+        "transition_ref": f"transition_ref:{packet_hash[:16]}",
+        "historical_packet_rewritten": False,
+    }
+
+
+def _communication_contract() -> Dict[str, Any]:
+    return {
+        "mode": "INTENT_AND_STATE_FIELD_PACKET_COMMUNICATION",
+        "intent_communication": True,
+        "state_field_packet_communication": True,
+        "semantic_communication": False,
+        "semantic_model_role": "CANDIDATE_PARSER_ONLY",
+    }
+
+
+def _adi_boundary() -> Dict[str, Any]:
+    return {
+        "packet_layer": {
+            "mode": "LOCAL_IRREVERSIBLE_PACKET_ADJUDICATION_INDEX",
+            "index_state": "NOT_ALLOCATED",
+            "normalized_fields_ref": "packet_fields_ref:canonical_normalized",
+            "nonce_ref": "envelope_ref:nonce",
+            "key_version_ref": "protected_ref:local_authority_key_version",
+            "evidence_ref": "dimensions_ref:D4_EVIDENCE",
+            "member_plaintext": False,
+            "reversible_identity_code": False,
+            "floating_point_embedding": False,
+        },
+        "system_layer": {
+            "mode": "USER_OWNED_SPATIOTEMPORAL_STATE_INDEX_NETWORK",
+            "packet_lineage_ref": "lineage_ref:this_packet",
+            "logical_time_ref": "lineage_ref:logical_time",
+            "state_transition_ref": "lineage_ref:transition",
+            "namespace_ref": "namespace_ref:wuchang_three_org",
+            "evidence_graph_ref": "dimensions_ref:D4_EVIDENCE",
+        },
+    }
+
+
+def _protected_reference_boundary() -> Dict[str, Any]:
+    return {
+        "mode": "REFERENCE_ONLY",
+        "h64_td_ref": "protected_ref:H64-TD",
+        "codebook_ref": "protected_ref:complete_codebook",
+        "mapping_table_ref": "protected_ref:mapping_table",
+        "recovery_material_ref": "protected_ref:recovery_material",
+        "inline_protected_material": False,
+        "cloud_candidate_material": False,
+        "log_material": False,
+    }
+
+
+def _core_verification(
+    *,
+    verification_level: str,
+    packet_hash: str,
+    payload_byte_length: int,
+    decision: str,
+    evidence_refs: Sequence[str],
+    packet_id: str,
+) -> Dict[str, Any]:
+    verification_mode = VERIFICATION_MODES[verification_level]
+    common = {
+        "mode": verification_mode,
+        "method_ref": f"verifier:w7tp-{verification_mode.lower()}",
+        "contract_ref": f"contract:w7tp-{verification_mode.lower()}",
+    }
+    if verification_mode == "L1_EXACT_BYTE":
+        return {
+            **common,
+            "decision": decision if decision in {"PASS", "HOLD", "BLOCK"} else "HOLD",
+            "raw_sha256": packet_hash,
+            "byte_length": payload_byte_length,
+            "hash_scope": "TARGET_RAW_BYTES",
+        }
+    if verification_mode == "L2_EFFECT_EQUIVALENT":
+        return {
+            **common,
+            "decision": decision if decision in {"PASS", "HOLD", "BLOCK"} else "HOLD",
+            "effect_contract_ref": "effect:state-control-service-result",
+            "comparison_fields": ["state", "control", "effect"],
+            "evidence_refs": list(evidence_refs),
+            "local_verifier_ref": "verifier:local-total-field",
+        }
+    return {
+        **common,
+        "decision": "BLOCK" if decision == "BLOCK" else "HOLD",
+        "candidate_refs": [f"candidate:{packet_id}"],
+        "local_decision_authority_ref": "authority:local-total-field",
+        "final_authority_granted": False,
+    }
+
+
+def _build_v2_1_core_packet(
+    *,
+    packet_id: str,
+    packet_hash: str,
+    nonce: str,
+    verification_level: str,
+    decision: str,
+    intent_ref: str,
+    state_ref: str,
+    coordinate_ref: str,
+    evidence_values: Sequence[str],
+    execution_ref: str,
+    target_state_ref: str,
+    lookup_refs: Sequence[str],
+    generation_rule_refs: Sequence[str],
+    reconstruction_condition_refs: Sequence[str],
+    hard_risks: Sequence[str] = (),
+    payload_byte_length: int = 0,
+) -> Dict[str, Any]:
+    logical_time = max(1, int(packet_hash[:12], 16))
+    evidence_refs = list(dict.fromkeys(
+        f"evidence:{_sha256(value)}"
+        for value in evidence_values
+    )) or [f"evidence:{packet_hash}"]
+    lineage_ref = f"lineage:{packet_hash[:16]}"
+    transition_ref = f"transition:{packet_hash[:16]}"
+    generation_ref = f"generation:{packet_hash[:16]}"
+    risk_ref = f"risk:{packet_hash[:16]}"
+    verification_ref = f"verification:{packet_hash[:16]}"
+    envelope_ref = f"envelope:{packet_hash[:16]}"
+    namespace = "wuchang.three-org"
+    authority_ref = "authority:local-total-field"
+    replay_tuple = {
+        "authority_ref": authority_ref,
+        "namespace": namespace,
+        "packet_id": packet_id,
+        "nonce": nonce,
+        "logical_time": logical_time,
+    }
+    verification = _core_verification(
+        verification_level=verification_level,
+        packet_hash=packet_hash,
+        payload_byte_length=payload_byte_length,
+        decision=decision,
+        evidence_refs=evidence_refs,
+        packet_id=packet_id,
+    )
+    risk_decision = decision if decision in {"PASS", "HOLD", "BLOCK"} else "HOLD"
+    d6 = {
+        "protocol_ref": "protocol:w7tp-8d-generative-transmission-v2.1",
+        "routing_ref": "routing:local-total-field-reconstructor",
+        "lookup_refs": list(lookup_refs),
+        "reference_refs": [intent_ref, coordinate_ref, *evidence_refs],
+        "generation_rule_refs": list(generation_rule_refs),
+        "reconstruction_condition_refs": list(reconstruction_condition_refs),
+        "equivalent_state_rule_refs": ["rule:governed-equivalent-state"],
+        "total_field_verifier_ref": "verifier:local-total-field",
+    }
+
+    return {
+        "canonical_id": CANONICAL_V2_1_ID,
+        "version": CANONICAL_V2_1_VERSION,
+        "canonical_binding": {
+            "canonical_path": CANONICAL_V2_1_PATH,
+            "canonical_sha256": CANONICAL_V2_1_SHA256,
+            "parent_version": "2.0",
+            "parent_path": PARENT_CANONICAL_V2_PATH,
+            "parent_sha256": PARENT_CANONICAL_V2_SHA256,
+            "migration_mode": "APPEND_ONLY_SUCCESSOR",
+        },
+        "packet_core": "UNIFIED_MULTIPURPOSE_INTERACTIVE_COUPLED_8D_STATE_FIELD_PACKET",
+        "communication_contract": {
+            "primary": "INTENT_COMMUNICATION",
+            "secondary": "STATE_FIELD_PACKET_COMMUNICATION",
+            "semantic_communication": False,
+            "semantic_model_role": "CANDIDATE_EVIDENCE_ONLY",
+            "floating_point_required": False,
+        },
+        "authority_boundary": {
+            "cloud_authority": ["CANDIDATE", "EVIDENCE"],
+            "llm_authority": ["CANDIDATE", "EVIDENCE"],
+            "final_decision_authority": "LOCAL_TOTAL_FIELD",
+            "final_seal_authority": "LOCAL_TOTAL_FIELD",
+        },
+        "state_field": {
+            "kind": "INTERACTIVE_COUPLED_8D_STATE_FIELD",
+            "dimensions": {
+                "D1_INTENT": {"profile_ref": intent_ref},
+                "D2_STATE": {"profile_ref": state_ref},
+                "D3_COORDINATE": {"profile_ref": coordinate_ref},
+                "D4_EVIDENCE": {
+                    "profile_ref": f"evidence-profile:{packet_hash[:16]}",
+                    "evidence_refs": evidence_refs,
+                },
+                "D5_EXECUTION": {"profile_ref": execution_ref},
+                "D6_GENERATIVE_TRANSMISSION": d6,
+                "D7_RISK_QUARANTINE": {
+                    "hard_risks": list(hard_risks),
+                    "quarantine_refs": [f"quarantine:{packet_hash[:16]}"],
+                    "decision": risk_decision,
+                },
+                "D8_ENVELOPE_VERIFICATION": {
+                    "envelope_ref": envelope_ref,
+                    "verifier_ref": "verifier:local-total-field",
+                    "seal_policy_ref": "seal-policy:local-total-field",
+                },
+            },
+            "coupling": {
+                "transition_function": "S_NEXT=T(S_CURRENT,I,C,E,A,G,R,V)",
+                "current_state_ref": state_ref,
+                "intent_ref": intent_ref,
+                "coordinate_ref": coordinate_ref,
+                "evidence_refs": evidence_refs,
+                "execution_ref": execution_ref,
+                "generation_ref": generation_ref,
+                "risk_ref": risk_ref,
+                "verification_ref": verification_ref,
+                "target_state_ref": target_state_ref,
+                "non_float_execution": True,
+            },
+        },
+        "adi": {
+            "packet_layer": {
+                "index_kind": "OPAQUE_IRREVERSIBLE_PACKET_DECISION_INDEX",
+                "namespace": namespace,
+                "decision_index": packet_hash,
+                "nonce": nonce,
+                "key_version_ref": "key-version:local-authority-current",
+                "authority_ref": authority_ref,
+                "evidence_refs": evidence_refs,
+                "derivation_ref": "derivation:local-authority-normalized-fields",
+                "verifier_ref": "verifier:local-adi",
+                "irreversible": True,
+                "reversible_identity": False,
+                "database_primary_key": False,
+                "floating_embedding": False,
+            },
+            "system_layer": {
+                "index_kind": "USER_OWNED_SPATIOTEMPORAL_STATE_INDEX_NETWORK",
+                "owner_authority_ref": authority_ref,
+                "namespace": namespace,
+                "logical_time": logical_time,
+                "packet_lineage_refs": [lineage_ref],
+                "state_transition_ref": transition_ref,
+                "evidence_refs": evidence_refs,
+            },
+            "replay_protection": {
+                "tuple": replay_tuple,
+                "tuple_sha256": _sha256(replay_tuple),
+                "logical_time_monotonic": True,
+            },
+        },
+        "lineage": {
+            "append_only": True,
+            "parent_ref": "canonical-parent:w7tp-v2",
+            "parent_sha256": PARENT_CANONICAL_V2_SHA256,
+            "previous_seal_ref": "seal:none-initial",
+            "logical_time": logical_time,
+            "changed_dimensions": [
+                "D1_INTENT",
+                "D2_STATE",
+                "D3_COORDINATE",
+                "D4_EVIDENCE",
+                "D5_EXECUTION",
+                "D6_GENERATIVE_TRANSMISSION",
+                "D7_RISK_QUARANTINE",
+                "D8_ENVELOPE_VERIFICATION",
+            ],
+            "transition_evidence_refs": evidence_refs,
+        },
+        "generation": {
+            "protocol_native": True,
+            "state_ref": state_ref,
+            "coordinate_ref": coordinate_ref,
+            "lookup_refs": list(lookup_refs),
+            "generation_rule_refs": list(generation_rule_refs),
+            "reconstruction_condition_refs": list(reconstruction_condition_refs),
+            "target_state_ref": target_state_ref,
+            "file_movement": False,
+        },
+        "reconstruction": {
+            "local_state_field_ref": "state-field:local-total-field",
+            "lookup_refs": list(lookup_refs),
+            "condition_refs": list(reconstruction_condition_refs),
+            "equivalent_state_rule_refs": ["rule:governed-equivalent-state"],
+            "target_state_ref": target_state_ref,
+            "total_field_verifier_ref": "verifier:local-total-field",
+            "deterministic_operations": [
+                "INTEGER",
+                "BOOLEAN",
+                "SYMBOLIC",
+                "LOOKUP",
+                "REFERENCE_RESOLUTION",
+                "STATE_TRANSITION",
+            ],
+            "model_output_role": "CANDIDATE_EVIDENCE_ONLY",
+        },
+        "verification": verification,
+        "protected_refs": {
+            "materials": [
+                {
+                    "kind": "H64_TD",
+                    "reference": "protected_ref:H64-TD",
+                    "disclosure": "REFERENCE_ONLY",
+                },
+                {
+                    "kind": "CODEBOOK",
+                    "reference": "protected_ref:complete-codebook",
+                    "disclosure": "REFERENCE_ONLY",
+                },
+                {
+                    "kind": "MAPPING_TABLE",
+                    "reference": "protected_ref:mapping-table",
+                    "disclosure": "REFERENCE_ONLY",
+                },
+                {
+                    "kind": "RECOVERY_MATERIAL",
+                    "reference": "protected_ref:recovery-material",
+                    "disclosure": "REFERENCE_ONLY",
+                },
+            ],
+        },
+        "envelope": {
+            "packet_id": packet_id,
+            "authority_ref": authority_ref,
+            "version": CANONICAL_V2_1_VERSION,
+            "ttl_seconds": 900,
+            "nonce": nonce,
+            "payload_sha256": packet_hash,
+            "canonical_json_sha256": _sha256(
+                {
+                    "packet_id": packet_id,
+                    "packet_hash": packet_hash,
+                    "nonce": nonce,
+                    "logical_time": logical_time,
+                }
+            ),
+            "verifier_ref": "verifier:local-total-field",
+            "seal_policy_ref": "seal-policy:local-total-field",
+            "seal_state": "UNSEALED_CANDIDATE",
+            "final_seal_authority": "LOCAL_TOTAL_FIELD",
+        },
     }
 
 
@@ -357,8 +740,9 @@ def build_eight_d_media_transport_packet(
     resolved_domain = str(domain or "").upper()
     if resolved_domain not in {"IMAGE", "AUDIO", "VIDEO", "AUDIOVISUAL"}:
         raise ValueError("unsupported 8D media domain")
-    if verification_level not in {"L1_FULL", "L2_EQUIVALENT", "L3_CANDIDATE"}:
+    if verification_level not in VERIFICATION_MODES:
         raise ValueError("unsupported verification level")
+    verification_mode = VERIFICATION_MODES[verification_level]
 
     profile_ref = {
         "IMAGE": "profile_ref:w7tp_image_domain_profile_v1",
@@ -378,27 +762,36 @@ def build_eight_d_media_transport_packet(
             "AUDIO_SEMANTIC_TIMING_PROSODY_AND_SERVICE_EFFECT_EQUIVALENT"
         )
     packet_seed = {
+        "canonical_path": CANONICAL_V2_1_PATH,
+        "canonical_sha256": CANONICAL_V2_1_SHA256,
         "domain": resolved_domain,
         "scene_ref": scene_ref,
-        "verification_level": verification_level,
+        "verification_mode": verification_mode,
         "profile_ref": profile_ref
     }
     packet_hash = _sha256(packet_seed)
     packet_id = f"packet:taiji04:{resolved_domain.lower()}:{packet_hash[:16]}"
     nonce = _sha256({"packet_id": packet_id, "scene_ref": scene_ref})[:32]
+    lineage = _append_only_lineage(packet_id, packet_hash)
     envelope = {
         "packet_id": packet_id,
         "authority_ref": "authority_ref:total_field",
-        "version": "2.0.0",
+        "version": CANONICAL_V2_1_VERSION,
+        "canonical_ref": CANONICAL_V2_1_PATH,
+        "canonical_sha256": CANONICAL_V2_1_SHA256,
         "ttl_seconds": 900,
         "nonce": nonce,
+        "logical_time": lineage["logical_time"],
+        "lineage_ref": lineage["packet_ref"],
+        "verification_mode": verification_mode,
         "sha256": packet_hash,
         "verifier_ref": verification_ref,
         "seal_policy": "candidate_only_total_field_review"
     }
     risk = {"hard_risks": [], "decision": "PASS"}
     d6 = {
-        "protocol": "W7TP_8D_GENERATIVE_TRANSMISSION_V2",
+        "protocol": "W7TP_8D_GENERATIVE_TRANSMISSION_V2_1",
+        "communication_contract": _communication_contract(),
         "routing": "total_field_to_authorized_local_reconstructor",
         "segmentation": f"{resolved_domain.lower()}_state_coordinate_segment",
         "merge_conditions": ["packet_order_valid", "hash_valid", "ttl_valid"],
@@ -418,11 +811,57 @@ def build_eight_d_media_transport_packet(
         "refill_policy": "reference_only_no_raw_media_cloud_refill",
         "on_demand_materialization": True
     }
+    core_packet = _build_v2_1_core_packet(
+        packet_id=packet_id,
+        packet_hash=packet_hash,
+        nonce=nonce,
+        verification_level=verification_level,
+        decision="PASS",
+        intent_ref=f"intent:{resolved_domain.lower()}-reconstruction",
+        state_ref=f"state:{resolved_domain.lower()}-candidate",
+        coordinate_ref=f"coordinate:{resolved_domain.lower()}",
+        evidence_values=[scene_ref, profile_ref],
+        execution_ref="execution:authorized-local-reconstructor",
+        target_state_ref=f"target-state:{resolved_domain.lower()}-reconstructed",
+        lookup_refs=[f"lookup:{resolved_domain.lower()}-profile"],
+        generation_rule_refs=[
+            "rule:integer-state-transition",
+            "rule:reference-resolution",
+            "rule:coordinate-reconstruction",
+        ],
+        reconstruction_condition_refs=[
+            "condition:packet-order-valid",
+            "condition:hash-valid",
+            "condition:ttl-valid",
+        ],
+        payload_byte_length=len(_stable_json(packet_seed).encode("utf-8")),
+    )
 
     return {
-        "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2",
-        "version": "2.0.0",
+        "canonical_id": CANONICAL_V2_1_ID,
+        "version": CANONICAL_V2_1_VERSION,
+        "canonical_binding": _canonical_v2_1_binding(),
+        "core_packet": core_packet,
         "packet_core": "UNIFIED_MULTIPURPOSE_8D_PACKET",
+        "communication_contract": _communication_contract(),
+        "state_field": {
+            "mode": "INTERACTIVE_COUPLED_8D_STATE_FIELD",
+            "coupled_dimensions": [
+                "D1_INTENT",
+                "D2_STATE",
+                "D3_COORDINATE",
+                "D4_EVIDENCE",
+                "D5_EXECUTION",
+                "D6_GENERATIVE_TRANSMISSION",
+                "D7_RISK_QUARANTINE",
+                "D8_ENVELOPE_VERIFICATION",
+            ],
+            "transition_ref": lineage["transition_ref"],
+            "total_field_verifier_ref": "verifier_ref:total_field",
+        },
+        "lineage": lineage,
+        "adi": _adi_boundary(),
+        "protected_refs": _protected_reference_boundary(),
         "technology_flags": {
             "packet_carries_transport_protocol": True,
             "packet_carries_reconstruction_conditions": True,
@@ -444,8 +883,8 @@ def build_eight_d_media_transport_packet(
             "D4_EVIDENCE": {"profile_ref": f"evidence_ref:{packet_hash}"},
             "D5_EXECUTION": {"profile_ref": "execution_ref:authorized_local_reconstructor"},
             "D6_GENERATIVE_TRANSMISSION": d6,
-            "D7_RISK": risk,
-            "D8_ENVELOPE": envelope
+            "D7_RISK_QUARANTINE": risk,
+            "D8_ENVELOPE_VERIFICATION": envelope
         },
         "domain_profile": {
             "domain": resolved_domain,
@@ -493,6 +932,7 @@ def build_eight_d_media_transport_packet(
         },
         "verification": {
             "level": verification_level,
+            "mode": verification_mode,
             "method_ref": verification_ref,
             "contract_ref": d6["verification_contract"],
             "decision": "PASS"
@@ -575,6 +1015,132 @@ def build_audiovisual_natural_language_service_candidate(
         decision = "PASS_CANDIDATE"
         reason = "TAIJI04_AUDIOVISUAL_SOURCE_CANDIDATE_READY_FOR_TOTAL_FIELD_REVIEW"
 
+    packet_id = f"packet:taiji04:audiovisual-scene:{fp}"
+    packet_hash = _sha256(
+        {
+            "canonical_sha256": CANONICAL_V2_1_SHA256,
+            "packet_id": packet_id,
+            "decision": decision,
+            "evidence_refs": evidence,
+        }
+    )
+    lineage = _append_only_lineage(packet_id, packet_hash)
+    nonce = _sha256({"packet_id": packet_id, "logical_time": lineage["logical_time"]})[:32]
+    risk_quarantine = {
+        "blocked_actions": blocked_actions,
+        "missing_fields": missing_fields,
+        "raw_media_to_cloud_blocked": True,
+        "member_plaintext_to_cloud_blocked": True,
+        "direct_runtime_write_blocked": True,
+        "founder_identity_gate_required": profile["scene"] == "founder_scene"
+    }
+    envelope_verification = {
+        "packet_id": packet_id,
+        "version": CANONICAL_V2_1_VERSION,
+        "canonical_ref": CANONICAL_V2_1_PATH,
+        "canonical_sha256": CANONICAL_V2_1_SHA256,
+        "decision_authority": "total_field",
+        "owner_admin_review_required": True,
+        "ttl_required": True,
+        "nonce_required": True,
+        "nonce": nonce,
+        "logical_time": lineage["logical_time"],
+        "verification_mode": "L3_CANDIDATE",
+        "sha256": packet_hash,
+        "seal": f"candidate:{fp}"
+    }
+    legacy_flat_profile = {
+        "d1_intent": "taiji04_local_first_audiovisual_natural_language_service",
+        "d2_state": decision,
+        "d3_coordinate": {
+            "node_ref": node_ref,
+            "target_scene": profile["scene"],
+            "container_profile_candidate": profile["container_profile_candidate"],
+            "input_mode": mode,
+            "scene_role": profile["scene_role"]
+        },
+        "d4_evidence": {
+            "evidence_refs": evidence,
+            "candidate_fingerprint": fp
+        },
+        "d5_execution": {
+            "mode": "source_candidate_local_first",
+            "pipeline": service["local_pipeline"],
+            "runtime_activation": False,
+            "db_write": False,
+            "deploy": False,
+            "restart": False
+        },
+        "d6_technical_definition": service["linux_total_field_scheduling"]["generative_transmission"],
+        "d6_media_transport_basis": service["eight_d_media_transport_basis"],
+        "d7_risk": risk_quarantine,
+        "d8_envelope": envelope_verification
+    }
+    eight_d_packet = {
+        "canonical_id": CANONICAL_V2_1_ID,
+        "version": CANONICAL_V2_1_VERSION,
+        "canonical_binding": _canonical_v2_1_binding(),
+        "core_packet": _build_v2_1_core_packet(
+            packet_id=packet_id,
+            packet_hash=packet_hash,
+            nonce=nonce,
+            verification_level="L3_CANDIDATE",
+            decision="BLOCK" if decision == "BLOCK" else "HOLD",
+            intent_ref="intent:taiji04-audiovisual-service",
+            state_ref=f"state:{decision.lower().replace('_', '-')}",
+            coordinate_ref=f"coordinate:taiji04-{profile['scene'].replace('_', '-')}",
+            evidence_values=evidence or [f"candidate-fingerprint:{fp}"],
+            execution_ref="execution:source-candidate-local-first",
+            target_state_ref="target-state:total-field-reviewed-audiovisual-candidate",
+            lookup_refs=["lookup:taiji04-audiovisual-profile"],
+            generation_rule_refs=[
+                "rule:reference-resolution",
+                "rule:local-state-reconstruction",
+            ],
+            reconstruction_condition_refs=[
+                "condition:total-field-review",
+                "condition:no-raw-media-cloud",
+            ],
+            hard_risks=blocked_actions,
+            payload_byte_length=len(_stable_json(legacy_flat_profile).encode("utf-8")),
+        ),
+        "communication_contract": _communication_contract(),
+        "state_field": {
+            "mode": "INTERACTIVE_COUPLED_8D_STATE_FIELD",
+            "transition_ref": lineage["transition_ref"],
+            "total_field_verifier_ref": "verifier_ref:total_field",
+        },
+        "dimensions": {
+            "D1_INTENT": legacy_flat_profile["d1_intent"],
+            "D2_STATE": legacy_flat_profile["d2_state"],
+            "D3_COORDINATE": legacy_flat_profile["d3_coordinate"],
+            "D4_EVIDENCE": legacy_flat_profile["d4_evidence"],
+            "D5_EXECUTION": legacy_flat_profile["d5_execution"],
+            "D6_GENERATIVE_TRANSMISSION": {
+                "protocol": "W7TP_8D_GENERATIVE_TRANSMISSION_V2_1",
+                "definition": legacy_flat_profile["d6_technical_definition"],
+                "media_transport_basis": legacy_flat_profile["d6_media_transport_basis"],
+            },
+            "D7_RISK_QUARANTINE": risk_quarantine,
+            "D8_ENVELOPE_VERIFICATION": envelope_verification,
+        },
+        "verification": {
+            "level": "L3_CANDIDATE",
+            "mode": "L3_CANDIDATE",
+            "decision": decision,
+        },
+        "lineage": lineage,
+        "adi": _adi_boundary(),
+        "protected_refs": _protected_reference_boundary(),
+        "legacy_profile_adapter": {
+            "mode": "READ_ONLY_LEGACY_FLAT_PROFILE_PROJECTION",
+            "source_profile": "wuchang_three_org_audiovisual_flat_8d/1.0",
+            "historical_packet_rewritten": False,
+            "projection": legacy_flat_profile,
+        },
+        **legacy_flat_profile,
+    }
+
     return {
         "STATE": decision,
         "candidate_ref": f"taiji04_audiovisual_service_candidate:{fp}",
@@ -624,46 +1190,7 @@ def build_audiovisual_natural_language_service_candidate(
         "deploy": False,
         "restart": False,
         "router_write": False,
-        "eight_d_packet": {
-            "d1_intent": "taiji04_local_first_audiovisual_natural_language_service",
-            "d2_state": decision,
-            "d3_coordinate": {
-                "node_ref": node_ref,
-                "target_scene": profile["scene"],
-                "container_profile_candidate": profile["container_profile_candidate"],
-                "input_mode": mode,
-                "scene_role": profile["scene_role"]
-            },
-            "d4_evidence": {
-                "evidence_refs": evidence,
-                "candidate_fingerprint": fp
-            },
-            "d5_execution": {
-                "mode": "source_candidate_local_first",
-                "pipeline": service["local_pipeline"],
-                "runtime_activation": False,
-                "db_write": False,
-                "deploy": False,
-                "restart": False
-            },
-            "d6_technical_definition": service["linux_total_field_scheduling"]["generative_transmission"],
-            "d6_media_transport_basis": service["eight_d_media_transport_basis"],
-            "d7_risk": {
-                "blocked_actions": blocked_actions,
-                "missing_fields": missing_fields,
-                "raw_media_to_cloud_blocked": True,
-                "member_plaintext_to_cloud_blocked": True,
-                "direct_runtime_write_blocked": True,
-                "founder_identity_gate_required": profile["scene"] == "founder_scene"
-            },
-            "d8_envelope": {
-                "decision_authority": "total_field",
-                "owner_admin_review_required": True,
-                "ttl_required": True,
-                "nonce_required": True,
-                "seal": f"candidate:{fp}"
-            }
-        },
+        "eight_d_packet": eight_d_packet,
         "total_field_candidate_decision": {
             "decision": decision,
             "reason": reason,
@@ -1050,6 +1577,132 @@ def build_three_org_scene_candidate(
         decision = "PASS_CANDIDATE"
         reason = "THREE_ORG_CONTAINER_SCENE_CANDIDATE_READY_FOR_TOTAL_FIELD_REVIEW"
 
+    packet_id = f"packet:wuchang:three-org-scene:{fp}"
+    packet_hash = _sha256(
+        {
+            "canonical_sha256": CANONICAL_V2_1_SHA256,
+            "packet_id": packet_id,
+            "decision": decision,
+            "evidence_refs": evidence,
+        }
+    )
+    lineage = _append_only_lineage(packet_id, packet_hash)
+    nonce = _sha256({"packet_id": packet_id, "logical_time": lineage["logical_time"]})[:32]
+    risk_quarantine = {
+        "blocked_actions": blocked_actions,
+        "missing_fields": missing_fields,
+        "live_container_switch_blocked": True,
+        "docker_action_blocked": True
+    }
+    envelope_verification = {
+        "packet_id": packet_id,
+        "version": CANONICAL_V2_1_VERSION,
+        "canonical_ref": CANONICAL_V2_1_PATH,
+        "canonical_sha256": CANONICAL_V2_1_SHA256,
+        "decision_authority": "total_field",
+        "owner_admin_review_required": True,
+        "nonce": nonce,
+        "logical_time": lineage["logical_time"],
+        "verification_mode": "L3_CANDIDATE",
+        "sha256": packet_hash,
+        "seal": f"candidate:{fp}"
+    }
+    legacy_flat_profile = {
+        "d1_intent": "three_org_modules_support_odoo_community_container_scene_switch",
+        "d2_state": decision,
+        "d3_coordinate": {
+            "target_scene": profile["scene"],
+            "primary_module": profile["primary_module"],
+            "visible_modules": profile["visible_modules"],
+            "local_device_ref": local_device_ref
+        },
+        "d4_evidence": {
+            "evidence_refs": evidence,
+            "candidate_fingerprint": fp
+        },
+        "d5_execution": {
+            "mode": "candidate_only",
+            "container_profile_candidate": profile["container_profile_candidate"],
+            "live_container_switch": False,
+            "docker_compose_up": False,
+            "db_write": False,
+            "deploy": False,
+            "restart": False
+        },
+        "d6_technical_definition": (
+            "business_property_public_welfare_modules share Odoo community and "
+            "local devices switch scene by container profile candidate"
+        ),
+        "d7_risk": risk_quarantine,
+        "d8_envelope": envelope_verification
+    }
+    eight_d_packet = {
+        "canonical_id": CANONICAL_V2_1_ID,
+        "version": CANONICAL_V2_1_VERSION,
+        "canonical_binding": _canonical_v2_1_binding(),
+        "core_packet": _build_v2_1_core_packet(
+            packet_id=packet_id,
+            packet_hash=packet_hash,
+            nonce=nonce,
+            verification_level="L3_CANDIDATE",
+            decision="BLOCK" if decision == "BLOCK" else "HOLD",
+            intent_ref="intent:wuchang-three-org-scene",
+            state_ref=f"state:{decision.lower().replace('_', '-')}",
+            coordinate_ref=f"coordinate:{profile['scene'].replace('_', '-')}",
+            evidence_values=evidence or [f"candidate-fingerprint:{fp}"],
+            execution_ref="execution:candidate-only-container-profile",
+            target_state_ref="target-state:total-field-reviewed-three-org-scene",
+            lookup_refs=["lookup:wuchang-three-org-scene-profile"],
+            generation_rule_refs=[
+                "rule:reference-resolution",
+                "rule:container-scene-state-reconstruction",
+            ],
+            reconstruction_condition_refs=[
+                "condition:total-field-review",
+                "condition:no-live-container-switch",
+            ],
+            hard_risks=blocked_actions,
+            payload_byte_length=len(_stable_json(legacy_flat_profile).encode("utf-8")),
+        ),
+        "communication_contract": _communication_contract(),
+        "state_field": {
+            "mode": "INTERACTIVE_COUPLED_8D_STATE_FIELD",
+            "transition_ref": lineage["transition_ref"],
+            "total_field_verifier_ref": "verifier_ref:total_field",
+        },
+        "dimensions": {
+            "D1_INTENT": legacy_flat_profile["d1_intent"],
+            "D2_STATE": legacy_flat_profile["d2_state"],
+            "D3_COORDINATE": legacy_flat_profile["d3_coordinate"],
+            "D4_EVIDENCE": legacy_flat_profile["d4_evidence"],
+            "D5_EXECUTION": legacy_flat_profile["d5_execution"],
+            "D6_GENERATIVE_TRANSMISSION": {
+                "protocol": "W7TP_8D_GENERATIVE_TRANSMISSION_V2_1",
+                "mode": "L3_CANDIDATE",
+                "definition": legacy_flat_profile["d6_technical_definition"],
+                "reference_lookup_reconstruction": True,
+                "total_field_verification": True,
+            },
+            "D7_RISK_QUARANTINE": risk_quarantine,
+            "D8_ENVELOPE_VERIFICATION": envelope_verification,
+        },
+        "verification": {
+            "level": "L3_CANDIDATE",
+            "mode": "L3_CANDIDATE",
+            "decision": decision,
+        },
+        "lineage": lineage,
+        "adi": _adi_boundary(),
+        "protected_refs": _protected_reference_boundary(),
+        "legacy_profile_adapter": {
+            "mode": "READ_ONLY_LEGACY_FLAT_PROFILE_PROJECTION",
+            "source_profile": "wuchang_three_org_flat_8d/1.0",
+            "historical_packet_rewritten": False,
+            "projection": legacy_flat_profile,
+        },
+        **legacy_flat_profile,
+    }
+
     return {
         "STATE": decision,
         "candidate_ref": f"three_org_scene_candidate:{fp}",
@@ -1076,41 +1729,7 @@ def build_three_org_scene_candidate(
         "missing_fields": missing_fields,
         "blocked_actions": blocked_actions,
         "review_chain": data["scene_switch_rules"]["same_review_chain"],
-        "eight_d_packet": {
-            "d1_intent": "three_org_modules_support_odoo_community_container_scene_switch",
-            "d2_state": decision,
-            "d3_coordinate": {
-                "target_scene": profile["scene"],
-                "primary_module": profile["primary_module"],
-                "visible_modules": profile["visible_modules"],
-                "local_device_ref": local_device_ref
-            },
-            "d4_evidence": {
-                "evidence_refs": evidence,
-                "candidate_fingerprint": fp
-            },
-            "d5_execution": {
-                "mode": "candidate_only",
-                "container_profile_candidate": profile["container_profile_candidate"],
-                "live_container_switch": False,
-                "docker_compose_up": False,
-                "db_write": False,
-                "deploy": False,
-                "restart": False
-            },
-            "d6_technical_definition": "business_property_public_welfare_modules share Odoo community and local devices switch scene by container profile candidate",
-            "d7_risk": {
-                "blocked_actions": blocked_actions,
-                "missing_fields": missing_fields,
-                "live_container_switch_blocked": True,
-                "docker_action_blocked": True
-            },
-            "d8_envelope": {
-                "decision_authority": "total_field",
-                "owner_admin_review_required": True,
-                "seal": f"candidate:{fp}"
-            }
-        },
+        "eight_d_packet": eight_d_packet,
         "total_field_candidate_decision": {
             "decision": decision,
             "reason": reason,

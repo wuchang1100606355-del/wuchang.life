@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_review_candidate_v2_3_adapter_request_v2_1.schema.json",
+  "title": "W7TP Review Candidate 2.3 to Canonical V2.1 Adapter Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "adapter_contract_version",
+    "legacy_request_schema_ref",
+    "legacy_request_self_sha256",
+    "source_packet_raw_sha256",
+    "source_packet_canonical_sha256",
+    "canonical_binding",
+    "output_contract",
+    "request_self_hash_algorithm",
+    "request_self_sha256"
+  ],
+  "properties": {
+    "adapter_contract_version": {
+      "const": "W7TP-REVIEW-CANDIDATE-2.3-TO-CANONICAL-V2.1/1.0"
+    },
+    "legacy_request_schema_ref": {
+      "const": "schemas/field/w7tp_review_candidate_v2_3_adapter_request_v1.schema.json"
+    },
+    "legacy_request_self_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "source_packet_raw_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "source_packet_canonical_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "canonical_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_path",
+        "canonical_sha256",
+        "parent_path",
+        "parent_sha256",
+        "migration_mode"
+      ],
+      "properties": {
+        "canonical_path": {
+          "const": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"
+        },
+        "canonical_sha256": {
+          "const": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba"
+        },
+        "parent_path": {
+          "const": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"
+        },
+        "parent_sha256": {
+          "const": "a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0"
+        },
+        "migration_mode": {
+          "const": "APPEND_ONLY_SUCCESSOR"
+        }
+      }
+    },
+    "output_contract": {
+      "$ref": "#/$defs/outputContract"
+    },
+    "request_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
+    },
+    "request_self_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "typedRef": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 512,
+      "pattern": "^(ref|sha256|capability|evidence|verifier|authority|seal|transition|key-version):[^\\r\\n]+$"
+    },
+    "refArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/typedRef"
+      },
+      "uniqueItems": true
+    },
+    "protectedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protected_type",
+        "reference"
+      ],
+      "properties": {
+        "protected_type": {
+          "enum": [
+            "H64_TD",
+            "CODEBOOK",
+            "MAPPING_TABLE",
+            "RECOVERY_MATERIAL"
+          ]
+        },
+        "reference": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "exactBytesVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "raw_sha256",
+        "byte_length",
+        "hash_scope_ref"
+      ],
+      "properties": {
+        "mode": {
+          "const": "L1_EXACT_BYTES"
+        },
+        "raw_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hash_scope_ref": {
+          "$ref": "#/$defs/typedRef"
+        }
+      }
+    },
+    "effectEquivalentVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "effect_contract_ref",
+        "comparison_fields",
+        "evidence_refs"
+      ],
+      "properties": {
+        "mode": {
+          "const": "L2_EFFECT_EQUIVALENT"
+        },
+        "effect_contract_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "comparison_fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/refArray"
+        }
+      }
+    },
+    "candidateVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "candidate_only",
+        "authorization",
+        "local_decision_machine_ref"
+      ],
+      "properties": {
+        "mode": {
+          "const": "L3_CANDIDATE"
+        },
+        "candidate_only": {
+          "const": true
+        },
+        "authorization": {
+          "const": "NONE"
+        },
+        "local_decision_machine_ref": {
+          "$ref": "#/$defs/typedRef"
+        }
+      }
+    },
+    "verification": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/exactBytesVerification"
+        },
+        {
+          "$ref": "#/$defs/effectEquivalentVerification"
+        },
+        {
+          "$ref": "#/$defs/candidateVerification"
+        }
+      ]
+    },
+    "outputContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "namespace",
+        "logical_time",
+        "nonce",
+        "authority_ref",
+        "key_version_ref",
+        "state_transition_ref",
+        "previous_seal_ref",
+        "total_field_verifier_ref",
+        "evidence_refs",
+        "verification",
+        "protected_refs"
+      ],
+      "properties": {
+        "packet_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 192,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]+$"
+        },
+        "namespace": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 192,
+          "pattern": "^[a-z0-9][a-z0-9._:-]+$"
+        },
+        "logical_time": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "nonce": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 192,
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        },
+        "authority_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "key_version_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "state_transition_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "previous_seal_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "total_field_verifier_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/refArray"
+        },
+        "verification": {
+          "$ref": "#/$defs/verification"
+        },
+        "protected_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/protectedRef"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

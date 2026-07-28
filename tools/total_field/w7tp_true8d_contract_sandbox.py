@@ -12,14 +12,23 @@ import hashlib
 import json
 import unicodedata
 from collections.abc import Mapping, Sequence
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
+
+from jsonschema import Draft202012Validator
 
 
 ROOT = Path(__file__).resolve().parents[2]
 PLAN_PATH = ROOT / "runtime/total_field/inbox/W7TP_TRUE8D_EIGHT_FIELD_CONTAINERIZATION_PLAN_V2_20260717T140655Z.json"
 ROUTE_TABLE_PATH = ROOT / "runtime/total_field/secondary_cloud/scenario_route_table.json"
 CAPABILITY_REGISTRY_PATH = ROOT / "runtime/total_field/secondary_cloud/capability_registry.json"
+ACTIVE_CONTRACT_VERSION = "W7TP-TRUE8D-MACHINE-CONTRACT/2.1"
+LEGACY_CONTRACT_VERSION = "W7TP-TRUE8D-MACHINE-CONTRACT/2.0"
+ACTIVE_CANONICAL_SCHEMA_REF = "schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json"
+LEGACY_CANONICAL_SCHEMA_REF = "schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json"
+ACTIVE_PROJECTION_SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2_1.schema.json"
+LEGACY_PROJECTION_SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2.schema.json"
 
 COMMON_INPUT_FIELDS = (
     "contract_version", "field_id", "event_id", "attempt_id", "logical_time",
@@ -132,7 +141,14 @@ def validate_common_input(value: Mapping[str, Any], field_id: str) -> dict[str, 
     result = _closed(value, COMMON_INPUT_FIELDS, "HOLD_FIELD_INPUT_MISSING", "HOLD_FIELD_INPUT_EXTRA")
     if field_id not in FIELD_IDS or result["field_id"] != field_id:
         raise ContractSandboxError("QUARANTINE_FIELD_IDENTITY_MISMATCH")
-    if result["contract_version"] != "W7TP-TRUE8D-MACHINE-CONTRACT/2.0":
+    contract_version = result["contract_version"]
+    if contract_version == ACTIVE_CONTRACT_VERSION:
+        expected_schema_ref = ACTIVE_CANONICAL_SCHEMA_REF
+    elif contract_version == LEGACY_CONTRACT_VERSION:
+        expected_schema_ref = LEGACY_CANONICAL_SCHEMA_REF
+    else:
+        raise ContractSandboxError("HOLD_FIELD_SCHEMA_INVALID")
+    if result["canonical_schema_ref"] != expected_schema_ref:
         raise ContractSandboxError("HOLD_FIELD_SCHEMA_INVALID")
     for name in ("previous_total_state_hash", "event_payload_hash", "ruleset_hash"):
         if not _is_hash(result[name]):
@@ -161,6 +177,44 @@ def validate_field_output(field_id: str, value: Mapping[str, Any]) -> dict[str, 
     if field_id == "D8" and tuple(result) != D8_FIELDS:
         raise ContractSandboxError("BLOCK_D8_CANONICAL_AUTHORITY_DRIFT")
     return result
+
+
+@lru_cache(maxsize=2)
+def _projection_validator(contract_version: str) -> Draft202012Validator:
+    if contract_version == ACTIVE_CONTRACT_VERSION:
+        path = ACTIVE_PROJECTION_SCHEMA_PATH
+    elif contract_version == LEGACY_CONTRACT_VERSION:
+        path = LEGACY_PROJECTION_SCHEMA_PATH
+    else:
+        raise ContractSandboxError("HOLD_FIELD_SCHEMA_INVALID")
+    try:
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        Draft202012Validator.check_schema(schema)
+    except (OSError, UnicodeError, ValueError) as exc:
+        raise ContractSandboxError("HOLD_FIELD_SCHEMA_INVALID") from exc
+    return Draft202012Validator(schema)
+
+
+def validate_projection_contract(
+    common_input: Mapping[str, Any],
+    output: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Validate one active V2.1 or explicit legacy V2 projection."""
+
+    field_id = common_input.get("field_id")
+    if not isinstance(field_id, str):
+        raise ContractSandboxError("HOLD_FIELD_INPUT_MISSING")
+    validated_input = validate_common_input(common_input, field_id)
+    validated_output = validate_field_output(field_id, output)
+    projection = {"common_input": validated_input, "output": validated_output}
+    errors = list(
+        _projection_validator(validated_input["contract_version"]).iter_errors(
+            projection
+        )
+    )
+    if errors:
+        raise ContractSandboxError("HOLD_FIELD_SCHEMA_INVALID")
+    return projection
 
 
 def projection_hash(common_input: Mapping[str, Any], output: Mapping[str, Any]) -> str:
@@ -203,21 +257,21 @@ def _load_object(path: Path) -> dict[str, Any]:
 
 
 def _common(field_id: str, profile: str, consumer: str, route: Mapping[str, Any]) -> dict[str, Any]:
-    event_id = f"shadow:{profile}:{consumer}:v2"
+    event_id = f"shadow:{profile}:{consumer}:v2_1"
     payload_hash = canonical_sha256({"profile": profile, "consumer": consumer, "route": route})
     return {
-        "contract_version": "W7TP-TRUE8D-MACHINE-CONTRACT/2.0",
+        "contract_version": ACTIVE_CONTRACT_VERSION,
         "field_id": field_id,
         "event_id": event_id,
         "attempt_id": f"attempt:{profile}:{consumer}:1",
         "logical_time": 1,
-        "snapshot_id": "snapshot:readonly-shadow:v2",
+        "snapshot_id": "snapshot:readonly-shadow:v2_1",
         "previous_total_state_hash": canonical_sha256({"sealed": "reference-only", "profile": profile}),
         "event_payload_hash": payload_hash,
         "adi_coordinate_ref": "adi:shared-5d-metric-coordinate-index-evidence:v1",
-        "canonical_schema_ref": "schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json",
+        "canonical_schema_ref": ACTIVE_CANONICAL_SCHEMA_REF,
         "ruleset_hash": canonical_sha256({"rules": ["P2_READ_ONLY", "NO_AUTHORITY", "NO_SIDE_EFFECT"]}),
-        "rule_refs": ["rule:atomic-barrier:v2", "rule:d7-hard-risk:v2", "rule:readonly-shadow:v2"],
+        "rule_refs": ["rule:atomic-barrier:v2_1", "rule:d7-hard-risk:v2_1", "rule:readonly-shadow:v2_1"],
         "deadline_monotonic_ns": 5000000000,
     }
 
@@ -231,7 +285,7 @@ def _d1_d7_outputs(profile: str, consumer: str, route: Mapping[str, Any], common
         "D3": {"branch": "sandbox", "actor_role": "READ_ONLY_SHADOW", "channel": consumer, "node_id": "taiji01-non-live", "lan_state": "NOT_USED", "wan_state": "NOT_USED", "vpn_state": "NOT_USED", "firewall_state": "UNCHANGED", "dns_state": "UNCHANGED", "hardware_channel": "CPU_BASELINE", "transition_hash": ""},
         "D4": {"verified_evidence_refs": [str(ROUTE_TABLE_PATH.relative_to(ROOT)), str(CAPABILITY_REGISTRY_PATH.relative_to(ROOT))], "verified_evidence_hashes": [file_sha256(ROUTE_TABLE_PATH), file_sha256(CAPABILITY_REGISTRY_PATH)], "completeness": "COMPLETE_REFERENCE_ONLY", "verification_summary_hash": semantic_hash},
         "D5": {"action_code": "READ_ONLY_SHADOW_COMPARE", "target_ref": f"consumer:{consumer}", "precondition_hash": semantic_hash, "side_effect_class": "NONE", "requires_explicit_gate": True, "commit_applied": False},
-        "D6": {"transport_protocol_ref": "W7TP_PROTOCOL_NATIVE_8D_STATE_FIELD_PACKET", "lookup_refs": [route["capability_ref"], route["service_contract_ref"]], "reconstruction_condition_refs": ["condition:reference-resolves", "condition:semantic-equivalence"], "verification_method_ref": "verifier:p2-shadow-hash-and-semantic:v2", "equivalent_state_digest": semantic_hash, "model_required": False, "float_value_count": 0, "full_file_copy_present": False},
+        "D6": {"transport_protocol_ref": "W7TP_PROTOCOL_NATIVE_8D_STATE_FIELD_PACKET_V2_1", "lookup_refs": [route["capability_ref"], route["service_contract_ref"]], "reconstruction_condition_refs": ["condition:reference-resolves", "condition:effect-equivalent"], "verification_method_ref": "verifier:p2-shadow-hash-and-effect:v2_1", "equivalent_state_digest": semantic_hash, "model_required": False, "float_value_count": 0, "full_file_copy_present": False},
         "D7": {"risk_codes": [], "risk_level": "NONE", "disposition": "PASS", "blocking_evidence_refs": []},
     }
     outputs["D3"]["transition_hash"] = canonical_sha256({key: value for key, value in outputs["D3"].items() if key != "transition_hash"})
@@ -247,13 +301,18 @@ def run_shadow_case(profile: str, consumer: str) -> dict[str, Any]:
     route = route_table["routes"][profile]
     common_by_field = {field_id: validate_common_input(_common(field_id, profile, consumer, route), field_id) for field_id in FIELD_IDS}
     outputs = _d1_d7_outputs(profile, consumer, route, common_by_field)
-    hashes = {field_id: projection_hash(common_by_field[field_id], validate_field_output(field_id, output)) for field_id, output in outputs.items()}
+    hashes = {
+        field_id: projection_hash(
+            **validate_projection_contract(common_by_field[field_id], output)
+        )
+        for field_id, output in outputs.items()
+    }
     barrier_hash = canonical_sha256([{"field_id": field_id, "projection_hash": hashes[field_id]} for field_id in FIELD_IDS[:7]])
     semantic_hash = outputs["D6"]["equivalent_state_digest"]
     integrity_binding = {
         "nonce": f"nonce:{profile}:{consumer}:1",
         "packet_hash": common_by_field["D8"]["event_payload_hash"],
-        "integrity_proof_ref": "integrity:sha256-reference-only:v2",
+        "integrity_proof_ref": "integrity:sha256-reference-only:v2_1",
         "ttl_seconds": 300,
         "expiry_monotonic_ns": common_by_field["D8"]["deadline_monotonic_ns"],
         "event_id": common_by_field["D8"]["event_id"],
@@ -268,16 +327,16 @@ def run_shadow_case(profile: str, consumer: str) -> dict[str, Any]:
         "seal_applied": False,
     }
     d8_output = {
-        "packet_id": f"packet:{profile}:{consumer}:shadow:v2",
+        "packet_id": f"packet:{profile}:{consumer}:shadow:v2_1",
         "authority_ref": "TOTAL_FIELD_CORE_UNDER_FOUNDER_AUTHORITY",
-        "version": "2.0",
+        "version": "2.1",
         "ttl_seconds": 300,
         "nonce": integrity_binding["nonce"],
         "sha256": canonical_sha256(integrity_binding),
-        "verifier_ref": "verifier:true8d-contract-sandbox:v2",
+        "verifier_ref": "verifier:true8d-contract-sandbox:v2_1",
         "seal_policy": "NO_COMMIT_NO_SEAL_READ_ONLY_SHADOW",
     }
-    validate_field_output("D8", d8_output)
+    validate_projection_contract(common_by_field["D8"], d8_output)
     hashes["D8"] = projection_hash(common_by_field["D8"], d8_output)
     full_vector_hash = canonical_sha256([{"field_id": field_id, "projection_hash": hashes[field_id]} for field_id in FIELD_IDS])
     fixed_point_hashes = [canonical_sha256({"previous": common_by_field["D8"]["previous_total_state_hash"], "event": common_by_field["D8"]["event_payload_hash"], "field_vector_hash": full_vector_hash, "ruleset": common_by_field["D8"]["ruleset_hash"]})] * 2
@@ -314,7 +373,7 @@ def build_p2_evidence(run_id: str) -> dict[str, Any]:
     results = [run_shadow_case(profile, consumer) for profile in PROFILES for consumer in CONSUMERS]
     all_pass = len(results) == 35 and all(item["state"] == "PASS" and item["semantic_result_equivalent"] and item["total_state_hash_equivalent"] and item["profile_mutation_count"] == 0 and item["authority_increase_count"] == 0 and item["side_effect_count"] == 0 for item in results)
     evidence = {
-        "schema_version": "W7TP-TRUE8D-P2-SHADOW-EVIDENCE/1.0",
+        "schema_version": "W7TP-TRUE8D-P2-SHADOW-EVIDENCE/1.1",
         "run_id": run_id,
         "base_run_id": "W7TP_TRUE8D_EIGHT_FIELD_CONTAINERIZATION_PLAN_V2_20260717T140655Z",
         "input_files": [

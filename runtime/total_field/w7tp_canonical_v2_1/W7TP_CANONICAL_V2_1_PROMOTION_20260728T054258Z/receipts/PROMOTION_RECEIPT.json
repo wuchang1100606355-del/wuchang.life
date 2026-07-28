@@ -1,0 +1,82 @@
+{
+  "schema": "w7tp.total_field.canonical_promotion_receipt.v2_1",
+  "run_id": "W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z",
+  "state": "PASS_PROMOTION_GATES_AND_ATOMIC_POINTER_AUTHORIZED",
+  "effective_at_utc": "2026-07-28T05:57:54Z",
+  "founder_authorization": "江政隆_EXPLICIT_PROMOTE_W7TP_CANONICAL_V2_1_AND_UPGRADE_ALL_V2_0_CONSUMERS",
+  "source_git": {
+    "head": "60d8a0657992aa108df42c37617b3615765054a0",
+    "branch": "design/wish-tree-adi-thaw-launch-20260703-185047"
+  },
+  "parent": {
+    "version": "2.0",
+    "path": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md",
+    "sha256": "a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0",
+    "unchanged": true,
+    "status": "SUPERSEDED_BY_V2_1"
+  },
+  "successor": {
+    "version": "2.1",
+    "path": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md",
+    "sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+    "locks_matched": 12,
+    "status": "ACTIVE_CANONICAL"
+  },
+  "canonical_manifest": {
+    "path": "manifests/total_field/w7tp_canonical_v2_1/CANONICAL_MANIFEST.json",
+    "sha256": "f84cd06285ccbda25b281c68bb84eec633977a23f0a6c6fc62fbc03875b71cee"
+  },
+  "consumer_inventory": {
+    "path": "manifests/total_field/w7tp_canonical_v2_1/V2_CONSUMER_INVENTORY.json",
+    "sha256": "45a55ab6c5582057057461577f352ddacab36e0d5a248d0e2b378cebca37a7fa",
+    "found": 9,
+    "upgraded": 9
+  },
+  "sha256_manifest": {
+    "path": "manifests/total_field/w7tp_canonical_v2_1/SHA256_MANIFEST.json",
+    "sha256": "6612c91561b82e42aa5885beaff2ea07134e463ef5566fb09ece602cf1eae47b",
+    "self_sha256": "3980a530e8c0592cb7269df88745a0b0d9318707d7ccdbfceab44039d3807345",
+    "file_count": 35
+  },
+  "validation": {
+    "path": "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z/reports/VALIDATION_REPORT.json",
+    "sha256": "12f7797973fe7b680d8717dce17fb8b9c8fc6c38876c6a4754c8ba357905498d",
+    "state": "PASS"
+  },
+  "red_team_pre_promotion": {
+    "path": "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z/reports/RED_TEAM_PRE_PROMOTION.json",
+    "sha256": "c99a24fcc203db59eed4c117c6dbcfbe60631b0021ded647a0f8f3fd9e67922e",
+    "state": "PASS"
+  },
+  "probe": {
+    "path": "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z/probes/V2_1_NO_SIDE_EFFECT_PROBE.json",
+    "sha256": "cdd0fe5af743b92dadf555848abac8efb1d2fb9de779e90a8a3cf38773124739",
+    "state": "PASS_SOURCE_PACKET_RECONSTRUCT_VERIFY_SEAL"
+  },
+  "vpn": {
+    "online_device_count": 9,
+    "deployment_nodes": [
+      "taiji01"
+    ],
+    "unbound_online_nodes_excluded": 8
+  },
+  "deployment": {
+    "service": "w7tp-intent-field.service",
+    "manifest_path": "runtime/isolated/w7tp_canonical_v2_1_promotion/W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z/release_bundle/w7tp-intent-field-2a97cd5149f9fe68.manifest.json",
+    "manifest_sha256": "042ee20b04a42c077f3512a97f443d62e1e2ace58aea30b8af6c8e5e9bcecea1",
+    "artifact_path": "runtime/isolated/w7tp_canonical_v2_1_promotion/W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z/release_bundle/w7tp-intent-field-2a97cd5149f9fe68.tar",
+    "artifact_sha256": "5e79ad0762ec1dc37f6c2139d0b97251dce26fdb171f5c0a50e990db6e21a7e9",
+    "content_sha256": "2a97cd5149f9fe68fc98d6a5c2f76eb5d68c39055f657450deff1a96f3d9fd54",
+    "restart_required": false,
+    "reason": "LIVE_HTTP_IMPORT_CLOSURE_BYTE_IDENTICAL; OFFLINE_CONSUMERS_AND_CONTRACTS_ONLY"
+  },
+  "database_migration": "NOT_REQUIRED_NO_V2_DB_BINDING_OBSERVED",
+  "database_backup": "NOT_REQUIRED",
+  "router_write": false,
+  "remote_push": false,
+  "rollback": {
+    "canonical_pointer": "REMOVE_NEW_POINTER_ONLY_IF_PROMOTION_TRANSACTION_FAILS_BEFORE_COMPLETION",
+    "runtime_release": "/home/taiji_admin/.local/share/w7tp-intent-field/releases/34ba42505a31cff2",
+    "history": "APPEND_COMPENSATING_RECORD_NEVER_REWRITE_HISTORY"
+  }
+}

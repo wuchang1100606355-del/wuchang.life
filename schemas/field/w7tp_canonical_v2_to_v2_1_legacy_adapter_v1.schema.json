@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_canonical_v2_to_v2_1_legacy_adapter_v1.schema.json",
+  "title": "W7TP Canonical V2 to V2.1 Legacy Projection Adapter V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "adapter_id",
+    "version",
+    "mode",
+    "source",
+    "target",
+    "lineage",
+    "replay_protection",
+    "projection"
+  ],
+  "properties": {
+    "adapter_id": {
+      "const": "W7TP_CANONICAL_V2_TO_V2_1_LEGACY_ADAPTER_V1"
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "mode": {
+      "const": "LEGACY_V2_READ_TO_V2_1_PROJECTION"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_ref",
+        "canonical_id",
+        "version",
+        "raw_sha256",
+        "canonical_json_sha256",
+        "byte_length",
+        "schema_validated",
+        "bytes_mutated"
+      ],
+      "properties": {
+        "source_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "canonical_id": {
+          "const": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2"
+        },
+        "version": {
+          "const": "2.0.0"
+        },
+        "raw_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "canonical_json_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "schema_validated": {
+          "const": true
+        },
+        "bytes_mutated": {
+          "const": false
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_id",
+        "version",
+        "canonical_path",
+        "canonical_sha256",
+        "projection_only"
+      ],
+      "properties": {
+        "canonical_id": {
+          "const": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1"
+        },
+        "version": {
+          "const": "2.1"
+        },
+        "canonical_path": {
+          "const": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"
+        },
+        "canonical_sha256": {
+          "const": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba"
+        },
+        "projection_only": {
+          "const": true
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "append_only",
+        "parent_ref",
+        "parent_raw_sha256",
+        "logical_time"
+      ],
+      "properties": {
+        "append_only": {
+          "const": true
+        },
+        "parent_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "parent_raw_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "logical_time": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "replay_protection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tuple",
+        "tuple_sha256"
+      ],
+      "properties": {
+        "tuple": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authority_ref",
+            "namespace",
+            "packet_id",
+            "nonce",
+            "logical_time"
+          ],
+          "properties": {
+            "authority_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "namespace": {
+              "$ref": "#/$defs/namespace"
+            },
+            "packet_id": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "nonce": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "logical_time": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "tuple_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projection_id",
+        "legacy_profile",
+        "legacy_dimensions_sha256",
+        "dimension_refs",
+        "verification_mode",
+        "local_decision_required",
+        "source_content_embedded"
+      ],
+      "properties": {
+        "projection_id": {
+          "type": "string",
+          "pattern": "^W7TP-V2-LEGACY-PROJECTION-[0-9a-f]{16}$"
+        },
+        "legacy_profile": {
+          "const": "CANONICAL_V2_DIMENSIONS_READ_ONLY"
+        },
+        "legacy_dimensions_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dimension_refs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "D1_INTENT",
+            "D2_STATE",
+            "D3_COORDINATE",
+            "D4_EVIDENCE",
+            "D5_EXECUTION",
+            "D6_GENERATIVE_TRANSMISSION",
+            "D7_RISK_QUARANTINE",
+            "D8_ENVELOPE_VERIFICATION"
+          ],
+          "properties": {
+            "D1_INTENT": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "D2_STATE": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "D3_COORDINATE": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "D4_EVIDENCE": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "D5_EXECUTION": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "D6_GENERATIVE_TRANSMISSION": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "D7_RISK_QUARANTINE": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "D8_ENVELOPE_VERIFICATION": {
+              "$ref": "#/$defs/typedRef"
+            }
+          }
+        },
+        "verification_mode": {
+          "const": "L3_CANDIDATE"
+        },
+        "local_decision_required": {
+          "const": true
+        },
+        "source_content_embedded": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "typedRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.-]*:[^\\s]+$"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    }
+  }
+}

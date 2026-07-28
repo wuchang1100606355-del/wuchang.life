@@ -1,0 +1,186 @@
+{
+  "schema": "w7tp.total_field.v2_consumer_inventory.v2_1",
+  "generated_at_utc": "2026-07-28T05:42:58Z",
+  "source_root": "/home/taiji_admin/Taiji_Hub",
+  "canonical_target": {
+    "path": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md",
+    "sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+    "version": "2.1"
+  },
+  "consumer_count": 9,
+  "upgraded_count": 9,
+  "consumers": [
+    {
+      "consumer_id": "d8_guard_eval",
+      "path": "tools/d8_guard_eval.py",
+      "upgrade_mode": "DIRECT_ACTIVE_REBIND_WITH_LEGACY_V2_SUPPRESSION",
+      "legacy_v2_preserved": true,
+      "sha256": "2df2903520df0af8838de76076e688b966eba22da4f5ec4828e765a744287d66"
+    },
+    {
+      "consumer_id": "intent_field_edge_queue",
+      "path": "tools/total_field/w7tp_intent_field_suite/edge_queue.py",
+      "upgrade_mode": "NEW_PACKET_V2_1_LEGACY_V2_READ",
+      "legacy_v2_preserved": true,
+      "sha256": "e5f29a02ff03d921336a2808cd3794fc6fe607ee34b40c8a53abe487fa73309d"
+    },
+    {
+      "consumer_id": "intent_field_release_inventory",
+      "path": "tools/total_field/w7tp_intent_field_suite/cli.py",
+      "upgrade_mode": "RELEASE_INVENTORY_REBIND",
+      "legacy_v2_preserved": true,
+      "sha256": "8784e963678fd23111655843004544c9961b8546b308e20a734cbb88cc93cec9"
+    },
+    {
+      "consumer_id": "intent_field_adaptive_cognition",
+      "path": "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py",
+      "upgrade_mode": "V2_1_POLICY_WITH_V2_LEGACY_READ",
+      "legacy_v2_preserved": true,
+      "sha256": "cfbe1269a9feb4d3c24cd64b7a4d01c16c53048be8d72fb5104cc7afbddf36a4"
+    },
+    {
+      "consumer_id": "true8d_contract_sandbox",
+      "path": "tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "upgrade_mode": "ACTIVE_V2_1_CONTRACT_AND_EXPLICIT_V2_ADAPTER",
+      "legacy_v2_preserved": true,
+      "sha256": "3d43d1a6815cee0f5a6cadfd660b4d319731028a1d88ea4ee175317c7829d20e"
+    },
+    {
+      "consumer_id": "three_org_container_scene_bridge",
+      "path": "tools/total_field/wuchang_three_org_container_scene_bridge.py",
+      "upgrade_mode": "NESTED_SCHEMA_VALID_V2_1_CORE_PACKET",
+      "legacy_v2_preserved": true,
+      "sha256": "2ff72ae9eb03e9ccf75c59266ac98cf3b44be1c2f7de9d85fb0683e4ce917dc1"
+    },
+    {
+      "consumer_id": "review_candidate_adapter",
+      "path": "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
+      "upgrade_mode": "APPEND_ONLY_SUCCESSOR_ADAPTER",
+      "legacy_v2_preserved": true,
+      "sha256": "fee8ce8314b80402fddf2a783fc0158805220f052a66dc1f0f3df8173249aa20"
+    },
+    {
+      "consumer_id": "five_skill_identity_binding_matrix",
+      "path": "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json",
+      "upgrade_mode": "APPEND_ONLY_SUCCESSOR_BINDING",
+      "legacy_v2_preserved": true,
+      "sha256": "f7009c496f6d96b73298457b5d5bf055d5e0d9fae20afe069042a89f9c39b130"
+    },
+    {
+      "consumer_id": "system_whitepaper_alignment",
+      "path": "docs/total_field/W7TP_SYSTEM_WHITEPAPER_ZH_V2_1_ALIGNMENT_20260728.md",
+      "upgrade_mode": "APPEND_ONLY_CANONICAL_ALIGNMENT",
+      "legacy_v2_preserved": true,
+      "sha256": "e04f40a88913c0de1e4b6f2bb9f5ff4ed1fdebf715dd8188093c18e105fbbd95"
+    }
+  ],
+  "assessed_no_active_v2_binding": [
+    {
+      "component": "native_adi_9110",
+      "result": "NO_V2_PATH_HASH_OR_ID_REFERENCE_OBSERVED"
+    },
+    {
+      "component": "odoo_modules_and_database",
+      "result": "NO_V2_BINDING_REQUIRING_MIGRATION_OBSERVED"
+    },
+    {
+      "component": "product_root_pointer",
+      "result": "SEPARATE_NAMESPACE_NO_REBIND"
+    },
+    {
+      "component": "intent_field_9107_http_import_chain",
+      "result": "NO_DIRECT_V2_LOAD_OBSERVED"
+    }
+  ],
+  "vpn": {
+    "observed_at_utc": "2026-07-28T05:42:58Z",
+    "online_device_count": 9,
+    "online_devices": [
+      {
+        "node": "taiji01",
+        "tailscale_ipv4": "100.71.224.18",
+        "os": "linux",
+        "online": true,
+        "self": true,
+        "v2_consumer_evidence": "OBSERVED",
+        "deployment_eligible": true
+      },
+      {
+        "node": "penguin",
+        "tailscale_ipv4": "100.111.139.7",
+        "os": "linux",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_UNBOUND",
+        "deployment_eligible": false
+      },
+      {
+        "node": "iphone-11",
+        "tailscale_ipv4": "100.94.212.10",
+        "os": "ios",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_UNBOUND",
+        "deployment_eligible": false
+      },
+      {
+        "node": "taiji03",
+        "tailscale_ipv4": "100.106.66.44",
+        "os": "windows",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_UNBOUND",
+        "deployment_eligible": false
+      },
+      {
+        "node": "MSI",
+        "tailscale_ipv4": "100.84.204.114",
+        "os": "linux",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_UNBOUND",
+        "deployment_eligible": false
+      },
+      {
+        "node": "V3_MIX_EDLA_GL",
+        "tailscale_ipv4": "100.98.69.115",
+        "os": "android",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_NO_KNOWN_HOST_BINDING",
+        "deployment_eligible": false
+      },
+      {
+        "node": "MSI-win11",
+        "tailscale_ipv4": "100.105.82.28",
+        "os": "windows",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_UNBOUND",
+        "deployment_eligible": false
+      },
+      {
+        "node": "taiji03-1",
+        "tailscale_ipv4": "100.82.11.94",
+        "os": "linux",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_UNBOUND",
+        "deployment_eligible": false
+      },
+      {
+        "node": "drallion",
+        "tailscale_ipv4": "100.64.68.101",
+        "os": "android",
+        "online": true,
+        "self": false,
+        "v2_consumer_evidence": "NOT_OBSERVED_UNBOUND",
+        "deployment_eligible": false
+      }
+    ],
+    "deployment_nodes": [
+      "taiji01"
+    ],
+    "policy": "ONLINE_STATUS_ALONE_DOES_NOT_PROVE_CONSUMER_IDENTITY_OR_REMOTE_WRITE_AUTHORITY"
+  }
+}

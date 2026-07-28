@@ -167,13 +167,13 @@ class WuchangThreeOrgContainerSceneBridgeTests(unittest.TestCase):
             {"image", "audio", "audiovisual_sync"}
         )
         schema = json.loads(
-            Path("schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json").read_text(
+            Path("schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json").read_text(
                 encoding="utf-8"
             )
         )
         validator = Draft202012Validator(schema)
         for packet in candidate["media_transport_packets"].values():
-            validator.validate(packet)
+            validator.validate(packet["core_packet"])
 
     def test_audio_defaults_to_non_source_l2_equivalent_reconstruction(self):
         packet = build_eight_d_media_transport_packet(domain="AUDIO")

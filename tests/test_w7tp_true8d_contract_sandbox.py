@@ -18,17 +18,23 @@ from tools.total_field.w7tp_true8d_contract_sandbox import (
     HARD_RISK_CODES,
     PROFILES,
     ContractSandboxError,
+    ACTIVE_CANONICAL_SCHEMA_REF,
+    ACTIVE_CONTRACT_VERSION,
+    LEGACY_CANONICAL_SCHEMA_REF,
+    LEGACY_CONTRACT_VERSION,
     build_p2_evidence,
     canonical_sha256,
     run_shadow_case,
     validate_common_input,
     validate_field_output,
+    validate_projection_contract,
     validate_resource_budget,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2.schema.json"
+SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2_1.schema.json"
+LEGACY_SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2.schema.json"
 FIXTURE_PATH = ROOT / "tests/fixtures/w7tp_true8d_p2_shadow_vectors.json"
 
 
@@ -36,8 +42,10 @@ class True8DContractSandboxTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+        cls.legacy_schema = json.loads(LEGACY_SCHEMA_PATH.read_text(encoding="utf-8"))
         cls.fixture = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
         Draft202012Validator.check_schema(cls.schema)
+        Draft202012Validator.check_schema(cls.legacy_schema)
 
     def test_five_profiles_by_seven_consumers_pass_read_only(self) -> None:
         evidence = build_p2_evidence("TEST_P2")
@@ -97,7 +105,7 @@ class True8DContractSandboxTest(unittest.TestCase):
         case = run_shadow_case("ASSOCIATION", "INTENT")
         self.assertIsNone(case["d8_final_decision"])
         self.assertEqual(tuple(D8_FIELDS), ("packet_id", "authority_ref", "version", "ttl_seconds", "nonce", "sha256", "verifier_ref", "seal_policy"))
-        output = {"packet_id": "packet:test", "authority_ref": "TOTAL_FIELD_CORE_UNDER_FOUNDER_AUTHORITY", "version": "2.0", "ttl_seconds": 1, "nonce": "nonce:test", "sha256": "0" * 64, "verifier_ref": "verifier:test", "seal_policy": "NO_COMMIT_NO_SEAL_READ_ONLY_SHADOW"}
+        output = {"packet_id": "packet:test", "authority_ref": "TOTAL_FIELD_CORE_UNDER_FOUNDER_AUTHORITY", "version": "2.1", "ttl_seconds": 1, "nonce": "nonce:test", "sha256": "0" * 64, "verifier_ref": "verifier:test", "seal_policy": "NO_COMMIT_NO_SEAL_READ_ONLY_SHADOW"}
         self.assertEqual(tuple(validate_field_output("D8", output)), D8_FIELDS)
         output["final_decision"] = "ALLOW"
         with self.assertRaises(ContractSandboxError):
@@ -119,8 +127,37 @@ class True8DContractSandboxTest(unittest.TestCase):
         from tools.total_field.w7tp_true8d_contract_sandbox import _common
         route = json.loads((ROOT / "runtime/total_field/secondary_cloud/scenario_route_table.json").read_text(encoding="utf-8"))["routes"]["GENERIC"]
         common = _common("D8", "GENERIC", "INTENT", route)
-        output = {"packet_id": "packet:test", "authority_ref": "TOTAL_FIELD_CORE_UNDER_FOUNDER_AUTHORITY", "version": "2.0", "ttl_seconds": 1, "nonce": "nonce:test", "sha256": "0" * 64, "verifier_ref": "verifier:test", "seal_policy": "NO_COMMIT_NO_SEAL_READ_ONLY_SHADOW"}
+        output = {"packet_id": "packet:test", "authority_ref": "TOTAL_FIELD_CORE_UNDER_FOUNDER_AUTHORITY", "version": "2.1", "ttl_seconds": 1, "nonce": "nonce:test", "sha256": "0" * 64, "verifier_ref": "verifier:test", "seal_policy": "NO_COMMIT_NO_SEAL_READ_ONLY_SHADOW"}
         self.assertEqual(list(Draft202012Validator(self.schema).iter_errors({"common_input": common, "output": output})), [])
+        self.assertEqual(
+            validate_projection_contract(common, output),
+            {"common_input": common, "output": output},
+        )
+
+    def test_explicit_v2_input_remains_legacy_schema_compatible(self) -> None:
+        from tools.total_field.w7tp_true8d_contract_sandbox import _common
+        route = json.loads((ROOT / "runtime/total_field/secondary_cloud/scenario_route_table.json").read_text(encoding="utf-8"))["routes"]["GENERIC"]
+        common = _common("D8", "GENERIC", "INTENT", route)
+        common["contract_version"] = LEGACY_CONTRACT_VERSION
+        common["canonical_schema_ref"] = LEGACY_CANONICAL_SCHEMA_REF
+        output = {"packet_id": "packet:legacy", "authority_ref": "TOTAL_FIELD_CORE_UNDER_FOUNDER_AUTHORITY", "version": "2.0", "ttl_seconds": 1, "nonce": "nonce:legacy", "sha256": "0" * 64, "verifier_ref": "verifier:legacy", "seal_policy": "NO_COMMIT_NO_SEAL_READ_ONLY_SHADOW"}
+        self.assertEqual(
+            list(
+                Draft202012Validator(self.legacy_schema).iter_errors(
+                    {"common_input": common, "output": output}
+                )
+            ),
+            [],
+        )
+        self.assertEqual(
+            validate_projection_contract(common, output),
+            {"common_input": common, "output": output},
+        )
+        self.assertEqual(ACTIVE_CONTRACT_VERSION, "W7TP-TRUE8D-MACHINE-CONTRACT/2.1")
+        self.assertEqual(
+            ACTIVE_CANONICAL_SCHEMA_REF,
+            "schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json",
+        )
 
 
 if __name__ == "__main__":
