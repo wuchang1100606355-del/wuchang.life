@@ -9,9 +9,17 @@ const $ = (id) => document.getElementById(id);
 function stableStringify(value) {
   if (Array.isArray(value)) return "[" + value.map(stableStringify).join(",") + "]";
   if (value && typeof value === "object") {
-    return "{" + Object.keys(value).sort().map((key) => JSON.stringify(key) + ":" + stableStringify(value[key])).join(",") + "}";
+    return "{" + Object.keys(value).sort().map((key) => JSON.stringify(key.normalize("NFC")) + ":" + stableStringify(value[key])).join(",") + "}";
   }
+  if (typeof value === "string") return JSON.stringify(value.normalize("NFC"));
   return JSON.stringify(value);
+}
+
+async function sha256Hex(text) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 function pseudoHash64(text) {
@@ -51,7 +59,7 @@ function detectBoundaryHits(text) {
   return Array.from(new Set(hits)).sort();
 }
 
-function buildPacket() {
+async function buildPacket() {
   const intent = $("intentText").value.trim() || "會員日常協力";
   const actionType = $("actionType").value;
   const draftText = $("draftText").value.trim();
@@ -110,6 +118,7 @@ function buildPacket() {
         "deploy"
       ],
       no_plaintext_context: true,
+      reconstruction_level: "L3_CANDIDATE",
       human_confirm_required: actionType === "write_draft_ref" || riskLevel === "blocked",
       staff_confirm_required: false
     },
@@ -121,16 +130,20 @@ function buildPacket() {
       usage_log_required: true
     },
     D8_envelope: {
+      packet_id: `PKT_BROWSER_${crypto.randomUUID().replaceAll("-", "")}`,
       packet_ref: ref("packet_ref", `${intent}:${Date.now()}`),
-      nonce: ref("nonce_ref", `${Date.now()}:${Math.random()}`),
+      trace_id: `TRACE_BROWSER_${crypto.randomUUID().replaceAll("-", "")}`,
+      nonce: `nonce_ref:${crypto.randomUUID()}`,
       counter: 1,
       ttl_seconds: 300,
       created_at: new Date().toISOString(),
       schema_version: "8d.packet.v1",
       content_hash: "",
+      content_sha256: "",
       hmac_ref: "hmac_ref:xiaoj_member_browser_extension:verifier_required",
       signature_ref: "signature_ref:xiaoj_member_browser_extension:verifier_required",
-      replay_protection: true
+      replay_protection: true,
+      authority_granted: false
     },
     browser_action: {
       action_ref: ref("action_ref", `${actionType}:${intent}`),
@@ -161,33 +174,19 @@ function buildPacket() {
   };
   const hashPacket = JSON.parse(JSON.stringify(packet));
   hashPacket.D8_envelope.content_hash = "";
-  packet.D8_envelope.content_hash = pseudoHash64(stableStringify(hashPacket));
+  hashPacket.D8_envelope.content_sha256 = "";
+  const contentSha256 = await sha256Hex(stableStringify(hashPacket));
+  packet.D8_envelope.content_hash = contentSha256;
+  packet.D8_envelope.content_sha256 = contentSha256;
   return packet;
 }
 
 async function runBridge() {
-  const packet = buildPacket();
+  const packet = await buildPacket();
   $("packetOut").textContent = JSON.stringify(packet, null, 2);
-  if ($("useNativeGateway").checked) {
-    const nativeResult = await chrome.runtime.sendMessage({
-      type: "XIAOJ_NATIVE_GATEWAY_REQUEST",
-      packet,
-      intent: $("intentText").value.trim(),
-      selectedText: "",
-      localDraftText: packet.browser_action.action_type === "write_draft_ref" ? $("draftText").value.trim() : "",
-      activeFieldType: "textarea"
-    });
-    if (nativeResult && nativeResult.native_gateway_available) {
-      $("resultOut").textContent = JSON.stringify(nativeResult, null, 2);
-      $("decisionText").textContent = nativeResult.decision || "UNKNOWN";
-      $("decisionText").className = nativeResult.ok ? "allowed" : "blocked";
-      return;
-    }
-  }
   const result = await chrome.runtime.sendMessage({
-    type: "XIAOJ_EXECUTE_CANDIDATE_ACTION",
-    packet,
-    localDraftText: packet.browser_action.action_type === "write_draft_ref" ? $("draftText").value.trim() : ""
+    type: "XIAOJ_NATIVE_GATEWAY_REQUEST",
+    packet
   });
   $("resultOut").textContent = JSON.stringify(result, null, 2);
   $("decisionText").textContent = result && result.decision ? result.decision : "UNKNOWN";
@@ -206,4 +205,14 @@ $("runBtn").addEventListener("click", () => {
   });
 });
 
-$("packetOut").textContent = JSON.stringify(buildPacket(), null, 2);
+buildPacket()
+  .then((packet) => {
+    $("packetOut").textContent = JSON.stringify(packet, null, 2);
+  })
+  .catch((error) => {
+    $("packetOut").textContent = JSON.stringify({
+      state: "HOLD",
+      reason: "packet_hash_initialization_failed",
+      error_ref: ref("error_ref", String(error))
+    }, null, 2);
+  });

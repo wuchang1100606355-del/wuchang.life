@@ -22,7 +22,7 @@ DEFAULT_HOST_CONFIG = ROOT / "Taiji_Odoo/config/odoo.conf"
 DEFAULT_CONTAINER = "wuchang_os_odoo_18"
 DEFAULT_CONTAINER_CONFIG = "/etc/odoo/odoo.conf"
 CALLBACK_PATH = "/google/member/callback"
-CANONICAL_CALLBACK_URL = "https://wuchang.life/google/member/callback"
+CANONICAL_CALLBACK_URL = "https://member.wuchang.life/google/member/callback"
 GOOGLE_CLIENT_SECRET_FILE_ENV = "WUCHANG_GOOGLE_CLIENT_SECRET_FILE"
 GOOGLE_CLIENT_SECRET_FILE = "/run/secrets/google_member_client_secret"
 RESULT_PREFIX = "WUCHANG_GOOGLE_PROVIDER_RESULT="
@@ -215,8 +215,8 @@ redirect_uri = params.get_param("wuchang_google_member_login.redirect_uri") or "
 provider_exists = bool(provider)
 provider_active = bool(provider and provider.enabled)
 client_id_present = bool(provider and provider.client_id)
-callback_present = bool(redirect_uri and redirect_uri.endswith("/google/member/callback"))
-public_base_present = bool(public_base_url.startswith("https://"))
+callback_present = redirect_uri == {CANONICAL_CALLBACK_URL!r}
+public_base_present = public_base_url == "https://member.wuchang.life"
 auth_endpoint_state = google_endpoint_state(
     provider.auth_endpoint if provider else "", "authorization"
 )
@@ -225,11 +225,13 @@ if provider:
     userinfo_endpoint = provider.data_endpoint or provider.validation_endpoint or ""
 userinfo_endpoint_state = google_endpoint_state(userinfo_endpoint, "userinfo")
 runtime_secret_file_state = secret_file_state()
-canonical_callback_state = "PRESENT" if {CANONICAL_CALLBACK_URL!r}.startswith("https://wuchang.life/") else "INVALID_REF"
+canonical_callback_state = "PRESENT" if {CANONICAL_CALLBACK_URL!r} == "https://member.wuchang.life/google/member/callback" else "INVALID_REF"
 runtime_login_ready = all((
     provider_exists,
     provider_active,
     client_id_present,
+    callback_present,
+    public_base_present,
     runtime_secret_file_state == "PRESENT",
     auth_endpoint_state == "PRESENT_TRUSTED_GOOGLE_HTTPS",
     userinfo_endpoint_state == "PRESENT_TRUSTED_GOOGLE_HTTPS",

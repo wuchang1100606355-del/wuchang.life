@@ -139,6 +139,40 @@ def trusted_caddy_boundary(headers: Mapping[str, Any], peer_ip: str) -> bool:
     return normalized.get(BOUNDARY_HEADER.casefold()) == TRUSTED_BOUNDARY_VALUE
 
 
+def verify_trusted_identity_ref(
+    headers: Mapping[str, Any],
+    *,
+    trusted_boundary: bool,
+) -> dict[str, Any]:
+    """Verify the ACTIVE ref-only identity context without using a P0 prefix."""
+
+    if trusted_boundary is not True:
+        raise FieldApplicationError("IDENTITY_PROJECTION_UNTRUSTED_SOURCE")
+    normalized = {str(key).casefold(): value for key, value in headers.items()}
+    identity_header = HEADER_BY_FIELD["identity_ref"]
+    identity_ref = normalized.get(identity_header.casefold())
+    if not isinstance(identity_ref, str) or IDENTITY_REF.fullmatch(
+        identity_ref.strip()
+    ) is None:
+        raise FieldApplicationError(
+            "IDENTITY_PROJECTION_HEADER_REQUIRED",
+            f"$.headers.{identity_header}",
+        )
+    unexpected = {
+        header
+        for header in PROJECTION_HEADER_NAMES
+        if header.casefold() in normalized and header != identity_header
+    }
+    if unexpected:
+        raise FieldApplicationError("IDENTITY_REF_ONLY_CONTEXT_REQUIRED")
+    return {
+        "state": "PASS_TRUSTED_IDENTITY_REF_ONLY",
+        "projection": {"identity_ref": identity_ref.strip()},
+        "identity_prefix": None,
+        "identity_registry_snapshot": None,
+    }
+
+
 def _validate_projection_shape(projection: Mapping[str, Any]) -> None:
     if set(projection) != set(PROJECTION_FIELDS):
         raise FieldApplicationError("IDENTITY_PROJECTION_SHAPE_INVALID")

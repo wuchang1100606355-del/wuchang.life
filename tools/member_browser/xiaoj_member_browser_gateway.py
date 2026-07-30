@@ -13,6 +13,7 @@ no POS, no production database, and no runtime SQLite writes.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import sys
 import uuid
@@ -38,10 +39,28 @@ from tools.member_browser.xiaoj_member_browser_1b_controller import (
     odoo_function_items_for_role,
     ref,
 )
+from tools.total_field_candidate_gateway import receive_candidate
 
 
 GATEWAY_SCHEMA = ROOT / "schemas/browser/xiaoj_member_browser_gateway_result_v1.schema.json"
 ASSOCIATION_ADMISSION_SCHEMA = ROOT / "schemas/browser/xiaoj_association_usage_admission_packet_v1.schema.json"
+
+
+def forward_transport_envelope(
+    transport_envelope: dict[str, Any],
+    *,
+    replay_ledger: set[str],
+    received_at: dt.datetime | None = None,
+) -> dict[str, Any]:
+    """Forward one unchanged browser packet through the sole Total Field receiver."""
+
+    return receive_candidate(
+        transport_envelope,
+        previous_state={},
+        observation_domains={},
+        browser_replay_ledger=replay_ledger,
+        browser_received_at=received_at,
+    )
 
 
 def make_args(args: argparse.Namespace) -> SimpleNamespace:

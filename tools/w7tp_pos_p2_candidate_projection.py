@@ -28,6 +28,20 @@ REQUIRED_FALSE_FLAGS = {
     "deploy": False,
     "production_release": False,
 }
+P4_POS_FORBIDDEN_KEYS = {
+    "lines",
+    "items",
+    "order",
+    "order_id",
+    "payment",
+    "payment_method",
+    "inventory",
+    "stock",
+    "price",
+    "unit_price",
+    "member_data",
+    "member_plaintext",
+}
 
 
 def now_iso() -> str:
@@ -158,6 +172,112 @@ def validate_candidate(candidate: dict[str, Any]) -> list[str]:
     if not isinstance(candidate.get("rule_refs"), list) or not candidate.get("rule_refs"):
         errors.append("RULE_REFS_EMPTY")
     return errors
+
+
+def _forbidden_pos_path(value: Any, path: str = "$") -> str | None:
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            child = f"{path}.{key}"
+            if str(key).strip().casefold() in P4_POS_FORBIDDEN_KEYS:
+                return child
+            found = _forbidden_pos_path(nested, child)
+            if found is not None:
+                return found
+    elif isinstance(value, list):
+        for index, nested in enumerate(value):
+            found = _forbidden_pos_path(nested, f"{path}[{index}]")
+            if found is not None:
+                return found
+    return None
+
+
+def build_member_bound_pos_dry_run_candidate(
+    scene_binding: dict[str, Any],
+    request_candidate: dict[str, Any],
+) -> dict[str, Any]:
+    """Project one P4 scene binding into a reference-only POS dry run."""
+
+    if scene_binding.get("state") != "PASS_SCENE_BINDING_CANDIDATE":
+        return {
+            "state": "HOLD_P4_SCENE_BINDING_REQUIRED",
+            "candidate_only": True,
+        }
+    binding_material = {
+        key: value
+        for key, value in scene_binding.items()
+        if key != "binding_ref"
+    }
+    if scene_binding.get("binding_ref") != (
+        "scene_binding_ref:sha256:" + sha_obj(binding_material)
+    ):
+        return {
+            "state": "HOLD_P4_SCENE_BINDING_HASH_MISMATCH",
+            "candidate_only": True,
+        }
+    if any(
+        scene_binding.get(field) is not False
+        for field in (
+            "formal_pos_write",
+            "order_created",
+            "payment_capture",
+            "inventory_write",
+            "price_write",
+            "member_data_write",
+            "runtime_released",
+        )
+    ):
+        return {
+            "state": "BLOCK_POS_WRITE_AUTHORITY_INJECTION",
+            "candidate_only": True,
+        }
+    forbidden_path = _forbidden_pos_path(request_candidate)
+    if forbidden_path is not None:
+        return {
+            "state": "BLOCK_POS_WRITE_FIELD_FORBIDDEN",
+            "path": forbidden_path,
+            "candidate_only": True,
+        }
+    intent_ref = request_candidate.get("pos_intent_ref")
+    if (
+        not isinstance(intent_ref, str)
+        or not intent_ref.startswith("pos_intent_ref:sha256:")
+        or len(intent_ref) != len("pos_intent_ref:sha256:") + 64
+    ):
+        return {
+            "state": "HOLD_POS_INTENT_REF_REQUIRED",
+            "candidate_only": True,
+        }
+    material = {
+        "schema_version": "w7tp.member-pos-dry-run-candidate.v1",
+        "state": "PASS_POS_DRY_RUN_CANDIDATE",
+        "scene_binding_ref": scene_binding["binding_ref"],
+        "p3_gate_ref": scene_binding["p3_gate_ref"],
+        "verified_channel_binding_ref": scene_binding[
+            "verified_channel_binding_ref"
+        ],
+        "action_hash": scene_binding["action_hash"],
+        "member_ref": scene_binding["member_ref"],
+        "session_ref": scene_binding["session_ref"],
+        "scene_ref": scene_binding["scene_ref"],
+        "node_ref": scene_binding["node_ref"],
+        "capability_ref": scene_binding["capability_ref"],
+        "d3_coordinate_ref": scene_binding["d3_coordinate_ref"],
+        "carrier_ref": scene_binding["carrier_ref"],
+        "pos_intent_ref": intent_ref,
+        "formal_db_write": False,
+        "formal_pos_write": False,
+        "order_created": False,
+        "payment_capture": False,
+        "inventory_write": False,
+        "price_write": False,
+        "member_data_write": False,
+        "candidate_only": True,
+        "runtime_released": False,
+    }
+    material["pos_candidate_ref"] = (
+        "pos_candidate_ref:sha256:" + sha_obj(material)
+    )
+    return material
 
 
 def build_projection(candidate_path: Path, candidate: dict[str, Any]) -> dict[str, Any]:

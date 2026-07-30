@@ -1,0 +1,86 @@
+{
+  "artifact": "w7tp_member_sovereign_odoo_authority_ledger_v1",
+  "authoritative_model": {
+    "addon": "wuchang_member_registration",
+    "model": "wuchang.member.registration",
+    "persistence": "models.Model",
+    "same_name_model_declarations": 1
+  },
+  "authority": {
+    "candidate_authority": "none",
+    "member_consent_authority": "member",
+    "process_authority": "odoo",
+    "safety_and_landing_authority": "total_field_verifier"
+  },
+  "base_bindings": {
+    "p0_content_sha256": "2b8fec135a9a714af0a8b4cc5c9a77fcbc06c643ea13c66b73271c6834e592ce",
+    "p0_manifest_sha256": "4ee5af92bfb674ae3f1ad5e761e09122477bf545b66f5e0b408f6a969a8e625c",
+    "p0_p1_rescan": false,
+    "p1_content_sha256": "2e40172beca70eb5eb4a1805ea99f8a2d131c3622451b147c764e6488782dafc",
+    "p1_manifest_sha256": "88e2fec326d8ffe0d7ad9a9663dcc077831234de0146e28d74db2c56207e98e9",
+    "verified_before_construction": true
+  },
+  "candidate_only": true,
+  "content_hash_algorithm": "sha256(sorted(path_utf8 + NUL + file_bytes + NUL))",
+  "content_sha256": "bb92ec360e72b0ffb34160e21f8d6b989d5a44f9af00cb87bd3d664ffef217c4",
+  "files": [
+    {
+      "bytes": 5112,
+      "path": "Taiji_Odoo/addons/wuchang_core/models/member_registration.py",
+      "role": "retired_legacy_model_reference",
+      "sha256": "f0d07959c39f126510dca7ef639588cddeda529fa68453197ea53f2d8ec56577"
+    },
+    {
+      "bytes": 126588,
+      "path": "Taiji_Odoo/addons/wuchang_member_registration/models/member_registration.py",
+      "role": "authoritative_persistent_model_and_append_only_ledgers",
+      "sha256": "963d357699299953dcbec795efe33c10a31449a8414f1da9aa5bfd1a32675148"
+    },
+    {
+      "bytes": 7187,
+      "path": "Taiji_Odoo/addons/wuchang_member_registration/security/ir.model.access.csv",
+      "role": "append_only_acl",
+      "sha256": "77d00f0753ec54ef4fb020c3d9fa97b32aee6a3c4580f90c487cda7fc29229b3"
+    },
+    {
+      "bytes": 5810,
+      "path": "Taiji_Odoo/addons/wuchang_member_registration/security/wuchang_member_groups.xml",
+      "role": "member_subject_record_rules",
+      "sha256": "1134549353303ac74bed7f8d8dea1f40cff5b2a430d41132b72ed57110552840"
+    },
+    {
+      "bytes": 14437,
+      "path": "tests/test_member_sovereign_odoo_authority_ledger.py",
+      "role": "focused_and_negative_acceptance_tests",
+      "sha256": "d52ceb0dd1fbc878dfb5852ca5cbd1c796890e8993cc5b05d4d2654fb2ba3f09"
+    }
+  ],
+  "manifest_excludes_self": true,
+  "negative_acceptance": [
+    "cross_member",
+    "double_active_root",
+    "stale_revocation_epoch",
+    "ledger_overwrite_and_delete",
+    "forged_member_consent",
+    "provider_authority_escalation",
+    "stale_recovery_cas",
+    "double_recovery_completion",
+    "sudo_member_authority_bypass"
+  ],
+  "red_team": {
+    "post_reconstruction": "PASS",
+    "pre_construction": "PASS"
+  },
+  "run_id": "P2_ODOO_AUTHORITY_LEDGER_20260729T141601Z",
+  "runtime_released": false,
+  "source_ready": true,
+  "validation": {
+    "acl_record_rule_static": "PASS",
+    "csv_parse": "PASS_44_ROWS",
+    "focused_pytest": "PASS_27_OF_27",
+    "git_diff_check": "PASS",
+    "manifest_recompute": "PASS_SELF_EXCLUDING",
+    "py_compile": "PASS_3_OF_3",
+    "xml_parse": "PASS_1_OF_1"
+  }
+}

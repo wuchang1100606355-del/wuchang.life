@@ -1,0 +1,74 @@
+{
+  "schema": "W7TP-8D-CANONICAL-V2.1-FOUNDER-LOCKED-SUCCESSOR-MANIFEST/1.0",
+  "state": "APPEND_ONLY_CANONICAL_SUCCESSOR_NOT_ACTIVATED",
+  "successor_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728",
+  "source_canonical": {
+    "path": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md",
+    "sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+    "unchanged": true
+  },
+  "founder_lock_record": {
+    "path": "docs/total_field/W7TP_8D_CANONICAL_V2_1_FOUNDER_LOCK_RECORD_20260728.md",
+    "sha256": "e71c244c8d4c7c1d139cb4f00fcf7d38d3d01e5eb1e5c43eae3699c1d48e46c5",
+    "three_canonical_locks": "PASS_3_OF_3"
+  },
+  "optional_capability_appendix": {
+    "capability_id": "DISTRIBUTED_ACOUSTIC_EMBODIED_DIALOGUE",
+    "range": "BEGIN_OPTIONAL_CAPABILITY_APPENDIX_THROUGH_END_OPTIONAL_CAPABILITY_APPENDIX_INCLUSIVE_LF",
+    "sha256": "c1b3d5474de9790691b1d0c8307f2cc4bcc352480e2c3be4b3e0317fa99f2030",
+    "class": "OPTIONAL_SYSTEM_CAPABILITY",
+    "implementation_status": "CANDIDATE_PENDING_PHYSICAL_DISTRIBUTED_E2E_RECEIPT"
+  },
+  "successor_canonical": {
+    "path": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
+    "sha256": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d",
+    "parent_exact_byte_prefix": true,
+    "version": "2.1"
+  },
+  "canonical_locks": {
+    "CANONICAL_CAPABILITY": "8D_MAXIMUM_CLOSURE",
+    "RUNTIME_MODE": "MINIMUM_SUFFICIENT_DIMENSION",
+    "ADI_INDEX": "5D_INTEGER_METRIC",
+    "FLOAT_OR_SEMANTIC_SELECTION_USED": "NO"
+  },
+  "adi_binding_receipt": {
+    "packet_type": "W7TP_ADI_5D_CANONICAL_SUCCESSOR_BINDING_RECEIPT_CANDIDATE",
+    "index_policy": "5D_INTEGER_METRIC",
+    "index_state": "REFERENCE_BOUND_NO_INTEGER_ALLOCATION",
+    "source_canonical_sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+    "founder_lock_record_sha256": "e71c244c8d4c7c1d139cb4f00fcf7d38d3d01e5eb1e5c43eae3699c1d48e46c5",
+    "capability_appendix_sha256": "c1b3d5474de9790691b1d0c8307f2cc4bcc352480e2c3be4b3e0317fa99f2030",
+    "successor_canonical_sha256": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d",
+    "decision_index": "LOCAL_IRREVERSIBLE",
+    "system_index_network": "LINEAGE_LOGICAL_TIME_STATE_TRANSITION_NAMESPACE_EVIDENCE_SPATIOTEMPORAL",
+    "float_or_semantic_selection_used": false,
+    "binding_verification": "PASS",
+    "candidate_only": true,
+    "active_pointer_write": false,
+    "canonical_overwrite": false,
+    "database_write": false,
+    "receipt_sha256": "0bb4cad40ab691515f8f31a69f4fb4c8b04488ad433467207179bd676c0cb966"
+  },
+  "evidence_refs": [
+    "W7TP_XIAOJ_8D_VOICE_SKILL_V1_20260719",
+    "XIAOJ_HOMEPOD_8D_CANDIDATE_V1.json",
+    "總場多媒體AI架構研究報告",
+    "taiji01影音AI架構研究報告"
+  ],
+  "active_canonical_pointer": {
+    "path": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "sha256_before": "2edb0d87b95dc6290675fea38ab1a83cb429d8bcdddf9438e907bd051a16290b",
+    "updated": false
+  },
+  "prohibitions": {
+    "new_pid": false,
+    "new_listener": false,
+    "existing_service_change": false,
+    "deploy": false,
+    "restart": false,
+    "database_write": false,
+    "router_write": false,
+    "canonical_overwrite": false,
+    "local_openwebui_write": false
+  }
+}

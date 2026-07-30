@@ -19,6 +19,7 @@ from jsonschema import Draft202012Validator
 
 from tools.total_field.wuchang_three_org_container_scene_bridge import (
     build_audiovisual_natural_language_service_candidate,
+    build_p4_node_carrier_binding_candidate,
     load_three_org_scene_map,
 )
 from tools.total_field_candidate_gateway import receive_candidate
@@ -378,6 +379,224 @@ def sha256_object(value: Any) -> str:
     """Return one deterministic SHA-256 for a JSON value."""
 
     return hashlib.sha256(canonical_bytes(value)).hexdigest()
+
+
+def _p4_scene_validator() -> Draft202012Validator:
+    schema = json.loads(DEFAULT_SCHEMA_PATH.read_text(encoding="utf-8"))
+    return Draft202012Validator(
+        {
+            "$schema": schema["$schema"],
+            "$ref": "#/$defs/p4MemberSceneBinding",
+            "$defs": schema["$defs"],
+        }
+    )
+
+
+def build_member_sovereign_scene_binding_candidate(
+    *,
+    p3_request: Mapping[str, Any],
+    p3_gate: Mapping[str, Any],
+    verified_channel_binding: Mapping[str, Any],
+    scene: str,
+    capability_ref: str,
+    node_ref: str,
+    d3_coordinate_ref: str,
+    carrier_kind: str,
+    carrier_ref: str,
+    existing_device_nodes: Mapping[str, str] | None = None,
+    carrier_metadata: Mapping[str, Any] | None = None,
+    founder_scene: bool = False,
+    current_epoch: int,
+) -> dict[str, Any]:
+    """Derive one scene/node/carrier candidate only from a P3 PASS envelope."""
+
+    hold = {
+        "state": "HOLD_P3_SCENE_BINDING_NOT_EVIDENCED",
+        "candidate_only": True,
+        "runtime_released": False,
+    }
+    if (
+        p3_gate.get("state") != "PASS"
+        or p3_request.get("request_mode") != "ACTION_REQUEST"
+    ):
+        return hold
+    if (
+        verified_channel_binding.get("verifier_result") != "PASS"
+        or verified_channel_binding.get("member_ref")
+        != p3_request.get("member_ref")
+        or not isinstance(
+            verified_channel_binding.get("verified_channel_binding_ref"),
+            str,
+        )
+    ):
+        return {
+            **hold,
+            "state": "HOLD_CROSS_MEMBER_CHANNEL_BINDING",
+        }
+    gate_material = p3_gate.get("gate_material")
+    session = p3_request.get("session")
+    p3_scene = p3_request.get("scene")
+    action = p3_request.get("action")
+    if not all(
+        isinstance(value, Mapping)
+        for value in (gate_material, session, p3_scene, action)
+    ):
+        return hold
+    expected_gate_ref = (
+        "member_action_gate_ref:sha256:"
+        + sha256_object(gate_material)
+    )
+    if p3_gate.get("gate_ref") != expected_gate_ref:
+        return {
+            **hold,
+            "state": "HOLD_P3_GATE_HASH_MISMATCH",
+        }
+    expected_gate_fields = {
+        "identity_root_ref": p3_request.get("identity_root_ref"),
+        "root_generation": p3_request.get("root_generation"),
+        "revocation_epoch": p3_request.get("revocation_epoch"),
+        "session_ref": session.get("session_ref"),
+        "scene_ref": p3_scene.get("scene_ref"),
+        "action_hash": action.get("action_hash"),
+        "scope_refs": action.get("scope_refs"),
+        "effect_class": action.get("effect_class"),
+    }
+    if any(
+        gate_material.get(field) != value
+        for field, value in expected_gate_fields.items()
+    ):
+        return {
+            **hold,
+            "state": "HOLD_P3_GATE_BINDING_MISMATCH",
+        }
+    scopes = action.get("scope_refs")
+    if (
+        not isinstance(scopes, list)
+        or scopes != sorted(set(scopes))
+        or session.get("scope_refs") != scopes
+        or p3_scene.get("scope_refs") != scopes
+    ):
+        return {
+            **hold,
+            "state": "HOLD_SCOPE_EXPANSION",
+        }
+    if (
+        session.get("effect_class") != action.get("effect_class")
+        or p3_scene.get("effect_class") != action.get("effect_class")
+    ):
+        return {
+            **hold,
+            "state": "HOLD_EFFECT_CLASS_EXPANSION",
+        }
+    device_ref = session.get("device_ref")
+    if not isinstance(device_ref, str):
+        return {
+            **hold,
+            "state": "HOLD_P3_DEVICE_BINDING_REQUIRED",
+        }
+    role_seat_snapshot = session.get("role_seat_snapshot")
+    if not isinstance(role_seat_snapshot, Mapping):
+        return {
+            **hold,
+            "state": "HOLD_ROLE_SEAT_SNAPSHOT_REQUIRED",
+        }
+    role_seat_snapshot_ref = (
+        "role_seat_snapshot_ref:sha256:"
+        + sha256_object(role_seat_snapshot)
+    )
+    node_binding = build_p4_node_carrier_binding_candidate(
+        device_ref=device_ref,
+        node_ref=node_ref,
+        carrier_kind=carrier_kind,
+        carrier_ref=carrier_ref,
+        d3_coordinate_ref=d3_coordinate_ref,
+        existing_device_nodes=existing_device_nodes,
+        carrier_metadata=carrier_metadata,
+    )
+    if node_binding.get("state") != "PASS_NODE_CARRIER_BINDING_CANDIDATE":
+        return {
+            **hold,
+            "state": node_binding["state"],
+        }
+    founder_role_seat_lease_ref = None
+    if founder_scene:
+        leases = role_seat_snapshot.get("seat_leases")
+        founder_leases = [
+            lease for lease in (leases or [])
+            if isinstance(lease, Mapping)
+            and lease.get("seat_class") == "FOUNDER_DEVELOPER"
+            and lease.get("identity_root_ref")
+            == p3_request.get("identity_root_ref")
+            and lease.get("root_generation")
+            == p3_request.get("root_generation")
+            and lease.get("revocation_epoch")
+            == p3_request.get("revocation_epoch")
+            and isinstance(lease.get("issued_at_epoch"), int)
+            and isinstance(lease.get("expires_at_epoch"), int)
+            and lease["issued_at_epoch"] <= current_epoch
+            < lease["expires_at_epoch"]
+        ]
+        if len(founder_leases) != 1:
+            return {
+                **hold,
+                "state": "HOLD_FOUNDER_ROLE_SEAT_LEASE_REQUIRED",
+            }
+        founder_role_seat_lease_ref = (
+            "role_seat_lease_ref:sha256:"
+            + sha256_object(founder_leases[0])
+        )
+    material = {
+        "schema_version": "w7tp.member-channel-scene-pos-node-binding.v1",
+        "state": "PASS_SCENE_BINDING_CANDIDATE",
+        "p3_gate_ref": p3_gate.get("gate_ref"),
+        "verified_channel_binding_ref": verified_channel_binding.get(
+            "verified_channel_binding_ref"
+        ),
+        "action_hash": action.get("action_hash"),
+        "member_ref": p3_request.get("member_ref"),
+        "identity_root_ref": p3_request.get("identity_root_ref"),
+        "root_generation": p3_request.get("root_generation"),
+        "revocation_epoch": p3_request.get("revocation_epoch"),
+        "session_ref": session.get("session_ref"),
+        "scene_ref": p3_scene.get("scene_ref"),
+        "scene": scene,
+        "scope_refs": scopes,
+        "effect_class": action.get("effect_class"),
+        "device_ref": device_ref,
+        "channel_ref": session.get("channel_ref"),
+        "node_ref": node_ref,
+        "capability_ref": capability_ref,
+        "d3_coordinate_ref": d3_coordinate_ref,
+        "carrier_ref": carrier_ref,
+        "carrier_kind": carrier_kind,
+        "transport_priority": node_binding["transport_priority"],
+        "protocol_role": "CARRIER_ONLY",
+        "generative_transmission": (
+            "W7TP_PROTOCOL_NATIVE_8D_INTENT_FIELD_PACKET"
+        ),
+        "node_binding_ref": node_binding["node_binding_ref"],
+        "role_seat_snapshot_ref": role_seat_snapshot_ref,
+        "founder_role_seat_lease_required": founder_scene,
+        "founder_role_seat_lease_ref": founder_role_seat_lease_ref,
+        "pos_mode": "DRY_RUN_CANDIDATE_ONLY",
+        "formal_pos_write": False,
+        "order_created": False,
+        "payment_capture": False,
+        "inventory_write": False,
+        "price_write": False,
+        "member_data_write": False,
+        "candidate_only": True,
+        "runtime_released": False,
+    }
+    material["binding_ref"] = (
+        "scene_binding_ref:sha256:" + sha256_object(material)
+    )
+    if list(_p4_scene_validator().iter_errors(material)):
+        return {
+            **hold,
+            "state": "HOLD_P4_SCENE_SCHEMA_INVALID",
+        }
+    return material
 
 
 def _copy_json(value: Any) -> Any:

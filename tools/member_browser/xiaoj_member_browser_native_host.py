@@ -23,7 +23,12 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.member_browser.xiaoj_member_browser_gateway import build_gateway_result
+from tools.member_browser.xiaoj_member_browser_gateway import forward_transport_envelope
+from tools.tfct_true8d_runtime_candidate import RuntimeCandidateError
+from tools.total_field_candidate_gateway import TotalFieldGatewayError
+
+
+BROWSER_REPLAY_LEDGER: set[str] = set()
 
 
 def read_message() -> dict | None:
@@ -77,7 +82,7 @@ def build_args(payload: dict) -> argparse.Namespace:
 
 
 def handle(payload: dict) -> dict:
-    if payload.get("type") not in {"XIAOJ_NATIVE_GATEWAY_REQUEST", "XIAOJ_NATIVE_GATEWAY_SMOKE"}:
+    if payload.get("type") != "XIAOJ_NATIVE_GATEWAY_REQUEST":
         return {
             "ok": False,
             "decision": "BLOCK",
@@ -87,14 +92,59 @@ def handle(payload: dict) -> dict:
             "member_plaintext_transferred": False,
             "secret_transferred": False,
         }
-    result = build_gateway_result(build_args(payload))
+    transport_envelope = payload.get("transport_envelope")
+    if not isinstance(transport_envelope, dict):
+        return {
+            "ok": False,
+            "decision": "HOLD",
+            "reason": "browser_transport_envelope_required",
+            "candidate_only": True,
+            "authority_granted": False,
+            "requires_total_field_verify": True,
+            "member_plaintext_transferred": False,
+            "secret_transferred": False,
+        }
+    try:
+        result = forward_transport_envelope(
+            transport_envelope,
+            replay_ledger=BROWSER_REPLAY_LEDGER,
+        )
+    except TotalFieldGatewayError as exc:
+        return {
+            "ok": False,
+            "decision": "HOLD",
+            "reason": exc.reason_code,
+            "path": exc.path,
+            "candidate_only": True,
+            "authority_granted": False,
+            "requires_total_field_verify": True,
+            "member_plaintext_transferred": False,
+            "secret_transferred": False,
+        }
+    except (OSError, RuntimeCandidateError):
+        return {
+            "ok": False,
+            "decision": "HOLD",
+            "reason": "total_field_receiver_unavailable",
+            "candidate_only": True,
+            "authority_granted": False,
+            "requires_total_field_verify": True,
+            "member_plaintext_transferred": False,
+            "secret_transferred": False,
+        }
+    receipt = result["total_field_receipt"]
     return {
-        "ok": result["state"] != "BLOCK",
+        "ok": result["state"] == "ALLOW",
         "decision": result["state"],
         "candidate_only": True,
+        "authority_granted": False,
         "requires_total_field_verify": True,
         "member_plaintext_transferred": False,
         "secret_transferred": False,
+        "packet_id": result["packet_id"],
+        "trace_id": result["trace_id"],
+        "content_sha256": result["content_sha256"],
+        "total_field_receipt": receipt,
         "gateway_result": result,
     }
 

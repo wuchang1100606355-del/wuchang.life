@@ -4,7 +4,7 @@ import re
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,6 +68,31 @@ class WuchangNonprofitHomepageBoundariesTest(unittest.TestCase):
         self.assertIn("不募款、婉謝捐款，以商以智養公益", self.html)
         self.assertEqual(self.parser.first_hero_cta, "立即測試生成式傳輸")
 
+    def test_human_first_entrypoints_and_future_fund_commitment_are_explicit(self) -> None:
+        for marker in (
+            "第一次來，從你要完成的事情開始",
+            "親自體驗生成式傳輸",
+            "找社區服務與計畫",
+            "加入會員或免費訂閱",
+            "成為志工或合作夥伴",
+            "會員是我們服務的客戶，不是被管理的對象",
+            "正式訂閱尚未啟用",
+            "啟用後至少 60% 轉入社區數位發展基金",
+            "計算基礎、期間與帳務證據將在收費前公開",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, self.html)
+
+    def test_accessible_navigation_and_service_targets_are_source_present(self) -> None:
+        stylesheet = (ROOT / "web/assets/wuchang-site-design.css").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('class="skip" href="#main"', self.html)
+        self.assertIn('aria-label="服務承諾摘要"', self.html)
+        self.assertIn('aria-label="公開承諾"', self.html)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", stylesheet)
+        self.assertIn("min-height: 44px", stylesheet)
+
     def test_business_and_property_are_demo_only_on_canonical_subdomains(self) -> None:
         self.assertIn("business.wuchang.life", self.html)
         self.assertIn("property.wuchang.life", self.html)
@@ -83,7 +108,7 @@ class WuchangNonprofitHomepageBoundariesTest(unittest.TestCase):
     def test_core_navigation_targets_exist(self) -> None:
         local_links = [link for link in self.parser.links if link.startswith("./") and "#" not in link]
         for link in local_links:
-            target = (ROOT / "web" / link[2:]).resolve()
+            target = (ROOT / "web" / unquote(link[2:])).resolve()
             if link.endswith("/"):
                 target = target / "index.html"
             with self.subTest(link=link):

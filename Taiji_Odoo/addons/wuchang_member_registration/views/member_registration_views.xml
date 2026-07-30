@@ -77,4 +77,16 @@
             action="action_wuchang_member_registration"
             groups="wuchang_member_registration.group_wuchang_member_staff"
             sequence="10"/>
+
+  <record id="forum_wuchang_community_members" model="forum.forum">
+    <field name="name">社區會員討論版</field>
+    <field name="mode">discussions</field>
+    <field name="privacy">connected</field>
+    <field name="allow_share" eval="False"/>
+    <field name="description">供登入會員交流社區服務、活動與使用經驗。團體與商家保留內容權威；總場只守身分、個資、權限與安全邊界。</field>
+    <field name="karma_ask">0</field>
+    <field name="karma_answer">0</field>
+    <field name="karma_post">0</field>
+    <field name="karma_flag">0</field>
+  </record>
 </odoo>

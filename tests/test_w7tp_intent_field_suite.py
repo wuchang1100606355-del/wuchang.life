@@ -21,7 +21,9 @@ from tools.total_field.w7tp_field_application_runtime import (
     FieldApplicationError,
     main as legacy_main,
 )
+from tools.total_field.final_state_gate import InMemoryNonceLedger
 import tools.cloud_proxy.w7tp_openwebui_cloud_proxy as cloud_proxy
+import tools.total_field.w7tp_intent_field_suite.api as intent_api
 from tools.total_field.w7tp_bundle_installer import (
     BundleInstallError as BootstrapInstallError,
     install_bundle as bootstrap_install_bundle,
@@ -817,6 +819,141 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
         self.assertEqual(status, 422)
         self.assertEqual(result["reason_code"], "CAFE_POS_REQUEST_ID_INVALID")
 
+    def test_all_five_profiles_call_the_existing_receiver_once_and_return_receipt(self) -> None:
+        for profile, intent in COMPLETE_INTENTS.items():
+            with self.subTest(profile=profile):
+                payload = {
+                    "profile": profile,
+                    "intent": intent,
+                    "nonce": (
+                        "nonce_ref:sha256:" + canonical_sha256({"profile": profile})
+                    ),
+                    "return_coordinate": "/wuchang/intent-field",
+                }
+                original_receiver = intent_api.receive_candidate
+                with patch.object(
+                    intent_api,
+                    "receive_candidate",
+                    wraps=original_receiver,
+                ) as receiver:
+                    status, result = intent_api.process_http_request(
+                        json.dumps(payload).encode()
+                    )
+                self.assertEqual(status, 200, result)
+                self.assertEqual(receiver.call_count, 1)
+                self.assertEqual(
+                    result["D8"]["decision"], "PENDING_TOTAL_FIELD_REVIEW"
+                )
+                receipt = result["execution_metadata"]["total_field_receipt"]
+                self.assertEqual(receipt["receiver_call_count"], 1)
+                self.assertEqual(receipt["total_field_decision"], "HOLD")
+                self.assertFalse(receipt["commit_applied"])
+                self.assertFalse(receipt["action_executed"])
+                self.assertEqual(
+                    receipt["action_hash"],
+                    receipt["candidate_hash"],
+                )
+                self.assertEqual(
+                    receipt["candidate_hash"],
+                    result["content_sha256"],
+                )
+                self.assertEqual(
+                    receipt["scene_ref"], result["D3"]["scenario_ref"]
+                )
+                self.assertEqual(
+                    receipt["return_coordinate"], "/wuchang/intent-field"
+                )
+                self.assertIsNone(receipt["identity_ref"])
+                self.assertFalse(receipt["member_plaintext"])
+
+    def test_receiver_nonce_replay_is_rejected_before_a_second_call(self) -> None:
+        ledger = InMemoryNonceLedger()
+        payload = {
+            "profile": "GENERIC",
+            "intent": COMPLETE_INTENTS["GENERIC"],
+            "nonce": "nonce_ref:sha256:" + "1" * 64,
+            "return_coordinate": "/wuchang/intent-field",
+        }
+        original_receiver = intent_api.receive_candidate
+        with patch.object(
+            intent_api,
+            "receive_candidate",
+            wraps=original_receiver,
+        ) as receiver:
+            first_status, first = intent_api.process_http_request(
+                json.dumps(payload).encode(),
+                nonce_ledger=ledger,
+            )
+            replay_status, replay = intent_api.process_http_request(
+                json.dumps(payload).encode(),
+                nonce_ledger=ledger,
+            )
+        self.assertEqual(first_status, 200, first)
+        self.assertEqual(replay_status, 409, replay)
+        self.assertEqual(replay["reason_code"], "TOTAL_FIELD_NONCE_REPLAY")
+        self.assertEqual(receiver.call_count, 1)
+
+    def test_receiver_unavailable_returns_controlled_hold(self) -> None:
+        payload = {
+            "profile": "GENERIC",
+            "intent": COMPLETE_INTENTS["GENERIC"],
+            "nonce": "nonce_ref:sha256:" + "2" * 64,
+            "return_coordinate": "/wuchang/intent-field",
+        }
+        with patch.object(
+            intent_api,
+            "receive_candidate",
+            side_effect=OSError("synthetic unavailable"),
+        ) as receiver:
+            status, result = intent_api.process_http_request(
+                json.dumps(payload).encode()
+            )
+        self.assertEqual(status, 503)
+        self.assertEqual(result["state"], "HOLD")
+        self.assertEqual(
+            result["reason_code"], "TOTAL_FIELD_RECEIVER_UNAVAILABLE"
+        )
+        self.assertTrue(result["candidate_only"])
+        self.assertEqual(receiver.call_count, 1)
+
+    def test_block_receipt_never_executes_action(self) -> None:
+        payload = {
+            "profile": "GENERIC",
+            "intent": COMPLETE_INTENTS["GENERIC"],
+            "nonce": "nonce_ref:sha256:" + "3" * 64,
+            "return_coordinate": "/wuchang/intent-field",
+        }
+        original_receiver = intent_api.receive_candidate
+
+        def block_result(*args, **kwargs):
+            result = original_receiver(*args, **kwargs)
+            result["final_decision"] = "BLOCK"
+            result["decision_reason_codes"] = ["BLOCK_SYNTHETIC_TEST_FIXTURE"]
+            result["commit_applied"] = False
+            return result
+
+        with patch.object(
+            intent_api,
+            "receive_candidate",
+            side_effect=block_result,
+        ) as receiver:
+            status, result = intent_api.process_http_request(
+                json.dumps(payload).encode()
+            )
+        self.assertEqual(status, 200, result)
+        receipt = result["execution_metadata"]["total_field_receipt"]
+        self.assertEqual(receipt["total_field_decision"], "BLOCK")
+        self.assertFalse(receipt["commit_applied"])
+        self.assertFalse(receipt["action_executed"])
+        self.assertEqual(receiver.call_count, 1)
+
+    def test_existing_browser_ui_projects_total_field_receipt_without_execution_claim(self) -> None:
+        self.assertIn("total_field_receipt", PRODUCT_HTML)
+        self.assertIn("governanceDecision", PRODUCT_HTML)
+        self.assertIn("crypto.getRandomValues", PRODUCT_HTML)
+        self.assertIn("return_coordinate:'/wuchang/intent-field'", PRODUCT_HTML)
+        self.assertIn("這不是正式執行", PRODUCT_HTML)
+
     def test_release_includes_receive_candidate_runtime_closure(self) -> None:
         release_paths = {path.relative_to(ROOT).as_posix() for path in _release_files()}
         self.assertTrue(
@@ -900,6 +1037,21 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
         self.assertIn('aria-errormessage="intent-error"', PRODUCT_HTML)
         self.assertIn('data-example="整理一份不含個資的社區活動流程', PRODUCT_HTML)
         self.assertIn("$('preview-title').focus()", PRODUCT_HTML)
+        self.assertIn('id="display-mode"', PRODUCT_HTML)
+        self.assertIn('id="read-page"', PRODUCT_HTML)
+        self.assertIn('id="product-systems"', PRODUCT_HTML)
+        self.assertEqual(PRODUCT_HTML.count('class="product-choice"'), 4)
+        self.assertIn('id="common-skills"', PRODUCT_HTML)
+        self.assertEqual(PRODUCT_HTML.count('class="skill-choice"'), 8)
+        self.assertIn('id="ai-usage-mode"', PRODUCT_HTML)
+        self.assertIn("LOWEST_SUFFICIENT_TIER", PRODUCT_HTML)
+        self.assertIn("T0 固定規則與查表", PRODUCT_HTML)
+        self.assertIn("T3 尚未接通", PRODUCT_HTML)
+        self.assertIn("client_processing_tier:'T0_DETERMINISTIC_RULES_AND_REGISTRY'", PRODUCT_HTML)
+        self.assertIn("product_system_ref:selectedProductSystem", PRODUCT_HTML)
+        self.assertIn("common_skill_ref:selectedCommonSkill", PRODUCT_HTML)
+        self.assertIn("本頁沒有呼叫 LLM", PRODUCT_HTML)
+        self.assertIn("result-ai-tier", PRODUCT_HTML)
         self.assertIn("window.location.hash==='#workspace'", PRODUCT_HTML)
         self.assertLess(
             PRODUCT_HTML.index('id="workspace"'),

@@ -309,6 +309,36 @@ def test_odoo_projection_requires_verified_link_and_never_projects_plaintext():
             projection_for(held, prefix_ref)
 
 
+def test_active_forward_auth_uses_only_existing_opaque_identity_ref():
+    link = verified_link()
+    identity_ref = odoo_linking.identity_packet_ref_from_link_context(link)
+    headers = {HEADER_BY_FIELD["identity_ref"]: identity_ref}
+    payload = {
+        "profile": "GENERIC",
+        "intent": COMPLETE_GENERIC_INTENT,
+        "nonce": ref("nonce_ref", "active-ref-only-request"),
+        "return_coordinate": "/wuchang/intent-field",
+    }
+    status, result = process_http_request(
+        json.dumps(payload).encode("utf-8"),
+        trusted_identity_projection_headers=headers,
+        trusted_boundary=True,
+    )
+    receipt = result["execution_metadata"]["total_field_receipt"]
+    serialized = json.dumps(
+        {"headers": headers, "result": result},
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    assert status == 200
+    assert receipt["identity_ref"] == identity_ref
+    assert receipt["receiver_call_count"] == 1
+    assert receipt["member_plaintext"] is False
+    assert link["local_subject_reference"] not in serialized
+    assert "identity_prefix_ref" not in serialized
+    assert "provider_subject_reference" not in serialized
+
+
 def test_registry_snapshot_is_ref_only_and_rejection_never_echoes_value():
     link = verified_link()
     packet, prefix_ref, registry = identity_prefix_for(link)
@@ -330,7 +360,7 @@ def test_caddy_candidate_clears_external_headers_and_copies_only_allowlist():
         line.strip() for line in source.splitlines() if "copy_headers" in line
     )
     copied = set(copy_line.split()[1:])
-    assert copied == set(PROJECTION_HEADER_NAMES)
+    assert copied == {HEADER_BY_FIELD["identity_ref"]}
     for header in PROJECTION_HEADER_NAMES + (BOUNDARY_HEADER,):
         assert f"request_header -{header}" in source[:clear_end]
     assert (

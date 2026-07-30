@@ -82,13 +82,59 @@ DESKTOP_EXPRESSION = r"""
       Boolean(document.querySelector("#evidence-list")) &&
       Boolean(document.querySelector("#risk-list"))
   );
+  const displayMode = document.querySelector("#display-mode");
+  const productButtons = [...document.querySelectorAll("#product-systems .product-choice")];
+  const skillButtons = [...document.querySelectorAll("#common-skills .skill-choice")];
+  const usageReceipt = document.querySelector("#usage-receipt")?.textContent || "";
+  record(
+    "three_humanized_display_modes",
+    displayMode?.options.length === 3 &&
+      ["SIMPLE", "STANDARD", "ADVANCED"].every(
+        (value) => [...displayMode.options].some((option) => option.value === value)
+      )
+  );
+  record(
+    "four_chinese_product_entrances",
+    productButtons.length === 4 &&
+      ["影音 AI 商家管理", "管委會大廳影音 AI 與物業", "協會 Odoo 社區系統", "主權 AI 會員共同技能"]
+        .every((label) => document.querySelector("#product-systems").innerText.includes(label))
+  );
+  record(
+    "eight_practical_common_skills",
+    skillButtons.length === 8 &&
+      ["一句話辦事", "先找再生成", "上次結果再利用", "讀給我聽與說簡單一點", "真人接手與復原"]
+        .every((label) => document.querySelector("#common-skills").innerText.includes(label))
+  );
+  record(
+    "low_ai_usage_default",
+    document.querySelector("#ai-usage-mode")?.value === "LOWEST_SUFFICIENT_TIER" &&
+      ["T0", "T1", "T2", "T3 尚未接通"].every((label) => usageReceipt.includes(label))
+  );
+  displayMode.value = "SIMPLE";
+  displayMode.dispatchEvent(new Event("change", {bubbles: true}));
+  record(
+    "simple_mode_large_text",
+    document.body.dataset.displayMode === "SIMPLE" && parseFloat(getComputedStyle(document.body).fontSize) >= 19
+  );
+  displayMode.value = "STANDARD";
+  displayMode.dispatchEvent(new Event("change", {bubbles: true}));
+  const sovereignProduct = document.querySelector('[data-system="SOVEREIGN_AI_MEMBER_SKILLS"]');
+  sovereignProduct?.click();
+  const findSkill = document.querySelector('[data-skill="FIND_BEFORE_GENERATE"]');
+  findSkill?.click();
+  record(
+    "member_skill_selection_is_explicit",
+    sovereignProduct?.getAttribute("aria-pressed") === "true" &&
+      findSkill?.getAttribute("aria-pressed") === "true"
+  );
+
 
   const redteam = document.querySelector("#redteam-monitor");
   record(
     "always_on_redteam_visible",
     redteam?.dataset.state === "MONITORING_CLEAR" &&
       redteam.innerText.includes("常駐紅隊觀點監看中") &&
-      redteam.innerText.includes("不使用伺服器 LLM")
+      document.body.innerText.includes("本頁不在伺服器載入或執行模型")
   );
 
   const input = document.querySelector("#intent");
@@ -170,6 +216,22 @@ DESKTOP_EXPRESSION = r"""
     packet.D2?.intent || null
   );
   record(
+    "member_skill_adi_refs_preserved",
+    packet.D2?.intent?.product_system_ref === "SOVEREIGN_AI_MEMBER_SKILLS" &&
+      packet.D2?.intent?.common_skill_ref === "FIND_BEFORE_GENERATE" &&
+      packet.D2?.intent?.ai_usage_preference === "LOWEST_SUFFICIENT_TIER" &&
+      packet.D2?.intent?.interaction_mode === "STANDARD" &&
+      packet.D2?.intent?.client_processing_tier === "T0_DETERMINISTIC_RULES_AND_REGISTRY",
+    packet.D2?.intent || null
+  );
+  record(
+    "member_skill_and_ai_tier_receipt_visible",
+    document.querySelector("#result-skill")?.textContent === "先找再生成" &&
+      document.querySelector("#result-ai-tier")?.textContent.includes("T0") &&
+      document.querySelector("#result-ai-tier")?.textContent.includes("沒有呼叫 LLM")
+  );
+
+  record(
     "candidate_d1_to_d8_complete",
     document.querySelectorAll("#dimension-grid .dimension").length === 8 &&
       Array.from({length: 8}, (_, index) => "D" + (index + 1))
@@ -204,12 +266,48 @@ DESKTOP_EXPRESSION = r"""
     /^[0-9a-f]{64}$/.test(document.querySelector("#content-hash").textContent.trim()),
     document.querySelector("#content-hash").textContent.trim()
   );
+  const receiptDecision = packet.execution_metadata?.total_field_receipt?.total_field_decision;
+  const expectedDecision = {
+    PENDING_TOTAL_FIELD_REVIEW: "待總場審查", PASS: "總場 PASS", ALLOW: "總場 PASS",
+    HOLD: "總場 HOLD", BLOCK: "總場 BLOCK", QUARANTINE: "總場隔離"
+  }[receiptDecision || packet.D8?.decision];
   record(
     "human_summary_matches_packet",
     document.querySelector("#result-intent").textContent === packet.D1?.requested_result &&
-      document.querySelector("#result-d8").textContent === "待總場審查" &&
-      document.querySelector("#result-risk").textContent.includes("仍待人工核對")
+      document.querySelector("#result-d8").textContent === expectedDecision &&
+      document.querySelector("#result-risk").textContent.includes("仍待人工核對"),
+    {receiptDecision, expectedDecision, renderedDecision: document.querySelector("#result-d8").textContent}
   );
+  record(
+    "total_field_receipt_visible",
+    Boolean(receiptDecision) && document.querySelector("#result-d8").textContent === expectedDecision,
+    {receiptDecision, renderedDecision: document.querySelector("#result-d8").textContent}
+  );
+  const chineseScenes = [
+    ["GENERIC", "一般需求", "整理一般需求候選"],
+    ["ASSOCIATION", "社區服務與志工協作", "整理社區服務與志工協作候選"],
+    ["PROPERTY", "物業設備與檢查", "整理物業設備與檢查候選"],
+    ["CAFE_POS", "商家商品候選", "整理商家商品候選"],
+    ["HOUSEHOLD", "日常提醒與照護", "整理日常提醒與照護候選"]
+  ];
+  const chineseSceneResults = [];
+  for (const [profile, label, requested_result] of chineseScenes) {
+    const result = await api({profile, intent: {requested_result}});
+    chineseSceneResults.push({
+      profile, label, state: result?.state || null, returnedProfile: result?.profile || null,
+      redteam: result?.redteam_drift_monitor?.status || null
+    });
+  }
+  record(
+    "five_chinese_scenes_browser_packets",
+    chineseSceneResults.length === 5 && chineseSceneResults.every(
+      (result) => result.profile === result.returnedProfile &&
+        ["NEEDS_USER_GUIDED_COMPLETION", "CANDIDATE"].includes(result.state) &&
+        result.redteam !== "DRIFT_ALERT"
+    ),
+    chineseSceneResults
+  );
+
 
   const nodesReady = await waitFor(
     () => Number(document.querySelector("#node-grid").dataset.nodeCount || "0") > 0

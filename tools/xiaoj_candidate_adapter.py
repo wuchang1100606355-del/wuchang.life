@@ -9,10 +9,13 @@ import json
 import math
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, Mapping, Protocol, cast
+from typing import Any, Callable, Mapping, Protocol, Sequence, cast
 
 from tools.cloud_agent_candidate_provider import (
     CloudCandidateProvider as GCPCloudCandidateProvider,
+)
+from tools.total_field.xiaoj_member_bound_session_candidate import (
+    evaluate_member_action_session,
 )
 from tools.total_field_candidate_gateway import (
     receive_candidate as total_field_receive_candidate,
@@ -21,6 +24,19 @@ from tools.total_field_candidate_gateway import (
 
 SOURCE_MODES = frozenset({"TOTAL_FIELD_PULL", "LLM_PUSH"})
 PRIVILEGED_RESULT_KEYS = frozenset({"committed", "tfid", "total_field_hash"})
+P3_PRIVILEGED_RESULT_KEYS = frozenset(
+    {
+        "allow",
+        "commit",
+        "committed",
+        "commit_applied",
+        "tfid",
+        "total_field_hash",
+        "canonical_pointer",
+        "canonical_ref",
+        "formal_execution_authority",
+    }
+)
 DUAL_NLIO_RUN_ID = "W7TP_XIAOJ_DUAL_LLM_GOVERNED_NLIO_P1_POLICY_V1"
 DEGRADATION_POLICY_VERSION = "w7tp-xiaoj-single-provider-degradation-policy/1.0"
 DEGRADABLE_FAILURE_CLASSES = frozenset(
@@ -190,6 +206,23 @@ def _contains_forbidden_authority(value: Any) -> bool:
                 return True
     elif isinstance(value, list):
         return any(_contains_forbidden_authority(item) for item in value)
+    return False
+
+
+def _contains_p3_forbidden_authority(value: Any) -> bool:
+    """Reject authority-shaped output specifically on P3 ACTION_REQUEST paths."""
+
+    if isinstance(value, Mapping):
+        for key, nested in value.items():
+            normalized = str(key).strip().casefold().replace("-", "_")
+            if normalized in P3_PRIVILEGED_RESULT_KEYS:
+                return True
+            if normalized in {"final_decision", "decision"} and nested == "ALLOW":
+                return True
+            if _contains_p3_forbidden_authority(nested):
+                return True
+    elif isinstance(value, (tuple, list)):
+        return any(_contains_p3_forbidden_authority(item) for item in value)
     return False
 
 
@@ -721,6 +754,13 @@ class DualLLMGovernedNLIOCoordinator:
         channel: str = "web",
         request_mode: str = "CHAT_ONLY",
         requested_effects: Mapping[str, bool] | None = None,
+        member_action_candidate: Mapping[str, Any] | None = None,
+        member_nonce_consumer: Any | None = None,
+        member_p1_verifier: (
+            Callable[[Mapping[str, Any]], Mapping[str, Any]] | None
+        ) = None,
+        member_current_epoch: int | None = None,
+        active_seat_leases: Sequence[Mapping[str, Any]] = (),
     ) -> dict[str, Any]:
         """Return governed final state plus a natural-language presentation."""
 
@@ -732,6 +772,37 @@ class DualLLMGovernedNLIOCoordinator:
         if request_mode not in DUAL_NLIO_REQUEST_MODES:
             raise XiaoJCandidateError("DUAL_NLIO_REQUEST_MODE_UNSUPPORTED")
         provider_call_order: list[str] = []
+        member_gate: Mapping[str, Any] | None = None
+        missing_member_gate_reason: str | None = None
+        if request_mode == "ACTION_REQUEST":
+            if not isinstance(member_action_candidate, Mapping):
+                missing_member_gate_reason = "HOLD_MEMBER_DUAL_RECEIPT_REQUIRED"
+            elif not isinstance(member_current_epoch, int):
+                missing_member_gate_reason = "HOLD_MEMBER_SESSION_CLOCK_REQUIRED"
+            else:
+                member_gate = evaluate_member_action_session(
+                    member_action_candidate,
+                    current_epoch=member_current_epoch,
+                    nonce_consumer=member_nonce_consumer,
+                    p1_verifier=member_p1_verifier,
+                    active_seat_leases=active_seat_leases,
+                )
+                if member_gate.get("state") != "PASS":
+                    reason_code = str(
+                        member_gate.get("reason_code")
+                        or "HOLD_MEMBER_ACTION_GATE"
+                    )
+                    return self._hold_result(
+                        state=reason_code,
+                        request_ref=request_ref,
+                        channel=channel,
+                        provider_call_order=provider_call_order,
+                        available_provider=None,
+                        missing_provider=None,
+                        failure_class="IDENTITY_OR_PERMISSION_MISMATCH",
+                        request_mode=request_mode,
+                        gate_code=reason_code,
+                    )
         local_candidates, local_failure = self._provider_candidates(
             self.local_provider,
             request_ref=request_ref,
@@ -746,6 +817,21 @@ class DualLLMGovernedNLIOCoordinator:
             layer="CLOUD",
             provider_call_order=provider_call_order,
         )
+        if request_mode == "ACTION_REQUEST" and any(
+            _contains_p3_forbidden_authority(item)
+            for item in (*local_candidates, *cloud_candidates)
+        ):
+            return self._hold_result(
+                state="BLOCK_PROVIDER_AUTHORITY_INJECTION",
+                request_ref=request_ref,
+                channel=channel,
+                provider_call_order=provider_call_order,
+                available_provider=None,
+                missing_provider=None,
+                failure_class="FORBIDDEN_AUTHORITY",
+                request_mode=request_mode,
+                gate_code="BLOCK_PROVIDER_AUTHORITY_INJECTION",
+            )
         available = {
             layer: candidates
             for layer, candidates in (
@@ -898,6 +984,8 @@ class DualLLMGovernedNLIOCoordinator:
                 "formal_state_material_exposed": False,
                 "internal_error_exposed": False,
             }
+            if member_gate is not None:
+                result["member_action_gate_ref"] = member_gate["gate_ref"]
             if request_mode == "CODE_DRAFT_ONLY" and not action_requested:
                 draft_values = [item.candidate_value for item in validated]
                 draft_text = "\n\n".join(
@@ -914,6 +1002,18 @@ class DualLLMGovernedNLIOCoordinator:
                 }
             return result
 
+        if missing_member_gate_reason is not None:
+            return self._hold_result(
+                state=missing_member_gate_reason,
+                request_ref=request_ref,
+                channel=channel,
+                provider_call_order=provider_call_order,
+                available_provider=["LOCAL", "CLOUD"],
+                missing_provider=None,
+                failure_class="IDENTITY_OR_PERMISSION_MISMATCH",
+                request_mode=request_mode,
+                gate_code=missing_member_gate_reason,
+            )
         combined: tuple[Mapping[str, Any], ...] = (
             *local_candidates,
             *cloud_candidates,
@@ -951,7 +1051,7 @@ class DualLLMGovernedNLIOCoordinator:
         cloud_hashes = [
             validate_candidate(item).candidate_hash for item in cloud_candidates
         ]
-        return {
+        result = {
             "STATE": "PASS",
             "RUN_ID": DUAL_NLIO_RUN_ID,
             "policy_version": DEGRADATION_POLICY_VERSION,
@@ -976,6 +1076,9 @@ class DualLLMGovernedNLIOCoordinator:
             "side_effects_performed": False,
             "internal_error_exposed": False,
         }
+        if member_gate is not None:
+            result["member_action_gate_ref"] = member_gate["gate_ref"]
+        return result
 
 
 def cloud_push(
@@ -983,6 +1086,13 @@ def cloud_push(
     context: dict,
     *,
     provider: DirectCloudCandidateProvider | None = None,
+    member_action_candidate: Mapping[str, Any] | None = None,
+    member_nonce_consumer: Any | None = None,
+    member_p1_verifier: (
+        Callable[[Mapping[str, Any]], Mapping[str, Any]] | None
+    ) = None,
+    member_current_epoch: int | None = None,
+    active_seat_leases: Sequence[Mapping[str, Any]] = (),
 ) -> Mapping[str, Any]:
     """Route Cloud -> XiaoJ -> the sole Total Field candidate receiver.
 
@@ -1017,6 +1127,11 @@ def cloud_push(
         raise XiaoJCandidateError("XIAOJ_GOVERNANCE_CANDIDATE_MISSING")
     if _contains_forbidden_authority(governance_candidate):
         raise XiaoJCandidateError("XIAOJ_DIRECT_AUTHORITY_BLOCKED")
+    if (
+        member_action_candidate is not None
+        and _contains_p3_forbidden_authority(governance_candidate)
+    ):
+        raise XiaoJCandidateError("XIAOJ_P3_PROVIDER_AUTHORITY_BLOCKED")
     governance_candidate = _copy_json(governance_candidate)
     governance_candidate["source_mode"] = "LLM_PUSH"
     governance_candidate.pop("candidate_only", None)
@@ -1042,8 +1157,21 @@ def cloud_push(
     payload = envelope.governance_payload()
     payload["source_mode"] = "LLM_PUSH"
     payload["candidate_only"] = True
+    if member_action_candidate is not None:
+        payload["member_action_candidate"] = _copy_json(
+            dict(member_action_candidate)
+        )
+        payload_context = payload.get("context")
+        if not isinstance(payload_context, dict):
+            payload_context = {}
+        payload_context["request_mode"] = "ACTION_REQUEST"
+        payload["context"] = payload_context
     return total_field_receive_candidate(
         payload,
         previous_state=previous_state,
         observation_domains=observation_domains,
+        member_nonce_consumer=member_nonce_consumer,
+        member_p1_verifier=member_p1_verifier,
+        member_current_epoch=member_current_epoch,
+        active_seat_leases=active_seat_leases,
     )

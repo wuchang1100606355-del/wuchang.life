@@ -250,6 +250,20 @@ def build_line_official_account_webhook_candidate(
             "channel_access_token_echo": False,
             "member_plaintext_echo": False,
         },
+        "verified_channel_binding": {
+            "state": "HOLD_NOT_AUTHENTICATED_MEMBER_SESSION",
+            "provider": "line",
+            "provider_subject_hashes": [
+                event["source_ref_hash"] for event in event_candidates
+            ],
+            "raw_provider_profile": False,
+            "root_issued": False,
+            "consent_issued": False,
+            "role_issued": False,
+            "seat_issued": False,
+            "permission_issued": False,
+            "candidate_only": True,
+        },
     }
     gate, response = _render_total_field_line_response(candidate)
     candidate["total_field_gate"] = gate

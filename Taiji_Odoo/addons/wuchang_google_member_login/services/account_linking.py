@@ -8,7 +8,7 @@ import re
 from datetime import datetime, timezone
 
 
-CANONICAL_CALLBACK_URL = "https://wuchang.life/google/member/callback"
+CANONICAL_CALLBACK_URL = "https://member.wuchang.life/google/member/callback"
 PUBLIC_HOME_RETURN = "https://wuchang.life/"
 LINK_STATES = {
     "PROVIDER_LINK_FOUND",
@@ -98,6 +98,46 @@ def callback_security_decision(
     return {"decision": "PASS", "reason": "CALLBACK_SECURITY_VERIFIED"}
 
 
+def strict_channel_callback_security_decision(
+    *,
+    expected_state: str | None,
+    received_state: str | None,
+    expected_nonce: str | None,
+    token_claims: dict,
+    expected_audience: str,
+    authenticated_subject: str | None,
+    callback_url: str,
+    issued_at_epoch: int | None,
+    current_epoch: int,
+    replay_state: str,
+    ttl_seconds: int = 300,
+) -> dict[str, str]:
+    """Require one fresh, short-lived, authenticated Google callback."""
+
+    if (
+        not isinstance(issued_at_epoch, int)
+        or isinstance(issued_at_epoch, bool)
+        or not isinstance(current_epoch, int)
+        or isinstance(current_epoch, bool)
+        or current_epoch < issued_at_epoch
+        or current_epoch - issued_at_epoch > ttl_seconds
+        or ttl_seconds < 1
+        or ttl_seconds > 300
+    ):
+        return {"decision": "DENY", "reason": "CALLBACK_TTL_EXPIRED"}
+    if replay_state != "SESSION_STATE_CONSUMED_ONCE":
+        return {"decision": "DENY", "reason": "CALLBACK_REPLAY_EVIDENCE_REQUIRED"}
+    return callback_security_decision(
+        expected_state=expected_state,
+        received_state=received_state,
+        expected_nonce=expected_nonce,
+        token_claims=token_claims,
+        expected_audience=expected_audience,
+        userinfo_subject=authenticated_subject,
+        callback_url=callback_url,
+    )
+
+
 def transient_link_context(userinfo: dict, authority_resolution: dict) -> dict:
     subject = str(userinfo.get("sub") or "")
     email = str(userinfo.get("email") or "").strip().lower()
@@ -107,6 +147,10 @@ def transient_link_context(userinfo: dict, authority_resolution: dict) -> dict:
         "local_subject_reference": authority_resolution.get("local_subject_reference"),
         "link_state": authority_resolution.get("link_state") or "LINKING_PENDING",
         "consent_reference": authority_resolution.get("consent_reference"),
+        "verified_channel_binding_ref": authority_resolution.get(
+            "verified_channel_binding_ref"
+        ),
+        "member_ref": authority_resolution.get("member_ref"),
         "email_candidate_signal": sha256_ref("candidate:email", email) if email else None,
         "verifier_result": authority_resolution.get("verifier_result") or "HOLD",
         "public_home_return": PUBLIC_HOME_RETURN,

@@ -76,6 +76,15 @@ function validatePacket(packet) {
   if (action.submit_forbidden !== true) return blocked("submit_forbidden_required");
   if (params.candidate_only !== true) return blocked("candidate_only_required");
   if (params.requires_total_field_verify !== true) return blocked("total_field_verify_required");
+  const envelope = packet.D8_envelope || {};
+  if (!/^PKT_BROWSER_[a-f0-9]{32}$/.test(envelope.packet_id || "")) return blocked("packet_id_required");
+  if (!/^TRACE_BROWSER_[a-f0-9]{32}$/.test(envelope.trace_id || "")) return blocked("trace_id_required");
+  if (!/^[a-f0-9]{64}$/.test(envelope.content_sha256 || "")) return blocked("content_sha256_required");
+  if (envelope.content_hash !== envelope.content_sha256) return blocked("content_hash_mismatch");
+  if (envelope.authority_granted !== false) return blocked("authority_granted_false_required");
+  if (packet.D6_governance && packet.D6_governance.reconstruction_level !== "L3_CANDIDATE") {
+    return blocked("candidate_reconstruction_level_required");
+  }
   if (packet.D6_governance && packet.D6_governance.no_plaintext_context !== true) {
     return blocked("no_plaintext_context_required");
   }
@@ -165,35 +174,38 @@ function attachBridgeReturn(packet, result) {
 
 function nativeGatewayPayload(message) {
   const packet = message.packet || {};
-  const action = packet.browser_action || {};
-  const params = action.params || {};
+  const envelope = packet.D8_envelope || {};
   return {
     type: "XIAOJ_NATIVE_GATEWAY_REQUEST",
-    intent: message.intent || params.intent_ref || "會員日常協力",
-    safe_context_ref: params.safe_context_ref || "redacted_ref:extension_native_gateway",
-    selected_text: message.selectedText || "",
-    local_draft_text: message.localDraftText || "",
-    active_field_type: message.activeFieldType || "textarea",
-    member_ref: packet.D1_identity && packet.D1_identity.actor_ref ? packet.D1_identity.actor_ref : "actor_ref:member_browser_extension:active_member",
-    device_ref: "device_ref:member_browser_extension:chrome_mv3",
-    key_ref: packet.D5_resource && packet.D5_resource.selected_key_ref ? packet.D5_resource.selected_key_ref : "key_ref:member_browser_extension:broker_default",
-    api_ref: "api_ref:member_browser_extension:native_gateway",
-    quota_ref: params.quota_bucket_ref || "quota_ref:member_browser_extension:daily",
-    member_preference_ref: params.member_preference_ref || "preference_ref:member:sidepanel_default",
-    service_style_ref: params.service_style_ref || "service_style_ref:community_xiaoj_warm_daily",
-    behavior_info_ref: params.behavior_info_ref || "",
-    cloud_compute_ref: params.cloud_compute_ref || "cloud_compute_ref:native_host_local_gateway",
-    benefit_ref: params.benefit_ref || "benefit_ref:community_ai_member_daily"
+    transport_envelope: {
+      schema_version: "w7tp.browser-8d-transport-envelope.v1",
+      profile_type: "BROWSER_8D_TRANSPORT_ENVELOPE",
+      sender_ref: "web.xiaoj_member_browser_extension.background",
+      receiver_ref: "tools.total_field_candidate_gateway.receive_candidate",
+      return_coordinate: "chrome.runtime.sendMessage",
+      packet_id: envelope.packet_id,
+      trace_id: envelope.trace_id,
+      content_sha256: envelope.content_sha256,
+      reconstruction_level: packet.D6_governance && packet.D6_governance.reconstruction_level,
+      authority_granted: false,
+      browser_packet: packet
+    }
   };
 }
 
 function callNativeGateway(message) {
   return new Promise((resolve) => {
+    const gate = validatePacket(message.packet);
+    if (!gate.ok) {
+      resolve(gate);
+      return;
+    }
     if (!chrome.runtime.sendNativeMessage) {
       resolve(blocked("native_messaging_api_unavailable", { native_gateway_available: false }));
       return;
     }
-    chrome.runtime.sendNativeMessage(NATIVE_HOST_NAME, nativeGatewayPayload(message), (response) => {
+    const payload = nativeGatewayPayload(message);
+    chrome.runtime.sendNativeMessage(NATIVE_HOST_NAME, payload, (response) => {
       if (chrome.runtime.lastError) {
         resolve(blocked("native_gateway_unavailable", {
           native_gateway_available: false,
@@ -201,15 +213,29 @@ function callNativeGateway(message) {
         }));
         return;
       }
+      const expected = payload.transport_envelope;
+      if (!response || response.trace_id !== expected.trace_id || response.packet_id !== expected.packet_id) {
+        resolve(blocked("native_gateway_trace_mismatch", { native_gateway_available: true }));
+        return;
+      }
+      if (response.content_sha256 !== expected.content_sha256) {
+        resolve(blocked("native_gateway_content_hash_mismatch", { native_gateway_available: true }));
+        return;
+      }
       resolve({
-        ok: Boolean(response && response.ok),
-        decision: response && response.decision ? response.decision : "UNKNOWN",
+        ok: Boolean(response.ok),
+        decision: response.decision || "UNKNOWN",
         native_gateway_available: true,
         candidate_only: true,
+        authority_granted: false,
         requires_total_field_verify: true,
         member_plaintext_transferred: false,
         secret_transferred: false,
-        gateway_result: response ? response.gateway_result : null
+        trace_id: response.trace_id,
+        packet_id: response.packet_id,
+        content_sha256: response.content_sha256,
+        total_field_receipt: response.total_field_receipt || null,
+        gateway_result: response.gateway_result || null
       });
     });
   });

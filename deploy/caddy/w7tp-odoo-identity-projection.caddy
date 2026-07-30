@@ -1,7 +1,6 @@
 # SOURCE_CANDIDATE_ONLY — do not apply directly to /etc/caddy.
 # This replaces only the existing /api/intent-field handle after review.
-# The Odoo forward-auth response must be built by
-# account_linking.identity_projection_response_headers().
+# Odoo returns only the existing opaque X-W7TP-Identity-Ref contract field.
 
 (w7tp_odoo_identity_projection_candidate) {
 	route {
@@ -20,10 +19,88 @@
 
 		forward_auth 127.0.0.1:8069 {
 			uri /google/member/welcome
-			copy_headers X-W7TP-Identity-Schema X-W7TP-Identity-Ref X-W7TP-Canonical-Ref X-W7TP-Prefix-Ref X-W7TP-Prefix-Version X-W7TP-Issuer-Ref X-W7TP-Projection-Ref X-W7TP-Projection-SHA256 X-W7TP-Issued-At X-W7TP-Expires-At X-W7TP-Nonce
+			copy_headers X-W7TP-Identity-Ref
 		}
 
 		request_header X-W7TP-Projection-Boundary "caddy:wuchang.life:odoo-forward-auth:v1"
 		reverse_proxy 127.0.0.1:9107
+	}
+}
+
+# Import only inside the existing member.wuchang.life site. This exposes the
+# already-existing Odoo member routes without turning the member host into a
+# second nonprofit public website or an Ad Grants destination.
+(w7tp_odoo_public_member_routes_candidate) {
+	handle /google/member/callback {
+		reverse_proxy 127.0.0.1:8069 {
+			header_down Location "^/google/member/welcome$" "/wuchang/intent-field"
+		}
+	}
+
+	handle /google/member/* {
+		reverse_proxy 127.0.0.1:8069
+	}
+
+	handle /line/* {
+		reverse_proxy 127.0.0.1:8069
+	}
+
+	handle /wuchang/home {
+		reverse_proxy 127.0.0.1:8069
+	}
+
+	handle /wuchang/business/onboarding* {
+		reverse_proxy 127.0.0.1:8069
+	}
+
+	handle /forum* {
+		reverse_proxy 127.0.0.1:8069
+	}
+
+	handle /web/login* {
+		reverse_proxy 127.0.0.1:8069
+	}
+
+	handle /web/signup* {
+		forward_auth 127.0.0.1:8069 {
+			uri /wuchang/control/member-registration
+		}
+		reverse_proxy 127.0.0.1:8069
+	}
+}
+
+# Import inside the existing wuchang.life site before the static fallback.
+# The nonprofit homepage remains the sole public/Ad Grants destination; these
+# paths only transfer an intentional member task to the same owned base domain.
+(w7tp_odoo_public_member_redirects_candidate) {
+	redir /google/member/* https://member.wuchang.life{uri} temporary
+	redir /line/* https://member.wuchang.life{uri} temporary
+	redir /web/login* https://member.wuchang.life{uri} temporary
+	redir /web/signup* https://member.wuchang.life{uri} temporary
+	redir /wuchang/home https://member.wuchang.life{uri} temporary
+	redir /wuchang/business/onboarding* https://member.wuchang.life{uri} temporary
+	redir /forum* https://member.wuchang.life{uri} temporary
+}
+
+# Import only in the existing member.wuchang.life site. OAuth, session,
+# ref-only forward-auth, 9107 and receipt reconstruction stay on one host.
+(w7tp_odoo_member_host_candidate) {
+	import w7tp_odoo_public_member_routes_candidate
+
+	handle /api/intent-field {
+		import w7tp_odoo_identity_projection_candidate
+	}
+
+	handle /wuchang/intent-field {
+		reverse_proxy 127.0.0.1:9107
+	}
+
+	handle /api/nodes {
+		reverse_proxy 127.0.0.1:9107
+	}
+
+	handle / {
+		rewrite * /wuchang/home
+		reverse_proxy 127.0.0.1:8069
 	}
 }

@@ -1,0 +1,143 @@
+{
+  "schema_version": "w7tp.member-sovereign-channel-scene-pos-node-binding-manifest.v1",
+  "run_id": "P4_CHANNEL_SCENE_POS_NODE_20260729T162939Z",
+  "state": "PASS_SOURCE_CANDIDATE",
+  "candidate_only": true,
+  "runtime_released": false,
+  "base_hash_binding": {
+    "p0_content_sha256": "2b8fec135a9a714af0a8b4cc5c9a77fcbc06c643ea13c66b73271c6834e592ce",
+    "p1_content_sha256": "2e40172beca70eb5eb4a1805ea99f8a2d131c3622451b147c764e6488782dafc",
+    "p2_content_sha256": "bb92ec360e72b0ffb34160e21f8d6b989d5a44f9af00cb87bd3d664ffef217c4",
+    "p3_content_sha256": "1679caf92d24ac711dd341defdd725b0b408cde30c6b2577d06df1b72e773d04",
+    "p3_manifest_sha256": "35e12f3b6799fc3b0e9fa806c847858af47a35c2b4e4c4687e0bd439d7370e65",
+    "rescan_performed": false
+  },
+  "p4_content_sha256": "1dcb3333bde8648ac9fa79f193d0b0a3f424cb4e6d8d6442732a820daabd9f75",
+  "content_hash_algorithm": "sha256(sorted(path_utf8 + NUL + file_bytes + NUL))",
+  "route_source_map": {
+    "/web/signup": "wuchang_member_registration.controllers.main.WuchangMemberSignupController",
+    "/google/member/login": "wuchang_google_member_login.controllers.main.google_member_login",
+    "/google/member/callback": "wuchang_google_member_login.controllers.main.google_member_callback",
+    "/google/member/welcome": "wuchang_google_member_login.controllers.main.google_member_welcome",
+    "/line/login": "wuchang_line_login.controllers.main.line_login",
+    "/line/callback": "wuchang_line_login.controllers.main.line_callback",
+    "/wuchang/xiaoj/line-official-account/webhook": "wuchang_cafe_ai_gateway.controllers.main.line_official_account_webhook",
+    "/api/pos/v1/order": "wuchang_core.controllers.pos_mvp_api.create_order"
+  },
+  "canonical_entry_candidate": "/web/signup",
+  "disabled_or_removed_entries": [
+    "public Google channel button",
+    "public LINE channel button",
+    "/wuchang/google/member/recruitment",
+    "/wuchang/google/member/recruitment/welcome",
+    "legacy static Founder scene binding without P4 member-root lease"
+  ],
+  "files": [
+    {
+      "path": "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/controllers/main.py",
+      "sha256": "62c3e633dd107dc1dd71db8c87a7ee634b07c5fe9d2b2c9d3480affeee431e48"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/line_official_account_webhook.py",
+      "sha256": "feae784a713b622f8e727440decc77009fcad3e253f69c1199a4bb44987aff5d"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_core/controllers/pos_mvp_api.py",
+      "sha256": "05499bdd22c5b4bec30264545b827bc19071473c8067075f233a80b843dd153e"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py",
+      "sha256": "dd84604d8d9dc158fa70ea06992f9294657505a155a4371c1e66f0fade6ee671"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/services/account_linking.py",
+      "sha256": "e87693c8a4cad14948562da460bfa0858cdaea1285bf0f06d7abf0cddf40fd25"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_line_login/controllers/main.py",
+      "sha256": "4e4526a6bf883e7ea39f6401ac301bbd56a765bf204e9c8e9e615a66746c44fb"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_line_login/services/profile_minimization.py",
+      "sha256": "3ac05229e8a741ea63de048137e6f9cbd4b3051f973bbcd9f2db91e288d3cdb4"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_member_registration/controllers/main.py",
+      "sha256": "46b5d9c553dfeaca40f4e5373c1c388f0101acb386758deeb96ccea4b2d2f7c2"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_member_registration/models/member_registration.py",
+      "sha256": "26a7ddff906759b983db8d608328cff5dee0d7c13e49a41e6c31444bf54fedcc"
+    },
+    {
+      "path": "Taiji_Odoo/addons/wuchang_member_registration/views/login_templates.xml",
+      "sha256": "32b66344db665162221dce3e8dd58f3ad1ed335658bbfc17cd8511ab5c0efe41"
+    },
+    {
+      "path": "schemas/field/w7tp_three_major_scene_packet_candidate_v1.schema.json",
+      "sha256": "e2deaf34398e7a0aace8557d7793031995174f7a2f45e178424f3929ca26b3d8"
+    },
+    {
+      "path": "tests/test_member_sovereign_channel_scene_pos_node_binding.py",
+      "sha256": "7f970ec244dd8bc936b5975dcbc4036eb9daea74e06bb8ef1149b73929c2cbe0"
+    },
+    {
+      "path": "tools/total_field/three_major_scene_product_candidate.py",
+      "sha256": "e5fd997fe864ce1b0fe1b69f6eb63c0cfa9ecd71fde7027cd42362a2c45532a8"
+    },
+    {
+      "path": "tools/total_field/wuchang_three_org_container_scene_bridge.py",
+      "sha256": "4577f1b195e94310682b8d3482213439026349e3ebe1854dc4b28543f1ec367b"
+    },
+    {
+      "path": "tools/w7tp_pos_p2_candidate_projection.py",
+      "sha256": "3950ec829ed628f8b50288e7d6f0eb86a81eef2e737f3b206a5bcfb61de3ac9e"
+    }
+  ],
+  "validation": {
+    "focused_unittest": "PASS_28_OF_28",
+    "p4_focused_unittest": "PASS_17_OF_17",
+    "existing_scene_contract_unittest": "PASS_11_OF_11",
+    "python_compile": "PASS_13_OF_13",
+    "schema_validation": "PASS_DRAFT_2020_12",
+    "xml_parse": "PASS_1_OF_1",
+    "route_collision": "PASS_66_ROUTES_NO_COLLISION",
+    "orphan_product_reference": "PASS_NONE",
+    "git_diff_check": "PASS"
+  },
+  "negative_acceptance": [
+    "forged callback state",
+    "authenticated subject mismatch",
+    "nonce replay",
+    "callback TTL expiry",
+    "audience mismatch",
+    "raw provider profile exposure",
+    "provider authority escalation",
+    "body member_ref impersonation",
+    "cross-member scene",
+    "scope expansion",
+    "duplicate node_ref",
+    "carrier protocol impersonation",
+    "whole-device mount",
+    "POS write fields",
+    "legacy static Founder bypass",
+    "invalid public channel entry exposure",
+    "LINE official-account session absence"
+  ],
+  "red_team": {
+    "pre_construction": "PASS_EXACT_EXISTING_REFERENCES_FOUND_NEW_FILES_ABSENT",
+    "post_reconstruction": "PASS_SOURCE_ONLY_NO_AUTHORITY_OR_RUNTIME_RELEASE",
+    "pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE"
+  },
+  "forbidden_effects": {
+    "external_oauth_call": false,
+    "database_write": false,
+    "odoo_module_upgrade": false,
+    "runtime_nonce_write": false,
+    "pos_write": false,
+    "payment": false,
+    "restart": false,
+    "deploy": false,
+    "git_write": false
+  }
+}

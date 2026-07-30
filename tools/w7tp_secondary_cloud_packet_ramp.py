@@ -11,9 +11,13 @@ import copy
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any, Callable, Mapping, Sequence
 
 from jsonschema import Draft202012Validator
+
+from tools.total_field.xiaoj_member_bound_session_candidate import (
+    evaluate_member_action_session,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,6 +64,17 @@ FORBIDDEN_UPLINK_KEYS = {
     "raw_key",
     "raw_token",
     "password",
+}
+PROVIDER_AUTHORITY_KEYS = {
+    "allow",
+    "commit",
+    "committed",
+    "commit_applied",
+    "tfid",
+    "total_field_hash",
+    "canonical_pointer",
+    "canonical_ref",
+    "formal_execution_authority",
 }
 
 SCHEMA_FILES = {
@@ -142,6 +157,76 @@ def validate_no_uplink_plaintext(
     if require_minimal_pull and set(packet) != MINIMAL_PULL_FIELDS:
         errors.append("CAPABILITY_PULL_NOT_MINIMAL")
     return _decision(errors, disclosed_fields=sorted(packet))
+
+
+def _provider_authority_paths(value: Any, path: str = "$") -> list[str]:
+    """Find authority-shaped provider output without interpreting it as consent."""
+
+    found: list[str] = []
+    if isinstance(value, Mapping):
+        for key, child in value.items():
+            normalized = str(key).strip().casefold().replace("-", "_")
+            child_path = f"{path}.{key}"
+            if normalized in PROVIDER_AUTHORITY_KEYS:
+                found.append(child_path)
+            if normalized in {"decision", "final_decision"} and child == "ALLOW":
+                found.append(child_path)
+            found.extend(_provider_authority_paths(child, child_path))
+    elif isinstance(value, (tuple, list)):
+        for index, child in enumerate(value):
+            found.extend(_provider_authority_paths(child, f"{path}[{index}]"))
+    return found
+
+
+def gate_secondary_cloud_action_request(
+    request: Mapping[str, Any],
+    *,
+    current_epoch: int,
+    nonce_consumer: Any,
+    p1_verifier: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
+    active_seat_leases: Sequence[Mapping[str, Any]] = (),
+) -> dict[str, Any]:
+    """Evaluate an ACTION_REQUEST as a non-authoritative secondary-cloud candidate."""
+
+    if request.get("request_mode") != "ACTION_REQUEST":
+        return _decision(
+            ["HOLD_MEMBER_ACTION_REQUEST_REQUIRED"],
+            candidate_authority="none",
+            runtime_released=False,
+        )
+    provider_outputs = request.get("provider_outputs", [])
+    authority_paths = _provider_authority_paths(provider_outputs)
+    if authority_paths:
+        return {
+            "state": "BLOCK",
+            "errors": [
+                f"BLOCK_PROVIDER_AUTHORITY_INJECTION:{path}"
+                for path in authority_paths
+            ],
+            "candidate_authority": "none",
+            "runtime_released": False,
+        }
+    member_action = request.get("member_action_candidate")
+    if not isinstance(member_action, Mapping):
+        return _decision(
+            ["HOLD_MEMBER_DUAL_RECEIPT_REQUIRED"],
+            candidate_authority="none",
+            runtime_released=False,
+        )
+    gate = evaluate_member_action_session(
+        member_action,
+        current_epoch=current_epoch,
+        nonce_consumer=nonce_consumer,
+        p1_verifier=p1_verifier,
+        active_seat_leases=active_seat_leases,
+    )
+    return {
+        "state": gate["state"],
+        "errors": [] if gate["state"] == "PASS" else [gate["reason_code"]],
+        "gate_ref": gate.get("gate_ref"),
+        "candidate_authority": "none",
+        "runtime_released": False,
+    }
 
 
 def validate_member_entry_packet(packet: Mapping[str, Any]) -> dict[str, Any]:
@@ -465,6 +550,7 @@ def produce_verification_packet(
 __all__ = [
     "build_capability_pull_request",
     "deterministic_sha256",
+    "gate_secondary_cloud_action_request",
     "packet_content_sha256",
     "produce_verification_packet",
     "reconstruct_local_state",

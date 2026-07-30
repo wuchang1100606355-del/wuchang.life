@@ -176,7 +176,8 @@ def verify_extension_bridge(failures: list[str]) -> None:
     check("BROWSER_BRIDGE_RETURN_PACKET" in background, "EXTENSION_BRIDGE_RETURN_PACKET_EMITTED", failures)
     check("cloud_compute_ref" in background and "behavior_info_ref" in background and "action_trace_ref" in background, "EXTENSION_BRIDGE_RETURN_REFS_PRESENT", failures)
     check("tw.taiji.xiaoj_member_browser_gateway" in background, "EXTENSION_NATIVE_HOST_NAME_PRESENT", failures)
-    check("XIAOJ_NATIVE_GATEWAY_REQUEST" in background and "native_gateway_unavailable" in background, "EXTENSION_NATIVE_GATEWAY_FALLBACK_PRESENT", failures)
+    check("browser_packet: packet" in background and "content_sha256" in background and "trace_id" in background, "EXTENSION_ORIGINAL_PACKET_TRANSPORT_BOUND", failures)
+    check("XIAOJ_NATIVE_GATEWAY_REQUEST" in background and "native_gateway_unavailable" in background and "XIAOJ_EXECUTE_CANDIDATE_ACTION" not in sidepanel, "EXTENSION_NATIVE_GATEWAY_FAIL_CLOSED", failures)
 
     schema_path = ROOT / "schemas/browser/xiaoj_browser_bridge_return_packet_v1.schema.json"
     check(schema_path.is_file(), "BROWSER_BRIDGE_RETURN_SCHEMA_PRESENT", failures)
@@ -265,9 +266,6 @@ def verify_native_host(failures: list[str]) -> None:
     if NATIVE_HOST.is_file():
         payload = json.dumps({
             "type": "XIAOJ_NATIVE_GATEWAY_REQUEST",
-            "intent": "請幫我摘要目前選取的公告文字",
-            "safe_context_ref": "redacted_ref:native_verify",
-            "selected_text": "公告測試",
         })
         proc = run([sys.executable, str(NATIVE_HOST), "--once-json", payload])
         ok = (
@@ -275,9 +273,11 @@ def verify_native_host(failures: list[str]) -> None:
             and '"candidate_only": true' in proc.stdout
             and '"member_plaintext_transferred": false' in proc.stdout
             and '"secret_transferred": false' in proc.stdout
-            and '"gateway_result"' in proc.stdout
+            and '"decision": "HOLD"' in proc.stdout
+            and '"reason": "browser_transport_envelope_required"' in proc.stdout
+            and '"gateway_result"' not in proc.stdout
         )
-        check(ok, "NATIVE_HOST_ONCE_JSON", failures)
+        check(ok, "NATIVE_HOST_REQUIRES_TRANSPORT_ENVELOPE", failures)
         if not ok:
             sys.stdout.write(proc.stdout)
             sys.stderr.write(proc.stderr)

@@ -20,6 +20,7 @@ from tools.total_field.w7tp_intent_field_suite.api import (
     ready_payload,
 )
 from tools.total_field.w7tp_field_application_runtime import device_llm_execution_policy
+from tools.total_field.final_state_gate import InMemoryNonceLedger
 from tools.total_field.w7tp_intent_field_suite.identity_projection import (
     PROJECTION_HEADER_NAMES,
     projection_headers_present,
@@ -57,6 +58,7 @@ TRUSTED_IDENTITY_PREFIX_RESOLVER: Callable[
     [str], Mapping[str, Any] | None
 ] | None = None
 TRUSTED_IDENTITY_REGISTRY_SNAPSHOT: Mapping[str, Any] | None = None
+INTENT_FIELD_NONCE_LEDGER = InMemoryNonceLedger()
 
 
 def configure_trusted_identity_projection(
@@ -491,9 +493,13 @@ class H(BaseHTTPRequestHandler):
                     trusted_boundary=trusted_boundary,
                     identity_prefix_resolver=TRUSTED_IDENTITY_PREFIX_RESOLVER,
                     identity_registry_snapshot=TRUSTED_IDENTITY_REGISTRY_SNAPSHOT,
+                    nonce_ledger=INTENT_FIELD_NONCE_LEDGER,
                 )
             else:
-                code, result = process_http_request(payload)
+                code, result = process_http_request(
+                    payload,
+                    nonce_ledger=INTENT_FIELD_NONCE_LEDGER,
+                )
             self.out(code, result)
             return
         if path != "/v1/chat/completions":

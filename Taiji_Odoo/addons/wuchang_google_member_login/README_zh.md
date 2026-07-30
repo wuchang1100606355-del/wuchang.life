@@ -7,7 +7,7 @@
 - 層級：Odoo Governance Layer
 - 入口：`/google/member/login`
 - 回呼：`/google/member/callback`
-- 會員資料：連結或建立 `res.partner`
+- 會員資料：只解析既有本地會員綁定與不可反查引用，不自動建立或合併會員
 - 安全邊界：不在程式碼保存 Google client secret
 
 ## Odoo Provider 與參數
@@ -46,7 +46,7 @@ Apply 僅更新既有 `auth_oauth.provider_google`，不會建立重複 Provider
 Google Console 的 redirect URI 應對應：
 
 ```text
-https://wuchang.life/google/member/callback
+https://member.wuchang.life/google/member/callback
 ```
 
 ## 目前狀態
@@ -67,13 +67,10 @@ http://127.0.0.1:8069/google/member/login
 
 ## 會員連結規則
 
-1. 優先用 Google `sub` 尋找既有 partner。
-2. 找不到時用 email 尋找既有 partner。
-3. 仍找不到時建立新的 `res.partner`。
-4. 寫入：
-   - `wuchang_google_sub`
-   - `wuchang_google_email_verified`
-   - `wuchang_member_join_source = google`
+1. Google `sub` 先雜湊為 provider subject reference，再交由既有本地會員權威解析。
+2. Email 只能形成不可反查的候選訊號，不得自動合併相同 Email 的帳號。
+3. 找不到既有綁定時維持待確認，不自動建立 `res.partner` 或授予會員角色。
+4. 只有既有本地綁定、身分前綴與 verifier 均通過時，才產生五分鐘內有效的 ref-only 身分投影。
 
 ## 不可寫入
 

@@ -1313,9 +1313,49 @@ def bind_taiji04_local_entry_to_founder_scene(
     total_field_preflight_receipt: Mapping[str, Any],
     lawful_scope_confirmed: bool,
     evidence_refs: Sequence[str] | None = None,
-    active_developer_seats: Sequence[Mapping[str, Any]] = ()
+    active_developer_seats: Sequence[Mapping[str, Any]] = (),
+    member_scene_binding_candidate: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Bind the existing TAIJI04 entry to the existing Founder scene."""
+
+    p4_binding = dict(member_scene_binding_candidate or {})
+    p4_binding_ref = p4_binding.pop("binding_ref", None)
+    expected_p4_binding_ref = (
+        "scene_binding_ref:sha256:"
+        + hashlib.sha256(
+            json.dumps(
+                p4_binding,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            ).encode("utf-8")
+        ).hexdigest()
+    )
+    if (
+        p4_binding.get("state") != "PASS_SCENE_BINDING_CANDIDATE"
+        or p4_binding.get("founder_role_seat_lease_required") is not True
+        or not _p4_hash_ref(
+            p4_binding.get("founder_role_seat_lease_ref"),
+            "role_seat_lease",
+        )
+        or p4_binding.get("candidate_only") is not True
+        or p4_binding.get("runtime_released") is not False
+        or p4_binding_ref != expected_p4_binding_ref
+    ):
+        return _taiji04_founder_binding_denied(
+            "HOLD_P4_MEMBER_ROOT_FOUNDER_LEASE_REQUIRED"
+        )
+    expected_member_ref = p4_binding.get("member_ref")
+    expected_agent_ref = developer_session_request.get("xiaoj_agent_ref")
+    if (
+        developer_session_request.get("member_ref") != expected_member_ref
+        or not isinstance(expected_agent_ref, str)
+        or not expected_agent_ref
+    ):
+        return _taiji04_founder_binding_denied(
+            "HOLD_P4_MEMBER_ROOT_FOUNDER_LEASE_MISMATCH"
+        )
 
     command_ref = str(founder_identity_request.get("founder_command_ref") or "").strip()
     if founder_identity_request.get("explicit_founder_command") is not True or not command_ref:
@@ -1339,8 +1379,8 @@ def bind_taiji04_local_entry_to_founder_scene(
         "FOUNDER_AUTHORIZED_CLOUD_MODEL_ENHANCEMENT"
     }
     if (
-        operation_record.get("principal") != "member_ref:founder"
-        or operation_record.get("actor") != "xiaoj_agent_ref:founder-local"
+        operation_record.get("principal") != expected_member_ref
+        or operation_record.get("actor") != expected_agent_ref
         or operation_record.get("command") != command_ref
         or "role_ref:founder_developer" not in operation_record.get("role", [])
         or not required_capabilities.issubset(capabilities)
@@ -1417,6 +1457,13 @@ def bind_taiji04_local_entry_to_founder_scene(
         "execution_runtime_verified": False,
         "intent_ref_sha256": _sha256(intent_text),
         "command_ref_sha256": command_ref_sha256,
+        "member_scene_binding_ref": p4_binding_ref,
+        "identity_root_ref": p4_binding.get("identity_root_ref"),
+        "root_generation": p4_binding.get("root_generation"),
+        "revocation_epoch": p4_binding.get("revocation_epoch"),
+        "founder_role_seat_lease_ref": p4_binding.get(
+            "founder_role_seat_lease_ref"
+        ),
         "evidence_refs_sha256": [_sha256(value) for value in (evidence_refs or [])],
         "media_packet_refs": media_packet_refs,
         "total_field_translation": True,
@@ -1757,4 +1804,99 @@ def render_three_org_scene_response(candidate: Mapping[str, Any]) -> Dict[str, A
         "deploy": False,
         "restart": False,
         "next_action": "TOTAL_FIELD_OWNER_ADMIN_REVIEW"
+    }
+
+
+def _p4_hash_ref(value: Any, namespace: str) -> bool:
+    prefix = f"{namespace}_ref:sha256:"
+    return (
+        isinstance(value, str)
+        and value.startswith(prefix)
+        and len(value) == len(prefix) + 64
+        and all(character in "0123456789abcdef" for character in value[-64:])
+    )
+
+
+def build_p4_node_carrier_binding_candidate(
+    *,
+    device_ref: str,
+    node_ref: str,
+    carrier_kind: str,
+    carrier_ref: str,
+    d3_coordinate_ref: str,
+    existing_device_nodes: Mapping[str, str] | None = None,
+    carrier_metadata: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Bind one device to one node; LAN/VPN/SMB/SSH remain carriers only."""
+
+    references = (
+        (device_ref, "device"),
+        (node_ref, "node"),
+        (carrier_ref, "carrier"),
+        (d3_coordinate_ref, "d3_coordinate"),
+    )
+    if any(not _p4_hash_ref(value, namespace) for value, namespace in references):
+        return {
+            "state": "HOLD_NODE_CARRIER_REFERENCE_INVALID",
+            "candidate_only": True,
+        }
+    if carrier_kind not in {"LAN", "VPN", "SMB", "SSH"}:
+        return {
+            "state": "HOLD_CARRIER_KIND_UNSUPPORTED",
+            "candidate_only": True,
+        }
+    metadata = dict(carrier_metadata or {})
+    forbidden_metadata = {
+        "mount_path",
+        "device_path",
+        "share_path",
+        "whole_device_mount",
+        "generative_transmission",
+        "protocol_authority",
+    }
+    if forbidden_metadata & set(metadata):
+        return {
+            "state": "BLOCK_CARRIER_PROTOCOL_OR_MOUNT_ESCALATION",
+            "candidate_only": True,
+        }
+    registry = dict(existing_device_nodes or {})
+    current_node = registry.get(device_ref)
+    if current_node is not None and current_node != node_ref:
+        return {
+            "state": "HOLD_DUPLICATE_NODE_REF",
+            "candidate_only": True,
+        }
+    if any(
+        registered_device != device_ref and registered_node == node_ref
+        for registered_device, registered_node in registry.items()
+    ):
+        return {
+            "state": "HOLD_DUPLICATE_NODE_REF",
+            "candidate_only": True,
+        }
+    material = {
+        "device_ref": device_ref,
+        "node_ref": node_ref,
+        "carrier_kind": carrier_kind,
+        "carrier_ref": carrier_ref,
+        "d3_coordinate_ref": d3_coordinate_ref,
+        "transport_priority": {
+            "LAN": "LAN_PRIMARY",
+            "VPN": "VPN_FALLBACK",
+            "SMB": "CARRIER_AUXILIARY",
+            "SSH": "CARRIER_AUXILIARY",
+        }[carrier_kind],
+        "protocol_role": "CARRIER_ONLY",
+        "generative_transmission": (
+            "W7TP_PROTOCOL_NATIVE_8D_INTENT_FIELD_PACKET"
+        ),
+        "whole_device_mount": False,
+        "candidate_only": True,
+    }
+    return {
+        "state": "PASS_NODE_CARRIER_BINDING_CANDIDATE",
+        **material,
+        "node_binding_ref": (
+            "node_binding_ref:sha256:" + _sha256(material)
+        ),
     }

@@ -23,10 +23,43 @@
   <template id="wuchang_auth_signup_form" inherit_id="auth_signup.signup" name="Wuchang Signup Form Copy">
     <xpath expr="//form[contains(@class, 'oe_signup_form')]" position="before">
       <div class="wuchang-signup-context">
-        <h3>社區會員服務註冊</h3>
+        <h3>個人會員服務註冊</h3>
         <p>
-          本入口用於五常社區會員服務、活動通知、公益參與與權益確認。資料使用以協會治理規則與總場安全邊界為準。
+          個人會員不需人工核准；請填寫所屬團體及轄區內外。本頁不收集精確住址或定位。
         </p>
+        <p><a href="/wuchang/business/onboarding">代表團體申請會員，請改走團體申請入口。</a></p>
+      </div>
+    </xpath>
+    <xpath expr="//div[contains(@class, 'field-name')]" position="after">
+      <input type="hidden" name="member_type" value="individual"/>
+      <div class="mb-3 field-organization-name">
+        <label for="organization_name">所屬團體</label>
+        <input type="text"
+               name="organization_name"
+               id="organization_name"
+               class="form-control"
+               required="required"
+               maxlength="160"
+               t-att-value="organization_name"
+               placeholder="例如：五常里、社區組織、公司或學校"/>
+      </div>
+      <div class="mb-3 field-membership-category">
+        <label for="membership_category">是否位於五常社區轄區內</label>
+        <select name="membership_category"
+                id="membership_category"
+                class="form-select"
+                required="required">
+          <option value="">請選擇</option>
+          <option value="in_community_jurisdiction"
+                  t-att-selected="'selected' if membership_category == 'in_community_jurisdiction' else None">
+            轄區內（五常里、五順里、仁忠里）
+          </option>
+          <option value="outside_community_jurisdiction"
+                  t-att-selected="'selected' if membership_category == 'outside_community_jurisdiction' else None">
+            轄區外
+          </option>
+        </select>
+        <div class="form-text">僅記錄轄區分類，不上傳住址、GPS 或位置軌跡。</div>
       </div>
     </xpath>
     <xpath expr="//button[@type='submit' and contains(@class, 'btn-primary')]" position="replace">

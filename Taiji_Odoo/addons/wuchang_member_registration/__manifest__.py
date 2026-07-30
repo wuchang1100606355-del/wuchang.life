@@ -5,7 +5,14 @@
     "category": "Wuchang/W7TP",
     "author": "Wuchang Smart Cloud",
     "license": "LGPL-3",
-    "depends": ["base", "web", "auth_signup", "product", "point_of_sale"],
+    "depends": [
+        "base",
+        "web",
+        "auth_signup",
+        "product",
+        "point_of_sale",
+        "website_forum",
+    ],
     "data": [
         "security/wuchang_member_groups.xml",
         "security/ir.model.access.csv",

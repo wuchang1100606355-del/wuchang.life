@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import time
 import uuid
@@ -41,6 +42,11 @@ SAFETY_FLAGS = {
     "RUNTIME_AUTHORITY": False,
     "CANONICAL_8D_VERIFIER_REQUIRED": True,
 }
+ACTIVE_XIAOJ_VOICE_OUTPUT_PROJECTION_POINTER = (
+    Path(__file__).resolve().parents[1]
+    / "runtime/total_field/master_index"
+    / "ACTIVE_XIAOJ_VERIFIED_OUTPUT_PROJECTION_POINTER.json"
+)
 
 SCENE_ALIAS_TABLE = {
     "STORE_CONTEXT": ["咖啡", "POS", "點餐", "結帳", "菜單", "客人", "店裡", "櫃台", "庫存", "外送", "訂單", "會員點數", "飲料", "拿鐵"],
@@ -891,6 +897,92 @@ def final_verifier(
     }
 
 
+def _load_active_voice_output_hook() -> Any:
+    pointer = json.loads(
+        ACTIVE_XIAOJ_VOICE_OUTPUT_PROJECTION_POINTER.read_text(
+            encoding="utf-8"
+        )
+    )
+    pointer_without_hash = {
+        key: value for key, value in pointer.items() if key != "pointer_sha256"
+    }
+    hook = pointer.get("formal_output_hook")
+    if (
+        pointer.get("active") is not True
+        or sha(pointer_without_hash) != pointer.get("pointer_sha256")
+        or not isinstance(hook, dict)
+    ):
+        raise RuntimeError("HOLD_ACTIVE_VOICE_OUTPUT_POINTER_INVALID")
+    hook_path = Path(str(hook.get("path") or ""))
+    if (
+        not hook_path.is_file()
+        or hashlib.sha256(hook_path.read_bytes()).hexdigest()
+        != hook.get("sha256")
+    ):
+        raise RuntimeError("HOLD_ACTIVE_VOICE_OUTPUT_HOOK_HASH_MISMATCH")
+    spec = importlib.util.spec_from_file_location(
+        "xiaoj_active_verified_voice_output_hook",
+        hook_path,
+    )
+    if spec is None or spec.loader is None:
+        raise RuntimeError("HOLD_ACTIVE_VOICE_OUTPUT_HOOK_LOAD_FAILED")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def voice_output_hook_health() -> dict[str, Any]:
+    """Read the active pointer on demand so version switches need no restart."""
+
+    try:
+        hook = _load_active_voice_output_hook()
+        return hook.health(require_active=True)
+    except Exception as exc:
+        return {
+            "state": "HOLD_FORMAL_VOICE_OUTPUT_HEALTH",
+            "failure_class": type(exc).__name__,
+            "active": False,
+            "restart_required": False,
+        }
+
+
+def dispatch_verified_final_answer_voice(
+    *,
+    answer_text: str,
+    final_verifier: dict[str, Any],
+    output_mode: str,
+    disclosure_class: str,
+    logical_time: str,
+) -> dict[str, Any]:
+    """Keep voice effects optional and never block the verified text result."""
+
+    if output_mode != "VOICE":
+        return {
+            "state": "VOICE_OUTPUT_NOT_REQUESTED",
+            "output_mode": output_mode,
+            "playback_started": False,
+            "text_response_blocked": False,
+        }
+    try:
+        hook = _load_active_voice_output_hook()
+        return hook.dispatch_verified_voice_output(
+            answer_text=answer_text,
+            final_verifier=final_verifier,
+            output_mode=output_mode,
+            disclosure_class=disclosure_class,
+            logical_time=logical_time,
+        )
+    except Exception as exc:
+        return {
+            "state": "HOLD_FORMAL_VOICE_OUTPUT_NON_BLOCKING_FAILURE",
+            "failure_class": type(exc).__name__,
+            "playback_started": False,
+            "playback_finished": False,
+            "automatic_retry": False,
+            "text_response_blocked": False,
+        }
+
+
 def run(
     text: str,
     branch: str = "cafe_main",
@@ -903,6 +995,8 @@ def run(
     canonical_verifier_result: dict[str, Any] | None = None,
     event_id: str = "",
     logical_time: Any = None,
+    output_mode: str = "TEXT",
+    disclosure_class: str = "PUBLIC",
 ) -> dict[str, Any]:
     event_basis = {
         "text": text,
@@ -955,7 +1049,7 @@ def run(
     final = final_verifier(verifier_results, canonical_verifier_result=canonical_verifier_result)
     semantic_ir = packet_chain[-2]["D2_state"]["semantic_ir"]
     zh_tw = render_language(semantic_ir, final["decision"], final["reasons"])
-    return {
+    result = {
         "STATE": "PASS_W7TP_PACKET_INFERENCE_RUNTIME",
         "RUN_MODE": "MODEL_FREE_PACKET_BY_PACKET_INFERENCE",
         "SAFETY_FLAGS": SAFETY_FLAGS,
@@ -969,6 +1063,14 @@ def run(
             "zh_TW": zh_tw,
         },
     }
+    result["VOICE_OUTPUT"] = dispatch_verified_final_answer_voice(
+        answer_text=zh_tw,
+        final_verifier=final,
+        output_mode=output_mode,
+        disclosure_class=disclosure_class,
+        logical_time=str(resolved_logical_time),
+    )
+    return result
 
 
 def main() -> int:
@@ -983,6 +1085,12 @@ def main() -> int:
     parser.add_argument("--authenticated-role-ref", default="")
     parser.add_argument("--signed-identity-packet-ref", default="")
     parser.add_argument("--canonical-verifier-result-json", default="")
+    parser.add_argument("--output-mode", choices=("TEXT", "VOICE"), default="TEXT")
+    parser.add_argument(
+        "--disclosure-class",
+        choices=("PUBLIC", "INTERNAL_AUTHORIZED", "FOUNDER_AUTHORIZED"),
+        default="PUBLIC",
+    )
     args = parser.parse_args()
 
     canonical_verifier_result = None
@@ -999,6 +1107,8 @@ def main() -> int:
         authenticated_role_ref=args.authenticated_role_ref,
         signed_identity_packet_ref=args.signed_identity_packet_ref,
         canonical_verifier_result=canonical_verifier_result,
+        output_mode=args.output_mode,
+        disclosure_class=args.disclosure_class,
     )
     rendered = json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True)
     print(rendered)

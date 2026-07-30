@@ -12,6 +12,7 @@ ALLOWED_LINK_FIELDS = {
     "provider_name",
     "provider_subject_reference",
     "local_subject_reference",
+    "identity_prefix_ref",
     "link_state",
     "consent_reference",
     "linked_at",
@@ -65,6 +66,46 @@ def callback_security_decision(
     return {"decision": "PASS", "reason": "CALLBACK_SECURITY_VERIFIED"}
 
 
+def strict_channel_callback_security_decision(
+    *,
+    expected_state: str | None,
+    received_state: str | None,
+    expected_nonce: str | None,
+    token_claims: dict,
+    expected_audience: str,
+    authenticated_subject: str | None,
+    callback_url: str,
+    issued_at_epoch: int | None,
+    current_epoch: int,
+    replay_state: str,
+    ttl_seconds: int = 300,
+) -> dict[str, str]:
+    """Require one fresh, short-lived, authenticated LINE callback."""
+
+    if (
+        not isinstance(issued_at_epoch, int)
+        or isinstance(issued_at_epoch, bool)
+        or not isinstance(current_epoch, int)
+        or isinstance(current_epoch, bool)
+        or current_epoch < issued_at_epoch
+        or current_epoch - issued_at_epoch > ttl_seconds
+        or ttl_seconds < 1
+        or ttl_seconds > 300
+    ):
+        return {"decision": "DENY", "reason": "CALLBACK_TTL_EXPIRED"}
+    if replay_state != "SESSION_STATE_CONSUMED_ONCE":
+        return {"decision": "DENY", "reason": "CALLBACK_REPLAY_EVIDENCE_REQUIRED"}
+    return callback_security_decision(
+        expected_state=expected_state,
+        received_state=received_state,
+        expected_nonce=expected_nonce,
+        token_claims=token_claims,
+        expected_audience=expected_audience,
+        profile_subject=authenticated_subject,
+        callback_url=callback_url,
+    )
+
+
 def minimized_link_record(
     profile: dict, authority_resolution: dict, verified_at: str
 ) -> dict:
@@ -74,6 +115,7 @@ def minimized_link_record(
             str(profile.get("userId") or "")
         ),
         "local_subject_reference": authority_resolution.get("local_subject_reference"),
+        "identity_prefix_ref": authority_resolution.get("identity_prefix_ref"),
         "link_state": authority_resolution.get("link_state") or "LINKING_PENDING",
         "consent_reference": authority_resolution.get("consent_reference"),
         "linked_at": authority_resolution.get("linked_at"),

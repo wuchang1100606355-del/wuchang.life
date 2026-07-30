@@ -2,10 +2,127 @@ import html
 import json
 
 from odoo import fields, http
+from odoo.addons.auth_signup.controllers.main import AuthSignupHome
+from odoo.exceptions import UserError
 from odoo.http import request
 
 
+INDIVIDUAL_JURISDICTION_CATEGORIES = {
+    "in_community_jurisdiction",
+    "outside_community_jurisdiction",
+}
+
+
+class WuchangMemberSignupController(AuthSignupHome):
+    def get_auth_signup_qcontext(self):
+        qcontext = super().get_auth_signup_qcontext()
+        for key in ("member_type", "organization_name", "membership_category"):
+            qcontext[key] = request.params.get(key) or ""
+        return qcontext
+
+    def do_signup(self, qcontext):
+        if not request.env["wuchang.community.feature.gate"].is_landing_enabled(
+            "member_registration"
+        ):
+            raise UserError("會員註冊目前暫停受理。")
+
+        member_type = str(qcontext.get("member_type") or "individual").strip()
+        if member_type != "individual":
+            raise UserError("團體會員請使用團體申請入口，並等待 Founder 核准。")
+        organization_name = str(qcontext.get("organization_name") or "").strip()
+        if not organization_name:
+            raise UserError("個人會員必須填寫所屬團體。")
+        if len(organization_name) > 160:
+            raise UserError("所屬團體名稱過長。")
+        membership_category = str(
+            qcontext.get("membership_category") or ""
+        ).strip()
+        if membership_category not in INDIVIDUAL_JURISDICTION_CATEGORIES:
+            raise UserError("請選擇是否位於五常社區轄區內。")
+
+        values = self._prepare_signup_values(qcontext)
+        self._signup_with_values(qcontext.get("token"), values)
+        registration = request.env["wuchang.member.registration"].sudo().create({
+            "registration_channel": "odoo",
+            "review_status": "draft",
+            "consent_version": "individual_member_v1",
+            "member_type": "individual",
+            "organization_name": organization_name,
+            "organization_role": (
+                "resident"
+                if membership_category == "in_community_jurisdiction"
+                else "other"
+            ),
+            "membership_category": membership_category,
+            "role_scope": "member",
+            "service_scope": "community_member_service",
+        })
+        registration.action_submit_review()
+        request.env.cr.commit()
+
+
 class WuchangMemberRegistrationController(http.Controller):
+    def _founder_review_authorized(self):
+        raw = request.env["ir.config_parameter"].sudo().get_param(
+            "founder.identity.google_accounts"
+        ) or "[]"
+        try:
+            founder_accounts = {
+                str(account).strip().lower()
+                for account in json.loads(raw)
+                if isinstance(account, str) and account.strip()
+            }
+        except (TypeError, ValueError):
+            return False
+        login = str(request.env.user.login or "").strip().lower()
+        return bool(
+            login
+            and login in founder_accounts
+            and request.env.user.has_group(
+                "wuchang_member_registration.group_wuchang_member_admin"
+            )
+        )
+
+    def _registration_enabled(self):
+        return request.env["wuchang.community.feature.gate"].is_landing_enabled(
+            "member_registration"
+        )
+
+    def _registration_hold(self):
+        return {
+            "state": "HOLD_LANDING_CONTROL_DISABLED",
+            "feature_key": "landing.member_registration",
+            "member_plaintext": False,
+        }
+
+    def _registration_hold_page(self):
+        return request.make_response(
+            "會員服務目前暫停受理，既有會員權益不受影響；請稍後再試或洽服務人員。",
+            status=503,
+            headers=[("Content-Type", "text/plain; charset=utf-8")],
+        )
+
+    @http.route(
+        "/wuchang/control/member-registration",
+        type="http",
+        auth="public",
+        csrf=False,
+    )
+    def member_registration_control(self, **kw):
+        gate = request.env["wuchang.community.feature.gate"].sudo().search([
+            ("feature_key", "=", "landing.member_registration"),
+        ], limit=1)
+        if not gate or not gate.is_landing_enabled("member_registration"):
+            return request.make_response("", status=503)
+        status = gate.build_status()
+        return request.make_response(
+            "",
+            status=204,
+            headers=[
+                ("X-W7TP-Control-State", status["gate_state"]),
+                ("X-W7TP-Control-Receipt", status["receipt_ref"]),
+            ],
+        )
 
     def _request_payload(self, kw):
         params = {}
@@ -194,9 +311,10 @@ class WuchangMemberRegistrationController(http.Controller):
         <p class="lead">這個網站服務五常社區的公益治理、會員參與與咖啡館現場營運。協會是社區治理主體；上品食品行與聊國咖啡館重新總店是外部友軍、營運與技術支援窗口。</p>
         <div class="actions">
           <a class="button primary" href="/web/login">店員/店長登入</a>
-          <a class="button" href="/web/signup">會員註冊</a>
-          <a class="button" href="/line/login">LINE 會員入口</a>
-          <a class="button" href="/google/member/login">Google 會員入口</a>
+          <a class="button" href="/web/signup">個人會員註冊</a>
+          <a class="button" href="/wuchang/business/onboarding">團體會員申請</a>
+          <a class="button" href="/forum">社區會員討論版</a>
+          <span class="button">Google／LINE 綁定須先完成 Odoo 會員登入</span>
         </div>
       </div>
     </section>
@@ -244,7 +362,8 @@ class WuchangMemberRegistrationController(http.Controller):
         <h2>現在有什麼</h2>
         <table class="facts" aria-label="目前服務">
           <tr><th>店內營運</th><td>店員與店長可透過 Odoo 入口進入後台與 POS；現金收款是目前優先恢復的營運路徑。</td></tr>
-          <tr><th>會員入口</th><td>提供一般註冊入口，LINE 與 Google 會員入口已保留路由，正式 OAuth 值與 callback 測試需完成後才開放正式串接。</td></tr>
+          <tr><th>會員入口</th><td>個人會員填寫所屬團體與轄區內外後即可使用；團體會員須由 Founder 核准。LINE 與 Google 入口仍須各自完成 OAuth 設定。</td></tr>
+          <tr><th>會員討論版</th><td>登入會員可在既有 Odoo 討論版交流；社區人員負責內容服務與版務，總場只守身分、個資、權限與安全邊界。</td></tr>
           <tr><th>AI 總場</th><td>使用 D8 / W7TP 總場規則保存證據、權限、風險與行動邊界；AI 只能輔助，不能私自下單、付款或讀取會員明文。</td></tr>
           <tr><th>語言輔助</th><td>首頁與操作設計以中文為主，後續可支援英文、越文輔助，方便店長與店員實際使用。</td></tr>
         </table>
@@ -301,6 +420,8 @@ class WuchangMemberRegistrationController(http.Controller):
 
     @http.route("/wuchang/member/register/start", type="json", auth="public", csrf=False)
     def start_registration(self, channel="odoo", consent_version="v1", **kw):
+        if not self._registration_enabled():
+            return self._registration_hold()
         allowed = {"line", "google", "odoo", "pwa", "staff_terminal"}
         if channel not in allowed:
             channel = "odoo"
@@ -389,6 +510,8 @@ class WuchangMemberRegistrationController(http.Controller):
 
     @http.route("/wuchang/business/onboarding", type="http", auth="public", website=False, csrf=False)
     def business_onboarding_form(self, **kw):
+        if not self._registration_enabled():
+            return self._registration_hold_page()
         body = """<!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -411,7 +534,7 @@ class WuchangMemberRegistrationController(http.Controller):
 <body>
 <main>
   <h1>商家組織註冊</h1>
-  <p>自然人先作為負責人或授權管理者建立商家組織；經總場核准後，才形成營運入口與服務設定。</p>
+  <p>自然人先作為負責人或授權管理者建立團體；由 Founder 核准團體資格，總場只核對安全、權限與證據邊界。</p>
   <div class="note">送出會建立待審申請，不會直接下單、扣款、部署、重啟或修改 router。</div>
   <form method="post" action="/wuchang/business/onboarding/submit">
     <div class="grid">
@@ -425,7 +548,12 @@ class WuchangMemberRegistrationController(http.Controller):
     </div>
     <div class="grid">
       <label>門市名稱<input name="store_name" value="上品聊國咖啡館" required></label>
-      <label>服務區域 ref<input name="service_area_ref" value="service_area_ref:local" required></label>
+      <label>是否位於五常社區轄區
+        <select name="service_area_ref" required>
+          <option value="in_community_jurisdiction">轄區內（五常里、五順里、仁忠里）</option>
+          <option value="outside_community_jurisdiction">轄區外</option>
+        </select>
+      </label>
     </div>
     <label>服務項目 JSON<textarea name="service_items_json">["cafe_menu", "member_service", "line_ai_response", "odoo_pos_management"]</textarea></label>
     <div class="grid">
@@ -442,6 +570,8 @@ class WuchangMemberRegistrationController(http.Controller):
 
     @http.route("/wuchang/business/onboarding/submit", type="http", auth="public", methods=["POST"], csrf=False)
     def business_onboarding_submit(self, **kw):
+        if not self._registration_enabled():
+            return self._registration_hold_page()
         try:
             _responsible, batch = self._create_business_onboarding(self._request_payload(kw))
         except Exception as exc:
@@ -454,6 +584,8 @@ class WuchangMemberRegistrationController(http.Controller):
 
     @http.route("/wuchang/business/onboarding/start", type="json", auth="public", csrf=False)
     def business_onboarding_start(self, **kw):
+        if not self._registration_enabled():
+            return self._registration_hold()
         try:
             responsible, batch = self._create_business_onboarding(self._request_payload(kw))
         except Exception as exc:
@@ -485,6 +617,11 @@ class WuchangMemberRegistrationController(http.Controller):
 
     @http.route("/wuchang/business/onboarding/<string:packet_ref>/approve", type="json", auth="user", csrf=False)
     def business_onboarding_approve(self, packet_ref, **kw):
+        if not self._founder_review_authorized():
+            return {
+                "state": "HOLD_FOUNDER_APPROVAL_REQUIRED",
+                "member_plaintext": False,
+            }
         batch = request.env["wuchang.member.group.registration.batch"].sudo().search([
             ("packet_ref", "=", packet_ref),
             ("business_onboarding_enabled", "=", True),
@@ -503,6 +640,8 @@ class WuchangMemberRegistrationController(http.Controller):
 
     @http.route("/wuchang/member/register/group/<string:packet_ref>", type="http", auth="public", csrf=False)
     def group_registration_entry(self, packet_ref, **kw):
+        if not self._registration_enabled():
+            return self._registration_hold_page()
         batch = self._find_group_batch(packet_ref)
         if not batch:
             return request.make_response("Group registration packet not found.", status=404)
@@ -513,8 +652,7 @@ class WuchangMemberRegistrationController(http.Controller):
           <p>Group: %(group)s</p>
           <p>State: %(state)s</p>
           <p>D8 Ref: %(d8)s</p>
-          <p><a href="/google/member/login?group_packet_ref=%(packet)s">Continue with Google</a></p>
-          <p><a href="/line/login?group_packet_ref=%(packet)s">Continue with LINE</a></p>
+          <p>Google／LINE channel 綁定須在既有會員 session 內完成；本頁不提供外部登入旁路。</p>
           <form method="post" action="/wuchang/member/register/group/%(packet)s/claim">
             <input type="hidden" name="provider" value="manual"/>
             <button type="submit">Create provisional group registration</button>
@@ -530,6 +668,8 @@ class WuchangMemberRegistrationController(http.Controller):
 
     @http.route("/wuchang/member/register/group/<string:packet_ref>/claim", type="http", auth="public", methods=["POST"], csrf=False)
     def group_registration_claim(self, packet_ref, **kw):
+        if not self._registration_enabled():
+            return self._registration_hold_page()
         batch = self._find_group_batch(packet_ref)
         if not batch:
             return request.make_response("Group registration packet not found.", status=404)

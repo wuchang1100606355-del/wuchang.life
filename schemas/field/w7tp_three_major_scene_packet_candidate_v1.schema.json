@@ -266,6 +266,130 @@
     "sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
+    },
+    "hashRef": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*_ref:sha256:[0-9a-f]{64}$"
+    },
+    "scopeRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^scope_ref:sha256:[0-9a-f]{64}$"
+      }
+    },
+    "p4MemberSceneBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "state",
+        "p3_gate_ref",
+        "verified_channel_binding_ref",
+        "action_hash",
+        "member_ref",
+        "identity_root_ref",
+        "root_generation",
+        "revocation_epoch",
+        "session_ref",
+        "scene_ref",
+        "scene",
+        "scope_refs",
+        "effect_class",
+        "device_ref",
+        "channel_ref",
+        "node_ref",
+        "capability_ref",
+        "d3_coordinate_ref",
+        "carrier_ref",
+        "carrier_kind",
+        "transport_priority",
+        "protocol_role",
+        "generative_transmission",
+        "node_binding_ref",
+        "role_seat_snapshot_ref",
+        "founder_role_seat_lease_required",
+        "founder_role_seat_lease_ref",
+        "pos_mode",
+        "formal_pos_write",
+        "order_created",
+        "payment_capture",
+        "inventory_write",
+        "price_write",
+        "member_data_write",
+        "candidate_only",
+        "runtime_released",
+        "binding_ref"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "w7tp.member-channel-scene-pos-node-binding.v1"
+        },
+        "state": {"const": "PASS_SCENE_BINDING_CANDIDATE"},
+        "p3_gate_ref": {"$ref": "#/$defs/hashRef"},
+        "verified_channel_binding_ref": {"$ref": "#/$defs/hashRef"},
+        "action_hash": {"$ref": "#/$defs/sha256"},
+        "member_ref": {"$ref": "#/$defs/hashRef"},
+        "identity_root_ref": {"$ref": "#/$defs/hashRef"},
+        "root_generation": {"type": "integer", "minimum": 1},
+        "revocation_epoch": {"type": "integer", "minimum": 0},
+        "session_ref": {"$ref": "#/$defs/hashRef"},
+        "scene_ref": {"$ref": "#/$defs/hashRef"},
+        "scene": {
+          "enum": ["public_benefit", "property", "merchant"]
+        },
+        "scope_refs": {"$ref": "#/$defs/scopeRefs"},
+        "effect_class": {
+          "enum": [
+            "E0_ANSWER",
+            "E1_READ",
+            "E2_CANDIDATE",
+            "E3_SANDBOX",
+            "E4_REVERSIBLE_WRITE",
+            "E5_HIGH_IMPACT"
+          ]
+        },
+        "device_ref": {"$ref": "#/$defs/hashRef"},
+        "channel_ref": {
+          "anyOf": [
+            {"$ref": "#/$defs/hashRef"},
+            {"type": "null"}
+          ]
+        },
+        "node_ref": {"$ref": "#/$defs/hashRef"},
+        "capability_ref": {"$ref": "#/$defs/hashRef"},
+        "d3_coordinate_ref": {"$ref": "#/$defs/hashRef"},
+        "carrier_ref": {"$ref": "#/$defs/hashRef"},
+        "carrier_kind": {"enum": ["LAN", "VPN", "SMB", "SSH"]},
+        "transport_priority": {
+          "enum": ["LAN_PRIMARY", "VPN_FALLBACK", "CARRIER_AUXILIARY"]
+        },
+        "protocol_role": {"const": "CARRIER_ONLY"},
+        "generative_transmission": {
+          "const": "W7TP_PROTOCOL_NATIVE_8D_INTENT_FIELD_PACKET"
+        },
+        "node_binding_ref": {"$ref": "#/$defs/hashRef"},
+        "role_seat_snapshot_ref": {"$ref": "#/$defs/hashRef"},
+        "founder_role_seat_lease_required": {"type": "boolean"},
+        "founder_role_seat_lease_ref": {
+          "anyOf": [
+            {"$ref": "#/$defs/hashRef"},
+            {"type": "null"}
+          ]
+        },
+        "pos_mode": {"const": "DRY_RUN_CANDIDATE_ONLY"},
+        "formal_pos_write": {"const": false},
+        "order_created": {"const": false},
+        "payment_capture": {"const": false},
+        "inventory_write": {"const": false},
+        "price_write": {"const": false},
+        "member_data_write": {"const": false},
+        "candidate_only": {"const": true},
+        "runtime_released": {"const": false},
+        "binding_ref": {"$ref": "#/$defs/hashRef"}
+      }
     }
   }
 }

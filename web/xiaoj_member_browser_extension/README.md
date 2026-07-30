@@ -92,7 +92,10 @@ runtime/member_browser/native_host/tw.taiji.xiaoj_member_browser_gateway.json
 
 Manual browser installation is still required. The renderer does not write system directories and does not use sudo.
 
-If the native host is unavailable, the extension falls back to the local minimum-privilege bridge.
+The send path fails closed when the native host or Total Field receiver is unavailable.
+It does not fall back to a second local decision path. The original browser
+packet, `packet_id`, `trace_id`, and `content_sha256` remain bound through the
+transport envelope and the returned Total Field receipt.
 
 ## Verification
 

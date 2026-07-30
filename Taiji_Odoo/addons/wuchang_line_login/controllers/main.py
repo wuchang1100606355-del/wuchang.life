@@ -1,4 +1,5 @@
 import secrets
+import time
 import requests
 from datetime import datetime, timezone
 from urllib.parse import urlencode
@@ -9,14 +10,27 @@ from odoo.http import request
 from ..services.profile_minimization import (
     CANONICAL_CALLBACK_URL,
     authorization_decision,
-    callback_security_decision,
     minimized_link_record,
+    strict_channel_callback_security_decision,
 )
 
 
 LINE_ID_TOKEN_VERIFY_URL = 'https://api.line.me/oauth2/v2.1/verify'
 
 class WuchangLineLogin(http.Controller):
+    def _landing_enabled(self):
+        return request.env["wuchang.community.feature.gate"].is_landing_enabled(
+            "line_login"
+        )
+
+    def _landing_hold(self):
+        return self._status_page(
+            "LINE 會員入口目前已安全關閉",
+            "此入口目前由既有產品控制閘關閉，未授權的請求不會繞過身分與權限。",
+            "LANDING_CONTROL_DISABLED:line_login",
+            status=503,
+        )
+
     def _html_page(self, title, message, reference):
         return """<!doctype html>
 <html lang="zh-Hant">
@@ -65,8 +79,10 @@ class WuchangLineLogin(http.Controller):
     def _success_page(self, title, message):
         return request.make_response(self._html_page(title, message, "LINE_LOGIN_COMPLETE"))
 
-    @http.route('/line/login', type='http', auth='public', website=False, csrf=False)
+    @http.route('/line/login', type='http', auth='user', website=False, csrf=False)
     def line_login(self, **kw):
+        if not self._landing_enabled():
+            return self._landing_hold()
         channel_id = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.channel_id')
         redirect_uri = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.redirect_uri')
 
@@ -89,6 +105,7 @@ class WuchangLineLogin(http.Controller):
         nonce = secrets.token_urlsafe(24)
         request.session['wuchang_line_state'] = state
         request.session['wuchang_line_nonce'] = nonce
+        request.session['wuchang_line_issued_at_epoch'] = int(time.time())
         group_packet_ref = kw.get('group_packet_ref')
         if group_packet_ref:
             request.session['wuchang_group_packet_ref'] = group_packet_ref
@@ -106,10 +123,23 @@ class WuchangLineLogin(http.Controller):
 
     @http.route('/line/callback', type='http', auth='public', website=False, csrf=False)
     def line_callback(self, **kw):
+        if not self._landing_enabled():
+            return self._landing_hold()
+        if not request.session.uid:
+            return self._status_page(
+                "LINE 登入安全檢查未通過",
+                "必須先由唯一 Odoo 會員入口登入，再進行 LINE channel 綁定。",
+                "AUTHENTICATED_MEMBER_SESSION_REQUIRED",
+                status=401,
+            )
         code = kw.get('code')
         state = kw.get('state')
         saved_state = request.session.pop('wuchang_line_state', None)
         expected_nonce = request.session.pop('wuchang_line_nonce', None)
+        issued_at_epoch = request.session.pop(
+            'wuchang_line_issued_at_epoch',
+            None,
+        )
 
         if not code:
             return self._status_page(
@@ -205,14 +235,17 @@ class WuchangLineLogin(http.Controller):
 
         profile = profile_res.json()
         line_user_id = profile.get('userId')
-        security = callback_security_decision(
+        security = strict_channel_callback_security_decision(
             expected_state=saved_state,
             received_state=state,
             expected_nonce=expected_nonce,
             token_claims=token_claims,
             expected_audience=channel_id,
-            profile_subject=line_user_id,
+            authenticated_subject=line_user_id,
             callback_url=redirect_uri,
+            issued_at_epoch=issued_at_epoch,
+            current_epoch=int(time.time()),
+            replay_state="SESSION_STATE_CONSUMED_ONCE",
         )
         if security['decision'] != 'PASS':
             return self._status_page(
@@ -222,13 +255,23 @@ class WuchangLineLogin(http.Controller):
                 status=400,
             )
 
-        authority = request.env['wuchang.member.external.auth'].sudo()
-        resolution = authority.resolve_provider_subject('line', line_user_id)
+        authority = request.env['wuchang.member.external.auth']
+        resolution = authority.resolve_provider_subject_for_session(
+            'line',
+            line_user_id,
+            request.env.user,
+        )
         link_context = minimized_link_record(
             profile,
             resolution,
             datetime.now(timezone.utc).isoformat(),
         )
+        link_context.update({
+            'verified_channel_binding_ref': resolution.get(
+                'verified_channel_binding_ref'
+            ),
+            'member_ref': resolution.get('member_ref'),
+        })
         request.session['wuchang_line_link_context'] = link_context
         if authorization_decision(link_context['link_state']) != 'ALLOW':
             return self._status_page(

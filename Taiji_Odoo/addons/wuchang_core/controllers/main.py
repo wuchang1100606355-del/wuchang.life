@@ -5118,9 +5118,17 @@ class JulesController(http.Controller):
         except Exception:
             key = ''
         if not key:
-            return True
+            return False
         got = (request.httprequest.headers.get('X-Jules-Key') or '').strip()
-        return got == key
+        return bool(got and hmac.compare_digest(got, key))
+
+    def _landing_enabled(self, surface):
+        try:
+            return request.env[
+                "wuchang.community.feature.gate"
+            ].is_landing_enabled(surface)
+        except KeyError:
+            return False
 
     def _find_partner_by_unit(self, user_unit):
         user_unit = (user_unit or '').strip()
@@ -5439,6 +5447,10 @@ class JulesController(http.Controller):
     def create_order(self, **payload):
         if not self._check_auth():
             return {'status': 'error', 'message': 'unauthorized'}
+        if not self._landing_enabled('pos_order'):
+            return {'status': 'HOLD', 'message': 'HOLD_LANDING_CONTROL_DISABLED', 'feature_key': 'landing.pos_order'}
+        if not self._landing_enabled('payment'):
+            return {'status': 'HOLD', 'message': 'HOLD_LANDING_CONTROL_DISABLED', 'feature_key': 'landing.payment'}
 
         user_unit = (payload or {}).get('user_unit')
         product_id = (payload or {}).get('product_id')
@@ -5521,6 +5533,8 @@ class JulesController(http.Controller):
     def create_pos_online_order(self, **payload):
         if not self._check_auth():
             return {'status': 'error', 'message': 'unauthorized'}
+        if not self._landing_enabled('pos_order'):
+            return {'status': 'HOLD', 'message': 'HOLD_LANDING_CONTROL_DISABLED', 'feature_key': 'landing.pos_order'}
 
         user_unit = (payload or {}).get('user_unit')
         config_id = (payload or {}).get('config_id')

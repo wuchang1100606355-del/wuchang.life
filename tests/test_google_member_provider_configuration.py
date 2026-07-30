@@ -99,8 +99,13 @@ def test_provider_tool_uses_odoo_config_and_stdin_without_plaintext_secret() -> 
 def test_provider_check_uses_runtime_secret_file_metadata_and_trusted_origins() -> None:
     tool = load(TOOL_PATH, "configure_google_member_provider_runtime_health")
     program = tool.build_odoo_shell_program("check")
+    assert tool.CANONICAL_CALLBACK_URL == (
+        "https://member.wuchang.life/google/member/callback"
+    )
     assert tool.GOOGLE_CLIENT_SECRET_FILE in program
     assert tool.CANONICAL_CALLBACK_URL in program
+    assert "callback_present," in program
+    assert "public_base_present," in program
     assert '"accounts.google.com"' in program
     assert '"www.googleapis.com"' in program
     assert 'params.get_param("wuchang_google_member_login.client_secret")' not in program
