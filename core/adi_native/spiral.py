@@ -3,7 +3,13 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import Callable, Iterable
 
-from .distance import TransitionRuleHold, delta_f, resolve_canonical_path
+from .distance import (
+    BreakpointReachabilityDenied,
+    DENY_BREAKPOINT_CROSSED,
+    TransitionRuleHold,
+    delta_f as transition_path_distance_f,
+    resolve_canonical_path,
+)
 from .models import (
     DirectSlotConfig,
     NativeLookupReceipt,
@@ -53,10 +59,19 @@ def enumerate_shells(
     candidates: Iterable[StatePacket8D],
     transition_rules: Iterable[NativeTransitionRule],
 ) -> tuple[NativeSpiralShell, ...]:
+    """Group reachable candidates into TRANSITION_PATH_DISTANCE shells."""
     rules = tuple(transition_rules)
     grouped: dict[int, list[StatePacket8D]] = defaultdict(list)
+    denied_count = 0
     for candidate in candidates:
-        grouped[delta_f(origin, candidate, rules)].append(candidate)
+        try:
+            distance = transition_path_distance_f(origin, candidate, rules)
+        except BreakpointReachabilityDenied:
+            denied_count += 1
+            continue
+        grouped[distance].append(candidate)
+    if not grouped and denied_count:
+        raise BreakpointReachabilityDenied(DENY_BREAKPOINT_CROSSED)
     return tuple(
         NativeSpiralShell(
             radius,
