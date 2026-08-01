@@ -5,7 +5,11 @@ import json
 from dataclasses import dataclass
 from typing import Iterable, Mapping, Sequence
 
-from .distance import TransitionRuleHold, resolve_canonical_path
+from .distance import (
+    BreakpointReachabilityDenied,
+    TransitionRuleHold,
+    resolve_canonical_path,
+)
 from .models import NativeLookupReceipt, NativeTransitionRule, StatePacket8D
 from .projection import metric_signature_f, positive_negative_boundaries, project_8d_state
 
@@ -31,6 +35,10 @@ FORBIDDEN_NATIVE_PROXIES = (
     "kv cache",
     "pagedattention",
     "token-level constrained decoding",
+    "tree index",
+    "tree-index",
+    "geometric helix",
+    "fixed phase",
     "模型投票",
     "模型平均",
 )
@@ -69,6 +77,8 @@ def candidate_state_root_f(packet: StatePacket8D) -> str:
         "topology_coordinate_ref": packet.topology_coordinate_ref,
         "event_hash_ref": packet.event_hash_ref,
     }
+    if packet.breakpoint_segment_ref is not None:
+        material["breakpoint_segment_ref"] = packet.breakpoint_segment_ref
     return hashlib.sha256(_canonical_bytes(material)).hexdigest()
 
 
@@ -161,6 +171,8 @@ def evidence_closed_f(
         return ValidationDecision("HOLD", "HOLD_EVIDENCE_DIGEST_MISMATCH")
     try:
         path = resolve_canonical_path(origin, packet, transition_rules)
+    except BreakpointReachabilityDenied as exc:
+        return ValidationDecision("DENY", exc.code)
     except TransitionRuleHold as exc:
         return ValidationDecision("HOLD", exc.code)
     required_refs = {ref for rule in path.rules for ref in rule.required_evidence_refs}

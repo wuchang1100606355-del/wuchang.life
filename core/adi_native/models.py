@@ -55,6 +55,7 @@ class StatePacket8D:
     previous_logical_time: int | None = None
     claimed_metric_signature: Tuple[Any, ...] | None = None
     metadata: Mapping[str, Any] = field(default_factory=dict)
+    breakpoint_segment_ref: str | None = None
 
 
 @dataclass(frozen=True)
@@ -107,12 +108,22 @@ class NativeTransitionRule:
     direction_code: str
     step_cost_uint: int
     rule_version: str
+    breakpoint_policy_ref: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.step_cost_uint, int) or self.step_cost_uint <= 0:
             raise ValueError("step_cost_uint must be a positive integer")
         if self.polarity not in (-1, 0, 1):
             raise ValueError("polarity must be -1, 0, or 1")
+
+
+@dataclass(frozen=True)
+class BreakpointReachabilityVerdict:
+    verdict: str
+    origin_segment_ref: str | None
+    candidate_segment_ref: str | None
+    breakpoint_policy_ref: str | None
+    reason_code: str
 
 
 @dataclass(frozen=True)

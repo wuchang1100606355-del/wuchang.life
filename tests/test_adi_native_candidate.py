@@ -1,12 +1,24 @@
 import ast
 import re
-from dataclasses import replace
+from dataclasses import fields, replace
 from pathlib import Path
 
 import pytest
 
-from core.adi_native.distance import TransitionRuleHold, delta_f
-from core.adi_native.index import direct_slot_f, phi_f, tau_f
+from core.adi_native.distance import (
+    ALLOW_REACHABLE,
+    DENY_BREAKPOINT_CROSSED,
+    HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE,
+    TransitionRuleHold,
+    delta_f,
+    evaluate_breakpoint_reachability,
+)
+from core.adi_native.index import (
+    direct_slot_f,
+    phi_f,
+    tau_f,
+    time_axis_absolute_distance,
+)
 from core.adi_native.models import (
     DirectSlotConfig,
     DimensionBoundaryFacts,
@@ -42,6 +54,7 @@ def packet(
     parent_state_root="aa" * 32,
     boundaries=POSITIVE_BOUNDARIES,
     evidence=True,
+    breakpoint_segment_ref="segment:primary",
 ):
     digests = {"ev": "digest-1"} if evidence else {}
     expected = {"ev": "digest-1"}
@@ -65,6 +78,7 @@ def packet(
         expected_evidence_digests=expected,
         satisfied_preconditions=frozenset({"ready"}),
         previous_logical_time=logical_time - 1,
+        breakpoint_segment_ref=breakpoint_segment_ref,
     )
     value = replace(value, state_root=candidate_state_root_f(value))
     return replace(value, claimed_metric_signature=metric_signature_f(value).as_tuple())
@@ -78,6 +92,7 @@ def transition(
     direction,
     *,
     required=("ev",),
+    breakpoint_policy_ref="breakpoint-policy:v1",
 ):
     return NativeTransitionRule(
         transition_rule_id=rule_id,
@@ -89,6 +104,7 @@ def transition(
         direction_code=direction,
         step_cost_uint=cost,
         rule_version="rule-v1",
+        breakpoint_policy_ref=breakpoint_policy_ref,
     )
 
 
@@ -113,7 +129,16 @@ def test_t01_same_input_produces_same_phi_f():
     origin, target = packet("A"), packet("B", event_time=20, logical_time=2)
     rules = (transition("r01", "A", "B", 3, "FORWARD"),)
     config = slot_config(target)
-    assert phi_f(origin, target, rules, config) == phi_f(origin, target, rules, config)
+    first = phi_f(origin, target, rules, config)
+    second = phi_f(origin, target, rules, config)
+    summary = (
+        target.state_root,
+        first.native_adi_ref,
+        first.absolute_distance,
+        first.direction_path,
+    )
+    print("ADI聚焦功能輸出摘要=" + repr(summary))
+    assert first == second
 
 
 def test_t02_delta_f_identity_is_zero():
@@ -256,6 +281,9 @@ def test_t13_local_candidate_root_mismatch_holds():
         "KV cache",
         "PagedAttention",
         "token-level constrained decoding",
+        "tree index",
+        "geometric helix",
+        "fixed phase",
         "模型投票",
         "模型平均",
     ],
@@ -286,6 +314,7 @@ def test_t15_state8d_to_adi_io_relationship_is_complete():
         "rule_version",
         "logical_time",
     )
+    assert result.direction_path == ("FORWARD",)
 
 
 def test_t16_evidence_closure_requires_exact_evidence():
@@ -332,7 +361,12 @@ def test_t19_delta_f_is_not_direct_slot_arithmetic():
     origin, target = packet("A"), packet("B", event_time=20, logical_time=2)
     rules = (transition("r01", "A", "B", 7, "FORWARD"),)
     config = slot_config(origin, target, value_by_code={"A": 55, "B": 55})
+    logical_time_config = DirectSlotConfig(0, 100, 100, {})
     assert abs(direct_slot_f(origin, config) - direct_slot_f(target, config)) == 0
+    assert time_axis_absolute_distance(
+        tau_f(origin.logical_time, logical_time_config),
+        tau_f(target.logical_time, logical_time_config),
+    ) == 1
     assert delta_f(origin, target, rules) == 7
 
 
@@ -372,10 +406,270 @@ def test_t20_external_research_dependencies_are_isolated():
 
 def test_shell_enumeration_uses_integer_transition_costs():
     origin = packet("A")
-    target = packet("B", event_time=20, logical_time=2)
+    path_near = packet("B", event_time=90, logical_time=90)
+    time_near = packet("C", event_time=11, logical_time=2)
+    rules = (
+        transition("r-path-near", "A", "B", 1, "EAST"),
+        transition("r-time-near", "A", "C", 4, "WEST"),
+    )
     shells = enumerate_shells(
         origin,
-        (target, origin),
-        (transition("r01", "A", "B", 4, "FORWARD"),),
+        (time_near, path_near, origin),
+        rules,
     )
-    assert tuple(shell.radius for shell in shells) == (0, 4)
+    config = DirectSlotConfig(0, 100, 100, {})
+    origin_slot = tau_f(origin.logical_time, config)
+    assert tuple(shell.radius for shell in shells) == (0, 1, 4)
+    assert shells[1].candidate_state_roots == (path_near.state_root,)
+    assert shells[2].candidate_state_roots == (time_near.state_root,)
+    assert time_axis_absolute_distance(
+        tau_f(path_near.logical_time, config), origin_slot
+    ) > time_axis_absolute_distance(tau_f(time_near.logical_time, config), origin_slot)
+
+
+def test_t21_permanent_slot_and_explicit_time_axis_distance_are_integer_only():
+    config = DirectSlotConfig(0, 100, 10, {})
+    state_time = 40
+    query_slots = (2, 8)
+    projected_slots = tuple(tau_f(state_time, config) for _ in query_slots)
+    distances = tuple(
+        time_axis_absolute_distance(projected_slots[0], query_slot)
+        for query_slot in query_slots
+    )
+    assert projected_slots == (4, 4)
+    assert distances == (2, 4)
+    assert type(distances[0]) is int
+    assert distances[0] >= 0
+    assert time_axis_absolute_distance(4, 8) == time_axis_absolute_distance(8, 4)
+    with pytest.raises(TypeError):
+        time_axis_absolute_distance(4)
+    for invalid in (True, 1.5):
+        with pytest.raises(ValueError):
+            time_axis_absolute_distance(invalid, 4)
+        with pytest.raises(ValueError):
+            time_axis_absolute_distance(4, invalid)
+        with pytest.raises(ValueError):
+            tau_f(invalid, config)
+
+
+def test_t23_transition_path_sum_is_integer_and_never_falls_back_to_time():
+    origin = packet("A", event_time=10, logical_time=1)
+    target = packet("C", event_time=90, logical_time=3)
+    rules = (
+        transition("r-ab", "A", "B", 2, "EAST"),
+        transition("r-bc", "B", "C", 3, "NORTH"),
+    )
+    config = DirectSlotConfig(0, 100, 100, {})
+    path_distance = delta_f(origin, target, rules)
+    time_distance = time_axis_absolute_distance(
+        tau_f(target.logical_time, config), tau_f(origin.logical_time, config)
+    )
+    assert type(path_distance) is int
+    assert path_distance == 2 + 3 == 5
+    assert time_distance == 2
+    assert path_distance != time_distance
+    missing = packet("D", event_time=20, logical_time=2)
+    assert time_axis_absolute_distance(
+        tau_f(missing.logical_time, config), tau_f(origin.logical_time, config)
+    ) == 1
+    with pytest.raises(TransitionRuleHold) as exc:
+        delta_f(origin, missing, ())
+    assert exc.value.code == "HOLD_TRANSITION_RULE_MISSING"
+    with pytest.raises(ValueError):
+        transition("r-float", "A", "C", 1.5, "EAST")
+    boolean_cost_rule = transition("r-bool", "A", "C", True, "EAST")
+    with pytest.raises(TransitionRuleHold) as exc:
+        delta_f(origin, target, (boolean_cost_rule,))
+    assert exc.value.code == "HOLD_TRANSITION_RULE_MISSING"
+
+
+def test_t24_direction_comes_from_topology_not_time_sign():
+    origin = packet("A", event_time=50, logical_time=5)
+    past = packet("B", event_time=40, logical_time=4)
+    future = packet("C", event_time=60, logical_time=6)
+    same_time_north = packet("D", event_time=70, logical_time=7)
+    same_time_south = packet("E", event_time=70, logical_time=7)
+    rules = (
+        transition("r-past", "A", "B", 1, "OUTBOUND"),
+        transition("r-future", "A", "C", 1, "OUTBOUND"),
+        transition("r-north", "A", "D", 1, "NORTH"),
+        transition("r-south", "A", "E", 1, "SOUTH"),
+    )
+    config = slot_config(past, future, same_time_north, same_time_south)
+    logical_time_config = DirectSlotConfig(0, 100, 100, {})
+    assert tau_f(past.logical_time, logical_time_config) - tau_f(
+        origin.logical_time, logical_time_config
+    ) < 0
+    assert tau_f(future.logical_time, logical_time_config) - tau_f(
+        origin.logical_time, logical_time_config
+    ) > 0
+    assert phi_f(origin, past, rules, config).direction_path == ("OUTBOUND",)
+    assert phi_f(origin, future, rules, config).direction_path == ("OUTBOUND",)
+    assert tau_f(same_time_north.logical_time, logical_time_config) == tau_f(
+        same_time_south.logical_time, logical_time_config
+    )
+    assert phi_f(origin, same_time_north, rules, config).direction_path == ("NORTH",)
+    assert phi_f(origin, same_time_south, rules, config).direction_path == ("SOUTH",)
+
+
+def test_t25_breakpoint_reachability_verdict_v1():
+    origin = packet("A", breakpoint_segment_ref="segment:alpha")
+    same_segment = packet("B", logical_time=2, breakpoint_segment_ref="segment:alpha")
+    cross_segment = packet("C", logical_time=2, breakpoint_segment_ref="segment:beta")
+    same_rule = transition("r-same", "A", "B", 2, "EAST")
+    cross_rule = transition("r-cross", "A", "C", 1, "WEST")
+
+    allowed = evaluate_breakpoint_reachability(origin, same_segment, same_rule)
+    assert allowed.verdict == allowed.reason_code == ALLOW_REACHABLE
+    assert allowed.origin_segment_ref == "segment:alpha"
+    assert allowed.candidate_segment_ref == "segment:alpha"
+    assert allowed.breakpoint_policy_ref == "breakpoint-policy:v1"
+
+    denied = evaluate_breakpoint_reachability(origin, cross_segment, cross_rule)
+    assert denied.verdict == denied.reason_code == DENY_BREAKPOINT_CROSSED
+    assert denied.origin_segment_ref == "segment:alpha"
+    assert denied.candidate_segment_ref == "segment:beta"
+    with pytest.raises(TransitionRuleHold) as exc:
+        delta_f(origin, cross_segment, (cross_rule,))
+    assert exc.value.code == DENY_BREAKPOINT_CROSSED
+
+    exception_policy = replace(cross_rule, breakpoint_policy_ref="policy:allow-cross")
+    assert evaluate_breakpoint_reachability(
+        origin, cross_segment, exception_policy
+    ).verdict == DENY_BREAKPOINT_CROSSED
+
+
+def test_t26_breakpoint_missing_evidence_and_legacy_construction_hold():
+    origin = packet("A", breakpoint_segment_ref="segment:alpha")
+    candidate = packet("B", logical_time=2, breakpoint_segment_ref="segment:alpha")
+    rule = transition("r01", "A", "B", 2, "EAST")
+
+    missing_origin = replace(origin, breakpoint_segment_ref=None)
+    missing_candidate = replace(candidate, breakpoint_segment_ref=None)
+    missing_policy = replace(rule, breakpoint_policy_ref=None)
+    for verdict in (
+        evaluate_breakpoint_reachability(missing_origin, candidate, rule),
+        evaluate_breakpoint_reachability(origin, missing_candidate, rule),
+        evaluate_breakpoint_reachability(origin, candidate, missing_policy),
+    ):
+        assert verdict.verdict == HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE
+        assert verdict.reason_code == HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE
+
+    packet_kwargs = {
+        item.name: getattr(origin, item.name)
+        for item in fields(StatePacket8D)
+        if item.name != "breakpoint_segment_ref"
+    }
+    rule_kwargs = {
+        item.name: getattr(rule, item.name)
+        for item in fields(NativeTransitionRule)
+        if item.name != "breakpoint_policy_ref"
+    }
+    legacy_origin = StatePacket8D(**packet_kwargs)
+    legacy_rule = NativeTransitionRule(**rule_kwargs)
+    assert legacy_origin.breakpoint_segment_ref is None
+    assert legacy_rule.breakpoint_policy_ref is None
+    with pytest.raises(TransitionRuleHold) as exc:
+        delta_f(legacy_origin, candidate, (legacy_rule,))
+    assert exc.value.code == HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE
+    with pytest.raises(TransitionRuleHold) as exc:
+        delta_f(origin, candidate, (missing_policy,))
+    assert exc.value.code == HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE
+
+
+def test_t27_breakpoint_filter_selects_farther_reachable_candidate():
+    origin = packet("A", logical_time=10, breakpoint_segment_ref="segment:alpha")
+    blocked = packet("B", logical_time=11, breakpoint_segment_ref="segment:beta")
+    reachable = packet("C", logical_time=20, breakpoint_segment_ref="segment:alpha")
+    rules = (
+        transition("r-blocked", "A", "B", 1, "WEST"),
+        transition("r-reachable", "A", "C", 5, "EAST"),
+    )
+    logical_time_config = DirectSlotConfig(0, 100, 100, {})
+    origin_slot = tau_f(origin.logical_time, logical_time_config)
+    assert time_axis_absolute_distance(
+        tau_f(blocked.logical_time, logical_time_config), origin_slot
+    ) < time_axis_absolute_distance(
+        tau_f(reachable.logical_time, logical_time_config), origin_slot
+    )
+
+    shells = enumerate_shells(origin, (blocked, reachable), rules)
+    assert tuple(shell.radius for shell in shells) == (5,)
+    assert shells[0].candidate_state_roots == (reachable.state_root,)
+    assert blocked.state_root not in shells[0].candidate_state_roots
+    with pytest.raises(TransitionRuleHold) as exc:
+        enumerate_shells(origin, (blocked,), rules)
+    assert exc.value.code == DENY_BREAKPOINT_CROSSED
+
+    validated_roots = []
+
+    def validate(value):
+        validated_roots.append(value.state_root)
+        return value
+
+    receipt = evidence_closure_stop(
+        origin,
+        (blocked, reachable),
+        rules,
+        authoritative_parent_state_root=origin.parent_state_root,
+        total_field_validate=validate,
+        query_budget=10,
+    )
+    assert receipt.state == "UNIQUE_EVIDENCE_CLOSED_FIXED_POINT"
+    assert receipt.shell == 5
+    assert receipt.candidate_state_root == reachable.state_root
+    assert validated_roots == [reachable.state_root]
+
+
+def test_t28_breakpoint_hold_is_fail_closed_before_shell_assignment():
+    origin = packet("A", breakpoint_segment_ref="segment:alpha")
+    incomplete = packet("B", logical_time=2, breakpoint_segment_ref=None)
+    reachable = packet("C", logical_time=3, breakpoint_segment_ref="segment:alpha")
+    rules = (
+        transition("r-incomplete", "A", "B", 1, "WEST"),
+        transition("r-reachable", "A", "C", 5, "EAST"),
+    )
+    with pytest.raises(TransitionRuleHold) as exc:
+        enumerate_shells(origin, (incomplete, reachable), rules)
+    assert exc.value.code == HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE
+    receipt = evidence_closure_stop(
+        origin,
+        (incomplete, reachable),
+        rules,
+        authoritative_parent_state_root=origin.parent_state_root,
+        total_field_validate=lambda value: value,
+        query_budget=10,
+    )
+    assert receipt.state == HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE
+    assert receipt.candidate_state_root is None
+
+
+def test_t29_nonbreakpoint_failures_keep_their_own_reason_codes():
+    origin = packet("A")
+    target = packet("B", logical_time=2)
+    negative_rule = replace(transition("r-negative", "A", "B", 1, "WEST"), polarity=-1)
+    with pytest.raises(TransitionRuleHold) as exc:
+        delta_f(origin, target, (negative_rule,))
+    assert exc.value.code == "HOLD_TRANSITION_RULE_MISSING"
+    assert exc.value.code not in {
+        DENY_BREAKPOINT_CROSSED,
+        HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE,
+    }
+
+
+def test_t30_float_values_cannot_be_primary_adi_or_breakpoint_inputs():
+    base = packet("A")
+    with pytest.raises(ValueError):
+        tau_f(1.5, DirectSlotConfig(0, 100, 10, {}))
+    floating_dimensions = replace(base, dimensions=(1.5, 2, 3, 4, 5, 6, 7, 8))
+    assert validate_8d(floating_dimensions).reason == "BLOCK_NON_INTEGER_8D_STATE"
+    floating_slot_config = slot_config(base, value_by_code={"A": 1.5})
+    with pytest.raises(ValueError):
+        direct_slot_f(base, floating_slot_config)
+    floating_segment = replace(base, breakpoint_segment_ref=1.5)
+    verdict = evaluate_breakpoint_reachability(
+        floating_segment,
+        packet("B", logical_time=2),
+        transition("r01", "A", "B", 1, "EAST"),
+    )
+    assert verdict.verdict == HOLD_BREAKPOINT_EVIDENCE_INCOMPLETE
