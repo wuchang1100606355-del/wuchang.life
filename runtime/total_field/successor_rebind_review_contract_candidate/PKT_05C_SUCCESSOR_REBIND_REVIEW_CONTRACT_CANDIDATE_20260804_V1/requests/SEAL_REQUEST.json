@@ -1,0 +1,29 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-SEAL-REQUEST/1.0",
+  "packet_type": "TOTAL_FIELD_SUCCESSOR_REBIND_SEAL_REQUEST",
+  "request_id": "PKT_05C_SUCCESSOR_REBIND_SEAL_REQUEST_CANDIDATE_20260804_V1",
+  "run_id": "PKT_05C_SUCCESSOR_REBIND_CANDIDATE_20260804_V1",
+  "state": "REQUEST_ONLY",
+  "review_request_ref": "runtime/total_field/successor_rebind_review_contract_candidate/PKT_05C_SUCCESSOR_REBIND_REVIEW_CONTRACT_CANDIDATE_20260804_V1/requests/TOTAL_FIELD_SUCCESSOR_REBIND_REVIEW_REQUEST.json",
+  "review_request_sha256": "bb9635e9a2fc7b27a49be6ce5588c88300ae44b1be4d70f34cb8183f6661f47b",
+  "source_manifest_ref": "runtime/total_field/successor_integration_candidate_binding/PKT_05C_SUCCESSOR_REBIND_CANDIDATE_20260804_V1/SHA256_MANIFEST.json",
+  "sha256_manifest_sha256": "036cd4f26677e21e0d0d08f7dbdcb5dcdaddaf0ed830dee17573902af70a570b",
+  "authority_pointer_ref": "runtime/total_field/successor_rebind_review_contract_candidate/PKT_05C_SUCCESSOR_REBIND_REVIEW_CONTRACT_CANDIDATE_20260804_V1/requests/AUTHORITY_BINDING_REQUEST.json",
+  "authority_pointer_sha256": "8142d04f0dbfb5770211c50e8902b2681308b7513ae88ef70f414a7bae6dd8be",
+  "founder_authorization_ref": "runtime/total_field/successor_rebind_review_contract_candidate/PKT_05C_SUCCESSOR_REBIND_REVIEW_CONTRACT_CANDIDATE_20260804_V1/authorizations/FOUNDER_CONTRACT_BUILD_AUTHORIZATION_RECORD.json",
+  "founder_authorization_sha256": "10590b482adf81792129878efc908605c0da7d71fd0f46a0494d29dfea67cf31",
+  "nonce": "nonce:sha256:3cfd40f8589787006b932d969cddd1c69eba78838daa61893cce36b67607208a",
+  "created_at": "2026-08-03T18:03:45Z",
+  "expires_at": "2026-08-03T18:33:45Z",
+  "replay_guard": {
+    "single_use": true,
+    "domain": "taiji01:total-field:successor-rebind:v1",
+    "ledger_ref": "runtime/total_field/successor_rebind_review_contract_candidate/PKT_05C_SUCCESSOR_REBIND_REVIEW_CONTRACT_CANDIDATE_20260804_V1/requests/AUTHORITY_BINDING_REQUEST.json#replay_ledger_state",
+    "on_replay": "HOLD_SUCCESSOR_REBIND_REVIEW"
+  },
+  "formal_decision_ref": null,
+  "formal_receipt_ref": null,
+  "formal_seal": false,
+  "seal_created": false,
+  "core_landing": "HOLD_PENDING_SEPARATE_AUTHORIZATION"
+}

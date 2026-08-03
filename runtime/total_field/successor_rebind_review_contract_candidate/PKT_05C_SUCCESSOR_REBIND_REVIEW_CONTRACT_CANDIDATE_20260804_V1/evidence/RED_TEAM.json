@@ -1,0 +1,24 @@
+{
+  "schema_version": "W7TP-SUCCESSOR-REBIND-CONTRACT-RED-TEAM/1.0",
+  "packet_type": "SUCCESSOR_REBIND_CONTRACT_RED_TEAM",
+  "run_id": "PKT_05C_SUCCESSOR_REBIND_REVIEW_CONTRACT_CANDIDATE_20260804_V1",
+  "state": "PASS",
+  "test_environment_ref": "evidence/DEPENDENCY_ENVIRONMENT.json",
+  "fixed_vectors": {
+    "approved_test_vector": "PASS",
+    "rejected_request": "PASS",
+    "expired_request": "PASS",
+    "nonce_replay": "PASS",
+    "null_manifest_sha256": "PASS",
+    "wrong_authority": "PASS",
+    "hash_drift": "PASS",
+    "untracked_formal_input": "PASS"
+  },
+  "targeted_tests": "8 passed in 0.28s",
+  "existing_48_of_48_rerun": false,
+  "existing_61_of_61_rerun": false,
+  "formal_decision_created": false,
+  "formal_receipt_created": false,
+  "formal_seal_created": false,
+  "active_pointer_created": false
+}
