@@ -72,6 +72,293 @@
     "verification_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^evidence_ref:[A-Za-z0-9._:-]+$"}}
   },
   "$defs": {
-    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "hashRef": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*_ref:sha256:[0-9a-f]{64}$"
+    },
+    "scopeRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^scope_ref:sha256:[0-9a-f]{64}$"
+      }
+    },
+    "effectClass": {
+      "enum": [
+        "E0_ANSWER",
+        "E1_READ",
+        "E2_CANDIDATE",
+        "E3_SANDBOX",
+        "E4_REVERSIBLE_WRITE",
+        "E5_HIGH_IMPACT"
+      ]
+    },
+    "seatLease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lease_ref",
+        "seat_ref",
+        "seat_class",
+        "role_ref",
+        "identity_root_ref",
+        "root_generation",
+        "revocation_epoch",
+        "issued_at_epoch",
+        "expires_at_epoch",
+        "state"
+      ],
+      "properties": {
+        "lease_ref": {"$ref": "#/$defs/hashRef"},
+        "seat_ref": {"$ref": "#/$defs/hashRef"},
+        "seat_class": {"enum": ["MEMBER", "FOUNDER_DEVELOPER"]},
+        "role_ref": {"$ref": "#/$defs/hashRef"},
+        "identity_root_ref": {"$ref": "#/$defs/hashRef"},
+        "root_generation": {"type": "integer", "minimum": 1},
+        "revocation_epoch": {"type": "integer", "minimum": 0},
+        "issued_at_epoch": {"type": "integer", "minimum": 0},
+        "expires_at_epoch": {"type": "integer", "minimum": 1},
+        "state": {"const": "ACTIVE_CANDIDATE"}
+      }
+    },
+    "roleSeatSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_ref",
+        "snapshot_sha256",
+        "role_refs",
+        "seat_leases"
+      ],
+      "properties": {
+        "snapshot_ref": {"$ref": "#/$defs/hashRef"},
+        "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "role_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/hashRef"}
+        },
+        "seat_leases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/seatLease"}
+        }
+      }
+    },
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_ref",
+        "identity_root_ref",
+        "root_packet_ref",
+        "root_generation",
+        "revocation_epoch",
+        "issued_at_epoch",
+        "expires_at_epoch",
+        "ttl_seconds",
+        "scope_refs",
+        "effect_class",
+        "device_ref",
+        "channel_ref",
+        "nonce_ref",
+        "nonce_binding_sha256",
+        "role_seat_snapshot"
+      ],
+      "properties": {
+        "session_ref": {"$ref": "#/$defs/hashRef"},
+        "identity_root_ref": {"$ref": "#/$defs/hashRef"},
+        "root_packet_ref": {"$ref": "#/$defs/hashRef"},
+        "root_generation": {"type": "integer", "minimum": 1},
+        "revocation_epoch": {"type": "integer", "minimum": 0},
+        "issued_at_epoch": {"type": "integer", "minimum": 0},
+        "expires_at_epoch": {"type": "integer", "minimum": 1},
+        "ttl_seconds": {"type": "integer", "minimum": 1, "maximum": 3600},
+        "scope_refs": {"$ref": "#/$defs/scopeRefs"},
+        "effect_class": {"$ref": "#/$defs/effectClass"},
+        "device_ref": {
+          "anyOf": [{"$ref": "#/$defs/hashRef"}, {"type": "null"}]
+        },
+        "channel_ref": {
+          "anyOf": [{"$ref": "#/$defs/hashRef"}, {"type": "null"}]
+        },
+        "nonce_ref": {"$ref": "#/$defs/hashRef"},
+        "nonce_binding_sha256": {"$ref": "#/$defs/sha256"},
+        "role_seat_snapshot": {"$ref": "#/$defs/roleSeatSnapshot"}
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "device_ref": {"$ref": "#/$defs/hashRef"}
+          }
+        },
+        {
+          "properties": {
+            "channel_ref": {"$ref": "#/$defs/hashRef"}
+          }
+        }
+      ]
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scene_ref",
+        "identity_root_ref",
+        "root_generation",
+        "revocation_epoch",
+        "session_ref",
+        "scope_refs",
+        "effect_class"
+      ],
+      "properties": {
+        "scene_ref": {"$ref": "#/$defs/hashRef"},
+        "identity_root_ref": {"$ref": "#/$defs/hashRef"},
+        "root_generation": {"type": "integer", "minimum": 1},
+        "revocation_epoch": {"type": "integer", "minimum": 0},
+        "session_ref": {"$ref": "#/$defs/hashRef"},
+        "scope_refs": {"$ref": "#/$defs/scopeRefs"},
+        "effect_class": {"$ref": "#/$defs/effectClass"}
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action_hash",
+        "purpose_ref",
+        "scope_refs",
+        "effect_class"
+      ],
+      "properties": {
+        "action_hash": {"$ref": "#/$defs/sha256"},
+        "purpose_ref": {"$ref": "#/$defs/hashRef"},
+        "scope_refs": {"$ref": "#/$defs/scopeRefs"},
+        "effect_class": {"$ref": "#/$defs/effectClass"}
+      }
+    },
+    "memberConsentReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_ref",
+        "receipt_state",
+        "authority",
+        "action_hash",
+        "root_generation",
+        "session_ref",
+        "scene_ref",
+        "scope_refs",
+        "effect_class"
+      ],
+      "properties": {
+        "receipt_ref": {"$ref": "#/$defs/hashRef"},
+        "receipt_state": {"const": "CONSENT"},
+        "authority": {"const": "member"},
+        "action_hash": {"$ref": "#/$defs/sha256"},
+        "root_generation": {"type": "integer", "minimum": 1},
+        "session_ref": {"$ref": "#/$defs/hashRef"},
+        "scene_ref": {"$ref": "#/$defs/hashRef"},
+        "scope_refs": {"$ref": "#/$defs/scopeRefs"},
+        "effect_class": {"$ref": "#/$defs/effectClass"}
+      }
+    },
+    "totalFieldReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_ref",
+        "receipt_state",
+        "authority",
+        "action_hash",
+        "root_generation",
+        "session_ref",
+        "scene_ref",
+        "scope_refs",
+        "effect_class"
+      ],
+      "properties": {
+        "receipt_ref": {"$ref": "#/$defs/hashRef"},
+        "receipt_state": {"const": "PASS"},
+        "authority": {"const": "total_field_verifier"},
+        "action_hash": {"$ref": "#/$defs/sha256"},
+        "root_generation": {"type": "integer", "minimum": 1},
+        "session_ref": {"$ref": "#/$defs/hashRef"},
+        "scene_ref": {"$ref": "#/$defs/hashRef"},
+        "scope_refs": {"$ref": "#/$defs/scopeRefs"},
+        "effect_class": {"$ref": "#/$defs/effectClass"}
+      }
+    },
+    "memberActionRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "request_mode",
+        "p1_identity_candidate",
+        "member_ref",
+        "xiaoj_agent_ref",
+        "identity_root_ref",
+        "root_packet_ref",
+        "root_generation",
+        "revocation_epoch",
+        "session",
+        "scene",
+        "action",
+        "member_consent_receipt",
+        "total_field_receipt",
+        "provider_context",
+        "verification_refs"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "w7tp.member-session-dual-receipt-9107.v1"
+        },
+        "request_mode": {"const": "ACTION_REQUEST"},
+        "p1_identity_candidate": {"type": "object", "minProperties": 1},
+        "member_ref": {"$ref": "#/$defs/hashRef"},
+        "xiaoj_agent_ref": {"$ref": "#/$defs/hashRef"},
+        "identity_root_ref": {"$ref": "#/$defs/hashRef"},
+        "root_packet_ref": {"$ref": "#/$defs/hashRef"},
+        "root_generation": {"type": "integer", "minimum": 1},
+        "revocation_epoch": {"type": "integer", "minimum": 0},
+        "session": {"$ref": "#/$defs/session"},
+        "scene": {"$ref": "#/$defs/scene"},
+        "action": {"$ref": "#/$defs/action"},
+        "member_consent_receipt": {
+          "$ref": "#/$defs/memberConsentReceipt"
+        },
+        "total_field_receipt": {"$ref": "#/$defs/totalFieldReceipt"},
+        "provider_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider_count",
+            "provider_refs",
+            "candidate_authority"
+          ],
+          "properties": {
+            "provider_count": {"type": "integer", "minimum": 1, "maximum": 2},
+            "provider_refs": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/hashRef"}
+            },
+            "candidate_authority": {"const": "none"}
+          }
+        },
+        "verification_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/hashRef"}
+        }
+      }
+    }
   }
 }
