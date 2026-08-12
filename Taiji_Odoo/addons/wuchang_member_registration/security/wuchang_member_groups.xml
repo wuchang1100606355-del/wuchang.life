@@ -5,6 +5,12 @@
     <field name="sequence">80</field>
   </record>
 
+  <record id="group_wuchang_member_subject" model="res.groups">
+    <field name="name">Wuchang Member Subject</field>
+    <field name="category_id" ref="module_category_wuchang_member_governance"/>
+    <field name="comment">A member can read and append only their own sovereign authority records.</field>
+  </record>
+
   <record id="group_wuchang_member_staff" model="res.groups">
     <field name="name">Wuchang Member Staff</field>
     <field name="category_id" ref="module_category_wuchang_member_governance"/>
@@ -23,5 +29,82 @@
     <field name="category_id" ref="module_category_wuchang_member_governance"/>
     <field name="implied_ids" eval="[(4, ref('group_wuchang_member_manager'))]"/>
     <field name="comment">Governance administrator access. Deletion remains disabled; use dead-letter states instead.</field>
+  </record>
+
+  <record id="rule_wuchang_member_registration_subject_own" model="ir.rule">
+    <field name="name">Member registration: subject owns record</field>
+    <field name="model_id" ref="model_wuchang_member_registration"/>
+    <field name="domain_force">[('create_uid', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('group_wuchang_member_subject'))]"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="False"/>
+    <field name="perm_unlink" eval="False"/>
+  </record>
+
+  <record id="rule_wuchang_member_external_auth_subject_own" model="ir.rule">
+    <field name="name">External binding: subject owns record</field>
+    <field name="model_id" ref="model_wuchang_member_external_auth"/>
+    <field name="domain_force">[('member_user_id', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('group_wuchang_member_subject'))]"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="False"/>
+    <field name="perm_unlink" eval="False"/>
+  </record>
+
+  <record id="rule_wuchang_member_consent_ledger_subject_own" model="ir.rule">
+    <field name="name">Consent ledger: subject owns record</field>
+    <field name="model_id" ref="model_wuchang_member_consent_ledger"/>
+    <field name="domain_force">[('member_user_id', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('group_wuchang_member_subject'))]"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_unlink" eval="False"/>
+  </record>
+
+  <record id="rule_wuchang_member_sovereign_root_ledger_subject_own" model="ir.rule">
+    <field name="name">Root ledger: subject owns record</field>
+    <field name="model_id" ref="model_wuchang_member_sovereign_root_ledger"/>
+    <field name="domain_force">[('member_user_id', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('group_wuchang_member_subject'))]"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_unlink" eval="False"/>
+  </record>
+
+  <record id="rule_wuchang_member_sovereign_revocation_ledger_subject_own" model="ir.rule">
+    <field name="name">Revocation ledger: subject owns record</field>
+    <field name="model_id" ref="model_wuchang_member_sovereign_revocation_ledger"/>
+    <field name="domain_force">[('member_user_id', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('group_wuchang_member_subject'))]"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_unlink" eval="False"/>
+  </record>
+
+  <record id="rule_wuchang_member_sovereign_recovery_ledger_subject_own" model="ir.rule">
+    <field name="name">Recovery ledger: subject owns record</field>
+    <field name="model_id" ref="model_wuchang_member_sovereign_recovery_ledger"/>
+    <field name="domain_force">[('member_user_id', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('group_wuchang_member_subject'))]"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_unlink" eval="False"/>
+  </record>
+
+  <record id="rule_wuchang_member_sovereign_invalidation_candidate_subject_own" model="ir.rule">
+    <field name="name">Invalidation candidate: subject owns record</field>
+    <field name="model_id" ref="model_wuchang_member_sovereign_invalidation_candidate"/>
+    <field name="domain_force">[('member_user_id', '=', user.id)]</field>
+    <field name="groups" eval="[(4, ref('group_wuchang_member_subject'))]"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_unlink" eval="False"/>
   </record>
 </odoo>

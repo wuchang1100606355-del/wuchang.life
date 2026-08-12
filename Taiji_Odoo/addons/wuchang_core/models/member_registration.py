@@ -2,9 +2,15 @@
 from odoo import api, fields, models
 
 
-class WuchangMemberRegistration(models.TransientModel):
-    _name = "wuchang.member.registration"
-    _description = "Wuchang Member Registration 8D Packet Gate"
+class RetiredWuchangMemberRegistrationReference:
+    """Non-model reference retained for migration review only.
+
+    The sole Odoo model owner is the persistent
+    wuchang_member_registration.wuchang.member.registration model.
+    """
+
+    legacy_model_name = "wuchang.member.registration"
+    legacy_state = "RETIRED_NOT_REGISTERED"
 
     name = fields.Char(string="Registration Ref", default="Wuchang 8D Registration")
     state = fields.Selection(
