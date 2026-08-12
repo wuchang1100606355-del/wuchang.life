@@ -1,0 +1,1051 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_member_sovereign_derived_packets_v1.schema.json",
+  "title": "W7TP Member Sovereign Derived Packets v1 Candidate",
+  "$comment": "P0 source-contract candidate for short-lived session, scene, consent, revocation, recovery, and role-seat packets. It grants no runtime authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "lifecycle",
+    "derived_packet_ref",
+    "identity_root_ref",
+    "root_packet_ref",
+    "subject_binding_ref",
+    "root_generation",
+    "revocation_epoch",
+    "member_display_hash",
+    "terms_version",
+    "issued_at",
+    "expires_at",
+    "nonce_ref",
+    "replay_domain_ref",
+    "atomic_nonce_consumption_required",
+    "action_binding",
+    "payload",
+    "authority_model",
+    "candidate_only",
+    "runtime_enabled",
+    "formal_execution_authority",
+    "authority_granted",
+    "root_packet_accepted_as_action_credential",
+    "member_plaintext_included",
+    "credential_material_included",
+    "generative_transmission",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-MEMBER-SOVEREIGN-DERIVED-PACKETS/1.0"
+    },
+    "packet_type": {
+      "enum": [
+        "MEMBER_SESSION",
+        "MEMBER_SCENE",
+        "MEMBER_CONSENT",
+        "MEMBER_REVOCATION",
+        "MEMBER_RECOVERY",
+        "MEMBER_ROLE_SEAT_LEASE"
+      ]
+    },
+    "lifecycle": {
+      "const": "CANDIDATE"
+    },
+    "derived_packet_ref": {
+      "type": "string",
+      "pattern": "^member_derived_packet_ref:sha256:[0-9a-f]{64}$"
+    },
+    "identity_root_ref": {
+      "type": "string",
+      "pattern": "^member_identity_root_ref:sha256:[0-9a-f]{64}$"
+    },
+    "root_packet_ref": {
+      "type": "string",
+      "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+    },
+    "subject_binding_ref": {
+      "type": "string",
+      "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+    },
+    "root_generation": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "revocation_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "member_display_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "terms_version": {
+      "$ref": "#/$defs/version"
+    },
+    "issued_at": {
+      "$ref": "#/$defs/zulu_datetime"
+    },
+    "expires_at": {
+      "$ref": "#/$defs/zulu_datetime"
+    },
+    "nonce_ref": {
+      "type": "string",
+      "pattern": "^nonce_ref:sha256:[0-9a-f]{64}$"
+    },
+    "replay_domain_ref": {
+      "type": "string",
+      "pattern": "^replay_domain_ref:sha256:[0-9a-f]{64}$"
+    },
+    "atomic_nonce_consumption_required": {
+      "const": true
+    },
+    "action_binding": {
+      "$ref": "#/$defs/action_binding"
+    },
+    "payload": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/session_payload"
+        },
+        {
+          "$ref": "#/$defs/scene_payload"
+        },
+        {
+          "$ref": "#/$defs/consent_payload"
+        },
+        {
+          "$ref": "#/$defs/revocation_payload"
+        },
+        {
+          "$ref": "#/$defs/recovery_payload"
+        },
+        {
+          "$ref": "#/$defs/role_seat_payload"
+        }
+      ]
+    },
+    "authority_model": {
+      "$ref": "#/$defs/authority_model"
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "runtime_enabled": {
+      "const": false
+    },
+    "formal_execution_authority": {
+      "const": false
+    },
+    "authority_granted": {
+      "const": false
+    },
+    "root_packet_accepted_as_action_credential": {
+      "const": false
+    },
+    "member_plaintext_included": {
+      "const": false
+    },
+    "credential_material_included": {
+      "const": false
+    },
+    "generative_transmission": {
+      "$ref": "#/$defs/generative_transmission"
+    },
+    "integrity": {
+      "$ref": "#/$defs/integrity"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "MEMBER_SESSION"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/session_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "MEMBER_SCENE"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/scene_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "MEMBER_CONSENT"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/consent_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "MEMBER_REVOCATION"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/revocation_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "MEMBER_RECOVERY"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/recovery_payload"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "MEMBER_ROLE_SEAT_LEASE"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/role_seat_payload"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "zulu_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "nullable_session_ref": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        }
+      ]
+    },
+    "nullable_scene_ref": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+        }
+      ]
+    },
+    "scope_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^scope_ref:sha256:[0-9a-f]{64}$"
+      }
+    },
+    "purpose_ref": {
+      "type": "string",
+      "pattern": "^purpose_ref:sha256:[0-9a-f]{64}$"
+    },
+    "effect_class": {
+      "enum": [
+        "E0_ANSWER",
+        "E1_READ",
+        "E2_CANDIDATE",
+        "E3_SANDBOX",
+        "E4_REVERSIBLE_WRITE",
+        "E5_HIGH_IMPACT"
+      ]
+    },
+    "action_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "identity_root_ref",
+        "root_packet_ref",
+        "subject_binding_ref",
+        "root_generation",
+        "revocation_epoch",
+        "session_ref",
+        "scene_ref",
+        "action_ref",
+        "action_code",
+        "action_class",
+        "target_ref",
+        "parameters_sha256",
+        "purpose_ref",
+        "scope_refs",
+        "resource_refs",
+        "effect_class",
+        "member_display_hash",
+        "terms_version",
+        "amount_currency_hash_scope",
+        "amount_currency_hash",
+        "action_hash_algorithm",
+        "action_hash"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "W7TP-MEMBER-ACTION-HASH-BASIS/1.0"
+        },
+        "identity_root_ref": {
+          "type": "string",
+          "pattern": "^member_identity_root_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_packet_ref": {
+          "type": "string",
+          "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "subject_binding_ref": {
+          "type": "string",
+          "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_generation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revocation_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "session_ref": {
+          "$ref": "#/$defs/nullable_session_ref"
+        },
+        "scene_ref": {
+          "$ref": "#/$defs/nullable_scene_ref"
+        },
+        "action_ref": {
+          "type": "string",
+          "pattern": "^action_ref:sha256:[0-9a-f]{64}$"
+        },
+        "action_code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{1,127}$"
+        },
+        "action_class": {
+          "enum": [
+            "NON_TRANSACTION",
+            "TRANSACTION"
+          ]
+        },
+        "target_ref": {
+          "type": "string",
+          "pattern": "^target_ref:sha256:[0-9a-f]{64}$"
+        },
+        "parameters_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "purpose_ref": {
+          "$ref": "#/$defs/purpose_ref"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "resource_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^resource_ref:sha256:[0-9a-f]{64}$"
+          }
+        },
+        "effect_class": {
+          "$ref": "#/$defs/effect_class"
+        },
+        "member_display_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "terms_version": {
+          "$ref": "#/$defs/version"
+        },
+        "amount_currency_hash_scope": {
+          "const": "CANONICAL_AMOUNT_MINOR_CURRENCY_TARGET_REF/1.0"
+        },
+        "amount_currency_hash": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "action_hash_algorithm": {
+          "const": "SHA256_CANONICAL_MEMBER_ACTION_BASIS/1.0"
+        },
+        "action_hash": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action_class": {
+                "const": "TRANSACTION"
+              }
+            },
+            "required": [
+              "action_class"
+            ]
+          },
+          "then": {
+            "properties": {
+              "amount_currency_hash": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "amount_currency_hash": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "session_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_ref",
+        "subject_binding_ref",
+        "audience_ref",
+        "scope_refs",
+        "role_refs",
+        "role_table_snapshot_ref",
+        "role_table_snapshot_hash",
+        "verified_channel_binding_ref",
+        "device_binding_ref",
+        "session_proof_ref",
+        "nonce_consumption_required",
+        "root_packet_as_credential_accepted",
+        "issuing_process_authority"
+      ],
+      "properties": {
+        "session_ref": {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        },
+        "subject_binding_ref": {
+          "type": "string",
+          "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+        },
+        "audience_ref": {
+          "type": "string",
+          "pattern": "^audience_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "role_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^role_ref:sha256:[0-9a-f]{64}$"
+          }
+        },
+        "role_table_snapshot_ref": {
+          "type": "string",
+          "pattern": "^role_table_snapshot_ref:sha256:[0-9a-f]{64}$"
+        },
+        "role_table_snapshot_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "verified_channel_binding_ref": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^verified_channel_binding_ref:sha256:[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "device_binding_ref": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^device_binding_ref:sha256:[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "session_proof_ref": {
+          "type": "string",
+          "pattern": "^session_proof_ref:sha256:[0-9a-f]{64}$"
+        },
+        "nonce_consumption_required": {
+          "const": true
+        },
+        "root_packet_as_credential_accepted": {
+          "const": false
+        },
+        "issuing_process_authority": {
+          "const": "odoo"
+        }
+      }
+    },
+    "scene_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_ref",
+        "scene_ref",
+        "scene_type_ref",
+        "purpose_ref",
+        "scope_refs",
+        "capability_refs",
+        "action_hash",
+        "parent_session_required",
+        "issuing_process_authority"
+      ],
+      "properties": {
+        "session_ref": {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scene_ref": {
+          "type": "string",
+          "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scene_type_ref": {
+          "type": "string",
+          "pattern": "^scene_type_ref:sha256:[0-9a-f]{64}$"
+        },
+        "purpose_ref": {
+          "$ref": "#/$defs/purpose_ref"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "capability_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^capability_ref:sha256:[0-9a-f]{64}$"
+          }
+        },
+        "action_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "parent_session_required": {
+          "const": true
+        },
+        "issuing_process_authority": {
+          "const": "odoo"
+        }
+      }
+    },
+    "consent_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consent_ref",
+        "session_ref",
+        "scene_ref",
+        "decision",
+        "purpose_ref",
+        "scope_refs",
+        "action_hash",
+        "amount_currency_hash",
+        "member_proof_ref",
+        "supersedes_consent_ref",
+        "independent_from_total_field_receipt",
+        "decision_authority"
+      ],
+      "properties": {
+        "consent_ref": {
+          "type": "string",
+          "pattern": "^member_consent_ref:sha256:[0-9a-f]{64}$"
+        },
+        "session_ref": {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scene_ref": {
+          "type": "string",
+          "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+        },
+        "decision": {
+          "enum": [
+            "CONSENT",
+            "DENY",
+            "WITHDRAW",
+            "HOLD"
+          ]
+        },
+        "purpose_ref": {
+          "$ref": "#/$defs/purpose_ref"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "action_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "amount_currency_hash": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "member_proof_ref": {
+          "type": "string",
+          "pattern": "^member_proof_ref:sha256:[0-9a-f]{64}$"
+        },
+        "supersedes_consent_ref": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^member_consent_ref:sha256:[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "independent_from_total_field_receipt": {
+          "const": true
+        },
+        "decision_authority": {
+          "const": "member"
+        }
+      }
+    },
+    "revocation_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revocation_ref",
+        "target_type",
+        "target_ref",
+        "previous_revocation_epoch",
+        "new_revocation_epoch",
+        "effective_at",
+        "reason_code",
+        "member_or_recovery_proof_ref",
+        "monotonic_epoch_required",
+        "invalidates_descendants",
+        "revocation_authority"
+      ],
+      "properties": {
+        "revocation_ref": {
+          "type": "string",
+          "pattern": "^member_revocation_ref:sha256:[0-9a-f]{64}$"
+        },
+        "target_type": {
+          "enum": [
+            "ROOT",
+            "SESSION",
+            "SCENE",
+            "CONSENT",
+            "ROLE_SEAT"
+          ]
+        },
+        "target_ref": {
+          "type": "string",
+          "pattern": "^[a-z_]+_ref:sha256:[0-9a-f]{64}$"
+        },
+        "previous_revocation_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_revocation_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "effective_at": {
+          "$ref": "#/$defs/zulu_datetime"
+        },
+        "reason_code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{1,127}$"
+        },
+        "member_or_recovery_proof_ref": {
+          "type": "string",
+          "pattern": "^(member_proof_ref|recovery_proof_ref):sha256:[0-9a-f]{64}$"
+        },
+        "monotonic_epoch_required": {
+          "const": true
+        },
+        "invalidates_descendants": {
+          "const": true
+        },
+        "revocation_authority": {
+          "const": "member"
+        }
+      }
+    },
+    "recovery_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recovery_ref",
+        "previous_root_packet_ref",
+        "expected_root_generation",
+        "expected_revocation_epoch",
+        "new_root_packet_ref",
+        "new_root_generation",
+        "new_member_key_commitment",
+        "recovery_policy_ref",
+        "recovery_factor_refs",
+        "recovery_quorum_ref",
+        "challenge_ref",
+        "compare_and_swap_ref",
+        "unique_completion_ref",
+        "cooldown_until",
+        "recovery_state",
+        "old_root_revoked_on_success",
+        "descendants_invalidated_on_success",
+        "atomic_compare_and_swap_required",
+        "recovery_authority"
+      ],
+      "properties": {
+        "recovery_ref": {
+          "type": "string",
+          "pattern": "^member_recovery_ref:sha256:[0-9a-f]{64}$"
+        },
+        "previous_root_packet_ref": {
+          "type": "string",
+          "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "expected_root_generation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expected_revocation_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_root_packet_ref": {
+          "type": "string",
+          "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "new_root_generation": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "new_member_key_commitment": {
+          "type": "string",
+          "pattern": "^member_key_commitment:sha256:[0-9a-f]{64}$"
+        },
+        "recovery_policy_ref": {
+          "type": "string",
+          "pattern": "^recovery_policy_ref:sha256:[0-9a-f]{64}$"
+        },
+        "recovery_factor_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^recovery_factor_ref:sha256:[0-9a-f]{64}$"
+          }
+        },
+        "recovery_quorum_ref": {
+          "type": "string",
+          "pattern": "^recovery_quorum_ref:sha256:[0-9a-f]{64}$"
+        },
+        "challenge_ref": {
+          "type": "string",
+          "pattern": "^recovery_challenge_ref:sha256:[0-9a-f]{64}$"
+        },
+        "compare_and_swap_ref": {
+          "type": "string",
+          "pattern": "^recovery_cas_ref:sha256:[0-9a-f]{64}$"
+        },
+        "unique_completion_ref": {
+          "type": "string",
+          "pattern": "^recovery_completion_ref:sha256:[0-9a-f]{64}$"
+        },
+        "cooldown_until": {
+          "$ref": "#/$defs/zulu_datetime"
+        },
+        "recovery_state": {
+          "enum": [
+            "PENDING_CANDIDATE",
+            "COMPLETED_CANDIDATE",
+            "REJECTED_CANDIDATE"
+          ]
+        },
+        "old_root_revoked_on_success": {
+          "const": true
+        },
+        "descendants_invalidated_on_success": {
+          "const": true
+        },
+        "atomic_compare_and_swap_required": {
+          "const": true
+        },
+        "recovery_authority": {
+          "const": "member"
+        }
+      }
+    },
+    "role_seat_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role_seat_ref",
+        "session_ref",
+        "scene_ref",
+        "organization_ref",
+        "role_ref",
+        "seat_ref",
+        "scope_refs",
+        "role_table_snapshot_ref",
+        "role_table_snapshot_hash",
+        "lease_ref",
+        "seat_lease_cas_ref",
+        "transferable",
+        "subdelegation_allowed",
+        "founder_role_requires_explicit_member_root_binding",
+        "atomic_seat_lease_required",
+        "issuing_process_authority"
+      ],
+      "properties": {
+        "role_seat_ref": {
+          "type": "string",
+          "pattern": "^member_role_seat_ref:sha256:[0-9a-f]{64}$"
+        },
+        "session_ref": {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scene_ref": {
+          "type": "string",
+          "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+        },
+        "organization_ref": {
+          "type": "string",
+          "pattern": "^organization_ref:sha256:[0-9a-f]{64}$"
+        },
+        "role_ref": {
+          "type": "string",
+          "pattern": "^role_ref:sha256:[0-9a-f]{64}$"
+        },
+        "seat_ref": {
+          "type": "string",
+          "pattern": "^seat_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "role_table_snapshot_ref": {
+          "type": "string",
+          "pattern": "^role_table_snapshot_ref:sha256:[0-9a-f]{64}$"
+        },
+        "role_table_snapshot_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "lease_ref": {
+          "type": "string",
+          "pattern": "^seat_lease_ref:sha256:[0-9a-f]{64}$"
+        },
+        "seat_lease_cas_ref": {
+          "type": "string",
+          "pattern": "^seat_lease_cas_ref:sha256:[0-9a-f]{64}$"
+        },
+        "transferable": {
+          "const": false
+        },
+        "subdelegation_allowed": {
+          "const": false
+        },
+        "founder_role_requires_explicit_member_root_binding": {
+          "const": true
+        },
+        "atomic_seat_lease_required": {
+          "const": true
+        },
+        "issuing_process_authority": {
+          "const": "odoo"
+        }
+      }
+    },
+    "authority_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_consent_authority",
+        "safety_and_landing_authority",
+        "process_authority",
+        "candidate_authority"
+      ],
+      "properties": {
+        "member_consent_authority": {
+          "const": "member"
+        },
+        "safety_and_landing_authority": {
+          "const": "total_field_verifier"
+        },
+        "process_authority": {
+          "const": "odoo"
+        },
+        "candidate_authority": {
+          "const": "none"
+        }
+      }
+    },
+    "generative_transmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "state_packet_ref",
+        "reconstruction_condition_ref",
+        "equivalent_state_ref",
+        "total_field_verify_ref",
+        "ordinary_file_movement",
+        "cloud_sync",
+        "backup",
+        "download_decryption"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "W7TP_8D_INTENT_FIELD_PACKET"
+        },
+        "state_packet_ref": {
+          "type": "string",
+          "pattern": "^state_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "reconstruction_condition_ref": {
+          "type": "string",
+          "pattern": "^reconstruction_condition_ref:sha256:[0-9a-f]{64}$"
+        },
+        "equivalent_state_ref": {
+          "type": "string",
+          "pattern": "^equivalent_state_ref:sha256:[0-9a-f]{64}$"
+        },
+        "total_field_verify_ref": {
+          "type": "string",
+          "pattern": "^total_field_verify_ref:sha256:[0-9a-f]{64}$"
+        },
+        "ordinary_file_movement": {
+          "const": false
+        },
+        "cloud_sync": {
+          "const": false
+        },
+        "backup": {
+          "const": false
+        },
+        "download_decryption": {
+          "const": false
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization",
+        "hash_algorithm",
+        "hash_scope",
+        "content_sha256"
+      ],
+      "properties": {
+        "canonicalization": {
+          "const": "UTF8_NFC_SORTED_KEYS_NO_WHITESPACE_NO_FLOATS"
+        },
+        "hash_algorithm": {
+          "const": "SHA-256"
+        },
+        "hash_scope": {
+          "const": "ALL_PACKET_FIELDS_EXCEPT_INTEGRITY_CONTENT_SHA256"
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}
