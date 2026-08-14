@@ -1,0 +1,369 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_total_field_genesis_authority_bootstrap_candidate_v1.schema.json",
+  "title": "W7TP Total Field Genesis Authority Bootstrap Candidate v1",
+  "$comment": "Candidate-only two-stage genesis proposal and seal. Stage C is an uncalled injected atomic activation capability. This schema never grants active authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "stage",
+    "state",
+    "candidate_only",
+    "authority_granted",
+    "active_authority_created",
+    "activation_called",
+    "receiver_call_count",
+    "second_authority_created",
+    "second_receiver_created",
+    "database_written",
+    "deployment_performed",
+    "service_restarted",
+    "private_key_read",
+    "member_plaintext_included",
+    "existing_d8_pass_required",
+    "total_field_decision",
+    "authority_record_path",
+    "authority_id",
+    "authority_version",
+    "authority_scope",
+    "issued_at",
+    "expires_at",
+    "nonce",
+    "verifier_ref",
+    "registry_coordinate",
+    "founder_person_packet_ref",
+    "founder_identity_root_ref",
+    "founder_role_seat_ref",
+    "registered_device_ref",
+    "founder_capability_assignment_ref",
+    "access_profile_ref",
+    "evidence_bundle_sha256",
+    "evidence_refs",
+    "proposal_sha256",
+    "red_team_pre_definition"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "W7TP_TOTAL_FIELD_GENESIS_AUTHORITY_BOOTSTRAP_CANDIDATE_V1"
+    },
+    "stage": {
+      "enum": [
+        "A_GENESIS_PROPOSAL",
+        "B_SEALED_GENESIS_CANDIDATE"
+      ]
+    },
+    "state": {
+      "enum": [
+        "GENESIS_PROPOSAL_CANDIDATE",
+        "SEALED_GENESIS_AUTHORITY_CANDIDATE"
+      ]
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "authority_granted": {
+      "const": false
+    },
+    "active_authority_created": {
+      "const": false
+    },
+    "activation_called": {
+      "const": false
+    },
+    "receiver_call_count": {
+      "const": 0
+    },
+    "second_authority_created": {
+      "const": false
+    },
+    "second_receiver_created": {
+      "const": false
+    },
+    "database_written": {
+      "const": false
+    },
+    "deployment_performed": {
+      "const": false
+    },
+    "service_restarted": {
+      "const": false
+    },
+    "private_key_read": {
+      "const": false
+    },
+    "member_plaintext_included": {
+      "const": false
+    },
+    "existing_d8_pass_required": {
+      "const": false
+    },
+    "total_field_decision": {
+      "const": "NOT_RUN"
+    },
+    "authority_record_path": {
+      "const": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
+    },
+    "authority_id": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "authority_version": {
+      "const": 1
+    },
+    "authority_scope": {
+      "const": [
+        "E5_FORMAL_READ_ONLY_REVIEW",
+        "RECEIVE_CANDIDATE"
+      ]
+    },
+    "issued_at": {
+      "$ref": "#/$defs/zulu_datetime"
+    },
+    "expires_at": {
+      "$ref": "#/$defs/zulu_datetime"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^nonce_ref:sha256:[0-9a-f]{64}$"
+    },
+    "verifier_ref": {
+      "type": "string",
+      "pattern": "^verifier_ref:[A-Za-z0-9_.:-]{8,256}$"
+    },
+    "registry_coordinate": {
+      "const": "odoo18://wuchang_member_registration/wuchang.member.registration/sovereign-authority-ledger-candidate-v1"
+    },
+    "founder_person_packet_ref": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "founder_identity_root_ref": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "founder_role_seat_ref": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "registered_device_ref": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "founder_capability_assignment_ref": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "access_profile_ref": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "evidence_bundle_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "evidence_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "founder_identity_binding_receipt_ref",
+        "8d_adi_binding_evidence_ref",
+        "current_root_registry_cardinality_evidence_ref"
+      ],
+      "properties": {
+        "founder_identity_binding_receipt_ref": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "8d_adi_binding_evidence_ref": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "current_root_registry_cardinality_evidence_ref": {
+          "$ref": "#/$defs/hash_ref"
+        }
+      }
+    },
+    "proposal_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "proposal_ref": {
+      "type": "string",
+      "pattern": "^genesis_proposal_ref:sha256:[0-9a-f]{64}$"
+    },
+    "founder_signature_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "owner_seal_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "revocation_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "nonce_consumed": {
+      "const": true
+    },
+    "sealed_candidate_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "activation_capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "target",
+        "single_use",
+        "atomic_create_if_absent",
+        "persistent_nonce_required",
+        "permanent_self_stop_after_success",
+        "call_forbidden_in_candidate_build",
+        "implementation"
+      ],
+      "properties": {
+        "capability_id": {
+          "const": "W7TP_TOTAL_FIELD_GENESIS_ATOMIC_ACTIVATION_V1"
+        },
+        "target": {
+          "const": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
+        },
+        "single_use": {
+          "const": true
+        },
+        "atomic_create_if_absent": {
+          "const": true
+        },
+        "persistent_nonce_required": {
+          "const": true
+        },
+        "permanent_self_stop_after_success": {
+          "const": true
+        },
+        "call_forbidden_in_candidate_build": {
+          "const": true
+        },
+        "implementation": {
+          "const": "INJECTED_SINGLE_USE_ATOMIC_AUTHORITY_STORE"
+        }
+      }
+    },
+    "red_team_pre_definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "active_authority_preexistence",
+        "activation_in_this_run",
+        "database_write",
+        "external_signature_verifier",
+        "persistent_nonce",
+        "private_key_access",
+        "second_authority",
+        "second_receiver",
+        "second_registry_coordinate"
+      ],
+      "properties": {
+        "active_authority_preexistence": {
+          "const": "PERMANENT_BLOCK"
+        },
+        "activation_in_this_run": {
+          "const": "FORBIDDEN"
+        },
+        "database_write": {
+          "const": "FORBIDDEN"
+        },
+        "external_signature_verifier": {
+          "const": "REQUIRED"
+        },
+        "persistent_nonce": {
+          "const": "REQUIRED"
+        },
+        "private_key_access": {
+          "const": "FORBIDDEN"
+        },
+        "second_authority": {
+          "const": "FORBIDDEN"
+        },
+        "second_receiver": {
+          "const": "FORBIDDEN"
+        },
+        "second_registry_coordinate": {
+          "const": "FORBIDDEN"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "stage": {
+          "const": "A_GENESIS_PROPOSAL"
+        },
+        "state": {
+          "const": "GENESIS_PROPOSAL_CANDIDATE"
+        }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "proposal_ref"
+            ]
+          },
+          {
+            "required": [
+              "founder_signature_sha256"
+            ]
+          },
+          {
+            "required": [
+              "owner_seal_sha256"
+            ]
+          },
+          {
+            "required": [
+              "revocation_sha256"
+            ]
+          },
+          {
+            "required": [
+              "nonce_consumed"
+            ]
+          },
+          {
+            "required": [
+              "sealed_candidate_sha256"
+            ]
+          },
+          {
+            "required": [
+              "activation_capability"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "properties": {
+        "stage": {
+          "const": "B_SEALED_GENESIS_CANDIDATE"
+        },
+        "state": {
+          "const": "SEALED_GENESIS_AUTHORITY_CANDIDATE"
+        }
+      },
+      "required": [
+        "proposal_ref",
+        "founder_signature_sha256",
+        "owner_seal_sha256",
+        "revocation_sha256",
+        "nonce_consumed",
+        "sealed_candidate_sha256",
+        "activation_capability"
+      ]
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "hash_ref": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_.-]*:sha256:[0-9a-f]{64}$"
+    },
+    "zulu_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    }
+  }
+}
