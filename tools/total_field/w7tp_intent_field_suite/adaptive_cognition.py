@@ -41,7 +41,7 @@ ALLOWED_ADAPTIVE_KEYS = frozenset(
 )
 DEFAULT_POLICY = {
     "version": "1.1.0",
-    "source_refs": ["repo:docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"],
+    "source_refs": ["repo:docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md"],
     "legacy_source_refs": ["repo:docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"],
     "migration_mode": "APPEND_ONLY_SUCCESSOR",
     "question_order": "CONTRACT_ORDER",

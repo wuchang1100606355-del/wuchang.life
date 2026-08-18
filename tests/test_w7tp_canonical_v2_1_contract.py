@@ -20,7 +20,7 @@ SCHEMA_PATH = (
 )
 CANONICAL_PATH = (
     ROOT
-    / "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"
+    / "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md"
 )
 PARENT_PATH = (
     ROOT
@@ -49,11 +49,11 @@ def make_packet() -> dict:
         "canonical_binding": {
             "canonical_path": (
                 "docs/total_field/"
-                "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"
+                "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md"
             ),
             "canonical_sha256": (
-                "e960d14254df083ffed711e2c44b76fc"
-                "2075541716881bc3d1034cb26cffbaba"
+                "383aba5b7a9f5d0e948d9b43b83e7dd"
+                "6b6ec9c27f025fb9069e83810f0ae870d"
             ),
             "parent_version": "2.0",
             "parent_path": (
@@ -235,8 +235,8 @@ def test_canonical_raw_hashes_are_bound() -> None:
         "0d361b9352a71094ad5450a6022d5d0"
     )
     assert hashlib.sha256(CANONICAL_PATH.read_bytes()).hexdigest() == (
-        "e960d14254df083ffed711e2c44b76fc"
-        "2075541716881bc3d1034cb26cffbaba"
+        "383aba5b7a9f5d0e948d9b43b83e7dd"
+        "6b6ec9c27f025fb9069e83810f0ae870d"
     )
 
 

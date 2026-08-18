@@ -16,7 +16,7 @@ from tools.total_field.w7tp_field_application_runtime import (
 )
 
 
-EXPECTED_SCENARIOS = {"ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC"}
+EXPECTED_SCENARIOS = {"ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC", "AUDIO"}
 
 
 class W7TPFieldApplicationRuntimeTest(unittest.TestCase):

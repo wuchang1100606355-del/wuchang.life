@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 
 from tools import d8_guard_eval
@@ -17,12 +19,28 @@ from tools.total_field.w7tp_intent_field_suite.edge_queue import (
 
 ACTIVE_PATH = (
     "docs/total_field/"
-    "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"
+    "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md"
 )
 LEGACY_PATH = (
     "docs/total_field/"
     "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"
 )
+ROOT = Path(__file__).resolve().parents[1]
+ACTIVE_POINTER_PATH = (
+    ROOT / "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"
+)
+
+
+def test_active_pointer_hashes_bind_all_declared_sources() -> None:
+    pointer = json.loads(ACTIVE_POINTER_PATH.read_text(encoding="utf-8"))
+    for path_key, hash_key in (
+        ("canonical_path", "canonical_sha256"),
+        ("machine_schema_path", "machine_schema_sha256"),
+        ("promotion_receipt_path", "promotion_receipt_sha256"),
+    ):
+        target = ROOT / pointer[path_key]
+        assert target.is_file()
+        assert hashlib.sha256(target.read_bytes()).hexdigest() == pointer[hash_key]
 
 
 def test_d8_guard_binds_active_v2_1_and_preserves_legacy_parent() -> None:

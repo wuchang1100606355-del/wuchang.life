@@ -9,10 +9,14 @@ from .models import DirectSlotConfig, NativeAdiIndex, NativeTransitionRule, Stat
 from .projection import metric_signature_f, positive_negative_boundaries, project_8d_state
 
 SOURCE_REF = "FOUNDER_NATIVE_ADI_RULE_DECLARATION_V1.md#complete-native-adi"
+LEGACY_TRANSITION_PATH_DISTANCE_FIELD = "absolute_distance"
 
 
 def tau_f(event_time: int, config: DirectSlotConfig) -> int:
     """Historical absolute-time slot projection retained as a distinct layer."""
+    integer_inputs = (event_time, config.t_min, config.t_max, config.slot_count)
+    if any(not isinstance(value, int) or isinstance(value, bool) for value in integer_inputs):
+        raise ValueError("DIRECT_SLOT_INPUTS_MUST_BE_INTEGERS")
     if config.t_max <= config.t_min or config.slot_count <= 0:
         raise ValueError("INVALID_DIRECT_SLOT_RANGE")
     numerator = (event_time - config.t_min) * config.slot_count
@@ -21,6 +25,14 @@ def tau_f(event_time: int, config: DirectSlotConfig) -> int:
     if result < 0:
         raise ValueError("DIRECT_SLOT_UINT_UNDERFLOW")
     return result
+
+
+def time_axis_absolute_distance(state_slot: int, current_slot: int) -> int:
+    """Return the non-negative slot distance from an explicit current slot."""
+    for name, value in (("STATE_SLOT", state_slot), ("CURRENT_SLOT", current_slot)):
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            raise ValueError(f"{name}_MUST_BE_NON_NEGATIVE_INTEGER")
+    return abs(state_slot - current_slot)
 
 
 def direct_slot_f(packet: StatePacket8D, config: DirectSlotConfig) -> int:
@@ -60,6 +72,7 @@ def phi_f(
 ) -> NativeAdiIndex:
     """Build the complete ordered Founder-native causal state index."""
     path = resolve_canonical_path(origin, target, transition_rules)
+    transition_path_distance = path.total_cost
     direct_slot = direct_slot_f(target, slot_config)
     absolute_slot = tau_f(target.event_time, slot_config)
     metric = metric_signature_f(target).as_tuple()
@@ -71,7 +84,8 @@ def phi_f(
         ("state_8d", project_8d_state(target)),
         ("boundary_state", positive_negative_boundaries(target)),
         ("metric_signature", metric),
-        ("absolute_distance", path.total_cost),
+        # Preserve the serialized field name while freezing its path-distance role.
+        (LEGACY_TRANSITION_PATH_DISTANCE_FIELD, transition_path_distance),
         ("direction_path", path.direction_codes),
         ("parent_state_root", target.parent_state_root),
         ("evidence_root", target.evidence_root),
@@ -84,6 +98,6 @@ def phi_f(
         ordered_fields,
         native_adi_ref,
         direct_slot,
-        path.total_cost,
+        transition_path_distance,
         path.direction_codes,
     )

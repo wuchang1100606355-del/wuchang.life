@@ -7,9 +7,9 @@
   "properties": {
     "packet_id": {"type": "string", "minLength": 8},
     "schema_version": {"const": "W7TP-SCENARIO-TRANSLATION/1.0"},
-    "selected_container": {"enum": ["ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC"]},
-    "packet_type": {"enum": ["ASSOCIATION_SERVICE_PACKET", "PROPERTY_SERVICE_PACKET", "CAFE_POS_SERVICE_PACKET", "HOUSEHOLD_SERVICE_PACKET", "GENERIC_INTENT_PACKET"]},
-    "capability_ref": {"enum": ["CAP_ASSOCIATION_SERVICE_V1", "CAP_PROPERTY_SERVICE_V1", "CAP_CAFE_POS_SERVICE_V1", "CAP_HOUSEHOLD_SERVICE_V1", "CAP_GENERIC_INTENT_V1"]},
+    "selected_container": {"enum": ["ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC", "AUDIO"]},
+    "packet_type": {"enum": ["ASSOCIATION_SERVICE_PACKET", "PROPERTY_SERVICE_PACKET", "CAFE_POS_SERVICE_PACKET", "HOUSEHOLD_SERVICE_PACKET", "GENERIC_INTENT_PACKET", "AUDIO_SERVICE_PACKET"]},
+    "capability_ref": {"enum": ["CAP_ASSOCIATION_SERVICE_V1", "CAP_PROPERTY_SERVICE_V1", "CAP_CAFE_POS_SERVICE_V1", "CAP_HOUSEHOLD_SERVICE_V1", "CAP_GENERIC_INTENT_V1", "CAP_MULTIDIMENSIONAL_THREE_DIRECTION_ADI_UNIFIED_AUDIO_CAPABILITY_V1"]},
     "destination_field": {"type": "string", "minLength": 3},
     "d1_intent": {"type": "object", "required": ["service_result_ref"], "properties": {"service_result_ref": {"type": "string"}}, "additionalProperties": false},
     "d2_state": {"type": "object", "required": ["identity_ref", "role_refs", "consent_state", "workflow_state_ref"], "properties": {"identity_ref": {"type": "string"}, "role_refs": {"type": "array", "items": {"type": "string"}}, "consent_state": {"type": "string"}, "workflow_state_ref": {"type": "string"}}, "additionalProperties": false},

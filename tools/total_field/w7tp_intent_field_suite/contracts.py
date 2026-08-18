@@ -1,4 +1,4 @@
-"""Non-authoritative field-completion contracts for the five shared profiles."""
+"""Non-authoritative field-completion contracts for the six shared profiles."""
 
 from __future__ import annotations
 
@@ -28,6 +28,39 @@ def _q(field: str, profile: str, prompt: str, reason: str, *options: str) -> Que
 
 
 CONTRACTS = {
+    "AUDIO": ProfileContract(
+        "AUDIO",
+        "AUDIO_SERVICE_PACKET",
+        (
+            _q(
+                "requested_result",
+                "AUDIO",
+                "希望達成的音訊方向是？",
+                "只允許本機可驗證的音訊效果等價。",
+                "語音播放",
+                "聲音輸入",
+                "跨設備音訊轉送",
+            ),
+            _q(
+                "audio_device_path",
+                "AUDIO",
+                "要使用哪一個音訊節點？",
+                "以節點可驗證設備名單為準。",
+                "AUDIO_INPUT",
+                "AUDIO_OUTPUT",
+                "AUDIO_RELAY",
+            ),
+            _q(
+                "target_effect_mode",
+                "AUDIO",
+                "你要驗證的效果等價條件是？",
+                "只記錄節點可驗證的等價結果。",
+                "可聽播放完成",
+                "可轉發完成",
+                "無法確認可聽效果",
+            ),
+        ),
+    ),
     "ASSOCIATION": ProfileContract(
         "ASSOCIATION",
         "ASSOCIATION_SERVICE_PACKET",

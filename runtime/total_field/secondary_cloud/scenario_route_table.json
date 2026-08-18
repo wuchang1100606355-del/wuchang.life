@@ -40,6 +40,13 @@
       "capability_ref": "CAP_GENERIC_INTENT_V1",
       "destination_field": "GENERIC_SERVICE_FIELD",
       "service_contract_ref": "contract:generic.local"
+    },
+    "AUDIO": {
+      "scenario_refs": ["scenario:AUDIO"],
+      "packet_type": "AUDIO_SERVICE_PACKET",
+      "capability_ref": "CAP_MULTIDIMENSIONAL_THREE_DIRECTION_ADI_UNIFIED_AUDIO_CAPABILITY_V1",
+      "destination_field": "AUDIO_SERVICE_FIELD",
+      "service_contract_ref": "contract:audio.local"
     }
   }
 }

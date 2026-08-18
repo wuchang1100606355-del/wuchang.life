@@ -16,8 +16,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Mapping, MutableSet, Sequence, cast
 
-from jsonschema import Draft202012Validator, RefResolver
+from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError
+from referencing import Registry, Resource
 
 from tools.eightd_gte_parser_candidate import (
     EightDGTEParserCandidate,
@@ -171,8 +172,10 @@ def _profile_validator(
     if not isinstance(base_id, str) or not base_id:
         raise TotalFieldGatewayError("GATEWAY_BASE_SCHEMA_ID_MISSING")
     resolvable_base = _absolutize_local_refs(base, base_id)
-    resolver = RefResolver.from_schema(profile, store={base_id: resolvable_base})
-    return Draft202012Validator(profile, resolver=resolver)
+    registry = Registry().with_resource(
+        base_id, Resource.from_contents(resolvable_base)
+    )
+    return Draft202012Validator(profile, registry=registry)
 
 
 def _error_path(error: ValidationError) -> str:

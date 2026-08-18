@@ -238,6 +238,10 @@ def test_all_frontend_containers_route_to_fixed_contracts():
         "CAFE_POS": ("CAFE_POS_SERVICE_PACKET", "CAP_CAFE_POS_SERVICE_V1"),
         "HOUSEHOLD": ("HOUSEHOLD_SERVICE_PACKET", "CAP_HOUSEHOLD_SERVICE_V1"),
         "GENERIC": ("GENERIC_INTENT_PACKET", "CAP_GENERIC_INTENT_V1"),
+        "AUDIO": (
+            "AUDIO_SERVICE_PACKET",
+            "CAP_MULTIDIMENSIONAL_THREE_DIRECTION_ADI_UNIFIED_AUDIO_CAPABILITY_V1",
+        ),
     }
     for container, (packet_type, capability_ref) in expected.items():
         result = ramp.resolve_scenario_container(f"scenario:{container}", route_table)
@@ -245,6 +249,140 @@ def test_all_frontend_containers_route_to_fixed_contracts():
         assert result["selected_container"] == container
         assert result["packet_type"] == packet_type
         assert result["capability_ref"] == capability_ref
+
+
+def test_ambiguous_scenario_refs_must_hold_audio_route_resolution():
+    route_table = json.loads(
+        (ROOT / "runtime/total_field/secondary_cloud/scenario_route_table.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    route_table["routes"]["GENERIC"]["scenario_refs"] = ["scenario:AUDIO"]
+    result = ramp.resolve_scenario_container("scenario:AUDIO", route_table)
+    assert result["state"] == "HOLD"
+    assert "SCENARIO_ROUTE_NOT_UNIQUE" in result["errors"]
+
+
+def test_unsupported_container_in_route_mapping_is_held():
+    route_table = json.loads(
+        (ROOT / "runtime/total_field/secondary_cloud/scenario_route_table.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    route_table["routes"]["AUDIO_LEGACY"] = route_table["routes"].pop("AUDIO")
+    route_table["routes"]["AUDIO_LEGACY"]["scenario_refs"] = ["scenario:AUDIO"]
+    result = ramp.resolve_scenario_container("scenario:AUDIO", route_table)
+    assert result["state"] == "HOLD"
+    assert "UNSUPPORTED_CONTAINER" in result["errors"]
+
+
+def test_secondary_cloud_action_request_requires_member_action_candidate_in_payload():
+    request = {
+        "request_mode": "ACTION_REQUEST",
+        "provider_outputs": [],
+    }
+    result = ramp.gate_secondary_cloud_action_request(
+        request,
+        current_epoch=1,
+        nonce_consumer=lambda _value: "nonce",
+    )
+    assert result["state"] == "HOLD"
+    assert any(
+        "HOLD_MEMBER_DUAL_RECEIPT_REQUIRED" in error for error in result["errors"]
+    )
+
+
+def test_multilayer_audit_holds_on_audio_route_mismatch_with_association_translation():
+    translation = scenario_translation()
+    authority = identity_authority()
+    authority["scenario_ref"] = "scenario:AUDIO"
+    entry = member_entry()
+    entry["scenario_ref"] = "scenario:AUDIO"
+
+    final = ramp.run_multilayer_audit(
+        member_entry_packet=entry,
+        identity_authority_packet=authority,
+        scenario_translation_packet=translation,
+        capability_pull_request_packet=capability_pull(),
+        capability_packet=capability_packet(),
+        local_reconstruction_packet=ramp.reconstruct_local_state(translation, capability_packet()),
+    )
+
+    route_errors = [
+        item["evidence"] for item in final["layers"] if item["layer"] == "L3_SCENARIO_DESTINATION"
+    ][0]
+    assert final["state"] == "HOLD"
+    assert any(error.startswith("ROUTE_MISMATCH:") for error in route_errors)
+
+
+def test_multilayer_audit_holds_on_node_boundary_violation_and_ttl_mismatch():
+    translation, _, audit = full_path()
+    translation["d3_coordinate"]["node_ref"] = "taiji01-stable-ip"
+    translation["d8_envelope"]["ttl_seconds"] = 0
+    translation["d8_envelope"]["nonce"] = "short"
+    translation["d8_envelope"]["sha256"] = ramp.packet_content_sha256(translation)
+
+    reconstruction = ramp.reconstruct_local_state(
+        translation,
+        capability_packet(),
+    )
+    final = ramp.run_multilayer_audit(
+        member_entry_packet=member_entry(),
+        identity_authority_packet=identity_authority(),
+        scenario_translation_packet=translation,
+        capability_pull_request_packet=capability_pull(),
+        capability_packet=capability_packet(),
+        local_reconstruction_packet=reconstruction,
+    )
+    envelope_errors = [
+        item["evidence"] for item in final["layers"] if item["layer"] == "L8_ENVELOPE_SEAL"
+    ][0]
+    node_errors = [
+        item["evidence"] for item in final["layers"] if item["layer"] == "L7_NO_UPLINK_LOCAL_BOUNDARY"
+    ][0]
+    assert "TTL_INVALID" in envelope_errors
+    assert "NONCE_INVALID" in envelope_errors
+    assert "LOCAL_NODE_BOUNDARY_VIOLATION" in node_errors
+    assert final["state"] == "HOLD"
+
+
+def test_multilayer_audit_rejects_capability_reference_gaps_for_audio_path():
+    translation, _, _ = full_path()
+    packet = capability_packet()
+    packet["source_refs"] = []
+    packet["payload_refs"] = []
+    packet["sha256"] = ramp.packet_content_sha256(packet)
+    reconstruction = ramp.reconstruct_local_state(translation, packet)
+    final = ramp.run_multilayer_audit(
+        member_entry_packet=member_entry(),
+        identity_authority_packet=identity_authority(),
+        scenario_translation_packet=translation,
+        capability_pull_request_packet=capability_pull(),
+        capability_packet=packet,
+        local_reconstruction_packet=reconstruction,
+    )
+    evidence_errors = [
+        item["evidence"] for item in final["layers"] if item["layer"] == "L5_REFERENCE_EVIDENCE"
+    ][0]
+    assert "CAPABILITY_REFERENCES_INCOMPLETE" in evidence_errors
+    assert final["state"] == "HOLD"
+
+
+def test_secondary_cloud_action_request_blocks_browser_authority_injection_attempt():
+    request = {
+        "request_mode": "ACTION_REQUEST",
+        "provider_outputs": [{"decision": "ALLOW"}],
+        "member_action_candidate": {"scenario": "AUDIO"},
+    }
+    result = ramp.gate_secondary_cloud_action_request(
+        request,
+        current_epoch=1,
+        nonce_consumer=lambda _value: "nonce",
+    )
+    assert result["state"] == "BLOCK"
+    assert any(
+        "BLOCK_PROVIDER_AUTHORITY_INJECTION" in error for error in result["errors"]
+    )
 
 
 def test_local_reconstruction_passes_without_external_answering():

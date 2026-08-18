@@ -31,7 +31,7 @@ VERIFICATION_LOCATION = "LOCAL_OR_TOTAL_FIELD"
 PACKET_PROTOCOL = "W7TP-8D-PACKET-NATIVE/1.0"
 PULL_PROTOCOL = "W7TP-PULL-PACKET-ONLY/1.0"
 
-CONTAINERS = {"ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC"}
+CONTAINERS = {"ASSOCIATION", "PROPERTY", "CAFE_POS", "HOUSEHOLD", "GENERIC", "AUDIO"}
 MINIMAL_PULL_FIELDS = {
     "capability_id",
     "capability_ref",
@@ -287,7 +287,7 @@ def resolve_identity_authority(
 def resolve_scenario_container(
     scenario_ref: str, route_table: Mapping[str, Any] | None = None
 ) -> dict[str, Any]:
-    """Resolve one scenario reference against the fixed five-container route table."""
+    """Resolve one scenario reference against the fixed shared route table."""
 
     table = dict(route_table) if route_table is not None else _load_json(ROUTE_TABLE_PATH)
     matches = [

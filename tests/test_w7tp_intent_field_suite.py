@@ -58,6 +58,11 @@ from tools.total_field.w7tp_intent_field_suite.packet_builder import process_int
 
 
 COMPLETE_INTENTS = {
+    "AUDIO": {
+        "requested_result": "音訊候選",
+        "audio_device_path": "AUDIO_OUTPUT",
+        "target_effect_mode": "可聽播放完成",
+    },
     "ASSOCIATION": {
         "requested_result": "社區服務候選",
         "service_goal": "活動規劃",
@@ -112,7 +117,7 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
             "receiver_context": context,
         }
 
-    def test_a01_a02_five_profiles_share_runtime_and_correct_packet_types(self) -> None:
+    def test_a01_a02_six_profiles_share_runtime_and_correct_packet_types(self) -> None:
         route_table = json.loads(SCENARIO_ROUTE_TABLE_PATH.read_text(encoding="utf-8"))
         self.assertEqual(set(route_table["routes"]), set(COMPLETE_INTENTS))
         for profile, intent in COMPLETE_INTENTS.items():
@@ -157,6 +162,26 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
         )
         self.assertEqual(second["state"], "NEEDS_USER_GUIDED_COMPLETION")
         self.assertEqual(second["question"]["question_id"], "generic.evidence_refs")
+        self.assertNotEqual(first["state_id"], second["state_id"])
+        self.assertEqual(first["intent_content_sha256"], canonical_sha256(intent))
+
+    def test_a04_audio_guided_completion_is_one_question_and_preserves_state_chain(self) -> None:
+        intent = {
+            "requested_result": COMPLETE_INTENTS["AUDIO"]["requested_result"],
+        }
+        first = process_intent("AUDIO", intent)
+        self.assertEqual(first["state"], "NEEDS_USER_GUIDED_COMPLETION")
+        self.assertEqual(first["question"]["question_id"], "audio.audio_device_path")
+        self.assertEqual(len(first["question"]["options"]), 3)
+        second = process_intent(
+            "AUDIO",
+            intent,
+            state_id=first["state_id"],
+            question_id=first["question"]["question_id"],
+            answer="AUDIO_OUTPUT",
+        )
+        self.assertEqual(second["state"], "NEEDS_USER_GUIDED_COMPLETION")
+        self.assertEqual(second["question"]["question_id"], "audio.target_effect_mode")
         self.assertNotEqual(first["state_id"], second["state_id"])
         self.assertEqual(first["intent_content_sha256"], canonical_sha256(intent))
 
@@ -226,6 +251,13 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
                     process_intent("GENERIC", {key: "ALLOW"})
                 self.assertEqual(caught.exception.reason_code, "AUTHORITY_ESCALATION_BLOCKED")
 
+    def test_a06_audio_authority_escalation_blocks(self) -> None:
+        for key in ("d8_decision", "founder_command_ref", "formal_execution_authority"):
+            with self.subTest(key=key):
+                with self.assertRaises(FieldApplicationError) as caught:
+                    process_intent("AUDIO", {**COMPLETE_INTENTS["AUDIO"], key: "ALLOW"})
+                self.assertEqual(caught.exception.reason_code, "AUTHORITY_ESCALATION_BLOCKED")
+
     def test_a07_determinism_unicode_and_execution_metadata_exclusion(self) -> None:
         first_intent = dict(COMPLETE_INTENTS["GENERIC"], requested_result="Cafe\u0301 候選")
         second_intent = dict(COMPLETE_INTENTS["GENERIC"], requested_result="Café 候選")
@@ -233,6 +265,25 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
         second = process_intent("GENERIC", second_intent, execution_metadata={"observed_at": "two"})
         self.assertEqual(first["content_sha256"], second["content_sha256"])
         self.assertNotEqual(first["execution_metadata"], second["execution_metadata"])
+
+    def test_a07_audio_capability_registry_mismatch_hold(self) -> None:
+        route_table = json.loads(SCENARIO_ROUTE_TABLE_PATH.read_text(encoding="utf-8"))
+        registry = json.loads(CAPABILITY_REGISTRY_PATH.read_text(encoding="utf-8"))
+        route_table["routes"]["AUDIO"]["capability_ref"] = "MISSING_AUDIO_CAPABILITY"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            route_path = root / "route.json"
+            registry_path = root / "registry.json"
+            route_path.write_text(json.dumps(route_table), encoding="utf-8")
+            registry_path.write_text(json.dumps(registry), encoding="utf-8")
+            with self.assertRaises(FieldApplicationError) as caught:
+                process_intent(
+                    "AUDIO",
+                    COMPLETE_INTENTS["AUDIO"],
+                    route_table_path=route_path,
+                    capability_registry_path=registry_path,
+                )
+        self.assertEqual(caught.exception.reason_code, "SCENARIO_CAPABILITY_REGISTRY_MISMATCH")
 
     def test_a08_gt_semantics_are_packet_native(self) -> None:
         result = process_intent("GENERIC", COMPLETE_INTENTS["GENERIC"])
