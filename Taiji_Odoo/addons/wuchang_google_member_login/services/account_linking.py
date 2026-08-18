@@ -8,7 +8,7 @@ import re
 from datetime import datetime, timezone
 
 
-CANONICAL_CALLBACK_URL = "https://member.wuchang.life/google/member/callback"
+CANONICAL_CALLBACK_URL = "https://wuchang.life/google/member/callback"
 PUBLIC_HOME_RETURN = "https://wuchang.life/"
 LINK_STATES = {
     "PROVIDER_LINK_FOUND",

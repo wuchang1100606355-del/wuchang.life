@@ -1,10 +1,11 @@
 import json
 import os
+import re
 import secrets
 import stat
 import time
 from pathlib import Path
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 from odoo import http
@@ -34,7 +35,12 @@ GOOGLE_CLIENT_SECRET_FILE = Path("/run/secrets/google_member_client_secret")
 
 class WuchangGoogleMemberLogin(http.Controller):
     def _landing_enabled(self, surface):
-        return request.env["wuchang.community.feature.gate"].is_landing_enabled(surface)
+        gate = request.env["wuchang.community.feature.gate"]
+        if hasattr(gate, "is_landing_enabled"):
+            return gate.is_landing_enabled(surface)
+        if hasattr(gate, "is_enabled"):
+            return gate.is_enabled(f"landing.{surface}", default=True)
+        return False
 
     def _landing_hold(self, surface):
         return self._status_page(
@@ -122,7 +128,7 @@ class WuchangGoogleMemberLogin(http.Controller):
             return None
         return secret_value or None
 
-    @http.route("/google/member/login", type="http", auth="user", csrf=False)
+    @http.route("/google/member/login", type="http", auth="public", csrf=False)
     def google_member_login(self, **kw):
         if not self._landing_enabled("google_login"):
             return self._landing_hold("google_login")
@@ -143,8 +149,13 @@ class WuchangGoogleMemberLogin(http.Controller):
         group_packet_ref = kw.get("group_packet_ref")
         if group_packet_ref:
             request.session["wuchang_group_packet_ref"] = group_packet_ref
+        normalized_client_id = re.sub(
+            r"^(.+\.apps\.googleusercontent\.com)\1$",
+            r"\1",
+            (provider.client_id or "").strip(),
+        )
         params = {
-            "client_id": provider.client_id,
+            "client_id": normalized_client_id,
             "redirect_uri": self._redirect_uri(),
             "response_type": "code",
             "scope": "openid profile email",
@@ -153,8 +164,20 @@ class WuchangGoogleMemberLogin(http.Controller):
             "prompt": "select_account",
         }
         authorization_url = trusted_google_authorization_url(provider.auth_endpoint)
+        parsed_authorization = urlsplit(authorization_url)
+        if parsed_authorization.query:
+            authorization_url = urlunsplit(
+                (
+                    parsed_authorization.scheme,
+                    parsed_authorization.netloc,
+                    parsed_authorization.path,
+                    "",
+                    "",
+                )
+            )
         return request.redirect(
             f"{authorization_url}?{urlencode(params)}",
+            code=302,
             local=False,
         )
 
@@ -305,6 +328,7 @@ class WuchangGoogleMemberLogin(http.Controller):
                 "provider": "google",
                 "provider_user_ref": link_context["provider_subject_reference"],
                 "display_ref": "google_member_masked",
+                "hash_subject": authority.hash_subject("google", userinfo.get("sub")),
             }
             return request.redirect(f"/wuchang/member/register/group/{group_packet_ref}")
         return request.redirect("/google/member/welcome")

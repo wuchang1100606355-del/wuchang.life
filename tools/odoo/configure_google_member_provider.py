@@ -22,12 +22,13 @@ DEFAULT_HOST_CONFIG = ROOT / "Taiji_Odoo/config/odoo.conf"
 DEFAULT_CONTAINER = "wuchang_os_odoo_18"
 DEFAULT_CONTAINER_CONFIG = "/etc/odoo/odoo.conf"
 CALLBACK_PATH = "/google/member/callback"
-CANONICAL_CALLBACK_URL = "https://member.wuchang.life/google/member/callback"
 GOOGLE_CLIENT_SECRET_FILE_ENV = "WUCHANG_GOOGLE_CLIENT_SECRET_FILE"
 GOOGLE_CLIENT_SECRET_FILE = "/run/secrets/google_member_client_secret"
 RESULT_PREFIX = "WUCHANG_GOOGLE_PROVIDER_RESULT="
 DATABASE_PREFIX = "WUCHANG_ODOO_DATABASE_RESULT="
 APPLY_CONFIRMATION = "APPLY_EXISTING_GOOGLE_PROVIDER"
+CANONICAL_BASE_URL = "https://wuchang.life"
+CANONICAL_CALLBACK_URL = f"{CANONICAL_BASE_URL}{CALLBACK_PATH}"
 SAFE_NAME = re.compile(r"^[A-Za-z0-9_.-]+$")
 SAFE_CONTAINER_PATH = re.compile(r"^/[A-Za-z0-9_./-]+$")
 
@@ -43,6 +44,8 @@ def database_name_from_config(path: Path) -> str:
 
 
 def validate_public_base_url(value: str) -> str:
+    if "<" in (value or "") or ">" in (value or ""):
+        raise ValueError("public_base_url_placeholder_detected")
     parsed = urlsplit((value or "").strip().rstrip("/"))
     hostname = (parsed.hostname or "").lower()
     if parsed.scheme != "https" or not hostname or parsed.username or parsed.password:
@@ -216,7 +219,7 @@ provider_exists = bool(provider)
 provider_active = bool(provider and provider.enabled)
 client_id_present = bool(provider and provider.client_id)
 callback_present = redirect_uri == {CANONICAL_CALLBACK_URL!r}
-public_base_present = public_base_url == "https://member.wuchang.life"
+public_base_present = public_base_url == "https://wuchang.life"
 auth_endpoint_state = google_endpoint_state(
     provider.auth_endpoint if provider else "", "authorization"
 )
@@ -225,7 +228,7 @@ if provider:
     userinfo_endpoint = provider.data_endpoint or provider.validation_endpoint or ""
 userinfo_endpoint_state = google_endpoint_state(userinfo_endpoint, "userinfo")
 runtime_secret_file_state = secret_file_state()
-canonical_callback_state = "PRESENT" if {CANONICAL_CALLBACK_URL!r} == "https://member.wuchang.life/google/member/callback" else "INVALID_REF"
+canonical_callback_state = "PRESENT" if {CANONICAL_CALLBACK_URL!r} else "INVALID_REF"
 runtime_login_ready = all((
     provider_exists,
     provider_active,

@@ -287,6 +287,7 @@ class WuchangLineLogin(http.Controller):
                 'provider': 'line',
                 'provider_user_ref': link_context['provider_subject_reference'],
                 'display_ref': 'line_member_masked',
+                'hash_subject': authority.hash_subject('line', line_user_id),
             }
             return request.redirect('/wuchang/member/register/group/%s' % group_packet_ref)
 
