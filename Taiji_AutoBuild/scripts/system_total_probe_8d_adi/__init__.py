@@ -1,0 +1,4 @@
+from .contract import ADI_CAPABILITY_COORDINATES
+
+
+__all__ = ["ADI_CAPABILITY_COORDINATES"]
