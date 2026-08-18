@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_total_field_worktree_index_review_receipt_v1.schema.json",
+  "title": "W7TP Total Field Worktree Index Review Receipt V1",
+  "type": "object",
+  "required": [
+    "schema_version", "packet_type", "run_id", "state", "request_sha256",
+    "index_manifest_sha256", "queue_entry_sha256", "candidate_content_sha256",
+    "base_head", "native_d8_decision_reference", "native_d8_decision_sha256",
+    "single_use_nonce_sha256", "decision", "receipt_self_hash_algorithm", "receipt_self_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-TOTAL-FIELD-WORKTREE-INDEX-REVIEW-RECEIPT/1.0"},
+    "packet_type": {"const": "TOTAL_FIELD_WORKTREE_INDEX_REVIEW_RECEIPT"},
+    "run_id": {"type": "string", "minLength": 1},
+    "state": {"enum": ["FORMAL_DECISION_BOUND", "FORMAL_DECISION_HOLD", "FORMAL_DECISION_BLOCK"]},
+    "request_sha256": {"$ref": "#/$defs/sha256"},
+    "index_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "queue_entry_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate_content_sha256": {"$ref": "#/$defs/sha256"},
+    "base_head": {"$ref": "#/$defs/gitOid"},
+    "native_d8_decision_reference": {"type": "string", "minLength": 1},
+    "native_d8_decision_sha256": {"$ref": "#/$defs/sha256"},
+    "single_use_nonce_sha256": {"$ref": "#/$defs/sha256"},
+    "decision": {"enum": ["PASS", "HOLD", "BLOCK"]},
+    "receipt_self_hash_algorithm": {"const": "SHA256_CANONICAL_JSON_EXCLUDING_RECEIPT_SELF_SHA256/1.0"},
+    "receipt_self_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitOid": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"}
+  },
+  "additionalProperties": false
+}
