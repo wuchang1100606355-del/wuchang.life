@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+AUDIO_FILE="${1:?AUDIO_FILE_REQUIRED}"
+read -r SCAN_HOST RAOP_IDENTIFIER < "/home/taiji_admin/Taiji_Hub/runtime/total_field/device_registry/hom_epod/private/HOME_POD_LAN_AUDIO_NODE_OFFICE_01.selector"
+exec "/home/taiji_admin/Taiji_Hub/runtime/total_field/tools/pyatv_venv/bin/atvremote"   --storage none   --scan-hosts "$SCAN_HOST"   --scan-protocols raop   --id "$RAOP_IDENTIFIER"   "stream_file=$AUDIO_FILE"
