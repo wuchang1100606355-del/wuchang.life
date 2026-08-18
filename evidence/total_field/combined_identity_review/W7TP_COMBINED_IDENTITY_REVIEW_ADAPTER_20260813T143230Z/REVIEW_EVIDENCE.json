@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "canonical_or_pointer_write": "NO",
+    "db_write": "NO",
+    "deploy": "NO",
+    "entrypoint_independent": "PASS",
+    "image_build": "NO",
+    "manifest_and_source_files": "PASS_1_OF_1",
+    "owner_seal": "PASS",
+    "replay": "PASS",
+    "request_schema_and_self_hash": "PASS",
+    "request_ttl": "PASS",
+    "runtime_activation": "NO",
+    "self_review": "PASS_NOT_SELF_REVIEW"
+  },
+  "entrypoint_version": "w7tp-total-field-static-review-entrypoint/1.0",
+  "fixed_authority_boundary": {
+    "canonical_change": false,
+    "container_start": false,
+    "db_write": false,
+    "deploy": false,
+    "git_commit": false,
+    "git_push": false,
+    "image_build": false,
+    "image_pull": false,
+    "image_tag": false,
+    "pointer_change": false,
+    "restart": false,
+    "runtime_activation": false
+  },
+  "manifest": {
+    "files_verified": 1,
+    "sha256": "6b2c07e9d0cc1fa3f8ddbf43469fef5f1061951306ab983c9d002d9a26c28a56",
+    "verified_sources": [
+      {
+        "path": "tools/total_field/w7tp_combined_identity_review_compat_adapter_candidate.py",
+        "sha256": "596bc0cb93b1f267443b82d96f91f0a21078c2387ef2c564eb6172db4414b260",
+        "size_bytes": 15458
+      }
+    ]
+  },
+  "owner_seal": {
+    "expires_at": "2026-08-13T14:47:46Z",
+    "seal_id": "owner-seal:W7TP_COMBINED_IDENTITY_REVIEW_ADAPTER_20260813T143230Z:596bc0cb93b1f267",
+    "sha256": "438061e7fddc6f0dcb7f7ea6645e3c1240119d1f70e181e3a1c7425c668b9ce9",
+    "single_use_id": "single-use:W7TP_COMBINED_IDENTITY_REVIEW_ADAPTER_20260813T143230Z:596bc0cb93b1f267"
+  },
+  "packet_type": "REVIEW_EVIDENCE",
+  "reason_codes": [
+    "PASS_EXACT_HASH_BOUND_STATIC_IMPLEMENTATION_CANDIDATE_ONLY"
+  ],
+  "request": {
+    "purpose": "W7TP_COMBINED_IDENTITY_REVIEW_ADAPTER_CANDIDATE_ONLY",
+    "requested_decision": "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY",
+    "run_id": "W7TP_COMBINED_IDENTITY_REVIEW_ADAPTER_20260813T143230Z",
+    "sha256": "a303f389fa7c981d797c964d6cc0a5d26746dbe6b5eea63ea6a2edcdb2c07485"
+  },
+  "reviewed_at": "2026-08-13T14:32:46Z",
+  "run_id": "W7TP_COMBINED_IDENTITY_REVIEW_ADAPTER_20260813T143230Z_TOTAL_FIELD_STATIC_REVIEW",
+  "schema_version": "W7TP-TOTAL-FIELD-STATIC-REVIEW-EVIDENCE/1.0"
+}

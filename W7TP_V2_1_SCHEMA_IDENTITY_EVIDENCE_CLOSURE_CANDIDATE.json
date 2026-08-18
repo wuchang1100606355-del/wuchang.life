@@ -1,0 +1,95 @@
+{
+  "schema": "w7tp.v2_1.schema_identity_evidence_closure_candidate.v1",
+  "state": "CANDIDATE_NOT_CANONICAL",
+  "candidate_only": true,
+  "run_id": "W7TP_V2_1_SCHEMA_IDENTITY_EVIDENCE_CLOSURE_20260813T131629Z",
+  "created_at_utc": "2026-08-13T13:16:29Z",
+  "scope": "EXACT_HASH_RECOVERY_ONLY",
+  "pointer": {
+    "path": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "sha256": "3f278718bcc4b7f1bc336cd06c50e7611d1ce5989bf71f63015857367c7466d5",
+    "schema_path": "schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json",
+    "schema_sha256": "cf3df7380e70d0b4bb21635ddc6f1f097713cf94fbf8428966713c949ff1d135"
+  },
+  "schema_identities": {
+    "pointer_expected": {
+      "sha256": "cf3df7380e70d0b4bb21635ddc6f1f097713cf94fbf8428966713c949ff1d135",
+      "bytes_found": true,
+      "source_ref": "git:64656aa730c76604986cf0db7179b7b528904fec:schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json",
+      "git_blob_oid": "033f2b4d8dca9181d1ecb33ca0882cf3499a3dba",
+      "source_sha256_recheck": "cf3df7380e70d0b4bb21635ddc6f1f097713cf94fbf8428966713c949ff1d135"
+    },
+    "current_worktree": {
+      "path": "schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json",
+      "sha256": "4ac5b77d7406b4a3cf57de9481ebb4aa1d9fa5d4677099f8859482b5ec2a32f4",
+      "git_state": "MODIFIED_UNBOUND",
+      "formal_activation_binding_found": false
+    }
+  },
+  "activation_lineage": {
+    "source_commit": "64656aa730c76604986cf0db7179b7b528904fec",
+    "source_commit_pointer_ref": "git:64656aa730c76604986cf0db7179b7b528904fec:runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "source_commit_pointer_blob_oid": "7f89dc1d0c9ad5e30e4f4a0fb535467324c1545e",
+    "source_commit_pointer_sha256": "2edb0d87b95dc6290675fea38ab1a83cb429d8bcdddf9438e907bd051a16290b",
+    "activation_previous_state_ref": "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_SUCCESSOR_ACTIVATION_20260803T211241Z/ACTIVE_W7TP_CANONICAL_POINTER_PREVIOUS_STATE.json",
+    "activation_previous_state_sha256": "2edb0d87b95dc6290675fea38ab1a83cb429d8bcdddf9438e907bd051a16290b",
+    "activation_rollback_ref": "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_SUCCESSOR_ACTIVATION_20260803T211241Z/ACTIVE_W7TP_CANONICAL_POINTER_ROLLBACK.json",
+    "activation_rollback_sha256": "91ebdf066cb5fc42b32d532c04f2dd31d9a8597da55ba6bc2f44b658788a440b",
+    "activation_receipt_ref": "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_SUCCESSOR_ACTIVATION_20260803T211241Z/receipts/W7TP_CANONICAL_V2_1_SUCCESSOR_ACTIVATION_RECEIPT.json",
+    "activation_receipt_sha256": "39739b1cefcf3f7e098ee7d3e2dde73e429c8e916663d3440ee2b5ecf187b60c",
+    "activation_receipt_state": "PASS_CANONICAL_SUCCESSOR_ACTIVATED_APPEND_ONLY",
+    "pointer_schema_binding_preserved_across_activation": true,
+    "closure_state": "PASS_CANDIDATE_EXACT_BYTES_AND_POINTER_LINEAGE"
+  },
+  "current_schema_activation_binding_search": {
+    "target_sha256": "4ac5b77d7406b4a3cf57de9481ebb4aa1d9fa5d4677099f8859482b5ec2a32f4",
+    "binding_found": false,
+    "coordinates_checked": [
+      "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_SUCCESSOR_ACTIVATION_20260803T211241Z/",
+      "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_SUCCESSOR_ACTIVATION_20260803T211241Z/receipts/W7TP_CANONICAL_V2_1_SUCCESSOR_ACTIVATION_RECEIPT.json",
+      "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
+      "git-history:schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json"
+    ]
+  },
+  "evidence_gaps": [
+    "NO_FORMAL_MANIFEST_OR_TOTAL_FIELD_RECEIPT_EXPLICITLY_BINDS_CURRENT_SCHEMA_SHA256_4AC5B77D",
+    "ACTIVATION_RECEIPT_DOES_NOT_CONTAIN_AN_EXPLICIT_SCHEMA_PATH_AND_SCHEMA_SHA256_PAIR",
+    "CURRENT_WORKTREE_SCHEMA_IS_NOT_A_FORMAL_AUTHORITY_SOURCE"
+  ],
+  "recommendation": "A_POINTER_SCHEMA_IDENTITY",
+  "recommendation_authority": "CANDIDATE_ONLY",
+  "formal_manifest_or_receipt_required_fields": [
+    "schema",
+    "version",
+    "state",
+    "run_id",
+    "issued_at_utc",
+    "authority_ref",
+    "active_pointer_path",
+    "active_pointer_sha256",
+    "canonical_path",
+    "canonical_sha256",
+    "machine_schema_path",
+    "machine_schema_sha256",
+    "predecessor_schema_sha256",
+    "manifest_path",
+    "manifest_sha256",
+    "verifier_ref",
+    "verification_result",
+    "decision",
+    "final_seal_ref",
+    "side_effects"
+  ],
+  "prohibited_side_effects": {
+    "pointer_write": false,
+    "schema_write": false,
+    "receipt_write": false,
+    "canonical_promotion": false,
+    "total_field_decision": false,
+    "database_write": false,
+    "deploy": false,
+    "restart": false,
+    "router_write": false
+  }
+}

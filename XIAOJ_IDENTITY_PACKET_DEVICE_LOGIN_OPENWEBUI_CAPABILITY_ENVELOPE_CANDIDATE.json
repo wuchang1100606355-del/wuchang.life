@@ -1,0 +1,503 @@
+{
+  "schema_version": "w7tp-total-field-skill-manifest/1.0",
+  "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "skill_id": "w7tp.xiaoj.identity-packet-device-login-openwebui-envelope",
+  "display_name_zh": "小J身分封包、設備登入與 Open WebUI 能力封套候選",
+  "version": "1.0.0",
+  "language": "zh-Hant",
+  "founder_authority_ref": "authority_ref:FOUNDER_FINAL_HUMAN_AUTHORITY",
+  "identity_and_seat": {
+    "member_required": true,
+    "xiaoj_identity_required": true,
+    "allowed_roles": [
+      "role_ref:founder",
+      "role_ref:organization_operator",
+      "role_ref:member"
+    ],
+    "fixed_role_capacity_required": true,
+    "active_seat_required": true,
+    "reservation_non_executable": true,
+    "access_profile_refs": [
+      "access_profile_ref:IDENTITY_PACKET_ENTITLEMENT_ENVELOPE",
+      "access_profile_ref:EXACT_ROLE_SEAT"
+    ],
+    "cross_member_plaintext_allowed": false
+  },
+  "product_output_contract": {
+    "intended_users": [
+      "Founder",
+      "organization_operator",
+      "member"
+    ],
+    "user_need": "以同一小J及同一身分根，透過已登記設備或未登記設備的人審流程重構受限Session，並在Open WebUI只投影本次身分封包允許的技能、模型、工具、UI與資料範圍。",
+    "product_outcome": "一份不可自行生效的能力封套候選；帳號僅為驗證通道，9107以同一身分封包在伺服器端重新驗證，Open WebUI沒有身分根、Total Field或直接執行權威。",
+    "deliverables": [
+      "XIAOJ_IDENTITY_PACKET_DEVICE_LOGIN_OPENWEBUI_CAPABILITY_ENVELOPE_CANDIDATE.json"
+    ],
+    "interface_behavior": "身分封包Session進入Open WebUI後，只顯示候選能力投影；任何列舉、模型呼叫、工具呼叫、資料查詢或執行要求均送往既有9107封套重新驗證，結果以證據與人類滿意度回覆。",
+    "quality_thresholds": [
+      "PRIMARY_FAMILY_F02_IDENTITY_SEAT_CONSENT",
+      "SECONDARY_FAMILIES_F03_INTENT_PRODUCT_OUTPUT_AND_F16_PUBLIC_EXPERIENCE",
+      "CURRENT_OPERATION_EFFECT_E2",
+      "MAXIMUM_RUNTIME_EFFECT_E5_REQUIRES_SEPARATE_AUTHORIZATION",
+      "ONE_XIAOJ_ONE_IDENTITY_ROOT_ONE_TOTAL_FIELD_ONE_ADI_STATE_SPACE",
+      "COMPLETE_8D_AND_ADI_COORDINATES_REQUIRED",
+      "ACCOUNT_AUTHENTICATION_CHANNEL_ONLY",
+      "DEVICE_AUTHORITY_NONE",
+      "OPENWEBUI_AUTHORITY_NONE",
+      "SERVER_SIDE_IDENTITY_PACKET_RECHECK_REQUIRED",
+      "W7TP_SCHEMA_IDENTITY_PENDING_TOTAL_FIELD_DECISION"
+    ],
+    "acceptance_criteria": [
+      "PASS_CANDIDATE_MANIFEST_SCHEMA_VALID",
+      "PASS_CANDIDATE_RED_TEAM_PRE_DEFINITION",
+      "TRUSTED_DEVICE_AND_UNREGISTERED_DEVICE_FLOWS_DEFINED",
+      "RAW_FACE_IMAGE_AND_PIN_TRANSFER_OR_STORAGE_FORBIDDEN",
+      "OPENWEBUI_RUNTIME_EVIDENCE_REMAINS_OPEN",
+      "NO_SECOND_IDENTITY_CORE_ADI_OR_TOTAL_FIELD",
+      "NO_ACTIVATION_RUNTIME_DB_DEPLOY_RESTART_OR_CANONICAL_EFFECT"
+    ],
+    "failure_behavior": "任一身分根、Session、精確席位、設備信任、同意、意圖、ADI座標、證據或Total Field條件缺失時，縮小投影或HOLD；不得由帳號成功、設備擁有、UI可見或模型輸出補足權威。",
+    "prohibited_outputs": [
+      "RUNTIME_LOGIN_SUCCESS_CLAIM",
+      "LIVE_DEVICE_BINDING_CLAIM",
+      "FOUNDER_OR_MEMBER_AUTHORITY_SYNTHESIS",
+      "SECOND_XIAOJ_IDENTITY_CORE_ADI_OR_TOTAL_FIELD",
+      "DIRECT_OPENWEBUI_EXECUTION_OR_CANONICAL_WRITE",
+      "FORMAL_TOTAL_FIELD_DECISION_OR_PASS"
+    ],
+    "allowed_side_effects": [
+      "CREATE_THIS_SINGLE_CANDIDATE_FILE_ONLY"
+    ]
+  },
+  "classification": {
+    "primary_family": "F02",
+    "secondary_families": [
+      "F03",
+      "F16"
+    ],
+    "maximum_effect_class": "E2"
+  },
+  "information_context": {
+    "identity_derived_scope": true,
+    "required_field_domains": [
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6",
+      "D7",
+      "D8"
+    ],
+    "provenance_required": true,
+    "retrieved_content_is_instruction": false,
+    "raw_protected_context_allowed": false,
+    "protected_representation": [
+      "OPAQUE_IDENTITY_REF",
+      "OPAQUE_DEVICE_REF",
+      "OPAQUE_SESSION_REF",
+      "SHA256",
+      "RECEIPT_REF",
+      "NOT_EVIDENCED"
+    ],
+    "retention": "EVIDENCE_REFERENCES_ONLY"
+  },
+  "d1_d8_projection": {
+    "D1": {
+      "name": "INTENT",
+      "required": true,
+      "contract": "建立同一小J的身分封包、設備登入與Open WebUI候選能力封套；不得啟用或建立第二核心。"
+    },
+    "D2": {
+      "name": "STATE",
+      "required": true,
+      "contract": "CANDIDATE_NOT_CANONICAL；Open WebUI真實登入、設備綁定、Session及正式能力投影仍未證據閉合。"
+    },
+    "D3": {
+      "name": "COORDINATE",
+      "required": true,
+      "contract": "taiji01、同一小J身分根、既有9107 Total Field、Open WebUI UI adapter與受治理Executor之精確責任座標。"
+    },
+    "D4": {
+      "name": "EVIDENCE",
+      "required": true,
+      "contract": "綁定來源設計SHA、W7TP schema身分證據候選SHA、Session/設備/席位/同意/回執ref及明確NOT_EVIDENCED狀態。"
+    },
+    "D5": {
+      "name": "EXECUTION_POLICY",
+      "required": true,
+      "contract": "本次僅E2單檔候選；任何E3-E5登入綁定、信任寫入、runtime、DB、部署或正式效果都需獨立授權與Total Field裁決。"
+    },
+    "D6": {
+      "name": "GENERATIVE_TRANSMISSION",
+      "required": true,
+      "contract": "只使用原生8D意圖場封包、ref、lookup、重構條件與驗證；帳號、網路、WebAuthn及UI只是通道，不是生成式傳輸本體。"
+    },
+    "D7": {
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "required": true,
+      "contract": "阻擋帳號升權、未登記設備自動信任、UI繞過、raw臉部/PIN外傳或儲存、舊Session重播、跨會員及第二核心。"
+    },
+    "D8": {
+      "name": "ENVELOPE_AUTHORITY",
+      "required": true,
+      "contract": "Total Field驗證身分封包、權限邊界與結果並作最終PASS/HOLD/REJECT；Open WebUI、帳號、模型及設備權威皆為NONE。"
+    }
+  },
+  "authority_boundary": {
+    "allowed_outputs": [
+      "CANDIDATE",
+      "EVIDENCE",
+      "HOLD",
+      "AUTHORIZATION_REQUEST",
+      "HUMAN_REPLY"
+    ],
+    "forbidden_authority": [
+      "ALLOW",
+      "COMMITTED",
+      "COMMIT_APPLIED",
+      "TFS",
+      "TFID",
+      "TOTAL_FIELD_HASH",
+      "CANONICAL_POINTER",
+      "FINAL_SEAL",
+      "DIRECT_DB_WRITE",
+      "DIRECT_DEPLOY",
+      "SERVICE_RESTART",
+      "ROUTER_WRITE",
+      "OPENWEBUI_AUTHORITY",
+      "ACCOUNT_AS_IDENTITY_ROOT",
+      "DEVICE_AUTHORITY"
+    ],
+    "total_field_receiver_required": true,
+    "total_field_receiver_ref": "tools.total_field_candidate_gateway.receive_candidate@9107_TOTAL_FIELD_EXISTING_RECEIVER",
+    "human_final_effect_classes": [
+      "E4",
+      "E5"
+    ]
+  },
+  "execution_contract": {
+    "nodes": [
+      "taiji01"
+    ],
+    "carriers": [
+      "OPENWEBUI_UI_CAPABILITY_ADAPTER",
+      "WEBAUTHN_PASSKEY_ASSERTION_CHANNEL",
+      "ACCOUNT_AUTHENTICATION_CHANNEL"
+    ],
+    "dependencies": [
+      "ONE_EXISTING_XIAOJ_IDENTITY_ROOT",
+      "EXISTING_9107_TOTAL_FIELD_RECEIVER",
+      "EXISTING_ADI_STATE_SPACE",
+      "EXISTING_GOVERNED_EXECUTOR",
+      "W7TP_SCHEMA_IDENTITY_PENDING_TOTAL_FIELD_DECISION"
+    ],
+    "resource_limits": {
+      "current_operation_effect": "E2",
+      "maximum_runtime_effect": "E5",
+      "architecture": {
+        "one_xiaoj": true,
+        "one_identity_root": true,
+        "one_total_field": true,
+        "one_adi_state_space": true,
+        "second_identity_core_forbidden": true
+      },
+      "identity_packet_definition": {
+        "primary_system_service_subject": true,
+        "identity_root": "EXISTING_SINGLE_IDENTITY_ROOT_REF_ONLY",
+        "entitlement_envelope": "SERVER_VERIFIED_INTERSECTION_ONLY",
+        "available_skills": "ENTITLEMENT_DERIVED_CANDIDATE_SKILL_REFS_ONLY",
+        "available_models": "ENTITLEMENT_DERIVED_CANDIDATE_MODEL_REFS_ONLY",
+        "available_tools": "ENTITLEMENT_DERIVED_CANDIDATE_TOOL_REFS_ONLY",
+        "ui_projection": "IDENTITY_PACKET_DERIVED_CANDIDATE_CONTROLS_ONLY",
+        "session_state": "ACTIVE_TTL_NONCE_REPLAY_AND_REVOCATION_VERIFIED",
+        "device_trust_state": "REGISTERED_APPROVED_REVOCABLE_OPAQUE_REF_ONLY",
+        "evidence_history": "HASH_AND_RECEIPT_REFS_ONLY"
+      },
+      "total_field_definition": {
+        "verify_identity_packet": true,
+        "enforce_packet_authority_boundary": true,
+        "verify_result": true,
+        "final_decisions": [
+          "PASS",
+          "HOLD",
+          "REJECT"
+        ],
+        "candidate_may_issue_final_decision": false
+      },
+      "account_boundary": {
+        "role": "AUTHENTICATION_CHANNEL_ONLY",
+        "is_identity_root": false,
+        "login_success_is_authority": false
+      },
+      "device_verification": {
+        "methods": [
+          "GOOGLE_ACCOUNT",
+          "MICROSOFT_ACCOUNT",
+          "WINDOWS_HELLO_FACE",
+          "WINDOWS_HELLO_PIN"
+        ],
+        "google_account": "EXTERNAL_VERIFICATION_CHANNEL_ONLY_NOT_AUTHORITY",
+        "microsoft_account": "EXTERNAL_VERIFICATION_CHANNEL_ONLY_NOT_AUTHORITY",
+        "windows_hello_face": "OS_LOCAL_VERIFICATION_PLUS_WEBAUTHN_OR_PASSKEY_ASSERTION_ONLY",
+        "windows_hello_pin": "OS_LOCAL_VERIFICATION_PLUS_WEBAUTHN_OR_PASSKEY_ASSERTION_ONLY",
+        "raw_face_image_transfer": "FORBIDDEN",
+        "raw_face_image_storage": "FORBIDDEN",
+        "pin_transfer": "FORBIDDEN",
+        "pin_storage": "FORBIDDEN",
+        "device_authority": "NONE"
+      },
+      "login_state_transitions": {
+        "registered_trusted_device": [
+          "REGISTERED_TRUSTED_DEVICE",
+          "VALID_IDENTITY_PACKET_BINDING",
+          "ONE_VERIFICATION_METHOD_PASS",
+          "RECONSTRUCT_IDENTITY_PACKET_SESSION",
+          "PROJECT_ALLOWED_SKILLS_MODELS_TOOLS_UI"
+        ],
+        "unregistered_device": [
+          "UNREGISTERED_DEVICE",
+          "EXTERNAL_OR_LOCAL_VERIFICATION_PASS",
+          "DEVICE_LOGIN_CANDIDATE_ONLY",
+          "EMAIL_REVIEW_REQUIRED",
+          "APPROVAL_RECEIPT_REQUIRED",
+          "DEVICE_TRUST_BINDING_CANDIDATE",
+          "SESSION_RECONSTRUCTION"
+        ],
+        "unregistered_device_auto_trust": false,
+        "verification_success_auto_grants_device_trust": false,
+        "email_review_uses_plaintext_in_this_candidate": false
+      },
+      "openwebui_contract": {
+        "roles": [
+          "UI_CAPABILITY_ADAPTER",
+          "IDENTITY_PACKET_LOGIN_CHANNEL",
+          "CANDIDATE_CONFIGURATION_CHANNEL",
+          "HUMAN_RESPONSE_RENDERER"
+        ],
+        "authority": "NONE",
+        "identity_root": false,
+        "total_field_receiver": false,
+        "direct_execution": "FORBIDDEN",
+        "direct_canonical_write": "FORBIDDEN",
+        "ui_hidden_is_authorization": false,
+        "model_or_tool_menu_is_authorization": false,
+        "runtime_state": "HOLD_OPENWEBUI_RUNTIME_AND_FORMAL_IDENTITY_BINDING_NOT_CLOSED"
+      },
+      "single_service_path": [
+        "IDENTITY_PACKET_SESSION",
+        "OPEN_WEBUI",
+        "9107_TOTAL_FIELD",
+        "IDENTITY_PACKET_ENTITLEMENT_LOOKUP",
+        "ADI_EXACT_SKILL_COORDINATE",
+        "GOVERNED_EXECUTOR",
+        "EVIDENCE_AND_SATISFACTION",
+        "OPEN_WEBUI_RESPONSE"
+      ],
+      "server_side_enforcement": {
+        "entrypoint": "9107_TOTAL_FIELD_EXISTING_RECEIVER",
+        "same_identity_packet_recheck_required": true,
+        "rechecks": [
+          "IDENTITY_ROOT_BINDING",
+          "ACTIVE_SESSION",
+          "EXACT_ROLE_SEAT",
+          "CURRENT_INTENT",
+          "CONSENT_STATE",
+          "DEVICE_TRUST_STATE",
+          "ORGANIZATION_POLICY",
+          "CAPABILITY_MANIFEST",
+          "CURRENT_RISK_POLICY",
+          "ACTION_LEASE_IF_REQUIRED",
+          "CURRENT_TOTAL_FIELD_STATE"
+        ],
+        "client_role_scope_tool_model_or_prompt_trusted": false,
+        "fail_closed": true
+      },
+      "complete_adi_coordinates": {
+        "state": "IDENTITY_SESSION_DEVICE_AND_TOTAL_FIELD_STATE_REF",
+        "capability": "ENTITLEMENT_INTERSECTION_AND_EXACT_SKILL_REF",
+        "decision": "TOTAL_FIELD_PASS_HOLD_REJECT_REF",
+        "transition": "LOGIN_TRUST_SESSION_PROJECTION_EXECUTION_RESULT_STATE_DELTA",
+        "spatiotemporal": "OPAQUE_DEVICE_SCENE_TIME_TTL_COORDINATE_REF",
+        "evidence": "SOURCE_HASH_SESSION_DEVICE_APPROVAL_EXECUTOR_AND_RECEIPT_REFS",
+        "reconstruction": "IDENTITY_PACKET_SESSION_AND_ALLOWED_CAPABILITY_PROJECTION_CONDITIONS"
+      },
+      "complete_8d_coordinates": {
+        "D1": "IDENTITY_PACKET_DEVICE_LOGIN_OPENWEBUI_ENVELOPE_INTENT",
+        "D2": "CANDIDATE_AND_RUNTIME_HOLD_STATE",
+        "D3": "IDENTITY_ROOT_DEVICE_SESSION_OPENWEBUI_9107_ADI_EXECUTOR_COORDINATES",
+        "D4": "SOURCE_HASHES_OPAQUE_REFS_AND_RECEIPT_EVIDENCE",
+        "D5": "E2_CANDIDATE_ONLY_EXECUTION_POLICY",
+        "D6": "PROTOCOL_NATIVE_REFERENCE_LOOKUP_RECONSTRUCTION_VERIFICATION",
+        "D7": "FAIL_CLOSED_RED_TEAM_BOUNDARY",
+        "D8": "TOTAL_FIELD_ONLY_FINAL_AUTHORITY_ENVELOPE"
+      },
+      "session_contract": {
+        "ttl_required": true,
+        "nonce_required": true,
+        "replay_guard_required": true,
+        "exact_seat_required": true,
+        "identity_or_seat_change_invalidates_projection": true,
+        "device_revocation_invalidates_projection": true,
+        "stale_projection_reuse": "FORBIDDEN"
+      },
+      "evidence_state": {
+        "source_design_bound": true,
+        "w7tp_schema_identity_evidence_bound": true,
+        "w7tp_schema_identity": "PENDING_TOTAL_FIELD_DECISION",
+        "runtime_evidence_closed": false,
+        "live_login_evidenced": false,
+        "live_device_binding_evidenced": false,
+        "openwebui_9107_identity_envelope_evidenced": false
+      },
+      "red_team_pre_definition": {
+        "state": "PASS_CANDIDATE_DEFINITION_12_OF_12",
+        "checks": [
+          "ACCOUNT_CANNOT_BECOME_IDENTITY_ROOT",
+          "UNREGISTERED_DEVICE_CANNOT_AUTO_TRUST",
+          "GOOGLE_OR_MICROSOFT_LOGIN_CANNOT_AUTO_ELEVATE",
+          "WINDOWS_HELLO_USES_LOCAL_OS_AND_WEBAUTHN_ASSERTION_ONLY",
+          "RAW_FACE_IMAGE_AND_PIN_NEVER_TRANSFERRED_OR_STORED",
+          "OPENWEBUI_UI_OR_MENU_CANNOT_AUTHORIZE",
+          "DIRECT_BACKEND_CALL_REQUIRES_SAME_SERVER_ENVELOPE",
+          "SESSION_EXPIRY_SEAT_CHANGE_AND_DEVICE_REVOCATION_INVALIDATE_PROJECTION",
+          "CROSS_MEMBER_AND_FOUNDER_TOOL_DISCLOSURE_FAIL_CLOSED",
+          "W7TP_SCHEMA_IDENTITY_REMAINS_PENDING",
+          "RUNTIME_EVIDENCE_REMAINS_OPEN",
+          "NO_SECOND_XIAOJ_IDENTITY_CORE_ADI_OR_TOTAL_FIELD"
+        ],
+        "open_findings": [
+          "LIVE_FOUNDER_OR_MEMBER_LOGIN_NOT_EVIDENCED",
+          "LIVE_DEVICE_APPROVAL_AND_BINDING_NOT_EVIDENCED",
+          "OPENWEBUI_TO_9107_IDENTITY_ENVELOPE_RUNTIME_NOT_EVIDENCED",
+          "W7TP_SCHEMA_IDENTITY_TOTAL_FIELD_DECISION_NOT_RUN"
+        ]
+      }
+    },
+    "persistent_side_effects": [
+      "THIS_SINGLE_NEW_CANDIDATE_FILE"
+    ],
+    "forbidden_effects": [
+      "MODIFY_SOURCE_DESIGN_POINTER_SCHEMA_RECEIPT_OR_RUNTIME",
+      "IDENTITY_OR_DEVICE_TRUST_DB_WRITE",
+      "LIVE_LOGIN_OR_WEBAUTHN_OPERATION",
+      "DEPLOY_RESTART_REBOOT_OR_ROUTER_WRITE",
+      "CANONICAL_PROMOTION_OR_TOTAL_FIELD_DECISION",
+      "SECOND_XIAOJ_IDENTITY_CORE_ADI_TOTAL_FIELD_OR_RECEIVER",
+      "RAW_FACE_IMAGE_PIN_SECRET_TOKEN_PASSWORD_MEMBER_PLAINTEXT_OR_PRIVATE_DEVICE_COORDINATE_ACCESS"
+    ],
+    "rollback": "候選不可自行生效；若不採用，只移除這一個新候選檔，不影響任何既有來源、pointer、schema、runtime、DB或服務。",
+    "existing_state_preserved": true
+  },
+  "w7tp_contract": {
+    "claimed": true,
+    "canonical_ref": "W7TP_V2_1_SCHEMA_IDENTITY_PENDING_TOTAL_FIELD_DECISION@candidate-sha256:93ec623056feae7f5bfd5c68cccb0a5dc840834acc3b133f8690c89b6de56d5d",
+    "protocol_bearing_packet": true,
+    "reconstruction_conditions": true,
+    "packet_carried_verification": true,
+    "acceptance_mode": "EQUIVALENT_STATE",
+    "carrier_is_not_w7tp": true
+  },
+  "red_team_contract": {
+    "mandatory": true,
+    "stages": [
+      "RED_TEAM_PRE_DEFINITION",
+      "RED_TEAM_PRE_ACTIVATION",
+      "RED_TEAM_POST_OPERATION"
+    ],
+    "high_critical_hold": true,
+    "medium_requires_mitigation_or_policy": true,
+    "closure_evidence_required": true,
+    "authorization_cannot_waive_finding": true
+  },
+  "hold_contract": {
+    "language": "zh-Hant",
+    "required_fields": [
+      "question",
+      "answer",
+      "risk_found",
+      "possible_effect",
+      "protected_state",
+      "solution",
+      "user_action_required"
+    ],
+    "one_solution": true,
+    "raw_code_only_forbidden": true
+  },
+  "authorization_contract": {
+    "required_for_effect_classes": [
+      "E3",
+      "E4",
+      "E5"
+    ],
+    "single_use": true,
+    "expiry_required": true,
+    "input_hashes_required": true,
+    "effect_and_risk_explanation_required": true,
+    "rollback_required": true,
+    "stop_conditions_required": true,
+    "total_field_review_required": true
+  },
+  "verification_contract": {
+    "product_acceptance_checks": [
+      "PASS_CANDIDATE_MANIFEST_SCHEMA_VALID",
+      "PASS_CANDIDATE_RED_TEAM_PRE_DEFINITION",
+      "SOURCE_HASHES_EXACT",
+      "RUNTIME_AND_AUTHORITY_CLAIMS_REMAIN_FALSE"
+    ],
+    "static_checks": [
+      "JSON_PARSE",
+      "W7TP_TOTAL_FIELD_SKILL_MANIFEST_V1_SCHEMA",
+      "EXISTING_SKILL_MANIFEST_SEMANTIC_VALIDATOR",
+      "SOURCE_SHA256_RECHECK",
+      "RED_TEAM_PRE_DEFINITION_ASSERTIONS",
+      "PROHIBITED_SIDE_EFFECT_ASSERTIONS",
+      "GIT_DIFF_CHECK"
+    ],
+    "runtime_checks": [],
+    "evidence_required": [
+      "XIAOJ_SOVEREIGN_AI_DYNAMIC_INTENT_SERVICE_MERGED_CANDIDATE_V2.md#sha256:340a62fe6348d09a440daac1a4f47e2e4a8a0074d7dab6da0726a0e305491c0b",
+      "W7TP_V2_1_SCHEMA_IDENTITY_EVIDENCE_CLOSURE_CANDIDATE.json#sha256:93ec623056feae7f5bfd5c68cccb0a5dc840834acc3b133f8690c89b6de56d5d"
+    ],
+    "existing_state_check": true,
+    "no_pass_without_evidence": true
+  },
+  "lifecycle": {
+    "state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+    "activation_requires_total_field_receipt": true,
+    "total_field_decision_ref": null,
+    "suspension_triggers": [
+      "IDENTITY_ROOT_OR_EXACT_SEAT_MISMATCH",
+      "SESSION_EXPIRED_OR_REPLAY_DETECTED",
+      "DEVICE_TRUST_REVOKED_OR_UNAPPROVED",
+      "W7TP_SCHEMA_IDENTITY_OR_SOURCE_HASH_MISMATCH",
+      "OPENWEBUI_OR_EXECUTOR_AUTHORITY_EXPANSION",
+      "SECOND_CORE_DETECTED"
+    ],
+    "replacement_refs": [],
+    "retirement_preserves_evidence": true,
+    "session_revocation_on_seat_or_profile_change": true
+  },
+  "evidence_and_hashes": {
+    "hash_algorithm": "SHA-256",
+    "manifest_self_hash": "PENDING_TOTAL_FIELD_SEAL",
+    "manifest_hash_excludes_field": "evidence_and_hashes.manifest_self_hash",
+    "canonical_refs": [
+      "XIAOJ_SOVEREIGN_AI_DYNAMIC_INTENT_SERVICE_MERGED_CANDIDATE_V2.md#sha256:340a62fe6348d09a440daac1a4f47e2e4a8a0074d7dab6da0726a0e305491c0b",
+      "W7TP_V2_1_SCHEMA_IDENTITY_EVIDENCE_CLOSURE_CANDIDATE.json#sha256:93ec623056feae7f5bfd5c68cccb0a5dc840834acc3b133f8690c89b6de56d5d"
+    ],
+    "schema_refs": [
+      "runtime/isolated/govern_total_field_skills_v2_2_0_source_candidate_20260802T165359Z/govern-total-field-skills/references/total_field_skill_manifest_v1.schema.json#sha256:6035c5d3867c0a9e35a0bb811a999ec8135cff13615b3c207dadf31084595577"
+    ],
+    "implementation_refs": [
+      "XIAOJ_SOVEREIGN_AI_DYNAMIC_INTENT_SERVICE_MERGED_CANDIDATE_V2.md",
+      "W7TP_V2_1_SCHEMA_IDENTITY_EVIDENCE_CLOSURE_CANDIDATE.json"
+    ],
+    "implementation_sha256": {
+      "XIAOJ_SOVEREIGN_AI_DYNAMIC_INTENT_SERVICE_MERGED_CANDIDATE_V2.md": "340a62fe6348d09a440daac1a4f47e2e4a8a0074d7dab6da0726a0e305491c0b",
+      "W7TP_V2_1_SCHEMA_IDENTITY_EVIDENCE_CLOSURE_CANDIDATE.json": "93ec623056feae7f5bfd5c68cccb0a5dc840834acc3b133f8690c89b6de56d5d"
+    },
+    "evidence_destination": "XIAOJ_IDENTITY_PACKET_DEVICE_LOGIN_OPENWEBUI_CAPABILITY_ENVELOPE_CANDIDATE.json"
+  }
+}

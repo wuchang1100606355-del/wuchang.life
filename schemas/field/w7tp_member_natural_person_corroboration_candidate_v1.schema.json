@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_member_natural_person_corroboration_candidate_v1.schema.json",
+  "title": "W7TP Member Natural Person Corroboration Candidate v1（W7TP會員自然人佐證候選第1版）",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "state",
+    "candidate_only",
+    "formal_authority_created",
+    "total_field_decision",
+    "requires_total_field_verify",
+    "natural_person_anchor_candidate",
+    "member_binding_candidate",
+    "assurance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-MEMBER-NATURAL-PERSON-CORROBORATION-CANDIDATE/1.0"
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "formal_authority_created": {
+      "const": false
+    },
+    "total_field_decision": {
+      "const": "NOT_RUN"
+    },
+    "requires_total_field_verify": {
+      "const": true
+    },
+    "natural_person_anchor_candidate": {
+      "type": ["object", "null"]
+    },
+    "google_corroboration_receipt_candidate": {
+      "type": ["object", "null"]
+    },
+    "member_binding_candidate": {
+      "type": ["object", "null"]
+    },
+    "founder_position_binding_candidate": {
+      "type": ["object", "null"]
+    },
+    "assurance": {
+      "type": "object",
+      "required": [
+        "state",
+        "conflict_state"
+      ],
+      "properties": {
+        "state": {
+          "type": "string"
+        },
+        "conflict_state": {
+          "enum": [
+            "NONE",
+            "CONFLICT"
+          ]
+        }
+      }
+    }
+  }
+}
