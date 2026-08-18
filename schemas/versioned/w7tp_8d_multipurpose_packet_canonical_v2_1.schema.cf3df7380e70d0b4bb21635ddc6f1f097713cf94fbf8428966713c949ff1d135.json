@@ -1,0 +1,923 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json",
+  "title": "W7TP 8D Multipurpose Generative Transmission Packet Canonical V2.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonical_id",
+    "version",
+    "canonical_binding",
+    "packet_core",
+    "communication_contract",
+    "authority_boundary",
+    "state_field",
+    "adi",
+    "lineage",
+    "generation",
+    "reconstruction",
+    "verification",
+    "protected_refs",
+    "envelope"
+  ],
+  "properties": {
+    "canonical_id": {
+      "const": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1"
+    },
+    "version": {
+      "const": "2.1"
+    },
+    "canonical_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_path",
+        "canonical_sha256",
+        "parent_version",
+        "parent_path",
+        "parent_sha256",
+        "migration_mode"
+      ],
+      "properties": {
+        "canonical_path": {
+          "const": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md"
+        },
+        "canonical_sha256": {
+          "const": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba"
+        },
+        "parent_version": {
+          "const": "2.0"
+        },
+        "parent_path": {
+          "const": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"
+        },
+        "parent_sha256": {
+          "const": "a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0"
+        },
+        "migration_mode": {
+          "const": "APPEND_ONLY_SUCCESSOR"
+        }
+      }
+    },
+    "packet_core": {
+      "const": "UNIFIED_MULTIPURPOSE_INTERACTIVE_COUPLED_8D_STATE_FIELD_PACKET"
+    },
+    "communication_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary",
+        "secondary",
+        "semantic_communication",
+        "semantic_model_role",
+        "floating_point_required"
+      ],
+      "properties": {
+        "primary": {
+          "const": "INTENT_COMMUNICATION"
+        },
+        "secondary": {
+          "const": "STATE_FIELD_PACKET_COMMUNICATION"
+        },
+        "semantic_communication": {
+          "const": false
+        },
+        "semantic_model_role": {
+          "const": "CANDIDATE_EVIDENCE_ONLY"
+        },
+        "floating_point_required": {
+          "const": false
+        }
+      }
+    },
+    "authority_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cloud_authority",
+        "llm_authority",
+        "final_decision_authority",
+        "final_seal_authority"
+      ],
+      "properties": {
+        "cloud_authority": {
+          "$ref": "#/$defs/candidateEvidenceAuthority"
+        },
+        "llm_authority": {
+          "$ref": "#/$defs/candidateEvidenceAuthority"
+        },
+        "final_decision_authority": {
+          "const": "LOCAL_TOTAL_FIELD"
+        },
+        "final_seal_authority": {
+          "const": "LOCAL_TOTAL_FIELD"
+        }
+      }
+    },
+    "state_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "dimensions",
+        "coupling"
+      ],
+      "properties": {
+        "kind": {
+          "const": "INTERACTIVE_COUPLED_8D_STATE_FIELD"
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "D1_INTENT",
+            "D2_STATE",
+            "D3_COORDINATE",
+            "D4_EVIDENCE",
+            "D5_EXECUTION",
+            "D6_GENERATIVE_TRANSMISSION",
+            "D7_RISK_QUARANTINE",
+            "D8_ENVELOPE_VERIFICATION"
+          ],
+          "properties": {
+            "D1_INTENT": {
+              "$ref": "#/$defs/profileRef"
+            },
+            "D2_STATE": {
+              "$ref": "#/$defs/profileRef"
+            },
+            "D3_COORDINATE": {
+              "$ref": "#/$defs/profileRef"
+            },
+            "D4_EVIDENCE": {
+              "$ref": "#/$defs/evidenceDimension"
+            },
+            "D5_EXECUTION": {
+              "$ref": "#/$defs/profileRef"
+            },
+            "D6_GENERATIVE_TRANSMISSION": {
+              "$ref": "#/$defs/generativeTransmissionDimension"
+            },
+            "D7_RISK_QUARANTINE": {
+              "$ref": "#/$defs/riskQuarantineDimension"
+            },
+            "D8_ENVELOPE_VERIFICATION": {
+              "$ref": "#/$defs/envelopeVerificationDimension"
+            }
+          }
+        },
+        "coupling": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transition_function",
+            "current_state_ref",
+            "intent_ref",
+            "coordinate_ref",
+            "evidence_refs",
+            "execution_ref",
+            "generation_ref",
+            "risk_ref",
+            "verification_ref",
+            "target_state_ref",
+            "non_float_execution"
+          ],
+          "properties": {
+            "transition_function": {
+              "const": "S_NEXT=T(S_CURRENT,I,C,E,A,G,R,V)"
+            },
+            "current_state_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "intent_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "coordinate_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "evidence_refs": {
+              "$ref": "#/$defs/nonEmptyRefArray"
+            },
+            "execution_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "generation_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "risk_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "verification_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "target_state_ref": {
+              "$ref": "#/$defs/typedRef"
+            },
+            "non_float_execution": {
+              "const": true
+            }
+          }
+        }
+      }
+    },
+    "adi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_layer",
+        "system_layer",
+        "replay_protection"
+      ],
+      "properties": {
+        "packet_layer": {
+          "$ref": "#/$defs/adiPacketLayer"
+        },
+        "system_layer": {
+          "$ref": "#/$defs/adiSystemLayer"
+        },
+        "replay_protection": {
+          "$ref": "#/$defs/replayProtection"
+        }
+      }
+    },
+    "lineage": {
+      "$ref": "#/$defs/lineage"
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol_native",
+        "state_ref",
+        "coordinate_ref",
+        "lookup_refs",
+        "generation_rule_refs",
+        "reconstruction_condition_refs",
+        "target_state_ref",
+        "file_movement"
+      ],
+      "properties": {
+        "protocol_native": {
+          "const": true
+        },
+        "state_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "coordinate_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "lookup_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "generation_rule_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "reconstruction_condition_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "target_state_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "file_movement": {
+          "const": false
+        }
+      }
+    },
+    "reconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local_state_field_ref",
+        "lookup_refs",
+        "condition_refs",
+        "equivalent_state_rule_refs",
+        "target_state_ref",
+        "total_field_verifier_ref",
+        "deterministic_operations",
+        "model_output_role"
+      ],
+      "properties": {
+        "local_state_field_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "lookup_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "condition_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "equivalent_state_rule_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "target_state_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "total_field_verifier_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "deterministic_operations": {
+          "const": [
+            "INTEGER",
+            "BOOLEAN",
+            "SYMBOLIC",
+            "LOOKUP",
+            "REFERENCE_RESOLUTION",
+            "STATE_TRANSITION"
+          ]
+        },
+        "model_output_role": {
+          "const": "CANDIDATE_EVIDENCE_ONLY"
+        }
+      }
+    },
+    "verification": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/l1ExactByteVerification"
+        },
+        {
+          "$ref": "#/$defs/l2EffectEquivalentVerification"
+        },
+        {
+          "$ref": "#/$defs/l3CandidateVerification"
+        }
+      ]
+    },
+    "protected_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "materials"
+      ],
+      "properties": {
+        "materials": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "reference",
+              "disclosure"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "H64_TD",
+                  "CODEBOOK",
+                  "MAPPING_TABLE",
+                  "RECOVERY_MATERIAL"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "pattern": "^(trade_secret_ref|protected_ref):[^\\s]+$"
+              },
+              "disclosure": {
+                "const": "REFERENCE_ONLY"
+              }
+            }
+          }
+        }
+      }
+    },
+    "envelope": {
+      "$ref": "#/$defs/envelope"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "typedRef": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.-]*:[^\\s]+$"
+    },
+    "nonEmptyRefArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/typedRef"
+      }
+    },
+    "candidateEvidenceAuthority": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "CANDIDATE",
+          "EVIDENCE"
+        ]
+      }
+    },
+    "profileRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_ref"
+      ],
+      "properties": {
+        "profile_ref": {
+          "$ref": "#/$defs/typedRef"
+        }
+      }
+    },
+    "evidenceDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_ref",
+        "evidence_refs"
+      ],
+      "properties": {
+        "profile_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        }
+      }
+    },
+    "generativeTransmissionDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol_ref",
+        "routing_ref",
+        "lookup_refs",
+        "reference_refs",
+        "generation_rule_refs",
+        "reconstruction_condition_refs",
+        "equivalent_state_rule_refs",
+        "total_field_verifier_ref"
+      ],
+      "properties": {
+        "protocol_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "routing_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "lookup_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "reference_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "generation_rule_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "reconstruction_condition_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "equivalent_state_rule_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "total_field_verifier_ref": {
+          "$ref": "#/$defs/typedRef"
+        }
+      }
+    },
+    "riskQuarantineDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hard_risks",
+        "quarantine_refs",
+        "decision"
+      ],
+      "properties": {
+        "hard_risks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "quarantine_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "decision": {
+          "enum": [
+            "PASS",
+            "HOLD",
+            "BLOCK"
+          ]
+        }
+      }
+    },
+    "envelopeVerificationDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "envelope_ref",
+        "verifier_ref",
+        "seal_policy_ref"
+      ],
+      "properties": {
+        "envelope_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "verifier_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "seal_policy_ref": {
+          "$ref": "#/$defs/typedRef"
+        }
+      }
+    },
+    "adiPacketLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index_kind",
+        "namespace",
+        "decision_index",
+        "nonce",
+        "key_version_ref",
+        "authority_ref",
+        "evidence_refs",
+        "derivation_ref",
+        "verifier_ref",
+        "irreversible",
+        "reversible_identity",
+        "database_primary_key",
+        "floating_embedding"
+      ],
+      "properties": {
+        "index_kind": {
+          "const": "OPAQUE_IRREVERSIBLE_PACKET_DECISION_INDEX"
+        },
+        "namespace": {
+          "$ref": "#/$defs/namespace"
+        },
+        "decision_index": {
+          "$ref": "#/$defs/sha256"
+        },
+        "nonce": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "key_version_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "authority_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "derivation_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "verifier_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "irreversible": {
+          "const": true
+        },
+        "reversible_identity": {
+          "const": false
+        },
+        "database_primary_key": {
+          "const": false
+        },
+        "floating_embedding": {
+          "const": false
+        }
+      }
+    },
+    "adiSystemLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index_kind",
+        "owner_authority_ref",
+        "namespace",
+        "logical_time",
+        "packet_lineage_refs",
+        "state_transition_ref",
+        "evidence_refs"
+      ],
+      "properties": {
+        "index_kind": {
+          "const": "USER_OWNED_SPATIOTEMPORAL_STATE_INDEX_NETWORK"
+        },
+        "owner_authority_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "namespace": {
+          "$ref": "#/$defs/namespace"
+        },
+        "logical_time": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "packet_lineage_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "state_transition_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        }
+      }
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    },
+    "replayProtection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tuple",
+        "tuple_sha256",
+        "logical_time_monotonic"
+      ],
+      "properties": {
+        "tuple": {
+          "$ref": "#/$defs/replayTuple"
+        },
+        "tuple_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "logical_time_monotonic": {
+          "const": true
+        }
+      }
+    },
+    "replayTuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_ref",
+        "namespace",
+        "packet_id",
+        "nonce",
+        "logical_time"
+      ],
+      "properties": {
+        "authority_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "namespace": {
+          "$ref": "#/$defs/namespace"
+        },
+        "packet_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "nonce": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "logical_time": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "append_only",
+        "parent_ref",
+        "parent_sha256",
+        "previous_seal_ref",
+        "logical_time",
+        "changed_dimensions",
+        "transition_evidence_refs"
+      ],
+      "properties": {
+        "append_only": {
+          "const": true
+        },
+        "parent_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "parent_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "previous_seal_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "logical_time": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "changed_dimensions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "D1_INTENT",
+              "D2_STATE",
+              "D3_COORDINATE",
+              "D4_EVIDENCE",
+              "D5_EXECUTION",
+              "D6_GENERATIVE_TRANSMISSION",
+              "D7_RISK_QUARANTINE",
+              "D8_ENVELOPE_VERIFICATION"
+            ]
+          }
+        },
+        "transition_evidence_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        }
+      }
+    },
+    "verificationDecision": {
+      "enum": [
+        "PASS",
+        "HOLD",
+        "BLOCK"
+      ]
+    },
+    "l1ExactByteVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "method_ref",
+        "contract_ref",
+        "decision",
+        "raw_sha256",
+        "byte_length",
+        "hash_scope"
+      ],
+      "properties": {
+        "mode": {
+          "const": "L1_EXACT_BYTE"
+        },
+        "method_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "contract_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "decision": {
+          "$ref": "#/$defs/verificationDecision"
+        },
+        "raw_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hash_scope": {
+          "const": "TARGET_RAW_BYTES"
+        }
+      }
+    },
+    "l2EffectEquivalentVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "method_ref",
+        "contract_ref",
+        "decision",
+        "effect_contract_ref",
+        "comparison_fields",
+        "evidence_refs",
+        "local_verifier_ref"
+      ],
+      "properties": {
+        "mode": {
+          "const": "L2_EFFECT_EQUIVALENT"
+        },
+        "method_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "contract_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "decision": {
+          "$ref": "#/$defs/verificationDecision"
+        },
+        "effect_contract_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "comparison_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "local_verifier_ref": {
+          "$ref": "#/$defs/typedRef"
+        }
+      }
+    },
+    "l3CandidateVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "method_ref",
+        "contract_ref",
+        "decision",
+        "candidate_refs",
+        "local_decision_authority_ref",
+        "final_authority_granted"
+      ],
+      "properties": {
+        "mode": {
+          "const": "L3_CANDIDATE"
+        },
+        "method_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "contract_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "decision": {
+          "enum": [
+            "HOLD",
+            "BLOCK"
+          ]
+        },
+        "candidate_refs": {
+          "$ref": "#/$defs/nonEmptyRefArray"
+        },
+        "local_decision_authority_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "final_authority_granted": {
+          "const": false
+        }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "authority_ref",
+        "version",
+        "ttl_seconds",
+        "nonce",
+        "payload_sha256",
+        "canonical_json_sha256",
+        "verifier_ref",
+        "seal_policy_ref",
+        "seal_state",
+        "final_seal_authority"
+      ],
+      "properties": {
+        "packet_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "authority_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "version": {
+          "const": "2.1"
+        },
+        "ttl_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "nonce": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "canonical_json_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "verifier_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "seal_policy_ref": {
+          "$ref": "#/$defs/typedRef"
+        },
+        "seal_state": {
+          "enum": [
+            "UNSEALED_CANDIDATE",
+            "SEALED_BY_LOCAL_TOTAL_FIELD"
+          ]
+        },
+        "final_seal_authority": {
+          "const": "LOCAL_TOTAL_FIELD"
+        }
+      }
+    }
+  }
+}

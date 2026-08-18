@@ -1,0 +1,59 @@
+{
+  "schema_id": "W7TP_LOCAL_MODEL_CAPABILITY_ROUTING_POLICY_V1",
+  "version": "1.0.0",
+  "authority_boundary": "LOCAL_CANDIDATE_ONLY",
+  "flow": [
+    "USER_INPUT",
+    "D1_INTENT_COMPRESSION",
+    "SKILL_LOOKUP",
+    "LOCAL_MODEL_CANDIDATE",
+    "TOOL_CONTRACT_VALIDATION",
+    "TOTAL_FIELD_GOVERNANCE_VALIDATION",
+    "RESULT_WITH_EVIDENCE"
+  ],
+  "identity_policy": {
+    "founder_claim_requires_existing_verified_authority_ref": true,
+    "general_member_uses_minimum_privilege": true,
+    "unknown_identity_uses_minimum_privilege": true,
+    "model_may_self_elevate": false
+  },
+  "selection": {
+    "method": "deterministic_trigger_score_then_registry_order",
+    "no_match_skill": "total_field_policy_check",
+    "unsafe_intent_skill": "total_field_policy_check",
+    "unsafe_intent_disposition": "BLOCK",
+    "tool_unavailable_disposition": "HOLD"
+  },
+  "hard_block_markers": [
+    "DB write",
+    "deploy",
+    "restart",
+    "router write",
+    "正式送件",
+    "修改模型權重",
+    "讀取密鑰",
+    "輸出 token",
+    "會員明文",
+    "raw audio"
+  ],
+  "generative_transmission": {
+    "definition": "狀態場封包、引用、查表、重構條件、等價狀態生成與總場驗證",
+    "not_file_transfer": true,
+    "not_cloud_ciphertext_sync": true,
+    "not_backup": true,
+    "not_download_then_decrypt": true,
+    "requires_lookup_refs": true,
+    "requires_reconstruction_conditions": true,
+    "requires_equivalent_state_digest": true,
+    "requires_total_field_verification": true
+  },
+  "candidate_return_contract": {
+    "required": ["state", "skill_id", "d1_intent_projection", "candidate", "evidence", "policy"],
+    "state_allowed": ["CANDIDATE_ONLY", "HOLD", "BLOCK"],
+    "evidence_requires_relative_path_and_sha256": true,
+    "missing_gateway": "HOLD_NO_GATEWAY",
+    "missing_tool": "HOLD_TOOL_UNAVAILABLE",
+    "invalid_contract": "HOLD_TOOL_CONTRACT_INVALID",
+    "commit_allowed": false
+  }
+}

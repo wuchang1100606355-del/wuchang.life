@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://w7tp.local/schemas/field/w7tp_moving_v_preload_cleanup_v1.schema.json",
+  "title": "W7TP Moving-V Preload Protection and Miss Cleanup Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "contract_id",
+    "status",
+    "mode",
+    "authority",
+    "adi_binding",
+    "time_alignment_contract",
+    "materialization_contract",
+    "optimization_contract",
+    "policy",
+    "memory_budget",
+    "allowed_actions",
+    "required_reclaim_gates",
+    "zero_tolerance_metrics",
+    "explicit_non_actions"
+  ],
+  "properties": {
+    "contract_version": {"const": "W7TP-MOVING-V-PRELOAD-CLEANUP/1.0"},
+    "contract_id": {"const": "W7TP_MOVING_V_PRELOAD_CLEANUP_V1_CANDIDATE"},
+    "status": {"const": "CANDIDATE_ONLY"},
+    "mode": {"const": "STATIC_SIMULATION_ONLY"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_authority",
+        "runtime_approved",
+        "canonical_change_approved",
+        "deployment_approved",
+        "hard_delete_enabled",
+        "canonical_source_delete_allowed"
+      ],
+      "properties": {
+        "decision_authority": {"const": "TOTAL_FIELD"},
+        "runtime_approved": {"const": false},
+        "canonical_change_approved": {"const": false},
+        "deployment_approved": {"const": false},
+        "hard_delete_enabled": {"const": false},
+        "canonical_source_delete_allowed": {"const": false}
+      }
+    },
+    "adi_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "distance_input",
+        "computes_adi_distance",
+        "generic_geometric_distance_allowed",
+        "similarity_proxy_allowed",
+        "canonical_rule_lineage"
+      ],
+      "properties": {
+        "distance_input": {"const": "FOUNDER_NATIVE_ADI_DELTA_F_UINT_ONLY"},
+        "computes_adi_distance": {"const": false},
+        "generic_geometric_distance_allowed": {"const": false},
+        "similarity_proxy_allowed": {"const": false},
+        "canonical_rule_lineage": {"type": "string", "minLength": 1}
+      }
+    },
+    "time_alignment_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apex_source",
+        "event_time_required",
+        "ingest_time_required",
+        "logical_time_binding_required",
+        "safe_watermark_rule",
+        "clock_regression_policy",
+        "network_partition_policy",
+        "late_event_policy"
+      ],
+      "properties": {
+        "apex_source": {"const": "EXTERNALLY_ALIGNED_MONOTONIC_INPUT"},
+        "event_time_required": {"const": true},
+        "ingest_time_required": {"const": true},
+        "logical_time_binding_required": {"const": true},
+        "safe_watermark_rule": {"const": "MINIMUM_OF_ALL_REQUIRED_ACTIVE_NODE_WATERMARKS"},
+        "clock_regression_policy": {"const": "HOLD"},
+        "network_partition_policy": {"const": "HOLD_WATERMARK_ADVANCE"},
+        "late_event_policy": {"const": "PAST_HOLD_UNTIL_RECONCILED"}
+      }
+    },
+    "materialization_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_action",
+        "volatile_cache_action_field",
+        "native_adi_deleted_refs_for_cache_eviction",
+        "future_predicted_miss_action",
+        "past_eligible_action"
+      ],
+      "properties": {
+        "canonical_action": {"const": "RETAIN"},
+        "volatile_cache_action_field": {"const": "materialization_evictions"},
+        "native_adi_deleted_refs_for_cache_eviction": {"const": "FORBIDDEN"},
+        "future_predicted_miss_action": {"const": "SOFT_EVICT_RECONSTRUCTIBLE_ONLY"},
+        "past_eligible_action": {"const": "MOVE_TO_QUARANTINE_FIRST"}
+      }
+    },
+    "optimization_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "founder_intent",
+        "numeric_parameter_policy",
+        "current_numbers",
+        "threshold_state",
+        "ordered_objectives",
+        "fixed_non_numeric_invariants"
+      ],
+      "properties": {
+        "founder_intent": {"const": "BETTER_EFFECT_AND_BETTER_HUMAN_USER_EXPERIENCE"},
+        "numeric_parameter_policy": {"const": "ALL_NUMERIC_VALUES_ARE_TUNABLE_WITH_EVIDENCE"},
+        "current_numbers": {"const": "SYNTHETIC_VALIDATION_DEFAULTS_NOT_FOUNDER_CONSTANTS"},
+        "threshold_state": {"const": "PENDING_SHADOW_AND_CANARY_CALIBRATION"},
+        "ordered_objectives": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "fixed_non_numeric_invariants": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "policy": {"$ref": "#/$defs/policy"},
+    "memory_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "budget_mode",
+        "initial_candidate_bytes",
+        "max_resident_bytes",
+        "high_watermark_bytes",
+        "low_watermark_bytes",
+        "budget_semantics",
+        "adjustable",
+        "adjustment_gate_state",
+        "adjustment_requires",
+        "activation_state"
+      ],
+      "properties": {
+        "budget_mode": {"const": "PERFORMANCE_GATED_ADAPTIVE_LIMIT"},
+        "initial_candidate_bytes": {"type": "integer", "minimum": 1},
+        "max_resident_bytes": {"type": "integer", "minimum": 1},
+        "high_watermark_bytes": {"type": "integer", "minimum": 1},
+        "low_watermark_bytes": {"type": "integer", "minimum": 0},
+        "budget_semantics": {"const": "CURRENT_CANDIDATE_LIMIT_NOT_RESERVED_OR_FIXED"},
+        "adjustable": {"const": true},
+        "adjustment_gate_state": {"const": "THRESHOLDS_NOT_CALIBRATED"},
+        "adjustment_requires": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "activation_state": {"const": "NOT_APPLIED"}
+      }
+    },
+    "allowed_actions": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "PROTECT_CURRENT",
+          "PROTECT_PRELOAD",
+          "KEEP_HOLD",
+          "NO_PRELOAD_KEEP_REFERENCE",
+          "SOFT_EVICT_RECONSTRUCTIBLE",
+          "MOVE_TO_QUARANTINE",
+          "NOOP_REFERENCE_ONLY"
+        ]
+      }
+    },
+    "required_reclaim_gates": {
+      "type": "array",
+      "minItems": 9,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "zero_tolerance_metrics": {
+      "type": "object",
+      "additionalProperties": {"const": 0},
+      "required": [
+        "protected_eviction_violation",
+        "current_eviction_violation",
+        "canonical_source_deleted",
+        "double_reclaim",
+        "unaudited_reclaim",
+        "hash_mismatch_consumed"
+      ]
+    },
+    "explicit_non_actions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^NO_[A-Z0-9_]+$"}
+    }
+  },
+  "$defs": {
+    "uint": {"type": "integer", "minimum": 0},
+    "envelope_knot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "future_offset_ns",
+        "protected_radius_uint",
+        "candidate_radius_uint"
+      ],
+      "properties": {
+        "future_offset_ns": {"$ref": "#/$defs/uint"},
+        "protected_radius_uint": {"$ref": "#/$defs/uint"},
+        "candidate_radius_uint": {"$ref": "#/$defs/uint"}
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "prediction_epoch",
+        "apex_time_ns",
+        "safe_watermark_ns",
+        "current_guard_ns",
+        "clock_uncertainty_ns",
+        "past_grace_ns",
+        "future_horizon_ns",
+        "envelope"
+      ],
+      "properties": {
+        "policy_id": {"type": "string", "minLength": 1},
+        "prediction_epoch": {"type": "string", "minLength": 1},
+        "apex_time_ns": {"$ref": "#/$defs/uint"},
+        "safe_watermark_ns": {"$ref": "#/$defs/uint"},
+        "current_guard_ns": {"$ref": "#/$defs/uint"},
+        "clock_uncertainty_ns": {"$ref": "#/$defs/uint"},
+        "past_grace_ns": {"$ref": "#/$defs/uint"},
+        "future_horizon_ns": {"$ref": "#/$defs/uint"},
+        "envelope": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"$ref": "#/$defs/envelope_knot"}
+        }
+      }
+    }
+  }
+}

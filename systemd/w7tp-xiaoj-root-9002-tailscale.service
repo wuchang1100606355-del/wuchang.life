@@ -1,0 +1,17 @@
+[Unit]
+Description=W7TP XiaoJ Root 8B Tailscale-only TCP 9002 tunnel
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/socat TCP4-LISTEN:9002,bind=100.84.204.114,reuseaddr,fork TCP4:127.0.0.1:9002
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=default.target

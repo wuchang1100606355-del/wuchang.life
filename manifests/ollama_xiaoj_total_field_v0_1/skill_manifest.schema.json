@@ -1,0 +1,63 @@
+{
+  "schema_id": "OLLAMA_XIAOJ_TOTAL_FIELD_SKILL_MANIFEST_V0_1",
+  "mode": "candidate_only_skill_manifest",
+  "credential_material_allowed": false,
+  "db_write": false,
+  "deploy": false,
+  "restart": false,
+  "router_write": false,
+  "canonical_pointer_write": false,
+  "authorized_skills": [
+    {
+      "id": "evidence_echo",
+      "enabled": true,
+      "credential_required": false,
+      "output_kind": "Evidence",
+      "forbidden_outputs": [
+        "ALLOW",
+        "TFS",
+        "TFID",
+        "committed",
+        "commit",
+        "canonical_pointer",
+        "pointer",
+        "total_field_hash",
+        "Total Field Hash"
+      ]
+    },
+    {
+      "id": "candidate_outline",
+      "enabled": true,
+      "credential_required": false,
+      "output_kind": "Candidate",
+      "forbidden_outputs": [
+        "ALLOW",
+        "TFS",
+        "TFID",
+        "committed",
+        "commit",
+        "canonical_pointer",
+        "pointer",
+        "total_field_hash",
+        "Total Field Hash"
+      ]
+    },
+    {
+      "id": "total_field_policy_check",
+      "enabled": true,
+      "credential_required": false,
+      "output_kind": "Evidence",
+      "forbidden_outputs": [
+        "ALLOW",
+        "TFS",
+        "TFID",
+        "committed",
+        "commit",
+        "canonical_pointer",
+        "pointer",
+        "total_field_hash",
+        "Total Field Hash"
+      ]
+    }
+  ]
+}

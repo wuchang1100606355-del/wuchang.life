@@ -1,0 +1,52 @@
+{
+  "schema_id": "W7TP_LOCAL_MODEL_TOOL_CONTRACTS_V1",
+  "version": "1.0.0",
+  "mcp_exposed_tools": [
+    {
+      "name": "get_total_field_dynamic_context",
+      "transport": "stdio",
+      "side_effect_class": "NONE",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string", "minLength": 1, "maxLength": 20000},
+          "max_items": {"type": "integer", "minimum": 1, "maximum": 20, "default": 8},
+          "identity_class": {"type": "string", "enum": ["founder", "general_member", "unknown"], "default": "unknown"}
+        },
+        "required": ["query"],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["state", "authority", "policy", "packet_sha256"],
+        "properties": {
+          "state": {"type": "string"},
+          "authority": {"const": "READ_ONLY_CONTEXT_EVIDENCE_NO_DECISION_AUTHORITY"},
+          "capability_route": {"type": ["object", "null"]},
+          "context_items": {"type": "array"},
+          "policy": {"type": "object"},
+          "packet_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": true
+      }
+    }
+  ],
+  "governance_internal_contracts": [
+    {
+      "name": "receive_candidate",
+      "model_callable": false,
+      "purpose": "由既有總場閘道接收 Candidate；不是 Continue 可直接執行工具",
+      "required_input": ["source", "skill_id", "dynamic_context_binding", "candidate", "policy"],
+      "allowed_result_states": ["CANDIDATE_RECEIVED", "HOLD", "BLOCK", "QUARANTINE"],
+      "side_effect_requires_separate_total_field_authorization": true
+    }
+  ],
+  "forbidden_tool_behavior": [
+    "explain_as_if_executed",
+    "unlisted_tool_call",
+    "direct_db_write",
+    "direct_deploy_or_restart",
+    "direct_router_or_canonical_write",
+    "secret_member_plaintext_or_raw_audio_input_or_output"
+  ]
+}

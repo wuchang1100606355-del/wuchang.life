@@ -1,0 +1,52 @@
+{
+  "active": false,
+  "authority_pointer_ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+  "authority_pointer_required": true,
+  "authorization_boundary": {
+    "deploy_authority": false,
+    "execution_authority": false,
+    "formal_decision_authority": false,
+    "formal_seal_authority": false,
+    "restart_authority": false
+  },
+  "node_binding": {
+    "active_pointer_precondition": "REGISTERED_MSI_DEVICE_REF_BOUND_ACTIVE_POINTER_REQUIRES_SEPARATE_AUTHORITY",
+    "authority_runtime_owner": "MSI",
+    "cross_node_authority_allowed": false,
+    "device_binding_ratification_authority": "FOUNDER_HUMAN_RATIFICATION",
+    "device_binding_ratified_at": "2026-08-07T04:43:41Z",
+    "device_binding_ref": "device_ref:msi:physical:sha256:04219469ae7d72e6d4825c07e8c178287d06b98cf9eca371d425e3c2bc64c7da",
+    "device_binding_state": "FOUNDER_RATIFIED",
+    "ledger_owner_node": "MSI",
+    "node_id": "MSI",
+    "node_role": "FOUNDER_SOVEREIGN_NODE",
+    "taiji01_authority_level": "PUBLIC_SERVICE_PROJECTION_ONLY"
+  },
+  "nonce_ledger": {
+    "automatic_nonce_deletion": false,
+    "file_mode": "0600",
+    "parent_mode": "0700",
+    "path": "runtime/total_field/runtime_state/authority_nonce_ledger.sqlite3",
+    "persistent": true,
+    "single_use": true,
+    "storage": "SQLite"
+  },
+  "owner_binding": {
+    "adapter": "tools.total_field_receive_candidate_authority_adapter:receive_candidate_authority_bound",
+    "builder": "tools.total_field_dynamic_context:build_active_authority_receive_candidate",
+    "formal_ingress_switched": false,
+    "resolver": "tools.total_field_authority_resolver:resolve_active_total_field_authority",
+    "runtime_bindings": "tools.total_field_authority_runtime_bindings:build_authority_runtime_bindings"
+  },
+  "profile_id": "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_RUNTIME_PROFILE_V1",
+  "schema_id": "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_RUNTIME_PROFILE_V1",
+  "signature_verifier": {
+    "binding_mode": "INJECTED_BACKEND_ONLY",
+    "environment_secret_read_by_binding_module": false,
+    "key_material_read_by_binding_module": false,
+    "trusted_verifier_refs": [
+      "verifier_ref:total_field_runtime_v1"
+    ]
+  },
+  "state": "FORMAL_LANDING_BOUND_INACTIVE"
+}

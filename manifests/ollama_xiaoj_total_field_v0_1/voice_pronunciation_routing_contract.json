@@ -1,0 +1,153 @@
+{
+  "schema_id": "W7TP_XIAOJ_MULTI_PRONUNCIATION_ROUTING_V1",
+  "version": "1.0.0",
+  "state": "CORE_ENDPOINT_LANDED_VOICE_PROVIDER_RUNTIME_SEPARATELY_PENDING",
+  "principle": "MULTIPLE_PRONUNCIATION_SYSTEMS_SELECTED_PER_TASK",
+  "non_negotiable_quality_gate": {
+    "emotionless_recitation_accepted": false,
+    "mechanical_flat_delivery_accepted": false,
+    "required_for_every_profile": [
+      "intent_aware_prosody",
+      "natural_pausing",
+      "semantic_emphasis",
+      "relationship_appropriate_warmth"
+    ],
+    "failure_state": "HOLD_EMOTIONLESS_RECITATION_NOT_XIAOJ",
+    "fallback_order": [
+      "TRY_NEXT_VERIFIED_PRONUNCIATION_PROVIDER",
+      "RETURN_VERIFIED_TEXT_WITH_AUDIO_HOLD"
+    ]
+  },
+  "core_model_binding": {
+    "core_model_count": 1,
+    "core_model_node": "FOUNDER_LAPTOP(MSI)",
+    "core_model_ref": "candidate_ref:xiaoj:fused-single-model:v1",
+    "identity_and_core_model_immutable": true
+  },
+  "task_profiles": [
+    {
+      "profile": "HUMAN_CONVERSATION",
+      "optimize_for": [
+        "naturalness",
+        "emotion_continuity",
+        "intent_aware_expression",
+        "zh_TW_prosody"
+      ]
+    },
+    {
+      "profile": "PRECISE_TERMINOLOGY",
+      "optimize_for": ["custom_lexicon", "proper_nouns", "numbers", "acronyms"]
+    },
+    {
+      "profile": "LOW_LATENCY_INTERACTION",
+      "optimize_for": ["first_audio_latency", "streaming", "short_response"]
+    },
+    {
+      "profile": "LONG_FORM_READING",
+      "optimize_for": ["stability", "paragraph_rhythm", "cost_efficiency"]
+    },
+    {
+      "profile": "ACCESSIBILITY",
+      "optimize_for": ["clarity", "speed_control", "repeatability"]
+    }
+  ],
+  "provider_registry_contract": {
+    "providers_may_be_multiple": true,
+    "provider_names_are_runtime_discovered": true,
+    "do_not_invent_unverified_provider": true,
+    "required_metadata": [
+      "capability_ref",
+      "supported_languages",
+      "voices",
+      "latency_class",
+      "quality_class",
+      "emotional_prosody_class",
+      "cost_class",
+      "privacy_class",
+      "availability_state",
+      "evidence_path",
+      "sha256"
+    ]
+  },
+  "selection_order": [
+    "SCENE_PERMISSION_AND_MODE",
+    "TASK_PROFILE",
+    "LANGUAGE_AND_PRONUNCIATION_NEEDS",
+    "PRIVACY_AND_AUTHORITY",
+    "VERIFIED_PROVIDER_AVAILABILITY",
+    "LATENCY_QUALITY_COST_SCORE",
+    "EMOTIONAL_PROSODY_HARD_GATE",
+    "FALLBACK_CHAIN"
+  ],
+  "formal_call_path": [
+    "SCENE_INPUT",
+    "8D_ADI_PACKET",
+    "SCENE_PERMISSION_MODE_ROUTING",
+    "FOUNDER_LAPTOP_CORE_MODEL",
+    "MODEL_CANDIDATE",
+    "VERIFIED_FINAL_ANSWER",
+    "TAIJI01_TOTAL_FIELD",
+    "ACTIVE_VERIFIED_OUTPUT_PROJECTION",
+    "PRONUNCIATION_TASK_ROUTER",
+    "AIRPLAY_ADAPTER",
+    "HOMEPOD"
+  ],
+  "homepod": {
+    "role": "EXISTING_OUTPUT_CHAIN",
+    "chain_reuse_requested": true,
+    "is_only_pronunciation_system": false
+  },
+  "reference_only_endpoint_observation": {
+    "state": "SUPERSEDED_HISTORICAL_HOLD_LAPTOP_CORE_MODEL_ENDPOINT_UNAVAILABLE",
+    "superseded_by_core_landing": true,
+    "core_model_node": "FOUNDER_LAPTOP(MSI)",
+    "tailscale_online": true,
+    "physical_model_binding": "UNVERIFIED",
+    "screenshot_evidence": "Continue已選取Qwen3_Abliterated_8B_Frontbrain",
+    "screenshot_proves_endpoint": false,
+    "vscode_remote_forward_port": 41861,
+    "vscode_remote_forward_is_model_endpoint": false,
+    "required_model_endpoint_port": 9002,
+    "endpoint_check": {
+      "/healthz": "HTTP_000_CONNECTION_REFUSED",
+      "/v1/models": "HTTP_000_CONNECTION_REFUSED"
+    },
+    "taiji01_model_called": false,
+    "existing_homepod_chain_reused": true,
+    "blocker": "筆電在線但9002未監聽；截圖中的模型選擇尚未形成taiji01可達且綁定core_model_ref的正式端點",
+    "next": "START_EXISTING_FOUNDER_LAPTOP_XIAOJ_CORE_ENDPOINT_ON_AUTHORIZED_VPN_BINDING_THEN_RECHECK_METADATA_ONLY_ENDPOINTS",
+    "evidence_status": "USER_SUPPLIED_REFERENCE_ONLY_NOT_CURRENTLY_HASH_EVIDENCED",
+    "authorizes_start_or_restart": false
+  },
+  "current_core_endpoint": {
+    "state": "PASS_LAPTOP_CORE_MODEL_ENDPOINT_LANDED",
+    "endpoint": "http://100.84.204.114:9002",
+    "binding": "TAILSCALE_IPV4_ONLY_TO_LOCALHOST_GATEWAY",
+    "healthz": "HTTP_200",
+    "v1_models": "HTTP_200",
+    "v1_chat_completions": "HTTP_200",
+    "physical_model_binding": "VERIFIED",
+    "model_digest": "5a1b4a5f4cc02fbccc3df38c2fc4e9d8772fdfafdd678f7158c6deeffb0a7830",
+    "voice_provider_runtime_status": "NOT_YET_EVIDENCED_BY_THIS_CORE_LANDING"
+  },
+  "scene_reference_contract": {
+    "mode": "REFERENCE_ONLY",
+    "fields": [
+      "xiaoj_identity_ref",
+      "core_model_ref",
+      "scene_ref",
+      "mode_ref",
+      "allowed_context_refs",
+      "capability_refs",
+      "route_ref",
+      "logical_time",
+      "packet_sha256"
+    ]
+  },
+  "fallback": {
+    "missing_verified_provider": "HOLD_PRONUNCIATION_PROVIDER_NOT_YET_EVIDENCED",
+    "emotionless_output": "HOLD_EMOTIONLESS_RECITATION_NOT_XIAOJ",
+    "core_endpoint_unavailable": "KEEP_TEXT_VERIFIED_FINAL_ANSWER_AND_HOLD_AUDIO_PATH",
+    "never_call_taiji01_model": true
+  }
+}

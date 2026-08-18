@@ -1,0 +1,157 @@
+{
+  "contract_version": "W7TP-MOVING-V-PRELOAD-CLEANUP/1.0",
+  "contract_id": "W7TP_MOVING_V_PRELOAD_CLEANUP_V1_CANDIDATE",
+  "status": "CANDIDATE_ONLY",
+  "mode": "STATIC_SIMULATION_ONLY",
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "runtime_approved": false,
+    "canonical_change_approved": false,
+    "deployment_approved": false,
+    "hard_delete_enabled": false,
+    "canonical_source_delete_allowed": false
+  },
+  "adi_binding": {
+    "distance_input": "FOUNDER_NATIVE_ADI_DELTA_F_UINT_ONLY",
+    "computes_adi_distance": false,
+    "generic_geometric_distance_allowed": false,
+    "similarity_proxy_allowed": false,
+    "canonical_rule_lineage": "PENDING_TOTAL_FIELD_CONFIRMATION"
+  },
+  "time_alignment_contract": {
+    "apex_source": "EXTERNALLY_ALIGNED_MONOTONIC_INPUT",
+    "event_time_required": true,
+    "ingest_time_required": true,
+    "logical_time_binding_required": true,
+    "safe_watermark_rule": "MINIMUM_OF_ALL_REQUIRED_ACTIVE_NODE_WATERMARKS",
+    "clock_regression_policy": "HOLD",
+    "network_partition_policy": "HOLD_WATERMARK_ADVANCE",
+    "late_event_policy": "PAST_HOLD_UNTIL_RECONCILED"
+  },
+  "materialization_contract": {
+    "canonical_action": "RETAIN",
+    "volatile_cache_action_field": "materialization_evictions",
+    "native_adi_deleted_refs_for_cache_eviction": "FORBIDDEN",
+    "future_predicted_miss_action": "SOFT_EVICT_RECONSTRUCTIBLE_ONLY",
+    "past_eligible_action": "MOVE_TO_QUARANTINE_FIRST"
+  },
+  "optimization_contract": {
+    "founder_intent": "BETTER_EFFECT_AND_BETTER_HUMAN_USER_EXPERIENCE",
+    "numeric_parameter_policy": "ALL_NUMERIC_VALUES_ARE_TUNABLE_WITH_EVIDENCE",
+    "current_numbers": "SYNTHETIC_VALIDATION_DEFAULTS_NOT_FOUNDER_CONSTANTS",
+    "threshold_state": "PENDING_SHADOW_AND_CANARY_CALIBRATION",
+    "ordered_objectives": [
+      "DATA_INTEGRITY_AND_PROTECTED_STATE_SAFETY",
+      "RESPONSE_EFFECT_AND_TASK_SUCCESS",
+      "INTERACTIVE_LATENCY_AND_NO_VISIBLE_STALL",
+      "RECONSTRUCTION_RELIABILITY",
+      "PRELOAD_HIT_RATE_AND_FALSE_MISS_CONTROL",
+      "SYSTEM_STABILITY_NO_OOM_OR_SWAP_THRASHING",
+      "RAM_VRAM_AND_TRANSPORT_EFFICIENCY"
+    ],
+    "fixed_non_numeric_invariants": [
+      "NEVER_EVICT_CURRENT_OR_V_PROTECTED_STATE",
+      "NEVER_DELETE_CANONICAL_SOURCE",
+      "UNKNOWN_OR_CONFLICTED_STATE_HOLDS",
+      "FALSE_MISS_MUST_BE_RECONSTRUCTIBLE_AND_HASH_VERIFIED",
+      "LOCAL_PASS_NEVER_IMPLIES_TOTAL_FIELD_OR_RUNTIME_APPROVAL"
+    ]
+  },
+  "policy": {
+    "policy_id": "MOVING_V_STATIC_VALIDATION_POLICY_V1",
+    "prediction_epoch": "STATIC_EPOCH_0001",
+    "apex_time_ns": 1000000000000,
+    "safe_watermark_ns": 995000000000,
+    "current_guard_ns": 100000000,
+    "clock_uncertainty_ns": 100000000,
+    "past_grace_ns": 1000000000,
+    "future_horizon_ns": 60000000000,
+    "envelope": [
+      {
+        "future_offset_ns": 0,
+        "protected_radius_uint": 0,
+        "candidate_radius_uint": 64
+      },
+      {
+        "future_offset_ns": 10000000000,
+        "protected_radius_uint": 16,
+        "candidate_radius_uint": 64
+      },
+      {
+        "future_offset_ns": 30000000000,
+        "protected_radius_uint": 40,
+        "candidate_radius_uint": 72
+      },
+      {
+        "future_offset_ns": 60000000000,
+        "protected_radius_uint": 64,
+        "candidate_radius_uint": 80
+      }
+    ]
+  },
+  "memory_budget": {
+    "budget_mode": "PERFORMANCE_GATED_ADAPTIVE_LIMIT",
+    "initial_candidate_bytes": 2147483648,
+    "max_resident_bytes": 2147483648,
+    "high_watermark_bytes": 1932735283,
+    "low_watermark_bytes": 1610612736,
+    "budget_semantics": "CURRENT_CANDIDATE_LIMIT_NOT_RESERVED_OR_FIXED",
+    "adjustable": true,
+    "adjustment_gate_state": "THRESHOLDS_NOT_CALIBRATED",
+    "adjustment_requires": [
+      "SHADOW_OR_CANARY_SAMPLE_SUFFICIENCY",
+      "HOST_RESERVE_PASS",
+      "NO_OOM",
+      "NO_SWAP_THRASHING",
+      "P95_LATENCY_REGRESSION_WITHIN_APPROVED_THRESHOLD",
+      "FALSE_MISS_RATE_WITHIN_APPROVED_THRESHOLD",
+      "PRELOAD_HIT_RATE_ABOVE_APPROVED_THRESHOLD",
+      "PROPOSED_LIMIT_NOT_BELOW_PROTECTED_WORKING_SET",
+      "ZERO_PROTECTED_EVICTION_VIOLATIONS",
+      "ZERO_RECONSTRUCTION_HASH_MISMATCHES",
+      "TOTAL_FIELD_AND_HUMAN_AUTHORIZATION"
+    ],
+    "activation_state": "NOT_APPLIED"
+  },
+  "allowed_actions": [
+    "PROTECT_CURRENT",
+    "PROTECT_PRELOAD",
+    "KEEP_HOLD",
+    "NO_PRELOAD_KEEP_REFERENCE",
+    "SOFT_EVICT_RECONSTRUCTIBLE",
+    "MOVE_TO_QUARANTINE",
+    "NOOP_REFERENCE_ONLY"
+  ],
+  "required_reclaim_gates": [
+    "NO_LIVE_REFERENCE",
+    "NO_ACTIVE_LEASE",
+    "NOT_PINNED",
+    "RECORD_VERSION_CAS_MATCH",
+    "PREDICTION_EPOCH_CAS_MATCH",
+    "DURABLE_SOURCE_VERIFIED",
+    "RECONSTRUCTION_REFERENCE_EXISTS",
+    "SOURCE_HASH_MATCH",
+    "TARGET_NOT_CANONICAL_SOURCE"
+  ],
+  "zero_tolerance_metrics": {
+    "protected_eviction_violation": 0,
+    "current_eviction_violation": 0,
+    "canonical_source_deleted": 0,
+    "double_reclaim": 0,
+    "unaudited_reclaim": 0,
+    "hash_mismatch_consumed": 0
+  },
+  "explicit_non_actions": [
+    "NO_SERVICE_RESTART",
+    "NO_REBOOT",
+    "NO_DEPLOYMENT",
+    "NO_MODEL_RELOAD",
+    "NO_CGROUP_CHANGE",
+    "NO_ROUTER_CHANGE",
+    "NO_EXTERNAL_CALL",
+    "NO_CANONICAL_WRITE",
+    "NO_POINTER_CHANGE",
+    "NO_HARD_DELETE",
+    "NO_NATIVE_ADI_DELETED_REFS_FOR_CACHE_EVICTION"
+  ]
+}
