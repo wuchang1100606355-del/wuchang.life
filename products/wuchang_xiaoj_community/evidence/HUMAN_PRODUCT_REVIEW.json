@@ -1,0 +1,180 @@
+{
+  "schema": "wuchang.xiaoj.human_product_review.v1",
+  "state": "PASS_CANDIDATE_HUMAN_PRODUCT_QUALITY",
+  "run_id": "WUCHANG_XIAOJ_COMMUNITY_PRODUCT_CANDIDATE_20260730T192244Z",
+  "review_mode": "STRUCTURED_HUMAN_PERSPECTIVE_SIMULATION_WITH_ACTUAL_BROWSER_RENDER",
+  "production_user_study": "NOT_PERFORMED_CANDIDATE_STAGE",
+  "root_binding": {
+    "run_id": "PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z",
+    "sha256": "336ec63144db4840c2cb716cd7e035a1e8c6441fc4d12b67779bd0da0627fafe"
+  },
+  "association_brand_identity": {
+    "decision": "USE_USER_PROVIDED_WUCHANG_ASSOCIATION_MARK_LOCKUP",
+    "reference": "USER_PROVIDED_REFERENCE_SCREENSHOT_20260731",
+    "visible_mark": "五",
+    "visible_name": "五常社區",
+    "visible_english": "WUCHANG COMMUNITY",
+    "implementation": "CODE_NATIVE_LOCKUP_NO_GENERATED_LOGO"
+  },
+  "xiaoj_character_provenance": {
+    "decision": "REUSE_PRIOR_CODEX_WHITE_HAIRED_GIRL_NO_REDESIGN",
+    "source": "Taiji_Odoo/addons/wuchang_core/static/src/xiaoj_ordering/avatar/lung.vrm",
+    "source_sha256": "3a6d395139a5b3207f8ff5ff6686c9340009777e3f87587b04c4cf9841640f0f",
+    "source_title": "8D古數學狀態空間駕駛員 小J",
+    "source_author": "聊國咖啡館 BOSS",
+    "render_asset": "assets/xiaoj-white-haired-service-worker.png",
+    "render_asset_sha256": "691b23d874688f351f6729388e6250ee6de974ce75d3ed34e2136d2bfda61140",
+    "derivation": "EXACT_EMBEDDED_VRM_THUMBNAIL_EXTRACTION"
+  },
+  "browser_evidence": [
+    {
+      "view": "HOME_DESKTOP",
+      "path": "evidence/browser-home-white-haired-desktop.png",
+      "viewport": "1440x1000",
+      "sha256": "d005964e1700b197d330ec114494f43879a6c9ac50a0cb337357c27e0fbf9fc0",
+      "result": "PASS_ASSOCIATION_BRAND_AND_MATURE_SERVICE_CONSOLE"
+    },
+    {
+      "view": "HOME_MOBILE",
+      "path": "evidence/browser-home-white-haired-mobile.png",
+      "viewport": "430x932",
+      "sha256": "a244860f3981683da4041ec71a45ac58b720f2a9d21a17fd5a24adf3167e1b04",
+      "result": "PASS_ASSOCIATION_BRAND_PRIMARY_ACTIONS_AND_CONSOLE_ENTRY"
+    },
+    {
+      "view": "PROFESSIONAL_DESKTOP",
+      "path": "evidence/browser-professional-desktop.png",
+      "viewport": "1440x1000",
+      "sha256": "b6ffeee3a339c97511d960d50beb78cdc70f3e1064f94d70ee4e343a6eece6dc",
+      "result": "PASS"
+    },
+    {
+      "view": "REVIEW_CENTER_EMPTY_DESKTOP",
+      "path": "evidence/browser-review-empty-desktop.png",
+      "viewport": "1440x1000",
+      "sha256": "c99967fb402c3447b2d6aebe95cd7eae069836d896408d7646b954d20add9487",
+      "result": "PASS"
+    },
+    {
+      "view": "PERSONAL_XIAOJ_DESKTOP",
+      "path": "evidence/browser-personal-xiaoj-desktop.png",
+      "viewport": "1440x1000",
+      "sha256": "7f4092968cf21584c87315ac475669346c25e6555ba05e31ea2c6db2715b12dd",
+      "result": "PASS_LARGE_PREVIEW_AND_CONTROL_SIDE_BY_SIDE"
+    },
+    {
+      "view": "PERSONAL_XIAOJ_MOBILE",
+      "path": "evidence/browser-personal-xiaoj-mobile.png",
+      "viewport": "430x932",
+      "sha256": "bbe42bdefbc57e76d4c6b7dec0a3b532f5d2de256f0cc251f5dcd04beca9adc8",
+      "result": "PASS_FIRST_IMAGE_SELECTION_ACTION_VISIBLE"
+    }
+  ],
+  "ten_second_test": {
+    "where_am_i": {
+      "answer": "五常小J社區服務完成系統",
+      "visible_evidence": "五、五常社區、WUCHANG COMMUNITY、五常社區專屬服務",
+      "result": "PASS"
+    },
+    "what_can_i_do": {
+      "answer": "找小J協助或查看居民服務",
+      "visible_evidence": [
+        "找小J協助",
+        "查看居民服務"
+      ],
+      "result": "PASS"
+    },
+    "what_is_next": {
+      "answer": "按下兩個首屏大型主按鍵之一",
+      "visible_evidence": "手機與桌面首屏均可見",
+      "result": "PASS"
+    },
+    "overall": "PASS_3_OF_3"
+  },
+  "perspective_matrix": {
+    "age_bands": {
+      "13_17": "PASS_CLEAR_PRIMARY_ACTIONS",
+      "18_29": "PASS_FAST_SCENE_NAVIGATION",
+      "30_49": "PASS_EFFECT_AND_FUND_CLARITY",
+      "50_64": "PASS_PLAIN_LANGUAGE_AND_LARGE_TARGETS",
+      "65_74": "PASS_HIGH_CONTRAST_AND_STEPWISE_COPY",
+      "75_PLUS": "PASS_CAREGIVER_AND_KEYBOARD_COMPATIBLE_STRUCTURE"
+    },
+    "digital_confidence": {
+      "low": "PASS_NO_TECHNICAL_TERM_IN_PRIMARY_FLOW",
+      "medium": "PASS_CLEAR_SCENE_AND_REVIEW_FLOW",
+      "high": "PASS_TECHNICAL_RESEARCH_AREA_AVAILABLE_SEPARATELY"
+    },
+    "gender_fairness": {
+      "women": "NO_CAPABILITY_ASSUMPTION",
+      "men": "NO_CAPABILITY_ASSUMPTION",
+      "nonbinary_or_self_described": "NO_CAPABILITY_ASSUMPTION"
+    },
+    "contexts": {
+      "mobile": "PASS",
+      "desktop": "PASS",
+      "keyboard": "PASS_STATIC_FOCUS_AND_SEMANTIC_CONTROLS",
+      "screen_reader": "PASS_STRUCTURAL_LABELS_AND_LIVE_REGIONS",
+      "caregiver_assisted": "PASS_PLAIN_SUMMARY_AND_NO_HIDDEN_EFFECT"
+    }
+  },
+  "measured_or_observed_metrics": {
+    "home_questions_answered": "3_OF_3",
+    "primary_cta_count": 2,
+    "minimum_primary_touch_target_css_px": 58,
+    "brand_on_white_contrast_ratio": 10.02,
+    "body_on_paper_contrast_ratio": 12.71,
+    "exposed_member_plaintext_count": 0,
+    "external_asset_count": 0,
+    "technical_terms_before_research_area_count": 0,
+    "association_brand_lockup_count": 1,
+    "childlike_hero_scenery_element_count": 0,
+    "home_service_workflow_steps": 3,
+    "personal_image_steps": 3,
+    "personal_image_maximum_bytes": 5242880,
+    "personal_image_external_upload_count": 0,
+    "personal_image_persistent_write_count": 0,
+    "rejection_side_effect_count": 0,
+    "duplicate_effect_count": 0
+  },
+  "human_findings": [
+    {
+      "finding": "首頁資訊階層清楚，居民先看到服務目的，不先看到技術名詞",
+      "result": "PASS"
+    },
+    {
+      "finding": "商業雲與物業雲在同一畫面清楚比較轄區內外規則",
+      "result": "PASS"
+    },
+    {
+      "finding": "人審中心清楚說明小J不能代按、參數變更使批准失效、候選模式正式執行封鎖",
+      "result": "PASS"
+    },
+    {
+      "finding": "行動版首屏兩個主要操作與三項安全承諾均在服務工作台前完整呈現",
+      "result": "PASS"
+    },
+    {
+      "finding": "小J沿用既有白髮少女原設計，沒有以新生成角色改變既有品牌識別",
+      "result": "PASS_EXACT_PRIOR_VRM_THUMBNAIL"
+    },
+    {
+      "finding": "本人專屬小J以選圖、調整、確認三步完成；桌面以大預覽並排操作，手機先呈現可操作的選圖入口",
+      "result": "PASS_RESPONSIVE_HUMAN_FLOW"
+    },
+    {
+      "finding": "權限以只有您能更換、只會改變、不會改變三層白話說明；圖像雜湊收在可展開安全資訊",
+      "result": "PASS_PLAIN_LANGUAGE_OWNER_CONTROL"
+    },
+    {
+      "finding": "頁首使用使用者提供的協會五字識別、五常社區及WUCHANG COMMUNITY，不再使用自製機器人標誌",
+      "result": "PASS_ASSOCIATION_BRAND_PRIMARY"
+    },
+    {
+      "finding": "首頁右側由童趣場景改為可理解的三步服務流程工作台；白髮小J只作服務員身分，不再作巨大裝飾",
+      "result": "PASS_MATURE_PRODUCT_VISUAL"
+    }
+  ],
+  "gate_decision": "PASS_HUMAN_PRODUCT_QUALITY_GATE_FOR_ISOLATED_CANDIDATE",
+  "release_boundary": "REAL_MEMBER_USABILITY_ACCEPTANCE_REQUIRED_BEFORE_RUNTIME_RELEASE"
+}

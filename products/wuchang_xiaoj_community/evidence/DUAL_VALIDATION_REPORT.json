@@ -1,0 +1,55 @@
+{
+  "schema": "wuchang.xiaoj.dual_validation_report.v1",
+  "state": "PASS_NEW_THREE_GATE_CANDIDATE",
+  "run_id": "WUCHANG_XIAOJ_COMMUNITY_PRODUCT_CANDIDATE_20260730T192244Z",
+  "gate_order": [
+    {
+      "gate": "ROOT_PACKET_GATE",
+      "result": "PASS",
+      "evidence": "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json@sha256:7f549057d958802f67628f25e98c6a5159f06ff661114bd1949388626b0f4119"
+    },
+    {
+      "gate": "HUMAN_PRODUCT_QUALITY_GATE",
+      "result": "PASS_CANDIDATE",
+      "evidence": "evidence/HUMAN_PRODUCT_REVIEW.json"
+    },
+    {
+      "gate": "DUAL_VALIDATION_GATE",
+      "result": "PASS_CANDIDATE",
+      "code_validation": "PASS",
+      "human_perspective_validation": "PASS",
+      "evidence": [
+        "evidence/CODE_VALIDATION_REPORT.json",
+        "evidence/HUMAN_PRODUCT_REVIEW.json"
+      ]
+    }
+  ],
+  "hard_risk_review": {
+    "hidden_side_effect": "PASS_BLOCKED_BY_ACTION_REVIEW_PACKET",
+    "technical_jargon_displacing_resident_service": "PASS_TECHNICAL_RESEARCH_AREA_ONLY",
+    "association_brand_replaced_by_generic_product_icon": "PASS_BLOCKED_USER_PROVIDED_ASSOCIATION_MARK_PRIMARY",
+    "childlike_hero_scenery": "PASS_BLOCKED_MATURE_SERVICE_CONSOLE_REPLACEMENT",
+    "unapproved_character_redesign": "PASS_BLOCKED_PRIOR_CODEX_WHITE_HAIRED_DESIGN_REUSED",
+    "unauthorized_personal_image_change": "PASS_BLOCKED_SAME_MEMBER_ROOT_AND_SESSION_REQUIRED",
+    "personal_image_preview_presented_as_applied": "PASS_BLOCKED_LOCAL_PREVIEW_LABEL_AND_ZERO_WRITE",
+    "personal_image_parameters_changed_after_review": "PASS_BLOCKED_ACTION_HASH_AND_PARAMETERS_SHA256",
+    "parallel_membership_authority": "PASS_ODOO_ONLY",
+    "candidate_presented_as_live_runtime": "PASS_VISIBLE_ISOLATED_CANDIDATE_LABEL",
+    "formal_effect_after_candidate_approval": "PASS_BLOCKED"
+  },
+  "product_candidate": {
+    "source": "/home/taiji_admin/Taiji_Hub/products/wuchang_xiaoj_community",
+    "scenes": [
+      "RESIDENT",
+      "BUSINESS_CLOUD",
+      "PROPERTY_CLOUD"
+    ],
+    "source_generation": "COMPLETED",
+    "database_write": false,
+    "deploy": false,
+    "restart": false,
+    "runtime_release": false
+  },
+  "decision": "PASS_ISOLATED_PRODUCT_CANDIDATE_ONLY",
+  "production_boundary": "NO_DEPLOY_NO_DB_NO_RUNTIME_RELEASE; REAL_MEMBER_ACCEPTANCE_AND_SEPARATE_LANDING_AUTHORIZATION_REQUIRED"
+}
