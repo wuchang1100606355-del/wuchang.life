@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
+from __future__ import annotations
+
 from odoo import fields
 from odoo.http import Response
+
+
+HOLD_NO_VERIFIER_REASON = "HOLD_NATIVE_8D_VERIFIER_NOT_BOUND"
+GUEST_MODE = "GUEST_SERVICE_SESSION"
+MEMBER_MODE = "VERIFIED_8D_MEMBER"
+
 
 def _get_any_ref(record, names):
     if not record:
@@ -12,48 +20,45 @@ def _get_any_ref(record, names):
                 return value
     return False
 
+
+def _resolve_existing_canonical_8d_verifier():
+    """Thin adapter hook for an existing canonical verifier.
+
+    No bound verifier exists in the currently permitted workspace scope, so
+    the adapter deliberately returns None instead of inventing a second
+    authority system.
+    """
+
+    return None
+
+
 def validate_xiaoj_8d_packet_gate(request):
     """
     Official XiaoJ entrance gate.
 
-    Required authority is a valid 8D packet or controlled packet_ref.
-    The 8D packet is the carrier for:
-    - AI identity
-    - device binding
-    - Odoo function authority
-    - AI function authority
-    - dedicated XiaoJ service
-    - association-verifiable true identity
-    - no-plaintext front-stage behavior refs
+    Member identity authority is only the 8D ADI identity packet.
+    Odoo user/partner refs, device refs, table refs, and service refs are only
+    coordinates or evidence. They do not authorize identity by themselves.
     """
+
     env = request.env
     user = env.user.sudo()
-    partner = user.partner_id.sudo() if user and user.partner_id else False
+    partner = getattr(user, "partner_id", False)
+    if partner:
+        partner = partner.sudo()
     icp = env["ir.config_parameter"].sudo()
-
-    association_root_packet_ref = icp.get_param("wuchang.w7tp.association_root_8d_packet_ref")
-    counter_ai_packet_ref = icp.get_param("wuchang.w7tp.counter_ai_8d_packet_ref")
-
-    if not association_root_packet_ref:
-        return {
-            "allowed": False,
-            "mode": "DENY",
-            "reason": "ASSOCIATION_ROOT_8D_PACKET_MISSING",
-            "read_allowed": False,
-            "write_allowed": False,
-        }
 
     user_packet_ref = _get_any_ref(user, [
         "x_w7tp_8d_packet_ref",
         "x_w7tp_8d_packet",
         "x_w7tp_packet_ref",
     ])
-
     partner_packet_ref = _get_any_ref(partner, [
         "x_w7tp_8d_packet_ref",
         "x_w7tp_8d_packet",
         "x_w7tp_packet_ref",
     ])
+    member_packet_ref = user_packet_ref or partner_packet_ref
 
     ai_identity_ref = _get_any_ref(user, [
         "x_w7tp_ai_identity_ref",
@@ -66,7 +71,6 @@ def validate_xiaoj_8d_packet_gate(request):
     ])
 
     device_ref = request.session.get("w7tp_device_ref") or request.session.get("device_ref")
-
     xiaoj_service_ref = _get_any_ref(user, [
         "x_w7tp_xiaoj_service_ref",
         "x_xiaoj_service_ref",
@@ -75,40 +79,87 @@ def validate_xiaoj_8d_packet_gate(request):
         "x_xiaoj_service_ref",
     ])
 
-    member_packet_ref = user_packet_ref or partner_packet_ref
+    verifier = _resolve_existing_canonical_8d_verifier()
 
-    if member_packet_ref and ai_identity_ref and device_ref and xiaoj_service_ref:
+    if member_packet_ref:
+        if verifier is None:
+            return {
+                "allowed": False,
+                "mode": "DENY",
+                "identity_verified": False,
+                "identity_authority": "NONE",
+                "read_allowed": True,
+                "write_allowed": False,
+                "plaintext_allowed": False,
+                "reason": HOLD_NO_VERIFIER_REASON,
+                "packet_ref": str(member_packet_ref),
+                "member_packet_ref": str(member_packet_ref),
+                "ai_identity_ref": str(ai_identity_ref or ""),
+                "device_ref": str(device_ref or ""),
+                "xiaoj_service_ref": str(xiaoj_service_ref or ""),
+                "execution_authorized": False,
+            }
+
+        verification = verifier.verify(
+            request=request,
+            packet_ref=str(member_packet_ref),
+            ai_identity_ref=str(ai_identity_ref or ""),
+            device_ref=str(device_ref or ""),
+            xiaoj_service_ref=str(xiaoj_service_ref or ""),
+        )
+        if not verification.get("verified"):
+            return {
+                "allowed": False,
+                "mode": "DENY",
+                "identity_verified": False,
+                "identity_authority": "NONE",
+                "read_allowed": True,
+                "write_allowed": False,
+                "plaintext_allowed": False,
+                "reason": verification.get("reason") or "VERIFIER_DENIED",
+                "packet_ref": str(member_packet_ref),
+                "execution_authorized": False,
+            }
         return {
             "allowed": True,
-            "mode": "MEMBER_8D_PACKET",
+            "mode": MEMBER_MODE,
             "packet_ref": str(member_packet_ref),
-            "ai_identity_ref": str(ai_identity_ref),
-            "device_ref": str(device_ref),
-            "xiaoj_service_ref": str(xiaoj_service_ref),
+            "identity_verified": True,
+            "identity_authority": "8D_ADI_IDENTITY_PACKET",
             "read_allowed": True,
-            "write_allowed": True,
+            "write_allowed": bool(verification.get("execution_authorized", False)),
             "plaintext_allowed": False,
+            "verification_receipt_ref": str(verification.get("verification_receipt_ref") or ""),
+            "execution_authorized": bool(verification.get("execution_authorized", False)),
         }
 
+    counter_ai_packet_ref = icp.get_param("wuchang.w7tp.counter_ai_8d_packet_ref")
     if counter_ai_packet_ref:
         return {
             "allowed": True,
-            "mode": "COUNTER_AI_GUEST_PACKET",
+            "mode": GUEST_MODE,
             "packet_ref": str(counter_ai_packet_ref),
+            "identity_verified": False,
+            "identity_authority": "NONE",
             "read_allowed": True,
             "write_allowed": False,
             "guest_only": True,
             "plaintext_allowed": False,
+            "execution_authorized": False,
         }
 
     return {
         "allowed": False,
         "mode": "DENY",
-        "reason": "NO_VALID_8D_PACKET_OR_COUNTER_AI_PACKET",
+        "identity_verified": False,
+        "identity_authority": "NONE",
         "read_allowed": False,
         "write_allowed": False,
         "plaintext_allowed": False,
+        "reason": "NO_GUEST_CAPABILITY_PACKET_BOUND",
+        "execution_authorized": False,
     }
+
 
 def render_xiaoj_8d_packet_denied_page(gate):
     reason = gate.get("reason", "DENY")
@@ -130,12 +181,11 @@ code{{background:#000;padding:4px 8px;border-radius:8px}}
 </head>
 <body>
 <div class="card">
-<h1>小J 入口尚未通過 8維封包</h1>
+<h1>小J 入口暫時無法進入</h1>
 <p class="bad">READ_DENY / WRITE_DENY</p>
 <p>原因：<code>{reason}</code></p>
-<p>本入口需要有效 8維封包或受控 packet_ref。</p>
-<p>8維封包必須包含或參照：AI身分、設備綁定、Odoo功能、AI功能、專屬小J服務、真實身分協會可證、非明文前段留存與執行權限。</p>
-<p class="ok">訪客點餐需由櫃台AI服務8維封包進入；會員服務需由 Odoo 驗證會員8維封包。</p>
+<p>會員身份只能由 8D ADI identity packet 驗證；若沒有正式 verifier，會員權限會維持關閉。</p>
+<p class="ok">Guest service session 仍可在具備 counter AI capability 時以唯讀方式進入。</p>
 </div>
 </body>
 </html>

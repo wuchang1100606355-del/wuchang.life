@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "LIVE_ODOO_MENU_DATA_READONLY_MAPPING_V1",
+  "title": "LIVE_ODOO_MENU_DATA_READONLY_MAPPING_V1",
+  "type": "object",
+  "required": [
+    "snapshot_ref",
+    "source_modules",
+    "source_models",
+    "menu_fields_mapped",
+    "catalog",
+    "w5c_reused",
+    "deterministic_output",
+    "content_sha256"
+  ],
+  "properties": {
+    "snapshot_ref": {
+      "const": "LIVE_ODOO_MENU_DATA_READONLY_MAPPING_V1"
+    },
+    "source_modules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "source_models": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "menu_fields_mapped": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "catalog": {
+      "type": "object",
+      "required": [
+        "menu_items",
+        "option_groups",
+        "option_questions",
+        "option_items",
+        "product_templates"
+      ],
+      "properties": {
+        "menu_items": {
+          "type": "array"
+        },
+        "option_groups": {
+          "type": "array"
+        },
+        "option_questions": {
+          "type": "array"
+        },
+        "option_items": {
+          "type": "array"
+        },
+        "product_templates": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "w5c_reused": {
+      "type": "boolean"
+    },
+    "deterministic_output": {
+      "type": "boolean",
+      "const": true
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": true
+}
+
