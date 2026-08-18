@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>小J 15 元件離散候選｜人審 HOLD</title>
+  <style>
+    :root{color-scheme:dark;font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif;background:#071018;color:#e9f2f7}*{box-sizing:border-box}body{margin:0;padding:24px;max-width:1500px;margin-inline:auto}header{display:flex;gap:20px;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #2a4654;padding-bottom:18px}h1{margin:0 0 8px;font-size:1.45rem}.hold{background:#4a3211;border:1px solid #b9873f;border-radius:7px;padding:10px 14px;color:#ffdba7;font-weight:700}p{color:#a9bdc7;line-height:1.55}.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:18px 0}.fact{background:#0d1b24;border:1px solid #24404d;border-radius:7px;padding:12px}.fact b{display:block;color:#78d8c7;margin-bottom:4px}.views{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.view{background:#0b1922;border:1px solid #294653;border-radius:8px;padding:12px}.view h2{font-size:1rem;margin:0 0 10px}.pair{display:grid;grid-template-columns:1fr 128px;gap:9px;align-items:start}.reference{width:100%;aspect-ratio:3/4;object-fit:contain;background:#fff}.stack{display:grid;gap:7px}.mask{width:128px;height:192px;image-rendering:pixelated;background:#fff;border:1px solid #3b5966}.caption{font-size:.72rem;color:#8ba4af;margin:2px 0 0}.anchor{margin-top:18px;display:grid;grid-template-columns:minmax(190px,280px) 1fr;gap:18px;align-items:start}.anchor img{width:100%;background:#fff}.warning{border-left:4px solid #d49b4d;padding:10px 14px;background:#211b13;color:#e9c994}.hash{font-family:ui-monospace,monospace;overflow-wrap:anywhere;font-size:.78rem;color:#9cc2cd}@media(max-width:900px){.views{grid-template-columns:1fr}.anchor{grid-template-columns:1fr}.pair{grid-template-columns:1fr 128px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>小J｜15 元件離散查表人審候選</h1>
+      <p>唯一決策核心為 15 位元整數遮罩的 32,767 個非空組合排序。此頁僅呈現正、左、背投影與差異遮罩；沒有骨架、蒙皮、joint、動作或即時頂點變形。</p>
+    </div>
+    <div class="hold">REFERENCE_ALIGNED_CANDIDATE<br>HOLD_HUMAN_REVIEW</div>
+  </header>
+  <section class="facts">
+    <div class="fact"><b>最佳整數遮罩</b>2 / 000000000000010</div>
+    <div class="fact"><b>元件選擇</b>C01</div>
+    <div class="fact"><b>列舉範圍</b>1–32767，完整且唯一</div>
+    <div class="fact"><b>身分判定</b>identity_pass=false</div>
+  </section>
+  <section class="views">
+    <article class="view">
+      <h2>正面 Front</h2>
+      <div class="pair"><img class="reference" src="../evidence/references/front.png" alt="正面來源參考"><div class="stack"><img class="mask" src="../evidence/masks/candidate/front.png" alt="正面候選遮罩"><img class="mask" src="../evidence/masks/difference/front.png" alt="正面差異遮罩"></div></div>
+      <p class="caption">來源參考｜候選投影｜整數 XOR 差異</p>
+    </article>
+    <article class="view">
+      <h2>左側 Left</h2>
+      <div class="pair"><img class="reference" src="../evidence/references/left.png" alt="左側來源參考"><div class="stack"><img class="mask" src="../evidence/masks/candidate/left.png" alt="左側候選遮罩"><img class="mask" src="../evidence/masks/difference/left.png" alt="左側差異遮罩"></div></div>
+      <p class="caption">來源參考｜候選投影｜整數 XOR 差異</p>
+    </article>
+    <article class="view">
+      <h2>背面 Back</h2>
+      <div class="pair"><img class="reference" src="../evidence/references/back.png" alt="背面來源參考"><div class="stack"><img class="mask" src="../evidence/masks/candidate/back.png" alt="背面候選遮罩"><img class="mask" src="../evidence/masks/difference/back.png" alt="背面差異遮罩"></div></div>
+      <p class="caption">來源參考｜候選投影｜整數 XOR 差異</p>
+    </article>
+  </section>
+  <section class="anchor">
+    <img src="../evidence/references/identity_anchor.png" alt="身份錨點">
+    <div>
+      <h2>Identity anchor lineage</h2>
+      <p class="hash">5232a0f17c1589b8eced2233b6a0198fe07de253e9b574acc900f6a70ec194e9</p>
+      <p class="warning">此 hash 已納入 component table 主鍵與 lineage，但沒有既定的人類身分驗收門檻。因此本頁不提供 PASS 按鈕、不寫入狀態，也不得自動升級至 HUMAN_ACCEPTED_BASE。</p>
+      <p>查表：<a href="../tables/component_table.json">component_table.json</a>　完整排序：<a href="../ranking/full_ranking.jsonl">full_ranking.jsonl</a>　最佳候選：<a href="../ranking/best_candidate.json">best_candidate.json</a></p>
+    </div>
+  </section>
+</body>
+</html>

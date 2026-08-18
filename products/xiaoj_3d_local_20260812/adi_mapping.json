@@ -1,0 +1,15 @@
+{
+  "schema": "w7tp.8d-adi.float-control.v1",
+  "coordinates": [
+    {"id":"identity","label":"身份","default":0.70,"target":"presentation.identityStability"},
+    {"id":"intent","label":"意圖","default":0.50,"target":"expression.valence"},
+    {"id":"authority","label":"權限","default":0.80,"target":"motion.gain"},
+    {"id":"relation","label":"關係","default":0.55,"target":"gaze.engagement"},
+    {"id":"resource","label":"資源","default":0.50,"target":"material.luminance"},
+    {"id":"time","label":"時間","default":0.45,"target":"motion.cadence"},
+    {"id":"risk","label":"風險","default":0.20,"target":"motion.restraint"},
+    {"id":"governance","label":"治理","default":0.90,"target":"control.guard"}
+  ],
+  "range": {"min":0,"max":1,"precision":0.01},
+  "safety": "Local presentation control only; no network, DB, deployment, or authority mutation."
+}

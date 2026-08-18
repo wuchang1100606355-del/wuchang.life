@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>小J｜本機 3D 互動核心</title><link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
+</head>
+<body>
+  <main>
+    <section class="stage"><canvas id="viewport" aria-label="小J 3D 模型"></canvas><div id="load">正在載入小J核心…</div></section>
+    <aside>
+      <p class="eyebrow">個人專屬AI服務 - 小J</p><h1>3D 互動核心</h1>
+      <p class="sub">本機離線素材、即時骨架蒙皮與 8D ADI 浮點控制。</p>
+      <section><h2>動作</h2><div id="actions" class="grid"></div></section>
+      <section><h2>情緒 · 三級</h2><div id="emotions" class="grid"></div></section>
+      <section><h2>發音嘴型</h2><div id="phonemes" class="grid compact"></div></section>
+      <section><h2>8D ADI 控制</h2><div id="adi"></div></section>
+      <p id="status" role="status">準備中</p>
+    </aside>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body></html>

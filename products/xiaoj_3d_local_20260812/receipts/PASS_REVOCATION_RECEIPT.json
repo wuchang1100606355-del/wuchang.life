@@ -1,0 +1,20 @@
+{
+  "schema": "w7tp.local-3d.pass-revocation.v1",
+  "product": "xiaoj_3d_local_20260812",
+  "status": "QUARANTINED",
+  "effective_at": "2026-08-12T05:40:00+08:00",
+  "revoked_receipts": [
+    "LOCAL_VALIDATION_RECEIPT.json",
+    "BROWSER_SMOKE_RECEIPT.json"
+  ],
+  "disabled_capabilities": [
+    "runtime_skeleton",
+    "runtime_skinning",
+    "actions",
+    "expressions",
+    "visemes",
+    "8d_adi_deformation"
+  ],
+  "release_gate": "Three-view visual geometry validation plus post-rig visual validation required.",
+  "pass": false
+}

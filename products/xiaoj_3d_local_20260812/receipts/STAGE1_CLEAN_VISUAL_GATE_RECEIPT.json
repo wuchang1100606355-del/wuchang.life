@@ -1,0 +1,35 @@
+{
+  "schema": "w7tp.local-3d.stage1-clean-visual-gate.v1",
+  "input_references": {
+    "front.png": "2dfcb9a25ba13ad9edfb6dc90c3f05daffe69634117528f588cd00e98361dd40",
+    "left.png": "176bfa518013c68d9abd03271b5cfc7c0efe34f1bd2c909398302e90b56ac645",
+    "back.png": "a5e244749813a22036d38b46dab4524004d00e834107415b1843f8214e9105b6",
+    "identity_anchor.png": "5232a0f17c1589b8eced2233b6a0198fe07de253e9b574acc900f6a70ec194e9"
+  },
+  "clean_glb": {
+    "path": "assets/xiaoj_clean_humanoid_stage1.glb",
+    "sha256": "cef14b35cf5388fa15a2114f0858a83279dbda03a7c316dceb75650aacc37437",
+    "vertices": 158083,
+    "triangles": 316202,
+    "component_count": 1,
+    "watertight": true
+  },
+  "render_mode": "neutral clean mesh only; skeleton=false; skinning=false; actions=false; expressions=false; visemes=false; adi=false",
+  "views": {
+    "front": {"path": "diagnostics/clean_views/front.png", "sha256": "2e0bb55fa3bbe3ad2f98028179b21d1f86869dc4ee3b992f924d59c76ccf04a5"},
+    "left": {"path": "diagnostics/clean_views/left.png", "sha256": "4b9d548c41d564d209027135f675e117a308c69c58256408e4cf8d8ecd4d8331"},
+    "back": {"path": "diagnostics/clean_views/back.png", "sha256": "fe7fc0055c2a2ea8e8cf57c7d6beedbc03745e957b5310725fa0f704fe8aa42a"}
+  },
+  "visual_gates": {
+    "head_body_proportion": true,
+    "limb_continuity": true,
+    "left_right_symmetry": true,
+    "no_background_fragments": true,
+    "no_stretch_or_exploded_faces": true,
+    "three_view_identity_consistency": true,
+    "reference_identity_features": ["Asian female face", "long silver hair", "hooded jacket", "long pants", "sneakers"]
+  },
+  "status": "PASS_STAGE1_CLEAN_GEOMETRY_ONLY",
+  "scope_limit": "This receipt does not approve rigging, animation, expressions, visemes, ADI or the product UI.",
+  "pass": true
+}

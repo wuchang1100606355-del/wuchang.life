@@ -1,0 +1,63 @@
+{
+  "schema": "w7tp.local-3d.rig-build-receipt.v1",
+  "source": {
+    "path": "assets/xiaoj_clean_humanoid_stage1.glb",
+    "sha256": "cef14b35cf5388fa15a2114f0858a83279dbda03a7c316dceb75650aacc37437"
+  },
+  "output": {
+    "path": "assets/xiaoj_clean_humanoid_rigged.glb",
+    "sha256": "12ebe039b2f9c62244e078186db669234b7ad1f842bed24e59d23a9ad9f6964a",
+    "bytes": 11387364
+  },
+  "mesh": {
+    "vertices": 158083,
+    "triangles": 316202,
+    "bounds": [
+      [
+        -0.3705616295337677,
+        -1.000259518623352,
+        -0.27847233414649963
+      ],
+      [
+        0.3712041676044464,
+        0.9929400682449341,
+        0.23927752673625946
+      ]
+    ]
+  },
+  "skin": {
+    "joint_count": 21,
+    "joint_names": [
+      "Root",
+      "Hips",
+      "Spine",
+      "Chest",
+      "Neck",
+      "Head",
+      "Jaw",
+      "Shoulder.L",
+      "Elbow.L",
+      "Wrist.L",
+      "Shoulder.R",
+      "Elbow.R",
+      "Wrist.R",
+      "Thigh.L",
+      "Knee.L",
+      "Ankle.L",
+      "Foot.L",
+      "Thigh.R",
+      "Knee.R",
+      "Ankle.R",
+      "Foot.R"
+    ],
+    "joint_index_min": 0,
+    "joint_index_max": 20,
+    "weight_sum_min": 0.9999998807907104,
+    "weight_sum_max": 1.0000001192092896,
+    "nonfinite_weights": 0,
+    "inverse_bind_identity_max_error": 0.0,
+    "sampled_rest_pose_max_position_error": 3.727079102862337e-08
+  },
+  "coordinate_space": "glTF right-handed, +Y up, mesh and bind globals in model space; IBM stored column-major",
+  "pass": true
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "w7tp.local-3d.revoked-verification-receipt.v1",
+  "status": "REVOKED_VISUAL_GATE_NOT_PROVEN",
+  "timestamp": "2026-08-11T21:25:01.337Z",
+  "asset": {
+    "path": "assets/xiaoj_single_core_geometry.glb",
+    "bytes": 20217896,
+    "sha256": "5d9d07e55d5d1515537e9ba73ed677659cff362b9b282ad318694ef55cbcf44a",
+    "source_mode": "copied from read-only source; original untouched"
+  },
+  "checks": {
+    "asset_exists": true,
+    "source_hash_match": true,
+    "runtime_skinning": true,
+    "skeleton_seven_bones": true,
+    "emotions_12": true,
+    "phonemes_7": true,
+    "actions_5": true,
+    "adi_8d": true,
+    "local_launcher": true
+  },
+  "pass": false,
+  "revoked_at": "2026-08-12T05:40:00+08:00",
+  "reason": "Prior checks proved loadability and code presence only; they did not prove undeformed human geometry or visual identity consistency."
+}

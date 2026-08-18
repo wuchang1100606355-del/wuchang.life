@@ -1,0 +1,29 @@
+{
+  "schema": "w7tp.local-3d.stage1-raw-rejection.v1",
+  "source_glb": {
+    "path": "assets/xiaoj_single_core_geometry.glb",
+    "sha256": "5d9d07e55d5d1515537e9ba73ed677659cff362b9b282ad318694ef55cbcf44a"
+  },
+  "render_mode": "neutral source mesh only; skeleton=false; skinning=false; actions=false; expressions=false; visemes=false; adi=false",
+  "views": {
+    "front": {"path": "diagnostics/raw_views/front.png", "sha256": "d04a8c53b81f9de2d4473be0466997084d1811d5b8736a09150b007e189c8a3c"},
+    "left": {"path": "diagnostics/raw_views/left.png", "sha256": "dbdb38294eb4fd18a8ff44389ebd61b448db4baf867b0beddf508ed3c58a2c45"},
+    "back": {"path": "diagnostics/raw_views/back.png", "sha256": "75b4fd7e99eda5064d660cfbd3b859342a2b65c047250c1bbeaadce2f62a3b78"}
+  },
+  "component_evidence": {
+    "component_count": 15,
+    "largest_background_faces": 801692,
+    "human_component_faces": 316202,
+    "small_fragment_faces": 5278
+  },
+  "visual_gates": {
+    "head_body_proportion": "OBSCURED_BY_BACKGROUND_GEOMETRY",
+    "limb_continuity": "HUMAN_COMPONENT_PRESENT_BUT_NOT_ISOLATED",
+    "left_right_symmetry": "NOT_ACCEPTABLE_WITH_FOREIGN_GEOMETRY",
+    "no_background_fragments": false,
+    "no_stretch_or_exploded_faces": "NOT_PROVABLE_IN_LEFT_VIEW",
+    "three_view_identity_consistency": false
+  },
+  "status": "REJECT_STAGE1_RAW_SOURCE",
+  "pass": false
+}

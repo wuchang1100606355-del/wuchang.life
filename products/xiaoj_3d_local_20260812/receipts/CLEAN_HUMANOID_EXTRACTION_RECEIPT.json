@@ -1,0 +1,57 @@
+{
+  "schema": "w7tp.local-3d.clean-humanoid-extraction.v1",
+  "source": {
+    "path": "assets/xiaoj_single_core_geometry.glb",
+    "sha256": "5d9d07e55d5d1515537e9ba73ed677659cff362b9b282ad318694ef55cbcf44a"
+  },
+  "source_component_count": 15,
+  "component_face_counts": [
+    801692,
+    316202,
+    4056,
+    448,
+    292,
+    284,
+    104,
+    28,
+    16,
+    16,
+    8,
+    8,
+    8,
+    8,
+    2
+  ],
+  "selection": {
+    "rank": 1,
+    "faces": 316202,
+    "vertices": 158083,
+    "bounds": [
+      [
+        -0.3705616295337677,
+        -1.000259518623352,
+        -0.27847233414649963
+      ],
+      [
+        0.3712041676044464,
+        0.9929400682449341,
+        0.23927752673625946
+      ]
+    ],
+    "extents": [
+      0.7417657971382141,
+      1.9931995868682861,
+      0.5177498608827591
+    ],
+    "watertight": true,
+    "criteria_match_count": 1
+  },
+  "rejected_background_component_faces": 801692,
+  "rejected_small_fragment_faces": 5278,
+  "output": {
+    "path": "assets/xiaoj_clean_humanoid_stage1.glb",
+    "sha256": "cef14b35cf5388fa15a2114f0858a83279dbda03a7c316dceb75650aacc37437",
+    "bytes": 7589516
+  },
+  "pass": true
+}
