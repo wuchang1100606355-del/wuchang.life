@@ -1,0 +1,44 @@
+{
+  "evidence_version": "W7TP-TOTAL-FIELD-REVIEW-EVIDENCE/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "review_request_sha256": "e337d62660ab91c41bfffd9ca8cab719c480a8ad559cddefa0ef3064c4ab7da1",
+  "state_coordinate_packet_sha256": "00fe3f4a9ff384837bbe3f39ab7ab64517e3648c500fdae207b1b073b5bf934b",
+  "source_snapshot_aggregate_sha256": "8533fa0e5458173ce11360fa07ffcac6ab6f17f863d19c04a91f3b06ed0ff9f2",
+  "evidence_snapshot_aggregate_sha256": "24832e5fda2406a3fee864472e3dd6d769fc73d65fa07bce3f33dca2061d237b",
+  "matrix_source_manifest_sha256": "43c1b7786157dffd52339570ceb02df845b62f3e84fff6ccbb1943a6f7d498a2",
+  "prior_manifest_raw_sha256": "5617e21e362501950ca59b036dabd6d2535891f0c83ebac0ed06bebf10d2d1f4",
+  "prior_packet_aggregate_sha256": "5b86bb689f2efe440a81b98fbc87c4db09ef888060cbd8337c45699bb9a2e59d",
+  "denylist_sha256": "fcd48db3a8e5e4ed8f8542237e8ff081bc7bb3b7d1bf721bf689afe2d154c236",
+  "static_results": {
+    "moving_v_v2": "77/77 PASS",
+    "moving_v_v1_v2": "113/113 PASS",
+    "dependency_matrix": "20/20 PASS",
+    "schemas_meta_valid": "3/3",
+    "instances_valid": "2/2"
+  },
+  "closure_counts": {
+    "components": 23,
+    "versioned_producer_receipts": 21,
+    "versioned_demands": 23,
+    "component_edges": 18,
+    "vpn_nodes": 11,
+    "node_edges": 10,
+    "orphan_supplies": 5,
+    "unsatisfied_demands": 21,
+    "cycles": 1,
+    "single_points": 19,
+    "restart_gaps": 18,
+    "partition_gaps": 17
+  },
+  "blocking_hold_codes": [
+    "HOLD_SCHEMA_STATE_TRIAD_CONDITIONAL_COUPLING_UNPROVEN",
+    "HOLD_CONFIG_TO_POLICY_SCHEMA_BINDING_UNSATISFIED",
+    "HOLD_DEPENDENCY_CLOSURE_UNSATISFIED",
+    "ADAPTER_REQUIRED/HOLD_ATOMIC_ROUTE_RECEIPT_NONCE_DLQ_BINDING_UNPROVEN",
+    "HOLD_EXTERNAL_APPEND_ONLY_LEDGER_NOT_PROVEN",
+    "HOLD_SEPARATE_TOTAL_FIELD_RUNTIME_AUTHORITY_RECEIPT_ABSENT"
+  ],
+  "reviewer_may_approve_scoped_landing_or_canary_with_explicit_receipt": true,
+  "packet_may_not_self_approve_or_execute": true,
+  "overall_disposition": "HOLD"
+}

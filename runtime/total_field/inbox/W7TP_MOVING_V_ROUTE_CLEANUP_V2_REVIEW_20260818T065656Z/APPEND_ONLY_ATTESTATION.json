@@ -1,0 +1,17 @@
+{
+  "attestation_version": "W7TP-APPEND-ONLY-ATTESTATION/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "build_mode": "CREATE_NEW_FAIL_IF_EXISTS",
+  "old_packet_overwrite_attempted": false,
+  "prior_manifest_raw_sha256_before_build": "5617e21e362501950ca59b036dabd6d2535891f0c83ebac0ed06bebf10d2d1f4",
+  "prior_manifest_raw_sha256_after_build_required": "5617e21e362501950ca59b036dabd6d2535891f0c83ebac0ed06bebf10d2d1f4",
+  "local_hash_chain_verified": true,
+  "append_only_build_procedure_possible": true,
+  "packet_tree_marked_read_only_after_validation": true,
+  "read_only_metadata_is_not_worm_proof": true,
+  "external_worm_or_append_only_ledger_receipt": null,
+  "durable_append_only_storage_verified": false,
+  "append_only_guaranteed": false,
+  "hold_code": "HOLD_EXTERNAL_APPEND_ONLY_LEDGER_NOT_PROVEN",
+  "detached_anchor_requirement": "After creation, an external ledger must bind the final SHA256_MANIFEST raw SHA256 and packet aggregate; embedding that receipt inside this packet would create a hash cycle."
+}

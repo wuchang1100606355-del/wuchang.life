@@ -1,0 +1,29 @@
+service_tier = "default"
+personality = "pragmatic"
+model = "qwen2.5-coder:7b-instruct"
+model_provider = "taiji8d"
+model_context_window = 32768
+model_reasoning_effort = "none"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[projects."/home/taiji_admin/Taiji_Hub"]
+trust_level = "trusted"
+
+[projects."/home/taiji_admin"]
+trust_level = "trusted"
+
+[features]
+memories = true
+
+[memories]
+generate_memories = true
+use_memories = true
+
+[model_providers.taiji8d]
+name = "Taiji 8D Local Coder Route"
+base_url = "http://127.0.0.1:11437/v1"
+wire_api = "responses"
+request_max_retries = 2
+stream_max_retries = 1
+stream_idle_timeout_ms = 300000

@@ -1,0 +1,21 @@
+{
+  "report_version": "W7TP-LOGIC-VALIDATION-REPORT/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "module": {
+    "path": "tools/total_field/moving_v_route_cleanup_candidate_v2.py",
+    "sha256": "58622b646223bc95916bd9557b2683ab57290fdd7065401f2c91137b6b042e76",
+    "size_bytes": 78845
+  },
+  "test": {
+    "path": "tests/test_w7tp_moving_v_route_cleanup_v2.py",
+    "sha256": "e16061ce08065ee902a9ca665ab53e46c7f3300edc86cd6b86e6b98754125905",
+    "size_bytes": 57805
+  },
+  "v2_result": "77/77 PASS",
+  "v1_v2_result": "113/113 PASS",
+  "dependency_matrix_result": "20/20 PASS",
+  "independent_formal_review_result": "STATIC_LOGIC_PASS",
+  "live_runtime_result": "ADAPTER_REQUIRED/HOLD",
+  "anti_replay_dlq_modeled_inside_core": false,
+  "runtime_activation_authorized": false
+}

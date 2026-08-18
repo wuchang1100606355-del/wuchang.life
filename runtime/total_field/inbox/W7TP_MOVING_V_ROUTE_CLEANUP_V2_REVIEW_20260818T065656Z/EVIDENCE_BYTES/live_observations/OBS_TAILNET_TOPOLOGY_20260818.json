@@ -1,0 +1,81 @@
+{
+  "observation_id": "OBS_TAILNET_TOPOLOGY_20260818",
+  "observation_sha256": "440183c4cc446a684c174477adc86c7f2d36416bb902754c93e9165c80bd3d8b",
+  "observed_at_ns": "1787033352668778722",
+  "observer": "OPERATOR_AND_READ_ONLY_PROBE",
+  "evidence_class": "COMBINED",
+  "facts": [
+    {
+      "fact_key": "tailnet.node_count",
+      "fact_value": "11",
+      "unit": "COUNT"
+    },
+    {
+      "fact_key": "tailnet.same_user_id",
+      "fact_value": "true",
+      "unit": "BOOLEAN"
+    },
+    {
+      "fact_key": "tailnet.tags",
+      "fact_value": "none",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "tailnet.online_nodes",
+      "fact_value": "10",
+      "unit": "COUNT"
+    },
+    {
+      "fact_key": "tailnet.offline_node",
+      "fact_value": "taiji04",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "tailnet.tcp22_open",
+      "fact_value": "MSI-WSL,taiji01,penguin,wuchang-us-free-node",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "tailnet.tcp22_closed",
+      "fact_value": "taiji03-1",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "tailnet.ssh_denied",
+      "fact_value": "penguin:taiji_admin,o0930",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "tailscale.msi.run_ssh",
+      "fact_value": "false",
+      "unit": "BOOLEAN"
+    },
+    {
+      "fact_key": "tailscale.msi_wsl.run_ssh",
+      "fact_value": "true",
+      "unit": "BOOLEAN"
+    },
+    {
+      "fact_key": "tailscale.taiji01.run_ssh",
+      "fact_value": "true",
+      "unit": "BOOLEAN"
+    },
+    {
+      "fact_key": "ssh.taiji01.passwordless",
+      "fact_value": "PASS",
+      "unit": "STATE"
+    },
+    {
+      "fact_key": "ssh.penguin.failure_class",
+      "fact_value": "TAILNET_CONTROL_PLANE_POLICY_DENIED",
+      "unit": "STATE"
+    },
+    {
+      "fact_key": "ssh.taiji03_1.failure_class",
+      "fact_value": "TCP22_CONNECTION_REFUSED_HOST_SUPPLY_MISSING_OR_DISABLED",
+      "unit": "STATE"
+    }
+  ],
+  "authority_state": "HOLD",
+  "no_live_mutation": true
+}

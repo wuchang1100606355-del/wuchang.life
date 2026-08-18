@@ -1,0 +1,46 @@
+{
+  "evidence_version": "W7TP-RED-TEAM-EVIDENCE/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "static_result": "PASS_FAIL_CLOSED",
+  "covered_attacks": [
+    {
+      "attack": "A_THROUGH_G_INVALID_OR_UNKNOWN_INPUT_FAMILIES",
+      "expected": "HOLD_NO_EFFECT",
+      "observed": "PASS"
+    },
+    {
+      "attack": "FORGED_PRIOR_RECEIPT",
+      "expected": "REJECT",
+      "observed": "PASS"
+    },
+    {
+      "attack": "EXPIRED_PRIOR_RECEIPT",
+      "expected": "REJECT",
+      "observed": "PASS"
+    },
+    {
+      "attack": "CURRENT_GUARD_BYPASS",
+      "expected": "PROTECT_CURRENT",
+      "observed": "PASS"
+    },
+    {
+      "attack": "CANONICAL_OR_SHARED_OWNER_DELETE",
+      "expected": "RETAIN_OR_HOLD",
+      "observed": "PASS"
+    },
+    {
+      "attack": "LEGACY_SHELL_DLQ_REPLAY_AS_AUTHORITY",
+      "expected": "EXCLUDE_AND_HOLD",
+      "observed": "SOURCE_REVIEW_PASS; LIVE_EXECUTION_NOT_RUN"
+    }
+  ],
+  "unclosed_runtime_attacks": [
+    "CROSS_RESTART_ATOMIC_ROUTE_NONCE_RACE",
+    "PARTITION_SPLIT_BRAIN_ROUTE_COMMIT",
+    "DLQ_WRITE_WITHOUT_LEDGER_COMMIT",
+    "DELIVERY_RETRY_WITHOUT_PREVIOUS_LEDGER_BIND",
+    "REAL_CODEX_EXTENSION_NONTERMINATING_STREAM"
+  ],
+  "runtime_red_team_pass": false,
+  "recommended_state": "HOLD"
+}

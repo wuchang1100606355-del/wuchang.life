@@ -1,0 +1,1496 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://w7tp.local/schemas/field/w7tp_moving_v_route_policy_v2.schema.json",
+  "title": "W7TP Moving-V Route Policy V2",
+  "description": "Closed, evidence-bound policy for Moving-V routing across the FILE/PREDICTION lifecycle. All uint, nanosecond, and byte quantities are decimal strings for cross-runtime precision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "contract_version",
+    "contract_id",
+    "status",
+    "mode",
+    "time_encoding",
+    "instance_provenance",
+    "authority",
+    "lifecycle_policy",
+    "moving_v_geometry",
+    "route_proof_policy",
+    "error_branch_invalidation_policy",
+    "watermark_policy",
+    "materialization_policy",
+    "memory_budget_policy",
+    "ux_gate_policy",
+    "false_miss_policy",
+    "router_dlq_anti_replay_policy",
+    "allowed_actions",
+    "zero_tolerance_metrics"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "https://w7tp.local/schemas/field/w7tp_moving_v_route_policy_v2.schema.json"
+    },
+    "contract_version": {
+      "const": "W7TP-MOVING-V-ROUTE-POLICY/2.0"
+    },
+    "contract_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9][A-Z0-9_.:-]{7,127}$"
+    },
+    "status": {
+      "enum": [
+        "CANDIDATE_ONLY",
+        "SHADOW_AUTHORIZED",
+        "RAM_CANARY_AUTHORIZED",
+        "FORMAL_AUTHORIZED"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "STATIC_VALIDATION_ONLY",
+        "READ_ONLY_SHADOW",
+        "REVERSIBLE_RAM_CANARY",
+        "FORMAL_RUNTIME"
+      ]
+    },
+    "time_encoding": {
+      "const": "UNIX_EPOCH_NANOSECONDS_AS_UNSIGNED_DECIMAL_STRING"
+    },
+    "instance_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instance_role",
+        "source_contract_ref",
+        "source_contract_sha256",
+        "source_scope",
+        "mapping_version",
+        "mappings",
+        "unmapped_source_namespace_state",
+        "runtime_integration_state",
+        "binding_algorithm",
+        "binding_scope",
+        "binding_sha256"
+      ],
+      "properties": {
+        "instance_role": {
+          "const": "SCHEMA_VALID_POLICY_INSTANCE"
+        },
+        "source_contract_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "source_contract_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_scope": {
+          "const": "SELECTED_DECLARATIVE_FIELDS_ONLY"
+        },
+        "mapping_version": {
+          "const": "W7TP-MOVING-V-CONTRACT-CONFIG-TO-POLICY-INSTANCE/2.0"
+        },
+        "mappings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/policy_field_mapping"
+          }
+        },
+        "unmapped_source_namespace_state": {
+          "const": "NOT_ASSERTED_AS_POLICY_INSTANCE"
+        },
+        "runtime_integration_state": {
+          "const": "ADAPTER_REQUIRED/HOLD"
+        },
+        "binding_algorithm": {
+          "const": "SHA-256"
+        },
+        "binding_scope": {
+          "const": "UTF8_JSON_SORTED_KEYS_NO_WHITESPACE_OF_SOURCE_REF_SHA_SCOPE_MAPPING_VERSION_AND_MAPPINGS"
+        },
+        "binding_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_authority",
+        "runtime_authority_state",
+        "live_action_authority_receipt_required",
+        "canonical_action",
+        "hard_delete_canonical_allowed",
+        "self_approval_allowed"
+      ],
+      "properties": {
+        "decision_authority": {
+          "const": "TOTAL_FIELD"
+        },
+        "runtime_authority_state": {
+          "enum": [
+            "NOT_AUTHORIZED",
+            "SHADOW_ONLY",
+            "RAM_CANARY_ONLY",
+            "FORMAL_RUNTIME"
+          ]
+        },
+        "live_action_authority_receipt_required": {
+          "const": true
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "hard_delete_canonical_allowed": {
+          "const": false
+        },
+        "self_approval_allowed": {
+          "const": false
+        }
+      }
+    },
+    "lifecycle_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "time_basis",
+        "stages",
+        "stage_field",
+        "stage_entered_at_field",
+        "stage_observed_at_field",
+        "stage_sequence_field",
+        "stage_state_hash_field",
+        "time_domain_field",
+        "logical_time_field",
+        "schedule_reference_field",
+        "job_reference_field",
+        "transition_receipt_required",
+        "initial_stage_transition_receipt_required",
+        "transition_receipt_schema_version",
+        "allowed_transitions",
+        "transition_pre_state_hash_required",
+        "transition_post_state_hash_required",
+        "monotonicity_invariants",
+        "stage_regression_policy",
+        "scheduled_or_running_release_accounting",
+        "completion_receipt_required",
+        "completed_ownership_resolution_required"
+      ],
+      "properties": {
+        "time_basis": {
+          "const": "FILE_PREDICTION_LIFECYCLE"
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "const": "PREDICTED_NOT_GENERATED"
+            },
+            {
+              "const": "GENERATION_SCHEDULED_OR_RUNNING"
+            },
+            {
+              "const": "GENERATION_COMPLETED"
+            }
+          ],
+          "items": false
+        },
+        "stage_field": {
+          "const": "stage"
+        },
+        "stage_entered_at_field": {
+          "const": "stage_entered_at_ns"
+        },
+        "stage_observed_at_field": {
+          "const": "stage_observed_at_ns"
+        },
+        "stage_sequence_field": {
+          "const": "stage_sequence_uint_dec"
+        },
+        "stage_state_hash_field": {
+          "const": "stage_state_sha256"
+        },
+        "time_domain_field": {
+          "const": "time_domain_id"
+        },
+        "logical_time_field": {
+          "const": "logical_time_uint_dec"
+        },
+        "schedule_reference_field": {
+          "const": "schedule_ref"
+        },
+        "job_reference_field": {
+          "const": "job_ref"
+        },
+        "transition_receipt_required": {
+          "const": true
+        },
+        "initial_stage_transition_receipt_required": {
+          "const": false
+        },
+        "transition_receipt_schema_version": {
+          "const": "W7TP-MOVING-V-LIFECYCLE-TRANSITION-RECEIPT/2.0"
+        },
+        "allowed_transitions": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "PREDICTED_NOT_GENERATED->GENERATION_SCHEDULED_OR_RUNNING",
+              "GENERATION_SCHEDULED_OR_RUNNING->GENERATION_COMPLETED"
+            ]
+          }
+        },
+        "transition_pre_state_hash_required": {
+          "const": true
+        },
+        "transition_post_state_hash_required": {
+          "const": true
+        },
+        "monotonicity_invariants": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "STAGE_SEQUENCE_STRICTLY_INCREASES_ON_TRANSITION",
+              "LOGICAL_TIME_STRICTLY_INCREASES_ON_TRANSITION",
+              "STAGE_ENTERED_AT_NOT_AFTER_STAGE_OBSERVED_AT",
+              "STAGE_OBSERVED_AT_NOT_AFTER_INGEST_TIME",
+              "TRANSITION_PRE_AND_POST_STATE_HASHES_MATCH"
+            ]
+          }
+        },
+        "stage_regression_policy": {
+          "const": "HOLD_AND_INVALIDATE_ROUTE_BRANCH"
+        },
+        "scheduled_or_running_release_accounting": {
+          "const": "FORBIDDEN_UNTIL_CANCELLATION_RECEIPT_AND_ALLOCATOR_COMMIT_OBSERVATION"
+        },
+        "completion_receipt_required": {
+          "const": true
+        },
+        "completed_ownership_resolution_required": {
+          "const": true
+        }
+      }
+    },
+    "moving_v_geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "policy_epoch_id",
+        "prediction_epoch_id",
+        "route_epoch_id",
+        "membership_epoch_id",
+        "time_domain_id",
+        "route_graph_root_sha256",
+        "route_ruleset_root_sha256",
+        "apex_semantics",
+        "opening_direction",
+        "inside_v_semantics",
+        "side_semantics",
+        "behind_apex_semantics",
+        "distance_input",
+        "apex_time_ns",
+        "current_guard_ns",
+        "clock_uncertainty_ns",
+        "past_grace_ns",
+        "future_horizon_ns",
+        "interpolation",
+        "envelope",
+        "classification_states",
+        "runtime_invariants"
+      ],
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "policy_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "membership_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "time_domain_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_graph_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "route_ruleset_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "apex_semantics": {
+          "const": "ALIGNED_CURRENT_TIME"
+        },
+        "opening_direction": {
+          "const": "FUTURE"
+        },
+        "inside_v_semantics": {
+          "const": "FUTURE_PRELOAD_PROTECTED"
+        },
+        "side_semantics": {
+          "const": "FUTURE_PREDICTED_MISS_ROUTE_BRANCH"
+        },
+        "behind_apex_semantics": {
+          "const": "PAST_HOLD_OR_ELIGIBLE_AFTER_WATERMARK_AND_GATES"
+        },
+        "distance_input": {
+          "const": "FOUNDER_NATIVE_ADI_DELTA_F_UINT_WITH_PROOF_RECEIPT"
+        },
+        "apex_time_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "current_guard_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "clock_uncertainty_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "past_grace_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "future_horizon_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "interpolation": {
+          "enum": [
+            "LEFT_STEP",
+            "PIECEWISE_LINEAR_INTEGER_FLOOR"
+          ]
+        },
+        "envelope": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/envelope_knot"
+          }
+        },
+        "classification_states": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "PAST_HOLD",
+              "PAST_ELIGIBLE",
+              "CURRENT_GUARD",
+              "FUTURE_PROTECTED",
+              "FUTURE_PREDICTED_MISS",
+              "OUT_OF_HORIZON",
+              "OUTSIDE_MANAGED_ENVELOPE_HOLD",
+              "UNALIGNED_HOLD"
+            ]
+          }
+        },
+        "runtime_invariants": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ENVELOPE_OFFSETS_STRICTLY_INCREASE",
+              "PROTECTED_RADIUS_NON_DECREASING",
+              "CANDIDATE_RADIUS_NON_DECREASING",
+              "PROTECTED_RADIUS_NOT_GREATER_THAN_CANDIDATE_RADIUS",
+              "SIDE_CLEANUP_WIDTH_NON_INCREASING",
+              "FINAL_OFFSET_EQUALS_FUTURE_HORIZON",
+              "APEX_AND_WATERMARK_NEVER_REGRESS",
+              "UNKNOWN_OR_CONFLICTED_INPUT_HOLDS"
+            ]
+          }
+        }
+      }
+    },
+    "route_proof_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proof_required",
+        "proof_schema_version",
+        "proof_types",
+        "distance_field",
+        "canonical_path_required",
+        "canonical_path_hash_required",
+        "materialization_content_binding_required",
+        "prediction_and_route_epoch_binding_required",
+        "invalidation_branch_match_required",
+        "descendant_closure_proof_required",
+        "binds",
+        "generic_geometry_proxy_allowed",
+        "similarity_proxy_allowed",
+        "missing_or_invalid_proof_action",
+        "invalidating_conditions"
+      ],
+      "properties": {
+        "proof_required": {
+          "const": true
+        },
+        "proof_schema_version": {
+          "const": "W7TP-MOVING-V-ROUTE-PROOF-RECEIPT/2.0"
+        },
+        "proof_types": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "REACHABLE_PATH_PROOF",
+              "ROUTE_PREDICTION_RECEIPT",
+              "ROUTE_EXCLUSION_PROOF",
+              "PREDICTION_INVALIDATION_PROOF"
+            ]
+          }
+        },
+        "distance_field": {
+          "const": "delta_f_uint_dec"
+        },
+        "canonical_path_required": {
+          "const": false
+        },
+        "canonical_path_hash_required": {
+          "const": false
+        },
+        "materialization_content_binding_required": {
+          "const": true
+        },
+        "prediction_and_route_epoch_binding_required": {
+          "const": true
+        },
+        "invalidation_branch_match_required": {
+          "const": true
+        },
+        "descendant_closure_proof_required": {
+          "const": true
+        },
+        "binds": {
+          "type": "array",
+          "minItems": 18,
+          "maxItems": 18,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "RECORD_ID",
+              "MATERIALIZATION_ID",
+              "CONTENT_SHA256",
+              "POLICY_ID",
+              "POLICY_EPOCH_ID",
+              "PREDICTION_EPOCH_ID",
+              "ROUTE_EPOCH_ID",
+              "ROUTE_GRAPH_ROOT_SHA256",
+              "ROUTE_RULESET_ROOT_SHA256",
+              "START_STATE_ROOT_SHA256",
+              "TARGET_STATE_OR_PREDICATE_SHA256",
+              "LIFECYCLE_STAGE_STATE_SHA256",
+              "LIFECYCLE_TRANSITION_RECEIPT",
+              "NEED_TIME_RECEIPT",
+              "ADI_PROOF_RECEIPT",
+              "WATERMARK_MEMBERSHIP_RECEIPT",
+              "BRANCH_ID_FOR_INVALIDATION",
+              "DESCENDANT_CLOSURE_ROOT_AND_RECEIPT"
+            ]
+          }
+        },
+        "generic_geometry_proxy_allowed": {
+          "const": false
+        },
+        "similarity_proxy_allowed": {
+          "const": false
+        },
+        "missing_or_invalid_proof_action": {
+          "const": "HOLD_AND_INVALIDATE_ROUTE_BRANCH"
+        },
+        "invalidating_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/invalidation_reason"
+          }
+        }
+      }
+    },
+    "error_branch_invalidation_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "canonical_action",
+        "scheduled_or_running_is_released",
+        "release_accounting_requires_commit_receipt",
+        "predicted_not_generated",
+        "generation_scheduled_or_running",
+        "generation_completed"
+      ],
+      "properties": {
+        "scope": {
+          "const": "INVALIDATED_ROUTE_BRANCH_ONLY"
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "scheduled_or_running_is_released": {
+          "const": false
+        },
+        "release_accounting_requires_commit_receipt": {
+          "const": true
+        },
+        "predicted_not_generated": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stage",
+            "required_action",
+            "required_receipts",
+            "release_accounting"
+          ],
+          "properties": {
+            "stage": {
+              "const": "PREDICTED_NOT_GENERATED"
+            },
+            "required_action": {
+              "const": "CANCEL_PREDICTED_CANDIDATE"
+            },
+            "required_receipts": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "prefixItems": [
+                {
+                  "const": "ROUTE_INVALIDATION_RECEIPT"
+                }
+              ],
+              "items": false
+            },
+            "release_accounting": {
+              "const": "ZERO_MATERIALIZED_BYTES"
+            }
+          }
+        },
+        "generation_scheduled_or_running": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stage",
+            "required_action",
+            "required_receipts",
+            "accepted_cancellation_outcomes",
+            "required_worker_fence_state",
+            "release_accounting"
+          ],
+          "properties": {
+            "stage": {
+              "const": "GENERATION_SCHEDULED_OR_RUNNING"
+            },
+            "required_action": {
+              "const": "REQUEST_GENERATION_CANCELLATION"
+            },
+            "required_receipts": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "CANCELLATION_REQUEST_RECEIPT",
+                  "CANCELLATION_RESULT_RECEIPT",
+                  "WORKER_FENCE_QUIESCED_RECEIPT",
+                  "ALLOCATOR_COMMIT_OBSERVATION"
+                ]
+              }
+            },
+            "accepted_cancellation_outcomes": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "CANCELLED_BEFORE_START",
+                  "CANCELLED_DURING_RUN"
+                ]
+              }
+            },
+            "required_worker_fence_state": {
+              "const": "QUIESCED"
+            },
+            "release_accounting": {
+              "const": "FORBIDDEN_BEFORE_VERIFIED_CANCELLATION_AND_ALLOCATOR_COMMIT"
+            }
+          }
+        },
+        "generation_completed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stage",
+            "ownership_required",
+            "exclusive_non_canonical_action",
+            "shared_or_canonical_action",
+            "required_receipts",
+            "release_accounting"
+          ],
+          "properties": {
+            "stage": {
+              "const": "GENERATION_COMPLETED"
+            },
+            "ownership_required": {
+              "const": true
+            },
+            "exclusive_non_canonical_action": {
+              "const": "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION"
+            },
+            "shared_or_canonical_action": {
+              "const": "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL"
+            },
+            "required_receipts": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "COMPLETION_RECEIPT",
+                  "BRANCH_DELETION_OR_DETACH_RECEIPT",
+                  "MATERIALIZATION_COMMIT_RECEIPT"
+                ]
+              }
+            },
+            "release_accounting": {
+              "const": "ONLY_FROM_VERIFIED_COMMIT_RECEIPT"
+            }
+          }
+        }
+      }
+    },
+    "watermark_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_required",
+        "receipt_schema_version",
+        "membership_policy",
+        "node_identity_fields",
+        "safe_watermark_formula",
+        "clock_uncertainty_required",
+        "receipt_freshness_required",
+        "node_uniqueness_required",
+        "regression_policy",
+        "partition_policy",
+        "missing_member_policy",
+        "boot_mismatch_policy"
+      ],
+      "properties": {
+        "receipt_required": {
+          "const": true
+        },
+        "receipt_schema_version": {
+          "const": "W7TP-WATERMARK-MEMBERSHIP-RECEIPT/2.0"
+        },
+        "membership_policy": {
+          "const": "ALL_REQUIRED_MEMBERS"
+        },
+        "node_identity_fields": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "const": "node_id"
+            },
+            {
+              "const": "boot_id"
+            },
+            {
+              "const": "clock_id"
+            }
+          ],
+          "items": false
+        },
+        "safe_watermark_formula": {
+          "const": "MIN_REQUIRED_EVENT_WATERMARK_MINUS_PER_NODE_CLOCK_UNCERTAINTY"
+        },
+        "clock_uncertainty_required": {
+          "const": true
+        },
+        "receipt_freshness_required": {
+          "const": true
+        },
+        "node_uniqueness_required": {
+          "const": true
+        },
+        "regression_policy": {
+          "const": "HOLD"
+        },
+        "partition_policy": {
+          "const": "HOLD_WATERMARK_ADVANCE"
+        },
+        "missing_member_policy": {
+          "const": "HOLD"
+        },
+        "boot_mismatch_policy": {
+          "const": "HOLD_AND_REFRESH_MEMBERSHIP"
+        }
+      }
+    },
+    "materialization_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_action",
+        "canonical_source_delete_allowed",
+        "record_version_field",
+        "cas_required_fields",
+        "decision_token_schema_version",
+        "decision_token_binds",
+        "commit_revalidation_required",
+        "actual_release_constraint",
+        "lifecycle_snapshot_required",
+        "reconstruction_descriptor_required",
+        "future_predicted_miss_action",
+        "past_eligible_action",
+        "quarantine_first",
+        "release_accounting_source",
+        "scheduled_or_running_counts_as_released",
+        "vram_requires_separate_canary"
+      ],
+      "properties": {
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "canonical_source_delete_allowed": {
+          "const": false
+        },
+        "record_version_field": {
+          "const": "record_version_uint_dec"
+        },
+        "cas_required_fields": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 12,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "materialization_id",
+              "physical_allocation_id",
+              "expected_content_sha256",
+              "record_version_uint_dec",
+              "stage",
+              "generation_job_state",
+              "policy_epoch_id",
+              "prediction_epoch_id",
+              "route_epoch_id",
+              "route_graph_root_sha256",
+              "generation_token_sha256",
+              "atomic_lifecycle_token_sha256"
+            ]
+          }
+        },
+        "decision_token_schema_version": {
+          "const": "W7TP-MOVING-V-DECISION-TOKEN/2.0"
+        },
+        "decision_token_binds": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "MATERIALIZATION_AND_PHYSICAL_ALLOCATION",
+              "CONTENT_SHA256",
+              "POLICY_PREDICTION_AND_ROUTE_EPOCHS",
+              "ROUTE_GRAPH_ROOT_SHA256",
+              "ROUTE_PROOF_SHA256",
+              "FULL_SAFETY_STATE_SHA256",
+              "ALLOCATION_OWNER_SET_SHA256",
+              "EXPECTED_RELEASE_UPPER_BOUND_BYTES"
+            ]
+          }
+        },
+        "commit_revalidation_required": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "CURRENT_POLICY_EPOCH_MATCH",
+              "CURRENT_ROUTE_GRAPH_ROOT_MATCH",
+              "CURRENT_ROUTE_PROOF_HASH_MATCH_AND_PASS",
+              "CURRENT_FULL_SAFETY_STATE_HASH_MATCH",
+              "CURRENT_ALLOCATION_OWNER_SET_HASH_MATCH",
+              "CURRENT_CONTENT_AND_MATERIALIZATION_MATCH",
+              "CURRENT_GENERATION_AND_LIFECYCLE_TOKENS_MATCH",
+              "ACTUAL_RELEASE_NOT_ABOVE_TOKEN_UPPER_BOUND"
+            ]
+          }
+        },
+        "actual_release_constraint": {
+          "const": "ACTUAL_RELEASED_BYTES_LESS_THAN_OR_EQUAL_TO_DECISION_TOKEN_UPPER_BOUND"
+        },
+        "lifecycle_snapshot_required": {
+          "const": true
+        },
+        "reconstruction_descriptor_required": {
+          "const": true
+        },
+        "future_predicted_miss_action": {
+          "const": "SOFT_EVICT_RECONSTRUCTIBLE_MATERIALIZATION_ONLY"
+        },
+        "past_eligible_action": {
+          "const": "MOVE_EXCLUSIVE_NON_CANONICAL_MATERIALIZATION_TO_QUARANTINE_FIRST"
+        },
+        "quarantine_first": {
+          "const": true
+        },
+        "release_accounting_source": {
+          "const": "VERIFIED_MATERIALIZATION_COMMIT_RECEIPT"
+        },
+        "scheduled_or_running_counts_as_released": {
+          "const": false
+        },
+        "vram_requires_separate_canary": {
+          "const": true
+        }
+      }
+    },
+    "memory_budget_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "budget_owner",
+        "budget_scope",
+        "initial_candidate_bytes",
+        "low_watermark_bytes",
+        "high_watermark_bytes",
+        "max_resident_bytes",
+        "protected_working_set_floor_bytes",
+        "numeric_values_tunable",
+        "cross_field_invariants",
+        "adjustment_requires_ux_measurement",
+        "adjustment_requires_zero_tolerance_pass",
+        "automatic_application_allowed"
+      ],
+      "properties": {
+        "budget_owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "budget_scope": {
+          "enum": [
+            "DYNAMIC_CONTEXT_RAM_CACHE",
+            "FILE_GENERATION_RAM_MATERIALIZATIONS",
+            "VRAM_KV_MATERIALIZATIONS"
+          ]
+        },
+        "initial_candidate_bytes": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "low_watermark_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "high_watermark_bytes": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "max_resident_bytes": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "protected_working_set_floor_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "numeric_values_tunable": {
+          "const": true
+        },
+        "cross_field_invariants": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "PROTECTED_FLOOR_NOT_GREATER_THAN_LOW_WATERMARK",
+              "LOW_WATERMARK_LESS_THAN_HIGH_WATERMARK",
+              "HIGH_WATERMARK_NOT_GREATER_THAN_MAX_RESIDENT",
+              "INITIAL_CANDIDATE_NOT_GREATER_THAN_MAX_RESIDENT"
+            ]
+          }
+        },
+        "adjustment_requires_ux_measurement": {
+          "const": true
+        },
+        "adjustment_requires_zero_tolerance_pass": {
+          "const": true
+        },
+        "automatic_application_allowed": {
+          "const": false
+        }
+      }
+    },
+    "ux_gate_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measurement_schema_version",
+        "baseline_and_candidate_required",
+        "workload_manifest_required",
+        "minimum_sample_count_uint",
+        "minimum_duration_ns",
+        "required_strata",
+        "required_metrics",
+        "gates",
+        "real_measurement_required",
+        "synthetic_evidence_sufficient",
+        "decision_scope"
+      ],
+      "properties": {
+        "measurement_schema_version": {
+          "const": "W7TP-MOVING-V-UX-MEASUREMENT/2.0"
+        },
+        "baseline_and_candidate_required": {
+          "const": true
+        },
+        "workload_manifest_required": {
+          "const": true
+        },
+        "minimum_sample_count_uint": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "minimum_duration_ns": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "required_strata": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "COLD_AND_WARM",
+              "CONTEXT_LENGTH_BUCKET",
+              "LANGUAGE",
+              "TOOL_AND_NON_TOOL",
+              "CONCURRENCY",
+              "NODE_AND_MEMORY_TIER"
+            ]
+          }
+        },
+        "required_metrics": {
+          "type": "array",
+          "minItems": 18,
+          "maxItems": 18,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ux_metric_name"
+          }
+        },
+        "gates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ux_gate"
+          }
+        },
+        "real_measurement_required": {
+          "const": true
+        },
+        "synthetic_evidence_sufficient": {
+          "const": false
+        },
+        "decision_scope": {
+          "const": "MEASUREMENT_ONLY_NO_AUTOMATIC_POLICY_CHANGE"
+        }
+      }
+    },
+    "false_miss_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_schema_version",
+        "commit_binding_required",
+        "materialization_binding_required",
+        "content_hash_binding_required",
+        "prediction_epoch_binding_required",
+        "route_epoch_binding_required",
+        "byte_exact_reconstruction_required",
+        "route_epoch_change_is_false_miss",
+        "states"
+      ],
+      "properties": {
+        "receipt_schema_version": {
+          "const": "W7TP-MOVING-V-FALSE-MISS-RECEIPT/2.0"
+        },
+        "commit_binding_required": {
+          "const": true
+        },
+        "materialization_binding_required": {
+          "const": true
+        },
+        "content_hash_binding_required": {
+          "const": true
+        },
+        "prediction_epoch_binding_required": {
+          "const": true
+        },
+        "route_epoch_binding_required": {
+          "const": true
+        },
+        "byte_exact_reconstruction_required": {
+          "const": true
+        },
+        "route_epoch_change_is_false_miss": {
+          "const": false
+        },
+        "states": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "NOT_A_FALSE_MISS",
+              "HOLD_DEMAND_RECEIPT_BINDING_MISMATCH",
+              "ROUTE_CHANGE_REGENERATION",
+              "REHYDRATION_FAILURE_HOLD",
+              "SIMULATED_FALSE_MISS_BYTE_EXACT",
+              "FALSE_MISS_REHYDRATED_BYTE_EXACT"
+            ]
+          }
+        }
+      }
+    },
+    "router_dlq_anti_replay_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_required",
+        "receipt_schema_version",
+        "bound_input_scopes",
+        "nonce_required",
+        "idempotency_key_required",
+        "dedupe_key_required",
+        "payload_and_content_hash_required",
+        "router_and_membership_epoch_required",
+        "persistent_ledger_required",
+        "atomic_persistence_proof_required",
+        "dlq_without_atomic_ledger_sufficient",
+        "direct_native_criteria",
+        "current_moving_v_binding_state",
+        "existing_source_inventory"
+      ],
+      "properties": {
+        "receipt_required": {
+          "const": true
+        },
+        "receipt_schema_version": {
+          "const": "W7TP-ROUTER-DLQ-ANTI-REPLAY-RECEIPT/2.0"
+        },
+        "bound_input_scopes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "MOVING_V_ROUTE_INPUT",
+              "MOVING_V_CANCELLATION_INPUT",
+              "MOVING_V_CLEANUP_INPUT"
+            ]
+          }
+        },
+        "nonce_required": {
+          "const": true
+        },
+        "idempotency_key_required": {
+          "const": true
+        },
+        "dedupe_key_required": {
+          "const": true
+        },
+        "payload_and_content_hash_required": {
+          "const": true
+        },
+        "router_and_membership_epoch_required": {
+          "const": true
+        },
+        "persistent_ledger_required": {
+          "const": true
+        },
+        "atomic_persistence_proof_required": {
+          "const": true
+        },
+        "dlq_without_atomic_ledger_sufficient": {
+          "const": false
+        },
+        "direct_native_criteria": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "PERSISTENT_NONCE_OR_DEDUPE_LEDGER",
+              "ATOMIC_FIRST_SEEN_INSERT_OR_DUPLICATE_DECISION",
+              "PAYLOAD_AND_CONTENT_HASH_BINDING",
+              "ROUTER_AND_MEMBERSHIP_EPOCH_BINDING",
+              "DLQ_DECISION_AND_REASON_RECEIPT",
+              "MOVING_V_ROUTE_CANCEL_CLEANUP_INPUT_BINDING"
+            ]
+          }
+        },
+        "current_moving_v_binding_state": {
+          "const": "ADAPTER_REQUIRED/HOLD"
+        },
+        "existing_source_inventory": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/anti_replay_source_inventory"
+          }
+        }
+      }
+    },
+    "allowed_actions": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "PROTECT_CURRENT",
+          "PROTECT_PRELOAD_CANDIDATE",
+          "CONTINUE_PROTECTED_GENERATION",
+          "PROTECT_COMPLETED_MATERIALIZATION",
+          "KEEP_REFERENCE_ONLY",
+          "KEEP_HOLD",
+          "CANCEL_PREDICTED_CANDIDATE",
+          "REQUEST_GENERATION_CANCELLATION",
+          "CLEAN_CANCELLED_GENERATION_TEMP",
+          "SOFT_EVICT_RECONSTRUCTIBLE",
+          "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION",
+          "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL",
+          "MOVE_PAST_MATERIALIZATION_TO_QUARANTINE"
+        ]
+      }
+    },
+    "zero_tolerance_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protected_eviction_violation",
+        "current_eviction_violation",
+        "canonical_source_deleted",
+        "scheduled_or_running_false_release",
+        "double_reclaim",
+        "unaudited_reclaim",
+        "reconstruction_hash_mismatch_consumed",
+        "commit_without_authority"
+      ],
+      "properties": {
+        "protected_eviction_violation": {
+          "const": "0"
+        },
+        "current_eviction_violation": {
+          "const": "0"
+        },
+        "canonical_source_deleted": {
+          "const": "0"
+        },
+        "scheduled_or_running_false_release": {
+          "const": "0"
+        },
+        "double_reclaim": {
+          "const": "0"
+        },
+        "unaudited_reclaim": {
+          "const": "0"
+        },
+        "reconstruction_hash_mismatch_consumed": {
+          "const": "0"
+        },
+        "commit_without_authority": {
+          "const": "0"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "policy_field_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_pointer",
+        "target_pointer",
+        "transform",
+        "verification_state",
+        "note"
+      ],
+      "properties": {
+        "source_pointer": {
+          "type": "string",
+          "pattern": "^/.*$",
+          "maxLength": 512
+        },
+        "target_pointer": {
+          "type": "string",
+          "pattern": "^/.*$",
+          "maxLength": 512
+        },
+        "transform": {
+          "enum": [
+            "EXACT_COPY",
+            "CANONICALIZED_ENUM",
+            "DERIVED_CONSERVATIVE_DEFAULT",
+            "NOT_MAPPED_HOLD"
+          ]
+        },
+        "verification_state": {
+          "enum": [
+            "VERIFIED_STATIC_SOURCE_BINDING",
+            "ADAPTER_REQUIRED/HOLD"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "anti_replay_source_inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_ref",
+        "source_sha256",
+        "implementation_kind",
+        "observed_capabilities",
+        "component_state",
+        "moving_v_binding_state",
+        "gap"
+      ],
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "implementation_kind": {
+          "enum": [
+            "PERSISTENT_NONCE_LEDGER",
+            "DLQ_ROUTER",
+            "MOCK_DLQ_POLICY",
+            "DLQ_REPLAY_EXECUTOR",
+            "REPLAY_TEST"
+          ]
+        },
+        "observed_capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "SQLITE_PERSISTENCE",
+              "NONCE_PRIMARY_KEY",
+              "PACKET_HASH_BINDING",
+              "TTL_CLEANUP",
+              "ATOMIC_INSERT_OR_IGNORE",
+              "WAL_FULL_SYNC",
+              "REPLAY_AFTER_RESTART_TEST",
+              "TWO_CONNECTION_SINGLE_CONSUMER_TEST",
+              "DLQ_REASON",
+              "DLQ_PAYLOAD_HASH",
+              "HUMAN_REVIEW_HOLD",
+              "IN_MEMORY_MOCK_ONLY",
+              "MOVE_RETRY_LOOP"
+            ]
+          }
+        },
+        "component_state": {
+          "enum": [
+            "DIRECT_NATIVE",
+            "ADAPTER_REQUIRED"
+          ]
+        },
+        "moving_v_binding_state": {
+          "const": "ADAPTER_REQUIRED"
+        },
+        "gap": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "uint_dec": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "positive_uint_dec": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,19}$"
+    },
+    "ns_dec": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "bytes_dec": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "envelope_knot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "future_offset_ns",
+        "protected_radius_uint",
+        "candidate_radius_uint"
+      ],
+      "properties": {
+        "future_offset_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "protected_radius_uint": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "candidate_radius_uint": {
+          "$ref": "#/$defs/uint_dec"
+        }
+      }
+    },
+    "invalidation_reason": {
+      "enum": [
+        "ADI_PROOF_MISSING",
+        "ADI_PROOF_HASH_MISMATCH",
+        "CANONICAL_PATH_MISSING",
+        "CANONICAL_PATH_DIVERGENCE",
+        "TRANSITION_RULE_MISSING",
+        "PREDICTION_EPOCH_MISMATCH",
+        "POLICY_ID_MISMATCH",
+        "LIFECYCLE_STAGE_REGRESSION",
+        "SCHEDULE_REFERENCE_MISMATCH",
+        "JOB_REFERENCE_MISMATCH",
+        "CANCELLATION_TIMEOUT",
+        "COMPLETION_HASH_MISMATCH",
+        "OWNERSHIP_UNKNOWN",
+        "WATERMARK_MEMBERSHIP_INVALID",
+        "WATERMARK_EXPIRED",
+        "CLOCK_REGRESSION",
+        "NETWORK_PARTITION",
+        "CAS_MISMATCH",
+        "RECONSTRUCTION_PROOF_INVALID"
+      ]
+    },
+    "ux_metric_name": {
+      "enum": [
+        "TTFT_MS",
+        "END_TO_END_LATENCY_MS",
+        "TOKENS_PER_SECOND_MILLI",
+        "REHYDRATION_STALL_MS",
+        "TASK_SUCCESS_RATE_BP",
+        "TOOL_SUCCESS_RATE_BP",
+        "PRELOAD_HIT_RATE_BP",
+        "FALSE_MISS_RATE_BP",
+        "RECONSTRUCTION_PASS_RATE_BP",
+        "OOM_COUNT",
+        "SWAP_THRASH_COUNT",
+        "PROTECTED_EVICTION_COUNT",
+        "RECONSTRUCTION_HASH_MISMATCH_COUNT",
+        "PEAK_RAM_BYTES",
+        "HOST_RESERVE_BYTES",
+        "VRAM_ALLOCATED_BYTES",
+        "VRAM_RESERVED_BYTES",
+        "VRAM_FRAGMENTATION_BP"
+      ]
+    },
+    "ux_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric",
+        "comparison",
+        "threshold_dec",
+        "unit",
+        "window",
+        "failure_action"
+      ],
+      "properties": {
+        "metric": {
+          "$ref": "#/$defs/ux_metric_name"
+        },
+        "comparison": {
+          "enum": [
+            "LESS_THAN_OR_EQUAL",
+            "GREATER_THAN_OR_EQUAL",
+            "REGRESSION_LESS_THAN_OR_EQUAL",
+            "EXACT_ZERO"
+          ]
+        },
+        "threshold_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "unit": {
+          "enum": [
+            "MILLISECONDS",
+            "TOKENS_PER_SECOND_MILLI",
+            "BASIS_POINTS",
+            "COUNT",
+            "BYTES"
+          ]
+        },
+        "window": {
+          "enum": [
+            "P50",
+            "P95",
+            "P99",
+            "MAX",
+            "TOTAL",
+            "RATE"
+          ]
+        },
+        "failure_action": {
+          "const": "HOLD_POLICY_ADJUSTMENT"
+        }
+      }
+    }
+  }
+}

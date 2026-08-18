@@ -1,0 +1,97 @@
+{
+  "transcript_version": "W7TP-VALIDATION-TRANSCRIPT/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "created_at_utc": "2026-08-18T06:56:56.202347Z",
+  "environment": {
+    "python_dont_write_bytecode": true,
+    "pytest_cache_provider_disabled": true,
+    "platform": "Ubuntu under WSL",
+    "workspace": "/home/taiji_admin/Taiji_Hub"
+  },
+  "commands": [
+    {
+      "command_argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_w7tp_moving_v_route_cleanup_v2.py"
+      ],
+      "working_directory": "/home/taiji_admin/Taiji_Hub",
+      "started_at_ns": "1787036214908259328",
+      "ended_at_ns": "1787036215200378596",
+      "duration_ns": "292119268",
+      "return_code": 0,
+      "stdout": "........................................................................ [ 93%]\n.....                                                                    [100%]\n77 passed in 0.15s\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command_argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_w7tp_moving_v_preload_cleanup_v1.py"
+      ],
+      "working_directory": "/home/taiji_admin/Taiji_Hub",
+      "started_at_ns": "1787036215200420628",
+      "ended_at_ns": "1787036215381580773",
+      "duration_ns": "181160145",
+      "return_code": 0,
+      "stdout": "....................................                                     [100%]\n36 passed in 0.04s\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command_argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_w7tp_moving_v_preload_cleanup_v1.py",
+        "tests/test_w7tp_moving_v_route_cleanup_v2.py"
+      ],
+      "working_directory": "/home/taiji_admin/Taiji_Hub",
+      "started_at_ns": "1787036215381610514",
+      "ended_at_ns": "1787036215718434583",
+      "duration_ns": "336824069",
+      "return_code": 0,
+      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 0.19s\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command_argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_w7tp_8d_dependency_supply_demand_matrix_v1.py"
+      ],
+      "working_directory": "/home/taiji_admin/Taiji_Hub",
+      "started_at_ns": "1787036215718467034",
+      "ended_at_ns": "1787036216202325657",
+      "duration_ns": "483858623",
+      "return_code": 0,
+      "stdout": "....................                                                     [100%]\n20 passed in 0.34s\n",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "schema_validation": {
+    "draft202012_meta_valid_count": 3,
+    "policy_instance_valid": true,
+    "dependency_matrix_instance_valid": true,
+    "duplicate_json_key_and_local_ref_checks": "covered by 8D suite; 20/20 suite PASS"
+  },
+  "all_static_commands_passed": true
+}

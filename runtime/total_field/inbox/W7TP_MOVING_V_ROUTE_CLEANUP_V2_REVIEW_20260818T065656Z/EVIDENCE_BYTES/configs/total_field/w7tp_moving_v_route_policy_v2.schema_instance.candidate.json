@@ -1,0 +1,600 @@
+{
+  "$schema": "https://w7tp.local/schemas/field/w7tp_moving_v_route_policy_v2.schema.json",
+  "contract_version": "W7TP-MOVING-V-ROUTE-POLICY/2.0",
+  "contract_id": "W7TP_MOVING_V_ROUTE_POLICY_V2_STATIC_INSTANCE",
+  "status": "CANDIDATE_ONLY",
+  "mode": "STATIC_VALIDATION_ONLY",
+  "time_encoding": "UNIX_EPOCH_NANOSECONDS_AS_UNSIGNED_DECIMAL_STRING",
+  "instance_provenance": {
+    "instance_role": "SCHEMA_VALID_POLICY_INSTANCE",
+    "source_contract_ref": "configs/total_field/w7tp_moving_v_route_cleanup_v2.candidate.json",
+    "source_contract_sha256": "ad9ded877dd7df1a5161c814c332bcaa5227d0473834c36b505c05aeb6230d55",
+    "source_scope": "SELECTED_DECLARATIVE_FIELDS_ONLY",
+    "mapping_version": "W7TP-MOVING-V-CONTRACT-CONFIG-TO-POLICY-INSTANCE/2.0",
+    "mappings": [
+      {
+        "source_pointer": "/status",
+        "target_pointer": "/status",
+        "transform": "EXACT_COPY",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "CANDIDATE_ONLY is copied exactly."
+      },
+      {
+        "source_pointer": "/mode",
+        "target_pointer": "/mode",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "Source SHADOW_ONLY is conservatively represented as STATIC_VALIDATION_ONLY; no runtime authority is inferred."
+      },
+      {
+        "source_pointer": "/authority/decision_authority",
+        "target_pointer": "/authority/decision_authority",
+        "transform": "EXACT_COPY",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "TOTAL_FIELD is copied exactly."
+      },
+      {
+        "source_pointer": "/authority/runtime_approved",
+        "target_pointer": "/authority/runtime_authority_state",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "false maps to NOT_AUTHORIZED."
+      },
+      {
+        "source_pointer": "/temporal_lifecycle_contract/stages",
+        "target_pointer": "/lifecycle_policy/stages",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "Only the three named lifecycle stages are mapped; source stage subfields remain outside this policy namespace."
+      },
+      {
+        "source_pointer": "/temporal_lifecycle_contract/allowed_forward_transitions",
+        "target_pointer": "/lifecycle_policy/allowed_transitions",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "The two forward edges are canonicalized into arrow strings."
+      },
+      {
+        "source_pointer": "/time_alignment_contract",
+        "target_pointer": "/lifecycle_policy",
+        "transform": "DERIVED_CONSERVATIVE_DEFAULT",
+        "verification_state": "ADAPTER_REQUIRED/HOLD",
+        "note": "Time-domain identity, logical clock and state hashes are required by policy but absent as concrete runtime values in the source contract."
+      },
+      {
+        "source_pointer": "/watermark_membership_contract",
+        "target_pointer": "/watermark_policy",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "Declarative fail-closed membership semantics are mapped; live member receipts remain adapter-required."
+      },
+      {
+        "source_pointer": "/route_proof_contract",
+        "target_pointer": "/route_proof_policy",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "ADAPTER_REQUIRED/HOLD",
+        "note": "Source proof field list is not a verified route graph, ruleset, materialization-content binding or descendant closure proof."
+      },
+      {
+        "source_pointer": "/stage_specific_invalidation_contract",
+        "target_pointer": "/error_branch_invalidation_policy",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "ADAPTER_REQUIRED/HOLD",
+        "note": "Stage actions are normalized to runtime action enums; no cancellation, fence or deletion authority is created."
+      },
+      {
+        "source_pointer": "/adaptive_budget_contract/initial_ceiling_bytes",
+        "target_pointer": "/memory_budget_policy/initial_candidate_bytes",
+        "transform": "EXACT_COPY",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "2147483648 is copied as a shadow candidate only."
+      },
+      {
+        "source_pointer": "/ux_evidence_gates",
+        "target_pointer": "/ux_gate_policy",
+        "transform": "DERIVED_CONSERVATIVE_DEFAULT",
+        "verification_state": "ADAPTER_REQUIRED/HOLD",
+        "note": "Required metric names are mapped, while numeric gates remain conservative static placeholders pending real measurement."
+      },
+      {
+        "source_pointer": "/ux_evidence_gates/fixed_zero_tolerance_metrics",
+        "target_pointer": "/zero_tolerance_metrics",
+        "transform": "CANONICALIZED_ENUM",
+        "verification_state": "VERIFIED_STATIC_SOURCE_BINDING",
+        "note": "Named zero-tolerance outcomes are represented as decimal-string zero counters."
+      },
+      {
+        "source_pointer": "/time_alignment_contract/apex_source",
+        "target_pointer": "/moving_v_geometry",
+        "transform": "NOT_MAPPED_HOLD",
+        "verification_state": "ADAPTER_REQUIRED/HOLD",
+        "note": "Source declares an external apex source but provides no concrete apex, epochs, time domain, graph roots or envelope; instance values are syntactic sentinels only."
+      }
+    ],
+    "unmapped_source_namespace_state": "NOT_ASSERTED_AS_POLICY_INSTANCE",
+    "runtime_integration_state": "ADAPTER_REQUIRED/HOLD",
+    "binding_algorithm": "SHA-256",
+    "binding_scope": "UTF8_JSON_SORTED_KEYS_NO_WHITESPACE_OF_SOURCE_REF_SHA_SCOPE_MAPPING_VERSION_AND_MAPPINGS",
+    "binding_sha256": "54760362a8d7f4cbd1782528a1d08b0ea46d8a38de174e8f926848882bce39fa"
+  },
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "runtime_authority_state": "NOT_AUTHORIZED",
+    "live_action_authority_receipt_required": true,
+    "canonical_action": "RETAIN",
+    "hard_delete_canonical_allowed": false,
+    "self_approval_allowed": false
+  },
+  "lifecycle_policy": {
+    "time_basis": "FILE_PREDICTION_LIFECYCLE",
+    "stages": [
+      "PREDICTED_NOT_GENERATED",
+      "GENERATION_SCHEDULED_OR_RUNNING",
+      "GENERATION_COMPLETED"
+    ],
+    "stage_field": "stage",
+    "stage_entered_at_field": "stage_entered_at_ns",
+    "stage_observed_at_field": "stage_observed_at_ns",
+    "stage_sequence_field": "stage_sequence_uint_dec",
+    "stage_state_hash_field": "stage_state_sha256",
+    "time_domain_field": "time_domain_id",
+    "logical_time_field": "logical_time_uint_dec",
+    "schedule_reference_field": "schedule_ref",
+    "job_reference_field": "job_ref",
+    "transition_receipt_required": true,
+    "initial_stage_transition_receipt_required": false,
+    "transition_receipt_schema_version": "W7TP-MOVING-V-LIFECYCLE-TRANSITION-RECEIPT/2.0",
+    "allowed_transitions": [
+      "PREDICTED_NOT_GENERATED->GENERATION_SCHEDULED_OR_RUNNING",
+      "GENERATION_SCHEDULED_OR_RUNNING->GENERATION_COMPLETED"
+    ],
+    "transition_pre_state_hash_required": true,
+    "transition_post_state_hash_required": true,
+    "monotonicity_invariants": [
+      "STAGE_SEQUENCE_STRICTLY_INCREASES_ON_TRANSITION",
+      "LOGICAL_TIME_STRICTLY_INCREASES_ON_TRANSITION",
+      "STAGE_ENTERED_AT_NOT_AFTER_STAGE_OBSERVED_AT",
+      "STAGE_OBSERVED_AT_NOT_AFTER_INGEST_TIME",
+      "TRANSITION_PRE_AND_POST_STATE_HASHES_MATCH"
+    ],
+    "stage_regression_policy": "HOLD_AND_INVALIDATE_ROUTE_BRANCH",
+    "scheduled_or_running_release_accounting": "FORBIDDEN_UNTIL_CANCELLATION_RECEIPT_AND_ALLOCATOR_COMMIT_OBSERVATION",
+    "completion_receipt_required": true,
+    "completed_ownership_resolution_required": true
+  },
+  "moving_v_geometry": {
+    "policy_id": "MOVING_V_ROUTE_POLICY_V2_STATIC",
+    "policy_epoch_id": "STATIC_UNBOUND_POLICY_EPOCH_0",
+    "prediction_epoch_id": "STATIC_UNBOUND_PREDICTION_EPOCH_0",
+    "route_epoch_id": "STATIC_UNBOUND_ROUTE_EPOCH_0",
+    "membership_epoch_id": "STATIC_UNBOUND_MEMBERSHIP_EPOCH_0",
+    "time_domain_id": "STATIC_UNBOUND_TIME_DOMAIN",
+    "route_graph_root_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "route_ruleset_root_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "apex_semantics": "ALIGNED_CURRENT_TIME",
+    "opening_direction": "FUTURE",
+    "inside_v_semantics": "FUTURE_PRELOAD_PROTECTED",
+    "side_semantics": "FUTURE_PREDICTED_MISS_ROUTE_BRANCH",
+    "behind_apex_semantics": "PAST_HOLD_OR_ELIGIBLE_AFTER_WATERMARK_AND_GATES",
+    "distance_input": "FOUNDER_NATIVE_ADI_DELTA_F_UINT_WITH_PROOF_RECEIPT",
+    "apex_time_ns": "0",
+    "current_guard_ns": "1000000",
+    "clock_uncertainty_ns": "0",
+    "past_grace_ns": "0",
+    "future_horizon_ns": "1000000000",
+    "interpolation": "LEFT_STEP",
+    "envelope": [
+      {
+        "future_offset_ns": "0",
+        "protected_radius_uint": "0",
+        "candidate_radius_uint": "0"
+      },
+      {
+        "future_offset_ns": "1000000000",
+        "protected_radius_uint": "1",
+        "candidate_radius_uint": "2"
+      }
+    ],
+    "classification_states": [
+      "PAST_HOLD",
+      "PAST_ELIGIBLE",
+      "CURRENT_GUARD",
+      "FUTURE_PROTECTED",
+      "FUTURE_PREDICTED_MISS",
+      "OUT_OF_HORIZON",
+      "OUTSIDE_MANAGED_ENVELOPE_HOLD",
+      "UNALIGNED_HOLD"
+    ],
+    "runtime_invariants": [
+      "ENVELOPE_OFFSETS_STRICTLY_INCREASE",
+      "PROTECTED_RADIUS_NON_DECREASING",
+      "CANDIDATE_RADIUS_NON_DECREASING",
+      "PROTECTED_RADIUS_NOT_GREATER_THAN_CANDIDATE_RADIUS",
+      "SIDE_CLEANUP_WIDTH_NON_INCREASING",
+      "FINAL_OFFSET_EQUALS_FUTURE_HORIZON",
+      "APEX_AND_WATERMARK_NEVER_REGRESS",
+      "UNKNOWN_OR_CONFLICTED_INPUT_HOLDS"
+    ]
+  },
+  "route_proof_policy": {
+    "proof_required": true,
+    "proof_schema_version": "W7TP-MOVING-V-ROUTE-PROOF-RECEIPT/2.0",
+    "proof_types": [
+      "REACHABLE_PATH_PROOF",
+      "ROUTE_PREDICTION_RECEIPT",
+      "ROUTE_EXCLUSION_PROOF",
+      "PREDICTION_INVALIDATION_PROOF"
+    ],
+    "distance_field": "delta_f_uint_dec",
+    "canonical_path_required": false,
+    "canonical_path_hash_required": false,
+    "materialization_content_binding_required": true,
+    "prediction_and_route_epoch_binding_required": true,
+    "invalidation_branch_match_required": true,
+    "descendant_closure_proof_required": true,
+    "binds": [
+      "RECORD_ID",
+      "MATERIALIZATION_ID",
+      "CONTENT_SHA256",
+      "POLICY_ID",
+      "POLICY_EPOCH_ID",
+      "PREDICTION_EPOCH_ID",
+      "ROUTE_EPOCH_ID",
+      "ROUTE_GRAPH_ROOT_SHA256",
+      "ROUTE_RULESET_ROOT_SHA256",
+      "START_STATE_ROOT_SHA256",
+      "TARGET_STATE_OR_PREDICATE_SHA256",
+      "LIFECYCLE_STAGE_STATE_SHA256",
+      "LIFECYCLE_TRANSITION_RECEIPT",
+      "NEED_TIME_RECEIPT",
+      "ADI_PROOF_RECEIPT",
+      "WATERMARK_MEMBERSHIP_RECEIPT",
+      "BRANCH_ID_FOR_INVALIDATION",
+      "DESCENDANT_CLOSURE_ROOT_AND_RECEIPT"
+    ],
+    "generic_geometry_proxy_allowed": false,
+    "similarity_proxy_allowed": false,
+    "missing_or_invalid_proof_action": "HOLD_AND_INVALIDATE_ROUTE_BRANCH",
+    "invalidating_conditions": [
+      "PREDICTION_EPOCH_MISMATCH",
+      "LIFECYCLE_STAGE_REGRESSION",
+      "WATERMARK_MEMBERSHIP_INVALID",
+      "CAS_MISMATCH"
+    ]
+  },
+  "error_branch_invalidation_policy": {
+    "scope": "INVALIDATED_ROUTE_BRANCH_ONLY",
+    "canonical_action": "RETAIN",
+    "scheduled_or_running_is_released": false,
+    "release_accounting_requires_commit_receipt": true,
+    "predicted_not_generated": {
+      "stage": "PREDICTED_NOT_GENERATED",
+      "required_action": "CANCEL_PREDICTED_CANDIDATE",
+      "required_receipts": [
+        "ROUTE_INVALIDATION_RECEIPT"
+      ],
+      "release_accounting": "ZERO_MATERIALIZED_BYTES"
+    },
+    "generation_scheduled_or_running": {
+      "stage": "GENERATION_SCHEDULED_OR_RUNNING",
+      "required_action": "REQUEST_GENERATION_CANCELLATION",
+      "required_receipts": [
+        "CANCELLATION_REQUEST_RECEIPT",
+        "CANCELLATION_RESULT_RECEIPT",
+        "WORKER_FENCE_QUIESCED_RECEIPT",
+        "ALLOCATOR_COMMIT_OBSERVATION"
+      ],
+      "accepted_cancellation_outcomes": [
+        "CANCELLED_BEFORE_START",
+        "CANCELLED_DURING_RUN"
+      ],
+      "required_worker_fence_state": "QUIESCED",
+      "release_accounting": "FORBIDDEN_BEFORE_VERIFIED_CANCELLATION_AND_ALLOCATOR_COMMIT"
+    },
+    "generation_completed": {
+      "stage": "GENERATION_COMPLETED",
+      "ownership_required": true,
+      "exclusive_non_canonical_action": "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION",
+      "shared_or_canonical_action": "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL",
+      "required_receipts": [
+        "COMPLETION_RECEIPT",
+        "BRANCH_DELETION_OR_DETACH_RECEIPT",
+        "MATERIALIZATION_COMMIT_RECEIPT"
+      ],
+      "release_accounting": "ONLY_FROM_VERIFIED_COMMIT_RECEIPT"
+    }
+  },
+  "watermark_policy": {
+    "receipt_required": true,
+    "receipt_schema_version": "W7TP-WATERMARK-MEMBERSHIP-RECEIPT/2.0",
+    "membership_policy": "ALL_REQUIRED_MEMBERS",
+    "node_identity_fields": [
+      "node_id",
+      "boot_id",
+      "clock_id"
+    ],
+    "safe_watermark_formula": "MIN_REQUIRED_EVENT_WATERMARK_MINUS_PER_NODE_CLOCK_UNCERTAINTY",
+    "clock_uncertainty_required": true,
+    "receipt_freshness_required": true,
+    "node_uniqueness_required": true,
+    "regression_policy": "HOLD",
+    "partition_policy": "HOLD_WATERMARK_ADVANCE",
+    "missing_member_policy": "HOLD",
+    "boot_mismatch_policy": "HOLD_AND_REFRESH_MEMBERSHIP"
+  },
+  "materialization_policy": {
+    "canonical_action": "RETAIN",
+    "canonical_source_delete_allowed": false,
+    "record_version_field": "record_version_uint_dec",
+    "cas_required_fields": [
+      "materialization_id",
+      "physical_allocation_id",
+      "expected_content_sha256",
+      "record_version_uint_dec",
+      "stage",
+      "generation_job_state",
+      "policy_epoch_id",
+      "prediction_epoch_id",
+      "route_epoch_id",
+      "route_graph_root_sha256",
+      "generation_token_sha256",
+      "atomic_lifecycle_token_sha256"
+    ],
+    "decision_token_schema_version": "W7TP-MOVING-V-DECISION-TOKEN/2.0",
+    "decision_token_binds": [
+      "MATERIALIZATION_AND_PHYSICAL_ALLOCATION",
+      "CONTENT_SHA256",
+      "POLICY_PREDICTION_AND_ROUTE_EPOCHS",
+      "ROUTE_GRAPH_ROOT_SHA256",
+      "ROUTE_PROOF_SHA256",
+      "FULL_SAFETY_STATE_SHA256",
+      "ALLOCATION_OWNER_SET_SHA256",
+      "EXPECTED_RELEASE_UPPER_BOUND_BYTES"
+    ],
+    "commit_revalidation_required": [
+      "CURRENT_POLICY_EPOCH_MATCH",
+      "CURRENT_ROUTE_GRAPH_ROOT_MATCH",
+      "CURRENT_ROUTE_PROOF_HASH_MATCH_AND_PASS",
+      "CURRENT_FULL_SAFETY_STATE_HASH_MATCH",
+      "CURRENT_ALLOCATION_OWNER_SET_HASH_MATCH",
+      "CURRENT_CONTENT_AND_MATERIALIZATION_MATCH",
+      "CURRENT_GENERATION_AND_LIFECYCLE_TOKENS_MATCH",
+      "ACTUAL_RELEASE_NOT_ABOVE_TOKEN_UPPER_BOUND"
+    ],
+    "actual_release_constraint": "ACTUAL_RELEASED_BYTES_LESS_THAN_OR_EQUAL_TO_DECISION_TOKEN_UPPER_BOUND",
+    "lifecycle_snapshot_required": true,
+    "reconstruction_descriptor_required": true,
+    "future_predicted_miss_action": "SOFT_EVICT_RECONSTRUCTIBLE_MATERIALIZATION_ONLY",
+    "past_eligible_action": "MOVE_EXCLUSIVE_NON_CANONICAL_MATERIALIZATION_TO_QUARANTINE_FIRST",
+    "quarantine_first": true,
+    "release_accounting_source": "VERIFIED_MATERIALIZATION_COMMIT_RECEIPT",
+    "scheduled_or_running_counts_as_released": false,
+    "vram_requires_separate_canary": true
+  },
+  "memory_budget_policy": {
+    "budget_owner": "TOTAL_FIELD",
+    "budget_scope": "DYNAMIC_CONTEXT_RAM_CACHE",
+    "initial_candidate_bytes": "2147483648",
+    "low_watermark_bytes": "1073741824",
+    "high_watermark_bytes": "1610612736",
+    "max_resident_bytes": "2147483648",
+    "protected_working_set_floor_bytes": "536870912",
+    "numeric_values_tunable": true,
+    "cross_field_invariants": [
+      "PROTECTED_FLOOR_NOT_GREATER_THAN_LOW_WATERMARK",
+      "LOW_WATERMARK_LESS_THAN_HIGH_WATERMARK",
+      "HIGH_WATERMARK_NOT_GREATER_THAN_MAX_RESIDENT",
+      "INITIAL_CANDIDATE_NOT_GREATER_THAN_MAX_RESIDENT"
+    ],
+    "adjustment_requires_ux_measurement": true,
+    "adjustment_requires_zero_tolerance_pass": true,
+    "automatic_application_allowed": false
+  },
+  "ux_gate_policy": {
+    "measurement_schema_version": "W7TP-MOVING-V-UX-MEASUREMENT/2.0",
+    "baseline_and_candidate_required": true,
+    "workload_manifest_required": true,
+    "minimum_sample_count_uint": "1",
+    "minimum_duration_ns": "1",
+    "required_strata": [
+      "COLD_AND_WARM",
+      "CONTEXT_LENGTH_BUCKET",
+      "LANGUAGE",
+      "TOOL_AND_NON_TOOL",
+      "CONCURRENCY",
+      "NODE_AND_MEMORY_TIER"
+    ],
+    "required_metrics": [
+      "TTFT_MS",
+      "END_TO_END_LATENCY_MS",
+      "TOKENS_PER_SECOND_MILLI",
+      "REHYDRATION_STALL_MS",
+      "TASK_SUCCESS_RATE_BP",
+      "TOOL_SUCCESS_RATE_BP",
+      "PRELOAD_HIT_RATE_BP",
+      "FALSE_MISS_RATE_BP",
+      "RECONSTRUCTION_PASS_RATE_BP",
+      "OOM_COUNT",
+      "SWAP_THRASH_COUNT",
+      "PROTECTED_EVICTION_COUNT",
+      "RECONSTRUCTION_HASH_MISMATCH_COUNT",
+      "PEAK_RAM_BYTES",
+      "HOST_RESERVE_BYTES",
+      "VRAM_ALLOCATED_BYTES",
+      "VRAM_RESERVED_BYTES",
+      "VRAM_FRAGMENTATION_BP"
+    ],
+    "gates": [
+      {
+        "metric": "PROTECTED_EVICTION_COUNT",
+        "comparison": "EXACT_ZERO",
+        "threshold_dec": "0",
+        "unit": "COUNT",
+        "window": "TOTAL",
+        "failure_action": "HOLD_POLICY_ADJUSTMENT"
+      }
+    ],
+    "real_measurement_required": true,
+    "synthetic_evidence_sufficient": false,
+    "decision_scope": "MEASUREMENT_ONLY_NO_AUTOMATIC_POLICY_CHANGE"
+  },
+  "false_miss_policy": {
+    "receipt_schema_version": "W7TP-MOVING-V-FALSE-MISS-RECEIPT/2.0",
+    "commit_binding_required": true,
+    "materialization_binding_required": true,
+    "content_hash_binding_required": true,
+    "prediction_epoch_binding_required": true,
+    "route_epoch_binding_required": true,
+    "byte_exact_reconstruction_required": true,
+    "route_epoch_change_is_false_miss": false,
+    "states": [
+      "NOT_A_FALSE_MISS",
+      "HOLD_DEMAND_RECEIPT_BINDING_MISMATCH",
+      "ROUTE_CHANGE_REGENERATION",
+      "REHYDRATION_FAILURE_HOLD",
+      "SIMULATED_FALSE_MISS_BYTE_EXACT",
+      "FALSE_MISS_REHYDRATED_BYTE_EXACT"
+    ]
+  },
+  "router_dlq_anti_replay_policy": {
+    "receipt_required": true,
+    "receipt_schema_version": "W7TP-ROUTER-DLQ-ANTI-REPLAY-RECEIPT/2.0",
+    "bound_input_scopes": [
+      "MOVING_V_ROUTE_INPUT",
+      "MOVING_V_CANCELLATION_INPUT",
+      "MOVING_V_CLEANUP_INPUT"
+    ],
+    "nonce_required": true,
+    "idempotency_key_required": true,
+    "dedupe_key_required": true,
+    "payload_and_content_hash_required": true,
+    "router_and_membership_epoch_required": true,
+    "persistent_ledger_required": true,
+    "atomic_persistence_proof_required": true,
+    "dlq_without_atomic_ledger_sufficient": false,
+    "direct_native_criteria": [
+      "PERSISTENT_NONCE_OR_DEDUPE_LEDGER",
+      "ATOMIC_FIRST_SEEN_INSERT_OR_DUPLICATE_DECISION",
+      "PAYLOAD_AND_CONTENT_HASH_BINDING",
+      "ROUTER_AND_MEMBERSHIP_EPOCH_BINDING",
+      "DLQ_DECISION_AND_REASON_RECEIPT",
+      "MOVING_V_ROUTE_CANCEL_CLEANUP_INPUT_BINDING"
+    ],
+    "current_moving_v_binding_state": "ADAPTER_REQUIRED/HOLD",
+    "existing_source_inventory": [
+      {
+        "source_ref": "tools/total_field_authority_runtime_bindings.py",
+        "source_sha256": "48960aca702a2d4a918e9ad5bfacad6068baf9fd1d5d35280efd4d46adeed9c2",
+        "implementation_kind": "PERSISTENT_NONCE_LEDGER",
+        "observed_capabilities": [
+          "SQLITE_PERSISTENCE",
+          "NONCE_PRIMARY_KEY",
+          "PACKET_HASH_BINDING",
+          "ATOMIC_INSERT_OR_IGNORE",
+          "WAL_FULL_SYNC"
+        ],
+        "component_state": "DIRECT_NATIVE",
+        "moving_v_binding_state": "ADAPTER_REQUIRED",
+        "gap": "The main-tree authority nonce ledger uses BEGIN IMMEDIATE plus INSERT OR IGNORE with WAL and synchronous FULL, but its scope is active-authority resolution; it emits no router/DLQ anti-replay receipt and is not wired to Moving-V route, cancellation, or cleanup inputs."
+      },
+      {
+        "source_ref": "tests/test_total_field_authority_runtime_bindings.py",
+        "source_sha256": "f59ac6ac47ebb6625384a8297c81799722257e7b971d1d86c482b1439124acc7",
+        "implementation_kind": "REPLAY_TEST",
+        "observed_capabilities": [
+          "REPLAY_AFTER_RESTART_TEST",
+          "TWO_CONNECTION_SINGLE_CONSUMER_TEST"
+        ],
+        "component_state": "DIRECT_NATIVE",
+        "moving_v_binding_state": "ADAPTER_REQUIRED",
+        "gap": "The main-tree tests cover restart replay and two SQLite connections for the authority ledger, but do not exercise router/DLQ receipts or Moving-V route, cancellation, cleanup, membership epoch, and DLQ decision bindings."
+      },
+      {
+        "source_ref": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tools/taiji_8d_canonical_verifier.py",
+        "source_sha256": "f412cfe6cd44e2001b05f09ad435b08c175f9c5bc35a5f68c4b7a57ed45db8d5",
+        "implementation_kind": "PERSISTENT_NONCE_LEDGER",
+        "observed_capabilities": [
+          "SQLITE_PERSISTENCE",
+          "NONCE_PRIMARY_KEY",
+          "PACKET_HASH_BINDING",
+          "TTL_CLEANUP"
+        ],
+        "component_state": "DIRECT_NATIVE",
+        "moving_v_binding_state": "ADAPTER_REQUIRED",
+        "gap": "PersistentNonceLedger is direct native inside an archived optimized-successor candidate, but it is not imported by the current Moving-V runtime, emits no router/DLQ anti-replay receipt, has no router or membership epoch binding, and its SELECT-then-INSERT concurrency atomicity is not proven."
+      },
+      {
+        "source_ref": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tests/test_taiji_8d_canonical_verifier.py",
+        "source_sha256": "184b82b7f67735bb67169cafac9026817da4bf71b1ed734b9c67ca8cc77cc903",
+        "implementation_kind": "REPLAY_TEST",
+        "observed_capabilities": [
+          "REPLAY_AFTER_RESTART_TEST"
+        ],
+        "component_state": "DIRECT_NATIVE",
+        "moving_v_binding_state": "ADAPTER_REQUIRED",
+        "gap": "The test proves sequential replay rejection after reopening the same SQLite file; it does not cover concurrent first-seen races, DLQ routing, router epochs, or Moving-V route/cancel/cleanup integration."
+      },
+      {
+        "source_ref": "models/dead_letter_router.py",
+        "source_sha256": "c1b04861e12b3cee559d0243fb51878a9b879a126a0616d788e4d13c6e0c7f48",
+        "implementation_kind": "DLQ_ROUTER",
+        "observed_capabilities": [
+          "DLQ_REASON",
+          "DLQ_PAYLOAD_HASH",
+          "HUMAN_REVIEW_HOLD"
+        ],
+        "component_state": "ADAPTER_REQUIRED",
+        "moving_v_binding_state": "ADAPTER_REQUIRED",
+        "gap": "The live-tree DLQ writer hashes sanitized records but has no nonce, idempotency key, dedupe key, persistent replay ledger, router epoch, membership epoch, or atomic duplicate decision."
+      },
+      {
+        "source_ref": "services/w7tp_lite/mock_router_dlq_policy.py",
+        "source_sha256": "d7dc9ed5683ddf3738a46bfc4a7b6bba120c781ba09f7bc13e0b8d321c0e6ca5",
+        "implementation_kind": "MOCK_DLQ_POLICY",
+        "observed_capabilities": [
+          "DLQ_REASON",
+          "IN_MEMORY_MOCK_ONLY"
+        ],
+        "component_state": "ADAPTER_REQUIRED",
+        "moving_v_binding_state": "ADAPTER_REQUIRED",
+        "gap": "The module explicitly declares mock_in_memory_only and replay_allowed false; its truncated decision/shard digest is an identifier, not a persistent anti-replay ledger."
+      },
+      {
+        "source_ref": "runtime/deadletter_replay.py",
+        "source_sha256": "d96f4eec43f8752ee63a0f3068447ba3cd816446187cb09eacbbab8c2e002457",
+        "implementation_kind": "DLQ_REPLAY_EXECUTOR",
+        "observed_capabilities": [
+          "MOVE_RETRY_LOOP"
+        ],
+        "component_state": "ADAPTER_REQUIRED",
+        "moving_v_binding_state": "ADAPTER_REQUIRED",
+        "gap": "The replay loop moves files and executes stored shell commands with shell=True; it has no nonce/dedupe ledger or receipt binding and cannot be used as Moving-V authority."
+      }
+    ]
+  },
+  "allowed_actions": [
+    "PROTECT_CURRENT",
+    "PROTECT_PRELOAD_CANDIDATE",
+    "CONTINUE_PROTECTED_GENERATION",
+    "PROTECT_COMPLETED_MATERIALIZATION",
+    "KEEP_REFERENCE_ONLY",
+    "KEEP_HOLD",
+    "CANCEL_PREDICTED_CANDIDATE",
+    "REQUEST_GENERATION_CANCELLATION",
+    "CLEAN_CANCELLED_GENERATION_TEMP",
+    "SOFT_EVICT_RECONSTRUCTIBLE",
+    "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION",
+    "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL",
+    "MOVE_PAST_MATERIALIZATION_TO_QUARANTINE"
+  ],
+  "zero_tolerance_metrics": {
+    "protected_eviction_violation": "0",
+    "current_eviction_violation": "0",
+    "canonical_source_deleted": "0",
+    "scheduled_or_running_false_release": "0",
+    "double_reclaim": "0",
+    "unaudited_reclaim": "0",
+    "reconstruction_hash_mismatch_consumed": "0",
+    "commit_without_authority": "0"
+  }
+}

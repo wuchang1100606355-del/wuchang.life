@@ -1,0 +1,29 @@
+{
+  "report_version": "W7TP-SCHEMA-BINDING-REPORT/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "json_schema_draft": "2020-12",
+  "meta_valid": {
+    "w7tp_moving_v_route_policy_v2.schema.json": true,
+    "w7tp_moving_v_route_runtime_envelopes_v2.schema.json": true,
+    "w7tp_8d_dependency_supply_demand_matrix_v1.schema.json": true
+  },
+  "instance_valid": {
+    "w7tp_moving_v_route_policy_v2.schema_instance.candidate.json": true,
+    "w7tp_8d_dependency_supply_demand_matrix_v1.candidate.json": true
+  },
+  "runtime_envelope_branch_count": 18,
+  "runtime_envelope_definition_count": 51,
+  "policy_instance_safe_triad": {
+    "status": "CANDIDATE_ONLY",
+    "mode": "STATIC_VALIDATION_ONLY",
+    "runtime_authority_state": "NOT_AUTHORIZED"
+  },
+  "generic_policy_schema_conditional_triad_coupling": false,
+  "config_to_policy_namespace_mapping_qualified_in_8d_closure": false,
+  "holds": [
+    "HOLD_SCHEMA_STATE_TRIAD_CONDITIONAL_COUPLING_UNPROVEN",
+    "HOLD_CONFIG_TO_POLICY_SCHEMA_BINDING_UNSATISFIED"
+  ],
+  "static_instance_use_allowed": true,
+  "generic_live_policy_acceptance_allowed": false
+}

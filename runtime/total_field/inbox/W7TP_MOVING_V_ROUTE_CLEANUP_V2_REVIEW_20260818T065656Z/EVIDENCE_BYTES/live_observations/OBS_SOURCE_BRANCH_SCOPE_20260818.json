@@ -1,0 +1,31 @@
+{
+  "observation_id": "OBS_SOURCE_BRANCH_SCOPE_20260818",
+  "observation_sha256": "95fe71e35b5d455a91c707c121335e082d947de3856a1bdd0d66fa39760f2833",
+  "observed_at_ns": "1787033352668778722",
+  "observer": "OPERATOR_AND_READ_ONLY_PROBE",
+  "evidence_class": "READ_ONLY_RUNTIME_PROBE",
+  "facts": [
+    {
+      "fact_key": "git.remote_branch_sha",
+      "fact_value": "b3737...",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "git.local_main_sha",
+      "fact_value": "c41bf...",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "remote.moving_v_adapter",
+      "fact_value": "absent",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "remote.total_field_adapter",
+      "fact_value": "absent",
+      "unit": "NONE"
+    }
+  ],
+  "authority_state": "HOLD",
+  "no_live_mutation": true
+}

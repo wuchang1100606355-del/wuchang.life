@@ -1,0 +1,31 @@
+{
+  "observation_id": "OBS_MSI_WSL_RESOURCE_20260818",
+  "observation_sha256": "9a244eab29d1298bc192ed38db024486235d6896affa82ae74ebfc06199decd9",
+  "observed_at_ns": "1787033352668778722",
+  "observer": "OPERATOR_AND_READ_ONLY_PROBE",
+  "evidence_class": "COMBINED",
+  "facts": [
+    {
+      "fact_key": "node.id",
+      "fact_value": "msi-wsl",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "memory.total",
+      "fact_value": "25200000000",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "memory.available",
+      "fact_value": "20700000000",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "tcp22",
+      "fact_value": "OPEN",
+      "unit": "STATE"
+    }
+  ],
+  "authority_state": "HOLD",
+  "no_live_mutation": true
+}

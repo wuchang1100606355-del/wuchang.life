@@ -1,0 +1,91 @@
+{
+  "observation_id": "OBS_TAIJI01_CODEX_LOCAL_ROUTE_20260818",
+  "observation_sha256": "8f23c0e3e5f9257d26f53266e297ddbda461fba3c5f71a710dd9d49f4809b3cb",
+  "observed_at_ns": "1787033352668778722",
+  "observer": "OPERATOR_AND_READ_ONLY_PROBE",
+  "evidence_class": "COMBINED",
+  "facts": [
+    {
+      "fact_key": "codex.default_model",
+      "fact_value": "gpt-5.3-codex-spark",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "codex.default_local_adapter_binding",
+      "fact_value": "ABSENT",
+      "unit": "STATE"
+    },
+    {
+      "fact_key": "local.config.model",
+      "fact_value": "qwen2.5-coder:7b-instruct",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "local.config.provider",
+      "fact_value": "taiji8d",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "local.config.base_url",
+      "fact_value": "http://127.0.0.1:11435/v1",
+      "unit": "ENDPOINT"
+    },
+    {
+      "fact_key": "adapter.11435.ceiling",
+      "fact_value": "2147483648",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "adapter.11435.used",
+      "fact_value": "0",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "adapter.11435.entries",
+      "fact_value": "0",
+      "unit": "COUNT"
+    },
+    {
+      "fact_key": "adapter.11435.profiles",
+      "fact_value": "4k,8k,16k,32k all OK",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "adapter.11435.tools",
+      "fact_value": "NO_EXEC_CLOUD_EXPLICIT_ONLY",
+      "unit": "STATE"
+    },
+    {
+      "fact_key": "adapter.11435.post_count",
+      "fact_value": "0",
+      "unit": "COUNT"
+    },
+    {
+      "fact_key": "adapter.11437.used",
+      "fact_value": "970",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "adapter.11437.entries",
+      "fact_value": "1",
+      "unit": "COUNT"
+    },
+    {
+      "fact_key": "adapter.11437.last_post",
+      "fact_value": "single smoke",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "adapter.11437.tool_bridge",
+      "fact_value": "candidate_only",
+      "unit": "STATE"
+    },
+    {
+      "fact_key": "adapter.memory_reservation",
+      "fact_value": "NON_RESERVED_ADJUSTABLE_CEILING",
+      "unit": "STATE"
+    }
+  ],
+  "authority_state": "HOLD",
+  "no_live_mutation": true
+}

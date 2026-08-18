@@ -1,0 +1,125 @@
+{
+  "report_version": "W7TP-CAPABILITY-SEPARATION-REPORT/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "principle": "A source-level capability, a schema contract, an adapter, a runtime binding, an authority receipt and an end-to-end consumer outcome are distinct capabilities and may not inherit each other's PASS state.",
+  "capabilities": [
+    {
+      "capability": "MOVING_V_V2_PURE_STATIC_LOGIC",
+      "state": "STATIC_LOGIC_PASS",
+      "evidence": [
+        "SOURCE_BYTES/tools/total_field/moving_v_route_cleanup_candidate_v2.py",
+        "VALIDATION_COMMAND_TRANSCRIPT.json"
+      ],
+      "live_authority": false
+    },
+    {
+      "capability": "MOVING_V_POLICY_AND_RUNTIME_ENVELOPE_CONTRACTS",
+      "state": "STATIC_SCHEMA_PASS_WITH_BINDING_HOLDS",
+      "evidence": [
+        "SCHEMA_BINDING_REPORT.json"
+      ],
+      "live_authority": false
+    },
+    {
+      "capability": "PERSISTENT_AUTHORITY_NONCE_LEDGER",
+      "state": "DIRECT_NATIVE_REUSABLE_COMPONENT",
+      "evidence": [
+        "EVIDENCE_BYTES/tools/total_field_authority_runtime_bindings.py",
+        "EVIDENCE_BYTES/tests/test_total_field_authority_runtime_bindings.py"
+      ],
+      "moving_v_binding": "ADAPTER_REQUIRED"
+    },
+    {
+      "capability": "ROUTER_AND_DLQ_SINKS",
+      "state": "SEPARATE_PARTIAL_IMPLEMENTATIONS",
+      "evidence": [
+        "EVIDENCE_BYTES/services/gateway/topology_router.py",
+        "EVIDENCE_BYTES/models/dead_letter_router.py",
+        "EVIDENCE_BYTES/services/w7tp_lite/mock_router_dlq_policy.py"
+      ],
+      "atomic_nonce_route_receipt_chain": "NOT_PROVEN"
+    },
+    {
+      "capability": "ATOMIC_ROUTE_STAGE_AUTHORITY_NONCE_COMMIT_OR_DLQ_RECEIPT",
+      "state": "ADAPTER_REQUIRED/HOLD",
+      "same_atomic_chain_proven": false,
+      "required_fields": [
+        "nonce",
+        "payload_sha256",
+        "router_id",
+        "router_epoch",
+        "router_boot_id",
+        "issued_at_ns",
+        "expires_at_ns",
+        "ledger_sequence",
+        "dlq_record_sha256",
+        "delivery_id",
+        "attempt",
+        "retry_of",
+        "route_decision",
+        "route_proof_sha256",
+        "policy_epoch",
+        "decision_token_sha256",
+        "outcome_PASS",
+        "authority_signature_sha256",
+        "previous_ledger_sha256"
+      ]
+    },
+    {
+      "capability": "LEGACY_DLQ_REPLAY",
+      "state": "LEGACY_REPLAY_UNSAFE_EXCLUDED",
+      "evidence": [
+        "EVIDENCE_BYTES/runtime/deadletter_replay.py"
+      ],
+      "reason": "shell=True and no bound nonce/versioned authority/idempotency receipt"
+    },
+    {
+      "capability": "8D_ADI_GTP_CROSS_COMPONENT_INTEGRATION",
+      "state": "ADAPTER_REQUIRED/HOLD",
+      "evidence": [
+        "DEPENDENCY_CLOSURE_REPORT.json"
+      ]
+    },
+    {
+      "capability": "TAIJI01_8D_LOCAL_SCOPED_PROFILE",
+      "state": "DEPLOYED_HASH_MATCH_OBSERVED",
+      "evidence": [
+        "SOURCE_BYTES/configs/codex/taiji01_8d_local_default.toml",
+        "RUNTIME_ADAPTER_E2E_EVIDENCE.json"
+      ],
+      "installed_default_binding": "SATISFIED_BY_RUNTIME_OBSERVATION"
+    },
+    {
+      "capability": "LOCAL_ADAPTER_11435_DIRECT_PROTOCOL",
+      "state": "PASS_OBSERVED_UNANCHORED",
+      "evidence": [
+        "RUNTIME_ADAPTER_E2E_EVIDENCE.json"
+      ]
+    },
+    {
+      "capability": "CODEX_REAL_EXTENSION_TO_11435_NONFINAL_DIAGNOSTIC",
+      "state": "SUPERSEDED_TIMEOUT_DIAGNOSTIC",
+      "evidence": [
+        "RUNTIME_ADAPTER_E2E_EVIDENCE.json"
+      ],
+      "http_200_posts": 3,
+      "terminal_completion": false
+    },
+    {
+      "capability": "CODEX_REAL_EXTENSION_TO_11437_DEFAULT_E2E",
+      "state": "DEPLOYED_SCOPED_CONFIG_AND_CANARY_PASS",
+      "evidence": [
+        "RUNTIME_ADAPTER_E2E_EVIDENCE.json"
+      ],
+      "exit_code": 0,
+      "exact_output": "TAIJI_CODEX_DEFAULT_LOCAL_OK"
+    },
+    {
+      "capability": "DYNAMIC_CONTEXT_2GIB",
+      "state": "INITIAL_ADJUSTABLE_CEILING_ONLY",
+      "reserved_bytes": "0",
+      "initial_ceiling_bytes": "2147483648"
+    }
+  ],
+  "overall_state": "ADAPTER_REQUIRED/HOLD"
+}

@@ -1,0 +1,112 @@
+{
+  "report_version": "W7TP-FAIL-CLOSED-GATE-REPORT/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "gates": [
+    {
+      "gate": "SOURCE_BYTES_FROZEN_AND_SNAPSHOTTED",
+      "state": "PASS",
+      "blocking": false
+    },
+    {
+      "gate": "PRIOR_MANIFEST_RAW_SHA_AND_AGGREGATE_BOUND",
+      "state": "PASS",
+      "blocking": false
+    },
+    {
+      "gate": "V2_STATIC_LOGIC_77_OF_77",
+      "state": "PASS",
+      "blocking": false
+    },
+    {
+      "gate": "V1_V2_REGRESSION_113_OF_113",
+      "state": "PASS",
+      "blocking": false
+    },
+    {
+      "gate": "8D_MATRIX_STATIC_VALIDATION_20_OF_20",
+      "state": "PASS",
+      "blocking": false
+    },
+    {
+      "gate": "GENERIC_POLICY_STATUS_MODE_AUTHORITY_CONDITIONAL_COUPLING",
+      "state": "HOLD",
+      "blocking": true
+    },
+    {
+      "gate": "ALL_CRITICAL_DEMANDS_SATISFIED_VERIFIED",
+      "state": "HOLD",
+      "blocking": true,
+      "unsatisfied_count": 21
+    },
+    {
+      "gate": "ZERO_ORPHAN_CYCLE_SPOF",
+      "state": "HOLD",
+      "blocking": true,
+      "counts": {
+        "orphan": 5,
+        "cycle": 1,
+        "spof": 19
+      }
+    },
+    {
+      "gate": "RESTART_DURABILITY",
+      "state": "HOLD",
+      "blocking": true,
+      "gap_count": 18
+    },
+    {
+      "gate": "PARTITION_AND_EXACT_MEMBERSHIP_SAFETY",
+      "state": "HOLD",
+      "blocking": true,
+      "gap_count": 17
+    },
+    {
+      "gate": "ATOMIC_ROUTE_STAGE_AUTHORITY_NONCE_COMMIT_OR_DLQ_RECEIPT",
+      "state": "HOLD",
+      "blocking": true
+    },
+    {
+      "gate": "LOCAL_ADAPTER_11435_DIRECT_PROTOCOL",
+      "state": "PASS",
+      "blocking": false,
+      "observed": "direct nonstream and SSE terminal PASS"
+    },
+    {
+      "gate": "REAL_CODEX_EXTENSION_11437_TERMINAL_E2E",
+      "state": "PASS",
+      "blocking": false,
+      "observed": "7.9s exit 0 exact TAIJI_CODEX_DEFAULT_LOCAL_OK"
+    },
+    {
+      "gate": "TAIJI01_INSTALLED_DEFAULT_CONSUMER_BINDING",
+      "state": "PASS_OBSERVED",
+      "blocking": false,
+      "observed": "remote config SHA equals repo SHA; mode 600"
+    },
+    {
+      "gate": "CUSTOM_MODEL_METADATA_AND_SKILL_CONTEXT_WARNINGS",
+      "state": "WARN",
+      "blocking": false,
+      "observed": "metadata fallback and skills context shortened to 2 percent"
+    },
+    {
+      "gate": "EXTERNAL_APPEND_ONLY_LEDGER_ANCHOR",
+      "state": "HOLD",
+      "blocking": true
+    },
+    {
+      "gate": "SEPARATE_TOTAL_FIELD_RUNTIME_AUTHORITY_RECEIPT",
+      "state": "HOLD",
+      "blocking": true
+    }
+  ],
+  "blocking_gate_count": 8,
+  "static_review_disposition": "STATIC_LOGIC_PASS",
+  "scoped_source_landing_reviewable": true,
+  "controlled_adapter_canary_observed": "DEPLOYED_SCOPED_CONFIG_AND_CANARY_PASS",
+  "default_cutover_observed": true,
+  "live_cleanup_router_activation_allowed_now": false,
+  "live_runtime_disposition": "ADAPTER_REQUIRED/HOLD",
+  "overall_disposition": "HOLD",
+  "fail_closed": true
+}

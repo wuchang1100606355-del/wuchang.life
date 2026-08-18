@@ -1,0 +1,43 @@
+{
+  "delta_version": "W7TP-FOUNDER-REQUIREMENTS-DELTA/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "requirements": [
+    {
+      "id": "REQ_V_GEOMETRY",
+      "requirement": "V apex aligns to now; opening faces future; past and missed branches become cleanup candidates while future branches remain preload candidates.",
+      "implemented_static": true
+    },
+    {
+      "id": "REQ_TIME_LIFECYCLE",
+      "requirement": "Use PREDICTED_NOT_GENERATED, GENERATION_SCHEDULED_OR_RUNNING, GENERATION_COMPLETED with stage time and transition/cancellation receipts.",
+      "implemented_static": true
+    },
+    {
+      "id": "REQ_STAGE_ERROR_PATHS",
+      "requirement": "Cancel predicted candidate; request running job cancellation and wait for receipt; only reclaim exclusive noncanonical completed materialization.",
+      "implemented_static": true
+    },
+    {
+      "id": "REQ_DYNAMIC_2GIB",
+      "requirement": "2147483648 bytes is an adjustable initial ceiling, not a reservation or guaranteed allocation.",
+      "implemented_static": true
+    },
+    {
+      "id": "REQ_8D_SUPPLY_DEMAND",
+      "requirement": "Every demand requires a versioned producer receipt with authority, provenance, time, resource and canonicality; enumerate orphan, unsatisfied, cycle, SPOF, restart and partition gaps.",
+      "implemented_static": true
+    },
+    {
+      "id": "REQ_LOCAL_MODEL",
+      "requirement": "Prepare a Taiji 8D local Codex profile using local model qwen2.5-coder:7b-instruct through 127.0.0.1:11437/v1.",
+      "implemented_as_scoped_profile": true,
+      "installed_default_observed": true
+    },
+    {
+      "id": "REQ_SCOPED_LANDING_CANARY",
+      "requirement": "Founder authorized scoped submission/push/deployment work; request controlled adapter canary and later default cutover without self-approval or false E2E claims.",
+      "operator_authorization_recorded": true,
+      "total_field_decision_still_required": true
+    }
+  ]
+}

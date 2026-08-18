@@ -1,0 +1,71 @@
+{
+  "observation_id": "OBS_TAIJI01_LIVE_GATEWAY_20260818",
+  "observation_sha256": "96cb5f7a0a07e1bed6dd3f2e2be56ce39097b8b98f2acc9dfcf2f2c18bbe0ab1",
+  "observed_at_ns": "1787033352668778722",
+  "observer": "OPERATOR_AND_READ_ONLY_PROBE",
+  "evidence_class": "READ_ONLY_RUNTIME_PROBE",
+  "facts": [
+    {
+      "fact_key": "process.pid",
+      "fact_value": "1313",
+      "unit": "COUNT"
+    },
+    {
+      "fact_key": "process.source_sha256",
+      "fact_value": "84cd27898af90ef9fc4efa3ecd5d901061253b3e816525bf8442a90a8ccb502f",
+      "unit": "SHA256"
+    },
+    {
+      "fact_key": "listen.endpoint",
+      "fact_value": "taiji01:9002",
+      "unit": "ENDPOINT"
+    },
+    {
+      "fact_key": "health.path",
+      "fact_value": "/health=404;/healthz=present",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "models.response",
+      "fact_value": "static:wuchang-v14",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "access.control",
+      "fact_value": "IP_CIDR_ONLY_NO_IDENTITY_NONCE_REPLAY",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "tool.shell",
+      "fact_value": "create_subprocess_shell",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "tool.physical_writer",
+      "fact_value": "enabled",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "cloud.keys",
+      "fact_value": "UNSET",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "configured.ollama_endpoint",
+      "fact_value": "http://100.100.100.100:11434",
+      "unit": "ENDPOINT"
+    },
+    {
+      "fact_key": "actual.ollama_endpoint",
+      "fact_value": "http://127.0.0.1:11434",
+      "unit": "ENDPOINT"
+    },
+    {
+      "fact_key": "backend.connection",
+      "fact_value": "FAILED",
+      "unit": "STATE"
+    }
+  ],
+  "authority_state": "HOLD",
+  "no_live_mutation": true
+}

@@ -1,0 +1,50 @@
+{
+  "packet_version": "W7TP-STATE-COORDINATE-HASH-PACKET/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "coordinate_order": [
+    "identity",
+    "intent",
+    "authority",
+    "relation",
+    "resource",
+    "time",
+    "risk",
+    "governance"
+  ],
+  "coordinates": {
+    "identity": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+    "intent": "REQUEST_SCOPED_SOURCE_LANDING_AND_RATIFICATION_OF_DEPLOYED_CONFIG_CANARY_WHILE_HOLDING_LIVE_CLEANUP_ROUTER",
+    "authority": "TOTAL_FIELD_REVIEW_REQUIRED_NOT_GRANTED",
+    "relation": "prior:5617e21e362501950ca59b036dabd6d2535891f0c83ebac0ed06bebf10d2d1f4|source:8533fa0e5458173ce11360fa07ffcac6ab6f17f863d19c04a91f3b06ed0ff9f2|evidence:24832e5fda2406a3fee864472e3dd6d769fc73d65fa07bce3f33dca2061d237b",
+    "resource": "DYNAMIC_CONTEXT_INITIAL_CEILING_2147483648_BYTES_NOT_RESERVED",
+    "time": "1787036216202376727",
+    "risk": "LIVE_RUNTIME_ADAPTER_REQUIRED_HOLD",
+    "governance": "NO_SELF_APPROVAL_EXTERNAL_APPEND_ONLY_ANCHOR_UNPROVEN"
+  },
+  "coordinate_canonicalization": "UTF8_FIXED_ORDER_KEY_EQUALS_VALUE_LINES_WITH_TERMINAL_LF",
+  "coordinate_sha256": "93ea7c73e7be3d9bbf5b8e7aa5c09d9e69b07247fd6ff13a7a0318bdf9c6328f",
+  "bindings": {
+    "SOURCE_SNAPSHOT_MANIFEST.json": "ad46565236cf8b813adff0f03f4a3622c7ad761e8686b680d9b7b01243d8405c",
+    "EVIDENCE_SNAPSHOT_MANIFEST.json": "1e04d64a504676c2d9d9795715f7a167ccdaa8138ed424b44c1a4c37015082d8",
+    "PRIOR_PACKET_ANCHOR.json": "87f0eedb4179c53f1bf86631f0a843ce61085ce932669164646b03fddf8975d6",
+    "ACTION_DENYLIST_ATTESTATION.json": "7138cb18c6b4b36a2898e56b90bf3386bc9403e80f34bd5742426e2d6dad1109",
+    "APPEND_ONLY_ATTESTATION.json": "450e8690bdeec514d742973caac0dd7c55e2ac0ebf400666155cdd240b417e36",
+    "DESIGN_CONTRACT.json": "84928ad3231d79f01f0847f3b9d31a5eaa0623b7229b022e39f9d8c09b72039b",
+    "SCHEMA_BINDING_REPORT.json": "a85e6d0fd6d5a0eb4170f3d7002c7ea9a1fb62c5380e688aac5f417185ba1588",
+    "CAPABILITY_SEPARATION_REPORT.json": "9141e9e12b7a503fe8819f6319824984ba9611755a3e386666c958d0a425ff3b",
+    "DEPENDENCY_CLOSURE_REPORT.json": "941e8cd42a02386f436b666603ff05f4bc6f1d572f5eb29ef2fb928ee5d8d319",
+    "RUNTIME_ADAPTER_E2E_EVIDENCE.json": "c0cf442eb0c7cb6626c96eafda93147fc2ed185b1b9925b04c1a30d0569827d3",
+    "VALIDATION_COMMAND_TRANSCRIPT.json": "7d205fa25072ca5fe707221d99f0754a9395f4da53e32f17903983fc31152b02",
+    "LOGIC_VALIDATION_REPORT.json": "5668b42c77732ee7bf056541b2575b1d0d4fd193fd787601141c23f5fa2a1419",
+    "RED_TEAM_EVIDENCE.json": "2db89e6d429dab2e2276b0c118228840ab8edee97c3e96ca73b194801144a46c",
+    "FAIL_CLOSED_GATE_REPORT.json": "f01fc4b0eac9558b68de306d36c56eff853da7b4b0d5655a16617900c7ce4911"
+  },
+  "source_snapshot_aggregate_sha256": "8533fa0e5458173ce11360fa07ffcac6ab6f17f863d19c04a91f3b06ed0ff9f2",
+  "evidence_snapshot_aggregate_sha256": "24832e5fda2406a3fee864472e3dd6d769fc73d65fa07bce3f33dca2061d237b",
+  "matrix_source_manifest_sha256": "43c1b7786157dffd52339570ceb02df845b62f3e84fff6ccbb1943a6f7d498a2",
+  "prior_manifest_raw_sha256": "5617e21e362501950ca59b036dabd6d2535891f0c83ebac0ed06bebf10d2d1f4",
+  "prior_packet_aggregate_sha256": "5b86bb689f2efe440a81b98fbc87c4db09ef888060cbd8337c45699bb9a2e59d",
+  "denylist_sha256": "fcd48db3a8e5e4ed8f8542237e8ff081bc7bb3b7d1bf721bf689afe2d154c236",
+  "final_packet_aggregate_intentionally_not_bound_here": true,
+  "reason": "The self-excluded final manifest is written last; binding it here would create a hash cycle."
+}

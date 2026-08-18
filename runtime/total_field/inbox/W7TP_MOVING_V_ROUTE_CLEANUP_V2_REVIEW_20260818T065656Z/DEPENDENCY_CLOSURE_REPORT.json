@@ -1,0 +1,939 @@
+{
+  "report_version": "W7TP-DEPENDENCY-CLOSURE-REPORT/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "matrix_id": "W7TP_8D_DEPENDENCY_SUPPLY_DEMAND_MATRIX_V1_CANDIDATE",
+  "matrix_state": "HOLD",
+  "closure_state": "HOLD",
+  "matrix_source_manifest_sha256": "43c1b7786157dffd52339570ceb02df845b62f3e84fff6ccbb1943a6f7d498a2",
+  "cardinality": {
+    "components": 23,
+    "versioned_producer_receipts": 21,
+    "versioned_demands": 23,
+    "component_edges": 18,
+    "vpn_nodes": 11,
+    "node_edges": 10,
+    "orphan_supplies": 5,
+    "unsatisfied_demands": 21,
+    "cycles": 1,
+    "single_points": 19,
+    "restart_gaps": 18,
+    "partition_gaps": 17
+  },
+  "eight_dimensions": [
+    "identity",
+    "intent",
+    "authority",
+    "relation",
+    "resource",
+    "time",
+    "risk",
+    "governance"
+  ],
+  "satisfaction_rule": "SATISFIED_VERIFIED only when identity, intent, authority, relation, resource, time, risk, governance plus provenance, canonicality, version, signature and freshness all pass without inference or downgrade.",
+  "typed_findings": {
+    "orphan_supplies": [
+      {
+        "finding_id": "ORPHAN_MOVING_V_CANDIDATE_RUNTIME_MOVING_V.SHADOW_DECISION",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime"
+        ],
+        "capability_id": "moving_v.shadow_decision",
+        "failure_domain": null,
+        "required_next_receipt": "BOUND_DEMAND_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "ORPHAN_RECEIVE_CANDIDATE_AUTHORITY_ADAPTER_AUTHORITY_BOUND_CANDIDATE",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter"
+        ],
+        "capability_id": "authority_bound_candidate",
+        "failure_domain": null,
+        "required_next_receipt": "BOUND_DEMAND_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "ORPHAN_CANONICAL_8D_NONCE_VERIFIER_CANDIDATE_D8.NONCE_VERDICT",
+        "state": "HOLD",
+        "subject_ids": [
+          "canonical_8d_nonce_verifier_candidate"
+        ],
+        "capability_id": "d8.nonce_verdict",
+        "failure_domain": null,
+        "required_next_receipt": "BOUND_DEMAND_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "ORPHAN_TRUE8D_CONTRACT_SANDBOX_TRUE8D.SANDBOX_PACKET",
+        "state": "HOLD",
+        "subject_ids": [
+          "true8d_contract_sandbox"
+        ],
+        "capability_id": "true8d.sandbox_packet",
+        "failure_domain": null,
+        "required_next_receipt": "BOUND_DEMAND_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "ORPHAN_GATEWAY_TOPOLOGY_ROUTER_GATEWAY.ROUTE_RESOLUTION",
+        "state": "HOLD",
+        "subject_ids": [
+          "gateway_topology_router"
+        ],
+        "capability_id": "gateway.route_resolution",
+        "failure_domain": null,
+        "required_next_receipt": "BOUND_DEMAND_EDGE_RECEIPT"
+      }
+    ],
+    "unsatisfied_demands": [
+      {
+        "finding_id": "UNSATISFIED_DEMAND:MOVING_V_CANDIDATE_RUNTIME:POLICY_INSTANCE_TO_MOVING_V_RUNTIME:0",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "moving_v_v2_contracts"
+        ],
+        "capability_id": "moving_v.versioned_contracts",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:MOVING_V_CANDIDATE_RUNTIME:NATIVE_ADI_TO_MOVING_V:1",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "native_spacetime_adi_candidate"
+        ],
+        "capability_id": "adi.state_packet",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:MOVING_V_CANDIDATE_RUNTIME:GTP_TO_MOVING_V:2",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "gtp_reconstruction_contract"
+        ],
+        "capability_id": "gtp.versioned_receipts",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:MOVING_V_CANDIDATE_RUNTIME:ROUTER_ANTI_REPLAY_TO_MOVING_V:3",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "router_dlq_anti_replay_contract"
+        ],
+        "capability_id": "router_dlq.anti_replay_receipt",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:MOVING_V_V2_CONTRACTS:CONTRACT_CONFIG_TO_POLICY_INSTANCE:4",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_v2_contracts"
+        ],
+        "capability_id": "moving_v.versioned_contracts",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:DYNAMIC_CONTEXT_READER:CONVERSATION_MEMORY_TO_DYNAMIC_CONTEXT:5",
+        "state": "HOLD",
+        "subject_ids": [
+          "dynamic_context_reader",
+          "gateway_conversation_memory"
+        ],
+        "capability_id": "gateway.memory_event",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:OLLAMA_CANDIDATE_SKILL_BRIDGE:OLLAMA.SKILL_MANIFEST:6",
+        "state": "HOLD",
+        "subject_ids": [
+          "ollama_candidate_skill_bridge"
+        ],
+        "capability_id": "ollama.skill_manifest",
+        "failure_domain": "NO_BOUND_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:GATEWAY_CONVERSATION_MEMORY:GATEWAY.MEMORY_QUERY:7",
+        "state": "HOLD",
+        "subject_ids": [
+          "gateway_conversation_memory"
+        ],
+        "capability_id": "gateway.memory_query",
+        "failure_domain": "NO_BOUND_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:AUTHORITY_RUNTIME_BINDINGS:INTENT_API_TO_AUTHORITY_LEDGER:9",
+        "state": "HOLD",
+        "subject_ids": [
+          "authority_runtime_bindings",
+          "intent_field_candidate_api"
+        ],
+        "capability_id": "intent_field.total_field_receipt",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:RECEIVE_CANDIDATE_AUTHORITY_ADAPTER:DYNAMIC_CONTEXT_TO_RECEIVE_ADAPTER:10",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter",
+          "dynamic_context_reader"
+        ],
+        "capability_id": "dynamic_context.packet",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:RECEIVE_CANDIDATE_AUTHORITY_ADAPTER:OLLAMA_SKILL_TO_RECEIVE_ADAPTER:12",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter",
+          "ollama_candidate_skill_bridge"
+        ],
+        "capability_id": "ollama.skill_candidate",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:INTRUDER_DEAD_LETTER_ROUTER:ROUTER_GUARD_TO_INTRUDER_DLQ:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "intruder_dead_letter_router",
+          "router_guard_shadow"
+        ],
+        "capability_id": "router.shadow_decision",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:ROUTER_GUARD_SHADOW:ROUTER.EAMTP_PACKET:13",
+        "state": "HOLD",
+        "subject_ids": [
+          "router_guard_shadow"
+        ],
+        "capability_id": "router.eamtp_packet",
+        "failure_domain": "NO_BOUND_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:LEGACY_DLQ_REPLAY_EXECUTOR:INTRUDER_DLQ_TO_LEGACY_REPLAY:14",
+        "state": "HOLD",
+        "subject_ids": [
+          "legacy_dlq_replay_executor",
+          "intruder_dead_letter_router"
+        ],
+        "capability_id": "dlq.sanitized_record",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:NATIVE_SPACETIME_ADI_CANDIDATE:ADI.MOVING_V_DELTA:15",
+        "state": "HOLD",
+        "subject_ids": [
+          "native_spacetime_adi_candidate"
+        ],
+        "capability_id": "adi.moving_v_delta",
+        "failure_domain": "NO_BOUND_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:CANONICAL_8D_NONCE_VERIFIER_CANDIDATE:LOOKUP_PACKET_TO_CANONICAL_VERIFIER:16",
+        "state": "HOLD",
+        "subject_ids": [
+          "canonical_8d_nonce_verifier_candidate",
+          "model_free_8d_lookup_candidate"
+        ],
+        "capability_id": "d8.lookup_packet",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:INTENT_FIELD_CANDIDATE_API:INTENT_FIELD.RUNTIME_BINDINGS:17",
+        "state": "HOLD",
+        "subject_ids": [
+          "intent_field_candidate_api"
+        ],
+        "capability_id": "intent_field.runtime_bindings",
+        "failure_domain": "NO_BOUND_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:ROUTER_DLQ_ANTI_REPLAY_CONTRACT:AUTHORITY_NONCE_TO_ROUTER_ANTI_REPLAY:18",
+        "state": "HOLD",
+        "subject_ids": [
+          "router_dlq_anti_replay_contract",
+          "authority_runtime_bindings"
+        ],
+        "capability_id": "authority.atomic_nonce",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:GATEWAY_TOPOLOGY_ROUTER:GATEWAY.ROUTE_INPUT:19",
+        "state": "HOLD",
+        "subject_ids": [
+          "gateway_topology_router",
+          "taiji01_live_legacy_gateway"
+        ],
+        "capability_id": "gateway.live_openai_compat",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:TAIJI01_LIVE_LEGACY_GATEWAY:OLLAMA_LOCAL_SUPPLY_TO_LIVE_GATEWAY:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_live_legacy_gateway",
+          "taiji01_local_ollama_supply"
+        ],
+        "capability_id": "ollama.local_api_supply",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      },
+      {
+        "finding_id": "UNSATISFIED_DEMAND:TAIJI01_CODEX_DEFAULT_CONSUMER:TAIJI8D_LOCAL_SUPPLY_TO_CODEX_DEFAULT:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_codex_default_consumer",
+          "taiji01_8d_local_adapter_supply"
+        ],
+        "capability_id": "taiji8d.local_model_route_supply",
+        "failure_domain": "UNQUALIFIED_EDGE",
+        "required_next_receipt": "SATISFIED_VERSIONED_PRODUCER_EDGE_RECEIPT"
+      }
+    ],
+    "cycles": [
+      {
+        "finding_id": "CYCLE_1",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_v2_contracts"
+        ],
+        "capability_id": null,
+        "failure_domain": "STRONGLY_CONNECTED_COMPONENT",
+        "required_next_receipt": "CYCLE_BREAK_OR_BOOTSTRAP_ORDER_RECEIPT"
+      }
+    ],
+    "single_points": [
+      {
+        "finding_id": "SPOF_POLICY_INSTANCE_TO_MOVING_V_RUNTIME",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_v2_contracts",
+          "moving_v_candidate_runtime"
+        ],
+        "capability_id": "moving_v.versioned_contracts",
+        "failure_domain": "ONLY_BOUND_EDGE:policy_instance_to_moving_v_runtime",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_NATIVE_ADI_TO_MOVING_V",
+        "state": "HOLD",
+        "subject_ids": [
+          "native_spacetime_adi_candidate",
+          "moving_v_candidate_runtime"
+        ],
+        "capability_id": "adi.state_packet",
+        "failure_domain": "ONLY_BOUND_EDGE:native_adi_to_moving_v",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_GTP_TO_MOVING_V",
+        "state": "HOLD",
+        "subject_ids": [
+          "gtp_reconstruction_contract",
+          "moving_v_candidate_runtime"
+        ],
+        "capability_id": "gtp.versioned_receipts",
+        "failure_domain": "ONLY_BOUND_EDGE:gtp_to_moving_v",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_ROUTER_ANTI_REPLAY_TO_MOVING_V",
+        "state": "HOLD",
+        "subject_ids": [
+          "router_dlq_anti_replay_contract",
+          "moving_v_candidate_runtime"
+        ],
+        "capability_id": "router_dlq.anti_replay_receipt",
+        "failure_domain": "ONLY_BOUND_EDGE:router_anti_replay_to_moving_v",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_AUTHORITY_BINDINGS_TO_RESOLVER",
+        "state": "HOLD",
+        "subject_ids": [
+          "authority_runtime_bindings",
+          "total_field_authority_resolver"
+        ],
+        "capability_id": "authority.atomic_nonce",
+        "failure_domain": "ONLY_BOUND_EDGE:authority_bindings_to_resolver",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_INTENT_API_TO_AUTHORITY_LEDGER",
+        "state": "HOLD",
+        "subject_ids": [
+          "intent_field_candidate_api",
+          "authority_runtime_bindings"
+        ],
+        "capability_id": "intent_field.total_field_receipt",
+        "failure_domain": "ONLY_BOUND_EDGE:intent_api_to_authority_ledger",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_DYNAMIC_CONTEXT_TO_RECEIVE_ADAPTER",
+        "state": "HOLD",
+        "subject_ids": [
+          "dynamic_context_reader",
+          "receive_candidate_authority_adapter"
+        ],
+        "capability_id": "dynamic_context.packet",
+        "failure_domain": "ONLY_BOUND_EDGE:dynamic_context_to_receive_adapter",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_RESOLVER_TO_RECEIVE_ADAPTER",
+        "state": "HOLD",
+        "subject_ids": [
+          "total_field_authority_resolver",
+          "receive_candidate_authority_adapter"
+        ],
+        "capability_id": "authority.resolution",
+        "failure_domain": "ONLY_BOUND_EDGE:resolver_to_receive_adapter",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_OLLAMA_SKILL_TO_RECEIVE_ADAPTER",
+        "state": "HOLD",
+        "subject_ids": [
+          "ollama_candidate_skill_bridge",
+          "receive_candidate_authority_adapter"
+        ],
+        "capability_id": "ollama.skill_candidate",
+        "failure_domain": "ONLY_BOUND_EDGE:ollama_skill_to_receive_adapter",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_ROUTER_GUARD_TO_INTRUDER_DLQ",
+        "state": "HOLD",
+        "subject_ids": [
+          "router_guard_shadow",
+          "intruder_dead_letter_router"
+        ],
+        "capability_id": "router.shadow_decision",
+        "failure_domain": "ONLY_BOUND_EDGE:router_guard_to_intruder_dlq",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_AUTHORITY_NONCE_TO_ROUTER_ANTI_REPLAY",
+        "state": "HOLD",
+        "subject_ids": [
+          "authority_runtime_bindings",
+          "router_dlq_anti_replay_contract"
+        ],
+        "capability_id": "authority.atomic_nonce",
+        "failure_domain": "ONLY_BOUND_EDGE:authority_nonce_to_router_anti_replay",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_LIVE_GATEWAY_TO_TOPOLOGY_ROUTER",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_live_legacy_gateway",
+          "gateway_topology_router"
+        ],
+        "capability_id": "gateway.live_openai_compat",
+        "failure_domain": "ONLY_BOUND_EDGE:live_gateway_to_topology_router",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_OLLAMA_LOCAL_SUPPLY_TO_LIVE_GATEWAY",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_local_ollama_supply",
+          "taiji01_live_legacy_gateway"
+        ],
+        "capability_id": "ollama.local_api_supply",
+        "failure_domain": "ONLY_BOUND_EDGE:ollama_local_supply_to_live_gateway",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_TAIJI8D_LOCAL_SUPPLY_TO_CODEX_DEFAULT",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_8d_local_adapter_supply",
+          "taiji01_codex_default_consumer"
+        ],
+        "capability_id": "taiji8d.local_model_route_supply",
+        "failure_domain": "ONLY_BOUND_EDGE:taiji8d_local_supply_to_codex_default",
+        "required_next_receipt": "REDUNDANT_PRODUCER_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_NODE_TAILNET-MSI-TO-MSI-WSL",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "msi-wsl"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_NODE_TAILNET-MSI-TO-TAIJI01",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "taiji01"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_NODE_TAILNET-MSI-TO-PENGUIN",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "penguin"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_NODE_TAILNET-MSI-TO-TAIJI03-LINUX",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "taiji03-linux"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_FAILOVER_RECEIPT"
+      },
+      {
+        "finding_id": "SPOF_NODE_TAILNET-MSI-TO-WUCHANG-US-FREE-NODE",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "wuchang-us-free-node"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_FAILOVER_RECEIPT"
+      }
+    ],
+    "restart_gaps": [
+      {
+        "finding_id": "RESTART_DEMAND:MOVING_V_CANDIDATE_RUNTIME:POLICY_INSTANCE_TO_MOVING_V_RUNTIME:0",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "moving_v_v2_contracts"
+        ],
+        "capability_id": "moving_v.versioned_contracts",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:MOVING_V_CANDIDATE_RUNTIME:NATIVE_ADI_TO_MOVING_V:1",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "native_spacetime_adi_candidate"
+        ],
+        "capability_id": "adi.state_packet",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:MOVING_V_CANDIDATE_RUNTIME:GTP_TO_MOVING_V:2",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "gtp_reconstruction_contract"
+        ],
+        "capability_id": "gtp.versioned_receipts",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:MOVING_V_CANDIDATE_RUNTIME:ROUTER_ANTI_REPLAY_TO_MOVING_V:3",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "router_dlq_anti_replay_contract"
+        ],
+        "capability_id": "router_dlq.anti_replay_receipt",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:AUTHORITY_RUNTIME_BINDINGS:INTENT_API_TO_AUTHORITY_LEDGER:9",
+        "state": "HOLD",
+        "subject_ids": [
+          "authority_runtime_bindings",
+          "intent_field_candidate_api"
+        ],
+        "capability_id": "intent_field.total_field_receipt",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:RECEIVE_CANDIDATE_AUTHORITY_ADAPTER:DYNAMIC_CONTEXT_TO_RECEIVE_ADAPTER:10",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter",
+          "dynamic_context_reader"
+        ],
+        "capability_id": "dynamic_context.packet",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:RECEIVE_CANDIDATE_AUTHORITY_ADAPTER:RESOLVER_TO_RECEIVE_ADAPTER:11",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter",
+          "total_field_authority_resolver"
+        ],
+        "capability_id": "authority.resolution",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:RECEIVE_CANDIDATE_AUTHORITY_ADAPTER:OLLAMA_SKILL_TO_RECEIVE_ADAPTER:12",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter",
+          "ollama_candidate_skill_bridge"
+        ],
+        "capability_id": "ollama.skill_candidate",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:INTRUDER_DEAD_LETTER_ROUTER:ROUTER_GUARD_TO_INTRUDER_DLQ:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "intruder_dead_letter_router",
+          "router_guard_shadow"
+        ],
+        "capability_id": "router.shadow_decision",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:ROUTER_DLQ_ANTI_REPLAY_CONTRACT:AUTHORITY_NONCE_TO_ROUTER_ANTI_REPLAY:18",
+        "state": "HOLD",
+        "subject_ids": [
+          "router_dlq_anti_replay_contract",
+          "authority_runtime_bindings"
+        ],
+        "capability_id": "authority.atomic_nonce",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:GATEWAY_TOPOLOGY_ROUTER:GATEWAY.ROUTE_INPUT:19",
+        "state": "HOLD",
+        "subject_ids": [
+          "gateway_topology_router",
+          "taiji01_live_legacy_gateway"
+        ],
+        "capability_id": "gateway.live_openai_compat",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:TAIJI01_LIVE_LEGACY_GATEWAY:OLLAMA_LOCAL_SUPPLY_TO_LIVE_GATEWAY:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_live_legacy_gateway",
+          "taiji01_local_ollama_supply"
+        ],
+        "capability_id": "ollama.local_api_supply",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_DEMAND:TAIJI01_CODEX_DEFAULT_CONSUMER:TAIJI8D_LOCAL_SUPPLY_TO_CODEX_DEFAULT:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_codex_default_consumer",
+          "taiji01_8d_local_adapter_supply"
+        ],
+        "capability_id": "taiji8d.local_model_route_supply",
+        "failure_domain": "UNPROVEN_RESTART_DURABILITY",
+        "required_next_receipt": "RESTART_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_NODE_TAILNET-MSI-TO-MSI-WSL",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "msi-wsl"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_NODE_TAILNET-MSI-TO-TAIJI01",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "taiji01"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_NODE_TAILNET-MSI-TO-PENGUIN",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "penguin"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_NODE_TAILNET-MSI-TO-TAIJI03-LINUX",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "taiji03-linux"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_DURABILITY_RECEIPT"
+      },
+      {
+        "finding_id": "RESTART_NODE_TAILNET-MSI-TO-WUCHANG-US-FREE-NODE",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "wuchang-us-free-node"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_DURABILITY_RECEIPT"
+      }
+    ],
+    "partition_gaps": [
+      {
+        "finding_id": "PARTITION_DEMAND:MOVING_V_CANDIDATE_RUNTIME:POLICY_INSTANCE_TO_MOVING_V_RUNTIME:0",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "moving_v_v2_contracts"
+        ],
+        "capability_id": "moving_v.versioned_contracts",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:MOVING_V_CANDIDATE_RUNTIME:NATIVE_ADI_TO_MOVING_V:1",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "native_spacetime_adi_candidate"
+        ],
+        "capability_id": "adi.state_packet",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:MOVING_V_CANDIDATE_RUNTIME:GTP_TO_MOVING_V:2",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "gtp_reconstruction_contract"
+        ],
+        "capability_id": "gtp.versioned_receipts",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:MOVING_V_CANDIDATE_RUNTIME:ROUTER_ANTI_REPLAY_TO_MOVING_V:3",
+        "state": "HOLD",
+        "subject_ids": [
+          "moving_v_candidate_runtime",
+          "router_dlq_anti_replay_contract"
+        ],
+        "capability_id": "router_dlq.anti_replay_receipt",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:AUTHORITY_RUNTIME_BINDINGS:INTENT_API_TO_AUTHORITY_LEDGER:9",
+        "state": "HOLD",
+        "subject_ids": [
+          "authority_runtime_bindings",
+          "intent_field_candidate_api"
+        ],
+        "capability_id": "intent_field.total_field_receipt",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:RECEIVE_CANDIDATE_AUTHORITY_ADAPTER:DYNAMIC_CONTEXT_TO_RECEIVE_ADAPTER:10",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter",
+          "dynamic_context_reader"
+        ],
+        "capability_id": "dynamic_context.packet",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:RECEIVE_CANDIDATE_AUTHORITY_ADAPTER:OLLAMA_SKILL_TO_RECEIVE_ADAPTER:12",
+        "state": "HOLD",
+        "subject_ids": [
+          "receive_candidate_authority_adapter",
+          "ollama_candidate_skill_bridge"
+        ],
+        "capability_id": "ollama.skill_candidate",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:INTRUDER_DEAD_LETTER_ROUTER:ROUTER_GUARD_TO_INTRUDER_DLQ:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "intruder_dead_letter_router",
+          "router_guard_shadow"
+        ],
+        "capability_id": "router.shadow_decision",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:ROUTER_DLQ_ANTI_REPLAY_CONTRACT:AUTHORITY_NONCE_TO_ROUTER_ANTI_REPLAY:18",
+        "state": "HOLD",
+        "subject_ids": [
+          "router_dlq_anti_replay_contract",
+          "authority_runtime_bindings"
+        ],
+        "capability_id": "authority.atomic_nonce",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:GATEWAY_TOPOLOGY_ROUTER:GATEWAY.ROUTE_INPUT:19",
+        "state": "HOLD",
+        "subject_ids": [
+          "gateway_topology_router",
+          "taiji01_live_legacy_gateway"
+        ],
+        "capability_id": "gateway.live_openai_compat",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:TAIJI01_LIVE_LEGACY_GATEWAY:OLLAMA_LOCAL_SUPPLY_TO_LIVE_GATEWAY:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_live_legacy_gateway",
+          "taiji01_local_ollama_supply"
+        ],
+        "capability_id": "ollama.local_api_supply",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_DEMAND:TAIJI01_CODEX_DEFAULT_CONSUMER:TAIJI8D_LOCAL_SUPPLY_TO_CODEX_DEFAULT:LIVE",
+        "state": "HOLD",
+        "subject_ids": [
+          "taiji01_codex_default_consumer",
+          "taiji01_8d_local_adapter_supply"
+        ],
+        "capability_id": "taiji8d.local_model_route_supply",
+        "failure_domain": "UNPROVEN_PARTITION_BEHAVIOR",
+        "required_next_receipt": "PARTITION_SAFETY_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_NODE_TAILNET-MSI-TO-MSI-WSL",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "msi-wsl"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_REPLAY_PARTITION_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_NODE_TAILNET-MSI-TO-TAIJI01",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "taiji01"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_REPLAY_PARTITION_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_NODE_TAILNET-MSI-TO-PENGUIN",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "penguin"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_REPLAY_PARTITION_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_NODE_TAILNET-MSI-TO-TAIJI03-LINUX",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "taiji03-linux"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_REPLAY_PARTITION_RECEIPT"
+      },
+      {
+        "finding_id": "PARTITION_NODE_TAILNET-MSI-TO-WUCHANG-US-FREE-NODE",
+        "state": "HOLD",
+        "subject_ids": [
+          "msi-win11",
+          "wuchang-us-free-node"
+        ],
+        "capability_id": "tailnet.cross_node_critical_edge",
+        "failure_domain": "TAILNET_SINGLE_USER_UNTAGGED",
+        "required_next_receipt": "CROSS_NODE_REPLAY_PARTITION_RECEIPT"
+      }
+    ]
+  },
+  "default_consumer_binding": {
+    "consumer": "taiji01 Codex default",
+    "required_capability": "taiji8d local adapter E2E",
+    "matrix_freeze_state": "UNSATISFIED",
+    "supplemental_post_freeze_runtime_state": "SATISFIED_BY_RUNTIME_OBSERVATION",
+    "result": "DEPLOYED_SCOPED_CONFIG_AND_CANARY_PASS",
+    "reason": "The immutable matrix preserves the earlier observation; supplemental packet evidence records repo/remote SHA equality and a terminal 11437 Codex CLI E2E PASS."
+  },
+  "atomic_router_dlq_binding": {
+    "state": "UNSATISFIED",
+    "hold": "ADAPTER_REQUIRED/HOLD_ATOMIC_ROUTE_RECEIPT_NONCE_DLQ_BINDING_UNPROVEN"
+  },
+  "overall_state": "HOLD"
+}

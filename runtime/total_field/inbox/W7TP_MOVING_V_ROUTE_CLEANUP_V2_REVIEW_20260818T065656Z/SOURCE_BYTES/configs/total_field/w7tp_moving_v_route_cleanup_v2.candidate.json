@@ -1,0 +1,444 @@
+{
+  "contract_version": "W7TP-MOVING-V-ROUTE-CLEANUP/2.0",
+  "contract_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_CANDIDATE",
+  "status": "CANDIDATE_ONLY",
+  "mode": "SHADOW_ONLY",
+  "extends_contract_ref": "configs/total_field/w7tp_moving_v_preload_cleanup_v1.candidate.json",
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "human_external_effect_approval_required": true,
+    "runtime_approved": false,
+    "canonical_change_approved": false,
+    "deployment_approved": false,
+    "route_proof_is_execution_authority": false,
+    "transition_receipt_is_execution_authority": false,
+    "live_route_change_allowed": false,
+    "live_cleanup_allowed": false,
+    "hard_delete_enabled": false,
+    "canonical_source_delete_allowed": false
+  },
+  "shadow_only_contract": {
+    "enabled": true,
+    "state": "OBSERVE_CLASSIFY_PROVE_INVALIDATE_AND_PROPOSE_ONLY",
+    "allowed_outputs": [
+      "ROUTE_PROOF_CANDIDATE",
+      "ROUTE_INVALIDATION_CANDIDATE",
+      "LIFECYCLE_STAGE_OBSERVATION",
+      "TRANSITION_RECEIPT_VALIDATION_RESULT",
+      "CANCELLATION_PROPOSAL",
+      "NONCANONICAL_EXCLUSIVE_CLEANUP_PROPOSAL",
+      "ADAPTIVE_BUDGET_PROPOSAL",
+      "UX_AND_CAPACITY_MEASUREMENT"
+    ],
+    "live_action_count": 0,
+    "state_mutation_count": 0,
+    "cleanup_execution_count": 0,
+    "budget_change_applied": false,
+    "default_effect": "NOOP_REFERENCE_ONLY",
+    "unknown_or_conflicted_effect": "HOLD"
+  },
+  "time_alignment_contract": {
+    "apex_source": "EXTERNALLY_ALIGNED_MONOTONIC_INPUT",
+    "event_time_required": true,
+    "ingest_time_required": true,
+    "logical_time_binding_required": true,
+    "membership_snapshot_required": true,
+    "watermark_snapshot_required": true,
+    "clock_regression_policy": "HOLD",
+    "network_partition_policy": "HOLD_WATERMARK_ADVANCE",
+    "late_event_policy": "PAST_HOLD_UNTIL_RECONCILED",
+    "stage_time_unit": "INTEGER_NANOSECONDS",
+    "stage_time_fields": [
+      "predicted_at_ns",
+      "generation_scheduled_at_ns",
+      "generation_started_at_ns",
+      "generation_completed_at_ns",
+      "stage_observed_at_ns"
+    ],
+    "stage_time_ordering": [
+      "predicted_at_ns <= generation_scheduled_at_ns WHEN_SCHEDULED",
+      "generation_scheduled_at_ns <= generation_started_at_ns WHEN_STARTED",
+      "generation_started_at_ns <= generation_completed_at_ns WHEN_COMPLETED",
+      "ALL_STAGE_TIMES <= stage_observed_at_ns"
+    ],
+    "missing_or_invalid_stage_time_policy": "UNALIGNED_HOLD"
+  },
+  "watermark_membership_contract": {
+    "membership_mode": "EXACT_HASH_BOUND_REQUIRED_SET",
+    "membership_authority": "EXPLICIT_GOVERNED_MEMBERSHIP_SNAPSHOT_ONLY",
+    "required_membership_fields": [
+      "membership_epoch",
+      "required_node_ids_sorted_unique",
+      "required_node_count",
+      "membership_snapshot_sha256",
+      "valid_from_ns",
+      "valid_until_ns",
+      "issuer_ref",
+      "signature_ref"
+    ],
+    "node_watermark_fields": [
+      "node_id",
+      "membership_epoch",
+      "watermark_ns",
+      "observed_at_ns",
+      "valid_until_ns",
+      "previous_watermark_ns",
+      "record_sha256",
+      "issuer_ref",
+      "signature_ref"
+    ],
+    "exact_membership_rule": "SORTED_UNIQUE_WATERMARK_NODE_IDS_MUST_EQUAL_REQUIRED_NODE_IDS_SORTED_UNIQUE",
+    "safe_watermark_rule": "MINIMUM_WATERMARK_OF_THE_EXACT_REQUIRED_MEMBERSHIP_SET",
+    "advance_requires": [
+      "MEMBERSHIP_EPOCH_EXACT_MATCH",
+      "NO_MISSING_MEMBER",
+      "NO_EXTRA_MEMBER",
+      "NO_DUPLICATE_MEMBER",
+      "ALL_MEMBER_RECEIPTS_VALID_AND_FRESH",
+      "ALL_MEMBER_WATERMARKS_MONOTONIC",
+      "MEMBERSHIP_SNAPSHOT_HASH_MATCH",
+      "SAFE_WATERMARK_NONDECREASING"
+    ],
+    "membership_change_effect": "NEW_MEMBERSHIP_EPOCH_INVALIDATES_ROUTE_AND_WATERMARK_PROOFS",
+    "missing_extra_duplicate_stale_or_regressed_policy": "HOLD_NO_WATERMARK_ADVANCE",
+    "online_discovery_may_infer_membership": false
+  },
+  "temporal_lifecycle_contract": {
+    "stage_authority": "HASH_BOUND_TRANSITION_RECEIPT_CHAIN",
+    "stage_inference_without_receipt_allowed": false,
+    "stages": [
+      {
+        "stage": "PREDICTED_NOT_GENERATED",
+        "generated_object_state": "ABSENT",
+        "job_state": "NOT_CREATED",
+        "invalid_route_shadow_action": "PROPOSE_CANCEL_CANDIDATE",
+        "required_terminal_receipt": "CANDIDATE_CANCEL_RECEIPT"
+      },
+      {
+        "stage": "GENERATION_SCHEDULED_OR_RUNNING",
+        "generated_object_state": "ABSENT_OR_PARTIAL_UNCONFIRMED",
+        "job_state_values": [
+          "SCHEDULED",
+          "RUNNING",
+          "CANCEL_REQUESTED",
+          "TERMINAL_STATE_PENDING"
+        ],
+        "invalid_route_shadow_action": "PROPOSE_CANCEL_JOB_AND_WAIT_FOR_TERMINAL_RECEIPT",
+        "required_terminal_receipt_values": [
+          "JOB_CANCELLED_RECEIPT",
+          "JOB_FAILED_RECEIPT",
+          "GENERATION_COMPLETED_RECEIPT"
+        ]
+      },
+      {
+        "stage": "GENERATION_COMPLETED",
+        "generated_object_state": "COMPLETE_HASH_BOUND",
+        "job_state": "COMPLETED",
+        "invalid_route_shadow_action": "PROPOSE_CLEAN_EXCLUSIVE_NONCANONICAL_COMPLETED_ARTIFACT_ONLY",
+        "required_terminal_receipt": "NONCANONICAL_EXCLUSIVE_CLEANUP_PROPOSAL_RECEIPT"
+      }
+    ],
+    "allowed_forward_transitions": [
+      {
+        "from": "PREDICTED_NOT_GENERATED",
+        "to": "GENERATION_SCHEDULED_OR_RUNNING",
+        "required_receipt": "GENERATION_SCHEDULE_RECEIPT"
+      },
+      {
+        "from": "GENERATION_SCHEDULED_OR_RUNNING",
+        "to": "GENERATION_COMPLETED",
+        "required_receipt": "GENERATION_COMPLETED_RECEIPT"
+      }
+    ],
+    "backward_transition_allowed": false,
+    "conflicting_or_out_of_order_transition_policy": "HOLD_QUARANTINE_RECEIPTS",
+    "same_transition_replay_policy": "IDEMPOTENT_NOOP_IF_HASH_IDENTICAL_OTHERWISE_HOLD"
+  },
+  "transition_receipt_contract": {
+    "hash_algorithm": "SHA-256",
+    "chain_rule": "PREVIOUS_RECEIPT_SHA256_PLUS_MONOTONIC_TRANSITION_SEQUENCE",
+    "required_fields": [
+      "receipt_id",
+      "receipt_type",
+      "record_id",
+      "route_proof_id",
+      "job_id_or_explicit_null",
+      "from_stage",
+      "to_stage_or_terminal_state",
+      "stage_epoch",
+      "record_version",
+      "prediction_epoch",
+      "transition_sequence",
+      "event_time_ns",
+      "observed_time_ns",
+      "previous_receipt_sha256",
+      "payload_sha256",
+      "idempotency_key",
+      "issuer_ref",
+      "signature_ref",
+      "result_state"
+    ],
+    "validation_requires": [
+      "RECEIPT_TYPE_ALLOWED_FOR_CURRENT_STAGE",
+      "ROUTE_PROOF_ID_MATCH",
+      "JOB_ID_EXACT_MATCH_WHEN_JOB_EXISTS",
+      "STAGE_EPOCH_MATCH",
+      "RECORD_VERSION_MATCH",
+      "PREDICTION_EPOCH_MATCH",
+      "TRANSITION_SEQUENCE_MONOTONIC",
+      "PREVIOUS_RECEIPT_HASH_MATCH",
+      "PAYLOAD_HASH_MATCH",
+      "ISSUER_AND_SIGNATURE_VALID",
+      "IDEMPOTENCY_KEY_NOT_CONFLICTED"
+    ],
+    "missing_invalid_expired_or_conflicted_policy": "HOLD_NO_STAGE_ADVANCE_NO_CLEANUP"
+  },
+  "stage_specific_invalidation_contract": {
+    "PREDICTED_NOT_GENERATED": {
+      "proposal": "CANCEL_PREDICTION_CANDIDATE_ONLY",
+      "requires": [
+        "ROUTE_PROOF_INVALIDATED",
+        "NO_JOB_ID_EXISTS",
+        "NO_GENERATED_ARTIFACT_EXISTS",
+        "CANDIDATE_VERSION_CAS_MATCH"
+      ],
+      "receipt_gate": "CANDIDATE_CANCEL_RECEIPT",
+      "live_effect": "DENIED_SHADOW_ONLY"
+    },
+    "GENERATION_SCHEDULED_OR_RUNNING": {
+      "proposal": "SEND_CANCEL_JOB_REQUEST_AND_WAIT",
+      "requires": [
+        "ROUTE_PROOF_INVALIDATED",
+        "JOB_ID_EXACT_MATCH",
+        "JOB_OWNERSHIP_PROOF_MATCH",
+        "STAGE_EPOCH_AND_JOB_VERSION_CAS_MATCH",
+        "CANCEL_REQUEST_IDEMPOTENCY_KEY",
+        "CANCEL_REQUEST_RECEIPT"
+      ],
+      "terminal_receipt_gate": "DO_NOT_ASSUME_CANCELLED_WAIT_FOR_VERIFIED_TERMINAL_RECEIPT",
+      "cancel_timeout_effect": "HOLD_JOB_STATE_UNKNOWN",
+      "completion_race_effect": "GENERATION_COMPLETED_RECEIPT_WINS_AND_RECLASSIFIES_TO_COMPLETED_STAGE",
+      "partial_artifact_effect": "HOLD_QUARANTINE_REFERENCE_ONLY",
+      "live_effect": "DENIED_SHADOW_ONLY"
+    },
+    "GENERATION_COMPLETED": {
+      "proposal": "CLEAN_EXCLUSIVE_NONCANONICAL_COMPLETED_ARTIFACT_ONLY",
+      "requires": [
+        "ROUTE_PROOF_INVALIDATED",
+        "GENERATION_COMPLETED_RECEIPT_VALID",
+        "COMPLETED_ARTIFACT_SET_EXACT_MEMBERSHIP",
+        "ARTIFACT_HASH_MATCH",
+        "ARTIFACT_CANONICAL_FALSE",
+        "EXCLUSIVE_OWNERSHIP_PROOF_MATCH",
+        "NO_LIVE_REFERENCE",
+        "NO_ACTIVE_LEASE",
+        "NOT_PINNED",
+        "NO_DOWNSTREAM_CONSUMER",
+        "NOT_NATIVE_ADI_CANONICAL_OR_TOMBSTONE_REFERENCE",
+        "RETENTION_AND_ROLLBACK_POLICY_ALLOW",
+        "ARTIFACT_VERSION_CAS_MATCH"
+      ],
+      "canonical_action": "RETAIN",
+      "shared_or_unknown_ownership_effect": "HOLD_RETAIN",
+      "live_effect": "DENIED_SHADOW_ONLY_PROPOSAL_ONLY"
+    }
+  },
+  "route_proof_contract": {
+    "proof_type": "MOVING_V_TIME_LIFECYCLE_ROUTE_PROOF_CANDIDATE",
+    "hash_algorithm": "SHA-256",
+    "required_fields": [
+      "route_proof_id",
+      "record_id",
+      "record_version",
+      "prediction_epoch",
+      "route_epoch",
+      "lifecycle_stage",
+      "stage_epoch",
+      "transition_receipt_head_sha256",
+      "event_time_ns",
+      "apex_time_ns",
+      "route_target_time_ns",
+      "adi_metric_ref",
+      "adi_metric_sha256",
+      "membership_epoch",
+      "membership_snapshot_sha256",
+      "watermark_snapshot_sha256",
+      "safe_watermark_ns",
+      "policy_sha256",
+      "source_state_sha256",
+      "reconstruction_ref_or_explicit_null",
+      "classified_state",
+      "proposed_shadow_action",
+      "proof_created_at_ns",
+      "proof_valid_until_ns",
+      "proof_sha256",
+      "issuer_ref",
+      "signature_ref"
+    ],
+    "proof_use": "SHADOW_CLASSIFICATION_AND_MEASUREMENT_ONLY",
+    "commit_time_revalidation_required": true,
+    "proof_may_authorize_live_action": false
+  },
+  "route_invalidation_contract": {
+    "default_on_invalidation": "HOLD_AND_EMIT_INVALIDATION_CANDIDATE",
+    "invalidation_triggers": [
+      "PROOF_EXPIRED",
+      "RECORD_VERSION_CHANGED",
+      "PREDICTION_EPOCH_CHANGED",
+      "ROUTE_EPOCH_CHANGED",
+      "LIFECYCLE_STAGE_CHANGED",
+      "STAGE_EPOCH_CHANGED",
+      "TRANSITION_RECEIPT_HEAD_CHANGED",
+      "JOB_STATE_OR_JOB_VERSION_CHANGED",
+      "EVENT_OR_ROUTE_TARGET_TIME_CHANGED",
+      "ADI_METRIC_REF_OR_HASH_CHANGED",
+      "MEMBERSHIP_EPOCH_OR_MEMBERSHIP_HASH_CHANGED",
+      "WATERMARK_SNAPSHOT_CHANGED_OR_REGRESSED",
+      "POLICY_HASH_CHANGED",
+      "SOURCE_STATE_HASH_CHANGED",
+      "RECONSTRUCTION_REFERENCE_OR_HASH_CHANGED",
+      "REFERENCE_LEASE_PIN_OR_CONSUMER_STATE_CHANGED",
+      "CLOCK_UNCERTAINTY_EXCEEDS_CURRENT_GUARD",
+      "ISSUER_OR_SIGNATURE_INVALID"
+    ],
+    "invalidation_receipt_required": true,
+    "stale_proof_reuse_allowed": false,
+    "stage_branching_rule": "USE_STAGE_SPECIFIC_INVALIDATION_CONTRACT_AFTER_RECEIPT_CHAIN_REVALIDATION"
+  },
+  "adaptive_budget_contract": {
+    "budget_mode": "SHADOW_PERFORMANCE_AND_UX_GATED_ADAPTIVE_CEILING",
+    "initial_ceiling_bytes": "2147483648",
+    "initial_ceiling_semantics": "STARTING_SHADOW_HYPOTHESIS_NOT_FIXED_LIMIT_NOT_RESERVATION_NOT_FLOOR",
+    "current_applied_ceiling_bytes": null,
+    "proposed_ceiling_bytes": null,
+    "adjustable_up": true,
+    "adjustable_down": true,
+    "automatic_adjustment_allowed": false,
+    "protected_working_set_floor_bytes": "MEASURED_INPUT_REQUIRED",
+    "host_safe_capacity_ceiling_bytes": "MEASURED_INPUT_REQUIRED",
+    "threshold_state": "UNSET_PENDING_REAL_SHADOW_CALIBRATION",
+    "proposal_values": [
+      "PROPOSE_INCREASE",
+      "PROPOSE_DECREASE",
+      "HOLD_CURRENT_HYPOTHESIS",
+      "HOLD_INSUFFICIENT_EVIDENCE"
+    ],
+    "proposal_requires": [
+      "REAL_SHADOW_SAMPLE_AND_DURATION_SUFFICIENCY",
+      "BASELINE_AND_CANDIDATE_WORKLOAD_COMPARABILITY",
+      "PROTECTED_WORKING_SET_FLOOR_MEASURED",
+      "HOST_RESERVE_PASS",
+      "NO_OOM",
+      "NO_SWAP_THRASHING",
+      "P95_LATENCY_WITHIN_APPROVED_UX_GATE",
+      "VISIBLE_STALL_RATE_WITHIN_APPROVED_UX_GATE",
+      "TASK_SUCCESS_WITHIN_APPROVED_UX_GATE",
+      "PRELOAD_HIT_RATE_WITHIN_APPROVED_GATE",
+      "FALSE_MISS_AND_REHYDRATION_WITHIN_APPROVED_GATES",
+      "CANCELLATION_AND_ORPHAN_ARTIFACT_METRICS_WITHIN_APPROVED_GATES",
+      "ZERO_PROTECTED_OR_CURRENT_EVICTION_PROPOSAL_VIOLATIONS",
+      "ZERO_CANONICAL_DELETE_PROPOSALS",
+      "ZERO_RECONSTRUCTION_HASH_MISMATCHES",
+      "TOTAL_FIELD_AND_HUMAN_AUTHORIZATION_FOR_ANY_FUTURE_APPLICATION"
+    ],
+    "activation_state": "NOT_APPLIED_SHADOW_ONLY"
+  },
+  "ux_evidence_gates": {
+    "primary_intent": "BETTER_EFFECT_AND_BETTER_HUMAN_USER_EXPERIENCE",
+    "evaluation_mode": "PAIRED_BASELINE_AND_CANDIDATE_SHADOW_OBSERVATION",
+    "minimum_sample_count": null,
+    "minimum_observation_duration_seconds": null,
+    "numeric_threshold_policy": "UNSET_VALUES_REQUIRE_TOTAL_FIELD_REVIEW_AFTER_REAL_CALIBRATION",
+    "required_metrics": [
+      "TASK_SUCCESS_RATE",
+      "USER_VISIBLE_FIRST_RESPONSE_P50_MS",
+      "USER_VISIBLE_FIRST_RESPONSE_P95_MS",
+      "END_TO_END_P95_MS",
+      "VISIBLE_STALL_RATE",
+      "ERROR_RATE",
+      "PRELOAD_HIT_RATE",
+      "FALSE_MISS_RATE",
+      "FALSE_MISS_REHYDRATION_P95_MS",
+      "CANCEL_REQUEST_TO_TERMINAL_RECEIPT_P95_MS",
+      "CANCEL_TIMEOUT_RATE",
+      "COMPLETION_AFTER_CANCEL_RACE_RATE",
+      "ORPHAN_OR_PARTIAL_ARTIFACT_RATE",
+      "HOST_FREE_MEMORY_RESERVE_BYTES",
+      "SWAP_IN_OUT_RATE",
+      "OOM_COUNT",
+      "PROTECTED_WORKING_SET_BYTES"
+    ],
+    "fixed_zero_tolerance_metrics": {
+      "protected_eviction_proposal_violation": 0,
+      "current_eviction_proposal_violation": 0,
+      "canonical_delete_proposal": 0,
+      "unverified_transition_consumed": 0,
+      "cancel_without_terminal_receipt_treated_as_cancelled": 0,
+      "shared_or_unknown_ownership_cleanup_proposal": 0,
+      "hash_mismatch_consumed": 0
+    },
+    "insufficient_missing_or_noncomparable_evidence_effect": "HOLD_NO_BUDGET_CHANGE"
+  },
+  "allowed_shadow_actions": [
+    "CLASSIFY_LIFECYCLE_STAGE",
+    "COMPUTE_EXACT_MEMBERSHIP_WATERMARK_CANDIDATE",
+    "EMIT_ROUTE_PROOF_CANDIDATE",
+    "EMIT_ROUTE_INVALIDATION_CANDIDATE",
+    "VALIDATE_TRANSITION_RECEIPT",
+    "PROPOSE_STAGE_SPECIFIC_CANCELLATION_OR_CLEANUP",
+    "MEASURE_UX_AND_CAPACITY",
+    "PROPOSE_ADAPTIVE_BUDGET",
+    "NOOP_REFERENCE_ONLY",
+    "HOLD"
+  ],
+  "explicitly_denied_actions": [
+    "GIT_ADD",
+    "GIT_COMMIT",
+    "GIT_PUSH",
+    "DEPLOY",
+    "RESTART",
+    "REBOOT",
+    "RUNTIME_ACTIVATION",
+    "SERVICE_CONTROL",
+    "CONTAINER_BUILD",
+    "CONTAINER_START",
+    "CONTAINER_STOP",
+    "CONTAINER_RESTART",
+    "DB_WRITE",
+    "DB_MIGRATION",
+    "ROUTER_WRITE",
+    "CANONICAL_WRITE",
+    "POINTER_UPDATE",
+    "MEMORY_LIMIT_CHANGE",
+    "CGROUP_CHANGE",
+    "MODEL_LOAD",
+    "MODEL_RELOAD",
+    "LIVE_JOB_CANCEL",
+    "LIVE_GENERATION_ARTIFACT_CLEANUP",
+    "LIVE_RAM_EVICTION",
+    "LIVE_VRAM_EVICTION",
+    "FILE_DELETE",
+    "CANONICAL_SOURCE_DELETE",
+    "NATIVE_ADI_TOMBSTONE_OR_DELETED_REF_WRITE",
+    "REMOTE_WRITE",
+    "EXTERNAL_NETWORK_CALL",
+    "CLOUD_MODEL_CALL",
+    "LIVE_URL_CREATION",
+    "EXTERNAL_PUBLICATION"
+  ],
+  "fail_closed_invariants": [
+    "THREE_LIFECYCLE_STAGES_ARE_TIME_AND_RECEIPT_BOUND",
+    "STAGE_NEVER_ADVANCES_WITHOUT_A_VALID_TRANSITION_RECEIPT",
+    "INVALID_PREDICTED_ITEM_ONLY_PROPOSES_CANDIDATE_CANCELLATION",
+    "INVALID_SCHEDULED_OR_RUNNING_ITEM_WAITS_FOR_A_VERIFIED_TERMINAL_RECEIPT",
+    "CANCEL_TIMEOUT_OR_RACE_NEVER_IMPLIES_CANCELLED",
+    "COMPLETED_ITEM_CLEANUP_PROPOSAL_REQUIRES_EXCLUSIVE_NONCANONICAL_PROOF",
+    "EXACT_WATERMARK_MEMBERSHIP_IS_SET_EQUALITY_NOT_DISCOVERY_INFERENCE",
+    "ROUTE_PROOF_INVALIDATES_ON_ANY_BOUND_STATE_OR_HASH_CHANGE",
+    "TWO_GIB_IS_ONLY_AN_INITIAL_TUNABLE_SHADOW_CEILING",
+    "CURRENT_AND_V_PROTECTED_STATE_NEVER_RECEIVE_EVICTION_PROPOSALS",
+    "CANONICAL_SOURCE_ACTION_IS_ALWAYS_RETAIN",
+    "UNKNOWN_MISSING_STALE_OR_CONFLICTED_STATE_ALWAYS_HOLDS",
+    "LOCAL_OR_SHADOW_PASS_NEVER_GRANTS_RUNTIME_OR_TOTAL_FIELD_AUTHORITY"
+  ]
+}

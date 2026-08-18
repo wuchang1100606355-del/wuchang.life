@@ -1,0 +1,339 @@
+{
+  "manifest_version": "W7TP-EVIDENCE-SNAPSHOT-MANIFEST/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "created_at_utc": "2026-08-18T06:56:56.202347Z",
+  "raw_repository_file_count": 29,
+  "canonical_live_observation_count": 7,
+  "total_source_ref_count": 36,
+  "matrix_source_binding_algorithm": "SHA-256_OF_UTF8_SORTED_SOURCE_REF_COLON_SHA256_LINES",
+  "matrix_source_manifest_sha256": "43c1b7786157dffd52339570ceb02df845b62f3e84fff6ccbb1943a6f7d498a2",
+  "snapshot_aggregate_method": "SHA256_OF_LEXICOGRAPHICALLY_SORTED_SNAPSHOT_SHA_SIZE_SOURCE_REF_SNAPSHOT_PATH_LINES_WITH_TERMINAL_LF",
+  "evidence_snapshot_aggregate_sha256": "24832e5fda2406a3fee864472e3dd6d769fc73d65fa07bce3f33dca2061d237b",
+  "entries": [
+    {
+      "source_ref": "configs/total_field/w7tp_moving_v_route_cleanup_v2.candidate.json",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "ad9ded877dd7df1a5161c814c332bcaa5227d0473834c36b505c05aeb6230d55",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/configs/total_field/w7tp_moving_v_route_cleanup_v2.candidate.json",
+      "snapshot_raw_sha256": "ad9ded877dd7df1a5161c814c332bcaa5227d0473834c36b505c05aeb6230d55",
+      "snapshot_size_bytes": 16097
+    },
+    {
+      "source_ref": "configs/total_field/w7tp_moving_v_route_policy_v2.schema_instance.candidate.json",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "4204af4bae23cf314dcbcda9c82ed4973fc6e4a4b72c83fc38be19c6cf85cc46",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/configs/total_field/w7tp_moving_v_route_policy_v2.schema_instance.candidate.json",
+      "snapshot_raw_sha256": "4204af4bae23cf314dcbcda9c82ed4973fc6e4a4b72c83fc38be19c6cf85cc46",
+      "snapshot_size_bytes": 25389
+    },
+    {
+      "source_ref": "legacy_core/taiji_unified_gateway_edge.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "84cd27898af90ef9fc4efa3ecd5d901061253b3e816525bf8442a90a8ccb502f",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/legacy_core/taiji_unified_gateway_edge.py",
+      "snapshot_raw_sha256": "84cd27898af90ef9fc4efa3ecd5d901061253b3e816525bf8442a90a8ccb502f",
+      "snapshot_size_bytes": 25363
+    },
+    {
+      "source_ref": "live-observation://OBS_MSI_RESOURCE_20260818",
+      "source_kind": "CANONICAL_LIVE_OBSERVATION_RECORD",
+      "declared_source_sha256": "16ffc3401d2a1ae724c42fd3cfe0d354e656edf721341368f4b6d728c59e95ab",
+      "declared_hash_method": "SHA256_RFC8785_LIKE_SORTED_COMPACT_JSON_EXCLUDING_observation_sha256",
+      "snapshot_path": "EVIDENCE_BYTES/live_observations/OBS_MSI_RESOURCE_20260818.json",
+      "snapshot_raw_sha256": "fac28a40461cb96b1f1d9a57ad92d9f1230a9d8d267c9ae933d0e83b6a5fdaf8",
+      "snapshot_size_bytes": 856
+    },
+    {
+      "source_ref": "live-observation://OBS_MSI_WSL_RESOURCE_20260818",
+      "source_kind": "CANONICAL_LIVE_OBSERVATION_RECORD",
+      "declared_source_sha256": "9a244eab29d1298bc192ed38db024486235d6896affa82ae74ebfc06199decd9",
+      "declared_hash_method": "SHA256_RFC8785_LIKE_SORTED_COMPACT_JSON_EXCLUDING_observation_sha256",
+      "snapshot_path": "EVIDENCE_BYTES/live_observations/OBS_MSI_WSL_RESOURCE_20260818.json",
+      "snapshot_raw_sha256": "334af89ee66cc09c17740cc041975bf0923ba460ecdbc21f36192cc170e0249c",
+      "snapshot_size_bytes": 739
+    },
+    {
+      "source_ref": "live-observation://OBS_SOURCE_BRANCH_SCOPE_20260818",
+      "source_kind": "CANONICAL_LIVE_OBSERVATION_RECORD",
+      "declared_source_sha256": "95fe71e35b5d455a91c707c121335e082d947de3856a1bdd0d66fa39760f2833",
+      "declared_hash_method": "SHA256_RFC8785_LIKE_SORTED_COMPACT_JSON_EXCLUDING_observation_sha256",
+      "snapshot_path": "EVIDENCE_BYTES/live_observations/OBS_SOURCE_BRANCH_SCOPE_20260818.json",
+      "snapshot_raw_sha256": "b95b94940feffa02b348f538550903c3128ef7f726ac2b97698e7aeaf13c4755",
+      "snapshot_size_bytes": 797
+    },
+    {
+      "source_ref": "live-observation://OBS_TAIJI01_CODEX_LOCAL_ROUTE_20260818",
+      "source_kind": "CANONICAL_LIVE_OBSERVATION_RECORD",
+      "declared_source_sha256": "8f23c0e3e5f9257d26f53266e297ddbda461fba3c5f71a710dd9d49f4809b3cb",
+      "declared_hash_method": "SHA256_RFC8785_LIKE_SORTED_COMPACT_JSON_EXCLUDING_observation_sha256",
+      "snapshot_path": "EVIDENCE_BYTES/live_observations/OBS_TAIJI01_CODEX_LOCAL_ROUTE_20260818.json",
+      "snapshot_raw_sha256": "dd3976b51102aac21e2f46ebd50031160146667b31163fdf04ded81d4186713a",
+      "snapshot_size_bytes": 2201
+    },
+    {
+      "source_ref": "live-observation://OBS_TAIJI01_LIVE_GATEWAY_20260818",
+      "source_kind": "CANONICAL_LIVE_OBSERVATION_RECORD",
+      "declared_source_sha256": "96cb5f7a0a07e1bed6dd3f2e2be56ce39097b8b98f2acc9dfcf2f2c18bbe0ab1",
+      "declared_hash_method": "SHA256_RFC8785_LIKE_SORTED_COMPACT_JSON_EXCLUDING_observation_sha256",
+      "snapshot_path": "EVIDENCE_BYTES/live_observations/OBS_TAIJI01_LIVE_GATEWAY_20260818.json",
+      "snapshot_raw_sha256": "6773464267de9fde80f80ec286a5f524911e9162e7385c0ea41ece21ebe78ef0",
+      "snapshot_size_bytes": 1785
+    },
+    {
+      "source_ref": "live-observation://OBS_TAIJI01_RESOURCE_MODEL_20260818",
+      "source_kind": "CANONICAL_LIVE_OBSERVATION_RECORD",
+      "declared_source_sha256": "89c70ea675ba4e6a988ec8000a240c403e8b1ec6b5a87fdf91b840d236f0efc0",
+      "declared_hash_method": "SHA256_RFC8785_LIKE_SORTED_COMPACT_JSON_EXCLUDING_observation_sha256",
+      "snapshot_path": "EVIDENCE_BYTES/live_observations/OBS_TAIJI01_RESOURCE_MODEL_20260818.json",
+      "snapshot_raw_sha256": "b06a90a4456e5bf1cbbf255b628a7f12c91773a9046063c26ab78433435e52b1",
+      "snapshot_size_bytes": 1375
+    },
+    {
+      "source_ref": "live-observation://OBS_TAILNET_TOPOLOGY_20260818",
+      "source_kind": "CANONICAL_LIVE_OBSERVATION_RECORD",
+      "declared_source_sha256": "440183c4cc446a684c174477adc86c7f2d36416bb902754c93e9165c80bd3d8b",
+      "declared_hash_method": "SHA256_RFC8785_LIKE_SORTED_COMPACT_JSON_EXCLUDING_observation_sha256",
+      "snapshot_path": "EVIDENCE_BYTES/live_observations/OBS_TAILNET_TOPOLOGY_20260818.json",
+      "snapshot_raw_sha256": "bc478e39bec03234ed303e35f02c33d8ca35f33817bb1956cdea5e0b5943c8aa",
+      "snapshot_size_bytes": 1978
+    },
+    {
+      "source_ref": "models/dead_letter_router.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "c1b04861e12b3cee559d0243fb51878a9b879a126a0616d788e4d13c6e0c7f48",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/models/dead_letter_router.py",
+      "snapshot_raw_sha256": "c1b04861e12b3cee559d0243fb51878a9b879a126a0616d788e4d13c6e0c7f48",
+      "snapshot_size_bytes": 7625
+    },
+    {
+      "source_ref": "runtime/deadletter_replay.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "d96f4eec43f8752ee63a0f3068447ba3cd816446187cb09eacbbab8c2e002457",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/runtime/deadletter_replay.py",
+      "snapshot_raw_sha256": "d96f4eec43f8752ee63a0f3068447ba3cd816446187cb09eacbbab8c2e002457",
+      "snapshot_size_bytes": 1208
+    },
+    {
+      "source_ref": "runtime/router/eamtp_router_guard_dryrun.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "f8effc0cc8274a9dda4018a287f3072f9deb83da0bed37db3bde8e91b1967666",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/runtime/router/eamtp_router_guard_dryrun.py",
+      "snapshot_raw_sha256": "f8effc0cc8274a9dda4018a287f3072f9deb83da0bed37db3bde8e91b1967666",
+      "snapshot_size_bytes": 5018
+    },
+    {
+      "source_ref": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/services/w7tp_native_adi/core.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "804ad93813cae000dbb3c54a72444c3ea102863137394161cd06c124379e30fa",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/services/w7tp_native_adi/core.py",
+      "snapshot_raw_sha256": "804ad93813cae000dbb3c54a72444c3ea102863137394161cd06c124379e30fa",
+      "snapshot_size_bytes": 49266
+    },
+    {
+      "source_ref": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tests/test_taiji_8d_canonical_verifier.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "184b82b7f67735bb67169cafac9026817da4bf71b1ed734b9c67ca8cc77cc903",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tests/test_taiji_8d_canonical_verifier.py",
+      "snapshot_raw_sha256": "184b82b7f67735bb67169cafac9026817da4bf71b1ed734b9c67ca8cc77cc903",
+      "snapshot_size_bytes": 4103
+    },
+    {
+      "source_ref": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tools/taiji_8d_canonical_verifier.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "f412cfe6cd44e2001b05f09ad435b08c175f9c5bc35a5f68c4b7a57ed45db8d5",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tools/taiji_8d_canonical_verifier.py",
+      "snapshot_raw_sha256": "f412cfe6cd44e2001b05f09ad435b08c175f9c5bc35a5f68c4b7a57ed45db8d5",
+      "snapshot_size_bytes": 14683
+    },
+    {
+      "source_ref": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tools/total_field/w7tp_intent_field_suite/api.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "2ca4e704b7b2cb982bd10c4a499aeb2ceeebcb614f1855992b9597a77eb197b0",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tools/total_field/w7tp_intent_field_suite/api.py",
+      "snapshot_raw_sha256": "2ca4e704b7b2cb982bd10c4a499aeb2ceeebcb614f1855992b9597a77eb197b0",
+      "snapshot_size_bytes": 70865
+    },
+    {
+      "source_ref": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tools/w7tp_8d_lookup_ai_min.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "2036e579d1eeb4d3e97c6d8bd0e8ca905b2a1a3829254163695b532d15dcd2e4",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/tools/w7tp_8d_lookup_ai_min.py",
+      "snapshot_raw_sha256": "2036e579d1eeb4d3e97c6d8bd0e8ca905b2a1a3829254163695b532d15dcd2e4",
+      "snapshot_size_bytes": 9259
+    },
+    {
+      "source_ref": "schemas/field/w7tp_moving_v_route_policy_v2.schema.json",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "25f2f863722cbcf0a20d1a0a7136ef66cf3a7c722336d6f5b0cf2c9bd37f9ab7",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/schemas/field/w7tp_moving_v_route_policy_v2.schema.json",
+      "snapshot_raw_sha256": "25f2f863722cbcf0a20d1a0a7136ef66cf3a7c722336d6f5b0cf2c9bd37f9ab7",
+      "snapshot_size_bytes": 42277
+    },
+    {
+      "source_ref": "schemas/field/w7tp_moving_v_route_runtime_envelopes_v2.schema.json",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "663a956591cb2ed04c91e7c2b4e36c17d0c9c133b76be5adb702ae57d80160fd",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/schemas/field/w7tp_moving_v_route_runtime_envelopes_v2.schema.json",
+      "snapshot_raw_sha256": "663a956591cb2ed04c91e7c2b4e36c17d0c9c133b76be5adb702ae57d80160fd",
+      "snapshot_size_bytes": 145522
+    },
+    {
+      "source_ref": "services/gateway/memory_logger.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "60ab975373841d257a98b9c08e54c8cfae120d01d356c5ad7f56480b9f8347a1",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/services/gateway/memory_logger.py",
+      "snapshot_raw_sha256": "60ab975373841d257a98b9c08e54c8cfae120d01d356c5ad7f56480b9f8347a1",
+      "snapshot_size_bytes": 530
+    },
+    {
+      "source_ref": "services/gateway/memory_recall.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "b2849792d14ac35c9af5df70b791624a24aaed35b12fb22ac2305b8484c7e61d",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/services/gateway/memory_recall.py",
+      "snapshot_raw_sha256": "b2849792d14ac35c9af5df70b791624a24aaed35b12fb22ac2305b8484c7e61d",
+      "snapshot_size_bytes": 807
+    },
+    {
+      "source_ref": "services/gateway/topology_router.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "a356d5a0518995f1b9c7bd48aac2b6e57ad882fa22f3a6fbd14d7c532e3f1960",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/services/gateway/topology_router.py",
+      "snapshot_raw_sha256": "a356d5a0518995f1b9c7bd48aac2b6e57ad882fa22f3a6fbd14d7c532e3f1960",
+      "snapshot_size_bytes": 3568
+    },
+    {
+      "source_ref": "services/w7tp_lite/mock_router_dlq_policy.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "d7dc9ed5683ddf3738a46bfc4a7b6bba120c781ba09f7bc13e0b8d321c0e6ca5",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/services/w7tp_lite/mock_router_dlq_policy.py",
+      "snapshot_raw_sha256": "d7dc9ed5683ddf3738a46bfc4a7b6bba120c781ba09f7bc13e0b8d321c0e6ca5",
+      "snapshot_size_bytes": 4032
+    },
+    {
+      "source_ref": "tests/test_total_field_authority_resolver.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "8e3d32ab69860dfbebc3215ce73cce2ff3596d9189f5d52b36d4714374e46116",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tests/test_total_field_authority_resolver.py",
+      "snapshot_raw_sha256": "8e3d32ab69860dfbebc3215ce73cce2ff3596d9189f5d52b36d4714374e46116",
+      "snapshot_size_bytes": 12755
+    },
+    {
+      "source_ref": "tests/test_total_field_authority_runtime_bindings.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "f59ac6ac47ebb6625384a8297c81799722257e7b971d1d86c482b1439124acc7",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tests/test_total_field_authority_runtime_bindings.py",
+      "snapshot_raw_sha256": "f59ac6ac47ebb6625384a8297c81799722257e7b971d1d86c482b1439124acc7",
+      "snapshot_size_bytes": 20971
+    },
+    {
+      "source_ref": "tests/test_total_field_dynamic_context.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "7667144f0e874cb0814acd78edd8b1dc3cd68452081210527e140ad85aea96ae",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tests/test_total_field_dynamic_context.py",
+      "snapshot_raw_sha256": "7667144f0e874cb0814acd78edd8b1dc3cd68452081210527e140ad85aea96ae",
+      "snapshot_size_bytes": 11994
+    },
+    {
+      "source_ref": "tests/test_total_field_receive_candidate_authority_adapter.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "ac5a729970a84e16070d709caa6ac7c07c101aa441e0acbc32bd54db09f01b7b",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tests/test_total_field_receive_candidate_authority_adapter.py",
+      "snapshot_raw_sha256": "ac5a729970a84e16070d709caa6ac7c07c101aa441e0acbc32bd54db09f01b7b",
+      "snapshot_size_bytes": 16144
+    },
+    {
+      "source_ref": "tests/test_w7tp_moving_v_route_cleanup_v2.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "e16061ce08065ee902a9ca665ab53e46c7f3300edc86cd6b86e6b98754125905",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tests/test_w7tp_moving_v_route_cleanup_v2.py",
+      "snapshot_raw_sha256": "e16061ce08065ee902a9ca665ab53e46c7f3300edc86cd6b86e6b98754125905",
+      "snapshot_size_bytes": 57805
+    },
+    {
+      "source_ref": "tools/ollama_total_field_skill_bridge.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tools/ollama_total_field_skill_bridge.py",
+      "snapshot_raw_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
+      "snapshot_size_bytes": 6908
+    },
+    {
+      "source_ref": "tools/total_field/moving_v_route_cleanup_candidate_v2.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "58622b646223bc95916bd9557b2683ab57290fdd7065401f2c91137b6b042e76",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tools/total_field/moving_v_route_cleanup_candidate_v2.py",
+      "snapshot_raw_sha256": "58622b646223bc95916bd9557b2683ab57290fdd7065401f2c91137b6b042e76",
+      "snapshot_size_bytes": 78845
+    },
+    {
+      "source_ref": "tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "d5ad2b374f89160b94d5aa6222022dcc9cde733d49716e86427e1bc1b69db9f2",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "snapshot_raw_sha256": "d5ad2b374f89160b94d5aa6222022dcc9cde733d49716e86427e1bc1b69db9f2",
+      "snapshot_size_bytes": 36744
+    },
+    {
+      "source_ref": "tools/total_field_authority_resolver.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "3d4e1f1f13a40cb131a57a5eb3760ce8a39b3b83a3ec7ad446779fa416032767",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tools/total_field_authority_resolver.py",
+      "snapshot_raw_sha256": "3d4e1f1f13a40cb131a57a5eb3760ce8a39b3b83a3ec7ad446779fa416032767",
+      "snapshot_size_bytes": 20524
+    },
+    {
+      "source_ref": "tools/total_field_authority_runtime_bindings.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "48960aca702a2d4a918e9ad5bfacad6068baf9fd1d5d35280efd4d46adeed9c2",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tools/total_field_authority_runtime_bindings.py",
+      "snapshot_raw_sha256": "48960aca702a2d4a918e9ad5bfacad6068baf9fd1d5d35280efd4d46adeed9c2",
+      "snapshot_size_bytes": 9394
+    },
+    {
+      "source_ref": "tools/total_field_dynamic_context.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "c7ed3a76348394f6355557743dd09856399768b5a63d0354b07e3d1093393cf9",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tools/total_field_dynamic_context.py",
+      "snapshot_raw_sha256": "c7ed3a76348394f6355557743dd09856399768b5a63d0354b07e3d1093393cf9",
+      "snapshot_size_bytes": 52071
+    },
+    {
+      "source_ref": "tools/total_field_receive_candidate_authority_adapter.py",
+      "source_kind": "RAW_REPOSITORY_FILE",
+      "declared_source_sha256": "dd47b2260210c9aa45b333915fed7c97d1f71c2484537d4a576af9c529f75072",
+      "declared_hash_method": "SHA256_RAW_FILE_BYTES",
+      "snapshot_path": "EVIDENCE_BYTES/tools/total_field_receive_candidate_authority_adapter.py",
+      "snapshot_raw_sha256": "dd47b2260210c9aa45b333915fed7c97d1f71c2484537d4a576af9c529f75072",
+      "snapshot_size_bytes": 13554
+    }
+  ],
+  "latest_runtime_adapter_observation_is_separate": "RUNTIME_ADAPTER_E2E_EVIDENCE.json"
+}

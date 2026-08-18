@@ -1,0 +1,61 @@
+{
+  "observation_id": "OBS_TAIJI01_RESOURCE_MODEL_20260818",
+  "observation_sha256": "89c70ea675ba4e6a988ec8000a240c403e8b1ec6b5a87fdf91b840d236f0efc0",
+  "observed_at_ns": "1787033352668778722",
+  "observer": "OPERATOR_AND_READ_ONLY_PROBE",
+  "evidence_class": "COMBINED",
+  "facts": [
+    {
+      "fact_key": "node.id",
+      "fact_value": "taiji01",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "memory.total",
+      "fact_value": "25100000000",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "memory.available",
+      "fact_value": "21600000000",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "swap.total",
+      "fact_value": "4290000000",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "swap.used",
+      "fact_value": "1450000000",
+      "unit": "BYTES"
+    },
+    {
+      "fact_key": "root.used",
+      "fact_value": "75",
+      "unit": "PERCENT"
+    },
+    {
+      "fact_key": "gpu.driver",
+      "fact_value": "UNAVAILABLE",
+      "unit": "STATE"
+    },
+    {
+      "fact_key": "ollama.endpoint",
+      "fact_value": "http://127.0.0.1:11434",
+      "unit": "ENDPOINT"
+    },
+    {
+      "fact_key": "ollama.models",
+      "fact_value": "present",
+      "unit": "NONE"
+    },
+    {
+      "fact_key": "ollama.loaded_models",
+      "fact_value": "0",
+      "unit": "COUNT"
+    }
+  ],
+  "authority_state": "HOLD",
+  "no_live_mutation": true
+}

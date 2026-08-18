@@ -1,0 +1,80 @@
+{
+  "request_version": "W7TP-TOTAL-FIELD-REVIEW-AND-DEPLOYMENT-REQUEST/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "created_at_utc": "2026-08-18T06:56:56.202347Z",
+  "requested_decision": "APPROVE_SCOPED_SOURCE_LANDING_AND_RATIFY_DEPLOYED_LOCAL_CONFIG_CANARY_WHILE_HOLDING_MOVING_V_LIVE_CLEANUP_ROUTER",
+  "requested_actions": [
+    {
+      "action": "SCOPED_SOURCE_LANDING",
+      "scope": [
+        "docs/w7tp_algorithms/W7TP_MOVING_V_ROUTE_CLEANUP_V2_CANDIDATE.md",
+        "docs/w7tp_algorithms/W7TP_MOVING_V_ROUTE_BRIDGE_MATRIX_V2_CANDIDATE.md",
+        "configs/total_field/w7tp_moving_v_route_cleanup_v2.candidate.json",
+        "configs/total_field/w7tp_moving_v_route_policy_v2.schema_instance.candidate.json",
+        "schemas/field/w7tp_moving_v_route_policy_v2.schema.json",
+        "schemas/field/w7tp_moving_v_route_runtime_envelopes_v2.schema.json",
+        "tools/total_field/moving_v_route_cleanup_candidate_v2.py",
+        "tests/test_w7tp_moving_v_route_cleanup_v2.py",
+        "schemas/field/w7tp_8d_dependency_supply_demand_matrix_v1.schema.json",
+        "configs/total_field/w7tp_8d_dependency_supply_demand_matrix_v1.candidate.json",
+        "tests/test_w7tp_8d_dependency_supply_demand_matrix_v1.py",
+        "configs/codex/taiji01_8d_local_default.toml"
+      ],
+      "current_readiness": "REVIEWABLE_STATIC_SOURCE"
+    },
+    {
+      "action": "RATIFY_CONTROLLED_ADAPTER_CANARY",
+      "scope": [
+        "127.0.0.1:11435",
+        "127.0.0.1:11437"
+      ],
+      "current_readiness": "DEPLOYED_SCOPED_CONFIG_AND_CANARY_PASS"
+    },
+    {
+      "action": "RATIFY_TAIJI01_DEFAULT_CODEX_CUTOVER",
+      "scope": [
+        "configs/codex/taiji01_8d_local_default.toml"
+      ],
+      "current_readiness": "DEPLOYED_HASH_MATCH_AND_E2E_PASS_OBSERVED"
+    },
+    {
+      "action": "MOVING_V_LIVE_CLEANUP_ROUTER_ACTIVATION",
+      "scope": [
+        "live cleanup",
+        "live router",
+        "canonical/memory effects"
+      ],
+      "current_readiness": "HOLD_NOT_REQUESTED_FOR_IMMEDIATE_EXECUTION"
+    }
+  ],
+  "founder_operator_authorization_recorded": true,
+  "packet_execution_authority": false,
+  "self_approval": false,
+  "runtime_approved": false,
+  "canonical_change_approved": false,
+  "deployment_approved": false,
+  "default_cutover_approved": false,
+  "total_field_final_decision": null,
+  "current_recommended_disposition": "HOLD",
+  "static_logic_result": "PASS",
+  "live_runtime_result": "ADAPTER_REQUIRED/HOLD",
+  "observed_scoped_config_deployed": true,
+  "canary_landed": true,
+  "default_cutover_landed": true,
+  "moving_v_live_cleanup_router_landed": false,
+  "state_coordinate_hash_packet_sha256": "00fe3f4a9ff384837bbe3f39ab7ab64517e3648c500fdae207b1b073b5bf934b",
+  "required_decision_receipt_fields": [
+    "decision_id",
+    "decision_version",
+    "scope_hash",
+    "authority_ref",
+    "authority_nonce",
+    "issued_at_ns",
+    "expires_at_ns",
+    "source_snapshot_aggregate_sha256",
+    "state_coordinate_sha256",
+    "decision",
+    "signature",
+    "revocation_ref"
+  ]
+}

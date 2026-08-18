@@ -1,0 +1,69 @@
+{
+  "evidence_version": "W7TP-RUNTIME-ADAPTER-E2E-EVIDENCE/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "observed_at_utc": "2026-08-18T06:56:56.202347Z",
+  "evidence_provenance": "PARENT_AGENT_RUNTIME_TEST_OBSERVATION",
+  "raw_log_or_detached_receipt_paths": [],
+  "durable_raw_evidence_anchor_state": "NOT_PROVIDED",
+  "results": [
+    {
+      "endpoint": "127.0.0.1:11435",
+      "test": "DIRECT_NONSTREAM",
+      "state": "PASS",
+      "terminal_response_observed": true
+    },
+    {
+      "endpoint": "127.0.0.1:11435",
+      "test": "DIRECT_SSE",
+      "state": "PASS",
+      "terminal_response_observed": true
+    },
+    {
+      "endpoint": "127.0.0.1:11435",
+      "test": "EARLIER_NONFINAL_CODEX_CLI_P_8D_LOCAL_DIAGNOSTIC",
+      "state": "SUPERSEDED_TIMEOUT_DIAGNOSTIC",
+      "duration_seconds": 244,
+      "http_200_post_count": 3,
+      "terminal_response_observed": false,
+      "note": "-p and --strict-config are not supported by the installed Codex CLI and this was not the final default-route E2E invocation."
+    },
+    {
+      "endpoint": "127.0.0.1:11437",
+      "test": "REAL_EXTENSION_CODEX_CLI_DEFAULT_ROUTE_E2E",
+      "state": "PASS",
+      "duration_seconds": "7.9",
+      "exit_code": 0,
+      "exact_output": "TAIJI_CODEX_DEFAULT_LOCAL_OK",
+      "input_tokens": 6342,
+      "output_tokens": 9,
+      "terminal_response_observed": true
+    }
+  ],
+  "candidate_profile_source": "configs/codex/taiji01_8d_local_default.toml",
+  "repo_profile_sha256": "8e1ef928ba3009a0d404a4bc0f4bb7cec1339bda03597b4543c15423e13a15f2",
+  "installed_default_observation": {
+    "path": "taiji01:~/.codex/config.toml",
+    "sha256": "8e1ef928ba3009a0d404a4bc0f4bb7cec1339bda03597b4543c15423e13a15f2",
+    "mode_octal": "600",
+    "byte_match_to_repo_profile": true
+  },
+  "rollback_observation": {
+    "backup_sha256_prefix": "c1bf8adb",
+    "mode_octal": "600",
+    "full_raw_hash_or_snapshot_in_packet": false
+  },
+  "cloud_profile_observation": {
+    "sha256_prefix": "6513",
+    "mode_octal": "600",
+    "full_raw_hash_or_snapshot_in_packet": false
+  },
+  "installed_default_cutover_completed": true,
+  "model_handoff_completed": true,
+  "canary_landed": true,
+  "default_cutover_landed": true,
+  "warnings": [
+    "CUSTOM_MODEL_METADATA_FALLBACK",
+    "SKILLS_CONTEXT_SHORTENED_TO_2_PERCENT"
+  ],
+  "review_effect": "DEPLOYED_SCOPED_CONFIG_AND_CANARY_PASS; MOVING_V_LIVE_CLEANUP_ROUTER_REMAINS_HOLD"
+}

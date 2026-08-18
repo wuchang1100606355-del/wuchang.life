@@ -1,0 +1,5628 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://w7tp.local/schemas/field/w7tp_moving_v_route_runtime_envelopes_v2.schema.json",
+  "title": "W7TP Moving-V Route Runtime Envelopes V2",
+  "description": "Discriminated runtime envelopes for Moving-V route evidence, lifecycle, invalidation, reconstruction, commit, and UX measurement. All uint, nanosecond, and byte quantities are unsigned decimal strings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "envelope_version",
+    "envelope_type",
+    "envelope_id",
+    "created_at_ns",
+    "producer",
+    "source_refs",
+    "integrity",
+    "payload"
+  ],
+  "properties": {
+    "envelope_version": {
+      "const": "W7TP-MOVING-V-ROUTE-RUNTIME-ENVELOPE/2.0"
+    },
+    "envelope_type": {
+      "enum": [
+        "BRIDGE",
+        "NEED_TIME_RECEIPT",
+        "ADI_DELTA_F_PROOF_RECEIPT",
+        "ROUTE_PROOF_RECEIPT",
+        "ROUTE_INVALIDATION_RECEIPT",
+        "LIFECYCLE_TRANSITION_RECEIPT",
+        "CANCELLATION_RECEIPT",
+        "COMPLETION_RECEIPT",
+        "MATERIALIZATION_LIFECYCLE_RECEIPT",
+        "WATERMARK_MEMBERSHIP_RECEIPT",
+        "ROUTE_DECISION",
+        "MATERIALIZATION_COMMIT_RECEIPT",
+        "BRANCH_DELETION_RECEIPT",
+        "FALSE_MISS_RECEIPT",
+        "GTP_RECONSTRUCTION_DESCRIPTOR",
+        "GTP_RECONSTRUCTION_RECEIPT",
+        "UX_MEASUREMENT",
+        "ROUTER_DLQ_ANTI_REPLAY_RECEIPT"
+      ]
+    },
+    "envelope_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:/-]{7,255}$"
+    },
+    "created_at_ns": {
+      "$ref": "#/$defs/ns_dec"
+    },
+    "producer": {
+      "$ref": "#/$defs/producer"
+    },
+    "source_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/typed_ref"
+      }
+    },
+    "integrity": {
+      "$ref": "#/$defs/integrity"
+    },
+    "payload": {}
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "BRIDGE"
+        },
+        "payload": {
+          "$ref": "#/$defs/bridge"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "NEED_TIME_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/need_time_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "ADI_DELTA_F_PROOF_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/adi_proof_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "ROUTE_PROOF_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/route_proof_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "ROUTE_INVALIDATION_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/route_invalidation_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "LIFECYCLE_TRANSITION_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/lifecycle_transition_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "CANCELLATION_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/cancellation_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "COMPLETION_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/completion_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "MATERIALIZATION_LIFECYCLE_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/materialization_lifecycle_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "WATERMARK_MEMBERSHIP_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/watermark_membership_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "ROUTE_DECISION"
+        },
+        "payload": {
+          "$ref": "#/$defs/route_decision"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "MATERIALIZATION_COMMIT_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/materialization_commit_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "BRANCH_DELETION_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/branch_deletion_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "FALSE_MISS_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/false_miss_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "GTP_RECONSTRUCTION_DESCRIPTOR"
+        },
+        "payload": {
+          "$ref": "#/$defs/gtp_reconstruction_descriptor"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "GTP_RECONSTRUCTION_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/gtp_reconstruction_receipt"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "UX_MEASUREMENT"
+        },
+        "payload": {
+          "$ref": "#/$defs/ux_measurement"
+        }
+      }
+    },
+    {
+      "properties": {
+        "envelope_type": {
+          "const": "ROUTER_DLQ_ANTI_REPLAY_RECEIPT"
+        },
+        "payload": {
+          "$ref": "#/$defs/router_dlq_anti_replay_receipt"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "uint_dec": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "ns_dec": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "bytes_dec": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "positive_uint_dec": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,19}$"
+    },
+    "basis_points_dec": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,3}|10000)$"
+    },
+    "nullable_uint_dec": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/uint_dec"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_ns_dec": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ns_dec"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "nullable_sha256": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/sha256"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "typed_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "ref",
+        "sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "nullable_typed_ref": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/typed_ref"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_id",
+        "build_sha256",
+        "node_id",
+        "boot_id",
+        "authority_state",
+        "attestation_ref"
+      ],
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "build_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "node_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "authority_state": {
+          "enum": [
+            "CANDIDATE_ONLY",
+            "SHADOW_AUTHORIZED",
+            "RAM_CANARY_AUTHORIZED",
+            "FORMAL_AUTHORIZED"
+          ]
+        },
+        "attestation_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization",
+        "hash_algorithm",
+        "sha256"
+      ],
+      "properties": {
+        "canonicalization": {
+          "const": "RFC8785"
+        },
+        "hash_algorithm": {
+          "const": "SHA-256"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "stage": {
+      "enum": [
+        "PREDICTED_NOT_GENERATED",
+        "GENERATION_SCHEDULED_OR_RUNNING",
+        "GENERATION_COMPLETED"
+      ]
+    },
+    "adapter_state": {
+      "enum": [
+        "DIRECT_NATIVE",
+        "VERIFIED_ADAPTER",
+        "ADAPTER_REQUIRED",
+        "AUTHORITY_REQUIRED",
+        "HOLD"
+      ]
+    },
+    "lifecycle_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage",
+        "stage_entered_at_ns",
+        "stage_observed_at_ns",
+        "stage_sequence_uint_dec",
+        "stage_state_sha256",
+        "time_domain_id",
+        "logical_time_uint_dec",
+        "schedule_ref",
+        "job_ref",
+        "generation_job_id",
+        "generation_job_state",
+        "transition_receipt_ref",
+        "cancellation_receipt_ref",
+        "cancellation_outcome",
+        "worker_fence_receipt_ref",
+        "worker_fence_state",
+        "completion_receipt_ref"
+      ],
+      "properties": {
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "stage_entered_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_observed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_sequence_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "stage_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "time_domain_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "logical_time_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "schedule_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "job_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "generation_job_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "generation_job_state": {
+          "$ref": "#/$defs/generation_job_state"
+        },
+        "transition_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "cancellation_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "cancellation_outcome": {
+          "enum": [
+            null,
+            "CANCELLED_BEFORE_START",
+            "CANCELLED_DURING_RUN"
+          ]
+        },
+        "worker_fence_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "worker_fence_state": {
+          "enum": [
+            null,
+            "ACTIVE",
+            "QUIESCED"
+          ]
+        },
+        "completion_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "stage": {
+                "const": "PREDICTED_NOT_GENERATED"
+              }
+            },
+            "required": [
+              "stage"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage_sequence_uint_dec": {
+                "const": "0"
+              },
+              "schedule_ref": {
+                "type": "null"
+              },
+              "job_ref": {
+                "type": "null"
+              },
+              "generation_job_id": {
+                "type": "null"
+              },
+              "generation_job_state": {
+                "const": "NONE"
+              },
+              "transition_receipt_ref": {
+                "type": "null"
+              },
+              "cancellation_receipt_ref": {
+                "type": "null"
+              },
+              "cancellation_outcome": {
+                "type": "null"
+              },
+              "worker_fence_receipt_ref": {
+                "type": "null"
+              },
+              "worker_fence_state": {
+                "type": "null"
+              },
+              "completion_receipt_ref": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stage": {
+                "const": "GENERATION_SCHEDULED_OR_RUNNING"
+              }
+            },
+            "required": [
+              "stage"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage_sequence_uint_dec": {
+                "$ref": "#/$defs/positive_uint_dec"
+              },
+              "schedule_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "job_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "generation_job_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "generation_job_state": {
+                "enum": [
+                  "SCHEDULED",
+                  "RUNNING",
+                  "CANCEL_REQUESTED",
+                  "CANCEL_CONFIRMED"
+                ]
+              },
+              "transition_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "completion_receipt_ref": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "generation_job_state": {
+                "const": "CANCEL_CONFIRMED"
+              }
+            },
+            "required": [
+              "generation_job_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "cancellation_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "cancellation_outcome": {
+                "enum": [
+                  "CANCELLED_BEFORE_START",
+                  "CANCELLED_DURING_RUN"
+                ]
+              },
+              "worker_fence_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "worker_fence_state": {
+                "const": "QUIESCED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stage": {
+                "const": "GENERATION_COMPLETED"
+              }
+            },
+            "required": [
+              "stage"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage_sequence_uint_dec": {
+                "$ref": "#/$defs/positive_uint_dec"
+              },
+              "schedule_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "job_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "generation_job_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "generation_job_state": {
+                "const": "COMPLETED"
+              },
+              "transition_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "completion_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "bridge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "bridge_record_id",
+        "record_id",
+        "source_record_ref",
+        "event_time_ns",
+        "ingest_time_ns",
+        "prediction_epoch_id",
+        "policy_ref",
+        "need_time_receipt_ref",
+        "adi_proof_receipt_ref",
+        "route_proof_receipt_ref",
+        "lifecycle_transition_receipt_ref",
+        "materialization_lifecycle_receipt_ref",
+        "watermark_membership_receipt_ref",
+        "gtp_reconstruction_descriptor_ref",
+        "adapter_states",
+        "bridge_state",
+        "hold_reasons",
+        "canonical_action",
+        "router_dlq_anti_replay_receipt_ref"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-RUNTIME-BRIDGE/2.0"
+        },
+        "bridge_record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "source_record_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "event_time_ns": {
+          "$ref": "#/$defs/nullable_ns_dec"
+        },
+        "ingest_time_ns": {
+          "$ref": "#/$defs/nullable_ns_dec"
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "need_time_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "adi_proof_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "route_proof_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "lifecycle_transition_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "materialization_lifecycle_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "watermark_membership_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "gtp_reconstruction_descriptor_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "adapter_states": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "need_time",
+            "adi",
+            "route",
+            "cache",
+            "watermark",
+            "gtp",
+            "ux",
+            "router_dlq_anti_replay"
+          ],
+          "properties": {
+            "need_time": {
+              "$ref": "#/$defs/adapter_state"
+            },
+            "adi": {
+              "$ref": "#/$defs/adapter_state"
+            },
+            "route": {
+              "$ref": "#/$defs/adapter_state"
+            },
+            "cache": {
+              "$ref": "#/$defs/adapter_state"
+            },
+            "watermark": {
+              "$ref": "#/$defs/adapter_state"
+            },
+            "gtp": {
+              "$ref": "#/$defs/adapter_state"
+            },
+            "ux": {
+              "$ref": "#/$defs/adapter_state"
+            },
+            "router_dlq_anti_replay": {
+              "$ref": "#/$defs/adapter_state"
+            }
+          }
+        },
+        "bridge_state": {
+          "enum": [
+            "SHADOW_ONLY",
+            "EVICTION_ELIGIBLE",
+            "HOLD"
+          ]
+        },
+        "hold_reasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "router_dlq_anti_replay_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "bridge_state": {
+                "const": "EVICTION_ELIGIBLE"
+              }
+            },
+            "required": [
+              "bridge_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "event_time_ns": {
+                "$ref": "#/$defs/ns_dec"
+              },
+              "ingest_time_ns": {
+                "$ref": "#/$defs/ns_dec"
+              },
+              "need_time_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "adi_proof_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "route_proof_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "lifecycle_transition_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "materialization_lifecycle_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "watermark_membership_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "gtp_reconstruction_descriptor_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "hold_reasons": {
+                "maxItems": 0
+              },
+              "router_dlq_anti_replay_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "need_time_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "receipt_id",
+        "record_id",
+        "prediction_epoch_id",
+        "time_domain_id",
+        "logical_time_uint_dec",
+        "need_time_ns",
+        "prediction_created_at_ns",
+        "valid_from_ns",
+        "valid_until_ns",
+        "stage",
+        "stage_entered_at_ns",
+        "stage_observed_at_ns",
+        "stage_sequence_uint_dec",
+        "stage_state_sha256",
+        "schedule_ref",
+        "job_ref",
+        "transition_receipt_ref",
+        "predictor",
+        "input_snapshot_ref",
+        "basis",
+        "confidence_basis_points_uint",
+        "state",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-NEED-TIME-PREDICTION-RECEIPT/2.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "time_domain_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "logical_time_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "need_time_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "prediction_created_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "valid_from_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "valid_until_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage": {
+          "const": "PREDICTED_NOT_GENERATED"
+        },
+        "stage_entered_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_observed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_sequence_uint_dec": {
+          "const": "0"
+        },
+        "stage_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "schedule_ref": {
+          "type": "null"
+        },
+        "job_ref": {
+          "type": "null"
+        },
+        "transition_receipt_ref": {
+          "type": "null"
+        },
+        "predictor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "predictor_id",
+            "predictor_version",
+            "config_sha256"
+          ],
+          "properties": {
+            "predictor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "predictor_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "config_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "input_snapshot_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "basis": {
+          "enum": [
+            "EXPLICIT_SCHEDULER_DEADLINE",
+            "ACCESS_PREDICTOR",
+            "USER_PLAN"
+          ]
+        },
+        "confidence_basis_points_uint": {
+          "$ref": "#/$defs/basis_points_dec"
+        },
+        "state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "adi_proof_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "proof_id",
+        "record_id",
+        "prediction_epoch_id",
+        "left_state_packet_ref",
+        "right_state_packet_ref",
+        "adi_snapshot_id",
+        "parent_snapshot_ref",
+        "canonical_version",
+        "rule_version",
+        "state_root_sha256",
+        "evidence_root_sha256",
+        "canonical_path_ref",
+        "canonical_path_sha256",
+        "delta_f_uint_dec",
+        "computed_at_ns",
+        "verifier_ref",
+        "proof_scope",
+        "runtime_invariants",
+        "verification_state",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-ADI-DELTA-F-PROOF-RECEIPT/2.0"
+        },
+        "proof_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "left_state_packet_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "right_state_packet_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "adi_snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "parent_snapshot_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "canonical_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "rule_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "state_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "evidence_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "canonical_path_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "canonical_path_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "delta_f_uint_dec": {
+          "$ref": "#/$defs/nullable_uint_dec"
+        },
+        "computed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "verifier_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "proof_scope": {
+          "const": "MOVING_V_EXTERNAL_MATERIALIZATION_POLICY_INPUT"
+        },
+        "runtime_invariants": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "CANONICAL_PATH_UNIQUE",
+              "DELTA_F_EQUALS_CANONICAL_PATH_COST_SUM",
+              "STATE_AND_EVIDENCE_ROOTS_BIND_PACKET_PAIR",
+              "PREDICTION_EPOCH_IS_BINDING_NOT_ADI_SNAPSHOT_ALIAS"
+            ]
+          }
+        },
+        "verification_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "verification_state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "verification_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "canonical_path_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "canonical_path_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "delta_f_uint_dec": {
+                "$ref": "#/$defs/uint_dec"
+              },
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "route_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_index_uint_dec",
+        "from_state_ref",
+        "to_state_ref",
+        "transition_rule_ref",
+        "cost_uint_dec"
+      ],
+      "properties": {
+        "step_index_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "from_state_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "to_state_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "transition_rule_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "cost_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        }
+      }
+    },
+    "route_proof_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "route_proof_id",
+        "record_id",
+        "materialization_id",
+        "content_sha256",
+        "policy_ref",
+        "policy_id",
+        "policy_epoch_id",
+        "prediction_epoch_id",
+        "route_epoch_id",
+        "route_graph_root_sha256",
+        "route_ruleset_root_sha256",
+        "proof_type",
+        "start_state_root_sha256",
+        "target_state_or_predicate_sha256",
+        "valid_from_ns",
+        "valid_until_ns",
+        "need_time_start_ns",
+        "need_time_end_ns",
+        "constraint_root_sha256",
+        "closed_world_declared",
+        "verifier_id",
+        "verifier_sha256",
+        "proof_payload_sha256",
+        "proof_sha256",
+        "covered_materialization_bindings",
+        "descendant_closure_root_sha256",
+        "closure_receipt_sha256",
+        "closure_verification_state",
+        "replay_complete",
+        "frontier_complete",
+        "actual_outcome_ref",
+        "branch_id",
+        "descendant_materialization_ids",
+        "branch_matches_record",
+        "descendant_binding_set_matches_closure",
+        "lifecycle",
+        "need_time_receipt_ref",
+        "adi_proof_receipt_ref",
+        "watermark_membership_receipt_ref",
+        "classification",
+        "classification_reason",
+        "verification_state",
+        "failure_code",
+        "router_dlq_anti_replay_receipt_ref"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-ROUTE-PROOF-RECEIPT/2.0"
+        },
+        "route_proof_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "policy_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "policy_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_graph_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "route_ruleset_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "proof_type": {
+          "enum": [
+            "REACHABLE_PATH_PROOF",
+            "ROUTE_PREDICTION_RECEIPT",
+            "ROUTE_EXCLUSION_PROOF",
+            "PREDICTION_INVALIDATION_PROOF"
+          ]
+        },
+        "start_state_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "target_state_or_predicate_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "valid_from_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "valid_until_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "need_time_start_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "need_time_end_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "constraint_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "closed_world_declared": {
+          "type": "boolean"
+        },
+        "verifier_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "verifier_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "proof_payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "proof_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "covered_materialization_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/materialization_content_binding"
+          }
+        },
+        "descendant_closure_root_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "closure_receipt_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "closure_verification_state": {
+          "enum": [
+            null,
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "replay_complete": {
+          "type": "boolean"
+        },
+        "frontier_complete": {
+          "type": "boolean"
+        },
+        "actual_outcome_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "branch_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "descendant_materialization_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "branch_matches_record": {
+          "type": "boolean"
+        },
+        "descendant_binding_set_matches_closure": {
+          "type": "boolean"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle_binding"
+        },
+        "need_time_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "adi_proof_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "watermark_membership_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "route_steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/route_step"
+          }
+        },
+        "route_total_cost_uint_dec": {
+          "$ref": "#/$defs/nullable_uint_dec"
+        },
+        "canonical_path_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "classification": {
+          "enum": [
+            "PAST_HOLD",
+            "PAST_ELIGIBLE",
+            "CURRENT_GUARD",
+            "FUTURE_PROTECTED",
+            "FUTURE_PREDICTED_MISS",
+            "OUT_OF_HORIZON",
+            "OUTSIDE_MANAGED_ENVELOPE_HOLD",
+            "UNALIGNED_HOLD"
+          ]
+        },
+        "classification_reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "verification_state": {
+          "enum": [
+            "PASS",
+            "HOLD",
+            "INVALIDATED"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "router_dlq_anti_replay_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "proof_type": {
+                "const": "REACHABLE_PATH_PROOF"
+              }
+            },
+            "required": [
+              "proof_type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "replay_complete": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "proof_type": {
+                "const": "ROUTE_EXCLUSION_PROOF"
+              }
+            },
+            "required": [
+              "proof_type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "closed_world_declared": {
+                "const": true
+              },
+              "frontier_complete": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "proof_type": {
+                "const": "PREDICTION_INVALIDATION_PROOF"
+              }
+            },
+            "required": [
+              "proof_type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "closed_world_declared": {
+                "const": true
+              },
+              "frontier_complete": {
+                "const": true
+              },
+              "actual_outcome_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "branch_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "descendant_materialization_ids": {
+                "minItems": 1
+              },
+              "descendant_closure_root_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "closure_receipt_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "closure_verification_state": {
+                "const": "PASS"
+              },
+              "branch_matches_record": {
+                "const": true
+              },
+              "descendant_binding_set_matches_closure": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "verification_state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "verification_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "route_invalidation_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "invalidation_id",
+        "record_id",
+        "route_proof_ref",
+        "prediction_epoch_id",
+        "route_epoch_id",
+        "branch_id",
+        "proof_branch_id",
+        "descendant_materialization_ids",
+        "covered_materialization_bindings",
+        "descendant_closure_root_sha256",
+        "closure_receipt_sha256",
+        "closure_verification_state",
+        "route_proof_branch_matches_record",
+        "descendant_binding_set_matches_closure",
+        "lifecycle",
+        "reason_code",
+        "stage_action",
+        "cancellation_request_ref",
+        "cancellation_receipt_ref",
+        "cancellation_outcome",
+        "worker_fence_receipt_ref",
+        "worker_fence_state",
+        "allocator_commit_observation_ref",
+        "branch_deletion_receipt_ref",
+        "release_accounting_state",
+        "scheduled_or_running_counted_as_released",
+        "invalidation_state",
+        "canonical_action",
+        "router_dlq_anti_replay_receipt_ref"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-ROUTE-INVALIDATION-RECEIPT/2.0"
+        },
+        "invalidation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "route_proof_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "proof_branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "descendant_materialization_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "covered_materialization_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/materialization_content_binding"
+          }
+        },
+        "descendant_closure_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "closure_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "closure_verification_state": {
+          "const": "PASS"
+        },
+        "route_proof_branch_matches_record": {
+          "const": true
+        },
+        "descendant_binding_set_matches_closure": {
+          "const": true
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle_binding"
+        },
+        "reason_code": {
+          "$ref": "#/$defs/invalidation_reason"
+        },
+        "stage_action": {
+          "enum": [
+            "CANCEL_PREDICTED_CANDIDATE",
+            "REQUEST_GENERATION_CANCELLATION",
+            "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION",
+            "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL",
+            "HOLD_UNKNOWN_OWNERSHIP"
+          ]
+        },
+        "cancellation_request_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "cancellation_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "cancellation_outcome": {
+          "enum": [
+            null,
+            "CANCELLED_BEFORE_START",
+            "CANCELLED_DURING_RUN"
+          ]
+        },
+        "worker_fence_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "worker_fence_state": {
+          "enum": [
+            null,
+            "ACTIVE",
+            "QUIESCED"
+          ]
+        },
+        "allocator_commit_observation_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "branch_deletion_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "release_accounting_state": {
+          "enum": [
+            "ZERO_NOT_GENERATED",
+            "FORBIDDEN_PENDING_CANCELLATION_AND_ALLOCATOR_COMMIT",
+            "ONLY_FROM_VERIFIED_COMMIT_RECEIPT",
+            "HOLD"
+          ]
+        },
+        "scheduled_or_running_counted_as_released": {
+          "const": false
+        },
+        "invalidation_state": {
+          "enum": [
+            "COMPLETED",
+            "PENDING_CANCELLATION",
+            "PENDING_BRANCH_DELETION_OR_DETACH",
+            "HOLD"
+          ]
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "router_dlq_anti_replay_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "PREDICTED_NOT_GENERATED"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage_action": {
+                "const": "CANCEL_PREDICTED_CANDIDATE"
+              },
+              "cancellation_request_ref": {
+                "type": "null"
+              },
+              "cancellation_receipt_ref": {
+                "type": "null"
+              },
+              "cancellation_outcome": {
+                "type": "null"
+              },
+              "worker_fence_receipt_ref": {
+                "type": "null"
+              },
+              "worker_fence_state": {
+                "type": "null"
+              },
+              "allocator_commit_observation_ref": {
+                "type": "null"
+              },
+              "branch_deletion_receipt_ref": {
+                "type": "null"
+              },
+              "release_accounting_state": {
+                "const": "ZERO_NOT_GENERATED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "GENERATION_SCHEDULED_OR_RUNNING"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage_action": {
+                "const": "REQUEST_GENERATION_CANCELLATION"
+              },
+              "cancellation_request_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "branch_deletion_receipt_ref": {
+                "type": "null"
+              },
+              "release_accounting_state": {
+                "const": "FORBIDDEN_PENDING_CANCELLATION_AND_ALLOCATOR_COMMIT"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "GENERATION_SCHEDULED_OR_RUNNING"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              },
+              "invalidation_state": {
+                "const": "COMPLETED"
+              }
+            },
+            "required": [
+              "lifecycle",
+              "invalidation_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "cancellation_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "cancellation_outcome": {
+                "enum": [
+                  "CANCELLED_BEFORE_START",
+                  "CANCELLED_DURING_RUN"
+                ]
+              },
+              "worker_fence_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "worker_fence_state": {
+                "const": "QUIESCED"
+              },
+              "allocator_commit_observation_ref": {
+                "$ref": "#/$defs/typed_ref"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "GENERATION_COMPLETED"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage_action": {
+                "enum": [
+                  "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION",
+                  "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL",
+                  "HOLD_UNKNOWN_OWNERSHIP"
+                ]
+              },
+              "cancellation_request_ref": {
+                "type": "null"
+              },
+              "cancellation_receipt_ref": {
+                "type": "null"
+              },
+              "cancellation_outcome": {
+                "type": "null"
+              },
+              "worker_fence_receipt_ref": {
+                "type": "null"
+              },
+              "worker_fence_state": {
+                "type": "null"
+              },
+              "release_accounting_state": {
+                "enum": [
+                  "ONLY_FROM_VERIFIED_COMMIT_RECEIPT",
+                  "HOLD"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "lifecycle_transition_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "transition_id",
+        "receipt_id",
+        "record_id",
+        "materialization_id",
+        "prediction_epoch_id",
+        "time_domain_id",
+        "logical_time_uint_dec",
+        "stage_sequence_uint_dec",
+        "from_stage",
+        "to_stage",
+        "transition_time_ns",
+        "observed_time_ns",
+        "generation_job_id",
+        "schedule_ref",
+        "job_ref",
+        "completion_receipt_ref",
+        "previous_transition_ref",
+        "expected_previous_state_sha256",
+        "resulting_state_sha256",
+        "idempotency_key",
+        "transition_state",
+        "receipt_sha256",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-LIFECYCLE-TRANSITION-RECEIPT/2.0"
+        },
+        "transition_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "time_domain_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "logical_time_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "stage_sequence_uint_dec": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "from_stage": {
+          "enum": [
+            "PREDICTED_NOT_GENERATED",
+            "GENERATION_SCHEDULED_OR_RUNNING"
+          ]
+        },
+        "to_stage": {
+          "enum": [
+            "GENERATION_SCHEDULED_OR_RUNNING",
+            "GENERATION_COMPLETED"
+          ]
+        },
+        "transition_time_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "observed_time_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "generation_job_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "schedule_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "job_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "completion_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "previous_transition_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "expected_previous_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "resulting_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 256
+        },
+        "transition_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "from_stage": {
+              "const": "PREDICTED_NOT_GENERATED"
+            },
+            "to_stage": {
+              "const": "GENERATION_SCHEDULED_OR_RUNNING"
+            },
+            "completion_receipt_ref": {
+              "type": "null"
+            },
+            "previous_transition_ref": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "from_stage": {
+              "const": "GENERATION_SCHEDULED_OR_RUNNING"
+            },
+            "to_stage": {
+              "const": "GENERATION_COMPLETED"
+            },
+            "completion_receipt_ref": {
+              "$ref": "#/$defs/typed_ref"
+            },
+            "previous_transition_ref": {
+              "$ref": "#/$defs/typed_ref"
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "transition_state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "transition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cancellation_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "cancellation_id",
+        "cancellation_request_ref",
+        "receipt_sha256",
+        "record_id",
+        "materialization_id",
+        "prediction_epoch_id",
+        "time_domain_id",
+        "logical_time_uint_dec",
+        "stage",
+        "stage_entered_at_ns",
+        "stage_observed_at_ns",
+        "stage_sequence_uint_dec",
+        "stage_state_sha256",
+        "schedule_ref",
+        "job_ref",
+        "generation_job_id",
+        "requested_at_ns",
+        "acknowledged_at_ns",
+        "completed_at_ns",
+        "cancellation_state",
+        "cancellation_outcome",
+        "worker_state",
+        "worker_fence_receipt_ref",
+        "worker_fence_state",
+        "allocator_observation_ref",
+        "completion_receipt_ref",
+        "released_bytes_claimed",
+        "release_accounting_authorized",
+        "materialization_commit_receipt_required",
+        "failure_code",
+        "router_dlq_anti_replay_receipt_ref"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-CANCELLATION-RECEIPT/2.0"
+        },
+        "cancellation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "cancellation_request_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "time_domain_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "logical_time_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "stage": {
+          "const": "GENERATION_SCHEDULED_OR_RUNNING"
+        },
+        "stage_entered_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_observed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_sequence_uint_dec": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "stage_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "schedule_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "job_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "generation_job_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "requested_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "acknowledged_at_ns": {
+          "$ref": "#/$defs/nullable_ns_dec"
+        },
+        "completed_at_ns": {
+          "$ref": "#/$defs/nullable_ns_dec"
+        },
+        "cancellation_state": {
+          "enum": [
+            "REQUESTED",
+            "ACKNOWLEDGED",
+            "CANCELLED",
+            "TOO_LATE_GENERATION_COMPLETED",
+            "HOLD"
+          ]
+        },
+        "cancellation_outcome": {
+          "enum": [
+            null,
+            "CANCELLED_BEFORE_START",
+            "CANCELLED_DURING_RUN",
+            "TOO_LATE_ALREADY_COMPLETED"
+          ]
+        },
+        "worker_state": {
+          "enum": [
+            "QUEUED",
+            "RUNNING",
+            "STOPPING",
+            "STOPPED",
+            "COMPLETED",
+            "UNKNOWN"
+          ]
+        },
+        "worker_fence_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "worker_fence_state": {
+          "enum": [
+            null,
+            "ACTIVE",
+            "QUIESCED"
+          ]
+        },
+        "allocator_observation_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "completion_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "released_bytes_claimed": {
+          "const": "0"
+        },
+        "release_accounting_authorized": {
+          "const": false
+        },
+        "materialization_commit_receipt_required": {
+          "const": true
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "router_dlq_anti_replay_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "cancellation_state": {
+                "const": "CANCELLED"
+              }
+            },
+            "required": [
+              "cancellation_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "acknowledged_at_ns": {
+                "$ref": "#/$defs/ns_dec"
+              },
+              "completed_at_ns": {
+                "$ref": "#/$defs/ns_dec"
+              },
+              "cancellation_outcome": {
+                "enum": [
+                  "CANCELLED_BEFORE_START",
+                  "CANCELLED_DURING_RUN"
+                ]
+              },
+              "worker_fence_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "worker_fence_state": {
+                "const": "QUIESCED"
+              },
+              "allocator_observation_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "completion_receipt_ref": {
+                "type": "null"
+              },
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "cancellation_state": {
+                "const": "TOO_LATE_GENERATION_COMPLETED"
+              }
+            },
+            "required": [
+              "cancellation_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "cancellation_outcome": {
+                "const": "TOO_LATE_ALREADY_COMPLETED"
+              },
+              "completion_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "completion_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "completion_id",
+        "record_id",
+        "prediction_epoch_id",
+        "stage",
+        "stage_entered_at_ns",
+        "schedule_ref",
+        "job_ref",
+        "completed_at_ns",
+        "output_ref",
+        "output_sha256",
+        "output_bytes",
+        "ownership",
+        "canonical_action",
+        "completion_state",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-GENERATION-COMPLETION-RECEIPT/2.0"
+        },
+        "completion_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "stage": {
+          "const": "GENERATION_COMPLETED"
+        },
+        "stage_entered_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "schedule_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "job_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "completed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "output_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "output_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "ownership": {
+          "enum": [
+            "EXCLUSIVE_NON_CANONICAL",
+            "SHARED_NON_CANONICAL",
+            "CANONICAL_SOURCE",
+            "UNKNOWN"
+          ]
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "completion_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      }
+    },
+    "lifecycle_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_at_ns",
+        "live_reference_count_uint_dec",
+        "active_lease_count_uint_dec",
+        "lease_set_digest_sha256",
+        "pin_count_uint_dec",
+        "pin_set_digest_sha256",
+        "atomic_lifecycle_token_sha256"
+      ],
+      "properties": {
+        "observed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "live_reference_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "active_lease_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "lease_set_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "pin_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "pin_set_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "atomic_lifecycle_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "materialization_lifecycle_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "materialization_receipt_id",
+        "record_id",
+        "record_version_uint_dec",
+        "policy_epoch_id",
+        "prediction_epoch_id",
+        "route_epoch_id",
+        "lifecycle",
+        "cache_id",
+        "materialization_id",
+        "physical_allocation_id",
+        "source_record_ref",
+        "generation_token_sha256",
+        "content_sha256",
+        "storage_tier",
+        "allocator_ref",
+        "logical_payload_bytes",
+        "measured_resident_bytes",
+        "lifecycle_snapshot",
+        "safety_state_snapshot_ref",
+        "safety_state_sha256",
+        "allocation_owner_set_ref",
+        "allocation_owner_set_sha256",
+        "reconstruction_descriptor_ref",
+        "ownership",
+        "materialization_state",
+        "scheduled_or_running_counted_as_released",
+        "canonical_action"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-CACHE-MATERIALIZATION-GENERATION/2.0"
+        },
+        "materialization_receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_version_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "policy_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle_binding"
+        },
+        "cache_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "physical_allocation_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "source_record_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "generation_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "storage_tier": {
+          "enum": [
+            "NONE",
+            "RAM_HEAP",
+            "RAM_PINNED",
+            "VRAM_KV_PAGE",
+            "DISK_QUARANTINE",
+            "REFERENCE_ONLY"
+          ]
+        },
+        "allocator_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "logical_payload_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "measured_resident_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "lifecycle_snapshot": {
+          "$ref": "#/$defs/lifecycle_snapshot"
+        },
+        "safety_state_snapshot_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "safety_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "allocation_owner_set_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "allocation_owner_set_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "reconstruction_descriptor_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "ownership": {
+          "enum": [
+            "NOT_GENERATED",
+            "PARTIAL_NON_CANONICAL",
+            "EXCLUSIVE_NON_CANONICAL",
+            "SHARED_NON_CANONICAL",
+            "CANONICAL_SOURCE",
+            "UNKNOWN"
+          ]
+        },
+        "materialization_state": {
+          "enum": [
+            "NOT_MATERIALIZED",
+            "ALLOCATING",
+            "RESIDENT",
+            "QUARANTINED",
+            "REFERENCE_ONLY",
+            "HOLD"
+          ]
+        },
+        "scheduled_or_running_counted_as_released": {
+          "const": false
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "PREDICTED_NOT_GENERATED"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "physical_allocation_id": {
+                "type": "null"
+              },
+              "storage_tier": {
+                "const": "NONE"
+              },
+              "allocator_ref": {
+                "type": "null"
+              },
+              "logical_payload_bytes": {
+                "const": "0"
+              },
+              "measured_resident_bytes": {
+                "const": "0"
+              },
+              "allocation_owner_set_ref": {
+                "type": "null"
+              },
+              "allocation_owner_set_sha256": {
+                "type": "null"
+              },
+              "reconstruction_descriptor_ref": {
+                "type": "null"
+              },
+              "ownership": {
+                "const": "NOT_GENERATED"
+              },
+              "materialization_state": {
+                "const": "NOT_MATERIALIZED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "GENERATION_SCHEDULED_OR_RUNNING"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "ownership": {
+                "enum": [
+                  "PARTIAL_NON_CANONICAL",
+                  "UNKNOWN"
+                ]
+              },
+              "materialization_state": {
+                "enum": [
+                  "ALLOCATING",
+                  "HOLD"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "GENERATION_COMPLETED"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "physical_allocation_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "allocator_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "allocation_owner_set_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "allocation_owner_set_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "reconstruction_descriptor_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "ownership": {
+                "enum": [
+                  "EXCLUSIVE_NON_CANONICAL",
+                  "SHARED_NON_CANONICAL",
+                  "CANONICAL_SOURCE",
+                  "UNKNOWN"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "node_member": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "boot_id",
+        "role",
+        "clock_id"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "clock_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "node_watermark_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "boot_id",
+        "clock_id",
+        "event_watermark_ns",
+        "observed_at_ns",
+        "clock_uncertainty_ns",
+        "sync_state",
+        "attestation_ref"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "clock_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "event_watermark_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "observed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "clock_uncertainty_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "sync_state": {
+          "enum": [
+            "PASS",
+            "UNSYNCHRONIZED",
+            "REGRESSED",
+            "EXPIRED",
+            "HOLD"
+          ]
+        },
+        "attestation_ref": {
+          "$ref": "#/$defs/typed_ref"
+        }
+      }
+    },
+    "watermark_membership_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "receipt_id",
+        "membership_epoch_id",
+        "membership_snapshot_ref",
+        "required_nodes",
+        "observations",
+        "missing_node_ids",
+        "partition_state",
+        "membership_policy",
+        "calculation",
+        "safe_watermark_ns",
+        "valid_until_ns",
+        "calculation_input_digest_sha256",
+        "runtime_invariants",
+        "quorum_state",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-WATERMARK-MEMBERSHIP-RECEIPT/2.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "membership_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "membership_snapshot_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "required_nodes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/node_member"
+          }
+        },
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/node_watermark_observation"
+          }
+        },
+        "missing_node_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "partition_state": {
+          "enum": [
+            "HEALTHY",
+            "PARTITIONED",
+            "UNKNOWN"
+          ]
+        },
+        "membership_policy": {
+          "const": "ALL_REQUIRED_MEMBERS"
+        },
+        "calculation": {
+          "const": "MIN_REQUIRED_EVENT_WATERMARK_MINUS_PER_NODE_CLOCK_UNCERTAINTY"
+        },
+        "safe_watermark_ns": {
+          "$ref": "#/$defs/nullable_ns_dec"
+        },
+        "valid_until_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "calculation_input_digest_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "runtime_invariants": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "NODE_IDS_UNIQUE",
+              "NODE_BOOT_IDS_MATCH_MEMBERSHIP",
+              "EVERY_REQUIRED_NODE_HAS_ONE_PASS_OBSERVATION",
+              "SAFE_WATERMARK_NEVER_REGRESSES",
+              "RECEIPT_NOT_EXPIRED",
+              "NO_NETWORK_PARTITION"
+            ]
+          }
+        },
+        "quorum_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "quorum_state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "quorum_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "missing_node_ids": {
+                "maxItems": 0
+              },
+              "partition_state": {
+                "const": "HEALTHY"
+              },
+              "safe_watermark_ns": {
+                "$ref": "#/$defs/ns_dec"
+              },
+              "calculation_input_digest_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "route_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "decision_id",
+        "idempotency_key",
+        "decision_token_sha256",
+        "record_id",
+        "materialization_id",
+        "physical_allocation_id",
+        "bridge_ref",
+        "route_proof_ref",
+        "policy_ref",
+        "materialization_lifecycle_ref",
+        "watermark_membership_ref",
+        "lifecycle",
+        "expected_record_version_uint_dec",
+        "expected_generation_job_state",
+        "expected_policy_epoch_id",
+        "expected_prediction_epoch_id",
+        "expected_route_epoch_id",
+        "expected_route_graph_root_sha256",
+        "expected_route_proof_sha256",
+        "expected_content_sha256",
+        "expected_generation_token_sha256",
+        "expected_atomic_lifecycle_token_sha256",
+        "expected_safety_state_snapshot_ref",
+        "expected_safety_state_sha256",
+        "expected_allocation_owner_set_ref",
+        "expected_allocation_owner_set_sha256",
+        "expected_release_upper_bound_bytes",
+        "expires_at_ns",
+        "classification",
+        "action",
+        "reason",
+        "binding_checks",
+        "decision_state",
+        "total_field_authority_ref",
+        "canonical_action",
+        "router_dlq_anti_replay_receipt_ref"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-ROUTE-DECISION/2.0"
+        },
+        "decision_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "idempotency_key": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 256
+        },
+        "decision_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "physical_allocation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "bridge_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "route_proof_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "materialization_lifecycle_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "watermark_membership_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle_binding"
+        },
+        "expected_record_version_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "expected_generation_job_state": {
+          "$ref": "#/$defs/generation_job_state"
+        },
+        "expected_policy_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expected_prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expected_route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expected_route_graph_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_route_proof_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_generation_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_atomic_lifecycle_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_safety_state_snapshot_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "expected_safety_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_allocation_owner_set_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "expected_allocation_owner_set_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_release_upper_bound_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "expires_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "classification": {
+          "enum": [
+            "PAST_HOLD",
+            "PAST_ELIGIBLE",
+            "CURRENT_GUARD",
+            "FUTURE_PROTECTED",
+            "FUTURE_PREDICTED_MISS",
+            "OUT_OF_HORIZON",
+            "OUTSIDE_MANAGED_ENVELOPE_HOLD",
+            "UNALIGNED_HOLD"
+          ]
+        },
+        "action": {
+          "enum": [
+            "PROTECT_CURRENT",
+            "PROTECT_PRELOAD_CANDIDATE",
+            "CONTINUE_PROTECTED_GENERATION",
+            "PROTECT_COMPLETED_MATERIALIZATION",
+            "KEEP_REFERENCE_ONLY",
+            "KEEP_HOLD",
+            "CANCEL_PREDICTED_CANDIDATE",
+            "REQUEST_GENERATION_CANCELLATION",
+            "CLEAN_CANCELLED_GENERATION_TEMP",
+            "SOFT_EVICT_RECONSTRUCTIBLE",
+            "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION",
+            "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL",
+            "MOVE_PAST_MATERIALIZATION_TO_QUARANTINE"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "binding_checks": {
+          "$ref": "#/$defs/decision_binding_checks"
+        },
+        "decision_state": {
+          "enum": [
+            "SHADOW_ONLY",
+            "ACTION_AUTHORIZED",
+            "HOLD"
+          ]
+        },
+        "total_field_authority_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "router_dlq_anti_replay_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "decision_state": {
+                "const": "ACTION_AUTHORIZED"
+              }
+            },
+            "required": [
+              "decision_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "total_field_authority_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "binding_checks": {
+                "properties": {
+                  "materialization_and_content_match": {
+                    "const": true
+                  },
+                  "policy_epoch_match": {
+                    "const": true
+                  },
+                  "prediction_epoch_match": {
+                    "const": true
+                  },
+                  "route_epoch_match": {
+                    "const": true
+                  },
+                  "route_graph_root_match": {
+                    "const": true
+                  },
+                  "route_proof_match_and_pass": {
+                    "const": true
+                  },
+                  "safety_state_match": {
+                    "const": true
+                  },
+                  "allocation_owner_set_match": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "GENERATION_SCHEDULED_OR_RUNNING"
+                  },
+                  "generation_job_state": {
+                    "not": {
+                      "const": "CANCEL_CONFIRMED"
+                    }
+                  }
+                },
+                "required": [
+                  "stage",
+                  "generation_job_state"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expected_release_upper_bound_bytes": {
+                "const": "0"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "released_bytes_by_tier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ram_heap_bytes",
+        "ram_pinned_bytes",
+        "vram_kv_page_bytes",
+        "total_bytes"
+      ],
+      "properties": {
+        "ram_heap_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "ram_pinned_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "vram_kv_page_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "total_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        }
+      }
+    },
+    "materialization_commit_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "operation_id",
+        "receipt_id",
+        "receipt_sha256",
+        "idempotency_key",
+        "decision_ref",
+        "decision_token_sha256",
+        "record_id",
+        "materialization_id",
+        "physical_allocation_id",
+        "expected_content_sha256",
+        "committed_action",
+        "lifecycle",
+        "expected_record_version_uint_dec",
+        "observed_record_version_uint_dec",
+        "expected_policy_epoch_id",
+        "current_policy_epoch_id",
+        "expected_prediction_epoch_id",
+        "current_prediction_epoch_id",
+        "expected_route_epoch_id",
+        "current_route_epoch_id",
+        "expected_route_graph_root_sha256",
+        "current_route_graph_root_sha256",
+        "expected_route_proof_sha256",
+        "current_route_proof_sha256",
+        "current_route_proof_verification_state",
+        "expected_generation_token_sha256",
+        "observed_generation_token_sha256",
+        "expected_atomic_lifecycle_token_sha256",
+        "observed_atomic_lifecycle_token_sha256",
+        "expected_safety_state_snapshot_ref",
+        "expected_safety_state_sha256",
+        "current_safety_state_snapshot_ref",
+        "current_safety_state_sha256",
+        "expected_allocation_owner_set_ref",
+        "expected_allocation_owner_set_sha256",
+        "current_allocation_owner_set_ref",
+        "current_allocation_owner_set_sha256",
+        "expected_release_upper_bound_bytes",
+        "actual_released_bytes",
+        "actual_release_bound_comparison_ref",
+        "allocator_before_ref",
+        "allocator_after_ref",
+        "released_bytes_by_tier",
+        "quarantine_ref",
+        "branch_deletion_receipt_ref",
+        "cancellation_receipt_ref",
+        "cancellation_outcome",
+        "worker_fence_receipt_ref",
+        "worker_fence_state",
+        "audit_ref",
+        "total_field_authority_ref",
+        "binding_checks",
+        "cas_result",
+        "simulation_only",
+        "scheduled_or_running_direct_release_allowed",
+        "canonical_action",
+        "canonical_source_deleted",
+        "commit_state",
+        "failure_code",
+        "router_dlq_anti_replay_receipt_ref"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MATERIALIZATION-EVICTION-COMMIT-RECEIPT/2.0"
+        },
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 256
+        },
+        "decision_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "decision_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "physical_allocation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "expected_content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "committed_action": {
+          "enum": [
+            "PROTECT_CURRENT",
+            "PROTECT_PRELOAD_CANDIDATE",
+            "CONTINUE_PROTECTED_GENERATION",
+            "PROTECT_COMPLETED_MATERIALIZATION",
+            "KEEP_REFERENCE_ONLY",
+            "KEEP_HOLD",
+            "CANCEL_PREDICTED_CANDIDATE",
+            "REQUEST_GENERATION_CANCELLATION",
+            "CLEAN_CANCELLED_GENERATION_TEMP",
+            "SOFT_EVICT_RECONSTRUCTIBLE",
+            "DELETE_NONCANONICAL_DERIVED_MATERIALIZATION",
+            "DETACH_BRANCH_REFERENCE_RETAIN_CANONICAL",
+            "MOVE_PAST_MATERIALIZATION_TO_QUARANTINE"
+          ]
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle_binding"
+        },
+        "expected_record_version_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "observed_record_version_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "expected_policy_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "current_policy_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expected_prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "current_prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expected_route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "current_route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expected_route_graph_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "current_route_graph_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_route_proof_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "current_route_proof_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "current_route_proof_verification_state": {
+          "enum": [
+            "PASS",
+            "HOLD",
+            "INVALIDATED"
+          ]
+        },
+        "expected_generation_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "observed_generation_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_atomic_lifecycle_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "observed_atomic_lifecycle_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_safety_state_snapshot_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "expected_safety_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "current_safety_state_snapshot_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "current_safety_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_allocation_owner_set_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "expected_allocation_owner_set_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "current_allocation_owner_set_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "current_allocation_owner_set_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_release_upper_bound_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "actual_released_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "actual_release_bound_comparison_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "allocator_before_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "allocator_after_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "released_bytes_by_tier": {
+          "$ref": "#/$defs/released_bytes_by_tier"
+        },
+        "quarantine_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "branch_deletion_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "cancellation_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "cancellation_outcome": {
+          "enum": [
+            null,
+            "CANCELLED_BEFORE_START",
+            "CANCELLED_DURING_RUN"
+          ]
+        },
+        "worker_fence_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "worker_fence_state": {
+          "enum": [
+            null,
+            "ACTIVE",
+            "QUIESCED"
+          ]
+        },
+        "audit_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "total_field_authority_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "binding_checks": {
+          "$ref": "#/$defs/commit_binding_checks"
+        },
+        "cas_result": {
+          "enum": [
+            "PASS",
+            "NOOP_ALREADY_COMMITTED",
+            "HOLD"
+          ]
+        },
+        "simulation_only": {
+          "type": "boolean"
+        },
+        "scheduled_or_running_direct_release_allowed": {
+          "const": false
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "canonical_source_deleted": {
+          "const": false
+        },
+        "commit_state": {
+          "enum": [
+            "PASS",
+            "NOOP_ALREADY_COMMITTED",
+            "HOLD"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "router_dlq_anti_replay_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "commit_state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "commit_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "current_route_proof_verification_state": {
+                "const": "PASS"
+              },
+              "binding_checks": {
+                "properties": {
+                  "decision_token_hash_match": {
+                    "const": true
+                  },
+                  "materialization_and_content_match": {
+                    "const": true
+                  },
+                  "record_version_match": {
+                    "const": true
+                  },
+                  "stage_and_job_state_match": {
+                    "const": true
+                  },
+                  "generation_and_lifecycle_tokens_match": {
+                    "const": true
+                  },
+                  "policy_epoch_match": {
+                    "const": true
+                  },
+                  "prediction_epoch_match": {
+                    "const": true
+                  },
+                  "route_epoch_match": {
+                    "const": true
+                  },
+                  "route_graph_root_match": {
+                    "const": true
+                  },
+                  "route_proof_hash_match_and_current_pass": {
+                    "const": true
+                  },
+                  "current_safety_state_match": {
+                    "const": true
+                  },
+                  "current_allocation_owner_set_match": {
+                    "const": true
+                  },
+                  "current_action_gate_pass": {
+                    "const": true
+                  },
+                  "actual_release_not_above_upper_bound": {
+                    "const": true
+                  },
+                  "released_bytes_equal_allocator_delta": {
+                    "const": true
+                  },
+                  "authority_valid": {
+                    "const": true
+                  }
+                }
+              },
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "stage": {
+                    "const": "GENERATION_SCHEDULED_OR_RUNNING"
+                  }
+                },
+                "required": [
+                  "stage"
+                ]
+              },
+              "commit_state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "lifecycle",
+              "commit_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "committed_action": {
+                "const": "CLEAN_CANCELLED_GENERATION_TEMP"
+              },
+              "cancellation_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "cancellation_outcome": {
+                "enum": [
+                  "CANCELLED_BEFORE_START",
+                  "CANCELLED_DURING_RUN"
+                ]
+              },
+              "worker_fence_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "worker_fence_state": {
+                "const": "QUIESCED"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "branch_deletion_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "branch_receipt_id",
+        "record_id",
+        "route_invalidation_ref",
+        "completion_receipt_ref",
+        "target_ref",
+        "target_sha256",
+        "stage",
+        "ownership",
+        "action",
+        "precondition_proof_ref",
+        "performed_at_ns",
+        "result_state",
+        "released_bytes_claimed",
+        "materialization_commit_receipt_required",
+        "canonical_action",
+        "canonical_source_deleted",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-BRANCH-DELETION-OR-DETACH-RECEIPT/2.0"
+        },
+        "branch_receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "route_invalidation_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "completion_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "target_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "target_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "stage": {
+          "const": "GENERATION_COMPLETED"
+        },
+        "ownership": {
+          "enum": [
+            "EXCLUSIVE_NON_CANONICAL",
+            "SHARED_NON_CANONICAL",
+            "CANONICAL_SOURCE",
+            "UNKNOWN"
+          ]
+        },
+        "action": {
+          "enum": [
+            "DELETE_EXCLUSIVE_NON_CANONICAL_COMPLETED_MATERIALIZATION",
+            "DETACH_ROUTE_BRANCH_REFERENCE_ONLY",
+            "HOLD_UNKNOWN_OWNERSHIP"
+          ]
+        },
+        "precondition_proof_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "performed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "result_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "released_bytes_claimed": {
+          "const": "0"
+        },
+        "materialization_commit_receipt_required": {
+          "const": true
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "canonical_source_deleted": {
+          "const": false
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "ownership": {
+                "const": "EXCLUSIVE_NON_CANONICAL"
+              }
+            },
+            "required": [
+              "ownership"
+            ]
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "const": "DELETE_EXCLUSIVE_NON_CANONICAL_COMPLETED_MATERIALIZATION"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "ownership": {
+                "enum": [
+                  "SHARED_NON_CANONICAL",
+                  "CANONICAL_SOURCE"
+                ]
+              }
+            },
+            "required": [
+              "ownership"
+            ]
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "const": "DETACH_ROUTE_BRANCH_REFERENCE_ONLY"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "ownership": {
+                "const": "UNKNOWN"
+              }
+            },
+            "required": [
+              "ownership"
+            ]
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "const": "HOLD_UNKNOWN_OWNERSHIP"
+              },
+              "result_state": {
+                "const": "HOLD"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "gtp_reconstruction_descriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "descriptor_id",
+        "reconstruction_ref",
+        "record_id",
+        "gtp_protocol",
+        "gtp_protocol_version",
+        "packet_id",
+        "packet_sha256",
+        "nonce_digest_sha256",
+        "issued_at_ns",
+        "expires_at_ns",
+        "resolver_ref",
+        "expected_content_sha256",
+        "expected_bytes",
+        "durability_receipt_ref",
+        "replay_policy",
+        "authority_state",
+        "preflight_state",
+        "canonical_action",
+        "failure_code",
+        "materialization_id",
+        "prediction_epoch_id",
+        "route_epoch_id"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-GTP-RECONSTRUCTION-DESCRIPTOR/2.0"
+        },
+        "descriptor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "reconstruction_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "gtp_protocol": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "gtp_protocol_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "packet_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "packet_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "nonce_digest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "issued_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "expires_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "resolver_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "expected_content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "expected_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "durability_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "replay_policy": {
+          "enum": [
+            "SINGLE_USE_LEDGER",
+            "BOUNDED_IDEMPOTENT_REPLAY"
+          ]
+        },
+        "authority_state": {
+          "enum": [
+            "CANDIDATE_ONLY",
+            "SHADOW_AUTHORIZED",
+            "RAM_CANARY_AUTHORIZED",
+            "FORMAL_AUTHORIZED"
+          ]
+        },
+        "preflight_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "gtp_reconstruction_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "request_id",
+        "descriptor_ref",
+        "record_id",
+        "materialization_id",
+        "cache_generation_uint_dec",
+        "attempt_uint_dec",
+        "started_at_ns",
+        "completed_at_ns",
+        "packet_integrity_state",
+        "ttl_state",
+        "replay_state",
+        "nonce_ledger_ref",
+        "resolver_state",
+        "expected_sha256",
+        "observed_sha256",
+        "expected_bytes",
+        "observed_bytes",
+        "runtime_invariants",
+        "result",
+        "failure_code",
+        "prediction_epoch_id",
+        "route_epoch_id",
+        "decision_token_sha256"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-GTP-RECONSTRUCTION-RECEIPT/2.0"
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "descriptor_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "cache_generation_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "attempt_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "started_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "completed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "packet_integrity_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "ttl_state": {
+          "enum": [
+            "PASS",
+            "EXPIRED",
+            "HOLD"
+          ]
+        },
+        "replay_state": {
+          "enum": [
+            "PASS_FIRST_USE",
+            "PASS_IDEMPOTENT_REPLAY",
+            "REPLAY_REJECTED",
+            "HOLD"
+          ]
+        },
+        "nonce_ledger_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "resolver_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "expected_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "observed_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "expected_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "observed_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "runtime_invariants": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "EXPECTED_SHA256_EQUALS_OBSERVED_SHA256",
+              "EXPECTED_BYTES_EQUALS_OBSERVED_BYTES",
+              "TTL_VALID_AT_RECONSTRUCTION_START",
+              "NONCE_REPLAY_LEDGER_VERIFIED"
+            ]
+          }
+        },
+        "result": {
+          "enum": [
+            "PASS_BYTE_EXACT",
+            "HOLD"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "decision_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "const": "PASS_BYTE_EXACT"
+              }
+            },
+            "required": [
+              "result"
+            ]
+          },
+          "then": {
+            "properties": {
+              "packet_integrity_state": {
+                "const": "PASS"
+              },
+              "ttl_state": {
+                "const": "PASS"
+              },
+              "replay_state": {
+                "enum": [
+                  "PASS_FIRST_USE",
+                  "PASS_IDEMPOTENT_REPLAY"
+                ]
+              },
+              "resolver_state": {
+                "const": "PASS"
+              },
+              "observed_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "false_miss_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "receipt_id",
+        "record_id",
+        "commit_receipt_ref",
+        "decision_token_sha256",
+        "commit_materialization_id",
+        "commit_expected_content_sha256",
+        "commit_prediction_epoch_id",
+        "commit_route_epoch_id",
+        "commit_action",
+        "commit_state",
+        "commit_simulation_only",
+        "route_proof_ref",
+        "route_invalidation_ref",
+        "materialization_lifecycle_ref",
+        "original_classification",
+        "evicted_at_ns",
+        "demand_event_ref",
+        "demand_event_id",
+        "demanded_at_ns",
+        "demand_materialization_id",
+        "demand_prediction_epoch_id",
+        "demand_route_epoch_id",
+        "actual_hit",
+        "matured_horizon_ns",
+        "gtp_descriptor_ref",
+        "gtp_reconstruction_receipt_ref",
+        "reconstructed_materialization_id",
+        "reconstructed_content_sha256",
+        "rehydration_stall_ns",
+        "binding_checks",
+        "state",
+        "canonical_action",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-FALSE-MISS-RECEIPT/2.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "commit_receipt_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "decision_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "commit_materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "commit_expected_content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "commit_prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "commit_route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "commit_action": {
+          "const": "SOFT_EVICT_RECONSTRUCTIBLE"
+        },
+        "commit_state": {
+          "enum": [
+            "PASS",
+            "NOOP_ALREADY_COMMITTED",
+            "HOLD"
+          ]
+        },
+        "commit_simulation_only": {
+          "type": "boolean"
+        },
+        "route_proof_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "route_invalidation_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "materialization_lifecycle_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "original_classification": {
+          "const": "FUTURE_PREDICTED_MISS"
+        },
+        "evicted_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "demand_event_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "demand_event_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "demanded_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "demand_materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "demand_prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "demand_route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "actual_hit": {
+          "type": "boolean"
+        },
+        "matured_horizon_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "gtp_descriptor_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "gtp_reconstruction_receipt_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "reconstructed_materialization_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "reconstructed_content_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "rehydration_stall_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "binding_checks": {
+          "$ref": "#/$defs/false_miss_binding_checks"
+        },
+        "state": {
+          "enum": [
+            "NOT_A_FALSE_MISS",
+            "HOLD_DEMAND_RECEIPT_BINDING_MISMATCH",
+            "ROUTE_CHANGE_REGENERATION",
+            "REHYDRATION_FAILURE_HOLD",
+            "SIMULATED_FALSE_MISS_BYTE_EXACT",
+            "FALSE_MISS_REHYDRATED_BYTE_EXACT"
+          ]
+        },
+        "canonical_action": {
+          "const": "RETAIN"
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "SIMULATED_FALSE_MISS_BYTE_EXACT",
+                  "FALSE_MISS_REHYDRATED_BYTE_EXACT"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "commit_state": {
+                "const": "PASS"
+              },
+              "actual_hit": {
+                "const": true
+              },
+              "gtp_reconstruction_receipt_ref": {
+                "$ref": "#/$defs/typed_ref"
+              },
+              "reconstructed_materialization_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "reconstructed_content_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "binding_checks": {
+                "properties": {
+                  "commit_action_eligible": {
+                    "const": true
+                  },
+                  "commit_receipt_bound": {
+                    "const": true
+                  },
+                  "materialization_match": {
+                    "const": true
+                  },
+                  "content_sha256_match": {
+                    "const": true
+                  },
+                  "prediction_epoch_match": {
+                    "const": true
+                  },
+                  "route_epoch_match": {
+                    "const": true
+                  },
+                  "demand_event_bound": {
+                    "const": true
+                  },
+                  "actual_hit": {
+                    "const": true
+                  },
+                  "gtp_byte_exact_match": {
+                    "const": true
+                  }
+                }
+              },
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "SIMULATED_FALSE_MISS_BYTE_EXACT"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "commit_simulation_only": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "FALSE_MISS_REHYDRATED_BYTE_EXACT"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "commit_simulation_only": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "ROUTE_CHANGE_REGENERATION"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "properties": {
+                  "binding_checks": {
+                    "properties": {
+                      "prediction_epoch_match": {
+                        "const": false
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "binding_checks": {
+                    "properties": {
+                      "route_epoch_match": {
+                        "const": false
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "invalidation_reason": {
+      "enum": [
+        "ADI_PROOF_MISSING",
+        "ADI_PROOF_HASH_MISMATCH",
+        "CANONICAL_PATH_MISSING",
+        "CANONICAL_PATH_DIVERGENCE",
+        "TRANSITION_RULE_MISSING",
+        "PREDICTION_EPOCH_MISMATCH",
+        "POLICY_ID_MISMATCH",
+        "LIFECYCLE_STAGE_REGRESSION",
+        "SCHEDULE_REFERENCE_MISMATCH",
+        "JOB_REFERENCE_MISMATCH",
+        "CANCELLATION_TIMEOUT",
+        "COMPLETION_HASH_MISMATCH",
+        "OWNERSHIP_UNKNOWN",
+        "WATERMARK_MEMBERSHIP_INVALID",
+        "WATERMARK_EXPIRED",
+        "CLOCK_REGRESSION",
+        "NETWORK_PARTITION",
+        "CAS_MISMATCH",
+        "RECONSTRUCTION_PROOF_INVALID"
+      ]
+    },
+    "latency_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit",
+        "sample_count_uint_dec",
+        "p50_uint_dec",
+        "p95_uint_dec",
+        "p99_uint_dec",
+        "max_uint_dec"
+      ],
+      "properties": {
+        "unit": {
+          "enum": [
+            "MILLISECONDS",
+            "TOKENS_PER_SECOND_MILLI"
+          ]
+        },
+        "sample_count_uint_dec": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "p50_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "p95_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "p99_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "max_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        }
+      }
+    },
+    "rate_metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "numerator_uint_dec",
+        "denominator_uint_dec",
+        "rate_basis_points_uint_dec",
+        "denominator_definition",
+        "window_definition"
+      ],
+      "properties": {
+        "numerator_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "denominator_uint_dec": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "rate_basis_points_uint_dec": {
+          "$ref": "#/$defs/basis_points_dec"
+        },
+        "denominator_definition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "window_definition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "ux_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ttft_ms",
+        "end_to_end_latency_ms",
+        "tokens_per_second_milli",
+        "rehydration_stall_ms",
+        "task_success",
+        "tool_success",
+        "preload_hit",
+        "false_miss",
+        "reconstruction_pass",
+        "oom_count_uint_dec",
+        "swap_thrash_count_uint_dec",
+        "protected_eviction_count_uint_dec",
+        "reconstruction_hash_mismatch_count_uint_dec",
+        "peak_ram_bytes",
+        "host_reserve_bytes",
+        "vram_allocated_bytes",
+        "vram_reserved_bytes",
+        "vram_fragmentation_basis_points_uint_dec"
+      ],
+      "properties": {
+        "ttft_ms": {
+          "$ref": "#/$defs/latency_summary"
+        },
+        "end_to_end_latency_ms": {
+          "$ref": "#/$defs/latency_summary"
+        },
+        "tokens_per_second_milli": {
+          "$ref": "#/$defs/latency_summary"
+        },
+        "rehydration_stall_ms": {
+          "$ref": "#/$defs/latency_summary"
+        },
+        "task_success": {
+          "$ref": "#/$defs/rate_metric"
+        },
+        "tool_success": {
+          "$ref": "#/$defs/rate_metric"
+        },
+        "preload_hit": {
+          "$ref": "#/$defs/rate_metric"
+        },
+        "false_miss": {
+          "$ref": "#/$defs/rate_metric"
+        },
+        "reconstruction_pass": {
+          "$ref": "#/$defs/rate_metric"
+        },
+        "oom_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "swap_thrash_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "protected_eviction_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "reconstruction_hash_mismatch_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "peak_ram_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "host_reserve_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "vram_allocated_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "vram_reserved_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "vram_fragmentation_basis_points_uint_dec": {
+          "$ref": "#/$defs/basis_points_dec"
+        }
+      }
+    },
+    "ux_arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm_id",
+        "policy_ref",
+        "model_ref",
+        "build_ref",
+        "hardware_profile_ref",
+        "workload_manifest_ref",
+        "started_at_ns",
+        "completed_at_ns",
+        "sample_count_uint_dec",
+        "strata",
+        "metrics"
+      ],
+      "properties": {
+        "arm_id": {
+          "enum": [
+            "BASELINE",
+            "CANDIDATE"
+          ]
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "model_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "build_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "hardware_profile_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "workload_manifest_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "started_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "completed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "sample_count_uint_dec": {
+          "$ref": "#/$defs/positive_uint_dec"
+        },
+        "strata": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "COLD",
+              "WARM",
+              "SHORT_CONTEXT",
+              "MEDIUM_CONTEXT",
+              "LONG_CONTEXT",
+              "TOOL_TASK",
+              "NON_TOOL_TASK",
+              "LANGUAGE_ZH_TW",
+              "LANGUAGE_OTHER",
+              "SINGLE_USER",
+              "CONCURRENT_USERS",
+              "RAM_TIER",
+              "VRAM_TIER"
+            ]
+          }
+        },
+        "metrics": {
+          "$ref": "#/$defs/ux_metrics"
+        }
+      }
+    },
+    "ux_measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "experiment_id",
+        "workload_manifest_ref",
+        "node_membership_ref",
+        "measurement_plan_ref",
+        "arms",
+        "runtime_invariants",
+        "measurement_state",
+        "decision_scope",
+        "failure_reasons"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-MOVING-V-UX-MEASUREMENT/2.0"
+        },
+        "experiment_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "workload_manifest_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "node_membership_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "measurement_plan_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "arms": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ux_arm"
+          },
+          "allOf": [
+            {
+              "contains": {
+                "properties": {
+                  "arm_id": {
+                    "const": "BASELINE"
+                  }
+                },
+                "required": [
+                  "arm_id"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "properties": {
+                  "arm_id": {
+                    "const": "CANDIDATE"
+                  }
+                },
+                "required": [
+                  "arm_id"
+                ]
+              },
+              "minContains": 1,
+              "maxContains": 1
+            }
+          ]
+        },
+        "runtime_invariants": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "EXACTLY_ONE_BASELINE_AND_ONE_CANDIDATE_ARM",
+              "SAME_WORKLOAD_MANIFEST",
+              "SAME_MODEL_AND_HARDWARE_PROFILE_OR_DECLARED_NORMALIZATION",
+              "FALSE_MISS_DENOMINATOR_USES_MATURED_HORIZON_ONLY",
+              "COLD_AND_WARM_RESULTS_REPORTED_SEPARATELY",
+              "REAL_RUNTIME_MEASUREMENT_NOT_SYNTHETIC",
+              "NO_AUTOMATIC_POLICY_APPLICATION"
+            ]
+          }
+        },
+        "measurement_state": {
+          "enum": [
+            "PASS_MEASURED",
+            "HOLD"
+          ]
+        },
+        "decision_scope": {
+          "const": "MEASUREMENT_ONLY_NO_AUTOMATIC_POLICY_CHANGE"
+        },
+        "failure_reasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      }
+    },
+    "generation_job_state": {
+      "enum": [
+        "NONE",
+        "SCHEDULED",
+        "RUNNING",
+        "CANCEL_REQUESTED",
+        "CANCEL_CONFIRMED",
+        "COMPLETED"
+      ]
+    },
+    "materialization_content_binding": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,255}:[a-f0-9]{64}$"
+    },
+    "allocation_owner_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "physical_allocation_id",
+        "observed_at_ns",
+        "owner_materialization_ids",
+        "owner_set_sha256"
+      ],
+      "properties": {
+        "physical_allocation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "observed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "owner_materialization_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "owner_set_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "safety_state_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_key",
+        "record_id",
+        "materialization_id",
+        "physical_allocation_id",
+        "content_sha256",
+        "record_version_uint_dec",
+        "time_domain_id",
+        "logical_time_uint_dec",
+        "stage",
+        "stage_entered_at_ns",
+        "stage_observed_at_ns",
+        "stage_sequence_uint_dec",
+        "stage_state_sha256",
+        "generation_job_id",
+        "generation_job_state",
+        "stage_transition_receipt_sha256",
+        "cancellation_receipt_sha256",
+        "cancellation_outcome",
+        "worker_fence_receipt_sha256",
+        "worker_fence_state",
+        "completion_receipt_sha256",
+        "generation_token_sha256",
+        "atomic_lifecycle_token_sha256",
+        "live_reference_count_uint_dec",
+        "active_lease_count_uint_dec",
+        "pin_count_uint_dec",
+        "is_canonical",
+        "is_derived",
+        "exclusive_allocation",
+        "branch_id",
+        "parent_materialization_id",
+        "legal_hold",
+        "retention_hold",
+        "reconstruction_descriptor_sha256",
+        "reconstruction_proof_valid",
+        "storage_tier",
+        "resident_bytes",
+        "prediction_epoch_id",
+        "route_epoch_id",
+        "safety_state_sha256"
+      ],
+      "properties": {
+        "record_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "materialization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "physical_allocation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "record_version_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "time_domain_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "logical_time_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "stage_entered_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_observed_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "stage_sequence_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "stage_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "generation_job_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "generation_job_state": {
+          "$ref": "#/$defs/generation_job_state"
+        },
+        "stage_transition_receipt_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "cancellation_receipt_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "cancellation_outcome": {
+          "enum": [
+            null,
+            "CANCELLED_BEFORE_START",
+            "CANCELLED_DURING_RUN"
+          ]
+        },
+        "worker_fence_receipt_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "worker_fence_state": {
+          "enum": [
+            null,
+            "ACTIVE",
+            "QUIESCED"
+          ]
+        },
+        "completion_receipt_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "generation_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "atomic_lifecycle_token_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "live_reference_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "active_lease_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "pin_count_uint_dec": {
+          "$ref": "#/$defs/uint_dec"
+        },
+        "is_canonical": {
+          "type": "boolean"
+        },
+        "is_derived": {
+          "type": "boolean"
+        },
+        "exclusive_allocation": {
+          "type": "boolean"
+        },
+        "branch_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "parent_materialization_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "legal_hold": {
+          "type": "boolean"
+        },
+        "retention_hold": {
+          "type": "boolean"
+        },
+        "reconstruction_descriptor_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "reconstruction_proof_valid": {
+          "type": "boolean"
+        },
+        "storage_tier": {
+          "enum": [
+            "NONE",
+            "RAM_HEAP",
+            "RAM_PINNED",
+            "VRAM_KV_PAGE",
+            "DISK_QUARANTINE",
+            "REFERENCE_ONLY"
+          ]
+        },
+        "resident_bytes": {
+          "$ref": "#/$defs/bytes_dec"
+        },
+        "prediction_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "route_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "safety_state_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "decision_binding_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "materialization_and_content_match",
+        "policy_epoch_match",
+        "prediction_epoch_match",
+        "route_epoch_match",
+        "route_graph_root_match",
+        "route_proof_match_and_pass",
+        "safety_state_match",
+        "allocation_owner_set_match"
+      ],
+      "properties": {
+        "materialization_and_content_match": {
+          "type": "boolean"
+        },
+        "policy_epoch_match": {
+          "type": "boolean"
+        },
+        "prediction_epoch_match": {
+          "type": "boolean"
+        },
+        "route_epoch_match": {
+          "type": "boolean"
+        },
+        "route_graph_root_match": {
+          "type": "boolean"
+        },
+        "route_proof_match_and_pass": {
+          "type": "boolean"
+        },
+        "safety_state_match": {
+          "type": "boolean"
+        },
+        "allocation_owner_set_match": {
+          "type": "boolean"
+        }
+      }
+    },
+    "commit_binding_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_token_hash_match",
+        "materialization_and_content_match",
+        "record_version_match",
+        "stage_and_job_state_match",
+        "generation_and_lifecycle_tokens_match",
+        "policy_epoch_match",
+        "prediction_epoch_match",
+        "route_epoch_match",
+        "route_graph_root_match",
+        "route_proof_hash_match_and_current_pass",
+        "current_safety_state_match",
+        "current_allocation_owner_set_match",
+        "current_action_gate_pass",
+        "actual_release_not_above_upper_bound",
+        "released_bytes_equal_allocator_delta",
+        "authority_valid"
+      ],
+      "properties": {
+        "decision_token_hash_match": {
+          "type": "boolean"
+        },
+        "materialization_and_content_match": {
+          "type": "boolean"
+        },
+        "record_version_match": {
+          "type": "boolean"
+        },
+        "stage_and_job_state_match": {
+          "type": "boolean"
+        },
+        "generation_and_lifecycle_tokens_match": {
+          "type": "boolean"
+        },
+        "policy_epoch_match": {
+          "type": "boolean"
+        },
+        "prediction_epoch_match": {
+          "type": "boolean"
+        },
+        "route_epoch_match": {
+          "type": "boolean"
+        },
+        "route_graph_root_match": {
+          "type": "boolean"
+        },
+        "route_proof_hash_match_and_current_pass": {
+          "type": "boolean"
+        },
+        "current_safety_state_match": {
+          "type": "boolean"
+        },
+        "current_allocation_owner_set_match": {
+          "type": "boolean"
+        },
+        "current_action_gate_pass": {
+          "type": "boolean"
+        },
+        "actual_release_not_above_upper_bound": {
+          "type": "boolean"
+        },
+        "released_bytes_equal_allocator_delta": {
+          "type": "boolean"
+        },
+        "authority_valid": {
+          "type": "boolean"
+        }
+      }
+    },
+    "false_miss_binding_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit_action_eligible",
+        "commit_receipt_bound",
+        "materialization_match",
+        "content_sha256_match",
+        "prediction_epoch_match",
+        "route_epoch_match",
+        "demand_event_bound",
+        "actual_hit",
+        "gtp_byte_exact_match"
+      ],
+      "properties": {
+        "commit_action_eligible": {
+          "type": "boolean"
+        },
+        "commit_receipt_bound": {
+          "type": "boolean"
+        },
+        "materialization_match": {
+          "type": "boolean"
+        },
+        "content_sha256_match": {
+          "type": "boolean"
+        },
+        "prediction_epoch_match": {
+          "type": "boolean"
+        },
+        "route_epoch_match": {
+          "type": "boolean"
+        },
+        "demand_event_bound": {
+          "type": "boolean"
+        },
+        "actual_hit": {
+          "type": "boolean"
+        },
+        "gtp_byte_exact_match": {
+          "type": "boolean"
+        }
+      }
+    },
+    "router_dlq_anti_replay_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_version",
+        "receipt_id",
+        "receipt_sha256",
+        "input_scope",
+        "component_implementation_state",
+        "moving_v_binding_state",
+        "source_implementation_ref",
+        "producer_node_id",
+        "producer_boot_id",
+        "producer_ref",
+        "router_id",
+        "router_epoch_id",
+        "membership_epoch_id",
+        "payload_sha256",
+        "content_sha256",
+        "nonce",
+        "idempotency_key",
+        "dedupe_key",
+        "first_seen_at_ns",
+        "duplicate_seen_at_ns",
+        "ledger_ref",
+        "ledger_sha256",
+        "ledger_persistence",
+        "atomic_persistence_state",
+        "dlq_reason",
+        "decision",
+        "authority_ref",
+        "authority_state",
+        "dlq_record_ref",
+        "receipt_state",
+        "failure_code"
+      ],
+      "properties": {
+        "payload_version": {
+          "const": "W7TP-ROUTER-DLQ-ANTI-REPLAY-RECEIPT/2.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_scope": {
+          "enum": [
+            "MOVING_V_ROUTE_INPUT",
+            "MOVING_V_CANCELLATION_INPUT",
+            "MOVING_V_CLEANUP_INPUT"
+          ]
+        },
+        "component_implementation_state": {
+          "enum": [
+            "DIRECT_NATIVE",
+            "ADAPTER_REQUIRED"
+          ]
+        },
+        "moving_v_binding_state": {
+          "enum": [
+            "DIRECT_NATIVE",
+            "ADAPTER_REQUIRED"
+          ]
+        },
+        "source_implementation_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "producer_node_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "producer_boot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "producer_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "router_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "router_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "membership_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "nonce": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 256
+        },
+        "idempotency_key": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 256
+        },
+        "dedupe_key": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 256
+        },
+        "first_seen_at_ns": {
+          "$ref": "#/$defs/ns_dec"
+        },
+        "duplicate_seen_at_ns": {
+          "$ref": "#/$defs/nullable_ns_dec"
+        },
+        "ledger_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "ledger_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "ledger_persistence": {
+          "enum": [
+            "SQLITE_PERSISTENT",
+            "APPEND_ONLY_DURABLE",
+            "IN_MEMORY_MOCK",
+            "UNKNOWN"
+          ]
+        },
+        "atomic_persistence_state": {
+          "enum": [
+            "PROVEN_ATOMIC",
+            "NOT_PROVEN",
+            "MOCK_ONLY"
+          ]
+        },
+        "dlq_reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "decision": {
+          "enum": [
+            "FIRST_SEEN_ALLOW",
+            "DUPLICATE_DEAD_LETTER",
+            "INVALID_DEAD_LETTER",
+            "HOLD"
+          ]
+        },
+        "authority_ref": {
+          "$ref": "#/$defs/typed_ref"
+        },
+        "authority_state": {
+          "enum": [
+            "CANDIDATE_ONLY",
+            "SHADOW_AUTHORIZED",
+            "RAM_CANARY_AUTHORIZED",
+            "FORMAL_AUTHORIZED"
+          ]
+        },
+        "dlq_record_ref": {
+          "$ref": "#/$defs/nullable_typed_ref"
+        },
+        "receipt_state": {
+          "enum": [
+            "PASS",
+            "HOLD"
+          ]
+        },
+        "failure_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "decision": {
+                "const": "FIRST_SEEN_ALLOW"
+              }
+            },
+            "required": [
+              "decision"
+            ]
+          },
+          "then": {
+            "properties": {
+              "duplicate_seen_at_ns": {
+                "type": "null"
+              },
+              "dlq_record_ref": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "decision": {
+                "const": "DUPLICATE_DEAD_LETTER"
+              }
+            },
+            "required": [
+              "decision"
+            ]
+          },
+          "then": {
+            "properties": {
+              "duplicate_seen_at_ns": {
+                "$ref": "#/$defs/ns_dec"
+              },
+              "dlq_record_ref": {
+                "$ref": "#/$defs/typed_ref"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "moving_v_binding_state": {
+                "const": "DIRECT_NATIVE"
+              },
+              "receipt_state": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "moving_v_binding_state",
+              "receipt_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "component_implementation_state": {
+                "const": "DIRECT_NATIVE"
+              },
+              "ledger_persistence": {
+                "enum": [
+                  "SQLITE_PERSISTENT",
+                  "APPEND_ONLY_DURABLE"
+                ]
+              },
+              "atomic_persistence_state": {
+                "const": "PROVEN_ATOMIC"
+              },
+              "failure_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "moving_v_binding_state": {
+                "const": "ADAPTER_REQUIRED"
+              }
+            },
+            "required": [
+              "moving_v_binding_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "receipt_state": {
+                "const": "HOLD"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

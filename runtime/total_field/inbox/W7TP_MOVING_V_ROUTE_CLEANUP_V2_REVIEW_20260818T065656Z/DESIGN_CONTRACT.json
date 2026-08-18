@@ -1,0 +1,46 @@
+{
+  "contract_version": "W7TP-MOVING-V-ROUTE-CLEANUP-REVIEW-CONTRACT/2.0",
+  "run_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_REVIEW_20260818T065656Z",
+  "current_mode": "SHADOW_ONLY_STATIC_VALIDATION",
+  "lifecycle_order": [
+    "PREDICTED_NOT_GENERATED",
+    "GENERATION_SCHEDULED_OR_RUNNING",
+    "GENERATION_COMPLETED"
+  ],
+  "time_invariants": [
+    "EXPLICIT_TIME_DOMAIN",
+    "MONOTONIC_STAGE_TIME",
+    "TRANSITION_RECEIPT_REQUIRED",
+    "CURRENT_GUARD_FAIL_CLOSED"
+  ],
+  "watermark_invariants": [
+    "EXACT_MEMBERSHIP",
+    "MEMBERSHIP_EPOCH_BOUND",
+    "NO_ADVANCE_ON_UNKNOWN_OR_PARTITION"
+  ],
+  "route_invariants": [
+    "ROUTE_PROOF_BOUND",
+    "POLICY_EPOCH_BOUND",
+    "INVALIDATION_RECEIPT_REQUIRED",
+    "DECISION_TOKEN_BOUND"
+  ],
+  "error_branch_contract": {
+    "PREDICTED_NOT_GENERATED": "CANCEL_PREDICTED_CANDIDATE_ONLY",
+    "GENERATION_SCHEDULED_OR_RUNNING": "REQUEST_CANCEL_AND_WAIT_FOR_TERMINAL_CANCEL_RECEIPT",
+    "GENERATION_COMPLETED": "ONLY_EXCLUSIVE_NONCANONICAL_DERIVED_MATERIALIZATION_MAY_BE_RECLAIMED"
+  },
+  "memory_budget": {
+    "initial_ceiling_bytes_uint_dec": "2147483648",
+    "reservation": false,
+    "tunable_with_real_ux_and_capacity_evidence": true
+  },
+  "canonicality": {
+    "canonical_action": "RETAIN",
+    "hard_delete_allowed": false,
+    "shared_or_unknown_owner_action": "HOLD"
+  },
+  "live_authority": {
+    "granted": false,
+    "separate_total_field_receipt_required": true
+  }
+}
