@@ -11,6 +11,30 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RANK = {"PASS": 0, "INFO": 1, "WARN": 2, "HOLD": 3, "BLOCK": 4}
+_READONLY_SQL_AUDIT = {
+    "query_count": 0,
+    "mutation_count": 0,
+    "transaction_read_only_confirmed": False,
+    "queries": [],
+}
+_ACTIVE_ALERTS_READONLY_QUERY = """
+    SELECT COALESCE(jsonb_agg(to_jsonb(a)), '[]'::jsonb)
+    FROM (
+      SELECT id, run_id, event_type, alert_level, title, summary,
+             evidence_ref, reverse_refs, affected_paths
+      FROM d8_active_possible_alerts
+      ORDER BY created_at
+    ) a;
+    """
+
+
+def normalize_sql(sql: str) -> str:
+    return " ".join(sql.split())
+
+
+_READONLY_SQL_ALLOWLIST_SHA256 = {
+    hashlib.sha256(normalize_sql(_ACTIVE_ALERTS_READONLY_QUERY).encode("utf-8")).hexdigest()
+}
 
 
 def run_psql(sql: str) -> str:
@@ -37,14 +61,24 @@ def run_psql(sql: str) -> str:
 
 
 def ensure_readonly_sql(sql: str) -> None:
-    forbidden = r"(?is)\b(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE|CALL|DO|COPY|BEGIN|START\s+TRANSACTION|COMMIT|ROLLBACK|SAVEPOINT|RELEASE)\b"
+    forbidden = r"(?is)\b(INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE|CALL|DO|COPY|SET|RESET|PREPARE|EXECUTE|DEALLOCATE|BEGIN|START\s+TRANSACTION|COMMIT|ROLLBACK|SAVEPOINT|RELEASE)\b"
     if re.search(forbidden, sql):
         raise ValueError("SQL mutation is forbidden in read-only preflight")
+    normalized = normalize_sql(sql)
+    query_hash = hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+    if query_hash not in _READONLY_SQL_ALLOWLIST_SHA256:
+        raise ValueError("SQL is not in the read-only preflight allowlist")
 
 
 def run_psql_readonly(sql: str) -> str:
     ensure_readonly_sql(sql)
-    guarded_sql = "SELECT current_setting('transaction_read_only');\n" + sql
+    guarded_sql = (
+        "SELECT current_setting('transaction_read_only');\n"
+        "SELECT current_setting('default_transaction_read_only');\n"
+        "SELECT pg_current_xact_id_if_assigned() IS NULL;\n"
+        + sql
+        + "\nSELECT pg_current_xact_id_if_assigned() IS NULL;"
+    )
     containers = subprocess.check_output(
         ["docker", "ps", "--filter", "label=com.docker.compose.service=d8_db", "--format", "{{.Names}}"],
         cwd=ROOT, text=True,
@@ -69,9 +103,32 @@ def run_psql_readonly(sql: str) -> str:
         guarded_sql,
     ]
     lines = subprocess.check_output(cmd, cwd=ROOT, text=True).splitlines()
-    if not lines or lines[0].strip() != "on":
+    if len(lines) < 5 or lines[0].strip() != "on" or lines[1].strip() != "on":
         raise RuntimeError("database read-only protection is not active")
-    return "\n".join(lines[1:]).strip()
+    if lines[2].strip() != "t" or lines[-1].strip() != "t":
+        raise RuntimeError("read-only query assigned a transaction id")
+    _READONLY_SQL_AUDIT["query_count"] += 1
+    _READONLY_SQL_AUDIT["transaction_read_only_confirmed"] = True
+    _READONLY_SQL_AUDIT["xid_assigned"] = False
+    _READONLY_SQL_AUDIT["queries"].append({
+        "statement_class": "SELECT",
+        "sql_sha256": hashlib.sha256(normalize_sql(sql).encode("utf-8")).hexdigest(),
+    })
+    return "\n".join(lines[3:-1]).strip()
+
+
+def reset_readonly_sql_audit() -> None:
+    _READONLY_SQL_AUDIT.update({
+        "query_count": 0,
+        "mutation_count": 0,
+        "transaction_read_only_confirmed": False,
+        "xid_assigned": False,
+        "queries": [],
+    })
+
+
+def readonly_sql_audit() -> dict:
+    return json.loads(canonical_json(_READONLY_SQL_AUDIT))
 
 
 def sql_literal(value: str) -> str:
@@ -79,15 +136,7 @@ def sql_literal(value: str) -> str:
 
 
 def load_alerts(*, read_only: bool = False) -> list[dict]:
-    query = """
-        SELECT COALESCE(jsonb_agg(to_jsonb(a)), '[]'::jsonb)
-        FROM (
-          SELECT id, run_id, event_type, alert_level, title, summary,
-                 evidence_ref, reverse_refs, affected_paths
-          FROM d8_active_possible_alerts
-          ORDER BY created_at
-        ) a;
-        """
+    query = _ACTIVE_ALERTS_READONLY_QUERY
     raw = run_psql_readonly(query) if read_only else run_psql(query)
     return json.loads(raw or "[]")
 
@@ -137,6 +186,24 @@ def canonical_json(payload: dict) -> str:
 
 def sha256_payload(payload: dict) -> str:
     return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+
+
+def evaluation_insert_projection(candidate: dict) -> dict:
+    """Return the exact logical row the persistence phase would insert."""
+    return {
+        "run_id": candidate["run_id"],
+        "task_name": candidate["task_name"],
+        "task_scope": json.loads(canonical_json(candidate["task_scope"])),
+        "matched_alerts": json.loads(canonical_json(candidate["matched_alerts"])),
+        "decision": candidate["decision"],
+        "reason": candidate["reason"],
+        "executable": False,
+        "pollution_guard": True,
+    }
+
+
+def evaluation_insert_projection_sha256(candidate: dict) -> str:
+    return sha256_payload(evaluation_insert_projection(candidate))
 
 
 def prepare_evaluation(
@@ -212,6 +279,17 @@ def validate_evaluation(candidate: dict, *, now: dt.datetime | None = None) -> d
     hash_input = json.loads(canonical_json(candidate))
     claimed_hash = str(hash_input.get("envelope", {}).get("candidate_sha256") or "")
     hash_input["envelope"]["candidate_sha256"] = ""
+    matched_alerts = candidate.get("matched_alerts") if isinstance(candidate.get("matched_alerts"), list) else []
+    expected_payload = {
+        "scope": candidate.get("task_scope"),
+        "matched_alert_ids": [item.get("alert_id") for item in matched_alerts],
+        "decision": candidate.get("decision"),
+        "reason": candidate.get("reason"),
+    }
+    try:
+        insert_projection = evaluation_insert_projection(candidate)
+    except (KeyError, TypeError, ValueError):
+        insert_projection = {}
     checks = {
         "schema": candidate.get("schema_version") == "D8_GUARD_EVALUATION_CANDIDATE_V1",
         "required_fields": required.issubset(candidate),
@@ -225,7 +303,18 @@ def validate_evaluation(candidate: dict, *, now: dt.datetime | None = None) -> d
         "authority": candidate.get("authority", {}).get("persistence_authority") is False and candidate.get("authority", {}).get("production_authority") is False,
         "risk_gates": candidate.get("risk_gates", {}).get("allow_persistence") is False and candidate.get("risk_gates", {}).get("decision") == candidate.get("decision"),
         "evidence_refs": isinstance(candidate.get("evidence_refs"), list),
-        "evaluation_payload": isinstance(candidate.get("evaluation_payload"), dict),
+        "evaluation_payload": candidate.get("evaluation_payload") == expected_payload,
+        "insert_projection": bool(insert_projection)
+        and insert_projection.get("run_id") == candidate.get("run_id")
+        and insert_projection.get("task_name") == candidate.get("task_name")
+        and insert_projection.get("task_scope") == candidate.get("task_scope")
+        and insert_projection.get("matched_alerts") == matched_alerts
+        and insert_projection.get("decision") == candidate.get("decision")
+        and insert_projection.get("reason") == candidate.get("reason")
+        and candidate.get("executable") is False
+        and candidate.get("pollution_guard") is True
+        and insert_projection.get("executable") is False
+        and insert_projection.get("pollution_guard") is True,
     }
     try:
         created_at = dt.datetime.fromisoformat(str(envelope.get("created_at")))
@@ -240,50 +329,24 @@ def persist_evaluation(candidate: dict) -> None:
     validation = validate_evaluation(candidate)
     if validation["state"] != "PASS":
         raise ValueError("evaluation candidate validation failed before persistence")
-    matched = [
-        {
-            "id": item.get("id"),
-            "event_type": item.get("alert_id"),
-            "alert_level": item.get("alert_level"),
-        }
-        for item in candidate["matched_alerts"]
-    ]
-    _insert_evaluation(
-        candidate["run_id"],
-        candidate["task_name"],
-        candidate["task_scope"],
-        matched,
-        candidate["decision"],
-        candidate["reason"],
-    )
+    _insert_evaluation(evaluation_insert_projection(candidate))
 
 
-def _insert_evaluation(run_id: str, task_name: str, scope: dict, matched: list[dict], decision: str, reason: str) -> None:
-    payload = {
-        "scope": scope,
-        "matched_alerts": [
-            {
-                "id": a.get("id"),
-                "alert_id": a.get("event_type"),
-                "alert_level": a.get("alert_level"),
-            }
-            for a in matched
-        ],
-    }
+def _insert_evaluation(projection: dict) -> None:
     sql = f"""
     INSERT INTO d8_guard_evaluations (
       run_id, task_name, task_scope, matched_alerts, decision, reason,
       executable, pollution_guard
     )
     VALUES (
-      {sql_literal(run_id)},
-      {sql_literal(task_name)},
-      {sql_literal(json.dumps(scope, ensure_ascii=False))}::jsonb,
-      {sql_literal(json.dumps(payload["matched_alerts"], ensure_ascii=False))}::jsonb,
-      {sql_literal(decision)},
-      {sql_literal(reason)},
-      false,
-      true
+      {sql_literal(projection["run_id"])},
+      {sql_literal(projection["task_name"])},
+      {sql_literal(canonical_json(projection["task_scope"]))}::jsonb,
+      {sql_literal(canonical_json(projection["matched_alerts"]))}::jsonb,
+      {sql_literal(projection["decision"])},
+      {sql_literal(projection["reason"])},
+      {str(projection["executable"]).lower()},
+      {str(projection["pollution_guard"]).lower()}
     );
     """
     run_psql(sql)
