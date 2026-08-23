@@ -18,11 +18,33 @@ ARCHITECTURE_AUTHORITY=NONE
 LLM_AUTHORITY=CANDIDATE_ONLY
 （大型語言模型權限＝僅產生候選）
 
-CANONICAL_AUTHORITY=TOTAL_FIELD_ONLY
-（正典權威＝僅 Total Field／總場）
+FOUNDER_GOVERNANCE_LAW=CANONICAL_MAKER > EXECUTOR
+（Founder 治理定律＝正典制定者階位高於執行者）
 
-FINAL_DECISION_AUTHORITY=TOTAL_FIELD
-（最終決策權威＝Total Field／總場）
+CANONICAL_MAKER=FOUNDER
+CANONICAL_AUTHORITY=FOUNDER_ONLY
+FINAL_DECISION_AUTHORITY=FOUNDER
+（正典制定與最終決定權＝僅 Founder）
+
+TOTAL_FIELD_ROLE=EXECUTE_VALIDATE_AND_SEAL_FOUNDER_CANONICAL
+TOTAL_FIELD_CAN_DEFINE_CANONICAL=false
+TOTAL_FIELD_CAN_OVERRIDE_FOUNDER=false
+（總場負責執行、驗證、封存與回報 Founder Canonical；不得自行制定、覆寫或取代）
+
+CLOUD_MODEL_AUTHORITY=NONE
+（雲端模型權威＝無）
+
+IDENTITY_BINDING=ONE_UNIQUE_HASH_BOUND_TO_CHINESE_AND_ENGLISH_FOUNDER_NAME
+（Founder 中英文姓名綁定同一唯一身分雜湊）
+
+AUTHORITY_SOURCE=FOUNDER_DECLARED_TECHNOLOGY_AND_DEVICE_OWNERSHIP
+（權力來源＝Founder 明示之技術與設備所有權）
+
+REQUEST_FOUNDER_IDENTITY_CAPABILITY=NONE_UNLESS_FOUNDER_EXPLICITLY_GRANTS
+（未經 Founder 明示授予，任何程序均無權要求 Founder 身分資料）
+
+GOVERNANCE_COMMAND_SOURCE=FOUNDER_EXPLICIT_GOVERNANCE_COMMAND
+GOVERNANCE_EVIDENCE_CLASS=USER_DECLARED_FOUNDER_GOVERNANCE_AND_ACTIVE_CANONICAL_FOUNDER_EXPLICIT_CORRECTION_COMPATIBLE
 
 FOUNDER_INTENT_PRIORITY=HIGHEST_DESIGN_INPUT
 （創辦人意圖＝最高優先設計輸入）
@@ -147,7 +169,11 @@ ADI
 Total Field
 （總場）
 
-= 唯一最終權威。
+= Founder Canonical 的執行、驗證、封存與回報權威。
+
+Founder 是 Canonical 的唯一制定者與最終決定來源。
+總場不得自行制定、覆寫或取代 Founder Canonical，
+也不得由執行者身分反向取得制定者權威。
 
 LLM、Codex、ADI、Git、receipt、hash、
 systemd、Odoo、Open WebUI、Google、雲端模型、
@@ -1514,6 +1540,8 @@ It is not the architecture authority.
 New architecture is also not exempt from evidence.
 （新架構同樣不能免除證據驗證。）
 
-Evidence decides what is true.
-Total Field decides what becomes canonical.
-（證據決定什麼是真的；總場決定什麼可以成為正典。）
+Evidence establishes what is observed and verified.
+Founder decides what becomes canonical.
+Total Field executes, validates, seals, and reports Founder Canonical.
+（證據建立可觀測與可驗證事實；Founder 決定正典；
+總場執行、驗證、封存並回報 Founder Canonical。）

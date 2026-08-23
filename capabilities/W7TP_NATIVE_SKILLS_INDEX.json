@@ -1,0 +1,19 @@
+{
+  "state": "W7TP_NATIVE_SKILLS_FAST_LAND_BUNDLE",
+  "source_runtime_required": false,
+  "external_authority_inherited": false,
+  "skills": [
+    "w7tp-external-capability-gateway",
+    "w7tp-deterministic-effect-gate",
+    "w7tp-bounded-delegation-chain",
+    "w7tp-stateful-information-flow",
+    "w7tp-execution-evidence-lifecycle"
+  ],
+  "composition": "gateway -> effect-gate -> delegation/info-flow as needed -> execution -> evidence-lifecycle",
+  "authority_wall": {
+    "external_admin_is_founder": false,
+    "external_identity_is_founder": false,
+    "external_policy_is_d8": false,
+    "external_allow_is_effect_authorization": false
+  }
+}

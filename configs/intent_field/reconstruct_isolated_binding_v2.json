@@ -1,0 +1,41 @@
+{
+  "binding_id": "W7TP-INTENT-FIELD-RECONSTRUCT-ISOLATED-BINDING/2.0",
+  "state": "CANDIDATE",
+  "node": "taiji01",
+  "skill_operation": "RECONSTRUCT_ISOLATED",
+  "runtime_action": "P2_ISOLATED_CANARY",
+  "contract": "W7TP-TOTAL-FIELD-RECONSTRUCT-ISOLATED/2.0",
+  "receipt_contract": "W7TP-TOTAL-FIELD-RECONSTRUCT-ISOLATED-RECEIPT/2.0",
+  "entrypoint": "tools/total_field/w7tp_reconstruct_isolated_validator.py",
+  "reviewer": "tools/total_field/w7tp_reconstruct_isolated_reviewer.py",
+  "decision_schema": "schemas/field/w7tp_total_field_reconstruct_isolated_decision_v2.schema.json",
+  "review_receipt_schema": "schemas/field/w7tp_total_field_reconstruct_isolated_review_receipt_v2.schema.json",
+  "runner_gate": "tools/total_field/w7tp_reconstruct_isolated_runner_gate.py",
+  "runner_gate_required_before_any_execution": true,
+  "review_receipt_contract": "W7TP-TOTAL-FIELD-RECONSTRUCT-ISOLATED-REVIEW-RECEIPT/2.0",
+  "authority_architecture": "REUSE_EXISTING_TOTAL_FIELD_POINTER_AND_FOUNDER_AUTHORIZATION_REFS",
+  "receipt_builder": "tools/total_field/w7tp_reconstruct_isolated_receipt.py",
+  "target_native_gateway": "tools/total_field_candidate_gateway.py",
+  "target_native_reconstruction_base": "tools.w7tp_secondary_cloud_packet_ramp.reconstruct_local_state",
+  "target_field_snapshot_sha256": "4acccea6e5caaa085857fa65c665e25bb9463394860e324de158d5bec35dc323",
+  "target_base_state_sha256": "2253afcc5d72625ed8f3af5a4267669f5dd8e9a9c6cbea044a90c3ba70f2dce2",
+  "target_successor_canonical_sha256": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d",
+  "minimum_generative_delta_sha256": "ab875e3ea504cdcdbedd63416dd89e36ab9e491a4dfa34b28a21da411d269782",
+  "delta_items": [
+    "SUCCESSOR_EXACT_SHA_SHADOW_CONSUMER_BINDING",
+    "9107_OUTPUT_TO_RECONSTRUCT_LOCAL_STATE_BINDING_ONLY"
+  ],
+  "call_edge": {
+    "source": "9107_CANDIDATE_NORMALIZED_OUTPUT",
+    "target": "tools.w7tp_secondary_cloud_packet_ramp.reconstruct_local_state",
+    "effect": "BINDING_ONLY",
+    "verification_required": true,
+    "evidence_required": true
+  },
+  "new_adapter_required": false,
+  "9110_required": false,
+  "v1_predecessor_preserved": true,
+  "v1_mutated": false,
+  "activation": false,
+  "live_effect": false
+}

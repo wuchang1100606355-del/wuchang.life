@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_total_field_d8_review_receipt_v2.schema.json",
+  "title": "W7TP Total Field Reconstruct Isolated Receipt V2",
+  "type": "object",
+  "required": [
+    "contract",
+    "receipt_id",
+    "created_at",
+    "request_sha256",
+    "scope_sha256",
+    "target_field_snapshot_sha256",
+    "target_base_state_sha256",
+    "target_successor_canonical_sha256",
+    "minimum_generative_delta_sha256",
+    "target_reconstruction_evidence_sha256",
+    "red_team_post_reconstruction_sha256",
+    "validation_report_sha256",
+    "evidence_verification",
+    "candidate_only",
+    "commit_applied",
+    "no_action",
+    "no_live_effect",
+    "existing_services_unchanged",
+    "live_rebind_occurred",
+    "live_9107_mutation_occurred",
+    "db_write_occurred",
+    "service_restart_occurred",
+    "canonical_mutation_occurred",
+    "pointer_mutation_occurred",
+    "deployment_occurred",
+    "promotion_occurred",
+    "activation_occurred",
+    "landing_occurred",
+    "single_use_consumed",
+    "replay_disposition",
+    "receipt_self_hash_algorithm",
+    "receipt_self_sha256"
+  ],
+  "properties": {
+    "contract": {
+      "const": "W7TP-TOTAL-FIELD-RECONSTRUCT-ISOLATED-RECEIPT/2.0"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^W7TP_RECONSTRUCT_ISOLATED_RECEIPT_V2_[A-Za-z0-9._-]+$"
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "request_sha256": {"$ref": "#/$defs/sha256"},
+    "scope_sha256": {"$ref": "#/$defs/sha256"},
+    "target_field_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+    "target_base_state_sha256": {"$ref": "#/$defs/sha256"},
+    "target_successor_canonical_sha256": {"$ref": "#/$defs/sha256"},
+    "minimum_generative_delta_sha256": {"$ref": "#/$defs/sha256"},
+    "target_reconstruction_evidence_sha256": {"$ref": "#/$defs/sha256"},
+    "red_team_post_reconstruction_sha256": {"$ref": "#/$defs/sha256"},
+    "validation_report_sha256": {"$ref": "#/$defs/sha256"},
+    "evidence_verification": {
+      "type": "object",
+      "required": [
+        "source",
+        "request_sha256_verified",
+        "scope_sha256_verified",
+        "target_hashes_verified",
+        "exact_targets_verified",
+        "red_team_open_high_critical"
+      ],
+      "properties": {
+        "source": {"const": "VALIDATION_REPORT_AND_HASH_BOUND_EXECUTION_EVIDENCE"},
+        "request_sha256_verified": {"const": true},
+        "scope_sha256_verified": {"const": true},
+        "target_hashes_verified": {"const": true},
+        "exact_targets_verified": {"const": true},
+        "red_team_open_high_critical": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "candidate_only": {"const": true},
+    "commit_applied": {"const": false},
+    "no_action": {"const": true},
+    "no_live_effect": {"const": true},
+    "existing_services_unchanged": {"const": true},
+    "live_rebind_occurred": {"const": false},
+    "live_9107_mutation_occurred": {"const": false},
+    "db_write_occurred": {"const": false},
+    "service_restart_occurred": {"const": false},
+    "canonical_mutation_occurred": {"const": false},
+    "pointer_mutation_occurred": {"const": false},
+    "deployment_occurred": {"const": false},
+    "promotion_occurred": {"const": false},
+    "activation_occurred": {"const": false},
+    "landing_occurred": {"const": false},
+    "single_use_consumed": {"const": true},
+    "replay_disposition": {"const": "CONSUMED_EXACTLY_ONCE"},
+    "receipt_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_RECEIPT_SELF_SHA256/1.0"
+    },
+    "receipt_self_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}
