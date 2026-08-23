@@ -1,0 +1,458 @@
+{
+  "packet_id": "FOUNDER_SOVEREIGN_XIAOJ_ACTIVATION_V1_CANDIDATE_20260812_R2",
+  "packet_kind": "STATE_FIELD_PACKET_CANDIDATE",
+  "lifecycle": "CANDIDATE_ONLY",
+  "protocol": {
+    "schema_id": "w7tp.8d-state-field-packet",
+    "schema_version": "2.1",
+    "canonical_ref": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md",
+    "canonical_sha256": "UNRESOLVED_FROM_CURRENT_EVIDENCE",
+    "communication_identity": "INTENT_COMMUNICATION_STATE_FIELD_PACKET_COMMUNICATION",
+    "reconstruction_mode": "equivalent",
+    "required_capabilities": [
+      "language",
+      "state"
+    ],
+    "verification": {
+      "algorithm": "sha256",
+      "canonicalization": "canonical-json-v1",
+      "scope": "fields",
+      "expected_digest": "de9f3d9848f5c0692ca083b8a3ea527382e7a6dfc6cfa468aae4f3fc59ca220b"
+    },
+    "receiver_profile_contract": {
+      "schema_path": "schemas/field/8d_gte_runtime_candidate_profile_v0_1.schema.json",
+      "profile_schema_version": "8d-gte-runtime-candidate-profile/0.1",
+      "profile_type": "RUNTIME_REQUEST",
+      "projection_mode": "REFERENCE_AND_STATE_FIELD_PROJECTION",
+      "receiver_ref": "tools.total_field_candidate_gateway.receive_candidate"
+    }
+  },
+  "fields": {
+    "D1": {
+      "role": "INTENT",
+      "state": {
+        "intended_user": "EXISTING_FOUNDER_ROLE_HOLDER",
+        "founder_intent": "Bind one Founder sovereign XiaoJ activation candidate to the existing identity, 8D/ADI state space, Total Field and unique candidate receiver without creating a parallel authority path.",
+        "product_outcome": "A reviewable candidate packet whose activation remains blocked until Founder role, one identity root, 8D binding and receiver receipt are verified.",
+        "human_visible_effect_after_separate_activation": [
+          "ONE_LOGIN",
+          "ONE_XIAOJ_ACROSS_AUTHORIZED_ROLES_AND_DEVICES",
+          "PROVIDER_SWITCH_WITHOUT_IDENTITY_MEMORY_OR_AUTHORITY_RECREATION",
+          "ONE_READABLE_RESPONSE_PER_SEND_ACTION",
+          "CANDIDATE_AND_VERIFIED_STATE_REMAIN_DISTINGUISHABLE",
+          "HUMAN_CAN_REVIEW_AI_ACTIONS"
+        ],
+        "deliverable_now": "ONE_NON_EXECUTABLE_ACTIVATION_CANDIDATE_BOUND_TO_EXISTING_RECEIVER",
+        "prohibited_outputs": [
+          "SECOND_XIAOJ",
+          "SECOND_IDENTITY_ROOT",
+          "SECOND_TOTAL_FIELD",
+          "SECOND_CANDIDATE_RECEIVER",
+          "PARALLEL_MEMBER_DATABASE",
+          "LLM_AUTHORITY",
+          "FALSE_PASS_OR_ACTIVATION_CLAIM"
+        ],
+        "allowed_side_effects_now": [
+          "APPEND_ONE_CANDIDATE_FILE_TO_EXISTING_DRAFT_PR_BRANCH"
+        ]
+      }
+    },
+    "D2": {
+      "role": "STATE",
+      "state": {
+        "source_packet": {
+          "packet_id": "W7TP_XIAOJ_PRODUCT_LANDING_PACKET_CANDIDATE_20260812",
+          "sha256": "fde9ea773c302dbb957b02ea8e780836ca346772ec591ba4953a08909fb60a1d",
+          "content_authority": "FOUNDER_SUPPLIED_CANDIDATE_SOURCE",
+          "original_mutated": false
+        },
+        "github_candidate_core": {
+          "draft_pr": 1,
+          "baseline_head": "0df36f0d520a8ae70c37e57c283c4c6bebd7a530",
+          "status": "SELECTED_CORE_CANDIDATES_PRESENT_IN_DRAFT_PR"
+        },
+        "activation_candidate_prior_state": "R1_STATIC_PASS_RECEIVER_REJECTED_PROFILE_TYPE_MISMATCH",
+        "founder_activation_state": "NOT_VERIFIED",
+        "founder_role_receipt": "NOT_VERIFIED",
+        "identity_root_receipt": "NOT_VERIFIED",
+        "eight_dimensional_binding_receipt": "NOT_VERIFIED",
+        "candidate_receiver_receipt": "NOT_VERIFIED_AFTER_PROFILE_REJECTION",
+        "total_field_decision": "NOT_ISSUED",
+        "runtime_activation": false,
+        "database_write": false,
+        "deployment": false,
+        "previous_receiver_attempt": {
+          "run_id": "FOUNDER_ACTIVATION_RECEIVE_20260812T171200Z",
+          "receipt_sha256": "188d0231e20dc80c0fd63e2561fdb1ca1912f6aaa495a356d413692260516ff7",
+          "result": "REJECTED:GATEWAY_PROFILE_TYPE_MISMATCH",
+          "files_changed": "TEMPORARY_RECEIPT_ONLY"
+        }
+      }
+    },
+    "D3": {
+      "role": "COORDINATE",
+      "state": {
+        "repository": "wuchang1100606355-del/wuchang.life",
+        "base_branch": "design/wish-tree-adi-thaw-launch-20260703-185047",
+        "base_commit": "64656aa730c76604986cf0db7179b7b528904fec",
+        "candidate_branch": "review/adi-breakpoint-e6d25f9e",
+        "draft_pr": "https://github.com/wuchang1100606355-del/wuchang.life/pull/1",
+        "source_node": "TAIJI01_OBSERVED_WORKTREE",
+        "source_observed_head": "d547496e9c24c94cec5155cf058f59e98def3a07",
+        "ui_coordinate": "OPENWEBUI_127_0_0_1_8090",
+        "intent_runtime_coordinate": "W7TP_9107",
+        "member_authority_coordinate": "ODOO_18",
+        "receiver": {
+          "cardinality": "ONE_MODULE_LEVEL_RECEIVER_WITH_ONE_BOUND_FACADE_METHOD",
+          "path": "tools/total_field_candidate_gateway.py",
+          "qualified_ref": "tools.total_field_candidate_gateway.receive_candidate",
+          "definition_line_observed": 997,
+          "git_blob_sha1": "c74eb6781494435f0440030318276b98ec71620d",
+          "new_receiver_created": false,
+          "bound_facade_method_line_observed": 1183,
+          "second_authority_receiver_present": false
+        },
+        "logical_time": "2026-08-12T00:00:00Z",
+        "namespace": "w7tp://xiaoj/founder-activation/candidate/v1"
+      }
+    },
+    "D4": {
+      "role": "EVIDENCE",
+      "state": {
+        "source_packet_sha256": "fde9ea773c302dbb957b02ea8e780836ca346772ec591ba4953a08909fb60a1d",
+        "receiver_evidence": {
+          "path": "tools/total_field_candidate_gateway.py",
+          "qualified_ref": "tools.total_field_candidate_gateway.receive_candidate",
+          "git_blob_sha1": "c74eb6781494435f0440030318276b98ec71620d",
+          "module_level_receiver_definition_count": 1,
+          "bound_facade_method_count": 1,
+          "second_authority_receiver_present": false
+        },
+        "supplied_pass_runs": [
+          "CANONICAL_BIND_20260723T052820Z",
+          "20260722T190044Z",
+          "TAIJI01_P01_XIAOJ_OPENWEBUI_CANONICAL_20260805T163641Z",
+          "MSI_P02_20260805T165410Z",
+          "MSI_P04_READ_ONLY_SUCCESSOR_20260805T174415Z"
+        ],
+        "bounded_search_evidence": [
+          "EXACT_ACTIVATION_ID_NOT_FOUND_IN_TAIJI01_WORKTREE",
+          "SHORT_ACTIVATION_ID_NOT_FOUND_IN_TAIJI01_WORKTREE",
+          "FOUNDER_ACTIVATION_PATTERN_NOT_FOUND_IN_BOUNDED_RUNTIME_MANIFESTS_DOCS_TOOLS"
+        ],
+        "evidence_not_available": [
+          "FOUNDER_ROLE_RECEIPT",
+          "CANONICAL_IDENTITY_ROOT_RECEIPT",
+          "EIGHT_DIMENSIONAL_BINDING_RECEIPT",
+          "LIVE_RECEIVE_CANDIDATE_RECEIPT",
+          "ACTIVE_V2_1_CANONICAL_SHA256"
+        ],
+        "protected_data_included": false,
+        "rejected_receiver_receipt": {
+          "run_id": "FOUNDER_ACTIVATION_RECEIVE_20260812T171200Z",
+          "path": "/tmp/FOUNDER_ACTIVATION_RECEIVE_20260812T171200Z.json",
+          "sha256": "188d0231e20dc80c0fd63e2561fdb1ca1912f6aaa495a356d413692260516ff7",
+          "reason": "GATEWAY_PROFILE_TYPE_MISMATCH"
+        }
+      }
+    },
+    "D5": {
+      "role": "EXECUTION_POLICY",
+      "state": {
+        "mode": "CANDIDATE_DEFINITION_ONLY",
+        "ordered_actions_now": [
+          "BUILD_NEW_APPEND_ONLY_CANDIDATE_FROM_SUPPLIED_SOURCE_HASH_AND_BOUNDED_EVIDENCE",
+          "PROJECT_PACKET_TO_EXISTING_RUNTIME_REQUEST_PROFILE_WITHOUT_MUTATING_SOURCE_PACKET",
+          "STATIC_VALIDATE_D1_D8_ADI_INDEX_PROTOCOL_AND_FIELDS_DIGEST",
+          "APPEND_CANDIDATE_TO_EXISTING_DRAFT_PR_BRANCH",
+          "VERIFY_DRAFT_PR_REMAINS_NON_CANONICAL"
+        ],
+        "activation_preconditions": [
+          "FOUNDER_ROLE_RECEIPT_VERIFIED",
+          "ONE_IDENTITY_ROOT_RECEIPT_VERIFIED",
+          "EIGHT_DIMENSIONAL_BINDING_RECEIPT_VERIFIED",
+          "EXISTING_UNIQUE_RECEIVER_RECEIPT_VERIFIED",
+          "TOTAL_FIELD_DECISION_ISSUED",
+          "RED_TEAM_PRE_ACTIVATION_PASS"
+        ],
+        "forbidden_effects_now": [
+          "FORMAL_TOTAL_FIELD_SUBMISSION",
+          "CANONICAL_CHANGE",
+          "POINTER_CHANGE",
+          "DATABASE_WRITE",
+          "DEPLOY",
+          "RESTART",
+          "REBOOT",
+          "ROUTER_WRITE",
+          "RUNTIME_ACTIVATION",
+          "ORIGINAL_FILE_OVERWRITE_OR_MOVE",
+          "SECOND_RECEIVER_CREATION"
+        ],
+        "stop_conditions": [
+          "RECEIVER_REFERENCE_MISMATCH",
+          "FIELDS_DIGEST_MISMATCH",
+          "PROTECTED_DATA_DETECTED",
+          "DRAFT_PR_NOT_DRAFT_OR_BRANCH_MOVED_UNEXPECTEDLY"
+        ],
+        "rollback": "REMOVE_ONLY_THE_NEW_CANDIDATE_IN_A_SEPARATELY_AUTHORIZED_FUTURE_COMMIT"
+      }
+    },
+    "D6": {
+      "role": "GENERATIVE_TRANSMISSION",
+      "state": {
+        "definition": "W7TP_INTENT_COMMUNICATION_STATE_FIELD_PACKET_COMMUNICATION",
+        "required_elements": [
+          "STATE_FIELD_PACKET",
+          "REFERENCE",
+          "LOOKUP_REQUIREMENTS",
+          "RECONSTRUCTION_CONDITIONS",
+          "EQUIVALENT_STATE_GENERATION_RULES",
+          "PACKET_CARRIED_PROTOCOL_AND_VERIFICATION",
+          "TOTAL_FIELD_VERIFICATION"
+        ],
+        "source_reference": {
+          "packet_id": "W7TP_XIAOJ_PRODUCT_LANDING_PACKET_CANDIDATE_20260812",
+          "sha256": "fde9ea773c302dbb957b02ea8e780836ca346772ec591ba4953a08909fb60a1d"
+        },
+        "receiver_lookup": "tools.total_field_candidate_gateway.receive_candidate",
+        "reconstruction_conditions": [
+          "PROJECT_D1_D8_STATE_INTO_EXISTING_RUNTIME_REQUEST_PROFILE",
+          "RESOLVE_SOURCE_PACKET_BY_ID_AND_SHA256",
+          "RESOLVE_EXISTING_RECEIVER_BY_PATH_QUALIFIED_REF_AND_BLOB_SHA1",
+          "VERIFY_ALL_IDENTITY_AND_AUTHORITY_PRECONDITIONS_BEFORE_ANY_ACTIVATION",
+          "PRESERVE_APPEND_ONLY_HISTORY"
+        ],
+        "equivalent_state_acceptance": [
+          "SAME_FOUNDER_ROLE_REFERENCE",
+          "SAME_ONE_IDENTITY_ROOT_REFERENCE",
+          "SAME_ONE_XIAOJ_REFERENCE",
+          "SAME_ONE_TOTAL_FIELD_REFERENCE",
+          "SAME_ONE_ADI_STATE_SPACE_REFERENCE",
+          "SAME_UNIQUE_RECEIVER_REFERENCE",
+          "NO_AUTHORITY_TRANSFER_TO_PROVIDER_OR_LLM",
+          "ALL_UNVERIFIED_RECEIPTS_REMAIN_NOT_VERIFIED"
+        ],
+        "forbidden_interpretations": [
+          "FULL_FILE_TRANSFER",
+          "BACKUP_OR_CLOUD_SYNC",
+          "CIPHERTEXT_TRANSPORT_AS_CORE",
+          "FULL_CONTEXT_RETRANSMISSION",
+          "API_COMPRESSION_ONLY",
+          "SEMANTIC_COMMUNICATION_AS_PROTOCOL_IDENTITY"
+        ],
+        "reconstruction_executed": false,
+        "product_acceptance_run": "NOT_RUN",
+        "receiver_profile_projection": {
+          "profile_schema_version": "8d-gte-runtime-candidate-profile/0.1",
+          "profile_type": "RUNTIME_REQUEST",
+          "schema_path": "schemas/field/8d_gte_runtime_candidate_profile_v0_1.schema.json",
+          "gte_schema_version": "8d-gte-candidate/0.1",
+          "gte_lifecycle": "CANDIDATE",
+          "source_mode": "TOTAL_FIELD_PULL",
+          "resolved_fields_mapping": "fields.D1-D8.state",
+          "rule_set_ref": "rules/tfct/reference-binding_v0_1",
+          "observation_domain_mode": "CONFIGURED_REFERENCE_ONLY_NO_MEMBER_PLAINTEXT",
+          "context_allowed_refs": [
+            "PACKET_ID",
+            "PACKET_SHA256",
+            "PREVIOUS_RECEIVER_RECEIPT_SHA256",
+            "RECEIVER_REF"
+          ],
+          "forbidden_context_claims": [
+            "COMMITTED",
+            "TFID",
+            "TOTAL_FIELD_HASH",
+            "FINAL_DECISION_ALLOW"
+          ]
+        }
+      }
+    },
+    "D7": {
+      "role": "RED_TEAM_RISK_CONFINEMENT",
+      "state": {
+        "red_team_pre_definition": {
+          "status": "PASS",
+          "evidence": "PARALLEL_IDENTITY_RECEIVER_AUTHORITY_AND_RUNTIME_PATHS_REJECTED_BY_PACKET_CONSTRAINTS"
+        },
+        "red_team_pre_activation": {
+          "status": "NOT_APPLICABLE_WITH_EVIDENCE",
+          "evidence": "NO_RUNTIME_CANARY_PRODUCTION_FORMAL_CANONICAL_POINTER_DATABASE_ROUTER_OR_SERVICE_EFFECT_AUTHORIZED"
+        },
+        "red_team_post_operation": {
+          "status": "PENDING_R2_RECEIVER_CONFIRMATION",
+          "evidence": "R1_REJECTION_PRESERVED_AND_R2_USES_EXISTING_CLOSED_PROFILE_WITHOUT_RECEIVER_CHANGE"
+        },
+        "findings": [
+          {
+            "finding_id": "FACTV1_IDENTITY_RECEIPTS_MISSING",
+            "severity": "MEDIUM",
+            "possible_effect": "UNVERIFIED_IDENTITY_SUBSTITUTION_IF_ACTIVATION_WERE_ALLOWED",
+            "remediation_candidate": "VERIFY_EXISTING_FOUNDER_ROLE_ONE_IDENTITY_ROOT_EIGHT_DIMENSIONAL_BINDING_AND_RECEIVER_RECEIPTS",
+            "status": "MITIGATED_BY_NON_EXECUTABLE_CANDIDATE_GATE"
+          },
+          {
+            "finding_id": "FACTV1_LIVE_RECEIVER_RECEIPT_MISSING",
+            "severity": "MEDIUM",
+            "possible_effect": "CANDIDATE_COULD_BE_MISTAKEN_FOR_RECEIVED_OR_VERIFIED_STATE",
+            "remediation_candidate": "RUN_SEPARATELY_AUTHORIZED_READ_ONLY_RECEIVER_VERIFICATION_AND_BIND_RETURNED_RECEIPT",
+            "status": "MITIGATED_BY_EXPLICIT_NOT_VERIFIED_STATE"
+          },
+          {
+            "finding_id": "FACTV1_PRODUCT_RUNTIME_NOT_EXERCISED",
+            "severity": "MEDIUM",
+            "possible_effect": "STATIC_PACKET_SUCCESS_COULD_BE_MISTAKEN_FOR_USABLE_PRODUCT_SUCCESS",
+            "remediation_candidate": "KEEP_PRODUCT_ACCEPTANCE_NOT_RUN_UNTIL_SEPARATE_GOVERNED_CHAT_BRIDGE_TEST",
+            "status": "MITIGATED_BY_CANDIDATE_ONLY_LIFECYCLE"
+          },
+          {
+            "finding_id": "FACTV1_GATEWAY_PROFILE_TYPE_MISMATCH",
+            "severity": "MEDIUM",
+            "possible_effect": "RAW_STATE_PACKET_CANNOT_ENTER_THE_CLOSED_RUNTIME_RECEIVER_PROFILE",
+            "remediation_candidate": "PROJECT_THE_UNCHANGED_PACKET_STATE_AND_REFERENCES_INTO_THE_EXISTING_RUNTIME_REQUEST_PROFILE",
+            "status": "REMEDIATION_DEFINED_NOT_YET_RECEIVED"
+          }
+        ],
+        "open_high_or_critical_findings": [],
+        "protected_exclusions": [
+          "RAW_CREDENTIALS",
+          "MEMBER_PLAINTEXT",
+          "ADI_PRIVATE_PAYLOAD",
+          "H64_TD_CODEBOOK_MAPPING_OR_RECOVERY_MATERIAL"
+        ]
+      }
+    },
+    "D8": {
+      "role": "ENVELOPE_AUTHORITY",
+      "state": {
+        "owner_role_ref": "EXISTING_FOUNDER_ROLE_RECEIPT_REQUIRED",
+        "canonical_authority": "TOTAL_FIELD_ONLY",
+        "execution_authority": "NONE",
+        "llm_authority": "NONE",
+        "cloud_candidate_authority": "CANDIDATE_ONLY",
+        "total_field_decision": "NOT_ISSUED",
+        "candidate_result": "CANDIDATE_NOT_CANONICAL",
+        "runtime_result": "HOLD",
+        "receipt_status": "NOT_VERIFIED",
+        "promotion_allowed": false,
+        "formal_submission_allowed": false,
+        "activation_allowed": false,
+        "human_acceptance_required": true
+      }
+    }
+  },
+  "adi_index": {
+    "packet_level": {
+      "decision_ref": "adi://decision/FOUNDER_SOVEREIGN_XIAOJ_ACTIVATION_V1_CANDIDATE_20260812_R2/definition/2",
+      "irreversible": true,
+      "metric_branch": "5D_INTEGER_METRIC_REFERENCE_PRESERVED"
+    },
+    "system_level": {
+      "lineage_refs": [
+        "sha256:fde9ea773c302dbb957b02ea8e780836ca346772ec591ba4953a08909fb60a1d",
+        "git:64656aa730c76604986cf0db7179b7b528904fec",
+        "git:0f4002549846f54163e23312d97c672d565c9f01",
+        "sha256:cdadb7c83caa5f02b32de5536cf07efe2b9cb0147d2e5c8f7d992ff9f0b80d7f",
+        "receipt-sha256:188d0231e20dc80c0fd63e2561fdb1ca1912f6aaa495a356d413692260516ff7"
+      ],
+      "logical_time": "2026-08-12T00:00:00Z",
+      "state_transition_refs": [
+        "R1_GATEWAY_PROFILE_REJECTION_TO_R2_EXISTING_PROFILE_PROJECTION"
+      ],
+      "namespace": "w7tp://xiaoj/founder-activation/candidate/v1",
+      "evidence_spacetime_refs": [
+        "taiji01://Taiji_Hub/d547496e9c24c94cec5155cf058f59e98def3a07/2026-08-12",
+        "github://wuchang1100606355-del/wuchang.life/pull/1/head/0f4002549846f54163e23312d97c672d565c9f01"
+      ]
+    }
+  },
+  "observations": [
+    {
+      "observation_id": "OBS_SOURCE_PACKET_HASH",
+      "modality": "language",
+      "evidence_class": "OBSERVED",
+      "source_ref": "sha256:fde9ea773c302dbb957b02ea8e780836ca346772ec591ba4953a08909fb60a1d",
+      "summary": "Founder-supplied product landing candidate names an activation candidate and keeps its receipt not verified.",
+      "verification_ref": "WINDOWS_GET_FILE_HASH_SHA256_USER_SUPPLIED_OUTPUT"
+    },
+    {
+      "observation_id": "OBS_UNIQUE_RECEIVER",
+      "modality": "state",
+      "evidence_class": "OBSERVED",
+      "source_ref": "git-blob:c74eb6781494435f0440030318276b98ec71620d",
+      "summary": "Draft PR head evidence contains one module-level receive_candidate receiver and one bound class facade method; the facade does not create a second authority receiver.",
+      "coordinate": "tools/total_field_candidate_gateway.py:997",
+      "verification_ref": "GITHUB_PR_HEAD_FILE_INSPECTION"
+    },
+    {
+      "observation_id": "OBS_PRIOR_ACTIVATION_REFERENCE_ABSENT",
+      "modality": "state",
+      "evidence_class": "OBSERVED",
+      "source_ref": "taiji01://Taiji_Hub/d547496e9c24c94cec5155cf058f59e98def3a07/bounded-search",
+      "summary": "The exact activation candidate identifier and bounded Founder activation patterns produced no file match in the supplied taiji01 searches.",
+      "verification_ref": "USER_SUPPLIED_TERMINAL_OUTPUT"
+    },
+    {
+      "observation_id": "OBS_IDENTITY_RECEIPTS",
+      "modality": "state",
+      "evidence_class": "UNKNOWN",
+      "source_ref": "total-field://receipt/founder-activation/required",
+      "summary": "Founder role, one identity root, 8D binding and live receiver receipts are not available in current evidence."
+    },
+    {
+      "observation_id": "OBS_R1_PROFILE_REJECTION",
+      "modality": "state",
+      "evidence_class": "OBSERVED",
+      "source_ref": "receipt-sha256:188d0231e20dc80c0fd63e2561fdb1ca1912f6aaa495a356d413692260516ff7",
+      "summary": "R1 reached the existing receiver but was rejected because the raw state packet was not projected into the required RUNTIME_REQUEST profile.",
+      "verification_ref": "FOUNDER_ACTIVATION_RECEIVE_20260812T171200Z"
+    }
+  ],
+  "envelope": {
+    "mode": "READ_ONLY",
+    "history_mode": "APPEND_ONLY",
+    "hard_risks": [],
+    "identity_preconditions": {
+      "fixed_role_quota": "NOT_VERIFIED",
+      "seat_identifier": "FOUNDER_SEAT_REFERENCE_REQUIRED",
+      "seat_state": "NOT_VERIFIED",
+      "member_xiaoj_binding": "NOT_VERIFIED",
+      "identity_access_profile_ref": "NOT_VERIFIED",
+      "seat_assignment_hash": "NOT_VERIFIED",
+      "founder_authority_receipt": "NOT_VERIFIED",
+      "total_field_authority_receipt": "NOT_ISSUED"
+    },
+    "candidate_identities": {
+      "local_model": "NONE_USED_FOR_AUTHORITY",
+      "cloud_model": "NONE_USED_FOR_AUTHORITY"
+    },
+    "dynamic_context": {
+      "session_ref": "NONE_OPENED",
+      "queried_domains": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "member_boundary": "NO_MEMBER_PLAINTEXT_INCLUDED",
+      "authority": "NONE"
+    },
+    "receiver_evidence_destination": "tools.total_field_candidate_gateway.receive_candidate",
+    "artifact_manifest": {
+      "candidate_file_sha256": "COMPUTED_AFTER_SERIALIZATION",
+      "receiver_receipt": "NOT_VERIFIED",
+      "predecessor_candidate_sha256": "cdadb7c83caa5f02b32de5536cf07efe2b9cb0147d2e5c8f7d992ff9f0b80d7f",
+      "predecessor_receipt_sha256": "188d0231e20dc80c0fd63e2561fdb1ca1912f6aaa495a356d413692260516ff7"
+    },
+    "receiver_profile_projection": {
+      "profile_schema_version": "8d-gte-runtime-candidate-profile/0.1",
+      "profile_type": "RUNTIME_REQUEST",
+      "source_packet_mutated": false,
+      "receiver_mutated": false,
+      "second_receiver_created": false
+    }
+  }
+}
