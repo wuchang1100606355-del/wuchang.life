@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/ifgc-relational-closure-v1.schema.json",
+  "title": "IFGC relational contract closure v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mainline_relation",
+    "continuation_distance",
+    "supply_demand_fit",
+    "relational_evidence"
+  ],
+  "properties": {
+    "mainline_relation": { "$ref": "#/$defs/mainlineRelation" },
+    "continuation_distance": { "$ref": "#/$defs/continuationDistance" },
+    "supply_demand_fit": { "$ref": "#/$defs/supplyDemandFit" },
+    "relational_evidence": { "$ref": "#/$defs/relationalEvidence" }
+  },
+  "$defs": {
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "evidence_refs"],
+      "properties": {
+        "state": { "enum": ["PASS", "FAIL", "UNKNOWN"] },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" }
+      }
+    },
+    "routeStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step", "evidence_refs"],
+      "properties": {
+        "step": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" }
+      }
+    },
+    "hardGates": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "input_output_contract": { "$ref": "#/$defs/gate" },
+        "dependencies": { "$ref": "#/$defs/gate" },
+        "version": { "$ref": "#/$defs/gate" },
+        "overlapping_supply": { "$ref": "#/$defs/gate" },
+        "priority": { "$ref": "#/$defs/gate" },
+        "dual_execution_risk": { "$ref": "#/$defs/gate" },
+        "authority_conflict": { "$ref": "#/$defs/gate" },
+        "all_consumers": { "$ref": "#/$defs/gate" },
+        "behavioral_equivalence": { "$ref": "#/$defs/gate" },
+        "data_migration": { "$ref": "#/$defs/gate" },
+        "exit_and_recovery": { "$ref": "#/$defs/gate" },
+        "isolation": { "$ref": "#/$defs/gate" },
+        "no_effect": { "$ref": "#/$defs/gate" },
+        "no_mainline_impact": { "$ref": "#/$defs/gate" },
+        "unrelated_or_risk_boundary": { "$ref": "#/$defs/gate" }
+      }
+    },
+    "mainlineRelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_relation",
+        "hard_gates",
+        "missing_gates",
+        "first_breakpoint",
+        "shortest_continuation_route"
+      ],
+      "properties": {
+        "candidate_relation": {
+          "enum": ["CONTINUE", "FUSE", "REPLACE", "PARALLEL_SHADOW", "ISOLATE", "HOLD"]
+        },
+        "hard_gates": { "$ref": "#/$defs/hardGates" },
+        "missing_gates": {
+          "type": "array",
+          "maxItems": 512,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "first_breakpoint": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "shortest_continuation_route": {
+          "type": "array",
+          "maxItems": 512,
+          "items": { "$ref": "#/$defs/routeStep" }
+        }
+      }
+    },
+    "axis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "evidence_refs"],
+      "properties": {
+        "state": { "enum": ["ALIGNED", "DELTA", "UNKNOWN"] },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" }
+      }
+    },
+    "continuationDistance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semantic",
+        "structure_contract",
+        "dependency",
+        "tests",
+        "runtime_wiring",
+        "data_migration",
+        "governance_authority",
+        "security",
+        "cross_node",
+        "recovery"
+      ],
+      "properties": {
+        "semantic": { "$ref": "#/$defs/axis" },
+        "structure_contract": { "$ref": "#/$defs/axis" },
+        "dependency": { "$ref": "#/$defs/axis" },
+        "tests": { "$ref": "#/$defs/axis" },
+        "runtime_wiring": { "$ref": "#/$defs/axis" },
+        "data_migration": { "$ref": "#/$defs/axis" },
+        "governance_authority": { "$ref": "#/$defs/axis" },
+        "security": { "$ref": "#/$defs/axis" },
+        "cross_node": { "$ref": "#/$defs/axis" },
+        "recovery": { "$ref": "#/$defs/axis" }
+      }
+    },
+    "evidencedItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "evidence_refs"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" }
+      }
+    },
+    "supplyMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["demand_id", "supply_ids", "evidence_refs"],
+      "properties": {
+        "demand_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "supply_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 512,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "evidence_refs"],
+      "properties": {
+        "action": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" }
+      }
+    },
+    "recoveryStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step", "evidence_refs", "rollback"],
+      "properties": {
+        "step": { "enum": ["expand", "migrate", "deprecate"] },
+        "evidence_refs": { "$ref": "#/$defs/evidenceRefs" },
+        "rollback": { "$ref": "#/$defs/rollback" }
+      }
+    },
+    "supplyDemandFit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old_demand_set",
+        "new_supply_mapping",
+        "uncovered_demands",
+        "extra_side_effects",
+        "unknown_dynamic_consumers",
+        "dependency_cycles",
+        "authority_conflicts",
+        "recovery_route"
+      ],
+      "properties": {
+        "old_demand_set": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 512,
+          "items": { "$ref": "#/$defs/evidencedItem" }
+        },
+        "new_supply_mapping": {
+          "type": "array",
+          "maxItems": 512,
+          "items": { "$ref": "#/$defs/supplyMapping" }
+        },
+        "uncovered_demands": { "$ref": "#/$defs/evidencedItemArray" },
+        "extra_side_effects": { "$ref": "#/$defs/evidencedItemArray" },
+        "unknown_dynamic_consumers": { "$ref": "#/$defs/evidencedItemArray" },
+        "dependency_cycles": { "$ref": "#/$defs/evidencedItemArray" },
+        "authority_conflicts": { "$ref": "#/$defs/evidencedItemArray" },
+        "recovery_route": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            { "allOf": [{ "$ref": "#/$defs/recoveryStep" }, { "properties": { "step": { "const": "expand" } } }] },
+            { "allOf": [{ "$ref": "#/$defs/recoveryStep" }, { "properties": { "step": { "const": "migrate" } } }] },
+            { "allOf": [{ "$ref": "#/$defs/recoveryStep" }, { "properties": { "step": { "const": "deprecate" } } }] }
+          ],
+          "items": false
+        }
+      }
+    },
+    "evidencedItemArray": {
+      "type": "array",
+      "maxItems": 512,
+      "items": { "$ref": "#/$defs/evidencedItem" }
+    },
+    "relationalEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_class",
+        "artifact_ref",
+        "artifact_sha256",
+        "stage_receipt_ref",
+        "stage_receipt_sha256"
+      ],
+      "properties": {
+        "evidence_class": { "const": "FIELD_EVIDENCE" },
+        "artifact_ref": { "type": "string", "pattern": "^[^/][^:]*\\.json$", "maxLength": 512 },
+        "artifact_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "stage_receipt_ref": { "type": "string", "pattern": "^[^/][^:]*\\.json$", "maxLength": 512 },
+        "stage_receipt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}
