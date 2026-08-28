@@ -10,6 +10,7 @@
 - MSI 每五分鐘採集一次，生成 V2.1 封包並傳向四個可執行遠端節點。
 - 每個來源節點使用獨立且固定的 `w7tp.mesh.node_state.v21.<node_id>` namespace；logical time 只在該來源狀態流內單調增加。不得讓不同節點共用同一 namespace，否則接收端的不可逆 replay index 會正確拒絕相同 logical time，形成跨來源衝突。
 - 接收端 HTTP 409 只有在回應包含受限安全格式的 `CONFLICT_*` reason code 時，才寫入 append-only `outbox_terminal` 並停止該 carrier／peer 的無限重試；`HOLD_*`、無法解析或暫時性回應仍維持耐久重試。終止紀錄是 D4 衝突證據，不是成功收據或權威升格。
+- `01_NODE_INDEX/discovered` 的拓撲證據同時綁定「被發現節點」與「觀測者節點」；不同來源觀察到同一尾網節點時，各自寫入 `observers/<source_node>`，不得因內容相同而互相覆寫或碰撞。
 - MSI 同時將本機與接收封包拆分成 Drive projection envelopes，spool 位於 `/mnt/c/Users/o0930/AppData/Local/W7TP/gt_mesh_v21/drive_spool`。
 - `peers` 是傳輸路由，不是 authority 路由；Git 欄位只形成 D4 evidence。taiji01 可選 Native ADI hook 只送小型 append-only reference record，不傳完整 snapshot，也不重啟或修改既有 `:9110` service。
 

@@ -701,7 +701,46 @@ class MeshTests(unittest.TestCase):
                     lineage=lineage,
                 )
                 self.assertTrue(any("07_GITHUB" in path.parts for path in paths))
-                self.assertTrue(any("discovered" in path.parts and "remote-1" in path.parts for path in paths))
+                self.assertTrue(
+                    any(
+                        "discovered" in path.parts
+                        and "remote-1" in path.parts
+                        and "observers" in path.parts
+                        and "source" in path.parts
+                        for path in paths
+                    )
+                )
+                second_snapshot = copy.deepcopy(projected_snapshot)
+                second_snapshot["source_node_ref"] = "node:source-two"
+                second_snapshot["node"] = {"node_id": "source-two", "observation_state": "OBSERVED_METADATA_ONLY"}
+                second_transfer = build_transfer(
+                    sender,
+                    second_snapshot,
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace="w7tp.mesh.test.source-two",
+                    now=FIXED,
+                )
+                second_lineage = next(
+                    item
+                    for item in sender.journal.records("lineage")
+                    if item["packet_ref"] == second_transfer.packet_ref
+                )
+                second_paths = produce_drive_projection_envelopes(
+                    spool_dir,
+                    snapshot=second_snapshot,
+                    packet=second_transfer.packet,
+                    profile=second_transfer.profile,
+                    lineage=second_lineage,
+                )
+                self.assertTrue(
+                    any(
+                        "discovered" in path.parts
+                        and "remote-1" in path.parts
+                        and "observers" in path.parts
+                        and "source-two" in path.parts
+                        for path in second_paths
+                    )
+                )
                 core = require_core()
                 for path in paths:
                     envelope = core.canonical_json_loads(path.read_bytes(), require_canonical=True)

@@ -148,7 +148,7 @@ def produce_drive_projection_envelopes(
                 else discovered.get("dns_name") or discovered.get("node_name")
             )
             project(
-                f"01_NODE_INDEX/discovered/{safe_id}/topology",
+                f"01_NODE_INDEX/discovered/{safe_id}/observers/{node_id}/topology",
                 {"schema_id": "W7TP_GT_MESH_DISCOVERED_NODE_EVIDENCE_V21", **dict(discovered)},
             )
     for service in snapshot.get("services", []):
