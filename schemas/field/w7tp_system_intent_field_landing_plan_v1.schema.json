@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://w7tp.local/schemas/field/w7tp_system_intent_field_landing_plan_v1.schema.json",
+  "title": "W7TP System Intent Field Landing Plan V1 Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "plan_version",
+    "plan_id",
+    "status",
+    "scope",
+    "current_state",
+    "target_outcome",
+    "authority",
+    "identity_and_ownership_boundary",
+    "system_planes",
+    "dynamic_state_fields",
+    "construction_order",
+    "data_contracts",
+    "landing_phases",
+    "measurement_framework",
+    "responsibility_matrix",
+    "evidence_anchors",
+    "current_decision"
+  ],
+  "properties": {
+    "$schema": {"const": "../../schemas/field/w7tp_system_intent_field_landing_plan_v1.schema.json"},
+    "plan_version": {"const": "W7TP-SYSTEM-INTENT-FIELD-LANDING-PLAN/1.0"},
+    "plan_id": {"const": "W7TP_SYSTEM_INTENT_FIELD_LANDING_PLAN_V1_CANDIDATE"},
+    "status": {"const": "CANDIDATE_PLAN_ONLY"},
+    "scope": {"const": "LOCAL_FIRST_SYSTEM_INTENT_FIELD_CONSTRUCTION_AND_GOVERNED_LANDING"},
+    "current_state": {"$ref": "#/$defs/current_state"},
+    "target_outcome": {"$ref": "#/$defs/target_outcome"},
+    "authority": {"$ref": "#/$defs/authority"},
+    "identity_and_ownership_boundary": {"$ref": "#/$defs/identity_boundary"},
+    "system_planes": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/system_plane"}
+    },
+    "dynamic_state_fields": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/dynamic_state_field"}
+    },
+    "construction_order": {
+      "const": [
+        "D1_INTENT_RESOLUTION",
+        "LOAD_VERIFIED_SCOPED_STATE",
+        "GATE_1_CANONICAL_LOCK",
+        "GATE_2_INTENT_PRODUCT_GAP",
+        "GATE_3_HUMAN_UI_PRODUCT_REVIEW",
+        "GENERATE_UNKNOWN_DELTA_ONLY",
+        "RECONSTRUCT_CANDIDATE_STATE",
+        "VERIFY_CANDIDATE",
+        "TOTAL_FIELD_REVIEW"
+      ]
+    },
+    "data_contracts": {"$ref": "#/$defs/data_contracts"},
+    "landing_phases": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/landing_phase"}
+    },
+    "measurement_framework": {"$ref": "#/$defs/measurement_framework"},
+    "responsibility_matrix": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/responsibility"}
+    },
+    "evidence_anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime_chain",
+        "intent_field_build_candidate",
+        "intent_field_reconstruction_candidate",
+        "public_test_landing_candidate",
+        "true8d_contract_sandbox",
+        "intent_cache_policy",
+        "authority_profile",
+        "adaptive_integration_v3"
+      ],
+      "properties": {
+        "runtime_chain": {"$ref": "#/$defs/file_anchor"},
+        "intent_field_build_candidate": {"$ref": "#/$defs/file_anchor"},
+        "intent_field_reconstruction_candidate": {"$ref": "#/$defs/file_anchor"},
+        "public_test_landing_candidate": {"$ref": "#/$defs/file_anchor"},
+        "true8d_contract_sandbox": {"$ref": "#/$defs/file_anchor"},
+        "intent_cache_policy": {"$ref": "#/$defs/file_anchor"},
+        "authority_profile": {"$ref": "#/$defs/file_anchor"},
+        "adaptive_integration_v3": {"$ref": "#/$defs/file_anchor"}
+      }
+    },
+    "current_decision": {"$ref": "#/$defs/current_decision"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "string_array": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "current_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local_runtime_chain_present", "intent_field_read_only_observation_present", "existing_landing_candidate_chain_present", "moving_v_shadow_integration_present", "formal_landing_allowed", "deployment_executed_by_this_plan"],
+      "properties": {
+        "local_runtime_chain_present": {"const": true},
+        "intent_field_read_only_observation_present": {"const": true},
+        "existing_landing_candidate_chain_present": {"const": true},
+        "moving_v_shadow_integration_present": {"const": true},
+        "formal_landing_allowed": {"const": false},
+        "deployment_executed_by_this_plan": {"const": false}
+      }
+    },
+    "target_outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["single_intent_field", "intent_definition", "execution_rule", "transport_rule", "effect_rule", "success_definition"],
+      "properties": {
+        "single_intent_field": {"const": true},
+        "intent_definition": {"const": "DYNAMIC_GOVERNED_STATE_FIELD_NOT_A_SECOND_DATABASE_OR_SECOND_TOTAL_FIELD"},
+        "execution_rule": {"const": "DETERMINISTIC_LOOKUP_RULE_AND_STATE_TRANSITION_FIRST_MODEL_ONLY_FOR_UNKNOWN_DELTA"},
+        "transport_rule": {"const": "TRANSMIT_REFS_DELTAS_HASHES_AUTHORITY_RECONSTRUCTION_CONDITIONS_AND_RECEIPTS_NOT_FULL_CONTEXT"},
+        "effect_rule": {"const": "CANDIDATE_EFFECT_REQUIRES_HUMAN_CONFIRMATION_AND_TOTAL_FIELD_AUTHORITY_BEFORE_FORMAL_COMMIT"},
+        "success_definition": {"type": "string", "minLength": 1}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_authority", "human_semantic_ratification_required", "active_total_field_profile", "formal_landing_allowed", "deployment_allowed", "restart_allowed", "database_write_allowed", "payment_effect_allowed", "member_plaintext_allowed", "model_has_authority", "adapter_has_authority", "device_has_authority", "memory_effect_allowed", "remote_write_allowed"],
+      "properties": {
+        "decision_authority": {"const": "TOTAL_FIELD"},
+        "human_semantic_ratification_required": {"const": true},
+        "active_total_field_profile": {"const": false},
+        "formal_landing_allowed": {"const": false},
+        "deployment_allowed": {"const": false},
+        "restart_allowed": {"const": false},
+        "database_write_allowed": {"const": false},
+        "payment_effect_allowed": {"const": false},
+        "member_plaintext_allowed": {"const": false},
+        "model_has_authority": {"const": false},
+        "adapter_has_authority": {"const": false},
+        "device_has_authority": {"const": false},
+        "memory_effect_allowed": {"const": false},
+        "remote_write_allowed": {"const": false}
+      }
+    },
+    "identity_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["member_identity_sovereignty_source", "service_system_identity_mode", "service_system_becomes_member_registry", "full_member_plaintext_replication_allowed", "xiaoj_w7tp_technical_ownership_transfer_proven", "technical_ownership_and_runtime_authority_are_separate", "public_interest_authorization_implies_ownership_transfer"],
+      "properties": {
+        "member_identity_sovereignty_source": {"const": "ASSOCIATION_GOVERNED_MEMBER_IDENTITY_REGISTRY"},
+        "service_system_identity_mode": {"const": "ROLE_BINDING_OR_8D_IDENTITY_PACKET_REFERENCE_ONLY"},
+        "service_system_becomes_member_registry": {"const": false},
+        "full_member_plaintext_replication_allowed": {"const": false},
+        "xiaoj_w7tp_technical_ownership_transfer_proven": {"const": false},
+        "technical_ownership_and_runtime_authority_are_separate": {"const": true},
+        "public_interest_authorization_implies_ownership_transfer": {"const": false}
+      }
+    },
+    "system_plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plane_id", "responsibility", "authoritative_source", "live_state"],
+      "properties": {
+        "plane_id": {"type": "string", "pattern": "^P_[A-Z_]+$"},
+        "responsibility": {"type": "string", "minLength": 1},
+        "authoritative_source": {"type": "string", "minLength": 1},
+        "live_state": {"type": "string", "minLength": 1}
+      }
+    },
+    "dynamic_state_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "definition", "fail_closed_state"],
+      "properties": {
+        "field": {"type": "string", "pattern": "^D[1-8]_[A-Z0-9_]+$"},
+        "definition": {"type": "string", "minLength": 1},
+        "fail_closed_state": {"type": "string", "pattern": "^(LOCAL_)?HOLD_[A-Z0-9_]+$"}
+      }
+    },
+    "volatile_ingress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_input_may_exist_transiently", "raw_input_cache_allowed", "raw_input_forwarded_to_delta_model", "retention_requires_separate_policy"],
+      "properties": {
+        "raw_input_may_exist_transiently": {"const": true},
+        "raw_input_cache_allowed": {"const": false},
+        "raw_input_forwarded_to_delta_model": {"const": false},
+        "retention_requires_separate_policy": {"const": true}
+      }
+    },
+    "intent_root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_fields", "unresolved_effect"],
+      "properties": {
+        "required_fields": {"$ref": "#/$defs/string_array"},
+        "unresolved_effect": {"const": "HOLD_BEFORE_STATE_LOAD_OR_MODEL_CALL"}
+      }
+    },
+    "minimum_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_fields", "none_effect"],
+      "properties": {
+        "required_fields": {"$ref": "#/$defs/string_array"},
+        "none_effect": {"const": "BUILD_NOT_REQUIRED"}
+      }
+    },
+    "model_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_material", "forbidden_material", "output_authority"],
+      "properties": {
+        "allowed_material": {"$ref": "#/$defs/string_array"},
+        "forbidden_material": {"$ref": "#/$defs/string_array"},
+        "output_authority": {"const": "CANDIDATE_ONLY"}
+      }
+    },
+    "effect_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_fields", "missing_effect"],
+      "properties": {
+        "required_fields": {"$ref": "#/$defs/string_array"},
+        "missing_effect": {"const": "HOLD_NO_COMMIT"}
+      }
+    },
+    "data_contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["volatile_ingress", "intent_root", "minimum_delta", "model_packet", "effect_receipt"],
+      "properties": {
+        "volatile_ingress": {"$ref": "#/$defs/volatile_ingress"},
+        "intent_root": {"$ref": "#/$defs/intent_root"},
+        "minimum_delta": {"$ref": "#/$defs/minimum_delta"},
+        "model_packet": {"$ref": "#/$defs/model_packet"},
+        "effect_receipt": {"$ref": "#/$defs/effect_receipt"}
+      }
+    },
+    "landing_phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase_id", "objective", "entry_requires", "deliverables", "exit_requires", "current_state", "rollback"],
+      "properties": {
+        "phase_id": {"type": "string", "pattern": "^L0[0-8]_[A-Z0-9_]+$"},
+        "objective": {"type": "string", "minLength": 1},
+        "entry_requires": {"$ref": "#/$defs/string_array"},
+        "deliverables": {"$ref": "#/$defs/string_array"},
+        "exit_requires": {"$ref": "#/$defs/string_array"},
+        "current_state": {"type": "string", "minLength": 1},
+        "rollback": {"type": "string", "minLength": 1}
+      }
+    },
+    "measurement_framework": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordered_objectives", "zero_tolerance_metrics", "calibration_required_metrics", "numeric_threshold_state"],
+      "properties": {
+        "ordered_objectives": {"$ref": "#/$defs/string_array"},
+        "zero_tolerance_metrics": {"$ref": "#/$defs/string_array"},
+        "calibration_required_metrics": {"$ref": "#/$defs/string_array"},
+        "numeric_threshold_state": {"const": "PENDING_BASELINE_AND_HUMAN_REVIEWED_CALIBRATION"}
+      }
+    },
+    "responsibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "responsibility", "may_grant_runtime_effect_alone"],
+      "properties": {
+        "role": {"type": "string", "minLength": 1},
+        "responsibility": {"type": "string", "minLength": 1},
+        "may_grant_runtime_effect_alone": {"type": "boolean"}
+      }
+    },
+    "file_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "current_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "first_execution_phase", "next_allowed_action", "formal_effect_count", "service_restart_count", "deployment_count"],
+      "properties": {
+        "state": {"const": "PLAN_COMPLETE_EXECUTION_NOT_STARTED"},
+        "first_execution_phase": {"const": "L00_SCOPE_AND_AUTHORITY_LOCK"},
+        "next_allowed_action": {"const": "HUMAN_REVIEW_PLAN_THEN_RUN_L00_AND_L01_AS_A_SEPARATE_NO_EFFECT_WORK_PACKAGE"},
+        "formal_effect_count": {"type": "integer", "const": 0},
+        "service_restart_count": {"type": "integer", "const": 0},
+        "deployment_count": {"type": "integer", "const": 0}
+      }
+    }
+  }
+}

@@ -1,0 +1,560 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:system-intent-field-founder-clarification:v1",
+  "title": "W7TP System Intent Field Founder Clarification V1 Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_id",
+    "packet_id",
+    "packet_version",
+    "state",
+    "mode",
+    "source_position",
+    "source_bindings",
+    "intent_statements",
+    "alignment",
+    "conflict_summary",
+    "authority",
+    "effects",
+    "current_decision",
+    "next"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../schemas/field/w7tp_system_intent_field_founder_clarification_v1.schema.json"
+    },
+    "schema_id": {
+      "const": "W7TP_SYSTEM_INTENT_FIELD_FOUNDER_CLARIFICATION_V1"
+    },
+    "packet_id": {
+      "const": "W7TP_SYSTEM_INTENT_FIELD_FOUNDER_CLARIFICATION_20260824"
+    },
+    "packet_version": {
+      "const": "1.0.0"
+    },
+    "state": {
+      "const": "CANDIDATE_INTENT_DELTA_RECORDED"
+    },
+    "mode": {
+      "const": "APPEND_ONLY_NO_AUTO_MERGE"
+    },
+    "source_position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node",
+        "root",
+        "branch",
+        "head",
+        "observed_date"
+      ],
+      "properties": {
+        "node": {
+          "const": "MSI"
+        },
+        "root": {
+          "const": "/home/taiji_admin/Taiji_Hub"
+        },
+        "branch": {
+          "const": "agent/moving-v-v2-taiji8d-local-canary"
+        },
+        "head": {
+          "const": "348e4f440b4a2d62a9f9cc169f94ab7fb3964e44"
+        },
+        "observed_date": {
+          "const": "2026-08-24"
+        }
+      }
+    },
+    "source_bindings": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/source_binding"
+      }
+    },
+    "intent_statements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "governance",
+        "system_topology",
+        "cloud_governance",
+        "generative_transmission",
+        "local_llm",
+        "personal_information",
+        "personal_devices",
+        "receipt_transport"
+      ],
+      "properties": {
+        "governance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "system_owner",
+            "canonical_maker",
+            "unique_rule_modification_principal",
+            "total_ledger_governed",
+            "rule_modification_requires_exact_founder_packet",
+            "total_field_can_override_founder",
+            "runtime_policy_decision_scope",
+            "grant_origin",
+            "total_field_can_create_founder_grant",
+            "grant_scope_expansion_by_total_field",
+            "policy_allow_equals_d8_grant",
+            "missing_founder_rule_effect",
+            "ambiguous_founder_rule_effect",
+            "invalid_d8_effect",
+            "expired_d8_effect",
+            "d8_scope_mismatch_effect",
+            "runtime_allow_preconditions",
+            "total_field_runtime_allow_scope",
+            "executor_boundary"
+          ],
+          "properties": {
+            "system_owner": {
+              "const": "FOUNDER"
+            },
+            "canonical_maker": {
+              "const": "FOUNDER"
+            },
+            "unique_rule_modification_principal": {
+              "const": "FOUNDER_ONLY"
+            },
+            "total_ledger_governed": {
+              "const": true
+            },
+            "rule_modification_requires_exact_founder_packet": {
+              "const": true
+            },
+            "total_field_can_override_founder": {
+              "const": false
+            },
+            "runtime_policy_decision_scope": {
+              "const": "TOTAL_FIELD_WITHIN_FOUNDER_DEFINED_RULES"
+            },
+            "grant_origin": {
+              "const": "FOUNDER_ONLY"
+            },
+            "total_field_can_create_founder_grant": {
+              "const": false
+            },
+            "grant_scope_expansion_by_total_field": {
+              "const": false
+            },
+            "policy_allow_equals_d8_grant": {
+              "const": false
+            },
+            "missing_founder_rule_effect": {
+              "const": "HOLD"
+            },
+            "ambiguous_founder_rule_effect": {
+              "const": "HOLD"
+            },
+            "invalid_d8_effect": {
+              "const": "HOLD"
+            },
+            "expired_d8_effect": {
+              "const": "HOLD"
+            },
+            "d8_scope_mismatch_effect": {
+              "const": "HOLD"
+            },
+            "runtime_allow_preconditions": {
+              "const": [
+                "VALID_FOUNDER_RULE",
+                "APPLICABLE_CURRENT_STATE",
+                "REQUIRED_EVIDENCE",
+                "VALID_D8",
+                "VALID_EFFECT_CONTRACT"
+              ]
+            },
+            "total_field_runtime_allow_scope": {
+              "const": "EXACT_GRANTED_SCOPE_ONLY"
+            },
+            "executor_boundary": {
+              "const": "EXECUTOR_ONLY_WITHIN_VALID_TOTAL_FIELD_DECISION_AND_EFFECT_CONTRACT"
+            }
+          }
+        },
+        "system_topology": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "msi_role",
+            "taiji01_role",
+            "cloud_role"
+          ],
+          "properties": {
+            "msi_role": {
+              "const": "FOUNDER_PERSONAL_DEVELOPMENT_AND_SYSTEM_OWNER_INTERFACE"
+            },
+            "taiji01_role": {
+              "const": "MAIN_SYSTEM_HEADLESS_OPERATIONS_AND_AUTOMATION_MANAGER"
+            },
+            "cloud_role": {
+              "const": "TOTAL_FIELD_CLOUD_UNIFIED_STATIC_COMMAND_CENTER"
+            }
+          }
+        },
+        "cloud_governance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "member_access",
+            "member_read_scope_source",
+            "write_principals",
+            "writer_identity_is_authority"
+          ],
+          "properties": {
+            "member_access": {
+              "const": "READ_ONLY"
+            },
+            "member_read_scope_source": {
+              "const": "SOVEREIGNTY_PACKET_PERMISSION"
+            },
+            "write_principals": {
+              "const": [
+                "SPACE_ADMIN_ACCOUNT",
+                "TOTAL_FIELD_SERVICE_ACCOUNT"
+              ]
+            },
+            "writer_identity_is_authority": {
+              "const": false
+            }
+          }
+        },
+        "generative_transmission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "w7tp_definition",
+            "d6_definition",
+            "all_device_common_language",
+            "candidate_content_channel"
+          ],
+          "properties": {
+            "w7tp_definition": {
+              "const": "INTENT_COMMUNICATION_AND_STATE_FIELD_PACKET_COMMUNICATION"
+            },
+            "d6_definition": {
+              "const": "GENERATIVE_TRANSMISSION"
+            },
+            "all_device_common_language": {
+              "const": "W7TP_GENERATIVE_TRANSMISSION"
+            },
+            "candidate_content_channel": {
+              "const": "TOTAL_FIELD_CLOUD_UNIFIED_CHANNEL"
+            }
+          }
+        },
+        "local_llm": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "host_device",
+            "operational_role",
+            "development_use",
+            "candidate_content_generation_allowed",
+            "model_authority",
+            "preferred_isolation"
+          ],
+          "properties": {
+            "host_device": {
+              "const": "MSI"
+            },
+            "operational_role": {
+              "const": "INTENT_TRANSLATION_AND_DIALOGUE_CAPABILITY_MANAGEMENT_ONLY"
+            },
+            "development_use": {
+              "const": "VIRTUAL_OR_DEDICATED_CONTAINER_ADVISORY_AND_PERFORMANCE_TEST"
+            },
+            "candidate_content_generation_allowed": {
+              "const": false
+            },
+            "model_authority": {
+              "const": "NONE"
+            },
+            "preferred_isolation": {
+              "const": "DEDICATED_CONTAINER"
+            }
+          }
+        },
+        "personal_information": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "governance_source",
+            "processing_scope",
+            "association_member_identity_is_separate",
+            "unscoped_cloud_projection_allowed"
+          ],
+          "properties": {
+            "governance_source": {
+              "const": "PERSONAL_SOVEREIGNTY_PACKET"
+            },
+            "processing_scope": {
+              "const": "EXACT_PACKET_PERMISSION_ONLY"
+            },
+            "association_member_identity_is_separate": {
+              "const": true
+            },
+            "unscoped_cloud_projection_allowed": {
+              "const": false
+            }
+          }
+        },
+        "personal_devices": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "personal_computer_count",
+            "personal_computer_node",
+            "personal_mobile_count",
+            "personal_mobile_node",
+            "phone_verifies_computer_replacement",
+            "computer_verifies_phone_replacement",
+            "device_is_founder_authority"
+          ],
+          "properties": {
+            "personal_computer_count": {
+              "const": 1
+            },
+            "personal_computer_node": {
+              "const": "MSI"
+            },
+            "personal_mobile_count": {
+              "const": 1
+            },
+            "personal_mobile_node": {
+              "const": "UNKNOWN_UNVERIFIED"
+            },
+            "phone_verifies_computer_replacement": {
+              "const": true
+            },
+            "computer_verifies_phone_replacement": {
+              "const": true
+            },
+            "device_is_founder_authority": {
+              "const": false
+            }
+          }
+        },
+        "receipt_transport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "read_path",
+            "receipt_carrier",
+            "carrier_authority",
+            "state"
+          ],
+          "properties": {
+            "read_path": {
+              "const": "TOTAL_FIELD_CLOUD_UNIFIED_CHANNEL"
+            },
+            "receipt_carrier": {
+              "const": "VPN"
+            },
+            "carrier_authority": {
+              "const": "NONE"
+            },
+            "state": {
+              "const": "CANDIDATE_DESIGN_INTENT_REQUIRES_ALIGNMENT"
+            }
+          }
+        }
+      }
+    },
+    "alignment": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/alignment_item"
+      }
+    },
+    "conflict_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "aligned",
+        "conflict",
+        "unknown",
+        "total"
+      ],
+      "properties": {
+        "aligned": {
+          "const": 4
+        },
+        "conflict": {
+          "const": 4
+        },
+        "unknown": {
+          "const": 3
+        },
+        "total": {
+          "const": 11
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_authority",
+        "intent_source",
+        "creates_authority",
+        "overrides_existing",
+        "auto_merge_allowed",
+        "canonical_mutation",
+        "d8_mutation",
+        "model_authority"
+      ],
+      "properties": {
+        "packet_authority": {
+          "const": "CANDIDATE_ONLY"
+        },
+        "intent_source": {
+          "const": "FOUNDER_EXPLICIT_CLARIFICATION"
+        },
+        "creates_authority": {
+          "const": false
+        },
+        "overrides_existing": {
+          "const": false
+        },
+        "auto_merge_allowed": {
+          "const": false
+        },
+        "canonical_mutation": {
+          "const": false
+        },
+        "d8_mutation": {
+          "const": false
+        },
+        "model_authority": {
+          "const": "NONE"
+        }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_write",
+        "database_write",
+        "deployment",
+        "restart",
+        "remote_write",
+        "runtime_effect"
+      ],
+      "properties": {
+        "source_write": {
+          "const": true
+        },
+        "database_write": {
+          "const": false
+        },
+        "deployment": {
+          "const": false
+        },
+        "restart": {
+          "const": false
+        },
+        "remote_write": {
+          "const": false
+        },
+        "runtime_effect": {
+          "const": false
+        }
+      }
+    },
+    "current_decision": {
+      "const": "HOLD_CONFLICTS_RECORDED_NO_AUTO_MERGE"
+    },
+    "next": {
+      "const": "RECONCILE_EXISTING_INTENT_FIELD_CONFLICTS_BEFORE_MERGE"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coordinate",
+        "sha256",
+        "state",
+        "evidence_level"
+      ],
+      "properties": {
+        "coordinate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "state": {
+          "enum": [
+            "CANDIDATE_UNTRACKED",
+            "DIRTY_UNSTAGED",
+            "EXTERNAL_METADATA_ONLY"
+          ]
+        },
+        "evidence_level": {
+          "enum": [
+            "CONTENT_HASH",
+            "METADATA_AND_CONTENT_HASH_NO_SEMANTIC_READ"
+          ]
+        }
+      }
+    },
+    "alignment_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_id",
+        "state",
+        "intent_ref",
+        "observed_ref",
+        "reason"
+      ],
+      "properties": {
+        "item_id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$"
+        },
+        "state": {
+          "enum": [
+            "ALIGNED",
+            "CONFLICT",
+            "UNKNOWN"
+          ]
+        },
+        "intent_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observed_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

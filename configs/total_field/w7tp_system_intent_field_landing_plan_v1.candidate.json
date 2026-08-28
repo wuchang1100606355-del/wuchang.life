@@ -1,0 +1,409 @@
+{
+  "$schema": "../../schemas/field/w7tp_system_intent_field_landing_plan_v1.schema.json",
+  "plan_version": "W7TP-SYSTEM-INTENT-FIELD-LANDING-PLAN/1.0",
+  "plan_id": "W7TP_SYSTEM_INTENT_FIELD_LANDING_PLAN_V1_CANDIDATE",
+  "status": "CANDIDATE_PLAN_ONLY",
+  "scope": "LOCAL_FIRST_SYSTEM_INTENT_FIELD_CONSTRUCTION_AND_GOVERNED_LANDING",
+  "current_state": {
+    "local_runtime_chain_present": true,
+    "intent_field_read_only_observation_present": true,
+    "existing_landing_candidate_chain_present": true,
+    "moving_v_shadow_integration_present": true,
+    "formal_landing_allowed": false,
+    "deployment_executed_by_this_plan": false
+  },
+  "target_outcome": {
+    "single_intent_field": true,
+    "intent_definition": "DYNAMIC_GOVERNED_STATE_FIELD_NOT_A_SECOND_DATABASE_OR_SECOND_TOTAL_FIELD",
+    "execution_rule": "DETERMINISTIC_LOOKUP_RULE_AND_STATE_TRANSITION_FIRST_MODEL_ONLY_FOR_UNKNOWN_DELTA",
+    "transport_rule": "TRANSMIT_REFS_DELTAS_HASHES_AUTHORITY_RECONSTRUCTION_CONDITIONS_AND_RECEIPTS_NOT_FULL_CONTEXT",
+    "effect_rule": "CANDIDATE_EFFECT_REQUIRES_HUMAN_CONFIRMATION_AND_TOTAL_FIELD_AUTHORITY_BEFORE_FORMAL_COMMIT",
+    "success_definition": "SAFE_USEFUL_LOW_FRICTION_RECONSTRUCTIBLE_AND_AUDITABLE_INTENT_TO_EFFECT_PATH"
+  },
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "human_semantic_ratification_required": true,
+    "active_total_field_profile": false,
+    "formal_landing_allowed": false,
+    "deployment_allowed": false,
+    "restart_allowed": false,
+    "database_write_allowed": false,
+    "payment_effect_allowed": false,
+    "member_plaintext_allowed": false,
+    "model_has_authority": false,
+    "adapter_has_authority": false,
+    "device_has_authority": false,
+    "memory_effect_allowed": false,
+    "remote_write_allowed": false
+  },
+  "identity_and_ownership_boundary": {
+    "member_identity_sovereignty_source": "ASSOCIATION_GOVERNED_MEMBER_IDENTITY_REGISTRY",
+    "service_system_identity_mode": "ROLE_BINDING_OR_8D_IDENTITY_PACKET_REFERENCE_ONLY",
+    "service_system_becomes_member_registry": false,
+    "full_member_plaintext_replication_allowed": false,
+    "xiaoj_w7tp_technical_ownership_transfer_proven": false,
+    "technical_ownership_and_runtime_authority_are_separate": true,
+    "public_interest_authorization_implies_ownership_transfer": false
+  },
+  "system_planes": [
+    {
+      "plane_id": "P_CONTROL",
+      "responsibility": "POLICY_AUTHORITY_SCOPE_AND_PROMOTION_GATES",
+      "authoritative_source": "TOTAL_FIELD_SIGNED_DECISION_AND_ACTIVE_POLICY_POINTER",
+      "live_state": "HOLD_INACTIVE_AUTHORITY"
+    },
+    {
+      "plane_id": "P_INTENT",
+      "responsibility": "RESOLVE_D1_INTENT_ROOT_AND_ACCEPTANCE_WITHOUT_GUESSING",
+      "authoritative_source": "HUMAN_MEANING_PLUS_GOVERNED_INTENT_CONTRACT",
+      "live_state": "CANDIDATE_CORE_PRESENT"
+    },
+    {
+      "plane_id": "P_STATE",
+      "responsibility": "LOAD_MINIMUM_VERIFIED_SCOPED_STATE_BY_REFERENCE",
+      "authoritative_source": "HASH_BOUND_STATE_ROOTS_AND_GOVERNED_SYSTEMS_OF_RECORD",
+      "live_state": "CANDIDATE_CONTRACT_PRESENT"
+    },
+    {
+      "plane_id": "P_EXECUTION",
+      "responsibility": "RUN_DETERMINISTIC_PATH_FIRST_AND_GENERATE_UNKNOWN_DELTA_ONLY",
+      "authoritative_source": "VERSIONED_RULES_TEMPLATES_AND_VERIFIED_CANDIDATE_ADAPTERS",
+      "live_state": "SANDBOX_VALIDATED_NOT_FORMALLY_LANDED"
+    },
+    {
+      "plane_id": "P_RECONSTRUCTION",
+      "responsibility": "RECONSTRUCT_EQUIVALENT_MINIMUM_STATE_FROM_ADI_GTP_REFERENCES",
+      "authoritative_source": "EXPECTED_HASH_AND_RECONSTRUCTION_RECEIPTS",
+      "live_state": "ADAPTER_REQUIRED_HOLD"
+    },
+    {
+      "plane_id": "P_MEMORY",
+      "responsibility": "OBSERVE_AND_RECOMMEND_MOVING_V_PRELOAD_AND_MEMORY_BUDGET",
+      "authoritative_source": "SHADOW_EVIDENCE_AND_SEPARATE_EFFECT_AUTHORIZATION",
+      "live_state": "SHADOW_ONLY_NO_EFFECT"
+    },
+    {
+      "plane_id": "P_EVIDENCE",
+      "responsibility": "APPEND_HASH_BOUND_DECISION_TRANSITION_EFFECT_AND_ROLLBACK_RECEIPTS",
+      "authoritative_source": "IMMUTABLE_AUDIT_LEDGER_AND_VERIFIED_RECEIPT_CHAIN",
+      "live_state": "DESIGN_REQUIRED_FOR_FULL_CHAIN"
+    },
+    {
+      "plane_id": "P_EXPERIENCE",
+      "responsibility": "MEASURE_TASK_EFFECT_HUMAN_FRICTION_LATENCY_AND_RECOVERY",
+      "authoritative_source": "HUMAN_REVIEWED_TEST_AND_CANARY_EVIDENCE",
+      "live_state": "CALIBRATION_REQUIRED"
+    }
+  ],
+  "dynamic_state_fields": [
+    {
+      "field": "D1_INTENT",
+      "definition": "RESULT_SUBJECT_SCENE_CONSTRAINTS_ACCEPTANCE_AND_TARGET_PRODUCT_EFFECT",
+      "fail_closed_state": "LOCAL_HOLD_INTENT_UNRESOLVED"
+    },
+    {
+      "field": "D2_STATE",
+      "definition": "CURRENT_VERIFIED_SCOPED_STATE_AND_SESSION_LIFECYCLE",
+      "fail_closed_state": "HOLD_STATE_UNVERIFIED"
+    },
+    {
+      "field": "D3_COORDINATE",
+      "definition": "NODE_DEVICE_TABLE_SERVICE_AND_IDENTITY_PACKET_REFERENCES",
+      "fail_closed_state": "HOLD_COORDINATE_UNBOUND"
+    },
+    {
+      "field": "D4_EVIDENCE",
+      "definition": "SOURCE_DECISION_TRANSITION_CONFIRMATION_AND_EFFECT_RECEIPTS",
+      "fail_closed_state": "HOLD_EVIDENCE_INCOMPLETE"
+    },
+    {
+      "field": "D5_EXECUTION",
+      "definition": "DETERMINISTIC_OR_CANDIDATE_DELTA_EXECUTION_WITH_EXPLICIT_EFFECT_BOUNDARY",
+      "fail_closed_state": "HOLD_EFFECT_UNAUTHORIZED"
+    },
+    {
+      "field": "D6_TECHNICAL_DEFINITION",
+      "definition": "ADI_STATE_CAPABILITY_DECISION_TRANSITION_SPATIOTEMPORAL_EVIDENCE_AND_RECONSTRUCTION_COORDINATES",
+      "fail_closed_state": "HOLD_SEMANTIC_DRIFT"
+    },
+    {
+      "field": "D7_RISK",
+      "definition": "HARDWALLS_FOR_IDENTITY_SECRET_PAYMENT_CANONICALITY_AUTHORITY_AND_DATA_MINIMIZATION",
+      "fail_closed_state": "HOLD_HARD_RISK"
+    },
+    {
+      "field": "D8_ENVELOPE",
+      "definition": "MINIMUM_REF_DELTA_HASH_AUTHORITY_RECONSTRUCTION_AND_VERIFICATION_PACKET",
+      "fail_closed_state": "HOLD_ENVELOPE_INVALID"
+    }
+  ],
+  "construction_order": [
+    "D1_INTENT_RESOLUTION",
+    "LOAD_VERIFIED_SCOPED_STATE",
+    "GATE_1_CANONICAL_LOCK",
+    "GATE_2_INTENT_PRODUCT_GAP",
+    "GATE_3_HUMAN_UI_PRODUCT_REVIEW",
+    "GENERATE_UNKNOWN_DELTA_ONLY",
+    "RECONSTRUCT_CANDIDATE_STATE",
+    "VERIFY_CANDIDATE",
+    "TOTAL_FIELD_REVIEW"
+  ],
+  "data_contracts": {
+    "volatile_ingress": {
+      "raw_input_may_exist_transiently": true,
+      "raw_input_cache_allowed": false,
+      "raw_input_forwarded_to_delta_model": false,
+      "retention_requires_separate_policy": true
+    },
+    "intent_root": {
+      "required_fields": [
+        "result",
+        "subject",
+        "scene",
+        "known_state_refs",
+        "constraints",
+        "acceptance",
+        "target_product_effect"
+      ],
+      "unresolved_effect": "HOLD_BEFORE_STATE_LOAD_OR_MODEL_CALL"
+    },
+    "minimum_delta": {
+      "required_fields": [
+        "affected_coordinates",
+        "stable_refs",
+        "changed_state",
+        "unknown_slots",
+        "reconstruction_conditions",
+        "verification_conditions",
+        "target_product_effect"
+      ],
+      "none_effect": "BUILD_NOT_REQUIRED"
+    },
+    "model_packet": {
+      "allowed_material": [
+        "intent_root_ref",
+        "current_state_root_ref",
+        "stable_state_refs",
+        "affected_coordinates",
+        "unknown_slots",
+        "target_product_effect",
+        "reconstruction_conditions",
+        "verification_conditions",
+        "output_schema"
+      ],
+      "forbidden_material": [
+        "RAW_USER_INPUT",
+        "FULL_CONTEXT",
+        "KNOWN_PRIVATE_STATE_VALUE",
+        "MEMBER_PLAINTEXT",
+        "PAYMENT_SECRET",
+        "CREDENTIAL_OR_TOKEN"
+      ],
+      "output_authority": "CANDIDATE_ONLY"
+    },
+    "effect_receipt": {
+      "required_fields": [
+        "decision_receipt_ref",
+        "scope_ref",
+        "input_state_sha256",
+        "candidate_sha256",
+        "effect_type",
+        "effect_result",
+        "output_state_sha256",
+        "rollback_receipt_ref",
+        "observed_at",
+        "issuer_ref"
+      ],
+      "missing_effect": "HOLD_NO_COMMIT"
+    }
+  },
+  "landing_phases": [
+    {
+      "phase_id": "L00_SCOPE_AND_AUTHORITY_LOCK",
+      "objective": "RATIFY_ONE_SYSTEM_INTENT_FIELD_SCOPE_OWNERSHIP_BOUNDARY_AND_EFFECT_AUTHORITY",
+      "entry_requires": ["THIS_CANDIDATE_PLAN", "FOUNDER_OR_DESIGNATED_HUMAN_REVIEW"],
+      "deliverables": ["SIGNED_SCOPE_STATEMENT", "ROLE_AND_AUTHORITY_MATRIX", "FORBIDDEN_EFFECTS_REGISTER"],
+      "exit_requires": ["NO_SECOND_TOTAL_FIELD", "NO_IMPLIED_IP_TRANSFER", "FORMAL_EFFECTS_REMAIN_FALSE"],
+      "current_state": "READY_FOR_HUMAN_SCOPE_RATIFICATION",
+      "rollback": "REJECT_PLAN_AND_RETAIN_EXISTING_RUNTIME_UNCHANGED"
+    },
+    {
+      "phase_id": "L01_READ_ONLY_BASELINE",
+      "objective": "CAPTURE_RUNTIME_TOPOLOGY_POLICIES_SCHEMAS_HEALTH_AND_EVIDENCE_WITHOUT_SECRET_CONTENT",
+      "entry_requires": ["L00_SCOPE_LOCKED", "READ_ONLY_INVENTORY_SCOPE"],
+      "deliverables": ["BASELINE_MANIFEST", "ENDPOINT_CAPABILITY_MAP", "GAP_REGISTER", "SOURCE_SHA256_MANIFEST"],
+      "exit_requires": ["ALL_REQUIRED_SOURCES_IDENTIFIED", "NO_SECRET_OR_MEMBER_PLAINTEXT_READ", "BASELINE_REPRODUCIBLE"],
+      "current_state": "READY_FOR_BOUNDED_READ_ONLY_REFRESH",
+      "rollback": "DISCARD_BASELINE_CANDIDATE_REPORTS_ONLY"
+    },
+    {
+      "phase_id": "L02_CONTRACT_AND_FIELD_FREEZE",
+      "objective": "FREEZE_D1_TO_D8_INTENT_STATE_ENVELOPE_SCHEMA_HOLD_STATES_AND_VERSIONING",
+      "entry_requires": ["L01_BASELINE_PASS", "IDENTITY_REFERENCE_BOUNDARY_ACCEPTED"],
+      "deliverables": ["INTENT_ROOT_SCHEMA", "MINIMUM_DELTA_SCHEMA", "D8_ENVELOPE_SCHEMA", "RECEIPT_SCHEMAS", "VERSION_MIGRATION_RULES"],
+      "exit_requires": ["SCHEMAS_CLOSED", "UNKNOWN_FIELDS_REJECTED", "NEGATIVE_TESTS_PASS", "TOTAL_FIELD_STATIC_REVIEW_PASS"],
+      "current_state": "HOLD_PREDECESSOR_GATES",
+      "rollback": "KEEP_PREVIOUS_SCHEMA_VERSION_ACTIVE"
+    },
+    {
+      "phase_id": "L03_DETERMINISTIC_CORE_SHADOW",
+      "objective": "IMPLEMENT_INTENT_RESOLUTION_SCOPED_STATE_LOAD_THREE_GATES_AND_DETERMINISTIC_ROUTES_IN_SHADOW",
+      "entry_requires": ["L02_CONTRACT_FREEZE_PASS", "VERSIONED_RULE_BUNDLE"],
+      "deliverables": ["SHADOW_CONTROLLER", "RULE_AND_TEMPLATE_BUNDLE", "DECISION_TRACE", "FAIL_CLOSED_TEST_REPORT"],
+      "exit_requires": ["KNOWN_INTENTS_BYPASS_MODEL", "UNRESOLVED_INTENT_CALLS_NO_MODEL", "ALL_EFFECTS_FALSE", "REPLAY_DETERMINISTIC"],
+      "current_state": "HOLD_PREDECESSOR_GATES",
+      "rollback": "STOP_SHADOW_CONTROLLER_AND_REMOVE_NO_ACTIVE_POINTER"
+    },
+    {
+      "phase_id": "L04_MODEL_UNKNOWN_DELTA_SHADOW",
+      "objective": "CONNECT_LOCAL_MODEL_ONLY_FOR_UNKNOWN_SLOTS_WITH_CANDIDATE_SCHEMA_AND_VERIFIER",
+      "entry_requires": ["L03_DETERMINISTIC_CORE_PASS", "MODEL_PACKET_MINIMIZATION_PROVEN"],
+      "deliverables": ["MODEL_DELTA_ADAPTER", "OUTPUT_SCHEMA_VALIDATOR", "QUALITY_AND_LATENCY_REPORT", "PROMPT_DATA_BOUNDARY_REPORT"],
+      "exit_requires": ["MODEL_CALL_COUNT_BOUNDED", "RAW_INPUT_NOT_IN_MODEL_PACKET", "INVALID_OUTPUT_HOLDS", "MODEL_AUTHORITY_NONE"],
+      "current_state": "HOLD_PREDECESSOR_GATES",
+      "rollback": "DISABLE_MODEL_DELTA_ADAPTER_AND_USE_DETERMINISTIC_HOLD"
+    },
+    {
+      "phase_id": "L05_ADI_GTP_MOVING_V_SHADOW",
+      "objective": "BIND_ADI_DELTA_F_GTP_RECONSTRUCTION_AND_MOVING_V_OBSERVATION_WITHOUT_MEMORY_EFFECT",
+      "entry_requires": ["L04_MODEL_DELTA_PASS", "ADI_PRODUCER_RECEIPT", "GTP_EXPECTED_HASH_CONTRACT"],
+      "deliverables": ["ADI_BINDING_ADAPTER", "GTP_RECONSTRUCTION_RECEIPTS", "MOVING_V_SHADOW_REPORTS", "FALSE_MISS_AND_REBUILD_REPORT"],
+      "exit_requires": ["RECONSTRUCTION_HASH_MATCH", "CANONICAL_SOURCE_RETAINED", "MEMORY_EFFECT_COUNT_ZERO", "PERFORMANCE_THRESHOLDS_CALIBRATED"],
+      "current_state": "HOLD_ADI_GTP_BINDINGS_UNPROVEN",
+      "rollback": "DISCONNECT_ADI_GTP_SHADOW_ADAPTERS_AND_RETAIN_STATIC_REFERENCES"
+    },
+    {
+      "phase_id": "L06_HUMAN_REVIEWED_LOCAL_PILOT",
+      "objective": "RUN_LOCAL_OR_PAPER_PUBLIC_TEST_WITH_HUMAN_CONFIRMATION_AND_NO_FORMAL_WRITE",
+      "entry_requires": ["L05_SHADOW_PASS", "TEST_SCENARIOS_APPROVED", "STOP_AND_SUPPORT_PROCEDURES_READY"],
+      "deliverables": ["TASK_SUCCESS_REPORT", "HUMAN_FRICTION_REPORT", "LATENCY_AND_RECOVERY_REPORT", "INCIDENT_AND_HOLD_LOG"],
+      "exit_requires": ["ZERO_HARDWALL_VIOLATIONS", "HUMAN_CONFIRMATION_ALWAYS_ENFORCED", "USER_EXPERIENCE_ACCEPTED", "ROLLBACK_DRILL_PASS"],
+      "current_state": "HOLD_PREDECESSOR_GATES",
+      "rollback": "DISABLE_PILOT_ENTRY_AND_RETAIN_CANDIDATE_REPORTS"
+    },
+    {
+      "phase_id": "L07_SCOPED_REVOCABLE_CANARY",
+      "objective": "ALLOW_ONE_NARROW_REVERSIBLE_EFFECT_PATH_UNDER_SIGNED_TOTAL_FIELD_AUTHORIZATION",
+      "entry_requires": ["L06_PILOT_PASS", "ACTIVE_SCOPED_AUTHORIZATION", "EFFECT_AND_ROLLBACK_RECEIPT_IMPLEMENTED"],
+      "deliverables": ["CANARY_DECISION_RECEIPT", "EFFECT_RECEIPTS", "ROLLBACK_RECEIPTS", "CANARY_EVALUATION"],
+      "exit_requires": ["SCOPE_TIME_NODE_AND_ACTION_LIMITS_HONORED", "REVOCATION_TEST_PASS", "NO_UNAUTHORIZED_EFFECT", "TOTAL_FIELD_REVIEW_PASS"],
+      "current_state": "HOLD_AUTHORITY_INACTIVE",
+      "rollback": "REVOKE_CANARY_RECEIPT_DISABLE_ENTRY_RESTORE_LAST_SIGNED_BUNDLE"
+    },
+    {
+      "phase_id": "L08_FORMAL_PROMOTION_AND_OPERATIONS",
+      "objective": "PROMOTE_SIGNED_VERSION_WITH_SLO_MONITORING_INCIDENT_RESPONSE_AND_REVERSIBLE_UPGRADE",
+      "entry_requires": ["L07_CANARY_PASS", "FORMAL_TOTAL_FIELD_PROMOTION_DECISION", "OPERATIONS_OWNER_ACCEPTANCE"],
+      "deliverables": ["SIGNED_RELEASE_BUNDLE", "ACTIVE_POINTER_RECEIPT", "RUNBOOK", "SLO_DASHBOARD", "INCIDENT_AND_ROLLBACK_POLICY"],
+      "exit_requires": ["POST_PROMOTION_VERIFICATION_PASS", "EVIDENCE_CHAIN_COMPLETE", "ROLLBACK_TARGET_VERIFIED", "HUMAN_OWNER_ACKNOWLEDGED"],
+      "current_state": "HOLD_NOT_AUTHORIZED",
+      "rollback": "RESTORE_PREVIOUS_SIGNED_ACTIVE_POINTER_AND_VERIFY_STATE_ROOT"
+    }
+  ],
+  "measurement_framework": {
+    "ordered_objectives": [
+      "DATA_AND_IDENTITY_SAFETY",
+      "TASK_EFFECT_AND_CORRECTNESS",
+      "HUMAN_PERCEIVED_LATENCY_AND_FRICTION",
+      "RECONSTRUCTION_AND_RECOVERY_RELIABILITY",
+      "INTENT_RESOLUTION_AND_PRELOAD_QUALITY",
+      "SYSTEM_STABILITY",
+      "MEMORY_COMPUTE_AND_TRANSFER_EFFICIENCY"
+    ],
+    "zero_tolerance_metrics": [
+      "UNAUTHORIZED_EFFECT_COUNT",
+      "MEMBER_PLAINTEXT_LEAK_COUNT",
+      "SECRET_OR_CREDENTIAL_LEAK_COUNT",
+      "CANONICAL_SOURCE_DELETE_COUNT",
+      "MODEL_OR_DEVICE_AUTHORITY_ESCALATION_COUNT",
+      "EFFECT_WITHOUT_RECEIPT_COUNT"
+    ],
+    "calibration_required_metrics": [
+      "TASK_SUCCESS_RATE",
+      "INTENT_HOLD_AND_CLARIFICATION_RATE",
+      "DETERMINISTIC_ROUTE_RATE",
+      "MODEL_CALL_RATE",
+      "HUMAN_CONFIRMATION_FRICTION",
+      "END_TO_END_P50_P95_P99_LATENCY",
+      "RECONSTRUCTION_SUCCESS_AND_P95_LATENCY",
+      "FALSE_MISS_AND_PRELOAD_HIT_RATE",
+      "ROLLBACK_TIME_AND_RECOVERY_SUCCESS",
+      "MEMORY_AND_TRANSFER_SAVINGS"
+    ],
+    "numeric_threshold_state": "PENDING_BASELINE_AND_HUMAN_REVIEWED_CALIBRATION"
+  },
+  "responsibility_matrix": [
+    {
+      "role": "FOUNDER_OR_DESIGNATED_HUMAN",
+      "responsibility": "RATIFY_MEANING_SCOPE_PRODUCT_EFFECT_AND_ACCEPTABLE_HUMAN_EXPERIENCE",
+      "may_grant_runtime_effect_alone": false
+    },
+    {
+      "role": "TOTAL_FIELD",
+      "responsibility": "ISSUE_FORMAL_SCOPED_DECISION_PROMOTION_AND_REVOCATION_RECEIPTS",
+      "may_grant_runtime_effect_alone": true
+    },
+    {
+      "role": "IDENTITY_GOVERNANCE",
+      "responsibility": "MAINTAIN_MEMBER_IDENTITY_SOVEREIGNTY_AND_REFERENCE_ONLY_SERVICE_BINDINGS",
+      "may_grant_runtime_effect_alone": false
+    },
+    {
+      "role": "RUNTIME_MAINTAINER",
+      "responsibility": "IMPLEMENT_TEST_DEPLOY_AND_ROLLBACK_ONLY_INSIDE_SIGNED_SCOPE",
+      "may_grant_runtime_effect_alone": false
+    },
+    {
+      "role": "HUMAN_REVIEWER_OR_OPERATOR",
+      "responsibility": "CONFIRM_OR_REJECT_CANDIDATE_EFFECTS_AND_REPORT_FRICTION_OR_INCIDENTS",
+      "may_grant_runtime_effect_alone": false
+    },
+    {
+      "role": "LOCAL_MODEL_OR_ADAPTER",
+      "responsibility": "PRODUCE_CANDIDATE_DELTA_OR_VERIFICATION_SIGNAL_ONLY",
+      "may_grant_runtime_effect_alone": false
+    }
+  ],
+  "evidence_anchors": {
+    "runtime_chain": {
+      "path": "docs/runtime/xiaoj_standard_chain_v1.md",
+      "sha256": "938ffc5209220ff8b9921259418c33e3db19d3de6af1f37d743eaa03a0a2023d"
+    },
+    "intent_field_build_candidate": {
+      "path": "runtime/total_field/landing/INTENT_FIELD_BUILD_V1.json",
+      "sha256": "813fe5ef1ddaa539c90704d7b3cf1278d9d5340e5e4af092d71607ba49786ed1"
+    },
+    "intent_field_reconstruction_candidate": {
+      "path": "runtime/total_field/landing/INTENT_FIELD_RECONSTRUCTION_SUCCESSOR_CANDIDATE_V2.json",
+      "sha256": "d0c0a8120db10b53f150607318b3cc5445b26a0ab730cbcd8470fd690626a330"
+    },
+    "public_test_landing_candidate": {
+      "path": "runtime/total_field/landing/PUBLIC_TEST_LANDING_FLOW_V1.json",
+      "sha256": "22021cd85a00dd9b997a4804d44a76c9656c17474ec583c684bc282552071524"
+    },
+    "true8d_contract_sandbox": {
+      "path": "tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "sha256": "d5ad2b374f89160b94d5aa6222022dcc9cde733d49716e86427e1bc1b69db9f2"
+    },
+    "intent_cache_policy": {
+      "path": "Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json",
+      "sha256": "935575e7e897146d8581c3497a6d5a6e5bf2728f76873a0b3f42a1ca97b395dd"
+    },
+    "authority_profile": {
+      "path": "configs/total_field/active_total_field_authority_runtime_v1.json",
+      "sha256": "9678814a48807431b6b218548639b96b863fa3185c1f0bcc7a5c948ccc76885d"
+    },
+    "adaptive_integration_v3": {
+      "path": "configs/total_field/w7tp_xiaoj_adi_moving_v_adaptive_integration_v3.candidate.json",
+      "sha256": "3614f8ad7fc8bab55587dd4c0183ec6251e9376bf51bb452e12cc8c9d05d21a3"
+    }
+  },
+  "current_decision": {
+    "state": "PLAN_COMPLETE_EXECUTION_NOT_STARTED",
+    "first_execution_phase": "L00_SCOPE_AND_AUTHORITY_LOCK",
+    "next_allowed_action": "HUMAN_REVIEW_PLAN_THEN_RUN_L00_AND_L01_AS_A_SEPARATE_NO_EFFECT_WORK_PACKAGE",
+    "formal_effect_count": 0,
+    "service_restart_count": 0,
+    "deployment_count": 0
+  }
+}

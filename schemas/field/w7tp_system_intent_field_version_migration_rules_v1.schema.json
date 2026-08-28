@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:system-intent-field-version-migration-rules:v1",
+  "title": "W7TP System Intent Field Version Migration Rules V1 Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "rules_version",
+    "rules_id",
+    "status",
+    "scope",
+    "supported_sources",
+    "target_contracts",
+    "migration_rules",
+    "unsupported_version_effect",
+    "lossy_migration_effect",
+    "authority_increase_effect",
+    "hash_mismatch_effect",
+    "rollback",
+    "authority",
+    "current_decision"
+  ],
+  "properties": {
+    "$schema": {"const": "../../schemas/field/w7tp_system_intent_field_version_migration_rules_v1.schema.json"},
+    "rules_version": {"const": "W7TP-SYSTEM-INTENT-FIELD-VERSION-MIGRATION/1.0"},
+    "rules_id": {"const": "W7TP_SYSTEM_INTENT_FIELD_VERSION_MIGRATION_RULES_V1_CANDIDATE"},
+    "status": {"const": "CANDIDATE_ONLY"},
+    "scope": {"const": "SCHEMA_AND_REFERENCE_PACKET_MIGRATION_NO_RUNTIME_EFFECT"},
+    "supported_sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "target_contracts": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/target"}
+    },
+    "migration_rules": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/rule"}
+    },
+    "unsupported_version_effect": {"const": "HOLD_VERSION_UNSUPPORTED"},
+    "lossy_migration_effect": {"const": "HOLD_LOSSY_MIGRATION_FORBIDDEN"},
+    "authority_increase_effect": {"const": "HOLD_AUTHORITY_ESCALATION"},
+    "hash_mismatch_effect": {"const": "HOLD_SOURCE_HASH_MISMATCH"},
+    "rollback": {"const": "KEEP_PREVIOUS_SCHEMA_VERSION_ACTIVE_AND_DISCARD_CANDIDATE_MIGRATION"},
+    "authority": {"$ref": "#/$defs/authority"},
+    "current_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "automatic_migration_allowed", "automatic_promotion_allowed", "next_gate"],
+      "properties": {
+        "state": {"const": "RULES_CLOSED_CANDIDATE_ONLY"},
+        "automatic_migration_allowed": {"const": false},
+        "automatic_promotion_allowed": {"const": false},
+        "next_gate": {"const": "TOTAL_FIELD_STATIC_REVIEW"}
+      }
+    }
+  },
+  "$defs": {
+    "ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "version", "compatibility"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/ref"},
+        "version": {"$ref": "#/$defs/ref"},
+        "compatibility": {"enum": ["SEMANTIC_PREDECESSOR_REQUIRES_EXPLICIT_MIGRATION", "EXACT_VERSION_VALIDATE_ONLY"]}
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_id", "version", "path"],
+      "properties": {
+        "contract_id": {"$ref": "#/$defs/ref"},
+        "version": {"$ref": "#/$defs/ref"},
+        "path": {"$ref": "#/$defs/ref"}
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_id", "trigger", "result", "required_conditions"],
+      "properties": {
+        "rule_id": {"type": "string", "pattern": "^MIG_[0-9]{3}_[A-Z0-9_]+$"},
+        "trigger": {"$ref": "#/$defs/ref"},
+        "result": {"$ref": "#/$defs/ref"},
+        "required_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ref"}
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_authority", "migration_authority", "formal_landing_allowed", "applies_change", "memory_effect", "database_write", "deployment", "restart", "remote_write"],
+      "properties": {
+        "decision_authority": {"const": "TOTAL_FIELD"},
+        "migration_authority": {"const": "NONE"},
+        "formal_landing_allowed": {"const": false},
+        "applies_change": {"const": false},
+        "memory_effect": {"const": false},
+        "database_write": {"const": false},
+        "deployment": {"const": false},
+        "restart": {"const": false},
+        "remote_write": {"const": false}
+      }
+    }
+  }
+}

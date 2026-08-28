@@ -1,0 +1,147 @@
+{
+  "$schema": "../../schemas/field/w7tp_system_intent_field_contract_freeze_v1.schema.json",
+  "contract_version": "W7TP-SYSTEM-INTENT-FIELD-CONTRACT-FREEZE/1.0",
+  "contract_id": "W7TP_SYSTEM_INTENT_FIELD_CONTRACT_FREEZE_V1_CANDIDATE",
+  "status": "CANDIDATE_CONTRACT_FREEZE",
+  "phase_id": "L02_CONTRACT_AND_FIELD_FREEZE",
+  "objective": "FREEZE_D1_TO_D8_INTENT_STATE_ENVELOPE_SCHEMA_HOLD_STATES_AND_VERSIONING",
+  "predecessor": {
+    "package_id": "W7TP_SYSTEM_INTENT_FIELD_L00_PLUS_L01_20260818T202634Z",
+    "package_decision_path": "runtime/total_field/inbox/W7TP_SYSTEM_INTENT_FIELD_L00_PLUS_L01_20260818T202634Z/PACKAGE_DECISION.json",
+    "package_decision_sha256": "e751e0cdefb8c49934b9097e4f0fca5fc82f0e742a3dca0b6bc00546efd38cc4",
+    "artifact_set_sha256": "06710e7d865efd89816e04c61b8b52e867ba6f1ccdc61e630fdaa33985c9757c",
+    "l02_entry_decision_path": "runtime/total_field/inbox/W7TP_SYSTEM_INTENT_FIELD_L00_PLUS_L01_20260818T202634Z/L02_ENTRY_DECISION.json",
+    "l02_entry_decision_sha256": "a810e9195a7ab69289246e660e4e0e6d7547f22231d56f862851abbeb1a5d34c"
+  },
+  "construction_order": [
+    "D1_INTENT_RESOLUTION",
+    "LOAD_VERIFIED_SCOPED_STATE",
+    "GATE_1_CANONICAL_LOCK",
+    "GATE_2_INTENT_PRODUCT_GAP",
+    "GATE_3_HUMAN_UI_PRODUCT_REVIEW",
+    "GENERATE_UNKNOWN_DELTA_ONLY",
+    "RECONSTRUCT_CANDIDATE_STATE",
+    "VERIFY_CANDIDATE",
+    "TOTAL_FIELD_REVIEW"
+  ],
+  "contract_artifacts": [
+    {
+      "artifact_id": "INTENT_ROOT_SCHEMA",
+      "path": "schemas/field/w7tp_system_intent_root_v1.schema.json",
+      "sha256": "273b50525a631ac055e1aa7c6c1b61e79e0757adce691d7f44a00a0a38d12970",
+      "role": "CLOSED_D1_INTENT_ROOT_REFERENCES_ACCEPTANCE_AND_UNRESOLVED_HOLD"
+    },
+    {
+      "artifact_id": "MINIMUM_DELTA_SCHEMA",
+      "path": "schemas/field/w7tp_system_intent_minimum_delta_v1.schema.json",
+      "sha256": "79afef0506b908f59ae7d0c12ca124136931e9fac5b4391196f65f8e6f0f5b77",
+      "role": "REFERENCE_ONLY_TRUE_MINIMUM_DELTA_AND_UNKNOWN_SLOT_PACKET"
+    },
+    {
+      "artifact_id": "D8_ENVELOPE_SCHEMA",
+      "path": "schemas/field/w7tp_system_intent_d8_envelope_v1.schema.json",
+      "sha256": "780c198686c487281f18c6b6fb504cbb361428adb330c4a9ce26440368c3d1c7",
+      "role": "ORDERED_D1_TO_D7_REFERENCE_ENVELOPE_RECONSTRUCTION_AND_VERIFICATION"
+    },
+    {
+      "artifact_id": "RECEIPT_CHAIN_SCHEMA",
+      "path": "schemas/field/w7tp_system_intent_receipt_chain_v1.schema.json",
+      "sha256": "8d2419fda24cba8b12a3537b4fab067a23c1d11dfe10ce57a7b393c3b4d4240a",
+      "role": "DECISION_TRANSITION_NO_EFFECT_AND_ROLLBACK_RECEIPT_CHAIN_WITH_REPLAY_CONTROLS"
+    },
+    {
+      "artifact_id": "VERSION_MIGRATION_RULES",
+      "path": "configs/total_field/w7tp_system_intent_field_version_migration_rules_v1.candidate.json",
+      "sha256": "60ef59e82fbe0724c2ac613795fae89b71ec577afa6dafc3d8af9b7019be7c38",
+      "role": "APPEND_ONLY_FAIL_CLOSED_VERSION_MIGRATION_WITHOUT_AUTOMATIC_PROMOTION"
+    }
+  ],
+  "migration_rules": {
+    "artifact_id": "VERSION_MIGRATION_RULES",
+    "path": "configs/total_field/w7tp_system_intent_field_version_migration_rules_v1.candidate.json",
+    "sha256": "60ef59e82fbe0724c2ac613795fae89b71ec577afa6dafc3d8af9b7019be7c38",
+    "role": "APPEND_ONLY_FAIL_CLOSED_VERSION_MIGRATION_WITHOUT_AUTOMATIC_PROMOTION"
+  },
+  "closed_contract_controls": {
+    "all_objects_closed": true,
+    "unknown_fields_rejected": true,
+    "integer_only_numeric_state": true,
+    "reference_only_cross_node_transport": true,
+    "model_unknown_slots_only": true,
+    "receipt_chain_required_before_commit": true
+  },
+  "data_boundaries": {
+    "allowed_cross_node_material": [
+      "STATE_REFERENCES",
+      "MINIMUM_DELTAS",
+      "SHA256_HASHES",
+      "AUTHORITY_STATE",
+      "RECONSTRUCTION_CONDITIONS",
+      "VERIFICATION_INSTRUCTIONS",
+      "RECEIPT_REFERENCES"
+    ],
+    "forbidden_material": [
+      "RAW_USER_INPUT",
+      "FULL_CONTEXT",
+      "KNOWN_PRIVATE_STATE_VALUE",
+      "MEMBER_PLAINTEXT",
+      "PAYMENT_SECRET",
+      "CREDENTIAL_OR_TOKEN"
+    ],
+    "raw_input_hold": "RAW_INPUT_NEVER_ENTERS_CACHE_OR_UNKNOWN_DELTA_PACKET",
+    "no_delta_effect": "BUILD_NOT_REQUIRED"
+  },
+  "identity_and_ownership_boundary": {
+    "member_identity_sovereignty_source": "ASSOCIATION_GOVERNED_MEMBER_IDENTITY_REGISTRY",
+    "service_identity_mode": "ROLE_BINDING_OR_8D_IDENTITY_PACKET_REFERENCE_ONLY",
+    "full_member_plaintext_replication_allowed": false,
+    "technical_ownership_transfer_proven": false,
+    "technical_ownership_and_runtime_authority_are_separate": true
+  },
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "active_total_field_profile": false,
+    "formal_landing_allowed": false,
+    "applies_change": false,
+    "memory_effect": false,
+    "database_write": false,
+    "deployment": false,
+    "restart": false,
+    "remote_write": false,
+    "model_has_authority": false,
+    "adapter_has_authority": false,
+    "device_has_authority": false
+  },
+  "hold_states": [
+    "LOCAL_HOLD_INTENT_UNRESOLVED",
+    "HOLD_BEFORE_STATE_LOAD_OR_MODEL_CALL",
+    "HOLD_STATE_UNVERIFIED",
+    "HOLD_COORDINATE_UNBOUND",
+    "HOLD_EVIDENCE_INCOMPLETE",
+    "HOLD_EFFECT_UNAUTHORIZED",
+    "HOLD_SEMANTIC_DRIFT",
+    "HOLD_HARD_RISK",
+    "HOLD_ENVELOPE_INVALID",
+    "HOLD_SCHEMA_UNKNOWN_FIELD",
+    "HOLD_VERSION_UNSUPPORTED",
+    "HOLD_LOSSY_MIGRATION_FORBIDDEN",
+    "HOLD_AUTHORITY_ESCALATION",
+    "HOLD_SOURCE_HASH_MISMATCH",
+    "HOLD_NO_COMMIT"
+  ],
+  "exit_requirements": {
+    "SCHEMAS_CLOSED": "REQUIRED",
+    "UNKNOWN_FIELDS_REJECTED": "REQUIRED",
+    "NEGATIVE_TESTS_PASS": "REQUIRED",
+    "TOTAL_FIELD_STATIC_REVIEW_PASS": "REQUIRED"
+  },
+  "current_decision": {
+    "state": "CONTRACTS_FROZEN_CANDIDATE_STATIC_REVIEW_REQUIRED",
+    "formal_effect_count": 0,
+    "service_restart_count": 0,
+    "deployment_count": 0,
+    "database_write_count": 0,
+    "memory_effect_count": 0,
+    "next_gate": "L03_ENTRY_DECISION_ONLY"
+  }
+}

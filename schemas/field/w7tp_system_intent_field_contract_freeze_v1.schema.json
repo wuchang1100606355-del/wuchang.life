@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:system-intent-field-contract-freeze:v1",
+  "title": "W7TP System Intent Field Contract Freeze V1 Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "contract_version",
+    "contract_id",
+    "status",
+    "phase_id",
+    "objective",
+    "predecessor",
+    "construction_order",
+    "contract_artifacts",
+    "migration_rules",
+    "closed_contract_controls",
+    "data_boundaries",
+    "identity_and_ownership_boundary",
+    "authority",
+    "hold_states",
+    "exit_requirements",
+    "current_decision"
+  ],
+  "properties": {
+    "$schema": {"const": "../../schemas/field/w7tp_system_intent_field_contract_freeze_v1.schema.json"},
+    "contract_version": {"const": "W7TP-SYSTEM-INTENT-FIELD-CONTRACT-FREEZE/1.0"},
+    "contract_id": {"const": "W7TP_SYSTEM_INTENT_FIELD_CONTRACT_FREEZE_V1_CANDIDATE"},
+    "status": {"const": "CANDIDATE_CONTRACT_FREEZE"},
+    "phase_id": {"const": "L02_CONTRACT_AND_FIELD_FREEZE"},
+    "objective": {"const": "FREEZE_D1_TO_D8_INTENT_STATE_ENVELOPE_SCHEMA_HOLD_STATES_AND_VERSIONING"},
+    "predecessor": {"$ref": "#/$defs/predecessor"},
+    "construction_order": {
+      "const": [
+        "D1_INTENT_RESOLUTION",
+        "LOAD_VERIFIED_SCOPED_STATE",
+        "GATE_1_CANONICAL_LOCK",
+        "GATE_2_INTENT_PRODUCT_GAP",
+        "GATE_3_HUMAN_UI_PRODUCT_REVIEW",
+        "GENERATE_UNKNOWN_DELTA_ONLY",
+        "RECONSTRUCT_CANDIDATE_STATE",
+        "VERIFY_CANDIDATE",
+        "TOTAL_FIELD_REVIEW"
+      ]
+    },
+    "contract_artifacts": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "migration_rules": {"$ref": "#/$defs/artifact"},
+    "closed_contract_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["all_objects_closed", "unknown_fields_rejected", "integer_only_numeric_state", "reference_only_cross_node_transport", "model_unknown_slots_only", "receipt_chain_required_before_commit"],
+      "properties": {
+        "all_objects_closed": {"const": true},
+        "unknown_fields_rejected": {"const": true},
+        "integer_only_numeric_state": {"const": true},
+        "reference_only_cross_node_transport": {"const": true},
+        "model_unknown_slots_only": {"const": true},
+        "receipt_chain_required_before_commit": {"const": true}
+      }
+    },
+    "data_boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_cross_node_material", "forbidden_material", "raw_input_hold", "no_delta_effect"],
+      "properties": {
+        "allowed_cross_node_material": {"$ref": "#/$defs/nonempty_strings"},
+        "forbidden_material": {"$ref": "#/$defs/nonempty_strings"},
+        "raw_input_hold": {"const": "RAW_INPUT_NEVER_ENTERS_CACHE_OR_UNKNOWN_DELTA_PACKET"},
+        "no_delta_effect": {"const": "BUILD_NOT_REQUIRED"}
+      }
+    },
+    "identity_and_ownership_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["member_identity_sovereignty_source", "service_identity_mode", "full_member_plaintext_replication_allowed", "technical_ownership_transfer_proven", "technical_ownership_and_runtime_authority_are_separate"],
+      "properties": {
+        "member_identity_sovereignty_source": {"const": "ASSOCIATION_GOVERNED_MEMBER_IDENTITY_REGISTRY"},
+        "service_identity_mode": {"const": "ROLE_BINDING_OR_8D_IDENTITY_PACKET_REFERENCE_ONLY"},
+        "full_member_plaintext_replication_allowed": {"const": false},
+        "technical_ownership_transfer_proven": {"const": false},
+        "technical_ownership_and_runtime_authority_are_separate": {"const": true}
+      }
+    },
+    "authority": {"$ref": "#/$defs/authority"},
+    "hold_states": {"$ref": "#/$defs/nonempty_strings"},
+    "exit_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["SCHEMAS_CLOSED", "UNKNOWN_FIELDS_REJECTED", "NEGATIVE_TESTS_PASS", "TOTAL_FIELD_STATIC_REVIEW_PASS"],
+      "properties": {
+        "SCHEMAS_CLOSED": {"const": "REQUIRED"},
+        "UNKNOWN_FIELDS_REJECTED": {"const": "REQUIRED"},
+        "NEGATIVE_TESTS_PASS": {"const": "REQUIRED"},
+        "TOTAL_FIELD_STATIC_REVIEW_PASS": {"const": "REQUIRED"}
+      }
+    },
+    "current_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "formal_effect_count", "service_restart_count", "deployment_count", "database_write_count", "memory_effect_count", "next_gate"],
+      "properties": {
+        "state": {"const": "CONTRACTS_FROZEN_CANDIDATE_STATIC_REVIEW_REQUIRED"},
+        "formal_effect_count": {"const": 0},
+        "service_restart_count": {"const": 0},
+        "deployment_count": {"const": 0},
+        "database_write_count": {"const": 0},
+        "memory_effect_count": {"const": 0},
+        "next_gate": {"const": "L03_ENTRY_DECISION_ONLY"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nonempty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_id", "package_decision_path", "package_decision_sha256", "artifact_set_sha256", "l02_entry_decision_path", "l02_entry_decision_sha256"],
+      "properties": {
+        "package_id": {"const": "W7TP_SYSTEM_INTENT_FIELD_L00_PLUS_L01_20260818T202634Z"},
+        "package_decision_path": {"type": "string", "minLength": 1},
+        "package_decision_sha256": {"$ref": "#/$defs/sha256"},
+        "artifact_set_sha256": {"$ref": "#/$defs/sha256"},
+        "l02_entry_decision_path": {"type": "string", "minLength": 1},
+        "l02_entry_decision_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "path", "sha256", "role"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "role": {"type": "string", "minLength": 1}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_authority", "active_total_field_profile", "formal_landing_allowed", "applies_change", "memory_effect", "database_write", "deployment", "restart", "remote_write", "model_has_authority", "adapter_has_authority", "device_has_authority"],
+      "properties": {
+        "decision_authority": {"const": "TOTAL_FIELD"},
+        "active_total_field_profile": {"const": false},
+        "formal_landing_allowed": {"const": false},
+        "applies_change": {"const": false},
+        "memory_effect": {"const": false},
+        "database_write": {"const": false},
+        "deployment": {"const": false},
+        "restart": {"const": false},
+        "remote_write": {"const": false},
+        "model_has_authority": {"const": false},
+        "adapter_has_authority": {"const": false},
+        "device_has_authority": {"const": false}
+      }
+    }
+  }
+}

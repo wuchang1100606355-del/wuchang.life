@@ -1,0 +1,187 @@
+{
+  "$schema": "../../schemas/field/w7tp_system_intent_field_deterministic_shadow_v1.schema.json",
+  "bundle_version": "W7TP-SYSTEM-INTENT-FIELD-DETERMINISTIC-SHADOW/1.0",
+  "bundle_id": "W7TP_SYSTEM_INTENT_FIELD_DETERMINISTIC_SHADOW_V1_CANDIDATE",
+  "status": "CANDIDATE_SHADOW_ONLY",
+  "phase_id": "L03_DETERMINISTIC_CORE_SHADOW",
+  "objective": "IMPLEMENT_INTENT_RESOLUTION_SCOPED_STATE_LOAD_THREE_GATES_AND_DETERMINISTIC_ROUTES_IN_SHADOW",
+  "predecessor": {
+    "package_id": "W7TP_SYSTEM_INTENT_FIELD_L02_CONTRACT_AND_FIELD_FREEZE_20260818T204413Z",
+    "package_decision_path": "runtime/total_field/inbox/W7TP_SYSTEM_INTENT_FIELD_L02_CONTRACT_AND_FIELD_FREEZE_20260818T204413Z/PACKAGE_DECISION.json",
+    "package_decision_sha256": "7b76a55f28afefba1ce2b524b4a9ef557d08bf37ff7910175bd33b8eea9d179c",
+    "artifact_set_sha256": "89c4f0385eb503b80c1c9d7ea84f2eaf7c871074e9ec8771a92d63fe8704238a",
+    "l03_entry_decision_path": "runtime/total_field/inbox/W7TP_SYSTEM_INTENT_FIELD_L02_CONTRACT_AND_FIELD_FREEZE_20260818T204413Z/L03_ENTRY_DECISION.json",
+    "l03_entry_decision_sha256": "de7f010492ff2dded177eba06a404ef3c457cf7333f89b8516210923bcccda03",
+    "contract_bundle_path": "configs/total_field/w7tp_system_intent_field_contract_freeze_v1.candidate.json",
+    "contract_bundle_sha256": "8c6e4a248ac5296df5419a45c7df0c8ec38a5abc6204dfe622befcc88fa3da47",
+    "version_rules_path": "configs/total_field/w7tp_system_intent_field_version_migration_rules_v1.candidate.json",
+    "version_rules_sha256": "60ef59e82fbe0724c2ac613795fae89b71ec577afa6dafc3d8af9b7019be7c38"
+  },
+  "controller": {
+    "controller_id": "W7TP_SYSTEM_INTENT_FIELD_DETERMINISTIC_SHADOW_V1",
+    "path": "tools/total_field/w7tp_system_intent_field_deterministic_shadow.py",
+    "sha256": "e9c85506f65d92753bfdf87ed5df24e647b8bb64277779b9fb82f9ee09f86278",
+    "mode": "PURE_LOCAL_DETERMINISTIC_REFERENCE_ONLY",
+    "external_io_allowed": false,
+    "model_interface_present": false
+  },
+  "construction_order": [
+    "VALIDATE_REFERENCE_ONLY_REQUEST",
+    "RESOLVE_GOVERNED_INTENT",
+    "HOLD_UNRESOLVED_BEFORE_STATE_LOAD_OR_MODEL",
+    "LOAD_VERIFIED_SCOPED_STATE",
+    "GATE_1_CANONICAL_LOCK",
+    "GATE_2_INTENT_PRODUCT_GAP",
+    "GATE_3_HUMAN_UI_PRODUCT_REVIEW",
+    "BUILD_REFERENCE_ONLY_CANDIDATE_OR_HOLD",
+    "EMIT_DETERMINISTIC_NO_EFFECT_TRACE"
+  ],
+  "templates": [
+    {
+      "template_ref": "template:no-state-change-v1",
+      "template_version": "1.0",
+      "output_kind": "NO_STATE_CHANGE",
+      "output_schema_ref": "schema:w7tp-system-intent-minimum-delta-v1",
+      "model_allowed": false,
+      "authority": "NONE",
+      "formal_effect_allowed": false
+    },
+    {
+      "template_ref": "template:reference-replace-v1",
+      "template_version": "1.0",
+      "output_kind": "REFERENCE_DELTA",
+      "output_schema_ref": "schema:w7tp-system-intent-minimum-delta-v1",
+      "model_allowed": false,
+      "authority": "NONE",
+      "formal_effect_allowed": false
+    },
+    {
+      "template_ref": "template:unknown-slot-hold-v1",
+      "template_version": "1.0",
+      "output_kind": "UNKNOWN_SLOT_HOLD",
+      "output_schema_ref": "schema:w7tp-system-intent-minimum-delta-v1",
+      "model_allowed": false,
+      "authority": "NONE",
+      "formal_effect_allowed": false
+    }
+  ],
+  "rules": [
+    {
+      "rule_id": "rule:menu-query-v1",
+      "intent_code": "MENU_QUERY",
+      "outcome_code": "INFORMATION_ONLY_NO_CHANGE",
+      "template_ref": "template:no-state-change-v1",
+      "target_effect_ref": "effect:menu-information-only",
+      "route_mode": "NO_STATE_CHANGE",
+      "coordinate_ref": "coordinate:service-menu",
+      "candidate_product_ref": "product:menu-current",
+      "human_confirmation_required": true,
+      "model_allowed": false,
+      "formal_effect_allowed": false
+    },
+    {
+      "rule_id": "rule:staff-assist-v1",
+      "intent_code": "STAFF_ASSIST",
+      "outcome_code": "REFERENCE_DELTA_CANDIDATE",
+      "template_ref": "template:reference-replace-v1",
+      "target_effect_ref": "effect:staff-assist-guidance",
+      "route_mode": "CANDIDATE_REFERENCE_REPLACE",
+      "coordinate_ref": "coordinate:staff-assist-product",
+      "candidate_product_ref": "product:staff-assist-guidance-v1",
+      "human_confirmation_required": true,
+      "model_allowed": false,
+      "formal_effect_allowed": false
+    },
+    {
+      "rule_id": "rule:service-request-v1",
+      "intent_code": "SERVICE_REQUEST",
+      "outcome_code": "REFERENCE_DELTA_CANDIDATE",
+      "template_ref": "template:reference-replace-v1",
+      "target_effect_ref": "effect:service-request-draft",
+      "route_mode": "CANDIDATE_REFERENCE_REPLACE",
+      "coordinate_ref": "coordinate:service-request-product",
+      "candidate_product_ref": "product:service-request-draft-v1",
+      "human_confirmation_required": true,
+      "model_allowed": false,
+      "formal_effect_allowed": false
+    },
+    {
+      "rule_id": "rule:display-update-v1",
+      "intent_code": "DISPLAY_UPDATE",
+      "outcome_code": "REFERENCE_DELTA_CANDIDATE",
+      "template_ref": "template:reference-replace-v1",
+      "target_effect_ref": "effect:display-update-draft",
+      "route_mode": "CANDIDATE_REFERENCE_REPLACE",
+      "coordinate_ref": "coordinate:display-product",
+      "candidate_product_ref": "product:display-update-draft-v1",
+      "human_confirmation_required": true,
+      "model_allowed": false,
+      "formal_effect_allowed": false
+    },
+    {
+      "rule_id": "rule:pos-order-create-v1",
+      "intent_code": "POS_ORDER_CREATE",
+      "outcome_code": "UNKNOWN_SLOT_HOLD_NO_MODEL",
+      "template_ref": "template:unknown-slot-hold-v1",
+      "target_effect_ref": "effect:pos-order-draft",
+      "route_mode": "UNKNOWN_SLOT_HOLD",
+      "coordinate_ref": "coordinate:pos-order-draft",
+      "candidate_product_ref": "product:pos-order-draft-v1",
+      "human_confirmation_required": true,
+      "model_allowed": false,
+      "formal_effect_allowed": false
+    }
+  ],
+  "unresolved_intent_effect": "LOCAL_HOLD_INTENT_UNRESOLVED",
+  "unknown_slot_effect": "LOCAL_HOLD_UNKNOWN_SLOT_REQUIRES_L04",
+  "replay_controls": {
+    "deterministic_serialization": "SORTED_KEYS_COMPACT_ASCII_JSON_SHA256",
+    "duplicate_submission_policy": "RETURN_IDENTICAL_TRACE_NO_NEW_EFFECT",
+    "race_policy": "EXPECTED_STATE_VERSION_AND_HASH_CAS_HOLD",
+    "clock_input_allowed": false,
+    "random_input_allowed": false
+  },
+  "data_boundaries": {
+    "allowed_material": [
+      "INTENT_CODE",
+      "ROLE_OR_8D_REFERENCES",
+      "STATE_REFERENCES",
+      "STATE_VERSION_AND_HASH",
+      "MINIMUM_DELTAS",
+      "RECONSTRUCTION_CONDITIONS",
+      "VERIFICATION_INSTRUCTIONS"
+    ],
+    "forbidden_material": [
+      "RAW_USER_INPUT",
+      "FULL_CONTEXT",
+      "KNOWN_PRIVATE_STATE_VALUE",
+      "MEMBER_PLAINTEXT",
+      "PAYMENT_SECRET",
+      "CREDENTIAL_OR_TOKEN"
+    ],
+    "state_load_boundary": "ONLY_AFTER_EXACT_GOVERNED_INTENT_RESOLUTION",
+    "trace_boundary": "REFERENCES_HASHES_DECISIONS_AND_EFFECT_FLAGS_ONLY"
+  },
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "controller_authority": "NONE",
+    "formal_landing_allowed": false,
+    "applies_change": false,
+    "memory_effect": false,
+    "database_write": false,
+    "deployment": false,
+    "restart": false,
+    "remote_write": false,
+    "model_has_authority": false
+  },
+  "current_decision": {
+    "state": "L03_SHADOW_CANDIDATE_LOCAL_VALIDATION_ONLY",
+    "formal_effect_count": 0,
+    "model_call_count": 0,
+    "service_restart_count": 0,
+    "deployment_count": 0,
+    "database_write_count": 0,
+    "memory_effect_count": 0,
+    "next_gate": "L04_ENTRY_DECISION_ONLY"
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:system-intent-field-deterministic-shadow:v1",
+  "title": "W7TP System Intent Field Deterministic Shadow V1 Candidate",
+  "description": "Closed L03 rule-and-template bundle for reference-only deterministic shadow decisions with no model or formal effect authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "bundle_version",
+    "bundle_id",
+    "status",
+    "phase_id",
+    "objective",
+    "predecessor",
+    "controller",
+    "construction_order",
+    "templates",
+    "rules",
+    "unresolved_intent_effect",
+    "unknown_slot_effect",
+    "replay_controls",
+    "data_boundaries",
+    "authority",
+    "current_decision"
+  ],
+  "properties": {
+    "$schema": {"const": "../../schemas/field/w7tp_system_intent_field_deterministic_shadow_v1.schema.json"},
+    "bundle_version": {"const": "W7TP-SYSTEM-INTENT-FIELD-DETERMINISTIC-SHADOW/1.0"},
+    "bundle_id": {"const": "W7TP_SYSTEM_INTENT_FIELD_DETERMINISTIC_SHADOW_V1_CANDIDATE"},
+    "status": {"const": "CANDIDATE_SHADOW_ONLY"},
+    "phase_id": {"const": "L03_DETERMINISTIC_CORE_SHADOW"},
+    "objective": {"const": "IMPLEMENT_INTENT_RESOLUTION_SCOPED_STATE_LOAD_THREE_GATES_AND_DETERMINISTIC_ROUTES_IN_SHADOW"},
+    "predecessor": {"$ref": "#/$defs/predecessor"},
+    "controller": {"$ref": "#/$defs/controller"},
+    "construction_order": {
+      "const": [
+        "VALIDATE_REFERENCE_ONLY_REQUEST",
+        "RESOLVE_GOVERNED_INTENT",
+        "HOLD_UNRESOLVED_BEFORE_STATE_LOAD_OR_MODEL",
+        "LOAD_VERIFIED_SCOPED_STATE",
+        "GATE_1_CANONICAL_LOCK",
+        "GATE_2_INTENT_PRODUCT_GAP",
+        "GATE_3_HUMAN_UI_PRODUCT_REVIEW",
+        "BUILD_REFERENCE_ONLY_CANDIDATE_OR_HOLD",
+        "EMIT_DETERMINISTIC_NO_EFFECT_TRACE"
+      ]
+    },
+    "templates": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 32,
+      "items": {"$ref": "#/$defs/template"}
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/rule"}
+    },
+    "unresolved_intent_effect": {"const": "LOCAL_HOLD_INTENT_UNRESOLVED"},
+    "unknown_slot_effect": {"const": "LOCAL_HOLD_UNKNOWN_SLOT_REQUIRES_L04"},
+    "replay_controls": {"$ref": "#/$defs/replay_controls"},
+    "data_boundaries": {"$ref": "#/$defs/data_boundaries"},
+    "authority": {"$ref": "#/$defs/authority"},
+    "current_decision": {"$ref": "#/$defs/current_decision"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {"type": "string", "minLength": 3, "maxLength": 512, "pattern": "^[A-Za-z0-9_./-]+$"},
+    "ref": {"type": "string", "pattern": "^(?:[a-z][a-z0-9_+.-]*):[A-Za-z0-9][A-Za-z0-9._:/#-]{0,255}$"},
+    "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,95}$"},
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package_id",
+        "package_decision_path",
+        "package_decision_sha256",
+        "artifact_set_sha256",
+        "l03_entry_decision_path",
+        "l03_entry_decision_sha256",
+        "contract_bundle_path",
+        "contract_bundle_sha256",
+        "version_rules_path",
+        "version_rules_sha256"
+      ],
+      "properties": {
+        "package_id": {"const": "W7TP_SYSTEM_INTENT_FIELD_L02_CONTRACT_AND_FIELD_FREEZE_20260818T204413Z"},
+        "package_decision_path": {"$ref": "#/$defs/path"},
+        "package_decision_sha256": {"$ref": "#/$defs/sha256"},
+        "artifact_set_sha256": {"$ref": "#/$defs/sha256"},
+        "l03_entry_decision_path": {"$ref": "#/$defs/path"},
+        "l03_entry_decision_sha256": {"$ref": "#/$defs/sha256"},
+        "contract_bundle_path": {"$ref": "#/$defs/path"},
+        "contract_bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "version_rules_path": {"$ref": "#/$defs/path"},
+        "version_rules_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "controller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["controller_id", "path", "sha256", "mode", "external_io_allowed", "model_interface_present"],
+      "properties": {
+        "controller_id": {"const": "W7TP_SYSTEM_INTENT_FIELD_DETERMINISTIC_SHADOW_V1"},
+        "path": {"const": "tools/total_field/w7tp_system_intent_field_deterministic_shadow.py"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "mode": {"const": "PURE_LOCAL_DETERMINISTIC_REFERENCE_ONLY"},
+        "external_io_allowed": {"const": false},
+        "model_interface_present": {"const": false}
+      }
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "template_ref",
+        "template_version",
+        "output_kind",
+        "output_schema_ref",
+        "model_allowed",
+        "authority",
+        "formal_effect_allowed"
+      ],
+      "properties": {
+        "template_ref": {"$ref": "#/$defs/ref"},
+        "template_version": {"const": "1.0"},
+        "output_kind": {"enum": ["NO_STATE_CHANGE", "REFERENCE_DELTA", "UNKNOWN_SLOT_HOLD"]},
+        "output_schema_ref": {"$ref": "#/$defs/ref"},
+        "model_allowed": {"const": false},
+        "authority": {"const": "NONE"},
+        "formal_effect_allowed": {"const": false}
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "intent_code",
+        "outcome_code",
+        "template_ref",
+        "target_effect_ref",
+        "route_mode",
+        "coordinate_ref",
+        "candidate_product_ref",
+        "human_confirmation_required",
+        "model_allowed",
+        "formal_effect_allowed"
+      ],
+      "properties": {
+        "rule_id": {"$ref": "#/$defs/ref"},
+        "intent_code": {"$ref": "#/$defs/code"},
+        "outcome_code": {"$ref": "#/$defs/code"},
+        "template_ref": {"$ref": "#/$defs/ref"},
+        "target_effect_ref": {"$ref": "#/$defs/ref"},
+        "route_mode": {"enum": ["NO_STATE_CHANGE", "CANDIDATE_REFERENCE_REPLACE", "UNKNOWN_SLOT_HOLD"]},
+        "coordinate_ref": {"$ref": "#/$defs/ref"},
+        "candidate_product_ref": {"$ref": "#/$defs/ref"},
+        "human_confirmation_required": {"const": true},
+        "model_allowed": {"const": false},
+        "formal_effect_allowed": {"const": false}
+      }
+    },
+    "replay_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deterministic_serialization", "duplicate_submission_policy", "race_policy", "clock_input_allowed", "random_input_allowed"],
+      "properties": {
+        "deterministic_serialization": {"const": "SORTED_KEYS_COMPACT_ASCII_JSON_SHA256"},
+        "duplicate_submission_policy": {"const": "RETURN_IDENTICAL_TRACE_NO_NEW_EFFECT"},
+        "race_policy": {"const": "EXPECTED_STATE_VERSION_AND_HASH_CAS_HOLD"},
+        "clock_input_allowed": {"const": false},
+        "random_input_allowed": {"const": false}
+      }
+    },
+    "data_boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_material", "forbidden_material", "state_load_boundary", "trace_boundary"],
+      "properties": {
+        "allowed_material": {
+          "const": [
+            "INTENT_CODE",
+            "ROLE_OR_8D_REFERENCES",
+            "STATE_REFERENCES",
+            "STATE_VERSION_AND_HASH",
+            "MINIMUM_DELTAS",
+            "RECONSTRUCTION_CONDITIONS",
+            "VERIFICATION_INSTRUCTIONS"
+          ]
+        },
+        "forbidden_material": {
+          "const": [
+            "RAW_USER_INPUT",
+            "FULL_CONTEXT",
+            "KNOWN_PRIVATE_STATE_VALUE",
+            "MEMBER_PLAINTEXT",
+            "PAYMENT_SECRET",
+            "CREDENTIAL_OR_TOKEN"
+          ]
+        },
+        "state_load_boundary": {"const": "ONLY_AFTER_EXACT_GOVERNED_INTENT_RESOLUTION"},
+        "trace_boundary": {"const": "REFERENCES_HASHES_DECISIONS_AND_EFFECT_FLAGS_ONLY"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_authority",
+        "controller_authority",
+        "formal_landing_allowed",
+        "applies_change",
+        "memory_effect",
+        "database_write",
+        "deployment",
+        "restart",
+        "remote_write",
+        "model_has_authority"
+      ],
+      "properties": {
+        "decision_authority": {"const": "TOTAL_FIELD"},
+        "controller_authority": {"const": "NONE"},
+        "formal_landing_allowed": {"const": false},
+        "applies_change": {"const": false},
+        "memory_effect": {"const": false},
+        "database_write": {"const": false},
+        "deployment": {"const": false},
+        "restart": {"const": false},
+        "remote_write": {"const": false},
+        "model_has_authority": {"const": false}
+      }
+    },
+    "current_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "formal_effect_count", "model_call_count", "service_restart_count", "deployment_count", "database_write_count", "memory_effect_count", "next_gate"],
+      "properties": {
+        "state": {"const": "L03_SHADOW_CANDIDATE_LOCAL_VALIDATION_ONLY"},
+        "formal_effect_count": {"const": 0},
+        "model_call_count": {"const": 0},
+        "service_restart_count": {"const": 0},
+        "deployment_count": {"const": 0},
+        "database_write_count": {"const": 0},
+        "memory_effect_count": {"const": 0},
+        "next_gate": {"const": "L04_ENTRY_DECISION_ONLY"}
+      }
+    }
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:system-intent-receipt-chain:v1",
+  "title": "W7TP System Intent Receipt Chain V1 Candidate",
+  "description": "Closed no-effect decision, transition, effect and rollback receipt-chain contract with replay, duplicate and race controls.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "chain_id",
+    "chain_state",
+    "decision_receipt",
+    "transition_receipt",
+    "effect_receipt",
+    "rollback_receipt",
+    "replay_protection",
+    "authority"
+  ],
+  "properties": {
+    "contract_version": {"const": "W7TP-SYSTEM-INTENT-RECEIPT-CHAIN/1.0"},
+    "chain_id": {"$ref": "#/$defs/ref"},
+    "chain_state": {"enum": ["HOLD", "BUILD_NOT_REQUIRED", "CANDIDATE_READY_FOR_TOTAL_FIELD"]},
+    "decision_receipt": {"$ref": "#/$defs/decision_receipt"},
+    "transition_receipt": {"oneOf": [{"$ref": "#/$defs/transition_receipt"}, {"type": "null"}]},
+    "effect_receipt": {"oneOf": [{"$ref": "#/$defs/effect_receipt"}, {"type": "null"}]},
+    "rollback_receipt": {"oneOf": [{"$ref": "#/$defs/rollback_receipt"}, {"type": "null"}]},
+    "replay_protection": {"$ref": "#/$defs/replay_protection"},
+    "authority": {"$ref": "#/$defs/authority"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"chain_state": {"const": "HOLD"}}, "required": ["chain_state"]},
+      "then": {
+        "properties": {
+          "decision_receipt": {"allOf": [{"$ref": "#/$defs/decision_receipt"}, {"properties": {"decision": {"const": "HOLD"}}}]},
+          "transition_receipt": {"type": "null"},
+          "effect_receipt": {"type": "null"},
+          "rollback_receipt": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"chain_state": {"const": "BUILD_NOT_REQUIRED"}}, "required": ["chain_state"]},
+      "then": {
+        "properties": {
+          "decision_receipt": {"allOf": [{"$ref": "#/$defs/decision_receipt"}, {"properties": {"decision": {"const": "BUILD_NOT_REQUIRED"}, "human_confirmation_state": {"const": "NOT_APPLICABLE"}}}]},
+          "transition_receipt": {"type": "null"},
+          "effect_receipt": {"type": "null"},
+          "rollback_receipt": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"chain_state": {"const": "CANDIDATE_READY_FOR_TOTAL_FIELD"}}, "required": ["chain_state"]},
+      "then": {
+        "properties": {
+          "decision_receipt": {"allOf": [{"$ref": "#/$defs/decision_receipt"}, {"properties": {"decision": {"const": "CANDIDATE_READY_FOR_TOTAL_FIELD"}, "human_confirmation_state": {"const": "CONFIRMED"}, "candidate_sha256": {"$ref": "#/$defs/sha256"}}}]},
+          "transition_receipt": {"$ref": "#/$defs/transition_receipt"},
+          "effect_receipt": {"$ref": "#/$defs/effect_receipt"},
+          "rollback_receipt": {"$ref": "#/$defs/rollback_receipt"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ref": {"type": "string", "pattern": "^(?:[a-z][a-z0-9_+.-]*):[A-Za-z0-9][A-Za-z0-9._:/#-]{0,255}$"},
+    "nullable_ref": {"oneOf": [{"$ref": "#/$defs/ref"}, {"type": "null"}]},
+    "nullable_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/ref"}
+    },
+    "decision_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_version", "receipt_id", "receipt_type", "issued_at_utc", "issuer_ref", "scope_ref", "input_state_sha256", "candidate_sha256", "decision", "reason_codes", "human_confirmation_state", "formal_authority", "previous_receipt_sha256", "receipt_sha256"],
+      "properties": {
+        "receipt_version": {"const": "W7TP-DECISION-RECEIPT/1.0"},
+        "receipt_id": {"$ref": "#/$defs/ref"},
+        "receipt_type": {"const": "DECISION"},
+        "issued_at_utc": {"type": "string", "format": "date-time"},
+        "issuer_ref": {"$ref": "#/$defs/ref"},
+        "scope_ref": {"$ref": "#/$defs/ref"},
+        "input_state_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_sha256": {"$ref": "#/$defs/nullable_sha256"},
+        "decision": {"enum": ["HOLD", "BUILD_NOT_REQUIRED", "CANDIDATE_READY_FOR_TOTAL_FIELD", "REJECTED"]},
+        "reason_codes": {"$ref": "#/$defs/refs"},
+        "human_confirmation_state": {"enum": ["REQUIRED_PENDING", "CONFIRMED", "REJECTED", "NOT_APPLICABLE"]},
+        "formal_authority": {"const": false},
+        "previous_receipt_sha256": {"$ref": "#/$defs/nullable_sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "transition_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_version", "receipt_id", "receipt_type", "issued_at_utc", "issuer_ref", "scope_ref", "decision_receipt_ref", "from_state_ref", "to_state_ref", "transition_code", "input_state_sha256", "output_state_sha256", "applies_change", "previous_receipt_sha256", "receipt_sha256"],
+      "properties": {
+        "receipt_version": {"const": "W7TP-TRANSITION-RECEIPT/1.0"},
+        "receipt_id": {"$ref": "#/$defs/ref"},
+        "receipt_type": {"const": "TRANSITION"},
+        "issued_at_utc": {"type": "string", "format": "date-time"},
+        "issuer_ref": {"$ref": "#/$defs/ref"},
+        "scope_ref": {"$ref": "#/$defs/ref"},
+        "decision_receipt_ref": {"$ref": "#/$defs/ref"},
+        "from_state_ref": {"$ref": "#/$defs/ref"},
+        "to_state_ref": {"$ref": "#/$defs/ref"},
+        "transition_code": {"const": "CANDIDATE_STATE_ONLY"},
+        "input_state_sha256": {"$ref": "#/$defs/sha256"},
+        "output_state_sha256": {"$ref": "#/$defs/sha256"},
+        "applies_change": {"const": false},
+        "previous_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "effect_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_version", "receipt_id", "receipt_type", "decision_receipt_ref", "scope_ref", "input_state_sha256", "candidate_sha256", "effect_type", "effect_result", "output_state_sha256", "rollback_receipt_ref", "observed_at", "issuer_ref", "applies_change", "formal_authority", "previous_receipt_sha256", "receipt_sha256"],
+      "properties": {
+        "receipt_version": {"const": "W7TP-EFFECT-RECEIPT/1.0"},
+        "receipt_id": {"$ref": "#/$defs/ref"},
+        "receipt_type": {"const": "EFFECT"},
+        "decision_receipt_ref": {"$ref": "#/$defs/ref"},
+        "scope_ref": {"$ref": "#/$defs/ref"},
+        "input_state_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_sha256": {"$ref": "#/$defs/sha256"},
+        "effect_type": {"const": "NONE"},
+        "effect_result": {"const": "NOT_APPLIED_CANDIDATE_ONLY"},
+        "output_state_sha256": {"$ref": "#/$defs/sha256"},
+        "rollback_receipt_ref": {"$ref": "#/$defs/ref"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "issuer_ref": {"$ref": "#/$defs/ref"},
+        "applies_change": {"const": false},
+        "formal_authority": {"const": false},
+        "previous_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "rollback_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_version", "receipt_id", "receipt_type", "effect_receipt_ref", "scope_ref", "rollback_target_ref", "rollback_result", "input_state_sha256", "output_state_sha256", "verified_state_sha256", "observed_at", "issuer_ref", "applies_change", "previous_receipt_sha256", "receipt_sha256"],
+      "properties": {
+        "receipt_version": {"const": "W7TP-ROLLBACK-RECEIPT/1.0"},
+        "receipt_id": {"$ref": "#/$defs/ref"},
+        "receipt_type": {"const": "ROLLBACK"},
+        "effect_receipt_ref": {"$ref": "#/$defs/ref"},
+        "scope_ref": {"$ref": "#/$defs/ref"},
+        "rollback_target_ref": {"$ref": "#/$defs/ref"},
+        "rollback_result": {"const": "NOT_REQUIRED_NO_EFFECT"},
+        "input_state_sha256": {"$ref": "#/$defs/sha256"},
+        "output_state_sha256": {"$ref": "#/$defs/sha256"},
+        "verified_state_sha256": {"$ref": "#/$defs/sha256"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "issuer_ref": {"$ref": "#/$defs/ref"},
+        "applies_change": {"const": false},
+        "previous_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "replay_protection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nonce", "attempt_id", "idempotency_key", "prior_receipt_ref", "single_use_nonce_required", "duplicate_submission_policy", "replay_policy", "race_policy"],
+      "properties": {
+        "nonce": {"$ref": "#/$defs/ref"},
+        "attempt_id": {"$ref": "#/$defs/ref"},
+        "idempotency_key": {"$ref": "#/$defs/ref"},
+        "prior_receipt_ref": {"$ref": "#/$defs/nullable_ref"},
+        "single_use_nonce_required": {"const": true},
+        "duplicate_submission_policy": {"const": "RETURN_OR_HOLD_ORIGINAL_RECEIPT_NO_NEW_EFFECT"},
+        "replay_policy": {"const": "HOLD_REPLAY_NO_NEW_EFFECT"},
+        "race_policy": {"const": "TERMINAL_RECEIPT_AND_CAS_PRECEDENCE"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_authority", "chain_authority", "formal_landing_allowed", "applies_change", "memory_effect", "database_write", "deployment", "restart", "remote_write"],
+      "properties": {
+        "decision_authority": {"const": "TOTAL_FIELD"},
+        "chain_authority": {"const": "CANDIDATE_ONLY"},
+        "formal_landing_allowed": {"const": false},
+        "applies_change": {"const": false},
+        "memory_effect": {"const": false},
+        "database_write": {"const": false},
+        "deployment": {"const": false},
+        "restart": {"const": false},
+        "remote_write": {"const": false}
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "$schema": "../../schemas/field/w7tp_system_intent_field_version_migration_rules_v1.schema.json",
+  "rules_version": "W7TP-SYSTEM-INTENT-FIELD-VERSION-MIGRATION/1.0",
+  "rules_id": "W7TP_SYSTEM_INTENT_FIELD_VERSION_MIGRATION_RULES_V1_CANDIDATE",
+  "status": "CANDIDATE_ONLY",
+  "scope": "SCHEMA_AND_REFERENCE_PACKET_MIGRATION_NO_RUNTIME_EFFECT",
+  "supported_sources": [
+    {
+      "source_id": "W7TP_SYSTEM_INTENT_FIELD_LANDING_PLAN_V1_CANDIDATE",
+      "version": "W7TP-SYSTEM-INTENT-FIELD-LANDING-PLAN/1.0",
+      "compatibility": "SEMANTIC_PREDECESSOR_REQUIRES_EXPLICIT_MIGRATION"
+    },
+    {
+      "source_id": "W7TP_TRUE8D_MACHINE_CONTRACT_V2",
+      "version": "W7TP-TRUE8D-MACHINE-CONTRACT/2.0",
+      "compatibility": "SEMANTIC_PREDECESSOR_REQUIRES_EXPLICIT_MIGRATION"
+    },
+    {
+      "source_id": "W7TP_SYSTEM_INTENT_FIELD_CONTRACT_FREEZE_V1_CANDIDATE",
+      "version": "W7TP-SYSTEM-INTENT-FIELD-CONTRACT-FREEZE/1.0",
+      "compatibility": "EXACT_VERSION_VALIDATE_ONLY"
+    }
+  ],
+  "target_contracts": [
+    {
+      "contract_id": "W7TP_SYSTEM_INTENT_ROOT_V1_CANDIDATE",
+      "version": "W7TP-SYSTEM-INTENT-ROOT/1.0",
+      "path": "schemas/field/w7tp_system_intent_root_v1.schema.json"
+    },
+    {
+      "contract_id": "W7TP_SYSTEM_INTENT_MINIMUM_DELTA_V1_CANDIDATE",
+      "version": "W7TP-SYSTEM-INTENT-MINIMUM-DELTA/1.0",
+      "path": "schemas/field/w7tp_system_intent_minimum_delta_v1.schema.json"
+    },
+    {
+      "contract_id": "W7TP_SYSTEM_INTENT_D8_ENVELOPE_V1_CANDIDATE",
+      "version": "W7TP-SYSTEM-INTENT-D8-ENVELOPE/1.0",
+      "path": "schemas/field/w7tp_system_intent_d8_envelope_v1.schema.json"
+    },
+    {
+      "contract_id": "W7TP_SYSTEM_INTENT_RECEIPT_CHAIN_V1_CANDIDATE",
+      "version": "W7TP-SYSTEM-INTENT-RECEIPT-CHAIN/1.0",
+      "path": "schemas/field/w7tp_system_intent_receipt_chain_v1.schema.json"
+    }
+  ],
+  "migration_rules": [
+    {
+      "rule_id": "MIG_001_EXACT_VERSION_VALIDATE_ONLY",
+      "trigger": "source:exact_target_version",
+      "result": "result:validate_without_transform",
+      "required_conditions": ["condition:schema_hash_match", "condition:closed_schema_valid"]
+    },
+    {
+      "rule_id": "MIG_002_SEMANTIC_PREDECESSOR_EXPLICIT_MAPPING",
+      "trigger": "source:supported_semantic_predecessor",
+      "result": "result:produce_candidate_successor_only",
+      "required_conditions": ["condition:explicit_field_mapping", "condition:source_retained", "condition:post_migration_reverify"]
+    },
+    {
+      "rule_id": "MIG_003_APPEND_ONLY_SUCCESSOR",
+      "trigger": "source:any_supported_predecessor",
+      "result": "result:no_predecessor_overwrite_or_delete",
+      "required_conditions": ["condition:new_version_identifier", "condition:predecessor_hash_preserved"]
+    },
+    {
+      "rule_id": "MIG_004_UNKNOWN_FIELD_REJECT",
+      "trigger": "packet:unknown_or_extra_field",
+      "result": "hold:HOLD_SCHEMA_UNKNOWN_FIELD",
+      "required_conditions": ["condition:additional_properties_false", "condition:no_field_drop"]
+    },
+    {
+      "rule_id": "MIG_005_AUTHORITY_NON_INCREASE",
+      "trigger": "packet:authority_or_effect_flag_change",
+      "result": "hold:HOLD_AUTHORITY_ESCALATION",
+      "required_conditions": ["condition:authority_remains_none_or_candidate_only", "condition:all_effect_flags_false"]
+    },
+    {
+      "rule_id": "MIG_006_FORBIDDEN_DATA_NON_INTRODUCTION",
+      "trigger": "packet:raw_private_member_payment_or_secret_material",
+      "result": "hold:HOLD_FORBIDDEN_DATA_MATERIAL",
+      "required_conditions": ["condition:reference_only_transport", "condition:raw_input_absent", "condition:member_plaintext_absent", "condition:secret_material_absent"]
+    },
+    {
+      "rule_id": "MIG_007_RECEIPT_CHAIN_APPEND_ONLY",
+      "trigger": "receipt:predecessor_chain_present",
+      "result": "result:append_successor_receipt_refs",
+      "required_conditions": ["condition:previous_receipt_hash_preserved", "condition:nonce_and_idempotency_preserved", "condition:no_effect_replay"]
+    },
+    {
+      "rule_id": "MIG_008_HASH_BOUND_REVERIFY",
+      "trigger": "packet:migration_candidate_created",
+      "result": "result:reconstruct_and_verify_candidate_hash",
+      "required_conditions": ["condition:source_hash_match", "condition:target_schema_hash_match", "condition:expected_output_hash_match"]
+    },
+    {
+      "rule_id": "MIG_009_UNSUPPORTED_OR_LOSSY_HOLD",
+      "trigger": "source:unsupported_version_or_lossy_mapping",
+      "result": "hold:HOLD_VERSION_OR_LOSSY_MIGRATION",
+      "required_conditions": ["condition:no_guessing", "condition:no_default_authority", "condition:previous_version_retained"]
+    }
+  ],
+  "unsupported_version_effect": "HOLD_VERSION_UNSUPPORTED",
+  "lossy_migration_effect": "HOLD_LOSSY_MIGRATION_FORBIDDEN",
+  "authority_increase_effect": "HOLD_AUTHORITY_ESCALATION",
+  "hash_mismatch_effect": "HOLD_SOURCE_HASH_MISMATCH",
+  "rollback": "KEEP_PREVIOUS_SCHEMA_VERSION_ACTIVE_AND_DISCARD_CANDIDATE_MIGRATION",
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "migration_authority": "NONE",
+    "formal_landing_allowed": false,
+    "applies_change": false,
+    "memory_effect": false,
+    "database_write": false,
+    "deployment": false,
+    "restart": false,
+    "remote_write": false
+  },
+  "current_decision": {
+    "state": "RULES_CLOSED_CANDIDATE_ONLY",
+    "automatic_migration_allowed": false,
+    "automatic_promotion_allowed": false,
+    "next_gate": "TOTAL_FIELD_STATIC_REVIEW"
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schema:system-intent-minimum-delta:v1",
+  "title": "W7TP System Intent Minimum Delta V1 Candidate",
+  "description": "Closed reference-only minimum-delta contract. Known values remain referenced; a model may fill only declared unknown slots and has no authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "delta_id",
+    "intent_root_ref",
+    "current_state_root_ref",
+    "minimum_delta_state",
+    "affected_coordinates",
+    "stable_refs",
+    "changed_state",
+    "unknown_slots",
+    "reconstruction_conditions",
+    "verification_conditions",
+    "target_product_effect",
+    "none_effect",
+    "model_packet_policy",
+    "authority",
+    "raw_input_included",
+    "full_context_included",
+    "known_private_state_values_included",
+    "member_plaintext_included",
+    "secret_material_included"
+  ],
+  "properties": {
+    "contract_version": {"const": "W7TP-SYSTEM-INTENT-MINIMUM-DELTA/1.0"},
+    "delta_id": {"$ref": "#/$defs/ref"},
+    "intent_root_ref": {"$ref": "#/$defs/ref"},
+    "current_state_root_ref": {"$ref": "#/$defs/ref"},
+    "minimum_delta_state": {"enum": ["DELTA_REQUIRED", "NONE"]},
+    "affected_coordinates": {"$ref": "#/$defs/refs"},
+    "stable_refs": {"$ref": "#/$defs/refs"},
+    "changed_state": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/change"}
+    },
+    "unknown_slots": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/unknown_slot"}
+    },
+    "reconstruction_conditions": {"$ref": "#/$defs/nonempty_refs"},
+    "verification_conditions": {"$ref": "#/$defs/nonempty_refs"},
+    "target_product_effect": {"$ref": "#/$defs/ref"},
+    "none_effect": {"const": "BUILD_NOT_REQUIRED"},
+    "model_packet_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_material", "forbidden_material", "output_authority"],
+      "properties": {
+        "allowed_material": {
+          "const": [
+            "intent_root_ref",
+            "current_state_root_ref",
+            "stable_state_refs",
+            "affected_coordinates",
+            "unknown_slots",
+            "target_product_effect",
+            "reconstruction_conditions",
+            "verification_conditions",
+            "output_schema"
+          ]
+        },
+        "forbidden_material": {
+          "const": [
+            "RAW_USER_INPUT",
+            "FULL_CONTEXT",
+            "KNOWN_PRIVATE_STATE_VALUE",
+            "MEMBER_PLAINTEXT",
+            "PAYMENT_SECRET",
+            "CREDENTIAL_OR_TOKEN"
+          ]
+        },
+        "output_authority": {"const": "CANDIDATE_ONLY"}
+      }
+    },
+    "authority": {"const": "NONE"},
+    "raw_input_included": {"const": false},
+    "full_context_included": {"const": false},
+    "known_private_state_values_included": {"const": false},
+    "member_plaintext_included": {"const": false},
+    "secret_material_included": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"minimum_delta_state": {"const": "NONE"}}, "required": ["minimum_delta_state"]},
+      "then": {
+        "properties": {
+          "affected_coordinates": {"maxItems": 0},
+          "changed_state": {"maxItems": 0},
+          "unknown_slots": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"minimum_delta_state": {"const": "DELTA_REQUIRED"}}, "required": ["minimum_delta_state"]},
+      "then": {
+        "properties": {"affected_coordinates": {"minItems": 1}},
+        "anyOf": [
+          {"properties": {"changed_state": {"minItems": 1}}},
+          {"properties": {"unknown_slots": {"minItems": 1}}}
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ref": {"type": "string", "pattern": "^(?:[a-z][a-z0-9_+.-]*):[A-Za-z0-9][A-Za-z0-9._:/#-]{0,255}$"},
+    "nullable_ref": {"oneOf": [{"$ref": "#/$defs/ref"}, {"type": "null"}]},
+    "refs": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/ref"}
+    },
+    "nonempty_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/ref"}
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coordinate_ref", "operation", "previous_state_ref", "candidate_state_ref", "candidate_state_sha256", "authority"],
+      "properties": {
+        "coordinate_ref": {"$ref": "#/$defs/ref"},
+        "operation": {"enum": ["SET_REFERENCE", "REPLACE_REFERENCE", "REMOVE_CANDIDATE_REFERENCE"]},
+        "previous_state_ref": {"$ref": "#/$defs/nullable_ref"},
+        "candidate_state_ref": {"$ref": "#/$defs/nullable_ref"},
+        "candidate_state_sha256": {"$ref": "#/$defs/sha256"},
+        "authority": {"const": "NONE"}
+      }
+    },
+    "unknown_slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot_id", "coordinate_ref", "expected_schema_ref", "constraint_refs", "output_authority"],
+      "properties": {
+        "slot_id": {"$ref": "#/$defs/ref"},
+        "coordinate_ref": {"$ref": "#/$defs/ref"},
+        "expected_schema_ref": {"$ref": "#/$defs/ref"},
+        "constraint_refs": {"$ref": "#/$defs/nonempty_refs"},
+        "output_authority": {"const": "CANDIDATE_ONLY"}
+      }
+    }
+  }
+}
