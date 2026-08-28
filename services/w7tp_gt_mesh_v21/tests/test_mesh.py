@@ -113,6 +113,10 @@ class MeshTests(unittest.TestCase):
         lines = raw.getvalue().decode("utf-8").splitlines()
         self.assertTrue(lines[0].startswith("{"))
         self.assertTrue(lines[-1].startswith("風險／未知："))
+        doctor_summary = render_human_summary({"state": "PASS_CORE_READY"}, config)
+        self.assertIn("只確認具備啟動條件", doctor_summary)
+        self.assertIn("尚未建立或傳送封包", doctor_summary)
+        self.assertNotIn("本次沒有可確認的傳輸模式", doctor_summary)
 
     def test_deploy_routes_total_field_and_drive_without_msi_authority(self) -> None:
         config_root = Path(__file__).resolve().parents[1] / "deploy" / "configs"

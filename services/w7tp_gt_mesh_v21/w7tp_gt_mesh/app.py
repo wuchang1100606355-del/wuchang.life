@@ -426,6 +426,18 @@ def render_human_summary(value: Mapping[str, object], config: Mapping[str, objec
     if result_state.startswith("HOLD"):
         result_text = f"本輪已安全暫停，因為{hold_reason}；沒有把未知狀態補成成功。"
         risk = "暫停原因已保留為可追查證據；修復最短缺失條件前，不會執行控制或升格權威。"
+    elif result_state == "PASS_CORE_READY":
+        result_text = "既有核心相依與節點設定檢查已通過；本次只確認具備啟動條件，尚未建立或傳送封包。"
+        risk = "這是啟動前檢查，不代表動態索引、跨節點傳輸或控制已經發生。"
+    elif result_state == "PASS_TRANSFER_BUILT_CANDIDATE_ONLY":
+        result_text = f"已建立可驗證的候選封包，採用{transfer_text}；證據參照為（{packet_ref}），尚未因此取得執行權威。"
+        risk = "候選封包仍須經接收端重建、收據與總場判定，不能只憑建立成功宣稱節點已生效。"
+    elif result_state == "PASS_CYCLE_COMPLETED_WITH_ORTHOGONAL_PEER_RESULTS":
+        result_text = f"已完成本輪狀態採集、封包建立、Drive 投影與各節點獨立送達嘗試；本輪採用{transfer_text}，證據參照為（{packet_ref}）。"
+        risk = "各節點送達結果彼此獨立；失敗項會保留重試紀錄，不能由其中一個成功推定全網閉環。"
+    elif result_state == "PASS_RETRY_CYCLE_COMPLETE":
+        result_text = "已完成本輪待送資料與 Native ADI 待處理紀錄的重試；每一筆仍以各自收據判定。"
+        risk = "重試流程完成不等於每筆都成功，未取得收據的項目仍維持未知或待重試。"
     elif result_state.startswith("PASS"):
         result_text = f"本輪流程已完成，採用{transfer_text}；封包證據參照為（{packet_ref}）。"
         risk = "控制執行器尚未接線；未觀測或不可用狀態保持未知，封包與 Drive 投影不自行成為實際執行效果。"
