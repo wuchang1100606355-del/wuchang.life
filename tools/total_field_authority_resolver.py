@@ -11,6 +11,50 @@ ACTIVE_POINTER_REL = Path("runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json
 ARTIFACT_ROOT_REL = Path("runtime/total_field/authority_artifacts")
 MAX_JSON_BYTES = 1_000_000
 MAX_TTL_SECONDS = 300
+RECEIVE_CANDIDATE_SCOPE = "RECEIVE_CANDIDATE"
+POINTER_BOOTSTRAP_SCOPE = "BOOTSTRAP_CURRENT_ACTIVE_CANONICAL_POINTER"
+PROMOTION_SCOPE = "PROMOTE_ACCEPTED_CANDIDATE"
+PROMOTION_SCOPE_CONSTRAINTS = {
+    "total_field_decision": "ALLOW_CANDIDATE_ACCEPTED",
+    "candidate_sha256": "066e39cd2abad3d4ed713e4f7ecb7f220d4651d9f7624f5b48d13c4781be7890",
+    "promotion_mechanism_sha256": "6681cdd0ca6ee7c0133d5fe6eb0b77541a756d4bffad7451656d4b010ea8ebf9",
+    "active_pointer_preimage_sha256": "d3ce26e27785400b7eb4eaacb6b522f1484e11c43e4416463f976865fda63b97",
+    "current_canonical_sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+    "single_use_authorization_required": True,
+    "replay_protected": True,
+    "authority_signature_required": True,
+    "append_only_promotion_receipt": True,
+    "generic_canonical_write": False,
+    "arbitrary_pointer_write": False,
+    "deploy": False,
+    "restart": False,
+    "authority_management": False,
+    "formal_submission": False,
+    "other_candidate_promotion": False,
+    "historical_mutation": False,
+}
+POINTER_BOOTSTRAP_SCOPE_CONSTRAINTS = {
+    "target": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "operation": "CREATE_IF_ABSENT",
+    "expected_preimage": "ABSENT",
+    "bound_canonical_sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+    "fail_if_already_exists": True,
+    "overwrite": False,
+    "replay_protected": True,
+    "single_use_authorization_required": True,
+    "authority_signature_required": True,
+    "promotion": False,
+    "activation": False,
+    "generic_canonical_write": False,
+    "deploy": False,
+    "restart": False,
+    "authority_management": False,
+}
+SCOPE_OWNER_AUTHORIZATIONS = {
+    RECEIVE_CANDIDATE_SCOPE: "FOUNDER_APPROVED_RECEIVE_CANDIDATE",
+    POINTER_BOOTSTRAP_SCOPE: "FOUNDER_APPROVED_CURRENT_ACTIVE_CANONICAL_POINTER_BOOTSTRAP",
+    PROMOTION_SCOPE: "FOUNDER_APPROVED_PROMOTE_ACCEPTED_CANDIDATE",
+}
 DISALLOWED_PATH_PARTS = {
     "archive",
     "candidate",
@@ -100,6 +144,11 @@ def _result(
                 ],
                 "access_profile_ref": authority["access_profile_ref"],
                 "authority_scope": list(authority["authority_scope"]),
+                "scope": list(authority["authority_scope"]),
+                "authority_scope_constraints": dict(
+                    authority.get("authority_scope_constraints") or {}
+                ),
+                "authority_sha256": authority["_authority_file_sha256"],
                 "expires_at": authority["expires_at"],
                 "verifier_ref": authority["verifier_ref"],
             }
@@ -250,10 +299,32 @@ def _validate_pointer_shape(pointer: Mapping[str, Any]) -> None:
     _require_opaque_ref(pointer, "verifier_ref", "verifier_ref:")
 
     scope = pointer.get("authority_scope")
-    if not isinstance(scope, list) or "RECEIVE_CANDIDATE" not in scope:
+    if (
+        not isinstance(scope, list)
+        or len(scope) != 1
+        or scope[0] not in SCOPE_OWNER_AUTHORIZATIONS
+    ):
         raise ResolverError(
             "HOLD_AUTHORITY_INCOMPLETE",
-            "authority_scope lacks RECEIVE_CANDIDATE",
+            "authority_scope must contain exactly one allowed scope",
+        )
+    constraints = pointer.get("authority_scope_constraints")
+    if scope[0] == POINTER_BOOTSTRAP_SCOPE:
+        if constraints != POINTER_BOOTSTRAP_SCOPE_CONSTRAINTS:
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                "pointer-bootstrap scope constraints are missing or expanded",
+            )
+    elif scope[0] == PROMOTION_SCOPE:
+        if constraints != PROMOTION_SCOPE_CONSTRAINTS:
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                "promotion scope constraints are missing, drifted, or expanded",
+            )
+    elif constraints not in (None, {}):
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "scope constraints are not allowed for RECEIVE_CANDIDATE",
         )
 
     nonce = pointer.get("nonce")
@@ -321,15 +392,21 @@ def _verify_owner_seal(
     artifact: Mapping[str, Any],
     *,
     authority_id: str,
+    authority_scope: list[str],
     now: datetime,
 ) -> None:
     if artifact.get("schema_id") != "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_OWNER_SEAL_V1":
         raise ResolverError("BLOCK_OWNER_SEAL_INVALID", "Owner seal schema is invalid")
     if artifact.get("authority_id") != authority_id:
         raise ResolverError("BLOCK_OWNER_SEAL_INVALID", "Owner seal authority_id mismatch")
-    if artifact.get("authorization") != "FOUNDER_APPROVED_RECEIVE_CANDIDATE":
+    expected_authorization = (
+        SCOPE_OWNER_AUTHORIZATIONS.get(authority_scope[0])
+        if len(authority_scope) == 1
+        else None
+    )
+    if artifact.get("authorization") != expected_authorization:
         raise ResolverError(
-            "BLOCK_OWNER_SEAL_INVALID", "Owner seal authorization is invalid"
+            "BLOCK_OWNER_SEAL_INVALID", "Owner seal authorization is invalid for scope"
         )
     _require_opaque_ref(artifact, "single_use_id", "single_use_ref:")
     issued_at = _parse_utc(artifact.get("issued_at"), "owner_seal.issued_at")
@@ -528,7 +605,12 @@ def resolve_active_total_field_authority(
             "owner_seal_sha256",
         )
         _verify_d8(d8_artifact, authority_id=authority_id, now=now)
-        _verify_owner_seal(owner_artifact, authority_id=authority_id, now=now)
+        _verify_owner_seal(
+            owner_artifact,
+            authority_id=authority_id,
+            authority_scope=list(pointer["authority_scope"]),
+            now=now,
+        )
         _verify_detached_signature(
             signature_artifact,
             authority_id=authority_id,
@@ -554,10 +636,14 @@ def resolve_active_total_field_authority(
                 "BLOCK_AUTHORITY_REPLAY", "authority nonce has already been consumed"
             )
 
+        authority_result = dict(pointer)
+        authority_result["_authority_file_sha256"] = hashlib.sha256(
+            pointer_path.read_bytes()
+        ).hexdigest()
         return _result(
             "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED",
-            "independently issued runtime authority verified for candidate intake only",
-            authority=pointer,
+            "independently issued runtime authority verified for its single bounded scope",
+            authority=authority_result,
         )
     except ResolverError as exc:
         return _result(exc.state, exc.reason)
@@ -568,6 +654,10 @@ __all__ = [
     "ARTIFACT_ROOT_REL",
     "PersistentNonceLedger",
     "TrustedSignatureVerifier",
+    "POINTER_BOOTSTRAP_SCOPE",
+    "POINTER_BOOTSTRAP_SCOPE_CONSTRAINTS",
+    "PROMOTION_SCOPE",
+    "PROMOTION_SCOPE_CONSTRAINTS",
     "canonical_sha256",
     "resolve_active_total_field_authority",
 ]

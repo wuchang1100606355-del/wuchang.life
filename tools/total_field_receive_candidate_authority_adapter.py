@@ -2,17 +2,18 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable, Collection, Mapping
 
 ACTIVE_POINTER_LOOKUP_REF = "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
 RESOLVER_CANDIDATE_REL = "tools/total_field_authority_resolver.py"
 RESOLVER_CANDIDATE_SHA256 = (
-    "3d4e1f1f13a40cb131a57a5eb3760ce8a39b3b83a3ec7ad446779fa416032767"
+    "529e23cd07f3399eb0abcb7835533128486dd246bf96fde521847d136e4134cd"
 )
 CURRENT_OWNER_REL = "tools/total_field_dynamic_context.py"
 CURRENT_OWNER_SHA256 = (
-    "c7ed3a76348394f6355557743dd09856399768b5a63d0354b07e3d1093393cf9"
+    "0f264e36201f89d486276f4d296bc3f45665c54ce96f5db0755d40ef36268ea0"
 )
 PASS_AUTHORITY_STATE = "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED"
 ALLOWED_CANDIDATE_STATES = {
@@ -401,6 +402,176 @@ def receive_candidate_authority_bound(
     )
 
 
+TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY = "NONE"
+TOTAL_FIELD_OPERATION_PACKET_SCHEMA = "W7TP_TOTAL_FIELD_OPERATION_PACKET_V1"
+MAX_OPERATION_PACKET_TTL_SECONDS = 3600
+OPERATION_PROPOSAL_FIELDS = frozenset(
+    {
+        "schema_id",
+        "operation_id",
+        "intent_ref",
+        "target_node",
+        "object_id",
+        "exact_coordinate",
+        "current_state_hash",
+        "input_hashes",
+        "authorized_action",
+        "authorized_steps",
+        "maximum_effect",
+        "forbidden_effects",
+        "expected_effect",
+        "rollback",
+        "evidence_refs",
+        "candidate_only",
+        "operation_authority",
+    }
+)
+
+
+def _operation_time(value: Any, path: str) -> datetime:
+    if not isinstance(value, str):
+        raise ValueError(f"DATETIME_REQUIRED:{path}")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(f"DATETIME_INVALID:{path}") from exc
+    if parsed.tzinfo is None:
+        raise ValueError(f"DATETIME_TIMEZONE_REQUIRED:{path}")
+    return parsed.astimezone(timezone.utc)
+
+
+def _operation_hash(value: Any, path: str) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or any(char not in "0123456789abcdef" for char in value)
+    ):
+        raise ValueError(f"HASH_INVALID:{path}")
+    return value
+
+
+def build_total_field_operation_packet(
+    proposal: Mapping[str, Any],
+    *,
+    verified_authority_ref: Mapping[str, Any],
+    issued_at: str,
+    ttl_seconds: int,
+) -> dict[str, Any]:
+    """Convert a proposal only when Total Field authority is already verified."""
+    if set(proposal) != OPERATION_PROPOSAL_FIELDS:
+        raise ValueError("OPERATION_PROPOSAL_SHAPE_MISMATCH")
+    if (
+        proposal.get("schema_id") != "W7TP_OPERATION_PROPOSAL_V1"
+        or proposal.get("candidate_only") is not True
+        or proposal.get("operation_authority") is not False
+    ):
+        raise ValueError("RAW_PROPOSAL_AUTHORITY_FORBIDDEN")
+    if (
+        verified_authority_ref.get("schema_id")
+        != "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1"
+    ):
+        raise ValueError("VERIFIED_TOTAL_FIELD_AUTHORITY_REQUIRED")
+    if not 1 <= ttl_seconds <= MAX_OPERATION_PACKET_TTL_SECONDS:
+        raise ValueError("OPERATION_PACKET_TTL_INVALID")
+    issued = _operation_time(issued_at, "issued_at")
+    for field in ("current_state_hash",):
+        _operation_hash(proposal.get(field), field)
+    input_hashes = proposal.get("input_hashes")
+    if not isinstance(input_hashes, Mapping) or not input_hashes:
+        raise ValueError("OPERATION_INPUT_HASHES_REQUIRED")
+    for name, digest in input_hashes.items():
+        _operation_hash(digest, f"input_hashes.{name}")
+    packet = {
+        "schema_id": TOTAL_FIELD_OPERATION_PACKET_SCHEMA,
+        "operation_id": proposal["operation_id"],
+        "intent_ref": proposal["intent_ref"],
+        "target_node": proposal["target_node"],
+        "object_id": proposal["object_id"],
+        "exact_coordinate": proposal["exact_coordinate"],
+        "current_state_hash": proposal["current_state_hash"],
+        "input_hashes": dict(input_hashes),
+        "authorized_action": proposal["authorized_action"],
+        "authorized_steps": list(proposal["authorized_steps"]),
+        "maximum_effect": proposal["maximum_effect"],
+        "forbidden_effects": list(proposal["forbidden_effects"]),
+        "expected_effect": proposal["expected_effect"],
+        "rollback": proposal["rollback"],
+        "ttl_seconds": ttl_seconds,
+        "issued_at": issued.isoformat().replace("+00:00", "Z"),
+        "expires_at": (issued + timedelta(seconds=ttl_seconds))
+        .isoformat()
+        .replace("+00:00", "Z"),
+        "single_use": True,
+        "evidence_refs": list(proposal["evidence_refs"]),
+        "D8_AUTHORITY": {
+            "verified_authority_ref": dict(verified_authority_ref),
+            "authority_resolution_sha256": _operation_hash(
+                verified_authority_ref.get("authority_resolution_sha256"),
+                "verified_authority_ref.authority_resolution_sha256",
+            ),
+            "issuer": "TOTAL_FIELD_ONLY",
+        },
+        "raw_llm_operation_authority": "FORBIDDEN",
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+    packet["packet_sha256"] = canonical_sha256(packet)
+    return packet
+
+
+def validate_total_field_operation_packet(
+    packet: Mapping[str, Any] | None,
+    *,
+    now: datetime,
+) -> dict[str, Any]:
+    """Fail closed for absent, forged, expired, replay-unbound, or raw commands."""
+    if not isinstance(packet, Mapping):
+        return {
+            "state": "BLOCK_OPERATION_PACKET_REQUIRED",
+            "executor_authorized": False,
+        }
+    if packet.get("schema_id") != TOTAL_FIELD_OPERATION_PACKET_SCHEMA:
+        return {"state": "BLOCK_OPERATION_PACKET_SCHEMA", "executor_authorized": False}
+    supplied_hash = packet.get("packet_sha256")
+    unsigned = dict(packet)
+    unsigned.pop("packet_sha256", None)
+    if supplied_hash != canonical_sha256(unsigned):
+        return {"state": "BLOCK_OPERATION_PACKET_HASH", "executor_authorized": False}
+    try:
+        issued = _operation_time(packet.get("issued_at"), "issued_at")
+        expires = _operation_time(packet.get("expires_at"), "expires_at")
+    except ValueError:
+        return {"state": "BLOCK_OPERATION_PACKET_TIME", "executor_authorized": False}
+    ttl = packet.get("ttl_seconds")
+    if (
+        isinstance(ttl, bool)
+        or not isinstance(ttl, int)
+        or not 1 <= ttl <= MAX_OPERATION_PACKET_TTL_SECONDS
+        or expires - issued != timedelta(seconds=ttl)
+        or now.astimezone(timezone.utc) < issued
+        or now.astimezone(timezone.utc) >= expires
+    ):
+        return {"state": "BLOCK_OPERATION_PACKET_TTL", "executor_authorized": False}
+    d8 = packet.get("D8_AUTHORITY")
+    if (
+        not isinstance(d8, Mapping)
+        or d8.get("issuer") != "TOTAL_FIELD_ONLY"
+        or not isinstance(d8.get("verified_authority_ref"), Mapping)
+        or d8["verified_authority_ref"].get("schema_id")
+        != "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1"
+        or packet.get("single_use") is not True
+        or packet.get("raw_llm_operation_authority") != "FORBIDDEN"
+        or packet.get("float_authority_dependency") != "NONE"
+    ):
+        return {"state": "BLOCK_OPERATION_PACKET_AUTHORITY", "executor_authorized": False}
+    return {
+        "state": "PASS_TOTAL_FIELD_OPERATION_PACKET",
+        "executor_authorized": True,
+        "operation_id": packet.get("operation_id"),
+        "single_use_requires_runtime_nonce_consumer": True,
+        "packet_sha256": supplied_hash,
+    }
+
+
 __all__ = [
     "ACTIVE_POINTER_LOOKUP_REF",
     "CURRENT_OWNER_REL",
@@ -408,5 +579,7 @@ __all__ = [
     "RESOLVER_CANDIDATE_REL",
     "RESOLVER_CANDIDATE_SHA256",
     "canonical_sha256",
+    "build_total_field_operation_packet",
     "receive_candidate_authority_bound",
+    "validate_total_field_operation_packet",
 ]

@@ -39,14 +39,22 @@
     "runtime_bindings": "tools.total_field_authority_runtime_bindings:build_authority_runtime_bindings"
   },
   "profile_id": "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_RUNTIME_PROFILE_V1",
+  "root_of_trust_bootstrap_receipt_ref": "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800/ROOT_OF_TRUST_BOOTSTRAP_RECEIPT.json",
+  "root_of_trust_bootstrap_receipt_sha256": "a52da3850dd29c9d4732c3506f385a6b9f8edb9f814561d3bdb3d8721e650303",
   "schema_id": "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_RUNTIME_PROFILE_V1",
   "signature_verifier": {
+    "algorithm": "Ed25519",
     "binding_mode": "INJECTED_BACKEND_ONLY",
     "environment_secret_read_by_binding_module": false,
+    "implementation": "tools.total_field_ed25519_backend:Ed25519DetachedSignatureBackend",
     "key_material_read_by_binding_module": false,
+    "production_backend_verified": true,
+    "public_key_fingerprint": "sha256:09adae73f29258eadb9f0eee007a05b2e03ef6bb331ab0ab4c0cf58d57d01570",
+    "public_key_ref": "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800/authority_signing_public.pem",
+    "public_key_sha256": "d85896d9c0fc9411c894d84f2ae8dfec5b2a708c5d2c7231c3373a50a6d1e5b3",
     "trusted_verifier_refs": [
       "verifier_ref:total_field_runtime_v1"
     ]
   },
-  "state": "FORMAL_LANDING_BOUND_INACTIVE"
+  "state": "FORMAL_INGRESS_ACTIVE"
 }

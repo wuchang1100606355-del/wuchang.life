@@ -9,9 +9,13 @@ import importlib
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from copy import deepcopy
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable, Collection, Iterable, Mapping
+
+
+TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY = "NONE"
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1068,6 +1072,525 @@ def build_dynamic_context(
         },
     }
     return _finalize_packet(packet)
+
+
+CAPABILITY_MISSING_FIELDS = frozenset(
+    {
+        "task_id",
+        "receiver_id",
+        "receiver_version",
+        "current_intent_ref",
+        "missing_capability_id",
+        "missing_input_class",
+        "missing_schema_version",
+        "missing_lookup_resource",
+        "missing_verification_capability",
+        "current_available_capabilities",
+        "current_context_refs",
+        "evidence",
+    }
+)
+SENSITIVE_INFORMATION_ROUTES = {
+    "PUBLIC": "CLOUD_POLICY_ELIGIBLE",
+    "DEIDENTIFIED_TECHNICAL": "CLOUD_POLICY_ELIGIBLE",
+    "LOCAL_INTERNAL": "LOCAL_ONLY_DEFAULT",
+    "BUSINESS_SECRET": "CLOUD_PLAINTEXT_FORBIDDEN",
+    "PERSONAL_DATA": "CLOUD_PLAINTEXT_FORBIDDEN",
+    "CREDENTIAL_SECRET": "MODEL_CONTEXT_FORBIDDEN",
+    "PROTECTED_ADI_REFERENCE": "REFERENCE_ONLY",
+    "UNKNOWN": "FAIL_CLOSED_LOCAL_ONLY",
+}
+TASK_CLASSES = frozenset(
+    {
+        "REASONING_TASK",
+        "CAPABILITY_TASK",
+        "DATA_ACCESS_TASK",
+        "OPERATION_TASK",
+        "MIXED_TASK",
+    }
+)
+MAX_CAPABILITY_PACKET_TTL_SECONDS = 3600
+
+
+def _require_sha256(value: Any, path: str) -> str:
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+        raise ValueError(f"HASH_INVALID:{path}")
+    return value
+
+
+def _parse_packet_time(value: Any, path: str) -> datetime:
+    if not isinstance(value, str):
+        raise ValueError(f"DATETIME_REQUIRED:{path}")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(f"DATETIME_INVALID:{path}") from exc
+    if parsed.tzinfo is None:
+        raise ValueError(f"DATETIME_TIMEZONE_REQUIRED:{path}")
+    return parsed.astimezone(timezone.utc)
+
+
+def normalize_capability_missing_report(value: Mapping[str, Any]) -> dict[str, Any]:
+    """Normalize an exact Local-LLM gap; never select a provider or expose data."""
+    if set(value) != CAPABILITY_MISSING_FIELDS:
+        raise ValueError("CAPABILITY_MISSING_REPORT_SHAPE_MISMATCH")
+    for field in CAPABILITY_MISSING_FIELDS - {
+        "current_available_capabilities",
+        "current_context_refs",
+        "evidence",
+    }:
+        if not isinstance(value.get(field), str) or not str(value[field]).strip():
+            raise ValueError(f"CAPABILITY_MISSING_REPORT_FIELD_INVALID:{field}")
+    for field in ("current_available_capabilities", "current_context_refs", "evidence"):
+        items = value.get(field)
+        if not isinstance(items, list) or any(not isinstance(item, str) for item in items):
+            raise ValueError(f"CAPABILITY_MISSING_REPORT_FIELD_INVALID:{field}")
+    report = {
+        "schema_id": "W7TP_CAPABILITY_MISSING_REPORT_V1",
+        **deepcopy(dict(value)),
+        "provider_selected": None,
+        "authority": False,
+        "candidate_only": True,
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+    return _finalize_packet(report)
+
+
+def classify_total_field_task(
+    *,
+    reasoning: bool = False,
+    capability_gap: bool = False,
+    data_access: bool = False,
+    operation: bool = False,
+) -> str:
+    enabled = sum(bool(item) for item in (reasoning, capability_gap, data_access, operation))
+    if enabled > 1:
+        return "MIXED_TASK"
+    if operation:
+        return "OPERATION_TASK"
+    if data_access:
+        return "DATA_ACCESS_TASK"
+    if capability_gap:
+        return "CAPABILITY_TASK"
+    return "REASONING_TASK"
+
+
+def route_sensitive_information(metadata: Mapping[str, Any]) -> dict[str, Any]:
+    """Route from exact governed metadata; model confidence is ignored."""
+    data_class = str(metadata.get("data_class") or "UNKNOWN").upper()
+    if data_class not in SENSITIVE_INFORMATION_ROUTES:
+        data_class = "UNKNOWN"
+    route = SENSITIVE_INFORMATION_ROUTES[data_class]
+    return {
+        "state": "TOTAL_FIELD_SENSITIVE_ROUTE_DECIDED",
+        "data_class": data_class,
+        "route": route,
+        "cloud_plaintext_allowed": data_class in {"PUBLIC", "DEIDENTIFIED_TECHNICAL"},
+        "model_context_allowed": data_class != "CREDENTIAL_SECRET",
+        "reference_only": data_class == "PROTECTED_ADI_REFERENCE",
+        "decision_inputs": {
+            key: metadata.get(key)
+            for key in (
+                "object_class",
+                "data_class",
+                "namespace",
+                "owner",
+                "coordinate",
+                "policy_ref",
+                "d7_ref",
+                "d8_ref",
+                "evidence_ref",
+            )
+        },
+        "model_confidence_used": False,
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+
+
+def build_total_field_capability_requirement_packet(
+    report: Mapping[str, Any],
+    *,
+    target_base_state: Mapping[str, Any],
+    reusable_capability_refs: Collection[str],
+    created_at: str,
+    ttl_seconds: int = 900,
+) -> dict[str, Any]:
+    if report.get("schema_id") != "W7TP_CAPABILITY_MISSING_REPORT_V1":
+        raise ValueError("CAPABILITY_MISSING_REPORT_REQUIRED")
+    if report.get("authority") is not False or report.get("candidate_only") is not True:
+        raise ValueError("CAPABILITY_REPORT_AUTHORITY_INVALID")
+    if not 1 <= ttl_seconds <= MAX_CAPABILITY_PACKET_TTL_SECONDS:
+        raise ValueError("CAPABILITY_REQUIREMENT_TTL_INVALID")
+    created = _parse_packet_time(created_at, "created_at")
+    expires = created + timedelta(seconds=ttl_seconds)
+    packet = {
+        "schema_id": "W7TP_TOTAL_FIELD_CAPABILITY_REQUIREMENT_PACKET_V1",
+        "D1_INTENT": {
+            "intent_ref": report["current_intent_ref"],
+            "required_capability_id": report["missing_capability_id"],
+        },
+        "D2_STATE": {
+            "receiver_id": report["receiver_id"],
+            "receiver_version": report["receiver_version"],
+            "target_base_state": deepcopy(dict(target_base_state)),
+            "current_available_capabilities": list(report["current_available_capabilities"]),
+        },
+        "D3_COORDINATE": {
+            "task_id": report["task_id"],
+            "required_object_id": report["missing_capability_id"],
+            "namespace": "W7TP.CAPABILITY",
+            "version": report["missing_schema_version"],
+            "receiver_id": report["receiver_id"],
+        },
+        "D4_EVIDENCE": {
+            "gap_report_sha256": report["packet_sha256"],
+            "evidence_refs": list(report["evidence"]),
+            "reusable_capability_refs": sorted(set(reusable_capability_refs)),
+        },
+        "D5_EXECUTION_POLICY": {
+            "allowed_provider_actions": ["ANALYZE", "GENERATE", "COMPLETE", "REPAIR", "TRANSFORM", "PROPOSE"],
+            "forbidden_provider_actions": ["ACCEPT_SELF", "PROMOTE_SELF", "EXECUTE", "MODIFY_CANONICAL", "ISSUE_OPERATION_PACKET"],
+        },
+        "D6_GENERATIVE_COMPLETION": {
+            "target_base_state": deepcopy(dict(target_base_state)),
+            "minimum_capability_delta": [report["missing_capability_id"]],
+            "references": sorted(set(reusable_capability_refs)),
+            "coordinates": [report["missing_lookup_resource"]],
+            "reconstruction_rules": ["REUSE_TARGET_NATIVE_FIRST", "GENERATE_ONLY_MISSING_CAPABILITY"],
+            "verification_rules": [report["missing_verification_capability"]],
+        },
+        "D7_RISK_QUARANTINE": {
+            "sensitive_data_route": "TOTAL_FIELD_REQUIRED",
+            "forbidden_effects": ["LIVE_WRITE", "DB_WRITE", "CANONICAL_MUTATION", "POINTER_MUTATION", "OPERATION_COMMAND"],
+            "stop_conditions": ["HASH_MISMATCH", "COORDINATE_MISMATCH", "PROTECTED_DATA_BOUNDARY", "NO_STATE_PROGRESS"],
+        },
+        "D8_ENVELOPE_AUTHORITY": {
+            "request_identity": f"CAPABILITY_REQ:{report['task_id']}:{report['packet_sha256']}",
+            "candidate_only": True,
+            "provider_authority": False,
+            "created_at": created.isoformat().replace("+00:00", "Z"),
+            "expires_at": expires.isoformat().replace("+00:00", "Z"),
+            "ttl_seconds": ttl_seconds,
+            "verification_contract": report["missing_verification_capability"],
+            "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+        },
+    }
+    return _finalize_packet(packet)
+
+
+def _candidate_failures(
+    candidate: Mapping[str, Any], requirement: Mapping[str, Any], *, now: datetime | None
+) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    expected_request_hash = str(requirement.get("packet_sha256"))
+    checks = (
+        (candidate.get("schema_id") == "W7TP_COMPLETION_CANDIDATE_PACKET_V1", "SCHEMA_VALID", "$.schema_id"),
+        (candidate.get("request_packet_sha256") == expected_request_hash, "REQUEST_HASH_EXACT", "$.request_packet_sha256"),
+        (candidate.get("candidate_only") is True, "CANDIDATE_ONLY", "$.candidate_only"),
+        (candidate.get("provider_authority") is False, "PROVIDER_AUTHORITY_FALSE", "$.provider_authority"),
+        (candidate.get("operation_authority") in (None, False), "OPERATION_AUTHORITY_FALSE", "$.operation_authority"),
+        (candidate.get("promoted") in (None, False), "SELF_PROMOTION_FORBIDDEN", "$.promoted"),
+        (candidate.get("canonical") in (None, False), "SELF_CANONICALIZATION_FORBIDDEN", "$.canonical"),
+        (candidate.get("unresolved_required_effects") == [], "UNRESOLVED_EFFECT_SET_EMPTY", "$.unresolved_required_effects"),
+        (candidate.get("forbidden_effects") == [], "FORBIDDEN_EFFECTS_ABSENT", "$.forbidden_effects"),
+        ("operation_command" not in candidate, "OPERATION_COMMAND_ABSENT", "$.operation_command"),
+    )
+    for passed, predicate, path in checks:
+        if not passed:
+            failures.append({"predicate": predicate, "path": path})
+    envelope = requirement.get("D8_ENVELOPE_AUTHORITY")
+    if not isinstance(envelope, Mapping):
+        failures.append({"predicate": "REQUIREMENT_D8_VALID", "path": "$.D8_ENVELOPE_AUTHORITY"})
+    else:
+        try:
+            created = _parse_packet_time(envelope.get("created_at"), "requirement.created_at")
+            expires = _parse_packet_time(envelope.get("expires_at"), "requirement.expires_at")
+            ttl = envelope.get("ttl_seconds")
+            check_time = (now or created).astimezone(timezone.utc)
+            if (
+                isinstance(ttl, bool)
+                or not isinstance(ttl, int)
+                or not 1 <= ttl <= MAX_CAPABILITY_PACKET_TTL_SECONDS
+                or expires - created != timedelta(seconds=ttl)
+                or check_time < created
+                or check_time >= expires
+            ):
+                failures.append({"predicate": "REQUIREMENT_TTL_ACTIVE", "path": "$.D8_ENVELOPE_AUTHORITY"})
+        except (ValueError, AttributeError):
+            failures.append({"predicate": "REQUIREMENT_D8_VALID", "path": "$.D8_ENVELOPE_AUTHORITY"})
+    output_hashes = candidate.get("output_hashes")
+    if not isinstance(output_hashes, Mapping) or not output_hashes:
+        failures.append({"predicate": "OUTPUT_HASHES_PRESENT", "path": "$.output_hashes"})
+    else:
+        for coordinate, digest in output_hashes.items():
+            try:
+                _require_sha256(digest, f"$.output_hashes.{coordinate}")
+            except ValueError:
+                failures.append({"predicate": "OUTPUT_HASH_EXACT", "path": f"$.output_hashes.{coordinate}"})
+    supplied_hash = candidate.get("candidate_sha256")
+    unsigned = dict(candidate)
+    unsigned.pop("candidate_sha256", None)
+    if supplied_hash != canonical_sha256(unsigned):
+        failures.append({"predicate": "CANDIDATE_SELF_HASH_EXACT", "path": "$.candidate_sha256"})
+    expected_capability = requirement.get("D1_INTENT", {}).get("required_capability_id")
+    if candidate.get("capability_id") != expected_capability:
+        failures.append({"predicate": "CAPABILITY_ID_EXACT", "path": "$.capability_id"})
+    return failures
+
+
+def verify_completion_candidate(
+    candidate: Mapping[str, Any], requirement: Mapping[str, Any], *, now: datetime | None = None
+) -> dict[str, Any]:
+    failures = _candidate_failures(candidate, requirement, now=now)
+    if failures:
+        rejection = {
+            "schema_id": "W7TP_TOTAL_FIELD_REJECTION_DELTA_PACKET_V1",
+            "request_packet_sha256": requirement.get("packet_sha256"),
+            "accepted_effects": [],
+            "rejected_effects": [requirement.get("D1_INTENT", {}).get("required_capability_id")],
+            "missing_effects": [requirement.get("D1_INTENT", {}).get("required_capability_id")],
+            "invalid_objects": sorted({item["path"] for item in failures}),
+            "exact_failure_predicates": failures,
+            "required_corrections": sorted({item["predicate"] for item in failures}),
+            "preserved_accepted_objects": list(candidate.get("reused_objects") or []),
+            "next_minimum_delta": [requirement.get("D1_INTENT", {}).get("required_capability_id")],
+            "candidate_only": True,
+            "provider_authority": False,
+        }
+        return {
+            "state": "REJECTED",
+            "decision": "REJECT_AND_REQUEST_NEXT_DELTA",
+            "failures": failures,
+            "rejection_delta": _finalize_packet(rejection),
+            "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+        }
+    qualified = {
+        "schema_id": "W7TP_QUALIFIED_CAPABILITY_PACKET_V1",
+        "request_packet_sha256": requirement["packet_sha256"],
+        "completion_candidate_sha256": candidate["candidate_sha256"],
+        "capability_id": candidate["capability_id"],
+        "object_refs": deepcopy(list(candidate.get("object_refs") or [])),
+        "output_hashes": deepcopy(dict(candidate["output_hashes"])),
+        "receiver_requirements": [requirement["D2_STATE"]["receiver_id"]],
+        "lineage": {
+            "parent": requirement["packet_sha256"],
+            "relation": "TOTAL_FIELD_VERIFIED_COMPLETION",
+        },
+        "qualified": True,
+        "provider_authority": False,
+        "operation_authority": False,
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+    return {
+        "state": "QUALIFIED",
+        "decision": "ACCEPT_QUALIFIED_CANDIDATE",
+        "qualified_capability_packet": _finalize_packet(qualified),
+        "failures": [],
+    }
+
+
+def run_total_field_capability_completion(
+    report: Mapping[str, Any],
+    *,
+    target_native_provider: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None,
+    local_provider: Callable[[Mapping[str, Any]], Mapping[str, Any]],
+    cloud_provider: Callable[[Mapping[str, Any]], Mapping[str, Any]],
+    target_base_state: Mapping[str, Any],
+    reusable_capability_refs: Collection[str],
+    created_at: str,
+    verification_time: datetime | None = None,
+    max_cloud_rounds: int = 3,
+) -> dict[str, Any]:
+    """Use target native, then Local LLM, then minimal Cloud deltas."""
+    normalized = normalize_capability_missing_report(report)
+    provider_trace: list[str] = []
+    if target_native_provider is not None:
+        target_result = target_native_provider(deepcopy(normalized))
+        provider_trace.append("TARGET_NATIVE_CAPABILITY")
+        if target_result.get("state") == "CAPABILITY_AVAILABLE":
+            return {"state": "QUALIFIED_LOCAL", "provider_trace": provider_trace, "cloud_calls": 0, "result": deepcopy(dict(target_result))}
+    local_result = local_provider(deepcopy(normalized))
+    provider_trace.append("LOCAL_LLM")
+    if local_result.get("state") == "CAPABILITY_AVAILABLE":
+        return {"state": "QUALIFIED_LOCAL", "provider_trace": provider_trace, "cloud_calls": 0, "result": deepcopy(dict(local_result))}
+    requirement = build_total_field_capability_requirement_packet(
+        normalized,
+        target_base_state=target_base_state,
+        reusable_capability_refs=reusable_capability_refs,
+        created_at=created_at,
+    )
+    request: Mapping[str, Any] = requirement
+    rejection_deltas: list[dict[str, Any]] = []
+    seen_delta_hashes: set[str] = set()
+    for _round in range(1, max_cloud_rounds + 1):
+        candidate = dict(cloud_provider(deepcopy(dict(request))))
+        provider_trace.append("CLOUD_PROVIDER")
+        decision = verify_completion_candidate(
+            candidate,
+            requirement,
+            now=verification_time or _parse_packet_time(created_at, "verification_time"),
+        )
+        if decision["state"] == "QUALIFIED":
+            return {
+                "state": "QUALIFIED",
+                "provider_trace": provider_trace,
+                "cloud_calls": provider_trace.count("CLOUD_PROVIDER"),
+                "requirement_packet": requirement,
+                "rejection_deltas": rejection_deltas,
+                "qualified_capability_packet": decision["qualified_capability_packet"],
+            }
+        delta = decision["rejection_delta"]
+        if delta["packet_sha256"] in seen_delta_hashes:
+            return {"state": "STOPPED_NON_CONVERGENCE", "provider_trace": provider_trace, "cloud_calls": provider_trace.count("CLOUD_PROVIDER"), "rejection_deltas": rejection_deltas + [delta], "unresolved_required_effects": delta["next_minimum_delta"]}
+        seen_delta_hashes.add(delta["packet_sha256"])
+        rejection_deltas.append(delta)
+        request = delta
+    return {"state": "STOPPED_NON_CONVERGENCE", "provider_trace": provider_trace, "cloud_calls": provider_trace.count("CLOUD_PROVIDER"), "rejection_deltas": rejection_deltas, "unresolved_required_effects": requirement["D6_GENERATIVE_COMPLETION"]["minimum_capability_delta"]}
+
+
+def select_smallest_sufficient_memory_set(
+    *,
+    intent_ref: str,
+    qualified_capability_packet: Mapping[str, Any],
+    current_task_state: Mapping[str, Any],
+    adi_objects: Collection[Mapping[str, Any]],
+    receiver_id: str,
+) -> dict[str, Any]:
+    """Resolve an exact dependency closure; no semantic or float ranking."""
+    if qualified_capability_packet.get("qualified") is not True:
+        raise ValueError("QUALIFIED_CAPABILITY_PACKET_REQUIRED")
+    index: dict[str, Mapping[str, Any]] = {}
+    for item in adi_objects:
+        object_id = item.get("object_id")
+        coordinate = item.get("coordinate")
+        if not isinstance(object_id, str) or not object_id or not isinstance(coordinate, str):
+            raise ValueError("ADI_OBJECT_COORDINATE_INVALID")
+        if coordinate.startswith("/") or ".." in Path(coordinate).parts or "\\" in coordinate:
+            raise ValueError("ADI_OBJECT_COORDINATE_INVALID")
+        _require_sha256(item.get("sha256"), f"ADI:{object_id}:sha256")
+        if not isinstance(item.get("lineage_ref"), str) or not item["lineage_ref"]:
+            raise ValueError(f"ADI_LINEAGE_REF_REQUIRED:{object_id}")
+        if not isinstance(item.get("evidence_ref"), str) or not item["evidence_ref"]:
+            raise ValueError(f"ADI_EVIDENCE_REF_REQUIRED:{object_id}")
+        if object_id in index:
+            raise ValueError("ADI_OBJECT_ID_COLLISION")
+        index[object_id] = item
+    required = set(current_task_state.get("required_object_ids") or [])
+    required.update(qualified_capability_packet.get("object_refs") or [])
+    selected: dict[str, Mapping[str, Any]] = {}
+    pending = sorted(required)
+    while pending:
+        object_id = pending.pop(0)
+        if object_id in selected:
+            continue
+        if object_id not in index:
+            raise ValueError(f"ADI_REQUIRED_OBJECT_NOT_FOUND:{object_id}")
+        item = index[object_id]
+        consumers = item.get("consumers") or []
+        if consumers and receiver_id not in consumers:
+            raise ValueError(f"ADI_RECEIVER_INCOMPATIBLE:{object_id}")
+        selected[object_id] = item
+        for dependency in item.get("dependencies") or []:
+            if dependency not in selected:
+                pending.append(str(dependency))
+        pending.sort()
+    memory_set = {
+        "schema_id": "W7TP_ADI_SMALLEST_SUFFICIENT_MEMORY_SET_V1",
+        "intent_ref": intent_ref,
+        "receiver_id": receiver_id,
+        "selection_predicates": ["OBJECT_ID_EXACT", "COORDINATE_EXACT", "STATE_BOUND", "LINEAGE_BOUND", "DEPENDENCY_CLOSURE", "EVIDENCE_BOUND", "RECEIVER_COMPATIBLE"],
+        "selected_objects": [
+            {
+                "object_id": object_id,
+                "coordinate": selected[object_id]["coordinate"],
+                "sha256": selected[object_id]["sha256"],
+                "state": selected[object_id].get("state"),
+                "lineage_ref": selected[object_id].get("lineage_ref"),
+                "evidence_ref": selected[object_id].get("evidence_ref"),
+                "capability_ref": selected[object_id].get("capability_ref"),
+                "reconstruction_rule": selected[object_id].get("reconstruction_rule"),
+                "verification_rule": selected[object_id].get("verification_rule"),
+            }
+            for object_id in sorted(selected)
+        ],
+        "excluded_object_count": len(index) - len(selected),
+        "semantic_similarity_used": False,
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+    return _finalize_packet(memory_set)
+
+
+def build_local_llm_working_memory_projection(
+    *,
+    intent_ref: str,
+    current_state_ref: str,
+    required_capability_id: str,
+    qualified_capability_packet: Mapping[str, Any],
+    smallest_memory_set: Mapping[str, Any],
+    receiver_id: str,
+    receiver_capability_boundary: Collection[str],
+    allowed_actions: Collection[str],
+    forbidden_actions: Collection[str],
+    verification_procedure: Collection[str],
+    stop_conditions: Collection[str],
+    context_ttl_seconds: int,
+) -> dict[str, Any]:
+    if not 1 <= context_ttl_seconds <= MAX_CAPABILITY_PACKET_TTL_SECONDS:
+        raise ValueError("WORKING_MEMORY_TTL_INVALID")
+    original_hash = canonical_sha256(qualified_capability_packet)
+    selected = smallest_memory_set.get("selected_objects")
+    if not isinstance(selected, list):
+        raise ValueError("SMALLEST_MEMORY_SET_REQUIRED")
+    projection = {
+        "schema_id": "W7TP_LOCAL_LLM_WORKING_MEMORY_PROJECTION_V1",
+        "intent": intent_ref,
+        "current_state": current_state_ref,
+        "required_capability": required_capability_id,
+        "qualified_capability_ref": qualified_capability_packet.get("packet_sha256"),
+        "object_refs": [item["object_id"] for item in selected],
+        "schema_refs": [item["coordinate"] for item in selected if str(item["coordinate"]).startswith("schemas/")],
+        "lineage_refs": [item["lineage_ref"] for item in selected if item.get("lineage_ref")],
+        "evidence_refs": [item["evidence_ref"] for item in selected if item.get("evidence_ref")],
+        "allowed_actions": sorted(set(allowed_actions)),
+        "forbidden_actions": sorted(set(forbidden_actions)),
+        "verification_procedure": list(verification_procedure),
+        "stop_conditions": list(stop_conditions),
+        "context_ttl_seconds": context_ttl_seconds,
+        "receiver_id": receiver_id,
+        "receiver_capability_boundary": sorted(set(receiver_capability_boundary)),
+        "physical_memory_mapping": False,
+        "candidate_only": True,
+    }
+    if canonical_sha256(qualified_capability_packet) != original_hash:
+        raise AssertionError("QUALIFIED_CAPABILITY_PACKET_MUTATED")
+    return _finalize_packet(projection)
+
+
+def normalize_local_llm_result(result: Mapping[str, Any]) -> dict[str, Any]:
+    proposed_actions = result.get("proposed_actions") or []
+    if not isinstance(proposed_actions, list):
+        raise ValueError("LOCAL_LLM_PROPOSED_ACTIONS_INVALID")
+    return _finalize_packet(
+        {
+            "schema_id": "W7TP_LOCAL_LLM_RESULT_V1",
+            "result_ref": result.get("result_ref"),
+            "result_sha256": _require_sha256(result.get("result_sha256"), "result_sha256"),
+            "reasoning_result": result.get("reasoning_result"),
+            "operation_proposal": (
+                {
+                    "schema_id": "W7TP_OPERATION_PROPOSAL_V1",
+                    "proposed_actions": deepcopy(proposed_actions),
+                    "candidate_only": True,
+                    "operation_authority": False,
+                }
+                if proposed_actions
+                else None
+            ),
+            "operation_command": None,
+            "operation_authority": False,
+            "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+        }
+    )
 
 
 class TotalFieldContextMcpServer:

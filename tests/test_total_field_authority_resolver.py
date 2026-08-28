@@ -186,6 +186,40 @@ class ActiveAuthorityResolverCandidateTests(unittest.TestCase):
         }
         self._resign_pointer(pointer)
 
+    def _configure_pointer_bootstrap_scope(self) -> None:
+        owner = self._read(self.owner_path)
+        owner["authorization"] = (
+            "FOUNDER_APPROVED_CURRENT_ACTIVE_CANONICAL_POINTER_BOOTSTRAP"
+        )
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope"] = [resolver.POINTER_BOOTSTRAP_SCOPE]
+        pointer["authority_scope_constraints"] = dict(
+            resolver.POINTER_BOOTSTRAP_SCOPE_CONSTRAINTS
+        )
+        pointer["founder_capability_assignment_ref"] = (
+            "capability_assignment_ref:pointer_bootstrap_opaque_v1"
+        )
+        pointer["access_profile_ref"] = (
+            "access_profile_ref:pointer_bootstrap_opaque_v1"
+        )
+        pointer["owner_seal_sha256"] = self._write(self.owner_path, owner)
+        self._resign_pointer(pointer)
+
+    def _configure_promotion_scope(self) -> None:
+        owner = self._read(self.owner_path)
+        owner["authorization"] = "FOUNDER_APPROVED_PROMOTE_ACCEPTED_CANDIDATE"
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope"] = [resolver.PROMOTION_SCOPE]
+        pointer["authority_scope_constraints"] = dict(
+            resolver.PROMOTION_SCOPE_CONSTRAINTS
+        )
+        pointer["founder_capability_assignment_ref"] = (
+            "capability_assignment_ref:promotion_opaque_v1"
+        )
+        pointer["access_profile_ref"] = "access_profile_ref:promotion_opaque_v1"
+        pointer["owner_seal_sha256"] = self._write(self.owner_path, owner)
+        self._resign_pointer(pointer)
+
     def _resolve(
         self,
         lookup: Any = "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
@@ -308,6 +342,116 @@ class ActiveAuthorityResolverCandidateTests(unittest.TestCase):
         self._write(self.d8_path, d8)
         result = self._resolve()
         self.assertEqual(result["state"], "BLOCK_AUTHORITY_BINDING_INVALID")
+
+
+    def test_16_pointer_bootstrap_scope_exact_contract_passes(self) -> None:
+        self._configure_pointer_bootstrap_scope()
+        result = self._resolve()
+        self.assertEqual(result["state"], "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED")
+        self.assertEqual(result["scope"], [resolver.POINTER_BOOTSTRAP_SCOPE])
+        self.assertEqual(
+            result["authority_scope_constraints"],
+            resolver.POINTER_BOOTSTRAP_SCOPE_CONSTRAINTS,
+        )
+        self.assertRegex(result["authority_sha256"], r"^[0-9a-f]{64}$")
+
+    def test_17_pointer_bootstrap_scope_requires_exact_constraints(self) -> None:
+        self._configure_pointer_bootstrap_scope()
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope_constraints"]["overwrite"] = True
+        self._resign_pointer(pointer)
+        result = self._resolve()
+        self.assertEqual(result["state"], "BLOCK_AUTHORITY_SCOPE_ESCALATION")
+
+    def test_18_mixed_authority_scopes_are_rejected(self) -> None:
+        self._configure_pointer_bootstrap_scope()
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope"] = [
+            resolver.POINTER_BOOTSTRAP_SCOPE,
+            "RECEIVE_CANDIDATE",
+        ]
+        self._resign_pointer(pointer)
+        result = self._resolve()
+        self.assertEqual(result["state"], "HOLD_AUTHORITY_INCOMPLETE")
+
+    def test_19_pointer_bootstrap_promotion_escalation_is_rejected(self) -> None:
+        self._configure_pointer_bootstrap_scope()
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope_constraints"]["promotion"] = True
+        self._resign_pointer(pointer)
+        result = self._resolve()
+        self.assertEqual(result["state"], "BLOCK_AUTHORITY_SCOPE_ESCALATION")
+
+    def test_20_receive_candidate_scope_remains_supported(self) -> None:
+        result = self._resolve()
+        self.assertEqual(result["state"], "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED")
+        self.assertEqual(result["scope"], ["RECEIVE_CANDIDATE"])
+
+
+
+    def test_21_promotion_scope_exact_contract_passes(self) -> None:
+        self._configure_promotion_scope()
+        result = self._resolve()
+        self.assertEqual(result["state"], "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED")
+        self.assertEqual(result["scope"], [resolver.PROMOTION_SCOPE])
+        self.assertEqual(
+            result["authority_scope_constraints"],
+            resolver.PROMOTION_SCOPE_CONSTRAINTS,
+        )
+
+    def test_22_promotion_scope_rejects_other_candidate(self) -> None:
+        self._configure_promotion_scope()
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope_constraints"]["candidate_sha256"] = "0" * 64
+        self._resign_pointer(pointer)
+        result = self._resolve()
+        self.assertEqual(result["state"], "BLOCK_AUTHORITY_SCOPE_ESCALATION")
+
+    def test_23_promotion_scope_rejects_mechanism_drift(self) -> None:
+        self._configure_promotion_scope()
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope_constraints"]["promotion_mechanism_sha256"] = (
+            "1" * 64
+        )
+        self._resign_pointer(pointer)
+        result = self._resolve()
+        self.assertEqual(result["state"], "BLOCK_AUTHORITY_SCOPE_ESCALATION")
+
+    def test_24_promotion_scope_rejects_forbidden_capability_escalation(self) -> None:
+        forbidden = (
+            "generic_canonical_write",
+            "arbitrary_pointer_write",
+            "deploy",
+            "restart",
+            "authority_management",
+            "formal_submission",
+            "other_candidate_promotion",
+            "historical_mutation",
+        )
+        for field in forbidden:
+            with self.subTest(field=field):
+                self.tearDown()
+                self.setUp()
+                self._configure_promotion_scope()
+                pointer = self._read(self.pointer_path)
+                pointer["authority_scope_constraints"][field] = True
+                self._resign_pointer(pointer)
+                result = self._resolve()
+                self.assertEqual(
+                    result["state"], "BLOCK_AUTHORITY_SCOPE_ESCALATION"
+                )
+
+    def test_25_promotion_scope_rejects_mixed_scope(self) -> None:
+        self._configure_promotion_scope()
+        pointer = self._read(self.pointer_path)
+        pointer["authority_scope"] = [
+            resolver.PROMOTION_SCOPE,
+            "RECEIVE_CANDIDATE",
+        ]
+        self._resign_pointer(pointer)
+        result = self._resolve()
+        self.assertEqual(result["state"], "HOLD_AUTHORITY_INCOMPLETE")
+
 
 
 if __name__ == "__main__":
