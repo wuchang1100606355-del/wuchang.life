@@ -127,6 +127,7 @@ class MeshTests(unittest.TestCase):
         for name in ("taiji02", "taiji03", "wuchang-us-free-node"):
             self.assertEqual({"msi", "taiji01"}, {peer["peer_id"] for peer in configs[name]["peers"]})
         self.assertIn("taiji01", {peer["peer_id"] for peer in configs["msi"]["peers"]})
+        self.assertEqual("127.0.0.1", configs["taiji02"]["listen_host"])
         for name, config in configs.items():
             self.assertEqual(TOTAL_FIELD_AUTHORITY_REF, config["authority_ref"], name)
             self.assertEqual("node:taiji01", config["total_field_authority_node_ref"], name)
@@ -146,6 +147,10 @@ class MeshTests(unittest.TestCase):
         self.assertEqual(["msi", "taiji01"], manifest["route_contract"]["remote_nodes_to"])
         self.assertEqual("node:taiji01", manifest["total_field_authority_node_ref"])
         self.assertEqual("TELEMETRY_TASK_VALIDATION_ONLY_NO_EXECUTOR", manifest["candidate_control_endpoint_state"])
+        taiji02 = next(node for node in manifest["nodes"] if node["node_id"] == "taiji02")
+        self.assertEqual("127.0.0.1:9238", taiji02["listen"])
+        self.assertEqual("100.111.139.7:9238", taiji02["tailnet_ingress"])
+        self.assertEqual("TAILSCALE_USERSPACE_SERVE_TCP", taiji02["tailnet_ingress_mode"])
         self.assertNotIn("control_authority_endpoint", manifest)
 
     def test_total_field_authority_control_contract_and_scheduler_interface(self) -> None:

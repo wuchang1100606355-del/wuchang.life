@@ -4,7 +4,7 @@
 
 ## 拓撲
 
-- 所有節點固定監聽各自 Tailscale 位址的 TCP 9238，不綁定一般 LAN 全介面。
+- MSI、taiji01、taiji03 與美國節點固定監聽各自可由核心網路綁定的 Tailscale 位址 TCP 9238，不綁定一般 LAN 全介面。taiji02 的即時觀測是 Tailscale userspace networking，尾網位址不在核心網卡上，因此 receiver 只監聽 `127.0.0.1:9238`，再由既有 Tailscale Serve 以 raw TCP 將 `100.111.139.7:9238` 映射至同一 receiver；Serve 只是 carrier，不建立第二個 receiver 或第二權威。
 - taiji01 是 Total Field authority/verifier、Native ADI primary、state sealer 與 receipt issuer；MSI Windows 是 Founder interface，MSI WSL 只做 build/test/GTP packet generation 與 Drive projection，其他 Linux 節點是 execution workers。MSI 不建立第二權威。
 - taiji02、taiji03、wuchang-us-free-node 每五分鐘採集一次低成本狀態，生成 V2.1 封包並直接傳向 taiji01 與 MSI；taiji01 傳向 MSI。
 - MSI 每五分鐘採集一次，生成 V2.1 封包並傳向四個可執行遠端節點。
@@ -33,7 +33,7 @@ curated paths 只對已列出的 source/runtime、V2.1 canonical/schema 與相�
 
 部署前先建立 config/runtime 目錄，並將同一 GitHub commit 的 versioned source 安裝到 MSI `/home/taiji_admin/.local/opt/w7tp_gt_mesh_v21/<commit>`、其餘節點 `/opt/w7tp/gt_mesh_v21/<commit>`，再以原子 `current` 指向該版本。`current` 必須同時含頂層 `w7tp_gt_mesh`、既有 `w7tp_runtime.state_field` 子集、V2.1 canonical 與 schema；遠端節點不依賴 repository checkout。將該節點 config 複製為 manifest 指定的 `config.json`，只選一組 unit 啟用。Python 最低版本為 3.11。
 
-從 Windows/DrvFS 複製 unit 與 config 到 Linux 時，落地權限固定為 `0644`，runtime/config 目錄則只給服務帳號所需權限；不要沿用 DrvFS 顯示的 executable/world-writable mode。
+從 Windows/DrvFS 複製 unit 與 config 到 Linux 時，unit 落地權限固定為 `0644`；config 目錄與 `config.json` 必須由實際服務帳號擁有，分別使用 `0700` 與 `0600`，runtime 目錄也只給該服務帳號所需權限。不要沿用 DrvFS 顯示的 executable/world-writable mode。taiji02 啟動 receiver 後，以 `tailscale serve --bg --tcp=9238 tcp://127.0.0.1:9238` 建立尾網內原始 TCP 入口，並以 `tailscale serve status` 與遠端 `/healthz` 同時驗證；不得使用公開 Funnel。
 
 啟動後的最小驗證是：`doctor` 通過、`/healthz` 回應 `LIVE_SERVICE_PRESENCE_ONLY`、timer 顯示下一次觸發時間、一次 cycle 產生本地 packet/carrier refs，且雙向路由各有 receiver receipt 或明確 retry record。這些證據仍不單獨建立 final authority。
 
