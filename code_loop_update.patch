@@ -1,0 +1,84 @@
+diff --git a/.skill-build/8d-adi-state-field-intelligence/SKILL.md b/.skill-build/8d-adi-state-field-intelligence/SKILL.md
+--- a/.skill-build/8d-adi-state-field-intelligence/SKILL.md
++++ b/.skill-build/8d-adi-state-field-intelligence/SKILL.md
+@@ -74,7 +74,30 @@
+ 
+ 每項結論標示 `已證明`、`強推論`、`弱推論` 或 `缺證據`，附最短證據路徑。時間先後不得直接升格為因果；找不到引用不得宣告沒有外部使用者。
+ 
+-### 6. 產生修正路線
++### 6. 標示程式碼閉環缺口
++
++沿「定義 → 實作 → 呼叫 → 輸入輸出 → 錯誤處理 → 測試 → 接線 → 執行證據 → 回復」逐環核對：
++
++- 定義—實作缺口：結構、介面或規則已改，實作沒有同步，或實作沒有正式定義。
++- 實作—呼叫缺口：程式存在但沒有可信呼叫者，或呼叫者仍指向舊實作。
++- 輸入—輸出缺口：欄位、型別、版本、預設值、回傳值或序列化契約不閉合。
++- 正常—錯誤路徑缺口：成功路徑存在，但失敗、逾時、重試、部分完成或資源限制沒有處理。
++- 程式—測試缺口：修改行為未被測試，測試只覆蓋舊行為，或測試與實作由同一錯誤假設產生。
++- 測試—接線缺口：單元測試通過，但正式入口、載入、路由、設定或跨節點接線未證明。
++- 接線—效果缺口：宣稱已部署或接線，但沒有同版本的執行與效果收據。
++- 修改—證據缺口：程式已改，但結構、測試、證據、版本或權威仍指向舊座標。
++- 生成來源缺口：修改生成產物而非來源，或生成器、模板與產物版本不一致。
++- 回復閉環缺口：沒有前像、回復條件、相容策略或可重驗還原方法。
++- 跨節點閉環缺口：不同節點的程式、結構、設定、權威或證據版本不一致。
++
++每個缺口輸出：斷裂環節、前後座標、直接證據、影響半徑、已證明／推論／未知、阻斷程度、閉合條件及下一個精確動作。找不到某環只能標示 `未知邊界`，不得宣告「沒有缺口」。
++
++### 7. 產生修正路線
+@@ -87,7 +110,7 @@
+ 
+ 依序執行：定位 → 關係映射 → 影響模擬 → 候選修正 → 驗證 → 權威核准 → 接線 → 效果重驗 → 持久化。產生路線不等於取得執行授權。
+ 
+-### 7. 驗證與決定
++### 8. 驗證與決定
+@@ -135,6 +158,7 @@
+ 證據等級=
+ 正式權威=
+ 狀態場摘要=
++程式碼閉環缺口=
+ 功能群組=
+ 供給群組=
+ 需求群組=
+diff --git a/.skill-build/8d-adi-state-field-intelligence/references/state-field-model.md b/.skill-build/8d-adi-state-field-intelligence/references/state-field-model.md
+--- a/.skill-build/8d-adi-state-field-intelligence/references/state-field-model.md
++++ b/.skill-build/8d-adi-state-field-intelligence/references/state-field-model.md
+@@ -75,6 +75,27 @@
+ - `權威衝突`：不同有效來源對同一座標給出互斥決定。
+ - `時間錯置`：下游或證據早於其宣稱使用的上游版本。
+ 
++## 程式碼閉環缺口物件
++
++```json
++{
++  "gap_id": "穩定識別",
++  "broken_link": "定義—實作／實作—呼叫／輸入—輸出／正常—錯誤／程式—測試／測試—接線／接線—效果／修改—證據／生成來源／回復／跨節點",
++  "before_coordinate": {},
++  "after_coordinate": {},
++  "evidence_refs": [],
++  "impact_radius": "局部／群組／系統／治理／未知",
++  "confidence": "已證明／強推論／弱推論／缺證據",
++  "blocking": "阻斷／重大／一般／待確認",
++  "unknown_frontier": [],
++  "closure_conditions": [],
++  "next_exact_action": ""
++}
++```
++
++阻斷程度依效果決定，不依檔名或檔案數量決定。破壞契約、形成不可逆資料效果、缺正式權威、無法安全回復或跨節點版本分裂時，至少標示重大；會使正式流程錯誤生效時標示阻斷。
++
+ ## 影響傳播
+@@ -116,6 +137,7 @@
+   "demand_groups": [],
+   "dependency_gaps": [],
++  "code_loop_gaps": [],
+   "impact": {
+diff --git a/.skill-build/8d-adi-state-field-intelligence/agents/openai.yaml b/.skill-build/8d-adi-state-field-intelligence/agents/openai.yaml
+--- a/.skill-build/8d-adi-state-field-intelligence/agents/openai.yaml
++++ b/.skill-build/8d-adi-state-field-intelligence/agents/openai.yaml
+@@ -1,4 +1,4 @@
+ interface:
+   display_name: "8D ADI 狀態場檔案智能"
+-  short_description: "以座標與狀態場分析因果、供需、存依、功能及修改影響路線"
+-  default_prompt: "使用 $8d-adi-state-field-intelligence 建立檔案狀態場，分析修改影響並產生安全修正路線。"
++  short_description: "以座標與狀態場分析程式碼閉環缺口及修改影響路線"
++  default_prompt: "使用 $8d-adi-state-field-intelligence 建立狀態場，標示程式碼閉環缺口並產生安全修正路線。"

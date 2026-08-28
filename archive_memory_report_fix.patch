@@ -1,0 +1,44 @@
+diff --git a/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py b/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py
+--- a/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py
++++ b/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py
+@@ -361,10 +361,10 @@ def scan(args: argparse.Namespace) -> int:
+         "required_artifacts": [
+             "ADI_STATE_SNAPSHOT.json", "SNAPSHOT_SHA256.txt",
+-            "VALIDATION_REPORT.json", "SEAL.json",
++            "SEAL.json",
+         ],
+         "recipe": [
+             "驗證快照標準 SHA-256",
+             "依 logical_root_id 與 ADI 相對路徑重建節點",
+             "依證據強度重建狀態向量與待分析缺口索引",
+-            "套用驗證報告與封印，不提升未證明權威",
++            "套用當次記憶體驗證結果與封印，不提升未證明權威",
+         ],
+@@ -382,6 +382,5 @@ def scan(args: argparse.Namespace) -> int:
+     write_json(run_dir / "ADI_STATE_SNAPSHOT.json", snapshot)
+     atomic_new(run_dir / "SNAPSHOT_SHA256.txt", f"{snapshot['snapshot_sha256']}\n".encode())
+-    write_json(run_dir / "VALIDATION_REPORT.json", validation)
+     write_json(run_dir / "ADI_GENERATIVE_TRANSFER_BOOK.json", book)
+     write_json(run_dir / "SEAL.json", seal)
+-    print(json.dumps({"state": decision, "run_id": run_id, "output": str(run_dir), "snapshot_sha256": snapshot["snapshot_sha256"]}, ensure_ascii=False))
++    print(json.dumps({"state": decision, "run_id": run_id, "output": str(run_dir), "snapshot_sha256": snapshot["snapshot_sha256"], "validation": validation, "report_persistence": "MEMORY_ONLY"}, ensure_ascii=False))
+@@ -522,10 +521,10 @@ def compare(args: argparse.Namespace) -> int:
+-        "required_artifacts": ["ADI_STATE_DELTA.json", "DELTA_SHA256.txt", "DIFF_SUMMARY.md", "VALIDATION_REPORT.json", "SEAL.json"],
++        "required_artifacts": ["ADI_STATE_DELTA.json", "DELTA_SHA256.txt", "SEAL.json"],
+         "recipe": [
+             "驗證前後快照與差異 SHA-256",
+             "依 ADI 路徑座標重建新增、消失與改變集合",
+             "將改變路徑送入程式碼閉環與影響傳播分析",
+             "依證據強度區分內容差異與中繼資料差異",
+-            "套用驗證報告與封印，不提升未證明權威",
++            "套用當次記憶體驗證結果與封印，不提升未證明權威",
+         ],
+@@ -540,7 +539,5 @@ def compare(args: argparse.Namespace) -> int:
+     write_json(run_dir / "ADI_STATE_DELTA.json", delta)
+     atomic_new(run_dir / "DELTA_SHA256.txt", f"{delta['delta_sha256']}\n".encode())
+-    atomic_new(run_dir / "DIFF_SUMMARY.md", summary.encode("utf-8"))
+-    write_json(run_dir / "VALIDATION_REPORT.json", validation)
+     write_json(run_dir / "ADI_GENERATIVE_TRANSFER_BOOK.json", book)
+     write_json(run_dir / "SEAL.json", seal)
+-    print(json.dumps({"state": decision, "run_id": run_id, "output": str(run_dir), "delta_sha256": delta["delta_sha256"]}, ensure_ascii=False))
++    print(json.dumps({"state": decision, "run_id": run_id, "output": str(run_dir), "delta_sha256": delta["delta_sha256"], "report": summary, "validation": validation, "report_persistence": "MEMORY_ONLY"}, ensure_ascii=False))

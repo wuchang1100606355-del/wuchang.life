@@ -1,0 +1,10 @@
+diff --git a/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py b/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py
+--- a/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py
++++ b/.skill-build/8d-adi-state-field-intelligence/scripts/adi_state_archive.py
+@@ -218,6 +218,4 @@ def bounded_walk(
+             candidate = (current_path / name).resolve()
+             if name == ".git" or candidate == excluded_root or within(candidate, excluded_root):
+                 continue
+-            if within(excluded_root, candidate):
+-                continue
+             kept.append(name)
