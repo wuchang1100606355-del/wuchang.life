@@ -1,0 +1,94 @@
+{
+  "schema": "W7TP_STATE_FIELD_MCP_PREBUILD_READONLY_INVENTORY_V1",
+  "captured_utc": "2026-08-19T14:40:22Z",
+  "roots": [
+    {
+      "path": "/home/taiji_admin/Taiji_Hub",
+      "state": "PRESENT_PRIMARY_SYSTEM_ROOT"
+    },
+    {
+      "path": "/mnt/c/Taiji_Runtime",
+      "state": "PRESENT_NO_CHILD_ITEMS_OBSERVED"
+    }
+  ],
+  "git_baseline": {
+    "branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "head": "348e4f440b4a2d62a9f9cc169f94ab7fb3964e44",
+    "porcelain_v1_all_records": 30,
+    "porcelain_v1_all_metadata_sha256": "5e9c08d34e9a7cd2c2e43c08b65d04622c7a2821c83debd08ef04f9f8487cc25",
+    "tracked_name_status_records": 0,
+    "tracked_name_status_metadata_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "environment": {
+    "platform": "WSL2_WITH_SYSTEMD_PID1",
+    "python": "3.12.3",
+    "node": "22.22.2",
+    "npm": "10.9.7",
+    "docker_cli": "29.4.1",
+    "systemd": "255",
+    "openssh_client": "9.6p1",
+    "openssh_server": "NOT_INSTALLED_NOT_ENABLED",
+    "tailscale": "1.102.2",
+    "python_mcp_sdk": "NOT_FOUND",
+    "node_mcp_sdk": "NOT_FOUND",
+    "existing_stack_reused": ["fastapi", "uvicorn", "pydantic_available"]
+  },
+  "tailscale_status_json": {
+    "command_executed_read_only": true,
+    "backend_state": "Running",
+    "logical_nodes": 11,
+    "online_nodes": 9,
+    "os_counts": {
+      "linux": 5,
+      "windows": 2,
+      "android": 3,
+      "ios": 1
+    },
+    "full_addresses_emitted": false,
+    "login_identifiers_emitted": false,
+    "auth_material_emitted": false
+  },
+  "physical_fault_domain_interpretation": [
+    {
+      "logical_planes": ["msi-linux-wsl", "msi-windows"],
+      "physical_fault_domains": 1
+    },
+    {
+      "logical_planes": ["taiji03-linux", "taiji03-windows"],
+      "physical_fault_domains": 1
+    },
+    {
+      "logical_plane": "taiji01-linux-and-other-peers",
+      "physical_independence": "NOT_EVIDENCED"
+    }
+  ],
+  "service_snapshot": [
+    {"port": 3000, "state": "NOT_LISTENING"},
+    {"port": 3010, "state": "NOT_LISTENING"},
+    {"port": 8105, "state": "LOOPBACK_LISTENING_PYTHON_UVICORN"},
+    {"port": 8126, "state": "LOOPBACK_LISTENING_FIXED_RUNTIME"},
+    {"port": 8127, "state": "LOOPBACK_LISTENING_FIXED_RUNTIME"},
+    {"port": 9004, "state": "EXISTING_WILDCARD_DOCKER_PROXY_RED_TEAM_ALERT_NOT_MODIFIED"},
+    {"port": 9101, "state": "NOT_LISTENING"},
+    {"port": 11434, "state": "LOOPBACK_LISTENING_OLLAMA"}
+  ],
+  "red_team_preexisting_alerts": [
+    "PORT_9004_EXISTING_WILDCARD_LISTENER_NOT_CAUSED_OR_MODIFIED_BY_CANDIDATE",
+    "SYSTEMD_DEGRADED_SYSTEMD_RESOLVED_FAILED_NOT_MODIFIED",
+    "NO_EXISTING_MCP_SDK_OR_SERVER_RUNTIME"
+  ],
+  "protected_boundary": {
+    "state": "PROTECTED_OPAQUE_NODE",
+    "classes": [
+      "environment_files",
+      "private_keys",
+      "passwords_and_tokens",
+      "member_plaintext",
+      "docker_socket"
+    ],
+    "content_read": false,
+    "content_hashed": false,
+    "content_emitted": false
+  },
+  "mutations_performed": []
+}

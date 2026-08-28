@@ -1,0 +1,43 @@
+{
+  "schema": "W7TP_STATE_FIELD_MCP_FINAL_TEST_REPORT_V1",
+  "final_status": "PASS_LOCAL_CANDIDATE_ONLY",
+  "syntax": {
+    "command": "python3 -m compileall -q src tests scripts",
+    "status": "PASS"
+  },
+  "type_contract": {
+    "command": "python3 scripts/type_contract_check.py",
+    "status": "PASS_BOUNDED_STATIC_TYPE_RESOLUTION",
+    "annotated_functions_checked": 64,
+    "runtime_callable_type_hints_resolved": 58,
+    "failures": 0,
+    "limitation": "No external mypy or pyright installation was present or added. The dependency-free checker parses every source, requires complete function annotations, imports every module, and resolves public callable type hints; it does not claim whole-program inference equivalent to mypy or pyright."
+  },
+  "unit_and_red_team": {
+    "command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
+    "tests_run": 40,
+    "failures": 0,
+    "errors": 0,
+    "unexpected_skips": 0,
+    "status": "PASS"
+  },
+  "coverage_gates": {
+    "synthetic_node_and_log_fixture": "PASS",
+    "actual_127_0_0_1_mcp_startup": "PASS",
+    "eight_tools_allow_and_deny": "PASS",
+    "sensitive_masking": "PASS",
+    "json_basic_auth_jwt_masking": "PASS",
+    "command_path_privilege_blocking": "PASS",
+    "no_side_effect_prepare_tools": "PASS",
+    "authorization_live_binding_ttl_and_replay": "PASS",
+    "chunked_request_streaming_body_limit": "PASS",
+    "unknown_log_timestamp_fail_closed": "PASS",
+    "governance_denial_adapter_invocations_zero": "PASS",
+    "8d_runtime_adi_separation": "PASS",
+    "physical_fault_domain_grouping": "PASS",
+    "carrier_boundary": "PASS"
+  },
+  "network_install": false,
+  "service_activation": false,
+  "remote_test": false
+}

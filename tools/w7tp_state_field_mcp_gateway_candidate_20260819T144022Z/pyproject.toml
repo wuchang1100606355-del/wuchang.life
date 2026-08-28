@@ -1,0 +1,11 @@
+[project]
+name = "w7tp-state-field-mcp-gateway-candidate"
+version = "0.1.0"
+description = "Local-only, allowlisted W7TP 8D state-field MCP gateway candidate"
+requires-python = ">=3.12"
+dependencies = ["fastapi", "uvicorn"]
+
+[tool.w7tp-candidate]
+bind_host = "127.0.0.1"
+formal_activation = false
+network_install_performed = false

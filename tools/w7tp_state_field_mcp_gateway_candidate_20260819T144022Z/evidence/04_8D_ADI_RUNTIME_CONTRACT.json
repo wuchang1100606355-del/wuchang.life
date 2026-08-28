@@ -1,0 +1,39 @@
+{
+  "schema": "W7TP_EXECUTABLE_8D_STATE_FIELD_RUNTIME_OS_CANDIDATE_V1",
+  "eight_dimension_programs": [
+    {"dimension": "identity", "program": "bind_local_principal"},
+    {"dimension": "intent", "program": "classify_bounded_goal"},
+    {"dimension": "authority", "program": "enforce_candidate_boundary"},
+    {"dimension": "relation", "program": "bind_allowlisted_target"},
+    {"dimension": "resource", "program": "apply_compute_and_output_budget"},
+    {"dimension": "time", "program": "apply_window_ttl_and_freshness"},
+    {"dimension": "risk", "program": "reject_untrusted_input_shapes"},
+    {"dimension": "governance", "program": "fuse_fail_closed_decision"}
+  ],
+  "runtime_properties": {
+    "dynamic_activation": true,
+    "state_transition": true,
+    "program_fusion": true,
+    "fail_closed_governance": true,
+    "risk_program_executes_before_adapter_resolution": true,
+    "closed_schema_and_allowlist_gate_runs_inside_authority_dimension": true,
+    "governance_opens_adapter_gate_only_after_all_active_programs_pass": true,
+    "denial_adapter_invocation_tested_as_zero": true,
+    "static_d1_d8_grid": false
+  },
+  "adi_index": {
+    "coordinate": true,
+    "relation": true,
+    "decision": true,
+    "transition": true,
+    "time": true,
+    "space": true,
+    "evidence": true,
+    "callable": false,
+    "activation_authority": false
+  },
+  "packet_sequence": "State->Coordinate->Hash->Packet",
+  "formal_authority": false,
+  "canonical": false,
+  "landed": false
+}

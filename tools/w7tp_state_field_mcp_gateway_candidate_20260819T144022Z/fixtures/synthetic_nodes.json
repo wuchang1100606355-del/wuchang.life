@@ -1,0 +1,35 @@
+{
+  "schema": "W7TP_SYNTHETIC_NODE_FIXTURE_V1",
+  "nodes": [
+    {
+      "id": "synthetic-host-linux",
+      "node_class": "linux_execution_node",
+      "os_family": "linux",
+      "physical_fault_domain_id": "synthetic-physical-host",
+      "shell_capable": false,
+      "execution_enabled": false
+    },
+    {
+      "id": "synthetic-host-windows",
+      "node_class": "windows_execution_node",
+      "os_family": "windows",
+      "physical_fault_domain_id": "synthetic-physical-host",
+      "shell_capable": false,
+      "execution_enabled": false
+    },
+    {
+      "id": "synthetic-mobile",
+      "node_class": "mobile_sensing_light_compute_node",
+      "os_family": "android",
+      "physical_fault_domain_id": null,
+      "shell_capable": false,
+      "execution_enabled": false
+    }
+  ],
+  "expected": {
+    "logical_node_count": 3,
+    "evidenced_physical_fault_domains": 1,
+    "logical_planes_in_shared_domain": 2,
+    "mobile_shell_assumed": false
+  }
+}

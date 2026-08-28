@@ -1,0 +1,76 @@
+{
+  "schema": "W7TP_STATE_FIELD_MCP_SOURCE_IMMUTABILITY_AUDIT_V1",
+  "git_root": "/home/taiji_admin/Taiji_Hub",
+  "candidate_prefix": "tools/w7tp_state_field_mcp_gateway_candidate_20260819T144022Z/",
+  "git_status_serialization": "git status --porcelain=v1 -z --untracked-files=all raw NUL-terminated bytes; candidate-prefix records excluded for comparison",
+  "before": {
+    "preexisting_status_records": 30,
+    "preexisting_status_metadata_sha256": "5e9c08d34e9a7cd2c2e43c08b65d04622c7a2821c83debd08ef04f9f8487cc25",
+    "tracked_name_status_records": 0,
+    "tracked_name_status_metadata_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "after_excluding_candidate_prefix": {
+    "preexisting_status_records": 30,
+    "preexisting_status_metadata_sha256": "5e9c08d34e9a7cd2c2e43c08b65d04622c7a2821c83debd08ef04f9f8487cc25",
+    "tracked_name_status_records": 0,
+    "tracked_name_status_metadata_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "final_git_status_projection": {
+    "total_visible_records": 60,
+    "candidate_visible_records": 30,
+    "preexisting_visible_records": 30,
+    "candidate_governed_files": 32,
+    "candidate_manifest_entries_excluding_manifest": 31,
+    "candidate_governed_files_ignored_by_existing_rules": 2,
+    "candidate_generated_pycache_files_ignored": 18,
+    "ignored_governed_classes": ["MANIFEST_SHA256", "SYNTHETIC_LOG_FIXTURE"]
+  },
+  "postbuild_read_only_system_snapshot": {
+    "roots": {
+      "/home/taiji_admin/Taiji_Hub": "PRESENT",
+      "/mnt/c/Taiji_Runtime": "PRESENT_ZERO_CHILD_ITEMS_OBSERVED"
+    },
+    "tailscale_status_json_sanitized": {
+      "backend_state": "Running",
+      "logical_nodes": 11,
+      "online_nodes": 9,
+      "os_counts": {"linux": 5, "windows": 2, "android": 3, "ios": 1},
+      "full_addresses_login_identifiers_or_auth_material_emitted": false
+    },
+    "service_ports": [
+      {"port": 3000, "state": "NOT_LISTENING"},
+      {"port": 3010, "state": "NOT_LISTENING"},
+      {"port": 8105, "state": "LOOPBACK_LISTENING"},
+      {"port": 8126, "state": "LOOPBACK_LISTENING"},
+      {"port": 8127, "state": "LOOPBACK_LISTENING"},
+      {"port": 9004, "state": "EXISTING_WILDCARD_LISTENER_RED_TEAM_ALERT"},
+      {"port": 9101, "state": "NOT_LISTENING"},
+      {"port": 11434, "state": "LOOPBACK_LISTENING"}
+    ],
+    "systemd_state": "degraded",
+    "comparison_to_prebuild_sanitized_snapshot": "EXACT_MATCH_FOR_ROOTS_TAILSCALE_COUNTS_TARGET_PORT_CLASSES_AND_SYSTEMD_STATE"
+  },
+  "postbuild_snapshot_comparison": "EXACT_MATCH_AFTER_EXCLUDING_NEW_CANDIDATE_PREFIX",
+  "late_final_git_recheck": {
+    "total_visible_records": 61,
+    "candidate_visible_records": 30,
+    "outside_candidate_records": 31,
+    "tracked_name_status_records": 0,
+    "late_untracked_path": "bin/taiji-whole-machine-probe",
+    "late_untracked_path_mtime_utc": "2026-08-19T15:34:56.652893Z",
+    "late_untracked_path_content_read": false,
+    "late_untracked_path_content_hashed": false,
+    "attribution": "CONCURRENT_EXTERNAL_ADDITION_NOT_ATTRIBUTED_TO_CANDIDATE_BY_AVAILABLE_EVIDENCE",
+    "original_baseline_after_excluding_candidate_and_late_addition_records": 30,
+    "original_baseline_after_excluding_candidate_and_late_addition_sha256": "5e9c08d34e9a7cd2c2e43c08b65d04622c7a2821c83debd08ef04f9f8487cc25",
+    "original_30_record_projection_comparison": "EXACT_MATCH"
+  },
+  "tracked_files_modified_by_build": 0,
+  "existing_files_overwritten_by_build": 0,
+  "existing_files_deleted_by_build": 0,
+  "existing_files_moved_by_build": 0,
+  "protected_file_content_read_or_hashed": false,
+  "service_start_stop_restart_or_enable_commands_executed": false,
+  "tailscale_cloudflare_firewall_router_docker_database_mutation_commands_executed": false,
+  "scope_note": "The original 30-record NUL-serialized projection remains byte-identical after excluding the new candidate and one late concurrent untracked addition. The complete final outside-candidate Git status is therefore not identical to the prebuild snapshot. The postbuild system check proves only the listed sanitized observations; it is not a byte-level proof of every mutable OS datum and does not claim preexisting dirty records were clean."
+}

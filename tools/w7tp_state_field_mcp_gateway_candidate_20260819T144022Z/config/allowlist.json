@@ -1,0 +1,303 @@
+{
+  "schema": "W7TP_STATE_FIELD_MCP_FIXED_ALLOWLIST_CANDIDATE_V1",
+  "snapshot_utc": "2026-08-19T14:40:22Z",
+  "candidate_mode": "LOCAL_READ_ONLY_DEFAULT",
+  "nodes": [
+    {
+      "id": "msi-linux-wsl",
+      "display_name": "MSI Linux/WSL logical plane",
+      "node_class": "linux_execution_node",
+      "os_family": "linux",
+      "logical_plane": "wsl2",
+      "physical_fault_domain_id": "physical-msi-host",
+      "fault_domain_evidence": "SAME_PHYSICAL_HOST_AS_MSI_WINDOWS",
+      "last_observed_online": true,
+      "health_mode": "local_safe_metrics",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": [
+        "python_3_12_runtime",
+        "node_22_runtime",
+        "loopback_tcp_observation",
+        "docker_cli_observed_without_socket_access"
+      ],
+      "agent_candidates": ["linux_controlled_agent_candidate", "tailscale_ssh_carrier_candidate_disabled"],
+      "capability_evidence_status": "OBSERVED_LOCAL_TOOLCHAIN"
+    },
+    {
+      "id": "msi-windows",
+      "display_name": "MSI Windows logical plane",
+      "node_class": "windows_execution_node",
+      "os_family": "windows",
+      "logical_plane": "windows_host",
+      "physical_fault_domain_id": "physical-msi-host",
+      "fault_domain_evidence": "SAME_PHYSICAL_HOST_AS_MSI_WSL",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["windows_openssh_agent_candidate", "powershell_constrained_agent_candidate"],
+      "capability_evidence_status": "CANDIDATE_NOT_ENABLED"
+    },
+    {
+      "id": "taiji03-linux",
+      "display_name": "taiji03 Linux logical plane",
+      "node_class": "linux_execution_node",
+      "os_family": "linux",
+      "logical_plane": "linux",
+      "physical_fault_domain_id": "physical-taiji03-host",
+      "fault_domain_evidence": "SAME_PHYSICAL_HOST_AS_TAIJI03_WINDOWS",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["linux_controlled_agent_candidate", "tailscale_ssh_carrier_candidate_disabled"],
+      "capability_evidence_status": "CANDIDATE_NOT_ENABLED"
+    },
+    {
+      "id": "taiji03-windows",
+      "display_name": "taiji03 Windows logical plane",
+      "node_class": "windows_execution_node",
+      "os_family": "windows",
+      "logical_plane": "windows",
+      "physical_fault_domain_id": "physical-taiji03-host",
+      "fault_domain_evidence": "SAME_PHYSICAL_HOST_AS_TAIJI03_LINUX",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["windows_openssh_agent_candidate", "powershell_constrained_agent_candidate"],
+      "capability_evidence_status": "CANDIDATE_NOT_ENABLED"
+    },
+    {
+      "id": "taiji01-linux",
+      "display_name": "taiji01 Linux logical node",
+      "node_class": "linux_execution_node",
+      "os_family": "linux",
+      "logical_plane": "linux",
+      "physical_fault_domain_id": null,
+      "fault_domain_evidence": "INDEPENDENT_HARDWARE_NOT_EVIDENCED",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["linux_controlled_agent_candidate", "tailscale_ssh_carrier_candidate_disabled"],
+      "capability_evidence_status": "CANDIDATE_NOT_ENABLED"
+    },
+    {
+      "id": "linux-peer-04",
+      "display_name": "Sanitized Linux logical peer 04",
+      "node_class": "linux_execution_node",
+      "os_family": "linux",
+      "logical_plane": "linux",
+      "physical_fault_domain_id": null,
+      "fault_domain_evidence": "UNDETERMINED",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["linux_controlled_agent_candidate"],
+      "capability_evidence_status": "SANITIZED_PRESENCE_ONLY"
+    },
+    {
+      "id": "linux-peer-05",
+      "display_name": "Sanitized Linux logical peer 05",
+      "node_class": "linux_execution_node",
+      "os_family": "linux",
+      "logical_plane": "linux",
+      "physical_fault_domain_id": null,
+      "fault_domain_evidence": "UNDETERMINED",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["linux_controlled_agent_candidate"],
+      "capability_evidence_status": "SANITIZED_PRESENCE_ONLY"
+    },
+    {
+      "id": "android-peer-01",
+      "display_name": "Sanitized Android peer 01",
+      "node_class": "mobile_sensing_light_compute_node",
+      "os_family": "android",
+      "logical_plane": "mobile_app",
+      "physical_fault_domain_id": null,
+      "fault_domain_evidence": "UNDETERMINED",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["mobile_app_api_telemetry_candidate"],
+      "capability_evidence_status": "NO_SHELL_ASSUMED"
+    },
+    {
+      "id": "android-peer-02",
+      "display_name": "Sanitized Android peer 02",
+      "node_class": "mobile_sensing_light_compute_node",
+      "os_family": "android",
+      "logical_plane": "mobile_app",
+      "physical_fault_domain_id": null,
+      "fault_domain_evidence": "UNDETERMINED",
+      "last_observed_online": false,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["mobile_app_api_telemetry_candidate"],
+      "capability_evidence_status": "NO_SHELL_ASSUMED"
+    },
+    {
+      "id": "android-peer-03",
+      "display_name": "Sanitized Android peer 03",
+      "node_class": "mobile_sensing_light_compute_node",
+      "os_family": "android",
+      "logical_plane": "mobile_app",
+      "physical_fault_domain_id": null,
+      "fault_domain_evidence": "UNDETERMINED",
+      "last_observed_online": false,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["mobile_app_api_telemetry_candidate"],
+      "capability_evidence_status": "NO_SHELL_ASSUMED"
+    },
+    {
+      "id": "ios-peer-01",
+      "display_name": "Sanitized iOS peer 01",
+      "node_class": "mobile_sensing_light_compute_node",
+      "os_family": "ios",
+      "logical_plane": "mobile_app",
+      "physical_fault_domain_id": null,
+      "fault_domain_evidence": "UNDETERMINED",
+      "last_observed_online": true,
+      "health_mode": "snapshot_only_no_remote_probe",
+      "shell_capable": false,
+      "execution_enabled": false,
+      "observed_capabilities": ["tailscale_peer_presence"],
+      "agent_candidates": ["mobile_app_api_telemetry_candidate"],
+      "capability_evidence_status": "NO_SHELL_ASSUMED"
+    }
+  ],
+  "services": [
+    {
+      "id": "candidate-fixture-log",
+      "node_id": "msi-linux-wsl",
+      "probe_host": null,
+      "probe_port": null,
+      "exposure_baseline": "NO_LISTENER_SYNTHETIC_FIXTURE",
+      "log_file": "fixtures/synthetic_gateway.log"
+    },
+    {
+      "id": "local-port-8105",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 8105,
+      "exposure_baseline": "LOOPBACK_EXISTING",
+      "log_file": null
+    },
+    {
+      "id": "local-port-8126",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 8126,
+      "exposure_baseline": "LOOPBACK_EXISTING",
+      "log_file": null
+    },
+    {
+      "id": "local-port-8127",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 8127,
+      "exposure_baseline": "LOOPBACK_EXISTING",
+      "log_file": null
+    },
+    {
+      "id": "local-port-9004",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 9004,
+      "exposure_baseline": "WILDCARD_EXISTING_RED_TEAM_ALERT_NOT_MODIFIED",
+      "log_file": null
+    },
+    {
+      "id": "local-port-9101",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 9101,
+      "exposure_baseline": "NOT_LISTENING_AT_SNAPSHOT",
+      "log_file": null
+    },
+    {
+      "id": "local-port-11434",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 11434,
+      "exposure_baseline": "LOOPBACK_EXISTING",
+      "log_file": null
+    },
+    {
+      "id": "local-port-3000",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 3000,
+      "exposure_baseline": "NOT_LISTENING_AT_SNAPSHOT",
+      "log_file": null
+    },
+    {
+      "id": "local-port-3010",
+      "node_id": "msi-linux-wsl",
+      "probe_host": "127.0.0.1",
+      "probe_port": 3010,
+      "exposure_baseline": "NOT_LISTENING_AT_SNAPSHOT",
+      "log_file": null
+    }
+  ],
+  "physical_fault_domains": [
+    {
+      "id": "physical-msi-host",
+      "logical_node_ids": ["msi-linux-wsl", "msi-windows"],
+      "count_as_independent_hardware_domains": 1
+    },
+    {
+      "id": "physical-taiji03-host",
+      "logical_node_ids": ["taiji03-linux", "taiji03-windows"],
+      "count_as_independent_hardware_domains": 1
+    }
+  ],
+  "subnet_gateways": [],
+  "cloud_extension_nodes": [],
+  "carriers": [
+    {
+      "id": "tailscale",
+      "role": "CARRIER_ONLY",
+      "generative_transport": false,
+      "enabled_or_modified_by_candidate": false
+    },
+    {
+      "id": "ssh",
+      "role": "CARRIER_ONLY",
+      "generative_transport": false,
+      "enabled_or_modified_by_candidate": false
+    },
+    {
+      "id": "https",
+      "role": "CARRIER_ONLY",
+      "generative_transport": false,
+      "enabled_or_modified_by_candidate": false
+    }
+  ],
+  "protected_opaque_nodes": [
+    {"class": "environment_files", "state": "PROTECTED_OPAQUE_NODE", "read": false, "hashed": false},
+    {"class": "private_key_material", "state": "PROTECTED_OPAQUE_NODE", "read": false, "hashed": false},
+    {"class": "tokens_and_credentials", "state": "PROTECTED_OPAQUE_NODE", "read": false, "hashed": false},
+    {"class": "member_plaintext", "state": "PROTECTED_OPAQUE_NODE", "read": false, "hashed": false},
+    {"class": "docker_socket", "state": "PROTECTED_OPAQUE_NODE", "read": false, "hashed": false}
+  ]
+}

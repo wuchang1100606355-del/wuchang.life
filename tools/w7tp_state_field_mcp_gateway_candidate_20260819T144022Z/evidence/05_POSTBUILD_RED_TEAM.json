@@ -1,0 +1,74 @@
+{
+  "schema": "W7TP_STATE_FIELD_MCP_POSTBUILD_RED_TEAM_V1",
+  "phase": "FINAL_LOCAL_CANDIDATE_VALIDATION",
+  "decision": "PASS_LOCAL_CANDIDATE_ONLY",
+  "tool_surface": {
+    "expected_tools": 8,
+    "observed_tools": 8,
+    "arbitrary_shell_tool": false,
+    "arbitrary_command_tool": false,
+    "arbitrary_path_tool": false,
+    "execute_or_approve_tool": false
+  },
+  "security_results": {
+    "every_tool_allowed_case": "PASS",
+    "every_tool_rejected_extra_command_case": "PASS",
+    "unknown_node_service_and_tool_rejection": "PASS",
+    "log_service_line_time_input_read_and_output_byte_bounds": "PASS",
+    "unknown_timestamp_log_line": "PASS_FAIL_CLOSED_OMITTED",
+    "sensitive_output_masking": "PASS_ZERO_SYNTHETIC_CANARY_LEAK",
+    "json_token_basic_auth_jwt_and_quoted_assignment_masking": "PASS",
+    "path_traversal_blocking": "PASS",
+    "privilege_escalation_blocking": "PASS",
+    "non_loopback_bind_blocking": "PASS",
+    "external_host_and_origin_blocking": "PASS",
+    "oversized_content_length_body_blocking": "PASS",
+    "oversized_chunked_body_streaming_blocking": "PASS",
+    "live_task_candidate_hash_target_parameter_expiry_binding": "PASS",
+    "authorization_candidate_replay_blocking": "PASS_PROCESS_MEMORY_SCOPE",
+    "task_candidate_registry_limit": 256,
+    "protected_source_read_count": 0,
+    "protected_source_hash_count": 0,
+    "remote_connection_count": 0,
+    "control_plane_mutation_count": 0,
+    "database_write_count": 0,
+    "prepare_tool_file_write_count": 0
+  },
+  "runtime_results": {
+    "eight_executable_dimension_programs": "PASS",
+    "dynamic_activation_sets_differ_by_tool": "PASS",
+    "fusion_governance": "PASS_POLICY_GATE_INSIDE_AUTHORITY_DIMENSION",
+    "denied_dimension_adapter_invocation_count": 0,
+    "adi_non_executable_and_separate": "PASS",
+    "state_coordinate_hash_packet_binding": "PASS",
+    "static_d1_d8_fixture_classified_drift_without_mutation": "PASS"
+  },
+  "mcp_results": {
+    "actual_listener_address": "127.0.0.1",
+    "ephemeral_port_used_for_test": true,
+    "initialize": "PASS",
+    "initialized_notification": "PASS",
+    "tools_list": "PASS",
+    "tools_call": "PASS",
+    "invalid_json": "PASS_FAIL_CLOSED",
+    "unknown_method": "PASS_FAIL_CLOSED"
+  },
+  "iteration_record": {
+    "initial_self_test_findings": 4,
+    "independent_red_team_findings": {
+      "high": 2,
+      "medium": 4,
+      "low_medium": 2
+    },
+    "resolved_before_final": 12,
+    "final_failures": 0,
+    "note": "Independent review caught governance outside the runtime gate, JSON/Basic redaction bypass, missing synthetic-node fixture, bounded-type-check overclaim, weak task/auth binding, incomplete system post-state evidence, fail-open untimestamped logs, and unbounded chunked request buffering. All were corrected or narrowed to an explicit bounded claim before final evidence."
+  },
+  "preexisting_alerts_not_modified": [
+    "PORT_9004_EXISTING_WILDCARD_LISTENER",
+    "SYSTEMD_RESOLVED_FAILED_UNIT"
+  ],
+  "formal_activation": false,
+  "canonical": false,
+  "landed": false
+}
