@@ -8,10 +8,4 @@ ingress:
   - hostname: www.wuchang.life
     service: http://127.0.0.1:8089
 
-  - hostname: ai.wuchang.life
-    service: http://127.0.0.1:3000
-
-  - hostname: taiji.wuchang.life
-    service: http://127.0.0.1:8088
-
   - service: http_status:404
