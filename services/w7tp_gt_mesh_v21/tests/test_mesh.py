@@ -779,6 +779,50 @@ class MeshTests(unittest.TestCase):
                 self.assertEqual(2, len(result["peer_results"]))
                 self.assertGreater(result["drive_projection_count"], 0)
 
+    def test_retry_completion_is_bound_to_carrier_and_peer(self) -> None:
+        with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:
+            with MeshStorage(runtime_dir) as storage:
+                transfer = build_transfer(
+                    storage,
+                    snapshot(1),
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace="w7tp.mesh.test",
+                    now=FIXED,
+                )
+                transport = MeshTransport(storage)
+                peer_one = "http://127.0.0.1:9101/v2.1/packets"
+                peer_two = "http://127.0.0.1:9102/v2.1/packets"
+                transport._queue(
+                    carrier_ref=transfer.carrier_ref,
+                    peer_url=peer_one,
+                    reason_code="CARRIER_UNAVAILABLE",
+                    attempt=1,
+                )
+                transport._queue(
+                    carrier_ref=transfer.carrier_ref,
+                    peer_url=peer_two,
+                    reason_code="CARRIER_UNAVAILABLE",
+                    attempt=1,
+                )
+                storage.journal.append(
+                    "outbox_done",
+                    "peer-one-complete",
+                    {
+                        "carrier_ref": transfer.carrier_ref,
+                        "peer_url": peer_one,
+                        "attempt": 2,
+                    },
+                )
+                with mock.patch.object(
+                    transport,
+                    "send",
+                    return_value={"state": "HOLD_QUEUED_FOR_RETRY", "reason_code": "CARRIER_UNAVAILABLE"},
+                ) as send:
+                    results = transport.retry_pending(timeout_seconds=1)
+                self.assertEqual(1, len(results))
+                self.assertEqual(1, send.call_count)
+                self.assertEqual(peer_two, send.call_args.kwargs["peer_url"])
+
     def test_artifacts_do_not_embed_raw_technical_secrets(self) -> None:
         with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:
             with MeshStorage(runtime_dir) as storage:

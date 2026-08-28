@@ -126,7 +126,7 @@ class MeshTransport:
 
     def retry_pending(self, *, timeout_seconds: int = 10) -> list[dict[str, object]]:
         completed = {
-            item.get("carrier_ref")
+            (item.get("carrier_ref"), item.get("peer_url"))
             for item in self.storage.journal.records("outbox_done")
         }
         latest: dict[tuple[object, object], dict[str, object]] = {}
@@ -134,7 +134,7 @@ class MeshTransport:
             latest[(item.get("carrier_ref"), item.get("peer_url"))] = item
         results: list[dict[str, object]] = []
         for (carrier_ref, peer_url), item in latest.items():
-            if carrier_ref in completed or not isinstance(carrier_ref, str) or not isinstance(peer_url, str):
+            if (carrier_ref, peer_url) in completed or not isinstance(carrier_ref, str) or not isinstance(peer_url, str):
                 continue
             carrier = self.storage.get_artifact(carrier_ref)
             attempt = int(item.get("attempt", 0)) + 1
