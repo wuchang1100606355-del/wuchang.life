@@ -967,6 +967,52 @@ class MeshTests(unittest.TestCase):
                 send_again.assert_not_called()
                 self.assertEqual(1, len(list(storage.journal.records("outbox_queue"))))
 
+    def test_retry_expired_packet_is_terminal_and_not_requeued(self) -> None:
+        with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:
+            with MeshStorage(runtime_dir) as storage:
+                transfer = build_transfer(
+                    storage,
+                    snapshot(1),
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace="w7tp.mesh.test",
+                    now=FIXED,
+                )
+                transport = MeshTransport(storage)
+                peer_url = "http://127.0.0.1:9101/v2.1/packets"
+                transport._queue(
+                    carrier_ref=transfer.carrier_ref,
+                    peer_url=peer_url,
+                    reason_code="CARRIER_UNAVAILABLE",
+                    attempt=1,
+                )
+                expired = urllib.error.HTTPError(
+                    peer_url,
+                    409,
+                    "expired",
+                    {},
+                    io.BytesIO(
+                        require_core().canonical_json_bytes(
+                            {"reason_code": "HOLD_PACKET_TTL_EXPIRED", "state": "HOLD"}
+                        )
+                    ),
+                )
+                with mock.patch(
+                    "w7tp_gt_mesh.transport.urllib.request.urlopen",
+                    side_effect=expired,
+                ) as send:
+                    results = transport.retry_pending(timeout_seconds=1)
+                self.assertEqual(1, send.call_count)
+                self.assertEqual("HOLD_TERMINAL_EXPIRED_NOT_RETRYABLE", results[0]["state"])
+                self.assertEqual("HOLD_PACKET_TTL_EXPIRED", results[0]["reason_code"])
+                self.assertEqual(1, len(list(storage.journal.records("outbox_queue"))))
+                terminal = list(storage.journal.records("outbox_terminal"))
+                self.assertEqual(1, len(terminal))
+                self.assertEqual("HOLD_TERMINAL_EXPIRED_NOT_RETRYABLE", terminal[0]["state"])
+
+                with mock.patch("w7tp_gt_mesh.transport.urllib.request.urlopen") as send_again:
+                    self.assertEqual([], transport.retry_pending(timeout_seconds=1))
+                send_again.assert_not_called()
+
     def test_retry_completion_is_bound_to_carrier_and_peer(self) -> None:
         with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:
             with MeshStorage(runtime_dir) as storage:

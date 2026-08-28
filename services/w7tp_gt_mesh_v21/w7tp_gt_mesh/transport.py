@@ -12,6 +12,9 @@ from .core import CoreBindings, MeshHold, require_core, utc_now, utc_text
 from .journal import MeshStorage
 
 
+NON_RETRYABLE_HOLD_REASONS = frozenset({"HOLD_PACKET_TTL_EXPIRED"})
+
+
 def validate_peer_url(value: object) -> str:
     if not isinstance(value, str):
         raise MeshHold("HOLD_PEER_URL_INVALID")
@@ -52,7 +55,7 @@ class MeshTransport:
         self.storage.journal.append("outbox_queue", key, record)
         return record
 
-    def _terminal_conflict(
+    def _terminal_hold(
         self,
         *,
         carrier_ref: str,
@@ -62,9 +65,14 @@ class MeshTransport:
     ) -> dict[str, object]:
         core = require_core()
         terminated_at = utc_text(utc_now())
+        state = (
+            "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE"
+            if reason_code.startswith("CONFLICT_")
+            else "HOLD_TERMINAL_EXPIRED_NOT_RETRYABLE"
+        )
         record = {
             "schema_id": "W7TP_GT_MESH_OUTBOX_TERMINAL_V21",
-            "state": "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE",
+            "state": state,
             "carrier_ref": carrier_ref,
             "peer_url": peer_url,
             "attempt": attempt,
@@ -77,7 +85,7 @@ class MeshTransport:
         return record
 
     @staticmethod
-    def _safe_terminal_conflict_reason(raw: bytes, core: CoreBindings) -> str | None:
+    def _safe_terminal_reason(raw: bytes, core: CoreBindings) -> str | None:
         if len(raw) > 64 * 1024:
             return None
         try:
@@ -87,11 +95,13 @@ class MeshTransport:
         if not isinstance(parsed, dict):
             return None
         reason_code = parsed.get("reason_code")
+        if not isinstance(reason_code, str) or len(reason_code) > 128:
+            return None
+        if reason_code in NON_RETRYABLE_HOLD_REASONS:
+            return reason_code
         if (
-            not isinstance(reason_code, str)
-            or not reason_code.startswith("CONFLICT_")
+            not reason_code.startswith("CONFLICT_")
             or len(reason_code) <= len("CONFLICT_")
-            or len(reason_code) > 128
             or any(character not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_" for character in reason_code)
         ):
             return None
@@ -130,17 +140,17 @@ class MeshTransport:
                     conflict_raw = exc.read(64 * 1024 + 1)
                 except (OSError, ValueError):
                     conflict_raw = b""
-                conflict_reason = self._safe_terminal_conflict_reason(conflict_raw, core)
-                if conflict_reason is not None:
-                    self._terminal_conflict(
+                terminal_reason = self._safe_terminal_reason(conflict_raw, core)
+                if terminal_reason is not None:
+                    terminal = self._terminal_hold(
                         carrier_ref=carrier_ref,
                         peer_url=url,
-                        reason_code=conflict_reason,
+                        reason_code=terminal_reason,
                         attempt=attempt,
                     )
                     return {
-                        "state": "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE",
-                        "reason_code": conflict_reason,
+                        "state": terminal["state"],
+                        "reason_code": terminal_reason,
                         "carrier_ref": carrier_ref,
                     }
             reason = f"HTTP_{exc.code}"
@@ -230,7 +240,7 @@ class MeshTransport:
                 }
                 key = f"{time.time_ns():020d}-{carrier_ref.removeprefix('sha256:')}"
                 self.storage.journal.append("outbox_done", key, done)
-            elif result.get("state") == "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE":
+            elif str(result.get("state", "")).startswith("HOLD_TERMINAL_"):
                 continue
             else:
                 self._queue(
