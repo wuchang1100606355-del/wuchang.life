@@ -128,6 +128,10 @@ class MeshTests(unittest.TestCase):
             self.assertEqual({"msi", "taiji01"}, {peer["peer_id"] for peer in configs[name]["peers"]})
         self.assertIn("taiji01", {peer["peer_id"] for peer in configs["msi"]["peers"]})
         self.assertEqual("127.0.0.1", configs["taiji02"]["listen_host"])
+        namespaces = {config["namespace"] for config in configs.values()}
+        self.assertEqual(len(configs), len(namespaces))
+        for name, config in configs.items():
+            self.assertEqual(f"w7tp.mesh.node_state.v21.{name}", config["namespace"])
         for name, config in configs.items():
             self.assertEqual(TOTAL_FIELD_AUTHORITY_REF, config["authority_ref"], name)
             self.assertEqual("node:taiji01", config["total_field_authority_node_ref"], name)
@@ -151,6 +155,8 @@ class MeshTests(unittest.TestCase):
         self.assertEqual("127.0.0.1:9238", taiji02["listen"])
         self.assertEqual("100.111.139.7:9238", taiji02["tailnet_ingress"])
         self.assertEqual("TAILSCALE_USERSPACE_SERVE_TCP", taiji02["tailnet_ingress_mode"])
+        for node in manifest["nodes"]:
+            self.assertEqual(configs[node["node_id"]]["namespace"], node["stream_namespace"])
         self.assertNotIn("control_authority_endpoint", manifest)
 
     def test_total_field_authority_control_contract_and_scheduler_interface(self) -> None:
@@ -783,6 +789,144 @@ class MeshTests(unittest.TestCase):
                 self.assertEqual(2, send.call_count)
                 self.assertEqual(2, len(result["peer_results"]))
                 self.assertGreater(result["drive_projection_count"], 0)
+
+    def test_http_409_conflict_is_terminal_and_saves_only_safe_reason(self) -> None:
+        with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:
+            with MeshStorage(runtime_dir) as storage:
+                transfer = build_transfer(
+                    storage,
+                    snapshot(1),
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace="w7tp.mesh.test",
+                    now=FIXED,
+                )
+                peer_url = "http://127.0.0.1:9101/v2.1/packets"
+                response_marker = "response-content-must-not-be-saved"
+                response_raw = require_core().canonical_json_bytes(
+                    {
+                        "reason_code": "CONFLICT_PACKET_PAYLOAD_HASH",
+                        "server_detail": response_marker,
+                        "state": "HOLD",
+                    }
+                )
+                conflict = urllib.error.HTTPError(
+                    peer_url,
+                    409,
+                    "conflict response text must not be saved",
+                    {},
+                    io.BytesIO(response_raw),
+                )
+                with mock.patch(
+                    "w7tp_gt_mesh.transport.urllib.request.urlopen",
+                    side_effect=conflict,
+                ):
+                    result = MeshTransport(storage).send(
+                        transfer.carrier,
+                        carrier_ref=transfer.carrier_ref,
+                        peer_url=peer_url,
+                    )
+
+                self.assertEqual(
+                    {
+                        "state": "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE",
+                        "reason_code": "CONFLICT_PACKET_PAYLOAD_HASH",
+                        "carrier_ref": transfer.carrier_ref,
+                    },
+                    result,
+                )
+                terminal = list(storage.journal.records("outbox_terminal"))
+                self.assertEqual(1, len(terminal))
+                self.assertEqual("CONFLICT_PACKET_PAYLOAD_HASH", terminal[0]["reason_code"])
+                self.assertEqual("HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE", terminal[0]["state"])
+                self.assertNotIn("server_detail", terminal[0])
+                self.assertNotIn(response_marker, json.dumps(terminal[0], sort_keys=True))
+                self.assertEqual([], list(storage.journal.records("outbox_queue")))
+
+    def test_http_409_hold_or_unparseable_response_remains_retryable(self) -> None:
+        with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:
+            with MeshStorage(runtime_dir) as storage:
+                transfer = build_transfer(
+                    storage,
+                    snapshot(1),
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace="w7tp.mesh.test",
+                    now=FIXED,
+                )
+                transport = MeshTransport(storage)
+                peer_url = "http://127.0.0.1:9101/v2.1/packets"
+                bodies = (
+                    require_core().canonical_json_bytes({"reason_code": "HOLD_DELTA_BASE_OBJECT_MISSING"}),
+                    b"not-json",
+                    require_core().canonical_json_bytes({"reason_code": "CONFLICT_unsafe-code"}),
+                )
+                for response_raw in bodies:
+                    conflict = urllib.error.HTTPError(
+                        peer_url,
+                        409,
+                        "conflict",
+                        {},
+                        io.BytesIO(response_raw),
+                    )
+                    with mock.patch(
+                        "w7tp_gt_mesh.transport.urllib.request.urlopen",
+                        side_effect=conflict,
+                    ):
+                        result = transport.send(
+                            transfer.carrier,
+                            carrier_ref=transfer.carrier_ref,
+                            peer_url=peer_url,
+                        )
+                    self.assertEqual("HOLD_QUEUED_FOR_RETRY", result["state"])
+                    self.assertEqual("HTTP_409", result["reason_code"])
+
+                queued = list(storage.journal.records("outbox_queue"))
+                self.assertEqual(3, len(queued))
+                self.assertTrue(all(item["reason_code"] == "HTTP_409" for item in queued))
+                self.assertEqual([], list(storage.journal.records("outbox_terminal")))
+
+    def test_retry_terminal_conflict_is_not_requeued_or_retried_again(self) -> None:
+        with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:
+            with MeshStorage(runtime_dir) as storage:
+                transfer = build_transfer(
+                    storage,
+                    snapshot(1),
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace="w7tp.mesh.test",
+                    now=FIXED,
+                )
+                transport = MeshTransport(storage)
+                peer_url = "http://127.0.0.1:9101/v2.1/packets"
+                transport._queue(
+                    carrier_ref=transfer.carrier_ref,
+                    peer_url=peer_url,
+                    reason_code="CARRIER_UNAVAILABLE",
+                    attempt=1,
+                )
+                conflict = urllib.error.HTTPError(
+                    peer_url,
+                    409,
+                    "conflict",
+                    {},
+                    io.BytesIO(
+                        require_core().canonical_json_bytes(
+                            {"reason_code": "CONFLICT_RECONSTRUCTED_TARGET_HASH"}
+                        )
+                    ),
+                )
+                with mock.patch(
+                    "w7tp_gt_mesh.transport.urllib.request.urlopen",
+                    side_effect=conflict,
+                ) as send:
+                    results = transport.retry_pending(timeout_seconds=1)
+                self.assertEqual(1, send.call_count)
+                self.assertEqual("HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE", results[0]["state"])
+                self.assertEqual(1, len(list(storage.journal.records("outbox_queue"))))
+                self.assertEqual(1, len(list(storage.journal.records("outbox_terminal"))))
+
+                with mock.patch("w7tp_gt_mesh.transport.urllib.request.urlopen") as send_again:
+                    self.assertEqual([], transport.retry_pending(timeout_seconds=1))
+                send_again.assert_not_called()
+                self.assertEqual(1, len(list(storage.journal.records("outbox_queue"))))
 
     def test_retry_completion_is_bound_to_carrier_and_peer(self) -> None:
         with tempfile.TemporaryDirectory(dir="/tmp") as runtime_dir:

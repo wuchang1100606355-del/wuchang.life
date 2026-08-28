@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 from typing import Mapping
 
-from .core import MeshHold, require_core, utc_now, utc_text
+from .core import CoreBindings, MeshHold, require_core, utc_now, utc_text
 from .journal import MeshStorage
 
 
@@ -52,6 +52,51 @@ class MeshTransport:
         self.storage.journal.append("outbox_queue", key, record)
         return record
 
+    def _terminal_conflict(
+        self,
+        *,
+        carrier_ref: str,
+        peer_url: str,
+        reason_code: str,
+        attempt: int,
+    ) -> dict[str, object]:
+        core = require_core()
+        terminated_at = utc_text(utc_now())
+        record = {
+            "schema_id": "W7TP_GT_MESH_OUTBOX_TERMINAL_V21",
+            "state": "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE",
+            "carrier_ref": carrier_ref,
+            "peer_url": peer_url,
+            "attempt": attempt,
+            "reason_code": reason_code,
+            "terminated_at": terminated_at,
+            "carrier_authority": "NONE",
+        }
+        key = f"{time.time_ns():020d}-{core.sha256_hex(core.canonical_json_bytes(record))}"
+        self.storage.journal.append("outbox_terminal", key, record)
+        return record
+
+    @staticmethod
+    def _safe_terminal_conflict_reason(raw: bytes, core: CoreBindings) -> str | None:
+        if len(raw) > 64 * 1024:
+            return None
+        try:
+            parsed = core.canonical_json_loads(raw, require_canonical=False)
+        except Exception:
+            return None
+        if not isinstance(parsed, dict):
+            return None
+        reason_code = parsed.get("reason_code")
+        if (
+            not isinstance(reason_code, str)
+            or not reason_code.startswith("CONFLICT_")
+            or len(reason_code) <= len("CONFLICT_")
+            or len(reason_code) > 128
+            or any(character not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_" for character in reason_code)
+        ):
+            return None
+        return reason_code
+
     def send(
         self,
         carrier: Mapping[str, object],
@@ -80,6 +125,24 @@ class MeshTransport:
                 if len(response_raw) > 1024 * 1024:
                     raise MeshHold("HOLD_RECEIPT_TOO_LARGE")
         except urllib.error.HTTPError as exc:
+            if exc.code == 409:
+                try:
+                    conflict_raw = exc.read(64 * 1024 + 1)
+                except (OSError, ValueError):
+                    conflict_raw = b""
+                conflict_reason = self._safe_terminal_conflict_reason(conflict_raw, core)
+                if conflict_reason is not None:
+                    self._terminal_conflict(
+                        carrier_ref=carrier_ref,
+                        peer_url=url,
+                        reason_code=conflict_reason,
+                        attempt=attempt,
+                    )
+                    return {
+                        "state": "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE",
+                        "reason_code": conflict_reason,
+                        "carrier_ref": carrier_ref,
+                    }
             reason = f"HTTP_{exc.code}"
             if queue_on_failure:
                 self._queue(carrier_ref=carrier_ref, peer_url=url, reason_code=reason, attempt=attempt)
@@ -129,12 +192,21 @@ class MeshTransport:
             (item.get("carrier_ref"), item.get("peer_url"))
             for item in self.storage.journal.records("outbox_done")
         }
+        terminated = {
+            (item.get("carrier_ref"), item.get("peer_url"))
+            for item in self.storage.journal.records("outbox_terminal")
+        }
         latest: dict[tuple[object, object], dict[str, object]] = {}
         for item in self.storage.journal.records("outbox_queue"):
             latest[(item.get("carrier_ref"), item.get("peer_url"))] = item
         results: list[dict[str, object]] = []
         for (carrier_ref, peer_url), item in latest.items():
-            if (carrier_ref, peer_url) in completed or not isinstance(carrier_ref, str) or not isinstance(peer_url, str):
+            if (
+                (carrier_ref, peer_url) in completed
+                or (carrier_ref, peer_url) in terminated
+                or not isinstance(carrier_ref, str)
+                or not isinstance(peer_url, str)
+            ):
                 continue
             carrier = self.storage.get_artifact(carrier_ref)
             attempt = int(item.get("attempt", 0)) + 1
@@ -158,6 +230,8 @@ class MeshTransport:
                 }
                 key = f"{time.time_ns():020d}-{carrier_ref.removeprefix('sha256:')}"
                 self.storage.journal.append("outbox_done", key, done)
+            elif result.get("state") == "HOLD_TERMINAL_CONFLICT_NOT_RETRYABLE":
+                continue
             else:
                 self._queue(
                     carrier_ref=carrier_ref,
