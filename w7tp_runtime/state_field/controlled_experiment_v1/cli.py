@@ -1,4 +1,4 @@
-"""Non-destructive command-line entrypoint for core run and verify."""
+"""Non-destructive command-line entrypoint for run, verify, and local serve."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Sequence
 
+from .api import serve_demo
 from .pipeline import WRITE_ROOT, run_controlled_demo, verify_run
 
 
@@ -20,6 +21,9 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--repo-root", type=Path, default=Path.cwd())
     verify = sub.add_parser("verify", help="independently verify a completed run")
     verify.add_argument("run_dir", type=Path)
+    serve = sub.add_parser("serve", help="serve read-only UI/API on loopback")
+    serve.add_argument("run_dir", type=Path)
+    serve.add_argument("--port", type=int, default=9108)
     return parser
 
 
@@ -36,7 +40,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     elif args.command == "verify":
         result = verify_run(args.run_dir)
     else:
-        result = verify_run(args.run_dir)
+        serve_demo(args.run_dir, port=args.port)
+        return 0
     print(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2))
     state = result.get("state", result.get("summary", {}).get("state"))
     return 1 if state == "FAIL" else 0

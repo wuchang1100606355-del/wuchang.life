@@ -11,9 +11,13 @@ python3 tools/run_w7tp_controlled_experiment_v1.py verify /tmp/w7tp_controlled_e
 
 Each run creates a new directory under `/tmp/w7tp_controlled_experiment_v1/`. Files are created exclusively and never overwrite an earlier run. The run contains a resource catalog, five packet/receiver/reconstruction evidence sets, five immutable receipts, a static candidate UI, and a self-excluding SHA-256 manifest.
 
-The core candidate intentionally excludes process probes and the optional
-loopback HTTP API. GPU metadata therefore remains `UNKNOWN_UNVERIFIED`; the
-static candidate UI is an output artifact, not deployment evidence.
+The optional local UI/API is read-only and loopback-only:
+
+```bash
+python3 tools/run_w7tp_controlled_experiment_v1.py serve /tmp/w7tp_controlled_experiment_v1/<run-directory> --port 9108
+```
+
+The execution environment used for the recorded Phase B run prohibited socket creation, so the live loopback API remains `NOT_VERIFIED`. The static UI artifact and API handler are present; neither is deployment evidence.
 
 ## Evidence states
 

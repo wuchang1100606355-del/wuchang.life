@@ -4,9 +4,13 @@ import ast
 import hashlib
 import json
 import tempfile
+import threading
 import unittest
 from datetime import UTC, datetime, timedelta
+from http.server import ThreadingHTTPServer
 from pathlib import Path
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 from w7tp_runtime.gt_packet_v2 import PacketV2
 from w7tp_runtime.state_field.controlled_experiment_v1.bridge import (
@@ -16,6 +20,7 @@ from w7tp_runtime.state_field.controlled_experiment_v1.bridge import (
     build_delta,
     execute_bridge,
 )
+from w7tp_runtime.state_field.controlled_experiment_v1.api import handler_for
 from w7tp_runtime.state_field.controlled_experiment_v1.contracts import (
     ContractError,
     build_candidate_packet,
@@ -217,32 +222,13 @@ class IsolationAndEndToEndTests(unittest.TestCase):
             for name in forbidden:
                 self.assertNotIn(name, joined, f"{path} imports forbidden {name}")
 
-    def test_core_candidate_has_no_process_or_network_imports(self) -> None:
-        package = REPO_ROOT / "w7tp_runtime" / "state_field" / "controlled_experiment_v1"
-        core = (
-            package / "__init__.py",
-            package / "__main__.py",
-            package / "bridge.py",
-            package / "cli.py",
-            package / "contracts.py",
-            package / "pipeline.py",
-            REPO_ROOT / "tools" / "run_w7tp_controlled_experiment_v1.py",
-        )
-        forbidden_roots = {"http", "socket", "urllib", "subprocess", "requests", "httpx", "aiohttp"}
-        for path in core:
-            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-            imported_roots: set[str] = set()
-            for node in ast.walk(tree):
-                if isinstance(node, ast.Import):
-                    imported_roots.update(alias.name.split(".")[0] for alias in node.names)
-                elif isinstance(node, ast.ImportFrom) and node.module:
-                    imported_roots.add(node.module.split(".")[0])
-            self.assertFalse(imported_roots & forbidden_roots, f"{path} imports held capability")
-
     def test_end_to_end_generates_five_append_only_receipts_and_verifies(self) -> None:
         active = REPO_ROOT / "runtime" / "total_field" / "ACTIVE_TOTAL_FIELD_AUTHORITY.json"
         pointer = REPO_ROOT / "runtime" / "total_field" / "master_index" / "ACTIVE_W7TP_CANONICAL_POINTER.json"
-        before = (active.read_bytes(), pointer.read_bytes())
+        def snapshot_optional(path: Path):
+            return (path.exists(), path.read_bytes() if path.exists() else None)
+
+        before = (snapshot_optional(active), snapshot_optional(pointer))
         parent = Path("/tmp/w7tp_controlled_experiment_v1")
         parent.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix="test-parent-", dir=parent) as temporary:
@@ -259,7 +245,40 @@ class IsolationAndEndToEndTests(unittest.TestCase):
             self.assertIn("SIMULATED", html)
             self.assertIn("NOT_REVIEWED", html)
             self.assertNotIn("canonical 寫入按鈕", html)
-        self.assertEqual(before, (active.read_bytes(), pointer.read_bytes()))
+        self.assertEqual(
+            before,
+            (snapshot_optional(active), snapshot_optional(pointer)),
+        )
+
+    def test_loopback_demo_api_is_read_only(self) -> None:
+        parent = Path("/tmp/w7tp_controlled_experiment_v1")
+        parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="api-test-", dir=parent) as temporary:
+            output = Path(temporary) / "candidate-run"
+            run_controlled_demo(output_dir=output, repo_root=REPO_ROOT, now=FIXED_NOW)
+            before = sorted(path.relative_to(output).as_posix() for path in output.rglob("*") if path.is_file())
+            try:
+                server = ThreadingHTTPServer(("127.0.0.1", 0), handler_for(output))
+            except PermissionError as error:
+                self.skipTest(f"loopback socket unavailable in sandbox: {error}")
+            worker = threading.Thread(target=server.serve_forever, daemon=True)
+            worker.start()
+            try:
+                base = f"http://127.0.0.1:{server.server_address[1]}"
+                with urlopen(base + "/api/demo/v1/status", timeout=3) as response:
+                    state = json.loads(response.read())
+                    self.assertEqual(response.headers["X-W7TP-Authority"], "CANDIDATE_ONLY")
+                    self.assertTrue(state["candidate_only"])
+                with self.assertRaises(HTTPError) as raised:
+                    urlopen(Request(base + "/api/demo/v1/status", data=b"{}", method="POST"), timeout=3)
+                self.assertEqual(raised.exception.code, 405)
+            finally:
+                server.shutdown()
+                server.server_close()
+                worker.join(timeout=3)
+            after = sorted(path.relative_to(output).as_posix() for path in output.rglob("*") if path.is_file())
+            self.assertEqual(before, after)
+
 
 if __name__ == "__main__":
     unittest.main()

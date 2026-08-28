@@ -7,6 +7,7 @@ import json
 import os
 import platform
 import shutil
+import subprocess
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -113,7 +114,32 @@ def _ram_bytes() -> int | None:
 
 
 def _gpu_observation() -> tuple[str, int | None, str]:
-    return "UNKNOWN_UNVERIFIED", None, "PROCESS_PROBE_EXCLUDED_CORE_CANDIDATE"
+    command = shutil.which("nvidia-smi")
+    if command is None:
+        return "UNKNOWN_UNVERIFIED", None, "NVIDIA_SMI_NOT_FOUND"
+    try:
+        result = subprocess.run(
+            [
+                command,
+                "--query-gpu=memory.total",
+                "--format=csv,noheader,nounits",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=3,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return "UNKNOWN_UNVERIFIED", None, "NVIDIA_SMI_UNAVAILABLE_OR_TIMEOUT"
+    if result.returncode != 0:
+        return "UNKNOWN_UNVERIFIED", None, "NVIDIA_SMI_UNAVAILABLE_OR_BLOCKED"
+    try:
+        totals = [int(line.strip()) for line in result.stdout.splitlines() if line.strip()]
+    except ValueError:
+        return "UNKNOWN_UNVERIFIED", None, "NVIDIA_SMI_OUTPUT_INVALID"
+    if not totals:
+        return "UNKNOWN_UNVERIFIED", None, "NVIDIA_SMI_GPU_NOT_OBSERVED"
+    return "OBSERVED_DIRECT", sum(totals) * 1024 * 1024, "NVIDIA_SMI_METADATA_ONLY"
 
 
 def probe_resource_catalog(
