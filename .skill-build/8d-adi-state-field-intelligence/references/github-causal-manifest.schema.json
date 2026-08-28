@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:github-causal-declaration:1.0",
+  "title": "W7TP GitHub Causal Declaration 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_only",
+    "intent",
+    "coordinate",
+    "scenarios",
+    "groups",
+    "risk",
+    "github_contract",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": {"const": "w7tp-github-causal-declaration/1.0"},
+    "candidate_only": {"const": true},
+    "intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent_ref", "product_effect"],
+      "properties": {
+        "intent_ref": {"$ref": "#/$defs/non_empty"},
+        "product_effect": {"$ref": "#/$defs/non_empty"}
+      }
+    },
+    "coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logical_root_id", "base_commit", "target_ref"],
+      "properties": {
+        "logical_root_id": {"$ref": "#/$defs/non_empty"},
+        "base_commit": {"$ref": "#/$defs/git_oid"},
+        "target_ref": {"$ref": "#/$defs/non_empty"}
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/scenario"}
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/group"}
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["holds", "unknown_boundaries", "network_hold_set"],
+      "properties": {
+        "holds": {"$ref": "#/$defs/string_array"},
+        "unknown_boundaries": {"$ref": "#/$defs/string_array"},
+        "network_hold_set": {"$ref": "#/$defs/path_array"}
+      }
+    },
+    "github_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_branch_ref",
+        "target_ref",
+        "required_checks",
+        "pr_required",
+        "attestation_required",
+        "total_field_check_required"
+      ],
+      "properties": {
+        "candidate_branch_ref": {"$ref": "#/$defs/non_empty"},
+        "target_ref": {"$ref": "#/$defs/non_empty"},
+        "required_checks": {"$ref": "#/$defs/string_array_nonempty"},
+        "pr_required": {"const": true},
+        "attestation_required": {"type": "boolean"},
+        "total_field_check_required": {"const": true}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lifecycle", "total_field_decision_ref", "forbidden_claims"],
+      "properties": {
+        "lifecycle": {"const": "CANDIDATE"},
+        "total_field_decision_ref": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/non_empty"}]
+        },
+        "forbidden_claims": {"$ref": "#/$defs/string_array_nonempty"}
+      }
+    }
+  },
+  "$defs": {
+    "non_empty": {"type": "string", "minLength": 1},
+    "git_oid": {"type": "string", "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "string_array": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/non_empty"},
+      "uniqueItems": true
+    },
+    "string_array_nonempty": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/non_empty"},
+      "uniqueItems": true
+    },
+    "path_array": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/path"},
+      "uniqueItems": true
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scenario_id",
+        "actor",
+        "trigger",
+        "preconditions",
+        "expected_effect",
+        "verifier_refs"
+      ],
+      "properties": {
+        "scenario_id": {"$ref": "#/$defs/non_empty"},
+        "actor": {"$ref": "#/$defs/non_empty"},
+        "trigger": {"$ref": "#/$defs/non_empty"},
+        "preconditions": {"$ref": "#/$defs/string_array_nonempty"},
+        "expected_effect": {"$ref": "#/$defs/non_empty"},
+        "verifier_refs": {"$ref": "#/$defs/string_array_nonempty"}
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "change", "sha256", "base_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/path"},
+        "change": {"enum": ["ADD", "MODIFY", "DELETE"]},
+        "sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "base_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]}
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge_id",
+        "source",
+        "target",
+        "relation",
+        "mechanism",
+        "evidence_class",
+        "evidence_refs",
+        "verifier_refs"
+      ],
+      "properties": {
+        "edge_id": {"$ref": "#/$defs/non_empty"},
+        "source": {"$ref": "#/$defs/non_empty"},
+        "target": {"$ref": "#/$defs/non_empty"},
+        "relation": {
+          "enum": [
+            "requires",
+            "provides",
+            "imports",
+            "calls",
+            "verifies",
+            "produces",
+            "routes",
+            "affects",
+            "causes",
+            "authorizes",
+            "conflicts"
+          ]
+        },
+        "mechanism": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/non_empty"}]},
+        "evidence_class": {
+          "enum": ["OBSERVED", "RECONSTRUCTED_EXPLICIT", "INFERRED", "CONFLICT", "UNKNOWN"]
+        },
+        "evidence_refs": {"$ref": "#/$defs/string_array_nonempty"},
+        "verifier_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "closure_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "evidence_refs"],
+      "properties": {
+        "state": {"enum": ["CLOSED", "OPEN", "UNKNOWN", "NOT_APPLICABLE"]},
+        "evidence_refs": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["definition", "implementation", "consumer", "test", "wiring", "effect", "rollback"],
+      "properties": {
+        "definition": {"$ref": "#/$defs/closure_stage"},
+        "implementation": {"$ref": "#/$defs/closure_stage"},
+        "consumer": {"$ref": "#/$defs/closure_stage"},
+        "test": {"$ref": "#/$defs/closure_stage"},
+        "wiring": {"$ref": "#/$defs/closure_stage"},
+        "effect": {"$ref": "#/$defs/closure_stage"},
+        "rollback": {"$ref": "#/$defs/closure_stage"}
+      }
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direct", "first_order", "second_order", "reverse", "unknown_frontier"],
+      "properties": {
+        "direct": {"$ref": "#/$defs/string_array_nonempty"},
+        "first_order": {"$ref": "#/$defs/string_array"},
+        "second_order": {"$ref": "#/$defs/string_array"},
+        "reverse": {"$ref": "#/$defs/string_array"},
+        "unknown_frontier": {"$ref": "#/$defs/string_array"}
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group_id",
+        "purpose",
+        "scenario_refs",
+        "depends_on",
+        "files",
+        "causal_edges",
+        "closure",
+        "effects"
+      ],
+      "properties": {
+        "group_id": {"$ref": "#/$defs/non_empty"},
+        "purpose": {"$ref": "#/$defs/non_empty"},
+        "scenario_refs": {"$ref": "#/$defs/string_array_nonempty"},
+        "depends_on": {"$ref": "#/$defs/string_array"},
+        "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/file"}},
+        "causal_edges": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/edge"}},
+        "closure": {"$ref": "#/$defs/closure"},
+        "effects": {"$ref": "#/$defs/effects"}
+      }
+    }
+  }
+}
