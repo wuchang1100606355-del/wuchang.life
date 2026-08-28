@@ -1,0 +1,4 @@
+interface:
+  display_name: "意圖場生成式建構"
+  short_description: "用動態8D與ADI把意圖片段建構成守密、可重構的候選程式封包"
+  default_prompt: "使用 $intent-field-generative-construction 將意圖片段建構成候選程式封包。必須執行 ANALYSIS、TRANSFER、CONSTRUCTION、ADDRESSING 四大功能；守住生成式傳輸不變式與營業秘密；所有推演、模擬、候選組合與修改影響先在隔離虛擬空間進行，主線只讀且不得因此接線、合併、覆蓋、部署或啟用；在既有 ANALYSIS + ADDRESSING 中判定 CONTINUE、FUSE、REPLACE、PARALLEL_SHADOW、ISOLATE、HOLD 六種主線關係，輸出十軸接續距離與供需密合；未經獨立驗證的執行、旅程、真實性與權威一律保留 RUNTIME_EVIDENCE_UNVERIFIED、USER_JOURNEY_EVIDENCE_UNVERIFIED、CROSS_NODE_REPLAY_UNVERIFIED、AUTHENTICITY_UNVERIFIED、ACTIVATION_NOT_AUTHORIZED。"
