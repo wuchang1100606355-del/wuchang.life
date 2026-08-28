@@ -1,0 +1,66 @@
+{
+  "contract_version": "W7TP-XIAOJ-ADI-MOVING-V-SHADOW/1.0",
+  "contract_id": "W7TP_XIAOJ_ADI_MOVING_V_SHADOW_V1_CANDIDATE",
+  "status": "SHADOW_ONLY",
+  "mode": "OBSERVE_RECOMMEND_NO_EFFECT",
+  "authority": {
+    "runtime_effects_allowed": false,
+    "applies_change": false,
+    "memory_limit_change_allowed": false,
+    "job_cancellation_allowed": false,
+    "ram_vram_unload_allowed": false,
+    "file_delete_allowed": false,
+    "canonical_source_delete_allowed": false,
+    "service_restart_allowed": false,
+    "remote_write_allowed": false
+  },
+  "sources": {
+    "intent_state_url": "http://127.0.0.1:9107/state",
+    "intent_status_url": "http://127.0.0.1:9107/intent-field/status",
+    "ollama_process_url": "http://127.0.0.1:11434/api/ps",
+    "gateway_health_urls": [
+      "http://127.0.0.1:8081/health",
+      "http://127.0.0.1:9002/health"
+    ],
+    "claw_capability_url": "http://127.0.0.1:9004/openapi.json",
+    "intent_cache_policy_path": "Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json"
+  },
+  "required_intent_state": {
+    "intent_field_loaded": true,
+    "memory_field_loaded": true,
+    "topology_field_loaded": true,
+    "policy_gate_active": true
+  },
+  "required_intent_status": {
+    "hardwalls_enabled": true,
+    "cloud_allowed": false,
+    "pii_allowed": false,
+    "secrets_allowed": false
+  },
+  "sampling": {
+    "sample_count": 5,
+    "interval_seconds": 0.25,
+    "timeout_seconds": 3.0
+  },
+  "adaptive_budget": {
+    "current_limit_bytes": 2147483648,
+    "minimum_candidate_bytes": 536870912,
+    "maximum_candidate_bytes": 4294967296,
+    "step_bytes": 268435456,
+    "minimum_host_reserve_bytes": 4294967296,
+    "protected_working_set_floor_bytes": 536870912
+  },
+  "performance_gate": {
+    "min_sample_count_uint": 30,
+    "min_observation_ns_uint": 300000000000,
+    "min_host_reserve_bytes_uint": 4294967296,
+    "max_p95_latency_regression_bp_uint": 500,
+    "max_false_miss_rate_bp_uint": 100,
+    "min_preload_hit_rate_bp_uint": 7000
+  },
+  "reporting": {
+    "directory": "runtime/reports",
+    "filename_prefix": "W7TP_XIAOJ_ADI_MOVING_V_SHADOW_V1",
+    "include_raw_response_bodies": false
+  }
+}

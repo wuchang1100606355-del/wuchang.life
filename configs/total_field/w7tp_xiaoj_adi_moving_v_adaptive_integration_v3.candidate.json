@@ -1,0 +1,267 @@
+{
+  "$schema": "../../schemas/field/w7tp_xiaoj_adi_moving_v_adaptive_integration_v3.schema.json",
+  "contract_version": "W7TP-XIAOJ-ADI-MOVING-V-ADAPTIVE-INTEGRATION/3.0",
+  "contract_id": "W7TP_XIAOJ_ADI_MOVING_V_ADAPTIVE_INTEGRATION_V3_CANDIDATE",
+  "status": "DESIGN_INTEGRATED_CANDIDATE",
+  "mode": "SHADOW_LIVE_OBSERVATION_NO_EFFECT",
+  "integration_state": "DESIGN_INTEGRATED_SHADOW_RUNNING_LIVE_EFFECTS_HOLD",
+  "lineage": [
+    {
+      "contract_id": "W7TP_MOVING_V_PRELOAD_CLEANUP_V1_CANDIDATE",
+      "path": "configs/total_field/w7tp_moving_v_preload_cleanup_v1.candidate.json",
+      "sha256": "a02321892988c4c7054e6c1d9b884d9dae53707dcdbd695165be5cf380fdb394",
+      "role": "PRELOAD_PROTECTION_AND_RECLAIM_SAFETY",
+      "mutation_allowed": false
+    },
+    {
+      "contract_id": "W7TP_MOVING_V_ROUTE_CLEANUP_V2_CANDIDATE",
+      "path": "configs/total_field/w7tp_moving_v_route_cleanup_v2.candidate.json",
+      "sha256": "ad9ded877dd7df1a5161c814c332bcaa5227d0473834c36b505c05aeb6230d55",
+      "role": "ROUTE_PROOF_AND_THREE_STAGE_LIFECYCLE",
+      "mutation_allowed": false
+    },
+    {
+      "contract_id": "W7TP_XIAOJ_ADI_MOVING_V_SHADOW_V1_CANDIDATE",
+      "path": "configs/total_field/w7tp_xiaoj_adi_moving_v_shadow_v1.candidate.json",
+      "sha256": "3c845944772ddb8f423d41ff6ad60c1b00845664d18326636dbbfa6290e6130e",
+      "role": "LIVE_READ_ONLY_SHADOW_SAMPLER",
+      "mutation_allowed": false
+    }
+  ],
+  "components": [
+    {
+      "component_id": "XIAOJ_LOCAL_INGRESS",
+      "role": "ACCEPT_LOCAL_GOVERNED_INTENT_AND_EXPOSE_HEALTH_ONLY_TO_THIS_LOOP",
+      "state": "LIVE_READ_ONLY_OBSERVED",
+      "produces": ["LOCAL_GATEWAY_HEALTH", "LOCAL_CAPABILITY_METADATA"]
+    },
+    {
+      "component_id": "XIAOJ_INTENT_FIELD",
+      "role": "SUPPLY_INTENT_MEMORY_TOPOLOGY_AND_POLICY_GATE_READINESS",
+      "state": "LIVE_READ_ONLY_OBSERVED",
+      "produces": ["INTENT_FIELD_STATE", "INTENT_FIELD_SAFETY_STATUS"]
+    },
+    {
+      "component_id": "GOVERNED_INTENT_CACHE",
+      "role": "CACHE_ONLY_GOVERNED_FLOW_TEMPLATES_WITHOUT_RAW_OR_MEMBER_PLAINTEXT",
+      "state": "ACTIVE_POLICY_METADATA_OBSERVED",
+      "produces": ["CACHE_POLICY_READINESS"]
+    },
+    {
+      "component_id": "NATIVE_ADI_DELTA_F",
+      "role": "SUPPLY_FOUNDER_NATIVE_ADI_DELTA_F_AND_HASH_BOUND_STATE_ROOTS",
+      "state": "SOURCE_CANDIDATE_PRESENT_BINDING_REQUIRED",
+      "produces": ["ADI_DELTA_F_RECEIPT", "ADI_STATE_ROOT_RECEIPT"]
+    },
+    {
+      "component_id": "MOVING_V_CLASSIFIER",
+      "role": "CLASSIFY_V_INTERIOR_V_SIDE_AND_CONFIRMED_PAST_WITHOUT_GRANTING_DELETE_AUTHORITY",
+      "state": "STATIC_CONTRACT_VALIDATED_SHADOW_SIGNAL_ONLY",
+      "produces": ["MOVING_V_CLASSIFICATION_CANDIDATE", "LIFECYCLE_ACTION_PROPOSAL"]
+    },
+    {
+      "component_id": "GTP_RECONSTRUCTION",
+      "role": "RECONSTRUCT_SOFT_UNLOADED_NONCANONICAL_MATERIALIZATION_AND_VERIFY_EXPECTED_HASH",
+      "state": "ADAPTER_REQUIRED_HOLD",
+      "produces": ["RECONSTRUCTION_RECEIPT", "RECONSTRUCTION_HASH_VERDICT"]
+    },
+    {
+      "component_id": "OLLAMA_MODEL_RESIDENCY",
+      "role": "EXPOSE_LOCAL_ACTIVE_MODEL_RESIDENCY_WITHOUT_TRIGGERING_MODEL_LOAD",
+      "state": "LIVE_READ_ONLY_OBSERVED",
+      "produces": ["ACTIVE_MODEL_COUNT", "MODEL_RESIDENCY_METADATA"]
+    },
+    {
+      "component_id": "SHADOW_ADAPTATION_LOOP",
+      "role": "JOIN_SIGNALS_AND_EMIT_EXPLAINABLE_BUDGET_CANDIDATES_ONLY",
+      "state": "RUNNING_OBSERVE_RECOMMEND_NO_EFFECT",
+      "produces": ["ADAPTIVE_BUDGET_CANDIDATE", "HOLD_REASON", "SHADOW_REPORT"]
+    },
+    {
+      "component_id": "TOTAL_FIELD_AUTHORITY_GATE",
+      "role": "REQUIRE_SCOPED_REVOCABLE_DECISION_AND_COMMIT_RECEIPT_BEFORE_ANY_EFFECT",
+      "state": "INACTIVE_HOLD",
+      "produces": ["TOTAL_FIELD_REVIEW_DECISION", "SCOPED_CANARY_AUTHORIZATION", "COMMIT_RECEIPT"]
+    }
+  ],
+  "ordered_data_flow": [
+    "XIAOJ_LOCAL_INGRESS",
+    "XIAOJ_INTENT_FIELD",
+    "GOVERNED_INTENT_CACHE",
+    "NATIVE_ADI_DELTA_F",
+    "MOVING_V_CLASSIFIER",
+    "GTP_RECONSTRUCTION",
+    "OLLAMA_MODEL_RESIDENCY",
+    "SHADOW_ADAPTATION_LOOP",
+    "TOTAL_FIELD_AUTHORITY_GATE"
+  ],
+  "temporal_lifecycle": [
+    {
+      "stage": "PREDICTED_NOT_GENERATED",
+      "shadow_effect": "PROPOSE_CANCEL_CANDIDATE_ONLY",
+      "live_effect": "DENIED"
+    },
+    {
+      "stage": "GENERATION_SCHEDULED_OR_RUNNING",
+      "shadow_effect": "PROPOSE_CANCEL_JOB_AND_WAIT_FOR_TERMINAL_RECEIPT",
+      "live_effect": "DENIED"
+    },
+    {
+      "stage": "GENERATION_COMPLETED",
+      "shadow_effect": "PROPOSE_SOFT_UNLOAD_OR_QUARANTINE_EXCLUSIVE_NONCANONICAL_ONLY",
+      "live_effect": "DENIED"
+    }
+  ],
+  "adaptive_loop": {
+    "ordered_phases": [
+      "OBSERVE",
+      "NORMALIZE",
+      "CLASSIFY",
+      "RECOMMEND",
+      "REVIEW_GATE",
+      "CANARY_GATE",
+      "COMMIT_RECEIPT"
+    ],
+    "phase_effects": {
+      "OBSERVE": "READ_LOOPBACK_AND_LOCAL_POLICY_METADATA_ONLY",
+      "NORMALIZE": "FAIL_CLOSED_ON_MISSING_UNSAFE_OR_UNALIGNED_INPUT",
+      "CLASSIFY": "PRODUCE_CANDIDATE_LABELS_WITHOUT_DELETE_AUTHORITY",
+      "RECOMMEND": "PRODUCE_EXPLAINABLE_PARAMETER_CANDIDATE_ONLY",
+      "REVIEW_GATE": "REQUIRE_TOTAL_FIELD_STATIC_AND_EVIDENCE_REVIEW",
+      "CANARY_GATE": "REQUIRE_SEPARATE_SCOPED_REVOCABLE_AUTHORIZATION",
+      "COMMIT_RECEIPT": "REQUIRE_HASH_BOUND_EFFECT_AND_ROLLBACK_RECEIPTS"
+    },
+    "current_phase_ceiling": "RECOMMEND",
+    "applies_change": false
+  },
+  "source_boundaries": {
+    "loopback_urls": [
+      "http://127.0.0.1:8081/health",
+      "http://127.0.0.1:9002/health",
+      "http://127.0.0.1:9004/openapi.json",
+      "http://127.0.0.1:9107/state",
+      "http://127.0.0.1:9107/intent-field/status",
+      "http://127.0.0.1:11434/api/ps"
+    ],
+    "local_metadata_paths": [
+      "/proc/meminfo",
+      "Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json"
+    ],
+    "forbidden_reads": [
+      "PROMPT_BODY",
+      "MEMBER_PLAINTEXT",
+      "PAYMENT_DATA",
+      "CREDENTIAL_OR_TOKEN",
+      "MODEL_WEIGHT_BYTES",
+      "SECRET_FILE_CONTENT"
+    ],
+    "model_generation_request_allowed": false,
+    "non_loopback_network_allowed": false
+  },
+  "safety_invariants": [
+    "V_INTERIOR_AND_CURRENT_ARE_ALWAYS_PROTECTED",
+    "V_SIDE_IS_PREDICTED_MISS_NOT_PERMANENTLY_UNREACHABLE",
+    "V_SIDE_ALLOWS_ONLY_SOFT_UNLOAD_OF_RECONSTRUCTIBLE_NONCANONICAL_MATERIALIZATION",
+    "CONFIRMED_PAST_REQUIRES_WATERMARK_REFERENCE_LEASE_CAS_OWNERSHIP_RETENTION_AND_HASH_GATES",
+    "CANONICAL_SOURCE_IS_NEVER_DELETED",
+    "UNKNOWN_CONFLICTED_OR_MISSING_RECEIPT_ALWAYS_HOLDS",
+    "BUDGET_OPTIMIZATION_NEVER_OVERRIDES_DATA_SAFETY_OR_USER_EXPERIENCE"
+  ],
+  "authority": {
+    "decision_authority": "TOTAL_FIELD",
+    "active_total_field_profile": false,
+    "runtime_effects_allowed": false,
+    "applies_change": false,
+    "memory_limit_change_allowed": false,
+    "job_cancellation_allowed": false,
+    "ram_vram_unload_allowed": false,
+    "file_delete_allowed": false,
+    "canonical_source_delete_allowed": false,
+    "service_restart_allowed": false,
+    "remote_write_allowed": false,
+    "deployment_allowed": false
+  },
+  "evidence_anchors": {
+    "v1_design": {
+      "path": "docs/w7tp_algorithms/W7TP_MOVING_V_PRELOAD_CLEANUP_V1_CANDIDATE.md",
+      "sha256": "dd626a68a58867a4b52c8ceeff093feb92fe0a4a4504ce6e6cfbecda41107379"
+    },
+    "v2_design": {
+      "path": "docs/w7tp_algorithms/W7TP_MOVING_V_ROUTE_CLEANUP_V2_CANDIDATE.md",
+      "sha256": "8fdfb78cc159a29b305f7bd9f50b1d5274309371b4b3339493731138ea968f98"
+    },
+    "v2_bridge_matrix": {
+      "path": "docs/w7tp_algorithms/W7TP_MOVING_V_ROUTE_BRIDGE_MATRIX_V2_CANDIDATE.md",
+      "sha256": "794a08fb789a5264150ed98c780fc8f5c6d61a58c6d08dcb059331e3ecc0bdd2"
+    },
+    "shadow_adapter": {
+      "path": "tools/total_field/xiaoj_adi_moving_v_shadow_adapter.py",
+      "sha256": "0605895c0f7459bacb23c6f1333372d0f5fa61d0e0f4f23f9722bf6f5972fed1"
+    },
+    "shadow_observation": {
+      "path": "runtime/reports/W7TP_XIAOJ_ADI_MOVING_V_SHADOW_V1_20260818T192354093382Z.json",
+      "sha256": "16f81d32b460cad3cc99e77279a7d0c69a3fee5f824f0fbdd2ae35ad054860aa",
+      "config_canonical_sha256": "6478f3b0c53dc4e6e92630ce5dc89fb895ee8b12f9d494828c6b87c714b7ab00",
+      "sample_count": 5,
+      "endpoint_failure_count": 0,
+      "active_model_count_max": 0,
+      "reason": "HOLD_NO_ACTIVE_MODEL_WORKLOAD",
+      "applies_change": false
+    },
+    "intent_cache_policy": {
+      "path": "Taiji_Governance/system_info/active_intent_flow_cache_policy.manifest.json",
+      "sha256": "935575e7e897146d8581c3497a6d5a6e5bf2728f76873a0b3f42a1ca97b395dd"
+    },
+    "native_adi_core_candidate": {
+      "path": "runtime/total_field/optimized_successor_candidate/W7TP_OPTIMIZED_SUCCESSOR_CANDIDATE_20260727T150936Z/successor/services/w7tp_native_adi/core.py",
+      "sha256": "804ad93813cae000dbb3c54a72444c3ea102863137394161cd06c124379e30fa",
+      "runtime_binding_proven": false
+    },
+    "authority_profile": {
+      "path": "configs/total_field/active_total_field_authority_runtime_v1.json",
+      "sha256": "9678814a48807431b6b218548639b96b863fa3185c1f0bcc7a5c948ccc76885d",
+      "active": false
+    }
+  },
+  "readiness_gates": [
+    {
+      "gate": "ADI_DELTA_F_PRODUCER_RECEIPT_BOUND",
+      "state": "HOLD"
+    },
+    {
+      "gate": "GTP_RECONSTRUCTION_ADAPTER_AND_HASH_RECEIPT_PROVEN",
+      "state": "HOLD"
+    },
+    {
+      "gate": "PRELOAD_FALSE_MISS_RECONSTRUCTION_TTFT_AND_TASK_EFFECT_EVIDENCE_SUFFICIENT",
+      "state": "HOLD"
+    },
+    {
+      "gate": "RAM_ALLOCATOR_RELEASE_RECEIPT_AND_VRAM_GPU_FENCE_PROVEN",
+      "state": "HOLD"
+    },
+    {
+      "gate": "RESTART_PARTITION_LATE_EVENT_REPLAY_RACE_AND_ROLLBACK_TESTS_PASS",
+      "state": "HOLD"
+    },
+    {
+      "gate": "TOTAL_FIELD_SCOPED_REVOCABLE_CANARY_AUTHORIZATION_PRESENT",
+      "state": "HOLD"
+    }
+  ],
+  "ordered_optimization_objectives": [
+    "DATA_SAFETY",
+    "TASK_EFFECT",
+    "HUMAN_PERCEIVED_LATENCY",
+    "RECONSTRUCTION_RELIABILITY",
+    "PRELOAD_HIT_AND_FALSE_MISS",
+    "SYSTEM_STABILITY",
+    "MEMORY_AND_TRANSFER_SAVINGS"
+  ],
+  "current_decision": {
+    "state": "HOLD_SHADOW_ONLY",
+    "reason": "DESIGN_PATH_INTEGRATED_BUT_ADI_GTP_RUNTIME_BINDINGS_AND_PERFORMANCE_EVIDENCE_NOT_PROVEN",
+    "next_allowed_action": "CONTINUE_BOUNDED_SHADOW_OBSERVATION_AND_PREPARE_STATIC_TOTAL_FIELD_REVIEW",
+    "live_effect_count": 0
+  }
+}

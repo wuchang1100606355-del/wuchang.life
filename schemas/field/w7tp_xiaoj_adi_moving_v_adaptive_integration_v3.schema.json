@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://w7tp.local/schemas/field/w7tp_xiaoj_adi_moving_v_adaptive_integration_v3.schema.json",
+  "title": "W7TP XiaoJ ADI Moving-V Adaptive Integration V3 Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "contract_version",
+    "contract_id",
+    "status",
+    "mode",
+    "integration_state",
+    "lineage",
+    "components",
+    "ordered_data_flow",
+    "temporal_lifecycle",
+    "adaptive_loop",
+    "source_boundaries",
+    "safety_invariants",
+    "authority",
+    "evidence_anchors",
+    "readiness_gates",
+    "ordered_optimization_objectives",
+    "current_decision"
+  ],
+  "properties": {
+    "$schema": {"const": "../../schemas/field/w7tp_xiaoj_adi_moving_v_adaptive_integration_v3.schema.json"},
+    "contract_version": {"const": "W7TP-XIAOJ-ADI-MOVING-V-ADAPTIVE-INTEGRATION/3.0"},
+    "contract_id": {"const": "W7TP_XIAOJ_ADI_MOVING_V_ADAPTIVE_INTEGRATION_V3_CANDIDATE"},
+    "status": {"const": "DESIGN_INTEGRATED_CANDIDATE"},
+    "mode": {"const": "SHADOW_LIVE_OBSERVATION_NO_EFFECT"},
+    "integration_state": {"const": "DESIGN_INTEGRATED_SHADOW_RUNNING_LIVE_EFFECTS_HOLD"},
+    "lineage": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/lineage"}
+    },
+    "components": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/component"}
+    },
+    "ordered_data_flow": {
+      "const": [
+        "XIAOJ_LOCAL_INGRESS",
+        "XIAOJ_INTENT_FIELD",
+        "GOVERNED_INTENT_CACHE",
+        "NATIVE_ADI_DELTA_F",
+        "MOVING_V_CLASSIFIER",
+        "GTP_RECONSTRUCTION",
+        "OLLAMA_MODEL_RESIDENCY",
+        "SHADOW_ADAPTATION_LOOP",
+        "TOTAL_FIELD_AUTHORITY_GATE"
+      ]
+    },
+    "temporal_lifecycle": {
+      "type": "array",
+      "prefixItems": [
+        {"$ref": "#/$defs/predicted_stage"},
+        {"$ref": "#/$defs/running_stage"},
+        {"$ref": "#/$defs/completed_stage"}
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "adaptive_loop": {"$ref": "#/$defs/adaptive_loop"},
+    "source_boundaries": {"$ref": "#/$defs/source_boundaries"},
+    "safety_invariants": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "contains": {"const": "CANONICAL_SOURCE_IS_NEVER_DELETED"}
+    },
+    "authority": {"$ref": "#/$defs/authority"},
+    "evidence_anchors": {"$ref": "#/$defs/evidence_anchors"},
+    "readiness_gates": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/readiness_gate"}
+    },
+    "ordered_optimization_objectives": {
+      "const": [
+        "DATA_SAFETY",
+        "TASK_EFFECT",
+        "HUMAN_PERCEIVED_LATENCY",
+        "RECONSTRUCTION_RELIABILITY",
+        "PRELOAD_HIT_AND_FALSE_MISS",
+        "SYSTEM_STABILITY",
+        "MEMORY_AND_TRANSFER_SAVINGS"
+      ]
+    },
+    "current_decision": {"$ref": "#/$defs/current_decision"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nonempty_string_array": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_id", "path", "sha256", "role", "mutation_allowed"],
+      "properties": {
+        "contract_id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "role": {"type": "string", "minLength": 1},
+        "mutation_allowed": {"const": false}
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_id", "role", "state", "produces"],
+      "properties": {
+        "component_id": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+        "role": {"type": "string", "minLength": 1},
+        "state": {"type": "string", "minLength": 1},
+        "produces": {"$ref": "#/$defs/nonempty_string_array"}
+      }
+    },
+    "predicted_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "shadow_effect", "live_effect"],
+      "properties": {
+        "stage": {"const": "PREDICTED_NOT_GENERATED"},
+        "shadow_effect": {"const": "PROPOSE_CANCEL_CANDIDATE_ONLY"},
+        "live_effect": {"const": "DENIED"}
+      }
+    },
+    "running_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "shadow_effect", "live_effect"],
+      "properties": {
+        "stage": {"const": "GENERATION_SCHEDULED_OR_RUNNING"},
+        "shadow_effect": {"const": "PROPOSE_CANCEL_JOB_AND_WAIT_FOR_TERMINAL_RECEIPT"},
+        "live_effect": {"const": "DENIED"}
+      }
+    },
+    "completed_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "shadow_effect", "live_effect"],
+      "properties": {
+        "stage": {"const": "GENERATION_COMPLETED"},
+        "shadow_effect": {"const": "PROPOSE_SOFT_UNLOAD_OR_QUARANTINE_EXCLUSIVE_NONCANONICAL_ONLY"},
+        "live_effect": {"const": "DENIED"}
+      }
+    },
+    "adaptive_loop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordered_phases", "phase_effects", "current_phase_ceiling", "applies_change"],
+      "properties": {
+        "ordered_phases": {
+          "const": ["OBSERVE", "NORMALIZE", "CLASSIFY", "RECOMMEND", "REVIEW_GATE", "CANARY_GATE", "COMMIT_RECEIPT"]
+        },
+        "phase_effects": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["OBSERVE", "NORMALIZE", "CLASSIFY", "RECOMMEND", "REVIEW_GATE", "CANARY_GATE", "COMMIT_RECEIPT"],
+          "properties": {
+            "OBSERVE": {"const": "READ_LOOPBACK_AND_LOCAL_POLICY_METADATA_ONLY"},
+            "NORMALIZE": {"const": "FAIL_CLOSED_ON_MISSING_UNSAFE_OR_UNALIGNED_INPUT"},
+            "CLASSIFY": {"const": "PRODUCE_CANDIDATE_LABELS_WITHOUT_DELETE_AUTHORITY"},
+            "RECOMMEND": {"const": "PRODUCE_EXPLAINABLE_PARAMETER_CANDIDATE_ONLY"},
+            "REVIEW_GATE": {"const": "REQUIRE_TOTAL_FIELD_STATIC_AND_EVIDENCE_REVIEW"},
+            "CANARY_GATE": {"const": "REQUIRE_SEPARATE_SCOPED_REVOCABLE_AUTHORIZATION"},
+            "COMMIT_RECEIPT": {"const": "REQUIRE_HASH_BOUND_EFFECT_AND_ROLLBACK_RECEIPTS"}
+          }
+        },
+        "current_phase_ceiling": {"const": "RECOMMEND"},
+        "applies_change": {"const": false}
+      }
+    },
+    "source_boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["loopback_urls", "local_metadata_paths", "forbidden_reads", "model_generation_request_allowed", "non_loopback_network_allowed"],
+      "properties": {
+        "loopback_urls": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^http://127\\.0\\.0\\.1:[0-9]+/"}
+        },
+        "local_metadata_paths": {"$ref": "#/$defs/nonempty_string_array"},
+        "forbidden_reads": {"$ref": "#/$defs/nonempty_string_array"},
+        "model_generation_request_allowed": {"const": false},
+        "non_loopback_network_allowed": {"const": false}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_authority",
+        "active_total_field_profile",
+        "runtime_effects_allowed",
+        "applies_change",
+        "memory_limit_change_allowed",
+        "job_cancellation_allowed",
+        "ram_vram_unload_allowed",
+        "file_delete_allowed",
+        "canonical_source_delete_allowed",
+        "service_restart_allowed",
+        "remote_write_allowed",
+        "deployment_allowed"
+      ],
+      "properties": {
+        "decision_authority": {"const": "TOTAL_FIELD"},
+        "active_total_field_profile": {"const": false},
+        "runtime_effects_allowed": {"const": false},
+        "applies_change": {"const": false},
+        "memory_limit_change_allowed": {"const": false},
+        "job_cancellation_allowed": {"const": false},
+        "ram_vram_unload_allowed": {"const": false},
+        "file_delete_allowed": {"const": false},
+        "canonical_source_delete_allowed": {"const": false},
+        "service_restart_allowed": {"const": false},
+        "remote_write_allowed": {"const": false},
+        "deployment_allowed": {"const": false}
+      }
+    },
+    "file_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "shadow_observation_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "config_canonical_sha256", "sample_count", "endpoint_failure_count", "active_model_count_max", "reason", "applies_change"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "config_canonical_sha256": {"$ref": "#/$defs/sha256"},
+        "sample_count": {"type": "integer", "const": 5},
+        "endpoint_failure_count": {"type": "integer", "const": 0},
+        "active_model_count_max": {"type": "integer", "const": 0},
+        "reason": {"const": "HOLD_NO_ACTIVE_MODEL_WORKLOAD"},
+        "applies_change": {"const": false}
+      }
+    },
+    "native_adi_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "runtime_binding_proven"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_binding_proven": {"const": false}
+      }
+    },
+    "authority_profile_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "active"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "active": {"const": false}
+      }
+    },
+    "evidence_anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["v1_design", "v2_design", "v2_bridge_matrix", "shadow_adapter", "shadow_observation", "intent_cache_policy", "native_adi_core_candidate", "authority_profile"],
+      "properties": {
+        "v1_design": {"$ref": "#/$defs/file_anchor"},
+        "v2_design": {"$ref": "#/$defs/file_anchor"},
+        "v2_bridge_matrix": {"$ref": "#/$defs/file_anchor"},
+        "shadow_adapter": {"$ref": "#/$defs/file_anchor"},
+        "shadow_observation": {"$ref": "#/$defs/shadow_observation_anchor"},
+        "intent_cache_policy": {"$ref": "#/$defs/file_anchor"},
+        "native_adi_core_candidate": {"$ref": "#/$defs/native_adi_anchor"},
+        "authority_profile": {"$ref": "#/$defs/authority_profile_anchor"}
+      }
+    },
+    "readiness_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate", "state"],
+      "properties": {
+        "gate": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+        "state": {"const": "HOLD"}
+      }
+    },
+    "current_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "reason", "next_allowed_action", "live_effect_count"],
+      "properties": {
+        "state": {"const": "HOLD_SHADOW_ONLY"},
+        "reason": {"const": "DESIGN_PATH_INTEGRATED_BUT_ADI_GTP_RUNTIME_BINDINGS_AND_PERFORMANCE_EVIDENCE_NOT_PROVEN"},
+        "next_allowed_action": {"const": "CONTINUE_BOUNDED_SHADOW_OBSERVATION_AND_PREPARE_STATIC_TOTAL_FIELD_REVIEW"},
+        "live_effect_count": {"type": "integer", "const": 0}
+      }
+    }
+  }
+}
