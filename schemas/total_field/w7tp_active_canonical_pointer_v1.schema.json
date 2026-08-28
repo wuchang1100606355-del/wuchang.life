@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji.local/schemas/total_field/w7tp_active_canonical_pointer_v1.schema.json",
+  "title": "W7TP active canonical pointer governance contract",
+  "oneOf": [
+    {"$ref": "#/$defs/pointer"},
+    {"$ref": "#/$defs/receipt"},
+    {"$ref": "#/$defs/bootstrap_request"}
+  ],
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "pointer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_id", "pointer_state", "canonical_locator", "canonical_sha256",
+        "canonical_commit", "canonical_identity", "logical_time", "authority_id",
+        "authority_sha256", "authorization_ref", "creation_receipt_ref",
+        "expected_preimage", "creation_mode", "current", "active"
+      ],
+      "properties": {
+        "schema_id": {"const": "W7TP_ACTIVE_CANONICAL_POINTER_V1"},
+        "pointer_state": {"const": "ACTIVE_CURRENT"},
+        "canonical_locator": {"$ref": "#/$defs/path"},
+        "canonical_sha256": {"$ref": "#/$defs/sha"},
+        "canonical_commit": {"$ref": "#/$defs/commit"},
+        "canonical_identity": {"type": "string", "minLength": 1},
+        "logical_time": {"type": "string", "minLength": 1},
+        "authority_id": {"type": "string", "minLength": 1},
+        "authority_sha256": {"$ref": "#/$defs/sha"},
+        "authorization_ref": {"type": "string", "minLength": 1},
+        "creation_receipt_ref": {
+          "type": "string",
+          "pattern": "^runtime/total_field/master_index/receipts/[^/]+/POINTER_BOOTSTRAP_RECEIPT\\.json$"
+        },
+        "expected_preimage": {"const": "ABSENT"},
+        "creation_mode": {"const": "CREATE_IF_ABSENT"},
+        "current": {"const": true},
+        "active": {"const": true}
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_id", "state", "pointer_ref", "pointer_sha256", "canonical_locator",
+        "canonical_commit", "canonical_sha256", "authority_id", "authority_sha256",
+        "authorization_ref", "logical_time", "nonce_ref", "historical_receipt",
+        "overwrite", "receipt_sha256"
+      ],
+      "properties": {
+        "schema_id": {"const": "W7TP_CURRENT_POINTER_BOOTSTRAP_RECEIPT_V1"},
+        "state": {"const": "POINTER_BOOTSTRAP_AUTHORIZED_APPEND_ONLY"},
+        "pointer_ref": {"const": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"},
+        "pointer_sha256": {"$ref": "#/$defs/sha"},
+        "canonical_locator": {"$ref": "#/$defs/path"},
+        "canonical_commit": {"$ref": "#/$defs/commit"},
+        "canonical_sha256": {"$ref": "#/$defs/sha"},
+        "authority_id": {"type": "string", "minLength": 1},
+        "authority_sha256": {"$ref": "#/$defs/sha"},
+        "authorization_ref": {"type": "string", "minLength": 1},
+        "logical_time": {"type": "string", "minLength": 1},
+        "nonce_ref": {"type": "string", "pattern": "^nonce_ref:sha256:[0-9a-f]{64}$"},
+        "historical_receipt": {"const": false},
+        "overwrite": {"const": false},
+        "receipt_sha256": {"$ref": "#/$defs/sha"}
+      }
+    },
+    "bootstrap_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_id", "state", "pointer_ref", "expected_preimage", "create_if_absent",
+        "fail_if_already_exists", "canonical_locator", "canonical_commit",
+        "canonical_sha256", "canonical_identity", "logical_time", "receipt_ref",
+        "authorization_ref", "authorization"
+      ],
+      "properties": {
+        "schema_id": {"const": "W7TP_CURRENT_POINTER_BOOTSTRAP_REQUEST_V1"},
+        "state": {"const": "REQUEST_POINTER_BOOTSTRAP"},
+        "pointer_ref": {"const": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"},
+        "expected_preimage": {"const": "ABSENT"},
+        "create_if_absent": {"const": true},
+        "fail_if_already_exists": {"const": true},
+        "canonical_locator": {"$ref": "#/$defs/path"},
+        "canonical_commit": {"$ref": "#/$defs/commit"},
+        "canonical_sha256": {"$ref": "#/$defs/sha"},
+        "canonical_identity": {"type": "string", "minLength": 1},
+        "logical_time": {"type": "string", "minLength": 1},
+        "receipt_ref": {"type": "string", "pattern": "^runtime/total_field/master_index/receipts/[^/]+/POINTER_BOOTSTRAP_RECEIPT\\.json$"},
+        "authorization_ref": {"type": "string", "minLength": 1},
+        "authorization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_id", "state", "scope", "pointer_ref", "expected_preimage",
+            "canonical_locator", "canonical_commit", "canonical_sha256", "receipt_ref",
+            "authority_id", "authority_sha256", "nonce_ref", "issued_at", "expires_at",
+            "verifier_ref", "payload_sha256", "signature"
+          ],
+          "properties": {
+            "schema_id": {"const": "W7TP_CURRENT_POINTER_BOOTSTRAP_AUTHORIZATION_V1"},
+            "state": {"const": "AUTHORIZED_SINGLE_POINTER_BOOTSTRAP"},
+            "scope": {"const": "BOOTSTRAP_CURRENT_ACTIVE_CANONICAL_POINTER"},
+            "pointer_ref": {"const": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"},
+            "expected_preimage": {"const": "ABSENT"},
+            "canonical_locator": {"$ref": "#/$defs/path"},
+            "canonical_commit": {"$ref": "#/$defs/commit"},
+            "canonical_sha256": {"$ref": "#/$defs/sha"},
+            "receipt_ref": {"type": "string"},
+            "authority_id": {"type": "string", "minLength": 1},
+            "authority_sha256": {"$ref": "#/$defs/sha"},
+            "nonce_ref": {"type": "string", "pattern": "^nonce_ref:sha256:[0-9a-f]{64}$"},
+            "issued_at": {"type": "string", "format": "date-time"},
+            "expires_at": {"type": "string", "format": "date-time"},
+            "verifier_ref": {"type": "string", "minLength": 1},
+            "payload_sha256": {"$ref": "#/$defs/sha"},
+            "signature": {"type": "string", "pattern": "^ed25519:[A-Za-z0-9_-]+={0,2}$"}
+          }
+        }
+      }
+    }
+  }
+}
