@@ -140,6 +140,59 @@ class RunSummary:
         }
 
 
+FileCoordinate = Tuple[int, int, int, int, int, int, int, int]
+
+
+@dataclasses.dataclass
+class WatchState:
+    """Process-local acceleration state; never authority or durable evidence."""
+
+    successful_coordinates: Dict[str, FileCoordinate] = dataclasses.field(default_factory=dict)
+
+
+@dataclasses.dataclass
+class LocalReceiptIndex:
+    """One-cycle validated lookup for immutable spool-path bindings."""
+
+    receipt_root: Path
+    by_spool_path: Dict[str, Tuple[Any, ...]] = dataclasses.field(default_factory=dict)
+    error_code: Optional[str] = None
+    io_error: bool = False
+    loaded: bool = False
+
+    def ensure_loaded(self) -> None:
+        if self.loaded:
+            if self.error_code is not None:
+                raise ProjectionHold(self.error_code)
+            if self.io_error:
+                raise OSError("LOCAL_RECEIPT_INDEX_IO_ERROR")
+            return
+        try:
+            self.by_spool_path = _scan_local_receipt_bindings(self.receipt_root)
+        except ProjectionHold as exc:
+            self.error_code = exc.code
+        except OSError:
+            self.io_error = True
+        self.loaded = True
+        if self.error_code is not None:
+            raise ProjectionHold(self.error_code)
+        if self.io_error:
+            raise OSError("LOCAL_RECEIPT_INDEX_IO_ERROR")
+
+    def assert_append_only(self, envelope: "ValidEnvelope") -> None:
+        self.ensure_loaded()
+        observed_hashes = self.by_spool_path.get(envelope.envelope_spool_relative_path, ())
+        if any(value != envelope.envelope_file_sha256 for value in observed_hashes):
+            raise ProjectionHold("SPOOL_ENVELOPE_PATH_REBOUND")
+
+    def record(self, envelope: "ValidEnvelope") -> None:
+        self.ensure_loaded()
+        path = envelope.envelope_spool_relative_path
+        observed_hashes = set(self.by_spool_path.get(path, ()))
+        observed_hashes.add(envelope.envelope_file_sha256)
+        self.by_spool_path[path] = tuple(sorted(observed_hashes))
+
+
 def _reject_json_constant(_value: str) -> None:
     raise ValueError("NON_FINITE_JSON_NUMBER")
 
@@ -400,6 +453,16 @@ def _spool_relative_path(spool_root: Path, envelope_path: Path) -> str:
     return PurePosixPath(*relative.parts).as_posix()
 
 
+def _spool_relative_text(spool_root: Path, envelope_path: Path) -> str:
+    """Return the walk coordinate; pending entries still receive full validation."""
+
+    try:
+        relative = envelope_path.relative_to(spool_root)
+    except ValueError as exc:
+        raise EnvelopeRejected("ENVELOPE_PATH_OUTSIDE_SPOOL") from exc
+    return PurePosixPath(*relative.parts).as_posix()
+
+
 def _enumerate_envelopes(spool_root: Path) -> List[Path]:
     envelope_paths: List[Path] = []
     for current_text, directory_names, file_names in os.walk(spool_root, followlinks=False):
@@ -416,7 +479,7 @@ def _enumerate_envelopes(spool_root: Path) -> List[Path]:
                 envelope_paths.append(current / file_name)
     return sorted(
         envelope_paths,
-        key=lambda entry: _spool_relative_path(spool_root, entry).casefold(),
+        key=lambda entry: _spool_relative_text(spool_root, entry).casefold(),
     )
 
 
@@ -587,9 +650,10 @@ def _validate_existing_receipt(raw: bytes, envelope: ValidEnvelope, receipt_id: 
         raise ProjectionHold("LOCAL_RECEIPT_BINDING_MISMATCH")
 
 
-def _assert_spool_path_append_only(receipt_root: Path, envelope: ValidEnvelope) -> None:
-    """Reject a successful spool relative path that later presents different bytes."""
+def _scan_local_receipt_bindings(receipt_root: Path) -> Dict[str, Tuple[Any, ...]]:
+    """Validate local receipts once and index their immutable spool bindings."""
 
+    mutable_bindings: Dict[str, set] = {}
     for receipt_path in receipt_root.glob("*.json"):
         if _is_reparse_or_symlink(receipt_path) or not receipt_path.is_file():
             raise ProjectionHold("LOCAL_RECEIPT_ENTRY_UNSAFE")
@@ -603,10 +667,26 @@ def _assert_spool_path_append_only(receipt_root: Path, envelope: ValidEnvelope) 
             raise ProjectionHold("LOCAL_RECEIPT_ID_INVALID")
         if receipt_path.name != f"{receipt_id}.json":
             raise ProjectionHold("LOCAL_RECEIPT_FILENAME_BINDING_MISMATCH")
-        if document.get("envelope_spool_relative_path") != envelope.envelope_spool_relative_path:
-            continue
-        if document.get("envelope_file_sha256") != envelope.envelope_file_sha256:
-            raise ProjectionHold("SPOOL_ENVELOPE_PATH_REBOUND")
+        spool_path = document.get("envelope_spool_relative_path")
+        if isinstance(spool_path, str):
+            mutable_bindings.setdefault(spool_path, set()).add(
+                document.get("envelope_file_sha256")
+            )
+    return {
+        spool_path: tuple(sorted(values, key=lambda value: repr(value)))
+        for spool_path, values in mutable_bindings.items()
+    }
+
+
+def _assert_spool_path_append_only(
+    receipt_root: Path,
+    envelope: ValidEnvelope,
+    receipt_index: Optional[LocalReceiptIndex] = None,
+) -> None:
+    """Reject a successful spool relative path that later presents different bytes."""
+
+    active_index = receipt_index or LocalReceiptIndex(receipt_root)
+    active_index.assert_append_only(envelope)
 
 
 def _load_or_create_local_receipt(
@@ -643,6 +723,7 @@ def process_envelope(
     drive_root: Path,
     receipt_root: Path,
     maximum_bytes: int,
+    receipt_index: Optional[LocalReceiptIndex] = None,
 ) -> EnvelopeResult:
     stage = "ENVELOPE"
     envelope_display = envelope_path.name
@@ -650,7 +731,7 @@ def process_envelope(
         envelope_display = _spool_relative_path(spool_root, envelope_path)
         raw = _read_stable_envelope(envelope_path, maximum_bytes)
         envelope = validate_envelope(envelope_path, raw, envelope_display)
-        _assert_spool_path_append_only(receipt_root, envelope)
+        _assert_spool_path_append_only(receipt_root, envelope, receipt_index)
         stage = "ARTIFACT"
         artifact_result = _project_drive_bytes(
             drive_root,
@@ -663,6 +744,8 @@ def process_envelope(
             envelope,
             artifact_result.state,
         )
+        if receipt_index is not None:
+            receipt_index.record(envelope)
         receipt_relative_path = PurePosixPath(
             "08_RECEIPTS",
             f"{RECEIPT_PREFIX}{receipt_id}.json",
@@ -699,11 +782,26 @@ def process_envelope(
         )
 
 
+def _file_coordinate(path: Path) -> FileCoordinate:
+    metadata = path.lstat()
+    return (
+        stat.S_IFMT(metadata.st_mode),
+        getattr(metadata, "st_file_attributes", 0),
+        getattr(metadata, "st_reparse_tag", 0),
+        metadata.st_dev,
+        metadata.st_ino,
+        metadata.st_size,
+        metadata.st_mtime_ns,
+        metadata.st_ctime_ns,
+    )
+
+
 def run_once(
     spool_dir: Path,
     drive_root: Path,
     receipt_dir: Path,
     maximum_bytes: int = DEFAULT_MAX_ENVELOPE_BYTES,
+    watch_state: Optional[WatchState] = None,
 ) -> RunSummary:
     if maximum_bytes < 1:
         raise SetupHold("MAX_ENVELOPE_BYTES_INVALID")
@@ -711,13 +809,63 @@ def run_once(
         Path(spool_dir), Path(receipt_dir), Path(drive_root)
     )
     envelope_paths = _enumerate_envelopes(spool_root)
-    results = tuple(
-        process_envelope(path, spool_root, drive_root_resolved, receipt_root, maximum_bytes)
-        for path in envelope_paths
-    )
+    pending: List[Tuple[Path, str, Optional[FileCoordinate]]] = []
+    seen_paths = set()
+    for path in envelope_paths:
+        spool_relative_path = _spool_relative_text(spool_root, path)
+        seen_paths.add(spool_relative_path)
+        try:
+            coordinate = _file_coordinate(path)
+        except OSError:
+            coordinate = None
+        if (
+            watch_state is not None
+            and coordinate is not None
+            and watch_state.successful_coordinates.get(spool_relative_path) == coordinate
+        ):
+            continue
+        pending.append((path, spool_relative_path, coordinate))
+
+    if watch_state is not None:
+        for stale_path in set(watch_state.successful_coordinates) - seen_paths:
+            del watch_state.successful_coordinates[stale_path]
+
+    receipt_index = LocalReceiptIndex(receipt_root)
+    result_items: List[EnvelopeResult] = []
+    for path, spool_relative_path, before_coordinate in pending:
+        result = process_envelope(
+            path,
+            spool_root,
+            drive_root_resolved,
+            receipt_root,
+            maximum_bytes,
+            receipt_index,
+        )
+        result_items.append(result)
+        if watch_state is None:
+            continue
+        if result.state != "PASS_BYTES_PROJECTED" or before_coordinate is None:
+            watch_state.successful_coordinates.pop(spool_relative_path, None)
+            continue
+        try:
+            after_coordinate = _file_coordinate(path)
+        except OSError:
+            watch_state.successful_coordinates.pop(spool_relative_path, None)
+            continue
+        if after_coordinate == before_coordinate:
+            watch_state.successful_coordinates[spool_relative_path] = before_coordinate
+        else:
+            watch_state.successful_coordinates.pop(spool_relative_path, None)
+
+    results = tuple(result_items)
     passed = sum(item.state == "PASS_BYTES_PROJECTED" for item in results)
     held = len(results) - passed
-    state = "IDLE_NO_ENVELOPES" if not results else ("PASS_BYTES_PROJECTED" if held == 0 else "HOLD")
+    if not envelope_paths:
+        state = "IDLE_NO_ENVELOPES"
+    elif not results:
+        state = "IDLE_NO_NEW_OR_CHANGED_ENVELOPES"
+    else:
+        state = "PASS_BYTES_PROJECTED" if held == 0 else "HOLD"
     return RunSummary(
         state=state,
         processed=len(results),
@@ -788,6 +936,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if args.watch and args.poll_seconds < 1:
         parser.error("--poll-seconds must be at least 1")
     exit_code = 0
+    watch_state = WatchState() if args.watch else None
     try:
         while True:
             summary = run_once(
@@ -795,6 +944,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 drive_root=args.drive_root,
                 receipt_dir=args.receipt_dir,
                 maximum_bytes=args.max_envelope_bytes,
+                watch_state=watch_state,
             )
             _emit_summary(summary)
             if summary.held:

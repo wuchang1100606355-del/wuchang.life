@@ -4,6 +4,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 MODULE_ROOT = Path(__file__).resolve().parents[1]
@@ -85,8 +86,13 @@ class ProjectorTestCase(unittest.TestCase):
         path.write_bytes(canonical(document))
         return path
 
-    def run_once(self):
-        return projector.run_once(self.spool, self.drive, self.receipts)
+    def run_once(self, watch_state=None):
+        return projector.run_once(
+            self.spool,
+            self.drive,
+            self.receipts,
+            watch_state=watch_state,
+        )
 
     def test_valid_projection_and_two_immutable_receipts(self):
         artifact = {"node": "MSI", "state": "candidate"}
@@ -124,6 +130,140 @@ class ProjectorTestCase(unittest.TestCase):
         self.assertEqual("ALREADY_PRESENT_IDENTICAL", second.results[0].drive_receipt_state)
         self.assertEqual(receipt_before, local_receipt.read_bytes())
         self.assertEqual(1, len(list(self.receipts.glob("*.json"))))
+
+    def test_receipt_validation_is_linear_per_run(self):
+        for index in range(3):
+            self.write_envelope(
+                f"{index:04d}.json",
+                make_envelope(
+                    f"04_EVIDENCE/linear-{index}.json",
+                    {"value": index},
+                    packet_id=f"packet-{index}",
+                ),
+            )
+        first = self.run_once()
+        self.assertEqual(3, first.passed)
+
+        original_validator = projector._validated_receipt_document
+        with mock.patch.object(
+            projector,
+            "_validated_receipt_document",
+            wraps=original_validator,
+        ) as validator:
+            second = self.run_once()
+
+        self.assertEqual(3, second.passed)
+        self.assertEqual(6, validator.call_count)
+
+    def test_watch_state_skips_unchanged_successful_envelope(self):
+        self.write_envelope(
+            "0001.json",
+            make_envelope("04_EVIDENCE/watch.json", {"value": 1}),
+        )
+        watch_state = projector.WatchState()
+        first = self.run_once(watch_state)
+        self.assertEqual("PASS_BYTES_PROJECTED", first.state)
+
+        with mock.patch.object(
+            projector,
+            "process_envelope",
+            wraps=projector.process_envelope,
+        ) as process:
+            second = self.run_once(watch_state)
+
+        self.assertEqual("IDLE_NO_NEW_OR_CHANGED_ENVELOPES", second.state)
+        self.assertEqual(0, second.processed)
+        self.assertEqual((), second.results)
+        process.assert_not_called()
+
+    def test_watch_state_processes_only_new_envelope(self):
+        self.write_envelope(
+            "0001.json",
+            make_envelope("04_EVIDENCE/first-watch.json", {"value": 1}),
+        )
+        watch_state = projector.WatchState()
+        first = self.run_once(watch_state)
+        self.assertEqual(1, first.processed)
+        self.write_envelope(
+            "0002.json",
+            make_envelope(
+                "04_EVIDENCE/second-watch.json",
+                {"value": 2},
+                packet_id="packet-002",
+            ),
+        )
+
+        second = self.run_once(watch_state)
+
+        self.assertEqual("PASS_BYTES_PROJECTED", second.state)
+        self.assertEqual(1, second.processed)
+        self.assertEqual("0002.json", second.results[0].envelope_file)
+
+    def test_watch_state_revalidates_changed_spool_path(self):
+        path = self.write_envelope(
+            "fixed-watch-name.json",
+            make_envelope("04_EVIDENCE/watch-first.json", {"value": 1}),
+        )
+        watch_state = projector.WatchState()
+        first = self.run_once(watch_state)
+        self.assertEqual("PASS_BYTES_PROJECTED", first.state)
+        path.write_bytes(
+            canonical(
+                make_envelope(
+                    "04_EVIDENCE/watch-second.json",
+                    {"value": "changed-and-longer"},
+                )
+            )
+        )
+
+        second = self.run_once(watch_state)
+
+        self.assertEqual("HOLD", second.state)
+        self.assertEqual(
+            "ENVELOPE_SPOOL_ENVELOPE_PATH_REBOUND",
+            second.results[0].code,
+        )
+        self.assertFalse((self.drive / "04_EVIDENCE" / "watch-second.json").exists())
+
+    def test_watch_state_does_not_cache_hold(self):
+        (self.drive / "05_CONFLICT").rmdir()
+        self.write_envelope(
+            "0001.json",
+            make_envelope("05_CONFLICT/retry.json", {"value": 1}),
+        )
+        watch_state = projector.WatchState()
+        first = self.run_once(watch_state)
+        self.assertEqual("HOLD", first.state)
+        self.assertEqual({}, watch_state.successful_coordinates)
+        (self.drive / "05_CONFLICT").mkdir()
+
+        second = self.run_once(watch_state)
+
+        self.assertEqual("PASS_BYTES_PROJECTED", second.state)
+        self.assertEqual(1, second.processed)
+
+    def test_fresh_watch_state_reconciles_missing_drive_receipt(self):
+        self.write_envelope(
+            "0001.json",
+            make_envelope("04_EVIDENCE/reconcile.json", {"value": 1}),
+        )
+        first = self.run_once(projector.WatchState())
+        receipt_id = first.results[0].receipt_id
+        local_receipt = self.receipts / f"{receipt_id}.json"
+        drive_receipt = (
+            self.drive
+            / "08_RECEIPTS"
+            / f"CLOUD_WRITE_RECEIPT_{receipt_id}.json"
+        )
+        drive_receipt.unlink()
+
+        second = self.run_once(projector.WatchState())
+
+        self.assertEqual("PASS_BYTES_PROJECTED", second.state)
+        self.assertEqual("ALREADY_PRESENT_IDENTICAL", second.results[0].artifact_write_state)
+        self.assertEqual("ALREADY_PRESENT_IDENTICAL", second.results[0].local_receipt_state)
+        self.assertEqual("CREATED", second.results[0].drive_receipt_state)
+        self.assertEqual(local_receipt.read_bytes(), drive_receipt.read_bytes())
 
     def test_existing_different_bytes_are_never_overwritten(self):
         target = self.drive / "04_EVIDENCE" / "conflict.json"
