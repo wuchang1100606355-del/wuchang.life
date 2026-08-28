@@ -1,0 +1,13 @@
+[Unit]
+Description=Run MSI W7TP 8D ADI mesh cycle every five minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=10s
+RandomizedDelaySec=15s
+Persistent=true
+Unit=w7tp-gt-mesh-v21-cycle.service
+
+[Install]
+WantedBy=timers.target

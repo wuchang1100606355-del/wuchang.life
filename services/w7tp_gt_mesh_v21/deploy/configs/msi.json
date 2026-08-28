@@ -1,0 +1,139 @@
+{
+  "authority_ref": "authority:TOTAL_FIELD",
+  "total_field_authority_node_ref": "node:taiji01",
+  "containers": {
+    "enabled": true,
+    "engines": [
+      "docker",
+      "podman"
+    ],
+    "names": []
+  },
+  "curated_files": [
+    {
+      "include_sha256": true,
+      "max_entries": 96,
+      "path": "/home/taiji_admin/.local/opt/w7tp_gt_mesh_v21/current/w7tp_gt_mesh",
+      "recursive": true
+    },
+    {
+      "include_sha256": true,
+      "max_entries": 1,
+      "path": "/home/taiji_admin/.local/opt/w7tp_gt_mesh_v21/current/docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md",
+      "recursive": false
+    },
+    {
+      "include_sha256": true,
+      "max_entries": 1,
+      "path": "/home/taiji_admin/.local/opt/w7tp_gt_mesh_v21/current/schemas/versioned/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.cf3df7380e70d0b4bb21635ddc6f1f097713cf94fbf8428966713c949ff1d135.json",
+      "recursive": false
+    },
+    {
+      "include_sha256": true,
+      "max_entries": 32,
+      "path": "/home/taiji_admin/Taiji_Hub/runtime/isolated/w7tp_all_node_gt_base_20260728",
+      "recursive": true
+    }
+  ],
+  "disk_roots": [
+    "/home/taiji_admin/Taiji_Hub",
+    "/mnt/c/Users/o0930/AppData/Local/W7TP/gt_mesh_v21"
+  ],
+  "drive_spool_root": "/mnt/c/Users/o0930/AppData/Local/W7TP/gt_mesh_v21/drive_spool",
+  "design_authority": "FOUNDER_ARCHITECTURE",
+  "control_authority_endpoint": "http://100.71.224.18:9238/v2.1/packets",
+  "control_authority_node_id": "taiji01",
+  "node_role": "MSI_WSL_BUILD_TEST_GTP_PACKET_GENERATION",
+  "git_evidence_roots": [
+    {
+      "include_untracked": true,
+      "path": "/home/taiji_admin/Taiji_Hub"
+    }
+  ],
+  "http_timeout_seconds": 20,
+  "listeners": {
+    "enabled": true
+  },
+  "listen_host": "100.84.204.114",
+  "listen_port": 9238,
+  "logical_root_id": "w7tp_total_field_mesh_v21",
+  "max_body_bytes": 33554432,
+  "namespace": "w7tp.mesh.node_state.v21",
+  "node_id": "msi",
+  "peers": [
+    {
+      "peer_id": "taiji01",
+      "url": "http://100.71.224.18:9238/v2.1/packets"
+    },
+    {
+      "peer_id": "taiji02",
+      "url": "http://100.111.139.7:9238/v2.1/packets"
+    },
+    {
+      "peer_id": "taiji03",
+      "url": "http://100.82.11.94:9238/v2.1/packets"
+    },
+    {
+      "peer_id": "wuchang-us-free-node",
+      "url": "http://100.99.148.1:9238/v2.1/packets"
+    }
+  ],
+  "primary_decision_engine": "8D_ADI",
+  "primary_decision_engine_role": "PRIMARY_DECISION_ENGINE_NOT_AUTHORITY",
+  "runtime_root": "/home/taiji_admin/.local/state/w7tp-gt-mesh-v21/msi",
+  "services": [
+    {
+      "name": "w7tp-gt-mesh-v21.service",
+      "scope": "user"
+    },
+    {
+      "name": "tailscaled.service",
+      "scope": "system"
+    },
+    {
+      "name": "docker.service",
+      "scope": "system"
+    },
+    {
+      "name": "containerd.service",
+      "scope": "system"
+    },
+    {
+      "name": "ollama.service",
+      "scope": "system"
+    },
+    {
+      "name": "open-webui.service",
+      "scope": "system"
+    },
+    {
+      "name": "odoo.service",
+      "scope": "system"
+    },
+    {
+      "name": "postgresql.service",
+      "scope": "system"
+    },
+    {
+      "name": "n8n.service",
+      "scope": "system"
+    },
+    {
+      "name": "grafana-server.service",
+      "scope": "system"
+    },
+    {
+      "name": "flowise.service",
+      "scope": "system"
+    },
+    {
+      "name": "w7tp-receiver.service",
+      "scope": "system"
+    },
+    {
+      "name": "w7tp-reconstruction.service",
+      "scope": "system"
+    }
+  ],
+  "ttl_seconds": 900
+}

@@ -1,0 +1,27 @@
+[Unit]
+Description=W7TP 8D ADI low-cost index and generative-transmission cycle (taiji02 system fallback)
+Wants=network-online.target
+After=network-online.target w7tp-gt-mesh-v21.service
+
+[Service]
+Type=oneshot
+User=taiji_02
+Group=taiji_02
+WorkingDirectory=/opt/w7tp/gt_mesh_v21/current
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/opt/w7tp/gt_mesh_v21/current
+UMask=0077
+ExecStartPre=/usr/bin/env python3 -m w7tp_gt_mesh --config /etc/w7tp-gt-mesh-v21/config.json doctor
+ExecStart=/usr/bin/env python3 -m w7tp_gt_mesh --config /etc/w7tp-gt-mesh-v21/config.json cycle
+ExecStart=/usr/bin/env python3 -m w7tp_gt_mesh --config /etc/w7tp-gt-mesh-v21/config.json retry
+TimeoutStartSec=240s
+Nice=10
+IOSchedulingClass=idle
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+ReadWritePaths=/home/taiji_02/.local/state/w7tp-gt-mesh-v21/taiji02

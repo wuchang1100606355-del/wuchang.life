@@ -1,0 +1,29 @@
+[Unit]
+Description=W7TP 8D ADI generative-transmission mesh receiver (MSI system fallback)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=taiji_admin
+Group=taiji_admin
+WorkingDirectory=/home/taiji_admin/.local/opt/w7tp_gt_mesh_v21/current
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/taiji_admin/.local/opt/w7tp_gt_mesh_v21/current
+UMask=0077
+ExecStartPre=/usr/bin/env python3 -m w7tp_gt_mesh --config /etc/w7tp-gt-mesh-v21/config.json doctor
+ExecStart=/usr/bin/env python3 -m w7tp_gt_mesh --config /etc/w7tp-gt-mesh-v21/config.json serve
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=20s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+ReadWritePaths=/home/taiji_admin/.local/state/w7tp-gt-mesh-v21/msi /mnt/c/Users/o0930/AppData/Local/W7TP/gt_mesh_v21/drive_spool
+
+[Install]
+WantedBy=multi-user.target

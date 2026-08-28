@@ -1,0 +1,96 @@
+{
+  "authority_state": "DEPLOYMENT_COORDINATES_ONLY_NOT_FINAL_AUTHORITY",
+  "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1",
+  "cycle_interval_seconds": 300,
+  "d8_decision_authority": "authority:TOTAL_FIELD",
+  "design_authority": "FOUNDER_ARCHITECTURE",
+  "total_field_authority_node_ref": "node:taiji01",
+  "candidate_control_and_receipt_node_ref": "node:taiji01",
+  "msi_role": "FOUNDER_INTERFACE_BUILD_TEST_GTP_SOURCE_AND_DRIVE_PROJECTION_NOT_AUTHORITY",
+  "candidate_control_packet_ingress": "http://100.71.224.18:9238/v2.1/packets",
+  "candidate_control_endpoint_state": "TELEMETRY_TASK_VALIDATION_ONLY_NO_EXECUTOR",
+  "native_adi_local_insert_endpoint": "http://127.0.0.1:9110/v1/adi/insert",
+  "nodes": [
+    {
+      "config_source": "configs/msi.json",
+      "config_target_system": "/etc/w7tp-gt-mesh-v21/config.json",
+      "config_target_user": "/home/taiji_admin/.config/w7tp-gt-mesh-v21/config.json",
+      "listen": "100.84.204.114:9238",
+      "node_id": "msi",
+      "preferred_scope": "user",
+      "runtime_root": "/home/taiji_admin/.local/state/w7tp-gt-mesh-v21/msi",
+      "source_working_directory": "/home/taiji_admin/.local/opt/w7tp_gt_mesh_v21/current",
+      "system_unit_source": "systemd/system/msi",
+      "user": "taiji_admin",
+      "user_unit_source": "systemd/user/msi"
+    },
+    {
+      "config_source": "configs/taiji01.json",
+      "config_target_system": "/etc/w7tp-gt-mesh-v21/config.json",
+      "config_target_user": "/home/taiji_admin/.config/w7tp-gt-mesh-v21/config.json",
+      "listen": "100.71.224.18:9238",
+      "node_id": "taiji01",
+      "preferred_scope": "system",
+      "runtime_root": "/home/taiji_admin/.local/state/w7tp-gt-mesh-v21/taiji01",
+      "source_working_directory": "/opt/w7tp/gt_mesh_v21/current",
+      "system_unit_source": "systemd/system/taiji01",
+      "user": "taiji_admin",
+      "user_unit_source": "systemd/user/taiji01"
+    },
+    {
+      "config_source": "configs/taiji02.json",
+      "config_target_system": "/etc/w7tp-gt-mesh-v21/config.json",
+      "config_target_user": "/home/taiji_02/.config/w7tp-gt-mesh-v21/config.json",
+      "listen": "100.111.139.7:9238",
+      "node_id": "taiji02",
+      "preferred_scope": "user",
+      "runtime_root": "/home/taiji_02/.local/state/w7tp-gt-mesh-v21/taiji02",
+      "source_working_directory": "/opt/w7tp/gt_mesh_v21/current",
+      "system_unit_source": "systemd/system/taiji02",
+      "user": "taiji_02",
+      "user_unit_source": "systemd/user/taiji02"
+    },
+    {
+      "config_source": "configs/taiji03.json",
+      "config_target_system": "/etc/w7tp-gt-mesh-v21/config.json",
+      "config_target_user": "/home/lenovo/.config/w7tp-gt-mesh-v21/config.json",
+      "listen": "100.82.11.94:9238",
+      "node_id": "taiji03",
+      "preferred_scope": "system",
+      "runtime_root": "/home/lenovo/.local/state/w7tp-gt-mesh-v21/taiji03",
+      "source_working_directory": "/opt/w7tp/gt_mesh_v21/current",
+      "system_unit_source": "systemd/system/taiji03",
+      "user": "lenovo",
+      "user_unit_source": "systemd/user/taiji03"
+    },
+    {
+      "config_source": "configs/wuchang-us-free-node.json",
+      "config_target_system": "/etc/w7tp-gt-mesh-v21/config.json",
+      "listen": "100.99.148.1:9238",
+      "node_id": "wuchang-us-free-node",
+      "preferred_scope": "system",
+      "runtime_root": "/var/lib/w7tp-gt-mesh-v21/wuchang-us-free-node",
+      "source_working_directory": "/opt/w7tp/gt_mesh_v21/current",
+      "system_unit_source": "systemd/system/wuchang-us-free-node",
+      "user": "root"
+    }
+  ],
+  "primary_decision_engine": "8D_ADI",
+  "primary_decision_engine_role": "PRIMARY_DECISION_ENGINE_NOT_AUTHORITY",
+  "unique_authority": "TOTAL_FIELD",
+  "route_contract": {
+    "msi_to": [
+      "taiji01",
+      "taiji02",
+      "taiji03",
+      "wuchang-us-free-node"
+    ],
+    "remote_nodes_to": [
+      "msi",
+      "taiji01"
+    ],
+    "transport_authority": "NONE"
+  },
+  "schema_id": "W7TP_GT_MESH_DEPLOYMENT_MANIFEST_V21",
+  "service_port": 9238
+}

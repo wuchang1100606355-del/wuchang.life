@@ -1,0 +1,20 @@
+[Unit]
+Description=W7TP 8D ADI low-cost index and generative-transmission cycle (taiji03)
+Wants=network-online.target
+After=network-online.target w7tp-gt-mesh-v21.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/w7tp/gt_mesh_v21/current
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/opt/w7tp/gt_mesh_v21/current
+UMask=0077
+ExecStartPre=/usr/bin/env python3 -m w7tp_gt_mesh --config /home/lenovo/.config/w7tp-gt-mesh-v21/config.json doctor
+ExecStart=/usr/bin/env python3 -m w7tp_gt_mesh --config /home/lenovo/.config/w7tp-gt-mesh-v21/config.json cycle
+ExecStart=/usr/bin/env python3 -m w7tp_gt_mesh --config /home/lenovo/.config/w7tp-gt-mesh-v21/config.json retry
+TimeoutStartSec=240s
+Nice=10
+IOSchedulingClass=idle
+NoNewPrivileges=true
+PrivateTmp=true
+RestrictSUIDSGID=true

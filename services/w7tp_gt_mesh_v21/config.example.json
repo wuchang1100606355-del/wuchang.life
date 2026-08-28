@@ -1,0 +1,49 @@
+{
+  "node_id": "MSI",
+  "logical_root_id": "W7TP_GT_MESH_V21",
+  "runtime_root": "/var/lib/w7tp-gt-mesh-v21",
+  "drive_spool_root": "/mnt/c/W7TP_Drive_Spool",
+  "authority_ref": "authority:TOTAL_FIELD",
+  "primary_decision_engine": "8D_ADI",
+  "primary_decision_engine_role": "PRIMARY_DECISION_ENGINE_NOT_AUTHORITY",
+  "total_field_authority_node_ref": "node:taiji01",
+  "namespace": "w7tp.mesh.node-state.v21",
+  "ttl_seconds": 300,
+  "listen_host": "0.0.0.0",
+  "listen_port": 9191,
+  "max_body_bytes": 16777216,
+  "http_timeout_seconds": 10,
+  "services": [
+    {
+      "name": "w7tp-gt-mesh-v21-receiver.service",
+      "scope": "user"
+    }
+  ],
+  "containers": {
+    "enabled": true,
+    "engines": [
+      "docker",
+      "podman"
+    ],
+    "names": []
+  },
+  "listeners": {
+    "enabled": true
+  },
+  "curated_files": [],
+  "disk_roots": [
+    "/var/lib/w7tp-gt-mesh-v21"
+  ],
+  "git_evidence_roots": [
+    {
+      "path": "/home/taiji_admin/Taiji_Hub",
+      "include_untracked": true
+    }
+  ],
+  "peers": [
+    {
+      "peer_id": "taiji01",
+      "url": "http://100.64.0.10:9191"
+    }
+  ]
+}

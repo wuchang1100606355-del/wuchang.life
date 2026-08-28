@@ -1,0 +1,32 @@
+{
+  "active_authority_ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+  "allowed_existing_container_ids": [],
+  "allowed_immutable_canary_image_refs": [],
+  "authority_profile_ref": "configs/total_field/active_total_field_authority_runtime_v1.json",
+  "candidate_state": "CANDIDATE_NOT_CANONICAL_NOT_PROMOTED",
+  "control_authority_endpoint": "http://100.71.224.18:9238/v2.1/packets",
+  "control_authority_node_id": "taiji01",
+  "default_policy": "DEDICATED_W7TP_CANARY_ONLY",
+  "design_authority": "FOUNDER_ARCHITECTURE",
+  "enabled": false,
+  "execution_lease_state_machine": [
+    "ISSUED",
+    "ACKNOWLEDGED",
+    "RUNNING",
+    "RESULT_CANDIDATE",
+    "ACCEPTED",
+    "EXPIRED",
+    "REJECTED"
+  ],
+  "existing_container_management_enabled": false,
+  "hold_reason": "ACTIVE_TOTAL_FIELD_AUTHORITY_SCOPE_AND_RUNTIME_PROFILE_DO_NOT_CURRENTLY_AUTHORIZE_CROSS_NODE_CONTROL_OR_EXECUTION",
+  "primary_decision_engine": "8D_ADI",
+  "required_canary_scopes": [
+    "CROSS_NODE_CONTROL",
+    "EXECUTE_CANARY",
+    "HARDWARE_SCHEDULE"
+  ],
+  "schema_id": "W7TP_TOTAL_FIELD_CONTROL_RUNTIME_CONFIG_CANDIDATE_V1",
+  "signature_backend": "tools.total_field_ed25519_backend:Ed25519DetachedSignatureBackend",
+  "transport": "EXISTING_W7TP_GT_MESH_V21_ONLY"
+}
