@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_volunteer_point_tree" model="ir.ui.view">
-        <field name="name">wuchang.volunteer.point.tree</field>
+        <field name="name">wuchang.volunteer.point.list</field>
         <field name="model">wuchang.volunteer.point</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="volunteer_id"/>
                 <field name="points"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record id="view_volunteer_point_form" model="ir.ui.view">
@@ -35,7 +35,7 @@
     <record id="action_volunteer_point" model="ir.actions.act_window">
         <field name="name">志工點數派發</field>
         <field name="res_model">wuchang.volunteer.point</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem id="menu_wuchang_core_root" name="五常志工"/>
     <menuitem id="menu_volunteer_point" name="點數簽核" parent="menu_wuchang_core_root" action="action_volunteer_point"/>

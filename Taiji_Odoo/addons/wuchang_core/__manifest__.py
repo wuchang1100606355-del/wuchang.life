@@ -9,6 +9,7 @@
             'wuchang_core/static/src/js/background_service.js',
         ],
     },
+    'license': 'LGPL-3',
     'installable': True,
     'application': False,
 }
