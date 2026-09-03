@@ -14,6 +14,7 @@ if str(ROOT) not in sys.path:
 from tools.total_field_dynamic_context import (  # noqa: E402
     TotalFieldContextMcpServer,
     build_local_llm_working_memory_projection,
+    build_sovereign_ai_member_seat_admission,
     build_total_field_capability_requirement_packet,
     build_v_shape_vram_prediction_projection,
     build_dynamic_context,
@@ -549,6 +550,130 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
         self.assertFalse(contract["membership_change_rehashes_canonical_root"])
         self.assertFalse(contract["membership_change_may_rewrite_header"])
         self.assertTrue(contract["member_effect_requires_separate_d8"])
+        self.assertTrue(contract["one_person_one_sovereign_identity_packet"])
+        self.assertTrue(contract["permissions_are_packet_scoped"])
+        self.assertEqual(contract["founder_login_providers"], ["LINE", "GOOGLE"])
+        self.assertTrue(contract["provider_subjects_map_to_same_person_packet"])
+        self.assertFalse(contract["automatic_email_identity_merge"])
+        self.assertEqual(contract["default_ai_seat"], "CLOUD_CANDIDATE_SMALL_MODEL")
+        self.assertTrue(contract["member_owned_ai_capability_allowed"])
+        self.assertEqual(contract["central_cloud_usage_default"], "NOT_USED")
+        self.assertFalse(contract["system_mutation_default"])
+        self.assertTrue(contract["founder_verification_is_not_d8"])
+        self.assertEqual(contract["unverified_system_mutation"], "BLOCK")
+        interface = contract["browser_ai_interface"]
+        self.assertEqual(interface["selected_projection"], "OPEN_WEBUI")
+        self.assertEqual(
+            interface["role"],
+            "BROWSER_ONLY_AI_SEAT_AND_MODEL_SELECTION",
+        )
+        self.assertFalse(interface["is_xiaoj_core"])
+        self.assertFalse(interface["is_person_identity_root"])
+        self.assertFalse(interface["is_total_field_authority"])
+        self.assertFalse(interface["provider_credentials_visible_to_model"])
+        self.assertFalse(interface["parallel_member_system"])
+        self.assertFalse(interface["configuration_write_authority"])
+        self.assertTrue(
+            interface["live_compatibility_reobservation_required_before_write"]
+        )
+
+    @staticmethod
+    def _member_ai_seat_args() -> dict[str, object]:
+        allowed = [
+            "READ_MINIMUM_DYNAMIC_CONTEXT",
+            "ODOO_ROLE_SCOPED_BUSINESS_USE",
+            "USE_MEMBER_OWN_AI_CAPABILITY",
+            "SUBMIT_CANDIDATE_RESULT",
+        ]
+        return {
+            "person_packet_ref": "person_packet_ref:member:sha256:" + "a" * 64,
+            "tenant_ref": "tenant_ref:wuchang",
+            "seat_ref": "seat_ref:xiaoj:member",
+            "person_permission_scopes": allowed,
+            "login_provider": "GOOGLE",
+            "login_subject_ref": "login_subject_ref:google:sha256:" + "b" * 64,
+            "login_binding_receipt_ref": (
+                "login_binding_receipt_ref:sha256:" + "c" * 64
+            ),
+            "login_binding_verified": True,
+            "ai_provider_id": "provider-neutral",
+            "provider_ai_session_ref": "provider_ai_session_ref:sha256:" + "d" * 64,
+            "provider_ai_session_verified": True,
+            "small_model_ref": "model_ref:xiaoj:small",
+            "requested_capabilities": allowed,
+            "acknowledged_invariants": {
+                "AI_ACCOUNT_IS_NOT_PERSON_IDENTITY",
+                "AI_ACCOUNT_IS_NOT_TOTAL_FIELD_AUTHORITY",
+                "MEMBER_PERMISSIONS_COME_FROM_PERSON_PACKET",
+                "UNVERIFIED_SEAT_CANNOT_MODIFY_SYSTEM",
+                "SYSTEM_MUTATION_REQUIRES_FOUNDER_VERIFICATION_AND_D8",
+                "ODOO_USE_IS_ROLE_SCOPED",
+                "PROVIDER_CREDENTIALS_ARE_NOT_EXPOSED_TO_MODEL",
+            },
+            "session_ttl_seconds": 900,
+        }
+
+    def test_member_owned_ai_enters_non_authoritative_small_model_candidate_seat(self):
+        packet = build_sovereign_ai_member_seat_admission(
+            **self._member_ai_seat_args()
+        )
+        self.assertEqual(packet["state"], "PASS_CLOUD_CANDIDATE_SMALL_MODEL_SEAT")
+        self.assertTrue(packet["candidate_only"])
+        self.assertFalse(packet["credentials_included"])
+        self.assertEqual(packet["D2_STATE"]["model_class"], "SMALL_MODEL")
+        self.assertEqual(
+            packet["D6_GENERATIVE_TRANSMISSION"]["member_ai_usage_charge_owner"],
+            "MEMBER_PROVIDER_ACCOUNT",
+        )
+        self.assertEqual(packet["D1_INTENT"]["central_usage_default"], "NOT_USED")
+        self.assertFalse(packet["D5_EXECUTION_POLICY"]["odoo_system_administration"])
+        self.assertFalse(packet["D5_EXECUTION_POLICY"]["direct_system_mutation"])
+        self.assertFalse(packet["D8_ENVELOPE_AUTHORITY"]["operation_authority"])
+        self.assertFalse(packet["D8_ENVELOPE_AUTHORITY"]["canonical"])
+
+    def test_unverified_person_packet_cannot_request_system_mutation(self):
+        args = self._member_ai_seat_args()
+        args["person_permission_scopes"] = ["SYSTEM_MUTATION"]
+        args["requested_capabilities"] = ["SYSTEM_MUTATION"]
+        packet = build_sovereign_ai_member_seat_admission(**args)
+        self.assertEqual(
+            packet["state"],
+            "BLOCK_SYSTEM_MUTATION_UNVERIFIED_PERSON_PACKET",
+        )
+        self.assertFalse(packet["D5_EXECUTION_POLICY"]["direct_system_mutation"])
+
+    def test_founder_verified_mutation_request_still_holds_for_exact_d8(self):
+        args = self._member_ai_seat_args()
+        args["person_permission_scopes"] = ["SYSTEM_MUTATION"]
+        args["requested_capabilities"] = ["SYSTEM_MUTATION"]
+        args["founder_verified_for_system_mutation"] = True
+        packet = build_sovereign_ai_member_seat_admission(**args)
+        self.assertEqual(packet["state"], "HOLD_SYSTEM_MUTATION_D8_REQUIRED")
+        self.assertFalse(packet["D5_EXECUTION_POLICY"]["direct_system_mutation"])
+        self.assertFalse(packet["D8_ENVELOPE_AUTHORITY"]["founder_verification_is_d8"])
+        self.assertTrue(
+            packet["D8_ENVELOPE_AUTHORITY"]["system_mutation_requires_exact_d8"]
+        )
+
+    def test_unverified_member_ai_provider_session_holds(self):
+        args = self._member_ai_seat_args()
+        args["provider_ai_session_verified"] = False
+        packet = build_sovereign_ai_member_seat_admission(**args)
+        self.assertEqual(
+            packet["state"],
+            "HOLD_MEMBER_AI_PROVIDER_SESSION_UNVERIFIED",
+        )
+
+    def test_member_ai_seat_rejects_scalar_permission_input(self):
+        args = self._member_ai_seat_args()
+        args["person_permission_scopes"] = "SYSTEM_MUTATION"
+        args["requested_capabilities"] = "SYSTEM_MUTATION"
+        packet = build_sovereign_ai_member_seat_admission(**args)
+        self.assertEqual(packet["state"], "HOLD_SOVEREIGN_AI_SEAT_INPUT_INVALID")
+        self.assertEqual(
+            packet["D7_RISK_QUARANTINE"]["invalid_collections"],
+            ["person_permission_scopes", "requested_capabilities"],
+        )
 
     def test_dynamic_context_regions_are_intent_controlled_inside_one_envelope(self):
         packet = build_dynamic_context(

@@ -26,6 +26,38 @@ REQUIRED_ALIGNMENT_ACKNOWLEDGEMENTS = frozenset(
         "LAN_PRECEDES_VPN",
     }
 )
+REQUIRED_SOVEREIGN_AI_SEAT_ACKNOWLEDGEMENTS = frozenset(
+    {
+        "AI_ACCOUNT_IS_NOT_PERSON_IDENTITY",
+        "AI_ACCOUNT_IS_NOT_TOTAL_FIELD_AUTHORITY",
+        "MEMBER_PERMISSIONS_COME_FROM_PERSON_PACKET",
+        "UNVERIFIED_SEAT_CANNOT_MODIFY_SYSTEM",
+        "SYSTEM_MUTATION_REQUIRES_FOUNDER_VERIFICATION_AND_D8",
+        "ODOO_USE_IS_ROLE_SCOPED",
+        "PROVIDER_CREDENTIALS_ARE_NOT_EXPOSED_TO_MODEL",
+    }
+)
+SOVEREIGN_AI_MEMBER_ALLOWED_CAPABILITIES = frozenset(
+    {
+        "READ_MINIMUM_DYNAMIC_CONTEXT",
+        "ODOO_ROLE_SCOPED_BUSINESS_USE",
+        "USE_MEMBER_OWN_AI_CAPABILITY",
+        "SUBMIT_CANDIDATE_RESULT",
+    }
+)
+SOVEREIGN_AI_SYSTEM_MUTATION_CAPABILITIES = frozenset(
+    {
+        "SYSTEM_MUTATION",
+        "CODE_WRITE",
+        "MODULE_INSTALL",
+        "CONFIG_WRITE",
+        "SERVICE_CONTROL",
+        "ROUTER_CONTROL",
+        "CANONICAL_WRITE",
+        "AUTHORITY_CHANGE",
+        "ROLE_ELEVATION",
+    }
+)
 INTENT_TRANSLATION_RUNTIME_PROFILE_RELATIVE_PATH = Path(
     "configs/total_field/active_total_field_authority_runtime_v1.json"
 )
@@ -1957,11 +1989,17 @@ def build_dynamic_context(
                 "identity_and_seat_are_envelope_preconditions": True,
                 "identity_is_d1": False,
                 "identity_is_d8": False,
+                "one_person_one_sovereign_identity_packet": True,
+                "permissions_are_packet_scoped": True,
                 "authority_root": "FOUNDER_TOTAL_FIELD_ONLY",
                 "member_identity_scope": "SCOPED_MEMBER_NO_TOTAL_FIELD_AUTHORITY",
                 "founder_path_blocked_by_member_system": False,
                 "member_projection_target": "EXISTING_ODOO_USERS_CONTACTS_PORTAL",
                 "odoo_is_total_field_authority": False,
+                "founder_login_providers": ["LINE", "GOOGLE"],
+                "login_provider_is_authenticator_not_authority": True,
+                "provider_subjects_map_to_same_person_packet": True,
+                "automatic_email_identity_merge": False,
                 "member_packet_fields": [
                     "ISSUER_REF",
                     "SUBJECT_REF",
@@ -1976,6 +2014,28 @@ def build_dynamic_context(
                 "membership_change_rehashes_canonical_root": False,
                 "membership_change_may_rewrite_header": False,
                 "member_effect_requires_separate_d8": True,
+                "default_ai_seat": "CLOUD_CANDIDATE_SMALL_MODEL",
+                "member_owned_ai_capability_allowed": True,
+                "member_provider_usage_budget_isolated": True,
+                "central_cloud_usage_default": "NOT_USED",
+                "system_mutation_default": False,
+                "system_mutation_eligibility": "FOUNDER_VERIFIED_PERSON_PACKET_ONLY",
+                "founder_verification_is_not_d8": True,
+                "unverified_system_mutation": "BLOCK",
+                "browser_ai_interface": {
+                    "selected_projection": "OPEN_WEBUI",
+                    "role": "BROWSER_ONLY_AI_SEAT_AND_MODEL_SELECTION",
+                    "is_xiaoj_core": False,
+                    "is_person_identity_root": False,
+                    "is_total_field_authority": False,
+                    "odoo_capability_access": "PERSON_PACKET_ROLE_SCOPED_ADAPTER_ONLY",
+                    "member_ai_provider_session": "MEMBER_OWNED_OPAQUE_CONNECTOR",
+                    "provider_credentials_visible_to_model": False,
+                    "provider_result": "CANDIDATE_RETURN_TO_TOTAL_FIELD",
+                    "parallel_member_system": False,
+                    "configuration_write_authority": False,
+                    "live_compatibility_reobservation_required_before_write": True,
+                },
                 "interface": "BROWSER_FORM_SELECTION",
                 "member_runtime_wiring_state": "NOT_YET_OBSERVED",
             },
@@ -3224,6 +3284,214 @@ def build_v_shape_vram_prediction_projection(
         },
         "numeric_distance_model_used": False,
         "semantic_similarity_used": False,
+    }
+    return _finalize_packet(packet)
+
+
+def build_sovereign_ai_member_seat_admission(
+    *,
+    person_packet_ref: str,
+    tenant_ref: str,
+    seat_ref: str,
+    person_permission_scopes: Collection[str],
+    login_provider: str,
+    login_subject_ref: str,
+    login_binding_receipt_ref: str,
+    login_binding_verified: bool,
+    ai_provider_id: str,
+    provider_ai_session_ref: str,
+    provider_ai_session_verified: bool,
+    small_model_ref: str,
+    requested_capabilities: Collection[str],
+    acknowledged_invariants: Collection[str],
+    founder_verified_for_system_mutation: bool = False,
+    session_ttl_seconds: int = 900,
+) -> dict[str, Any]:
+    """Build one provider-neutral, non-authoritative XiaoJ member seat decision."""
+
+    refs = {
+        "person_packet_ref": person_packet_ref,
+        "tenant_ref": tenant_ref,
+        "seat_ref": seat_ref,
+        "login_subject_ref": login_subject_ref,
+        "login_binding_receipt_ref": login_binding_receipt_ref,
+        "provider_ai_session_ref": provider_ai_session_ref,
+        "small_model_ref": small_model_ref,
+    }
+    invalid_refs = sorted(
+        key
+        for key, value in refs.items()
+        if not isinstance(value, str)
+        or not value.strip()
+        or len(value) > 512
+        or "@" in value
+        or any(character.isspace() for character in value)
+    )
+    invalid_collections = sorted(
+        name
+        for name, value in {
+            "person_permission_scopes": person_permission_scopes,
+            "requested_capabilities": requested_capabilities,
+            "acknowledged_invariants": acknowledged_invariants,
+        }.items()
+        if isinstance(value, (str, bytes, Mapping))
+        or not isinstance(value, Collection)
+        or any(not isinstance(item, str) or not item.strip() for item in value)
+    )
+    normalized_login_provider = (
+        login_provider.strip().upper() if isinstance(login_provider, str) else ""
+    )
+    normalized_ai_provider = (
+        ai_provider_id.strip() if isinstance(ai_provider_id, str) else ""
+    )
+    permissions = sorted(
+        {
+            str(item).strip().upper()
+            for item in (
+                person_permission_scopes if not invalid_collections else ()
+            )
+            if isinstance(item, str) and item.strip()
+        }
+    )
+    requested = sorted(
+        {
+            str(item).strip().upper()
+            for item in (
+                requested_capabilities if not invalid_collections else ()
+            )
+            if isinstance(item, str) and item.strip()
+        }
+    )
+    acknowledgements = {
+        str(item).strip().upper()
+        for item in (
+            acknowledged_invariants if not invalid_collections else ()
+        )
+        if isinstance(item, str) and item.strip()
+    }
+    missing_acknowledgements = sorted(
+        REQUIRED_SOVEREIGN_AI_SEAT_ACKNOWLEDGEMENTS - acknowledgements
+    )
+    unsupported = sorted(
+        set(requested)
+        - SOVEREIGN_AI_MEMBER_ALLOWED_CAPABILITIES
+        - SOVEREIGN_AI_SYSTEM_MUTATION_CAPABILITIES
+    )
+    outside_person_permissions = sorted(set(requested) - set(permissions))
+    requested_system_mutations = sorted(
+        set(requested) & SOVEREIGN_AI_SYSTEM_MUTATION_CAPABILITIES
+    )
+    invalid_ttl = (
+        isinstance(session_ttl_seconds, bool)
+        or not isinstance(session_ttl_seconds, int)
+        or not 60 <= session_ttl_seconds <= 3600
+    )
+
+    state = "PASS_CLOUD_CANDIDATE_SMALL_MODEL_SEAT"
+    reason = "member-owned AI capability admitted to a non-authoritative XiaoJ seat"
+    if (
+        invalid_refs
+        or invalid_collections
+        or not normalized_ai_provider
+        or not permissions
+        or not requested
+    ):
+        state = "HOLD_SOVEREIGN_AI_SEAT_INPUT_INVALID"
+        reason = "opaque identity, seat, provider-session, and model references are required"
+    elif normalized_login_provider not in {"LINE", "GOOGLE"}:
+        state = "HOLD_LOGIN_PROVIDER_NOT_BOUND"
+        reason = "the current sovereign person-packet login bindings are LINE and GOOGLE"
+    elif login_binding_verified is not True:
+        state = "HOLD_PERSON_PACKET_LOGIN_BINDING_UNVERIFIED"
+        reason = "login provider proof is not verified against the sovereign person packet"
+    elif provider_ai_session_verified is not True:
+        state = "HOLD_MEMBER_AI_PROVIDER_SESSION_UNVERIFIED"
+        reason = "member-owned AI provider session has no verified connector receipt"
+    elif missing_acknowledgements:
+        state = "HOLD_SOVEREIGN_AI_SEAT_ALIGNMENT_INCOMPLETE"
+        reason = "required authority and credential boundaries were not acknowledged"
+    elif unsupported:
+        state = "BLOCK_UNREGISTERED_AI_SEAT_CAPABILITY"
+        reason = "requested capability is outside the registered XiaoJ seat contract"
+    elif outside_person_permissions:
+        state = "BLOCK_PERSON_PACKET_PERMISSION_SCOPE"
+        reason = "requested capability is not granted by this person's packet"
+    elif requested_system_mutations and founder_verified_for_system_mutation is not True:
+        state = "BLOCK_SYSTEM_MUTATION_UNVERIFIED_PERSON_PACKET"
+        reason = "only a Founder-verified person packet may request system mutation"
+    elif requested_system_mutations:
+        state = "HOLD_SYSTEM_MUTATION_D8_REQUIRED"
+        reason = "Founder verification grants eligibility only; an exact D8 operation envelope is still required"
+    elif invalid_ttl:
+        state = "HOLD_SOVEREIGN_AI_SEAT_TTL_INVALID"
+        reason = "candidate seat TTL must be between 60 and 3600 seconds"
+
+    packet = {
+        "schema_id": "W7TP_XIAOJ_SOVEREIGN_AI_MEMBER_SEAT_ADMISSION_V1",
+        "state": state,
+        "candidate_only": True,
+        "credentials_included": False,
+        "D1_INTENT": {
+            "intent": "USE_MEMBER_OWN_AI_CAPABILITY_THROUGH_XIAOJ_CLOUD_CANDIDATE_SEAT",
+            "central_usage_default": "NOT_USED",
+        },
+        "D2_STATE": {
+            "person_packet_state": "LOGIN_BOUND" if login_binding_verified else "UNVERIFIED",
+            "ai_seat_state": state,
+            "model_class": "SMALL_MODEL",
+        },
+        "D3_COORDINATE": {
+            **refs,
+            "login_provider": normalized_login_provider,
+            "ai_provider_id": normalized_ai_provider,
+            "one_person_one_packet": True,
+        },
+        "D4_EVIDENCE": {
+            "login_binding_verified": login_binding_verified is True,
+            "provider_ai_session_verified": provider_ai_session_verified is True,
+            "verification_receipts_are_references_only": True,
+            "production_connector_must_verify_receipts": True,
+        },
+        "D5_EXECUTION_POLICY": {
+            "person_permission_scopes": permissions,
+            "requested_capabilities": requested,
+            "odoo_use": "PERSON_PACKET_ROLE_SCOPED_BUSINESS_OPERATIONS_ONLY",
+            "odoo_system_administration": False,
+            "direct_system_mutation": False,
+            "requested_system_mutations": requested_system_mutations,
+            "founder_verified_for_system_mutation": (
+                founder_verified_for_system_mutation is True
+            ),
+        },
+        "D6_GENERATIVE_TRANSMISSION": {
+            "local_small_model_role": "INTENT_COMPRESSION_ROUTING_AND_MINIMUM_CONTEXT",
+            "member_owned_ai_capability": True,
+            "member_ai_usage_charge_owner": "MEMBER_PROVIDER_ACCOUNT",
+            "full_context_transfer": False,
+            "context_input": "MINIMUM_8DADI_DYNAMIC_WINDOW_ONLY",
+            "provider_result": "CANDIDATE_RETURN_TO_TOTAL_FIELD",
+        },
+        "D7_RISK_QUARANTINE": {
+            "automatic_email_identity_merge": False,
+            "raw_provider_credentials_to_model": False,
+            "unverified_system_mutation": "BLOCK",
+            "unsupported_provider_connector": "HOLD",
+            "missing_acknowledgements": missing_acknowledgements,
+            "invalid_collections": invalid_collections,
+            "unsupported_capabilities": unsupported,
+            "outside_person_permissions": outside_person_permissions,
+            "session_ttl_seconds": session_ttl_seconds,
+        },
+        "D8_ENVELOPE_AUTHORITY": {
+            "ai_account_authority": False,
+            "login_provider_authority": False,
+            "odoo_authority": False,
+            "founder_verification_is_d8": False,
+            "system_mutation_requires_exact_d8": True,
+            "operation_authority": False,
+            "canonical": False,
+        },
+        "reason": reason,
     }
     return _finalize_packet(packet)
 
