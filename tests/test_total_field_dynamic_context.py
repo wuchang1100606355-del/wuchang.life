@@ -531,6 +531,25 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
         self.assertFalse(contract["source_data_destruction"])
         self.assertFalse(contract["operation_authority"])
 
+    def test_member_identity_cannot_block_or_override_total_field_authority(self):
+        packet = build_dynamic_context(
+            "會員系統必須接入 Odoo 但不得取得總場權威",
+            root=ROOT,
+            max_items=4,
+            identity_class="founder",
+            generated_at="2026-09-03T00:00:00+00:00",
+        )
+        contract = packet["identity_seat_boundary_contract"]
+        self.assertTrue(contract["identity_and_seat_are_envelope_preconditions"])
+        self.assertFalse(contract["identity_is_d1"])
+        self.assertFalse(contract["identity_is_d8"])
+        self.assertFalse(contract["founder_path_blocked_by_member_system"])
+        self.assertFalse(contract["odoo_is_total_field_authority"])
+        self.assertFalse(contract["member_plaintext_in_total_field"])
+        self.assertFalse(contract["membership_change_rehashes_canonical_root"])
+        self.assertFalse(contract["membership_change_may_rewrite_header"])
+        self.assertTrue(contract["member_effect_requires_separate_d8"])
+
     def test_dynamic_context_regions_are_intent_controlled_inside_one_envelope(self):
         packet = build_dynamic_context(
             "依最新意圖劃分上下文區域",

@@ -1912,8 +1912,8 @@ def build_dynamic_context(
                 "payloads_inlined": False,
             },
         },
-        "context_layout_contract": {
-            "schema_id": "W7TP_INTENT_CONTROLLED_CONTEXT_LAYOUT_V1",
+            "context_layout_contract": {
+                "schema_id": "W7TP_INTENT_CONTROLLED_CONTEXT_LAYOUT_V1",
             "zones": {
                 "HEADER_IMMUTABLE": {
                     "mutable": False,
@@ -1949,10 +1949,37 @@ def build_dynamic_context(
                     },
                 },
             },
-            "single_total_field_envelope": True,
-            "model_may_rewrite_layout": False,
-        },
-        "vram_prediction_workflow_contract": {
+                "single_total_field_envelope": True,
+                "model_may_rewrite_layout": False,
+            },
+            "identity_seat_boundary_contract": {
+                "schema_id": "W7TP_IDENTITY_SEAT_BOUNDARY_V1",
+                "identity_and_seat_are_envelope_preconditions": True,
+                "identity_is_d1": False,
+                "identity_is_d8": False,
+                "authority_root": "FOUNDER_TOTAL_FIELD_ONLY",
+                "member_identity_scope": "SCOPED_MEMBER_NO_TOTAL_FIELD_AUTHORITY",
+                "founder_path_blocked_by_member_system": False,
+                "member_projection_target": "EXISTING_ODOO_USERS_CONTACTS_PORTAL",
+                "odoo_is_total_field_authority": False,
+                "member_packet_fields": [
+                    "ISSUER_REF",
+                    "SUBJECT_REF",
+                    "AUDIENCE_REF",
+                    "TENANT_REF",
+                    "SEAT_REF",
+                    "NONCE_REF",
+                    "REVOCATION_REF",
+                ],
+                "member_plaintext_in_total_field": False,
+                "membership_change_updates": "MEMBER_LINEAGE_DELTA_ONLY",
+                "membership_change_rehashes_canonical_root": False,
+                "membership_change_may_rewrite_header": False,
+                "member_effect_requires_separate_d8": True,
+                "interface": "BROWSER_FORM_SELECTION",
+                "member_runtime_wiring_state": "NOT_YET_OBSERVED",
+            },
+            "vram_prediction_workflow_contract": {
             "schema_id": "W7TP_8DADI_V_SHAPE_VRAM_PREDICTION_PROJECTION_V1",
             "context_control": "CURRENT_FOUNDER_INTENT_TO_8DADI_DEPENDENCY_CLOSURE",
             "context_region_mapping": {
