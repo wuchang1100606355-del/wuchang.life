@@ -1831,6 +1831,194 @@ def build_dynamic_context(
             "completion_requires_reobserved_target_match": True,
             "formal_decision_authority": False,
         },
+        "context_region_contract": {
+            "schema_id": "W7TP_INTENT_CONTROLLED_CONTEXT_REGIONS_V1",
+            "single_total_field_envelope": True,
+            "selection": "CURRENT_FOUNDER_INTENT_TO_8DADI_EXACT_DEPENDENCY_CLOSURE",
+            "semantic_similarity_used": False,
+            "workspace_search": False,
+            "regions": {
+                "CORE_AUTHORITY": {
+                    "residency": "PINNED_MINIMUM",
+                    "content": "INVARIANTS_AUTHORITY_AND_RISK_BOUNDARY",
+                    "volatile": False,
+                },
+                "CURRENT_INTENT_TASK": {
+                    "residency": "ACTIVE_INTENT_BOUND",
+                    "content": "TARGET_STATE_AND_CURRENT_TASK",
+                    "volatile": False,
+                },
+                "ADI_RETRIEVED_DEPENDENCY": {
+                    "residency": "ON_DEMAND",
+                    "content": "EXACT_REQUIRED_DEPENDENCY_CLOSURE",
+                    "volatile": True,
+                },
+                "GENERATIVE_DELTA": {
+                    "residency": "ON_DEMAND",
+                    "content": "IRREDUCIBLE_NOVEL_DELTA_ONLY",
+                    "volatile": True,
+                },
+                "EXCLUDED_D4_REFERENCES": {
+                    "residency": "REFERENCE_ONLY_NOT_MODEL_OR_VRAM",
+                    "content": "LINEAGE_EVIDENCE_AND_EXCLUSION_REASON",
+                    "volatile": False,
+                },
+                "TRANSIENT_WORKING_SET": {
+                    "residency": "TTL_VOLATILE",
+                    "content": "TASK_LOCAL_RECONSTRUCTED_STATE",
+                    "volatile": True,
+                },
+            },
+            "region_may_change_authority": False,
+            "model_may_move_item_between_regions": False,
+        },
+        "context_regions": {
+            "CORE_AUTHORITY": {
+                "source_binding_refs": sorted(
+                    {
+                        str(item.get("relative_path"))
+                        for item in bindings
+                        if isinstance(item, Mapping) and item.get("relative_path")
+                    }
+                ),
+                "payloads_inlined": False,
+                },
+                "CURRENT_INTENT_TASK": {
+                    "intent_projection_sha256": (
+                        founder_intent_projection.get("packet_sha256")
+                        if isinstance(founder_intent_projection, Mapping)
+                        else None
+                    ),
+                    "query_inlined": False,
+                },
+            "ADI_RETRIEVED_DEPENDENCY": {
+                "item_refs": [
+                    {
+                        "relative_path": item["relative_path"],
+                        "sha256": item["sha256"],
+                    }
+                    for item in selected
+                ],
+                "payloads_inlined": False,
+            },
+            "GENERATIVE_DELTA": {"item_refs": [], "payloads_inlined": False},
+            "EXCLUDED_D4_REFERENCES": {
+                "categories": sorted(excluded),
+                "payloads_inlined": False,
+            },
+            "TRANSIENT_WORKING_SET": {
+                "item_refs": [],
+                "lifecycle": "TTL_VOLATILE",
+                "payloads_inlined": False,
+            },
+        },
+        "context_layout_contract": {
+            "schema_id": "W7TP_INTENT_CONTROLLED_CONTEXT_LAYOUT_V1",
+            "zones": {
+                "HEADER_IMMUTABLE": {
+                    "mutable": False,
+                    "region_refs": ["CORE_AUTHORITY"],
+                    "content": [
+                        "FOUNDER_INTENT_SOURCE",
+                        "8D_INVARIANTS",
+                        "AUTHORITY_BOUNDARY",
+                        "RISK_BOUNDARY",
+                    ],
+                },
+                "DYNAMIC_INTENT_WINDOW": {
+                    "rebuilt_per_intent": True,
+                    "region_refs": [
+                        "CURRENT_INTENT_TASK",
+                        "ADI_RETRIEVED_DEPENDENCY",
+                        "GENERATIVE_DELTA",
+                        "EXCLUDED_D4_REFERENCES",
+                        "TRANSIENT_WORKING_SET",
+                    ],
+                    "selection": "8DADI_EXACT_DEPENDENCY_CLOSURE",
+                },
+                "PERSONALIZATION_SETTINGS": {
+                    "persistent_preferences_allowed": True,
+                    "presentation_only": True,
+                    "may_override_header": False,
+                    "may_change_d8_authority": False,
+                    "may_change_canonical": False,
+                    "defaults": {
+                        "language": "zh-TW",
+                        "english_term_requires_zh_tw_translation": True,
+                        "interface": "BROWSER_FORM_SELECTION",
+                    },
+                },
+            },
+            "single_total_field_envelope": True,
+            "model_may_rewrite_layout": False,
+        },
+        "vram_prediction_workflow_contract": {
+            "schema_id": "W7TP_8DADI_V_SHAPE_VRAM_PREDICTION_PROJECTION_V1",
+            "context_control": "CURRENT_FOUNDER_INTENT_TO_8DADI_DEPENDENCY_CLOSURE",
+            "context_region_mapping": {
+                "pinned": ["CORE_AUTHORITY", "CURRENT_INTENT_TASK"],
+                "on_demand": ["ADI_RETRIEVED_DEPENDENCY", "GENERATIVE_DELTA"],
+                "not_vram": ["EXCLUDED_D4_REFERENCES"],
+                "volatile": ["TRANSIENT_WORKING_SET"],
+            },
+            "hit_definition": "REQUIRED_BY_CURRENT_INTENT_CLOSURE",
+            "recency_or_frequency_is_d4_only": True,
+            "model_may_expand_context": False,
+            "state_cell_model": "DISCRETE_GRID",
+            "grid_axes": ["LOGICAL_TIME", "HIT_STATE", "STORAGE_STATE"],
+            "grid_assignment": "INPUT_8DADI_COORDINATE_ONLY",
+            "locator": "ADI_EXACT_OBJECT_ID_TO_CURRENT_MEMORY_TIER",
+            "workspace_search": False,
+            "vertex": "CURRENT_LOGICAL_TIME",
+            "opening_direction": "FUTURE",
+            "hit_axis": "KEEP_PREDICTED_HIT_OBJECTS_VRAM_RESIDENT",
+            "unhit_branch": "RELEASE_VRAM_RESIDENCY_KEEP_STORAGE_AND_RECONSTRUCTION_REFS",
+            "prediction_miss": "EARLY_RELEASE_VRAM_RESIDENCY_ONLY",
+            "prediction_false_negative": "8DADI_MINIMUM_DELTA_RECONSTRUCT_THEN_KEEP",
+            "edge_information_state": "VOLATILE_NATURAL_DISSIPATION",
+            "retrieval": "8DADI_ON_DEMAND_RECONSTRUCTION",
+            "transmission_compensates_cache": True,
+            "generative_transmission_definition": (
+                "TRANSMIT_MINIMUM_STATE_GENERATOR_NOT_MATERIALIZED_TENSOR"
+            ),
+            "generative_packet_content": [
+                "INTENT_CONSTRAINTS",
+                "ADI_COORDINATES",
+                "LINEAGE",
+                "GENERATION_RULES",
+                "SEED_SIZE_STATE_COMMITMENT",
+                "IRREDUCIBLE_NOVEL_DELTA_ONLY",
+            ],
+            "receiver_reconstructs_with_local_resources": True,
+            "cpu_cache_transferable_to_gpu": False,
+            "host_ram_staging_allowed": True,
+            "host_to_gpu_transfer": "ASYNC_DMA_WHEN_RUNTIME_SUPPORTS",
+            "memory_tiers": [
+                "GPU_VRAM",
+                "PINNED_HOST_RAM",
+                "LOCAL_STORAGE_STATE",
+                "LAN_NODE",
+                "MINIMUM_CLOUD_DELTA",
+            ],
+            "dual_storage_mapping": {
+                "mode": "ADI_LOGICAL_GENERATIVE_STATE_MAPPING",
+                "local": "PRIMARY_RECONSTRUCTION_BASE",
+                "cloud": "MINIMUM_GENERATIVE_COMPLETION_SECONDARY",
+                "cloud_full_state_cache": False,
+                "cloud_direct_to_vram": False,
+                "staging_chain": [
+                    "GENERATIVE_STATE_PROJECTION_PACKET",
+                    "LOCAL_8DADI_RECONSTRUCTION",
+                    "HOST_RAM_MATERIALIZATION",
+                    "PINNED_HOST_RAM",
+                    "GPU_VRAM_STATE_CELL",
+                ],
+            },
+            "cloud_input": "MINIMUM_PARTIAL_INFORMATION_ONLY",
+            "source_data_destruction": False,
+            "numeric_distance_contract": "NOT_DEFINED_NO_FLOAT_INFERENCE",
+            "operation_authority": False,
+        },
         "excluded_categories": sorted(excluded),
         "sensitive_files_omitted": sensitive_omitted,
         "capability_route": (
@@ -2518,6 +2706,11 @@ def build_total_field_capability_requirement_packet(
             "coordinates": [report["missing_lookup_resource"]],
             "reconstruction_rules": ["REUSE_TARGET_NATIVE_FIRST", "GENERATE_ONLY_MISSING_CAPABILITY"],
             "verification_rules": [report["missing_verification_capability"]],
+            "cloud_input_scope": "MINIMUM_TASK_REQUIRED_PARTIAL_INFORMATION",
+            "cloud_result_role": "INCOMPLETE_DELTA_CANDIDATE_ONLY",
+            "local_reconstruction": "8DADI_INDEX_LINEAGE_RULE_BOUND",
+            "full_context_transmission": False,
+            "return_to_total_field_before_effect": True,
         },
         "D7_RISK_QUARANTINE": {
             "sensitive_data_route": "TOTAL_FIELD_REQUIRED",
@@ -2780,6 +2973,234 @@ def select_smallest_sufficient_memory_set(
     return _finalize_packet(memory_set)
 
 
+def build_v_shape_vram_prediction_projection(
+    *,
+    intent_ref: str,
+    current_logical_time: int,
+    receiver_id: str,
+    item_observations: Collection[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Project VRAM residency from explicit hit evidence without deleting source data."""
+    if (
+        isinstance(current_logical_time, bool)
+        or not isinstance(current_logical_time, int)
+        or current_logical_time < 0
+    ):
+        raise ValueError("VRAM_CURRENT_LOGICAL_TIME_INVALID")
+    intent = _require_non_empty_string(intent_ref, "intent_ref")
+    receiver = _require_non_empty_string(receiver_id, "receiver_id")
+    expected_fields = {
+        "object_id",
+        "coordinate",
+        "grid_cell_ref",
+        "adi_locator_ref",
+        "state_sha256",
+        "last_hit_logical_time",
+        "predicted_hit",
+        "observed_hit_state",
+        "vram_bytes",
+        "storage_state_ref",
+        "reconstruction_rule_ref",
+        "evidence_ref",
+    }
+    normalized: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for raw in item_observations:
+        if not isinstance(raw, Mapping) or set(raw) != expected_fields:
+            raise ValueError("VRAM_ITEM_OBSERVATION_SHAPE_MISMATCH")
+        object_id = _require_non_empty_string(raw.get("object_id"), "object_id")
+        if object_id in seen_ids:
+            raise ValueError("VRAM_OBJECT_ID_COLLISION")
+        seen_ids.add(object_id)
+        coordinate = _require_non_empty_string(raw.get("coordinate"), "coordinate")
+        if coordinate.startswith("/") or "\\" in coordinate or ".." in Path(coordinate).parts:
+            raise ValueError(f"VRAM_OBJECT_COORDINATE_INVALID:{object_id}")
+        last_hit = raw.get("last_hit_logical_time")
+        if (
+            isinstance(last_hit, bool)
+            or not isinstance(last_hit, int)
+            or last_hit < 0
+            or last_hit > current_logical_time
+        ):
+            raise ValueError(f"VRAM_LAST_HIT_LOGICAL_TIME_INVALID:{object_id}")
+        predicted_hit = raw.get("predicted_hit")
+        if not isinstance(predicted_hit, bool):
+            raise ValueError(f"VRAM_PREDICTED_HIT_INVALID:{object_id}")
+        observed_hit_state = raw.get("observed_hit_state")
+        if observed_hit_state not in {"UNKNOWN", "HIT", "MISS"}:
+            raise ValueError(f"VRAM_OBSERVED_HIT_STATE_INVALID:{object_id}")
+        vram_bytes = raw.get("vram_bytes")
+        if isinstance(vram_bytes, bool) or not isinstance(vram_bytes, int) or vram_bytes < 0:
+            raise ValueError(f"VRAM_BYTES_INVALID:{object_id}")
+        normalized.append(
+            {
+                "object_id": object_id,
+                "coordinate": coordinate,
+                "grid_cell_ref": _require_non_empty_string(
+                    raw.get("grid_cell_ref"), f"{object_id}.grid_cell_ref"
+                ),
+                "adi_locator_ref": _require_non_empty_string(
+                    raw.get("adi_locator_ref"), f"{object_id}.adi_locator_ref"
+                ),
+                "state_sha256": _require_sha256(
+                    raw.get("state_sha256"), f"{object_id}.state_sha256"
+                ),
+                "last_hit_logical_time": last_hit,
+                "predicted_hit": predicted_hit,
+                "observed_hit_state": observed_hit_state,
+                "vram_bytes": vram_bytes,
+                "storage_state_ref": _require_non_empty_string(
+                    raw.get("storage_state_ref"), f"{object_id}.storage_state_ref"
+                ),
+                "reconstruction_rule_ref": _require_non_empty_string(
+                    raw.get("reconstruction_rule_ref"),
+                    f"{object_id}.reconstruction_rule_ref",
+                ),
+                "evidence_ref": _require_non_empty_string(
+                    raw.get("evidence_ref"), f"{object_id}.evidence_ref"
+                ),
+            }
+        )
+    normalized.sort(key=lambda item: item["object_id"])
+    hit_axis: list[dict[str, Any]] = []
+    unhit_routes: list[dict[str, Any]] = []
+    for item in normalized:
+        observed = item["observed_hit_state"]
+        keep_resident = observed == "HIT" or (observed == "UNKNOWN" and item["predicted_hit"])
+        if keep_resident:
+            false_negative = observed == "HIT" and not item["predicted_hit"]
+            hit_axis.append(
+                {
+                    **item,
+                    "v_shape_coordinate": "CENTER_HIT_AXIS",
+                    "prediction_outcome": (
+                        "FALSE_NEGATIVE_RECOVERED_ON_DEMAND"
+                        if false_negative
+                        else "PREDICTION_PENDING" if observed == "UNKNOWN" else "HIT_CONFIRMED"
+                    ),
+                    "vram_action": (
+                        "8DADI_MINIMUM_DELTA_RECONSTRUCT_THEN_KEEP"
+                        if false_negative
+                        else "KEEP_VRAM_RESIDENT"
+                    ),
+                }
+            )
+            continue
+        prediction_miss = observed == "MISS" and item["predicted_hit"]
+        unhit_routes.append(
+            {
+                **item,
+                "v_shape_coordinate": "FUTURE_OPEN_UNHIT_BRANCH",
+                "prediction_outcome": (
+                    "PREDICTION_MISS_EARLY_RELEASE"
+                    if prediction_miss
+                    else "PREDICTED_UNHIT" if observed == "UNKNOWN" else "MISS_CONFIRMED"
+                ),
+                "vram_action": (
+                    "EARLY_RELEASE_VRAM_RESIDENCY_ONLY"
+                    if prediction_miss
+                    else "RELEASE_VRAM_RESIDENCY_ONLY"
+                ),
+                "edge_information_state": "VOLATILE_NATURAL_DISSIPATION",
+                "future_action": "8DADI_RECONSTRUCT_ON_DEMAND",
+                "source_data_effect": "NONE",
+            }
+        )
+    packet = {
+        "schema_id": "W7TP_8DADI_V_SHAPE_VRAM_PREDICTION_PROJECTION_V1",
+        "state": "V_SHAPE_VRAM_PREDICTION_PROJECTION_READY",
+        "D1_INTENT": {
+            "intent_ref": intent,
+            "effect": "MAXIMIZE_AVAILABLE_VRAM_AND_RECONSTRUCT_ON_DEMAND",
+            "context_control": "CURRENT_INTENT_ONLY",
+        },
+        "D2_STATE": {
+            "hit_object_count": len(hit_axis),
+            "unhit_object_count": len(unhit_routes),
+            "retained_vram_bytes": sum(item["vram_bytes"] for item in hit_axis),
+            "released_vram_bytes": sum(item["vram_bytes"] for item in unhit_routes),
+        },
+        "D3_COORDINATE": {
+            "receiver_id": receiver,
+            "vertex_logical_time": current_logical_time,
+            "opening_direction": "FUTURE",
+            "state_cell_model": "DISCRETE_GRID",
+            "grid_axes": ["LOGICAL_TIME", "HIT_STATE", "STORAGE_STATE"],
+            "grid_assignment": "INPUT_8DADI_COORDINATE_ONLY",
+            "locator": "ADI_EXACT_OBJECT_ID_TO_CURRENT_MEMORY_TIER",
+            "locator_refs": sorted({item["adi_locator_ref"] for item in normalized}),
+            "workspace_search": False,
+            "geometry": "SYMBOLIC_V_SHAPE_NO_FLOAT_DISTANCE",
+        },
+        "D4_EVIDENCE": {
+            "hit_signal_authority": "CURRENT_INTENT_CLOSURE_INPUT_EVIDENCE_ONLY",
+            "recency_or_frequency_authority": False,
+            "evidence_refs": sorted({item["evidence_ref"] for item in normalized}),
+            "state_sha256_refs": sorted({item["state_sha256"] for item in normalized}),
+        },
+        "D5_EXECUTION_POLICY": {
+            "hit_axis": hit_axis,
+            "unhit_routes": unhit_routes,
+            "persistent_source_destruction": False,
+            "storage_state_deletion": False,
+        },
+        "D6_GENERATIVE_TRANSMISSION": {
+            "retrieval_mode": "8DADI_ON_DEMAND",
+            "reconstruction_scope": "CURRENT_INTENT_REQUIRED_OBJECTS_ONLY",
+            "lookup_mode": "ADI_EXACT_OBJECT_ID_TO_CURRENT_TIER_COORDINATE",
+            "workspace_search": False,
+            "transmission_unit": "MINIMUM_GENERATIVE_STATE_PROJECTION_PACKET",
+            "transmitted_information": [
+                "INTENT_CONSTRAINTS",
+                "ADI_COORDINATES",
+                "LINEAGE",
+                "GENERATION_RULES",
+                "SEED_SIZE_STATE_COMMITMENT",
+                "IRREDUCIBLE_NOVEL_DELTA_ONLY",
+            ],
+            "receiver_reconstructs_with_local_resources": True,
+            "transmission_reconstructs_state_without_payload_cache": True,
+            "materialized_tensor_transfer": "ONLY_WHEN_IRREDUCIBLE_AND_AUTHORIZED",
+            "prediction_false_negative_action": "MINIMUM_DELTA_RECONSTRUCT_THEN_KEEP",
+            "cpu_cache_transferable_to_gpu": False,
+            "host_ram_staging_allowed": True,
+            "host_to_gpu_transfer": "ASYNC_DMA_WHEN_RUNTIME_SUPPORTS",
+            "memory_tier_order": [
+                "GPU_VRAM",
+                "PINNED_HOST_RAM",
+                "LOCAL_STORAGE_STATE",
+                "LAN_NODE",
+                "MINIMUM_CLOUD_DELTA",
+            ],
+            "dual_storage_mapping": "ADI_LOCAL_BASE_CLOUD_GENERATIVE_COMPLETION",
+            "physical_mapping": "POST_RECONSTRUCTION_HOST_RAM_TO_VRAM_MATERIALIZATION",
+            "local_storage_direct_to_gpu": "UNKNOWN_REQUIRES_RUNTIME_CAPABILITY_OBSERVATION",
+            "cloud_direct_to_vram": False,
+            "cloud_input_scope": "MINIMUM_PARTIAL_INFORMATION_ONLY",
+            "full_state_transfer": False,
+            "reconstruction_requires_state_hash_match": True,
+            "reconstruction_requires_effect_verification": True,
+        },
+        "D7_RISK_QUARANTINE": {
+            "hold_if_unreconstructable": True,
+            "hold_if_hash_mismatch": True,
+            "hold_if_hit_evidence_missing": True,
+            "edge_information_may_dissipate_only_after_refs_preserved": True,
+        },
+        "D8_ENVELOPE_AUTHORITY": {
+            "projection_only": True,
+            "operation_authority": False,
+            "model_authority": False,
+            "model_may_expand_context": False,
+            "canonical": False,
+            "total_field_redecision_required_before_external_effect": True,
+        },
+        "numeric_distance_model_used": False,
+        "semantic_similarity_used": False,
+    }
+    return _finalize_packet(packet)
+
+
 def build_local_llm_working_memory_projection(
     *,
     intent_ref: str,
@@ -2819,6 +3240,23 @@ def build_local_llm_working_memory_projection(
         "receiver_id": receiver_id,
         "receiver_capability_boundary": sorted(set(receiver_capability_boundary)),
         "physical_memory_mapping": False,
+        "working_memory_policy": {
+            "lifecycle": "VOLATILE_NATURAL_EXPIRY",
+            "context_control": "CURRENT_FOUNDER_INTENT_TO_8DADI_DEPENDENCY_CLOSURE",
+            "recency_or_frequency_is_d4_only": True,
+            "model_may_expand_context": False,
+            "cleanup_semantics": "RELEASE_WORKING_SET_REFERENCES_NOT_DATA_DESTRUCTION",
+            "persistent_payload_cache": False,
+            "cache_scope": "MINIMUM_INDEX_LINEAGE_EVIDENCE_RECONSTRUCTION_REFS_ONLY",
+            "retrieval_mode": "8DADI_ON_DEMAND",
+            "payload_prefetch": False,
+            "allocation_mode": "CALLER_BUDGETED_VOLATILE_WORKING_SET",
+            "reconstruct_after_release": True,
+            "cloud_fragment_policy": "MINIMUM_PARTIAL_INFORMATION_ONLY",
+            "cloud_fragment_authority": False,
+            "cloud_to_local_reconstruction": "8DADI_BOUND",
+            "total_field_redecision_required": True,
+        },
         "candidate_only": True,
     }
     if canonical_sha256(qualified_capability_packet) != original_hash:
