@@ -9,6 +9,11 @@ from typing import Any
 import requests
 from fastapi import APIRouter, HTTPException, Request
 
+from services.gateway.total_field_google_vertex import (
+    TOTAL_FIELD_GOOGLE_MODEL,
+    total_field_google_chat,
+)
+
 
 router = APIRouter(tags=["openai-compat"])
 
@@ -27,7 +32,9 @@ DEFAULT_MODEL = (
 )
 
 MODEL_ALIASES = {
-    "gemini": DEFAULT_MODEL,
+    "gemini": TOTAL_FIELD_GOOGLE_MODEL,
+    "w7tp-cloud": TOTAL_FIELD_GOOGLE_MODEL,
+    "google": TOTAL_FIELD_GOOGLE_MODEL,
     "local": DEFAULT_MODEL,
     "wuchang": DEFAULT_MODEL,
     "sister-j": DEFAULT_MODEL,
@@ -41,6 +48,8 @@ def list_models() -> dict[str, Any]:
     names = _available_models()
     if not names:
         names = [DEFAULT_MODEL]
+    if TOTAL_FIELD_GOOGLE_MODEL not in names:
+        names.insert(0, TOTAL_FIELD_GOOGLE_MODEL)
 
     return {
         "object": "list",
@@ -49,7 +58,11 @@ def list_models() -> dict[str, Any]:
                 "id": name,
                 "object": "model",
                 "created": 0,
-                "owned_by": "taiji-local",
+                "owned_by": (
+                    "total-field-google-vertex"
+                    if name == TOTAL_FIELD_GOOGLE_MODEL
+                    else "taiji-local"
+                ),
             }
             for name in names
         ],
@@ -67,10 +80,15 @@ async def chat_completions(request: Request) -> dict[str, Any]:
         raise HTTPException(status_code=422, detail="messages_or_prompt_required")
 
     model = _resolve_model(body.get("model"))
-    options = _ollama_options(body)
-
-    data, backend = _chat_with_fallback(model, messages, options)
-    content = _extract_content(data)
+    if model == TOTAL_FIELD_GOOGLE_MODEL:
+        content, usage, total_field_metadata = total_field_google_chat(messages, body)
+        backend = total_field_metadata["backend"]
+    else:
+        options = _ollama_options(body)
+        data, backend = _chat_with_fallback(model, messages, options)
+        content = _extract_content(data)
+        usage = _usage(data, messages, content)
+        total_field_metadata = {}
 
     return {
         "id": "chatcmpl-" + uuid.uuid4().hex,
@@ -87,11 +105,12 @@ async def chat_completions(request: Request) -> dict[str, Any]:
                 "finish_reason": "stop",
             }
         ],
-        "usage": _usage(data, messages, content),
+        "usage": usage,
         "taiji": {
             "compat_layer": "phase_b",
             "backend": backend,
             "plaintext_persisted": False,
+            **total_field_metadata,
         },
     }
 
@@ -152,6 +171,8 @@ def _available_models() -> list[str]:
 def _resolve_model(name: Any) -> str:
     requested = str(name or DEFAULT_MODEL)
     requested = MODEL_ALIASES.get(requested, requested)
+    if requested == TOTAL_FIELD_GOOGLE_MODEL:
+        return requested
     names = _available_models()
     if requested in names or not names:
         return requested
