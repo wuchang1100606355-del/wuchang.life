@@ -9,13 +9,30 @@ from typing import Any, Callable, Collection, Mapping
 ACTIVE_POINTER_LOOKUP_REF = "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
 RESOLVER_CANDIDATE_REL = "tools/total_field_authority_resolver.py"
 RESOLVER_CANDIDATE_SHA256 = (
-    "529e23cd07f3399eb0abcb7835533128486dd246bf96fde521847d136e4134cd"
+    "d04043ead2d90d4d0b83f7ae60d7ca36c09332acb12d63e3240957583f7f652e"
 )
 CURRENT_OWNER_REL = "tools/total_field_dynamic_context.py"
 CURRENT_OWNER_SHA256 = (
-    "0f264e36201f89d486276f4d296bc3f45665c54ce96f5db0755d40ef36268ea0"
+    "c6cedefd5573bafd822342d5047e497bf078e2811925172d43d2e5a3001061c8"
 )
 PASS_AUTHORITY_STATE = "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED"
+STATE_CELL_PILOT_SCOPE = "RUN_READ_ONLY_STATE_CELL_PILOT"
+STATE_CELL_PILOT_ACTION = "RUN_READ_ONLY_STATE_CELL_INDEX_PROJECTION"
+STATE_CELL_PILOT_NODE = "MSI"
+STATE_CELL_PILOT_MAXIMUM_EFFECT = "IN_MEMORY_READ_ONLY_ONLY"
+STATE_CELL_PILOT_FORBIDDEN_EFFECTS = frozenset(
+    {
+        "ACTIVE_POINTER_WRITE",
+        "CANONICAL_POINTER_WRITE",
+        "CLOUD_CALL",
+        "DB_WRITE",
+        "DEPLOY",
+        "FILE_DELETE",
+        "NETWORK_ROUTE_MUTATION",
+        "OLD_VERSION_EXECUTION",
+        "RESTART",
+    }
+)
 ALLOWED_CANDIDATE_STATES = {
     "CANDIDATE_ONLY",
     "CANDIDATE_ONLY_WITH_FORBIDDEN_FIELDS_REMOVED",
@@ -325,6 +342,27 @@ def receive_candidate_authority_bound(
             authority_resolution=authority_resolution,
         )
 
+    raw_scope_constraints = authority_resolution.get("authority_scope_constraints")
+    if not isinstance(raw_scope_constraints, Mapping):
+        return _safe_result(
+            "BLOCK_AUTHORITY_RESOLVER_INVALID",
+            "verified authority result has invalid authority_scope_constraints",
+            candidate_packet=candidate,
+            dynamic_context_packet=context,
+            authority_resolution=authority_resolution,
+        )
+    if (
+        authority_resolution.get("authority_scope") == [STATE_CELL_PILOT_SCOPE]
+        and not raw_scope_constraints
+    ):
+        return _safe_result(
+            "BLOCK_AUTHORITY_RESOLVER_INVALID",
+            "state-cell pilot authority omitted authority_scope_constraints",
+            candidate_packet=candidate,
+            dynamic_context_packet=context,
+            authority_resolution=authority_resolution,
+        )
+
     verified_authority_ref = {
         "schema_id": "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1",
         "authority_id": authority_resolution["authority_id"],
@@ -338,6 +376,7 @@ def receive_candidate_authority_bound(
         ],
         "access_profile_ref": authority_resolution["access_profile_ref"],
         "authority_scope": list(authority_resolution["authority_scope"]),
+        "authority_scope_constraints": dict(raw_scope_constraints),
         "expires_at": authority_resolution["expires_at"],
         "verifier_ref": authority_resolution["verifier_ref"],
         "authority_resolution_sha256": canonical_sha256(authority_resolution),
@@ -426,6 +465,84 @@ OPERATION_PROPOSAL_FIELDS = frozenset(
         "operation_authority",
     }
 )
+STATE_CELL_PILOT_PROPOSAL_FIELDS = OPERATION_PROPOSAL_FIELDS | frozenset(
+    {
+        "proposal_sha256",
+        "red_team_receipt_sha256",
+        "target_field_sha256",
+        "carrier_capability_registry_sha256",
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+    }
+)
+STATE_CELL_PILOT_CONSTRAINT_FIELDS = frozenset(
+    {
+        "proposal_sha256",
+        "red_team_receipt_sha256",
+        "target_field_sha256",
+        "carrier_capability_registry_sha256",
+        "target_node",
+        "object_id",
+        "exact_coordinate",
+        "authorized_action",
+        "authorized_steps_sha256",
+        "evidence_refs_sha256",
+        "maximum_effect",
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+        "forbidden_effects",
+        "operation_nonce",
+        "single_use_authorization_required",
+        "replay_protected",
+        "authority_signature_required",
+        "db_write",
+        "deploy",
+        "restart",
+        "network_route_mutation",
+        "cloud_call",
+        "file_delete",
+        "canonical_pointer_write",
+        "active_pointer_write",
+        "old_version_target_import",
+    }
+)
+STATE_CELL_PILOT_PACKET_FIELDS = frozenset(
+    {
+        "schema_id",
+        "operation_id",
+        "intent_ref",
+        "target_node",
+        "object_id",
+        "exact_coordinate",
+        "current_state_hash",
+        "input_hashes",
+        "proposal_sha256",
+        "red_team_receipt_sha256",
+        "target_field_sha256",
+        "carrier_capability_registry_sha256",
+        "authorized_action",
+        "authorized_steps",
+        "maximum_effect",
+        "forbidden_effects",
+        "expected_effect",
+        "rollback",
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+        "operation_nonce",
+        "ttl_seconds",
+        "issued_at",
+        "expires_at",
+        "single_use",
+        "evidence_refs",
+        "D8_AUTHORITY",
+        "raw_llm_operation_authority",
+        "float_authority_dependency",
+        "packet_sha256",
+    }
+)
 
 
 def _operation_time(value: Any, path: str) -> datetime:
@@ -450,6 +567,153 @@ def _operation_hash(value: Any, path: str) -> str:
     return value
 
 
+def _operation_budget(value: Any, path: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError(f"POSITIVE_INTEGER_REQUIRED:{path}")
+    return value
+
+
+def _state_cell_pilot_constraints(
+    verified_authority_ref: Mapping[str, Any],
+) -> dict[str, Any]:
+    if (
+        verified_authority_ref.get("schema_id")
+        != "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1"
+    ):
+        raise ValueError("VERIFIED_TOTAL_FIELD_AUTHORITY_REQUIRED")
+    if verified_authority_ref.get("authority_scope") != [STATE_CELL_PILOT_SCOPE]:
+        raise ValueError("TOTAL_FIELD_OPERATION_SCOPE_FORBIDDEN")
+    raw = verified_authority_ref.get("authority_scope_constraints")
+    if not isinstance(raw, Mapping) or set(raw) != STATE_CELL_PILOT_CONSTRAINT_FIELDS:
+        raise ValueError("STATE_CELL_PILOT_SCOPE_CONSTRAINTS_INVALID")
+    constraints = dict(raw)
+    for field in (
+        "proposal_sha256",
+        "red_team_receipt_sha256",
+        "target_field_sha256",
+        "carrier_capability_registry_sha256",
+        "authorized_steps_sha256",
+        "evidence_refs_sha256",
+    ):
+        _operation_hash(constraints.get(field), f"authority_scope_constraints.{field}")
+    for field in (
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+    ):
+        _operation_budget(constraints.get(field), f"authority_scope_constraints.{field}")
+    if constraints.get("target_node") != STATE_CELL_PILOT_NODE:
+        raise ValueError("STATE_CELL_PILOT_NODE_INVALID")
+    if constraints.get("authorized_action") != STATE_CELL_PILOT_ACTION:
+        raise ValueError("STATE_CELL_PILOT_ACTION_INVALID")
+    if constraints.get("maximum_effect") != STATE_CELL_PILOT_MAXIMUM_EFFECT:
+        raise ValueError("STATE_CELL_PILOT_MAXIMUM_EFFECT_INVALID")
+    if set(constraints.get("forbidden_effects") or []) != STATE_CELL_PILOT_FORBIDDEN_EFFECTS:
+        raise ValueError("STATE_CELL_PILOT_FORBIDDEN_EFFECTS_INVALID")
+    if len(constraints["forbidden_effects"]) != len(STATE_CELL_PILOT_FORBIDDEN_EFFECTS):
+        raise ValueError("STATE_CELL_PILOT_FORBIDDEN_EFFECTS_DUPLICATED")
+    for field in (
+        "single_use_authorization_required",
+        "replay_protected",
+        "authority_signature_required",
+    ):
+        if constraints.get(field) is not True:
+            raise ValueError(f"STATE_CELL_PILOT_TRUE_REQUIRED:{field}")
+    for field in (
+        "db_write",
+        "deploy",
+        "restart",
+        "network_route_mutation",
+        "cloud_call",
+        "file_delete",
+        "canonical_pointer_write",
+        "active_pointer_write",
+        "old_version_target_import",
+    ):
+        if constraints.get(field) is not False:
+            raise ValueError(f"STATE_CELL_PILOT_FALSE_REQUIRED:{field}")
+    nonce = constraints.get("operation_nonce")
+    if not isinstance(nonce, str) or not nonce.startswith("nonce_ref:sha256:"):
+        raise ValueError("STATE_CELL_PILOT_OPERATION_NONCE_INVALID")
+    _operation_hash(nonce.removeprefix("nonce_ref:sha256:"), "operation_nonce")
+    for field in ("object_id", "exact_coordinate"):
+        if not isinstance(constraints.get(field), str) or not constraints[field].strip():
+            raise ValueError(f"STATE_CELL_PILOT_TEXT_REQUIRED:{field}")
+    return constraints
+
+
+def _require_state_cell_proposal_matches_scope(
+    proposal: Mapping[str, Any],
+    constraints: Mapping[str, Any],
+) -> None:
+    if set(proposal) != STATE_CELL_PILOT_PROPOSAL_FIELDS:
+        raise ValueError("STATE_CELL_PILOT_PROPOSAL_SHAPE_MISMATCH")
+    if (
+        proposal.get("schema_id") != "W7TP_OPERATION_PROPOSAL_V1"
+        or proposal.get("candidate_only") is not True
+        or proposal.get("operation_authority") is not False
+    ):
+        raise ValueError("RAW_PROPOSAL_AUTHORITY_FORBIDDEN")
+    for field in (
+        "proposal_sha256",
+        "red_team_receipt_sha256",
+        "target_field_sha256",
+        "carrier_capability_registry_sha256",
+    ):
+        value = _operation_hash(proposal.get(field), field)
+        if value != constraints[field]:
+            raise ValueError(f"STATE_CELL_PILOT_SCOPE_MISMATCH:{field}")
+    for field in (
+        "target_node",
+        "object_id",
+        "exact_coordinate",
+        "authorized_action",
+        "maximum_effect",
+    ):
+        if proposal.get(field) != constraints[field]:
+            raise ValueError(f"STATE_CELL_PILOT_SCOPE_MISMATCH:{field}")
+    for field in (
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+    ):
+        value = _operation_budget(proposal.get(field), field)
+        if value != constraints[field]:
+            raise ValueError(f"STATE_CELL_PILOT_SCOPE_MISMATCH:{field}")
+    steps = proposal.get("authorized_steps")
+    evidence_refs = proposal.get("evidence_refs")
+    forbidden = proposal.get("forbidden_effects")
+    if not isinstance(steps, list) or not steps:
+        raise ValueError("STATE_CELL_PILOT_AUTHORIZED_STEPS_REQUIRED")
+    if not isinstance(evidence_refs, list) or not evidence_refs:
+        raise ValueError("STATE_CELL_PILOT_EVIDENCE_REFS_REQUIRED")
+    if (
+        not isinstance(forbidden, list)
+        or len(forbidden) != len(set(forbidden))
+        or set(forbidden) != STATE_CELL_PILOT_FORBIDDEN_EFFECTS
+    ):
+        raise ValueError("STATE_CELL_PILOT_FORBIDDEN_EFFECTS_INVALID")
+    if canonical_sha256(steps) != constraints["authorized_steps_sha256"]:
+        raise ValueError("STATE_CELL_PILOT_SCOPE_MISMATCH:authorized_steps")
+    if canonical_sha256(evidence_refs) != constraints["evidence_refs_sha256"]:
+        raise ValueError("STATE_CELL_PILOT_SCOPE_MISMATCH:evidence_refs")
+    input_hashes = proposal.get("input_hashes")
+    if not isinstance(input_hashes, Mapping) or set(input_hashes) != {
+        "proposal",
+        "red_team_receipt",
+        "target_field",
+    }:
+        raise ValueError("STATE_CELL_PILOT_INPUT_HASHES_INVALID")
+    expected_hashes = {
+        "proposal": proposal["proposal_sha256"],
+        "red_team_receipt": proposal["red_team_receipt_sha256"],
+        "target_field": proposal["target_field_sha256"],
+    }
+    for name, expected in expected_hashes.items():
+        if _operation_hash(input_hashes.get(name), f"input_hashes.{name}") != expected:
+            raise ValueError(f"STATE_CELL_PILOT_SCOPE_MISMATCH:input_hashes.{name}")
+
+
 def build_total_field_operation_packet(
     proposal: Mapping[str, Any],
     *,
@@ -457,23 +721,19 @@ def build_total_field_operation_packet(
     issued_at: str,
     ttl_seconds: int,
 ) -> dict[str, Any]:
-    """Convert a proposal only when Total Field authority is already verified."""
-    if set(proposal) != OPERATION_PROPOSAL_FIELDS:
-        raise ValueError("OPERATION_PROPOSAL_SHAPE_MISMATCH")
-    if (
-        proposal.get("schema_id") != "W7TP_OPERATION_PROPOSAL_V1"
-        or proposal.get("candidate_only") is not True
-        or proposal.get("operation_authority") is not False
-    ):
-        raise ValueError("RAW_PROPOSAL_AUTHORITY_FORBIDDEN")
-    if (
-        verified_authority_ref.get("schema_id")
-        != "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1"
-    ):
-        raise ValueError("VERIFIED_TOTAL_FIELD_AUTHORITY_REQUIRED")
+    """Build only the exact, scope-bound, read-only state-cell pilot packet."""
+    constraints = _state_cell_pilot_constraints(verified_authority_ref)
+    _require_state_cell_proposal_matches_scope(proposal, constraints)
     if not 1 <= ttl_seconds <= MAX_OPERATION_PACKET_TTL_SECONDS:
         raise ValueError("OPERATION_PACKET_TTL_INVALID")
     issued = _operation_time(issued_at, "issued_at")
+    expires = issued + timedelta(seconds=ttl_seconds)
+    authority_expires = _operation_time(
+        verified_authority_ref.get("expires_at"),
+        "verified_authority_ref.expires_at",
+    )
+    if expires > authority_expires:
+        raise ValueError("OPERATION_PACKET_EXCEEDS_AUTHORITY_WINDOW")
     for field in ("current_state_hash",):
         _operation_hash(proposal.get(field), field)
     input_hashes = proposal.get("input_hashes")
@@ -490,17 +750,25 @@ def build_total_field_operation_packet(
         "exact_coordinate": proposal["exact_coordinate"],
         "current_state_hash": proposal["current_state_hash"],
         "input_hashes": dict(input_hashes),
+        "proposal_sha256": proposal["proposal_sha256"],
+        "red_team_receipt_sha256": proposal["red_team_receipt_sha256"],
+        "target_field_sha256": proposal["target_field_sha256"],
+        "carrier_capability_registry_sha256": proposal[
+            "carrier_capability_registry_sha256"
+        ],
         "authorized_action": proposal["authorized_action"],
         "authorized_steps": list(proposal["authorized_steps"]),
         "maximum_effect": proposal["maximum_effect"],
         "forbidden_effects": list(proposal["forbidden_effects"]),
         "expected_effect": proposal["expected_effect"],
         "rollback": proposal["rollback"],
+        "cell_budget": proposal["cell_budget"],
+        "relation_traversal_budget": proposal["relation_traversal_budget"],
+        "observation_budget": proposal["observation_budget"],
+        "operation_nonce": constraints["operation_nonce"],
         "ttl_seconds": ttl_seconds,
         "issued_at": issued.isoformat().replace("+00:00", "Z"),
-        "expires_at": (issued + timedelta(seconds=ttl_seconds))
-        .isoformat()
-        .replace("+00:00", "Z"),
+        "expires_at": expires.isoformat().replace("+00:00", "Z"),
         "single_use": True,
         "evidence_refs": list(proposal["evidence_refs"]),
         "D8_AUTHORITY": {
@@ -509,6 +777,8 @@ def build_total_field_operation_packet(
                 verified_authority_ref.get("authority_resolution_sha256"),
                 "verified_authority_ref.authority_resolution_sha256",
             ),
+            "authority_scope": [STATE_CELL_PILOT_SCOPE],
+            "authority_scope_constraints_sha256": canonical_sha256(constraints),
             "issuer": "TOTAL_FIELD_ONLY",
         },
         "raw_llm_operation_authority": "FORBIDDEN",
@@ -522,8 +792,10 @@ def validate_total_field_operation_packet(
     packet: Mapping[str, Any] | None,
     *,
     now: datetime,
+    nonce_ledger: Any | None = None,
+    trusted_authority_resolution: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Fail closed for absent, forged, expired, replay-unbound, or raw commands."""
+    """Validate and consume one exact read-only pilot operation at executor entry."""
     if not isinstance(packet, Mapping):
         return {
             "state": "BLOCK_OPERATION_PACKET_REQUIRED",
@@ -531,6 +803,8 @@ def validate_total_field_operation_packet(
         }
     if packet.get("schema_id") != TOTAL_FIELD_OPERATION_PACKET_SCHEMA:
         return {"state": "BLOCK_OPERATION_PACKET_SCHEMA", "executor_authorized": False}
+    if set(packet) != STATE_CELL_PILOT_PACKET_FIELDS:
+        return {"state": "BLOCK_OPERATION_PACKET_SHAPE", "executor_authorized": False}
     supplied_hash = packet.get("packet_sha256")
     unsigned = dict(packet)
     unsigned.pop("packet_sha256", None)
@@ -558,17 +832,100 @@ def validate_total_field_operation_packet(
         or not isinstance(d8.get("verified_authority_ref"), Mapping)
         or d8["verified_authority_ref"].get("schema_id")
         != "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1"
+        or d8.get("authority_scope") != [STATE_CELL_PILOT_SCOPE]
         or packet.get("single_use") is not True
         or packet.get("raw_llm_operation_authority") != "FORBIDDEN"
         or packet.get("float_authority_dependency") != "NONE"
     ):
         return {"state": "BLOCK_OPERATION_PACKET_AUTHORITY", "executor_authorized": False}
+    verified = d8["verified_authority_ref"]
+    if (
+        not isinstance(trusted_authority_resolution, Mapping)
+        or trusted_authority_resolution.get("state") != PASS_AUTHORITY_STATE
+        or trusted_authority_resolution.get("authority_verified") is not True
+        or canonical_sha256(trusted_authority_resolution)
+        != verified.get("authority_resolution_sha256")
+        or trusted_authority_resolution.get("authority_scope")
+        != verified.get("authority_scope")
+        or trusted_authority_resolution.get("authority_scope_constraints")
+        != verified.get("authority_scope_constraints")
+        or trusted_authority_resolution.get("registered_device_ref")
+        != verified.get("registered_device_ref")
+        or trusted_authority_resolution.get("expires_at")
+        != verified.get("expires_at")
+    ):
+        return {
+            "state": "BLOCK_TRUSTED_AUTHORITY_RESOLUTION_REQUIRED",
+            "executor_authorized": False,
+        }
+    try:
+        constraints = _state_cell_pilot_constraints(verified)
+        if d8.get("authority_scope_constraints_sha256") != canonical_sha256(constraints):
+            raise ValueError("STATE_CELL_PILOT_CONSTRAINT_HASH_MISMATCH")
+        proposal_view = {
+            "schema_id": "W7TP_OPERATION_PROPOSAL_V1",
+            "operation_id": packet.get("operation_id"),
+            "intent_ref": packet.get("intent_ref"),
+            "target_node": packet.get("target_node"),
+            "object_id": packet.get("object_id"),
+            "exact_coordinate": packet.get("exact_coordinate"),
+            "current_state_hash": packet.get("current_state_hash"),
+            "input_hashes": packet.get("input_hashes"),
+            "proposal_sha256": packet.get("proposal_sha256"),
+            "red_team_receipt_sha256": packet.get("red_team_receipt_sha256"),
+            "target_field_sha256": packet.get("target_field_sha256"),
+            "carrier_capability_registry_sha256": packet.get(
+                "carrier_capability_registry_sha256"
+            ),
+            "authorized_action": packet.get("authorized_action"),
+            "authorized_steps": packet.get("authorized_steps"),
+            "maximum_effect": packet.get("maximum_effect"),
+            "forbidden_effects": packet.get("forbidden_effects"),
+            "expected_effect": packet.get("expected_effect"),
+            "rollback": packet.get("rollback"),
+            "evidence_refs": packet.get("evidence_refs"),
+            "cell_budget": packet.get("cell_budget"),
+            "relation_traversal_budget": packet.get("relation_traversal_budget"),
+            "observation_budget": packet.get("observation_budget"),
+            "candidate_only": True,
+            "operation_authority": False,
+        }
+        _require_state_cell_proposal_matches_scope(proposal_view, constraints)
+        if packet.get("operation_nonce") != constraints["operation_nonce"]:
+            raise ValueError("STATE_CELL_PILOT_OPERATION_NONCE_MISMATCH")
+        authority_expires = _operation_time(
+            verified.get("expires_at"),
+            "verified_authority_ref.expires_at",
+        )
+        if expires > authority_expires:
+            raise ValueError("OPERATION_PACKET_EXCEEDS_AUTHORITY_WINDOW")
+    except ValueError:
+        return {"state": "BLOCK_OPERATION_PACKET_SCOPE", "executor_authorized": False}
+    if (
+        nonce_ledger is None
+        or getattr(nonce_ledger, "persistent", False) is not True
+        or not callable(getattr(nonce_ledger, "mark_used_or_replay", None))
+    ):
+        return {
+            "state": "BLOCK_OPERATION_NONCE_LEDGER_REQUIRED",
+            "executor_authorized": False,
+        }
+    if not nonce_ledger.mark_used_or_replay(
+        str(packet["operation_nonce"]),
+        str(supplied_hash),
+        now.astimezone(timezone.utc).timestamp(),
+        int(ttl),
+    ):
+        return {"state": "BLOCK_OPERATION_REPLAY", "executor_authorized": False}
     return {
         "state": "PASS_TOTAL_FIELD_OPERATION_PACKET",
         "executor_authorized": True,
         "operation_id": packet.get("operation_id"),
-        "single_use_requires_runtime_nonce_consumer": True,
+        "single_use_nonce_consumed": True,
         "packet_sha256": supplied_hash,
+        "validation_class": "D4_EXECUTOR_PREFLIGHT_ONLY",
+        "8dadi_reobservation_required": True,
+        "final_authority": False,
     }
 
 

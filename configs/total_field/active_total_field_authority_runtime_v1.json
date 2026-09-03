@@ -9,6 +9,40 @@
     "formal_seal_authority": false,
     "restart_authority": false
   },
+  "intent_translation_application_rules": {
+    "application_sequence": [
+      "FOUNDER_INTENT",
+      "TARGET_8D_STATE_FIELD",
+      "8DADI_LOCATE_CURRENT_STATE",
+      "TOTAL_FIELD_DECISION",
+      "AFFECTED_COORDINATE_CLOSURE",
+      "AUTHORIZED_MATERIALIZATION",
+      "REOBSERVATION",
+      "RESIDUAL_DIFFERENCE_ONLY_CORRECTION"
+    ],
+    "canonical_pointer_write": false,
+    "english_term_requires_zh_tw_translation": true,
+    "execution_authority": false,
+    "formal_decision_authority": false,
+    "founder_intent_source": "LATEST_FOUNDER_NATURAL_LANGUAGE",
+    "legacy_policy": "V2_1_D4_HISTORY_ONLY",
+    "machine_identifier_translation_exempt": true,
+    "model_output_state": "CANDIDATE_ONLY",
+    "model_progress_access": "READ_ONLY",
+    "network_policy": "LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE",
+    "provider_neutral": true,
+    "required_acknowledgements": [
+      "AI_IS_NOT_AUTHORITY",
+      "UNKNOWN_WILL_NOT_BE_INVENTED",
+      "CANDIDATE_WILL_NOT_BE_PROMOTED_AUTOMATICALLY",
+      "LEGACY_WILL_NOT_DEFINE_TARGET",
+      "EXECUTION_REQUIRES_REOBSERVATION",
+      "LAN_PRECEDES_VPN"
+    ],
+    "schema_id": "W7TP_8DADI_INTENT_TRANSLATION_APPLICATION_RULES_V1",
+    "unknown_policy": "HOLD_NO_INVENTION",
+    "user_visible_language": "zh-TW"
+  },
   "node_binding": {
     "active_pointer_precondition": "REGISTERED_MSI_DEVICE_REF_BOUND_ACTIVE_POINTER_REQUIRES_SEPARATE_AUTHORITY",
     "authority_runtime_owner": "MSI",
@@ -56,5 +90,5 @@
       "verifier_ref:total_field_runtime_v1"
     ]
   },
-  "state": "FORMAL_INGRESS_ACTIVE"
+  "state": "HOLD_D8_AUTHORITY_NOT_APPROVED"
 }

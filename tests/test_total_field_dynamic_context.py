@@ -40,7 +40,7 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
             "schema_version": "1.0",
             "memory_id": source_sha,
             "category": "canonical/system",
-            "status": "historical_snapshot",
+            "status": "active",
             "trust": "declared",
             "source": {
                 "path": "contexts/current/VOICE_STATE.json",
@@ -53,7 +53,7 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
         index_row = {
             "memory_id": source_sha,
             "category": "canonical/system",
-            "status": "historical_snapshot",
+            "status": "active",
             "trust": "declared",
             "record_path": record_relative,
             "source_path": "contexts/current/VOICE_STATE.json",
@@ -76,6 +76,48 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
             },
         )
         write_json(
+            self.root / "configs/total_field/active_total_field_authority_runtime_v1.json",
+            {
+                "active": False,
+                "state": "HOLD_D8_AUTHORITY_NOT_APPROVED",
+                "owner_binding": {"formal_ingress_switched": False},
+                "intent_translation_application_rules": {
+                    "schema_id": "W7TP_8DADI_INTENT_TRANSLATION_APPLICATION_RULES_V1",
+                    "provider_neutral": True,
+                    "founder_intent_source": "LATEST_FOUNDER_NATURAL_LANGUAGE",
+                    "user_visible_language": "zh-TW",
+                    "english_term_requires_zh_tw_translation": True,
+                    "machine_identifier_translation_exempt": True,
+                    "required_acknowledgements": [
+                        "AI_IS_NOT_AUTHORITY",
+                        "UNKNOWN_WILL_NOT_BE_INVENTED",
+                        "CANDIDATE_WILL_NOT_BE_PROMOTED_AUTOMATICALLY",
+                        "LEGACY_WILL_NOT_DEFINE_TARGET",
+                        "EXECUTION_REQUIRES_REOBSERVATION",
+                        "LAN_PRECEDES_VPN",
+                    ],
+                    "unknown_policy": "HOLD_NO_INVENTION",
+                    "legacy_policy": "V2_1_D4_HISTORY_ONLY",
+                    "network_policy": "LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE",
+                    "model_output_state": "CANDIDATE_ONLY",
+                    "model_progress_access": "READ_ONLY",
+                    "application_sequence": [
+                        "FOUNDER_INTENT",
+                        "TARGET_8D_STATE_FIELD",
+                        "8DADI_LOCATE_CURRENT_STATE",
+                        "TOTAL_FIELD_DECISION",
+                        "AFFECTED_COORDINATE_CLOSURE",
+                        "AUTHORIZED_MATERIALIZATION",
+                        "REOBSERVATION",
+                        "RESIDUAL_DIFFERENCE_ONLY_CORRECTION",
+                    ],
+                    "execution_authority": False,
+                    "formal_decision_authority": False,
+                    "canonical_pointer_write": False,
+                },
+            },
+        )
+        write_json(
             self.root / "schemas/voice_browser_runtime.schema.json",
             {"state": "voice runtime requires live evidence"},
         )
@@ -95,11 +137,15 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
             generated_at="2026-07-21T01:02:03+00:00",
         )
         self.assertEqual(packet["state"], "TOTAL_FIELD_DYNAMIC_CONTEXT_READY")
-        self.assertEqual(packet["retrieval_state"], "MATCHED_CURRENT_AND_SNAPSHOT_EVIDENCE")
+        self.assertEqual(packet["retrieval_state"], "MATCHED_8DADI_INDEX_EVIDENCE")
         paths = [item["relative_path"] for item in packet["context_items"]]
-        self.assertIn("schemas/voice_browser_runtime.schema.json", paths)
-        schema_item = next(item for item in packet["context_items"] if item["relative_path"].startswith("schemas/"))
-        self.assertEqual(schema_item["evidence_class"], "CONTRACT_DEFINITION_NOT_RUNTIME_PROOF")
+        self.assertIn(
+            "runtime/developer_memory/records/canonical/system/voice-state.json",
+            paths,
+        )
+        self.assertFalse(any(path.startswith("schemas/") for path in paths))
+        self.assertTrue(packet["policy"]["8dadi_index_only"])
+        self.assertFalse(packet["policy"]["workspace_search"])
         self.assertEqual(packet["claim_gate"], "EVIDENCE_REQUIRES_TOTAL_FIELD_VALIDATION")
         self.assertFalse(any("quarantine" in path for path in paths))
         self.assertTrue(all(not path.startswith("/") for path in paths))
@@ -116,7 +162,11 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
             generated_at="2026-07-21T01:02:03+00:00",
         )
         paths = [item["relative_path"] for item in packet["context_items"]]
-        self.assertIn("schemas/voice_browser_runtime.schema.json", paths)
+        self.assertIn(
+            "runtime/developer_memory/records/canonical/system/voice-state.json",
+            paths,
+        )
+        self.assertFalse(any(path.startswith("schemas/") for path in paths))
 
     def test_memory_binding_mismatch_holds(self):
         index_path = self.root / "runtime/developer_memory/indexes/memory_index.jsonl"
@@ -134,7 +184,8 @@ class TotalFieldDynamicContextTests(unittest.TestCase):
         packet = build_dynamic_context("voice", root=self.root)
         text = json.dumps(packet)
         self.assertNotIn("abcdefghijklmnop123456", text)
-        self.assertGreaterEqual(packet["sensitive_files_omitted"], 1)
+        self.assertEqual(packet["sensitive_files_omitted"], 0)
+        self.assertFalse(packet["policy"]["workspace_search"])
 
     def test_mcp_lists_and_calls_dynamic_context_tool(self):
         server = TotalFieldContextMcpServer(self.root)

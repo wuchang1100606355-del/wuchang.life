@@ -16,6 +16,138 @@ from typing import Any, Callable, Collection, Iterable, Mapping
 
 
 TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY = "NONE"
+REQUIRED_ALIGNMENT_ACKNOWLEDGEMENTS = frozenset(
+    {
+        "AI_IS_NOT_AUTHORITY",
+        "UNKNOWN_WILL_NOT_BE_INVENTED",
+        "CANDIDATE_WILL_NOT_BE_PROMOTED_AUTOMATICALLY",
+        "LEGACY_WILL_NOT_DEFINE_TARGET",
+        "EXECUTION_REQUIRES_REOBSERVATION",
+        "LAN_PRECEDES_VPN",
+    }
+)
+INTENT_TRANSLATION_RUNTIME_PROFILE_RELATIVE_PATH = Path(
+    "configs/total_field/active_total_field_authority_runtime_v1.json"
+)
+INTENT_TRANSLATION_RULE_SCHEMA = (
+    "W7TP_8DADI_INTENT_TRANSLATION_APPLICATION_RULES_V1"
+)
+PROVIDER_NEUTRAL_TRANSLATION_SCHEMA = (
+    "W7TP_PROVIDER_NEUTRAL_INTENT_TRANSLATION_OBSERVATION_V1"
+)
+SPARSE_D1_D8_CANDIDATE_SCHEMA = "W7TP_8DADI_SPARSE_D1_D8_CANDIDATE_V1"
+TOTAL_FIELD_PROGRESS_SCHEMA = "W7TP_TOTAL_FIELD_PROGRESS_PROJECTION_V1"
+TOTAL_FIELD_CORRECTION_SCHEMA = "W7TP_8DADI_CORRECTION_CONTRACT_V1"
+PROGRESS_OBSERVATION_STATES = (
+    "OBSERVED",
+    "RECONSTRUCTED",
+    "INFERRED",
+    "CONFLICT",
+    "UNKNOWN",
+)
+PROGRESS_MAX_TTL_SECONDS = 3600
+OPAQUE_RUNTIME_REF = re.compile(r"^[A-Za-z][A-Za-z0-9_.-]*_ref:[A-Za-z0-9_.:-]{4,240}$")
+TRANSLATION_OBSERVATION_FIELDS = frozenset(
+    {
+        "schema_id",
+        "translator_ref",
+        "founder_intent_sha256",
+        "acknowledged_invariants",
+        "user_visible_language",
+        "english_terms_have_zh_tw_translation",
+        "claims_canonical_authority",
+        "requests_external_effect",
+        "dimensions",
+        "unknowns",
+    }
+)
+SPARSE_DIMENSION_FIELDS = frozenset({"state", "claims_zh_TW", "refs"})
+PROGRESS_OBSERVATION_FIELDS = frozenset({"state", "ref", "sha256"})
+PROGRESS_NODE_FIELDS = frozenset(
+    {"node_id", "state", "observed_at", "evidence_ref", "evidence_sha256"}
+)
+STATE_CELL_DIMENSIONS = ("D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8")
+STATE_CELL_STATES = {"OBSERVED", "CONFLICT", "UNKNOWN", "CANDIDATE"}
+STATE_CELL_SOURCE_CLASSES = {
+    "CURRENT_OBSERVED",
+    "USER_DECLARED_CURRENT_INTENT",
+    "HISTORICAL_D4_ONLY",
+}
+STATE_CELL_FIELDS = frozenset(
+    {
+        "cell_id",
+        "cell_class",
+        "node",
+        "capability",
+        "state",
+        "dimensions",
+        "evidence_ref",
+        "evidence_sha256",
+        "freshness",
+        "relations",
+        "source_class",
+        "target_eligible",
+        "authority_envelope_ref",
+    }
+)
+EIGHT_DADI_CARRIER_SPECS = {
+    "PYTHON_PURE_TRANSFORM": {
+        "carrier": "Python",
+        "purpose": "execute bounded deterministic in-memory projection functions",
+        "coordinate": "tools.total_field_dynamic_context:pure_state_cell_functions",
+        "allowed": ("PARSE_BOUND_INPUT", "IN_MEMORY_TRANSFORM", "RETURN_CANDIDATE_PACKET"),
+        "forbidden": ("SUBPROCESS_EFFECT", "NETWORK_EFFECT", "FILE_WRITE", "AUTHORITY_DECISION"),
+        "risk": "imperative code may hide external effects",
+    },
+    "JSON_BOUNDED_PACKET": {
+        "carrier": "JSON",
+        "purpose": "carry exact-schema D1-D8 candidate projections",
+        "coordinate": "W7TP_8DADI_STATE_CELL_*_V1",
+        "allowed": ("EXACT_SCHEMA_PARSE", "CANONICAL_SERIALIZE", "BOUNDED_PACKET"),
+        "forbidden": ("UNKNOWN_FIELD_ACCEPT", "SELF_DECLARED_AUTHORITY", "SYSTEM_TRUTH"),
+        "risk": "valid syntax may be mistaken for valid state",
+    },
+    "SHA256_D4_BINDING": {
+        "carrier": "SHA-256",
+        "purpose": "bind exact D4 evidence and packet preimages",
+        "coordinate": "D4:EVIDENCE_BINDING",
+        "allowed": ("DIGEST", "PREIMAGE_COMPARE", "DRIFT_DETECT"),
+        "forbidden": ("INTENT_INFERENCE", "CANONICALITY", "FINAL_AUTHORITY"),
+        "risk": "digest match may be mistaken for semantic alignment",
+    },
+    "ED25519_D8_VERIFIER": {
+        "carrier": "Ed25519",
+        "purpose": "verify a detached D8 envelope signature",
+        "coordinate": "D8:TOTAL_FIELD_SIGNATURE_VERIFIER",
+        "allowed": ("VERIFY_SIGNATURE",),
+        "forbidden": ("READ_PRIVATE_KEY", "SIGN_AUTHORITY", "ISSUE_DECISION"),
+        "risk": "signature validity may be mistaken for scope validity",
+    },
+    "SQLITE_SINGLE_USE_NONCE": {
+        "carrier": "SQLite nonce ledger",
+        "purpose": "consume one scope-bound operation nonce and block replay",
+        "coordinate": "D8:RUNTIME_NONCE_LEDGER",
+        "allowed": ("MARK_USED_OR_REPLAY",),
+        "forbidden": ("GENERAL_DATABASE", "MEMBER_DATA", "ARBITRARY_QUERY", "AUTHORITY_DECISION"),
+        "risk": "non-persistent or shared nonce domains may allow replay",
+    },
+    "GIT_D4_COORDINATE": {
+        "carrier": "Git coordinate",
+        "purpose": "observe repository root, branch, HEAD and exact scoped diff as D4 evidence",
+        "coordinate": "D4:REPOSITORY_COORDINATE",
+        "allowed": ("READ_ROOT", "READ_BRANCH", "READ_HEAD", "READ_SCOPED_DIFF"),
+        "forbidden": ("DEFINE_ARCHITECTURE", "DEFINE_AUTHORITY", "RESET", "CHECKOUT", "COMMIT"),
+        "risk": "branch names and clean tests may be mistaken for target truth",
+    },
+    "TOTAL_FIELD_OPERATION_PACKET_CARRIER": {
+        "carrier": "Total Field operation packet",
+        "purpose": "carry one exact action already bound by an external Total Field D8 scope",
+        "coordinate": "D5+D8:SCOPED_OPERATION_CARRIER",
+        "allowed": ("CARRY_SCOPE_BOUND_READ_ONLY_ACTION", "CARRY_FORBIDDEN_EFFECTS", "CARRY_ROLLBACK"),
+        "forbidden": ("DEFINE_FOUNDER_INTENT", "CREATE_AUTHORITY", "EXPAND_SCOPE", "AUTO_PROMOTE"),
+        "risk": "packet validity may be mistaken for Total Field approval or completion",
+    },
+}
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -86,6 +218,12 @@ QUERY_ALIASES = {
     "動態上下文": ("dynamic_context", "context"),
     "審查": ("review", "receipt", "manifest"),
     "雲端": ("cloud", "external_candidate"),
+    "自然語言": ("natural language", "natural_language", "intent"),
+    "上品聊國": ("shangpin liaoguo cafe", "cafe"),
+    "咖啡館": ("cafe", "coffee"),
+    "影音": ("audiovisual", "voice", "video"),
+    "區網": ("lan", "local-first", "local_first"),
+    "舊版": ("legacy", "old_version"),
 }
 
 
@@ -162,6 +300,21 @@ def _select_capability_route(query: str, pack: Mapping[str, Any], identity_class
     registry = pack["registry"]
     routing = pack["routing"]
     lowered = query.casefold()
+
+    def direct_query_match(value: str) -> bool:
+        needle = " ".join(value.casefold().split())
+        haystack = " ".join(lowered.split())
+        if not needle:
+            return False
+        if re.search(r"[\u3400-\u9fff]", needle):
+            return len(needle) >= 2 and needle in haystack
+        if len(needle) < 3:
+            return False
+        return re.search(
+            rf"(?<![a-z0-9_]){re.escape(needle)}(?![a-z0-9_])",
+            haystack,
+        ) is not None
+
     skills = registry.get("skills") or []
     ranked: list[tuple[int, int, Mapping[str, Any]]] = []
     for index, skill in enumerate(skills):
@@ -180,31 +333,53 @@ def _select_capability_route(query: str, pack: Mapping[str, Any], identity_class
 
     claimed_identity = identity_class if identity_class in {"founder", "general_member", "unknown"} else "unknown"
     founder_packets: list[dict[str, Any]] = []
+    founder_match_state = "NOT_APPLICABLE"
+    ambiguous_match_count = 0
+    selected_founder_triggers: list[str] = []
     if claimed_identity == "founder":
-        terms = _query_terms(query)
-        packet_scores: list[tuple[int, str, dict[str, Any]]] = []
+        packet_scores: list[tuple[int, str, dict[str, Any], list[str]]] = []
         for packet in pack["skill_index"].get("skill_packets") or []:
             intent = packet.get("D1_INTENT") or {}
             skill_id = str(packet.get("skill_id", ""))
             skill_name = str(packet.get("skill_name", ""))
-            description = str(intent.get("description", ""))
             triggers = [str(item) for item in intent.get("triggers") or []]
-            searchable = " ".join([skill_id, skill_name, description, *triggers]).casefold()
+            direct_match = any(direct_query_match(value) for value in (skill_id, skill_name))
+            matched_triggers = [
+                trigger
+                for trigger in triggers
+                if direct_query_match(trigger)
+            ]
             score = 0
-            if skill_id.casefold() in lowered or skill_name.casefold() in lowered:
+            if direct_match:
                 score += 1000
-            score += sum(80 + min(len(trigger), 40) for trigger in triggers if trigger.casefold() in lowered)
-            score += sum(10 + min(len(term), 20) for term in terms if term in searchable)
-            if packet.get("status") in {"READY_LOCAL", "READY_MCP"}:
-                score += 5
-            if score > 0:
-                packet_scores.append((score, skill_id, packet))
+            score += sum(80 + min(len(trigger), 40) for trigger in matched_triggers)
+            if direct_match or matched_triggers:
+                packet_scores.append((score, skill_id, packet, matched_triggers))
         packet_scores.sort(key=lambda item: (-item[0], item[1]))
-        founder_packets = [item[2] for item in packet_scores[:2]]
+        if packet_scores:
+            highest_score = packet_scores[0][0]
+            winners = [item for item in packet_scores if item[0] == highest_score]
+            if len(winners) == 1:
+                winner = winners[0]
+                founder_packets = [winner[2]]
+                selected_founder_triggers = winner[3]
+                founder_match_state = "UNIQUE_EXPLICIT_MATCH"
+            else:
+                founder_match_state = "AMBIGUOUS_EXPLICIT_MATCH"
+                ambiguous_match_count = len(winners)
+        else:
+            founder_match_state = "NO_EXPLICIT_MATCH"
+
+    if claimed_identity == "founder" and not founder_packets and not hard_markers:
+        selected = next(
+            skill for skill in skills if skill.get("id") == routing["selection"]["no_match_skill"]
+        )
 
     selected_packet = founder_packets[0] if founder_packets else None
     selected_status = selected_packet.get("status") if selected_packet else None
-    if selected_packet and not hard_markers:
+    if hard_markers:
+        disposition = "BLOCK"
+    elif selected_packet:
         disposition = {
             "READY_LOCAL": "CANDIDATE_ONLY",
             "READY_MCP": "CANDIDATE_ONLY",
@@ -212,8 +387,10 @@ def _select_capability_route(query: str, pack: Mapping[str, Any], identity_class
             "NEEDS_LOCAL_ADAPTER": "HOLD_LOCAL_ADAPTER_REQUIRED",
             "PLATFORM_INTERNAL_UNEXPORTABLE": "HOLD_PLATFORM_INTERNAL_UNEXPORTABLE",
         }[selected_status]
+    elif claimed_identity == "founder":
+        disposition = "HOLD_NO_UNIQUE_SKILL_MATCH"
     else:
-        disposition = "BLOCK" if hard_markers else "CANDIDATE_ONLY"
+        disposition = "CANDIDATE_ONLY"
     return {
         "flow": routing["flow"],
         "d1_intent_projection": {
@@ -223,14 +400,10 @@ def _select_capability_route(query: str, pack: Mapping[str, Any], identity_class
         },
         "identity_projection": {
             "claimed_identity": claimed_identity,
-            "skill_scope_verified": claimed_identity == "founder",
+            "skill_scope_verified": False,
             "authority_verified": False,
             "production_authority_verified": False,
-            "effective_profile": (
-                "FOUNDER_ALL_SKILLS"
-                if claimed_identity == "founder" and not hard_markers
-                else "general_member_minimum_privilege"
-            ),
+            "effective_profile": "general_member_minimum_privilege",
             "member_boundary": "OWNER_ONLY" if claimed_identity == "founder" else "MINIMUM_PRIVILEGE",
             "self_elevation_allowed": False,
         },
@@ -243,14 +416,16 @@ def _select_capability_route(query: str, pack: Mapping[str, Any], identity_class
                 else selected.get("purpose")
             ),
             "matched_triggers": (
-                (selected_packet.get("D1_INTENT") or {}).get("triggers", [])
+                selected_founder_triggers
                 if selected_packet
                 else selected.get("matched_triggers", [])
             ),
             "registry_version": registry.get("version"),
             "lookup_method": "DETERMINISTIC_INTEGER_TRIGGER_SCORE",
+            "match_state": founder_match_state,
+            "ambiguous_match_count": ambiguous_match_count,
             "matched_packet_count": len(founder_packets),
-            "max_packets_per_query": 2,
+            "max_packets_per_query": 1,
         },
         "matched_skill_packets": founder_packets,
         "tool_contract_validation": {
@@ -333,6 +508,483 @@ def canonical_sha256(value: Mapping[str, Any]) -> str:
 def _finalize_packet(packet: dict[str, Any]) -> dict[str, Any]:
     packet["packet_sha256"] = canonical_sha256(packet)
     return packet
+
+
+def build_8dadi_carrier_capability_registry() -> dict[str, Any]:
+    """Project implementation primitives into replaceable, non-authoritative 8D capabilities."""
+    capabilities: list[dict[str, Any]] = []
+    for capability_id, spec in sorted(EIGHT_DADI_CARRIER_SPECS.items()):
+        allowed = list(spec["allowed"])
+        forbidden = list(spec["forbidden"])
+        capabilities.append(
+            {
+                "capability_id": capability_id,
+                "carrier": spec["carrier"],
+                "allowed_actions": allowed,
+                "forbidden_actions": forbidden,
+                "D1": {"intent": spec["purpose"], "may_define_founder_intent": False},
+                "D2": {"state": "CONTROLLED_CARRIER_CANDIDATE", "self_active": False},
+                "D3": {"coordinate": spec["coordinate"], "replaceable": True},
+                "D4": {"evidence_required": True, "carrier_output_is_evidence_only": True},
+                "D5": {"allowed_actions": allowed, "forbidden_actions": forbidden},
+                "D6": {
+                    "reconstruction": "rebuild from this contract and exact evidence refs",
+                    "may_define_8dadi": False,
+                },
+                "D7": {"risk": spec["risk"], "fail_closed": True},
+                "D8": {
+                    "authority": "NONE",
+                    "total_field_scope_required_for_effect": True,
+                    "may_self_certify": False,
+                },
+            }
+        )
+    return _finalize_packet(
+        {
+            "schema_id": "W7TP_8DADI_CONTROLLED_CARRIER_CAPABILITY_REGISTRY_V1",
+            "state": "8DADI_CONTROLLED_CARRIER_CAPABILITY_CANDIDATE",
+            "capabilities": capabilities,
+            "candidate_authority": False,
+            "execution_authorized": False,
+            "final_authority": False,
+            "policy": {
+                "8dadi_defines_control_contract": True,
+                "carrier_may_define_8dadi": False,
+                "carrier_may_define_total_field": False,
+                "carrier_output_is_d4_or_d8_transport_only": True,
+                "total_field_final_effect_authority": True,
+            },
+        }
+    )
+
+
+def _state_cell_hold(
+    state: str,
+    reason: str,
+    *,
+    source_packet_sha256: str | None = None,
+) -> dict[str, Any]:
+    return _finalize_packet(
+        {
+            "schema_id": "W7TP_8DADI_STATE_CELL_PROJECTION_RESULT_V1",
+            "state": state,
+            "reason": reason,
+            "source_packet_sha256": source_packet_sha256,
+            "candidate_authority": False,
+            "execution_authorized": False,
+            "final_authority": False,
+            "policy": {
+                "candidate_only": True,
+                "in_memory_projection_only": True,
+                "workspace_search": False,
+                "db_write": False,
+                "deploy": False,
+                "restart": False,
+                "network_route_mutation": False,
+                "cloud_call": False,
+                "file_delete": False,
+                "canonical_pointer_write": False,
+                "active_pointer_write": False,
+                "old_version_target_import": False,
+            },
+        }
+    )
+
+
+def _explicit_positive_budget(value: Any, field: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError(f"{field} must be an explicit positive integer")
+    return value
+
+
+def _valid_sha256(value: Any) -> bool:
+    return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+
+def _validate_located_state_cell_packet(packet: Any) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    if not isinstance(packet, Mapping):
+        raise ValueError("located evidence packet must be an object")
+    normalized = dict(packet)
+    if normalized.get("state") != "TOTAL_FIELD_8DADI_LOCATED_EVIDENCE_READY":
+        raise ValueError("located evidence state is invalid")
+    supplied_hash = normalized.get("packet_sha256")
+    if not _valid_sha256(supplied_hash):
+        raise ValueError("located evidence packet hash is invalid")
+    unsigned = dict(normalized)
+    unsigned.pop("packet_sha256", None)
+    if canonical_sha256(unsigned) != supplied_hash:
+        raise ValueError("located evidence packet hash mismatch")
+    if not _valid_sha256(normalized.get("target_field_sha256")):
+        raise ValueError("target_field_sha256 is invalid")
+    registry_sha256 = build_8dadi_carrier_capability_registry()["packet_sha256"]
+    if normalized.get("carrier_capability_registry_sha256") != registry_sha256:
+        raise ValueError("8DADI carrier capability registry binding mismatch")
+    policy = normalized.get("policy")
+    if not isinstance(policy, Mapping):
+        raise ValueError("located evidence policy is missing")
+    required_true = (
+        "evidence_only",
+        "8dadi_located_coordinates_only",
+        "carrier_registry_bound",
+    )
+    required_false = (
+        "workspace_search",
+        "old_version_target_import",
+        "personal_data_included",
+    )
+    if any(policy.get(field) is not True for field in required_true) or any(
+        policy.get(field) is not False for field in required_false
+    ):
+        raise ValueError("located evidence policy boundary is invalid")
+    candidates = normalized.get("cell_candidates")
+    if not isinstance(candidates, list):
+        raise ValueError("cell_candidates must be a list")
+    return normalized, [dict(item) if isinstance(item, Mapping) else item for item in candidates]
+
+
+def build_8dadi_state_cell_projection(
+    located_evidence_packet: Mapping[str, Any],
+    *,
+    cell_budget: int,
+    relation_traversal_budget: int,
+    observation_budget: int,
+) -> dict[str, Any]:
+    """Normalize only pre-located 8DADI evidence into an in-memory cell candidate."""
+    try:
+        cell_limit = _explicit_positive_budget(cell_budget, "cell_budget")
+        relation_limit = _explicit_positive_budget(
+            relation_traversal_budget,
+            "relation_traversal_budget",
+        )
+        observation_limit = _explicit_positive_budget(
+            observation_budget,
+            "observation_budget",
+        )
+        source, candidates = _validate_located_state_cell_packet(located_evidence_packet)
+        observations_used = source.get("observations_used")
+        if (
+            isinstance(observations_used, bool)
+            or not isinstance(observations_used, int)
+            or observations_used < 0
+            or observations_used > observation_limit
+        ):
+            raise ValueError("observation budget exceeded or missing")
+        if len(candidates) > cell_limit:
+            raise ValueError("cell budget exceeded")
+        normalized_cells: list[dict[str, Any]] = []
+        cell_ids: set[str] = set()
+        relation_count = 0
+        for candidate in candidates:
+            if not isinstance(candidate, Mapping) or set(candidate) != STATE_CELL_FIELDS:
+                raise ValueError("state cell shape is missing or expanded")
+            cell = dict(candidate)
+            cell_id = cell.get("cell_id")
+            if not isinstance(cell_id, str) or not cell_id.strip() or cell_id in cell_ids:
+                raise ValueError("state cell id is invalid or duplicated")
+            cell_ids.add(cell_id)
+            for field in ("cell_class", "node", "capability", "evidence_ref", "freshness"):
+                if not isinstance(cell.get(field), str) or not cell[field].strip():
+                    raise ValueError(f"state cell {field} is required")
+            if cell.get("state") not in STATE_CELL_STATES:
+                raise ValueError("state cell state is invalid")
+            dimensions = cell.get("dimensions")
+            if (
+                not isinstance(dimensions, Mapping)
+                or set(dimensions) != set(STATE_CELL_DIMENSIONS)
+                or any(dimensions.get(key) is None for key in STATE_CELL_DIMENSIONS)
+            ):
+                raise ValueError("state cell requires one explicit D1-D8 projection")
+            if not _valid_sha256(cell.get("evidence_sha256")):
+                raise ValueError("state cell evidence_sha256 is invalid")
+            relations = cell.get("relations")
+            if (
+                not isinstance(relations, list)
+                or len(relations) != len(set(relations))
+                or any(not isinstance(item, str) or not item.strip() for item in relations)
+            ):
+                raise ValueError("state cell relations are invalid")
+            relation_count += len(relations)
+            if relation_count > relation_limit:
+                raise ValueError("relation traversal budget exceeded")
+            source_class = cell.get("source_class")
+            if source_class not in STATE_CELL_SOURCE_CLASSES:
+                raise ValueError("state cell source_class is invalid")
+            if not isinstance(cell.get("target_eligible"), bool):
+                raise ValueError("state cell target_eligible must be explicit")
+            if source_class == "HISTORICAL_D4_ONLY" and cell["target_eligible"] is not False:
+                raise ValueError("historical D4 evidence cannot enter the target field")
+            authority_ref = cell.get("authority_envelope_ref")
+            if authority_ref is not None and (
+                not isinstance(authority_ref, str) or not authority_ref.strip()
+            ):
+                raise ValueError("state cell authority envelope reference is invalid")
+            normalized_cells.append(cell)
+        for cell in normalized_cells:
+            if any(relation not in cell_ids for relation in cell["relations"]):
+                raise ValueError("state cell relation points outside the bounded projection")
+        normalized_cells.sort(key=lambda item: item["cell_id"])
+        return _finalize_packet(
+            {
+                "schema_id": "W7TP_8DADI_STATE_CELL_PROJECTION_V1",
+                "state": "8DADI_STATE_CELL_PROJECTION_CANDIDATE_READY",
+                "source_packet_sha256": source["packet_sha256"],
+                "target_field_sha256": source.get("target_field_sha256"),
+                "carrier_capability_registry_sha256": source[
+                    "carrier_capability_registry_sha256"
+                ],
+                "cells": normalized_cells,
+                "cell_count": len(normalized_cells),
+                "relation_count": relation_count,
+                "observations_used": observations_used,
+                "budgets": {
+                    "cell_budget": cell_limit,
+                    "relation_traversal_budget": relation_limit,
+                    "observation_budget": observation_limit,
+                },
+                "candidate_authority": False,
+                "execution_authorized": False,
+                "final_authority": False,
+                "carrier_semantics": {
+                    "python_json": "replaceable state-field projection carrier only",
+                    "sha256": "D4 evidence binding only",
+                    "decision_method": "8DADI target-to-observation comparison",
+                    "final_effect_authority": "TOTAL_FIELD",
+                },
+                "policy": {
+                    "candidate_only": True,
+                    "in_memory_projection_only": True,
+                    "8dadi_located_coordinates_only": True,
+                    "workspace_search": False,
+                    "db_write": False,
+                    "deploy": False,
+                    "restart": False,
+                    "network_route_mutation": False,
+                    "cloud_call": False,
+                    "file_delete": False,
+                    "canonical_pointer_write": False,
+                    "active_pointer_write": False,
+                    "old_version_target_import": False,
+                },
+            }
+        )
+    except ValueError as exc:
+        source_hash = (
+            str(located_evidence_packet.get("packet_sha256"))
+            if isinstance(located_evidence_packet, Mapping)
+            else None
+        )
+        return _state_cell_hold(
+            "HOLD_8DADI_STATE_CELL_PROJECTION_INVALID",
+            str(exc),
+            source_packet_sha256=source_hash,
+        )
+
+
+def _validated_projection(packet: Any, field: str) -> dict[str, Any]:
+    if not isinstance(packet, Mapping):
+        raise ValueError(f"{field} must be an object")
+    normalized = dict(packet)
+    if normalized.get("state") != "8DADI_STATE_CELL_PROJECTION_CANDIDATE_READY":
+        raise ValueError(f"{field} state is invalid")
+    if normalized.get("schema_id") != "W7TP_8DADI_STATE_CELL_PROJECTION_V1":
+        raise ValueError(f"{field} schema is invalid")
+    if normalized.get("carrier_capability_registry_sha256") != (
+        build_8dadi_carrier_capability_registry()["packet_sha256"]
+    ):
+        raise ValueError(f"{field} carrier capability registry drifted")
+    for digest_field in ("source_packet_sha256", "target_field_sha256"):
+        if not _valid_sha256(normalized.get(digest_field)):
+            raise ValueError(f"{field} {digest_field} is invalid")
+    supplied = normalized.get("packet_sha256")
+    unsigned = dict(normalized)
+    unsigned.pop("packet_sha256", None)
+    if not _valid_sha256(supplied) or canonical_sha256(unsigned) != supplied:
+        raise ValueError(f"{field} packet hash mismatch")
+    if (
+        normalized.get("candidate_authority") is not False
+        or normalized.get("execution_authorized") is not False
+        or normalized.get("final_authority") is not False
+    ):
+        raise ValueError(f"{field} attempted authority escalation")
+    cells = normalized.get("cells")
+    if not isinstance(cells, list):
+        raise ValueError(f"{field} cells are invalid")
+    if normalized.get("cell_count") != len(cells):
+        raise ValueError(f"{field} cell_count mismatch")
+    ids: set[str] = set()
+    relation_count = 0
+    for cell in cells:
+        if not isinstance(cell, Mapping) or set(cell) != STATE_CELL_FIELDS:
+            raise ValueError(f"{field} cell shape is invalid")
+        cell_id = cell.get("cell_id")
+        if not isinstance(cell_id, str) or not cell_id or cell_id in ids:
+            raise ValueError(f"{field} cell id is invalid")
+        ids.add(cell_id)
+        for text_field in (
+            "cell_class",
+            "node",
+            "capability",
+            "evidence_ref",
+            "freshness",
+        ):
+            if not isinstance(cell.get(text_field), str) or not cell[text_field].strip():
+                raise ValueError(f"{field} cell {text_field} is invalid")
+        if cell.get("state") not in STATE_CELL_STATES:
+            raise ValueError(f"{field} cell state is invalid")
+        dimensions = cell.get("dimensions")
+        if (
+            not isinstance(dimensions, Mapping)
+            or set(dimensions) != set(STATE_CELL_DIMENSIONS)
+            or any(dimensions.get(key) is None for key in STATE_CELL_DIMENSIONS)
+        ):
+            raise ValueError(f"{field} D1-D8 projection is invalid")
+        if not _valid_sha256(cell.get("evidence_sha256")):
+            raise ValueError(f"{field} cell evidence_sha256 is invalid")
+        source_class = cell.get("source_class")
+        if source_class not in STATE_CELL_SOURCE_CLASSES:
+            raise ValueError(f"{field} cell source_class is invalid")
+        if not isinstance(cell.get("target_eligible"), bool):
+            raise ValueError(f"{field} cell target_eligible is invalid")
+        if source_class == "HISTORICAL_D4_ONLY" and cell.get("target_eligible") is not False:
+            raise ValueError(f"{field} imports historical evidence into target")
+        authority_ref = cell.get("authority_envelope_ref")
+        if authority_ref is not None and (
+            not isinstance(authority_ref, str) or not authority_ref.strip()
+        ):
+            raise ValueError(f"{field} cell authority envelope reference is invalid")
+        relations = cell.get("relations")
+        if (
+            not isinstance(relations, list)
+            or len(relations) != len(set(relations))
+            or any(not isinstance(item, str) or not item.strip() for item in relations)
+        ):
+            raise ValueError(f"{field} relations are invalid")
+        relation_count += len(relations)
+    if normalized.get("relation_count") != relation_count:
+        raise ValueError(f"{field} relation_count mismatch")
+    if any(relation not in ids for cell in cells for relation in cell["relations"]):
+        raise ValueError(f"{field} relation leaves bounded projection")
+    budgets = normalized.get("budgets")
+    if not isinstance(budgets, Mapping) or set(budgets) != {
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+    }:
+        raise ValueError(f"{field} budgets are invalid")
+    cell_budget = _explicit_positive_budget(budgets.get("cell_budget"), "cell_budget")
+    relation_budget = _explicit_positive_budget(
+        budgets.get("relation_traversal_budget"),
+        "relation_traversal_budget",
+    )
+    observation_budget = _explicit_positive_budget(
+        budgets.get("observation_budget"),
+        "observation_budget",
+    )
+    observations_used = normalized.get("observations_used")
+    if (
+        len(cells) > cell_budget
+        or relation_count > relation_budget
+        or isinstance(observations_used, bool)
+        or not isinstance(observations_used, int)
+        or observations_used < 0
+        or observations_used > observation_budget
+    ):
+        raise ValueError(f"{field} budget exceeded")
+    policy = normalized.get("policy")
+    if (
+        not isinstance(policy, Mapping)
+        or policy.get("candidate_only") is not True
+        or policy.get("in_memory_projection_only") is not True
+        or policy.get("8dadi_located_coordinates_only") is not True
+        or policy.get("workspace_search") is not False
+        or policy.get("old_version_target_import") is not False
+        or any(
+            policy.get(key) is not False
+            for key in (
+                "db_write",
+                "deploy",
+                "restart",
+                "network_route_mutation",
+                "cloud_call",
+                "file_delete",
+                "canonical_pointer_write",
+                "active_pointer_write",
+            )
+        )
+    ):
+        raise ValueError(f"{field} policy boundary is invalid")
+    return normalized
+
+
+def verify_8dadi_state_cell_projection(
+    target_projection: Mapping[str, Any],
+    observed_projection: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Compare two bounded cell projections without granting completion authority."""
+    try:
+        target = _validated_projection(target_projection, "target_projection")
+        observed = _validated_projection(observed_projection, "observed_projection")
+        target_cells = {str(item["cell_id"]): item for item in target["cells"]}
+        observed_cells = {str(item["cell_id"]): item for item in observed["cells"]}
+        results: list[dict[str, Any]] = []
+        for cell_id in sorted(set(target_cells) | set(observed_cells)):
+            expected = target_cells.get(cell_id)
+            actual = observed_cells.get(cell_id)
+            if expected is None:
+                state = "OBSERVED"
+                reason = "unexpected observed cell"
+            elif actual is None:
+                state = "UNKNOWN"
+                reason = "target cell was not re-observed"
+            elif canonical_sha256(expected) == canonical_sha256(actual):
+                state = "ALIGNED_CANDIDATE_EVIDENCE"
+                reason = "target and observed cell projections match"
+            else:
+                state = "CONFLICT"
+                reason = "target and observed cell projections differ"
+            results.append({"cell_id": cell_id, "state": state, "reason": reason})
+        fully_aligned = bool(results) and all(
+            item["state"] == "ALIGNED_CANDIDATE_EVIDENCE" for item in results
+        )
+        return _finalize_packet(
+            {
+                "schema_id": "W7TP_8DADI_STATE_CELL_VERIFICATION_V1",
+                "state": (
+                    "ALIGNED_CANDIDATE_EVIDENCE"
+                    if fully_aligned
+                    else "8DADI_STATE_CELL_DIFFERENCE_CANDIDATE"
+                ),
+                "target_projection_sha256": target["packet_sha256"],
+                "observed_projection_sha256": observed["packet_sha256"],
+                "cell_results": results,
+                "remaining_delta_count": sum(
+                    item["state"] != "ALIGNED_CANDIDATE_EVIDENCE" for item in results
+                ),
+                "candidate_authority": False,
+                "execution_authorized": False,
+                "final_authority": False,
+                "verification_method": "8DADI_TARGET_TO_REOBSERVED_STATE_FIELD",
+                "carrier_semantics": {
+                    "hashes": "D4 evidence only",
+                    "packet_state": "candidate verification evidence only",
+                    "final_effect_authority": "TOTAL_FIELD",
+                },
+                "policy": {
+                    "8dadi_verification_only": True,
+                    "test_pass_is_not_final_authority": True,
+                    "total_field_review_required": True,
+                    "db_write": False,
+                    "deploy": False,
+                    "restart": False,
+                    "canonical_pointer_write": False,
+                },
+            }
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        return _state_cell_hold(
+            "HOLD_8DADI_STATE_CELL_VERIFICATION_INVALID",
+            str(exc),
+        )
 
 
 def _decision_result(
@@ -848,6 +1500,8 @@ def _memory_items(
         text = data.decode("utf-8")
         record = json.loads(text)
         source = record.get("source") if isinstance(record, dict) else None
+        payload = record.get("payload") if isinstance(record, dict) else None
+        record_type = str(payload.get("type", "")) if isinstance(payload, Mapping) else ""
         row_source_sha = str(row.get("source_sha256", ""))
         record_source_sha = str(source.get("sha256", "")) if isinstance(source, dict) else ""
         memory_id = str(record.get("memory_id", "")) if isinstance(record, dict) else ""
@@ -863,7 +1517,13 @@ def _memory_items(
             ]
         )
         score, matched = _match_score(searchable, terms)
-        if terms and score == 0:
+        is_founder_reentry = (
+            category == "governance/human"
+            and row.get("status") == "active"
+            and row.get("trust") == "founder_declared"
+            and record_type == "W7TP_8DADI_FOUNDER_INTENT_REENTRY"
+        )
+        if terms and score == 0 and not is_founder_reentry:
             continue
         source_path_value = str(row.get("source_path", ""))
         source_current_sha256 = None
@@ -892,11 +1552,72 @@ def _memory_items(
             "source_snapshot_sha256": row_source_sha,
             "source_current_sha256": source_current_sha256,
             "source_current_matches_snapshot": source_current_matches_snapshot,
+            "record_type": record_type,
             "matched_terms": matched[:8],
             "snippet": _snippet(text, terms),
         }
         ranked.append((score, item))
     return ranked, issues
+
+
+def _current_founder_intent_item(
+    ranked: list[tuple[int, dict[str, Any]]],
+) -> tuple[int, dict[str, Any]]:
+    candidates = [
+        pair
+        for pair in ranked
+        if pair[1].get("category") == "governance/human"
+        and pair[1].get("status") == "active"
+        and pair[1].get("trust") == "founder_declared"
+        and pair[1].get("record_type") == "W7TP_8DADI_FOUNDER_INTENT_REENTRY"
+    ]
+    if not candidates:
+        raise ValueError("CURRENT_FOUNDER_INTENT_NOT_INDEXED")
+    if len(candidates) != 1:
+        raise ValueError("CURRENT_FOUNDER_INTENT_AMBIGUOUS")
+    if candidates[0][1].get("source_current_matches_snapshot") is not True:
+        raise ValueError("CURRENT_FOUNDER_INTENT_SOURCE_DRIFT")
+    return candidates[0]
+
+
+def _current_founder_intent_projection(
+    root: Path, item: Mapping[str, Any]
+) -> dict[str, Any]:
+    source_relative_path = _require_non_empty_string(
+        item.get("source_relative_path"), "current_founder_intent.source_relative_path"
+    )
+    source_path = _resolve_inside(root, source_relative_path)
+    data = source_path.read_bytes()
+    source_sha256 = sha256_bytes(data)
+    if source_sha256 != item.get("source_snapshot_sha256"):
+        raise ValueError("CURRENT_FOUNDER_INTENT_SOURCE_DRIFT")
+    source = json.loads(data.decode("utf-8"))
+    if not isinstance(source, Mapping):
+        raise ValueError("CURRENT_FOUNDER_INTENT_SOURCE_INVALID")
+    required = {
+        "schema_id",
+        "state",
+        *STATE_CELL_DIMENSIONS,
+        "natural_language_execution_contract",
+        "network_policy",
+        "legacy_boundary",
+        "authority_boundary",
+    }
+    if not required.issubset(source):
+        raise ValueError("CURRENT_FOUNDER_INTENT_PROJECTION_INCOMPLETE")
+    return {
+        "schema_id": source["schema_id"],
+        "state": source["state"],
+        "source_ref": source_relative_path,
+        "source_sha256": source_sha256,
+        **{name: deepcopy(source[name]) for name in STATE_CELL_DIMENSIONS},
+        "natural_language_execution_contract": deepcopy(
+            source["natural_language_execution_contract"]
+        ),
+        "network_policy": deepcopy(source["network_policy"]),
+        "legacy_boundary": deepcopy(source["legacy_boundary"]),
+        "authority_boundary": deepcopy(source["authority_boundary"]),
+    }
 
 
 def _iter_workspace_files(root: Path) -> Iterable[Path]:
@@ -985,6 +1706,17 @@ def build_dynamic_context(
             generated_at=timestamp,
         )
     try:
+        translation_rules, translation_rules_binding = (
+            _load_intent_translation_application_rules(workspace_root)
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return _hold_packet(
+            "HOLD_INTENT_TRANSLATION_RULES_INVALID",
+            query=query,
+            reason=f"{type(exc).__name__}:{exc}",
+            generated_at=timestamp,
+        )
+    try:
         bootstrap, bindings, excluded, memory_root = _bootstrap_bindings(workspace_root)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return _hold_packet(
@@ -997,7 +1729,13 @@ def build_dynamic_context(
     terms = _query_terms(query)
     try:
         memory_ranked, binding_issues = _memory_items(workspace_root, memory_root, excluded, terms)
-        workspace_ranked, sensitive_omitted = _workspace_items(workspace_root, terms)
+        indexed_current = [
+            pair
+            for pair in memory_ranked
+            if pair[1].get("status") == "active"
+            and pair[1].get("source_current_matches_snapshot") is True
+        ]
+        sensitive_omitted = 0
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return _hold_packet(
             "HOLD_TOTAL_FIELD_CONTEXT_SOURCE_UNREADABLE",
@@ -1005,6 +1743,7 @@ def build_dynamic_context(
             reason=f"{type(exc).__name__}:{exc}",
             generated_at=timestamp,
         )
+
     if binding_issues:
         return _hold_packet(
             "HOLD_TOTAL_FIELD_CONTEXT_HASH_MISMATCH",
@@ -1013,8 +1752,46 @@ def build_dynamic_context(
             generated_at=timestamp,
         )
 
-    combined = memory_ranked + workspace_ranked
-    combined.sort(key=lambda pair: (-pair[0], pair[1]["relative_path"]))
+    current_founder = None
+    founder_intent_projection = None
+    if identity_class == "founder":
+        try:
+            current_founder = _current_founder_intent_item(memory_ranked)
+            founder_intent_projection = _current_founder_intent_projection(
+                workspace_root, current_founder[1]
+            )
+        except ValueError as exc:
+            founder_hold_states = {
+                "CURRENT_FOUNDER_INTENT_NOT_INDEXED": "HOLD_CURRENT_FOUNDER_INTENT_NOT_INDEXED",
+                "CURRENT_FOUNDER_INTENT_AMBIGUOUS": "HOLD_CURRENT_FOUNDER_INTENT_AMBIGUOUS",
+                "CURRENT_FOUNDER_INTENT_SOURCE_DRIFT": "HOLD_TOTAL_FIELD_CONTEXT_HASH_MISMATCH",
+            }
+            return _hold_packet(
+                founder_hold_states.get(
+                    str(exc), "HOLD_CURRENT_FOUNDER_INTENT_PROJECTION_INVALID"
+                ),
+                query=query,
+                reason=str(exc),
+                generated_at=timestamp,
+            )
+
+    if identity_class == "founder" and current_founder is not None:
+        indexed_current = [
+            current_founder,
+            *[pair for pair in indexed_current if pair[1] is not current_founder[1]],
+        ]
+
+    combined = indexed_current
+    combined.sort(
+        key=lambda pair: (
+            -int(
+                pair[1].get("trust") == "founder_declared"
+                and pair[1].get("category") == "governance/human"
+            ),
+            -pair[0],
+            pair[1]["relative_path"],
+        )
+    )
     selected: list[dict[str, Any]] = []
     seen_paths: set[str] = set()
     for _, item in combined:
@@ -1026,7 +1803,7 @@ def build_dynamic_context(
         if len(selected) >= max_items:
             break
 
-    retrieval_state = "MATCHED_CURRENT_AND_SNAPSHOT_EVIDENCE" if selected else "NOT_YET_EVIDENCED"
+    retrieval_state = "MATCHED_8DADI_INDEX_EVIDENCE" if selected else "NOT_YET_EVIDENCED"
     packet = {
         "schema_version": "1.0",
         "state": "TOTAL_FIELD_DYNAMIC_CONTEXT_READY",
@@ -1034,11 +1811,26 @@ def build_dynamic_context(
         "generated_at": timestamp,
         "query": _redact_personal_data(query[:2000]),
         "retrieval_state": retrieval_state,
+        "retrieval_method": "8DADI_MEMORY_INDEX_ONLY",
         "claim_gate": "EVIDENCE_REQUIRES_TOTAL_FIELD_VALIDATION",
         "authority": "READ_ONLY_CONTEXT_EVIDENCE_NO_DECISION_AUTHORITY",
         "source_bootstrap_generated_at": bootstrap.get("generated_at"),
         "source_bindings": bindings,
         "context_items": selected,
+        "founder_intent_projection": founder_intent_projection,
+        "intent_translation_application_rules": translation_rules,
+        "intent_translation_runtime_binding": translation_rules_binding,
+        "progress_projection_contract": {
+            "schema_id": TOTAL_FIELD_PROGRESS_SCHEMA,
+            "append_only": True,
+            "parent_hash_required_after_first_projection": True,
+            "logical_time_required": True,
+            "node_freshness_required": True,
+            "model_access": "READ_ONLY",
+            "unknown_or_conflict": "HOLD",
+            "completion_requires_reobserved_target_match": True,
+            "formal_decision_authority": False,
+        },
         "excluded_categories": sorted(excluded),
         "sensitive_files_omitted": sensitive_omitted,
         "capability_route": (
@@ -1053,6 +1845,13 @@ def build_dynamic_context(
             "historical_snapshot_is_not_current_runtime_proof": True,
             "schema_config_manifest_source_and_docs_are_not_runtime_proof": True,
             "missing_evidence_must_be_reported_as_not_yet_evidenced": True,
+            "8dadi_index_only": True,
+            "workspace_search": False,
+            "provider_neutral_intent_translation": True,
+            "user_visible_language": "zh-TW",
+            "english_term_requires_zh_tw_translation": True,
+            "model_progress_access": "READ_ONLY",
+            "historical_d4_in_target_context": False,
             "db_write": False,
             "deploy": False,
             "restart": False,
@@ -1128,6 +1927,467 @@ def _parse_packet_time(value: Any, path: str) -> datetime:
     if parsed.tzinfo is None:
         raise ValueError(f"DATETIME_TIMEZONE_REQUIRED:{path}")
     return parsed.astimezone(timezone.utc)
+
+
+def _require_non_empty_string(value: Any, path: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"STRING_REQUIRED:{path}")
+    return value.strip()
+
+
+def _require_string_list(value: Any, path: str) -> list[str]:
+    if not isinstance(value, list) or any(
+        not isinstance(item, str) or not item.strip() for item in value
+    ):
+        raise ValueError(f"STRING_LIST_REQUIRED:{path}")
+    return [item.strip() for item in value]
+
+
+def _load_intent_translation_application_rules(
+    root: str | Path,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    workspace_root = Path(root).resolve()
+    profile_path = _resolve_inside(
+        workspace_root, INTENT_TRANSLATION_RUNTIME_PROFILE_RELATIVE_PATH
+    )
+    profile = _load_json(profile_path)
+    rules = profile.get("intent_translation_application_rules")
+    required_fields = {
+        "schema_id",
+        "provider_neutral",
+        "founder_intent_source",
+        "user_visible_language",
+        "english_term_requires_zh_tw_translation",
+        "machine_identifier_translation_exempt",
+        "required_acknowledgements",
+        "unknown_policy",
+        "legacy_policy",
+        "network_policy",
+        "model_output_state",
+        "model_progress_access",
+        "application_sequence",
+        "execution_authority",
+        "formal_decision_authority",
+        "canonical_pointer_write",
+    }
+    if not isinstance(rules, Mapping) or set(rules) != required_fields:
+        raise ValueError("INTENT_TRANSLATION_RULE_SHAPE_MISMATCH")
+    if rules.get("schema_id") != INTENT_TRANSLATION_RULE_SCHEMA:
+        raise ValueError("INTENT_TRANSLATION_RULE_SCHEMA_MISMATCH")
+    if rules.get("provider_neutral") is not True:
+        raise ValueError("INTENT_TRANSLATION_PROVIDER_NEUTRAL_REQUIRED")
+    if rules.get("founder_intent_source") != "LATEST_FOUNDER_NATURAL_LANGUAGE":
+        raise ValueError("INTENT_TRANSLATION_FOUNDER_SOURCE_INVALID")
+    if rules.get("user_visible_language") != "zh-TW":
+        raise ValueError("INTENT_TRANSLATION_LANGUAGE_INVALID")
+    if rules.get("english_term_requires_zh_tw_translation") is not True:
+        raise ValueError("INTENT_TRANSLATION_ZH_TW_RULE_REQUIRED")
+    if rules.get("machine_identifier_translation_exempt") is not True:
+        raise ValueError("INTENT_TRANSLATION_IDENTIFIER_RULE_REQUIRED")
+    if set(_require_string_list(
+        rules.get("required_acknowledgements"),
+        "intent_translation_application_rules.required_acknowledgements",
+    )) != REQUIRED_ALIGNMENT_ACKNOWLEDGEMENTS:
+        raise ValueError("INTENT_TRANSLATION_ACKNOWLEDGEMENTS_MISMATCH")
+    if rules.get("unknown_policy") != "HOLD_NO_INVENTION":
+        raise ValueError("INTENT_TRANSLATION_UNKNOWN_POLICY_INVALID")
+    if rules.get("legacy_policy") != "V2_1_D4_HISTORY_ONLY":
+        raise ValueError("INTENT_TRANSLATION_LEGACY_POLICY_INVALID")
+    if rules.get("network_policy") != "LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE":
+        raise ValueError("INTENT_TRANSLATION_NETWORK_POLICY_INVALID")
+    if rules.get("model_output_state") != "CANDIDATE_ONLY":
+        raise ValueError("INTENT_TRANSLATION_OUTPUT_STATE_INVALID")
+    if rules.get("model_progress_access") != "READ_ONLY":
+        raise ValueError("INTENT_TRANSLATION_PROGRESS_ACCESS_INVALID")
+    if any(
+        rules.get(field) is not False
+        for field in (
+            "execution_authority",
+            "formal_decision_authority",
+            "canonical_pointer_write",
+        )
+    ):
+        raise ValueError("INTENT_TRANSLATION_AUTHORITY_INVERSION")
+    application_sequence = _require_string_list(
+        rules.get("application_sequence"),
+        "intent_translation_application_rules.application_sequence",
+    )
+    if application_sequence != [
+        "FOUNDER_INTENT",
+        "TARGET_8D_STATE_FIELD",
+        "8DADI_LOCATE_CURRENT_STATE",
+        "TOTAL_FIELD_DECISION",
+        "AFFECTED_COORDINATE_CLOSURE",
+        "AUTHORIZED_MATERIALIZATION",
+        "REOBSERVATION",
+        "RESIDUAL_DIFFERENCE_ONLY_CORRECTION",
+    ]:
+        raise ValueError("INTENT_TRANSLATION_SEQUENCE_INVALID")
+    profile_active = profile.get("active") is True
+    formal_ingress_switched = bool(
+        (profile.get("owner_binding") or {}).get("formal_ingress_switched")
+    )
+    profile_state = _require_non_empty_string(
+        profile.get("state"), "active_total_field_authority_runtime.state"
+    )
+    if not profile_active and (
+        formal_ingress_switched or profile_state == "FORMAL_INGRESS_ACTIVE"
+    ):
+        raise ValueError("INTENT_TRANSLATION_RUNTIME_STATE_CONFLICT")
+    binding = {
+        "relative_path": _relative_path(workspace_root, profile_path),
+        "sha256": sha256_bytes(profile_path.read_bytes()),
+        "profile_active": profile_active,
+        "formal_ingress_switched": formal_ingress_switched,
+        "profile_state": profile_state,
+    }
+    return deepcopy(dict(rules)), binding
+
+
+def _normalize_sparse_dimension(name: str, value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != SPARSE_DIMENSION_FIELDS:
+        raise ValueError(f"SPARSE_DIMENSION_SHAPE_MISMATCH:{name}")
+    state = _require_non_empty_string(value.get("state"), f"{name}.state")
+    if state not in {*PROGRESS_OBSERVATION_STATES, "CANDIDATE"}:
+        raise ValueError(f"SPARSE_DIMENSION_STATE_INVALID:{name}")
+    claims = _require_string_list(value.get("claims_zh_TW"), f"{name}.claims_zh_TW")
+    if any(re.search(r"[\u3400-\u9fff]", claim) is None for claim in claims):
+        raise ValueError(f"SPARSE_DIMENSION_ZH_TW_CLAIM_REQUIRED:{name}")
+    refs = _require_string_list(value.get("refs"), f"{name}.refs")
+    return {"state": state, "claims_zh_TW": claims, "refs": refs}
+
+
+def build_provider_neutral_intent_projection(
+    founder_intent: str,
+    *,
+    founder_intent_ref: str,
+    current_state_ref: str,
+    translation_observation: Mapping[str, Any],
+    created_at: str,
+    ttl_seconds: int = 900,
+    root: str | Path = ROOT,
+) -> dict[str, Any]:
+    """Normalize one model translation into a read-only sparse D1-D8 candidate."""
+    intent_text = _require_non_empty_string(founder_intent, "founder_intent")
+    intent_ref = _require_non_empty_string(founder_intent_ref, "founder_intent_ref")
+    state_ref = _require_non_empty_string(current_state_ref, "current_state_ref")
+    if set(translation_observation) != TRANSLATION_OBSERVATION_FIELDS:
+        raise ValueError("TRANSLATION_OBSERVATION_SHAPE_MISMATCH")
+    if translation_observation.get("schema_id") != PROVIDER_NEUTRAL_TRANSLATION_SCHEMA:
+        raise ValueError("TRANSLATION_OBSERVATION_SCHEMA_MISMATCH")
+    translator_ref = _require_non_empty_string(
+        translation_observation.get("translator_ref"), "translator_ref"
+    )
+    if OPAQUE_RUNTIME_REF.fullmatch(translator_ref) is None:
+        raise ValueError("TRANSLATOR_REF_NOT_OPAQUE")
+    intent_sha256 = sha256_bytes(intent_text.encode("utf-8"))
+    if translation_observation.get("founder_intent_sha256") != intent_sha256:
+        raise ValueError("FOUNDER_INTENT_HASH_MISMATCH")
+    acknowledged = set(
+        _require_string_list(
+            translation_observation.get("acknowledged_invariants"),
+            "acknowledged_invariants",
+        )
+    )
+    if not REQUIRED_ALIGNMENT_ACKNOWLEDGEMENTS.issubset(acknowledged):
+        raise ValueError("ALIGNMENT_ACKNOWLEDGEMENTS_INCOMPLETE")
+    if translation_observation.get("user_visible_language") != "zh-TW":
+        raise ValueError("USER_VISIBLE_LANGUAGE_MUST_BE_ZH_TW")
+    if translation_observation.get("english_terms_have_zh_tw_translation") is not True:
+        raise ValueError("ENGLISH_TERM_TRANSLATION_ACK_REQUIRED")
+    if translation_observation.get("claims_canonical_authority") is not False:
+        raise ValueError("ALIGNMENT_REJECTED_MODEL_AUTHORITY_CLAIM")
+    if translation_observation.get("requests_external_effect") is not False:
+        raise ValueError("ALIGNMENT_REJECTED_EXTERNAL_EFFECT_REQUEST")
+    dimensions = translation_observation.get("dimensions")
+    if not isinstance(dimensions, Mapping) or set(dimensions) != set(STATE_CELL_DIMENSIONS):
+        raise ValueError("SPARSE_D1_D8_DIMENSIONS_REQUIRED")
+    normalized_dimensions = {
+        name: _normalize_sparse_dimension(name, dimensions[name])
+        for name in STATE_CELL_DIMENSIONS
+    }
+    unknowns = _require_string_list(translation_observation.get("unknowns"), "unknowns")
+    if any(re.search(r"[\u3400-\u9fff]", item) is None for item in unknowns):
+        raise ValueError("UNKNOWN_ZH_TW_DESCRIPTION_REQUIRED")
+    if isinstance(ttl_seconds, bool) or not 1 <= ttl_seconds <= PROGRESS_MAX_TTL_SECONDS:
+        raise ValueError("INTENT_TRANSLATION_TTL_INVALID")
+    created = _parse_packet_time(created_at, "created_at")
+    expires = created + timedelta(seconds=ttl_seconds)
+    rules, rules_binding = _load_intent_translation_application_rules(root)
+    if set(rules["required_acknowledgements"]) != REQUIRED_ALIGNMENT_ACKNOWLEDGEMENTS:
+        raise ValueError("RUNTIME_ALIGNMENT_ACKNOWLEDGEMENTS_MISMATCH")
+    unresolved = bool(unknowns) or any(
+        item["state"] in {"UNKNOWN", "CONFLICT"}
+        for item in normalized_dimensions.values()
+    )
+    candidate_projection = {
+        "schema_id": SPARSE_D1_D8_CANDIDATE_SCHEMA,
+        "founder_intent": {"ref": intent_ref, "sha256": intent_sha256},
+        "current_state_ref": state_ref,
+        "dimensions": normalized_dimensions,
+        "unknowns": unknowns,
+        "translation_rules_sha256": canonical_sha256(rules),
+        "policy": {
+            "candidate_only": True,
+            "model_authority": False,
+            "operation_authority": False,
+            "canonical_promotion": False,
+            "unknown_will_not_be_invented": True,
+            "legacy_v2_1_target_eligible": False,
+            "lan_precedes_vpn": True,
+            "execution_requires_reobservation": True,
+            "user_visible_language": "zh-TW",
+            "english_term_requires_zh_tw_translation": True,
+        },
+    }
+    candidate_projection_sha256 = canonical_sha256(candidate_projection)
+    packet = {
+        "schema_id": "W7TP_PROVIDER_NEUTRAL_INTENT_PROJECTION_PACKET_V1",
+        "state": (
+            "HOLD_TRANSLATION_UNRESOLVED"
+            if unresolved
+            else "ALIGNMENT_ACCEPTED_READ_ONLY_CANDIDATE"
+        ),
+        "candidate_projection": candidate_projection,
+        "candidate_projection_sha256": candidate_projection_sha256,
+        "translation_evidence": {
+            "translator_ref": translator_ref,
+            "observation_sha256": canonical_sha256(translation_observation),
+            "runtime_rules_binding": rules_binding,
+        },
+        "created_at": created.isoformat().replace("+00:00", "Z"),
+        "expires_at": expires.isoformat().replace("+00:00", "Z"),
+        "ttl_seconds": ttl_seconds,
+        "candidate_only": True,
+        "model_authority": False,
+        "operation_authority": False,
+        "formal_decision_authority": False,
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+    return _finalize_packet(packet)
+
+
+def _normalize_progress_observation(name: str, value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != PROGRESS_OBSERVATION_FIELDS:
+        raise ValueError(f"PROGRESS_OBSERVATION_SHAPE_MISMATCH:{name}")
+    state = _require_non_empty_string(value.get("state"), f"{name}.state")
+    if state not in PROGRESS_OBSERVATION_STATES:
+        raise ValueError(f"PROGRESS_OBSERVATION_STATE_INVALID:{name}")
+    return {
+        "state": state,
+        "ref": _require_non_empty_string(value.get("ref"), f"{name}.ref"),
+        "sha256": _require_sha256(value.get("sha256"), f"{name}.sha256"),
+    }
+
+
+def _normalize_progress_node(
+    value: Any, *, created: datetime, ttl_seconds: int
+) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != PROGRESS_NODE_FIELDS:
+        raise ValueError("PROGRESS_NODE_SHAPE_MISMATCH")
+    state = _require_non_empty_string(value.get("state"), "node.state")
+    if state not in PROGRESS_OBSERVATION_STATES:
+        raise ValueError("PROGRESS_NODE_STATE_INVALID")
+    observed = _parse_packet_time(value.get("observed_at"), "node.observed_at")
+    if observed > created or created - observed > timedelta(seconds=ttl_seconds):
+        raise ValueError("PROGRESS_NODE_OBSERVATION_STALE")
+    return {
+        "node_id": _require_non_empty_string(value.get("node_id"), "node.node_id"),
+        "state": state,
+        "observed_at": observed.isoformat().replace("+00:00", "Z"),
+        "evidence_ref": _require_non_empty_string(
+            value.get("evidence_ref"), "node.evidence_ref"
+        ),
+        "evidence_sha256": _require_sha256(
+            value.get("evidence_sha256"), "node.evidence_sha256"
+        ),
+    }
+
+
+def build_total_field_progress_projection(
+    *,
+    founder_intent_ref: str,
+    founder_intent_sha256: str,
+    target_state: Mapping[str, Any],
+    current_state: Mapping[str, Any],
+    reobserved_state: Mapping[str, Any],
+    remaining_difference_refs: Collection[str],
+    receipt_refs: Collection[str],
+    node_observations: Collection[Mapping[str, Any]],
+    created_at: str,
+    ttl_seconds: int = 900,
+    previous_progress: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Build one append-only, model-readable progress projection without authority."""
+    if isinstance(ttl_seconds, bool) or not 1 <= ttl_seconds <= PROGRESS_MAX_TTL_SECONDS:
+        raise ValueError("PROGRESS_TTL_INVALID")
+    created = _parse_packet_time(created_at, "created_at")
+    expires = created + timedelta(seconds=ttl_seconds)
+    intent_ref = _require_non_empty_string(founder_intent_ref, "founder_intent_ref")
+    intent_sha256 = _require_sha256(founder_intent_sha256, "founder_intent_sha256")
+    target = _normalize_progress_observation("target_state", target_state)
+    current = _normalize_progress_observation("current_state", current_state)
+    reobserved = _normalize_progress_observation("reobserved_state", reobserved_state)
+    differences = sorted(set(_require_string_list(
+        list(remaining_difference_refs), "remaining_difference_refs"
+    )))
+    receipts = sorted(set(_require_string_list(list(receipt_refs), "receipt_refs")))
+    nodes = [
+        _normalize_progress_node(item, created=created, ttl_seconds=ttl_seconds)
+        for item in node_observations
+    ]
+    if len({item["node_id"] for item in nodes}) != len(nodes):
+        raise ValueError("PROGRESS_NODE_ID_COLLISION")
+    nodes.sort(key=lambda item: item["node_id"])
+    parent_progress_sha256 = None
+    logical_time = 1
+    if previous_progress is not None:
+        if previous_progress.get("schema_id") != TOTAL_FIELD_PROGRESS_SCHEMA:
+            raise ValueError("PREVIOUS_PROGRESS_SCHEMA_INVALID")
+        previous_unsigned = dict(previous_progress)
+        supplied_previous_hash = previous_unsigned.pop("packet_sha256", None)
+        if supplied_previous_hash != canonical_sha256(previous_unsigned):
+            raise ValueError("PREVIOUS_PROGRESS_HASH_MISMATCH")
+        previous_intent = previous_progress.get("founder_intent")
+        if not isinstance(previous_intent, Mapping) or previous_intent.get("sha256") != intent_sha256:
+            raise ValueError("PREVIOUS_PROGRESS_INTENT_MISMATCH")
+        previous_expires = _parse_packet_time(
+            previous_progress.get("expires_at"), "previous_progress.expires_at"
+        )
+        if created >= previous_expires:
+            raise ValueError("PREVIOUS_PROGRESS_STALE")
+        previous_logical_time = previous_progress.get("logical_time")
+        if isinstance(previous_logical_time, bool) or not isinstance(previous_logical_time, int):
+            raise ValueError("PREVIOUS_PROGRESS_LOGICAL_TIME_INVALID")
+        parent_progress_sha256 = str(supplied_previous_hash)
+        logical_time = previous_logical_time + 1
+    aligned = not differences and target["sha256"] == reobserved["sha256"]
+    packet = {
+        "schema_id": TOTAL_FIELD_PROGRESS_SCHEMA,
+        "state": (
+            "REOBSERVED_TARGET_FIELD_CLOSED"
+            if aligned
+            else "OPEN_RESIDUAL_DIFFERENCE"
+        ),
+        "founder_intent": {"ref": intent_ref, "sha256": intent_sha256},
+        "target_state": target,
+        "current_state": current,
+        "reobserved_state": reobserved,
+        "remaining_difference_refs": differences,
+        "receipt_refs": receipts,
+        "node_observations": nodes,
+        "logical_time": logical_time,
+        "parent_progress_sha256": parent_progress_sha256,
+        "created_at": created.isoformat().replace("+00:00", "Z"),
+        "expires_at": expires.isoformat().replace("+00:00", "Z"),
+        "ttl_seconds": ttl_seconds,
+        "append_only": True,
+        "model_access": "READ_ONLY",
+        "candidate_only": True,
+        "model_authority": False,
+        "operation_authority": False,
+        "formal_decision_authority": False,
+        "completion_requires_reobserved_target_match": True,
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+    return _finalize_packet(packet)
+
+
+def build_total_field_correction_contract(
+    progress_projection: Mapping[str, Any],
+    *,
+    affected_coordinate_refs: Collection[str],
+    attempt: int,
+    max_attempts: int,
+    rollback_ref: str,
+    verification_procedure: Collection[str],
+) -> dict[str, Any]:
+    """Derive one idempotent residual-only correction candidate from progress."""
+    if progress_projection.get("schema_id") != TOTAL_FIELD_PROGRESS_SCHEMA:
+        raise ValueError("TOTAL_FIELD_PROGRESS_PROJECTION_REQUIRED")
+    unsigned_progress = dict(progress_projection)
+    supplied_progress_sha256 = unsigned_progress.pop("packet_sha256", None)
+    if supplied_progress_sha256 != canonical_sha256(unsigned_progress):
+        raise ValueError("TOTAL_FIELD_PROGRESS_HASH_MISMATCH")
+    if isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+        raise ValueError("CORRECTION_ATTEMPT_INVALID")
+    if (
+        isinstance(max_attempts, bool)
+        or not isinstance(max_attempts, int)
+        or not 1 <= max_attempts <= 10
+    ):
+        raise ValueError("CORRECTION_MAX_ATTEMPTS_INVALID")
+    affected = sorted(set(_require_string_list(
+        list(affected_coordinate_refs), "affected_coordinate_refs"
+    )))
+    remaining = sorted(set(_require_string_list(
+        list(progress_projection.get("remaining_difference_refs") or []),
+        "remaining_difference_refs",
+    )))
+    if not set(remaining).issubset(affected):
+        raise ValueError("CORRECTION_RESIDUAL_OUTSIDE_AFFECTED_CLOSURE")
+    rollback = _require_non_empty_string(rollback_ref, "rollback_ref")
+    verification = _require_string_list(
+        list(verification_procedure), "verification_procedure"
+    )
+    target = _normalize_progress_observation(
+        "progress.target_state", progress_projection.get("target_state")
+    )
+    reobserved = _normalize_progress_observation(
+        "progress.reobserved_state", progress_projection.get("reobserved_state")
+    )
+    if target["sha256"] == reobserved["sha256"] and remaining:
+        raise ValueError("CORRECTION_RESIDUAL_CONFLICTS_WITH_REOBSERVED_MATCH")
+    if target["sha256"] != reobserved["sha256"] and not remaining:
+        state = "HOLD_CORRECTION_DIFFERENCE_NOT_LOCATED"
+        correction_allowed = False
+    elif not remaining:
+        state = "NO_CORRECTION_REQUIRED"
+        correction_allowed = False
+    elif attempt > max_attempts:
+        state = "HOLD_CORRECTION_ATTEMPTS_EXHAUSTED"
+        correction_allowed = False
+    else:
+        state = "CORRECTION_CANDIDATE_READY"
+        correction_allowed = True
+    idempotency_preimage = {
+        "progress_projection_sha256": supplied_progress_sha256,
+        "remaining_difference_refs": remaining,
+        "affected_coordinate_refs": affected,
+        "attempt": attempt,
+        "rollback_ref": rollback,
+        "verification_procedure": verification,
+    }
+    packet = {
+        "schema_id": TOTAL_FIELD_CORRECTION_SCHEMA,
+        "state": state,
+        "progress_projection_sha256": supplied_progress_sha256,
+        "founder_intent": deepcopy(progress_projection.get("founder_intent")),
+        "target_state": target,
+        "reobserved_state": reobserved,
+        "affected_coordinate_refs": affected,
+        "remaining_difference_refs": remaining,
+        "materialization_scope": remaining if correction_allowed else [],
+        "attempt": attempt,
+        "max_attempts": max_attempts,
+        "idempotency_key": canonical_sha256(idempotency_preimage),
+        "rollback_ref": rollback,
+        "verification_procedure": verification,
+        "post_state_receipt_required": True,
+        "divergence_policy": (
+            "QUARANTINE_AND_ROLLBACK"
+            if state.startswith("HOLD_CORRECTION")
+            else "REOBSERVE_THEN_CORRECT_REMAINING_ONLY"
+        ),
+        "cloud_red_team_candidate_only": True,
+        "candidate_only": True,
+        "operation_authority": False,
+        "formal_decision_authority": False,
+        "canonical_pointer_write": False,
+        "execution_requires_fresh_total_field_d8_scope": True,
+        "float_authority_dependency": TOTAL_FIELD_FLOAT_AUTHORITY_DEPENDENCY,
+    }
+    return _finalize_packet(packet)
 
 
 def normalize_capability_missing_report(value: Mapping[str, Any]) -> dict[str, Any]:

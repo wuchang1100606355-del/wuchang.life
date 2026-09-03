@@ -67,6 +67,38 @@ SECRET_PATTERNS = [
     ]
 ]
 
+SENSITIVE_VALUE_KEYS = {
+    "access_token",
+    "refresh_token",
+    "id_token",
+    "private_key",
+    "password",
+    "passwd",
+    "member_plaintext",
+}
+
+HIGH_CONFIDENCE_SECRET_VALUE_PATTERNS = [
+    re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----", re.IGNORECASE),
+    re.compile(r"\bAIza[0-9A-Za-z_\-]{20,}"),
+    re.compile(r"\bBearer\s+[0-9A-Za-z._\-]{12,}", re.IGNORECASE),
+    re.compile(
+        r'''["']?(?:access_token|refresh_token|id_token|private_key|password|passwd|member_plaintext)["']?\s*[:=]\s*["']?(?!false\b|null\b|none\b|\[redacted)[^\s"',}]{8,}''',
+        re.IGNORECASE,
+    ),
+]
+
+SAFE_SECRET_SENTINELS = {
+    "",
+    "false",
+    "none",
+    "null",
+    "not_present",
+    "not_included",
+    "redacted",
+    "[redacted]",
+    "[redacted_secret_or_member_plaintext]",
+}
+
 RED_TEAM_PATTERNS = {
     "RT_SECRET_EXPOSURE": re.compile(
         r"\b(secret|token|password|private[_ -]?key|credential|api[_ -]?key)\b|密鑰|憑證|密碼",
@@ -105,7 +137,7 @@ class AgentConfig:
     skill_manifest_path: Path = DEFAULT_MANIFEST
     credential_available: bool = False
     cloud_completion_enabled: bool = False
-    timeout_seconds: float = 10.0
+    timeout_seconds: float = 120.0
     total_field_root: Path = ROOT
     dynamic_context_max_items: int = 20
 
@@ -113,6 +145,36 @@ class AgentConfig:
 def contains_secret_text(value: Any) -> bool:
     text = json.dumps(value, ensure_ascii=False) if not isinstance(value, str) else value
     return any(pattern.search(text) for pattern in SECRET_PATTERNS)
+
+
+def contains_secret_material(value: Any) -> bool:
+    """Detect secret values without treating security-policy prose as a secret.
+
+    Dynamic 8DADI context is expected to contain words such as ``private key``
+    and ``token`` inside denial policies.  Those labels are not credentials.
+    A sensitive key with a non-sentinel value or a high-confidence credential
+    shape still fails closed.
+    """
+
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            normalized_key = str(key).strip().lower()
+            if normalized_key in SENSITIVE_VALUE_KEYS:
+                if isinstance(item, bool):
+                    if item:
+                        return True
+                elif item is not None:
+                    normalized_value = str(item).strip().lower()
+                    if normalized_value not in SAFE_SECRET_SENTINELS:
+                        return True
+            if contains_secret_material(item):
+                return True
+        return False
+    if isinstance(value, (list, tuple, set)):
+        return any(contains_secret_material(item) for item in value)
+    if isinstance(value, str):
+        return any(pattern.search(value) for pattern in HIGH_CONFIDENCE_SECRET_VALUE_PATTERNS)
+    return False
 
 
 def scrub_sensitive(value: Any) -> Any:
@@ -364,7 +426,7 @@ class OllamaXiaoJTotalFieldAgent:
                 "source": source,
                 "reason": f"{type(exc).__name__}:{exc}",
             }
-        if contains_secret_text(packet):
+        if contains_secret_material(packet):
             return {
                 "state": "HOLD_SECRET_OR_MEMBER_PLAINTEXT_INPUT",
                 "source": source,
@@ -565,6 +627,7 @@ def main() -> int:
     parser.add_argument("--ollama-url", default="http://127.0.0.1:11434")
     parser.add_argument("--model", default=DEFAULT_ROOT_MODEL)
     parser.add_argument("--skill-id", default="total_field_policy_check")
+    parser.add_argument("--timeout-seconds", type=float, default=120.0)
     parser.add_argument("--credential-available", action="store_true")
     parser.add_argument("--use-cloud-completion", action="store_true")
     args = parser.parse_args()
@@ -574,6 +637,7 @@ def main() -> int:
         model=args.model,
         credential_available=args.credential_available,
         cloud_completion_enabled=args.use_cloud_completion,
+        timeout_seconds=args.timeout_seconds,
     )
     agent = OllamaXiaoJTotalFieldAgent(config)
     try:

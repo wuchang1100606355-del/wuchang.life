@@ -14,6 +14,55 @@ MAX_TTL_SECONDS = 300
 RECEIVE_CANDIDATE_SCOPE = "RECEIVE_CANDIDATE"
 POINTER_BOOTSTRAP_SCOPE = "BOOTSTRAP_CURRENT_ACTIVE_CANONICAL_POINTER"
 PROMOTION_SCOPE = "PROMOTE_ACCEPTED_CANDIDATE"
+STATE_CELL_PILOT_SCOPE = "RUN_READ_ONLY_STATE_CELL_PILOT"
+STATE_CELL_PILOT_ACTION = "RUN_READ_ONLY_STATE_CELL_INDEX_PROJECTION"
+STATE_CELL_PILOT_NODE = "MSI"
+STATE_CELL_PILOT_MAXIMUM_EFFECT = "IN_MEMORY_READ_ONLY_ONLY"
+STATE_CELL_PILOT_FORBIDDEN_EFFECTS = frozenset(
+    {
+        "ACTIVE_POINTER_WRITE",
+        "CANONICAL_POINTER_WRITE",
+        "CLOUD_CALL",
+        "DB_WRITE",
+        "DEPLOY",
+        "FILE_DELETE",
+        "NETWORK_ROUTE_MUTATION",
+        "OLD_VERSION_EXECUTION",
+        "RESTART",
+    }
+)
+STATE_CELL_PILOT_CONSTRAINT_FIELDS = frozenset(
+    {
+        "proposal_sha256",
+        "red_team_receipt_sha256",
+        "target_field_sha256",
+        "carrier_capability_registry_sha256",
+        "target_node",
+        "object_id",
+        "exact_coordinate",
+        "authorized_action",
+        "authorized_steps_sha256",
+        "evidence_refs_sha256",
+        "maximum_effect",
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+        "forbidden_effects",
+        "operation_nonce",
+        "single_use_authorization_required",
+        "replay_protected",
+        "authority_signature_required",
+        "db_write",
+        "deploy",
+        "restart",
+        "network_route_mutation",
+        "cloud_call",
+        "file_delete",
+        "canonical_pointer_write",
+        "active_pointer_write",
+        "old_version_target_import",
+    }
+)
 PROMOTION_SCOPE_CONSTRAINTS = {
     "total_field_decision": "ALLOW_CANDIDATE_ACCEPTED",
     "candidate_sha256": "066e39cd2abad3d4ed713e4f7ecb7f220d4651d9f7624f5b48d13c4781be7890",
@@ -54,6 +103,7 @@ SCOPE_OWNER_AUTHORIZATIONS = {
     RECEIVE_CANDIDATE_SCOPE: "FOUNDER_APPROVED_RECEIVE_CANDIDATE",
     POINTER_BOOTSTRAP_SCOPE: "FOUNDER_APPROVED_CURRENT_ACTIVE_CANONICAL_POINTER_BOOTSTRAP",
     PROMOTION_SCOPE: "FOUNDER_APPROVED_PROMOTE_ACCEPTED_CANDIDATE",
+    STATE_CELL_PILOT_SCOPE: "FOUNDER_APPROVED_RUN_READ_ONLY_STATE_CELL_PILOT",
 }
 DISALLOWED_PATH_PARTS = {
     "archive",
@@ -242,6 +292,117 @@ def _require_opaque_ref(
     return value
 
 
+def _require_hash(mapping: Mapping[str, Any], field: str) -> str:
+    value = mapping.get(field)
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            f"{field} must be a lowercase SHA-256 digest",
+        )
+    return value
+
+
+def _require_positive_budget(mapping: Mapping[str, Any], field: str) -> int:
+    value = mapping.get(field)
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            f"{field} must be an explicit positive integer",
+        )
+    return value
+
+
+def _validate_state_cell_pilot_constraints(constraints: Any) -> None:
+    if not isinstance(constraints, Mapping):
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "state-cell pilot scope constraints are required",
+        )
+    if set(constraints) != STATE_CELL_PILOT_CONSTRAINT_FIELDS:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "state-cell pilot scope constraints are missing or expanded",
+        )
+    for field in (
+        "proposal_sha256",
+        "red_team_receipt_sha256",
+        "target_field_sha256",
+        "carrier_capability_registry_sha256",
+        "authorized_steps_sha256",
+        "evidence_refs_sha256",
+    ):
+        _require_hash(constraints, field)
+    for field in (
+        "cell_budget",
+        "relation_traversal_budget",
+        "observation_budget",
+    ):
+        _require_positive_budget(constraints, field)
+    if constraints.get("target_node") != STATE_CELL_PILOT_NODE:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "state-cell pilot target_node must be MSI",
+        )
+    if constraints.get("authorized_action") != STATE_CELL_PILOT_ACTION:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "state-cell pilot authorized_action is invalid",
+        )
+    if constraints.get("maximum_effect") != STATE_CELL_PILOT_MAXIMUM_EFFECT:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "state-cell pilot maximum_effect is invalid",
+        )
+    for field in ("object_id", "exact_coordinate"):
+        if not isinstance(constraints.get(field), str) or not constraints[field].strip():
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                f"state-cell pilot {field} is required",
+            )
+    forbidden = constraints.get("forbidden_effects")
+    if (
+        not isinstance(forbidden, list)
+        or len(forbidden) != len(set(forbidden))
+        or set(forbidden) != STATE_CELL_PILOT_FORBIDDEN_EFFECTS
+    ):
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "state-cell pilot forbidden_effects must match the hard wall",
+        )
+    operation_nonce = constraints.get("operation_nonce")
+    if not isinstance(operation_nonce, str) or NONCE_REF.fullmatch(operation_nonce) is None:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_REFERENCE_INVALID",
+            "operation_nonce is not a valid opaque nonce ref",
+        )
+    for field in (
+        "single_use_authorization_required",
+        "replay_protected",
+        "authority_signature_required",
+    ):
+        if constraints.get(field) is not True:
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                f"state-cell pilot {field} must be true",
+            )
+    for field in (
+        "db_write",
+        "deploy",
+        "restart",
+        "network_route_mutation",
+        "cloud_call",
+        "file_delete",
+        "canonical_pointer_write",
+        "active_pointer_write",
+        "old_version_target_import",
+    ):
+        if constraints.get(field) is not False:
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                f"state-cell pilot {field} must be false",
+            )
+
+
 def _verify_sha256(path: Path, expected: Any, state: str, field: str) -> None:
     if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
         raise ResolverError("HOLD_AUTHORITY_INCOMPLETE", f"{field} is invalid")
@@ -321,6 +482,8 @@ def _validate_pointer_shape(pointer: Mapping[str, Any]) -> None:
                 "BLOCK_AUTHORITY_SCOPE_ESCALATION",
                 "promotion scope constraints are missing, drifted, or expanded",
             )
+    elif scope[0] == STATE_CELL_PILOT_SCOPE:
+        _validate_state_cell_pilot_constraints(constraints)
     elif constraints not in (None, {}):
         raise ResolverError(
             "BLOCK_AUTHORITY_SCOPE_ESCALATION",
