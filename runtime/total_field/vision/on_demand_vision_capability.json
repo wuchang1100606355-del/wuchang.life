@@ -1,0 +1,42 @@
+{
+  "schema_version": "TOTAL-FIELD-ON-DEMAND-VISION-CAPABILITY/1.0",
+  "capability_ref": "CAP_ON_DEMAND_VISION_WALL_V1",
+  "mode": "ON_DEMAND",
+  "authority": "FOUNDER_REQUEST_ONLY",
+  "persistent_stream": false,
+  "continuous_decode": false,
+  "default_stream": "secondary",
+  "local_route": {
+    "host": "192.168.50.34",
+    "rtsp_port": 554,
+    "service_port": 30080
+  },
+  "remote_route": {
+    "host": "p1430563.ds1.nxt.net.tw",
+    "rtsp_port": 554,
+    "service_port": 30080
+  },
+  "channels": {
+    "count": 8,
+    "index_base": 0,
+    "rtsp_path_template": "/rtspstream?channel={channel}&stream={stream}"
+  },
+  "layouts": {
+    "1": "1x1",
+    "2_to_4": "2x2",
+    "5_to_8": "3x3"
+  },
+  "credential_policy": {
+    "repository_plaintext": "DENY",
+    "packet_plaintext": "DENY",
+    "command_history_plaintext": "DENY",
+    "source": "EXTERNAL_LOCAL_SECRET_STORE_ONLY"
+  },
+  "natural_language_examples": [
+    "開全部監視器",
+    "看一號",
+    "看一到四號",
+    "開五到八號"
+  ],
+  "source": "tools/total_field/on_demand_vision_wall.py"
+}
