@@ -296,17 +296,27 @@ def _load_capability_pack(root: Path) -> dict[str, Any] | None:
         documents[filename] = _load_json(pack_root / filename)
 
     registry = documents["capability_registry.json"]
-    if registry.get("version") != "1.0.0" or registry.get("model_authority") != "LOCAL_CANDIDATE_ONLY":
+    if (
+        registry.get("version") != "2.3.0"
+        or registry.get("model_authority") != "NONE_PASSIVE_ORGAN"
+        or registry.get("mode")
+        != "TOTAL_FIELD_CONTROLLED_REGISTERED_CAPABILITY_MAP_V2_3"
+    ):
         raise ValueError("capability pack version or authority invalid")
     root_model = documents["root_model_contract.json"]
-    identity = root_model.get("identity") or {}
-    unfenced = root_model.get("unfenced_reasoning") or {}
+    model_contract = root_model.get("model") or {}
+    side_effect_boundary = root_model.get("side_effect_boundary") or {}
+    workflow = root_model.get("workflow") or []
     if (
-        root_model.get("schema_id") != "W7TP_XIAOJ_ROOT_MODEL_8B_V1"
-        or identity.get("system_root_model") is not True
-        or identity.get("parameter_class") != "8B"
-        or unfenced.get("execution_is_unfenced") is not False
-        or root_model.get("red_team_alert", {}).get("enabled") is not True
+        root_model.get("schema_id") != "W7TP_XIAOJ_MODEL_ORGAN_CONTRACT_V2_3"
+        or model_contract.get("role")
+        != "PASSIVE_REPLACEABLE_REASONING_GENERATION_ORGAN"
+        or model_contract.get("controller") != "TOTAL_FIELD_USING_8D_ADI"
+        or model_contract.get("model_output_is_authority") is not False
+        or side_effect_boundary.get("model_self_authorization") is not False
+        or "RED_TEAM_PRECHECK" not in workflow
+        or "PURPLE_TEAM_MINIMUM_PATH_CONVERGENCE" not in workflow
+        or "REOBSERVATION_AND_TEST" not in workflow
     ):
         raise ValueError("root model contract invalid")
     voice_routing = documents["voice_pronunciation_routing_contract.json"]

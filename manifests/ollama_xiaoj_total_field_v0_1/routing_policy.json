@@ -1,16 +1,135 @@
 {
   "schema_id": "W7TP_LOCAL_MODEL_CAPABILITY_ROUTING_POLICY_V1",
-  "version": "1.0.0",
+  "version": "2.3.0",
   "authority_boundary": "LOCAL_CANDIDATE_ONLY",
   "flow": [
     "USER_INPUT",
-    "D1_INTENT_COMPRESSION",
-    "SKILL_LOOKUP",
-    "LOCAL_MODEL_CANDIDATE",
+    "D1_INTENT_TO_TARGET_8D_STATE_FIELD",
+    "8DADI_CONTEXT_AND_CAPABILITY_RESOLUTION",
+    "RED_TEAM_PRECHECK",
+    "PURPLE_TEAM_MINIMUM_PATH_CONVERGENCE",
     "TOOL_CONTRACT_VALIDATION",
-    "TOTAL_FIELD_GOVERNANCE_VALIDATION",
-    "RESULT_WITH_EVIDENCE"
+    "D8_SCOPE_AND_HUMAN_APPROVAL_RESOLUTION",
+    "REGISTERED_TOOL_EXECUTION_IF_AUTHORIZED",
+    "PRECISE_DELIVERY_OR_MATERIALIZATION_IF_AUTHORIZED",
+    "ACTIVATION_IF_AUTHORIZED",
+    "REOBSERVATION_AND_TEST",
+    "RESIDUAL_ONLY_CORRECTION",
+    "CLOSE_WITH_RECEIPT"
   ],
+  "workflow_closure": {
+    "settings_or_candidates_may_not_accumulate_as_execution": true,
+    "red_team_may_authorize": false,
+    "purple_team_may_authorize": false,
+    "skill_without_tool_binding_is_advisory_only": true,
+    "success_requires_reobserved_target_state": true,
+    "failure_disposition": "ROLL_BACK_TO_LAST_REOBSERVED_VERIFIED_STATE_AND_RECORD_RECEIPT"
+  },
+  "small_model_focus_scheduler": {
+    "decision_engine": "8D_ADI",
+    "active_work_cell_limit": 1,
+    "context_policy": "MINIMUM_REFERENCED_CONTEXT_ONLY",
+    "work_cell_requires": [
+      "CURRENT_FOUNDER_INTENT_REF",
+      "CURRENT_STATE_REF",
+      "TARGET_STATE_REF",
+      "RELEVANT_CAPABILITY_REFS",
+      "MINIMUM_CONTEXT_REFS",
+      "ACCEPTANCE_CONTRACT",
+      "D8_SCOPE_REF"
+    ],
+    "next_cell_requires_previous_execution_reobservation_and_close": true,
+    "queue_accumulation_forbidden": true,
+    "unrelated_history_injection_forbidden": true,
+    "failure_scope": "FAILED_CELL_ONLY"
+  },
+  "model_organ_environment": {
+    "role": "REPLACEABLE_REASONING_GENERATION_ORGAN",
+    "environment_provider": "TOTAL_FIELD_USING_8D_ADI",
+    "supplied_context": "PRECISE_MINIMUM_REFERENCED_WORK_CELL_ENVIRONMENT",
+    "model_output_is_effect": false,
+    "registered_tool_execution_is_required_for_effect": true,
+    "total_field_reobservation_is_required_for_close": true,
+    "model_or_provider_change_may_change_authority": false
+  },
+  "purpose_bound_model_profiles": {
+    "selector": "TOTAL_FIELD_USING_8D_ADI_WORK_CELL_PURPOSE",
+    "ENGINEERING_EXECUTION": {"temperature": 0.15, "top_p": 0.85, "max_output_tokens": 1024},
+    "RED_TEAM_EXPLORATION": {"temperature": 0.35, "top_p": 0.9, "max_output_tokens": 1536},
+    "PURPLE_TEAM_CONVERGENCE": {"temperature": 0.2, "top_p": 0.85, "max_output_tokens": 1024},
+    "CREATIVE_AUDIOVISUAL": {"temperature": 0.75, "top_p": 0.95, "max_output_tokens": 2048},
+    "SCHEDULED_HEALTH_CHECK": {"temperature": 0.1, "top_p": 0.8, "max_output_tokens": 256},
+    "NATURAL_CONVERSATION": {"temperature": 0.55, "top_p": 0.9, "max_output_tokens": 1024},
+    "model_may_self_select": false,
+    "scope": "CURRENT_WORK_CELL_ONLY_RESET_AFTER_CLOSE"
+  },
+  "persona_profession_model_routing": {
+    "brand_persona_invariant": true,
+    "profession_capability_variable": true,
+    "warmth_selected_by_interaction_position": true,
+    "model_selector": "TOTAL_FIELD_USING_8D_ADI",
+    "default_model_class": "SMALLEST_SUFFICIENT_LOCAL",
+    "upgrade_factors": ["PURPOSE", "COMPLEXITY", "SPECIALTY", "QUALITY", "LATENCY", "COST", "HARDWARE", "PRIVACY"],
+    "model_may_self_upgrade": false
+  },
+  "model_size_use_cases": {
+    "0_5B": "ROUTING_CLASSIFICATION_SIMPLE_UI_SHORT_EXTRACTION",
+    "1_TO_2B": "STRUCTURED_EXTRACTION_NORMALIZATION_LIGHT_TOOL_PREPARATION",
+    "3_TO_4B": "GENERAL_DIALOGUE_SUMMARY_SHORT_REASONING",
+    "7_TO_8B": "COMPLEX_ENGINEERING_RED_PURPLE_AND_CREATIVE_PLANNING",
+    "human_uncertainty_is_allowed": true,
+    "effect_requires_precise_scope_not_conversation_certainty": true,
+    "live_model_availability_required": true
+  },
+  "supply_packets": {
+    "knowledge": "VERIFIED_COORDINATED_KNOWLEDGE_REFS",
+    "dynamic_context": "CURRENT_WORK_CELL_CONTEXT_PACKET",
+    "cloud_inference": "MINIMUM_REDACTED_CURRENT_TASK_PACKET",
+    "cloud_inference_is_d6": false,
+    "cloud_result_returns_to_total_field": true,
+    "d6_requires_target_base_delta_coordinates_lineage_reconstruction_and_verification": true
+  },
+  "dynamic_context_replay": {
+    "replayable_mapping": true,
+    "reconstructs_context_not_side_effect": true,
+    "required": [
+      "PACKET_ID",
+      "FOUNDER_INTENT_REF",
+      "WORK_CELL_ID",
+      "CURRENT_AND_TARGET_STATE_REFS",
+      "KNOWLEDGE_AND_CAPABILITY_REFS",
+      "ADI_COORDINATES",
+      "LOGICAL_TIME",
+      "LINEAGE",
+      "CONTEXT_DIGEST",
+      "RECONSTRUCTION_RULES",
+      "VERIFICATION_RULES"
+    ],
+    "forbidden_replay": [
+      "SECRET_VALUES",
+      "USED_NONCE",
+      "EXPIRED_OR_SINGLE_USE_APPROVAL",
+      "PREVIOUS_SIDE_EFFECT_AUTHORIZATION"
+    ],
+    "effect_reexecution_requires_new_d8_resolution": true
+  },
+  "scheduled_health_engineering_model": {
+    "model_ref": "xiaoj:latest",
+    "timezone": "Asia/Taipei",
+    "daily_times": ["07:00", "19:00"],
+    "background_only": true,
+    "deterministic_checks_first": true,
+    "model_invocation": "ON_DRIFT_ONLY",
+    "repair_requires_current_d8_resolution": true
+  },
+  "uncertainty_escalation": {
+    "trigger": "MATERIAL_UNRESOLVED_DOUBT",
+    "packet": "MINIMUM_REDACTED_CLOUD_RED_TEAM_PACKET",
+    "cloud_result": "COUNTEREVIDENCE_CANDIDATE_ONLY",
+    "return_to": "TOTAL_FIELD_PURPLE_TEAM_MINIMUM_PATH_CONVERGENCE",
+    "cloud_may_authorize_or_execute": false,
+    "cloud_red_team_packet_is_d6": false
+  },
   "identity_policy": {
     "founder_claim_requires_existing_verified_authority_ref": true,
     "general_member_uses_minimum_privilege": true,
@@ -37,7 +156,7 @@
     "raw audio"
   ],
   "generative_transmission": {
-    "definition": "狀態場封包、引用、查表、重構條件、等價狀態生成與總場驗證",
+    "definition": "目的節點依經准入且可驗證的既有能力與狀態基座，接收形成同一目標結果所不可約的最小新資訊、引用、ADI 座標、重建規則與驗證規則，在本地確定性重建並重新驗證",
     "not_file_transfer": true,
     "not_cloud_ciphertext_sync": true,
     "not_backup": true,
@@ -45,7 +164,9 @@
     "requires_lookup_refs": true,
     "requires_reconstruction_conditions": true,
     "requires_equivalent_state_digest": true,
-    "requires_total_field_verification": true
+    "requires_total_field_verification": true,
+    "cloud_inference_or_model_fallback_is_d6": false,
+    "carrier_is_d6": false
   },
   "candidate_return_contract": {
     "required": ["state", "skill_id", "d1_intent_projection", "candidate", "evidence", "policy"],

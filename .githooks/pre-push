@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+passkey_python=/home/taiji_admin/.local/share/w7tp-passkey-d8/venv/bin/python
+if [ ! -x "$passkey_python" ]; then
+  printf '%s\n' '{"state":"HOLD_TOTAL_FIELD_GIT_PUSH_GATE","reason":"PASSKEY_RUNTIME_UNAVAILABLE","push_authorized":false}'
+  exit 1
+fi
+exec "$passkey_python" "$repo_root/tools/total_field_git_push_gate.py" \
+  --repo-root "$repo_root" \
+  --remote-name "$1" \
+  --remote-url "$2"

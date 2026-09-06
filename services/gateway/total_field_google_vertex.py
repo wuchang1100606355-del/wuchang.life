@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -21,6 +22,9 @@ VERTEX_MODEL = os.getenv("TAIJI_VERTEX_MODEL", "gemini-2.5-flash-lite")
 TOTAL_FIELD_GOOGLE_MODEL = os.getenv(
     "TAIJI_TOTAL_FIELD_GOOGLE_MODEL", "w7tp-total-field-google"
 )
+D6_CONTRACT_PATH = (
+    PROJECT_ROOT / "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json"
+)
 VERTEX_TIMEOUT = float(os.getenv("TAIJI_VERTEX_TIMEOUT", "120"))
 MAX_CONTEXT_ITEMS = int(os.getenv("TAIJI_VERTEX_MAX_CONTEXT_ITEMS", "4"))
 WINDOWS_POWERSHELL = Path(
@@ -38,6 +42,32 @@ REQUIRED_ACKNOWLEDGEMENTS = (
     "EXECUTION_REQUIRES_REOBSERVATION",
     "LAN_PRECEDES_VPN",
 )
+
+
+def _load_d6_contract() -> tuple[dict[str, Any], str]:
+    try:
+        raw = D6_CONTRACT_PATH.read_bytes()
+        contract = json.loads(raw.decode("utf-8"))
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_D6_CONTRACT_UNREADABLE",
+        ) from exc
+    if (
+        contract.get("schema_id")
+        != "W7TP_8DADI_D6_GENERATIVE_TRANSMISSION_CONTRACT_V2_3"
+        or contract.get("primary_decision_engine") != "8D_ADI"
+        or contract.get("not_d6", {}).get("cloud_llm_call") is not True
+        or contract.get("inference_routing_boundary", {}).get(
+            "inference_route_is_generative_transmission"
+        )
+        is not False
+    ):
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_D6_CONTRACT_INVARIANTS_INCOMPLETE",
+        )
+    return contract, hashlib.sha256(raw).hexdigest()
 
 
 def _last_user_text(messages: list[dict[str, str]]) -> str:
@@ -113,10 +143,16 @@ def _bounded_total_field_header(context: dict[str, Any]) -> dict[str, Any]:
             status_code=503,
             detail="HOLD_8DADI_ALIGNMENT_INVARIANTS_INCOMPLETE",
         )
+    d6_contract, d6_contract_sha256 = _load_d6_contract()
     return {
-        "schema_id": "W7TP_8DADI_TOTAL_FIELD_GOOGLE_PULL_HEADER_V1",
+        "schema_id": "W7TP_8DADI_TOTAL_FIELD_GOOGLE_PULL_HEADER_V2_3",
         "pull_owner": "TOTAL_FIELD",
         "provider_role": "REPLACEABLE_CLOUD_REASONING_ORGAN",
+        "inference_route": "GOOGLE_VERTEX",
+        "inference_route_is_generative_transmission": False,
+        "cloud_inference_is_d6": False,
+        "d6_definition": d6_contract["d6_core"]["definition"],
+        "d6_contract_sha256": d6_contract_sha256,
         "result_state": "CANDIDATE_ONLY",
         "execution_authorized": False,
         "system_mutation_allowed": False,
@@ -169,6 +205,8 @@ def total_field_google_chat(
         "instruction": (
             "你是由總場拉取的可替換 Google 雲端推理器。依使用者最新意圖提供繁體中文結果。"
             "你不是權威，不得宣稱已寫入、已部署、已啟用或已完成未重新觀測的效果。"
+            "本次 Google 推理呼叫不是 D6 生成式傳輸，也不得把雲端／本機模型切換稱為生成式傳輸。"
+            "D6 只指目標端依已驗證基座，以最小不可約新資訊及重建與驗證規則形成同一結果。"
         ),
         "upstream_system_instruction": supplied_system,
     }
@@ -182,6 +220,10 @@ def total_field_google_chat(
         temperature = float(body.get("temperature", 0.2))
     except (TypeError, ValueError):
         temperature = 0.2
+    try:
+        top_p = float(body.get("top_p", 0.9))
+    except (TypeError, ValueError):
+        top_p = 0.9
 
     vertex_payload = {
         "systemInstruction": {
@@ -199,6 +241,7 @@ def total_field_google_chat(
         "contents": contents,
         "generationConfig": {
             "temperature": max(0.0, min(temperature, 2.0)),
+            "topP": max(0.0, min(top_p, 1.0)),
             "maxOutputTokens": max_tokens,
         },
     }
@@ -257,6 +300,10 @@ def total_field_google_chat(
         "backend": "total_field_google_vertex",
         "provider_model": data.get("modelVersion") or VERTEX_MODEL,
         "total_field_pull": True,
+        "inference_route": "GOOGLE_VERTEX",
+        "inference_route_is_generative_transmission": False,
+        "generative_transmission_used": False,
+        "d6_contract_sha256": header["d6_contract_sha256"],
         "8dadi_index_only": True,
         "8dadi_context_packet_sha256": context.get("packet_sha256"),
         "candidate_authority": False,

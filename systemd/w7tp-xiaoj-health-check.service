@@ -1,0 +1,13 @@
+[Unit]
+Description=W7TP XiaoJ 8DADI scheduled health observation
+After=taiji-gateway.service taiji-03-ui.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+Environment=PYTHONPATH=/home/taiji_admin/Taiji_Hub
+ExecStart=/usr/bin/python3 /home/taiji_admin/Taiji_Hub/tools/xiaoj_total_field_health_check.py
+Nice=10
+
+[Install]
+WantedBy=default.target

@@ -33,6 +33,9 @@ def test_header_keeps_model_non_authoritative() -> None:
     header = _bounded_total_field_header(_context())
     assert header["pull_owner"] == "TOTAL_FIELD"
     assert header["result_state"] == "CANDIDATE_ONLY"
+    assert header["inference_route_is_generative_transmission"] is False
+    assert header["cloud_inference_is_d6"] is False
+    assert len(header["d6_contract_sha256"]) == 64
     assert header["execution_authorized"] is False
     assert header["system_mutation_allowed"] is False
     assert header["cloud_may_define_total_field"] is False
@@ -69,7 +72,7 @@ def test_total_field_google_pull_uses_8dadi_context(
 
     content, usage, metadata = total_field_google_chat(
         [{"role": "user", "content": "請依 8DADI 建構"}],
-        {"temperature": 0, "max_tokens": 64},
+        {"temperature": 0, "top_p": 0.85, "max_tokens": 64},
     )
 
     assert content == "完成建構建議"
@@ -80,8 +83,13 @@ def test_total_field_google_pull_uses_8dadi_context(
     assert metadata["execution_authorized"] is False
     sent = post.call_args.kwargs["json"]
     header = sent["systemInstruction"]["parts"][0]["text"]
-    assert "W7TP_8DADI_TOTAL_FIELD_GOOGLE_PULL_HEADER_V1" in header
+    assert "W7TP_8DADI_TOTAL_FIELD_GOOGLE_PULL_HEADER_V2_3" in header
     assert "TOTAL_FIELD" in header
+    assert metadata["generative_transmission_used"] is False
+    assert metadata["inference_route_is_generative_transmission"] is False
+    assert sent["generationConfig"]["temperature"] == 0
+    assert sent["generationConfig"]["topP"] == 0.85
+    assert sent["generationConfig"]["maxOutputTokens"] == 64
 
 
 @patch("services.gateway.total_field_google_vertex.build_dynamic_context")

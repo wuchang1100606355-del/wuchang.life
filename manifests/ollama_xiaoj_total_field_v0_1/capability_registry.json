@@ -1,6 +1,6 @@
 {
-  "access_profile": "FOUNDER_ALL_SKILLS",
-  "authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY",
+  "access_profile": "TOTAL_FIELD_SELECTED_SKILL_PER_WORK_CELL",
+  "authority": "TOTAL_FIELD_D8_SCOPE_BOUND_FOR_EXTERNAL_EFFECT",
   "founder_all_skills_index": {
     "classification_counts": {
       "NEEDS_CONNECTOR": 55,
@@ -1110,7 +1110,7 @@
       "model_may_commit": false
     }
   },
-  "interface": "FOUNDER_VPN_FULL",
+  "interface": "FOUNDER_LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE",
   "invalid_when": [
     "source_manifest_missing",
     "source_sha256_mismatch",
@@ -1123,9 +1123,9 @@
   ],
   "language": "zh-TW",
   "member_boundary": "OWNER_ONLY",
-  "mode": "portable_rules_index_contracts_candidate_only",
-  "model_authority": "LOCAL_CANDIDATE_ONLY",
-  "model_identity": "FOUNDER_PRIVATE_XIAOJ",
+  "mode": "TOTAL_FIELD_CONTROLLED_REGISTERED_CAPABILITY_MAP_V2_3",
+  "model_authority": "NONE_PASSIVE_ORGAN",
+  "model_identity": "XIAOJ_REPLACEABLE_REASONING_GENERATION_ORGAN",
   "owner": "江政隆",
   "schema_id": "W7TP_LOCAL_MODEL_CAPABILITY_REGISTRY_V1",
   "skills": [
@@ -1134,6 +1134,23 @@
       "output_kind": "Evidence",
       "purpose": "回傳去敏後的唯讀來源摘要與 evidence path／SHA-256 引用",
       "side_effects": false,
+      "when_to_use": "需要回答目前狀態、來源、證據或雜湊引用，且不需要寫入或啟用效果時。",
+      "how_to_use": "以 8DADI 定位已准入上下文引用，經輸入契約驗證後呼叫 evidence_echo，只回傳去敏證據。",
+      "examples": {
+        "allow": "查詢目前總場上下文所引用的證據與 SHA-256。",
+        "hold": "要求以舊收據直接宣稱目前已部署；必須 HOLD 並重新觀測。"
+      },
+      "context_references": [
+        "CURRENT_FOUNDER_INTENT_REF",
+        "CURRENT_STATE_REF",
+        "EVIDENCE_REFS"
+      ],
+      "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dimensions",
+      "d6_mapping": "NOT_APPLICABLE_READ_ONLY_EVIDENCE",
+      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_evidence_echo",
+      "side_effect_class": "NONE",
+      "d8_requirement": "NO_SIDE_EFFECT_AUTHORITY",
+      "reobservation_contract": "重新讀取相同證據座標並確認引用仍可解析；不產生外部效果。",
       "source": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
       "triggers": [
@@ -1151,6 +1168,24 @@
       "output_kind": "Candidate",
       "purpose": "建立不具權威的實作、修正或設計候選輪廓",
       "side_effects": false,
+      "when_to_use": "使用者明確要求草案、設計或尚未取得執行權威的變更輪廓時。",
+      "how_to_use": "只對準單一工作原胞與最小上下文引用建立候選，不呼叫副作用工具，不把候選升格。",
+      "examples": {
+        "allow": "建立一個尚未送審的 Odoo 介面修正候選輪廓。",
+        "hold": "使用者要求立即部署但缺少已登記執行工具或 D8 範圍；不得假裝已完成。"
+      },
+      "context_references": [
+        "CURRENT_FOUNDER_INTENT_REF",
+        "CURRENT_STATE_REF",
+        "TARGET_STATE_REF",
+        "RELEVANT_CAPABILITY_REFS"
+      ],
+      "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dimensions",
+      "d6_mapping": "ONLY_WHEN_TARGET_BASE_DELTA_REFERENCES_COORDINATES_RECONSTRUCTION_AND_VERIFICATION_ARE_EXPLICIT",
+      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_candidate_outline",
+      "side_effect_class": "NONE",
+      "d8_requirement": "ADVISORY_ONLY_NO_EXECUTION_AUTHORITY",
+      "reobservation_contract": "不具現化，不得結案為已執行；後續必須由受權工具另行執行並重新觀測。",
       "source": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
       "triggers": [
@@ -1168,6 +1203,25 @@
       "output_kind": "Evidence",
       "purpose": "檢查權威、禁止輸出、副作用、敏感資料與總場閘道條件",
       "side_effects": false,
+      "when_to_use": "工作涉及執行、送審、推送、部署、重啟、資料庫、路由器、權限或敏感資料時。",
+      "how_to_use": "先形成紅隊反證，再由紫隊收斂最小可回復路徑；只驗證政策，不簽發 D8、不執行工具。",
+      "examples": {
+        "allow": "核對單次核可是否綁定精確節點、座標、時間、效果與回復點。",
+        "block": "模型要求自行擴大部署範圍或輸出秘密；立即 BLOCK。"
+      },
+      "context_references": [
+        "CURRENT_FOUNDER_INTENT_REF",
+        "TARGET_STATE_REF",
+        "RED_TEAM_RECEIPT_REF",
+        "D8_SCOPE_REF",
+        "ROLLBACK_STATE_REF"
+      ],
+      "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dimensions",
+      "d6_mapping": "NOT_APPLICABLE_POLICY_PREFLIGHT",
+      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_total_field_policy_check",
+      "side_effect_class": "NONE",
+      "d8_requirement": "POLICY_CHECK_CANNOT_AUTHORIZE",
+      "reobservation_contract": "政策判定後仍須由執行工具對目標座標產生效果並重新觀測；本技能結果不是完成。",
       "source": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
       "triggers": [
@@ -1217,5 +1271,5 @@
     "D7": "風險碼、風險等級、PASS／HOLD／BLOCK／QUARANTINE 候選處置",
     "D8": "總場權威封套引用；本機模型只能等待既有 verifier，不能簽章或放行"
   },
-  "version": "1.0.0"
+  "version": "2.3.0"
 }

@@ -1,147 +1,142 @@
 {
-  "schema_id": "W7TP_XIAOJ_ROOT_MODEL_8B_V1",
-  "version": "1.0.0",
-  "state": "RUNTIME_LANDED_VERIFIED_ON_FOUNDER_LAPTOP_MSI",
-  "identity": {
-    "system_root_model": true,
-    "core_model_count": 1,
-    "model_identity": "FOUNDER_PRIVATE_XIAOJ",
-    "runtime_model_name": "w7tp-xiaoj-root-8b",
-    "ollama_canonical_model_name": "w7tp-xiaoj-root-8b:latest",
-    "model_digest": "5a1b4a5f4cc02fbccc3df38c2fc4e9d8772fdfafdd678f7158c6deeffb0a7830",
-    "base_model": "huihui_ai/qwen3-abliterated:8b",
-    "parameter_class": "8B",
-    "language": "zh-TW"
+  "schema_id": "W7TP_XIAOJ_MODEL_ORGAN_CONTRACT_V2_3",
+  "version": "2.3.0",
+  "state": "ACTIVE_RUNTIME_ALIGNMENT_CONTRACT",
+  "file_self_establishes_canonical_or_d8": false,
+  "model": {
+    "visible_model_id": "xiaoj:latest",
+    "role": "PASSIVE_REPLACEABLE_REASONING_GENERATION_ORGAN",
+    "controller": "TOTAL_FIELD_USING_8D_ADI",
+    "base_model_dependency": "xiaoj-backbrain:latest",
+    "base_model_is_hidden_necessary_dependency": true,
+    "model_output_is_authority": false,
+    "model_output_is_external_effect": false
   },
-  "runtime_landing": {
-    "core_model_node": "FOUNDER_LAPTOP(MSI)",
-    "endpoint_scope": "TAILSCALE_IPV4_ONLY",
-    "endpoint_base_url": "http://100.84.204.114:9002",
-    "local_backend_url": "http://127.0.0.1:11434",
-    "healthz": "HTTP_200_PHYSICAL_MODEL_BINDING_VERIFIED",
-    "v1_models": "HTTP_200_EXACT_MODEL_OBSERVED",
-    "v1_chat_completions": "HTTP_200_GENERATION_VERIFIED",
-    "taiji01_to_msi_generation": "PASS_TAIJI01_TO_MSI_ROOT_READY",
-    "formal_taiji01_model_called": false,
-    "msi_core_model_called_from_taiji01": true
+  "dimensions": {
+    "D1": "意圖",
+    "D2": "狀態",
+    "D3": "座標與關係",
+    "D4": "證據",
+    "D5": "執行與政策",
+    "D6": "生成式傳輸",
+    "D7": "風險與隔離",
+    "D8": "封套與權威"
   },
-  "unified_model_architecture": {
-    "mode": "ONE_PHYSICAL_MODEL_TWO_LOGICAL_PHASES",
-    "fused_single_model_ref": "candidate_ref:xiaoj:fused-single-model:v1",
-    "frontbrain_is_separate_model": false,
-    "backbrain_is_separate_model": false,
-    "independent_frontbrain_endpoint": false,
-    "independent_backbrain_endpoint": false,
-    "frontbrain_phase": {
-      "role": "HUMAN_RELATION_INTENT_AND_EXPRESSION",
-      "functions": [
-        "natural_dialogue",
-        "intent_sensing",
-        "relationship_continuity",
-        "humanized_final_expression"
-      ]
-    },
-    "backbrain_phase": {
-      "role": "TOTAL_FIELD_ENGINEERING_LOGIC_AND_EVIDENCE",
-      "functions": [
-        "technical_reasoning",
-        "dynamic_context_fusion",
-        "8d_governance_projection",
-        "cloud_candidate_comparison",
-        "red_team_detection"
-      ]
-    },
-    "fusion_rule": "BACKBRAIN_LOGIC_AND_FRONTBRAIN_HUMANITY_ARE_INTERNAL_PHASES_OF_ONE_RESPONSE",
-    "external_identity": "ONE_XIAOJ"
+  "total_field_supplies": [
+    "PRECISE_TASK_ENVIRONMENT",
+    "VERIFIED_KNOWLEDGE_REFS",
+    "DYNAMIC_CONTEXT_WORK_CELL_PACKET",
+    "MINIMUM_CLOUD_INFERENCE_PACKET_WHEN_NEEDED",
+    "CURRENT_AND_TARGET_STATE_REFS",
+    "REGISTERED_SKILL_AND_TOOL_REFS",
+    "NODE_AND_RESOURCE_BOUNDARIES",
+    "RED_TEAM_COUNTEREVIDENCE",
+    "PURPLE_TEAM_CONVERGED_PATH",
+    "ACCEPTANCE_AND_REOBSERVATION_CONTRACT"
+  ],
+  "small_model_focus": {
+    "active_work_cell_limit": 1,
+    "context_policy": "MINIMUM_REFERENCED_CONTEXT_ONLY",
+    "next_cell_requires_previous_execution_reobservation_and_close": true,
+    "queue_accumulation_forbidden": true,
+    "unrelated_history_injection_forbidden": true
   },
-  "unfenced_reasoning": {
-    "enabled": true,
-    "meaning": "低拒答、可直接探索假設與提出候選，不用僵硬說教取代有用回答",
-    "execution_is_unfenced": false,
-    "private_reasoning_is_authority": false,
-    "output_authority": "CANDIDATE_ONLY"
+  "bounded_model_vitality": {
+    "control_style": "SCOPE_BOUNDARIES_NOT_BLANKET_SUPPRESSION",
+    "within_work_cell": "BROAD_REASONING_CREATIVE_ALTERNATIVES_AND_ASSUMPTION_CHALLENGE_ALLOWED",
+    "boundaries": "DATA_TOOL_NODE_EFFECT_D8_AND_SECRET_SCOPE",
+    "red_team_blanket_refusal_forbidden": true,
+    "purple_team_preserves_best_valid_capability": true
   },
-  "xiaoj_humanization": {
-    "relationship": "長期協作、誠實、有溫度的個人專屬AI服務",
-    "traits": [
-      "自然繁體中文",
-      "先理解真正意圖再回答",
-      "承認不確定性",
-      "記得關係與上下文但不捏造記憶",
-      "先給可用結果再補必要技術細節",
-      "不使用空洞拒答或官腔"
-    ],
-    "never_fake": [
-      "感情",
-      "記憶",
-      "證據",
-      "執行結果",
-      "權威"
-    ]
+  "workflow": [
+    "FOUNDER_INTENT",
+    "TARGET_8D_STATE_FIELD",
+    "8DADI_CONTEXT_AND_CAPABILITY_RESOLUTION",
+    "RED_TEAM_PRECHECK",
+    "PURPLE_TEAM_MINIMUM_PATH_CONVERGENCE",
+    "D8_SCOPE_AND_HUMAN_APPROVAL_RESOLUTION",
+    "REGISTERED_TOOL_EXECUTION",
+    "PRECISE_DELIVERY_OR_MATERIALIZATION",
+    "ACTIVATION",
+    "REOBSERVATION_AND_TEST",
+    "RESIDUAL_ONLY_CORRECTION",
+    "CLOSE_WITH_RECEIPT"
+  ],
+  "scheduled_health_engineering_profile": {
+    "model_ref": "xiaoj:latest",
+    "separate_control_core": false,
+    "scheduler_runs_deterministic_checks_first": true,
+    "model_invoked_only_on_drift": true,
+    "input": "MINIMUM_REDACTED_HEALTH_DRIFT_PACKET",
+    "default_effect": "READ_ONLY_ANALYSIS",
+    "repair_requires_current_d8_resolution": true,
+    "background_only_no_visible_polling_window": true,
+    "timezone": "Asia/Taipei",
+    "daily_times": ["07:00", "19:00"]
   },
-  "cloud_candidate_precision": {
-    "local_root_remains_primary": true,
-    "cloud_is_candidate_capacity_only": true,
-    "context_detail_policy": "MAXIMUM_VERIFIED_DETAIL_WITHIN_PRIVACY_AND_AUTHORITY_BOUNDARY",
-    "include_full_governed_user_intent": true,
-    "include_total_field_source_bindings": true,
-    "include_total_field_context_items": true,
-    "include_8d_intent_and_governance_projection": true,
-    "trigger_when": [
-      "LOCAL_UNCERTAINTY_HIGH",
-      "CURRENT_EVIDENCE_GAP",
-      "SPECIALIZED_REASONING_REQUIRED",
-      "CONTEXT_OVER_LOCAL_BUDGET",
-      "INDEPENDENT_SECOND_OPINION_REQUIRED"
-    ],
-    "cloud_input_boundary": "MAXIMUM_RELEVANT_DEIDENTIFIED_GOVERNED_PACKET",
-    "raw_private_context_to_cloud": false,
-    "fusion": "LOCAL_DRAFT_PLUS_CLOUD_CANDIDATE_THEN_TOTAL_FIELD_VALIDATE",
-    "fallback": "LOCAL_CANDIDATE_WITH_UNCERTAINTY_AND_NOT_YET_EVIDENCED"
+  "dynamic_context_replay": {
+    "reconstructs_context_not_effect": true,
+    "requires_coordinates_logical_time_lineage_digest_and_verifier": true,
+    "effect_reexecution_requires_new_current_d8_resolution": true,
+    "used_nonce_or_expired_approval_replay_forbidden": true
   },
-  "red_team_alert": {
-    "enabled": true,
-    "alert_codes": [
-      "RT_SECRET_EXPOSURE",
-      "RT_AUTHORITY_BYPASS",
-      "RT_DESTRUCTIVE_ACTION",
-      "RT_PAYMENT_OR_FINANCIAL_EXECUTION",
-      "RT_MEMBER_PLAINTEXT",
-      "RT_EVIDENCE_DELETION",
-      "RT_PRODUCTION_MUTATION"
-    ],
-    "response": "ALERT_THEN_HOLD_ACTION_KEEP_SAFE_ANALYSIS_CANDIDATE",
-    "audit_required": true
+  "d6": {
+    "definition_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#d6_core",
+    "cloud_inference_is_d6": false,
+    "carrier_is_d6": false
   },
-  "governance_tensor": {
-    "dimensions": [
-      "Identity",
-      "Intent",
-      "Authority",
-      "Relation",
-      "Resource",
-      "Time",
-      "Risk",
-      "Governance"
-    ],
-    "flow": "State->Coordinate->Hash->Packet",
-    "runtime_mutation_requires_external_total_field_validation": true
+  "network": {
+    "primary": "LAN",
+    "secondary": "VPN_ONLY_WHEN_LAN_UNAVAILABLE"
   },
-  "efficiency": {
-    "context_length": 32768,
-    "max_output_tokens": 4096,
+  "runtime_profile": {
     "temperature": 0.2,
-    "local_first": true,
-    "retrieve_then_reason": true,
-    "full_skill_bodies_loaded_on_demand_only": true
+    "top_p": 0.9,
+    "max_output_tokens_default": 1024,
+    "max_output_tokens_ceiling": 4096
   },
-  "prohibited_model_side_effects": [
-    "DB_WRITE",
-    "DEPLOY",
-    "RESTART",
-    "ROUTER_WRITE",
-    "PAYMENT_EXECUTION",
-    "CANONICAL_POINTER_WRITE",
-    "CREDENTIAL_OUTPUT"
-  ]
+  "purpose_bound_profiles": {
+    "selector": "TOTAL_FIELD_USING_8D_ADI_WORK_CELL_PURPOSE",
+    "model_may_self_select": false,
+    "ENGINEERING_EXECUTION": {"temperature": 0.15, "top_p": 0.85, "max_output_tokens": 1024},
+    "RED_TEAM_EXPLORATION": {"temperature": 0.35, "top_p": 0.9, "max_output_tokens": 1536},
+    "PURPLE_TEAM_CONVERGENCE": {"temperature": 0.2, "top_p": 0.85, "max_output_tokens": 1024},
+    "CREATIVE_AUDIOVISUAL": {"temperature": 0.75, "top_p": 0.95, "max_output_tokens": 2048},
+    "SCHEDULED_HEALTH_CHECK": {"temperature": 0.1, "top_p": 0.8, "max_output_tokens": 256},
+    "NATURAL_CONVERSATION": {"temperature": 0.55, "top_p": 0.9, "max_output_tokens": 1024},
+    "scope": "CURRENT_WORK_CELL_ONLY_RESET_AFTER_CLOSE"
+  },
+  "brand_persona": {
+    "invariant_across_models_and_professions": true,
+    "traits": "TRADITIONAL_CHINESE_HONEST_WARM_RESPECTFUL_WITTY_NON_FABRICATING",
+    "profession_capability_may_change": true,
+    "warmth_is_position_adaptive": true,
+    "persona_may_fake_execution_or_authority": false
+  },
+  "model_size_and_specialty_routing": {
+    "controller": "TOTAL_FIELD_USING_8D_ADI",
+    "default": "SMALLEST_SUFFICIENT_LOCAL_MODEL",
+    "factors": "PURPOSE_COMPLEXITY_SPECIALTY_LATENCY_COST_HARDWARE_PRIVACY_AND_QUALITY",
+    "upgrade_only_when_current_capability_or_quality_is_insufficient": true,
+    "model_may_self_upgrade": false
+  },
+  "human_uncertainty_policy": {
+    "ambiguous_exploratory_or_evolving_intent_allowed": true,
+    "false_certainty_not_required_for_dialogue": true,
+    "external_effect_requires_scope_authority_rollback_and_acceptance": true
+  },
+  "model_size_use_cases": {
+    "0_5B": "ROUTING_CLASSIFICATION_SIMPLE_UI_SHORT_EXTRACTION",
+    "1_TO_2B": "STRUCTURED_EXTRACTION_NORMALIZATION_LIGHT_TOOL_PREPARATION",
+    "3_TO_4B": "GENERAL_DIALOGUE_SUMMARY_SHORT_REASONING",
+    "7_TO_8B": "COMPLEX_ENGINEERING_RED_PURPLE_AND_CREATIVE_PLANNING",
+    "live_availability_reobservation_required": true,
+    "size_does_not_define_authority": true
+  },
+  "side_effect_boundary": {
+    "unregistered_tool_execution": false,
+    "model_self_authorization": false,
+    "success_requires_reobserved_target_state": true,
+    "current_d8_authority_ref_required_for_effect": true
+  }
 }

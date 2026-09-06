@@ -15,6 +15,7 @@ RECEIVE_CANDIDATE_SCOPE = "RECEIVE_CANDIDATE"
 POINTER_BOOTSTRAP_SCOPE = "BOOTSTRAP_CURRENT_ACTIVE_CANONICAL_POINTER"
 PROMOTION_SCOPE = "PROMOTE_ACCEPTED_CANDIDATE"
 STATE_CELL_PILOT_SCOPE = "RUN_READ_ONLY_STATE_CELL_PILOT"
+GIT_PUSH_SCOPE = "AUTHORIZE_GIT_PUSH"
 STATE_CELL_PILOT_ACTION = "RUN_READ_ONLY_STATE_CELL_INDEX_PROJECTION"
 STATE_CELL_PILOT_NODE = "MSI"
 STATE_CELL_PILOT_MAXIMUM_EFFECT = "IN_MEMORY_READ_ONLY_ONLY"
@@ -63,6 +64,28 @@ STATE_CELL_PILOT_CONSTRAINT_FIELDS = frozenset(
         "old_version_target_import",
     }
 )
+GIT_PUSH_CONSTRAINT_FIELDS = frozenset(
+    {
+        "review_registration_ref",
+        "review_registration_sha256",
+        "base_commit",
+        "target_tree",
+        "branch",
+        "remote_name",
+        "remote_url_sha256",
+        "allowed_paths_sha256",
+        "single_commit_only",
+        "formal_submission",
+        "git_push",
+        "deploy",
+        "restart",
+        "canonical_pointer_write",
+        "active_pointer_write",
+        "single_use_authorization_required",
+        "replay_protected",
+        "authority_signature_required",
+    }
+)
 PROMOTION_SCOPE_CONSTRAINTS = {
     "total_field_decision": "ALLOW_CANDIDATE_ACCEPTED",
     "candidate_sha256": "066e39cd2abad3d4ed713e4f7ecb7f220d4651d9f7624f5b48d13c4781be7890",
@@ -104,6 +127,7 @@ SCOPE_OWNER_AUTHORIZATIONS = {
     POINTER_BOOTSTRAP_SCOPE: "FOUNDER_APPROVED_CURRENT_ACTIVE_CANONICAL_POINTER_BOOTSTRAP",
     PROMOTION_SCOPE: "FOUNDER_APPROVED_PROMOTE_ACCEPTED_CANDIDATE",
     STATE_CELL_PILOT_SCOPE: "FOUNDER_APPROVED_RUN_READ_ONLY_STATE_CELL_PILOT",
+    GIT_PUSH_SCOPE: "FOUNDER_APPROVED_EXACT_GIT_PUSH",
 }
 DISALLOWED_PATH_PARTS = {
     "archive",
@@ -403,6 +427,60 @@ def _validate_state_cell_pilot_constraints(constraints: Any) -> None:
             )
 
 
+def _validate_git_push_constraints(constraints: Any) -> None:
+    if not isinstance(constraints, Mapping) or set(constraints) != GIT_PUSH_CONSTRAINT_FIELDS:
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "git-push scope constraints are missing or expanded",
+        )
+    for field in ("review_registration_sha256", "remote_url_sha256", "allowed_paths_sha256"):
+        _require_hash(constraints, field)
+    for field in ("base_commit", "target_tree"):
+        value = constraints.get(field)
+        if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{40,64}", value) is None:
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                f"git-push {field} must be an exact Git object id",
+            )
+    review_ref = constraints.get("review_registration_ref")
+    if (
+        not isinstance(review_ref, str)
+        or not review_ref.startswith("runtime/total_field/authority_artifacts/")
+        or not review_ref.endswith("/GIT_PUSH_REVIEW_REGISTRATION.json")
+        or ".." in Path(review_ref).parts
+    ):
+        raise ResolverError(
+            "BLOCK_AUTHORITY_REFERENCE_INVALID",
+            "git-push review_registration_ref is invalid",
+        )
+    for field in ("branch", "remote_name"):
+        value = constraints.get(field)
+        if not isinstance(value, str) or not value.strip():
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                f"git-push {field} is required",
+            )
+    for field in (
+        "single_commit_only",
+        "formal_submission",
+        "git_push",
+        "single_use_authorization_required",
+        "replay_protected",
+        "authority_signature_required",
+    ):
+        if constraints.get(field) is not True:
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                f"git-push {field} must be true",
+            )
+    for field in ("deploy", "restart", "canonical_pointer_write", "active_pointer_write"):
+        if constraints.get(field) is not False:
+            raise ResolverError(
+                "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+                f"git-push {field} must be false",
+            )
+
+
 def _verify_sha256(path: Path, expected: Any, state: str, field: str) -> None:
     if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
         raise ResolverError("HOLD_AUTHORITY_INCOMPLETE", f"{field} is invalid")
@@ -484,6 +562,8 @@ def _validate_pointer_shape(pointer: Mapping[str, Any]) -> None:
             )
     elif scope[0] == STATE_CELL_PILOT_SCOPE:
         _validate_state_cell_pilot_constraints(constraints)
+    elif scope[0] == GIT_PUSH_SCOPE:
+        _validate_git_push_constraints(constraints)
     elif constraints not in (None, {}):
         raise ResolverError(
             "BLOCK_AUTHORITY_SCOPE_ESCALATION",
@@ -821,6 +901,8 @@ __all__ = [
     "POINTER_BOOTSTRAP_SCOPE_CONSTRAINTS",
     "PROMOTION_SCOPE",
     "PROMOTION_SCOPE_CONSTRAINTS",
+    "GIT_PUSH_SCOPE",
+    "GIT_PUSH_CONSTRAINT_FIELDS",
     "canonical_sha256",
     "resolve_active_total_field_authority",
 ]

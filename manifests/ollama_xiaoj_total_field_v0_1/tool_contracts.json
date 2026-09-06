@@ -39,6 +39,16 @@
       "required_input": ["source", "skill_id", "dynamic_context_binding", "candidate", "policy"],
       "allowed_result_states": ["CANDIDATE_RECEIVED", "HOLD", "BLOCK", "QUARANTINE"],
       "side_effect_requires_separate_total_field_authorization": true
+    },
+    {
+      "name": "scheduled_health_observation",
+      "model_callable": false,
+      "purpose": "每天 07:00 與 19:00 由背景排程執行確定性 8DADI 健康觀測；只有漂移才把最小去敏封包交給 xiaoj:latest 分析。",
+      "tool_binding": "tools.xiaoj_total_field_health_check:build_health_observation",
+      "side_effect_class": "OBSERVATION_ONLY",
+      "model_effect_authority": false,
+      "repair_requires_current_d8_resolution": true,
+      "reobservation_contract": "對齊資料庫、能力包雜湊、既有服務與 8080/8081/8787/9108 端口座標。"
     }
   ],
   "forbidden_tool_behavior": [

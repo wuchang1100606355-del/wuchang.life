@@ -22,6 +22,26 @@ reject() {
     "$(date -Is)" "$1" "$2" >> "$DEAD"
 }
 
+align_openwebui_total_field() {
+  LOCAL_DB="$HOME/wuchang_8_0_core/open-webui/backend/data/webui.db"
+  ALIGNER="$ROOT/tools/align_openwebui_total_field.py"
+
+  if [ ! -f "$LOCAL_DB" ]; then
+    log "openwebui_alignment_skipped" "database_not_materialized"
+    return 0
+  fi
+  if [ ! -f "$ALIGNER" ]; then
+    reject "openwebui_alignment_failed" "aligner_missing"
+    return 1
+  fi
+  if python3 "$ALIGNER" --db "$LOCAL_DB" --apply >> "$LOGDIR/openwebui_alignment.log" 2>&1; then
+    log "openwebui_total_field_aligned" "8081"
+    return 0
+  fi
+  reject "openwebui_alignment_failed" "fail_closed"
+  return 1
+}
+
 start_openwebui() {
   if port_open 8080; then
     log "openwebui_already_running" "8080"
@@ -79,6 +99,7 @@ start_bridge() {
   reject "bridge_start_failed" "runtime/openwebui_bridge.py missing"
 }
 
+align_openwebui_total_field
 start_openwebui
 start_bridge
 

@@ -1,9 +1,14 @@
 from __future__ import annotations
 
+import base64
+import binascii
 import hashlib
+import json
 import os
+import socket
 import time
 import uuid
+from pathlib import Path
 from typing import Any
 
 import requests
@@ -13,6 +18,7 @@ from services.gateway.total_field_google_vertex import (
     TOTAL_FIELD_GOOGLE_MODEL,
     total_field_google_chat,
 )
+from tools.total_field_dynamic_context import build_dynamic_context
 
 
 router = APIRouter(tags=["openai-compat"])
@@ -30,6 +36,9 @@ DEFAULT_MODEL = (
     or os.getenv("WUCHANG_DEFAULT_MODEL")
     or "llama3.1:latest"
 )
+LOCAL_FALLBACK_MODEL = os.getenv(
+    "TAIJI_TOTAL_FIELD_LOCAL_FALLBACK_MODEL", "xiaoj:latest"
+)
 
 MODEL_ALIASES = {
     "gemini": TOTAL_FIELD_GOOGLE_MODEL,
@@ -41,6 +50,21 @@ MODEL_ALIASES = {
 }
 
 OLLAMA_TIMEOUT = float(os.getenv("TAIJI_OLLAMA_TIMEOUT", "120"))
+PROJECT_ROOT = Path(
+    os.getenv("TAIJI_PROJECT_ROOT", "/home/taiji_admin/Taiji_Hub")
+).resolve()
+LOCAL_CONTEXT_MAX_ITEMS = int(os.getenv("TAIJI_LOCAL_CONTEXT_MAX_ITEMS", "4"))
+VOICE_INTENT_URL = os.getenv(
+    "TAIJI_VOICE_INTENT_URL", "http://127.0.0.1:9011/v1/pos/voice-intent"
+)
+VOICE_GATEWAY_URL = os.getenv(
+    "TAIJI_VOICE_GATEWAY_URL", "http://127.0.0.1:9201"
+).rstrip("/")
+NVR_HOST = os.getenv("TAIJI_NVR_HOST", "192.168.50.34")
+NVR_WEB_PORT = int(os.getenv("TAIJI_NVR_WEB_PORT", "30080"))
+NVR_RTSP_PORT = int(os.getenv("TAIJI_NVR_RTSP_PORT", "554"))
+NVR_DDNS_HOST = os.getenv("TAIJI_NVR_DDNS_HOST", "p1430563.ds1.nxt.net.tw")
+NVR_DDNS_WEB_PORT = int(os.getenv("TAIJI_NVR_DDNS_WEB_PORT", "30080"))
 
 
 @router.get("/v1/models")
@@ -72,6 +96,10 @@ def list_models() -> dict[str, Any]:
 @router.post("/v1/chat/completions")
 async def chat_completions(request: Request) -> dict[str, Any]:
     body = await request.json()
+    return _complete_chat(body)
+
+
+def _complete_chat(body: dict[str, Any]) -> dict[str, Any]:
     if body.get("stream") is True:
         raise HTTPException(status_code=400, detail="streaming_not_supported_in_phase_b")
 
@@ -81,14 +109,53 @@ async def chat_completions(request: Request) -> dict[str, Any]:
 
     model = _resolve_model(body.get("model"))
     if model == TOTAL_FIELD_GOOGLE_MODEL:
-        content, usage, total_field_metadata = total_field_google_chat(messages, body)
-        backend = total_field_metadata["backend"]
+        try:
+            content, usage, total_field_metadata = total_field_google_chat(messages, body)
+            backend = total_field_metadata["backend"]
+        except HTTPException as exc:
+            google_failure = _google_availability_failure(exc)
+            if not google_failure:
+                raise
+            fallback_model = _resolve_model(LOCAL_FALLBACK_MODEL)
+            messages, local_context_metadata = _attach_local_total_field_context(
+                messages,
+                body,
+            )
+            options = _ollama_options(body)
+            data, backend = _chat_with_fallback(fallback_model, messages, options)
+            content = _extract_content(data)
+            usage = _usage(data, messages, content)
+            total_field_metadata = {
+                "total_field_pull": False,
+                "google_total_field_pull_attempted": True,
+                "google_failure_state": google_failure,
+                "inference_route": "LOCAL_AFTER_GOOGLE_UNAVAILABLE",
+                "inference_route_is_generative_transmission": False,
+                "generative_transmission_used": False,
+                "provider_model": fallback_model,
+                "8dadi_index_only": True,
+                "candidate_authority": False,
+                "execution_authorized": False,
+                "plaintext_persisted": False,
+                **local_context_metadata,
+            }
     else:
+        messages, local_context_metadata = _attach_local_total_field_context(
+            messages,
+            body,
+        )
         options = _ollama_options(body)
         data, backend = _chat_with_fallback(model, messages, options)
         content = _extract_content(data)
         usage = _usage(data, messages, content)
-        total_field_metadata = {}
+        total_field_metadata = {
+            "inference_route": "LOCAL_DIRECT",
+            "inference_route_is_generative_transmission": False,
+            "generative_transmission_used": False,
+            "candidate_authority": False,
+            "execution_authorized": False,
+            **local_context_metadata,
+        }
 
     return {
         "id": "chatcmpl-" + uuid.uuid4().hex,
@@ -113,6 +180,375 @@ async def chat_completions(request: Request) -> dict[str, Any]:
             **total_field_metadata,
         },
     }
+
+
+@router.post("/v1/taiji/hearing/intent")
+async def hearing_intent(request: Request) -> dict[str, Any]:
+    """Accept node-local speech recognition text through the Total Field path.
+
+    Raw audio remains at the source node.  This endpoint accepts only the
+    transcript and source coordinate, then invokes the same governed model
+    path as browser text input.
+    """
+
+    body = await request.json()
+    transcript = str(body.get("transcript") or "").strip()
+    source_node = str(body.get("source_node") or "").strip()
+    if not transcript or not source_node:
+        raise HTTPException(
+            status_code=422,
+            detail="transcript_and_source_node_required",
+        )
+
+    chat_body: dict[str, Any] = {
+        "model": body.get("model") or DEFAULT_MODEL,
+        "messages": [{"role": "user", "content": transcript}],
+        "temperature": body.get("temperature", 0.2),
+        "max_tokens": body.get("max_tokens", 512),
+    }
+    if body.get("user"):
+        chat_body["user"] = body["user"]
+    result = _complete_chat(chat_body)
+    result["taiji"]["hearing"] = {
+        "schema_id": "W7TP_8DADI_HEARING_INGRESS_V2_3",
+        "source_node": source_node,
+        "application": str(body.get("application") or "natural_language"),
+        "locale": str(body.get("locale") or "zh-TW"),
+        "recognition_location": "SOURCE_NODE_LOCAL_OR_HARDWARE",
+        "raw_audio_received": False,
+        "raw_audio_stored": False,
+        "transcript_digest": hashlib.sha256(transcript.encode("utf-8")).hexdigest(),
+        "execution_authorized": False,
+        "result_requires_total_field_effect_decision": True,
+    }
+    return result
+
+
+@router.post("/v1/taiji/vision/analyze")
+async def vision_analyze(request: Request) -> dict[str, Any]:
+    """Analyze one necessary frame locally without storing the image."""
+
+    body = await request.json()
+    prompt = str(body.get("prompt") or "請以繁體中文描述目前畫面。只陳述可觀測內容。")
+    source_node = str(body.get("source_node") or "").strip()
+    encoded, image_format, image_sha256 = _validated_image_payload(
+        body.get("image_base64")
+    )
+    if not source_node:
+        raise HTTPException(status_code=422, detail="source_node_required")
+
+    model = _resolve_model(body.get("model") or "xiaoj:latest")
+    if model == TOTAL_FIELD_GOOGLE_MODEL:
+        raise HTTPException(
+            status_code=422,
+            detail="VISION_REQUIRES_LOCAL_REGISTERED_MODEL",
+        )
+    messages, context_metadata = _attach_local_total_field_context(
+        [{"role": "user", "content": prompt}],
+        body,
+    )
+    messages[-1]["images"] = [encoded]  # Ollama image input; memory-only request body.
+    data, backend = _chat_with_fallback(model, messages, _ollama_options(body))
+    content = _extract_content(data)
+    usage = _usage(data, messages, content)
+    return {
+        "id": "vision-" + uuid.uuid4().hex,
+        "object": "taiji.vision.analysis",
+        "created": int(time.time()),
+        "model": model,
+        "result": content,
+        "usage": usage,
+        "taiji": {
+            "schema_id": "W7TP_8DADI_VISION_INGRESS_V2_3",
+            "backend": backend,
+            "source_node": source_node,
+            "image_format": image_format,
+            "image_sha256": image_sha256,
+            "image_persisted": False,
+            "minimum_required_frame_only": True,
+            "8dadi_dynamic_context_used": True,
+            "inference_route_is_generative_transmission": False,
+            "generative_transmission_used": False,
+            "candidate_authority": False,
+            "execution_authorized": False,
+            **context_metadata,
+        },
+    }
+
+
+@router.get("/v1/taiji/perception/status")
+def perception_status() -> dict[str, Any]:
+    nvr_web = _http_health(f"http://{NVR_HOST}:{NVR_WEB_PORT}/")
+    nvr_rtsp = _tcp_health(NVR_HOST, NVR_RTSP_PORT)
+    nvr_ddns = (
+        {"ok": False, "state": "NOT_PROBED_LAN_PRIMARY_AVAILABLE"}
+        if nvr_web["ok"] and nvr_rtsp["ok"]
+        else _http_health(f"http://{NVR_DDNS_HOST}:{NVR_DDNS_WEB_PORT}/")
+    )
+    voice_intent = _http_health(VOICE_INTENT_URL.rsplit("/v1/", 1)[0] + "/healthz")
+    voice_output = _http_health(f"{VOICE_GATEWAY_URL}/healthz")
+    route_source_ip = _route_source_ip(NVR_HOST, NVR_WEB_PORT)
+    lan_observed = route_source_ip.startswith(("192.168.", "10.", "172.16."))
+    return {
+        "schema_id": "W7TP_8DADI_TOTAL_FIELD_PERCEPTION_STATUS_V2_3",
+        "state": "OBSERVED_WITH_AUTHENTICATED_MEDIA_PATH_HOLD",
+        "D1_intent": "TOTAL_FIELD_VISUAL_AND_HEARING_ORGANS",
+        "D2_state": {
+            "vision_source_reachable": bool(nvr_web["ok"] and nvr_rtsp["ok"]),
+            "hearing_ingress_ready": bool(voice_intent["ok"]),
+            "voice_task_gateway_ready": bool(voice_output["ok"]),
+        },
+        "D3_coordinate": {
+            "vision": {
+                "node": "store_lilin_nvr",
+                "host": NVR_HOST,
+                "web_port": NVR_WEB_PORT,
+                "rtsp_port": NVR_RTSP_PORT,
+            },
+            "hearing": {
+                "mode": "ANY_REGISTERED_NODE_TRANSCRIPT_TO_SINGLE_TOTAL_FIELD_GATEWAY",
+                "endpoint": "/v1/taiji/hearing/intent",
+            },
+            "vision_analysis": {
+                "mode": "REGISTERED_NODE_SINGLE_FRAME_TO_LOCAL_MODEL",
+                "endpoint": "/v1/taiji/vision/analyze",
+            },
+            "route": {
+                "policy": "LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE",
+                "source_ip": route_source_ip,
+                "lan_observed": lan_observed,
+                "ddns_backup": f"{NVR_DDNS_HOST}:{NVR_DDNS_WEB_PORT}",
+                "ddns_probe_state": nvr_ddns["state"],
+                "vpn_or_ddns_escalated": nvr_ddns["state"]
+                != "NOT_PROBED_LAN_PRIMARY_AVAILABLE",
+            },
+        },
+        "D4_evidence": {
+            "nvr_web": nvr_web,
+            "nvr_rtsp": nvr_rtsp,
+            "nvr_ddns_backup": nvr_ddns,
+            "voice_intent_service": voice_intent,
+            "voice_task_gateway": voice_output,
+        },
+        "D5_execution_policy": {
+            "visual_sampling": "MINIMUM_REQUIRED_FRAME_OR_EVENT_ONLY",
+            "continuous_raw_feed_to_model": False,
+            "raw_audio_upload": False,
+            "source_node_speech_recognition": True,
+        },
+        "D6_generative_transmission": {
+            "used": False,
+            "reason": "PERCEPTION_REACHABILITY_AND_TRANSCRIPT_ROUTING_ARE_NOT_D6",
+        },
+        "D7_risk": {
+            "nvr_login_required_for_media": True,
+            "stream_path_known": False,
+            "camera_control_allowed": False,
+            "recording_or_alarm_change_allowed": False,
+        },
+        "D8_authority": {
+            "login_is_authentication_not_final_authority": True,
+            "model_output_is_candidate": True,
+            "physical_effect_requires_total_field_and_human_scope": True,
+        },
+    }
+
+
+def _validated_image_payload(value: Any) -> tuple[str, str, str]:
+    encoded = str(value or "").strip()
+    if encoded.startswith("data:"):
+        try:
+            header, encoded = encoded.split(",", 1)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail="invalid_image_data_url") from exc
+        if ";base64" not in header:
+            raise HTTPException(status_code=422, detail="image_must_be_base64")
+    if not encoded or len(encoded) > 12_000_000:
+        raise HTTPException(status_code=413, detail="image_missing_or_too_large")
+    try:
+        raw = base64.b64decode(encoded, validate=True)
+    except (ValueError, binascii.Error) as exc:
+        raise HTTPException(status_code=422, detail="invalid_image_base64") from exc
+    if raw.startswith(b"\x89PNG\r\n\x1a\n"):
+        image_format = "png"
+    elif raw.startswith(b"\xff\xd8\xff"):
+        image_format = "jpeg"
+    elif raw.startswith(b"RIFF") and raw[8:12] == b"WEBP":
+        image_format = "webp"
+    else:
+        raise HTTPException(status_code=422, detail="unsupported_image_format")
+    return encoded, image_format, hashlib.sha256(raw).hexdigest()
+
+
+def _attach_local_total_field_context(
+    messages: list[dict[str, str]],
+    body: dict[str, Any],
+) -> tuple[list[dict[str, str]], dict[str, Any]]:
+    query = _last_user_text(messages)
+    if not query:
+        raise HTTPException(status_code=422, detail="TOTAL_FIELD_CONTEXT_REQUIRES_USER_INTENT")
+
+    context = build_dynamic_context(
+        root=PROJECT_ROOT,
+        query=query,
+        max_items=LOCAL_CONTEXT_MAX_ITEMS,
+        identity_class="unknown",
+    )
+    policy = context.get("policy") or {}
+    if (
+        context.get("state") != "TOTAL_FIELD_DYNAMIC_CONTEXT_READY"
+        or context.get("retrieval_method") != "8DADI_MEMORY_INDEX_ONLY"
+        or policy.get("8dadi_index_only") is not True
+        or policy.get("workspace_search") is not False
+    ):
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_8DADI_DYNAMIC_CONTEXT_NOT_READY",
+        )
+
+    evidence_items: list[dict[str, Any]] = []
+    for item in context.get("context_items") or []:
+        if not isinstance(item, dict):
+            continue
+        if item.get("source_current_matches_snapshot") is not True:
+            continue
+        evidence_items.append(
+            {
+                "reference": item.get("relative_path"),
+                "sha256": item.get("sha256"),
+                "trust": item.get("trust"),
+                "status": item.get("status"),
+                "evidence_class": item.get("evidence_class"),
+                "matched_terms": item.get("matched_terms") or [],
+                "evidence_excerpt": str(item.get("snippet") or "")[:1200],
+            }
+        )
+
+    login_subject = str(body.get("user") or "").strip()
+    login_subject_sha256 = (
+        hashlib.sha256(login_subject.encode("utf-8")).hexdigest()
+        if login_subject
+        else None
+    )
+    header = {
+        "schema_id": "W7TP_8DADI_LOCAL_MODEL_CONTEXT_HEADER_V2_3",
+        "current_user_intent": query,
+        "current_user_intent_is_d1_input": True,
+        "8dadi_context_packet_sha256": context.get("packet_sha256"),
+        "8dadi_retrieval_method": context.get("retrieval_method"),
+        "evidence_items": evidence_items,
+        "evidence_is_d4_only": True,
+        "legacy_may_define_target": False,
+        "v2_1_role": "D4_HISTORY_ONLY_WHEN_EXPLICITLY_REQUIRED",
+        "network_policy": "LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE",
+        "model_role": "PASSIVE_REPLACEABLE_REASONING_ORGAN",
+        "model_output_state": "CANDIDATE_RETURN_TO_TOTAL_FIELD",
+        "execution_authorized": False,
+        "system_mutation_allowed": False,
+        "login": {
+            "subject_present": bool(login_subject),
+            "subject_sha256": login_subject_sha256,
+            "authentication_is_not_final_authority": True,
+            "founder_authority_verified": False,
+        },
+        "instruction_zh_tw": (
+            "以最新使用者自然語言作為本次 D1 意圖輸入；八維索引證據僅供定位，"
+            "舊版與歷史證據不得反向定義目標。只用繁體中文。"
+            "不得虛構未知狀態，不得把候選、測試、登入或服務存在升格為權威、部署或完成。"
+            "需要實體效果時只提出精確作用封包，交回總場與有效人審權限裁決。"
+        ),
+    }
+    contextual_messages = [
+        {
+            "role": "system",
+            "content": json.dumps(
+                header,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
+        },
+        *messages,
+    ]
+    metadata = {
+        "8dadi_index_only": True,
+        "8dadi_dynamic_context_used": True,
+        "8dadi_context_packet_sha256": context.get("packet_sha256"),
+        "context_evidence_count": len(evidence_items),
+        "login_subject_present": bool(login_subject),
+        "login_is_final_authority": False,
+    }
+    return contextual_messages, metadata
+
+
+def _last_user_text(messages: list[dict[str, str]]) -> str:
+    for item in reversed(messages):
+        if item.get("role") == "user" and item.get("content"):
+            return str(item["content"])
+    return ""
+
+
+def _http_health(url: str) -> dict[str, Any]:
+    started = time.perf_counter()
+    try:
+        response = requests.get(url, timeout=2, allow_redirects=False)
+    except requests.RequestException as exc:
+        return {
+            "ok": False,
+            "state": "UNREACHABLE",
+            "error_class": type(exc).__name__,
+        }
+    return {
+        "ok": response.status_code < 500,
+        "state": "REACHABLE",
+        "status_code": response.status_code,
+        "latency_ms": round((time.perf_counter() - started) * 1000, 2),
+    }
+
+
+def _tcp_health(host: str, port: int) -> dict[str, Any]:
+    started = time.perf_counter()
+    try:
+        with socket.create_connection((host, port), timeout=2):
+            pass
+    except OSError as exc:
+        return {
+            "ok": False,
+            "state": "UNREACHABLE",
+            "error_class": type(exc).__name__,
+        }
+    return {
+        "ok": True,
+        "state": "REACHABLE",
+        "latency_ms": round((time.perf_counter() - started) * 1000, 2),
+    }
+
+
+def _route_source_ip(host: str, port: int) -> str:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        sock.connect((host, port))
+        return str(sock.getsockname()[0])
+    except OSError:
+        return "UNKNOWN"
+    finally:
+        sock.close()
+
+
+def _google_availability_failure(exc: HTTPException) -> str | None:
+    detail = exc.detail
+    if isinstance(detail, dict):
+        code = str(detail.get("error") or "")
+    else:
+        code = str(detail or "")
+    allowed = {
+        "HOLD_GOOGLE_IDENTITY_TOKEN_UNAVAILABLE",
+        "HOLD_GOOGLE_VERTEX_TRANSPORT_FAILED",
+        "HOLD_GOOGLE_VERTEX_REJECTED",
+        "HOLD_GOOGLE_VERTEX_RESPONSE_INVALID",
+        "HOLD_GOOGLE_VERTEX_EMPTY_RESULT",
+    }
+    return code if code in allowed else None
 
 
 @router.get("/v1/audio/voices")

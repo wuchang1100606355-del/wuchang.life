@@ -1,0 +1,12 @@
+[Unit]
+Description=Run W7TP XiaoJ health observation at 07:00 and 19:00 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 07,19:00:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+RandomizedDelaySec=0
+Unit=w7tp-xiaoj-health-check.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=W7TP Total Field User-Verified Passkey D8 Signer
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+ExecStart=/home/taiji_admin/.local/share/w7tp-passkey-d8/venv/bin/python /home/taiji_admin/Taiji_Hub/tools/total_field_passkey_d8_server.py --repo-root /home/taiji_admin/Taiji_Hub --host 127.0.0.1 --port 9120
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

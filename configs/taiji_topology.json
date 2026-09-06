@@ -1,25 +1,43 @@
 {
   "owner": "CHIANG_CHENG_LUNG",
-  "version": "2026-05-23-current-topology",
+  "version": "2026-09-06-8dadi-perception-v2.3",
+  "primary_decision_engine": "8D_ADI",
+  "identity_boundary": {
+    "total_field_login_account": "USER_DECLARED_EXISTS_LIVE_BINDING_NOT_YET_VERIFIED",
+    "login_is_authentication_not_final_authority": true,
+    "founder_effect_requires_verified_person_packet_and_scoped_human_approval": true
+  },
+  "network_policy": {
+    "primary": "LAN",
+    "fallback": "VPN_OR_DEVICE_DDNS_ONLY_AFTER_LAN_UNAVAILABLE",
+    "lan_available_must_not_route_through_fallback": true
+  },
   "layers": {
     "01_admin": {
       "role": ["root_policy", "approval", "guard"],
       "authority": "guarded_admin"
     },
     "02_edge_nodes": {
-      "nodes": ["taiji01", "openwebui", "odoo", "sensor"]
+      "nodes": ["taiji01", "openwebui", "odoo", "sensor", "store_lilin_nvr", "taiji04_sunmi_pos", "homepod_pair"]
     },
     "03_ui": {
       "services": ["openwebui", "openwebui_bridge"]
     }
   },
   "services": {
-    "gateway": "http://127.0.0.1:8081",
+    "gateway": "http://127.0.0.1:9002",
     "openwebui": "http://127.0.0.1:8080",
     "openwebui_bridge": "http://127.0.0.1:8098",
     "ollama": "http://127.0.0.1:11434",
     "claw": "http://127.0.0.1:9004",
-    "ssh_tunnel": "127.0.0.1:2222"
+    "router_ssh": "192.168.50.1:22",
+    "perception_status": "http://127.0.0.1:9002/v1/taiji/perception/status",
+    "hearing_ingress": "http://127.0.0.1:9002/v1/taiji/hearing/intent",
+    "vision_analysis": "http://127.0.0.1:9002/v1/taiji/vision/analyze",
+    "pos_voice_intent": "http://127.0.0.1:9011/v1/pos/voice-intent",
+    "voice_task_gateway": "http://127.0.0.1:9201/v1/voice/task",
+    "lilin_nvr_lan": "http://192.168.50.34:30080",
+    "lilin_nvr_ddns_backup_candidate": "p1430563.ds1.nxt.net.tw:30080"
   },
   "nodes": {
     "taiji01": {
@@ -37,6 +55,46 @@
     "sensor": {
       "role": ["sensing", "heartbeat", "environment_state"],
       "max_authority_level": 1
+    },
+    "store_lilin_nvr": {
+      "role": ["store_visual_source", "rtsp_source", "security_event_source"],
+      "lan_coordinate": "192.168.50.34",
+      "ddns_backup_coordinate": "p1430563.ds1.nxt.net.tw",
+      "ddns_backup_state": "DNS_RESOLVES_EXTERNAL_TCP_30080_UNREACHABLE_2026_09_06",
+      "ddns_backup_eligible": false,
+      "route_policy": "LAN_FIRST_DDNS_ONLY_AFTER_LAN_UNAVAILABLE",
+      "observed_state": "LAN_WEB_30080_AND_RTSP_554_REACHABLE_LOGIN_REQUIRED",
+      "stream_path_state": "UNKNOWN",
+      "control_policy": "READ_ONLY_UNTIL_SEPARATE_D8_HUMAN_APPROVAL",
+      "max_authority_level": 1
+    },
+    "taiji04_sunmi_pos": {
+      "role": ["source_node_speech_recognition", "google_hardware_voice", "browser_application", "scanner", "printer", "camera"],
+      "audio_policy": "RECOGNIZE_AT_SOURCE_SEND_TRANSCRIPT_ONLY",
+      "raw_audio_upload": false,
+      "max_authority_level": 2
+    },
+    "homepod_pair": {
+      "role": ["audio_output_candidate"],
+      "observed_state": "AIRPLAY_REACHABLE_CONTROL_SESSION_NOT_VERIFIED",
+      "max_authority_level": 1
+    }
+  },
+  "perception_contract": {
+    "vision": {
+      "primary_source": "store_lilin_nvr",
+      "model_input": "MINIMUM_REQUIRED_FRAME_OR_EVENT_ONLY",
+      "analysis_endpoint": "/v1/taiji/vision/analyze",
+      "analysis_runtime": "LOCAL_XIAOJ_GPU_WHEN_AVAILABLE",
+      "input_formats": ["png", "jpeg", "webp"],
+      "frame_persisted": false,
+      "continuous_raw_feed": false
+    },
+    "hearing": {
+      "accepted_source_scope": "ANY_REGISTERED_NODE",
+      "source_processing": "LOCAL_OR_HARDWARE_SPEECH_RECOGNITION",
+      "transport": "TRANSCRIPT_PLUS_NODE_COORDINATE",
+      "natural_language_and_application_requests_share_total_field_gateway": true
     }
   },
   "hard_denies": [
@@ -47,6 +105,9 @@
     "change_dns",
     "expose_secret",
     "external_publish",
-    "legal_commitment_without_signature"
+    "legal_commitment_without_signature",
+    "camera_configuration_change_without_human_approval",
+    "recording_or_alarm_change_without_human_approval",
+    "raw_audio_bulk_upload"
   ]
 }

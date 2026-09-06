@@ -1,0 +1,116 @@
+{
+  "schema_id": "W7TP_TOTAL_FIELD_GIT_PUSH_GATE_CONFIG_V1",
+  "state": "ACTIVE_FAIL_CLOSED",
+  "primary_decision_engine": "8D_ADI",
+  "intent_zh_TW": "任何正式推送前，必須先由總場完成可定位的審查登記，並以短效、單次、精確綁定的 D8 權威封套通過。",
+  "workflow": [
+    "EXACT_CHANGE_PACKET",
+    "TOTAL_FIELD_REVIEW_REGISTRATION",
+    "D8_BOUND_APPROVAL",
+    "FORMAL_COMMIT",
+    "GIT_PUSH",
+    "REOBSERVATION"
+  ],
+  "workflow_zh_TW": [
+    "精確變更封包",
+    "總場審查登記",
+    "D8 綁定通過",
+    "正式提交",
+    "推送",
+    "重新觀測"
+  ],
+  "hard_rules": {
+    "missing_review_registration": "BLOCK",
+    "expired_authority": "BLOCK",
+    "wrong_candidate_or_tree": "BLOCK",
+    "branch_or_remote_drift": "BLOCK",
+    "unsigned_or_replayed_authority": "BLOCK",
+    "git_no_verify_bypass_allowed": false,
+    "candidate_pass_is_push_authority": false,
+    "test_pass_is_push_authority": false
+  },
+  "hard_rules_zh_TW": {
+    "missing_review_registration": "缺少總場審查登記即拒絕",
+    "expired_authority": "權威過期即拒絕",
+    "wrong_candidate_or_tree": "候選或目標樹不符即拒絕",
+    "branch_or_remote_drift": "分支或遠端座標漂移即拒絕",
+    "unsigned_or_replayed_authority": "未簽章或重放權威即拒絕"
+  },
+  "authority_scope_required": "AUTHORIZE_GIT_PUSH",
+  "active_authority_pointer_ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+  "nonce_ledger_ref": "runtime/total_field/runtime_state/git_push_authority_nonce_ledger.sqlite3",
+  "signature_verifier": {
+    "algorithm": "Ed25519",
+    "public_key_ref": "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800/authority_signing_public.pem",
+    "trusted_verifier_refs": [
+      "verifier_ref:total_field_runtime_v1"
+    ],
+    "private_key_access": false
+  },
+  "passkey_verifier": {
+    "enabled": true,
+    "adapter": "tools.total_field_passkey_d8:verify_passkey_authority",
+    "python_runtime": "/home/taiji_admin/.local/share/w7tp-passkey-d8/venv/bin/python",
+    "dependency_lock_ref": "configs/total_field/passkey_d8_requirements.txt",
+    "rp_id": "localhost",
+    "rp_name": "W7TP 小J總場",
+    "expected_origin": "http://localhost:9120",
+    "review_request_ref": "runtime/total_field/review_requests/20260906_total_field_2_3_git_push/REQUEST.json",
+    "credential_ref": "runtime/total_field/runtime_state/passkey_d8/FOUNDER_PASSKEY_CREDENTIAL.json",
+    "active_approval_pointer_ref": "runtime/total_field/runtime_state/passkey_d8/ACTIVE_APPROVAL.json",
+    "runtime_state_ref": "runtime/total_field/runtime_state/passkey_d8",
+    "local_bootstrap_without_token": true,
+    "consumption_ledger_ref": "runtime/total_field/runtime_state/passkey_d8/consumed_approvals.sqlite3",
+    "user_verification": "required",
+    "maximum_ttl_seconds": 300,
+    "single_use": true,
+    "authenticator_attachment": "platform",
+    "required_client_user_agent_contains": "",
+    "active_signer": "MSI_WINDOWS_HELLO",
+    "provider_is_authority": false,
+    "model_is_authority": false,
+    "iphone_hardware_identity_inferred": false
+  },
+  "D8_boundary": {
+    "member_may_authorize_push": false,
+    "organization_admin_login_may_authorize_push": false,
+    "provider_account_may_authorize_push": false,
+    "model_may_authorize_push": false,
+    "founder_user_verified_total_field_signature_required": true,
+    "local_windows_hello_passkey_allowed": true,
+    "iphone_unlock_passkey_future_additional_signer_allowed": true,
+    "passkey_provider_is_authority": false
+  },
+  "real_world_role_projection": {
+    "role_model": {
+      "mode": "OVERLAPPING_MEMBERSHIP_AND_SCENE_CAPABILITIES",
+      "zh_TW": "會員身分與場景能力可重疊；同一自然人或組織可依場景持有多個角色。",
+      "scene_scope_grants_engineering_authority": false
+    },
+    "association": {
+      "user_declared_role": "SYSTEM_SUPER_ADMIN_ORGANIZATION_SCENE",
+      "zh_TW": "協會為系統超管組織場景；不等同 D8 工程推送權威。"
+    },
+    "condominium_committee": {
+      "user_declared_role": "SCENE_CAPABILITY_DOMAIN",
+      "zh_TW": "管委會為物業與場景能力域。"
+    },
+    "merchant": {
+      "user_declared_roles": [
+        "MEMBER",
+        "SCENE_CAPABILITY_DOMAIN"
+      ],
+      "existing_instance": "上品聊國咖啡館",
+      "capability_source": "TOTAL_FIELD_REGISTERED_SYSTEM_CAPABILITIES",
+      "capability_assignment": "ROLE_AND_SCENE_SCOPED",
+      "system_mutation_authority": false,
+      "zh_TW": "店家也是會員；系統依商家角色與場景提供已由總場註冊的商家服務能力。目前已有上品聊國咖啡館。"
+    },
+    "individual_member": {
+      "user_declared_role": "HIGHEST_SERVICE_PRIORITY_USER",
+      "scene_capability_eligible": true,
+      "founder_term_as_declared": "餐語的個人會員",
+      "zh_TW": "個人會員是服務設計最高優先使用者；保留創辦人原詞『餐語』且不自行改義；不因使用權取得系統修改權。"
+    }
+  }
+}

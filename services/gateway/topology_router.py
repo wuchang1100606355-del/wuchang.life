@@ -40,6 +40,9 @@ def topology_summary():
     return {
         "owner": topo.get("owner"),
         "version": topo.get("version"),
+        "primary_decision_engine": topo.get("primary_decision_engine"),
+        "network_policy": topo.get("network_policy", {}),
+        "identity_boundary": topo.get("identity_boundary", {}),
         "layers": list(topo.get("layers", {}).keys()),
         "services": topo.get("services", {}),
         "nodes": list(topo.get("nodes", {}).keys()),
@@ -71,6 +74,12 @@ def route_decide(req: RouteRequest):
         selected = "openwebui"
     elif req.task_class in ["property_case", "pos", "finance_record"]:
         selected = "odoo"
+    elif req.task_class in ["vision", "security_video", "camera_event"]:
+        selected = "store_lilin_nvr"
+    elif req.task_class in ["hearing", "speech_input", "voice_intent"]:
+        selected = "taiji04_sunmi_pos"
+    elif req.task_class in ["speech_output", "airplay_output"]:
+        selected = "homepod_pair"
     elif req.task_class in ["heartbeat", "sensing", "environment_state"]:
         selected = "sensor"
     else:
