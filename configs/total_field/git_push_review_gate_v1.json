@@ -64,9 +64,15 @@
     "user_verification": "required",
     "maximum_ttl_seconds": 300,
     "single_use": true,
-    "authenticator_attachment": "platform",
+    "authenticator_attachment": "device-bound-platform-or-hybrid-mobile",
+    "hybrid_mobile_passkey_allowed": true,
+    "external_security_key_allowed": false,
     "required_client_user_agent_contains": "",
-    "active_signer": "MSI_WINDOWS_HELLO",
+    "active_signer": "FOUNDER_ENROLLED_USER_VERIFIED_PASSKEY",
+    "allowed_unlock_surfaces": [
+      "MSI_WINDOWS_HELLO",
+      "MOBILE_PLATFORM_PASSKEY"
+    ],
     "provider_is_authority": false,
     "model_is_authority": false,
     "iphone_hardware_identity_inferred": false
@@ -77,8 +83,10 @@
     "provider_account_may_authorize_push": false,
     "model_may_authorize_push": false,
     "founder_user_verified_total_field_signature_required": true,
+    "founder_enrolled_platform_passkey_required": true,
     "local_windows_hello_passkey_allowed": true,
-    "iphone_unlock_passkey_future_additional_signer_allowed": true,
+    "mobile_platform_passkey_allowed": true,
+    "unlock_surface_is_final_authority": false,
     "passkey_provider_is_authority": false
   },
   "real_world_role_projection": {

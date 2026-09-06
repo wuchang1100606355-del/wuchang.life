@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""iPhone/WebAuthn signer adapter for an exact Total Field D8 effect."""
+"""Founder-enrolled platform-passkey adapter for an exact Total Field D8 effect."""
 from __future__ import annotations
 
 import hashlib
@@ -135,6 +135,37 @@ def approval_challenge(claims: Mapping[str, Any], nonce_b64url: str) -> bytes:
     return hashlib.sha256(canonical_json(claims) + b"\x00" + websafe_decode(nonce_b64url)).digest()
 
 
+def require_platform_authenticator(response: Mapping[str, Any]) -> str:
+    """Accept only the enrolled platform authenticator, never an external security key."""
+    attachment = response.get("authenticatorAttachment")
+    if attachment != "platform":
+        raise PasskeyD8Rejected("PASSKEY_PLATFORM_AUTHENTICATOR_REQUIRED")
+    return str(attachment)
+
+
+def require_admitted_authenticator(
+    response: Mapping[str, Any],
+    credential_record: Mapping[str, Any] | None = None,
+    *,
+    allow_hybrid_mobile: bool = True,
+) -> str:
+    """Accept a device-bound authenticator or an enrolled phone reached by the hybrid transport."""
+    attachment = response.get("authenticatorAttachment")
+    response_body = response.get("response")
+    response_transports = (
+        (response_body.get("transports") or []) if isinstance(response_body, Mapping) else []
+    )
+    enrolled_transports = (
+        (credential_record.get("transports") or []) if isinstance(credential_record, Mapping) else []
+    )
+    transports = {str(value) for value in [*response_transports, *enrolled_transports]}
+    if attachment == "platform":
+        return "platform"
+    if attachment == "cross-platform" and allow_hybrid_mobile and "hybrid" in transports:
+        return "cross-platform"
+    raise PasskeyD8Rejected("PASSKEY_ADMITTED_AUTHENTICATOR_REQUIRED")
+
+
 def _consume_once(path: Path, nonce: str, approval_sha256: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     connection = sqlite3.connect(path)
@@ -213,9 +244,16 @@ def verify_passkey_authority(
         response = assertion_record.get("assertion")
         if not isinstance(state, Mapping) or not isinstance(response, Mapping):
             raise PasskeyD8Rejected("PASSKEY_ASSERTION_INVALID")
+        credential_record, credential = load_credential(root, config)
+        authenticator_attachment = require_admitted_authenticator(
+            response,
+            credential_record,
+            allow_hybrid_mobile=config.get("hybrid_mobile_passkey_allowed") is True,
+        )
+        if approval.get("authenticator_attachment") != authenticator_attachment:
+            raise PasskeyD8Rejected("PASSKEY_AUTHENTICATOR_BINDING_DRIFT")
         if websafe_decode(str(state.get("challenge") or "")) != expected_challenge:
             raise PasskeyD8Rejected("PASSKEY_CHALLENGE_BINDING_DRIFT")
-        credential_record, credential = load_credential(root, config)
         credential_path = safe_runtime_ref(root, config.get("credential_ref"), suffix="FOUNDER_PASSKEY_CREDENTIAL.json")
         if sha256(credential_path.read_bytes()) != approval.get("credential_sha256"):
             raise PasskeyD8Rejected("PASSKEY_CREDENTIAL_HASH_DRIFT")
@@ -240,7 +278,8 @@ def verify_passkey_authority(
             "scope": [GIT_PUSH_SCOPE],
             "authority_scope_constraints": dict(constraints),
             "authority_sha256": approval_hash,
-            "signer_type": "LOCAL_WINDOWS_HELLO_USER_VERIFIED",
+            "signer_type": "FOUNDER_ENROLLED_USER_VERIFIED_PASSKEY",
+            "authenticator_attachment": authenticator_attachment,
             "user_verification": True,
             "provider_is_authority": False,
         }
@@ -269,6 +308,8 @@ __all__ = [
     "load_credential",
     "load_json",
     "parse_time",
+    "require_admitted_authenticator",
+    "require_platform_authenticator",
     "safe_runtime_ref",
     "sha256",
     "utc_now",

@@ -4,7 +4,14 @@ import unittest
 
 from fido2.utils import websafe_encode
 
-from tools.total_field_passkey_d8 import approval_challenge, canonical_json, sha256
+from tools.total_field_passkey_d8 import (
+    PasskeyD8Rejected,
+    approval_challenge,
+    canonical_json,
+    require_admitted_authenticator,
+    require_platform_authenticator,
+    sha256,
+)
 
 
 class TotalFieldPasskeyD8Tests(unittest.TestCase):
@@ -20,6 +27,39 @@ class TotalFieldPasskeyD8Tests(unittest.TestCase):
     def test_canonical_payload_is_stable(self) -> None:
         self.assertEqual(canonical_json({"b": 2, "a": 1}), b'{"a":1,"b":2}')
         self.assertEqual(len(sha256(b"evidence")), 64)
+
+    def test_platform_authenticator_is_accepted(self) -> None:
+        self.assertEqual(require_platform_authenticator({"authenticatorAttachment": "platform"}), "platform")
+
+    def test_external_security_key_is_rejected(self) -> None:
+        with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_PLATFORM_AUTHENTICATOR_REQUIRED"):
+            require_platform_authenticator({"authenticatorAttachment": "cross-platform"})
+
+    def test_hybrid_phone_is_admitted(self) -> None:
+        response = {
+            "authenticatorAttachment": "cross-platform",
+            "response": {"transports": ["hybrid", "internal"]},
+        }
+        self.assertEqual(
+            require_admitted_authenticator(response, allow_hybrid_mobile=True),
+            "cross-platform",
+        )
+
+    def test_enrolled_hybrid_phone_assertion_is_admitted(self) -> None:
+        response = {"authenticatorAttachment": "cross-platform", "response": {}}
+        enrolled = {"transports": ["hybrid", "internal"]}
+        self.assertEqual(
+            require_admitted_authenticator(response, enrolled, allow_hybrid_mobile=True),
+            "cross-platform",
+        )
+
+    def test_external_non_hybrid_security_key_is_rejected(self) -> None:
+        response = {
+            "authenticatorAttachment": "cross-platform",
+            "response": {"transports": ["usb"]},
+        }
+        with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_ADMITTED_AUTHENTICATOR_REQUIRED"):
+            require_admitted_authenticator(response, allow_hybrid_mobile=True)
 
 
 if __name__ == "__main__":

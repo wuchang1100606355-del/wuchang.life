@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Browser ceremony for founder-present local device unlock D8 approval."""
+"""Browser ceremony for founder-present platform-passkey D8 approval."""
 from __future__ import annotations
 
 import argparse
@@ -42,6 +42,7 @@ from tools.total_field_passkey_d8 import (
     load_credential,
     load_json,
     parse_time,
+    require_admitted_authenticator,
     sha256,
     utc_now,
 )
@@ -60,9 +61,9 @@ h1{font-size:28px;margin:0 0 8px}.sub{color:#94bfd7;margin:0 0 24px}.state{paddi
 button{width:100%;border:0;border-radius:14px;padding:16px;margin:8px 0;font-size:18px;font-weight:700;background:#39d8a0;color:#04120d}button.secondary{background:#263d51;color:#eaf6ff}button:disabled{opacity:.45}
 .rules{font-size:14px;line-height:1.65;color:#bdd5e3}.ok{color:#54e3a9}.bad{color:#ff8c8c}.label{color:#7fa9bf}
 </style></head><body><main><div class="card">
-<h1>小J 總場本機簽發</h1><p class="sub">以 MSI 的 Windows Hello 解鎖證明創辦人在場，只簽本次精確作用封包。</p>
+<h1>小J 總場創辦人簽發</h1><p class="sub">手機沒有既有密鑰時，先以 Face ID 建立新密鑰；不需要輸入任何舊密碼。</p>
 <div id="status" class="state">正在讀取簽發狀態…</div>
-<button id="enrol" class="secondary">首次註冊本機 Windows Hello</button>
+<button id="enrol" class="secondary">建立手機 Face ID 通行密鑰</button>
 <button id="approve">檢視並簽發本次推送</button>
 <div class="rules">不授權部署、重啟、正典修改或活動指標修改。分支、目標樹、遠端、檔案集合或五分鐘時限任一漂移，簽發即失效。Apple、Google、Tailscale 與瀏覽器均不是總場權威。</div>
 </div></main><script>
@@ -77,9 +78,10 @@ const request=o=>{const p=o.publicKey;p.challenge=dec(p.challenge);(p.allowCrede
 const regJSON=c=>({id:c.id,rawId:enc(c.rawId),type:c.type,authenticatorAttachment:c.authenticatorAttachment,clientExtensionResults:c.getClientExtensionResults(),response:{clientDataJSON:enc(c.response.clientDataJSON),attestationObject:enc(c.response.attestationObject),transports:c.response.getTransports?c.response.getTransports():[]}});
 const authJSON=c=>({id:c.id,rawId:enc(c.rawId),type:c.type,authenticatorAttachment:c.authenticatorAttachment,clientExtensionResults:c.getClientExtensionResults(),response:{clientDataJSON:enc(c.response.clientDataJSON),authenticatorData:enc(c.response.authenticatorData),signature:enc(c.response.signature),userHandle:c.response.userHandle?enc(c.response.userHandle):null}});
 const show=(m,ok=true)=>{statusEl.textContent=m;statusEl.className='state '+(ok?'ok':'bad')};
-async function refresh(){try{const r=await fetch('/health');const j=await r.json();show(`狀態：${j.state}\n通行密鑰：${j.credential_state_zh_TW}\n簽發器：${j.signer_zh_TW}\n待簽範圍：${j.scope_zh_TW}`)}catch(e){show('無法連到總場簽發服務：'+e.message,false)}}
-document.getElementById('enrol').onclick=async()=>{try{show('請使用本機 Windows Hello（PIN／指紋／臉部辨識）解鎖。');const o=await post('/v1/passkey/register/options');const c=await navigator.credentials.create(creation(o.options));const r=await post('/v1/passkey/register/complete',{response:regJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW);await refresh()}catch(e){show('註冊未完成：'+e.message,false)}};
-document.getElementById('approve').onclick=async()=>{try{show('正在建立綁定本次變更的五分鐘簽發挑戰…');const o=await post('/v1/passkey/approve/options');const d=o.display;const yes=confirm(`只簽發以下作用：\n範圍：正式 Git 推送\n分支：${d.branch}\n目標樹：${d.target_tree}\n檔案數：${d.file_count}\n有效：5 分鐘\n\n確定後請用本機 Windows Hello 解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/approve/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
+let enrolled=false;
+async function refresh(){try{const r=await fetch('/health');const j=await r.json();enrolled=Boolean(j.enrolled);const b=document.getElementById('enrol');b.disabled=false;b.textContent=enrolled?'手機沒有舊密鑰：重新建立 Face ID 通行密鑰':'首次建立手機 Face ID 通行密鑰';show(`狀態：${j.state}\n通行密鑰：${j.credential_state_zh_TW}\n簽發器：${j.signer_zh_TW}\n待簽範圍：${j.scope_zh_TW}`)}catch(e){show('無法連到總場簽發服務：'+e.message,false)}}
+document.getElementById('enrol').onclick=async()=>{try{const mode=enrolled?'rotate':'register';show('即將在手機建立一把新的 Face ID 通行密鑰；這不是輸入舊密碼。舊密鑰會保留到新密鑰建立成功。');const o=await post(`/v1/passkey/${mode}/options`);const c=await navigator.credentials.create(creation(o.options));const r=await post(`/v1/passkey/${mode}/complete`,{response:regJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW);await refresh()}catch(e){show('新密鑰尚未建立：'+e.message,false)}};
+document.getElementById('approve').onclick=async()=>{try{show('正在建立綁定本次變更的五分鐘簽發挑戰…');const o=await post('/v1/passkey/approve/options');const d=o.display;const yes=confirm(`只簽發以下作用：\n範圍：正式 Git 推送\n分支：${d.branch}\n目標樹：${d.target_tree}\n檔案數：${d.file_count}\n有效：5 分鐘\n\n確定後請使用已登記的創辦人平台通行密鑰解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/approve/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
 refresh();
 </script></body></html>"""
 
@@ -122,8 +124,9 @@ class PasskeyApplication:
         enrolled = self.credential_path().is_file()
         return {
             "state": "READY_FOR_LOCAL_APPROVAL" if enrolled else "READY_FOR_LOCAL_ENROLMENT",
+            "enrolled": enrolled,
             "credential_state_zh_TW": "已註冊" if enrolled else "尚未註冊",
-            "signer_zh_TW": "MSI 本機 Windows Hello",
+            "signer_zh_TW": "創辦人已登記的平台通行密鑰",
             "scope_zh_TW": "只允許精確、單次、五分鐘內的正式 Git 推送",
             "provider_is_authority": False,
             "total_field_is_effect_authority": True,
@@ -134,12 +137,16 @@ class PasskeyApplication:
         if required and required not in user_agent:
             raise PasskeyD8Rejected("簽發裝置不符合總場限制")
 
-    def register_options(self, supplied: str, user_agent: str) -> dict[str, Any]:
-        if self.credential_path().exists():
+    def register_options(self, supplied: str, user_agent: str, *, rotate: bool = False) -> dict[str, Any]:
+        credential_path = self.credential_path()
+        if credential_path.exists() and not rotate:
             raise PasskeyD8Rejected("通行密鑰已註冊，禁止覆寫")
+        if rotate and not credential_path.exists():
+            raise PasskeyD8Rejected("尚無舊密鑰，請使用首次建立")
         self.require_bootstrap(supplied)
         self.require_client(user_agent)
         ceremony_id = secrets.token_hex(16)
+        previous_credential_sha256 = sha256(credential_path.read_bytes()) if rotate else None
         options, state = self.server.register_begin(
             PublicKeyCredentialUserEntity(
                 id=b"w7tp-total-field-founder",
@@ -148,29 +155,61 @@ class PasskeyApplication:
             ),
             resident_key_requirement=ResidentKeyRequirement.REQUIRED,
             user_verification=UserVerificationRequirement.REQUIRED,
-            authenticator_attachment=AuthenticatorAttachment.PLATFORM,
+            authenticator_attachment=None,
         )
-        atomic_json(self.state_root / f"register-{ceremony_id}.json", {"state": state})
+        issued = utc_now()
+        atomic_json(
+            self.state_root / f"register-{ceremony_id}.json",
+            {
+                "state": state,
+                "mode": "ROTATE" if rotate else "REGISTER",
+                "issued_at": iso_z(issued),
+                "expires_at": iso_z(issued + timedelta(seconds=int(self.passkey["maximum_ttl_seconds"]))),
+                "previous_credential_sha256": previous_credential_sha256,
+            },
+        )
         return {"state": "PASSKEY_REGISTRATION_CHALLENGE_READY", "ceremony_id": ceremony_id, "options": dict(options)}
 
-    def register_complete(self, supplied: str, user_agent: str, body: Mapping[str, Any]) -> dict[str, Any]:
-        if self.credential_path().exists():
-            raise PasskeyD8Rejected("通行密鑰已註冊，禁止覆寫")
+    def register_complete(
+        self, supplied: str, user_agent: str, body: Mapping[str, Any], *, rotate: bool = False
+    ) -> dict[str, Any]:
         self.require_bootstrap(supplied)
         self.require_client(user_agent)
         ceremony_id = str(body.get("ceremony_id") or "")
         pending = self.state_root / f"register-{ceremony_id}.json"
         if not pending.is_file():
             raise PasskeyD8Rejected("註冊挑戰不存在或已失效")
-        state = load_json(pending, "PASSKEY_REGISTRATION_STATE_INVALID").get("state")
+        pending_record = load_json(pending, "PASSKEY_REGISTRATION_STATE_INVALID")
+        expected_mode = "ROTATE" if rotate else "REGISTER"
+        if pending_record.get("mode") != expected_mode:
+            raise PasskeyD8Rejected("註冊模式不符")
+        if utc_now() > parse_time(pending_record.get("expires_at")):
+            raise PasskeyD8Rejected("註冊挑戰已超過五分鐘")
+        credential_path = self.credential_path()
+        if rotate:
+            if not credential_path.is_file():
+                raise PasskeyD8Rejected("舊密鑰已不存在")
+            previous_sha256 = sha256(credential_path.read_bytes())
+            if previous_sha256 != pending_record.get("previous_credential_sha256"):
+                raise PasskeyD8Rejected("註冊期間舊密鑰已漂移")
+        elif credential_path.exists():
+            raise PasskeyD8Rejected("通行密鑰已註冊，禁止覆寫")
+        else:
+            previous_sha256 = None
+        state = pending_record.get("state")
         response = body.get("response")
         if not isinstance(state, Mapping) or not isinstance(response, Mapping):
             raise PasskeyD8Rejected("註冊回應無效")
         parsed = RegistrationResponse.from_dict(response)
         auth_data = self.server.register_complete(state, parsed)
         if not auth_data.is_user_verified() or auth_data.credential_data is None:
-            raise PasskeyD8Rejected("本機 Windows Hello 使用者解鎖驗證未成立")
+            raise PasskeyD8Rejected("創辦人平台通行密鑰使用者解鎖驗證未成立")
+        authenticator_attachment = require_admitted_authenticator(
+            response,
+            allow_hybrid_mobile=self.passkey.get("hybrid_mobile_passkey_allowed") is True,
+        )
         credential = auth_data.credential_data
+        transports = list(((response.get("response") or {}).get("transports") or []))
         record = {
             "schema_id": PASSKEY_CREDENTIAL_SCHEMA,
             "state": "ENROLLED_USER_VERIFIED",
@@ -180,16 +219,55 @@ class PasskeyApplication:
             "credential_id_b64url": websafe_encode(credential.credential_id),
             "attested_credential_data_b64url": websafe_encode(bytes(credential)),
             "aaguid_b64url": websafe_encode(bytes(credential.aaguid)),
-            "transports": list(((response.get("response") or {}).get("transports") or [])),
+            "transports": transports,
+            "authenticator_attachment": authenticator_attachment,
+            "authenticator_profile": (
+                "HYBRID_MOBILE_PLATFORM" if authenticator_attachment == "cross-platform" else "DEVICE_BOUND_PLATFORM"
+            ),
             "sign_count": int(auth_data.counter),
             "user_verification": True,
             "attestation_is_final_authority": False,
             "provider_is_authority": False,
         }
-        atomic_json(self.credential_path(), record)
+        atomic_json(credential_path, record)
+        active_credential_sha256 = sha256(credential_path.read_bytes())
+        if rotate:
+            rotation_receipt = {
+                "schema_id": "W7TP_TOTAL_FIELD_PASSKEY_CREDENTIAL_ROTATION_RECEIPT_V1",
+                "state": "PASS_ATOMIC_CREDENTIAL_ROTATION",
+                "rotated_at": iso_z(utc_now()),
+                "previous_credential_sha256": previous_sha256,
+                "active_credential_sha256": active_credential_sha256,
+                "authenticator_attachment": authenticator_attachment,
+                "transports": transports,
+                "user_verification": True,
+                "provider_is_authority": False,
+            }
+            atomic_json(self.state_root / f"credential-rotation-{ceremony_id}.json", rotation_receipt)
+            pointer_path = self.root.joinpath(
+                *PurePosixPath(str(self.passkey["active_approval_pointer_ref"])).parts
+            )
+            if pointer_path.is_file():
+                atomic_json(
+                    pointer_path,
+                    {
+                        "schema_id": PASSKEY_POINTER_SCHEMA,
+                        "state": "INVALIDATED_BY_CREDENTIAL_ROTATION",
+                        "previous_pointer_sha256": sha256(pointer_path.read_bytes()),
+                        "active_credential_sha256": active_credential_sha256,
+                        "updated_at": iso_z(utc_now()),
+                    },
+                )
         pending.unlink(missing_ok=True)
         self.bootstrap_path.unlink(missing_ok=True)
-        return {"state": "PASS_LOCAL_PASSKEY_ENROLLED", "message_zh_TW": "本機 Windows Hello 通行密鑰已註冊；尚未簽發任何系統變更。"}
+        return {
+            "state": "PASS_LOCAL_PASSKEY_ROTATED" if rotate else "PASS_LOCAL_PASSKEY_ENROLLED",
+            "message_zh_TW": (
+                "手機 Face ID 新密鑰已安全取代舊密鑰；請按下方按鈕簽發本次推送。"
+                if rotate
+                else "手機 Face ID 通行密鑰已建立；請按下方按鈕簽發本次推送。"
+            ),
+        }
 
     def _request(self) -> tuple[Path, dict[str, Any]]:
         path = self.root.joinpath(*PurePosixPath(str(self.passkey["review_request_ref"])).parts)
@@ -228,7 +306,7 @@ class PasskeyApplication:
             "remote_name": d3["remote_name"],
             "remote_url_sha256": d3["remote_url_sha256"],
             "allowed_paths_sha256": request["D4_EVIDENCE"]["changed_paths_sha256"],
-            "founder_user_verification": "LOCAL_WINDOWS_HELLO_REQUIRED",
+            "founder_user_verification": "ENROLLED_PLATFORM_PASSKEY_REQUIRED",
             "model_is_authority": False,
             "provider_is_authority": False,
         }
@@ -310,10 +388,15 @@ class PasskeyApplication:
         if not isinstance(response, Mapping):
             raise PasskeyD8Rejected("簽發回應無效")
         credential_record, credential = load_credential(self.root, self.passkey)
+        authenticator_attachment = require_admitted_authenticator(
+            response,
+            credential_record,
+            allow_hybrid_mobile=self.passkey.get("hybrid_mobile_passkey_allowed") is True,
+        )
         verified = self.server.authenticate_complete(pending["webauthn_state"], [credential], response)
         parsed = AuthenticationResponse.from_dict(response)
         if verified.credential_id != credential.credential_id or not parsed.response.authenticator_data.is_user_verified():
-            raise PasskeyD8Rejected("本機 Windows Hello 使用者解鎖驗證未成立")
+            raise PasskeyD8Rejected("創辦人平台通行密鑰使用者解鎖驗證未成立")
         current_request_path, current_request = self._request()
         claims = pending["signed_claims"]
         if sha256(current_request_path.read_bytes()) != claims["request_source_sha256"]:
@@ -350,6 +433,7 @@ class PasskeyApplication:
             "assertion_ref": _relative(self.root, assertion_path),
             "assertion_sha256": sha256(assertion_path.read_bytes()),
             "user_verification": True,
+            "authenticator_attachment": authenticator_attachment,
             "single_use": True,
             "provider_is_authority": False,
             "model_is_authority": False,
@@ -369,7 +453,7 @@ class PasskeyApplication:
         pending_path.unlink(missing_ok=True)
         return {
             "state": "PASS_LOCAL_DEVICE_UNLOCK_D8_APPROVAL_ISSUED",
-            "message_zh_TW": "本機 Windows Hello 解鎖驗證成立；本次精確推送已取得單次五分鐘簽發。",
+            "message_zh_TW": "創辦人平台通行密鑰解鎖驗證成立；本次精確推送已取得單次五分鐘簽發。",
             "approval_sha256": pointer["approval_sha256"],
         }
 
@@ -418,6 +502,10 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.app.register_options(token, user_agent)
             elif route == "/v1/passkey/register/complete":
                 result = self.app.register_complete(token, user_agent, body)
+            elif route == "/v1/passkey/rotate/options":
+                result = self.app.register_options(token, user_agent, rotate=True)
+            elif route == "/v1/passkey/rotate/complete":
+                result = self.app.register_complete(token, user_agent, body, rotate=True)
             elif route == "/v1/passkey/approve/options":
                 result = self.app.approve_options(user_agent)
             elif route == "/v1/passkey/approve/complete":

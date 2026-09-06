@@ -29,6 +29,10 @@ class TotalFieldGitPushGateTests(unittest.TestCase):
         (self.root / "configs/total_field/git_push_review_gate_v1.json").write_text(
             json.dumps({"state": "ACTIVE_FAIL_CLOSED"}), encoding="utf-8"
         )
+        (self.root / "seed.txt").write_text("seed\n", encoding="utf-8")
+        subprocess.run(["git", "-C", str(self.root), "add", "seed.txt"], check=True)
+        subprocess.run(["git", "-C", str(self.root), "commit", "-qm", "seed"], check=True)
+        self.remote_behind = self.git("rev-parse", "HEAD")
         (self.root / "a.txt").write_text("base\n", encoding="utf-8")
         subprocess.run(["git", "-C", str(self.root), "add", "a.txt"], check=True)
         subprocess.run(["git", "-C", str(self.root), "commit", "-qm", "base"], check=True)
@@ -80,12 +84,12 @@ class TotalFieldGitPushGateTests(unittest.TestCase):
             "authority_sha256": "a" * 64,
         }
 
-    def call(self, resolver=None):
+    def call(self, resolver=None, remote_oid=None):
         return verify_push(
             repo_root=self.root,
             remote_name="origin",
             remote_url=self.remote_url,
-            updates=[("refs/heads/main", self.tip, "refs/heads/main", self.base)],
+            updates=[("refs/heads/main", self.tip, "refs/heads/main", remote_oid or self.base)],
             authority_resolver=resolver or self.resolve,
             nonce_ledger=Ledger(),
             signature_verifier=Verifier(),
@@ -96,6 +100,22 @@ class TotalFieldGitPushGateTests(unittest.TestCase):
         result = self.call()
         self.assertEqual(result["state"], "PASS_TOTAL_FIELD_GIT_PUSH_GATE")
         self.assertTrue(result["push_authorized"])
+
+    def test_remote_ancestor_of_signed_base_passes(self) -> None:
+        result = self.call(remote_oid=self.remote_behind)
+        self.assertEqual(result["state"], "PASS_TOTAL_FIELD_GIT_PUSH_GATE")
+        self.assertTrue(result["push_authorized"])
+
+    def test_divergent_remote_holds(self) -> None:
+        tree = self.git("rev-parse", f"{self.remote_behind}^{{tree}}")
+        divergent = subprocess.check_output(
+            ["git", "-C", str(self.root), "commit-tree", tree, "-p", self.remote_behind],
+            input="divergent\n",
+            text=True,
+        ).strip()
+        result = self.call(remote_oid=divergent)
+        self.assertEqual(result["reason"], "REMOTE_BASE_DRIFT")
+        self.assertFalse(result["push_authorized"])
 
     def test_expired_or_unverified_authority_holds(self) -> None:
         result = self.call(lambda *_args, **_kwargs: {"state": "HOLD_AUTHORITY_EXPIRED"})

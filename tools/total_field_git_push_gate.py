@@ -49,6 +49,21 @@ def _git(root: Path, *args: str) -> str:
     return result.stdout.strip()
 
 
+def _is_ancestor(root: Path, ancestor: str, descendant: str) -> bool:
+    result = subprocess.run(
+        ["git", "-C", str(root), "merge-base", "--is-ancestor", ancestor, descendant],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+        text=True,
+    )
+    if result.returncode == 0:
+        return True
+    if result.returncode == 1:
+        return False
+    raise PushGateRejected("GIT_ANCESTRY_UNAVAILABLE")
+
+
 def _safe_ref(root: Path, value: Any) -> Path:
     if not isinstance(value, str) or not value:
         raise PushGateRejected("REVIEW_REGISTRATION_REF_MISSING")
@@ -170,7 +185,11 @@ def verify_push(
             raise PushGateRejected("REMOTE_BINDING_MISMATCH")
         if local_ref != f"refs/heads/{branch}" or remote_ref != f"refs/heads/{branch}":
             raise PushGateRejected("BRANCH_BINDING_MISMATCH")
-        if remote_oid not in ZERO_OID and remote_oid != exact["base_commit"]:
+        if (
+            remote_oid not in ZERO_OID
+            and remote_oid != exact["base_commit"]
+            and not _is_ancestor(root, remote_oid, str(exact["base_commit"]))
+        ):
             raise PushGateRejected("REMOTE_BASE_DRIFT")
         if _git(root, "rev-parse", f"{local_oid}^{{tree}}") != exact["target_tree"]:
             raise PushGateRejected("TARGET_TREE_DRIFT")
