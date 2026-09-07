@@ -53,18 +53,20 @@
     </record>
 
     <record id="action_wuchang_cafe_ai_eventbook" model="ir.actions.act_window">
-        <field name="name">AI Eventbook</field>
+        <field name="name">AI 事件簿</field>
         <field name="res_model">wuchang.cafe.ai.eventbook</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="menu_wuchang_cafe_root"
-              name="WuChang Cafe"
+              name="上品聊國咖啡館"
+              groups="base.group_system"
               sequence="80"/>
 
     <menuitem id="menu_wuchang_cafe_ai_eventbook"
-              name="AI Eventbook"
+              name="AI 事件簿"
               parent="menu_wuchang_cafe_root"
               action="action_wuchang_cafe_ai_eventbook"
+              groups="base.group_system"
               sequence="10"/>
 </odoo>

@@ -38,6 +38,11 @@ from ..services.merchant_capability_service import (
     plan_sovereign_ai_multi_account_binding,
     plan_xiaoj_field_projection,
 )
+from ..services.storefront_23 import (
+    build_storefront_flair,
+    build_storefront_response,
+    confirm_storefront_preview,
+)
 
 
 ROUTE_STATE = {
@@ -46,7 +51,8 @@ ROUTE_STATE = {
     "google_login": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
     "google_welcome": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
     "member_register_start": "HOLD_MEMBER_REGISTRATION_GATE",
-    "xiaoj_ordering": "P1_TRANSACTION_CAPABLE_SHELL",
+    "xiaoj_ordering": "商店介面啟用 · 正式下單待菜單對齊",
+    "xiaoj_display": "小J 顯示投影啟用 · 不具交易權限",
     "xiaoj_order": "HOLD_RUNTIME_POS_ORDER_RELEASE_REQUIRED",
     "xiaoj_payment": "HOLD_RUNTIME_PAYMENT_RELEASE_REQUIRED",
     "xiaoj_receipt": "HOLD_RUNTIME_POS_RECEIPT_REQUIRED",
@@ -128,7 +134,7 @@ def _page(
     payload_section = (
         f'<details class="route-payload"><summary>開發者候選資料</summary><pre>{safe_payload}</pre></details>'
         if page_class == "field-product"
-        else f'<section><h2>Route payload</h2><pre>{safe_payload}</pre></section>'
+        else f'<section><h2>路由封包（開發者資料）</h2><pre>{safe_payload}</pre></section>'
     )
     return f"""<!doctype html>
 <html lang="zh-Hant">
@@ -192,7 +198,7 @@ def _page(
   <main>
     <div class="bar">
       <div>
-        <p>聊國咖啡館重新總店 · XiaoJ P1</p>
+        <p>上品聊國咖啡館重新總店 · 小J 8DADI</p>
         <h1>{safe_title}</h1>
       </div>
       <span class="state">{safe_state}</span>
@@ -219,16 +225,506 @@ def _auth_body(provider: str) -> str:
 
 def _ordering_body() -> str:
     return """
-    <section>
-      <h2>可交易 / 可付款 / 可下單流程</h2>
-      <table>
-        <tr><th>點餐</th><td>使用真實菜單 source lock 後建立訂單草稿。</td></tr>
-        <tr><th>付款</th><td>支援現金櫃台確認；外部金流需另行授權。</td></tr>
-        <tr><th>下單</th><td>需要 POS session 與人審 release 後才可寫入 Odoo POS。</td></tr>
-        <tr><th>收據</th><td>等待 Odoo POS 正式 order id 後產生。</td></tr>
-      </table>
-    </section>
+    <style>
+      body.cafe-store { background:#130d09; color:#f8f0e7; }
+      body.cafe-store main { max-width:1220px; padding:18px clamp(14px,4vw,46px) 72px; }
+      body.cafe-store .bar { border:1px solid rgba(255,237,213,.14); border-radius:18px; padding:13px 16px; background:rgba(38,23,14,.78); backdrop-filter:blur(18px); }
+      body.cafe-store .bar p { margin:0; color:#e4b981; font-size:.78rem; letter-spacing:.1em; }
+      body.cafe-store .bar h1 { margin:4px 0 0; font-size:clamp(1rem,2vw,1.25rem); }
+      body.cafe-store .state { border-color:rgba(111,221,174,.35); border-radius:999px; background:rgba(111,221,174,.1); color:#9df2c9; font-size:.72rem; }
+      body.cafe-store main > section:last-child { border:1px solid rgba(255,237,213,.14); border-radius:18px; background:#1b120d; }
+      .storefront { --cream:#fff4e6; --muted:#cbb8a5; --coffee:#8e4f2a; --copper:#e38d4f; --mint:#75e0b1; --line:rgba(255,237,213,.15); overflow:hidden; border:1px solid var(--line); border-radius:32px; background:linear-gradient(145deg,#160e0a,#25150d 54%,#120b08); box-shadow:0 38px 110px rgba(0,0,0,.5); }
+      .storefront * { box-sizing:border-box; }
+      .storefront section { margin:0; padding:clamp(30px,6vw,76px) clamp(20px,6vw,76px); border:0; border-bottom:1px solid var(--line); background:transparent; }
+      .store-hero { min-height:620px; display:grid; grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr); align-items:center; gap:clamp(34px,7vw,86px); background:radial-gradient(circle at 78% 30%,rgba(227,141,79,.18),transparent 31rem),radial-gradient(circle at 8% 5%,rgba(117,224,177,.11),transparent 30rem); }
+      .store-kicker { margin:0 0 16px; color:#f1b16e; font-size:.76rem; font-weight:850; letter-spacing:.16em; }
+      .store-hero h2 { margin:0; max-width:790px; color:var(--cream); font-size:clamp(3rem,7vw,6.8rem); line-height:.91; letter-spacing:-.065em; text-wrap:balance; }
+      .store-hero h2 span { display:block; color:transparent; background:linear-gradient(100deg,#ffd9a8,#ef9658 48%,#79e5b5); background-clip:text; -webkit-background-clip:text; }
+      .store-lead { max-width:660px; margin:25px 0 0; color:var(--muted); font-size:clamp(1rem,1.7vw,1.2rem); line-height:1.8; }
+      .hero-tags { display:flex; flex-wrap:wrap; gap:9px; margin-top:27px; }
+      .hero-tags span { padding:8px 11px; border:1px solid var(--line); border-radius:999px; color:#ead8c5; font-size:.78rem; background:rgba(255,255,255,.025); }
+      .warm-state { display:inline-flex; align-items:center; gap:8px; margin-top:14px; padding:8px 11px; border-radius:999px; color:#bff7dc; background:rgba(117,224,177,.09); font-size:.76rem; }
+      .warm-state::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--mint); box-shadow:0 0 14px var(--mint); animation:blink 1.2s infinite; }
+      .avatar-stage { position:relative; min-height:450px; display:grid; place-items:center; isolation:isolate; }
+      .avatar-stage::before { content:""; position:absolute; width:88%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle,rgba(237,144,79,.22),transparent 62%); filter:blur(18px); }
+      .avatar-orbit { position:absolute; width:84%; aspect-ratio:1; border:1px solid rgba(255,196,135,.3); border-radius:50%; transform:rotateX(66deg) rotateZ(12deg); animation:store-orbit 14s linear infinite; }
+      .avatar-orbit.second { width:66%; border-color:rgba(117,224,177,.34); transform:rotateY(68deg) rotateZ(28deg); animation-direction:reverse; animation-duration:19s; }
+      .avatar { position:relative; width:min(430px,78vw); aspect-ratio:16/10; overflow:hidden; border:1px solid rgba(255,240,222,.3); border-radius:30px; background:#0f0a07; box-shadow:0 0 70px rgba(227,141,79,.3); animation:avatar-float 5.2s ease-in-out infinite; }
+      .avatar img { width:100%; height:100%; object-fit:cover; object-position:left center; transform:scale(1.035); transition:filter .25s ease,transform .4s ease; }
+      .avatar::after { content:"小J"; position:absolute; left:18px; bottom:16px; padding:6px 12px; border:1px solid rgba(255,255,255,.22); border-radius:999px; color:#fff8ef; background:rgba(19,10,6,.68); backdrop-filter:blur(12px); font-weight:950; letter-spacing:.12em; }
+      .avatar-stage.is-speaking .avatar img { filter:brightness(1.08) saturate(1.08); transform:scale(1.055) translateY(-2px); }
+      .avatar-stage.is-listening .avatar { box-shadow:0 0 90px rgba(117,224,177,.55); }
+      .avatar-stage[data-emotion="welcoming"] .avatar { box-shadow:0 0 92px rgba(237,155,94,.48); }
+      .avatar-stage[data-emotion="attentive"] .avatar { box-shadow:0 0 92px rgba(108,188,255,.5); }
+      .avatar-stage[data-emotion="cheerful"] .avatar { box-shadow:0 0 104px rgba(255,224,139,.5); }
+      .avatar-stage[data-emotion="reassuring"] .avatar { box-shadow:0 0 72px rgba(117,224,177,.34); }
+      .avatar-caption { position:absolute; right:0; bottom:6%; max-width:280px; padding:14px 16px; border:1px solid var(--line); border-radius:18px 18px 4px 18px; color:#f5e8dc; background:rgba(32,17,10,.88); backdrop-filter:blur(16px); }
+      .display-toolbar { display:flex; flex-wrap:wrap; gap:9px; margin-top:18px; }
+      .display-toolbar a,.outfit-pick { min-height:44px; display:inline-grid; place-items:center; padding:9px 13px; border:1px solid var(--line); border-radius:999px; color:#f8eadc; background:rgba(255,255,255,.045); font:inherit; font-size:.8rem; text-decoration:none; cursor:pointer; }
+      .outfit-pick.is-active { border-color:rgba(117,224,177,.7); color:#baf6d8; background:rgba(117,224,177,.11); }
+      @keyframes store-orbit { to { rotate:1turn; } } @keyframes avatar-float { 50% { transform:translateY(-10px) rotate(.5deg); } } @keyframes blink { 0%,46%,50%,100% { scale:1 1; } 48% { scale:1 .08; } }
+      .intent-zone { display:grid; grid-template-columns:.78fr 1.22fr; gap:clamp(25px,5vw,60px); align-items:start; }
+      .section-title h3 { margin:5px 0 15px; color:var(--cream); font-size:clamp(2.2rem,4.5vw,4.5rem); letter-spacing:-.045em; line-height:1; }
+      .section-title p { margin:0; color:var(--muted); line-height:1.75; }
+      .intent-card { padding:20px; border:1px solid var(--line); border-radius:25px; background:rgba(255,250,242,.05); box-shadow:0 24px 60px rgba(0,0,0,.2); }
+      .intent-card textarea { width:100%; min-height:132px; resize:vertical; padding:17px; border:1px solid rgba(255,236,211,.2); border-radius:17px; outline:none; color:#fff8ef; background:rgba(7,5,4,.5); font:inherit; font-size:1.05rem; line-height:1.6; }
+      .intent-card textarea:focus { border-color:var(--copper); box-shadow:0 0 0 4px rgba(227,141,79,.12); }
+      .intent-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+      .send-intent,.voice-intent,.quick-intent,.menu-pick { appearance:none; border:0; cursor:pointer; font:inherit; }
+      .send-intent { padding:13px 19px; border-radius:999px; color:#241108; background:linear-gradient(120deg,#ffd09a,#e88749); font-weight:900; }
+      .voice-intent { padding:13px 16px; border:1px solid var(--line); border-radius:999px; color:#f9e8d8; background:rgba(255,255,255,.05); }
+      .quick-row { display:flex; gap:8px; overflow:auto; margin-top:14px; padding-bottom:3px; }
+      .quick-intent { flex:0 0 auto; min-height:44px; padding:9px 12px; border:1px solid var(--line); border-radius:999px; color:#d8c7b8; background:rgba(255,255,255,.03); }
+      .xiaoj-result { margin-top:17px; padding:17px; border-left:3px solid var(--mint); border-radius:5px 17px 17px 5px; background:rgba(117,224,177,.08); }
+      .xiaoj-result[hidden] { display:none; }
+      .result-state { display:inline-flex; margin-bottom:10px; padding:5px 9px; border-radius:999px; color:#a4f2cc; background:rgba(117,224,177,.1); font-size:.75rem; }
+      .result-speech { margin:0; font-size:1.06rem; line-height:1.7; }
+      .order-preview { margin:13px 0 0; padding:0; list-style:none; }
+      .order-preview li { display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-top:1px solid var(--line); color:#e7d7c8; }
+      .receipt { margin-top:12px; color:#bcaa99; }
+      .receipt pre { max-height:260px; font-size:.74rem; white-space:pre-wrap; }
+      .touch-confirm { display:grid; gap:9px; margin-top:15px; padding:14px; border:1px solid rgba(255,209,166,.28); border-radius:18px; background:rgba(227,141,79,.09); }
+      .touch-confirm[hidden] { display:none; }
+      .touch-confirm button { min-height:68px; border:0; border-radius:16px; color:#241108; background:linear-gradient(120deg,#ffe0ba,#f09a5d); font:inherit; font-size:1.08rem; font-weight:950; cursor:pointer; touch-action:manipulation; }
+      .touch-confirm .readback-order { color:#f9e8d8; background:rgba(255,255,255,.07); border:1px solid var(--line); }
+      .touch-confirm button:disabled { cursor:not-allowed; filter:saturate(.25); opacity:.65; }
+      .touch-confirm small { color:#cbb8a5; line-height:1.55; }
+      .menu-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:28px; }
+      .menu-pick { min-height:150px; padding:19px; border:1px solid var(--line); border-radius:22px; text-align:left; color:#f9ecdf; background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02)); transition:.2s ease; }
+      .menu-pick:hover { translate:0 -4px; border-color:rgba(227,141,79,.6); }
+      .menu-pick small { display:block; color:#e5ad77; }.menu-pick strong { display:block; margin:20px 0 5px; font-size:1.15rem; }.menu-pick span { color:#cfbdad; }
+      .source-note { margin:18px 0 0; color:#9f8c7c; font-size:.78rem; line-height:1.65; }
+      .initiative { background:radial-gradient(circle at 18% 30%,rgba(117,224,177,.12),transparent 28rem)!important; }
+      .initiative-grid { display:grid; grid-template-columns:.86fr 1.14fr; gap:clamp(30px,6vw,78px); align-items:center; }
+      .node-field { position:relative; min-height:420px; display:grid; place-items:center; }
+      .node-core { z-index:2; width:148px; aspect-ratio:1; display:grid; place-items:center; border-radius:50%; color:#10271d; background:radial-gradient(circle at 33% 25%,#effff7,#75e0b1 48%,#25815d); box-shadow:0 0 60px rgba(117,224,177,.28); font-weight:950; text-align:center; }
+      .node-path { position:absolute; width:72%; height:72%; border:1px dashed rgba(117,224,177,.33); border-radius:50%; animation:store-orbit 30s linear infinite reverse; }
+      .node { position:absolute; width:132px; padding:12px; border:1px solid var(--line); border-radius:17px; color:#eddfd2; background:rgba(18,11,8,.88); text-align:center; box-shadow:0 18px 40px rgba(0,0,0,.25); }
+      .node b { display:block; color:#ffc38d; }.node small { color:#af9c8b; }.node.n1 { top:2%; left:8%; }.node.n2 { top:5%; right:4%; }.node.n3 { bottom:4%; left:3%; }.node.n4 { right:5%; bottom:3%; }
+      .principles { display:grid; gap:10px; margin-top:22px; }
+      .principles div { padding:13px 15px; border-left:2px solid var(--mint); background:rgba(255,255,255,.035); color:#d8c8ba; }
+      .social-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:28px; }
+      .social-grid article { padding:20px; border:1px solid var(--line); border-radius:22px; background:rgba(255,255,255,.035); }
+      .social-grid strong { display:block; margin-bottom:8px; color:#ffd1a6; font-size:1.08rem; }.social-grid p { margin:0; color:#c6b4a4; line-height:1.65; }
+      .store-footer { padding:22px!important; text-align:center; color:#a99584; font-size:.8rem; }
+      @media(max-width:820px) { .store-hero,.intent-zone,.initiative-grid { grid-template-columns:1fr; }.store-hero { padding-top:48px!important; }.avatar-stage { min-height:390px; }.menu-grid,.social-grid { grid-template-columns:1fr 1fr; } }
+      @media(max-width:520px) { .menu-grid,.social-grid { grid-template-columns:1fr; }.node { width:108px; font-size:.78rem; }.node-core { width:120px; }.storefront section { padding-left:17px; padding-right:17px; } }
+      @media(prefers-reduced-motion:reduce) { .avatar,.avatar-orbit,.node-path { animation:none!important; } }
+    </style>
+    <div class="storefront">
+      <section class="store-hero">
+        <div>
+          <p class="store-kicker">數位設備社區團結行動 × 8DADI</p>
+          <h2>一杯咖啡，<span>喚醒整個社區的數位能力。</span></h2>
+          <p class="store-lead">上品聊國咖啡館重新總店，讓看似普通的舊電腦在瀏覽器裡承載流暢的影音小J。設備不必變昂貴，能力由總場依意圖聚合。</p>
+          <div class="hero-tags"><span>外網中斷仍可服務</span><span>區網優先</span><span>D6 重建契約：CANDIDATE／UNKNOWN</span><span>Odoo 商業介面</span></div>
+          <div class="warm-state" data-warm-state>固定迎賓動畫與招呼語可用 · 模型器官：CANDIDATE／UNKNOWN</div>
+          <div class="display-toolbar">
+            <a href="/wuchang/xiaoj/display" target="_blank" rel="noopener" data-open-display>開啟 HDMI 小J 畫面</a>
+            <button class="outfit-pick is-active" type="button" data-xiaoj-outfit="white">白色科技制服</button>
+            <button class="outfit-pick" type="button" data-xiaoj-outfit="barista">咖啡師圍裙</button>
+            <button class="outfit-pick" type="button" data-xiaoj-outfit="event">深色活動接待服</button>
+            <button class="outfit-pick" type="button" data-xiaoj-outfit="community">社區日常服</button>
+          </div>
+        </div>
+        <div class="avatar-stage" data-avatar-stage>
+          <div class="avatar-orbit"></div><div class="avatar-orbit second"></div>
+          <div class="avatar" aria-label="影音AI店員小J"><img src="/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-white-tech.png" alt="小J 白色科技制服" data-xiaoj-hero-image></div>
+          <div class="avatar-caption" data-avatar-caption>嗨，我是小J。舊電腦也能有雲端級的出場方式。</div>
+        </div>
+      </section>
+
+      <section class="intent-zone" id="xiaoj-ordering">
+        <div class="section-title"><p class="store-kicker">自然語言店務入口</p><h3>你說人話，<br/>小J負責對準。</h3><p>語音或文字都可以。點餐內容先變成不可被幽默改寫的結構，再由小J用有溫度的方式覆誦。</p></div>
+        <div class="intent-card">
+          <form data-store-intent-form>
+            <label for="store-intent">告訴小J你想做什麼</label>
+            <textarea id="store-intent" required="required" placeholder="例如：小J，我 10 分鐘後到，先看看有沒有位子，幫我準備兩杯拿鐵。"></textarea>
+            <div class="intent-actions"><button class="send-intent" type="submit">請小J處理</button><button class="voice-intent" type="button" data-voice-intent>開始語音</button></div>
+          </form>
+          <div class="quick-row"><button class="quick-intent" type="button" data-quick="我 10 分鐘後到，先看看有沒有位子，幫我準備一杯拿鐵。">十分鐘後到</button><button class="quick-intent" type="button" data-quick="兩杯上品美式咖啡和一份烤貝果。">快速點餐</button><button class="quick-intent" type="button" data-quick="分析咖啡館最近的社群印象與可以改善的地方。">社群分析</button></div>
+          <div class="xiaoj-result" data-xiaoj-result hidden><span class="result-state" data-result-state></span><p class="result-speech" data-result-speech></p><ul class="order-preview" data-order-preview></ul><div class="touch-confirm" data-touch-confirm hidden><button class="readback-order" type="button" data-readback-order>播放結帳前語音複誦</button><button type="button" data-confirm-order disabled>我確認以上品項與數量</button><small data-confirm-note>語音與模型不能代替這一次觸控。客人親手確認後，系統才可進入正式送單門。</small></div><details class="receipt"><summary>查看 8DADI 回執</summary><pre data-result-receipt></pre></details></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title"><p class="store-kicker">公開菜單展示</p><h3>小J聽得懂，<br/>也算得清楚。</h3><p>點一下品項即可送入自然語言框。正式庫存、價格與 POS 寫單只接受店內 Odoo 的真實來源。</p></div>
+        <div class="menu-grid">
+          <button class="menu-pick" type="button" data-menu-intent="一杯上品美式咖啡"><small>義式咖啡</small><strong>上品美式咖啡</strong><span>公開索引價 NT$90</span></button>
+          <button class="menu-pick" type="button" data-menu-intent="一杯上品拿鐵咖啡"><small>義式咖啡</small><strong>上品拿鐵咖啡</strong><span>公開索引價 NT$90</span></button>
+          <button class="menu-pick" type="button" data-menu-intent="一份烤貝果"><small>輕食</small><strong>烤貝果</strong><span>公開索引價 NT$55</span></button>
+          <button class="menu-pick" type="button" data-menu-intent="一杯黃金曼特寧"><small>手沖特級品項</small><strong>黃金曼特寧</strong><span>公開索引價 NT$150</span></button>
+          <button class="menu-pick" type="button" data-menu-intent="一杯曼巴混合咖啡"><small>手沖咖啡</small><strong>曼巴混合咖啡</strong><span>公開索引價 NT$135</span></button>
+          <button class="menu-pick" type="button" data-menu-intent="一杯精選伯爵紅茶"><small>茶飲</small><strong>精選伯爵紅茶</strong><span>公開索引價 NT$65</span></button>
+        </div>
+        <p class="source-note">資料狀態：2026-09-03 由公開菜單索引觀測，僅作商店展示。未與店內 Odoo 菜單、庫存、座位狀態重新對齊前，不產生正式訂單或付款效果。</p>
+      </section>
+
+      <section class="initiative">
+        <div class="initiative-grid">
+          <div class="section-title"><p class="store-kicker">數位設備社區團結行動</p><h3>不是淘汰舊設備，<br/>是重新分配能力。</h3><p>每台設備只供應伺服器總場依身分封套允許的器官能力：顯示、收音、播音、運算、索引或店務。D6 只有在目標基座、最小必要差異、引用、座標、重建規則與驗證規則齊備並於目標端重驗時成立。</p><div class="principles"><div>設備所有人明確同意後才登錄</div><div>區網可通時只走區網，VPN 只作備援</div><div>伺服器總場決定路徑；模型只是可替換器官</div><div>離線時保留核心點餐與店務能力</div></div></div>
+          <div class="node-field" aria-label="社區數位設備能力場示意"><div class="node-path"></div><div class="node-core">伺服器總場<br/>8DADI</div><div class="node n1"><b>咖啡館舊電腦</b><small>瀏覽器與店務介面</small></div><div class="node n2"><b>MSI 顯示卡</b><small>模型與影音生成器官</small></div><div class="node n3"><b>商米 POS</b><small>語音、收銀與現場器官</small></div><div class="node n4"><b>社區閒置設備</b><small>經同意後供應能力</small></div></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title"><p class="store-kicker">動態上下文 × 雲端盲算候選</p><h3>雲端只取得最小投影，<br/>隱私保證仍待驗證。</h3><p>正典、總場秘密與完整身分封套留在伺服器總場；雲端器官只取得當前工作必要的去識別投影並回傳候選結果。沒有可驗證隱私機制前，狀態固定為 CLOUD_BLIND_COMPUTE_CANDIDATE／UNKNOWN。</p></div>
+        <div class="social-grid">
+          <article><strong>表頭區 · 不可被模型改寫</strong><p>創辦人意圖、8D 不變條件、身分與權限封套留在總場；模型只能閱讀被允許的投影。</p></article>
+          <article><strong>動態窗 · 只載入當前意圖</strong><p>點餐時只喚醒菜單、數量、座位與到店時間；社群分析時才載入公開評論及來源時間。</p></article>
+          <article><strong>個人化區 · 伺服器總場治理</strong><p>語氣、偏好與可用設備依身分封套由伺服器總場投影。外部 VM 只可作不含行為明文的候選索引器官，接通前維持 UNKNOWN。</p></article>
+        </div>
+        <div class="principles"><div>伺服器總場＋商米 POS＋可替換模型器官：形成低延遲店務智能</div><div>社區到處可見的舊電腦：經所有人同意後，分別供應顯示、聲音、索引或運算</div><div>想設計新服務時直接說出意圖：8DADI 求受影響閉包、預覽效果、最後人審後才可寫入</div></div>
+      </section>
+
+      <section>
+        <div class="section-title"><p class="store-kicker">可追溯的社群洞察</p><h3>聽見社群，<br/>不捏造社群。</h3><p>小J把評論、活動互動與會員回饋分開標記來源與時間，再交給商家決定要改善什麼。</p></div>
+        <div class="social-grid"><article><strong>被記住的核心</strong><p>手沖咖啡、價格親民、鄰里聊天與長時間陪伴，是公開評論反覆出現的印象。</p></article><article><strong>可以放大的特色</strong><p>瞬間冷卻手沖、舊豆袋再利用與社會企業敘事，適合變成可體驗的店內內容。</p></article><article><strong>不可假裝知道</strong><p>即時座位、庫存、會員個資與 LINE 互動未接上正式來源前，一律顯示未知。</p></article></div>
+      </section>
+      <section class="store-footer">上品聊國咖啡館重新總店 · 小J影音AI店務系統 · 8DADI 2.3</section>
+    </div>
+    <script>
+      (() => {
+        const form = document.querySelector('[data-store-intent-form]');
+        if (!form) return;
+        const input = form.querySelector('textarea');
+        const result = document.querySelector('[data-xiaoj-result]');
+        const resultState = document.querySelector('[data-result-state]');
+        const resultSpeech = document.querySelector('[data-result-speech]');
+        const orderPreview = document.querySelector('[data-order-preview]');
+        const receipt = document.querySelector('[data-result-receipt]');
+        const touchConfirm = document.querySelector('[data-touch-confirm]');
+        const readbackButton = document.querySelector('[data-readback-order]');
+        const confirmButton = document.querySelector('[data-confirm-order]');
+        const confirmNote = document.querySelector('[data-confirm-note]');
+        const avatar = document.querySelector('[data-avatar-stage]');
+        const caption = document.querySelector('[data-avatar-caption]');
+        const heroImage = document.querySelector('[data-xiaoj-hero-image]');
+        const displayStorageKey = 'wuchang-xiaoj-display-v23';
+        const displayAssets = {
+          white:'/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-white-tech.png',
+          barista:'/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-barista.png',
+          event:'/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-event-black.png',
+          community:'/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-community-gray.png'
+        };
+        const emotionByState = {
+          idle:'warm', warming:'welcoming', listening:'attentive', thinking:'focused',
+          speaking:'warm', confirmed:'cheerful', offline:'reassuring'
+        };
+        const voiceStyles = {
+          warm:{rate:1.00,pitch:1.05}, welcoming:{rate:1.02,pitch:1.08},
+          attentive:{rate:.97,pitch:1.01}, focused:{rate:.94,pitch:1.00},
+          cheerful:{rate:1.06,pitch:1.12}, reassuring:{rate:.90,pitch:.98},
+          clear:{rate:.90,pitch:1.00}
+        };
+        let displayChannel = null;
+        let currentOutfit = 'white';
+        let currentIntent = '';
+        let currentPreviewRef = '';
+        let currentPayload = null;
+        try { if ('BroadcastChannel' in window) displayChannel = new BroadcastChannel(displayStorageKey); } catch (_error) { displayChannel = null; }
+        const publishDisplay = (state, speech, emotion) => {
+          const controlledEmotion = voiceStyles[emotion] ? emotion : (emotionByState[state] || 'warm');
+          avatar.dataset.emotion = controlledEmotion;
+          const packet = {
+            schema:'xiaoj_display_projection_2.3',
+            state:state || 'idle',
+            emotion:controlledEmotion,
+            speech:String(speech || caption.textContent || '').slice(0,240),
+            outfit:currentOutfit,
+            created_at:Date.now()
+          };
+          try { localStorage.setItem(displayStorageKey, JSON.stringify(packet)); } catch (_error) {}
+          if (displayChannel) displayChannel.postMessage(packet);
+        };
+        const speak = (text, emotion = 'warm') => new Promise((resolve) => {
+          caption.textContent = text;
+          avatar.classList.add('is-speaking');
+          publishDisplay('speaking', text, emotion);
+          if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voiceStyle = voiceStyles[emotion] || voiceStyles.warm;
+            utterance.lang = 'zh-TW'; utterance.rate = voiceStyle.rate; utterance.pitch = voiceStyle.pitch;
+            let finished = false;
+            const finish = (ok) => { if (finished) return; finished = true; avatar.classList.remove('is-speaking'); publishDisplay('idle', text, emotion); resolve(ok); };
+            let started = false;
+            utterance.onstart = () => { started = true; };
+            utterance.onend = () => finish(true);
+            utterance.onerror = () => finish(false);
+            speechSynthesis.speak(utterance);
+            setTimeout(() => { if (!started) { speechSynthesis.cancel(); finish(false); } }, 1600);
+            setTimeout(() => finish(false), Math.min(12000, Math.max(4500, text.length * 210)));
+          } else { avatar.classList.remove('is-speaking'); publishDisplay('idle', text, emotion); resolve(false); }
+        });
+        const readBackOrder = (payload) => {
+          const lines = payload.frozen_facts?.order_lines || [];
+          if (!lines.length) return Promise.resolve(false);
+          const items = lines.map(line => `${line.name}${line.quantity}份`).join('、');
+          return speak(`結帳前為你複誦：${items}，合計${payload.frozen_facts.total}元。內容正確後，請本人按下確認。`, 'clear');
+        };
+        const render = (payload) => {
+          currentPayload = payload;
+          result.hidden = false;
+          resultState.textContent = payload.state_zh || '已建立受控回應';
+          resultSpeech.textContent = payload.xiaoj_line || '小J已收到。';
+          publishDisplay('thinking', resultSpeech.textContent, 'focused');
+          orderPreview.innerHTML = '';
+          const lines = payload.frozen_facts?.order_lines || [];
+          lines.forEach(line => {
+            const item = document.createElement('li');
+            const left = document.createElement('span'); left.textContent = `${line.name} × ${line.quantity}`;
+            const right = document.createElement('strong'); right.textContent = `NT$${line.subtotal}`;
+            item.append(left,right); orderPreview.append(item);
+          });
+          if (lines.length) {
+            const total = document.createElement('li');
+            const left = document.createElement('span'); left.textContent = '展示預覽合計';
+            const right = document.createElement('strong'); right.textContent = `NT$${payload.frozen_facts.total}`;
+            total.append(left,right); orderPreview.append(total);
+          }
+          const confirmation = payload.customer_confirmation || {};
+          currentPreviewRef = confirmation.preview_ref || '';
+          touchConfirm.hidden = !confirmation.required;
+          confirmButton.disabled = true;
+          readbackButton.disabled = !confirmation.required;
+          readbackButton.textContent = '播放結帳前語音複誦';
+          confirmButton.textContent = '我確認以上品項與數量';
+          confirmNote.textContent = confirmation.required ? '小J正在進行結帳前語音複誦；完成前不能確認。' : (confirmation.state_zh || '目前沒有可確認品項。');
+          receipt.textContent = JSON.stringify(payload.eight_dimensional_receipt || payload,null,2);
+          readBackOrder(payload).then((completed) => {
+            if (!confirmation.required) return;
+            confirmButton.dataset.voiceReadbackCompleted = completed ? 'true' : 'false';
+            confirmButton.disabled = !completed;
+            readbackButton.textContent = completed ? '重新播放結帳前語音複誦' : '點此播放結帳前語音複誦';
+            confirmNote.textContent = completed ? '語音複誦已完成，請真人核對後親手觸控確認。' : '瀏覽器未允許自動語音，請先點上方按鈕播放；結帳確認仍鎖定。';
+          });
+        };
+        const requestAppearance = (text) =>
+          fetch('/wuchang/xiaoj/api/store-flair', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',method:'call',params:{text},id:Date.now()})})
+            .then(response => response.json()).then(body => {
+              const payload = body.result || body;
+              if (!payload.flair) return payload;
+              caption.textContent = payload.flair;
+              if (!('speechSynthesis' in window) || !speechSynthesis.speaking) speak(payload.flair, 'cheerful');
+              return payload;
+            }).catch(() => null);
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const text = input.value.trim(); if (!text) return;
+          currentIntent = text; currentPreviewRef = '';
+          result.hidden = false; resultState.textContent = '8DADI 正在對準'; resultSpeech.textContent = '小J正在把幽默和訂單分開處理…'; orderPreview.innerHTML = ''; touchConfirm.hidden = true;
+          publishDisplay('thinking', '我正在把你的話對準店務狀態。', 'focused');
+          try {
+            const response = await fetch('/wuchang/xiaoj/api/store-chat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',method:'call',params:{text},id:Date.now()})});
+            const body = await response.json();
+            if (body.error) throw new Error(body.error.message || '回應失敗');
+            render(body.result || body); requestAppearance(text);
+          } catch (error) {
+            resultState.textContent = '離線備援'; resultSpeech.textContent = '對話通路正在休息，但商店介面仍可用；正式訂單沒有被送出。'; receipt.textContent = String(error);
+            publishDisplay('offline', resultSpeech.textContent, 'reassuring');
+          }
+        });
+        confirmButton.addEventListener('click', async () => {
+          if (!currentIntent || !currentPreviewRef) return;
+          confirmButton.disabled = true; confirmButton.textContent = '正在核對觸控確認';
+          try {
+            const response = await fetch('/wuchang/xiaoj/api/store-confirm', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',method:'call',params:{text:currentIntent,preview_ref:currentPreviewRef,acknowledged:true,voice_readback_completed:confirmButton.dataset.voiceReadbackCompleted === 'true'},id:Date.now()})});
+            const body = await response.json(); const payload = body.result || body;
+            if (body.error || !payload.customer_touch_confirmed) throw new Error(body.error?.message || '確認未成立');
+            resultState.textContent = '顧客觸控確認成立';
+            confirmButton.textContent = '已確認，不會重複送出';
+            confirmNote.textContent = payload.state_zh;
+            receipt.textContent = JSON.stringify(payload.eight_dimensional_receipt || payload,null,2);
+            publishDisplay('confirmed', '顧客已完成真人觸控確認。', 'cheerful');
+            speak('已收到你的親手確認。店內正式菜單尚未接通，所以現在沒有偷送單。', 'cheerful');
+          } catch (error) {
+            confirmButton.disabled = false; confirmButton.textContent = '重新確認以上品項與數量';
+            confirmNote.textContent = '確認未成立，訂單沒有送出。';
+          }
+        });
+        readbackButton.addEventListener('click', async () => {
+          if (!currentPayload) return;
+          readbackButton.disabled = true; readbackButton.textContent = '小J正在複誦';
+          const completed = await readBackOrder(currentPayload);
+          confirmButton.dataset.voiceReadbackCompleted = completed ? 'true' : 'false';
+          confirmButton.disabled = !completed;
+          readbackButton.disabled = false;
+          readbackButton.textContent = completed ? '重新播放結帳前語音複誦' : '再次播放結帳前語音複誦';
+          confirmNote.textContent = completed ? '語音複誦已完成，請真人核對後親手觸控確認。' : '語音仍未能播放，結帳確認維持鎖定。';
+        });
+        document.querySelectorAll('[data-quick]').forEach(button => button.addEventListener('click',() => { input.value=button.dataset.quick; input.focus(); }));
+        document.querySelectorAll('[data-menu-intent]').forEach(button => button.addEventListener('click',() => { input.value=button.dataset.menuIntent; document.querySelector('#xiaoj-ordering').scrollIntoView({behavior:'smooth'}); input.focus(); }));
+        document.querySelectorAll('[data-xiaoj-outfit]').forEach(button => button.addEventListener('click',() => {
+          const outfit = button.dataset.xiaojOutfit;
+          if (!displayAssets[outfit]) return;
+          currentOutfit = outfit;
+          heroImage.src = displayAssets[outfit];
+          heroImage.alt = '小J ' + button.textContent.trim();
+          document.querySelectorAll('[data-xiaoj-outfit]').forEach(item => item.classList.toggle('is-active', item === button));
+          publishDisplay('idle', '小J已換上' + button.textContent.trim() + '。', 'warm');
+        }));
+        const openDisplay = document.querySelector('[data-open-display]');
+        openDisplay.addEventListener('click',() => publishDisplay('idle', caption.textContent, 'warm'));
+        const voiceButton = document.querySelector('[data-voice-intent]');
+        voiceButton.addEventListener('click',() => {
+          const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!Recognition) { input.placeholder='此瀏覽器未提供語音辨識，請直接輸入文字。'; input.focus(); return; }
+          const recognition = new Recognition(); recognition.lang='zh-TW'; recognition.interimResults=false;
+          recognition.onstart=() => { avatar.classList.add('is-listening'); voiceButton.textContent='小J正在聽'; publishDisplay('listening', '我在聽，請慢慢說。', 'attentive'); };
+          recognition.onend=() => { avatar.classList.remove('is-listening'); voiceButton.textContent='開始語音'; publishDisplay('idle', caption.textContent, 'warm'); };
+          recognition.onresult=(event) => { input.value=event.results[0][0].transcript; form.requestSubmit(); };
+          recognition.start();
+        });
+        const warmState = document.querySelector('[data-warm-state]');
+        const warmup = requestAppearance('新顧客剛走進咖啡館，請準備一句不含交易內容的迎賓幽默。');
+        publishDisplay('warming', '歡迎光臨，我正在準備今天的店務狀態。', 'welcoming');
+        speak('歡迎光臨上品聊國咖啡館重新總店，我是小J。先看一段迎賓動畫，想喝什麼，等等直接跟我說。', 'welcoming');
+        warmup.then(payload => {
+          warmState.textContent = payload?.flair ? '本機小模型已暖機 · 8DADI 店務核心隨時可用' : '確定性離線店務已就緒 · 模型外表在背景待命';
+        });
+      })();
+    </script>
     """
+
+
+def _xiaoj_display_page() -> str:
+    return """<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小J 外接顯示畫面｜上品聊國咖啡館重新總店</title>
+  <style>
+    :root { color-scheme:dark; --cream:#fff4e7; --muted:#cbb8a5; --mint:#75e0b1; --copper:#ed9b5e; }
+    * { box-sizing:border-box; }
+    html,body { width:100%; height:100%; margin:0; overflow:hidden; background:#0b0705; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .scene { position:relative; width:100%; height:100%; isolation:isolate; background:#0b0705; }
+    .scene-image { position:absolute; inset:-1.5%; width:103%; height:103%; object-fit:cover; object-position:center; animation:display-breathe 8s ease-in-out infinite alternate; transition:opacity .45s ease,filter .35s ease; }
+    .scene::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(90deg,transparent 28%,rgba(7,5,4,.2) 52%,rgba(7,5,4,.86) 100%),linear-gradient(0deg,rgba(5,3,2,.62),transparent 35%); }
+    .brand { position:absolute; z-index:3; left:clamp(22px,4vw,68px); top:clamp(20px,4vw,54px); display:flex; align-items:center; gap:12px; padding:10px 14px; border:1px solid rgba(255,255,255,.16); border-radius:999px; color:var(--cream); background:rgba(12,8,6,.52); backdrop-filter:blur(14px); font-weight:850; letter-spacing:.06em; }
+    .brand::before { content:""; width:9px; height:9px; border-radius:50%; background:var(--mint); box-shadow:0 0 18px var(--mint); }
+    .panel { position:absolute; z-index:3; right:clamp(24px,5vw,86px); top:50%; width:min(42vw,670px); translate:0 -48%; color:var(--cream); }
+    .kicker { margin:0 0 14px; color:var(--copper); font-size:clamp(.72rem,1.1vw,.92rem); font-weight:900; letter-spacing:.17em; }
+    h1 { margin:0; font-size:clamp(3.2rem,8vw,8rem); line-height:.86; letter-spacing:-.07em; }
+    h1 span { display:block; color:transparent; background:linear-gradient(100deg,#fff2df,#efa36b 55%,#7ce4b5); background-clip:text; -webkit-background-clip:text; }
+    .status-line { display:flex; align-items:center; gap:10px; margin-top:26px; color:#bdf5d8; font-weight:850; }
+    .status-dot { width:10px; height:10px; border-radius:50%; background:var(--mint); box-shadow:0 0 20px var(--mint); }
+    .caption { min-height:4.8em; margin:18px 0 0; color:#efe2d6; font-size:clamp(1.2rem,2.5vw,2.25rem); line-height:1.55; text-wrap:balance; }
+    .meta { display:flex; flex-wrap:wrap; gap:9px; margin-top:22px; }
+    .meta span { padding:8px 11px; border:1px solid rgba(255,255,255,.15); border-radius:999px; color:var(--muted); background:rgba(255,255,255,.035); font-size:.78rem; }
+    .voice-wave { height:32px; display:flex; align-items:center; gap:5px; margin-top:22px; opacity:.32; }
+    .voice-wave span { width:4px; height:9px; border-radius:99px; background:var(--mint); }
+    body[data-state="speaking"] .voice-wave { opacity:1; }
+    body[data-state="speaking"] .voice-wave span { animation:voice-bar .52s ease-in-out infinite alternate; }
+    body[data-state="speaking"] .voice-wave span:nth-child(2),body[data-state="speaking"] .voice-wave span:nth-child(5) { animation-delay:.12s; }
+    body[data-state="speaking"] .voice-wave span:nth-child(3) { animation-delay:.24s; }
+    body[data-state="listening"] .status-dot { background:#6cbcff; box-shadow:0 0 26px #6cbcff; animation:listen-pulse .85s ease-in-out infinite alternate; }
+    body[data-state="thinking"] .status-dot,body[data-state="warming"] .status-dot { background:var(--copper); box-shadow:0 0 24px var(--copper); animation:listen-pulse .7s ease-in-out infinite alternate; }
+    body[data-state="confirmed"] .status-dot { background:#fff0b2; box-shadow:0 0 28px #fff0b2; }
+    body[data-state="offline"] .status-dot { background:#d9a37f; box-shadow:none; }
+    body[data-state="speaking"] .scene-image { filter:brightness(1.07) saturate(1.05); }
+    body[data-emotion="welcoming"] .scene-image,body[data-emotion="warm"] .scene-image { filter:brightness(1.04) saturate(1.08) sepia(.035); }
+    body[data-emotion="attentive"] .scene-image,body[data-emotion="focused"] .scene-image { filter:brightness(1.02) saturate(.96) hue-rotate(3deg); }
+    body[data-emotion="cheerful"] .scene-image { filter:brightness(1.1) saturate(1.14); }
+    body[data-emotion="reassuring"] .scene-image { filter:brightness(.98) saturate(.9); }
+    .boundary { position:absolute; z-index:3; left:clamp(22px,4vw,68px); bottom:clamp(18px,3vw,42px); color:rgba(255,244,231,.68); font-size:clamp(.68rem,1vw,.82rem); }
+    .fullscreen { position:absolute; z-index:4; right:20px; top:20px; min-width:44px; min-height:44px; padding:9px 13px; border:1px solid rgba(255,255,255,.17); border-radius:999px; color:#f8eadc; background:rgba(8,5,4,.56); cursor:pointer; font:inherit; }
+    @keyframes display-breathe { from { transform:scale(1.01) translate3d(0,0,0); } to { transform:scale(1.035) translate3d(-.25%,-.35%,0); } }
+    @keyframes voice-bar { to { height:30px; } }
+    @keyframes listen-pulse { to { transform:scale(1.65); opacity:.56; } }
+    @media(max-aspect-ratio:4/3) {
+      .scene-image { object-position:37% center; }
+      .scene::after { background:linear-gradient(0deg,rgba(5,3,2,.92),transparent 73%); }
+      .panel { left:7vw; right:7vw; top:auto; bottom:9vh; width:auto; translate:0; }
+      h1 { font-size:clamp(3rem,12vw,6.5rem); }
+      .caption { min-height:0; }
+    }
+    @media(prefers-reduced-motion:reduce) { .scene-image,.voice-wave span,.status-dot { animation:none!important; } }
+  </style>
+</head>
+<body data-state="idle" data-emotion="warm">
+  <main class="scene">
+    <img class="scene-image" src="/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-white-tech.png" alt="小J 白色科技制服" data-display-image>
+    <div class="brand">上品聊國咖啡館重新總店</div>
+    <section class="panel" aria-live="polite">
+      <p class="kicker">數位設備社區團結行動 × 8DADI 2.3</p>
+      <h1>我是<span>小J。</span></h1>
+      <div class="status-line"><span class="status-dot"></span><span data-display-state>待機中</span></div>
+      <p class="caption" data-display-caption>我就在旁邊。想喝什麼，直接跟我說。</p>
+      <div class="voice-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="meta"><span data-display-outfit>白色科技制服</span><span data-display-emotion>情緒：溫暖</span><span>區網內暫態同步</span><span>顯示投影無交易權限</span></div>
+    </section>
+    <p class="boundary">外接 HDMI 顯示頁｜不寫訂單、不收款、不管理會員資料</p>
+    <button class="fullscreen" type="button" data-fullscreen>全螢幕</button>
+  </main>
+  <script>
+    (() => {
+      const storageKey = 'wuchang-xiaoj-display-v23';
+      const image = document.querySelector('[data-display-image]');
+      const caption = document.querySelector('[data-display-caption]');
+      const stateLabel = document.querySelector('[data-display-state]');
+      const outfitLabel = document.querySelector('[data-display-outfit]');
+      const emotionLabel = document.querySelector('[data-display-emotion]');
+      const assets = {
+        white:['/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-white-tech.png','白色科技制服'],
+        barista:['/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-barista.png','咖啡師圍裙'],
+        event:['/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-event-black.png','深色活動接待服'],
+        community:['/wuchang_cafe_ai_gateway/static/src/img/xiaoj_display_23/xiaoj-community-gray.png','社區日常服']
+      };
+      const states = {
+        idle:'待機中', warming:'正在暖機', listening:'正在聽你說',
+        thinking:'8DADI 正在對準', speaking:'小J 正在說話',
+        confirmed:'真人確認已成立', offline:'離線備援'
+      };
+      const emotions = {
+        warm:'溫暖', welcoming:'迎賓', attentive:'專注聆聽', focused:'專注對準',
+        cheerful:'愉快', reassuring:'安心', clear:'清楚中性'
+      };
+      const emotionByState = {
+        idle:'warm', warming:'welcoming', listening:'attentive', thinking:'focused',
+        speaking:'warm', confirmed:'cheerful', offline:'reassuring'
+      };
+      Object.values(assets).forEach(item => { const preload = new Image(); preload.src = item[0]; });
+      const applyPacket = (packet) => {
+        if (!packet || packet.schema !== 'xiaoj_display_projection_2.3') return;
+        if (!assets[packet.outfit] || !states[packet.state]) return;
+        const emotion = emotions[packet.emotion] ? packet.emotion : emotionByState[packet.state];
+        document.body.dataset.state = packet.state;
+        document.body.dataset.emotion = emotion;
+        image.src = assets[packet.outfit][0];
+        image.alt = '小J ' + assets[packet.outfit][1];
+        outfitLabel.textContent = assets[packet.outfit][1];
+        stateLabel.textContent = states[packet.state];
+        emotionLabel.textContent = '情緒：' + emotions[emotion];
+        if (typeof packet.speech === 'string' && packet.speech.trim()) caption.textContent = packet.speech.slice(0,240);
+      };
+      try {
+        const stored = JSON.parse(localStorage.getItem(storageKey) || 'null');
+        applyPacket(stored);
+      } catch (_error) {}
+      try {
+        if ('BroadcastChannel' in window) {
+          const channel = new BroadcastChannel(storageKey);
+          channel.onmessage = event => applyPacket(event.data);
+        }
+      } catch (_error) {}
+      window.addEventListener('storage', event => {
+        if (event.key !== storageKey || !event.newValue) return;
+        try { applyPacket(JSON.parse(event.newValue)); } catch (_error) {}
+      });
+      document.querySelector('[data-fullscreen]').addEventListener('click',() => {
+        const target = document.documentElement;
+        if (!document.fullscreenElement && target.requestFullscreen) target.requestFullscreen();
+        else if (document.exitFullscreen) document.exitFullscreen();
+      });
+      window.addEventListener('keydown',event => {
+        if (event.key.toLowerCase() === 'f') document.querySelector('[data-fullscreen]').click();
+      });
+    })();
+  </script>
+</body>
+</html>"""
 
 
 def _group_member_field_product_body() -> str:
@@ -655,7 +1151,57 @@ class WuchangCafeAiGatewayController(http.Controller):
     @http.route("/wuchang/xiaoj/ordering", type="http", auth="public", csrf=False)
     def xiaoj_ordering(self, **_kwargs):
         payload = _json_payload("xiaoj_ordering", ROUTE_STATE["xiaoj_ordering"])
-        return _page("小J影音點餐", ROUTE_STATE["xiaoj_ordering"], _ordering_body(), payload)
+        return _page("上品聊國咖啡館重新總店", ROUTE_STATE["xiaoj_ordering"], _ordering_body(), payload, page_class="cafe-store")
+
+    @http.route("/wuchang/xiaoj/display", type="http", auth="public", csrf=False)
+    def xiaoj_display(self, **_kwargs):
+        return _xiaoj_display_page()
+
+    @http.route("/wuchang/xiaoj/api/store-chat", type="json", auth="public", csrf=False)
+    def xiaoj_store_chat(self, **kwargs):
+        params = _request_params()
+        params.update(kwargs)
+        config = http.request.env["ir.config_parameter"].sudo()
+        return build_storefront_response(
+            params.get("text") or params.get("transcript") or "",
+            model_endpoint=config.get_param(
+                "wuchang_cafe_ai_gateway.storefront_model_endpoint",
+                "http://wuchang_gpu_brain:11434/api/generate",
+            ),
+            model=config.get_param(
+                "wuchang_cafe_ai_gateway.storefront_model",
+                "gemma3:4b",
+            ),
+            use_model=False,
+        )
+
+    @http.route("/wuchang/xiaoj/api/store-flair", type="json", auth="public", csrf=False)
+    def xiaoj_store_flair(self, **kwargs):
+        params = _request_params()
+        params.update(kwargs)
+        config = http.request.env["ir.config_parameter"].sudo()
+        return build_storefront_flair(
+            params.get("text") or params.get("transcript") or "",
+            model_endpoint=config.get_param(
+                "wuchang_cafe_ai_gateway.storefront_model_endpoint",
+                "http://wuchang_gpu_brain:11434/api/generate",
+            ),
+            model=config.get_param(
+                "wuchang_cafe_ai_gateway.storefront_model",
+                "gemma3:4b",
+            ),
+        )
+
+    @http.route("/wuchang/xiaoj/api/store-confirm", type="json", auth="public", csrf=False)
+    def xiaoj_store_confirm(self, **kwargs):
+        params = _request_params()
+        params.update(kwargs)
+        return confirm_storefront_preview(
+            params.get("text") or params.get("transcript") or "",
+            params.get("preview_ref"),
+            params.get("acknowledged"),
+            params.get("voice_readback_completed"),
+        )
 
     @http.route("/wuchang/xiaoj/group-member-field-application", type="http", auth="user")
     def xiaoj_group_member_field_application(self, **_kwargs):
@@ -828,6 +1374,10 @@ class WuchangCafeAiGatewayController(http.Controller):
             permission_coordination_policy_ref=params.get(
                 "permission_coordination_policy_ref"
             ),
+            physical_identity_root_evidence_ref=params.get(
+                "physical_identity_root_evidence_ref"
+            ),
+            total_field_authority_ref=params.get("total_field_authority_ref"),
         )
 
     @http.route("/wuchang/xiaoj/api/sovereign-ai-account-governance-candidate", type="json", auth="user", csrf=False)

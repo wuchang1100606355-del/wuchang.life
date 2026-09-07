@@ -1,0 +1,62 @@
+<odoo>
+    <record id="view_wuchang_ai_compute_binding_list" model="ir.ui.view">
+        <field name="name">wuchang.ai.compute.binding.list</field>
+        <field name="model">wuchang.ai.compute.binding</field>
+        <field name="arch" type="xml">
+            <list string="可替換 LLM 算力" delete="false">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="natural_identity_packet_ref"/>
+                <field name="provider_kind"/>
+                <field name="owner_scope"/>
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="daily_budget_units"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_ai_compute_binding_form" model="ir.ui.view">
+        <field name="name">wuchang.ai.compute.binding.form</field>
+        <field name="model">wuchang.ai.compute.binding</field>
+        <field name="arch" type="xml">
+            <form string="可替換 LLM 算力" delete="false">
+                <header>
+                    <button name="action_disable" type="object" string="停用" groups="base.group_system" invisible="state == 'disabled'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group string="自然人與登入入口">
+                        <field name="name"/>
+                        <field name="user_id"/>
+                        <field name="natural_identity_packet_ref"/>
+                        <field name="owner_scope"/>
+                    </group>
+                    <group string="LLM 算力來源">
+                        <field name="provider_kind"/>
+                        <field name="account_ref_sha256" password="True"/>
+                        <field name="credential_vault_ref"/>
+                        <field name="purpose" readonly="1"/>
+                        <field name="model_allowlist"/>
+                        <field name="priority"/>
+                        <field name="daily_budget_units"/>
+                        <field name="last_verified_at" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_ai_compute_binding" model="ir.actions.act_window">
+        <field name="name">可替換 LLM 算力</field>
+        <field name="res_model">wuchang.ai.compute.binding</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_ai_compute_binding"
+              name="可替換 LLM 算力"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_ai_compute_binding"
+              groups="base.group_system"
+              sequence="8"/>
+</odoo>

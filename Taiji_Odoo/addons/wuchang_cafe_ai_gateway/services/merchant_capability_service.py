@@ -32,9 +32,6 @@ GROUP_MEMBER_QUESTIONNAIRE_API_PATH = "/wuchang/xiaoj/api/group-member-intent-fi
 SOVEREIGN_AI_ACCOUNT_BINDING_API_PATH = "/wuchang/xiaoj/api/sovereign-ai-account-binding-candidate"
 SOVEREIGN_AI_ACCOUNT_GOVERNANCE_API_PATH = "/wuchang/xiaoj/api/sovereign-ai-account-governance-candidate"
 
-REQUIRED_FOUNDER_ACCOUNT_LOGIN_SHA256 = (
-    "7769a6c5044484d5d5699db34ac0bd3010a217ea6ab8371d72097aaa02785bb6"
-)
 ALLOWED_ACCOUNT_BINDING_TYPES = (
     "linux_user",
     "domain_admin_email",
@@ -142,6 +139,26 @@ XIAOJ_CORE_SUPPLY_CONTRACT = {
         "formal_member_authority": "ASSOCIATION_GOVERNED_SOURCE_SEPARATE",
         "member_plaintext_in_projection": False,
     },
+    "member_ai_resource_isolation": {
+        "policy": "ADAPTIVE_BROWSER_BYO_TOTAL_FIELD_POOL",
+        "google_login_is_gemini_authorization": False,
+        "separate_gemini_binding_required": True,
+        "browser_local_first": True,
+        "member_bound_provider_second": True,
+        "founder_gpu_access": "TOTAL_FIELD_QUOTA_GOVERNED",
+        "founder_api_quota_access": "TOTAL_FIELD_QUOTA_GOVERNED",
+        "unlimited_shared_access": False,
+        "raw_api_key_in_odoo_or_model": False,
+        "credential_storage": "EXTERNAL_PROTECTED_VAULT_REFERENCE_ONLY",
+        "natural_language_interface_requires_llm": True,
+        "multiple_verified_accounts_per_natural_identity": True,
+        "multiple_llm_api_bindings_per_natural_identity": True,
+        "llm_compute_is_replaceable": True,
+        "llm_identity_or_authority_is_replaceable": False,
+        "no_provider_binding_mode": "HOLD_LLM_REQUIRED_FOR_NATURAL_LANGUAGE",
+        "eight_dimensional_prefilter_required": True,
+        "minimum_delta_to_model_only": True,
+    },
     "field_projection_identity": {
         "packet_manager": "THIS_SYSTEM_TOTAL_FIELD",
         "approval_authority": "ASSOCIATION_GOVERNANCE",
@@ -191,14 +208,17 @@ XIAOJ_CORE_SUPPLY_CONTRACT = {
         "explicit_delegation_requires_separate_evidence": True,
         "conflict_requires_governed_decision": True,
         "account_binding_alone_authorizes_founder_ratification": False,
-        "required_founder_account_binding": {
-            "account_ref": "FOUNDER_PERSONAL_ACCOUNT_USER_DECLARED_20260822",
-            "account_type": "google_email_after_consent",
-            "normalized_login_sha256": REQUIRED_FOUNDER_ACCOUNT_LOGIN_SHA256,
-            "sealed_identifier_claim_required": True,
-            "natural_identity_alignment_required": True,
-            "binding_verified": False,
-            "evidence_state": "USER_DECLARED_CANDIDATE_REQUIREMENT",
+        "founder_multi_account_binding_policy": {
+            "single_required_login_hash": False,
+            "all_founder_owned_accounts_may_be_entries": True,
+            "each_account_requires_fresh_login_proof": True,
+            "each_account_requires_same_natural_identity_relation": True,
+            "physical_identity_root_evidence_required": True,
+            "lan_or_vpn_controlled_realm_evidence_required": True,
+            "total_field_authority_ref_required": True,
+            "account_possession_alone_grants_founder_authority": False,
+            "multiple_llm_compute_bindings_allowed": True,
+            "llm_compute_substitution_only": True,
         },
     },
     "ownership_and_admin_separation": {
@@ -410,13 +430,30 @@ GROUP_MEMBER_QUESTIONNAIRE_COMMON_SECTIONS = (
         "code": "d5_execution_policy",
         "label": "D5 工作流程與人為放行",
         "prompt": "小J可做到哪一步、哪些動作一定要由哪個人類角色放行？",
-        "fields": ["service_workflow_refs", "release_role_refs", "prohibited_effects"],
+        "fields": [
+            "service_workflow_refs",
+            "xiaoj_projection_role_ref",
+            "language_channel_refs",
+            "handoff_message_contract_ref",
+            "release_role_refs",
+            "prohibited_effects",
+        ],
     },
     {
         "code": "d6_generative_transmission",
-        "label": "D6 影音小J與生成式傳輸",
-        "prompt": "影音小J在此場域呈現什麼角色、使用哪些語言與渠道、如何轉交真人？",
-        "fields": ["xiaoj_projection_role_ref", "language_channel_refs", "handoff_message_contract_ref"],
+        "label": "D6 生成式傳輸與目標端重建",
+        "prompt": (
+            "目的節點已具備哪些可驗證基底，還缺少哪些最小必要差異、引用、座標、"
+            "重建規則與驗證規則，才能在目的端確定性重建目標狀態？"
+        ),
+        "fields": [
+            "target_base_state_ref",
+            "minimum_required_delta_ref",
+            "reference_refs",
+            "coordinate_refs",
+            "reconstruction_rule_refs",
+            "verification_rule_refs",
+        ],
     },
     {
         "code": "d7_risk_quarantine",
@@ -710,17 +747,20 @@ def plan_sovereign_ai_multi_account_binding(
     natural_identity_ref: Any = None,
     account_bindings: Any = None,
     permission_coordination_policy_ref: Any = None,
+    physical_identity_root_evidence_ref: Any = None,
+    total_field_authority_ref: Any = None,
 ) -> dict[str, Any]:
     """Plan a no-write multi-account merge with per-account login proof."""
     governance = XIAOJ_CORE_SUPPLY_CONTRACT["sovereign_ai_packet_account_governance"]
     packet_ref = _opaque_ref(sovereign_ai_packet_ref)
     identity_ref = _opaque_ref(natural_identity_ref)
     policy_ref = _opaque_ref(permission_coordination_policy_ref)
+    physical_root_ref = _opaque_ref(physical_identity_root_evidence_ref)
+    total_field_ref = _opaque_ref(total_field_authority_ref)
     source_bindings = list(account_bindings) if isinstance(account_bindings, (list, tuple)) else []
     normalized_bindings = []
     binding_errors: list[str] = []
     seen_login_hashes: set[str] = set()
-    founder_binding_present = False
     existing_count = 0
     new_count = 0
 
@@ -787,17 +827,13 @@ def plan_sovereign_ai_multi_account_binding(
         if not domain_permission_refs or any(not item["present"] for item in domain_permission_refs):
             missing.append("domain_permission_refs")
 
-        is_required_founder_binding = bool(
-            login_hash == REQUIRED_FOUNDER_ACCOUNT_LOGIN_SHA256
-            and account_type == governance["required_founder_account_binding"]["account_type"]
-        )
-        founder_binding_present = founder_binding_present or is_required_founder_binding
         normalized_bindings.append({
             "index": index,
             "binding_state": binding_state or None,
             "account_type": account_type or None,
             "account_login_sha256": login_hash,
-            "is_required_founder_account_binding": is_required_founder_binding,
+            "account_possession_grants_founder_authority": False,
+            "llm_compute_substitution_eligible_after_verification": True,
             "refs": refs,
             "domain_permission_refs": domain_permission_refs,
             "missing_evidence": missing,
@@ -816,14 +852,16 @@ def plan_sovereign_ai_multi_account_binding(
         missing_prerequisites.append("natural_identity_ref")
     if not policy_ref["present"]:
         missing_prerequisites.append("permission_coordination_policy_ref")
+    if not physical_root_ref["present"]:
+        missing_prerequisites.append("physical_identity_root_evidence_ref")
+    if not total_field_ref["present"]:
+        missing_prerequisites.append("total_field_authority_ref")
     if len(source_bindings) < 2:
         missing_prerequisites.append("at_least_two_account_bindings")
     if existing_count < 1:
         missing_prerequisites.append("existing_account_binding")
     if new_count < 1:
         missing_prerequisites.append("new_account_binding")
-    if not founder_binding_present:
-        missing_prerequisites.append("required_founder_account_binding")
     missing_prerequisites.extend(binding_errors)
     candidate_ready = not missing_prerequisites
     payload = {
@@ -835,11 +873,14 @@ def plan_sovereign_ai_multi_account_binding(
         "sovereign_ai_packet_ref": packet_ref,
         "natural_identity_ref": identity_ref,
         "permission_coordination_policy_ref": policy_ref,
+        "physical_identity_root_evidence_ref": physical_root_ref,
+        "total_field_authority_ref": total_field_ref,
         "account_bindings": normalized_bindings,
         "account_count": len(normalized_bindings),
         "existing_account_count": existing_count,
         "new_account_count": new_count,
-        "required_founder_account_binding_present": founder_binding_present,
+        "single_required_founder_account_hash": False,
+        "account_possession_grants_founder_authority": False,
         "all_existing_and_new_account_evidence_present": candidate_ready,
         "all_account_logins_verified": False,
         "all_natural_identity_relations_verified": False,

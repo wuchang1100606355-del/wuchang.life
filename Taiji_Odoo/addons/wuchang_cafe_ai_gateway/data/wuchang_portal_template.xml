@@ -1,0 +1,12 @@
+<odoo>
+    <record id="user_wuchang_portal_template" model="res.users">
+        <field name="name">五常系統入口使用者範本</field>
+        <field name="login">__wuchang_portal_template__@invalid.local</field>
+        <field name="active" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_portal')])]"/>
+    </record>
+
+    <function model="ir.config_parameter"
+              name="set_param"
+              eval="('base.template_portal_user_id', ref('user_wuchang_portal_template'))"/>
+</odoo>

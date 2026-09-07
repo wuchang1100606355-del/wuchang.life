@@ -1,3 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_wuchang_cafe_ai_eventbook_user,wuchang.cafe.ai.eventbook.user,model_wuchang_cafe_ai_eventbook,base.group_user,1,0,0,0
 access_wuchang_cafe_ai_eventbook_admin,wuchang.cafe.ai.eventbook.admin,model_wuchang_cafe_ai_eventbook,base.group_system,1,1,1,1
+access_wuchang_cafe_merchant_viewer,wuchang.cafe.merchant.account.viewer,model_wuchang_cafe_merchant_account,group_wuchang_cafe_merchant_viewer,1,0,0,0
+access_wuchang_cafe_merchant_admin,wuchang.cafe.merchant.account.admin,model_wuchang_cafe_merchant_account,base.group_system,1,1,1,0
+access_wuchang_ai_compute_binding_portal,wuchang.ai.compute.binding.portal,model_wuchang_ai_compute_binding,base.group_portal,1,0,0,0
+access_wuchang_ai_compute_binding_admin,wuchang.ai.compute.binding.admin,model_wuchang_ai_compute_binding,base.group_system,1,1,1,0
+access_wuchang_cafe_gateway_admin,wuchang.cafe.gateway.admin,model_wuchang_cafe_gateway,base.group_system,1,1,1,0
+access_wuchang_cafe_order_proposal_admin,wuchang.cafe.order.proposal.admin,model_wuchang_cafe_order_proposal,base.group_system,1,1,1,0

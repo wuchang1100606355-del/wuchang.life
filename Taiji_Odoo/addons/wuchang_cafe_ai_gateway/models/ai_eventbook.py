@@ -15,6 +15,7 @@ class WuchangCafeAiEventbook(models.Model):
             ("wifi_auth", "WiFi Auth"),
             ("sunmi_event", "Sunmi Event"),
             ("clow_tool_call", "Clow Tool Call"),
+            ("merchant_access_change", "Merchant Access Change"),
             ("policy_reject", "Policy Reject"),
         ],
         required=True,

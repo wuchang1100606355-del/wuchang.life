@@ -1,0 +1,81 @@
+<odoo>
+    <record id="view_wuchang_cafe_merchant_account_list" model="ir.ui.view">
+        <field name="name">wuchang.cafe.merchant.account.list</field>
+        <field name="model">wuchang.cafe.merchant.account</field>
+        <field name="arch" type="xml">
+            <list string="商家帳號與權限" delete="false">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="company_id"/>
+                <field name="role_profile"/>
+                <field name="access_state"/>
+                <field name="google_login_bound"/>
+                <field name="line_official_account_ref"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_merchant_account_form" model="ir.ui.view">
+        <field name="name">wuchang.cafe.merchant.account.form</field>
+        <field name="model">wuchang.cafe.merchant.account</field>
+        <field name="arch" type="xml">
+            <form string="商家帳號與權限" delete="false">
+                <header>
+                    <button name="action_apply_access"
+                            type="object"
+                            string="套用權限"
+                            class="btn-primary"
+                            groups="base.group_system"/>
+                    <button name="action_disable_access"
+                            type="object"
+                            string="停用權限"
+                            class="btn-secondary"
+                            groups="base.group_system"/>
+                    <button name="action_open_self_ordering"
+                            type="object"
+                            string="開啟顧客點餐頁"
+                            class="btn-link"/>
+                    <field name="access_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group string="商家帳號">
+                        <field name="name"/>
+                        <field name="user_id"/>
+                        <field name="company_id"/>
+                        <field name="role_profile"/>
+                        <field name="pos_config_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string="登入與對客通路">
+                        <field name="google_login_bound" readonly="1"/>
+                        <field name="google_login_provider" readonly="1"/>
+                        <field name="line_official_account_ref"/>
+                    </group>
+                    <group string="固定權限邊界">
+                        <field name="identity_realm" readonly="1"/>
+                        <field name="member_personal_data_access" readonly="1"/>
+                        <field name="ai_resource_policy" readonly="1"/>
+                        <field name="founder_compute_access" readonly="1"/>
+                        <field name="ai_compute_binding_ids" readonly="1"/>
+                    </group>
+                    <group string="套用證據">
+                        <field name="last_access_applied_at" readonly="1"/>
+                        <field name="last_access_applied_by" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_cafe_merchant_account" model="ir.actions.act_window">
+        <field name="name">商家帳號與權限</field>
+        <field name="res_model">wuchang.cafe.merchant.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_cafe_merchant_account"
+              name="商家帳號與權限"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_cafe_merchant_account"
+              groups="base.group_system"
+              sequence="5"/>
+</odoo>

@@ -1,0 +1,143 @@
+<odoo>
+    <record id="view_wuchang_cafe_gateway_list" model="ir.ui.view">
+        <field name="name">wuchang.cafe.gateway.list</field>
+        <field name="model">wuchang.cafe.gateway</field>
+        <field name="arch" type="xml">
+            <list string="咖啡館閘道" delete="false">
+                <field name="name"/>
+                <field name="store_node_ref"/>
+                <field name="online_order_mode"/>
+                <field name="self_issued_ticket_enabled"/>
+                <field name="community_payment_enabled"/>
+                <field name="backend_visibility_policy"/>
+                <field name="public_route_policy"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_gateway_form" model="ir.ui.view">
+        <field name="name">wuchang.cafe.gateway.form</field>
+        <field name="model">wuchang.cafe.gateway</field>
+        <field name="arch" type="xml">
+            <form string="咖啡館閘道" delete="false">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                        <field name="store_node_ref"/>
+                        <field name="pos_config_id"/>
+                        <field name="seat_capacity_verified"/>
+                        <field name="line_official_url"/>
+                    </group>
+                    <group string="固定規則">
+                        <field name="online_order_mode"/>
+                        <field name="self_issued_ticket_enabled"/>
+                        <field name="community_payment_enabled"/>
+                        <field name="backend_visibility_policy" readonly="1"/>
+                        <field name="public_route_policy" readonly="1"/>
+                        <field name="cross_db_identity_policy" readonly="1"/>
+                        <field name="member_plaintext_policy" readonly="1"/>
+                        <field name="customer_ai_resource_policy" readonly="1"/>
+                        <field name="founder_compute_access" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_order_proposal_list" model="ir.ui.view">
+        <field name="name">wuchang.cafe.order.proposal.list</field>
+        <field name="model">wuchang.cafe.order.proposal</field>
+        <field name="arch" type="xml">
+            <list string="AI 點餐提案" delete="false">
+                <field name="name"/>
+                <field name="gateway_id"/>
+                <field name="state"/>
+                <field name="member_packet_ref"/>
+                <field name="intent_type"/>
+                <field name="total_amount_preview"/>
+                <field name="ticket_policy"/>
+                <field name="evidence_hash"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_cafe_order_proposal_form" model="ir.ui.view">
+        <field name="name">wuchang.cafe.order.proposal.form</field>
+        <field name="model">wuchang.cafe.order.proposal</field>
+        <field name="arch" type="xml">
+            <form string="AI 點餐提案" delete="false">
+                <header>
+                    <button name="action_staff_confirm"
+                            type="object"
+                            string="店員確認"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel"
+                            type="object"
+                            string="取消"
+                            invisible="state == 'cancelled'"/>
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,staff_confirmed,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="gateway_id"/>
+                        <field name="member_packet_ref"/>
+                        <field name="kiosk_pair_id"/>
+                        <field name="intent_type"/>
+                    </group>
+                    <group string="提案">
+                        <field name="proposal_text"/>
+                        <field name="currency_id"/>
+                        <field name="total_amount_preview"/>
+                        <field name="ticket_policy"/>
+                    </group>
+                    <group string="硬性邊界">
+                        <field name="community_payment_enabled" readonly="1"/>
+                        <field name="formal_payment_forbidden" readonly="1"/>
+                        <field name="formal_redemption_forbidden" readonly="1"/>
+                        <field name="auto_order_forbidden" readonly="1"/>
+                    </group>
+                    <group string="證據">
+                        <field name="staff_user_id" readonly="1"/>
+                        <field name="staff_confirmed_at" readonly="1"/>
+                        <field name="evidence_hash" readonly="1"/>
+                        <field name="governance_note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wuchang_cafe_gateway" model="ir.actions.act_window">
+        <field name="name">咖啡館閘道</field>
+        <field name="res_model">wuchang.cafe.gateway</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_wuchang_cafe_order_proposal" model="ir.actions.act_window">
+        <field name="name">AI 點餐提案</field>
+        <field name="res_model">wuchang.cafe.order.proposal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_cafe_gateway"
+              name="咖啡館閘道"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_cafe_gateway"
+              groups="base.group_system"
+              sequence="20"/>
+
+    <menuitem id="menu_wuchang_cafe_order_proposal"
+              name="AI 點餐提案"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_cafe_order_proposal"
+              groups="base.group_system"
+              sequence="15"/>
+</odoo>
