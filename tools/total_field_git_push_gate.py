@@ -26,6 +26,7 @@ CONFIG_REL = Path("configs/total_field/git_push_review_gate_v1.json")
 APPROVAL_SCHEMA = "W7TP_TOTAL_FIELD_GIT_PUSH_REVIEW_REGISTRATION_V1"
 APPROVAL_STATE = "PASS_TOTAL_FIELD_REVIEW_REGISTERED"
 ZERO_OID = frozenset({"0" * 40, "0" * 64})
+DEPLOY_RESTART_SCOPE = "AUTHORIZE_EXACT_DEPLOY_RESTART"
 
 
 class PushGateRejected(RuntimeError):
@@ -135,7 +136,7 @@ def verify_push(
         if (
             authority.get("state") != "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED"
             or authority.get("authority_verified") is not True
-            or authority.get("scope") != [GIT_PUSH_SCOPE]
+            or GIT_PUSH_SCOPE not in (authority.get("scope") or [])
         ):
             if passkey_authority_resolver is None:
                 raise PushGateRejected(str(authority.get("state") or "AUTHORITY_NOT_VERIFIED"))
@@ -143,12 +144,13 @@ def verify_push(
                 repo_root=root,
                 config=config.get("passkey_verifier") or {},
                 consume=False,
+                required_scope=GIT_PUSH_SCOPE,
             )
             authority_source = "USER_VERIFIED_DEVICE_PASSKEY"
             if (
                 authority.get("state") != "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED"
                 or authority.get("authority_verified") is not True
-                or authority.get("scope") != [GIT_PUSH_SCOPE]
+                or GIT_PUSH_SCOPE not in (authority.get("scope") or [])
             ):
                 raise PushGateRejected(str(authority.get("reason") or authority.get("state") or "AUTHORITY_NOT_VERIFIED"))
         constraints = authority.get("authority_scope_constraints")
@@ -167,7 +169,10 @@ def verify_push(
             or review.get("schema_id") != APPROVAL_SCHEMA
             or review.get("state") != APPROVAL_STATE
             or review.get("review_registered") is not True
-            or review.get("total_field_decision") != "ALLOW_FORMAL_GIT_PUSH"
+            or review.get("total_field_decision") not in {
+                "ALLOW_FORMAL_GIT_PUSH",
+                "ALLOW_FORMAL_GIT_PUSH_AND_EXACT_DEPLOY_RESTART",
+            }
         ):
             raise PushGateRejected("TOTAL_FIELD_REVIEW_NOT_PASSED")
         exact = {
@@ -205,6 +210,7 @@ def verify_push(
                 repo_root=root,
                 config=config.get("passkey_verifier") or {},
                 consume=True,
+                required_scope=GIT_PUSH_SCOPE,
             )
             if (
                 consumed.get("authority_verified") is not True
@@ -214,7 +220,11 @@ def verify_push(
         return {
             "state": "PASS_TOTAL_FIELD_GIT_PUSH_GATE",
             "push_authorized": True,
-            "deploy_authorized": False,
+            "deploy_authorized": bool(
+                DEPLOY_RESTART_SCOPE in (authority.get("scope") or [])
+                and constraints.get("deploy") is True
+                and constraints.get("restart") is True
+            ),
             "canonical_mutation_authorized": False,
             "active_pointer_mutation_authorized": False,
             "review_registration_sha256": constraints["review_registration_sha256"],

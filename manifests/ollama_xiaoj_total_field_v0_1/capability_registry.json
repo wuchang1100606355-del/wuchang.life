@@ -1,35 +1,57 @@
 {
-  "access_profile": "TOTAL_FIELD_SELECTED_SKILL_PER_WORK_CELL",
-  "authority": "TOTAL_FIELD_D8_SCOPE_BOUND_FOR_EXTERNAL_EFFECT",
+  "access_profile": "FOUNDER_ALL_SKILLS",
+  "authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY",
   "founder_all_skills_index": {
     "classification_counts": {
-      "NEEDS_CONNECTOR": 55,
-      "NEEDS_LOCAL_ADAPTER": 29,
+      "NEEDS_CONNECTOR": 38,
+      "NEEDS_LOCAL_ADAPTER": 47,
       "PLATFORM_INTERNAL_UNEXPORTABLE": 5,
       "READY_LOCAL": 7,
-      "READY_MCP": 1
+      "READY_MCP": 2
     },
     "default_context_contains_full_skill_bodies": false,
     "load_policy": "ON_DEMAND_DETERMINISTIC_INTEGER_LOOKUP",
     "path": "manifests/ollama_xiaoj_total_field_v0_1/founder_all_skills_8d_index.json",
-    "sha256": "6e8f9008d879aacb9cda9763faa3542af30569824d77a75a6cf00656d4acf1ac",
-    "skills_discovered": 97
+    "sha256": "796441aacb1ea5850017271c6a9a60c1225461437e7a59ee889fb13f9a3d66e2",
+    "skills_discovered": 99
   },
   "founder_skill_summaries": [
     {
-      "name": "agents-sdk",
-      "packet_id": "skill8d:0001:agents-sdk:56721657e7a9edd7",
-      "skill_id": "agents-sdk",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-developers/1.2.3/skills/agents-sdk/SKILL.md",
-      "source_sha256": "61830dccd552307bc714b961acae80b1c9c9c30b5d2faaa9e6043b6fb0414760",
-      "status": "NEEDS_CONNECTOR",
+      "name": "airtable-cli",
+      "packet_id": "skill8d:0001:airtable-cli:b6022f4ae31d3f05",
+      "skill_id": "airtable-cli",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/6.0.1/skills/airtable-cli/SKILL.md",
+      "source_sha256": "8c7aa197e1f14866cba1ff25e8365b46e08b6ec8f828ebee14e18bd9468da788",
+      "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
-        "controlled_connector:openai_platform"
+        "candidate_adapter:airtable-cli"
+      ]
+    },
+    {
+      "name": "airtable-filters",
+      "packet_id": "skill8d:0002:airtable-filters:932f3952675d52cc",
+      "skill_id": "airtable-filters",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/6.0.1/skills/airtable-filters/SKILL.md",
+      "source_sha256": "a73cf412d5f806483eb90f0d4b0b820bdebddca999311d6c7798f888b6e70a73",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:airtable-filters"
+      ]
+    },
+    {
+      "name": "airtable-overview",
+      "packet_id": "skill8d:0003:airtable-overview:c3465c52ef03a153",
+      "skill_id": "airtable-overview",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/6.0.1/skills/airtable-overview/SKILL.md",
+      "source_sha256": "07111021f00157d505e088d054f10a1c4af95d28bba031ff6502201b6e2abec9",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:airtable-overview"
       ]
     },
     {
       "name": "airunway-aks-setup",
-      "packet_id": "skill8d:0002:airunway-aks-setup:7645c540e339ecc9",
+      "packet_id": "skill8d:0004:airunway-aks-setup:fbea53e22f8a16ad",
       "skill_id": "airunway-aks-setup",
       "source_path": "/home/taiji_admin/.agents/skills/airunway-aks-setup/SKILL.md",
       "source_sha256": "89652e09aae17485d4f72e7417480c39289ac444a4985355ffbf2821e17fdd96",
@@ -40,7 +62,7 @@
     },
     {
       "name": "appinsights-instrumentation",
-      "packet_id": "skill8d:0003:appinsights-instrumentation:efef0727e4a7635a",
+      "packet_id": "skill8d:0005:appinsights-instrumentation:539ea9832e64d78b",
       "skill_id": "appinsights-instrumentation",
       "source_path": "/home/taiji_admin/.agents/skills/appinsights-instrumentation/SKILL.md",
       "source_sha256": "0086a38ba8dcb1be0e828f5d86d768d73110729bce51be9c60431ec59c47106c",
@@ -51,9 +73,9 @@
     },
     {
       "name": "artifact-template-analytics-dashboard",
-      "packet_id": "skill8d:0004:artifact-template-analytics-dashboard:4d70815bc159df66",
+      "packet_id": "skill8d:0006:artifact-template-analytics-dashboard:27ddae6416bf7e2f",
       "skill_id": "artifact-template-analytics-dashboard",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-analytics-dashboard/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/SKILL.md",
       "source_sha256": "cf5360fd8b197673bb237c52c603c97fa319c875c3dfa2cd8efff52d4422f513",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -62,9 +84,9 @@
     },
     {
       "name": "artifact-template-business-review",
-      "packet_id": "skill8d:0005:artifact-template-business-review:88cfc282a71b4ca8",
+      "packet_id": "skill8d:0007:artifact-template-business-review:79e277e597ef43ae",
       "skill_id": "artifact-template-business-review",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-business-review/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/SKILL.md",
       "source_sha256": "27721fc1d67d1b41949caa75ac8f94f81952ff124406878af6524047929e60d2",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -73,9 +95,9 @@
     },
     {
       "name": "artifact-template-design-report",
-      "packet_id": "skill8d:0006:artifact-template-design-report:753d4939f55f5a09",
+      "packet_id": "skill8d:0008:artifact-template-design-report:8a496a1f795c073d",
       "skill_id": "artifact-template-design-report",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-design-report/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/SKILL.md",
       "source_sha256": "563722f53854e606f8a9f87e37e72d7ef70a22d46d5836b8e4d6abfb1b79e9e0",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -84,9 +106,9 @@
     },
     {
       "name": "artifact-template-experiment-analysis",
-      "packet_id": "skill8d:0007:artifact-template-experiment-analysis:9b5d8ac3d85b36af",
+      "packet_id": "skill8d:0009:artifact-template-experiment-analysis:6279084d844877fe",
       "skill_id": "artifact-template-experiment-analysis",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-experiment-analysis/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/SKILL.md",
       "source_sha256": "0b05effc47df0a14f8e0c3e3597e6722224747435546385d38a2cae279bd20b9",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -95,9 +117,9 @@
     },
     {
       "name": "artifact-template-financial-budget",
-      "packet_id": "skill8d:0008:artifact-template-financial-budget:6583f3522672f43f",
+      "packet_id": "skill8d:0010:artifact-template-financial-budget:052bff2f0a0f608c",
       "skill_id": "artifact-template-financial-budget",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-financial-budget/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/SKILL.md",
       "source_sha256": "c0b6b7a62a15597aaf2b1ec679e21da48f533b756127f0aef957cdfe9f3da738",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -106,9 +128,9 @@
     },
     {
       "name": "artifact-template-investment-committee-memo",
-      "packet_id": "skill8d:0009:artifact-template-investment-committee-memo:41362123c083b9d8",
+      "packet_id": "skill8d:0011:artifact-template-investment-committee-memo:f2151f37091259d5",
       "skill_id": "artifact-template-investment-committee-memo",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-investment-committee-memo/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/SKILL.md",
       "source_sha256": "68abd08cfe5e073e3c446a3f675f44c5bf98f57434dba679e8acd8a763379a8b",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -117,9 +139,9 @@
     },
     {
       "name": "artifact-template-legal-memorandum",
-      "packet_id": "skill8d:0010:artifact-template-legal-memorandum:1b4fefe187dee051",
+      "packet_id": "skill8d:0012:artifact-template-legal-memorandum:50069669f8f7d808",
       "skill_id": "artifact-template-legal-memorandum",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-legal-memorandum/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/SKILL.md",
       "source_sha256": "51fb9d21baf6119c4ccb1903638a6bac0e859210de63460fffa7025d52e997e0",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -128,9 +150,9 @@
     },
     {
       "name": "artifact-template-market-trends-report",
-      "packet_id": "skill8d:0011:artifact-template-market-trends-report:c93f4c92c5e949a0",
+      "packet_id": "skill8d:0013:artifact-template-market-trends-report:3a13fde384772fab",
       "skill_id": "artifact-template-market-trends-report",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-market-trends-report/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/SKILL.md",
       "source_sha256": "d58d019b89cb6f292ac3ab991d561489eef477ff53ce05fb024a0c936f5af26a",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -139,9 +161,9 @@
     },
     {
       "name": "artifact-template-minimal-letterhead",
-      "packet_id": "skill8d:0012:artifact-template-minimal-letterhead:455ce69f075bd9f1",
+      "packet_id": "skill8d:0014:artifact-template-minimal-letterhead:10a0a1492bf7d193",
       "skill_id": "artifact-template-minimal-letterhead",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-minimal-letterhead/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/SKILL.md",
       "source_sha256": "880ef094d4d0c89a7bde5ce9bbe4086625c186651e9e6efc8ba8bdd7cc77f9d5",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -150,9 +172,9 @@
     },
     {
       "name": "artifact-template-operating-calendar",
-      "packet_id": "skill8d:0013:artifact-template-operating-calendar:a643021fadcd6b6a",
+      "packet_id": "skill8d:0015:artifact-template-operating-calendar:0e5044206c7b5ec7",
       "skill_id": "artifact-template-operating-calendar",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-operating-calendar/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/SKILL.md",
       "source_sha256": "33bb660791a0b9a21628a42c34934932220203b6aabd84e98cb1b45327d0384c",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -161,9 +183,9 @@
     },
     {
       "name": "artifact-template-operating-review",
-      "packet_id": "skill8d:0014:artifact-template-operating-review:0e3dd91dec384dc5",
+      "packet_id": "skill8d:0016:artifact-template-operating-review:6e39baf150f9b039",
       "skill_id": "artifact-template-operating-review",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-operating-review/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/SKILL.md",
       "source_sha256": "6d63c5cd025ffe936e7bab5db3023672bbaec26af55c2bb8b057d38c202c9c32",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -172,9 +194,9 @@
     },
     {
       "name": "artifact-template-project-kickoff",
-      "packet_id": "skill8d:0015:artifact-template-project-kickoff:f45f77884dde2698",
+      "packet_id": "skill8d:0017:artifact-template-project-kickoff:083ae010d9b4fe4a",
       "skill_id": "artifact-template-project-kickoff",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-project-kickoff/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/SKILL.md",
       "source_sha256": "aa893ebd89e7c8d1db4261d01cc2b1add35d78d00785871ccaaa5fc8db783ec9",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -183,9 +205,9 @@
     },
     {
       "name": "artifact-template-project-tracker",
-      "packet_id": "skill8d:0016:artifact-template-project-tracker:c46b7033b38de303",
+      "packet_id": "skill8d:0018:artifact-template-project-tracker:628661cae30e8c05",
       "skill_id": "artifact-template-project-tracker",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-project-tracker/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/SKILL.md",
       "source_sha256": "d97d5be20189b7f53dd269b6e1c5f694eaf53e5a72f6559fcb1578911b7cda82",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -194,9 +216,9 @@
     },
     {
       "name": "artifact-template-sales-pipeline",
-      "packet_id": "skill8d:0017:artifact-template-sales-pipeline:f95e07d7a139f28e",
+      "packet_id": "skill8d:0019:artifact-template-sales-pipeline:2f9515298d579117",
       "skill_id": "artifact-template-sales-pipeline",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-sales-pipeline/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/SKILL.md",
       "source_sha256": "15cfeeedf440021f16ed3f3ad8c7c1ef6d48898b9447741e223d2fb41cfc9800",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -205,9 +227,9 @@
     },
     {
       "name": "artifact-template-simple-dark-mode",
-      "packet_id": "skill8d:0018:artifact-template-simple-dark-mode:a332da6d3422eda9",
+      "packet_id": "skill8d:0020:artifact-template-simple-dark-mode:e79728711236c155",
       "skill_id": "artifact-template-simple-dark-mode",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-simple-dark-mode/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/SKILL.md",
       "source_sha256": "b7c8d0c05f75878b9bc21e56a57c41ec1aa29700aca0a24822be0f9f1bd53207",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -216,9 +238,9 @@
     },
     {
       "name": "artifact-template-simple-light-mode",
-      "packet_id": "skill8d:0019:artifact-template-simple-light-mode:e6bdf5eeff7adfaf",
+      "packet_id": "skill8d:0021:artifact-template-simple-light-mode:d5a12eb73ff818b8",
       "skill_id": "artifact-template-simple-light-mode",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-simple-light-mode/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/SKILL.md",
       "source_sha256": "7c68430c6cf57b55b457d4735dbd1a46b889bef135a32222902dd0848b6e1752",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -227,9 +249,9 @@
     },
     {
       "name": "artifact-template-strategy-memorandum",
-      "packet_id": "skill8d:0020:artifact-template-strategy-memorandum:7fdb356d6e20c48b",
+      "packet_id": "skill8d:0022:artifact-template-strategy-memorandum:d83aadb472683d75",
       "skill_id": "artifact-template-strategy-memorandum",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-strategy-memorandum/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/SKILL.md",
       "source_sha256": "51d7882ac94e8e57b323394825728c33925af878806e37277217c2dc12a912e5",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -238,9 +260,9 @@
     },
     {
       "name": "artifact-template-system-design",
-      "packet_id": "skill8d:0021:artifact-template-system-design:aff385ac6c133fe5",
+      "packet_id": "skill8d:0023:artifact-template-system-design:754fee9546af9b43",
       "skill_id": "artifact-template-system-design",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-system-design/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/SKILL.md",
       "source_sha256": "87f7b7ed1b0d8410f5e5971cd7f7db9a4165e2f37069e97e52dbfb469b75a57c",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -249,9 +271,9 @@
     },
     {
       "name": "artifact-template-team-alignment",
-      "packet_id": "skill8d:0022:artifact-template-team-alignment:18fc63a246ca9305",
+      "packet_id": "skill8d:0024:artifact-template-team-alignment:7f6edf4334881671",
       "skill_id": "artifact-template-team-alignment",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-team-alignment/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/SKILL.md",
       "source_sha256": "26d7cafdcd1899a937b325c5d02ac57c162d45002153be33a934d35f81eb6110",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -260,9 +282,9 @@
     },
     {
       "name": "artifact-template-three-statement-forecast",
-      "packet_id": "skill8d:0023:artifact-template-three-statement-forecast:e83fa7cd16cbdaee",
+      "packet_id": "skill8d:0025:artifact-template-three-statement-forecast:5880dce4868f59a8",
       "skill_id": "artifact-template-three-statement-forecast",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.0/skills/artifact-template-three-statement-forecast/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/SKILL.md",
       "source_sha256": "74f4a5cccec0107b861548b157e04c51d9b58ec13a990c86394b4c529b8ecf41",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
@@ -270,8 +292,30 @@
       ]
     },
     {
+      "name": "assess-patch-risk",
+      "packet_id": "skill8d:0026:assess-patch-risk:2ab3b271bc2fb39e",
+      "skill_id": "assess-patch-risk",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/assess-patch-risk/SKILL.md",
+      "source_sha256": "7fbbd0eb220408c0a0b27aaac8b43a165c7be3c49b48404f850546727133c97e",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:assess-patch-risk"
+      ]
+    },
+    {
+      "name": "attack-path-analysis",
+      "packet_id": "skill8d:0027:attack-path-analysis:0eae6131e4e71227",
+      "skill_id": "attack-path-analysis",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/attack-path-analysis/SKILL.md",
+      "source_sha256": "63e820ce598dd62c897283eab91d60ba0e4d81ecae8dc6e516d709e2ba6b0eaa",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:attack-path-analysis"
+      ]
+    },
+    {
       "name": "azure-ai",
-      "packet_id": "skill8d:0024:azure-ai:a68c6ec1888120a0",
+      "packet_id": "skill8d:0028:azure-ai:050bb5a37f207585",
       "skill_id": "azure-ai",
       "source_path": "/home/taiji_admin/.agents/skills/azure-ai/SKILL.md",
       "source_sha256": "9060994a74a9c8510c6e64d01edcef55440cefbba399c93cda18980651fff186",
@@ -282,7 +326,7 @@
     },
     {
       "name": "azure-aigateway",
-      "packet_id": "skill8d:0025:azure-aigateway:02795c26409a498b",
+      "packet_id": "skill8d:0029:azure-aigateway:4767b9e5c24e9cec",
       "skill_id": "azure-aigateway",
       "source_path": "/home/taiji_admin/.agents/skills/azure-aigateway/SKILL.md",
       "source_sha256": "2229d5e496d19e159bc97a7cc8b818be18a39d0a65578473d623af088aa21b4e",
@@ -293,7 +337,7 @@
     },
     {
       "name": "azure-cloud-migrate",
-      "packet_id": "skill8d:0026:azure-cloud-migrate:d1fc6993a605a852",
+      "packet_id": "skill8d:0030:azure-cloud-migrate:192f079e3f5c546f",
       "skill_id": "azure-cloud-migrate",
       "source_path": "/home/taiji_admin/.agents/skills/azure-cloud-migrate/SKILL.md",
       "source_sha256": "db31a871e00002b6895c5e32ade22244d3a92fbf3db88314474cef8c74b354ef",
@@ -304,7 +348,7 @@
     },
     {
       "name": "azure-compliance",
-      "packet_id": "skill8d:0027:azure-compliance:00d51108d81aaf79",
+      "packet_id": "skill8d:0031:azure-compliance:600285ff525ba3b8",
       "skill_id": "azure-compliance",
       "source_path": "/home/taiji_admin/.agents/skills/azure-compliance/SKILL.md",
       "source_sha256": "1f35685eadc0aa9f0c3299c248425d83740271e679170f8048356926fc1403aa",
@@ -315,7 +359,7 @@
     },
     {
       "name": "azure-compute",
-      "packet_id": "skill8d:0028:azure-compute:7c84fb727d0868ff",
+      "packet_id": "skill8d:0032:azure-compute:5f5f603aa5762b66",
       "skill_id": "azure-compute",
       "source_path": "/home/taiji_admin/.agents/skills/azure-compute/SKILL.md",
       "source_sha256": "0670f26a3f45029f74b8d400fcdb4d1d8394c3bda7c570c6738be5303d6799f8",
@@ -326,7 +370,7 @@
     },
     {
       "name": "azure-cost",
-      "packet_id": "skill8d:0029:azure-cost:0425e404eba07c84",
+      "packet_id": "skill8d:0033:azure-cost:6a2b0401b39f94e7",
       "skill_id": "azure-cost",
       "source_path": "/home/taiji_admin/.agents/skills/azure-cost/SKILL.md",
       "source_sha256": "bcd1c914d6960f769338a069ba1fe1ba4683ee2ea1781fc1310de21ff624de29",
@@ -337,7 +381,7 @@
     },
     {
       "name": "azure-deploy",
-      "packet_id": "skill8d:0030:azure-deploy:6d2e8baefd0db535",
+      "packet_id": "skill8d:0034:azure-deploy:3a8251f04a4aac81",
       "skill_id": "azure-deploy",
       "source_path": "/home/taiji_admin/.agents/skills/azure-deploy/SKILL.md",
       "source_sha256": "c3e877d874cac1834753e7b3b35a8a33e1257b3b5f3c429dcab238bd19c28601",
@@ -348,7 +392,7 @@
     },
     {
       "name": "azure-diagnostics",
-      "packet_id": "skill8d:0031:azure-diagnostics:e967b3e4ad8daf73",
+      "packet_id": "skill8d:0035:azure-diagnostics:eba3d94e05894123",
       "skill_id": "azure-diagnostics",
       "source_path": "/home/taiji_admin/.agents/skills/azure-diagnostics/SKILL.md",
       "source_sha256": "75f3e45d535efa721acf42931031d6ed27c1cca6574be9b881a0dd59139a88ad",
@@ -359,7 +403,7 @@
     },
     {
       "name": "azure-enterprise-infra-planner",
-      "packet_id": "skill8d:0032:azure-enterprise-infra-planner:dd1593b4eca31d30",
+      "packet_id": "skill8d:0036:azure-enterprise-infra-planner:0219c3ccb08b3a5a",
       "skill_id": "azure-enterprise-infra-planner",
       "source_path": "/home/taiji_admin/.agents/skills/azure-enterprise-infra-planner/SKILL.md",
       "source_sha256": "0abc0bb437aad5a36037b08f0e91ea2b7cfedb01899e06827725540dd6d3867e",
@@ -370,7 +414,7 @@
     },
     {
       "name": "azure-hosted-copilot-sdk",
-      "packet_id": "skill8d:0033:azure-hosted-copilot-sdk:80bc9ce5cb6c3276",
+      "packet_id": "skill8d:0037:azure-hosted-copilot-sdk:275abc12c1918ebd",
       "skill_id": "azure-hosted-copilot-sdk",
       "source_path": "/home/taiji_admin/.agents/skills/azure-hosted-copilot-sdk/SKILL.md",
       "source_sha256": "342dda8b9eb682aa2349bfcfe4cf28524c246e2739604f2f88ca9cb23281fdb5",
@@ -381,7 +425,7 @@
     },
     {
       "name": "azure-kubernetes",
-      "packet_id": "skill8d:0034:azure-kubernetes:510da49784242fa9",
+      "packet_id": "skill8d:0038:azure-kubernetes:12e11111193dd3aa",
       "skill_id": "azure-kubernetes",
       "source_path": "/home/taiji_admin/.agents/skills/azure-kubernetes/SKILL.md",
       "source_sha256": "9c8f61b2dd265ddbd08d2082e470f339c63c43d3c784324189a06927c75e80fb",
@@ -392,7 +436,7 @@
     },
     {
       "name": "azure-kubernetes-automatic-readiness",
-      "packet_id": "skill8d:0035:azure-kubernetes-automatic-readiness:7dd8990dade47596",
+      "packet_id": "skill8d:0039:azure-kubernetes-automatic-readiness:04597524ff2e4aef",
       "skill_id": "azure-kubernetes-automatic-readiness",
       "source_path": "/home/taiji_admin/.agents/skills/azure-kubernetes/azure-kubernetes-automatic-readiness/SKILL.md",
       "source_sha256": "bc3ebaf7b6b8148d322e4155e9a490ad01985265deaa4d669ef0dfd1b19d4d43",
@@ -403,7 +447,7 @@
     },
     {
       "name": "azure-kusto",
-      "packet_id": "skill8d:0036:azure-kusto:9d178e6016e61869",
+      "packet_id": "skill8d:0040:azure-kusto:e40bbe1f8bd539c4",
       "skill_id": "azure-kusto",
       "source_path": "/home/taiji_admin/.agents/skills/azure-kusto/SKILL.md",
       "source_sha256": "d3018c0de4b700f805cab55a40a16de7bab4ba3ed747f69819450c6edca891d7",
@@ -414,7 +458,7 @@
     },
     {
       "name": "azure-messaging",
-      "packet_id": "skill8d:0037:azure-messaging:c26239abfe9fdc89",
+      "packet_id": "skill8d:0041:azure-messaging:c3506562b8af60d5",
       "skill_id": "azure-messaging",
       "source_path": "/home/taiji_admin/.agents/skills/azure-messaging/SKILL.md",
       "source_sha256": "6304fe3ccbb6f36a4dcafe1bfe30d0c03618019d68fb4a933fd716bf8763d84c",
@@ -425,7 +469,7 @@
     },
     {
       "name": "azure-prepare",
-      "packet_id": "skill8d:0038:azure-prepare:315f26ee1bfa5c1b",
+      "packet_id": "skill8d:0042:azure-prepare:a07dc171659920c9",
       "skill_id": "azure-prepare",
       "source_path": "/home/taiji_admin/.agents/skills/azure-prepare/SKILL.md",
       "source_sha256": "ca7e3a1fa4030ef1923742a2a52b57f48181979a7263c9a82b439ed07211b18d",
@@ -436,7 +480,7 @@
     },
     {
       "name": "azure-quotas",
-      "packet_id": "skill8d:0039:azure-quotas:bc98f1976f834f4d",
+      "packet_id": "skill8d:0043:azure-quotas:f2189e89125a5cdf",
       "skill_id": "azure-quotas",
       "source_path": "/home/taiji_admin/.agents/skills/azure-quotas/SKILL.md",
       "source_sha256": "b517e29b50ba07dc42dd4fd356c0c15d5d41435415f6835ddb2ad874d6997237",
@@ -447,7 +491,7 @@
     },
     {
       "name": "azure-rbac",
-      "packet_id": "skill8d:0040:azure-rbac:68bd084cb75cc5f2",
+      "packet_id": "skill8d:0044:azure-rbac:4d190855c3b5808c",
       "skill_id": "azure-rbac",
       "source_path": "/home/taiji_admin/.agents/skills/azure-rbac/SKILL.md",
       "source_sha256": "5fa1410b1526906d42f094bd38ec0dee952cd67a24d0dd15590833b954627cb7",
@@ -458,7 +502,7 @@
     },
     {
       "name": "azure-reliability",
-      "packet_id": "skill8d:0041:azure-reliability:748d249638f61ece",
+      "packet_id": "skill8d:0045:azure-reliability:1d5925667fcb14b7",
       "skill_id": "azure-reliability",
       "source_path": "/home/taiji_admin/.agents/skills/azure-reliability/SKILL.md",
       "source_sha256": "001ca1733d1db5e950d7fc603eac7c28309458e54ab0ca54896002e08fe3285c",
@@ -469,7 +513,7 @@
     },
     {
       "name": "azure-resource-lookup",
-      "packet_id": "skill8d:0042:azure-resource-lookup:f04c3e3e37694dac",
+      "packet_id": "skill8d:0046:azure-resource-lookup:bf1d20e4b6d2c090",
       "skill_id": "azure-resource-lookup",
       "source_path": "/home/taiji_admin/.agents/skills/azure-resource-lookup/SKILL.md",
       "source_sha256": "81357bebb50b2a9cbfe46386eae4643d565445562882de4f891801b8b5dbfed1",
@@ -480,7 +524,7 @@
     },
     {
       "name": "azure-resource-visualizer",
-      "packet_id": "skill8d:0043:azure-resource-visualizer:6cb28f5338a51307",
+      "packet_id": "skill8d:0047:azure-resource-visualizer:59e8ca8731f22d0c",
       "skill_id": "azure-resource-visualizer",
       "source_path": "/home/taiji_admin/.agents/skills/azure-resource-visualizer/SKILL.md",
       "source_sha256": "a0dd18d0f49514e53c0683b32f93c60c34fab454e941e28cdff72444cd5d4440",
@@ -491,7 +535,7 @@
     },
     {
       "name": "azure-storage",
-      "packet_id": "skill8d:0044:azure-storage:d152ef422b9f5217",
+      "packet_id": "skill8d:0048:azure-storage:9e9cef9b591a0773",
       "skill_id": "azure-storage",
       "source_path": "/home/taiji_admin/.agents/skills/azure-storage/SKILL.md",
       "source_sha256": "0bb1208ef49ffcce3400d803139b682901b0df93a7c0b72518b01543da244fe6",
@@ -502,7 +546,7 @@
     },
     {
       "name": "azure-upgrade",
-      "packet_id": "skill8d:0045:azure-upgrade:93264ae732e780bd",
+      "packet_id": "skill8d:0049:azure-upgrade:ab7a5a2f980bdc34",
       "skill_id": "azure-upgrade",
       "source_path": "/home/taiji_admin/.agents/skills/azure-upgrade/SKILL.md",
       "source_sha256": "56b6ce64bca0630e42a3691a08b624227fd5c45e082adc328bfd4ef356a00b20",
@@ -513,7 +557,7 @@
     },
     {
       "name": "azure-validate",
-      "packet_id": "skill8d:0046:azure-validate:5245c8c99a5148dc",
+      "packet_id": "skill8d:0050:azure-validate:1bdd1cb8328f4e42",
       "skill_id": "azure-validate",
       "source_path": "/home/taiji_admin/.agents/skills/azure-validate/SKILL.md",
       "source_sha256": "0b1b6ed62c1271f17538a347a76e06d255f3235be82b64162462ee766ff01967",
@@ -523,19 +567,8 @@
       ]
     },
     {
-      "name": "build-chatgpt-app",
-      "packet_id": "skill8d:0047:build-chatgpt-app:b98be5dc94c436f7",
-      "skill_id": "build-chatgpt-app",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-developers/1.2.3/skills/build-chatgpt-app/SKILL.md",
-      "source_sha256": "b4ba5e0847e9b56b327da4e7546f5f0bf3325f54d6d21fc119b320bc2c898a53",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:openai_platform"
-      ]
-    },
-    {
       "name": "W7TP Candidate Outline",
-      "packet_id": "skill8d:0048:candidate_outline:b43591888d656b42",
+      "packet_id": "skill8d:0051:candidate_outline:4bfc46e702db2218",
       "skill_id": "candidate_outline",
       "source_path": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
@@ -546,7 +579,7 @@
     },
     {
       "name": "capacity",
-      "packet_id": "skill8d:0049:capacity:d91b3e6e5f8f6015",
+      "packet_id": "skill8d:0052:capacity:fdf60f94132d10ce",
       "skill_id": "capacity",
       "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/capacity/SKILL.md",
       "source_sha256": "91b3ce958de44f728453572747504e8c9146f119892aa690546fd19f8d96a344",
@@ -556,19 +589,8 @@
       ]
     },
     {
-      "name": "chatgpt-app-submission",
-      "packet_id": "skill8d:0050:chatgpt-app-submission:1d244820c906f9ce",
-      "skill_id": "chatgpt-app-submission",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-developers/1.2.3/skills/chatgpt-app-submission/SKILL.md",
-      "source_sha256": "c9b43ca8fe60189e541afa30ea32a86f1bd7ab58a353faac777192a282b796cf",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:openai_platform"
-      ]
-    },
-    {
       "name": "Codex Collaboration Runtime",
-      "packet_id": "skill8d:0051:codex_collaboration_runtime:632d209f1847d12c",
+      "packet_id": "skill8d:0053:codex_collaboration_runtime:32e5d235b16ed1ba",
       "skill_id": "codex_collaboration_runtime",
       "source_path": "PLATFORM_INTERNAL_OPAQUE_REF",
       "source_sha256": null,
@@ -579,7 +601,7 @@
     },
     {
       "name": "Codex Document Control Runtime",
-      "packet_id": "skill8d:0052:codex_document_control_runtime:9ab90ac30087f27d",
+      "packet_id": "skill8d:0054:codex_document_control_runtime:94f80133219460cd",
       "skill_id": "codex_document_control_runtime",
       "source_path": "PLATFORM_INTERNAL_OPAQUE_REF",
       "source_sha256": null,
@@ -590,7 +612,7 @@
     },
     {
       "name": "Codex Image Generation Runtime",
-      "packet_id": "skill8d:0053:codex_image_runtime:672077b9d0cd1f48",
+      "packet_id": "skill8d:0055:codex_image_runtime:72b8c71686ecc1c3",
       "skill_id": "codex_image_runtime",
       "source_path": "PLATFORM_INTERNAL_OPAQUE_REF",
       "source_sha256": null,
@@ -601,7 +623,7 @@
     },
     {
       "name": "Codex Sites Hosting Runtime",
-      "packet_id": "skill8d:0054:codex_sites_runtime:3e7e736b8ed86d04",
+      "packet_id": "skill8d:0056:codex_sites_runtime:4fdf564b699c1f2a",
       "skill_id": "codex_sites_runtime",
       "source_path": "PLATFORM_INTERNAL_OPAQUE_REF",
       "source_sha256": null,
@@ -612,7 +634,7 @@
     },
     {
       "name": "Codex Web Research Runtime",
-      "packet_id": "skill8d:0055:codex_web_research_runtime:bb2c5551c19aecc9",
+      "packet_id": "skill8d:0057:codex_web_research_runtime:b730d12a60335c8a",
       "skill_id": "codex_web_research_runtime",
       "source_path": "PLATFORM_INTERNAL_OPAQUE_REF",
       "source_sha256": null,
@@ -623,21 +645,43 @@
     },
     {
       "name": "customize",
-      "packet_id": "skill8d:0056:customize:0f0325ac6f7b5eeb",
+      "packet_id": "skill8d:0058:customize:30bd240a3b5ac3bc",
       "skill_id": "customize",
       "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/customize/SKILL.md",
-      "source_sha256": "9424dbe2afc67b79d04bb21cc041dfc7e52ae1d87fb2a7c9c24b7ee4c44f5123",
+      "source_sha256": "d0a25090ffc3e139ff2eaeca5f814a83aa61d596571d267f6a7ad534c153ba68",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:azure_cli_or_azure_mcp"
       ]
     },
     {
+      "name": "deep-security-scan",
+      "packet_id": "skill8d:0059:deep-security-scan:5d02c2921ce5f554",
+      "skill_id": "deep-security-scan",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/deep-security-scan/SKILL.md",
+      "source_sha256": "9f6dd957c2893531401f0ea16dbb969c6636dbc66793436eeb549c6894a01ef6",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:deep-security-scan"
+      ]
+    },
+    {
+      "name": "define-security-policy",
+      "packet_id": "skill8d:0060:define-security-policy:27dde4caa09bc90d",
+      "skill_id": "define-security-policy",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/define-security-policy/SKILL.md",
+      "source_sha256": "286f549d7d5b017e13e38031494723b5870949e3f82ac85b6a9c32d4718433bf",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:define-security-policy"
+      ]
+    },
+    {
       "name": "deploy-model",
-      "packet_id": "skill8d:0057:deploy-model:13e7fdcc808ee39a",
+      "packet_id": "skill8d:0061:deploy-model:ae604a5ddac8c3ca",
       "skill_id": "deploy-model",
       "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/SKILL.md",
-      "source_sha256": "bb027dcc53d93057daa81d2f5ee6ab2f47df9992ba3ceebe35d00938f7b3b4c9",
+      "source_sha256": "ae0de869fdaee1a6b6b04582e723a2363d482d85a5c119f1963a2c36eff5667c",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:azure_cli_or_azure_mcp"
@@ -645,7 +689,7 @@
     },
     {
       "name": "entra-agent-id",
-      "packet_id": "skill8d:0058:entra-agent-id:ba607e827af22f87",
+      "packet_id": "skill8d:0062:entra-agent-id:141f2988a5c403c4",
       "skill_id": "entra-agent-id",
       "source_path": "/home/taiji_admin/.agents/skills/entra-agent-id/SKILL.md",
       "source_sha256": "a21b4ddbcaea5c2655ea1ba7593fe3268d07ab9f6a0ca98209f07282f3636cb7",
@@ -656,7 +700,7 @@
     },
     {
       "name": "entra-app-registration",
-      "packet_id": "skill8d:0059:entra-app-registration:2799f5cec67c2a8c",
+      "packet_id": "skill8d:0063:entra-app-registration:24fcd56f471d3b2a",
       "skill_id": "entra-app-registration",
       "source_path": "/home/taiji_admin/.agents/skills/entra-app-registration/SKILL.md",
       "source_sha256": "c95e095025be0579170293652ff89a0515870e2585e238cdbb2491f53d6f4fde",
@@ -667,7 +711,7 @@
     },
     {
       "name": "W7TP Evidence Echo",
-      "packet_id": "skill8d:0060:evidence_echo:c94de722d33c6441",
+      "packet_id": "skill8d:0064:evidence_echo:f3e02cf5b6c4eaf0",
       "skill_id": "evidence_echo",
       "source_path": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
@@ -677,132 +721,44 @@
       ]
     },
     {
+      "name": "finding-discovery",
+      "packet_id": "skill8d:0065:finding-discovery:4cff06195b98cafe",
+      "skill_id": "finding-discovery",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/finding-discovery/SKILL.md",
+      "source_sha256": "938b73329188aa124770fcdf7cf7916e2941c8fdbf20acd9df96bc1a80185fe7",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:finding-discovery"
+      ]
+    },
+    {
       "name": "finetuning",
-      "packet_id": "skill8d:0061:finetuning:2d780ab6d9dae6a7",
+      "packet_id": "skill8d:0066:finetuning:cefc6ed3f019542b",
       "skill_id": "finetuning",
       "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/finetuning/SKILL.md",
-      "source_sha256": "760f5e7f21c0b87b5d1b00dae6a652e585b07798e3134cc669c6eb1fee6402f4",
+      "source_sha256": "7a17789cb61e026a52071564b00624f2880e7b35c89fec9aa06c0dfcc8fe1e31",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:azure_cli_or_azure_mcp"
       ]
     },
     {
-      "name": "gh-address-comments",
-      "packet_id": "skill8d:0062:gh-address-comments:f2b09bded26542fc",
-      "skill_id": "gh-address-comments",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/github/0.1.8-2841cf9749ae/skills/gh-address-comments/SKILL.md",
-      "source_sha256": "c1ebc337357402f7faabafe712e0c463981a65f736453efe52abd305bcb74769",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:github"
-      ]
-    },
-    {
-      "name": "gh-fix-ci",
-      "packet_id": "skill8d:0063:gh-fix-ci:a8a16c00e0867aa1",
-      "skill_id": "gh-fix-ci",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/github/0.1.8-2841cf9749ae/skills/gh-fix-ci/SKILL.md",
-      "source_sha256": "7621a3560d788fb221d25f9753233fe0c393c5cfe63167c88b11f027c277b1f8",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:github"
-      ]
-    },
-    {
-      "name": "github",
-      "packet_id": "skill8d:0064:github:68033b3d3d13be9d",
-      "skill_id": "github",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/github/0.1.8-2841cf9749ae/skills/github/SKILL.md",
-      "source_sha256": "81dbdd90934fe86a79ddc4790fd211e5fca866302a74090ad153395f56f2bd42",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:github"
-      ]
-    },
-    {
-      "name": "gmail",
-      "packet_id": "skill8d:0065:gmail:5cd01c358bb613f8",
-      "skill_id": "gmail",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/gmail/0.1.5/skills/gmail/SKILL.md",
-      "source_sha256": "3e8c0052dfd397f66d756626c18d695c6289c19da6909b1b6c65dadeb03fc678",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:gmail"
-      ]
-    },
-    {
-      "name": "gmail-inbox-triage",
-      "packet_id": "skill8d:0066:gmail-inbox-triage:8cdc4dbbac4a060f",
-      "skill_id": "gmail-inbox-triage",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/gmail/0.1.5/skills/gmail-inbox-triage/SKILL.md",
-      "source_sha256": "1ce1ef20bbe99da3e824818e397e50c33238666e528fed8e9ec46250585ec5cc",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:gmail"
-      ]
-    },
-    {
-      "name": "google-calendar",
-      "packet_id": "skill8d:0067:google-calendar:7921182587d6158d",
-      "skill_id": "google-calendar",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-calendar/1.2.4/skills/google-calendar/SKILL.md",
-      "source_sha256": "bd29e83353cde5df93682827875ad3c40c5dbb806e687b40c5c0bf95a1fa83e4",
+      "name": "fix-finding",
+      "packet_id": "skill8d:0067:fix-finding:880267349efa772d",
+      "skill_id": "fix-finding",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/fix-finding/SKILL.md",
+      "source_sha256": "7eca2ea1175edf2338ef08c69baef335abc5a57d09bcf405840f7e35e851cef9",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
-        "candidate_adapter:google-calendar"
-      ]
-    },
-    {
-      "name": "google-calendar-daily-brief",
-      "packet_id": "skill8d:0068:google-calendar-daily-brief:2b67f40f48826b51",
-      "skill_id": "google-calendar-daily-brief",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-calendar/1.2.4/skills/google-calendar-daily-brief/SKILL.md",
-      "source_sha256": "df3ab49a6e04ecbee44f045a4de231e27eba47a9ee9ac8cbb2ffc226056d0242",
-      "status": "NEEDS_LOCAL_ADAPTER",
-      "tool_refs": [
-        "candidate_adapter:google-calendar-daily-brief"
-      ]
-    },
-    {
-      "name": "google-calendar-free-up-time",
-      "packet_id": "skill8d:0069:google-calendar-free-up-time:8503ae9f4b198d14",
-      "skill_id": "google-calendar-free-up-time",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-calendar/1.2.4/skills/google-calendar-free-up-time/SKILL.md",
-      "source_sha256": "2408991103e925f0ea8d9183fe9a1e0fda10a7d3cb5423a1f6f3f6968322f6b9",
-      "status": "NEEDS_LOCAL_ADAPTER",
-      "tool_refs": [
-        "candidate_adapter:google-calendar-free-up-time"
-      ]
-    },
-    {
-      "name": "google-calendar-group-scheduler",
-      "packet_id": "skill8d:0070:google-calendar-group-scheduler:854dcced7f7f5011",
-      "skill_id": "google-calendar-group-scheduler",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-calendar/1.2.4/skills/google-calendar-group-scheduler/SKILL.md",
-      "source_sha256": "be486e5505c16660c7e3e1ebd7a04c8529d782e80de0a32bd8f075cff3015d91",
-      "status": "NEEDS_LOCAL_ADAPTER",
-      "tool_refs": [
-        "candidate_adapter:google-calendar-group-scheduler"
-      ]
-    },
-    {
-      "name": "google-calendar-meeting-prep",
-      "packet_id": "skill8d:0071:google-calendar-meeting-prep:4210adc7d56e7146",
-      "skill_id": "google-calendar-meeting-prep",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-calendar/1.2.4/skills/google-calendar-meeting-prep/SKILL.md",
-      "source_sha256": "001763823d4c8b578f6052b89ff5ee882b2e38dee37dd85af746eaa89eb51a64",
-      "status": "NEEDS_LOCAL_ADAPTER",
-      "tool_refs": [
-        "candidate_adapter:google-calendar-meeting-prep"
+        "candidate_adapter:fix-finding"
       ]
     },
     {
       "name": "google-docs",
-      "packet_id": "skill8d:0072:google-docs:1ee1dddac4655a16",
+      "packet_id": "skill8d:0068:google-docs:c3bf6f99ee391708",
       "skill_id": "google-docs",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.10/skills/google-docs/SKILL.md",
-      "source_sha256": "96076085bd04850552848b4b8aed9b51e00a5fe942d38f1e3b0cd3301d247b88",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-docs/SKILL.md",
+      "source_sha256": "8e5c26053d800e2980b74ab82c2ce95db94a17fbb443f8f6e30baeb442f1d464",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:google_drive"
@@ -810,10 +766,10 @@
     },
     {
       "name": "google-drive",
-      "packet_id": "skill8d:0073:google-drive:242b02dbfddd6a3a",
+      "packet_id": "skill8d:0069:google-drive:d0aa9783745f69ef",
       "skill_id": "google-drive",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.10/skills/google-drive/SKILL.md",
-      "source_sha256": "4766e7fe25e6a5bf495028147f8108633bc5297d57f2a8864a2a76e5e78763ee",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive/SKILL.md",
+      "source_sha256": "dabae8a192c861b76cf7b5742bdf14f8ed35e67d8e6cacfd5f746ffbefd6da5c",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:google_drive"
@@ -821,9 +777,9 @@
     },
     {
       "name": "google-drive-comments",
-      "packet_id": "skill8d:0074:google-drive-comments:955e14b37ef9064d",
+      "packet_id": "skill8d:0070:google-drive-comments:4f1c71c7551ad06d",
       "skill_id": "google-drive-comments",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.10/skills/google-drive-comments/SKILL.md",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive-comments/SKILL.md",
       "source_sha256": "a3077375a8f7558b9e052c98047747b8a4a1a90a9a90b552009c28fcdadfe94a",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
@@ -832,10 +788,10 @@
     },
     {
       "name": "google-sheets",
-      "packet_id": "skill8d:0075:google-sheets:464f6cc3e287a920",
+      "packet_id": "skill8d:0071:google-sheets:af1ff8f67552a16d",
       "skill_id": "google-sheets",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.10/skills/google-sheets/SKILL.md",
-      "source_sha256": "9ec749627d757d4b7ab2552d2ffdff403e228a1e5b44ce9356c20caac22267b4",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-sheets/SKILL.md",
+      "source_sha256": "54d160c27532e4ff610e9c5a7870fb80dc496b2d1d3f302996c21c505419c862",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:google_drive"
@@ -843,10 +799,10 @@
     },
     {
       "name": "google-slides",
-      "packet_id": "skill8d:0076:google-slides:d8785f8f0e0f2baa",
+      "packet_id": "skill8d:0072:google-slides:38cdf46578fb3fba",
       "skill_id": "google-slides",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.10/skills/google-slides/SKILL.md",
-      "source_sha256": "d0853efa7681f7d111f7f796210859b62779f1f94346690cf871e85038a9a533",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-slides/SKILL.md",
+      "source_sha256": "fd14974d7c4ea9ff134bcc21cd32b2b1d61eeaa77c6dc757075b07eef6bedbdb",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:google_drive"
@@ -854,10 +810,10 @@
     },
     {
       "name": "imagegen",
-      "packet_id": "skill8d:0077:imagegen:ce24568a7d23b674",
+      "packet_id": "skill8d:0073:imagegen:88dac394212a4131",
       "skill_id": "imagegen",
       "source_path": "/home/taiji_admin/.codex/skills/.system/imagegen/SKILL.md",
-      "source_sha256": "59981d23519222bcecf1be48bb37730bbc50539ceb0e35ad09fcef98a3df19d3",
+      "source_sha256": "681ddb4ad6d06a2acc78a3535b583f8d0c1ea800ecda3d56370d3310fd2cd4ba",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
         "candidate_adapter:imagegen"
@@ -865,54 +821,76 @@
     },
     {
       "name": "microsoft-foundry",
-      "packet_id": "skill8d:0078:microsoft-foundry:4237a53ca1f76e16",
+      "packet_id": "skill8d:0074:microsoft-foundry:b8b45ca2b296e5f8",
       "skill_id": "microsoft-foundry",
       "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/SKILL.md",
-      "source_sha256": "332bdabf5a84d6e399b5e4d2bf787cdcf968ac435fa7120db427927ce3c457a1",
+      "source_sha256": "46718ed889e7ea84593a2f6d4213ab8a442e6f2d400491c4bd032df9e77296d5",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:azure_cli_or_azure_mcp"
       ]
     },
     {
-      "name": "openai-api-troubleshooting",
-      "packet_id": "skill8d:0079:openai-api-troubleshooting:591f06e14ade1f24",
-      "skill_id": "openai-api-troubleshooting",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-developers/1.2.3/skills/openai-api-troubleshooting/SKILL.md",
-      "source_sha256": "9fb4e152430c2f0475d1d14ce61b413267d322af9c032f2affb64698ca562662",
-      "status": "NEEDS_CONNECTOR",
+      "name": "notion-knowledge-capture",
+      "packet_id": "skill8d:0075:notion-knowledge-capture:62e4ecdde98479e6",
+      "skill_id": "notion-knowledge-capture",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-knowledge-capture/SKILL.md",
+      "source_sha256": "ade7d8902823500f6af26bdf290f2a88e35b34ce9668739eb8807b773648e333",
+      "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
-        "controlled_connector:openai_platform"
+        "candidate_adapter:notion-knowledge-capture"
+      ]
+    },
+    {
+      "name": "notion-meeting-intelligence",
+      "packet_id": "skill8d:0076:notion-meeting-intelligence:4b53daba2ce78d08",
+      "skill_id": "notion-meeting-intelligence",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-meeting-intelligence/SKILL.md",
+      "source_sha256": "1a8647c46cdfab399a1e0199924e0aecb83034e9a1b0957db211a045145b7771",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:notion-meeting-intelligence"
+      ]
+    },
+    {
+      "name": "notion-research-documentation",
+      "packet_id": "skill8d:0077:notion-research-documentation:afd360006b3ccce5",
+      "skill_id": "notion-research-documentation",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-research-documentation/SKILL.md",
+      "source_sha256": "8ca523535915c1b9016202fa24d120545c60caea5c5545d74bfdec195f0a039a",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:notion-research-documentation"
+      ]
+    },
+    {
+      "name": "notion-spec-to-implementation",
+      "packet_id": "skill8d:0078:notion-spec-to-implementation:8f4802df57457c02",
+      "skill_id": "notion-spec-to-implementation",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-spec-to-implementation/SKILL.md",
+      "source_sha256": "43b304aaff38fbd4fd5d81efcefb2fd92f5450649eba8b02a2371edb4599cf3f",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:notion-spec-to-implementation"
       ]
     },
     {
       "name": "openai-docs",
-      "packet_id": "skill8d:0080:openai-docs:2edddbe009db0bbc",
+      "packet_id": "skill8d:0079:openai-docs:0f698c429e439e2f",
       "skill_id": "openai-docs",
       "source_path": "/home/taiji_admin/.codex/skills/.system/openai-docs/SKILL.md",
-      "source_sha256": "9914a79e6e1bd70d780b777e9019677af0eba60bbdfac3b7fe9b0407f16b5cc4",
+      "source_sha256": "7cb8fa1b2a0c635b5c61ffe1da7b8594a7ea0fce5b71e8d523e2025d88b2a05e",
       "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
         "candidate_adapter:openai-docs"
       ]
     },
     {
-      "name": "openai-platform-api-key",
-      "packet_id": "skill8d:0081:openai-platform-api-key:0ab46dbd638de2aa",
-      "skill_id": "openai-platform-api-key",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-developers/1.2.3/skills/openai-platform-api-key/SKILL.md",
-      "source_sha256": "780670286fb0acf32660abafc1bc34d7a25ff7a74af59e02db8fb62bbdd21ac2",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:openai_platform"
-      ]
-    },
-    {
       "name": "plugin-creator",
-      "packet_id": "skill8d:0082:plugin-creator:8a88962ced91f933",
+      "packet_id": "skill8d:0080:plugin-creator:c897705a7ace2bee",
       "skill_id": "plugin-creator",
       "source_path": "/home/taiji_admin/.codex/skills/.system/plugin-creator/SKILL.md",
-      "source_sha256": "8fd56316b2c49cbdc657a5d197967a233018e1fada65b00a5dd030dce6499a6e",
+      "source_sha256": "71b95b8219644f95d633721e7f7cd3c469edfc8fe50f8415d400dfb2d74bc7b9",
       "status": "READY_LOCAL",
       "tool_refs": [
         "continue_builtin:read_file",
@@ -923,19 +901,41 @@
       ]
     },
     {
+      "name": "plugin-management",
+      "packet_id": "skill8d:0081:plugin-management:e611865bb05f98b1",
+      "skill_id": "plugin-management",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management/SKILL.md",
+      "source_sha256": "653841cc21205269f08b0ce135891e1518dac616a766bcfb0b57d788d3f68b10",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:plugin-management"
+      ]
+    },
+    {
       "name": "preset",
-      "packet_id": "skill8d:0083:preset:e08f2a6da3915ec3",
+      "packet_id": "skill8d:0082:preset:1ade3e8e168080dd",
       "skill_id": "preset",
       "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/preset/SKILL.md",
-      "source_sha256": "e3d6313af788327dc409c1515029209a362db9ce7ace999b95653e85fa9b688e",
+      "source_sha256": "f4e44bf4eac06f75f17f5e3fc40e5a85a2cf23b27fcc99bf76c5df9d6e48eb5b",
       "status": "NEEDS_CONNECTOR",
       "tool_refs": [
         "controlled_connector:azure_cli_or_azure_mcp"
       ]
     },
     {
+      "name": "propose-security-hardening",
+      "packet_id": "skill8d:0083:propose-security-hardening:648dd897643901b9",
+      "skill_id": "propose-security-hardening",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/propose-security-hardening/SKILL.md",
+      "source_sha256": "b9d2c81ecb99e6eb4ad6424dbd297a935feb66c2658692d48caf4d9840eaf306",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:propose-security-hardening"
+      ]
+    },
+    {
       "name": "review-agent",
-      "packet_id": "skill8d:0084:review-agent:b983387672313922",
+      "packet_id": "skill8d:0084:review-agent:f48861333fde4269",
       "skill_id": "review-agent",
       "source_path": "/home/taiji_admin/.codex/skills/.system/review-agent/SKILL.md",
       "source_sha256": "07079efd0dc76f05fade424e5dfb048dce1de2df7626e1a4f56292a4f3f92228",
@@ -945,11 +945,33 @@
       ]
     },
     {
+      "name": "security-diff-scan",
+      "packet_id": "skill8d:0085:security-diff-scan:481046d0ddb71193",
+      "skill_id": "security-diff-scan",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/security-diff-scan/SKILL.md",
+      "source_sha256": "0a4c519ad713585876ea7eb0a8af4b59892c86746f4c69851db9ab347b7fad2f",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:security-diff-scan"
+      ]
+    },
+    {
+      "name": "security-scan",
+      "packet_id": "skill8d:0086:security-scan:a4c253704e2d9739",
+      "skill_id": "security-scan",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/security-scan/SKILL.md",
+      "source_sha256": "5b8f5d7debeca14c6b37e8e7ba737671362b8eb4b7f49e693c99c6bd04bc8fa0",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:security-scan"
+      ]
+    },
+    {
       "name": "skill-creator",
-      "packet_id": "skill8d:0085:skill-creator:52acd493849e3404",
+      "packet_id": "skill8d:0087:skill-creator:cd7a2c38d474c0b6",
       "skill_id": "skill-creator",
       "source_path": "/home/taiji_admin/.codex/skills/.system/skill-creator/SKILL.md",
-      "source_sha256": "da44c88f6b3845a8fa8c60792ec9a722110a55a9793c279757b48fefb11f819c",
+      "source_sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66",
       "status": "READY_LOCAL",
       "tool_refs": [
         "continue_builtin:read_file",
@@ -961,7 +983,7 @@
     },
     {
       "name": "skill-installer",
-      "packet_id": "skill8d:0086:skill-installer:6ddf7337ade73e94",
+      "packet_id": "skill8d:0088:skill-installer:2ed9b2a097889228",
       "skill_id": "skill-installer",
       "source_path": "/home/taiji_admin/.codex/skills/.system/skill-installer/SKILL.md",
       "source_sha256": "d68b77e5bbb34dedab89d134da52855f140fc4b4299b80104f534e3b9e98f8ee",
@@ -971,74 +993,19 @@
       ]
     },
     {
-      "name": "slack",
-      "packet_id": "skill8d:0087:slack:c2f5d7c032d19a9a",
-      "skill_id": "slack",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/slack/0.1.4/skills/slack/SKILL.md",
-      "source_sha256": "4d04f00cb7fc94bde903678d02e0f62bf919b6d841332449ae13b5e4ad86078e",
-      "status": "NEEDS_CONNECTOR",
+      "name": "threat-model",
+      "packet_id": "skill8d:0089:threat-model:829991de1ac7f0ba",
+      "skill_id": "threat-model",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/threat-model/SKILL.md",
+      "source_sha256": "9aa474aed20b89a350a1e9181c8fdf80c89b6ca05a300e5cc4727cd31ae3eadd",
+      "status": "NEEDS_LOCAL_ADAPTER",
       "tool_refs": [
-        "controlled_connector:slack"
-      ]
-    },
-    {
-      "name": "slack-channel-summarization",
-      "packet_id": "skill8d:0088:slack-channel-summarization:6703d1a5814e668f",
-      "skill_id": "slack-channel-summarization",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/slack/0.1.4/skills/slack-channel-summarization/SKILL.md",
-      "source_sha256": "e4c87663ca8c12e3df530963b5f1e6669e9b8e2ec551f02152fb8f410bdb92de",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:slack"
-      ]
-    },
-    {
-      "name": "slack-daily-digest",
-      "packet_id": "skill8d:0089:slack-daily-digest:77c3241bdde754b3",
-      "skill_id": "slack-daily-digest",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/slack/0.1.4/skills/slack-daily-digest/SKILL.md",
-      "source_sha256": "a45309e9f5d579e8561e1a58903ac423891f7533adb21ef5367c1cc241da2506",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:slack"
-      ]
-    },
-    {
-      "name": "slack-notification-triage",
-      "packet_id": "skill8d:0090:slack-notification-triage:36da3d51eb1ced3e",
-      "skill_id": "slack-notification-triage",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/slack/0.1.4/skills/slack-notification-triage/SKILL.md",
-      "source_sha256": "8876ef489d6593bdfb5ba7c59a92f01753b0e6df86a9383f7afed06d0b6653fb",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:slack"
-      ]
-    },
-    {
-      "name": "slack-outgoing-message",
-      "packet_id": "skill8d:0091:slack-outgoing-message:133804712ebcb049",
-      "skill_id": "slack-outgoing-message",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/slack/0.1.4/skills/slack-outgoing-message/SKILL.md",
-      "source_sha256": "fb084f4230a6a222ea8e0ecfe7c1a3d1e8d8bc0697b6c764e70d5991961ebed5",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:slack"
-      ]
-    },
-    {
-      "name": "slack-reply-drafting",
-      "packet_id": "skill8d:0092:slack-reply-drafting:d84fb4cbf56918c3",
-      "skill_id": "slack-reply-drafting",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/slack/0.1.4/skills/slack-reply-drafting/SKILL.md",
-      "source_sha256": "8c37e767de5973748208a3226395b849c2e48ae04b5d74d67bdf74cbddde31d1",
-      "status": "NEEDS_CONNECTOR",
-      "tool_refs": [
-        "controlled_connector:slack"
+        "candidate_adapter:threat-model"
       ]
     },
     {
       "name": "W7TP Total Field Policy Check",
-      "packet_id": "skill8d:0093:total_field_policy_check:e4c0de1b174625b4",
+      "packet_id": "skill8d:0090:total_field_policy_check:7556b8e61ca7960b",
       "skill_id": "total_field_policy_check",
       "source_path": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
@@ -1048,11 +1015,66 @@
       ]
     },
     {
+      "name": "track-findings",
+      "packet_id": "skill8d:0091:track-findings:1be6b7b6d74f42d3",
+      "skill_id": "track-findings",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/track-findings/SKILL.md",
+      "source_sha256": "8e3726e86ef0df509f1a635961f268e1bf04a4622a83e21c1d079f546cc61dcb",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:track-findings"
+      ]
+    },
+    {
+      "name": "triage-finding",
+      "packet_id": "skill8d:0092:triage-finding:1b6f64dbf2a1660b",
+      "skill_id": "triage-finding",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/triage-finding/SKILL.md",
+      "source_sha256": "70b0e771f286443ea32bbf466ad378b36f9123b4aa171ab02c6680fdbdb704f9",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:triage-finding"
+      ]
+    },
+    {
+      "name": "validation",
+      "packet_id": "skill8d:0093:validation:5b26bc6110d18bbd",
+      "skill_id": "validation",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/validation/SKILL.md",
+      "source_sha256": "9d9c2478c31d9eb8bcab6b3bbdc6d8aa1f58ceef75361148fef11e9311543f2e",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:validation"
+      ]
+    },
+    {
+      "name": "verify-fix",
+      "packet_id": "skill8d:0094:verify-fix:ec49d9e754506c05",
+      "skill_id": "verify-fix",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/verify-fix/SKILL.md",
+      "source_sha256": "3b10a60ef709553c706a3b023c26889cfde3261df44663a53687ba32ca919d5d",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:verify-fix"
+      ]
+    },
+    {
+      "name": "vulnerability-writeup",
+      "packet_id": "skill8d:0095:vulnerability-writeup:6d9adff365325172",
+      "skill_id": "vulnerability-writeup",
+      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/vulnerability-writeup/SKILL.md",
+      "source_sha256": "78105d91972d8d8fce44e4c24311a2b1a4c7acb23bbc3d69e628410cbcc35416",
+      "status": "NEEDS_LOCAL_ADAPTER",
+      "tool_refs": [
+        "candidate_adapter:vulnerability-writeup"
+      ]
+    },
+    {
       "name": "W7TP Dynamic Context",
-      "packet_id": "skill8d:0094:w7tp_dynamic_context:b9de474c158f167d",
+      "packet_id": "skill8d:0096:w7tp_dynamic_context:667d9e413c090f84",
       "skill_id": "w7tp_dynamic_context",
       "source_path": "tools/total_field_dynamic_context.py",
-      "source_sha256": "4ef2ad40b75e962582c55a32dff0a4e3a99faf13811c8653c8bcd53eface873d",
+      "source_sha256": "ea7ed43d69ef35867cfa7d746f4faaf8990ff8a0b18e29a5be78370e071201bc",
       "status": "READY_MCP",
       "tool_refs": [
         "mcp:get_total_field_dynamic_context"
@@ -1060,35 +1082,35 @@
     },
     {
       "name": "W7TP Generative Transmission",
-      "packet_id": "skill8d:0095:w7tp_generative_transmission:3822b5afb31332ad",
+      "packet_id": "skill8d:0097:w7tp_generative_transmission:63ef420cf774b1db",
       "skill_id": "w7tp_generative_transmission",
       "source_path": "manifests/ollama_xiaoj_total_field_v0_1/routing_policy.json",
-      "source_sha256": "fdb8563975107dc39a38d552d351a091bcddb5dd38e3b68b1b97b6af8f563ab3",
+      "source_sha256": "c0e8f211278838baa7f717fe63304bfb22a804abf42577fd7559638f5cbda5b4",
       "status": "READY_LOCAL",
       "tool_refs": [
         "local:deterministic_reference_lookup"
       ]
     },
     {
-      "name": "W7TP TRUE8D Contract Sandbox",
-      "packet_id": "skill8d:0096:w7tp_true8d_contract:b9c3faca348dc6c2",
-      "skill_id": "w7tp_true8d_contract",
-      "source_path": "tools/total_field/w7tp_true8d_contract_sandbox.py",
-      "source_sha256": "fde934728fce71911e0083c16d38040f13a41940af5cc8ccd4d3b5f0ca48c214",
-      "status": "READY_LOCAL",
+      "name": "W7TP Model Source Orchestration",
+      "packet_id": "skill8d:0098:w7tp_model_source_orchestration:1933dee4e285d1b7",
+      "skill_id": "w7tp_model_source_orchestration",
+      "source_path": "tools/total_field_dynamic_context.py",
+      "source_sha256": "ea7ed43d69ef35867cfa7d746f4faaf8990ff8a0b18e29a5be78370e071201bc",
+      "status": "READY_MCP",
       "tool_refs": [
-        "local:w7tp_true8d_contract_sandbox"
+        "mcp:orchestrate_model_source_context"
       ]
     },
     {
-      "name": "yeet",
-      "packet_id": "skill8d:0097:yeet:39dbfe2afc320c71",
-      "skill_id": "yeet",
-      "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/github/0.1.8-2841cf9749ae/skills/yeet/SKILL.md",
-      "source_sha256": "e93c6ea769ba673d30749a981cd8ad75b687f454e3c8e2e45e7cfcbd412df12c",
-      "status": "NEEDS_CONNECTOR",
+      "name": "W7TP TRUE8D Contract Sandbox",
+      "packet_id": "skill8d:0099:w7tp_true8d_contract:2ed3efde020aa49b",
+      "skill_id": "w7tp_true8d_contract",
+      "source_path": "tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "source_sha256": "d5ad2b374f89160b94d5aa6222022dcc9cde733d49716e86427e1bc1b69db9f2",
+      "status": "READY_LOCAL",
       "tool_refs": [
-        "controlled_connector:github"
+        "local:w7tp_true8d_contract_sandbox"
       ]
     }
   ],
@@ -1110,7 +1132,7 @@
       "model_may_commit": false
     }
   },
-  "interface": "FOUNDER_LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE",
+  "interface": "FOUNDER_VPN_FULL",
   "invalid_when": [
     "source_manifest_missing",
     "source_sha256_mismatch",
@@ -1125,21 +1147,11 @@
   "member_boundary": "OWNER_ONLY",
   "mode": "TOTAL_FIELD_CONTROLLED_REGISTERED_CAPABILITY_MAP_V2_3",
   "model_authority": "NONE_PASSIVE_ORGAN",
-  "model_identity": "XIAOJ_REPLACEABLE_REASONING_GENERATION_ORGAN",
+  "model_identity": "FOUNDER_PRIVATE_XIAOJ",
   "owner": "江政隆",
   "schema_id": "W7TP_LOCAL_MODEL_CAPABILITY_REGISTRY_V1",
   "skills": [
     {
-      "id": "evidence_echo",
-      "output_kind": "Evidence",
-      "purpose": "回傳去敏後的唯讀來源摘要與 evidence path／SHA-256 引用",
-      "side_effects": false,
-      "when_to_use": "需要回答目前狀態、來源、證據或雜湊引用，且不需要寫入或啟用效果時。",
-      "how_to_use": "以 8DADI 定位已准入上下文引用，經輸入契約驗證後呼叫 evidence_echo，只回傳去敏證據。",
-      "examples": {
-        "allow": "查詢目前總場上下文所引用的證據與 SHA-256。",
-        "hold": "要求以舊收據直接宣稱目前已部署；必須 HOLD 並重新觀測。"
-      },
       "context_references": [
         "CURRENT_FOUNDER_INTENT_REF",
         "CURRENT_STATE_REF",
@@ -1147,12 +1159,21 @@
       ],
       "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dimensions",
       "d6_mapping": "NOT_APPLICABLE_READ_ONLY_EVIDENCE",
-      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_evidence_echo",
-      "side_effect_class": "NONE",
       "d8_requirement": "NO_SIDE_EFFECT_AUTHORITY",
+      "examples": {
+        "allow": "查詢目前總場上下文所引用的證據與 SHA-256。",
+        "hold": "要求以舊收據直接宣稱目前已部署；必須 HOLD 並重新觀測。"
+      },
+      "how_to_use": "以 8DADI 定位已准入上下文引用，經輸入契約驗證後呼叫 evidence_echo，只回傳去敏證據。",
+      "id": "evidence_echo",
+      "output_kind": "Evidence",
+      "purpose": "回傳去敏後的唯讀來源摘要與 evidence path／SHA-256 引用",
       "reobservation_contract": "重新讀取相同證據座標並確認引用仍可解析；不產生外部效果。",
+      "side_effect_class": "NONE",
+      "side_effects": false,
       "source": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
+      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_evidence_echo",
       "triggers": [
         "證據",
         "來源",
@@ -1161,19 +1182,10 @@
         "hash",
         "目前狀態",
         "查找"
-      ]
+      ],
+      "when_to_use": "需要回答目前狀態、來源、證據或雜湊引用，且不需要寫入或啟用效果時。"
     },
     {
-      "id": "candidate_outline",
-      "output_kind": "Candidate",
-      "purpose": "建立不具權威的實作、修正或設計候選輪廓",
-      "side_effects": false,
-      "when_to_use": "使用者明確要求草案、設計或尚未取得執行權威的變更輪廓時。",
-      "how_to_use": "只對準單一工作原胞與最小上下文引用建立候選，不呼叫副作用工具，不把候選升格。",
-      "examples": {
-        "allow": "建立一個尚未送審的 Odoo 介面修正候選輪廓。",
-        "hold": "使用者要求立即部署但缺少已登記執行工具或 D8 範圍；不得假裝已完成。"
-      },
       "context_references": [
         "CURRENT_FOUNDER_INTENT_REF",
         "CURRENT_STATE_REF",
@@ -1182,12 +1194,21 @@
       ],
       "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dimensions",
       "d6_mapping": "ONLY_WHEN_TARGET_BASE_DELTA_REFERENCES_COORDINATES_RECONSTRUCTION_AND_VERIFICATION_ARE_EXPLICIT",
-      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_candidate_outline",
-      "side_effect_class": "NONE",
       "d8_requirement": "ADVISORY_ONLY_NO_EXECUTION_AUTHORITY",
+      "examples": {
+        "allow": "建立一個尚未送審的 Odoo 介面修正候選輪廓。",
+        "hold": "使用者要求立即部署但缺少已登記執行工具或 D8 範圍；不得假裝已完成。"
+      },
+      "how_to_use": "只對準單一工作原胞與最小上下文引用建立候選，不呼叫副作用工具，不把候選升格。",
+      "id": "candidate_outline",
+      "output_kind": "Candidate",
+      "purpose": "建立不具權威的實作、修正或設計候選輪廓",
       "reobservation_contract": "不具現化，不得結案為已執行；後續必須由受權工具另行執行並重新觀測。",
+      "side_effect_class": "NONE",
+      "side_effects": false,
       "source": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
+      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_candidate_outline",
       "triggers": [
         "候選",
         "草案",
@@ -1195,20 +1216,10 @@
         "設計",
         "實作",
         "修正"
-      ]
+      ],
+      "when_to_use": "使用者明確要求草案、設計或尚未取得執行權威的變更輪廓時。"
     },
     {
-      "default_fail_closed": true,
-      "id": "total_field_policy_check",
-      "output_kind": "Evidence",
-      "purpose": "檢查權威、禁止輸出、副作用、敏感資料與總場閘道條件",
-      "side_effects": false,
-      "when_to_use": "工作涉及執行、送審、推送、部署、重啟、資料庫、路由器、權限或敏感資料時。",
-      "how_to_use": "先形成紅隊反證，再由紫隊收斂最小可回復路徑；只驗證政策，不簽發 D8、不執行工具。",
-      "examples": {
-        "allow": "核對單次核可是否綁定精確節點、座標、時間、效果與回復點。",
-        "block": "模型要求自行擴大部署範圍或輸出秘密；立即 BLOCK。"
-      },
       "context_references": [
         "CURRENT_FOUNDER_INTENT_REF",
         "TARGET_STATE_REF",
@@ -1218,12 +1229,22 @@
       ],
       "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dimensions",
       "d6_mapping": "NOT_APPLICABLE_POLICY_PREFLIGHT",
-      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_total_field_policy_check",
-      "side_effect_class": "NONE",
       "d8_requirement": "POLICY_CHECK_CANNOT_AUTHORIZE",
+      "default_fail_closed": true,
+      "examples": {
+        "allow": "核對單次核可是否綁定精確節點、座標、時間、效果與回復點。",
+        "block": "模型要求自行擴大部署範圍或輸出秘密；立即 BLOCK。"
+      },
+      "how_to_use": "先形成紅隊反證，再由紫隊收斂最小可回復路徑；只驗證政策，不簽發 D8、不執行工具。",
+      "id": "total_field_policy_check",
+      "output_kind": "Evidence",
+      "purpose": "檢查權威、禁止輸出、副作用、敏感資料與總場閘道條件",
       "reobservation_contract": "政策判定後仍須由執行工具對目標座標產生效果並重新觀測；本技能結果不是完成。",
+      "side_effect_class": "NONE",
+      "side_effects": false,
       "source": "tools/ollama_total_field_skill_bridge.py",
       "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7",
+      "tool_binding": "tools.ollama_total_field_skill_bridge:OllamaTotalFieldSkillBridge._skill_total_field_policy_check",
       "triggers": [
         "權限",
         "授權",
@@ -1236,7 +1257,126 @@
         "送件",
         "密鑰",
         "會員"
-      ]
+      ],
+      "when_to_use": "工作涉及執行、送審、推送、部署、重啟、資料庫、路由器、權限或敏感資料時。"
+    },
+    {
+      "context_references": [
+        "CURRENT_FOUNDER_INTENT_REF",
+        "REGISTERED_NODE_REF",
+        "REGISTERED_SHARED_DRIVE_REF",
+        "TARGET_PATH_REF"
+      ],
+      "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dimensions",
+      "d6_mapping": "METADATA_LOOKUP_IS_NOT_D6_MATERIALIZATION_REQUIRES_EXPLICIT_TARGET_BASE_DELTA_RECONSTRUCTION_AND_VERIFICATION",
+      "d8_requirement": "NO_WRITE_OR_PROMOTION_AUTHORITY",
+      "examples": {
+        "allow": "商米 POS 經區網請總場列出五常雲端空間的比賽資料夾座標。",
+        "hold": "要求把服務帳戶金鑰傳到所有節點或直接把雲端資料升格正典；必須拒絕。"
+      },
+      "how_to_use": "先驗證來源節點與共用區鍵，再由太極一號既有 admin: 遠端入口列出單一受限路徑；不複製憑證、不讀敏感名稱內容、不直接寫入。",
+      "id": "shared_drive_metadata",
+      "output_kind": "Evidence",
+      "purpose": "由太極一號集中讀取三個已登記 Google 組織共用區的去敏中繼資料，供所有已登記節點透過總場查用。",
+      "reobservation_contract": "由太極一號重新列出三個登記 drive_id，確認要求路徑仍可讀且沒有輸出秘密值。",
+      "side_effect_class": "READ_ONLY_EXTERNAL_RESOURCE_METADATA",
+      "side_effects": false,
+      "source": "services/gateway/shared_resources.py",
+      "source_sha256": "5557dad85d8920b46e45f6b09c64c2063bc654fc02a3514ac8404d3a2f14aa39",
+      "tool_binding": "services.gateway.shared_resources:shared_drive_list",
+      "triggers": [
+        "雲端共用區",
+        "Google Drive",
+        "五常雲端空間",
+        "chiang",
+        "冷封存",
+        "雲端資料"
+      ],
+      "when_to_use": "目前工作原胞需要定位五常雲端空間、chiang 或 W7TP_Taiji_Cold_Archive 內的資料座標時。"
+    },
+    {
+      "context_references": [
+        "CURRENT_STATE_REF",
+        "TARGET_STATE_REF",
+        "INTERNAL_OBSERVATION_REF",
+        "EXTERNAL_EFFECT_REF"
+      ],
+      "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#dual_observation_closure",
+      "d6_mapping": "OBSERVATION_ONLY_NOT_D6",
+      "d8_requirement": "OBSERVATION_CANNOT_AUTHORIZE",
+      "examples": {
+        "allow": "內部顯示共用區可達，外部瀏覽器也能列出同一去敏資料座標。",
+        "hold": "容器健康但使用者頁面仍轉圈；不得宣告完成。"
+      },
+      "how_to_use": "內部視角由 8DADI 觀測登記座標；外部視角由瀏覽器呈現意圖、執行節點、傳輸類別、結果位置、一致性、授權與風險；兩者皆對齊才可結案。",
+      "id": "dual_observation_views",
+      "output_kind": "Evidence",
+      "purpose": "同時提供內部節點／路由／容器／資源視角與外部瀏覽器可見結果視角。",
+      "reobservation_contract": "重新讀取內外視角，確認內部狀態與人類可觀測結果同時符合目標。",
+      "side_effect_class": "NONE",
+      "side_effects": false,
+      "source": "services/gateway/shared_resources.py",
+      "source_sha256": "5557dad85d8920b46e45f6b09c64c2063bc654fc02a3514ac8404d3a2f14aa39",
+      "tool_binding": "services.gateway.shared_resources:internal_state_view+external_state_view",
+      "triggers": [
+        "內部視角",
+        "外部視角",
+        "重新觀測",
+        "瀏覽器效果",
+        "完成驗證"
+      ],
+      "when_to_use": "驗證系統是否真正完成工作，而不是只有服務或測試看似成功時。"
+    },
+    {
+      "context_references": [
+        "LOCKED_TARGET_REF",
+        "CURRENT_FOUNDER_INTENT_REF",
+        "SOURCE_ACCOUNT_REFS",
+        "SOURCE_EXPORT_REFS",
+        "MODEL_CAPABILITY_REFS",
+        "ACCEPTANCE_CONTRACT"
+      ],
+      "d1_d8_projection_ref": "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json#source_preserving_multi_model_orchestration",
+      "d6_mapping": "NOT_D6_UNLESS_COMPLETE_TARGET_BASE_DELTA_REFERENCES_COORDINATES_RECONSTRUCTION_AND_VERIFICATION_CONTRACT_EXISTS",
+      "d8_requirement": "SOURCE_RESULT_CANNOT_AUTHORIZE_OR_CHANGE_TARGET",
+      "examples": {
+        "allow": "本機小模型請總場把最小問題交給雲端紅隊，回收候選反證後繼續原工作目標。",
+        "hold": "外部模型要求合併帳號身分、變更目標或直接取得 D8；必須保留來源並拒絕升格。"
+      },
+      "how_to_use": "總場固定目前目標，透過已授權瀏覽器連接器自動取得結構化來源；本工具只做去敏、精確去重、來源綁定、衝突保留與候選回傳，本機 builder 再附加到既有 developer_memory 索引。",
+      "id": "source_preserving_model_orchestration",
+      "output_kind": "Evidence",
+      "persistence_binding": "tools.developer_memory_builder:persist_model_source_context",
+      "persistence_source_sha256": "01b798142d2cf2019f788ac674dda9e9c4ebee18635d534df8c95ca7790f0b81",
+      "proof_reuse_policy": "RETEST_ONLY_WHEN_SOURCE_DEPENDENCY_AUTHORITY_OR_EFFECT_BINDING_DRIFTS",
+      "purpose": "由總場調用其他模型或帳號整理對話、提出紅隊反證、抽取技能與完成受限雲端子工作，保留來源後交回 8D／ADI 裁決。",
+      "reobservation_contract": "重算匯出摘要、重讀來源封套與索引綁定，並以同一意圖查詢確認可命中；外部技能需另驗實體工具才可登記為已證實。",
+      "side_effect_class": "NONE_FOR_MCP_LOCAL_APPEND_ONLY_D4_FOR_AUTHORIZED_PERSISTENCE",
+      "side_effects": false,
+      "source": "tools/total_field_dynamic_context.py",
+      "source_sha256": "fe239371447905943decb082a76a9066518f7638adb265d761371d31f355c958",
+      "tool_binding": "mcp:orchestrate_model_source_context",
+      "triggers": [
+        "GPT駕駛GPT",
+        "模型協作",
+        "跨帳號意圖",
+        "對話匯出",
+        "意圖融合",
+        "技能融合",
+        "小模型雲端算力",
+        "上下文恢復",
+        "外部程式能力",
+        "外部替代方案",
+        "能力吸收"
+      ],
+      "verification_evidence": {
+        "ref": "tests/test_total_field_dynamic_context.py",
+        "result": "28_PASSED",
+        "scope": "MODEL_SOURCE_ORCHESTRATION_TARGET_LOCK_LOCAL_PERSISTENCE_AND_EXISTING_DYNAMIC_CONTEXT_CLOSURE",
+        "sha256": "b6e007abf241f2e17cf91b5e00c05a1296e6877ddc37d4ad065198f337ecf579"
+      },
+      "verification_state": "PROVEN_LOCAL_IMPLEMENTATION_BOUND_TO_RECORDED_DIGESTS_NO_EXTERNAL_CONNECTOR_EFFECT",
+      "when_to_use": "需要跨帳號對話來源、GPT 駕駛 GPT、小模型借用雲端算力、壓縮後恢復上下文或技能融合時。"
     }
   ],
   "source_contracts": [

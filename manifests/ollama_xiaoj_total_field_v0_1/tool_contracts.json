@@ -29,6 +29,35 @@
         },
         "additionalProperties": true
       }
+    },
+    {
+      "name": "orchestrate_model_source_context",
+      "transport": "stdio",
+      "side_effect_class": "NONE",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "mode": {"type": "string", "enum": ["PREPARE_SOURCE_REQUEST", "ASSIMILATE_SOURCE_EXPORTS"]},
+          "task_scope": {"type": "string", "minLength": 1, "maxLength": 4000},
+          "current_founder_intent_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+          "source_account_coordinate": {"type": "string", "maxLength": 240, "default": "UNKNOWN"},
+          "source_exports": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "object"}}
+        },
+        "required": ["mode", "task_scope", "current_founder_intent_ref"],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["schema_id", "state", "mode", "D8_ENVELOPE_AUTHORITY", "packet_sha256"],
+        "properties": {
+          "schema_id": {"const": "W7TP_8DADI_MODEL_SOURCE_ORCHESTRATION_V1"},
+          "state": {"type": "string"},
+          "mode": {"type": "string"},
+          "D8_ENVELOPE_AUTHORITY": {"type": "object"},
+          "packet_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": true
+      }
     }
   ],
   "governance_internal_contracts": [
@@ -49,6 +78,39 @@
       "model_effect_authority": false,
       "repair_requires_current_d8_resolution": true,
       "reobservation_contract": "對齊資料庫、能力包雜湊、既有服務與 8080/8081/8787/9108 端口座標。"
+    },
+    {
+      "name": "shared_drive_metadata_broker",
+      "model_callable": false,
+      "purpose": "由太極一號既有 rclone 授權集中讀取三個登記共用區的去敏中繼資料，供已登記節點經總場取用。",
+      "tool_binding": "services.gateway.shared_resources:shared_drive_list",
+      "side_effect_class": "READ_ONLY_EXTERNAL_RESOURCE_METADATA",
+      "credentials_remain_on_taiji01": true,
+      "cloud_result_is_authority": false,
+      "metadata_lookup_is_d6": false,
+      "write_or_content_materialization_requires_separate_contract": true,
+      "reobservation_contract": "從太極一號列出三個精確 drive_id，並由至少一個區網節點經既有 9002 閘道取得去敏清單。"
+    },
+    {
+      "name": "dual_observation_views",
+      "model_callable": false,
+      "purpose": "提供總場內部狀態與人類瀏覽器可見效果兩個觀測面。",
+      "tool_binding": "services.gateway.shared_resources:internal_state_view+external_state_view",
+      "side_effect_class": "NONE",
+      "internal_pass_alone_is_completion": false,
+      "success_requires_both_views": true
+    },
+    {
+      "name": "model_source_context_persistence",
+      "model_callable": false,
+      "purpose": "把已取得的模型／帳號來源匯出轉成去敏、來源保留、不可覆寫的本機 D4 封套，並附加到既有 8DADI 動態上下文索引。",
+      "tool_binding": "tools.developer_memory_builder:persist_model_source_context",
+      "side_effect_class": "LOCAL_APPEND_ONLY_D4_EVIDENCE",
+      "raw_export_copied": false,
+      "manual_copy_paste_required": false,
+      "new_parallel_memory_database": false,
+      "may_change_founder_intent_canonical_or_d8": false,
+      "reobservation_contract": "重讀本機 source envelope、record 與 memory_index 綁定，確認摘要一致且動態上下文可依意圖命中。"
     }
   ],
   "forbidden_tool_behavior": [

@@ -61,6 +61,9 @@ SOVEREIGN_AI_SYSTEM_MUTATION_CAPABILITIES = frozenset(
 INTENT_TRANSLATION_RUNTIME_PROFILE_RELATIVE_PATH = Path(
     "configs/total_field/active_total_field_authority_runtime_v1.json"
 )
+TOTAL_FIELD_8DADI_CONTRACT_RELATIVE_PATH = Path(
+    "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json"
+)
 INTENT_TRANSLATION_RULE_SCHEMA = (
     "W7TP_8DADI_INTENT_TRANSLATION_APPLICATION_RULES_V1"
 )
@@ -433,6 +436,8 @@ def _select_capability_route(query: str, pack: Mapping[str, Any], identity_class
         disposition = "HOLD_NO_UNIQUE_SKILL_MATCH"
     else:
         disposition = "CANDIDATE_ONLY"
+    root_model_identity = pack["root_model"].get("identity") or {}
+    root_model = pack["root_model"].get("model") or {}
     return {
         "flow": routing["flow"],
         "d1_intent_projection": {
@@ -486,10 +491,19 @@ def _select_capability_route(query: str, pack: Mapping[str, Any], identity_class
         "capability_pack_source_manifest_sha256": pack["source_manifest_sha256"],
         "root_model_projection": {
             "schema_id": pack["root_model"].get("schema_id"),
-            "runtime_model_name": (pack["root_model"].get("identity") or {}).get("runtime_model_name"),
-            "base_model": (pack["root_model"].get("identity") or {}).get("base_model"),
-            "parameter_class": (pack["root_model"].get("identity") or {}).get("parameter_class"),
-            "core_model_count": (pack["root_model"].get("identity") or {}).get("core_model_count"),
+            "runtime_model_name": (
+                root_model_identity.get("runtime_model_name")
+                or root_model.get("visible_model_id")
+            ),
+            "base_model": (
+                root_model_identity.get("base_model")
+                or root_model.get("base_model_dependency")
+            ),
+            "parameter_class": root_model_identity.get("parameter_class"),
+            "core_model_count": root_model_identity.get("core_model_count"),
+            "model_role": root_model.get("role"),
+            "controller": root_model.get("controller"),
+            "model_output_is_authority": root_model.get("model_output_is_authority"),
             "unified_model_mode": (
                 pack["root_model"].get("unified_model_architecture") or {}
             ).get("mode"),
@@ -1526,11 +1540,27 @@ def _memory_items(
             raise ValueError(f"memory index line {line_number} is not an object")
         rows.append(value)
 
+    # The index is append-only.  A later row for the same memory_id is a state
+    # transition event, not a second live object.  Only the last event may
+    # participate in current-state resolution.
+    latest_rows: dict[str, dict[str, Any]] = {}
+    unbound_rows: list[dict[str, Any]] = []
+    for row in rows:
+        memory_id = str(row.get("memory_id", ""))
+        if memory_id:
+            latest_rows[memory_id] = row
+        else:
+            unbound_rows.append(row)
+    rows = [*latest_rows.values(), *unbound_rows]
+
     ranked: list[tuple[int, dict[str, Any]]] = []
     issues: list[str] = []
     for row in rows:
         category = str(row.get("category", ""))
-        if category in excluded_categories or str(row.get("status")) == "quarantined":
+        if category in excluded_categories or str(row.get("status")) in {
+            "quarantined",
+            "superseded",
+        }:
             continue
         record_relative = str(row.get("record_path", ""))
         if not record_relative or not _path_is_allowed(record_relative):
@@ -1659,6 +1689,35 @@ def _current_founder_intent_projection(
         "network_policy": deepcopy(source["network_policy"]),
         "legacy_boundary": deepcopy(source["legacy_boundary"]),
         "authority_boundary": deepcopy(source["authority_boundary"]),
+        **(
+            {"target_lock": deepcopy(source["target_lock"])}
+            if isinstance(source.get("target_lock"), Mapping)
+            else {}
+        ),
+        **(
+            {"acceptance_contract": deepcopy(source["acceptance_contract"])}
+            if isinstance(source.get("acceptance_contract"), Mapping)
+            else {}
+        ),
+        **(
+            {"optimization_policy": deepcopy(source["optimization_policy"])}
+            if isinstance(source.get("optimization_policy"), Mapping)
+            else {}
+        ),
+        **(
+            {"high_cost_work_policy": deepcopy(source["high_cost_work_policy"])}
+            if isinstance(source.get("high_cost_work_policy"), Mapping)
+            else {}
+        ),
+        **(
+            {
+                "external_capability_assimilation": deepcopy(
+                    source["external_capability_assimilation"]
+                )
+            }
+            if isinstance(source.get("external_capability_assimilation"), Mapping)
+            else {}
+        ),
     }
 
 
@@ -1754,6 +1813,17 @@ def build_dynamic_context(
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return _hold_packet(
             "HOLD_INTENT_TRANSLATION_RULES_INVALID",
+            query=query,
+            reason=f"{type(exc).__name__}:{exc}",
+            generated_at=timestamp,
+        )
+    try:
+        data_governance_projection, data_governance_binding = (
+            _load_total_field_data_governance_projection(workspace_root)
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return _hold_packet(
+            "HOLD_TOTAL_FIELD_DATA_GOVERNANCE_CONTRACT_INVALID",
             query=query,
             reason=f"{type(exc).__name__}:{exc}",
             generated_at=timestamp,
@@ -1862,6 +1932,8 @@ def build_dynamic_context(
         "founder_intent_projection": founder_intent_projection,
         "intent_translation_application_rules": translation_rules,
         "intent_translation_runtime_binding": translation_rules_binding,
+        "data_custody_and_cafe_research_projection": data_governance_projection,
+        "data_custody_source_binding": data_governance_binding,
         "progress_projection_contract": {
             "schema_id": TOTAL_FIELD_PROGRESS_SCHEMA,
             "append_only": True,
@@ -1872,6 +1944,89 @@ def build_dynamic_context(
             "unknown_or_conflict": "HOLD",
             "completion_requires_reobserved_target_match": True,
             "formal_decision_authority": False,
+        },
+        "work_target_lock_contract": {
+            "schema_id": "W7TP_8DADI_WORK_TARGET_LOCK_V1",
+            "lock_owner": "TOTAL_FIELD_USING_CURRENT_FOUNDER_INTENT",
+            "required_binding": [
+                "CURRENT_FOUNDER_INTENT_REF",
+                "TARGET_8D_STATE_DIGEST",
+                "AFFECTED_COORDINATE_CLOSURE",
+                "ACCEPTANCE_CONTRACT",
+                "PARENT_PROGRESS_REF",
+            ],
+            "model_tool_cloud_or_historical_evidence_may_change_target": False,
+            "side_question_behavior": "ANSWER_THEN_RETURN_TO_LOCKED_PARENT_WORK_CELL",
+            "context_compaction_behavior": "REPLAY_LOCKED_TARGET_FROM_LOCAL_8DADI_INDEX",
+            "unlock_only_when": [
+                "TARGET_REOBSERVED_CLOSED",
+                "FOUNDER_EXPLICITLY_CORRECTS_REPLACES_OR_CANCELS_TARGET",
+            ],
+            "failure_behavior": (
+                "KEEP_TARGET_AND_LAST_VERIFIED_STATE_FIX_ONLY_RESIDUAL_DIFFERENCE"
+            ),
+            "optimization_admission": {
+                "allowed": True,
+                "must_preserve": [
+                    "FOUNDER_INTENDED_OBSERVABLE_OUTCOME",
+                    "TARGET_8D_STATE",
+                    "AUTHORITY_BOUNDARY",
+                    "ACCEPTANCE_CONTRACT",
+                ],
+                "may_improve": [
+                    "QUALITY",
+                    "HUMAN_EXPERIENCE",
+                    "COST",
+                    "LATENCY",
+                    "RESOURCE_PRESSURE",
+                    "RELIABILITY",
+                ],
+                "purpose_transfer_forbidden": True,
+                "unrelated_improvement_action": (
+                    "DEFER_OUTSIDE_CURRENT_LOCKED_WORK_CELL"
+                ),
+            },
+            "new_work_may_silently_replace_unfinished_target": False,
+            "high_cost_work_policy": {
+                "image_skinning_heavy_audiovisual_and_architecture_exploration": (
+                    "LOCATE_COMPARE_AND_RECOMMEND_ONLY"
+                ),
+                "implementation_or_paid_compute": False,
+                "future_execution_requires_founder_explicit_task_and_cost_bound": True,
+            },
+            "external_capability_assimilation": {
+                "scope": "ANY_TARGET_RELEVANT_EXTERNAL_CAPABILITY_NOT_ONLY_3D",
+                "current_mode": "READ_ONLY_CAPABILITY_EXTRACTION_AND_OPTION_COMPARISON",
+                "classification": ["REUSE", "ADAPT", "REIMPLEMENT", "REJECT"],
+                "installation_or_integration": False,
+                "external_authority_import": False,
+                "purpose_transfer_forbidden": True,
+            },
+        },
+        "adi_discrete_integer_lookup_math_contract": {
+            "founder_intent": "8DADI_USES_DISCRETE_STATE_INTEGER_OPERATIONS_AND_VERSIONED_LOOKUP_TABLE_MATH",
+            "state_representation": "VERSIONED_NAMESPACE_BOUND_DISCRETE_INTEGER_CODES",
+            "lookup_key": "ADI_FIVE_AXIS_COMPOSITE_INTEGER_KEY",
+            "operations": [
+                "INTEGER_KEY_COMPOSITION",
+                "EXACT_INTEGER_COMPARISON",
+                "VERSIONED_TABLE_LOOKUP",
+                "DISCRETE_STATE_TRANSITION",
+            ],
+            "lookup_table_binding_requires": [
+                "TABLE_REFERENCE",
+                "SCHEMA_VERSION",
+                "INTEGER_NAMESPACE",
+                "CONTENT_DIGEST",
+                "LINEAGE_REFERENCE",
+                "VALIDITY_SCOPE",
+                "TRANSITION_RULE_REFERENCE",
+            ],
+            "floating_point_required_for_known_discrete_lookup": False,
+            "semantic_similarity_or_llm_guess_used_for_coordinate_value": False,
+            "missing_contract_action": "HOLD_AT_EXACT_UNRESOLVED_COORDINATE",
+            "integer_lookup_alone_guarantees_correct_external_effect": False,
+            "reobservation_required": True,
         },
         "context_region_contract": {
             "schema_id": "W7TP_INTENT_CONTROLLED_CONTEXT_REGIONS_V1",
@@ -1927,7 +2082,7 @@ def build_dynamic_context(
                 },
                 "CURRENT_INTENT_TASK": {
                     "intent_projection_sha256": (
-                        founder_intent_projection.get("packet_sha256")
+                        founder_intent_projection.get("source_sha256")
                         if isinstance(founder_intent_projection, Mapping)
                         else None
                     ),
@@ -1996,12 +2151,72 @@ def build_dynamic_context(
             },
             "identity_seat_boundary_contract": {
                 "schema_id": "W7TP_IDENTITY_SEAT_BOUNDARY_V1",
+                "identity_packet_class": "8DADI_SOVEREIGN_PERSON_IDENTITY_PACKET",
                 "identity_and_seat_are_envelope_preconditions": True,
                 "identity_is_d1": False,
                 "identity_is_d8": False,
                 "one_person_one_sovereign_identity_packet": True,
+                "founder_natural_person_identity_root": {
+                    "subject_reference": "FOUNDER_NATURAL_PERSON_SOVEREIGN_IDENTITY_ROOT",
+                    "system_role": "NATURAL_PERSON_FOUNDER",
+                    "declared_google_login_binding_reference": "FOUNDER_PERSONAL_GOOGLE_ACCOUNT_O970106_REF",
+                    "account_identifier_in_model_context": False,
+                    "google_account_is_authenticator_not_person_identity": True,
+                    "founder_identity_root_is_organization_or_scene": False,
+                    "linked_current_scene_roles": [
+                        "FIVE_CHANG_ASSOCIATION_CHAIRPERSON",
+                        "SHANGPIN_LIAOGUO_CAFE_OWNER",
+                    ],
+                    "personal_browser_ai_is_user_scene_projection_of_this_person": True,
+                    "live_authenticator_binding_state": "NOT_YET_OBSERVED",
+                },
+                "concurrent_scene_seats_allowed": True,
+                "single_sovereign_identity_session_for_concurrent_scene_seats": True,
+                "manual_account_switch_required_for_scene_selection": False,
+                "provider_account_bindings_reference_same_person_packet": True,
+                "personal_ai_api_account_binding": {
+                    "provider_account_role": "PERSON_OWNED_AI_CAPABILITY_CONNECTOR_NOT_PERSON_IDENTITY_SCENE_SEAT_OR_AUTHORITY",
+                    "replaceable_unit": "AI_MODEL_COMPUTE_CONNECTOR_NOT_8DADI_INSTANCE",
+                    "single_controller": "EXISTING_TOTAL_FIELD_8DADI",
+                    "creates_parallel_8dadi_or_total_field": False,
+                    "api_account_login_alone_establishes_sovereign_identity": False,
+                    "sovereign_identity_packet_binding_required": True,
+                    "automatic_email_address_identity_merge": False,
+                    "multiple_person_owned_ai_api_accounts_may_bind_to_one_person_packet": True,
+                    "provider_credentials_visible_to_model_or_scene": False,
+                    "provider_usage_and_budget_remain_account_scoped": True,
+                    "compute_connector_selection": "8DADI_CURRENT_TASK_CAPABILITY_BUDGET_LATENCY_PRIVACY_SCENE_AND_REACHABILITY",
+                    "scene_action_still_requires_active_scene_packet": True,
+                    "provider_model_output": "CANDIDATE_RETURN_TO_TOTAL_FIELD_FOR_REOBSERVATION_AND_EFFECT_DECISION",
+                },
                 "permissions_are_packet_scoped": True,
                 "authority_root": "FOUNDER_TOTAL_FIELD_ONLY",
+                "founder_system_identity_root_is_universal_scene_role": False,
+                "founder_scene_action_requires_linked_scene_packet": True,
+                "scene_packet_references_same_sovereign_identity_root": True,
+                "founder_declared_existing_scene_roles": {
+                    "association_chairperson": "FOUNDER_DECLARED_EXISTING_ROLE_PENDING_LIVE_EVIDENCE_BINDING",
+                    "cafe_owner": "FOUNDER_DECLARED_EXISTING_ROLE_PENDING_LIVE_EVIDENCE_BINDING",
+                },
+                "founder_scene_portfolio": {
+                    "current_real_world_scenes": [
+                        "FIVE_CHANG_ASSOCIATION",
+                        "SHANGPIN_LIAOGUO_CAFE",
+                    ],
+                    "demonstration_scenes": ["PROPERTY_MANAGEMENT_COMMITTEE"],
+                    "demonstration_scene_may_imply_current_person_role_or_legal_authority": False,
+                    "demonstration_scene_data": "SYNTHETIC_OR_DEIDENTIFIED_ONLY",
+                    "demonstration_scene_external_effect": False,
+                },
+                "existing_role_admission_requires_re_election_or_business_reformation": False,
+                "one_registered_device_may_hold_multiple_isolated_scene_base_compartments": True,
+                "natural_language_scene_switch_does_not_merge_scene_data_or_authority": True,
+                "browser_scene_experience": "ONE_SIGNED_IN_PERSON_SESSION_WITH_VISIBLE_ACTIVE_SCENE_AND_ROLE_NO_ACCOUNT_RELOGIN",
+                "privileged_external_effect_confirmation": "STEP_UP_REGISTERED_DEVICE_UNLOCK_WITHIN_THE_SAME_PERSON_SESSION_NO_ACCOUNT_RELOGIN",
+                "silent_scene_selection_requires_unambiguous_intent_and_active_valid_seat": True,
+                "ambiguous_scene_intent_requires_visible_scene_confirmation_not_account_switch": True,
+                "cloud_or_local_model_account_may_define_person_identity_or_scene_seat": False,
+                "founder_authority_may_bypass_missing_scene_packet_for_scene_action": False,
                 "member_identity_scope": "SCOPED_MEMBER_NO_TOTAL_FIELD_AUTHORITY",
                 "founder_path_blocked_by_member_system": False,
                 "member_projection_target": "EXISTING_ODOO_USERS_CONTACTS_PORTAL",
@@ -2019,7 +2234,52 @@ def build_dynamic_context(
                     "NONCE_REF",
                     "REVOCATION_REF",
                 ],
-                "member_plaintext_in_total_field": False,
+                "member_personal_information_custodian": "FIVE_CHANG_ASSOCIATION_FIELD",
+                "total_field_personal_information_role": "ORCHESTRATE_CONTROLLED_PROJECTION_NO_DATA_CUSTODY",
+                "member_plaintext_in_model_context": False,
+                "scene_receives_purpose_bound_controlled_projection_only": True,
+                "identifying_fields_allowed_only_when_exact_lawful_duty_requires_them": True,
+                "scene_application_may_proxy_personal_payload": False,
+                "scene_may_persist_member_plaintext_by_default": False,
+                "membership_application_processor": "FIVE_CHANG_ASSOCIATION_FIELD_ORCHESTRATED_BY_TOTAL_FIELD",
+                "cafe_membership_application_role": "INTAKE_INTERFACE_HANDOFF_ONLY",
+                "membership_capability_paths": {
+                    "personal_member": {
+                        "self_owned_distributed_compute_required": False,
+                        "cloud_or_local_model_is_member": False,
+                        "cloud_or_local_model_role": "PERSONAL_MEMBER_SCENE_REPLACEABLE_CAPABILITY_ORGAN",
+                    },
+                    "distributed_compute_group_member": {
+                        "registered_distributed_compute_may_apply": True,
+                        "compute_capability_alone_grants_group_membership": False,
+                        "association_current_bylaws_and_human_approval_required": True,
+                        "association_field_issues_group_member_seat_after_approval": True,
+                        "ai_or_total_field_may_self_approve_group_membership": False,
+                        "resource_ownership_remains_with_contributor": True,
+                        "current_live_bylaws_eligibility_binding": "NOT_YET_OBSERVED",
+                    },
+                },
+                "cross_scene_personal_information_invocation_requires_audit": True,
+                "scene_caller_preapproval_receipt_required": True,
+                "personal_data_delivery_target": "APPROVED_CALLER_REGISTERED_DEVICE_DIRECT_FROM_ASSOCIATION_FIELD",
+                "calling_scene_receives_personal_payload": False,
+                "caller_device_d6_base_is_identity_seat_scope_specific": True,
+                "identical_d6_base_across_devices_required": False,
+                "cafe_general_member_base_may_reconstruct_association_personal_information": False,
+                "personal_information_reconstruction_requires_recipient_bound_capability": True,
+                "packet_metadata_alone_is_insufficient_for_personal_information_reconstruction": True,
+                "lawful_duty_access_must_not_be_blocked_by_extra_technical_approval": True,
+                "role_elevation_preserves_sovereign_person_identity": True,
+                "property_chairperson_capability_requires": [
+                    "COMMITTEE_ISSUED_ACTIVE_CHAIRPERSON_SEAT",
+                    "CURRENT_TERM",
+                    "CHAIRPERSON_ROLE_CAPABILITY_SKILL",
+                    "REGISTERED_CALLER_DEVICE",
+                    "CHAIRPERSON_DEVICE_D6_BASE",
+                    "PURPOSE_BOUND_RECEIPT",
+                ],
+                "total_field_may_self_grant_property_chairperson_seat": False,
+                "chairperson_term_or_receipt_revocation_restores_general_member_only": True,
                 "membership_change_updates": "MEMBER_LINEAGE_DELTA_ONLY",
                 "membership_change_rehashes_canonical_root": False,
                 "membership_change_may_rewrite_header": False,
@@ -2034,14 +2294,59 @@ def build_dynamic_context(
                 "unverified_system_mutation": "BLOCK",
                 "browser_ai_interface": {
                     "selected_projection": "OPEN_WEBUI",
-                    "role": "BROWSER_ONLY_AI_SEAT_AND_MODEL_SELECTION",
+                    "role": "PERSONAL_BROWSER_AI_USER_SCENE_INTERFACE",
+                    "scene_class": "PERSONAL_USER_SCENE_BROWSER_PROJECTION",
+                    "application_scene_composition": [
+                        "SOVEREIGN_IDENTITY_PACKET_AND_ACTIVE_SCENE_SEAT",
+                        "SINGLE_TOTAL_FIELD_8DADI_CONTROL_PLANE",
+                        "CLOUD_AND_LOCAL_MODEL_ORGANS",
+                        "DISTRIBUTED_REGISTERED_CAPABILITY_ORGANS",
+                        "PERSONAL_BROWSER_AI_INTERFACE",
+                    ],
+                    "cloud_and_local_models_are_replaceable_organs": True,
+                    "composition_forms_one_application_scene": True,
+                    "application_scene_is_not_parallel_8dadi_or_total_field": True,
+                    "one_person_session_for_concurrent_scene_seats": True,
+                    "manual_provider_account_switch_required": False,
+                    "active_scene_and_role_must_be_visible": True,
+                    "intent_and_capability_resolution": "8DADI_EXACT_IDENTITY_SEAT_SCENE_AND_CAPABILITY_COORDINATES",
+                    "distributed_resource_dispatch": "TOTAL_FIELD_TARGET_AWARE_MINIMUM_COST_COMPATIBLE_PATH",
+                    "8dadi_logical_unification": {
+                        "human_view": "ONE_NATURAL_LANGUAGE_CONTROLLED_SYSTEM",
+                        "unified_coordinate_classes": [
+                            "CLOUD_AND_LOCAL_MODEL",
+                            "NODE_COMPUTE_MEMORY_STORAGE_AND_IO",
+                            "CONTAINER_PROGRAM_DATABASE_AND_VIRTUAL_SPACE",
+                            "FILE_AND_CLOUD_DRIVE_ITEM",
+                        ],
+                        "one_8dadi_control_plane": True,
+                        "physical_and_scene_boundaries_preserved": True,
+                        "whole_system_replication_required": False,
+                    },
+                    "cloud_drive_capability": {
+                        "classification": "EXTERNAL_CLOUD_STORAGE_MATERIAL_AND_INDEX_CAPABILITY_ORGAN",
+                        "founder_declared_organization_shared_drive_count": 3,
+                        "live_shared_drive_identifiers_and_permissions": "NOT_YET_OBSERVED",
+                        "retrieval": "8DADI_CURRENT_INTENT_MINIMUM_REQUIRED_ITEM_OR_FRAGMENT",
+                        "whole_drive_sync_or_replication_by_default": False,
+                        "ordinary_drive_transfer_is_d6": False,
+                        "credentials_or_raw_personal_information_in_model_context": False,
+                    },
+                    "user_selects_physical_node_or_model_account_by_default": False,
+                    "model_role": "PASSIVE_REPLACEABLE_REASONING_GENERATION_ORGAN",
+                    "direct_node_or_hardware_control": False,
+                    "ambiguous_scene_intent_action": "VISIBLE_SCENE_CONFIRMATION_WITHIN_SAME_SESSION",
+                    "privileged_external_effect_action": "REGISTERED_DEVICE_STEP_UP_CONFIRMATION_WITHIN_SAME_SESSION",
                     "is_xiaoj_core": False,
                     "is_person_identity_root": False,
                     "is_total_field_authority": False,
                     "odoo_capability_access": "PERSON_PACKET_ROLE_SCOPED_ADAPTER_ONLY",
                     "member_ai_provider_session": "MEMBER_OWNED_OPAQUE_CONNECTOR",
+                    "personal_ai_api_account_requires_sovereign_identity_packet_binding": True,
+                    "multiple_bound_personal_ai_api_accounts_share_one_person_session_not_one_budget": True,
                     "provider_credentials_visible_to_model": False,
                     "provider_result": "CANDIDATE_RETURN_TO_TOTAL_FIELD",
+                    "provider_or_model_account_is_person_identity_or_scene_authority": False,
                     "parallel_member_system": False,
                     "configuration_write_authority": False,
                     "live_compatibility_reobservation_required_before_write": True,
@@ -2226,6 +2531,481 @@ def _require_string_list(value: Any, path: str) -> list[str]:
     ):
         raise ValueError(f"STRING_LIST_REQUIRED:{path}")
     return [item.strip() for item in value]
+
+
+MODEL_SOURCE_REQUIRED_AUTHORITY_BOUNDARY = frozenset(
+    {
+        "AI_IS_NOT_AUTHORITY",
+        "CHAT_MEMORY_IS_D4_EVIDENCE_ONLY",
+        "SOURCE_ACCOUNT_REMAINS_SEPARATE",
+        "CANDIDATE_IS_NOT_CANONICAL",
+        "NO_EXTERNAL_EFFECT",
+        "TOTAL_FIELD_REOBSERVATION_REQUIRED",
+    }
+)
+MODEL_SOURCE_SKILL_FIELDS = frozenset(
+    {
+        "skill_or_capability_name",
+        "artifact_or_exact_coordinate",
+        "trigger",
+        "inputs",
+        "outputs",
+        "tool_binding",
+        "side_effects",
+        "failure_modes",
+        "acceptance_conditions",
+        "example_cases",
+        "observed_status",
+        "authority_boundary",
+    }
+)
+MODEL_SOURCE_MAX_EXPORTS = 8
+MODEL_SOURCE_MAX_TOTAL_BYTES = 1_000_000
+MODEL_SOURCE_MAX_STATEMENTS = 2_000
+MODEL_SOURCE_MAX_SKILLS = 256
+
+
+def _model_source_account_coordinate(source_export: Mapping[str, Any]) -> str:
+    source_account = source_export.get("source_account")
+    coordinate: Any = "UNKNOWN"
+    if isinstance(source_account, Mapping):
+        coordinate = (
+            source_account.get("source_account_coordinate")
+            or source_account.get("account_identity")
+            or "UNKNOWN"
+        )
+    elif isinstance(source_account, str):
+        coordinate = source_account
+    return _sanitize_model_source_string(str(coordinate))[:240]
+
+
+def _sanitize_model_source_string(value: str) -> str:
+    redacted = _redact_personal_data(value)
+    return re.sub(
+        r"(https?://[^\s?#]+)\?[^\s#]+",
+        r"\1?[REDACTED_QUERY]",
+        redacted,
+        flags=re.IGNORECASE,
+    )
+
+
+def _sanitize_model_source_value(value: Any, *, depth: int = 0) -> Any:
+    """Keep bounded source meaning while removing personal identifiers."""
+    if depth > 6:
+        return "[DEPTH_LIMIT]"
+    if isinstance(value, str):
+        return _sanitize_model_source_string(value)[:4000]
+    if isinstance(value, bool) or value is None:
+        return value
+    if isinstance(value, (int, float)):
+        return value
+    if isinstance(value, Mapping):
+        return {
+            str(key)[:160]: _sanitize_model_source_value(item, depth=depth + 1)
+            for key, item in list(value.items())[:128]
+        }
+    if isinstance(value, Collection) and not isinstance(value, (str, bytes)):
+        return [
+            _sanitize_model_source_value(item, depth=depth + 1)
+            for item in list(value)[:128]
+        ]
+    return _sanitize_model_source_string(str(value))[:1000]
+
+
+def _model_source_collection_prompt(task_scope: str) -> str:
+    return (
+        "你現在只做創辦人意圖來源整理，不設計新架構、不修改記憶、GPT、設定、檔案或外部系統。\n"
+        f"只收集與此範圍直接相關的內容：{task_scope}\n"
+        "只接受可見的 USER／FOUNDER 原句；AI 回答、AI 推測、帳號記憶摘要與舊候選只能標為 D4。"
+        "每筆保留來源帳號座標、對話標題、thread ID 或 URL、時間、speaker、原句、正規化主張、"
+        "OBSERVED／RECONSTRUCTED／INFERRED／CONFLICT／UNKNOWN、superseded_by、provenance 與 confidence_basis。\n"
+        "固定 D1 意圖、D2 狀態、D3 座標、D4 證據、D5 執行／政策、D6 生成式傳輸、D7 風險／隔離、"
+        "D8 封套／權威；Identity／Seat 是完整封套前置條件，不是 D1。\n"
+        "D6 只接受 TARGET_BASE_STATE + MINIMUM_REQUIRED_DELTA + REFERENCES + COORDINATES + "
+        "RECONSTRUCTION_RULES + VERIFICATION_RULES，接收端依共同已准入基座確定性重建同一目標狀態。"
+        "Prompt、一般上下文、SSH、Git、VPN、同步、壓縮、檔案複製與雲端推理不是 D6。\n"
+        "技能必須列出實體座標、trigger、inputs、outputs、tool_binding、side_effects、failure_modes、"
+        "acceptance_conditions、example_cases、context references 與 authority boundary；模型自述能力標為 UNKNOWN。\n"
+        "不得用多數決、語意平均或相似度製造真理；衝突並存，被最新使用者原話取代者明列 superseded_by。"
+        "不得輸出秘密、權杖、金鑰、Cookie、授權碼或會員明文。若完整歷史不可讀，精確列出 access_limitations。\n"
+        "輸出單一可解析 UTF-8 JSON，包含 schema_version、export_id、source_account、export_scope、"
+        "access_limitations、source_threads、founder_statements、supersession_chain、eight_d_claims、"
+        "skills_and_capabilities、conflicts、legacy_contamination_rejected、unknowns、authority_boundary 與 source_digest。"
+    )
+
+
+def build_source_preserving_model_orchestration_packet(
+    *,
+    mode: str,
+    task_scope: str,
+    current_founder_intent_ref: str,
+    source_account_coordinate: str = "UNKNOWN",
+    source_exports: Collection[Mapping[str, Any]] | None = None,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    """Prepare or assimilate model-source packets without merging identity or authority."""
+    normalized_mode = _require_non_empty_string(mode, "mode").upper()
+    scope = _sanitize_model_source_string(
+        _require_non_empty_string(task_scope, "task_scope")
+    )[:4000]
+    intent_ref = _sanitize_model_source_string(
+        _require_non_empty_string(current_founder_intent_ref, "current_founder_intent_ref")
+    )[:512]
+    account_coordinate = _sanitize_model_source_string(
+        str(source_account_coordinate or "UNKNOWN")
+    )[:240]
+    timestamp = generated_at or utc_now()
+    if normalized_mode == "PREPARE_SOURCE_REQUEST":
+        return _finalize_packet(
+            {
+                "schema_id": "W7TP_8DADI_MODEL_SOURCE_ORCHESTRATION_V1",
+                "state": "MODEL_SOURCE_REQUEST_READY",
+                "mode": normalized_mode,
+                "generated_at": timestamp,
+                "D1_INTENT": {"task_scope": scope, "founder_intent_ref": intent_ref},
+                "D2_STATE": {"source_request": "READY", "external_result": "NOT_YET_RECEIVED"},
+                "D3_COORDINATE": {
+                    "source_account_coordinate": account_coordinate,
+                    "source_account_identity_merge": False,
+                },
+                "D4_EVIDENCE": {
+                    "prompt_zh_TW": _model_source_collection_prompt(scope),
+                    "returned_export_requires_local_validation": True,
+                },
+                "D5_EXECUTION_POLICY": {
+                    "carrier_options": [
+                        "AUTHORIZED_BROWSER_AUTOMATION",
+                        "USER_MEDIATED_EXPORT_FILE",
+                    ],
+                    "carrier_availability_requires_runtime_reobservation": True,
+                    "account_authentication_remains_with_account_holder": True,
+                    "side_effect_class": "NONE",
+                },
+                "D6_GENERATIVE_TRANSMISSION": {
+                    "classification": "NOT_D6_MODEL_SOURCE_SOLICITATION",
+                    "carrier_may_not_define_d6": True,
+                },
+                "D7_RISK_QUARANTINE": {
+                    "secret_member_plaintext_forbidden": True,
+                    "unknown_not_invented": True,
+                    "self_declared_digest_requires_recomputation": True,
+                },
+                "D8_ENVELOPE_AUTHORITY": {
+                    "model_authority": False,
+                    "source_account_authority": False,
+                    "operation_authority": False,
+                    "candidate_only": True,
+                },
+            }
+        )
+    if normalized_mode != "ASSIMILATE_SOURCE_EXPORTS":
+        raise ValueError("MODEL_SOURCE_MODE_UNSUPPORTED")
+    if isinstance(source_exports, (str, bytes, Mapping)) or not isinstance(
+        source_exports, Collection
+    ):
+        raise ValueError("MODEL_SOURCE_EXPORTS_REQUIRED")
+    exports = list(source_exports)
+    if not exports or len(exports) > MODEL_SOURCE_MAX_EXPORTS:
+        raise ValueError("MODEL_SOURCE_EXPORT_COUNT_INVALID")
+    if any(not isinstance(item, Mapping) for item in exports):
+        raise ValueError("MODEL_SOURCE_EXPORT_SHAPE_INVALID")
+    serialized = json.dumps(exports, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    if len(serialized.encode("utf-8")) > MODEL_SOURCE_MAX_TOTAL_BYTES:
+        raise ValueError("MODEL_SOURCE_EXPORTS_TOO_LARGE")
+    if _contains_sensitive_value(serialized):
+        return _finalize_packet(
+            {
+                "schema_id": "W7TP_8DADI_MODEL_SOURCE_ORCHESTRATION_V1",
+                "state": "HOLD_MODEL_SOURCE_SECRET_OR_MEMBER_PLAINTEXT",
+                "mode": normalized_mode,
+                "generated_at": timestamp,
+                "candidate_only": True,
+                "source_payload_retained": False,
+                "operation_authority": False,
+                "D8_ENVELOPE_AUTHORITY": {
+                    "model_authority": False,
+                    "source_account_authority": False,
+                    "operation_authority": False,
+                    "candidate_only": True,
+                    "total_field_reobservation_required": True,
+                },
+            }
+        )
+
+    source_bindings: list[dict[str, Any]] = []
+    claim_groups: dict[str, dict[str, Any]] = {}
+    capability_groups: dict[str, dict[str, Any]] = {}
+    conflicts: list[dict[str, Any]] = []
+    total_source_threads = 0
+    total_access_limitations = 0
+    skipped_statement_count = 0
+    skipped_skill_count = 0
+    total_statement_count = 0
+    for ordinal, raw_export in enumerate(exports, start=1):
+        source_export = dict(raw_export)
+        source_object_sha256 = canonical_sha256(source_export)
+        source_coordinate = _model_source_account_coordinate(source_export)
+        boundary = {
+            str(item).strip()
+            for item in (source_export.get("authority_boundary") or [])
+            if isinstance(item, str) and item.strip()
+        }
+        missing_boundary = sorted(MODEL_SOURCE_REQUIRED_AUTHORITY_BOUNDARY - boundary)
+        if missing_boundary:
+            conflicts.append(
+                {
+                    "type": "AUTHORITY_BOUNDARY_INCOMPLETE",
+                    "source_ordinal": ordinal,
+                    "missing": missing_boundary,
+                }
+            )
+        declared_digest = source_export.get("source_digest")
+        digest_state = "NOT_PROVIDED"
+        recomputed_digest = None
+        if isinstance(declared_digest, Mapping) and isinstance(
+            declared_digest.get("value"), str
+        ):
+            digest_preimage = deepcopy(source_export)
+            digest_preimage.pop("source_digest", None)
+            recomputed_digest = canonical_sha256(digest_preimage)
+            digest_state = (
+                "MATCH"
+                if recomputed_digest == declared_digest.get("value")
+                else "CONFLICT"
+            )
+            if digest_state == "CONFLICT":
+                conflicts.append(
+                    {
+                        "type": "SOURCE_DECLARED_DIGEST_MISMATCH",
+                        "source_ordinal": ordinal,
+                        "source_object_sha256": source_object_sha256,
+                        "recomputed_declared_preimage_sha256": recomputed_digest,
+                    }
+                )
+        threads = source_export.get("source_threads") or []
+        limitations = source_export.get("access_limitations") or []
+        total_source_threads += len(threads) if isinstance(threads, list) else 0
+        total_access_limitations += len(limitations) if isinstance(limitations, list) else 0
+        source_bindings.append(
+            {
+                "source_ordinal": ordinal,
+                "source_account_coordinate": source_coordinate,
+                "export_id": _sanitize_model_source_string(str(source_export.get("export_id") or "UNKNOWN"))[:240],
+                "schema_version": str(source_export.get("schema_version") or "UNKNOWN")[:40],
+                "source_object_sha256": source_object_sha256,
+                "declared_digest_state": digest_state,
+                "recomputed_declared_preimage_sha256": recomputed_digest,
+                "source_thread_count": len(threads) if isinstance(threads, list) else 0,
+                "access_limitation_count": len(limitations) if isinstance(limitations, list) else 0,
+                "source_account_identity_merge": False,
+                "may_define_current_founder_intent": False,
+            }
+        )
+        statements = source_export.get("founder_statements") or []
+        if not isinstance(statements, list):
+            conflicts.append({"type": "FOUNDER_STATEMENTS_SHAPE_INVALID", "source_ordinal": ordinal})
+            statements = []
+        for statement in statements:
+            if total_statement_count >= MODEL_SOURCE_MAX_STATEMENTS:
+                raise ValueError("MODEL_SOURCE_STATEMENT_LIMIT_EXCEEDED")
+            total_statement_count += 1
+            if not isinstance(statement, Mapping) or str(statement.get("speaker", "")).upper() not in {
+                "USER",
+                "FOUNDER",
+            }:
+                skipped_statement_count += 1
+                continue
+            verbatim = statement.get("verbatim_user_statement")
+            if not isinstance(verbatim, str) or not verbatim.strip():
+                skipped_statement_count += 1
+                continue
+            normalized_claim = statement.get("normalized_claim")
+            if not isinstance(normalized_claim, str) or not normalized_claim.strip():
+                normalized_claim = " ".join(verbatim.split())
+            normalized_claim = _sanitize_model_source_string(normalized_claim.strip())[:4000]
+            claim_digest = sha256_bytes(normalized_claim.encode("utf-8"))
+            group = claim_groups.setdefault(
+                claim_digest,
+                {
+                    "claim_digest": claim_digest,
+                    "normalized_claim": normalized_claim,
+                    "evidence_class": "EXTERNAL_ACCOUNT_D4_SOURCE_REPORTED_VERBATIM",
+                    "may_define_current_founder_intent": False,
+                    "sources": [],
+                },
+            )
+            group["sources"].append(
+                {
+                    "source_ordinal": ordinal,
+                    "source_account_coordinate": source_coordinate,
+                    "thread_title": _sanitize_model_source_string(str(statement.get("thread_title") or "UNKNOWN"))[:240],
+                    "thread_id_or_url": _sanitize_model_source_string(str(statement.get("thread_id_or_url") or "UNKNOWN"))[:512],
+                    "timestamp": str(statement.get("timestamp") or "UNKNOWN")[:80],
+                    "source_status": str(statement.get("status") or "UNKNOWN")[:40],
+                    "superseded_by": _sanitize_model_source_string(str(statement.get("superseded_by") or ""))[:1000] or None,
+                    "verbatim_user_statement": _sanitize_model_source_string(verbatim.strip())[:4000],
+                }
+            )
+        skills = source_export.get("skills_and_capabilities") or []
+        if not isinstance(skills, list):
+            conflicts.append({"type": "SKILLS_AND_CAPABILITIES_SHAPE_INVALID", "source_ordinal": ordinal})
+            skills = []
+        for skill in skills:
+            if len(capability_groups) >= MODEL_SOURCE_MAX_SKILLS:
+                raise ValueError("MODEL_SOURCE_SKILL_LIMIT_EXCEEDED")
+            if not isinstance(skill, Mapping) or not MODEL_SOURCE_SKILL_FIELDS.issubset(skill):
+                skipped_skill_count += 1
+                continue
+            capability_name = _sanitize_model_source_string(
+                str(skill.get("skill_or_capability_name"))
+            )[:240]
+            artifact_coordinate = _sanitize_model_source_string(
+                str(skill.get("artifact_or_exact_coordinate"))
+            )[:512]
+            capability_digest = sha256_bytes(
+                (capability_name + "\0" + artifact_coordinate).encode("utf-8")
+            )
+            group = capability_groups.setdefault(
+                capability_digest,
+                {
+                    "capability_digest": capability_digest,
+                    "skill_or_capability_name": capability_name,
+                    "artifact_or_exact_coordinate": artifact_coordinate,
+                    "assimilation_state": "DOCUMENTED_EXTERNAL_ARTIFACT_NOT_LOCALLY_OBSERVED",
+                    "skill_registration_eligible": False,
+                    "sources": [],
+                },
+            )
+            group["sources"].append(
+                {
+                    "source_ordinal": ordinal,
+                    "source_account_coordinate": source_coordinate,
+                    "source_observed_status": str(skill.get("observed_status") or "UNKNOWN")[:80],
+                    "capability_contract": {
+                        name: _sanitize_model_source_value(skill.get(name))
+                        for name in sorted(MODEL_SOURCE_SKILL_FIELDS - {"skill_or_capability_name"})
+                    },
+                }
+            )
+        imported_conflicts = source_export.get("conflicts") or []
+        if isinstance(imported_conflicts, list):
+            for imported in imported_conflicts[:256]:
+                if isinstance(imported, Mapping):
+                    conflicts.append(
+                        {
+                            "type": "SOURCE_REPORTED_CONFLICT",
+                            "source_ordinal": ordinal,
+                            "conflict_ref": _sanitize_model_source_string(
+                                str(imported.get("id") or imported.get("topic") or imported.get("subject") or "UNKNOWN")
+                            )[:240],
+                        }
+                    )
+
+    state = (
+        "SOURCE_PRESERVING_MODEL_ORCHESTRATION_CANDIDATE_WITH_CONFLICTS"
+        if conflicts
+        else "SOURCE_PRESERVING_MODEL_ORCHESTRATION_CANDIDATE_READY"
+    )
+    packet = {
+        "schema_id": "W7TP_8DADI_MODEL_SOURCE_ORCHESTRATION_V1",
+        "state": state,
+        "mode": normalized_mode,
+        "generated_at": timestamp,
+        "D1_INTENT": {"task_scope": scope, "current_founder_intent_ref": intent_ref},
+        "D2_STATE": {
+            "supplied_source_closure": True,
+            "all_account_history_complete": total_access_limitations == 0,
+            "absolute_founder_intent_completeness_claim_allowed": False,
+            "current_intent_update_requires_current_founder_or_total_field": True,
+        },
+        "D3_COORDINATE": {
+            "source_bindings": source_bindings,
+            "source_account_identity_merge": False,
+            "source_thread_count": total_source_threads,
+        },
+        "D4_EVIDENCE": {
+            "exact_claim_groups": sorted(claim_groups.values(), key=lambda item: item["claim_digest"]),
+            "documented_capability_groups": sorted(
+                capability_groups.values(), key=lambda item: item["capability_digest"]
+            ),
+            "access_limitation_count": total_access_limitations,
+            "skipped_statement_count": skipped_statement_count,
+            "skipped_skill_count": skipped_skill_count,
+        },
+        "D5_EXECUTION_POLICY": {
+            "merge_rule": "EXACT_NORMALIZED_CLAIM_DIGEST_WITH_ALL_PROVENANCE_RETAINED",
+            "semantic_similarity_used": False,
+            "majority_vote_used": False,
+            "conflict_resolution": "PRESERVE_UNTIL_CURRENT_FOUNDER_OR_TOTAL_FIELD_DECISION",
+            "controller": "TOTAL_FIELD_USING_8D_ADI",
+            "local_small_model_role": "BOUNDED_INTENT_AND_TASK_WORKER",
+            "cloud_model_role": "MINIMUM_SCOPED_SUBTASK_CANDIDATE_SUPPLIER",
+            "cloud_context_scope": "CURRENT_TASK_MINIMUM_REQUIRED_CONTEXT_ONLY",
+            "cloud_result_returns_to_total_field": True,
+            "model_to_model_result_is_authority": False,
+            "side_effect_class": "NONE",
+        },
+        "D6_GENERATIVE_TRANSMISSION": {
+            "classification": "NOT_D6_SOURCE_AND_CONTEXT_FUSION",
+            "may_become_d6_only_with_complete_target_reconstruction_contract": True,
+        },
+        "D7_RISK_QUARANTINE": {
+            "conflicts": conflicts,
+            "secret_member_plaintext_forbidden": True,
+            "source_digest_mismatch_does_not_silently_discard_source": True,
+            "unknown_not_invented": True,
+        },
+        "D8_ENVELOPE_AUTHORITY": {
+            "model_authority": False,
+            "source_account_authority": False,
+            "operation_authority": False,
+            "candidate_only": True,
+            "total_field_reobservation_required": True,
+        },
+    }
+    return _finalize_packet(packet)
+
+
+def _load_total_field_data_governance_projection(
+    root: str | Path,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    workspace_root = Path(root).resolve()
+    contract_path = _resolve_inside(
+        workspace_root, TOTAL_FIELD_8DADI_CONTRACT_RELATIVE_PATH
+    )
+    contract = _load_json(contract_path)
+    if contract.get("schema_id") != "W7TP_8DADI_D6_GENERATIVE_TRANSMISSION_CONTRACT_V2_3":
+        raise ValueError("TOTAL_FIELD_DATA_GOVERNANCE_SCHEMA_MISMATCH")
+    projection = contract.get("total_field_capability_and_field_data_custody_model")
+    if not isinstance(projection, Mapping):
+        raise ValueError("TOTAL_FIELD_DATA_GOVERNANCE_PROJECTION_MISSING")
+    required_sections = {
+        "five_chang_association_primary_field",
+        "personal_information_field_custody",
+        "property_management_committee_field",
+        "sovereign_identity_packet_scene_projection",
+        "property_committee_chairperson_seat_lifecycle",
+        "cross_scene_personal_information_invocation",
+        "personal_data_sovereignty_and_checks_balances",
+        "field_scoped_information_custody_model",
+        "field_to_total_field_information_boundary",
+        "cafe_field_data_custody",
+        "cafe_aggregate_query_projection",
+        "association_personal_information_lookup_and_scene_projection",
+        "membership_application_handoff",
+    }
+    if not required_sections.issubset(projection):
+        raise ValueError("TOTAL_FIELD_DATA_GOVERNANCE_SECTION_MISSING")
+    binding = _file_binding(
+        workspace_root,
+        contract_path,
+        source_kind="total_field_data_governance_contract",
+    )
+    binding["contract_state"] = contract.get("state")
+    binding["file_self_establishes_canonical_or_d8"] = bool(
+        contract.get("file_self_establishes_canonical_or_d8")
+    )
+    return deepcopy(dict(projection)), binding
 
 
 def _load_intent_translation_application_rules(
@@ -3597,7 +4377,7 @@ def normalize_local_llm_result(result: Mapping[str, Any]) -> dict[str, Any]:
 
 
 class TotalFieldContextMcpServer:
-    """Small dependency-free MCP stdio server exposing one read-only tool."""
+    """Small dependency-free MCP stdio server exposing read-only tools."""
 
     def __init__(self, root: str | Path = ROOT) -> None:
         self.root = Path(root).resolve()
@@ -3616,7 +4396,7 @@ class TotalFieldContextMcpServer:
                         "tools": {"listChanged": False},
                         "resources": {"subscribe": False, "listChanged": False},
                     },
-                    "serverInfo": {"name": "w7tp-total-field-dynamic-context", "version": "1.0.0"},
+                    "serverInfo": {"name": "w7tp-total-field-dynamic-context", "version": "1.1.0"},
                 }
             elif method == "ping":
                 result = {}
@@ -3662,33 +4442,137 @@ class TotalFieldContextMcpServer:
                                 },
                                 "additionalProperties": True,
                             },
-                        }
+                        },
+                        {
+                            "name": "orchestrate_model_source_context",
+                            "description": (
+                                "Prepare a source-preserving prompt for another AI account or assimilate returned "
+                                "account exports into exact D4 claim groups. Accounts remain separate; conflicts, "
+                                "unknowns, provenance and digest mismatches are retained. The result is candidate-only "
+                                "and has no decision or execution authority."
+                            ),
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "mode": {
+                                        "type": "string",
+                                        "enum": [
+                                            "PREPARE_SOURCE_REQUEST",
+                                            "ASSIMILATE_SOURCE_EXPORTS",
+                                        ],
+                                    },
+                                    "task_scope": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 4000,
+                                    },
+                                    "current_founder_intent_ref": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 512,
+                                    },
+                                    "source_account_coordinate": {
+                                        "type": "string",
+                                        "maxLength": 240,
+                                        "default": "UNKNOWN",
+                                    },
+                                    "source_exports": {
+                                        "type": "array",
+                                        "minItems": 1,
+                                        "maxItems": 8,
+                                        "items": {"type": "object"},
+                                    },
+                                },
+                                "required": [
+                                    "mode",
+                                    "task_scope",
+                                    "current_founder_intent_ref",
+                                ],
+                                "additionalProperties": False,
+                            },
+                            "outputSchema": {
+                                "type": "object",
+                                "required": [
+                                    "schema_id",
+                                    "state",
+                                    "mode",
+                                    "D8_ENVELOPE_AUTHORITY",
+                                    "packet_sha256",
+                                ],
+                                "properties": {
+                                    "schema_id": {
+                                        "const": "W7TP_8DADI_MODEL_SOURCE_ORCHESTRATION_V1"
+                                    },
+                                    "state": {"type": "string"},
+                                    "mode": {"type": "string"},
+                                    "D8_ENVELOPE_AUTHORITY": {"type": "object"},
+                                    "packet_sha256": {
+                                        "type": "string",
+                                        "pattern": "^[0-9a-f]{64}$",
+                                    },
+                                },
+                                "additionalProperties": True,
+                            },
+                        },
                     ]
                 }
             elif method == "tools/call":
                 params = request.get("params") or {}
-                if params.get("name") != "get_total_field_dynamic_context":
+                tool_name = params.get("name")
+                if tool_name not in {
+                    "get_total_field_dynamic_context",
+                    "orchestrate_model_source_context",
+                }:
                     return self._error(request_id, -32602, "unknown tool")
                 arguments = params.get("arguments") or {}
                 if not isinstance(arguments, dict):
                     return self._error(request_id, -32602, "arguments must be an object")
-                if set(arguments) - {"query", "max_items", "identity_class"}:
-                    return self._error(request_id, -32602, "unknown tool argument")
-                query = arguments.get("query")
-                if not isinstance(query, str) or not query.strip():
-                    return self._error(request_id, -32602, "query must be a non-empty string")
-                max_items = arguments.get("max_items", 8)
-                if isinstance(max_items, bool) or not isinstance(max_items, int) or not 1 <= max_items <= 20:
-                    return self._error(request_id, -32602, "max_items must be an integer from 1 to 20")
-                identity_class = arguments.get("identity_class", "unknown")
-                if identity_class not in {"founder", "general_member", "unknown"}:
-                    return self._error(request_id, -32602, "identity_class is invalid")
-                packet = build_dynamic_context(
-                    query,
-                    root=self.root,
-                    max_items=max_items,
-                    identity_class=identity_class,
-                )
+                if tool_name == "get_total_field_dynamic_context":
+                    if set(arguments) - {"query", "max_items", "identity_class"}:
+                        return self._error(request_id, -32602, "unknown tool argument")
+                    query = arguments.get("query")
+                    if not isinstance(query, str) or not query.strip():
+                        return self._error(request_id, -32602, "query must be a non-empty string")
+                    max_items = arguments.get("max_items", 8)
+                    if isinstance(max_items, bool) or not isinstance(max_items, int) or not 1 <= max_items <= 20:
+                        return self._error(request_id, -32602, "max_items must be an integer from 1 to 20")
+                    identity_class = arguments.get("identity_class", "unknown")
+                    if identity_class not in {"founder", "general_member", "unknown"}:
+                        return self._error(request_id, -32602, "identity_class is invalid")
+                    packet = build_dynamic_context(
+                        query,
+                        root=self.root,
+                        max_items=max_items,
+                        identity_class=identity_class,
+                    )
+                else:
+                    allowed = {
+                        "mode",
+                        "task_scope",
+                        "current_founder_intent_ref",
+                        "source_account_coordinate",
+                        "source_exports",
+                    }
+                    if set(arguments) - allowed:
+                        return self._error(request_id, -32602, "unknown tool argument")
+                    for required in ("mode", "task_scope", "current_founder_intent_ref"):
+                        if not isinstance(arguments.get(required), str) or not arguments[required].strip():
+                            return self._error(request_id, -32602, f"{required} must be a non-empty string")
+                    mode = arguments["mode"].upper()
+                    if mode not in {"PREPARE_SOURCE_REQUEST", "ASSIMILATE_SOURCE_EXPORTS"}:
+                        return self._error(request_id, -32602, "mode is invalid")
+                    source_exports = arguments.get("source_exports")
+                    if mode == "ASSIMILATE_SOURCE_EXPORTS" and not isinstance(source_exports, list):
+                        return self._error(request_id, -32602, "source_exports must be an array")
+                    packet = build_source_preserving_model_orchestration_packet(
+                        mode=mode,
+                        task_scope=arguments["task_scope"],
+                        current_founder_intent_ref=arguments["current_founder_intent_ref"],
+                        source_account_coordinate=arguments.get(
+                            "source_account_coordinate", "UNKNOWN"
+                        ),
+                        source_exports=source_exports,
+                    )
                 result = {
                     "content": [
                         {

@@ -1,6 +1,6 @@
 {
   "owner": "CHIANG_CHENG_LUNG",
-  "version": "2026-09-06-8dadi-perception-v2.3",
+  "version": "2026-09-07-8dadi-distributed-organ-fusion-v2.3",
   "primary_decision_engine": "8D_ADI",
   "identity_boundary": {
     "total_field_login_account": "USER_DECLARED_EXISTS_LIVE_BINDING_NOT_YET_VERIFIED",
@@ -12,23 +12,120 @@
     "fallback": "VPN_OR_DEVICE_DDNS_ONLY_AFTER_LAN_UNAVAILABLE",
     "lan_available_must_not_route_through_fallback": true
   },
+  "common_domain_plane": {
+    "domain": "wuchang.life",
+    "owner_scene": "wuchang_community_development_association",
+    "scope": "ALL_NODES_CONTAINERS_AND_CAPABILITIES_REGISTERED_TO_THE_ASSOCIATION_SCENE",
+    "cross_scene_binding": "REQUIRES_EXPLICIT_ASSOCIATION_RELATION_AND_CURRENT_TOTAL_FIELD_SCOPE",
+    "domain_is_identity_namespace_not_authority": true,
+    "node_namespace_pattern": "{node}.node.wuchang.life",
+    "service_namespace_pattern": "{service}.wuchang.life",
+    "internal_resolution": "LAN_SPLIT_HORIZON_FIRST",
+    "external_resolution": "TOTAL_FIELD_APPROVED_BROWSER_INGRESS_ONLY",
+    "direct_public_exposure_of_each_node": false,
+    "vpn_resolution": "FALLBACK_ONLY_AFTER_LAN_UNAVAILABLE",
+    "current_dns_binding_state": "REQUIRES_LIVE_REOBSERVATION_BEFORE_WRITE"
+  },
+  "internal_generative_transmission": {
+    "role": "DISTRIBUTED_SYSTEM_NERVOUS_SIGNAL",
+    "common_base_state": "FOUNDER_DECLARED_PRESENT_ON_REGISTERED_NODES_REQUIRES_NODE_LOCAL_BASE_REFERENCE",
+    "carrier_primary": "LAN",
+    "carrier_fallback": "VPN_ONLY_AFTER_LAN_UNAVAILABLE",
+    "transmit": [
+      "TARGET_STATE_COMMITMENT",
+      "TARGET_BASE_STATE_REFERENCE",
+      "MINIMUM_REQUIRED_DELTA",
+      "REFERENCES",
+      "ADI_COORDINATES",
+      "LINEAGE",
+      "RECONSTRUCTION_RULES",
+      "VERIFICATION_RULES"
+    ],
+    "floating_point_used": false,
+    "per_packet_human_approval": false,
+    "separate_external_verification_service": false,
+    "inline_integer_consistency_check": true,
+    "receiver_reobservation": "ON_RECONSTRUCTION_MISMATCH_OR_EFFECT_BOUNDARY",
+    "missing_common_base": "ONE_TIME_MINIMUM_BASE_COMPLETION_THEN_RETRY_D6",
+    "ordinary_http_ssh_git_vpn_is_carrier_not_d6": true
+  },
+  "total_field_hardware_orchestration": {
+    "controller": "TOTAL_FIELD",
+    "observation_engine": "8D_STATE_FIELD",
+    "locator": "ADI_EXACT_NODE_CAPABILITY_AND_ROUTE_COORDINATE",
+    "internal_signal": "D6_GENERATIVE_TRANSMISSION",
+    "carrier_order": ["LAN", "VPN_ONLY_AFTER_LAN_UNAVAILABLE"],
+    "scope": "ANY_REGISTERED_AND_ADMITTED_HARDWARE_OR_CONTAINER_CAPABILITY",
+    "unregistered_or_unobserved_device_action": "HOLD",
+    "direct_model_hardware_control": false,
+    "scene_projection": {
+      "reusable_across_scenarios": true,
+      "shared_core": ["TOTAL_FIELD", "8D_ADI", "D6_CONTRACT", "CAPABILITY_REGISTRY"],
+      "selected_by": "CURRENT_INTENT_PLUS_SCENE_ENVELOPE_PLUS_ROLE_SCOPE",
+      "loads_only_required_capability_closure": true,
+      "hardware_capability_may_be_shared": true,
+      "personal_data_and_effect_authority_are_scene_scoped": true,
+      "parallel_total_field_or_duplicate_scene_architecture": false
+    }
+  },
+  "distributed_resource_field": {
+    "aggregation_mode": "LOGICAL_SCHEDULABLE_POOL_NOT_PHYSICAL_SINGLE_MEMORY",
+    "resource_classes": ["CPU", "GPU", "RAM", "STORAGE", "NETWORK", "SENSOR", "VOICE", "DISPLAY", "SCANNER", "PRINTER", "CAMERA"],
+    "effective_capacity": "SUM_OF_CURRENTLY_REACHABLE_ADMITTED_AND_TASK_COMPATIBLE_RESOURCES",
+    "8d_role": "OBSERVE_CURRENT_AND_TARGET_RESOURCE_STATE",
+    "adi_role": "LOCATE_NODE_CAPABILITY_BASE_LINEAGE_AND_ROUTE",
+    "d6_role": "TRANSMIT_MINIMUM_MISSING_STATE_FOR_TARGET_SIDE_EXECUTION_OR_RECONSTRUCTION",
+    "scheduler_owner": "TOTAL_FIELD",
+    "remote_ram_is_not_local_vram_or_cpu_cache": true,
+    "target_node_materializes_required_working_state_locally": true,
+    "node_failure_removes_only_CURRENTLY_UNAVAILABLE_CAPACITY": true,
+    "scenario_reuse": "SAME_POOL_SCENE_SCOPED_PROJECTION"
+  },
+  "odoo_capability_plane": {
+    "role": "PRIMARY_SYSTEM_DESCRIPTION_AND_APPLICATION_CAPABILITY_ARCHITECTURE",
+    "runtime_host": "taiji01",
+    "primary_human_interface": "BROWSER",
+    "describes": ["SCENARIO", "MEMBER", "ORGANIZATION", "MERCHANT", "ROLE", "WORKFLOW", "SERVICE", "ORDER", "DOCUMENT", "DEVICE_CAPABILITY_PROJECTION"],
+    "scenarios": ["SHANGPIN_LIAOGUO_CAFE", "WUCHANG_COMMUNITY_DEVELOPMENT_ASSOCIATION", "CONDOMINIUM_COMMITTEE", "INDIVIDUAL_MEMBER"],
+    "natural_language_flow": "FOUNDER_OR_AUTHORIZED_USER_INTENT_TO_TOTAL_FIELD_TO_8DADI_TO_AFFECTED_ODOO_PROJECTION",
+    "odoo_is_total_field_or_d8_authority": false,
+    "odoo_model_or_record_may_define_8dadi_core": false,
+    "write_requires_scene_role_and_effect_scope": true,
+    "projection_scope": "AFFECTED_MODELS_VIEWS_ACCESS_RULES_AND_WORKFLOWS_ONLY",
+    "local_first_external_network_outage_tolerant": true,
+    "module_reuse_policy": {
+      "priority": ["ODOO_NATIVE_OPEN_SOURCE_MODULE", "EXISTING_VERIFIED_CUSTOM_MODULE_EXTENSION", "MINIMUM_NEW_CUSTOM_DELTA"],
+      "8dadi_resolves_requirement_to_existing_module_capability_first": true,
+      "configuration_precedes_custom_code": true,
+      "extension_precedes_core_copy_or_fork": true,
+      "duplicate_odoo_core_or_parallel_business_framework": false,
+      "module_enablement_requires_dependency_and_scene_scope_observation": true,
+      "unused_or_superseded_custom_projection_cleanup_after_reobserved_cutover": true
+    }
+  },
   "layers": {
     "01_admin": {
       "role": ["root_policy", "approval", "guard"],
       "authority": "guarded_admin"
     },
     "02_edge_nodes": {
-      "nodes": ["taiji01", "openwebui", "odoo", "sensor", "store_lilin_nvr", "taiji04_sunmi_pos", "homepod_pair"]
+      "nodes": ["taiji01", "msi_gpu_organ", "openwebui", "odoo", "sensor", "store_lilin_nvr", "taiji04_sunmi_pos", "homepod_pair"]
     },
     "03_ui": {
-      "services": ["openwebui", "openwebui_bridge"]
+      "services": ["openwebui", "model_gateway"]
     }
   },
   "services": {
-    "gateway": "http://127.0.0.1:9002",
-    "openwebui": "http://127.0.0.1:8080",
-    "openwebui_bridge": "http://127.0.0.1:8098",
-    "ollama": "http://127.0.0.1:11434",
+    "total_field_lan": "http://192.168.50.249:8082",
+    "native_adi_server_local": "http://127.0.0.1:9110",
+    "intent_field_server_local": "http://127.0.0.1:9107",
+    "model_gateway_lan": "http://192.168.50.249:9002",
+    "msi_ollama_lan": "http://192.168.50.82:11434",
+    "gateway": "http://192.168.50.249:9002",
+    "openwebui": "http://192.168.50.249:8080",
+    "model_gateway_local": "http://127.0.0.1:9002",
+    "odoo": "http://192.168.50.249:8069",
+    "ollama": "http://192.168.50.82:11434",
     "claw": "http://127.0.0.1:9004",
     "router_ssh": "192.168.50.1:22",
     "perception_status": "http://127.0.0.1:9002/v1/taiji/perception/status",
@@ -41,7 +138,19 @@
   },
   "nodes": {
     "taiji01": {
-      "role": ["llm_inference", "metric_tensor", "topology_compute", "gateway_backup"],
+      "role": ["system_body", "total_field_server", "native_adi", "odoo_server", "browser_service_host", "model_organ_dispatch"],
+      "lan_coordinate": "192.168.50.249",
+      "total_field_port": 8082,
+      "native_adi_port": 9110,
+      "model_gateway_port": 9002,
+      "max_authority_level": 4
+    },
+    "msi_gpu_organ": {
+      "role": ["founder_seat", "natural_language_entry", "local_gpu_model_organ", "audiovisual_generation_organ"],
+      "lan_coordinate": "192.168.50.82",
+      "model_endpoint": "http://192.168.50.82:11434",
+      "observed_state": "TAIJI01_LAN_DIRECT_MODEL_LIST_AND_XIAOJ_INFERENCE_PASS_100_PERCENT_GPU",
+      "is_total_field": false,
       "max_authority_level": 3
     },
     "openwebui": {
@@ -72,13 +181,113 @@
       "role": ["source_node_speech_recognition", "google_hardware_voice", "browser_application", "scanner", "printer", "camera"],
       "audio_policy": "RECOGNIZE_AT_SOURCE_SEND_TRANSCRIPT_ONLY",
       "raw_audio_upload": false,
+      "lan_coordinate": "192.168.50.218",
+      "observed_state": "USB_ADB_ANDROID_13_AND_TAIJI01_LAN_REACHABILITY_PASS",
       "max_authority_level": 2
     },
     "homepod_pair": {
       "role": ["audio_output_candidate"],
+      "lan_coordinates": ["192.168.50.29:7000", "192.168.50.101:7000"],
       "observed_state": "AIRPLAY_REACHABLE_CONTROL_SESSION_NOT_VERIFIED",
       "max_authority_level": 1
     }
+  },
+  "cloud_resources": {
+    "provider": "GOOGLE_DRIVE_ORGANIZATION_SHARED_DRIVES",
+    "connector_identity": "admin@wuchang.life",
+    "authority": "RESOURCE_AND_CANDIDATE_EVIDENCE_ONLY_NOT_TOTAL_FIELD",
+    "direct_canonical_write": false,
+    "minimum_information_pull": true,
+    "central_broker": {
+      "host": "taiji01",
+      "runtime_remote": "admin:",
+      "credentials_remain_on_broker": true,
+      "all_registered_nodes_consume_through_total_field": true,
+      "direct_node_oauth_or_token_copy": false,
+      "transport_policy": "LAN_FIRST_VPN_ONLY_AFTER_LAN_UNAVAILABLE",
+      "d6_policy": "ONLY_TARGET_AWARE_RECONSTRUCTION_PACKETS_ARE_D6_ORDINARY_CLOUD_BYTES_REMAIN_CARRIER_DATA"
+    },
+    "shared_drives": {
+      "wuchang_cloud_space": {
+        "drive_id": "0ABYhFR44_jiNUk9PVA",
+        "display_name": "五常雲端空間",
+        "role": ["competition_material", "current_research_material", "model_static_material", "odoo_material"],
+        "sensitive_plaintext_to_model": false,
+        "root_sensitive_names_observed": [".env", "service_account_json_candidate"]
+      },
+      "chiang": {
+        "drive_id": "0ACYn0NHA23xnUk9PVA",
+        "display_name": "chiang",
+        "role": ["secondary_work_material", "backup_material"],
+        "promotion_requires_current_total_field_decision": true
+      },
+      "w7tp_taiji_cold_archive": {
+        "drive_id": "0ABq8_XTqLlIxUk9PVA",
+        "display_name": "W7TP_Taiji_Cold_Archive",
+        "role": ["D4_HISTORICAL_EVIDENCE", "recovery_material"],
+        "live_architecture_source": false,
+        "default_mode": "READ_ONLY"
+      }
+    }
+  },
+  "container_common_plane": {
+    "state": "ACTIVE_TARGET_CONTRACT",
+    "primary_container_host": "taiji01",
+    "all_registered_nodes_share_capability_namespace": true,
+    "common_contract_version": "8DADI_2_3",
+    "node_identity_is_not_container_instance": true,
+    "portable_projection": "CONTENT_DIGEST_PLUS_ARCHITECTURE_COMPATIBILITY_PLUS_REGISTERED_CAPABILITY_CONTRACT",
+    "local_replica_requires_total_field_scope": true,
+    "non_container_device_access": "BROWSER_OR_REGISTERED_HARDWARE_ADAPTER_TO_SAME_CONTAINER_CAPABILITY",
+    "whole_system_replication_to_every_node": false,
+    "google_drive_is_resource_not_container_storage": true
+  },
+  "scenario_fields": {
+    "shared_total_field": "taiji01",
+    "shared_engine": "8D_ADI",
+    "shared_founder_person_packet_ref": "FOUNDER_PERSON_PACKET:CHIANG_CHENG_LUNG",
+    "responsible_person_is_same_across_declared_scenarios": true,
+    "same_person_does_not_merge_role_scopes": true,
+    "parallel_total_field_forbidden": true,
+    "natural_person_may_hold_multiple_scope_packets": true,
+    "cross_scenario_personal_data_access": false,
+    "scenarios": {
+      "shangpin_liaoguo_cafe": {
+        "class": "MERCHANT_SCENE_CAPABILITY",
+        "merchant_operation_account": "wuchang1100606355@gmail.com",
+        "account_binding_state": "FOUNDER_DECLARED_REQUIRES_LIVE_AUTHENTICATION_REOBSERVATION",
+        "account_is_authentication_not_identity_root_or_total_field_authority": true,
+        "odoo_projection": "SHOP_ORDERING_OPERATION_AND_MEMBER_SERVICE",
+        "member_scope": "CAFE_MEMBER_OR_MERCHANT_ROLE_PACKET"
+      },
+      "wuchang_community_development_association": {
+        "class": "ASSOCIATION_SUPERADMIN_ORGANIZATION_SCENE",
+        "odoo_projection": "ASSOCIATION_MEMBERSHIP_COMMUNITY_SERVICE_AND_AUTHORIZED_RECORDS",
+        "member_scope": "ASSOCIATION_ROLE_PACKET",
+        "association_controls_its_member_personal_data": true,
+        "bidirectional_member_merchant_service": true,
+        "merchant_receives_minimum_purpose_bound_member_projection_only": true,
+        "member_receives_authorized_merchant_service_projection": true,
+        "full_association_member_registry_visible_to_merchant": false
+      }
+    },
+    "scene_switching": "8DADI_LOADS_ONLY_THE_SELECTED_PERSON_PACKET_SCOPE_AND_REQUIRED_CAPABILITY_CLOSURE"
+  },
+  "observation_views": {
+    "internal": {
+      "purpose": "TOTAL_FIELD_AND_ENGINEERING_STATE_OBSERVATION",
+      "observes": ["REGISTERED_NODES", "CAPABILITIES", "LAN_VPN_ROUTE", "D6_RECONSTRUCTION", "CONTAINER_HEALTH", "RESOURCE_COORDINATES"],
+      "secret_values_visible_to_model": false,
+      "may_self_authorize": false
+    },
+    "external": {
+      "purpose": "HUMAN_OBSERVABLE_EFFECT_AND_BROWSER_TASK_COMPLETION",
+      "observes": ["INTENT_UNDERSTOOD", "EXECUTING_NODES", "TRANSFER_CLASS", "RESULT_LOCATION", "RESULT_CONSISTENCY", "AUTHORIZATION_REF", "RISK_AND_UNKNOWN"],
+      "primary_interface": "BROWSER_AND_NATURAL_LANGUAGE",
+      "raw_internal_topology_or_secret_exposure": false,
+      "may_define_internal_truth": false
+    },
+    "closure_requires_both_views_aligned": true
   },
   "perception_contract": {
     "vision": {

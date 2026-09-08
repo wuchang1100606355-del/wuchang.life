@@ -17,6 +17,434 @@
     "D7": "風險與隔離",
     "D8": "封套與權威"
   },
+  "adi_five_axis_coordinate_annotation": {
+    "state": "FOUNDER_DIRECTED_ALIGNMENT_CANDIDATE_PENDING_D8",
+    "origin_zh_TW": "ADI 的起點不是樹狀搜尋；它源自創辦人對時間與空間量化定位的構想，並受東方古數學查表定位方法啟發，再由 AI 依創辦人提示轉成可執行投影。",
+    "founder_intent_addendum_zh_TW": "8DADI 透過離散狀態整數運算與版本化查表數學，將雲地模型、節點算力、容器、程式、資料庫、虛擬空間、檔案及雲端硬碟定位於同一可調度狀態場；對人形成合一系統，底層仍保留真實邊界。",
+    "relationship_to_8d": "8D 負責觀測目前與目標狀態場；ADI 以五維座標精確定位被觀測的對象、關係與作用邊界。五維座標不取代 D1 至 D8。",
+    "coordinate_kind": "DISCRETE_INDEXED_FIVE_AXIS_REFERENCE",
+    "axes": [
+      {
+        "axis": "C1_DOMAIN",
+        "zh_TW": "境界域",
+        "annotation_zh_TW": "定位狀態在哪一個現實、組織、場景或技術邊界內成立；例如系統、協會、商家、設備、網路或容器。"
+      },
+      {
+        "axis": "C2_ENTITY",
+        "zh_TW": "實體",
+        "annotation_zh_TW": "定位被觀測或被調用的確切人、物、資料、能力、服務或工作物件；只引用實體，不因座標本身取得身分或權威。"
+      },
+      {
+        "axis": "C3_TOPOLOGY",
+        "zh_TW": "拓撲關係",
+        "annotation_zh_TW": "定位節點、方向、依賴、連線與路徑關係；網路路徑固定區域網路優先，區域網路不可達時才使用 VPN。"
+      },
+      {
+        "axis": "C4_TIME_STATE",
+        "zh_TW": "時間狀態",
+        "annotation_zh_TW": "以邏輯時間、有效期間、生命週期與狀態轉移定位同一實體目前所處的位置；不得以檔案時間單獨推定真實狀態。"
+      },
+      {
+        "axis": "C5_AUTHORITY",
+        "zh_TW": "權威界線",
+        "annotation_zh_TW": "定位觀測、提案、執行與外部效果所引用的權威封套及範圍；此座標只引用權威，不能自行簽發 D8 或升格正典。"
+      }
+    ],
+    "time_space_quantization_boundary": "目前只採穩定識別碼、邏輯時間、拓撲與權威引用形成離散查表座標；未另有明示數值契約前，不生成浮點距離、螺旋路徑或連續空間公式。",
+    "discrete_integer_lookup_math": {
+      "state_representation": "VERSIONED_NAMESPACE_BOUND_DISCRETE_INTEGER_CODES",
+      "lookup_key": "C1_DOMAIN_PLUS_C2_ENTITY_PLUS_C3_TOPOLOGY_PLUS_C4_TIME_STATE_PLUS_C5_AUTHORITY_COMPOSITE_INTEGER_KEY",
+      "operations": ["INTEGER_KEY_COMPOSITION", "EXACT_INTEGER_COMPARISON", "VERSIONED_TABLE_LOOKUP", "DISCRETE_STATE_TRANSITION"],
+      "lookup_table_binding_requires": ["TABLE_REFERENCE", "SCHEMA_VERSION", "INTEGER_NAMESPACE", "CONTENT_DIGEST", "LINEAGE_REFERENCE", "VALIDITY_SCOPE", "TRANSITION_RULE_REFERENCE"],
+      "floating_point_required_for_known_discrete_lookup": false,
+      "semantic_similarity_or_llm_guess_used_for_coordinate_value": false,
+      "missing_table_namespace_version_or_transition_rule": "HOLD_AT_EXACT_UNRESOLVED_COORDINATE",
+      "integer_lookup_alone_guarantees_correct_external_effect": false,
+      "reconstruction_and_external_effect_still_require_reobservation": true
+    },
+    "processing_order": [
+      "TARGET_8D_OBSERVATION",
+      "ADI_FIVE_AXIS_LOOKUP_AND_LOCATION",
+      "TOTAL_FIELD_DECISION",
+      "D6_TARGET_AWARE_RECONSTRUCTION_WHEN_APPLICABLE",
+      "REOBSERVED_8D_TARGET_STATE"
+    ],
+    "odoo_w5c_projection": {
+      "state": "OBSERVED_IMPLEMENTATION_PENDING_CANONICAL_BINDING",
+      "field_mapping": {
+        "w5c_domain": "C1_DOMAIN",
+        "w5c_entity": "C2_ENTITY",
+        "w5c_topology": "C3_TOPOLOGY",
+        "w5c_time_state": "C4_TIME_STATE",
+        "w5c_authority": "C5_AUTHORITY"
+      },
+      "w5c_code_role": "COMPOSITE_LOOKUP_KEY_NOT_A_SIXTH_AXIS",
+      "projection_may_define_canonical_or_d8": false
+    }
+  },
+  "adaptive_internal_dimension_projection": {
+    "state": "FOUNDER_DIRECTED_ALIGNMENT_CANDIDATE_PENDING_D8",
+    "purpose_zh_TW": "以完整八維作為總場觀測與結案封套，由 ADI 五軸依目前工作原胞選出可形成唯一結果的最小必要維度投影，降低模型上下文、索引、傳輸與重複驗證負擔。",
+    "full_observation_envelope": "D1_TO_D8",
+    "selector": "ADI_FIVE_AXIS_AFFECTED_COORDINATE_CLOSURE",
+    "internal_dimension_count": "TASK_DEPENDENT_MINIMUM_SUFFICIENT_K_NOT_A_FIXED_LOWER_DIMENSION",
+    "selection_rule": "只保留能唯一辨識目前狀態、目標、能力、路徑、風險與作用邊界的必要維度或其不可變引用；若投影產生多解，立即補回造成歧義的維度。",
+    "projection_is_canonical_redefinition": false,
+    "projection_may_erase_source_lineage_or_authority": false,
+    "external_effect_gate_must_resolve": ["D1_INTENT_REFERENCE", "D5_EXECUTION_POLICY", "D7_RISK_BOUNDARY", "D8_ENVELOPE_REFERENCE"],
+    "result_closure": "MERGE_RESULT_TO_ORIGINAL_ADI_COORDINATE_THEN_REOBSERVE_D1_TO_D8",
+    "d6_rule": "跨節點投影仍須符合 d6_core 與 required_packet_fields；低維投影不得把一般提示、複製、同步或載體改稱生成式傳輸。",
+    "performance_claim": "CANDIDATE_REQUIRES_CONTROLLED_BASELINE_MEASUREMENT"
+  },
+  "total_field_capability_and_field_data_custody_model": {
+    "state": "FOUNDER_DIRECTED_ALIGNMENT_CANDIDATE_PENDING_D8",
+    "definition_zh_TW": "總場是非資料保管型的技術能力層，負責 8D 觀測、ADI 定位、遮罩投影生成、路由、權限執行與重新觀測；各場景保管自身業務資料，個人資料主檔依創辦人最高原則由五常社區發展協會場景集中保管，其他場景只在合法且必要範圍內調用。",
+    "single_total_field_capability_plane": true,
+    "total_field_persistent_raw_data_custody": false,
+    "field_data_store_forms": ["DATABASE", "SCHEMA", "TENANT", "CONTAINER_DATA_STORE", "EXTERNAL_REGISTERED_DATA_SOURCE", "USER_SOVEREIGN_STORE"],
+    "field_registration_requires": ["ADI_FIVE_AXIS_COORDINATE", "DATA_CONTRACT", "LINEAGE_REFERENCE", "ACCESS_SCOPE", "D8_SCOPE_REFERENCE", "REOBSERVATION_CONTRACT"],
+    "authority_rule": "EACH_FIELD_CUSTODIES_ITS_NON_PERSONAL_BUSINESS_DATA_WHILE_ASSOCIATION_FIELD_CUSTODIES_PERSONAL_INFORMATION_MASTER_AND_TOTAL_FIELD_MAY_NOT_CONVERT_TECHNICAL_CONTROL_INTO_DATA_OWNERSHIP",
+    "cross_field_rule": "TOTAL_FIELD_RESOLVES_CURRENT_INTENT_SCOPE_AND_MINIMUM_REQUIRED_MASKED_PROJECTION_BEFORE_CROSS_FIELD_USE",
+    "isolation_rule": "ASSOCIATION_CUSTODIED_PERSONAL_INFORMATION_ASSOCIATION_RECORDS_MERCHANT_PROPERTY_AND_DEVICE_DATA_REMAIN_SEPARATE_UNLESS_CURRENT_LAWFUL_INTENT_REQUIRES_A_MINIMUM_AUDITED_JOIN",
+    "odoo_role": "PRIMARY_FIELD_BUSINESS_APPLICATION_AND_BROWSER_PROJECTION_NOT_TOTAL_FIELD_AUTHORITY_OR_DATA_OWNER",
+    "five_chang_association_primary_field": {
+      "scene_reality_classification": "FOUNDER_DECLARED_CURRENT_REAL_WORLD_SCENE_PENDING_LIVE_EVIDENCE_BINDING",
+      "field_name_zh_TW": "新北市三重區五常社區發展協會",
+      "system_role": "SYSTEM_PRIMARY_SCENE_ASSOCIATION_DATA_CUSTODIAN_AND_SYSTEM_PERSONAL_INFORMATION_MASTER_CUSTODIAN",
+      "mandatory": true,
+      "mandatory_rule_zh_TW": "法規對適用主體使用「應」時，在本系統標記為必須履行的義務，不得降格為可選功能；仍須依條文要件、例外、特定目的與個案事實執行。",
+      "total_field_relationship": "TOTAL_FIELD_PROVIDES_8DADI_TECHNICAL_ORCHESTRATION_WITHOUT_ACQUIRING_ASSOCIATION_DATA_OWNERSHIP",
+      "field_data_scope": ["COMMUNITY_HUMANITIES", "COMMUNITY_HYDROLOGY_AND_ENVIRONMENT", "COMMUNITY_HISTORY", "COMMUNITY_CULTURE", "ASSOCIATION_WORK_RECORDS", "ASSOCIATION_MEMBER_DATA_WITHIN_ASSOCIATION_PURPOSE"],
+      "governed_capabilities": ["PRESERVE", "APPLY", "RECORD", "RESEARCH", "MAINTAIN", "PROMOTE", "TRANSMIT_CULTURE"],
+      "mandatory_duties_zh_TW": ["依社區實際狀況建立並維護歷史、地理、環境、人文、人口、資源、問題及其他社區發展基本資料", "依需要採調查、研究、諮詢、協調、計畫、推行、評估及其他專業方法", "依創辦人現行意圖在合法範圍保存、應用、記錄與研究社區人文、水文、歷史及文化資料"],
+      "current_official_work_point_support": ["WORK_POINT_4_SHALL_USE_NEEDED_PROFESSIONAL_METHODS", "WORK_POINT_6_SHALL_ESTABLISH_COMMUNITY_BASIC_DATA", "WORK_POINT_7_COMMUNITY_CULTURE_PRESERVATION_MAINTENANCE_PROMOTION_AND_TRANSMISSION_SCOPE"],
+      "humanities_hydrology_history_research_boundary": "MANDATORY_SYSTEM_DUTY_WITH_EXACT_PURPOSE_SOURCE_RIGHTS_PERSONAL_DATA_COMPLIANCE_AND_APPLICABLE_LAWFUL_BASIS_REQUIRED_FOR_EACH_OPERATION",
+      "hydrology_coordinate_rule": "COMMUNITY_HYDROLOGY_IS_INDEXED_UNDER_GEOGRAPHY_AND_ENVIRONMENT_WITH_SOURCE_LINEAGE",
+      "member_data_boundary": "ASSOCIATION_MEMBER_DATA_REMAINS_SEPARATE_FROM_CAFE_CUSTOMER_OR_COMMERCIAL_MEMBER_DATA_UNLESS_A_CURRENT_AUTHORIZED_MINIMUM_JOIN_EXISTS",
+      "cafe_relationship": "REGISTERED_SCENE_RELATIONSHIP_DOES_NOT_TRANSFER_DATA_CUSTODY_OR_LEGAL_OWNERSHIP",
+      "legacy_work_outline_may_define_current_scope": false,
+      "current_official_evidence_role": "D4_EVIDENCE_ONLY_NOT_TOTAL_FIELD_AUTHORITY",
+      "current_official_evidence_refs": ["https://dep.mohw.gov.tw/DOSAASW/cp-530-82893-103.html", "https://www.mohw.gov.tw/dl-95694-5dc346e5-6659-487b-9bb3-42e733c51da1.html", "https://www.mohw.gov.tw/fp-88-229-1.html"]
+    },
+    "personal_information_field_custody": {
+      "rule_zh_TW": "個人資料主檔由五常社區發展協會場景保管；其他場景僅能依當次法定職務、合法目的或有效授權調用最小必要欄位。總場只協調受控視圖與遮罩投影，不持久保存個資。",
+      "total_field_role": "ORCHESTRATE_MASKED_PROJECTION_NO_PERSONAL_DATA_CUSTODY",
+      "personal_information_master_custodian": "FIVE_CHANG_ASSOCIATION_FIELD",
+      "association_custody_field_role": "STORE_PROCESS_AND_GOVERN_PERSONAL_INFORMATION_MASTER_WITHIN_LAWFUL_PURPOSE",
+      "association_custody_information_classes": ["PERSONAL_IDENTITY_PROFILE", "CONTACT_DATA", "MEMBERSHIP_APPLICATION_DETAIL", "CONSENT_AND_LAWFUL_PURPOSE_RECORD", "IDENTITY_BINDING_REFERENCE", "CROSS_SCENE_PERSONAL_DATA_ACCESS_AUDIT"],
+      "total_field_may_persist_member_plaintext": false,
+      "other_scene_may_create_personal_information_master": false,
+      "other_scene_may_persist_personal_information_copy_by_default": false,
+      "other_scene_may_define_person_identity_truth": false,
+      "lawful_duty_access_must_not_be_blocked_by_extra_technical_approval": true,
+      "scene_projection_requires_current_intent_and_authority_scope": true
+    },
+    "property_management_committee_field": {
+      "scene_reality_classification": "DEMONSTRATION_SCENE_NOT_CURRENT_REAL_WORLD_OPERATING_FIELD",
+      "demonstration_only": true,
+      "live_real_world_legal_or_personal_data_authority": false,
+      "demo_data_rule": "SYNTHETIC_OR_DEIDENTIFIED_DATA_ONLY",
+      "demo_external_effect_rule": "NO_REAL_WORLD_EFFECT_WITHOUT_SEPARATE_REAL_COMMITTEE_ADMISSION_AND_CURRENT_AUTHORITY_EVIDENCE",
+      "field_name_zh_TW": "社區管理委員會場景",
+      "system_role": "PROPERTY_MANAGEMENT_COMMITTEE_LEGAL_DUTY_FIELD",
+      "mandatory": true,
+      "mandatory_rule_zh_TW": "法規以「應」要求管理委員會、管理負責人或召集人執行時，屬必須履行的義務；技術治理不得把法定調用權改成可任意拒絕的額外審批。",
+      "legal_responsibility_remains_with_committee": true,
+      "personal_information_master_custodian": "FIVE_CHANG_ASSOCIATION_FIELD",
+      "personal_data_use_is_mandatory_when_irreducibly_required_for_legal_duty": true,
+      "committee_held_record_classes": ["MEETING_AND_RESOLUTION_RECORD", "FINANCIAL_AND_FUND_RECORD", "BUILDING_FACILITY_AND_SAFETY_RECORD", "LEGAL_DUTY_EXECUTION_RECORD", "OPAQUE_PERSON_REFERENCE"],
+      "association_custodied_personal_data_classes_callable_when_required": ["UNIT_OWNER_OR_RESIDENT_IDENTITY", "SERVICE_CONTACT", "OWNERSHIP_OR_OCCUPANCY_RELATION_REFERENCE", "MEETING_ATTENDANCE_SIGNATURE_OR_PROXY_REFERENCE", "FEE_ALLOCATION_AND_DELINQUENCY_SUBJECT_REFERENCE", "VIOLATION_COORDINATION_OR_SAFETY_SUBJECT_REFERENCE"],
+      "legal_duty_purposes": ["MEETING_NOTICE_MINUTES_DELIVERY_AND_PRESERVATION", "RESOLUTION_EXECUTION", "COMMON_AREA_SAFETY_ENVIRONMENT_AND_MAINTENANCE", "VIOLATION_PREVENTION_COORDINATION_AND_REQUIRED_DATA_PROVISION", "FUND_FEE_ACCOUNTING_COLLECTION_AND_DISCLOSURE", "PUBLIC_AND_FIRE_SAFETY_FILING", "REPORTING_TO_UNIT_OWNER_MEETING", "INTERESTED_PERSON_LAWFUL_INSPECTION_OR_COPY"],
+      "statutory_coordinates": ["APARTMENT_BUILDING_MANAGEMENT_ACT_ARTICLE_20", "ARTICLE_30", "ARTICLE_34", "ARTICLE_35", "ARTICLE_36", "ARTICLE_39", "ARTICLE_48"],
+      "committee_may_create_parallel_personal_information_master": false,
+      "committee_may_reuse_personal_data_for_unrelated_purpose": false,
+      "caller_admission_rule": "COMMITTEE_FIELD_PREAPPROVES_EXACT_CALLER_IDENTITY_DEVICE_PURPOSE_FIELDS_AND_TIME_SCOPE_AND_ISSUES_SCOPE_BOUND_RECEIPT",
+      "committee_scene_may_proxy_or_receive_personal_payload": false,
+      "delivery_target": "APPROVED_CALLER_REGISTERED_DEVICE_ONLY",
+      "lawful_access_rule": "ALLOW_EXACT_STATUTORY_OR_VALIDLY_AUTHORIZED_MINIMUM_VIEW_AND_DO_NOT_ADD_A_TOTAL_FIELD_CONSENT_OR_D8_GATE_THAT_DEFEATS_THE_LEGAL_RIGHT_OR_DUTY",
+      "privacy_rule": "APPLY_PURPOSE_NECESSITY_AND_PROPORTIONALITY_WITHOUT_REDACTION_THAT_DEFEATS_A_VALID_STATUTORY_REQUEST",
+      "total_field_relationship": "TOTAL_FIELD_ORCHESTRATES_8DADI_LOCATION_ACCESS_SCOPE_AUDIT_AND_REOBSERVATION_WITHOUT_PERSONAL_DATA_CUSTODY",
+      "current_official_evidence_role": "D4_EVIDENCE_ONLY_NOT_TOTAL_FIELD_AUTHORITY",
+      "current_official_evidence_refs": ["https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=D0070118", "https://www.nlma.gov.tw/ch/titlelist/interpcomp/14010"]
+    },
+    "sovereign_identity_packet_scene_projection": {
+      "rule_zh_TW": "每一自然人維持單一且穩定的 8DADI 主權身分封包；會員、職務、組織與管理權限由各分場依法或依有效治理程序簽發為可限時、可撤銷、可稽核的席位投影。",
+      "identity_packet_class": "8DADI_SOVEREIGN_PERSON_IDENTITY_PACKET",
+      "identity_and_seat_are_envelope_preconditions": true,
+      "identity_is_d1": false,
+      "identity_is_d8": false,
+      "one_person_one_sovereign_identity_packet": true,
+      "founder_natural_person_identity_root": {
+        "subject_reference": "FOUNDER_NATURAL_PERSON_SOVEREIGN_IDENTITY_ROOT",
+        "system_role": "NATURAL_PERSON_FOUNDER",
+        "declared_google_login_binding_reference": "FOUNDER_PERSONAL_GOOGLE_ACCOUNT_O970106_REF",
+        "declared_account_source": "LATEST_FOUNDER_CONVERSATION_WITH_PRIOR_COMPLETE_IDENTIFIER",
+        "account_identifier_storage": "ASSOCIATION_IDENTITY_FIELD_OR_AUTHENTICATOR_STORE_NOT_MODEL_CONTEXT",
+        "google_account_is_authenticator_not_person_identity": true,
+        "founder_identity_root_is_organization_or_scene": false,
+        "linked_current_scene_roles": ["FIVE_CHANG_ASSOCIATION_CHAIRPERSON", "SHANGPIN_LIAOGUO_CAFE_OWNER"],
+        "personal_browser_ai_is_user_scene_projection_of_this_person": true,
+        "live_authenticator_binding_state": "NOT_YET_OBSERVED"
+      },
+      "concurrent_scene_seats_allowed": true,
+      "single_sovereign_identity_session_for_concurrent_scene_seats": true,
+      "manual_account_switch_required_for_scene_selection": false,
+      "provider_account_bindings": "MULTIPLE_AUTHENTICATOR_OR_ROLE_EVIDENCE_BINDINGS_MAY_REFERENCE_THE_SAME_SOVEREIGN_IDENTITY_PACKET_WITHOUT_BECOMING_SEPARATE_PERSONS",
+      "personal_ai_api_account_binding": {
+        "user_experience": "ONE_BROWSER_SIGN_IN_AND_ONE_TIME_SOVEREIGN_IDENTITY_PACKET_BINDING_NO_REPEATED_PROVIDER_ACCOUNT_SWITCH",
+        "provider_account_role": "PERSON_OWNED_AI_CAPABILITY_CONNECTOR_NOT_PERSON_IDENTITY_SCENE_SEAT_OR_AUTHORITY",
+        "replaceable_unit": "AI_MODEL_COMPUTE_CONNECTOR_NOT_8DADI_INSTANCE",
+        "single_controller": "EXISTING_TOTAL_FIELD_8DADI",
+        "creates_parallel_8dadi_or_total_field": false,
+        "api_account_login_alone_establishes_sovereign_identity": false,
+        "binding_requires": ["AUTHENTICATED_PROVIDER_SUBJECT_REFERENCE", "SOVEREIGN_IDENTITY_PACKET_REFERENCE", "REGISTERED_DEVICE_REFERENCE", "EXPLICIT_PERSON_BINDING_RECEIPT", "PROVIDER_CAPABILITY_SCOPE", "REVOCATION_REFERENCE"],
+        "automatic_email_address_identity_merge": false,
+        "multiple_person_owned_ai_api_accounts_may_bind_to_one_person_packet": true,
+        "provider_credentials_are_opaque_to_models_scenes_and_total_field_context": true,
+        "provider_usage_and_budget_remain_account_scoped": true,
+        "compute_connector_selection_inputs": ["CURRENT_INTENT", "MODEL_CAPABILITY", "AVAILABLE_BUDGET", "LATENCY_CLASS", "PRIVACY_SCOPE", "SCENE_SCOPE", "CURRENT_REACHABILITY"],
+        "8dadi_role": "LOCATE_PERSON_PACKET_PROVIDER_CONNECTOR_CAPABILITY_BUDGET_SCENE_SCOPE_AND_CURRENT_TASK_COORDINATES",
+        "total_field_role": "SELECT_TASK_COMPATIBLE_PERSON_OWNED_OR_LOCAL_MODEL_ORGAN_AND_SEND_MINIMUM_CONTEXT_WITHOUT_TRANSFERRING_IDENTITY_AUTHORITY",
+        "provider_model_output": "CANDIDATE_RETURN_TO_TOTAL_FIELD_FOR_REOBSERVATION_AND_EFFECT_DECISION",
+        "scene_action_still_requires_active_scene_packet": true,
+        "unbound_mismatched_or_revoked_account_action": "HOLD_AT_EXACT_PROVIDER_BINDING_COORDINATE"
+      },
+      "founder_system_identity_root_is_universal_scene_role": false,
+      "founder_scene_action_requires_linked_scene_packet": true,
+      "founder_scene_packet_examples": ["ASSOCIATION_CHAIRPERSON_SCENE_PACKET", "CAFE_OWNER_OR_MANAGER_SCENE_PACKET", "PROPERTY_COMMITTEE_CHAIRPERSON_SCENE_PACKET"],
+      "founder_declared_existing_scene_roles": {
+        "association_chairperson": {
+          "role": "FIVE_CHANG_ASSOCIATION_CHAIRPERSON",
+          "state": "FOUNDER_DECLARED_EXISTING_ROLE_PENDING_LIVE_EVIDENCE_BINDING"
+        },
+        "cafe_owner": {
+          "role": "SHANGPIN_LIAOGUO_CAFE_OWNER",
+          "state": "FOUNDER_DECLARED_EXISTING_ROLE_PENDING_LIVE_EVIDENCE_BINDING"
+        }
+      },
+      "founder_scene_portfolio": {
+        "current_real_world_scenes": ["FIVE_CHANG_ASSOCIATION", "SHANGPIN_LIAOGUO_CAFE"],
+        "demonstration_scenes": ["PROPERTY_MANAGEMENT_COMMITTEE"],
+        "demonstration_scene_may_imply_current_person_role_or_legal_authority": false
+      },
+      "existing_role_admission_rule": "BIND_CURRENT_VALID_ROLE_EVIDENCE_TO_SCENE_PACKET_WITHOUT_REPERFORMING_ELECTION_APPLICATION_OR_BUSINESS_FORMATION",
+      "existing_role_activation_still_requires": ["CURRENT_ROLE_EVIDENCE_REFERENCE", "SCENE_ISSUER_OR_RECORD_AUTHORITY_REFERENCE", "VALIDITY_OR_TERM_SCOPE", "ROLE_SCOPE", "REVOCATION_REFERENCE", "REOBSERVATION"],
+      "scene_packet_relationship": "SCENE_PACKET_REFERENCES_SAME_SOVEREIGN_IDENTITY_ROOT_WITHOUT_COPYING_OR_REDEFINING_IT",
+      "scene_packet_must_bind": ["SOVEREIGN_IDENTITY_ROOT_REFERENCE", "SCENE_REFERENCE", "ROLE_AND_SEAT_REFERENCE", "SCENE_ISSUER_REFERENCE", "ISSUING_EVIDENCE_REFERENCE", "AUTHORITY_SCOPE", "VALID_FROM", "EXPIRES_AT", "SKILL_PROJECTION_REFERENCE", "DEVICE_BASE_REFERENCE_SET", "NONCE_REFERENCE", "REVOCATION_REFERENCE"],
+      "scene_seat_examples": ["CAFE_MEMBER_SEAT", "ASSOCIATION_ROLE_SEAT", "PROPERTY_COMMITTEE_CHAIRPERSON_SEAT", "MERCHANT_MANAGER_SEAT"],
+      "scene_seat_issuer": "EXACT_SCENE_AUTHORITY_WITH_EVIDENCE_AND_SCOPE_BOUND_RECEIPT",
+      "total_field_role": "LOCATE_VERIFY_ROUTE_AND_REOBSERVE_SEAT_PROJECTION_WITHOUT_SELF_ISSUING_SCENE_ROLE",
+      "scene_seat_binds": ["PERSON_IDENTITY_REFERENCE", "SCENE_REFERENCE", "ROLE_REFERENCE", "VALID_FROM", "EXPIRES_AT", "AUTHORITY_SCOPE", "SKILL_PROJECTION_REFERENCE", "DEVICE_BASE_REFERENCE", "NONCE_REFERENCE", "REVOCATION_REFERENCE", "ISSUING_EVIDENCE_REFERENCE"],
+      "skill_and_device_base_follow_active_seat": true,
+      "one_registered_device_may_hold_multiple_isolated_scene_base_compartments": true,
+      "scene_base_compartment_selection": "LATEST_FOUNDER_INTENT_PLUS_ACTIVE_SCENE_PACKET_PLUS_DEVICE_BINDING",
+      "natural_language_scene_switch_does_not_merge_scene_data_or_authority": true,
+      "browser_scene_experience": "ONE_SIGNED_IN_PERSON_SESSION_WITH_VISIBLE_ACTIVE_SCENE_AND_ROLE_NO_ACCOUNT_RELOGIN",
+      "privileged_external_effect_confirmation": "STEP_UP_REGISTERED_DEVICE_UNLOCK_WITHIN_THE_SAME_PERSON_SESSION_NO_ACCOUNT_RELOGIN",
+      "silent_scene_selection_requires_unambiguous_intent_and_active_valid_seat": true,
+      "ambiguous_scene_intent_requires_visible_scene_confirmation_not_account_switch": true,
+      "login_provider_or_device_is_authenticator_not_identity_authority": true,
+      "cloud_or_local_model_account_may_define_person_identity_or_scene_seat": false,
+      "seat_may_rewrite_person_identity": false,
+      "seat_scope_may_leak_to_other_scene": false,
+      "system_founder_authority_may_bypass_missing_scene_packet_for_scene_data_or_business_action": false,
+      "seat_or_skill_or_base_alone_may_create_d8": false,
+      "seat_lifecycle_is_append_only_audited": true
+    },
+    "property_committee_chairperson_seat_lifecycle": {
+      "current_use_classification": "DEMONSTRATION_WORKFLOW_TEMPLATE_NOT_ACTIVE_FOUNDER_SEAT",
+      "rule_zh_TW": "自然人當選並就任主任委員後，其原會員身分不變；由已成立的管理委員會依選任與任期證據簽發主委席位，會員小J載入主委職能技能，獲准設備安裝與該席位及權限相符的專屬生成式基座後，才可調用主委能力。",
+      "person_identity_continuity": "SAME_8DADI_SOVEREIGN_PERSON_IDENTITY_PACKET",
+      "seat_issuer": "ELECTED_PROPERTY_MANAGEMENT_COMMITTEE_FIELD",
+      "legal_coordinate": "APARTMENT_BUILDING_MANAGEMENT_ACT_ARTICLE_29",
+      "activation_requires": ["COMMITTEE_ESTABLISHMENT_REFERENCE", "COMMITTEE_MEMBER_ELECTION_OR_APPOINTMENT_RECORD", "CHAIRPERSON_MUTUAL_ELECTION_RECORD_OR_VALID_RULE_REFERENCE", "SUBJECT_PERSON_IDENTITY_REFERENCE", "CHAIRPERSON_SEAT_REFERENCE", "TERM_START", "TERM_END", "SCENE_ISSUED_SCOPE_BOUND_RECEIPT", "CHAIRPERSON_ROLE_CAPABILITY_SKILL_REFERENCE", "REGISTERED_DEVICE_REFERENCE", "CHAIRPERSON_DEVICE_D6_BASE_REFERENCE", "REVOCATION_REFERENCE"],
+      "total_field_role": "VERIFY_8DADI_COORDINATES_RECEIPT_TERM_SKILL_AND_DEVICE_BASE_THEN_ROUTE_WITHOUT_SELF_GRANTING_SEAT",
+      "member_xiaoj_projection": {
+        "loads": "CHAIRPERSON_ROLE_CAPABILITY_SKILL",
+        "preserves_brand_personality": true,
+        "does_not_replace_person_identity": true,
+        "does_not_create_total_field_authority": true,
+        "model_output_is_not_legal_or_d8_authority": true
+      },
+      "chairperson_skill_scope": ["COMMITTEE_LEGAL_DUTY_WORKFLOW", "MEETING_AND_RESOLUTION_WORKFLOW", "FINANCIAL_AND_FUND_WORKFLOW", "SAFETY_AND_MAINTENANCE_WORKFLOW", "LAWFUL_PERSONAL_INFORMATION_INVOCATION_REQUEST", "REPORT_NOTICE_AND_DISCLOSURE_WORKFLOW"],
+      "call_gate_requires_all_match": ["ACTIVE_CHAIRPERSON_SEAT", "CURRENT_TERM", "CALLING_SCENE", "PURPOSE_AND_LEGAL_BASIS", "ROLE_CAPABILITY_SKILL", "CALLER_DEVICE", "DEVICE_D6_BASE", "SINGLE_USE_OR_BOUNDED_RECEIPT", "NONCE_AND_REVOCATION_STATE"],
+      "skill_or_base_alone_grants_authority": false,
+      "committee_seat_alone_grants_unscoped_access": false,
+      "deactivation_triggers": ["TERM_EXPIRED", "RESIGNATION", "REMOVAL", "COMMITTEE_DISSOLVED", "SCENE_RECEIPT_REVOKED", "DEVICE_OR_BASE_REVOKED", "IDENTITY_SEAT_OR_SCOPE_MISMATCH"],
+      "deactivation_effect": ["CHAIRPERSON_SEAT_INACTIVE", "CHAIRPERSON_SKILL_PROJECTION_UNLOADED", "CHAIRPERSON_DEVICE_D6_BASE_CAPABILITY_REVOKED", "GENERAL_MEMBER_IDENTITY_RETAINED"],
+      "activation_and_deactivation_are_append_only_audited": true,
+      "live_seat_skill_and_device_base_state": "NOT_YET_OBSERVED"
+    },
+    "cross_scene_personal_information_invocation": {
+      "rule_zh_TW": "其他場景因法定職務或合法授權需要個資時，由總場以 8DADI 定位並向協會場景請求最小必要受控視圖；協會場景保管主檔，調用場景承擔自身法定責任。",
+      "control_plane": "CALLING_SCENE_PREAPPROVAL_RECEIPT_TO_TOTAL_FIELD_COMPLIANCE_RESOLUTION",
+      "data_plane": "ASSOCIATION_PERSONAL_INFORMATION_FIELD_DIRECT_TO_APPROVED_CALLER_REGISTERED_DEVICE_WITHOUT_TRAVERSING_CALLING_SCENE_DATA_STORE",
+      "request_must_record": ["CALLER_IDENTITY_REFERENCE", "CALLER_SEAT_REFERENCE", "CALLER_DEVICE_REFERENCE", "CALLER_SCENE_REFERENCE", "SCENE_PREAPPROVAL_RECEIPT_REFERENCE", "LEGAL_OR_AUTHORIZATION_BASIS_REFERENCE", "PURPOSE_CODE", "REQUESTED_FIELD_SET", "REQUEST_TIME", "VALID_FROM", "EXPIRES_AT", "NONCE_REFERENCE", "RETENTION_OR_VIEW_MODE", "D8_SCOPE_REFERENCE_IF_EXTERNAL_EFFECT_REQUIRES_IT"],
+      "result_must_record": ["DECISION", "RELEASED_FIELD_SET_OR_MASK_POLICY_REFERENCE", "RESULT_TIME", "RECIPIENT_REFERENCE", "EXPIRY_OR_RETENTION_DUTY_REFERENCE", "REOBSERVATION_RESULT", "AUDIT_LINEAGE_REFERENCE"],
+      "scene_preapproval_receipt_must_bind": ["CALLER_IDENTITY_REFERENCE", "CALLER_SEAT_REFERENCE", "CALLER_DEVICE_REFERENCE", "CALLER_DEVICE_D6_BASE_REFERENCE", "SCENE_REFERENCE", "LEGAL_OR_AUTHORIZATION_BASIS_REFERENCE", "PURPOSE_CODE", "FIELD_SET", "VALID_FROM", "EXPIRES_AT", "NONCE_REFERENCE", "REVOCATION_REFERENCE"],
+      "total_field_role": "VERIFY_SCENE_RECEIPT_SCOPE_COMPLIANCE_ROUTE_AND_REOBSERVE_WITHOUT_PERSONAL_DATA_CUSTODY",
+      "association_field_role": "GENERATE_EXACT_CONTROLLED_VIEW_AND_DELIVER_DIRECTLY_TO_APPROVED_CALLER_DEVICE",
+      "calling_scene_receives": ["OPAQUE_INVOCATION_REFERENCE", "DECISION", "DELIVERY_STATE", "AUDIT_LINEAGE_REFERENCE"],
+      "calling_scene_receives_personal_payload": false,
+      "caller_device_must_be_registered_and_bound_to_approved_seat": true,
+      "recipient_bound_reconstruction_capability_required": true,
+      "packet_or_reconstruction_metadata_alone_may_reveal_personal_information": false,
+      "receipt_is_single_use_or_explicitly_bounded": true,
+      "lan_first_delivery_vpn_only_when_lan_unavailable": true,
+      "lawful_access_is_default_allow_within_exact_scope": true,
+      "unknown_or_excess_scope_is_hold": true,
+      "total_field_may_store_returned_personal_data": false,
+      "calling_scene_may_store_only_when_exact_law_or_record_duty_requires_it": true,
+      "technical_governance_may_obstruct_valid_legal_authority": false,
+      "all_access_is_append_only_auditable": true,
+      "transport_classification_rule": "DIRECT_CONTROLLED_PROJECTION_IS_NOT_AUTOMATICALLY_D6_AND_D6_REQUIRES_A_COMPLETE_TARGET_RECONSTRUCTION_CONTRACT"
+    },
+    "personal_data_sovereignty_and_checks_balances": {
+      "principle_zh_TW": "在尊重個人資料主權、用途界線與相互制衡下，使合法且經授權的資料效用最大化；不得把效用最大化解讀為蒐集最大化。",
+      "optimization_objective": "MAXIMIZE_LAWFUL_AUTHORIZED_UTILITY_UNDER_PERSONAL_DATA_SOVEREIGNTY",
+      "separated_functions": {
+        "custody": "FIELD_DEFINED_DATA_CUSTODY_SCOPE",
+        "scene_use": "PURPOSE_BOUND_MASKED_NON_IDENTIFYING_PROJECTION",
+        "technical_orchestration": "TOTAL_FIELD_8DADI_MASKING_ROUTING_AND_REOBSERVATION",
+        "effect_approval": "CURRENT_D8_SCOPE_PLUS_FIELD_AUTHORITY_AND_APPLICABLE_LAWFUL_BASIS_OR_DATA_SUBJECT_CHOICE",
+        "audit": "APPEND_ONLY_METADATA_AND_DECISION_TRACE_WITHOUT_MEMBER_PLAINTEXT"
+      },
+      "hard_constraints": ["SPECIFIC_PURPOSE_REQUIRED", "MINIMUM_NECESSARY_SCOPE", "PURPOSE_COMPATIBILITY_REQUIRED", "LAWFUL_BASIS_OR_VALID_CHOICE_REQUIRED", "NO_REIDENTIFICATION", "NO_UNAUTHORIZED_CROSS_SCENE_LINKAGE", "RETENTION_AND_DELETION_RULE_REQUIRED", "SECURITY_AND_ACCESS_CONTROL_REQUIRED", "LEGAL_DUTY_ACCESS_MUST_NOT_BE_DEFEATED_BY_EXTRA_TECHNICAL_APPROVAL"],
+      "data_subject_controls": ["NOTICE", "ACCESS_OR_REVIEW", "COPY_REQUEST", "CORRECTION", "STOP_COLLECTION_PROCESSING_OR_USE", "DELETION_SUBJECT_TO_APPLICABLE_RETENTION_DUTY"],
+      "founder_or_model_may_override_data_subject_rights_or_lawful_purpose_boundary": false,
+      "external_legal_evidence_role": "D4_EVIDENCE_ONLY_NOT_ARCHITECTURE_AUTHORITY",
+      "external_legal_evidence_refs": ["https://mojlaw.moj.gov.tw/NewsContentE.aspx?id=29&lan=C", "https://www.moj.gov.tw/media/2809/31011536015.pdf?mediadl=true"]
+    },
+    "field_scoped_information_custody_model": {
+      "state": "FOUNDER_DIRECTED_ALIGNMENT_CANDIDATE_PENDING_D8",
+      "principle_zh_TW": "資料保管單位是分場；五常社區發展協會場景保管個人資料主檔，各其他場景保管自身非個資業務資料與法定紀錄。總場不保管資料，只以技術能力形成最小受控視圖、行為封套或無敏彙總。",
+      "custody_scopes": {
+        "total_field": {
+          "role": "NON_CUSTODIAL_TECHNICAL_CAPABILITY_PLANE",
+          "persistent_holds": [],
+          "transient_handles": ["OPAQUE_FIELD_REFERENCE", "CURRENT_INTENT_SCOPE", "MASKING_RULE_REFERENCE", "ROUTING_DECISION", "D8_SCOPE_REFERENCE", "REOBSERVATION_RESULT"],
+          "must_not_hold": ["PERSON_IDENTITY_MASTER", "MEMBERSHIP_APPLICATION_DETAIL", "CAFE_TRANSACTION_LINE_DETAIL", "CAFE_RECIPE_COST_SUPPLIER_PRICE_MARGIN", "DEIDENTIFIED_RESEARCH_STATISTICS", "USER_DEVICE_CREDENTIAL_SECRET", "USER_PRIVATE_RAW_CONTENT"]
+        },
+        "association_personal_information_field": {
+          "role": "SYSTEM_PERSONAL_INFORMATION_MASTER_CUSTODIAN",
+          "holds": ["PERSON_IDENTITY_MASTER", "CONSENT_AND_PURPOSE_SCOPE", "MEMBERSHIP_APPLICATION_DETAIL", "MEMBERSHIP_RELATIONSHIP", "IDENTITY_BINDING_REFERENCE", "CROSS_SCENE_PERSONAL_DATA_ACCESS_AUDIT"],
+          "must_not_hold": ["CAFE_TRANSACTION_LINE_DETAIL", "CAFE_RECIPE_COST_SUPPLIER_PRICE_MARGIN", "USER_DEVICE_CREDENTIAL_SECRET", "USER_PRIVATE_RAW_CONTENT"]
+        },
+        "cafe_field": {
+          "holds": ["SCENE_CONTENT", "MENU_AND_PRODUCT_CONFIGURATION", "ORDER_INVENTORY_PAYMENT_AND_SHIFT_DETAIL", "SCENE_OPERATIONAL_EVIDENCE"],
+          "must_not_hold": ["PERSON_IDENTITY_MASTER", "CROSS_FIELD_PERSONAL_PROFILE", "USER_DEVICE_CREDENTIAL_SECRET"]
+        },
+        "property_management_committee_field": {
+          "holds": ["MEETING_AND_RESOLUTION_RECORD", "FINANCIAL_AND_FUND_RECORD", "BUILDING_FACILITY_AND_SAFETY_RECORD", "LEGAL_DUTY_EXECUTION_RECORD", "OPAQUE_PERSON_REFERENCE"],
+          "personal_information_source": "AUDITED_PURPOSE_BOUND_VIEW_FROM_ASSOCIATION_PERSONAL_INFORMATION_FIELD",
+          "must_not_hold": ["PARALLEL_PERSON_IDENTITY_MASTER", "UNRELATED_ASSOCIATION_MEMBER_DETAIL", "CAFE_TRANSACTION_LINE_DETAIL", "USER_DEVICE_CREDENTIAL_SECRET"]
+        },
+        "user_sovereign_field": {
+          "holds": ["USER_PRIVATE_RAW_CONTENT", "DEVICE_CREDENTIAL_SECRET", "PERSONAL_PREFERENCE_SOURCE", "USER_CONTROLLED_PROVIDER_SESSION"],
+          "shares_only": ["PURPOSE_BOUND_CLAIM", "OPAQUE_IDENTITY_REFERENCE", "EXPLICITLY_SELECTED_MINIMUM_INPUT"],
+          "may_revoke_future_use_subject_to_APPLICABLE_RETENTION_DUTY": true
+        }
+      },
+      "cross_scope_flows": [
+        "TOTAL_FIELD_ORCHESTRATES_USER_TO_ASSOCIATION_PERSONAL_INFORMATION_FIELD_MINIMUM_MEMBERSHIP_AND_CONSENT_INPUT_WITHOUT_CUSTODY",
+        "TOTAL_FIELD_ORCHESTRATES_ASSOCIATION_PERSONAL_INFORMATION_FIELD_TO_CAFE_FIELD_MASKED_NON_IDENTIFYING_OPERATIONAL_VIEW_WITHOUT_CUSTODY",
+        "TOTAL_FIELD_ORCHESTRATES_ASSOCIATION_PERSONAL_INFORMATION_FIELD_TO_PROPERTY_COMMITTEE_EXACT_LAWFUL_DUTY_VIEW_WITH_APPEND_ONLY_ACCESS_AUDIT",
+        "TOTAL_FIELD_QUERIES_CAFE_FIELD_BEHAVIOR_ENVELOPE_AND_DEIDENTIFIED_AGGREGATE_WITHOUT_PERSISTING_IT",
+        "CAFE_FIELD_TO_USER_SOVEREIGN_FIELD_SERVICE_RESULT_AND_RECEIPT"
+      ],
+      "performance_rules": ["QUERY_AT_CURRENT_CUSTODY_SCOPE", "8DADI_MINIMUM_AFFECTED_COORDINATE_CLOSURE", "NO_RAW_GLOBAL_REPLICATION", "LAN_FIRST_VPN_ONLY_AFTER_LAN_UNAVAILABLE", "MASKED_DERIVED_VIEW_CACHE_REQUIRES_TTL_AND_REVOCATION_REFERENCE"],
+      "d6_rule": "ONLY_WITH_VERIFIED_TARGET_BASE_LINEAGE_RECONSTRUCTION_AND_VERIFICATION_RULES_RECONSTRUCT_THE_MINIMUM_MASKED_PROJECTION_AT_THE_RECEIVER",
+      "privacy_rules": ["NO_MEMBER_PLAINTEXT_IN_MODEL_CONTEXT", "NO_SECRET_IN_PACKET_LOG_OR_RESEARCH_VIEW", "NO_CROSS_SCOPE_RAW_JOIN", "NO_REIDENTIFICATION", "FAIL_CLOSED_ON_SCOPE_OR_AUTHORITY_MISMATCH"],
+      "total_field_or_any_field_may_unilaterally_expand_another_field_scope": false
+    },
+    "field_to_total_field_information_boundary": {
+      "rule_zh_TW": "總場可按目前意圖向分場查詢行為封套與不可回推個人的無敏研究統計，但只作技術轉送、呈現與重新觀測，不成為資料保管者。",
+      "behavior_envelope_fields": ["OPAQUE_ACTOR_REFERENCE", "ACTION_CLASS", "TARGET_COORDINATE_REFERENCE", "LOGICAL_TIME", "OUTCOME_STATE", "EFFECT_CLASS", "RISK_SUMMARY_REFERENCE", "AUTHORITY_SCOPE_REFERENCE", "DETAIL_PAYLOAD_OPAQUE_REFERENCE"],
+      "deidentified_research_statistic_fields": ["AGGREGATION_WINDOW", "SCENE_CLASS_REFERENCE", "METRIC_CODE", "AGGREGATED_VALUE", "SAMPLE_SIZE", "PRIVACY_TRANSFORM_REFERENCE", "SOURCE_LINEAGE_REFERENCE"],
+      "research_statistic_constraints": ["NO_DIRECT_IDENTIFIER", "NO_STABLE_INDIVIDUAL_LINKAGE", "NO_TRANSACTION_LINE", "NO_FREE_TEXT_OR_RAW_MEDIA", "GROUP_THRESHOLD_FROM_CURRENT_POLICY", "CURRENT_SCENE_EXPORT_SCOPE_REQUIRED"],
+      "detailed_operating_information_remains_in_child": ["TRANSACTION_LINE_DETAIL", "INVENTORY_MOVEMENT_DETAIL", "PAYMENT_DETAIL", "SHIFT_DETAIL", "RAW_MEDIA", "RAW_CONVERSATION", "DOMAIN_PAYLOAD", "CREDENTIAL"],
+      "execution_rule": "TOTAL_FIELD_SENDS_A_SCOPED_QUERY_TO_THE_FIELD_AND_TRANSIENTLY_HANDLES_ONLY_THE_BEHAVIOR_RESULT_ENVELOPE_PLUS_DEIDENTIFIED_RESEARCH_STATISTICS",
+      "total_field_may_materialize_field_detail": false,
+      "total_field_may_persist_deidentified_research_statistics": false,
+      "persistent_research_result_requires_designated_research_field": true,
+      "statistics_may_be_reidentified_or_joined_to_person": false,
+      "cross_scene_detail_copy": false
+    },
+    "cafe_field_data_custody": {
+      "scene_reality_classification": "FOUNDER_DECLARED_CURRENT_REAL_WORLD_SCENE_PENDING_LIVE_EVIDENCE_BINDING",
+      "scene": "上品聊國咖啡館",
+      "role": "CAFE_FIELD_DATA_CUSTODIAN_AND_BUSINESS_CAPABILITY_PROJECTION",
+      "observed_runtime_database": "wuchang_odoo",
+      "runtime_binding_state": "OBSERVED_RUNTIME_MAPPING_PENDING_D8_CANONICAL_BINDING",
+      "contains_only_scene_required_state": true,
+      "retains_detailed_operating_information": true,
+      "cafe_owned_content_classes": ["MENU_CONTENT", "MENU_DESCRIPTION", "PRODUCT_CONFIGURATION", "PRICE_CONFIGURATION", "OPERATING_RECORD_DETAIL"],
+      "exports_only_deidentified_research_statistics_to_total_field": true,
+      "may_redefine_total_field_root": false,
+      "writeback_rule": "RETURN_COORDINATE_BOUND_BEHAVIOR_AND_DEIDENTIFIED_RESEARCH_STATISTICS_TO_TOTAL_FIELD_FOR_D1_TO_D8_REOBSERVATION"
+    },
+    "cafe_aggregate_query_projection": {
+      "rule_zh_TW": "咖啡館保有菜單與詳細營業資訊；總場只能在目前意圖、場景輸出範圍與權威界線內查詢無敏彙總結果。",
+      "query_mode": "TOTAL_FIELD_SCOPED_QUERY_OF_CAFE_AGGREGATE_PROJECTION",
+      "queryable_metrics": ["TOTAL_REVENUE_BY_APPROVED_PERIOD", "PRODUCT_SALES_TOTAL_BY_APPROVED_PERIOD", "SALES_TOTAL_BY_TIME_WINDOW", "ORDER_COUNT_BY_APPROVED_PERIOD", "PRODUCT_QUANTITY_TOTAL_BY_APPROVED_PERIOD", "OTHER_APPROVED_AGGREGATED_METRIC_CODE"],
+      "query_dimensions": ["APPROVED_TIME_WINDOW", "PRODUCT_OPAQUE_REFERENCE", "SCENE_CLASS_REFERENCE"],
+      "response_constraints": ["AGGREGATED_RESULT_ONLY", "NO_PERSONAL_IDENTIFIER", "NO_INDIVIDUAL_BEHAVIOR_TRACE", "NO_TRANSACTION_OR_ORDER_LINE", "NO_FREE_TEXT_OR_RAW_MEDIA", "NO_RECIPE_COST_SUPPLIER_PRICE_MARGIN_OR_OTHER_BUSINESS_SECRET", "CURRENT_SCENE_EXPORT_SCOPE_REQUIRED"],
+      "may_return_raw_business_detail": false,
+      "may_return_person_level_behavior": false,
+      "may_expose_business_secret": false,
+      "new_metric_requires_current_scene_export_scope": true
+    },
+    "association_personal_information_lookup_and_scene_projection": {
+      "rule_zh_TW": "咖啡館、管理委員會或其他場景以不透明人物引用請求總場協調；總場向五常社區發展協會個資保管場景查詢後，只把符合目前法律、用途與權限的受控視圖投影給調用場景，總場不保管個資主資料。",
+      "child_query_fields": ["OPAQUE_MEMBER_REFERENCE", "SCENE_REFERENCE", "ACTION_CLASS", "AUTHORITY_SCOPE_REFERENCE"],
+      "total_field_role": "ORCHESTRATE_ASSOCIATION_PERSONAL_INFORMATION_LOOKUP_AND_CONTROLLED_PROJECTION_NO_CUSTODY",
+      "association_custody_field_role": "MATCH_PERSON_UNDER_EXACT_LEGAL_OR_AUTHORIZED_PURPOSE_SCOPE",
+      "child_may_receive": ["MASKED_OPERATIONAL_MEMBER_REFERENCE", "MASKED_DISPLAY_REFERENCE", "MEMBERSHIP_STATE", "SCENE_APPLICABLE_ELIGIBILITY", "APPLICABLE_MEMBER_BENEFIT_SET", "CONSENT_SCOPE_REFERENCE"],
+      "child_may_receive_or_store_member_master_detail": false,
+      "child_to_total_return_inherits_behavior_and_deidentified_statistics_boundary": true,
+      "merchant_or_model_may_receive_member_plaintext_by_default": false,
+      "controlled_view_purpose": "CALLING_SCENE_EXACT_LAWFUL_PURPOSE_ONLY",
+      "controlled_view_may_include_identifying_fields_only_when_exact_lawful_duty_requires_them": true,
+      "controlled_view_reidentification_outside_authorized_purpose_forbidden": true,
+      "controlled_view_may_define_d8_or_root_authority": false,
+      "invocation_audit_required": true
+    },
+    "membership_application_handoff": {
+      "rule_zh_TW": "咖啡館分場收到會員入會申請時只作使用者入口，由總場接手技術流程並立即轉交五常社區發展協會個資保管場景保管與處理；總場不持久保存申請個資。",
+      "cafe_role": "MEMBERSHIP_APPLICATION_INTAKE_INTERFACE_ONLY",
+      "handoff_mode": "CAFE_UI_TO_TOTAL_FIELD_ORCHESTRATION_TO_FIVE_CHANG_ASSOCIATION_PERSONAL_INFORMATION_CUSTODY_FIELD",
+      "total_field_role": "ORCHESTRATE_HANDOFF_AND_MASKED_STATUS_RETURN_NO_DATA_CUSTODY",
+      "association_custody_field_role": "STORE_PROCESS_AND_GOVERN_MEMBERSHIP_APPLICATION",
+      "membership_classes_and_compute_capability_binding": {
+        "personal_member_path": {
+          "member_subject": "NATURAL_PERSON_WITH_8DADI_SOVEREIGN_IDENTITY_PACKET",
+          "self_owned_distributed_compute_required": false,
+          "may_bind": ["PERSON_OWNED_CLOUD_AI_API_CONNECTOR", "PERSON_OWNED_LOCAL_MODEL_ORGAN", "REGISTERED_PERSONAL_DEVICE_CAPABILITY"],
+          "cloud_or_local_model_is_member": false,
+          "cloud_or_local_model_role": "PERSONAL_MEMBER_SCENE_REPLACEABLE_CAPABILITY_ORGAN",
+          "approval_issuer": "FIVE_CHANG_ASSOCIATION_FIELD_UNDER_CURRENT_MEMBERSHIP_RULES"
+        },
+        "distributed_compute_group_member_path": {
+          "founder_intent": "SUBJECT_WITH_OWN_REGISTERED_DISTRIBUTED_COMPUTE_MAY_APPLY_FOR_GROUP_MEMBER_STATUS",
+          "compute_admission_requires": ["RESOURCE_OWNER_OR_CONTROL_REFERENCE", "REGISTERED_NODE_AND_CAPABILITY_SET", "CURRENT_REACHABILITY_AND_COMPATIBILITY_OBSERVATION", "CONTRIBUTION_SCOPE", "REVOCATION_OR_WITHDRAWAL_REFERENCE"],
+          "compute_capability_alone_grants_group_membership": false,
+          "final_membership_class_and_eligibility": "FIVE_CHANG_ASSOCIATION_CURRENT_BYLAWS_AND_HUMAN_APPROVAL_REQUIRED",
+          "association_field_issues_group_member_seat_after_approval": true,
+          "ai_or_total_field_may_self_approve_group_membership": false,
+          "compute_registration_does_not_create_legal_person_or_group": true,
+          "resource_ownership_remains_with_contributor": true,
+          "total_field_may_schedule_only_within_approved_contribution_scene_and_task_scope": true,
+          "current_live_bylaws_eligibility_binding": "NOT_YET_OBSERVED"
+        }
+      },
+      "child_may_persist_application_plaintext": false,
+      "child_may_approve_or_activate_membership": false,
+      "total_field_may_persist_application_plaintext": false,
+      "total_field_returns_to_child": ["OPAQUE_APPLICATION_REFERENCE", "MASKED_APPLICATION_STATE", "SCENE_APPLICABLE_ELIGIBILITY"],
+      "membership_effect_authority": "TOTAL_FIELD_RESOLVES_CURRENT_D8_SCOPE_WITH_ASSOCIATION_FIELD_AUTHORITY_AND_DOES_NOT_ACQUIRE_DATA_OWNERSHIP"
+    },
+    "parallel_total_field_forbidden": true
+  },
   "d6_core": {
     "definition": "目的節點依經准入且可驗證的既有能力與狀態基座，接收形成同一目標結果所不可約的最小新資訊、引用、座標、重建規則及驗證規則，於本地確定性重建並重新驗證。",
     "equation": "TARGET_BASE_STATE + MINIMUM_REQUIRED_DELTA + REFERENCES + COORDINATES + RECONSTRUCTION_RULES + VERIFICATION_RULES -> TARGET_RECONSTRUCTION_PACKET -> RECEIVER_LOCAL_RECONSTRUCTION -> REOBSERVED_VERIFIED_TARGET_STATE",
@@ -57,6 +485,159 @@
     "carrier_never_defines_d6": true,
     "lan_precedes_vpn": true,
     "vpn_only_when_lan_unavailable": true
+  },
+  "trusted_internal_organ_fast_path": {
+    "purpose": "以生成式傳輸作為已登記器官間的內部神經訊號，利用接收端已具備且符合該身分權限的基底，避免重複搬運可重建狀態。",
+    "admission_precondition": "SENDER_AND_RECEIVER_ARE_REGISTERED_UNDER_SAME_CURRENT_TOTAL_FIELD_ENVELOPE",
+    "common_base_precondition": "RECEIVER_HAS_EXACT_ADMITTED_TARGET_BASE_REFERENCE",
+    "carrier_order": ["LAN", "VPN_ONLY_AFTER_LAN_UNAVAILABLE"],
+    "per_packet_human_approval_required": false,
+    "separate_external_validator_required": false,
+    "floating_point_contract_required": false,
+    "inline_integer_and_digest_consistency": true,
+    "receiver_reobservation": "ON_RECONSTRUCTION_MISMATCH_OR_EFFECT_BOUNDARY",
+    "missing_base_action": "ONE_TIME_MINIMUM_BASE_COMPLETION_THEN_RETRY",
+    "may_bypass_d8_effect_scope": false,
+    "may_skip_target_reconstruction_consistency": false
+  },
+  "registered_device_generative_base": {
+    "design_principle_zh_TW": "每台獲准設備依其身分封包、席位、場景角色、權限範圍與硬體能力設置專屬且可驗證的生成式傳輸基座；設備接收綁定該基座的最小狀態封包後，在本機確定性重建目標檔案或受控視圖。",
+    "applies_to": "EACH_REGISTERED_AND_ADMITTED_DEVICE",
+    "base_is_specific_to": ["IDENTITY_PACKET_REFERENCE", "SEAT_REFERENCE", "SCENE_ROLE", "AUTHORITY_SCOPE", "DEVICE_CAPABILITY_COORDINATE"],
+    "identical_base_across_devices_required": false,
+    "shared_contract_and_compatible_namespace_do_not_mean_identical_base": true,
+    "base_may_contain": ["COMMON_SCHEMA", "RENDERING_TEMPLATE", "RECONSTRUCTION_RULE", "VERIFICATION_CAPABILITY", "CRYPTOGRAPHIC_AND_DEVICE_BINDING_ADAPTER", "NON_PERSONAL_SHARED_MATERIAL"],
+    "base_must_not_contain": ["PERSON_SPECIFIC_PLAINTEXT", "UNSCOPED_CREDENTIAL", "UNAUTHORIZED_SCENE_DATA", "UNVERIFIED_OR_UNKNOWN_STATE", "PERSONAL_INFORMATION_RECONSTRUCTION_CAPABILITY_OUTSIDE_IDENTITY_SEAT_ROLE_AND_AUTHORITY_SCOPE"],
+    "capability_compartments": {
+      "cafe_general_member": {
+        "may_reconstruct": ["CAFE_ORDERING_VIEW", "MEMBER_BENEFIT_VIEW", "OWN_PURPOSE_BOUND_MEMBER_STATE"],
+        "may_not_reconstruct": ["ASSOCIATION_PERSONAL_INFORMATION_MASTER", "OTHER_PERSON_PERSONAL_INFORMATION", "PROPERTY_COMMITTEE_LEGAL_DUTY_PERSONAL_DATA_VIEW"]
+      },
+      "property_committee_approved_caller": {
+        "may_reconstruct_only_with": ["COMMITTEE_SCENE_PREAPPROVAL_RECEIPT", "EXACT_LEGAL_OR_AUTHORIZATION_BASIS", "MATCHING_IDENTITY_SEAT_DEVICE_BASE", "CURRENT_TIME_SCOPE", "UNUSED_NONCE", "ASSOCIATION_FIELD_RECIPIENT_BOUND_RELEASE"],
+        "scope": "EXACT_APPROVED_FIELD_SET_AND_PURPOSE_ONLY"
+      }
+    },
+    "packet_carries": ["TARGET_STATE_COMMITMENT", "TARGET_BASE_STATE_REFERENCE", "IRREDUCIBLE_NOVEL_INFORMATION_ONLY", "REFERENCES", "ADI_COORDINATES", "LINEAGE", "RECONSTRUCTION_RULES", "VERIFICATION_RULES", "EXECUTION_BOUNDARY", "D8_ENVELOPE_REFERENCE"],
+    "personal_information_rule": "PERSON_SPECIFIC_IRREDUCIBLE_NOVEL_INFORMATION_REMAINS_ENCRYPTED_MINIMUM_DELTA_AND_IS_NEVER_ASSUMED_TO_EXIST_IN_COMMON_BASE",
+    "recipient_binding_rule": "ENCRYPTED_MINIMUM_DELTA_AND_RECONSTRUCTION_CAPABILITY_ARE_BOUND_TO_EXACT_IDENTITY_SEAT_DEVICE_BASE_PURPOSE_EXPIRY_AND_NONCE",
+    "wrong_or_missing_base_result": "OPAQUE_UNRECONSTRUCTABLE_PACKET_WITH_NO_PARTIAL_PERSONAL_INFORMATION_OUTPUT",
+    "construction_metadata_or_packet_format_is_not_decryption_or_reconstruction_authority": true,
+    "receiver_output": "LOCAL_RECONSTRUCTED_EXACT_FILE_OR_PURPOSE_BOUND_CONTROLLED_VIEW",
+    "admission_record_requires": ["DEVICE_REFERENCE", "BASE_REFERENCE", "CONTENT_DIGEST", "LINEAGE_REFERENCE", "ARCHITECTURE_COMPATIBILITY", "CAPABILITY_SCOPE", "LAST_REOBSERVED_STATE"],
+    "design_requirement_does_not_prove_live_base_installed": true,
+    "missing_mismatched_or_unobserved_base_action": "HOLD_AT_EXACT_DEVICE_COORDINATE",
+    "ordinary_encrypted_direct_transfer_fallback_may_be_used_but_must_not_be_LABELLED_D6": true
+  },
+  "container_common_capability_plane": {
+    "primary_host": "taiji01",
+    "all_nodes_share_capability_contract_and_namespace": true,
+    "container_instance_is_not_node_identity": true,
+    "portable_replica_requires": ["CONTENT_DIGEST", "ARCHITECTURE_COMPATIBILITY", "TOTAL_FIELD_SCOPE"],
+    "non_container_nodes_consume_via": ["BROWSER", "REGISTERED_HARDWARE_ADAPTER"],
+    "whole_system_copy_to_every_node": false,
+    "d6_role": "TRANSMIT_ONLY_THE_TARGET_NODE_MISSING_STATE_NEEDED_TO_INVOKE_OR_RECONSTRUCT_THE_REGISTERED_CONTAINER_CAPABILITY"
+  },
+  "scene_agnostic_hardware_orchestration": {
+    "purpose_zh_TW": "讓同一總場依場景封套調控已登記硬體與容器器官，不為每個場景重建平行系統。",
+    "control_owner": "TOTAL_FIELD",
+    "observation": "8D_CURRENT_AND_TARGET_STATE_FIELD",
+    "location_and_route_resolution": "ADI_EXACT_COORDINATE",
+    "internal_control_signal": "D6_GENERATIVE_TRANSMISSION",
+    "carrier_preference": ["LAN", "VPN_ONLY_AFTER_LAN_UNAVAILABLE"],
+    "applicable_target": "ANY_REGISTERED_AND_ADMITTED_DEVICE_CAPABILITY",
+    "scene_selection_inputs": ["CURRENT_INTENT", "SCENE_ENVELOPE", "ROLE_SCOPE", "CAPABILITY_COORDINATE", "CURRENT_REACHABILITY"],
+    "projection_rule": "LOAD_ONLY_AFFECTED_SCENE_AND_CAPABILITY_CLOSURE",
+    "shared_capability_does_not_merge_personal_data_or_authority": true,
+    "model_may_directly_control_hardware": false,
+    "unregistered_unobserved_or_scope_mismatched_action": "HOLD",
+    "personal_browser_ai_user_scene": {
+      "classification": "PERSONAL_USER_SCENE_BROWSER_PROJECTION",
+      "human_experience_zh_TW": "使用者只登入一次自己的身分工作階段，以文字或語音表達意圖；總場依 8DADI 自動選定有效場景席位、能力與分散式節點，瀏覽器持續顯示目前作用場景與角色。",
+      "application_scene_composition": ["SOVEREIGN_IDENTITY_PACKET_AND_ACTIVE_SCENE_SEAT", "SINGLE_TOTAL_FIELD_8DADI_CONTROL_PLANE", "CLOUD_AND_LOCAL_MODEL_ORGANS", "DISTRIBUTED_REGISTERED_CAPABILITY_ORGANS", "PERSONAL_BROWSER_AI_INTERFACE"],
+      "cloud_and_local_models_are_replaceable_organs": true,
+      "composition_forms_one_application_scene": true,
+      "application_scene_is_not_parallel_8dadi_or_total_field": true,
+      "uses_existing_total_field_and_8dadi_core": true,
+      "one_person_session_for_concurrent_scene_seats": true,
+      "manual_provider_account_switch_required": false,
+      "active_scene_and_role_must_be_visible": true,
+      "intent_ingress": ["NATURAL_LANGUAGE_TEXT", "NATURAL_LANGUAGE_VOICE", "BROWSER_FORM_CONFIRMATION"],
+      "scene_and_capability_resolution": "8DADI_EXACT_IDENTITY_SEAT_SCENE_AND_CAPABILITY_COORDINATES",
+      "resource_dispatch": "TOTAL_FIELD_TARGET_AWARE_MINIMUM_COST_COMPATIBLE_PATH_OVER_DISTRIBUTED_RESOURCE_FIELD",
+      "model_role": "PASSIVE_REPLACEABLE_REASONING_GENERATION_ORGAN",
+      "model_or_provider_account_is_person_identity_or_scene_authority": false,
+      "browser_may_directly_control_nodes_or_hardware": false,
+      "ambiguous_scene_intent_action": "VISIBLE_SCENE_CONFIRMATION_WITHIN_SAME_SESSION",
+      "privileged_external_effect_action": "REGISTERED_DEVICE_STEP_UP_CONFIRMATION_WITHIN_SAME_SESSION",
+      "result_projection": "ONE_BROWSER_RESPONSE_WITH_EXECUTING_SCENE_NODE_EFFECT_AND_AUTHORIZATION_EXPLAINED"
+    }
+  },
+  "distributed_resource_field": {
+    "claim_boundary_zh_TW": "總場可把已登記且目前可達、可相容的算力與記憶體視為可排程邏輯總和；不得宣稱為零延遲物理共享記憶體。",
+    "8dadi_logical_unification": {
+      "human_view": "ONE_NATURAL_LANGUAGE_CONTROLLED_SYSTEM_THROUGH_PERSONAL_BROWSER_AI_USER_SCENE",
+      "unified_coordinate_classes": ["CLOUD_AND_LOCAL_MODEL", "NODE_CPU_GPU_RAM_STORAGE_AND_IO", "CONTAINER", "PROGRAM", "DATABASE", "VIRTUAL_SPACE", "FILE_AND_STATE_PROJECTION", "CLOUD_DRIVE_ITEM"],
+      "method": "ONE_8D_STATE_FIELD_PLUS_ADI_EXACT_COORDINATE_RELATION_LINEAGE_CAPABILITY_AND_ROUTE_INDEX",
+      "execution": "TOTAL_FIELD_SELECTS_ONLY_THE_CURRENT_INTENT_AFFECTED_COMPATIBLE_CLOSURE",
+      "d6_role": "TRANSMIT_OR_RECONSTRUCT_ONLY_IRREDUCIBLE_MISSING_TARGET_STATE_WHEN_COMPLETE_D6_CONTRACT_EXISTS",
+      "does_not_physically_merge_memory_storage_database_or_accounts": true,
+      "does_not_merge_scene_data_identity_seats_or_authority": true,
+      "does_not_copy_every_capability_to_every_node": true,
+      "partial_node_or_provider_failure_may_be_rerouted_within_current_scope": true
+    },
+    "logical_pool_includes": ["CPU", "GPU", "RAM", "STORAGE", "CLOUD_DRIVE_STORAGE", "NETWORK", "HARDWARE_ACCELERATOR", "INPUT_OUTPUT_DEVICE"],
+    "available_sum_filter": ["REGISTERED", "ADMITTED", "CURRENTLY_REACHABLE", "TASK_COMPATIBLE", "WITHIN_SCENE_AND_D8_SCOPE"],
+    "8d_observes": ["CAPACITY", "LOAD", "REACHABILITY", "LATENCY_CLASS", "BASE_STATE", "TARGET_STATE", "EFFECT"],
+    "adi_locates": ["NODE", "CAPABILITY", "BASE_REFERENCE", "LINEAGE", "ROUTE", "AFFECTED_CLOSURE"],
+    "d6_reduces": "REDUNDANT_STATE_AND_DATA_MOVEMENT",
+    "total_field_schedules": "TARGET_AWARE_MINIMUM_COST_COMPATIBLE_EXECUTION_PATH",
+    "primary_human_entrypoint": "PERSONAL_BROWSER_AI_USER_SCENE",
+    "entrypoint_does_not_own_or_merge_distributed_resources": true,
+    "user_never_selects_physical_node_or_model_account_when_intent_and_scope_are_unambiguous": true,
+    "cloud_drive_capability": {
+      "classification": "EXTERNAL_CLOUD_STORAGE_MATERIAL_AND_INDEX_CAPABILITY_ORGAN",
+      "provider_projection": "GOOGLE_DRIVE_PERSONAL_OR_ORGANIZATION_SHARED_DRIVE_CONNECTOR",
+      "founder_declared_organization_shared_drive_count": 3,
+      "live_shared_drive_identifiers_and_permissions": "NOT_YET_OBSERVED",
+      "8dadi_locates": ["OPAQUE_DRIVE_ITEM_REFERENCE", "SHARED_DRIVE_REFERENCE", "VERSION_OR_REVISION", "CONTENT_DIGEST_WHEN_AVAILABLE", "LINEAGE", "SCENE_SCOPE", "ACCESS_SCOPE"],
+      "total_field_reads": "CURRENT_INTENT_MINIMUM_REQUIRED_ITEM_OR_FRAGMENT_ONLY",
+      "whole_drive_sync_or_replication_by_default": false,
+      "provider_login_is_capability_AUTHENTICATOR_NOT_PERSON_IDENTITY_OR_D8": true,
+      "credentials_or_raw_personal_information_in_model_context": false,
+      "shared_drive_data_remains_in_OWNING_FIELD_UNLESS_EXACT_AUTHORIZED_PROJECTION": true,
+      "ordinary_drive_UPLOAD_DOWNLOAD_OR_FILE_COPY_IS_D6": false,
+      "d6_use_requires_target_base_delta_references_coordinates_reconstruction_and_verification_contract": true,
+      "offline_behavior": "USE_ONLY_PREVIOUSLY_ADMITTED_LOCAL_BASE_AND_EXPLICITLY_CACHED_MINIMUM_MATERIAL_WITH_LINEAGE",
+      "missing_permission_or_live_identifier_action": "HOLD_AT_EXACT_CLOUD_DRIVE_COORDINATE"
+    },
+    "remote_memory_rule": "REMOTE_MEMORY_CONTRIBUTES_CAPACITY_BY_REMOTE_EXECUTION_OR_TARGET_SIDE_RECONSTRUCTION_NOT_DIRECT_LOCAL_ADDRESSING",
+    "node_isolation_abstracted_for_human": true,
+    "physical_failure_latency_and_architecture_boundaries_preserved": true
+  },
+  "odoo_application_capability_plane": {
+    "role_zh_TW": "Odoo 承載系統的主要業務敘述、資料關係、角色、工作流、服務與瀏覽器介面。",
+    "same_total_field_and_8dadi_core_across_scenarios": true,
+    "scenario_specific_projection_not_parallel_architecture": true,
+    "natural_language_to_effect_path": ["INTENT", "TARGET_8D_STATE", "8DADI_AFFECTED_CLOSURE", "TOTAL_FIELD_EFFECT_DECISION", "MINIMUM_ODOO_PROJECTION", "REOBSERVATION"],
+    "odoo_supplies": ["BUSINESS_MODEL", "RELATION", "ROLE", "WORKFLOW", "BROWSER_VIEW", "SERVICE_CAPABILITY"],
+    "odoo_is_authority": false,
+    "model_is_authority": false,
+    "affected_projection_only": true,
+    "cross_scene_personal_data_merge": false,
+    "native_open_source_module_first": true,
+    "reuse_order": ["CONFIGURE_NATIVE_MODULE", "EXTEND_EXISTING_VERIFIED_MODULE", "IMPLEMENT_ONLY_IRREDUCIBLE_GAP"],
+    "8dadi_module_resolution": "MAP_INTENT_TO_EXISTING_ODOO_CAPABILITY_DEPENDENCY_AND_AFFECTED_PROJECTION",
+    "copy_or_fork_odoo_core_for_scene": false,
+    "custom_module_may_duplicate_native_capability": false,
+    "superseded_custom_projection_cleanup": "ONLY_AFTER_NEW_PATH_REOBSERVED_PASS_WITH_PREIMAGE"
+  },
+  "dual_observation_closure": {
+    "internal_view": "TOTAL_FIELD_NODE_ROUTE_CAPABILITY_D6_CONTAINER_AND_RESOURCE_STATE",
+    "external_view": "HUMAN_BROWSER_TASK_RESULT_LOCATION_CONSISTENCY_AUTHORIZATION_AND_RISK",
+    "success_requires_internal_and_external_alignment": true,
+    "external_success_may_override_internal_failure": false,
+    "internal_pass_without_human_observable_effect_is_completion": false
   },
   "evolution_layers": {
     "canonical_core": "TARGET_AWARE_MINIMUM_DELTA_REFERENCES_RECONSTRUCTION_AND_VERIFICATION",
@@ -308,6 +889,99 @@
     ],
     "effect_reexecution_requires_new_current_d8_resolution": true,
     "d6_classification": "只有接收端依准入基座與最小新資訊確定性重建並重新驗證同一上下文時，才可列為 D6 上下文重建映射。"
+  },
+  "source_preserving_multi_model_orchestration": {
+    "purpose_zh_TW": "讓總場調用其他帳號或雲端模型整理來源、提供紅隊反證、抽取能力及翻譯，再由 8D／ADI 保留來源並回到總場裁決。",
+    "controller": "TOTAL_FIELD_USING_8D_ADI",
+    "model_roles": ["SOURCE_SUMMARIZER", "RED_TEAM_COUNTEREVIDENCE", "CAPABILITY_EXTRACTOR", "TRANSLATOR", "BOUNDED_SUBTASK_WORKER"],
+    "local_small_model_role": "INTENT_COMPRESSION_TASK_EXECUTION_AND_RESULT_NORMALIZATION_WITHIN_ONE_WORK_CELL",
+    "cloud_model_role": "MINIMUM_SCOPED_CANDIDATE_SUPPLIER",
+    "source_account_identity_merge": false,
+    "source_account_memory_authority_merge": false,
+    "exact_duplicate_rule": "NORMALIZED_CLAIM_DIGEST_MAY_COALESCE_ONLY_WHILE_ALL_SOURCE_COORDINATES_REMAIN_ATTACHED",
+    "semantic_similarity_or_majority_vote_may_define_truth": false,
+    "conflict_rule": "PRESERVE_UNTIL_CURRENT_FOUNDER_OR_TOTAL_FIELD_DECISION",
+    "external_skill_artifact_state": "DOCUMENTED_ONLY_UNTIL_TARGET_ARTIFACT_AND_TOOL_BINDING_ARE_OBSERVED",
+    "external_skill_required_fields": ["ARTIFACT_OR_EXACT_COORDINATE", "TRIGGER", "INPUTS", "OUTPUTS", "TOOL_BINDING", "SIDE_EFFECTS", "FAILURE_MODES", "ACCEPTANCE_CONDITIONS", "EXAMPLE_CASES", "AUTHORITY_BOUNDARY"],
+    "cloud_context_scope": "CURRENT_TASK_MINIMUM_REQUIRED_REDACTED_CONTEXT_ONLY",
+    "provider_result_returns_to_total_field": true,
+    "provider_result_is_authority": false,
+    "ordinary_model_prompt_or_inference_is_d6": false,
+    "may_become_d6_only_with_complete_target_reconstruction_contract": true
+  },
+  "external_capability_assimilation": {
+    "scope": "ANY_TARGET_RELEVANT_EXTERNAL_PROGRAM_SERVICE_MODEL_PROTOCOL_OR_PUBLIC_DESIGN_NOT_ONLY_3D",
+    "current_mode": "READ_ONLY_CAPABILITY_EXTRACTION_AND_OPTION_COMPARISON",
+    "classification": ["REUSE", "ADAPT", "REIMPLEMENT", "REJECT"],
+    "required_contract": ["PROVENANCE", "OBSERVABLE_CAPABILITY", "INPUTS", "OUTPUTS", "COST", "LIMITS", "SIDE_EFFECTS", "FAILURE_MODES", "ACCEPTANCE_CONDITIONS", "AUTHORITY_BOUNDARY"],
+    "installation_or_integration_in_current_mode": false,
+    "external_authority_import": false,
+    "external_architecture_may_replace_founder_target": false,
+    "target_aware_minimum_delta_only": true,
+    "result": "CANDIDATE_CAPABILITY_CONTRACT_RETURN_TO_TOTAL_FIELD"
+  },
+  "local_context_persistence": {
+    "owner": "EXISTING_RUNTIME_DEVELOPER_MEMORY_CHAIN",
+    "builder_coordinate": "tools/developer_memory_builder.py",
+    "source_envelope_storage": "LOCAL_DISK_APPEND_ONLY_NOT_GIT",
+    "raw_external_export_is_copied": false,
+    "stored_material": "SANITIZED_SOURCE_PRESERVING_D4_ENVELOPE",
+    "derived_index": "runtime/developer_memory/indexes/memory_index.jsonl",
+    "derived_index_lookup": "8DADI_EXACT_INDEX_ONLY",
+    "workspace_file_search": false,
+    "source_envelope_may_be_overwritten": false,
+    "index_may_change_founder_intent_or_d8": false,
+    "replay_rule": "REBUILD_MINIMUM_CONTEXT_FROM_INDEXED_SOURCE_REFS_AFTER_SESSION_COMPACTION_OR_MODEL_CHANGE",
+    "new_parallel_memory_database": false
+  },
+  "founder_intent_field_completeness": {
+    "supplied_source_closure_is_distinct_from_all_account_history_completeness": true,
+    "absolute_complete_claim_forbidden_when_access_limitations_exist": true,
+    "semantic_closure_requires": ["CURRENT_FOUNDER_RESOLVES_MATERIAL_CONFLICTS", "ALL_REQUIRED_D1_TO_D8_DOMAINS_HAVE_SOURCE_BINDINGS"],
+    "system_closure_requires": "LIVE_LOCAL_SERVER_CLOUD_AND_HUMAN_EFFECT_REOBSERVATION"
+  },
+  "proven_capability_reuse": {
+    "purpose_zh_TW": "已證實且綁定未漂移的能力直接重用，不反覆走相同驗證程序。",
+    "proven_requires": ["EXACT_CAPABILITY_COORDINATE", "IMPLEMENTATION_DIGEST", "DEPENDENCY_BINDINGS", "ACCEPTANCE_CONTRACT", "PASS_EVIDENCE_REF", "AUTHORITY_AND_EFFECT_BOUNDARY"],
+    "reuse_without_retest_when": "ALL_BOUND_DIGESTS_DEPENDENCIES_AUTHORITY_SCOPE_AND_EFFECT_CLASS_ARE_UNCHANGED",
+    "revalidate_only": ["CHANGED_BINDING", "CHANGED_DEPENDENCY", "CHANGED_AUTHORITY_SCOPE", "CHANGED_EFFECT_CLASS", "LIVE_EFFECT_FRESHNESS_REQUIRED"],
+    "test_pass_may_be_promoted_to_canonical_or_d8": false,
+    "unbound_or_stale_proof_action": "REVALIDATE_AFFECTED_CLOSURE_ONLY"
+  },
+  "automatic_execution_default": {
+    "human_interface": "NATURAL_LANGUAGE_AND_BROWSER",
+    "manual_copy_paste_file_move_terminal_or_cross_node_relay_required": false,
+    "normal_source_collection": "TOTAL_FIELD_SELECTED_AUTHENTICATED_BROWSER_CONNECTOR",
+    "source_download_target": "REGISTERED_FIXED_LOCAL_INTAKE_COORDINATE",
+    "automatic_chain": ["INTENT", "SOURCE_COLLECTION", "LOCAL_SANITIZATION", "8DADI_INDEX", "WORK_CELL_CONTEXT", "REGISTERED_TOOL_EXECUTION", "REOBSERVATION", "RECEIPT"],
+    "human_action_only_when": ["EXTERNAL_AUTHENTICATION_EXPIRED", "EXACT_EXTERNAL_EFFECT_REQUIRES_FOUNDER_APPROVAL"],
+    "missing_authorized_browser_connector_action": "HOLD_WITH_ONE_PRECISE_PERMISSION_GAP_NOT_MANUAL_COPY_PASTE",
+    "automation_may_bypass_d8": false
+  },
+  "work_target_lock": {
+    "purpose_zh_TW": "固定目前工作目標，避免壓縮上下文、插問、模型切換、節點切換或工具輸出改寫任務。",
+    "required_binding": ["CURRENT_FOUNDER_INTENT_REF", "TARGET_8D_STATE_DIGEST", "AFFECTED_COORDINATE_CLOSURE", "ACCEPTANCE_CONTRACT", "PARENT_PROGRESS_REF"],
+    "lock_owner": "TOTAL_FIELD_USING_CURRENT_FOUNDER_INTENT",
+    "model_tool_cloud_or_historical_evidence_may_change_target": false,
+    "side_question_behavior": "ANSWER_THEN_RETURN_TO_LOCKED_PARENT_WORK_CELL",
+    "context_compaction_behavior": "REPLAY_LOCKED_TARGET_FROM_LOCAL_8DADI_INDEX",
+    "unlock_only_when": ["TARGET_REOBSERVED_CLOSED", "FOUNDER_EXPLICITLY_CORRECTS_REPLACES_OR_CANCELS_TARGET"],
+    "failure_behavior": "KEEP_TARGET_AND_LAST_VERIFIED_STATE_FIX_ONLY_RESIDUAL_DIFFERENCE",
+    "optimization_admission": {
+      "allowed": true,
+      "must_preserve": ["FOUNDER_INTENDED_OBSERVABLE_OUTCOME", "TARGET_8D_STATE", "AUTHORITY_BOUNDARY", "ACCEPTANCE_CONTRACT"],
+      "may_improve": ["QUALITY", "HUMAN_EXPERIENCE", "COST", "LATENCY", "RESOURCE_PRESSURE", "RELIABILITY"],
+      "requires": ["TARGET_CONTRIBUTION", "NO_INVARIANT_BREAK", "AFFECTED_CLOSURE_ONLY", "REOBSERVABLE_EFFECT"],
+      "purpose_transfer_forbidden": true,
+      "unrelated_improvement_action": "DEFER_OUTSIDE_CURRENT_LOCKED_WORK_CELL"
+    },
+    "new_work_may_silently_replace_unfinished_target": false,
+    "high_cost_work_policy": {
+      "scope": ["IMAGE_SKINNING", "HEAVY_AUDIOVISUAL_GENERATION", "ARCHITECTURE_OPTION_EXPLORATION"],
+      "current_action": "LOCATE_COMPARE_AND_RECOMMEND_ONLY",
+      "implementation_model_download_paid_compute_activation_or_deployment": false,
+      "future_execution_requires": "FOUNDER_EXPLICIT_TASK_AND_CURRENT_COST_BOUND"
+    }
   },
   "scheduled_health_engineering_model": {
     "model_ref": "xiaoj:latest",

@@ -16,7 +16,6 @@ PROJECT_ROOT = Path("/home/taiji_admin/Taiji_Hub")
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.align_openwebui_total_field import DEFAULT_DB_PATH, align
 
 
 SOURCE_MANIFEST = (
@@ -26,8 +25,8 @@ SOURCE_MANIFEST = (
 AUTHORITY_PROFILE = (
     PROJECT_ROOT / "configs/total_field/active_total_field_authority_runtime_v1.json"
 )
-REQUIRED_SERVICES = ("taiji-gateway.service", "taiji-03-ui.service")
-PORT_EXPECTATIONS = {8080: True, 8081: True, 8787: False, 9108: False}
+REQUIRED_SERVICES = ("taiji-gateway.service",)
+PORT_EXPECTATIONS = {8080: True, 8081: True, 9002: True, 9011: True, 8787: False, 9108: False}
 OLLAMA_GENERATE_URL = "http://127.0.0.1:11434/api/generate"
 
 
@@ -81,7 +80,13 @@ def _port_open(port: int) -> bool:
 
 
 def build_health_observation() -> dict[str, Any]:
-    alignment = align(DEFAULT_DB_PATH, apply=False)["after"]
+    alignment = {
+        "aligned": _port_open(8080) and _port_open(9002),
+        "source": "LIVE_CURRENT_CONTAINER_ROUTE",
+        "openwebui_port": 8080,
+        "upstream_port": 9002,
+        "legacy_database_used": False,
+    }
     manifest = verify_source_manifest()
     services = {name: _service_active(name) for name in REQUIRED_SERVICES}
     ports = {

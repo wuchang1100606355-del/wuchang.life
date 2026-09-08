@@ -54,6 +54,11 @@ PROJECT_ROOT = Path(
     os.getenv("TAIJI_PROJECT_ROOT", "/home/taiji_admin/Taiji_Hub")
 ).resolve()
 LOCAL_CONTEXT_MAX_ITEMS = int(os.getenv("TAIJI_LOCAL_CONTEXT_MAX_ITEMS", "4"))
+CONTEXT_IDENTITY_CLASS = os.getenv(
+    "TAIJI_CONTEXT_IDENTITY_CLASS", "unknown"
+).strip().lower()
+if CONTEXT_IDENTITY_CLASS not in {"founder", "general_member", "unknown"}:
+    CONTEXT_IDENTITY_CLASS = "unknown"
 VOICE_INTENT_URL = os.getenv(
     "TAIJI_VOICE_INTENT_URL", "http://127.0.0.1:9011/v1/pos/voice-intent"
 )
@@ -392,7 +397,7 @@ def _attach_local_total_field_context(
         root=PROJECT_ROOT,
         query=query,
         max_items=LOCAL_CONTEXT_MAX_ITEMS,
-        identity_class="unknown",
+        identity_class=CONTEXT_IDENTITY_CLASS,
     )
     policy = context.get("policy") or {}
     if (
@@ -436,6 +441,8 @@ def _attach_local_total_field_context(
         "current_user_intent_is_d1_input": True,
         "8dadi_context_packet_sha256": context.get("packet_sha256"),
         "8dadi_retrieval_method": context.get("retrieval_method"),
+        "context_identity_class": CONTEXT_IDENTITY_CLASS,
+        "founder_intent_projection": context.get("founder_intent_projection"),
         "evidence_items": evidence_items,
         "evidence_is_d4_only": True,
         "legacy_may_define_target": False,
@@ -474,6 +481,10 @@ def _attach_local_total_field_context(
         "8dadi_index_only": True,
         "8dadi_dynamic_context_used": True,
         "8dadi_context_packet_sha256": context.get("packet_sha256"),
+        "context_identity_class": CONTEXT_IDENTITY_CLASS,
+        "founder_intent_projection_present": bool(
+            context.get("founder_intent_projection")
+        ),
         "context_evidence_count": len(evidence_items),
         "login_subject_present": bool(login_subject),
         "login_is_final_authority": False,

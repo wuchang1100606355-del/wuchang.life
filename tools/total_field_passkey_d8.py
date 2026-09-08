@@ -26,6 +26,7 @@ PASSKEY_APPROVAL_STATE = "PASS_USER_VERIFIED_DEVICE_UNLOCK_D8_APPROVAL"
 PASSKEY_POINTER_SCHEMA = "W7TP_TOTAL_FIELD_PASSKEY_APPROVAL_POINTER_V1"
 PASSKEY_CREDENTIAL_SCHEMA = "W7TP_TOTAL_FIELD_FOUNDER_PASSKEY_CREDENTIAL_V1"
 GIT_PUSH_SCOPE = "AUTHORIZE_GIT_PUSH"
+DEPLOY_RESTART_SCOPE = "AUTHORIZE_EXACT_DEPLOY_RESTART"
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 GIT_OID = re.compile(r"^[0-9a-f]{40,64}$")
 
@@ -135,6 +136,21 @@ def approval_challenge(claims: Mapping[str, Any], nonce_b64url: str) -> bytes:
     return hashlib.sha256(canonical_json(claims) + b"\x00" + websafe_decode(nonce_b64url)).digest()
 
 
+def normalized_scopes(value: Any) -> tuple[str, ...]:
+    if isinstance(value, str):
+        scopes = (value,)
+    elif isinstance(value, list) and all(isinstance(item, str) for item in value):
+        scopes = tuple(value)
+    else:
+        raise PasskeyD8Rejected("PASSKEY_SCOPE_INVALID")
+    if not scopes or len(set(scopes)) != len(scopes):
+        raise PasskeyD8Rejected("PASSKEY_SCOPE_INVALID")
+    admitted = {GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE}
+    if any(scope not in admitted for scope in scopes):
+        raise PasskeyD8Rejected("PASSKEY_SCOPE_INVALID")
+    return scopes
+
+
 def require_platform_authenticator(response: Mapping[str, Any]) -> str:
     """Accept only the enrolled platform authenticator, never an external security key."""
     attachment = response.get("authenticatorAttachment")
@@ -166,17 +182,25 @@ def require_admitted_authenticator(
     raise PasskeyD8Rejected("PASSKEY_ADMITTED_AUTHENTICATOR_REQUIRED")
 
 
-def _consume_once(path: Path, nonce: str, approval_sha256: str) -> None:
+def _consume_once(path: Path, nonce: str, scope: str, approval_sha256: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     connection = sqlite3.connect(path)
     try:
         connection.execute(
-            "CREATE TABLE IF NOT EXISTS consumed (nonce TEXT PRIMARY KEY, approval_sha256 TEXT NOT NULL, consumed_at TEXT NOT NULL)"
+            "CREATE TABLE IF NOT EXISTS consumed_scopes (nonce TEXT NOT NULL, scope TEXT NOT NULL, approval_sha256 TEXT NOT NULL, consumed_at TEXT NOT NULL, PRIMARY KEY(nonce, scope))"
         )
+        if scope == GIT_PUSH_SCOPE:
+            legacy = connection.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name='consumed'"
+            ).fetchone()
+            if legacy and connection.execute(
+                "SELECT 1 FROM consumed WHERE nonce=?", (nonce,)
+            ).fetchone():
+                raise PasskeyD8Rejected("PASSKEY_APPROVAL_REPLAYED")
         try:
             connection.execute(
-                "INSERT INTO consumed(nonce, approval_sha256, consumed_at) VALUES(?, ?, ?)",
-                (nonce, approval_sha256, iso_z(utc_now())),
+                "INSERT INTO consumed_scopes(nonce, scope, approval_sha256, consumed_at) VALUES(?, ?, ?, ?)",
+                (nonce, scope, approval_sha256, iso_z(utc_now())),
             )
             connection.commit()
         except sqlite3.IntegrityError as exc:
@@ -190,6 +214,7 @@ def verify_passkey_authority(
     repo_root: str | Path,
     config: Mapping[str, Any],
     consume: bool,
+    required_scope: str = GIT_PUSH_SCOPE,
     now: datetime | None = None,
 ) -> dict[str, Any]:
     """Cryptographically verify one exact, short-lived WebAuthn approval."""
@@ -209,7 +234,8 @@ def verify_passkey_authority(
         approval = load_json(approval_path, "PASSKEY_APPROVAL_INVALID")
         if approval.get("schema_id") != PASSKEY_APPROVAL_SCHEMA or approval.get("state") != PASSKEY_APPROVAL_STATE:
             raise PasskeyD8Rejected("PASSKEY_APPROVAL_INVALID")
-        if approval.get("scope") != GIT_PUSH_SCOPE or approval.get("single_use") is not True:
+        scopes = normalized_scopes(approval.get("scopes", approval.get("scope")))
+        if required_scope not in scopes or approval.get("single_use") is not True:
             raise PasskeyD8Rejected("PASSKEY_SCOPE_INVALID")
         issued = parse_time(approval.get("issued_at"))
         expires = parse_time(approval.get("expires_at"))
@@ -221,7 +247,8 @@ def verify_passkey_authority(
         constraints = approval.get("authority_scope_constraints")
         if not isinstance(claims, Mapping) or not isinstance(constraints, Mapping):
             raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_MISSING")
-        if claims.get("scope") != GIT_PUSH_SCOPE or claims.get("authority_scope_constraints") != constraints:
+        claim_scopes = normalized_scopes(claims.get("scopes", claims.get("scope")))
+        if claim_scopes != scopes or claims.get("authority_scope_constraints") != constraints:
             raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDING_DRIFT")
         for field in ("request_packet_sha256", "review_registration_sha256"):
             if not isinstance(claims.get(field), str) or HEX64.fullmatch(str(claims[field])) is None:
@@ -271,11 +298,12 @@ def verify_passkey_authority(
         if consume:
             ledger_ref = config.get("consumption_ledger_ref")
             ledger = root.joinpath(*PurePosixPath(str(ledger_ref or "")).parts)
-            _consume_once(ledger, str(nonce), approval_hash)
+            _consume_once(ledger, str(nonce), required_scope, approval_hash)
         return {
             "state": "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED",
             "authority_verified": True,
-            "scope": [GIT_PUSH_SCOPE],
+            "scope": list(scopes),
+            "verified_scope": required_scope,
             "authority_scope_constraints": dict(constraints),
             "authority_sha256": approval_hash,
             "signer_type": "FOUNDER_ENROLLED_USER_VERIFIED_PASSKEY",
@@ -295,6 +323,7 @@ def verify_passkey_authority(
 
 __all__ = [
     "GIT_PUSH_SCOPE",
+    "DEPLOY_RESTART_SCOPE",
     "PASSKEY_APPROVAL_SCHEMA",
     "PASSKEY_APPROVAL_STATE",
     "PASSKEY_CREDENTIAL_SCHEMA",
@@ -307,6 +336,7 @@ __all__ = [
     "iso_z",
     "load_credential",
     "load_json",
+    "normalized_scopes",
     "parse_time",
     "require_admitted_authenticator",
     "require_platform_authenticator",

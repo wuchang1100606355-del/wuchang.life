@@ -1,16 +1,17 @@
-from pathlib import Path
+from __future__ import annotations
+
 import json
-import time
+from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
+
 ROOT = Path(__file__).resolve().parents[2]
-TOPO = ROOT / "configs" / "taiji_topology.json"
-LEDGER = ROOT / "runtime" / "ledger" / "routing_decisions.jsonl"
-DEAD = ROOT / "runtime" / "dead_letter" / "routing_rejected.jsonl"
+TOPOLOGY_PATH = ROOT / "configs" / "taiji_topology.json"
 
 router = APIRouter(prefix="/taiji", tags=["taiji-topology"])
+
 
 class RouteRequest(BaseModel):
     task_class: str
@@ -20,102 +21,126 @@ class RouteRequest(BaseModel):
     human_online: bool = False
     preferred_node: str | None = None
 
-def append_jsonl(path: Path, obj: dict):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(obj, ensure_ascii=False) + "\n")
 
-def load_topology():
-    if not TOPO.exists():
-        raise HTTPException(status_code=500, detail="missing taiji_topology.json")
-    return json.loads(TOPO.read_text(encoding="utf-8"))
+def load_topology() -> dict:
+    if not TOPOLOGY_PATH.is_file():
+        raise HTTPException(status_code=500, detail="missing_taiji_topology")
+    return json.loads(TOPOLOGY_PATH.read_text(encoding="utf-8"))
+
 
 @router.get("/topology")
-def topology():
-    return load_topology()
+def topology() -> dict:
+    data = load_topology()
+    return {
+        "version": data.get("version"),
+        "primary_decision_engine": data.get("primary_decision_engine"),
+        "network_policy": data.get("network_policy"),
+        "common_domain_plane": data.get("common_domain_plane"),
+        "total_field_hardware_orchestration": data.get(
+            "total_field_hardware_orchestration"
+        ),
+        "distributed_resource_field": data.get("distributed_resource_field"),
+        "odoo_capability_plane": data.get("odoo_capability_plane"),
+        "container_common_plane": data.get("container_common_plane"),
+        "scenario_fields": data.get("scenario_fields"),
+        "observation_views": data.get("observation_views"),
+        "nodes": data.get("nodes"),
+        "services": data.get("services"),
+        "cloud_resources": data.get("cloud_resources"),
+        "secret_values_included": False,
+        "authority": "OBSERVATION_ONLY_NOT_D8",
+    }
+
 
 @router.get("/topology/summary")
-def topology_summary():
-    topo = load_topology()
+def topology_summary() -> dict:
+    data = load_topology()
     return {
-        "owner": topo.get("owner"),
-        "version": topo.get("version"),
-        "primary_decision_engine": topo.get("primary_decision_engine"),
-        "network_policy": topo.get("network_policy", {}),
-        "identity_boundary": topo.get("identity_boundary", {}),
-        "layers": list(topo.get("layers", {}).keys()),
-        "services": topo.get("services", {}),
-        "nodes": list(topo.get("nodes", {}).keys()),
-        "hard_denies": topo.get("hard_denies", [])
+        "version": data.get("version"),
+        "primary_decision_engine": data.get("primary_decision_engine"),
+        "network_policy": data.get("network_policy", {}),
+        "domain": (data.get("common_domain_plane") or {}).get("domain"),
+        "domain_owner_scene": (data.get("common_domain_plane") or {}).get(
+            "owner_scene"
+        ),
+        "layers": list((data.get("layers") or {}).keys()),
+        "nodes": list((data.get("nodes") or {}).keys()),
+        "scenarios": list(
+            ((data.get("scenario_fields") or {}).get("scenarios") or {}).keys()
+        ),
+        "shared_drives": list(
+            ((data.get("cloud_resources") or {}).get("shared_drives") or {}).keys()
+        ),
+        "container_common": bool(
+            (data.get("container_common_plane") or {}).get(
+                "all_registered_nodes_share_capability_namespace"
+            )
+        ),
+        "hardware_orchestration": bool(
+            (data.get("total_field_hardware_orchestration") or {}).get(
+                "controller"
+            )
+            == "TOTAL_FIELD"
+        ),
+        "distributed_resource_aggregation": (
+            (data.get("distributed_resource_field") or {}).get(
+                "aggregation_mode"
+            )
+        ),
+        "odoo_is_primary_application_capability_plane": (
+            (data.get("odoo_capability_plane") or {}).get("role")
+            == "PRIMARY_SYSTEM_DESCRIPTION_AND_APPLICATION_CAPABILITY_ARCHITECTURE"
+        ),
+        "authority": "OBSERVATION_ONLY_NOT_D8",
     }
+
+
+def _route_for_task(task_class: str) -> str:
+    mapping = {
+        "local_llm": "msi_gpu_organ",
+        "audiovisual_generation": "msi_gpu_organ",
+        "chat": "openwebui",
+        "ui": "openwebui",
+        "property_case": "odoo",
+        "pos": "taiji04_sunmi_pos",
+        "finance_record": "odoo",
+        "vision": "store_lilin_nvr",
+        "security_video": "store_lilin_nvr",
+        "camera_event": "store_lilin_nvr",
+        "hearing": "taiji04_sunmi_pos",
+        "speech_input": "taiji04_sunmi_pos",
+        "voice_intent": "taiji04_sunmi_pos",
+        "speech_output": "homepod_pair",
+        "airplay_output": "homepod_pair",
+        "heartbeat": "sensor",
+        "sensing": "sensor",
+        "environment_state": "sensor",
+        "cloud_shared_drive": "taiji01",
+        "dynamic_context": "taiji01",
+        "total_field": "taiji01",
+    }
+    return mapping.get(task_class, "taiji01")
+
 
 @router.post("/route/decide")
-def route_decide(req: RouteRequest):
-    topo = load_topology()
-
-    if req.action in topo.get("hard_denies", []):
-        rejected = {
-            "ts": time.time(),
-            "event": "route_rejected",
-            "reason": "hard_denied_action",
-            "request": req.model_dump()
-        }
-        append_jsonl(DEAD, rejected)
-        raise HTTPException(status_code=403, detail=rejected)
-
-    nodes = topo.get("nodes", {})
-    selected = None
-
-    if req.preferred_node and req.preferred_node in nodes:
-        selected = req.preferred_node
-    elif req.task_class in ["topology_compute", "metric_tensor", "local_llm"]:
-        selected = "taiji01"
-    elif req.task_class in ["chat", "ui"]:
-        selected = "openwebui"
-    elif req.task_class in ["property_case", "pos", "finance_record"]:
-        selected = "odoo"
-    elif req.task_class in ["vision", "security_video", "camera_event"]:
-        selected = "store_lilin_nvr"
-    elif req.task_class in ["hearing", "speech_input", "voice_intent"]:
-        selected = "taiji04_sunmi_pos"
-    elif req.task_class in ["speech_output", "airplay_output"]:
-        selected = "homepod_pair"
-    elif req.task_class in ["heartbeat", "sensing", "environment_state"]:
-        selected = "sensor"
-    else:
-        selected = "taiji01"
-
-    node = nodes.get(selected)
-    if not node:
-        rejected = {
-            "ts": time.time(),
-            "event": "route_rejected",
-            "reason": "no_selected_node",
-            "request": req.model_dump()
-        }
-        append_jsonl(DEAD, rejected)
-        raise HTTPException(status_code=404, detail=rejected)
-
-    if req.authority_level > int(node.get("max_authority_level", 0)):
-        rejected = {
-            "ts": time.time(),
-            "event": "route_rejected",
-            "reason": "authority_level_exceeds_node",
-            "selected_node": selected,
-            "request": req.model_dump()
-        }
-        append_jsonl(DEAD, rejected)
-        raise HTTPException(status_code=403, detail=rejected)
-
-    decision = {
-        "ts": time.time(),
-        "event": "route_decided",
-        "task_class": req.task_class,
-        "action": req.action,
+def route_decide(request: RouteRequest) -> dict:
+    topology = load_topology()
+    if request.action in (topology.get("hard_denies") or []):
+        raise HTTPException(status_code=403, detail="hard_denied_action")
+    nodes = topology.get("nodes") or {}
+    selected = request.preferred_node or _route_for_task(request.task_class)
+    if selected not in nodes:
+        raise HTTPException(status_code=404, detail="registered_node_not_found")
+    if request.authority_level > int(nodes[selected].get("max_authority_level", 0)):
+        raise HTTPException(status_code=403, detail="authority_level_exceeds_node")
+    return {
+        "state": "8DADI_ROUTE_PROPOSAL_NO_EFFECT",
+        "task_class": request.task_class,
+        "action": request.action,
         "selected_node": selected,
-        "authority_level": req.authority_level,
-        "human_online": req.human_online,
-        "payload_summary": req.payload_summary
+        "authority_level_requested": request.authority_level,
+        "carrier_order": ["LAN", "VPN_ONLY_AFTER_LAN_UNAVAILABLE"],
+        "ledger_write": False,
+        "execution_authorized": False,
+        "requires_total_field_effect_decision": True,
     }
-    append_jsonl(LEDGER, decision)
-    return decision

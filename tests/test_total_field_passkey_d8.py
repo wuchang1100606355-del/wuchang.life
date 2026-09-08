@@ -5,9 +5,12 @@ import unittest
 from fido2.utils import websafe_encode
 
 from tools.total_field_passkey_d8 import (
+    DEPLOY_RESTART_SCOPE,
+    GIT_PUSH_SCOPE,
     PasskeyD8Rejected,
     approval_challenge,
     canonical_json,
+    normalized_scopes,
     require_admitted_authenticator,
     require_platform_authenticator,
     sha256,
@@ -27,6 +30,18 @@ class TotalFieldPasskeyD8Tests(unittest.TestCase):
     def test_canonical_payload_is_stable(self) -> None:
         self.assertEqual(canonical_json({"b": 2, "a": 1}), b'{"a":1,"b":2}')
         self.assertEqual(len(sha256(b"evidence")), 64)
+
+    def test_exact_combined_effect_scopes_are_admitted(self) -> None:
+        self.assertEqual(
+            normalized_scopes([GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE]),
+            (GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE),
+        )
+
+    def test_unknown_or_duplicate_effect_scope_is_rejected(self) -> None:
+        with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_SCOPE_INVALID"):
+            normalized_scopes([GIT_PUSH_SCOPE, GIT_PUSH_SCOPE])
+        with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_SCOPE_INVALID"):
+            normalized_scopes(["AUTHORIZE_EVERYTHING"])
 
     def test_platform_authenticator_is_accepted(self) -> None:
         self.assertEqual(require_platform_authenticator({"authenticatorAttachment": "platform"}), "platform")

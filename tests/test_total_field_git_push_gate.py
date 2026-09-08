@@ -101,6 +101,23 @@ class TotalFieldGitPushGateTests(unittest.TestCase):
         self.assertEqual(result["state"], "PASS_TOTAL_FIELD_GIT_PUSH_GATE")
         self.assertTrue(result["push_authorized"])
 
+    def test_combined_scope_exposes_exact_deploy_authorization(self) -> None:
+        self.constraints["deploy"] = True
+        self.constraints["restart"] = True
+
+        def combined(*_args, **_kwargs):
+            return {
+                "state": "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED",
+                "authority_verified": True,
+                "scope": ["AUTHORIZE_GIT_PUSH", "AUTHORIZE_EXACT_DEPLOY_RESTART"],
+                "authority_scope_constraints": self.constraints,
+                "authority_sha256": "c" * 64,
+            }
+
+        result = self.call(resolver=combined)
+        self.assertTrue(result["push_authorized"])
+        self.assertTrue(result["deploy_authorized"])
+
     def test_remote_ancestor_of_signed_base_passes(self) -> None:
         result = self.call(remote_oid=self.remote_behind)
         self.assertEqual(result["state"], "PASS_TOTAL_FIELD_GIT_PUSH_GATE")
