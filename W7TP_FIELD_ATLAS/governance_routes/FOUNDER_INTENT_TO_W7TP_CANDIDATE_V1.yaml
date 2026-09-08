@@ -1,0 +1,35 @@
+route_id: CANDIDATE_FOUNDER_INTENT_TO_W7TP_V1
+status: CANDIDATE
+authority:
+  founder_ref: founder:CHIANG_CHENG_LUNG
+  authority_ref: authority:TOTAL_FIELD
+  final_authority_granted: false
+scope:
+  allowed_effect: INTERNAL_EVIDENCE_ONLY
+  canonical_mutation: false
+  runtime_control: false
+route:
+  source: xiaoj-intent-field:/v1/founder-intents
+  decision_engine: 8D_ADI
+  decision_engine_authority_state: NOT_AUTHORITY
+  packet_builder: w7tp_gt_mesh.packet:build_transfer
+  transport: LAN_PRIMARY
+  receiver: http://192.168.50.249:9238/v2.1/packets
+  receipt_issuer: node:taiji01
+d1_d8:
+  D1: Founder intent
+  D2: referenced current state
+  D3: ADI coordinate reference
+  D4: evidence references
+  D5: internal evidence only
+  D6: receiver-local deterministic reconstruction
+  D7: fail closed and no external effect
+  D8: founder candidate envelope; Total Field remains final authority
+acceptance:
+  - PASS_RECEIVED
+  - PASS_EXACT_CANONICAL_JSON_HASH
+  - native_adi_receipt_persisted
+holds:
+  - no_founder_identity_authentication
+  - no_canonical_promotion
+  - no_external_effect_authority

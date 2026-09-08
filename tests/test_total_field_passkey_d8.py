@@ -37,6 +37,9 @@ class TotalFieldPasskeyD8Tests(unittest.TestCase):
             (GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE),
         )
 
+    def test_git_only_effect_scope_is_admitted(self) -> None:
+        self.assertEqual(normalized_scopes(GIT_PUSH_SCOPE), (GIT_PUSH_SCOPE,))
+
     def test_unknown_or_duplicate_effect_scope_is_rejected(self) -> None:
         with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_SCOPE_INVALID"):
             normalized_scopes([GIT_PUSH_SCOPE, GIT_PUSH_SCOPE])

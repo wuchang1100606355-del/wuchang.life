@@ -10,4 +10,8 @@ services:
     volumes:
       - ./runtime/reports:/app/runtime/reports
       - ./runtime/dead_letter:/app/runtime/dead_letter
+      - ./runtime/xiaoj_intent_field_w7tp:/app/runtime/w7tp
+    environment:
+      XIAOJ_W7TP_RUNTIME_ROOT: /app/runtime/w7tp
+      XIAOJ_TOTAL_FIELD_LAN_URL: http://192.168.50.249:9238/v2.1/packets
     restart: unless-stopped

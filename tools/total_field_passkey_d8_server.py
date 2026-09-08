@@ -66,8 +66,8 @@ button{width:100%;border:0;border-radius:14px;padding:16px;margin:8px 0;font-siz
 <h1>小J 總場創辦人簽發</h1><p class="sub">手機沒有既有密鑰時，先以 Face ID 建立新密鑰；不需要輸入任何舊密碼。</p>
 <div id="status" class="state">正在讀取簽發狀態…</div>
 <button id="enrol" class="secondary">建立手機 Face ID 通行密鑰</button>
-<button id="approve">檢視並簽發本次推送與精確部署</button>
-<div class="rules">只授權畫面列出的分支、目標樹、檔案集合、太極一號服務與五分鐘時限；不授權正典或活動指標修改。任一座標漂移，簽發即失效。Apple、Google、Tailscale 與瀏覽器均不是總場權威。</div>
+	<button id="approve">檢視並簽發本次精確作用</button>
+	<div class="rules">只授權畫面列出的作用、分支、目標樹、檔案集合與五分鐘時限；不授權正典或活動指標修改。任一座標漂移，簽發即失效。Apple、Google、Tailscale 與瀏覽器均不是總場權威。</div>
 </div></main><script>
 const q=new URLSearchParams(location.search), token=q.get('bootstrap')||localStorage.getItem('w7tp-bootstrap')||'';
 if(token)localStorage.setItem('w7tp-bootstrap',token);
@@ -83,7 +83,7 @@ const show=(m,ok=true)=>{statusEl.textContent=m;statusEl.className='state '+(ok?
 let enrolled=false;
 async function refresh(){try{const r=await fetch('/health');const j=await r.json();enrolled=Boolean(j.enrolled);const b=document.getElementById('enrol');b.disabled=false;b.textContent=enrolled?'手機沒有舊密鑰：重新建立 Face ID 通行密鑰':'首次建立手機 Face ID 通行密鑰';show(`狀態：${j.state}\n通行密鑰：${j.credential_state_zh_TW}\n簽發器：${j.signer_zh_TW}\n待簽範圍：${j.scope_zh_TW}`)}catch(e){show('無法連到總場簽發服務：'+e.message,false)}}
 document.getElementById('enrol').onclick=async()=>{try{const mode=enrolled?'rotate':'register';show('即將在手機建立一把新的 Face ID 通行密鑰；這不是輸入舊密碼。舊密鑰會保留到新密鑰建立成功。');const o=await post(`/v1/passkey/${mode}/options`);const c=await navigator.credentials.create(creation(o.options));const r=await post(`/v1/passkey/${mode}/complete`,{response:regJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW);await refresh()}catch(e){show('新密鑰尚未建立：'+e.message,false)}};
-document.getElementById('approve').onclick=async()=>{try{show('正在建立綁定本次變更的五分鐘簽發挑戰…');const o=await post('/v1/passkey/approve/options');const d=o.display;const yes=confirm(`只簽發以下作用：\n範圍：正式 Git 推送＋精確部署與重啟\n分支：${d.branch}\n目標樹：${d.target_tree}\n檔案數：${d.file_count}\n部署節點：${d.deploy_node}\n服務：${d.deploy_service}\n有效：5 分鐘\n\n確定後請使用已登記的創辦人平台通行密鑰解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/approve/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
+document.getElementById('approve').onclick=async()=>{try{show('正在建立綁定本次變更的五分鐘簽發挑戰…');const o=await post('/v1/passkey/approve/options');const d=o.display;const deployment=d.deploy_node?`\n部署節點：${d.deploy_node}\n服務：${d.deploy_service}`:'';const yes=confirm(`只簽發以下作用：\n範圍：${d.scope_zh_TW}\n分支：${d.branch}\n目標樹：${d.target_tree}\n檔案數：${d.file_count}${deployment}\n有效：5 分鐘\n\n確定後請使用已登記的創辦人平台通行密鑰解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/approve/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
 refresh();
 </script></body></html>"""
 
@@ -280,22 +280,40 @@ class PasskeyApplication:
         if not isinstance(d3, Mapping) or not isinstance(d8, Mapping):
             raise PasskeyD8Rejected("總場審查請求缺少精確座標")
         scopes = normalized_scopes(d8.get("requested_scopes", d8.get("requested_scope")))
-        if scopes != (GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE) or d8.get("maximum_ttl_seconds") != self.passkey["maximum_ttl_seconds"]:
+        allowed_scopes = {(GIT_PUSH_SCOPE,), (GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE)}
+        if scopes not in allowed_scopes or d8.get("maximum_ttl_seconds") != self.passkey["maximum_ttl_seconds"]:
             raise PasskeyD8Rejected("總場審查請求範圍不符")
         deployment = (request.get("D5_EXECUTION_POLICY") or {}).get("deployment")
-        if not isinstance(deployment, Mapping):
-            raise PasskeyD8Rejected("總場審查請求缺少精確部署座標")
-        required_deployment = {
-            "target_node": "taiji01",
-            "repository_root": "/home/taiji_admin/Taiji_Hub",
-            "service": "taiji_edge_gateway.service",
-            "application": "services.gateway.main:app",
-            "active_port": 9002,
-            "canary_port": 9003,
-            "carrier": "LAN",
-        }
-        if any(deployment.get(key) != value for key, value in required_deployment.items()):
-            raise PasskeyD8Rejected("總場審查請求部署座標不符")
+        if DEPLOY_RESTART_SCOPE in scopes:
+            if not isinstance(deployment, Mapping):
+                raise PasskeyD8Rejected("總場審查請求缺少精確部署座標")
+            admitted_deployments = (
+                {
+                    "target_node": "taiji01",
+                    "repository_root": "/home/taiji_admin/Taiji_Hub",
+                    "service": "taiji_edge_gateway.service",
+                    "application": "services.gateway.main:app",
+                    "active_port": 9002,
+                    "canary_port": 9003,
+                    "carrier": "LAN",
+                },
+                {
+                    "target_node": "MSI_WSL",
+                    "repository_root": "/home/taiji_admin/Taiji_Hub",
+                    "service": "xiaoj-intent-field",
+                    "application": "services.xiaoj_intent_field.app:app",
+                    "active_port": 9107,
+                    "canary_port": 0,
+                    "carrier": "LOCAL_DOCKER_COMPOSE",
+                },
+            )
+            if not any(
+                all(deployment.get(key) == value for key, value in expected.items())
+                for expected in admitted_deployments
+            ):
+                raise PasskeyD8Rejected("總場審查請求部署座標不符")
+        elif deployment is not None:
+            raise PasskeyD8Rejected("Git-only 審查請求不得攜帶部署座標")
         return path, request
 
     def approve_options(self, user_agent: str) -> dict[str, Any]:
@@ -306,7 +324,8 @@ class PasskeyApplication:
         scopes = normalized_scopes(
             request["D8_ENVELOPE_AUTHORITY"].get("requested_scopes")
         )
-        deployment = request["D5_EXECUTION_POLICY"]["deployment"]
+        deployment = request["D5_EXECUTION_POLICY"].get("deployment")
+        deploy_requested = DEPLOY_RESTART_SCOPE in scopes
         nonce = websafe_encode(secrets.token_bytes(32))
         ceremony_id = secrets.token_hex(16)
         issued = utc_now()
@@ -317,7 +336,7 @@ class PasskeyApplication:
             "schema_id": REVIEW_SCHEMA,
             "state": REVIEW_STATE,
             "review_registered": True,
-            "total_field_decision": "ALLOW_FORMAL_GIT_PUSH_AND_EXACT_DEPLOY_RESTART",
+            "total_field_decision": "ALLOW_FORMAL_GIT_PUSH_AND_EXACT_DEPLOY_RESTART" if deploy_requested else "ALLOW_FORMAL_GIT_PUSH",
             "reviewed_at": iso_z(issued),
             "review_request_ref": _relative(self.root, request_path),
             "review_request_packet_sha256": request["packet_sha256"],
@@ -328,11 +347,12 @@ class PasskeyApplication:
             "remote_url_sha256": d3["remote_url_sha256"],
             "allowed_paths_sha256": request["D4_EVIDENCE"]["changed_paths_sha256"],
             "authorized_scopes": list(scopes),
-            "deployment": deployment,
             "founder_user_verification": "ENROLLED_PLATFORM_PASSKEY_REQUIRED",
             "model_is_authority": False,
             "provider_is_authority": False,
         }
+        if deploy_requested:
+            review["deployment"] = deployment
         review_bytes = json.dumps(review, ensure_ascii=False, sort_keys=True, indent=2).encode("utf-8") + b"\n"
         constraints = {
             "review_registration_ref": review_ref,
@@ -346,15 +366,16 @@ class PasskeyApplication:
             "single_commit_only": True,
             "formal_submission": True,
             "git_push": True,
-            "deploy": True,
-            "restart": True,
-            "deployment": deployment,
+            "deploy": deploy_requested,
+            "restart": deploy_requested,
             "canonical_pointer_write": False,
             "active_pointer_write": False,
             "single_use_authorization_required": True,
             "replay_protected": True,
             "authority_signature_required": True,
         }
+        if deploy_requested:
+            constraints["deployment"] = deployment
         claims = {
             "scope": GIT_PUSH_SCOPE,
             "scopes": list(scopes),
@@ -397,8 +418,9 @@ class PasskeyApplication:
                 "target_tree": d3["target_tree"],
                 "file_count": len(d3.get("changed_paths") or []),
                 "ttl_seconds": self.passkey["maximum_ttl_seconds"],
-                "deploy_node": deployment["target_node"],
-                "deploy_service": deployment["service"],
+                "scope_zh_TW": "正式 Git 推送＋精確部署與重啟" if deploy_requested else "僅正式 Git 推送",
+                "deploy_node": deployment["target_node"] if deploy_requested else None,
+                "deploy_service": deployment["service"] if deploy_requested else None,
             },
         }
 
@@ -465,8 +487,8 @@ class PasskeyApplication:
             "single_use": True,
             "provider_is_authority": False,
             "model_is_authority": False,
-            "deploy_authorized": True,
-            "restart_authorized": True,
+            "deploy_authorized": bool(claims["authority_scope_constraints"]["deploy"]),
+            "restart_authorized": bool(claims["authority_scope_constraints"]["restart"]),
             "canonical_mutation_authorized": False,
         }
         atomic_json(approval_path, approval)
@@ -482,7 +504,11 @@ class PasskeyApplication:
         pending_path.unlink(missing_ok=True)
         return {
             "state": "PASS_LOCAL_DEVICE_UNLOCK_D8_APPROVAL_ISSUED",
-            "message_zh_TW": "創辦人平台通行密鑰解鎖驗證成立；本次精確推送與太極一號指定服務部署重啟已取得單次五分鐘簽發。",
+            "message_zh_TW": (
+                "創辦人平台通行密鑰解鎖驗證成立；本次精確推送與太極一號指定服務部署重啟已取得單次五分鐘簽發。"
+                if claims["authority_scope_constraints"]["deploy"]
+                else "創辦人平台通行密鑰解鎖驗證成立；本次僅限精確 Git 推送已取得單次五分鐘簽發。"
+            ),
             "approval_sha256": pointer["approval_sha256"],
         }
 
