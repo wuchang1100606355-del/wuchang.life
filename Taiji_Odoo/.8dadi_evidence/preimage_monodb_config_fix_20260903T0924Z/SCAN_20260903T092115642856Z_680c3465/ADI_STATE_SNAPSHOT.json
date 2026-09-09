@@ -1,0 +1,63 @@
+{
+  "artifacts": [
+    {
+      "adi_path_key": "config/odoo.conf",
+      "content_evidence": "完整內容雜湊",
+      "content_sha256": "75f1ceaea7cf8e39a2787887738a73557ce775cac04137e68c11c14f78031e93",
+      "existence": "存在",
+      "kind": "檔案",
+      "mode": 33188,
+      "modified_ns": 1788427275494416901,
+      "name_risk": "未命中名稱標記",
+      "path": "config/odoo.conf",
+      "size": 444
+    },
+    {
+      "adi_path_key": "docker-compose.yml",
+      "content_evidence": "完整內容雜湊",
+      "content_sha256": "558a4297f40a297f1682b46169076273210a3b1471c0a64a4096665c5759382c",
+      "existence": "存在",
+      "kind": "檔案",
+      "mode": 33188,
+      "modified_ns": 1788427275494416901,
+      "name_risk": "未命中名稱標記",
+      "path": "docker-compose.yml",
+      "size": 1024
+    }
+  ],
+  "coordinate": {
+    "git_after": {
+      "present": false
+    },
+    "git_before": {
+      "present": false
+    },
+    "node": "MSI-WSL",
+    "observed_at": "2026-09-03T09:21:15.642574+00:00",
+    "platform": "Linux",
+    "platform_release": "6.6.87.2-microsoft-standard-WSL2",
+    "root": "/tmp/w7tp-monodb-config-preimage-20260903T0924Z"
+  },
+  "coverage": "聲明範圍內查詢完成",
+  "hash_scope": "此物件排除 snapshot_sha256 欄位後的標準 JSON",
+  "holds": [],
+  "logical_root_id": "taiji-odoo-monodb-projection",
+  "protocol": "W7TP-8D-ADI-STATE-SNAPSHOT",
+  "protocol_version": "0.1.0",
+  "scan_policy": {
+    "content_read_default": false,
+    "coordinate_normalization": "POSIX_SEPARATOR_UNICODE_NFC_V1",
+    "hash_authorized_paths": [
+      "config/odoo.conf",
+      "docker-compose.yml"
+    ],
+    "max_depth": 2,
+    "max_files": 8,
+    "max_hash_bytes": 1048576,
+    "output_root_excluded": "evidence",
+    "path_case_mode": "preserve",
+    "time_budget_seconds": 20.0
+  },
+  "snapshot_sha256": "04eaa64ed4509834da8940cfe1a30b0ba5cfea09c3e241d62e4abd54c2cb2f5b",
+  "source_content_embedded": false
+}

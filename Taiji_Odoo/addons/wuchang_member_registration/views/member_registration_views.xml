@@ -3,8 +3,10 @@
     <field name="name">wuchang.member.registration.list</field>
     <field name="model">wuchang.member.registration</field>
     <field name="arch" type="xml">
-      <list>
+      <list string="協會會員登記">
         <field name="provisional_member_id"/>
+        <field name="identity_realm"/>
+        <field name="personal_data_controller"/>
         <field name="registration_channel"/>
         <field name="review_status"/>
         <field name="membership_category"/>
@@ -18,23 +20,25 @@
     <field name="name">wuchang.member.registration.form</field>
     <field name="model">wuchang.member.registration</field>
     <field name="arch" type="xml">
-      <form string="Member Registration">
+      <form string="協會會員登記">
         <header>
-          <button name="action_submit_review" type="object" string="Submit Review" class="btn-primary" groups="wuchang_member_registration.group_wuchang_member_manager"/>
-          <button name="action_approve" type="object" string="Approve" class="btn-success" groups="wuchang_member_registration.group_wuchang_member_manager"/>
-          <button name="action_reject" type="object" string="Reject" class="btn-secondary" groups="wuchang_member_registration.group_wuchang_member_manager"/>
-          <button name="action_dead_letter" type="object" string="Dead Letter" class="btn-danger" groups="wuchang_member_registration.group_wuchang_member_manager"/>
+          <button name="action_submit_review" type="object" string="送交協會審核" class="btn-primary" groups="wuchang_member_registration.group_wuchang_member_manager"/>
+          <button name="action_approve" type="object" string="核准" class="btn-success" groups="wuchang_member_registration.group_wuchang_member_manager"/>
+          <button name="action_reject" type="object" string="拒絕" class="btn-secondary" groups="wuchang_member_registration.group_wuchang_member_manager"/>
+          <button name="action_dead_letter" type="object" string="轉待人工處理" class="btn-danger" groups="wuchang_member_registration.group_wuchang_member_manager"/>
           <field name="review_status" widget="statusbar"/>
         </header>
         <sheet>
           <group>
             <field name="provisional_member_id" readonly="1"/>
+            <field name="identity_realm" readonly="1"/>
+            <field name="personal_data_controller" readonly="1"/>
             <field name="registration_channel"/>
             <field name="consent_version"/>
             <field name="consent_timestamp" readonly="1"/>
             <field name="reviewer_id" readonly="1"/>
           </group>
-          <group string="Minimum Review Data">
+          <group string="最小審核資料">
             <field name="review_name_hint"/>
             <field name="review_contact_hint"/>
             <field name="membership_category"/>
@@ -47,11 +51,11 @@
           <field name="reviewed_at" readonly="1"/>
           <field name="review_reason"/>
           </group>
-          <group string="Generated Identity">
+          <group string="產生的會員身分">
             <field name="identity_code_id" readonly="1"/>
           </group>
           <notebook>
-            <page string="Dead Letter">
+            <page string="待人工處理">
               <field name="dead_letter_reason"/>
             </page>
           </notebook>
@@ -61,18 +65,18 @@
   </record>
 
   <record id="action_wuchang_member_registration" model="ir.actions.act_window">
-    <field name="name">Member Registrations</field>
+    <field name="name">協會會員登記</field>
     <field name="res_model">wuchang.member.registration</field>
     <field name="view_mode">list,form</field>
   </record>
 
   <menuitem id="menu_wuchang_member_registration_root"
-            name="Wuchang Members"
+            name="五常協會會員"
             groups="wuchang_member_registration.group_wuchang_member_staff"
             sequence="80"/>
 
   <menuitem id="menu_wuchang_member_registration"
-            name="Registrations"
+            name="會員登記"
             parent="menu_wuchang_member_registration_root"
             action="action_wuchang_member_registration"
             groups="wuchang_member_registration.group_wuchang_member_staff"

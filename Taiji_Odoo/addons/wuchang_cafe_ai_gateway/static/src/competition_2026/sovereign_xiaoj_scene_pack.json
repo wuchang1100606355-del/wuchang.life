@@ -1,0 +1,407 @@
+{
+  "schema_id": "W7TP_SOVEREIGN_XIAOJ_SCENE_PACK_CANDIDATE_V1",
+  "state": "CANDIDATE",
+  "canonical": false,
+  "active": false,
+  "live_effect": false,
+  "final_authority": false,
+  "product": {
+    "name_zh_tw": "主權 AI 小 J 個人／組織服務員",
+    "competition_entry_zh_tw": "咖啡館服務員影音 AI 小 J",
+    "smallest_control_unit_zh_tw": "數位腦細胞：完整 D1 至 D8 狀態原胞",
+    "core_zh_tw": "8D ADI 是完整的 AI 應用系統；八維度自適應索引控制是其核心能力之一",
+    "effect_authority_zh_tw": "總場",
+    "model_role_zh_tw": "雲端模型是可替換算力，地端模型負責轉譯；兩者都不是權威"
+  },
+  "system_definition": {
+    "system_kind": "8D_ADI_COMPLETE_AI_APPLICATION_SYSTEM",
+    "complete_ai_application_system": true,
+    "not_merely": ["控制模組", "聊天機器人", "單一模型", "檔案傳輸工具"],
+    "digital_brain_cell": {
+      "smallest_complete_unit": true,
+      "dimensions": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+      "purpose_zh_tw": "將全面性理解形成有座標、有證據、有能力、有風險邊界且可重新觀測的執行"
+    },
+    "perception_surfaces": ["TEXT", "IMAGE", "AUDIO", "NETWORK_STATE", "DEVICE_CAPABILITY"],
+    "computation_planes": {
+      "discrete_index": {
+        "decision_mode": "EXACT_LOOKUP",
+        "owns": ["IDENTITY", "COORDINATE", "CAPABILITY_BINDING", "POLICY", "LINEAGE"],
+        "deterministic": true
+      },
+      "high_dimensional_float": {
+        "role": "UNDERSTANDING_AND_GENERATION_CANDIDATE",
+        "output_authority": false,
+        "may_create_missing_numeric_contract": false
+      },
+      "fusion": {
+        "join_unit": "D1_D8_DIGITAL_BRAIN_CELL",
+        "floating_output_must_resolve_through_discrete_index": true,
+        "conflict_mode": "FAIL_CLOSED"
+      }
+    },
+    "final_effect_adjudicator": "TOTAL_FIELD"
+  },
+  "understanding_to_execution": {
+    "steps": [
+      "CAPTURE_INTENT_AND_MULTIMODAL_STATE",
+      "BIND_EVIDENCE_AND_COORDINATES",
+      "EXACT_DISCRETE_INDEX_LOOKUP",
+      "HIGH_DIMENSIONAL_FLOATING_INFERENCE_CANDIDATE",
+      "FUSE_WITHOUT_AUTHORITY_INVERSION",
+      "BUILD_D1_D8_DIGITAL_BRAIN_CELLS",
+      "SELECT_REPLACEABLE_COMPUTE",
+      "GENERATE_MINIMUM_REQUIRED_TRANSMISSION",
+      "RECONSTRUCT_AT_TARGET",
+      "TOTAL_FIELD_ADJUDICATES_EFFECT",
+      "REOBSERVE_AND_RECORD_STATE"
+    ],
+    "execution_definition_zh_tw": "理解不是文字答案；理解必須落成可驗證的能力選擇、最小狀態差量、目標重建與效果邊界",
+    "anti_drift": [
+      "FOUNDER_INTENT_NOT_INFERRED_FROM_CODE",
+      "FLOATING_INFERENCE_CANNOT_CREATE_COORDINATES",
+      "MODEL_OUTPUT_REMAINS_CANDIDATE",
+      "D4_EVIDENCE_IS_NOT_AUTHORITY",
+      "D6_CANNOT_SELF_AUTHORIZE",
+      "RUNTIME_IS_PROJECTION",
+      "TOTAL_FIELD_CANNOT_BE_BYPASSED"
+    ]
+  },
+  "distributed_field": {
+    "unification_unit": "D1_D8_DIGITAL_BRAIN_CELL",
+    "nodes": ["BROWSER_OR_KIOSK", "ODOO_SCENE", "TOTAL_FIELD", "LOCAL_MODEL", "DISTRIBUTED_COMPUTE_HOST", "REPLACEABLE_CLOUD_MODEL"],
+    "network_priority": ["LAN", "VPN", "CLOUD", "OFFLINE_MINIMUM_SERVICE"],
+    "dynamic_context": "RECONSTRUCT_FROM_INDEXED_MINIMUM_REQUIRED_STATE",
+    "device_unification": "CAPABILITY_REGISTERED_AND_SELECTED_BY_COORDINATE",
+    "raw_context_pooling": false
+  },
+  "privacy_boundary": {
+    "camera_default_enabled": false,
+    "demographic_face_inference": false,
+    "raw_audio_persisted": false,
+    "member_plaintext_in_state_cell": false,
+    "credential_material_in_model_context": false
+  },
+  "compute_binding_source": {
+    "odoo_model": "wuchang.ai.compute.binding",
+    "providers": ["gemini", "openai", "other"],
+    "route_order": ["browser_local", "local_model", "member_bound_provider", "total_field_quota_pool"],
+    "minimum_delta_only": true,
+    "provider_is_authority": false
+  },
+  "scenes": [
+    {
+      "scene_id": "cafe",
+      "label_zh_tw": "上品聊國咖啡館",
+      "entry_role": "咖啡館服務員影音 AI 小 J",
+      "odoo_coordinates": [
+        "wuchang.cafe.gateway",
+        "wuchang.cafe.merchant.ai.handshake.service",
+        "wuchang.ai.compute.binding",
+        "/wuchang/xiaoj/api/intent",
+        "/wuchang/api/cafe/menu/v1"
+      ],
+      "capabilities": [
+        {
+          "capability_id": "cafe.audiovisual.guide",
+          "label_zh_tw": "影音迎賓與語音說明",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["browser:speechSynthesis", "xiaoj_display_projection"],
+          "output_modalities": ["visual", "audio", "text"]
+        },
+        {
+          "capability_id": "cafe.image.context",
+          "label_zh_tw": "不做人臉人口推論的影像情境理解候選",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["browser:image_input", "local_or_bound_vlm:candidate_only"],
+          "output_modalities": ["visual", "structured_data"]
+        },
+        {
+          "capability_id": "cafe.audio.intent",
+          "label_zh_tw": "語音意圖轉譯候選",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["browser:audio_input", "local_translator:candidate_only"],
+          "output_modalities": ["audio", "text", "structured_data"]
+        },
+        {
+          "capability_id": "cafe.network.observe",
+          "label_zh_tw": "網路狀態與可用傳輸路徑觀測",
+          "mode": "read_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["browser:network_state", "w7tp_mesh:route_observation"],
+          "output_modalities": ["structured_data"]
+        },
+        {
+          "capability_id": "cafe.generative.transmission.plan",
+          "label_zh_tw": "最小必要狀態資訊生成式傳輸規劃",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["XiaoJ.MeshTransport.send", "w7tp-gt-mesh-v21", "MeshReceiver.receive"],
+          "output_modalities": ["state_field_packet", "structured_data"]
+        },
+        {
+          "capability_id": "cafe.menu.explain",
+          "label_zh_tw": "真實菜單查詢與商品說明",
+          "mode": "read_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["wuchang.cafe.readonly.menu.mapping.service", "/wuchang/api/cafe/menu/v1"],
+          "output_modalities": ["visual", "audio", "text"]
+        },
+        {
+          "capability_id": "cafe.order.proposal",
+          "label_zh_tw": "點餐結構化候選",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["/wuchang/xiaoj/api/intent", "pos.order:proposal_only"],
+          "output_modalities": ["visual", "audio", "structured_data"]
+        },
+        {
+          "capability_id": "cafe.order.release",
+          "label_zh_tw": "正式下單與付款放行",
+          "mode": "human_release",
+          "d8_required_for_effect": true,
+          "local_safe": false,
+          "coordinates": ["pos.order", "pos.payment", "authority:TOTAL_FIELD"],
+          "output_modalities": ["structured_data", "receipt"]
+        }
+      ]
+    },
+    {
+      "scene_id": "property",
+      "label_zh_tw": "社區管委會／物業服務",
+      "entry_role": "大廳服務員影音 AI 小 J",
+      "odoo_coordinates": [
+        "wuchang.community",
+        "wuchang.building",
+        "wuchang.unit",
+        "wuchang.complaint",
+        "wuchang.repair",
+        "wuchang.property.document"
+      ],
+      "capabilities": [
+        {
+          "capability_id": "property.service.intake",
+          "label_zh_tw": "報修與服務需求結構化",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["wuchang.complaint", "wuchang.repair:proposal_only"],
+          "output_modalities": ["visual", "audio", "structured_data"]
+        },
+        {
+          "capability_id": "property.notice.read",
+          "label_zh_tw": "公告與公共文件說明",
+          "mode": "read_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["wuchang.bulletin", "wuchang.property.document"],
+          "output_modalities": ["visual", "audio", "text"]
+        },
+        {
+          "capability_id": "property.repair.release",
+          "label_zh_tw": "派工與設備控制放行",
+          "mode": "human_release",
+          "d8_required_for_effect": true,
+          "local_safe": false,
+          "coordinates": ["wuchang.repair", "committee_release", "authority:TOTAL_FIELD"],
+          "output_modalities": ["structured_data"]
+        }
+      ]
+    },
+    {
+      "scene_id": "association",
+      "label_zh_tw": "社區發展協會營運",
+      "entry_role": "公益服務影音 AI 小 J",
+      "odoo_coordinates": [
+        "wuchang.member.registration",
+        "wuchang.volunteer",
+        "wuchang.task",
+        "wuchang.meeting",
+        "wuchang.announcement"
+      ],
+      "capabilities": [
+        {
+          "capability_id": "association.service.intake",
+          "label_zh_tw": "公益服務需求結構化",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["wuchang.task:proposal_only", "human_social_worker_handoff"],
+          "output_modalities": ["visual", "audio", "structured_data"]
+        },
+        {
+          "capability_id": "association.volunteer.match",
+          "label_zh_tw": "志工與任務候選媒合",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["wuchang.volunteer", "wuchang.task", "human_review"],
+          "output_modalities": ["visual", "structured_data"]
+        },
+        {
+          "capability_id": "association.case.release",
+          "label_zh_tw": "個案服務正式指派",
+          "mode": "human_release",
+          "d8_required_for_effect": true,
+          "local_safe": false,
+          "coordinates": ["human_social_worker", "association_governance", "authority:TOTAL_FIELD"],
+          "output_modalities": ["structured_data"]
+        }
+      ]
+    },
+    {
+      "scene_id": "personal",
+      "label_zh_tw": "個人主權 AI 中繼服務",
+      "entry_role": "個人影音 AI 小 J",
+      "odoo_coordinates": [
+        "wuchang.ai.compute.binding",
+        "member_bound_provider",
+        "total_field_quota_pool",
+        "local_model_translation"
+      ],
+      "capabilities": [
+        {
+          "capability_id": "personal.dynamic.context.reconstruct",
+          "label_zh_tw": "動態上下文最小差量重建",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["8d_adi:index", "target_base_state", "minimum_required_delta"],
+          "output_modalities": ["structured_data", "text"]
+        },
+        {
+          "capability_id": "personal.subscription.relay",
+          "label_zh_tw": "個人 Gemini／GPT 訂閱算力的受控中繼候選",
+          "mode": "candidate_only",
+          "d8_required_for_effect": false,
+          "local_safe": true,
+          "coordinates": ["wuchang.ai.compute.binding", "member_bound_provider", "budget_guard"],
+          "output_modalities": ["text", "audio", "visual", "structured_data"]
+        },
+        {
+          "capability_id": "personal.external.effect.release",
+          "label_zh_tw": "個人外部作用放行",
+          "mode": "human_release",
+          "d8_required_for_effect": true,
+          "local_safe": false,
+          "coordinates": ["natural_person_approval", "authority:TOTAL_FIELD"],
+          "output_modalities": ["structured_data", "receipt"]
+        }
+      ]
+    }
+  ],
+  "earthquake_overlay": {
+    "overlay_id": "cafe_earthquake_resilience",
+    "label_zh_tw": "地震特殊狀態",
+    "trigger_schema": "W7TP_VERIFIED_ALERT_EVENT_CANDIDATE_V1",
+    "accepted_sources": ["ISOLATED_SIMULATION", "NCDR_CAP", "CWA_PWS"],
+    "default_capability_ids": [
+      "alert.verify",
+      "alert.translate",
+      "safety.drop_cover_hold",
+      "cafe.equipment.protection.proposal",
+      "community.status.collect"
+    ],
+    "capabilities": [
+      {
+        "capability_id": "alert.verify",
+        "label_zh_tw": "警報來源、區域、時間與證據驗證",
+        "mode": "read_only",
+        "d8_required_for_effect": false,
+        "local_safe": true,
+        "coordinates": ["NCDR_CAP", "CWA_PWS", "D4:evidence_binding"],
+        "output_modalities": ["structured_data"]
+      },
+      {
+        "capability_id": "alert.translate",
+        "label_zh_tw": "警報轉譯為店內可執行語音與畫面",
+        "mode": "candidate_only",
+        "d8_required_for_effect": false,
+        "local_safe": true,
+        "coordinates": ["local_model:translator", "xiaoj_display_projection"],
+        "output_modalities": ["visual", "audio", "text"]
+      },
+      {
+        "capability_id": "safety.drop_cover_hold",
+        "label_zh_tw": "趴下、掩護、穩住避難引導",
+        "mode": "candidate_only",
+        "d8_required_for_effect": false,
+        "local_safe": true,
+        "coordinates": ["CWA:earthquake_precautions", "NFA:earthquake_guidance"],
+        "output_modalities": ["visual", "audio", "text"]
+      },
+      {
+        "capability_id": "cafe.equipment.protection.proposal",
+        "label_zh_tw": "瓦斯、電源、門鎖與電梯保護提案",
+        "mode": "human_release",
+        "d8_required_for_effect": true,
+        "local_safe": true,
+        "coordinates": ["iot_effect_request:proposal_only", "authority:TOTAL_FIELD"],
+        "output_modalities": ["structured_data"]
+      },
+      {
+        "capability_id": "community.status.collect",
+        "label_zh_tw": "匿名平安狀態與人工接手機制",
+        "mode": "candidate_only",
+        "d8_required_for_effect": false,
+        "local_safe": true,
+        "coordinates": ["odoo:case_intake_candidate", "human_social_worker_handoff"],
+        "output_modalities": ["visual", "audio", "structured_data"]
+      }
+    ],
+    "generative_transmission": {
+      "TARGET_BASE_STATE": {
+        "required": ["local_scene_pack", "local_safety_script", "xiaoj_audio_visual_projection"],
+        "network_dependency": "LAN_FIRST_VPN_SECONDARY_OFFLINE_MINIMUM_SERVICE"
+      },
+      "MINIMUM_REQUIRED_DELTA": {},
+      "REFERENCES": ["NCDR_CAP", "CWA_PWS", "local_scene_pack_sha256"],
+      "COORDINATES": ["cafe_kiosk", "taiji01_total_field", "approved_edge_nodes"],
+      "RECONSTRUCTION_RULES": [
+        "VERIFY_ALERT_OR_SIMULATION_LABEL",
+        "VERIFY_TARGET_BASE_STATE",
+        "APPLY_ONLY_EVENT_DELTA",
+        "RECONSTRUCT_LOCALLY",
+        "DO_NOT_COPY_RAW_CONTEXT"
+      ],
+      "VERIFICATION_RULES": [
+        "REOBSERVE_EACH_TARGET",
+        "SPOKEN_AND_VISUAL_INSTRUCTION_MATCH",
+        "NO_EFFECT_WITHOUT_TOTAL_FIELD_D8",
+        "REPLAY_IS_REJECTED"
+      ]
+    },
+    "official_reference_urls": [
+      "https://alerts.ncdr.nat.gov.tw/web/developer/cap-docs",
+      "https://scweb.cwa.gov.tw/zh-tw/pws",
+      "https://scweb.cwa.gov.tw/webdata/PDF/Earthquake_precautions/index.html",
+      "https://www.nfa.gov.tw/cht/index.php?code=list&ids=585&page=1"
+    ],
+    "live_integration_state": "NOT_CONNECTED",
+    "simulation_is_official_alert": false,
+    "xiaoj_may_issue_national_alert": false
+  },
+  "competition_alignment": {
+    "innovation_and_technology": ["8D_ADI_COMPLETE_AI_APPLICATION_SYSTEM", "D1_D8_DIGITAL_BRAIN_CELL", "DISCRETE_EXACT_AND_HIGH_DIMENSIONAL_FLOAT_FUSION", "MULTIMODAL_STATE", "GENERATIVE_TRANSMISSION", "TOTAL_FIELD", "DISTRIBUTED_COMPUTE"],
+    "business_value": ["CAFE_SERVICE", "ODOO_SCENE_PACK", "BYO_AI_QUOTA_SAVING"],
+    "telecom_linkage": ["PWS_CELL_BROADCAST_INPUT", "LOW_BANDWIDTH_MINIMUM_DELTA", "LAN_AND_VPN_RESILIENCE"],
+    "experience": ["AUDIO", "VISUAL", "TEXT", "HUMAN_HANDOFF"],
+    "sustainability": ["OLD_DEVICE_REUSE", "LOCAL_FIRST", "CLOUD_ONLY_FOR_MINIMUM_GAP"]
+  },
+  "founder_story": {
+    "start_zh_tw": "一位想用咖啡館支持公益服務的咖啡師，從社工個案管理看見每個需求都同時具有意圖、狀態、座標、證據、執行、傳輸、風險與權威。",
+    "transformation_zh_tw": "十個月內，把反覆出現的八維觀察整理為可索引、可重建、可驗證的 8D ADI 數位腦細胞。",
+    "result_zh_tw": "小 J 因此不是一個聊天玩具，而是能在咖啡館、管委會與協會之間掛載靜態場景能力，同時把真實效果留給總場與人類權威的服務員。",
+    "evidence_state": "FOUNDER_DECLARED_NARRATIVE_REQUIRES_TIMELINE_EVIDENCE_BEFORE_PUBLIC_FACT_CLAIM"
+  }
+}

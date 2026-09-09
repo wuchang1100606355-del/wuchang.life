@@ -1,6 +1,6 @@
 {
     "name": "WuChang Cafe AI Gateway",
-    "version": "18.0.2.3.0",
+    "version": "18.0.2.3.1",
     "category": "Point of Sale",
     "summary": "上品聊國咖啡館重新總店：小J影音店員、自然語言點餐與 8DADI 數位設備社區團結行動。",
     "author": "WuChang / Liaoguo Cafe",

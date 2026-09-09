@@ -1,0 +1,11 @@
+SCHEMA=w7tp.8dadi.execution-drift-evidence/2.3
+STATE=HOLD_OBSOLETE_VPN_BIND
+D1_INTENT=區網優先，VPN 僅為候選備援
+D2_STATE=容器映像建構通過但舊綁定阻止啟動
+D3_COORDINATE=taiji_pos_google_voice_tool docker-compose ports
+D4_EVIDENCE=daemon reported cannot bind 100.107.187.77:9011 because address is absent
+D5_EXECUTION=remove only the absent fixed VPN host bind; retain localhost and taiji-ai network
+D6_GENERATIVE_TRANSMISSION=unchanged
+D7_RISK=no data deletion; no database write; no authority promotion
+D8_AUTHORITY=Founder current LAN-first intent; Total Field reobservation required
+FILES_DELETED=NONE

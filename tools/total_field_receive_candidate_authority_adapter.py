@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable, Collection, Mapping
@@ -13,9 +14,11 @@ RESOLVER_CANDIDATE_SHA256 = (
 )
 CURRENT_OWNER_REL = "tools/total_field_dynamic_context.py"
 CURRENT_OWNER_SHA256 = (
-    "2c6a4e7887eaf8a68488738ca614e0994804081e304944d4a413bad6eaf7e287"
+    "ea7ed43d69ef35867cfa7d746f4faaf8990ff8a0b18e29a5be78370e071201bc"
 )
 PASS_AUTHORITY_STATE = "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED"
+RECEIVE_CANDIDATE_SCOPE = "RECEIVE_CANDIDATE"
+PASSKEY_CONFIG_REL = Path("configs/total_field/git_push_review_gate_v1.json")
 STATE_CELL_PILOT_SCOPE = "RUN_READ_ONLY_STATE_CELL_PILOT"
 STATE_CELL_PILOT_ACTION = "RUN_READ_ONLY_STATE_CELL_INDEX_PROJECTION"
 STATE_CELL_PILOT_NODE = "MSI"
@@ -59,6 +62,52 @@ def canonical_sha256(value: Any) -> str:
         separators=(",", ":"),
     ).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
+
+
+def _resolve_passkey_authority(
+    *, repo_root: Path, passkey_config: Mapping[str, Any], consume: bool
+) -> dict[str, Any]:
+    runtime = Path(str(passkey_config.get("python_runtime") or ""))
+    verifier = repo_root / "tools/total_field_passkey_d8.py"
+    if not runtime.is_absolute() or not runtime.is_file() or not verifier.is_file():
+        return {
+            "state": "HOLD_DEVICE_PASSKEY_D8_AUTHORITY",
+            "authority_verified": False,
+            "reason": "PASSKEY_VERIFIER_RUNTIME_UNAVAILABLE",
+            "scope": [],
+        }
+    command = [
+        str(runtime),
+        str(verifier),
+        "--repo-root",
+        str(repo_root),
+        "--required-scope",
+        RECEIVE_CANDIDATE_SCOPE,
+    ]
+    if consume:
+        command.append("--consume")
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=repo_root,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            timeout=15,
+            check=False,
+        )
+        result = json.loads(completed.stdout)
+    except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError):
+        result = None
+    if not isinstance(result, dict):
+        return {
+            "state": "HOLD_DEVICE_PASSKEY_D8_AUTHORITY",
+            "authority_verified": False,
+            "reason": "PASSKEY_VERIFIER_PROCESS_FAILED",
+            "scope": [],
+        }
+    return result
 
 
 def _safe_result(
@@ -294,7 +343,55 @@ def receive_candidate_authority_bound(
             dynamic_context_packet=context,
         )
 
+    authority_source = "ED25519_ACTIVE_AUTHORITY"
     authority_state = authority_resolution.get("state")
+    if (
+        authority_state != PASS_AUTHORITY_STATE
+        or authority_resolution.get("authority_verified") is not True
+    ):
+        passkey_config_path = Path(repo_root).resolve() / PASSKEY_CONFIG_REL
+        if passkey_config_path.is_file() and not passkey_config_path.is_symlink():
+            try:
+                passkey_gate = json.loads(passkey_config_path.read_text(encoding="utf-8"))
+                passkey_config = passkey_gate.get("passkey_verifier") or {}
+                if RECEIVE_CANDIDATE_SCOPE in (
+                    passkey_config.get("allowed_effect_scopes") or []
+                ):
+                    passkey_resolution = _resolve_passkey_authority(
+                        repo_root=Path(repo_root).resolve(),
+                        passkey_config=passkey_config,
+                        consume=False,
+                    )
+                    constraints = passkey_resolution.get("authority_scope_constraints")
+                    expected = {
+                        "candidate_id": candidate.get("candidate_id"),
+                        "candidate_packet_sha256": candidate.get(
+                            "candidate_packet_sha256"
+                        ),
+                        "skill_index_sha256": candidate.get("skill_index_sha256"),
+                        "skill_source_manifest_sha256": candidate.get(
+                            "skill_source_manifest_sha256"
+                        ),
+                        "dynamic_context_sha256": context.get("packet_sha256"),
+                    }
+                    if (
+                        passkey_resolution.get("state") == PASS_AUTHORITY_STATE
+                        and passkey_resolution.get("authority_verified") is True
+                        and isinstance(constraints, Mapping)
+                        and all(constraints.get(key) == value for key, value in expected.items())
+                        and constraints.get("receive_candidate") is True
+                        and constraints.get("git_push") is False
+                        and constraints.get("deploy") is False
+                        and constraints.get("restart") is False
+                        and constraints.get("canonical_pointer_write") is False
+                        and constraints.get("active_pointer_write") is False
+                    ):
+                        authority_resolution = dict(passkey_resolution)
+                        authority_state = PASS_AUTHORITY_STATE
+                        authority_source = "FOUNDER_USER_VERIFIED_PASSKEY"
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError, ImportError):
+                pass
+
     if (
         authority_state != PASS_AUTHORITY_STATE
         or authority_resolution.get("authority_verified") is not True
@@ -328,6 +425,13 @@ def receive_candidate_authority_bound(
         "expires_at",
         "verifier_ref",
     )
+    if authority_source == "FOUNDER_USER_VERIFIED_PASSKEY":
+        required_resolution_fields = (
+            "scope",
+            "expires_at",
+            "authority_sha256",
+            "signer_type",
+        )
     missing = [
         field
         for field in required_resolution_fields
@@ -363,24 +467,53 @@ def receive_candidate_authority_bound(
             authority_resolution=authority_resolution,
         )
 
-    verified_authority_ref = {
-        "schema_id": "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1",
-        "authority_id": authority_resolution["authority_id"],
-        "authority_version": authority_resolution["authority_version"],
-        "founder_person_packet_ref": authority_resolution[
-            "founder_person_packet_ref"
-        ],
-        "registered_device_ref": authority_resolution["registered_device_ref"],
-        "founder_capability_assignment_ref": authority_resolution[
-            "founder_capability_assignment_ref"
-        ],
-        "access_profile_ref": authority_resolution["access_profile_ref"],
-        "authority_scope": list(authority_resolution["authority_scope"]),
-        "authority_scope_constraints": dict(raw_scope_constraints),
-        "expires_at": authority_resolution["expires_at"],
-        "verifier_ref": authority_resolution["verifier_ref"],
-        "authority_resolution_sha256": canonical_sha256(authority_resolution),
-    }
+    if authority_source == "FOUNDER_USER_VERIFIED_PASSKEY":
+        consumed = _resolve_passkey_authority(
+            repo_root=Path(repo_root).resolve(),
+            passkey_config=passkey_config,
+            consume=True,
+        )
+        if (
+            consumed.get("authority_verified") is not True
+            or consumed.get("authority_sha256")
+            != authority_resolution.get("authority_sha256")
+        ):
+            return _safe_result(
+                "HOLD_DEVICE_PASSKEY_D8_AUTHORITY",
+                str(consumed.get("reason") or "passkey approval consumption failed"),
+                candidate_packet=candidate,
+                dynamic_context_packet=context,
+                authority_resolution=authority_resolution,
+            )
+        verified_authority_ref = {
+            "schema_id": "W7TP_VERIFIED_PASSKEY_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1",
+            "authority_source": authority_source,
+            "authority_sha256": authority_resolution["authority_sha256"],
+            "signer_type": authority_resolution["signer_type"],
+            "authority_scope": list(authority_resolution["scope"]),
+            "authority_scope_constraints": dict(raw_scope_constraints),
+            "expires_at": authority_resolution["expires_at"],
+            "authority_resolution_sha256": canonical_sha256(authority_resolution),
+        }
+    else:
+        verified_authority_ref = {
+            "schema_id": "W7TP_VERIFIED_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLUTION_V1",
+            "authority_id": authority_resolution["authority_id"],
+            "authority_version": authority_resolution["authority_version"],
+            "founder_person_packet_ref": authority_resolution[
+                "founder_person_packet_ref"
+            ],
+            "registered_device_ref": authority_resolution["registered_device_ref"],
+            "founder_capability_assignment_ref": authority_resolution[
+                "founder_capability_assignment_ref"
+            ],
+            "access_profile_ref": authority_resolution["access_profile_ref"],
+            "authority_scope": list(authority_resolution["authority_scope"]),
+            "authority_scope_constraints": dict(raw_scope_constraints),
+            "expires_at": authority_resolution["expires_at"],
+            "verifier_ref": authority_resolution["verifier_ref"],
+            "authority_resolution_sha256": canonical_sha256(authority_resolution),
+        }
 
     try:
         owner_result = owner_receive_candidate(

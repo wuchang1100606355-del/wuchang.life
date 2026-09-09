@@ -4,76 +4,94 @@ import secrets
 import time
 from pathlib import Path
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class WuchangMemberRegistration(models.Model):
     _name = "wuchang.member.registration"
-    _description = "Wuchang Member Registration"
+    _description = "五常社區發展協會會員登記"
     _order = "create_date desc"
 
     name = fields.Char(default="New", readonly=True)
     provisional_member_id = fields.Char(readonly=True, index=True)
+    identity_realm = fields.Selection([
+        ("association_membership", "協會會員域"),
+    ], string="身分領域", required=True, default="association_membership", readonly=True)
+    personal_data_controller = fields.Selection([
+        ("wuchang_association", "五常社區發展協會"),
+    ], string="會員個資管理者", required=True, default="wuchang_association", readonly=True)
     registration_channel = fields.Selection([
         ("line", "LINE"),
         ("google", "Google"),
         ("odoo", "Odoo"),
-        ("pwa", "PWA"),
-        ("staff_terminal", "Staff Assisted"),
-    ], required=True, default="odoo")
+        ("pwa", "漸進式網頁應用程式（PWA）"),
+        ("staff_terminal", "協會人員協助"),
+    ], string="登記管道", required=True, default="odoo")
     review_status = fields.Selection([
-        ("draft", "Draft"),
-        ("pending_review", "Pending Review"),
-        ("approved", "Approved"),
-        ("rejected", "Rejected"),
-        ("dead_letter", "Dead Letter"),
-    ], default="draft", index=True)
-    consent_version = fields.Char(required=True, default="v1")
-    consent_timestamp = fields.Datetime()
-    reviewer_id = fields.Many2one("res.users", readonly=True)
-    dead_letter_reason = fields.Text(readonly=True)
+        ("draft", "草稿"),
+        ("pending_review", "待協會審核"),
+        ("approved", "已核准"),
+        ("rejected", "已拒絕"),
+        ("dead_letter", "待人工處理"),
+    ], string="審核狀態", default="draft", index=True)
+    consent_version = fields.Char(string="同意條款版本", required=True, default="v1")
+    consent_timestamp = fields.Datetime(string="同意時間")
+    reviewer_id = fields.Many2one("res.users", string="協會審核人", readonly=True)
+    dead_letter_reason = fields.Text(string="待人工處理原因", readonly=True)
 
     # Minimal review fields. These should not be used as daily runtime identity.
-    review_name_hint = fields.Char("Review Name Hint")
-    review_contact_hint = fields.Char("Review Contact Hint")
-    membership_category = fields.Char()
-    role_scope = fields.Char(default="member")
-    service_scope = fields.Char(default="basic_member_service")
+    review_name_hint = fields.Char("姓名審核提示")
+    review_contact_hint = fields.Char("聯絡方式審核提示")
+    membership_category = fields.Char(string="會員類別")
+    role_scope = fields.Char(string="角色範圍", default="member")
+    service_scope = fields.Char(string="服務範圍", default="basic_member_service")
 
     member_type = fields.Selection([
-        ("individual", "Individual Member"),
-        ("organization", "Organization Member"),
-    ], default="individual", required=True, index=True)
+        ("individual", "個人會員"),
+        ("organization", "團體會員"),
+    ], string="會員型態", default="individual", required=True, index=True)
 
-    organization_name = fields.Char("Organization / Affiliation")
+    organization_name = fields.Char("組織／所屬單位")
     organization_role = fields.Selection([
-        ("none", "None"),
-        ("responsible_person", "Responsible Person"),
-        ("representative", "Representative"),
-        ("position_responsible", "Position Responsible"),
-        ("staff", "Staff"),
-        ("volunteer", "Volunteer"),
-        ("resident", "Resident"),
-        ("other", "Other"),
-    ], default="none", index=True)
+        ("none", "無"),
+        ("responsible_person", "負責人"),
+        ("representative", "代表人"),
+        ("position_responsible", "職務負責人"),
+        ("staff", "工作人員"),
+        ("volunteer", "志工"),
+        ("resident", "居民"),
+        ("other", "其他"),
+    ], string="組織角色", default="none", index=True)
 
     review_level = fields.Selection([
-        ("manager_allowed", "Manager Allowed"),
-        ("owner_required", "Owner Required"),
-        ("org_responsible_required", "Organization Responsible Required"),
-    ], default="manager_allowed", readonly=True, index=True)
+        ("manager_allowed", "協會管理員可審核"),
+        ("owner_required", "協會治理管理員審核"),
+        ("org_responsible_required", "組織負責人確認"),
+    ], string="審核層級", default="manager_allowed", readonly=True, index=True)
 
-    reviewed_at = fields.Datetime(readonly=True)
-    review_reason = fields.Text("Review Reason")
+    reviewed_at = fields.Datetime(string="審核時間", readonly=True)
+    review_reason = fields.Text("審核原因")
 
-    identity_code_id = fields.Many2one("wuchang.member.identity.code", readonly=True)
+    identity_code_id = fields.Many2one("wuchang.member.identity.code", string="會員身分碼", readonly=True)
 
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            self._reject_authority_drift(vals)
             vals.setdefault("provisional_member_id", self._new_provisional_id())
             vals.setdefault("name", vals["provisional_member_id"])
         return super().create(vals_list)
+
+    def write(self, vals):
+        self._reject_authority_drift(vals)
+        return super().write(vals)
+
+    @api.model
+    def _reject_authority_drift(self, vals):
+        if vals.get("identity_realm") not in (None, False, "association_membership"):
+            raise ValidationError(_("會員登記只能存在於協會會員域。"))
+        if vals.get("personal_data_controller") not in (None, False, "wuchang_association"):
+            raise ValidationError(_("會員個資只能由五常社區發展協會管理。"))
 
     @api.model
     def _new_provisional_id(self):

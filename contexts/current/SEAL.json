@@ -1,0 +1,48 @@
+{
+  "schema": "w7tp.8dadi.resume-seal/2.3",
+  "中文名稱": "總場續接完整性封套",
+  "packet_id": "8dadi-session-resume-20260903T114124Z",
+  "created_at": "2026-09-03T11:41:24Z",
+  "seal_state": "INTEGRITY_SEALED_UNSIGNED",
+  "seal_state_中文": "已封存完整性但尚未取得密碼學人身簽章",
+  "hashes": {
+    "ADI_STATE_SNAPSHOT.json": "b53d03dec98ee019b44670cb9095e3c2f89a4c874e0ee0de30ad742dba535283",
+    "ADI_GENERATIVE_TRANSFER_PACKET.json": "ea9ff18f61c29785fb123ae3edf2afcd1700de02834eb41bf3c9014b0abc48d4"
+  },
+  "coordinate_lock": {
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "head": "a6bce1638142ef67e543cde708ba1f09fdb296f5",
+    "dirty_entries_at_observation": 40,
+    "coordinate_mismatch_result": "HOLD_REOBSERVE_DO_NOT_REBIND"
+  },
+  "capability": {
+    "id": "total-field.resume-state-load.2.3",
+    "read_verify_reobserve": "FOUNDER_AUTHORIZED",
+    "remote_subsystem_generation": "APPLICATION_REQUIRED",
+    "onsite_engineer_maintenance": "APPLICATION_REQUIRED",
+    "external_effect": "DENIED_UNTIL_TOTAL_FIELD_CHECK_AND_FOUNDER_HUMAN_APPROVAL"
+  },
+  "privilege_application_contract": {
+    "required": ["何時", "何地", "何人", "何事", "使用範圍", "有效時間"],
+    "human_reviewer": "FOUNDER",
+    "total_field_may_issue_after_human_approval_only": true,
+    "automatic_approval": false,
+    "standing_privilege": false,
+    "missing_expired_or_mismatched": "REJECT_OR_REVOKE_AND_HOLD"
+  },
+  "authority_boundary": {
+    "packet_is_canonical": false,
+    "packet_is_final_authority": false,
+    "packet_may_self_promote": false,
+    "packet_may_resume_paused_upload": false,
+    "total_field_decides_external_effect": true,
+    "founder_human_approval_required_for_privilege": true
+  },
+  "required_files": [
+    "ADI_STATE_SNAPSHOT.json",
+    "SNAPSHOT_SHA256.txt",
+    "ADI_GENERATIVE_TRANSFER_PACKET.json",
+    "SEAL.json"
+  ]
+}

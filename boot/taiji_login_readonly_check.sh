@@ -76,9 +76,9 @@ echo "[guard] readonly_guard: $READONLY_GUARD"
 
 check_url  "taiji_gateway"      "http://127.0.0.1:8081/health"
 check_url  "open_webui"         "http://127.0.0.1:8080"
-check_url  "openwebui_bridge"   "http://127.0.0.1:8098/v1/models"
+check_url  "model_gateway"      "http://127.0.0.1:9002/health"
 check_url  "ollama"             "http://127.0.0.1:11434/api/tags"
-check_url  "native_claw"        "http://127.0.0.1:9004/healthz"
+check_url  "native_claw"        "http://127.0.0.1:9004/openapi.json"
 check_url  "xiaoj_intent_field" "http://127.0.0.1:9107/healthz"
 check_port "ssh_tunnel"         "2222"
 

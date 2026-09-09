@@ -1,0 +1,57 @@
+{
+  "schema": "w7tp.8dadi.generative-capability-transfer/2.3",
+  "中文名稱": "自然語言全自動建構能力生成式傳輸封包",
+  "package_id": "total-field-nl-autobuild-2.3-20260903T114909Z",
+  "entry_file": "ADI_STATE_SNAPSHOT.json",
+  "entry_sha256": "2a8e33b9055a1bb13e027c4db1c289bdf466d76789fdbca4dbad684faa007b96",
+  "reconstructs": [
+    "自然語言建構命令契約",
+    "創辦人身分根與兩條合法到達路徑",
+    "創辦人逐案瀏覽器人審規則",
+    "總場核准後全自動建構流程",
+    "跨節點遠端生成、驗證、回復與回執規則"
+  ],
+  "receiver_sequence": [
+    "驗證快照、傳輸封包與封套雜湊",
+    "重新觀測總場正典、ROOT、BRANCH、HEAD與工作樹",
+    "重新觀測創辦人要求使用的設備與網路路徑",
+    "在瀏覽器呈現意圖、目標場、影響閉包、風險、範圍與有效時間",
+    "只接受創辦人本人明示核准",
+    "核准後由總場簽發單一命令即時限時限權封套",
+    "在封套範圍內自動完成觀測、生成、寫入、重新觀測與局部收斂",
+    "任一漂移即撤銷並停止"
+  ],
+  "identity_routes": {
+    "local": "EXPLICITLY_ADMITTED_DEVICE_ON_AUTHORIZED_LAN",
+    "remote": "EXPLICITLY_ADMITTED_IPHONE_OVER_VPN",
+    "network_presence_alone": "DENY"
+  },
+  "authorization": {
+    "reviewer": "FOUNDER_HUMAN_ONLY",
+    "one_command_one_envelope": true,
+    "automatic_approval": false,
+    "standing_privilege": false,
+    "approval_surface": "BROWSER_FORM"
+  },
+  "transport": {
+    "LAN": "PRIMARY",
+    "VPN": "REMOTE_OR_LAN_UNAVAILABLE",
+    "cloud": "MATERIAL_OR_CANDIDATE_ONLY"
+  },
+  "current_state": "PACKAGED_NOT_RUNTIME_ACTIVATED",
+  "activation_requires": [
+    "已核准裝置金鑰或等價硬體持有證據",
+    "可驗證的新鮮D8封套簽發器",
+    "現行總場正式呼叫接線",
+    "瀏覽器人審介面",
+    "正式路徑負向與效果重驗"
+  ],
+  "packet_is_authority": false,
+  "packet_may_self_activate": false,
+  "files_required": [
+    "ADI_STATE_SNAPSHOT.json",
+    "SNAPSHOT_SHA256.txt",
+    "ADI_GENERATIVE_TRANSFER_PACKET.json",
+    "SEAL.json"
+  ]
+}

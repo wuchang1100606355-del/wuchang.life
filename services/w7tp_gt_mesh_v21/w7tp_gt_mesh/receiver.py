@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 import datetime as dt
-from typing import Mapping
+from typing import Callable, Mapping
 
 from .core import (
     CARRIER_SCHEMA,
     PACKET_RECEIPT_SCHEMA,
     PRIMARY_DECISION_ENGINE,
     SNAPSHOT_SCHEMA,
+    TOTAL_FIELD_CONTROL_CARRIER_NAMESPACE,
+    TOTAL_FIELD_CONTROL_TASK_SCHEMA,
     TOTAL_FIELD_AUTHORITY_REF,
     MeshConflict,
     MeshHold,
@@ -24,12 +26,24 @@ from .packet import validate_packet, validate_packet_profile_binding
 from .control import validate_capability_inventory, validate_control_plane_contract
 
 
+ControlTaskHandler = Callable[[Mapping[str, object]], Mapping[str, object]]
+
+
 class MeshReceiver:
-    def __init__(self, storage: MeshStorage, *, receiver_node_ref: str) -> None:
+    def __init__(
+        self,
+        storage: MeshStorage,
+        *,
+        receiver_node_ref: str,
+        control_task_handler: ControlTaskHandler | None = None,
+    ) -> None:
         if not isinstance(receiver_node_ref, str) or not receiver_node_ref.startswith("node:"):
             raise MeshHold("HOLD_RECEIVER_NODE_REF_INVALID")
+        if control_task_handler is not None and not callable(control_task_handler):
+            raise MeshHold("HOLD_TOTAL_FIELD_CONTROL_HANDLER_INVALID")
         self.storage = storage
         self.receiver_node_ref = receiver_node_ref
+        self.control_task_handler = control_task_handler
 
     @staticmethod
     def _carrier_shape(carrier: Mapping[str, object]) -> None:
@@ -177,10 +191,22 @@ class MeshReceiver:
         if target_ref != core.sha256_ref(reconstructed):
             raise MeshConflict("CONFLICT_RECONSTRUCTED_TARGET_HASH")
         snapshot = core.canonical_json_loads(reconstructed, require_canonical=True)
-        if not isinstance(snapshot, dict) or snapshot.get("schema_id") != SNAPSHOT_SCHEMA:
+        if not isinstance(snapshot, dict):
             raise MeshHold("HOLD_RECONSTRUCTED_SNAPSHOT_SCHEMA")
+        snapshot_schema = snapshot.get("schema_id")
+        is_control_task = snapshot_schema == TOTAL_FIELD_CONTROL_TASK_SCHEMA
+        if snapshot_schema not in {SNAPSHOT_SCHEMA, TOTAL_FIELD_CONTROL_TASK_SCHEMA}:
+            raise MeshHold("HOLD_RECONSTRUCTED_SNAPSHOT_SCHEMA")
+        if (
+            is_control_task
+            and replay_tuple.get("namespace")
+            != TOTAL_FIELD_CONTROL_CARRIER_NAMESPACE
+        ):
+            raise MeshHold("HOLD_TOTAL_FIELD_CONTROL_CARRIER_NAMESPACE_INVALID")
         if snapshot.get("source_node_ref") != profile.get("source_node_ref") or snapshot.get("logical_time") != profile.get("logical_time"):
             raise MeshConflict("CONFLICT_RECONSTRUCTED_COORDINATE")
+        if is_control_task and self.control_task_handler is None:
+            raise MeshHold("HOLD_TOTAL_FIELD_CONTROL_HANDLER_UNAVAILABLE")
         self.storage.put_exact_bytes(target_ref, reconstructed)
         existing_receipt = self.storage.journal.find_receipt(packet_ref)
         if existing_receipt is not None:
@@ -198,6 +224,19 @@ class MeshReceiver:
             existing_receipt = self.storage.journal.find_receipt(packet_ref)
             if existing_receipt is not None:
                 return {**existing_receipt, "delivery_state": "PASS_IDEMPOTENT_ALREADY_RECEIVED"}
+            raise MeshConflict("CONFLICT_PACKET_REPLAY")
+        if is_control_task:
+            handler = self.control_task_handler
+            if handler is None:
+                raise MeshHold("HOLD_TOTAL_FIELD_CONTROL_HANDLER_UNAVAILABLE")
+            control_result = handler(snapshot)
+            if (
+                not isinstance(control_result, Mapping)
+                or control_result.get("state") != "PASS_TOTAL_FIELD_CANARY_TASK_VERIFIED"
+                or control_result.get("candidate_state")
+                != "CANDIDATE_NOT_CANONICAL_NOT_PROMOTED"
+            ):
+                raise MeshHold("HOLD_TOTAL_FIELD_CONTROL_RESULT_INVALID")
         packet_digest = packet_ref.removeprefix("sha256:")
         logical_time = int(profile["logical_time"])
         source_node_ref = str(profile["source_node_ref"])
@@ -223,7 +262,7 @@ class MeshReceiver:
             "logical_time": logical_time,
             "snapshot_ref": target_ref,
             "packet_ref": packet_ref,
-            "observed_at": snapshot.get("observed_at"),
+            "observed_at": snapshot.get("observed_at") or profile.get("issued_at"),
             "reconstructed_at": utc_text(observed_now),
             "authority_state": "CANDIDATE_EVIDENCE_ONLY",
             "live_effect_state": "RECONSTRUCTED_METADATA_STATE_ONLY",

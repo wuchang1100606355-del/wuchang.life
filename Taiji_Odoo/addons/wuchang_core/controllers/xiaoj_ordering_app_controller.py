@@ -17,7 +17,7 @@ def _safe_table_ref(value):
 
 
 class XiaoJOrderingAppController(http.Controller):
-    @http.route("/wuchang/xiaoj/ordering", type="http", auth="public", website=True, csrf=False)
+    @http.route("/wuchang/xiaoj/workspace", type="http", auth="public", website=True, csrf=False)
     def xiaoj_ordering_app(self, **kw):
         gate = validate_xiaoj_8d_packet_gate(request)
         if not gate.get("allowed"):
@@ -36,7 +36,7 @@ class XiaoJOrderingAppController(http.Controller):
   <link rel="manifest" href="/wuchang_core/static/src/xiaoj_ordering/xiaoj_ordering.webmanifest"/>
   <link rel="stylesheet" href="/wuchang_core/static/src/xiaoj_ordering/xiaoj_ordering_app.css"/>
 </head>
-<body data-start-mode="%s" data-table-ref="%s" data-store-ref="%s" data-route="/wuchang/xiaoj/ordering">
+<body data-start-mode="%s" data-table-ref="%s" data-store-ref="%s" data-route="/wuchang/xiaoj/workspace">
   <main id="xiaoj-ordering-app" class="app-shell">
     <noscript>此介面需要啟用 JavaScript。</noscript>
   </main>
@@ -45,11 +45,11 @@ class XiaoJOrderingAppController(http.Controller):
 </html>""" % (html.escape(mode), html.escape(table_ref), html.escape(store_ref))
         return request.make_response(html_body, headers=[("Content-Type", "text/html; charset=utf-8")])
 
-    @http.route("/wuchang/xiaoj/ordering/manifest", type="json", auth="user", csrf=False)
+    @http.route("/wuchang/xiaoj/workspace/manifest", type="json", auth="user", csrf=False)
     def xiaoj_ordering_manifest(self, **kw):
         return {
             "state": "XIAOJ_ORDERING_BROWSER_APP_READY",
-            "route": "/wuchang/xiaoj/ordering",
+            "route": "/wuchang/xiaoj/workspace",
             "pages": [
                 "staff_pos",
                 "counter_service_touch",

@@ -1,0 +1,227 @@
+{
+  "schema": "w7tp.8dadi.total-field-natural-language-autobuild/2.3",
+  "中文名稱": "總場自然語言全自動建構能力封裝",
+  "package_id": "total-field-nl-autobuild-2.3-20260903T114909Z",
+  "created_at": "2026-09-03T11:49:09Z",
+  "logical_root_id": "W7TP_TAIJI_HUB_TOTAL_FIELD",
+  "parent_resume_snapshot": {
+    "path": "contexts/current/ADI_STATE_SNAPSHOT.json",
+    "sha256": "b53d03dec98ee019b44670cb9095e3c2f89a4c874e0ee0de30ad742dba535283",
+    "relation": "EXTENDS_WITHOUT_OVERWRITE",
+    "relation_中文": "擴充既有續接狀態但不覆寫前一份快照"
+  },
+  "state_vector": {
+    "existence": "EXISTS",
+    "content_identity": "HASH_PENDING",
+    "persistence": "LOCAL_DURABLE_UNCOMMITTED",
+    "authority": "FOUNDER_POLICY_DECLARED_TOTAL_FIELD_RUNTIME_BINDING_UNPROVEN",
+    "dependency": "CONTRACT_CLOSED_CALLER_WIRING_OPEN",
+    "effect": "PACKAGED_NOT_ACTIVATED",
+    "validation": "STRUCTURE_AND_NEGATIVE_CASES_PENDING",
+    "risk": "FAIL_CLOSED"
+  },
+  "identity_and_seat_precondition": {
+    "中文名稱": "創辦人身分根封包",
+    "packet_id": "founder-identity-root-2.3-20260903T114909Z",
+    "definition": "創辦人身分根由已核准實體設備、裝置持有證據、新鮮挑戰回應及創辦人當次人審共同成立；網路位置本身不是身分或權威",
+    "authority_state": "FOUNDER_DECLARED_TARGET_PENDING_DEVICE_KEY_ADMISSION",
+    "raw_identity_or_credentials_embedded": false,
+    "legal_reach_paths": [
+      {
+        "path_id": "FOUNDER_LOCAL_LAN_SEAT",
+        "中文名稱": "創辦人本地區網席位",
+        "transport": "LAN_PRIMARY",
+        "eligible_devices": "ONLY_EXPLICITLY_ADMITTED_LOCAL_DEVICE_REFS",
+        "current_observation": {
+          "device_ref": "MSI_LOCAL_FOUNDER_DEVICE_REF",
+          "ipv4": "192.168.50.82",
+          "gateway": "192.168.50.1",
+          "state": "OBSERVED_NETWORK_PRESENCE_ONLY",
+          "observed_at": "2026-09-03T11:48:23Z"
+        },
+        "required_proofs": [
+          "已登錄裝置金鑰或等價硬體持有證據",
+          "新鮮隨機挑戰與回應",
+          "本次總場座標與邏輯時間",
+          "創辦人本人在瀏覽器審核介面明示核准"
+        ]
+      },
+      {
+        "path_id": "FOUNDER_IPHONE_REMOTE_VPN_SEAT",
+        "中文名稱": "創辦人iPhone遠端VPN席位",
+        "transport": "VPN_REMOTE_WHEN_NOT_ON_AUTHORIZED_LAN",
+        "eligible_devices": "ONLY_EXPLICITLY_ADMITTED_IPHONE_DEVICE_REF",
+        "current_observation": {
+          "device_ref": "ios-747d65c768b4faa9",
+          "os_family": "iOS",
+          "vpn_online": true,
+          "state": "OBSERVED_NETWORK_PRESENCE_ONLY_NOT_IDENTITY_PROOF",
+          "observed_at": "2026-09-03T11:48:23Z"
+        },
+        "required_proofs": [
+          "已登錄iPhone裝置金鑰或等價安全區持有證據",
+          "VPN節點身分與目前連線的新鮮證據",
+          "新鮮隨機挑戰與回應",
+          "創辦人本人在瀏覽器審核介面明示核准"
+        ]
+      }
+    ],
+    "anti_impersonation_rules": [
+      "同一區網內的其他設備不得自動成為創辦人",
+      "登入VPN、知道IP、持有帳號或能讀封包都不得單獨成立身分根",
+      "聊天歷史、模型記憶、服務名稱與裝置名稱不得替代設備持有證據",
+      "裝置遺失、金鑰輪替、座標衝突或挑戰過期立即撤銷席位並暫停"
+    ]
+  },
+  "D1_Intent": {
+    "中文": "意圖",
+    "intent": "由創辦人以自然語言提出建構意圖，總場轉為唯一目標八維狀態場，完成創辦人逐案人審後，自動執行最小受影響投影並重新觀測",
+    "human_entry": "NATURAL_LANGUAGE_ONLY",
+    "interface_rule": "ALL_USER_DECISIONS_IN_BROWSER_FORM"
+  },
+  "D2_State": {
+    "中文": "狀態",
+    "capability_state": "PACKAGED_NOT_RUNTIME_ACTIVATED",
+    "current_mode": "FAIL_CLOSED_UNTIL_FOUNDER_REVIEW_AND_TOTAL_FIELD_ENVELOPE",
+    "parent_upload_pause_preserved": true
+  },
+  "D3_Coordinate": {
+    "中文": "座標與關係",
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "head": "a6bce1638142ef67e543cde708ba1f09fdb296f5",
+    "package_path": "contexts/current/total_field_nl_autobuild_2_3",
+    "approval_surface": "EXISTING_TOTAL_FIELD_BROWSER_SURFACE_REQUIRED",
+    "network_policy": "LAN_FIRST_VPN_ONLY_FOR_REMOTE_OR_LAN_UNAVAILABLE"
+  },
+  "D4_Evidence": {
+    "中文": "證據",
+    "repository_observed_at": "2026-09-03T11:48:41Z",
+    "network_observed_at": "2026-09-03T11:48:23Z",
+    "repository_dirty_entries_before_package": 44,
+    "local_lan_observed": true,
+    "tailscale_self_online": true,
+    "ios_peer_observed": 1,
+    "ios_peer_online": 1,
+    "evidence_does_not_grant_authority": true
+  },
+  "D5_Execution_Policy": {
+    "中文": "執行與政策",
+    "capability_id": "total-field.natural-language-autobuild.2.3",
+    "pre_review_allowed": [
+      "解析自然語言意圖",
+      "唯讀觀測必要八維座標",
+      "計算目前場與目標場差異",
+      "產生人審用影響閉包與風險摘要"
+    ],
+    "pre_review_forbidden": [
+      "寫入",
+      "部署",
+      "啟用",
+      "刪除",
+      "改變路由或權威",
+      "向節點下達有外部效果的命令"
+    ],
+    "command_review_contract": {
+      "reviewer": "FOUNDER_HUMAN_ONLY",
+      "required_fields": [
+        "何時",
+        "何地",
+        "何人",
+        "何事",
+        "使用範圍",
+        "有效時間",
+        "目標八維狀態",
+        "受影響座標閉包",
+        "風險與可回復前像"
+      ],
+      "approval_surface": "BROWSER_FORM",
+      "approval_scope": "ONE_COMMAND_ONE_ENVELOPE",
+      "automatic_approval": false,
+      "delegated_approval": false,
+      "standing_privilege": false,
+      "approval_may_not_be_inferred": true
+    },
+    "post_approval_automatic_pipeline": [
+      "驗證創辦人身分根與席位",
+      "驗證人審核准內容、範圍、有效時間與新鮮隨機值",
+      "由總場簽發單一命令D8限時限權封套",
+      "重新觀測ROOT、BRANCH、HEAD、工作樹、正典與受影響節點",
+      "區網可達時使用區網，否則才選VPN候選路徑",
+      "建立寫入前不可覆寫證據快照",
+      "求受影響座標閉包",
+      "只遠端生成或更新閉包內必要投影",
+      "執行錯誤即回復前像並停止，不留下半套啟用",
+      "寫入後重新觀測八維狀態場",
+      "只修正仍未對齊的局部差異",
+      "產生帶邏輯時間、節點、結果與撤銷資訊的回執"
+    ],
+    "drift_rule": "任一身分、座標、範圍、時間、正典或效果漂移即停止並重新送創辦人人審",
+    "completion_rule": "重新觀測到的八維狀態場符合該次核准的目標場才算完成"
+  },
+  "D6_Generative_Transmission": {
+    "中文": "生成式傳輸",
+    "remote_generation": "在核准的目標節點以最小必要資訊重建受影響投影",
+    "transmittable": [
+      "意圖與目標狀態摘要",
+      "ADI座標",
+      "內容定址參照",
+      "最小生成材料",
+      "D8限時限權封套",
+      "驗證與回復條件"
+    ],
+    "not_transmittable": [
+      "秘密金鑰",
+      "會員個資明文",
+      "完整私有核心",
+      "未核准的能力或資料",
+      "創辦人身分根私密材料"
+    ],
+    "cloud_role": "MATERIAL_OR_CANDIDATE_ONLY",
+    "remote_node_may_self_activate": false
+  },
+  "D7_Risk_Quarantine": {
+    "中文": "風險與隔離",
+    "fail_closed": true,
+    "deny_cases": [
+      "非已核准設備",
+      "只有區網或VPN可達但缺裝置持有證據",
+      "創辦人未明示核准",
+      "核准範圍、時間或目標不完整",
+      "封套過期、重播、座標漂移或回執缺失",
+      "命令要求擴張自身權限或建立平行總場"
+    ],
+    "on_error": "ROLL_BACK_TO_PREIMAGE_AND_HOLD",
+    "on_unknown": "HOLD_DO_NOT_INVENT"
+  },
+  "D8_Envelope_Authority": {
+    "中文": "封套與權威",
+    "founder_human_review_is_required": true,
+    "total_field_verifies_and_issues_after_founder_approval": true,
+    "model_is_not_authority": true,
+    "network_is_not_authority": true,
+    "device_is_not_authority_without_admission": true,
+    "package_is_not_canonical": true,
+    "package_may_self_activate": false,
+    "production_caller_wiring": "UNPROVEN",
+    "current_effect_authority": "HOLD_UNTIL_FRESH_D8_AND_PROVEN_CALLER"
+  },
+  "negative_cases": [
+    {"case": "未登入但位於店內區網", "decision": "DENY"},
+    {"case": "iPhone已連VPN但未完成裝置挑戰", "decision": "DENY"},
+    {"case": "AI從歷史對話推測創辦人同意", "decision": "DENY"},
+    {"case": "人審核准後命令範圍漂移", "decision": "REVOKE_AND_HOLD"},
+    {"case": "封套有效且身分、座標、範圍與時間一致", "decision": "ALLOW_ONLY_WITHIN_ENVELOPE"}
+  ],
+  "translation_map": {
+    "Natural-language autobuild": "自然語言全自動建構",
+    "Founder identity root": "創辦人身分根",
+    "Seat": "席位／合法操作位置",
+    "Device admission": "裝置核准登錄",
+    "Challenge response": "挑戰回應",
+    "Just-in-time envelope": "即時限時限權封套",
+    "Caller wiring": "正式呼叫接線",
+    "Fail closed": "條件不足即拒絕",
+    "Preimage": "變更前可回復狀態"
+  }
+}

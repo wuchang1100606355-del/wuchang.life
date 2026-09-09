@@ -1,0 +1,135 @@
+{
+  "schema_id": "W7TP_8D_ADI_APPLICATION_DESIGN_INDEX_CANDIDATE_V1",
+  "state": "CANDIDATE",
+  "canonical": false,
+  "active": false,
+  "live_effect": false,
+  "final_authority": false,
+  "coverage": {
+    "scope": "CURRENT_FOUNDER_DIALOG_PLUS_RELEVANT_RETRIEVED_CODEX_TASKS_DRIVE_AND_LIVE_REPOSITORY_EVIDENCE",
+    "exhaustive_global_account_export": false,
+    "not_claimed_zh_tw": "未把無法存取或未逐項讀取的全部帳號歷史對話假稱為已完整讀取",
+    "conversation_tasks_considered": [
+      "6a9b34fa-b940-83e8-be7b-9659a901e649",
+      "6a9b4ba5-e994-83e8-842e-0de75f74d0f9",
+      "6a9c41a8-87b4-83ee-880d-91820739acfc",
+      "01a07232-9da7-7d10-b17e-59794194cf0c",
+      "01a029c5-b685-7b52-85d8-105b1f542e53",
+      "01a0682b-b190-70a3-b844-45f9a3fe9c21",
+      "01a0724c-46dd-7ea2-b245-8df7b87475bb"
+    ],
+    "drive_folder_ref": "https://drive.google.com/drive/folders/1YbV0f5kBRtBTv5oC-hAgoFvgifCJi5ou"
+  },
+  "founder_definition": {
+    "statement_zh_tw": "8D ADI 是完整的 AI 應用系統",
+    "product_zh_tw": "主權 AI 小 J 個人／組織服務員",
+    "competition_entry_zh_tw": "咖啡館服務員影音 AI 小 J",
+    "smallest_unit_zh_tw": "數位腦細胞：把理解形成可治理執行的完整 D1 至 D8 狀態原胞",
+    "source_class": "FOUNDER_DECLARED_CURRENT_INTENT",
+    "authority_class": "DESIGN_SOURCE_NOT_CANONICAL_PROMOTION"
+  },
+  "system_capabilities": [
+    {
+      "id": "complete_8d_adi_application_loop",
+      "definition_zh_tw": "從多模態感知、理解、索引、模型算力、生成式傳輸、目標重建、總場裁決到重新觀測的完整閉環",
+      "source_class": "FOUNDER_DECLARED_CURRENT_INTENT",
+      "evidence_refs": ["current_dialog:8d_adi_complete_ai_application_system"]
+    },
+    {
+      "id": "digital_brain_cell",
+      "definition_zh_tw": "以 D1 意圖、D2 狀態、D3 座標、D4 證據、D5 執行政策、D6 生成式傳輸、D7 風險隔離、D8 權威形成最小完整單位",
+      "source_class": "FOUNDER_DECLARED_PLUS_LIVE_REPOSITORY",
+      "evidence_refs": ["tools/total_field_dynamic_context.py:STATE_CELL_FIELDS"]
+    },
+    {
+      "id": "multimodal_total_understanding",
+      "definition_zh_tw": "影像、聲音、文字、網路狀態與設備能力共同形成全面性理解，不以單一模型輸出代替證據",
+      "source_class": "FOUNDER_DECLARED_CURRENT_INTENT",
+      "evidence_refs": ["current_dialog:multimodal_surfaces"]
+    },
+    {
+      "id": "dual_computation_plane",
+      "definition_zh_tw": "離散索引與查表運算固定精準座標、能力、政策及譜系；高維浮點模型提供理解與生成候選，必須回到離散索引解析",
+      "source_class": "FOUNDER_DECLARED_CURRENT_INTENT",
+      "evidence_refs": ["current_dialog:discrete_float_high_dimensional_fusion"],
+      "numeric_basis": "UNKNOWN_NOT_INFERRED"
+    },
+    {
+      "id": "distributed_compute_unification",
+      "definition_zh_tw": "瀏覽器、Odoo、邊緣設備、分散式算力主機、地端模型與可替換雲模型，以數位腦細胞及總場能力合一",
+      "source_class": "FOUNDER_DECLARED_PLUS_LIVE_REPOSITORY",
+      "evidence_refs": ["wuchang.ai.compute.binding", "merchant_ai_handshake.py"]
+    },
+    {
+      "id": "dynamic_context_reconstruction",
+      "definition_zh_tw": "目標端以基座、索引與最小必要狀態差量重建動態上下文，不搬運全部對話或原始資料",
+      "source_class": "FOUNDER_DECLARED_PLUS_LIVE_REPOSITORY",
+      "evidence_refs": ["tools/total_field_dynamic_context.py", "services/w7tp_gt_mesh_v21"]
+    },
+    {
+      "id": "generative_transmission",
+      "definition_zh_tw": "TARGET_BASE_STATE 加 MINIMUM_REQUIRED_DELTA、REFERENCES、COORDINATES、RECONSTRUCTION_RULES、VERIFICATION_RULES，使接收端本機重建並重觀測",
+      "source_class": "LIVE_REPOSITORY_PLUS_FOUNDER_DEFINITION",
+      "evidence_refs": ["XiaoJ.MeshTransport.send", "MeshRuntime", "MeshReceiver.receive"]
+    },
+    {
+      "id": "total_field_authority_and_anti_drift",
+      "definition_zh_tw": "模型、Runtime、雜湊、測試與回執只提供候選或證據；總場是外部效果的最終裁決點，座標或雜湊衝突即封閉停止",
+      "source_class": "FOUNDER_DECLARED_PLUS_LIVE_REPOSITORY",
+      "evidence_refs": ["services/w7tp_gt_mesh_v21/total_field_control"]
+    }
+  ],
+  "application_scenes": [
+    {
+      "scene_id": "cafe_audiovisual_clerk",
+      "name_zh_tw": "上品聊國咖啡館影音服務員",
+      "capabilities": ["影音迎賓", "語音意圖", "影像情境", "真實菜單說明", "點餐候選", "人工下單放行"],
+      "odoo_projection": ["wuchang.cafe.gateway", "wuchang.cafe.merchant.ai.handshake.service", "wuchang.ai.compute.binding"],
+      "evidence_state": "CANDIDATE_WITH_REUSABLE_IMPLEMENTATION"
+    },
+    {
+      "scene_id": "property_committee_clerk",
+      "name_zh_tw": "管委會／物業大廳服務員",
+      "capabilities": ["公告解說", "住戶服務需求候選", "報修候選", "人工派工放行"],
+      "odoo_projection": ["wuchang.community", "wuchang.building", "wuchang.unit", "wuchang.complaint", "wuchang.repair"],
+      "evidence_state": "REUSABLE_MODULES_OBSERVED_PRODUCTION_WIRING_UNKNOWN"
+    },
+    {
+      "scene_id": "association_public_service_clerk",
+      "name_zh_tw": "協會公益營運服務員",
+      "capabilities": ["會員服務", "志工媒合候選", "會議與公告", "社工個案候選", "人工接手"],
+      "odoo_projection": ["wuchang.member.registration", "wuchang.volunteer", "wuchang.task", "wuchang.meeting", "wuchang.announcement"],
+      "evidence_state": "REUSABLE_MODULES_OBSERVED_IDENTITY_BOUNDARY_REQUIRED"
+    },
+    {
+      "scene_id": "personal_sovereign_ai_relay",
+      "name_zh_tw": "個人主權 AI 訂閱中繼站",
+      "capabilities": ["Gemini／GPT 可替換供應", "地端轉譯", "用量預算", "最小雲端差量", "動態上下文重建"],
+      "odoo_projection": ["wuchang.ai.compute.binding", "member_bound_provider", "total_field_quota_pool"],
+      "evidence_state": "CANDIDATE_CONTRACT_EXISTING_BINDING_MODEL_OBSERVED"
+    },
+    {
+      "scene_id": "earthquake_resilience_overlay",
+      "name_zh_tw": "地震特殊狀態與國家示警轉譯演練",
+      "capabilities": ["CAP 來源驗證", "低頻寬最小差量", "店內影音避難指引", "設備保護提案", "匿名平安狀態候選"],
+      "odoo_projection": ["cafe_overlay", "property_overlay", "association_case_intake_candidate"],
+      "evidence_state": "ISOLATED_SIMULATION_ONLY_NOT_CONNECTED_TO_LIVE_ALERT"
+    },
+    {
+      "scene_id": "device_and_network_unification",
+      "name_zh_tw": "設備能力、網路狀態與分散式算力合一",
+      "capabilities": ["設備能力登記", "LAN 優先", "VPN 備援", "離線最低服務", "接收端重建", "重新觀測"],
+      "odoo_projection": ["capability_registry", "w7tp_mesh", "total_field"],
+      "evidence_state": "CANDIDATE_WITH_EXISTING_MESH_CHAIN"
+    }
+  ],
+  "hard_boundaries": [
+    "ODOO_SCENE_IS_PROJECTION_NOT_8D_ADI_WHOLE_SYSTEM",
+    "CLOUD_AND_LOCAL_MODELS_ARE_REPLACEABLE_COMPUTE_NOT_AUTHORITY",
+    "IMAGE_PROCESSING_MUST_NOT_DEFAULT_TO_FACE_AGE_GENDER_INFERENCE",
+    "EARTHQUAKE_DEMO_MUST_BE_LABELED_SIMULATION",
+    "NO_DEVICE_EFFECT_WITHOUT_TOTAL_FIELD_AND_HUMAN_RELEASE",
+    "ASSOCIATION_IDENTITY_AND_PERSONAL_R_AND_D_IDENTITY_REMAIN_SEPARATE",
+    "UNKNOWN_FLOATING_NUMERIC_BASIS_MUST_NOT_BE_INVENTED"
+  ]
+}

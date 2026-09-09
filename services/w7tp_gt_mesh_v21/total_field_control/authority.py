@@ -14,6 +14,8 @@ from w7tp_gt_mesh.core import (
     CANONICAL_SHA256,
     DIMENSIONS,
     MeshHold,
+    TOTAL_FIELD_CONTROL_CARRIER_NAMESPACE,
+    TOTAL_FIELD_CONTROL_TASK_SCHEMA,
     require_core,
 )
 
@@ -24,8 +26,9 @@ TOTAL_FIELD_AUTHORITY = "authority:TOTAL_FIELD"
 DESIGN_AUTHORITY = "FOUNDER_ARCHITECTURE"
 PRIMARY_DECISION_ENGINE = "8D_ADI"
 CONTROL_AUTHORITY_NODE_ID = "taiji01"
-TASK_SCHEMA = "W7TP_TOTAL_FIELD_CONTROL_TASK_CANDIDATE_V1"
+TASK_SCHEMA = TOTAL_FIELD_CONTROL_TASK_SCHEMA
 TASK_NAMESPACE = "w7tp.total_field.control.task.v1"
+TASK_CARRIER_NAMESPACE = TOTAL_FIELD_CONTROL_CARRIER_NAMESPACE
 AUTH_ALGORITHM = "Ed25519"
 MAX_TTL_SECONDS = 900
 REQUIRED_CONTROL_SCOPES = frozenset(
@@ -191,6 +194,7 @@ def build_task_envelope(
         },
         "task_id": task_id,
         "namespace": TASK_NAMESPACE,
+        "source_node_ref": f"node:{CONTROL_AUTHORITY_NODE_ID}",
         "logical_time": logical_time,
         "nonce": nonce_value,
         "issued_at_epoch": issued_at_epoch,
@@ -325,6 +329,8 @@ def verify_task_envelope(
         raise MeshHold("HOLD_TASK_SCHEMA_INVALID")
     if envelope.get("candidate_state") != "CANDIDATE_NOT_CANONICAL_NOT_PROMOTED":
         raise MeshHold("HOLD_TASK_CANDIDATE_STATE_INVALID")
+    if envelope.get("source_node_ref") != f"node:{CONTROL_AUTHORITY_NODE_ID}":
+        raise MeshHold("HOLD_TOTAL_FIELD_CONTROL_SOURCE_NODE_INVALID")
     dimensions = envelope.get("dimensions")
     if not isinstance(dimensions, Mapping) or tuple(dimensions.keys()) != DIMENSIONS:
         raise MeshHold("HOLD_TASK_DIMENSIONS_INVALID")

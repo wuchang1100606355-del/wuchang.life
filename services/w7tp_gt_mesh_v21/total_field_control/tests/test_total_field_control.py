@@ -2,17 +2,26 @@ from __future__ import annotations
 
 import copy
 import tempfile
+import threading
 import unittest
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Mapping
 
-from w7tp_gt_mesh.core import MeshHold
+from w7tp_gt_mesh.app import MeshRuntime, make_server
+from w7tp_gt_mesh.core import MeshHold, TOTAL_FIELD_AUTHORITY_REF, require_core
 from w7tp_gt_mesh.journal import MeshStorage
+from w7tp_gt_mesh.packet import build_transfer
+from w7tp_gt_mesh.transport import MeshTransport
 
 from total_field_control.adapters import CanaryActionDispatcher, CanaryPolicy, RunnerResult
 from total_field_control.agent import TotalFieldNodeAgent
-from total_field_control.authority import REQUIRED_CONTROL_SCOPES, verify_task_envelope
+from total_field_control.authority import (
+    REQUIRED_CONTROL_SCOPES,
+    TASK_CARRIER_NAMESPACE,
+    TASK_NAMESPACE,
+    verify_task_envelope,
+)
 from total_field_control.controller import plan_task_envelope
 from total_field_control.placement import deterministic_place
 
@@ -145,11 +154,19 @@ class TotalFieldControlTests(unittest.TestCase):
         self.small = snapshot("taiji02", cpu=4, ram=4_000_000_000, disk=8_000_000_000)
         self.large = snapshot("taiji03", cpu=16, ram=32_000_000_000, disk=64_000_000_000, gpu_mib=[8192])
 
-    def envelope(self, *, now: int = NOW) -> tuple[dict[str, object], dict[str, object]]:
+    def envelope(
+        self,
+        *,
+        now: int = NOW,
+        authority: Mapping[str, object] | None = None,
+        task_id: str = "task-canary-001",
+        logical_time: int = 1,
+        nonce: str = "1" * 32,
+    ) -> tuple[dict[str, object], dict[str, object]]:
         return plan_task_envelope(
             snapshots=[self.large, self.small],
             resource_request=REQUEST,
-            task_id="task-canary-001",
+            task_id=task_id,
             intent="驗證總場 canary 硬體調度閉環",
             operation="container_run_canary",
             parameters={
@@ -158,14 +175,14 @@ class TotalFieldControlTests(unittest.TestCase):
                 "image_ref": IMAGE_REF,
                 "command": ["python3", "-V"],
             },
-            logical_time=1,
+            logical_time=logical_time,
             issued_at_epoch=now,
             ttl_seconds=300,
             verifier_ref="verifier_ref:total_field_runtime_v1",
             signer=self.signatures,
-            active_authority=self.authority,
+            active_authority=authority if authority is not None else self.authority,
             authority_profile=self.profile,
-            nonce="1" * 32,
+            nonce=nonce,
         )
 
     def test_deterministic_placement_extends_existing_planner(self) -> None:
@@ -293,6 +310,43 @@ class TotalFieldControlTests(unittest.TestCase):
                 now_epoch=NOW + 300,
             )
 
+    def test_signature_and_active_authority_expiry_hold(self) -> None:
+        _, envelope = self.envelope()
+        bad_signature = copy.deepcopy(envelope)
+        bad_signature["dimensions"]["D8_ENVELOPE_VERIFICATION"]["signature"] = "invalid"
+        bad_signature["envelope_sha256"] = require_core().sha256_hex(
+            require_core().canonical_json_bytes(
+                {
+                    key: value
+                    for key, value in bad_signature.items()
+                    if key != "envelope_sha256"
+                }
+            )
+        )
+        with self.assertRaisesRegex(MeshHold, "HOLD_TOTAL_FIELD_SIGNATURE_INVALID"):
+            verify_task_envelope(
+                bad_signature,
+                signature_verifier=self.signatures,
+                active_authority=self.authority,
+                authority_profile=self.profile,
+                now_epoch=NOW + 1,
+            )
+
+        expired = active_authority()
+        expired["expires_at"] = utc_text(NOW)
+        _, expired_envelope = self.envelope(authority=expired)
+        with self.assertRaisesRegex(
+            MeshHold,
+            "HOLD_ACTIVE_TOTAL_FIELD_AUTHORITY_EXPIRED_OR_NOT_YET_VALID",
+        ):
+            verify_task_envelope(
+                expired_envelope,
+                signature_verifier=self.signatures,
+                active_authority=expired,
+                authority_profile=self.profile,
+                now_epoch=NOW + 1,
+            )
+
     def test_reserve_execute_verify_receipts_and_replay(self) -> None:
         _, envelope = self.envelope()
         dispatcher = FakeDispatcher()
@@ -343,6 +397,199 @@ class TotalFieldControlTests(unittest.TestCase):
                         now_epoch=NOW + 2,
                     )
                 self.assertEqual(dispatcher.executions, 1)
+
+    def test_mesh_receiver_routes_signed_control_task_once(self) -> None:
+        _, envelope = self.envelope()
+        dispatcher = FakeDispatcher()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with MeshStorage(root / "sender") as sender:
+                transfer = build_transfer(
+                    sender,
+                    envelope,
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace=TASK_CARRIER_NAMESPACE,
+                    ttl_seconds=300,
+                )
+                runtime_config = {
+                    "node_id": "taiji02",
+                    "logical_root_id": "mesh-control-test",
+                    "runtime_root": str(root / "receiver"),
+                }
+                holder: dict[str, TotalFieldNodeAgent] = {}
+
+                def handle_control_task(task: Mapping[str, object]) -> Mapping[str, object]:
+                    return holder["agent"].process(
+                        task,
+                        current_snapshot=self.small,
+                        active_authority=self.authority,
+                        authority_profile=self.profile,
+                        now_epoch=NOW + 1,
+                    )
+
+                with MeshRuntime(
+                    runtime_config,
+                    control_task_handler=handle_control_task,
+                ) as runtime:
+                    holder["agent"] = TotalFieldNodeAgent(
+                        storage=runtime.storage,
+                        node_id="taiji02",
+                        signature_verifier=self.signatures,
+                        dispatcher=dispatcher,
+                    )
+                    server = make_server(runtime, "127.0.0.1", 0, 8 * 1024 * 1024)
+                    thread = threading.Thread(target=server.serve_forever, daemon=True)
+                    thread.start()
+                    try:
+                        transport = MeshTransport(sender)
+                        peer_url = f"http://127.0.0.1:{server.server_address[1]}"
+                        first = transport.send(
+                            transfer.carrier,
+                            carrier_ref=transfer.carrier_ref,
+                            peer_url=peer_url,
+                            queue_on_failure=False,
+                        )
+                        second = transport.send(
+                            transfer.carrier,
+                            carrier_ref=transfer.carrier_ref,
+                            peer_url=peer_url,
+                            queue_on_failure=False,
+                        )
+                    finally:
+                        server.shutdown()
+                        server.server_close()
+                        thread.join(timeout=5)
+
+                self.assertIn("delivery_state", first, first)
+                self.assertEqual("PASS_RECEIVED", first["delivery_state"])
+                self.assertEqual(
+                    "PASS_IDEMPOTENT_ALREADY_RECEIVED",
+                    second["delivery_state"],
+                )
+                self.assertEqual(1, dispatcher.executions)
+
+    def test_control_task_without_effect_handler_holds(self) -> None:
+        _, envelope = self.envelope()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with MeshStorage(root / "sender") as sender, MeshStorage(
+                root / "receiver"
+            ) as receiver_storage:
+                transfer = build_transfer(
+                    sender,
+                    envelope,
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace=TASK_CARRIER_NAMESPACE,
+                    ttl_seconds=300,
+                )
+                from w7tp_gt_mesh.receiver import MeshReceiver
+
+                receiver = MeshReceiver(
+                    receiver_storage,
+                    receiver_node_ref="node:taiji02",
+                )
+                with self.assertRaisesRegex(
+                    MeshHold,
+                    "HOLD_TOTAL_FIELD_CONTROL_HANDLER_UNAVAILABLE",
+                ):
+                    receiver.receive(transfer.carrier)
+
+    def test_control_carrier_cannot_reuse_inner_task_replay_namespace(self) -> None:
+        _, envelope = self.envelope()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with MeshStorage(root / "sender") as sender, MeshStorage(
+                root / "receiver"
+            ) as receiver_storage:
+                transfer = build_transfer(
+                    sender,
+                    envelope,
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace=TASK_NAMESPACE,
+                    ttl_seconds=300,
+                )
+                from w7tp_gt_mesh.receiver import MeshReceiver
+
+                receiver = MeshReceiver(
+                    receiver_storage,
+                    receiver_node_ref="node:taiji02",
+                )
+                with self.assertRaisesRegex(
+                    MeshHold,
+                    "HOLD_TOTAL_FIELD_CONTROL_CARRIER_NAMESPACE_INVALID",
+                ):
+                    receiver.receive(transfer.carrier)
+
+    def test_failed_control_task_recovers_only_with_fresh_signed_task(self) -> None:
+        _, rejected = self.envelope()
+        rejected["dimensions"]["D8_ENVELOPE_VERIFICATION"]["signature"] = "invalid"
+        rejected["envelope_sha256"] = require_core().sha256_hex(
+            require_core().canonical_json_bytes(
+                {
+                    key: value
+                    for key, value in rejected.items()
+                    if key != "envelope_sha256"
+                }
+            )
+        )
+        _, recovered = self.envelope(
+            task_id="task-canary-recovery-002",
+            logical_time=2,
+            nonce="2" * 32,
+        )
+        dispatcher = FakeDispatcher()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with MeshStorage(root / "sender") as sender:
+                rejected_transfer = build_transfer(
+                    sender,
+                    rejected,
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace=TASK_CARRIER_NAMESPACE,
+                    ttl_seconds=300,
+                )
+                recovered_transfer = build_transfer(
+                    sender,
+                    recovered,
+                    authority_ref=TOTAL_FIELD_AUTHORITY_REF,
+                    namespace=TASK_CARRIER_NAMESPACE,
+                    ttl_seconds=300,
+                )
+                runtime_config = {
+                    "node_id": "taiji02",
+                    "logical_root_id": "mesh-control-recovery-test",
+                    "runtime_root": str(root / "receiver"),
+                }
+                holder: dict[str, TotalFieldNodeAgent] = {}
+
+                def handle_control_task(task: Mapping[str, object]) -> Mapping[str, object]:
+                    return holder["agent"].process(
+                        task,
+                        current_snapshot=self.small,
+                        active_authority=self.authority,
+                        authority_profile=self.profile,
+                        now_epoch=NOW + 1,
+                    )
+
+                with MeshRuntime(
+                    runtime_config,
+                    control_task_handler=handle_control_task,
+                ) as runtime:
+                    holder["agent"] = TotalFieldNodeAgent(
+                        storage=runtime.storage,
+                        node_id="taiji02",
+                        signature_verifier=self.signatures,
+                        dispatcher=dispatcher,
+                    )
+                    with self.assertRaisesRegex(
+                        MeshHold,
+                        "HOLD_TOTAL_FIELD_SIGNATURE_INVALID",
+                    ):
+                        runtime.receiver.receive(rejected_transfer.carrier)
+                    result = runtime.receiver.receive(recovered_transfer.carrier)
+
+                self.assertEqual("PASS_RECEIVED", result["delivery_state"])
+                self.assertEqual(1, dispatcher.executions)
 
     def test_policy_never_accepts_formal_service(self) -> None:
         policy = CanaryPolicy(allowed_image_refs=[IMAGE_REF])

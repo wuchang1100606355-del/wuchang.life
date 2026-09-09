@@ -4,14 +4,15 @@ services:
     container_name: taiji_pos_google_voice_tool
     ports:
       - "127.0.0.1:9011:9011"
-      - "100.107.187.77:9011:9011"
     environment:
       CLAW_SAFE_URL: "http://taiji_claw_safe:9004"
       STORE_RAW_TRANSCRIPT: "false"
+      W7TP_8DADI_MATERIAL_ROOT: "/mnt/8dadi/materialized"
     volumes:
       - ../reports/pos_voice_tool:/mnt/audit:rw
       - ../data/pos_voice_queue:/mnt/queue:rw
       - ../contexts/current:/mnt/current:ro
+      - ../runtime/materialized/xiaoj_voice_23:/mnt/8dadi/materialized:ro
     restart: unless-stopped
     networks:
       - taiji-ai

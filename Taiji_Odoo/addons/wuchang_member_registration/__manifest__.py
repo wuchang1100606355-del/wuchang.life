@@ -1,8 +1,8 @@
 {
-    "name": "Wuchang Member Registration",
+    "name": "五常社區發展協會會員登記",
     "version": "1.0.0",
-    "summary": "W7TP privacy-first member registration workflow",
-    "category": "Wuchang/W7TP",
+    "summary": "以隱私與協會權責為邊界的會員登記流程",
+    "category": "五常／W7TP",
     "author": "Wuchang Smart Cloud",
     "license": "LGPL-3",
     "depends": ["base", "web", "auth_signup"],

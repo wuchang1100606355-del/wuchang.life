@@ -23,11 +23,11 @@ REPORT_DIR = ROOT / "runtime" / "reports"
 
 TARGETS = [
     ("gateway_9002_health", "http://127.0.0.1:9002/health"),
-    ("gateway_9002_healthz", "http://127.0.0.1:9002/healthz"),
     ("gateway_8081_health", "http://127.0.0.1:8081/health"),
-    ("runtime_api_8091", "http://127.0.0.1:8091/health"),
-    ("runtime_core_8099", "http://127.0.0.1:8099/health"),
-    ("openai_bridge_8098_models", "http://127.0.0.1:8098/v1/models"),
+    ("intent_field_9107_health", "http://127.0.0.1:9107/healthz"),
+    ("pos_voice_9011_health", "http://127.0.0.1:9011/healthz"),
+    ("claw_9004_contract", "http://127.0.0.1:9004/openapi.json"),
+    ("odoo_8069_health", "http://127.0.0.1:8069/web/health"),
     ("openwebui_8080", "http://127.0.0.1:8080"),
     ("ollama_11434_tags", "http://127.0.0.1:11434/api/tags"),
 ]

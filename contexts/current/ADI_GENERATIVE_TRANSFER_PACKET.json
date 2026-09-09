@@ -1,0 +1,60 @@
+{
+  "schema": "w7tp.8dadi.generative-resume-transfer/2.3",
+  "中文名稱": "總場續接生成式傳輸封包",
+  "packet_id": "8dadi-session-resume-20260903T114124Z",
+  "entry_file": "ADI_STATE_SNAPSHOT.json",
+  "entry_sha256": "b53d03dec98ee019b44670cb9095e3c2f89a4c874e0ee0de30ad742dba535283",
+  "purpose": "讓任一相容AI或現場工程師以單一入口重建目前工作座標、權限邊界、暫停狀態與唯一下一步",
+  "reconstruction_scope": [
+    "最新創辦人意圖",
+    "D1至D8工作狀態",
+    "節點與網路座標",
+    "證據引用與未知邊界",
+    "遠端子系統生成規則",
+    "現場工程師即時維護授權規則"
+  ],
+  "excluded_material": [
+    "原始憑證與秘密金鑰",
+    "模型權重",
+    "完整原始碼",
+    "使用者個資明文",
+    "隱藏模型推理",
+    "未經總場裁決的外部效果"
+  ],
+  "receiver_protocol": [
+    "只開啟ADI_STATE_SNAPSHOT.json",
+    "以SNAPSHOT_SHA256.txt驗證入口檔",
+    "以SEAL.json驗證封包組合與權限邊界",
+    "承認resume_handshake全部不變條件",
+    "重新觀測目前ROOT、BRANCH、HEAD、WORKTREE、正典、D8與受影響節點",
+    "若座標漂移或封套不符立即HOLD，不得猜測補值",
+    "若為遠端生成或現場維護，先向總場申報何時、何地、何人、何事、使用範圍與有效時間",
+    "總場檢查後必須等待創辦人本人明示核准，才可簽發即時限時限權封套",
+    "只執行最新創辦人自然語言意圖造成的最小差異"
+  ],
+  "transport_policy": {
+    "LAN": "PRIMARY",
+    "VPN": "SECONDARY_WHEN_LAN_UNAVAILABLE",
+    "cloud": "MATERIAL_OR_CANDIDATE_ONLY",
+    "remote_generation": "TARGET_NODE_MINIMUM_PROJECTION_AFTER_TOTAL_FIELD_CHECK_AND_FOUNDER_HUMAN_APPROVAL"
+  },
+  "privilege_approval": {
+    "required_fields": ["何時", "何地", "何人", "何事", "使用範圍", "有效時間"],
+    "reviewer": "FOUNDER_HUMAN_ONLY",
+    "total_field_role": "VERIFY_ROUTE_AND_ISSUE_ENVELOPE_AFTER_APPROVAL",
+    "automatic_or_inferred_approval": false,
+    "missing_field_result": "REJECT",
+    "expired_or_mismatched_result": "REVOKE_AND_HOLD"
+  },
+  "current_execution_state": "PAUSED_BY_FOUNDER",
+  "resume_upload_automatically": false,
+  "packet_is_canonical": false,
+  "packet_is_authority": false,
+  "total_field_decides_external_effect": true,
+  "files_required": [
+    "ADI_STATE_SNAPSHOT.json",
+    "SNAPSHOT_SHA256.txt",
+    "ADI_GENERATIVE_TRANSFER_PACKET.json",
+    "SEAL.json"
+  ]
+}

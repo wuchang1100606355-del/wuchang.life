@@ -12,6 +12,7 @@ import urllib.error
 APP_NAME = "Taiji POS Google Voice Tool"
 CLAW_SAFE_URL = os.getenv("CLAW_SAFE_URL", "http://taiji_claw_safe:9004")
 STORE_RAW_TRANSCRIPT = os.getenv("STORE_RAW_TRANSCRIPT", "false").lower() == "true"
+MATERIAL_ROOT = Path(os.getenv("W7TP_8DADI_MATERIAL_ROOT", "/mnt/8dadi/materialized"))
 
 AUDIT_DIR = Path("/mnt/audit")
 QUEUE_DIR = Path("/mnt/queue")
@@ -134,6 +135,22 @@ def infer_action(text: str) -> Dict[str, str]:
 
 @app.get("/healthz")
 def healthz():
+    material_packages = []
+    if MATERIAL_ROOT.is_dir():
+        for manifest_path in sorted(MATERIAL_ROOT.glob("*/manifest.8dadi.json")):
+            try:
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                material_packages.append({
+                    "package_id": manifest.get("package_id"),
+                    "schema": manifest.get("schema"),
+                    "cloud_role": manifest.get("D8_authority", {}).get("cloud_role"),
+                    "runtime_decider": manifest.get("D8_authority", {}).get("runtime_decider"),
+                })
+            except (OSError, ValueError, TypeError, json.JSONDecodeError):
+                material_packages.append({
+                    "package_id": manifest_path.parent.name,
+                    "state": "HOLD_INVALID_MANIFEST",
+                })
     return {
         "ok": True,
         "service": APP_NAME,
@@ -142,6 +159,13 @@ def healthz():
         "store_raw_transcript": STORE_RAW_TRANSCRIPT,
         "audio_recording": False,
         "audio_file_upload": False,
+        "8dadi_schema": "2.3",
+        "material_projection": {
+            "mode": "google_drive_manifest_to_read_only_local_projection",
+            "root": str(MATERIAL_ROOT),
+            "packages": material_packages,
+            "cloud_is_authority": False,
+        },
     }
 
 

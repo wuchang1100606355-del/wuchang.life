@@ -1,0 +1,16 @@
+{
+  "schema": "w7tp.xiaoj.voice-profile/2.3",
+  "profile_id": "xiaoj-cafe-zh-tw-2.3",
+  "locale": "zh-TW",
+  "emotion_controls": {
+    "warm": {"instruction": "溫暖親切，語速自然", "order_effect": false},
+    "welcoming": {"instruction": "明亮歡迎，帶輕微笑意", "order_effect": false},
+    "attentive": {"instruction": "專注清楚，重要內容略微放慢", "order_effect": false},
+    "cheerful": {"instruction": "愉快活潑但不誇張", "order_effect": false},
+    "reassuring": {"instruction": "沉穩安心，避免催促", "order_effect": false},
+    "clear": {"instruction": "中性清楚，逐項複誦", "order_effect": false}
+  },
+  "required_human_confirmation": ["order_commit", "payment", "checkout"],
+  "D8_authority": "TOTAL_FIELD_ONLY",
+  "cloud_is_authority": false
+}

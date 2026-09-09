@@ -23,7 +23,7 @@ from .inventory import collect_snapshot
 from .journal import MeshStorage
 from .native_adi import NativeADIAdapter, build_native_adi_record
 from .packet import BuiltTransfer, build_transfer
-from .receiver import MeshReceiver
+from .receiver import ControlTaskHandler, MeshReceiver
 from .spool import produce_drive_projection_envelopes
 from .transport import MeshTransport
 
@@ -65,7 +65,12 @@ def load_config(path: str | os.PathLike[str]) -> dict[str, object]:
 
 
 class MeshRuntime:
-    def __init__(self, config: Mapping[str, object]) -> None:
+    def __init__(
+        self,
+        config: Mapping[str, object],
+        *,
+        control_task_handler: ControlTaskHandler | None = None,
+    ) -> None:
         require_core()
         runtime_root = config.get("runtime_root")
         node_id = config.get("node_id")
@@ -75,7 +80,11 @@ class MeshRuntime:
             raise MeshHold("HOLD_NODE_ID_REQUIRED")
         self.config = dict(config)
         self.storage = MeshStorage(runtime_root)
-        self.receiver = MeshReceiver(self.storage, receiver_node_ref=f"node:{node_id}")
+        self.receiver = MeshReceiver(
+            self.storage,
+            receiver_node_ref=f"node:{node_id}",
+            control_task_handler=control_task_handler,
+        )
         self.transport = MeshTransport(self.storage)
         native_adi_url = config.get("native_adi_url")
         if native_adi_url is not None and node_id != "taiji01":

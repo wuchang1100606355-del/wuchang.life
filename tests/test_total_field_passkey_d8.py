@@ -6,7 +6,9 @@ from fido2.utils import websafe_encode
 
 from tools.total_field_passkey_d8 import (
     DEPLOY_RESTART_SCOPE,
+    EXACT_REPAIR_SCOPE,
     GIT_PUSH_SCOPE,
+    RECEIVE_CANDIDATE_SCOPE,
     PasskeyD8Rejected,
     approval_challenge,
     canonical_json,
@@ -39,6 +41,23 @@ class TotalFieldPasskeyD8Tests(unittest.TestCase):
 
     def test_git_only_effect_scope_is_admitted(self) -> None:
         self.assertEqual(normalized_scopes(GIT_PUSH_SCOPE), (GIT_PUSH_SCOPE,))
+
+    def test_receive_candidate_scope_is_admitted_without_other_effects(self) -> None:
+        self.assertEqual(
+            normalized_scopes(RECEIVE_CANDIDATE_SCOPE),
+            (RECEIVE_CANDIDATE_SCOPE,),
+        )
+
+    def test_receive_candidate_scope_cannot_be_duplicated(self) -> None:
+        with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_SCOPE_INVALID"):
+            normalized_scopes([RECEIVE_CANDIDATE_SCOPE, RECEIVE_CANDIDATE_SCOPE])
+
+    def test_exact_repair_scope_is_admitted_without_other_effects(self) -> None:
+        self.assertEqual(normalized_scopes(EXACT_REPAIR_SCOPE), (EXACT_REPAIR_SCOPE,))
+
+    def test_exact_repair_scope_cannot_be_duplicated(self) -> None:
+        with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_SCOPE_INVALID"):
+            normalized_scopes([EXACT_REPAIR_SCOPE, EXACT_REPAIR_SCOPE])
 
     def test_unknown_or_duplicate_effect_scope_is_rejected(self) -> None:
         with self.assertRaisesRegex(PasskeyD8Rejected, "PASSKEY_SCOPE_INVALID"):

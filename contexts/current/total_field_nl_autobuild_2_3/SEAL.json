@@ -1,0 +1,50 @@
+{
+  "schema": "w7tp.8dadi.total-field-capability-seal/2.3",
+  "中文名稱": "總場自然語言建構能力完整性封套",
+  "package_id": "total-field-nl-autobuild-2.3-20260903T114909Z",
+  "created_at": "2026-09-03T11:49:09Z",
+  "seal_state": "INTEGRITY_SEALED_UNSIGNED",
+  "seal_state_中文": "內容完整性已封存，創辦人裝置身分簽章尚未簽發",
+  "hashes": {
+    "ADI_STATE_SNAPSHOT.json": "2a8e33b9055a1bb13e027c4db1c289bdf466d76789fdbca4dbad684faa007b96",
+    "ADI_GENERATIVE_TRANSFER_PACKET.json": "750aea2ea4455bf8e2ba46483eb242ea15e09acc15830d417da915645dcc3f0e"
+  },
+  "coordinate_lock": {
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "head": "a6bce1638142ef67e543cde708ba1f09fdb296f5",
+    "package_path": "contexts/current/total_field_nl_autobuild_2_3",
+    "mismatch_result": "HOLD_NO_REBIND"
+  },
+  "founder_identity_root": {
+    "local_route": "ADMITTED_DEVICE_ON_AUTHORIZED_LAN",
+    "remote_route": "ADMITTED_IPHONE_OVER_VPN",
+    "observed_remote_device_ref": "ios-747d65c768b4faa9",
+    "network_presence_state": "OBSERVED_NOT_IDENTITY_AUTHORITY",
+    "device_key_admission": "HOLD_NOT_YET_PROVEN",
+    "fresh_challenge_required": true
+  },
+  "command_authority": {
+    "human_reviewer": "FOUNDER_ONLY",
+    "approval_surface": "BROWSER_FORM",
+    "one_command_one_envelope": true,
+    "required_scope": ["何時", "何地", "何人", "何事", "使用範圍", "有效時間"],
+    "total_field_issues_after_founder_approval_only": true,
+    "automatic_or_inferred_approval": false,
+    "standing_or_delegated_privilege": false
+  },
+  "activation_boundary": {
+    "package_is_canonical": false,
+    "package_is_final_authority": false,
+    "runtime_activated": false,
+    "production_caller_wiring": "UNPROVEN",
+    "fresh_d8_issuer": "UNPROVEN",
+    "external_effect": "DENY_UNTIL_ALL_GATES_CLOSE"
+  },
+  "required_files": [
+    "ADI_STATE_SNAPSHOT.json",
+    "SNAPSHOT_SHA256.txt",
+    "ADI_GENERATIVE_TRANSFER_PACKET.json",
+    "SEAL.json"
+  ]
+}

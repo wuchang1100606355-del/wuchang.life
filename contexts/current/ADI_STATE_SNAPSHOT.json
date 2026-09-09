@@ -1,0 +1,268 @@
+{
+  "schema": "w7tp.8dadi.session-resume/2.3",
+  "中文名稱": "總場續接狀態載入能力",
+  "packet_id": "8dadi-session-resume-20260903T114124Z",
+  "created_at": "2026-09-03T11:41:24Z",
+  "mode": "RESUME_READ_REOBSERVE_ONLY",
+  "mode_中文": "僅續接、讀取與重新觀測",
+  "single_entry": "ADI_STATE_SNAPSHOT.json",
+  "capability_registration": {
+    "capability_id": "total-field.resume-state-load.2.3",
+    "中文名稱": "總場續接狀態載入",
+    "registration_state": "FOUNDER_AUTHORIZED_LOCAL_CAPABILITY",
+    "allowed": [
+      "讀取本封包",
+      "驗證封包完整性",
+      "重新觀測已列座標",
+      "依最新創辦人自然語言意圖計算差異",
+      "向總場提出遠端子系統生成請求",
+      "由現場工程師向總場提出限時維護授權請求"
+    ],
+    "forbidden_without_fresh_total_field_decision": [
+      "部署",
+      "啟用或升格候選",
+      "刪除或覆寫既有資料",
+      "修改正典或權威",
+      "恢復目前暫停的模型材料上傳",
+      "對外產生不可逆效果"
+    ],
+    "external_effect_authority": "TOTAL_FIELD",
+    "packet_is_authority": false
+  },
+  "identity_and_seat": {
+    "founder_identity": "REVERIFY_FROM_PHYSICAL_SYSTEM_BOUNDARY",
+    "founder_identity_中文": "須由本機、區網或已核准VPN的實體系統邊界重新驗證",
+    "login_account_ref": "FOUNDER_LOGIN_ACCOUNT_REF",
+    "organization_admin_ref": "ORG_ADMIN_ACCOUNT_REF",
+    "raw_credentials_embedded": false
+  },
+  "D1_Intent": {
+    "中文": "意圖",
+    "latest_founder_intent": [
+      "正典2.3與Exact V3為現行建構基線，2.1僅可作第四維歷史證據",
+      "自然語言是唯一使用入口，由總場裁決外部效果",
+      "以8DADI索引定位與管理全節點、網路、模型、Odoo與小J能力",
+      "區域網路直連優先，VPN僅在區網不可達時作候選或備援",
+      "先完成上品聊國咖啡館的瀏覽器式影音AI店員、Odoo點餐與人審結帳",
+      "模型是可替換外表與器官，總場是小J核心",
+      "目前保持模型材料上傳暫停，直到創辦人以自然語言明示繼續"
+    ],
+    "resume_phrase": "接續八維現場",
+    "legacy_must_not_define_target": true
+  },
+  "D2_State": {
+    "中文": "狀態",
+    "overall_state": "PAUSED_BY_FOUNDER_WITH_RESUME_PACKET_ACTIVE",
+    "current_repository": {
+      "root": "/home/taiji_admin/Taiji_Hub",
+      "branch": "agent/moving-v-v2-taiji8d-local-canary",
+      "head": "a6bce1638142ef67e543cde708ba1f09fdb296f5",
+      "dirty_entries": 40,
+      "dirty_policy": "PRESERVE_NO_CLEAN_RESET_STASH_COMMIT",
+      "observed_at": "2026-09-03T11:40:06Z"
+    },
+    "runtime_observation": {
+      "taiji_pos_google_voice_tool": "RUNNING_D4_ONLY",
+      "wuchang_os_odoo_18": "RUNNING_D4_ONLY",
+      "taiji_voice_gateway": "RUNNING_BUT_NO_PROVEN_TTS_EFFECT",
+      "wuchang_gpu_brain": "RUNNING_D4_ONLY",
+      "model_upload_process": "NOT_OBSERVED_AFTER_FOUNDER_PAUSE",
+      "service_running_does_not_prove_authority": true
+    },
+    "existing_context_conflict": {
+      "path": "contexts/current/AI_CURRENT_STATE.mtl.json",
+      "sha256": "a4b67b99d178683f2516f129be737f384a199fa492a09f694668dec5ced95318",
+      "declared_version_inside": "v1.0 RC1",
+      "classification": "CONFLICT_LEGACY_OR_UNRELATED_CONTEXT_NOT_TARGET_AUTHORITY",
+      "action": "PRESERVED_NOT_IMPORTED_AS_2.3"
+    }
+  },
+  "D3_Coordinate": {
+    "中文": "座標與關係",
+    "current_context_root": "/home/taiji_admin/Taiji_Hub/contexts/current",
+    "nodes": [
+      {"id": "MSI", "role": "本機總場入口與RTX 4070 Laptop GPU器官", "state": "OBSERVED_LOCAL"},
+      {"id": "taiji01", "role": "區網伺服器節點", "state": "KNOWN_COORDINATE_REOBSERVE_REQUIRED"},
+      {"id": "taiji02", "role": "penguin節點", "state": "USER_DECLARED_REOBSERVE_REQUIRED"},
+      {"id": "taiji03-wsl-via-router", "role": "路由與計算節點", "state": "KNOWN_COORDINATE_REOBSERVE_REQUIRED"},
+      {"id": "taiji04", "role": "商米POS、Google語音硬體授權、掃碼、列印與鏡頭器官", "state": "USER_DECLARED_REOBSERVE_REQUIRED"},
+      {"id": "rt-be86u", "role": "梅林路由器與區網優先路徑控制", "address": "192.168.50.1", "state": "KNOWN_COORDINATE_REOBSERVE_REQUIRED"},
+      {"id": "wuchang-us-free-node", "role": "美國Google Cloud免費VM索引節點", "state": "USER_DECLARED_REOBSERVE_REQUIRED"}
+    ],
+    "network_rule": "LAN_FIRST_VPN_SECONDARY",
+    "odoo_browser_entry": "http://127.0.0.1:8069/wuchang/xiaoj/ordering",
+    "google_drive_model_material_folder": "https://drive.google.com/drive/folders/11YoxfZ4kpG0NWqtncsLO1RO6jS2JMKsC"
+  },
+  "D4_Evidence": {
+    "中文": "證據",
+    "evidence_is_not_final_authority": true,
+    "observations": [
+      {
+        "item": "8DADI現行入口輪廓",
+        "state": "OBSERVED",
+        "path": "contexts/current/AI_CURRENT_STATE.mtl.json",
+        "sha256": "a4b67b99d178683f2516f129be737f384a199fa492a09f694668dec5ced95318",
+        "observed_at": "2026-09-03T11:39:52Z"
+      },
+      {
+        "item": "模型材料雲端片段",
+        "state": "OBSERVED_INCOMPLETE_NONCONTIGUOUS",
+        "observed_files": 25,
+        "expected_files": 55,
+        "missing_files": 30,
+        "present_groups": ["0003.part0000-0009", "0011.part0000-0013", "0013.part0001"],
+        "critical_gap": "0013.part0000不存在，最終模型清單未上傳",
+        "observed_at": "2026-09-03T11:40:00Z"
+      },
+      {
+        "item": "小J語音控制封裝",
+        "state": "PREVIOUSLY_OBSERVED_ACTIVE_MATERIAL_ONLY_REOBSERVE_REQUIRED",
+        "package_id": "xiaoj-voice-control-2.3",
+        "manifest_sha256": "808249bec49e68e8075a53ab540c9e4c590a2cf76c0e89516f39a219b162ea5f",
+        "cloud_role": "MATERIAL_ONLY",
+        "cloud_is_authority": false
+      },
+      {
+        "item": "Odoo情緒投影與店面能力",
+        "state": "TEST_EVIDENCE_ONLY",
+        "isolated_tests": "7_PASS_0_FAILURE_0_ERROR",
+        "afterimage_sha256": "ae2a315674c9fee1e03767d0b842d5a0bff401088799e854baf5a7dab1fe7921"
+      }
+    ]
+  },
+  "D5_Execution_Policy": {
+    "中文": "執行與政策",
+    "natural_language_only_for_user": true,
+    "human_confirmation_before_checkout": true,
+    "voice_repeat_before_payment_confirmation": true,
+    "reobserve_before_each_external_effect": true,
+    "pause_enforced": true,
+    "current_allowed_execution": "READ_VERIFY_REOBSERVE_DIFF_ONLY",
+    "remote_subsystem_generation": {
+      "state": "TOTAL_FIELD_APPLICATION_AND_FOUNDER_HUMAN_APPROVAL_REQUIRED",
+      "rule": "在目標節點遠端生成受影響座標閉包內的最小投影",
+      "preconditions": [
+        "目標節點身分與座標已重新觀測",
+        "申請完整陳述何時、何地、何人、何事、使用範圍與有效時間",
+        "總場完成八維檢查並送交創辦人本人審核",
+        "創辦人本人明示核准後總場才可簽發任務封套",
+        "區網優先路徑已判定",
+        "生成前已有可回復證據快照"
+      ],
+      "completion": "寫入後重新觀測八維狀態場並留下回執",
+      "standing_remote_admin": false
+    },
+    "onsite_engineer_maintenance": {
+      "state": "CALL_TOTAL_FIELD_THEN_FOUNDER_HUMAN_APPROVAL",
+      "中文": "現場工程師只能向總場提出申請，須經創辦人本人審核核准後取得即時限權維護授權",
+      "preconditions": [
+        "工程師身分、現場座標與維護對象可驗證",
+        "創辦人或既有授權規則允許該維護目的",
+        "申請完整陳述何時、何地、何人、何事、使用範圍與有效時間",
+        "總場完成八維檢查並送交創辦人本人審核",
+        "創辦人本人明示核准後，總場簽發單一任務、最小權限、限時封套"
+      ],
+      "grant_must_include": [
+        "工程師身分參照",
+        "節點與受影響座標",
+        "允許與禁止動作",
+        "到期時間",
+        "前後狀態回執"
+      ],
+      "on_expiry_or_mismatch": "REVOKE_AND_HOLD",
+      "automatic_approval": false,
+      "delegated_human_approval": false,
+      "permanent_engineer_privilege": false
+    }
+  },
+  "D6_Generative_Transmission": {
+    "中文": "生成式傳輸",
+    "control_package": {
+      "id": "xiaoj-voice-control-2.3",
+      "state": "MATERIALIZED_READ_ONLY",
+      "runtime_decider": "TOTAL_FIELD"
+    },
+    "cosyvoice_model_material": {
+      "id": "xiaoj-cosyvoice3-0.5b-2512-r29e01c",
+      "source_commit": "074ca6dc9e80a2f424f1f74b48bdd7d3fea531cc",
+      "model_revision": "29e01c4e8d000f4bcd70751be16fa94bf3d85a18",
+      "license_declared": "Apache-2.0",
+      "local_files": 15,
+      "local_total_bytes": 5427041134,
+      "chunk_count": 55,
+      "chunk_max_bytes": 100663296,
+      "local_manifest": "/home/taiji_admin/Taiji_Hub/reports/voice_materializer_23/xiaoj-cosyvoice3-0.5b-2512-r29e01c.manifest.8dadi.json",
+      "cloud_state": "INCOMPLETE_UPLOAD_PAUSED",
+      "reconstruction_gate": "REQUIRE_ALL_55_CHUNKS_MANIFEST_AND_FULL_HASH_MATCH"
+    },
+    "cloud_is_candidate_material_only": true,
+    "cloud_may_not_write_deploy_or_decide_authority": true
+  },
+  "D7_Risk_Quarantine": {
+    "中文": "風險與隔離",
+    "fail_closed": true,
+    "risks": [
+      "工作樹有40個未分類變更，不可自動清理或提交",
+      "模型材料僅25/55且不連續，不可重建、載入或宣稱完成",
+      "現行taiji_voice_gateway僅有舊版乾跑證據，沒有已證明的真實TTS效果",
+      "跨節點連通、身分、權限與實際效果必須重新觀測",
+      "不同AI帳號只能重讀外部狀態，不能繼承隱藏推理或自行取得創辦人權威"
+    ],
+    "secrets_embedded": false,
+    "legacy_2_1_role": "D4_HISTORICAL_EVIDENCE_ONLY"
+  },
+  "D8_Envelope_Authority": {
+    "中文": "封套與權威",
+    "founder_latest_natural_language_is_target_source": true,
+    "total_field_is_external_effect_authority": true,
+    "this_packet_is_canonical": false,
+    "this_packet_can_self_promote": false,
+    "this_packet_can_activate_runtime": false,
+    "founder_grant_scope": "REGISTER_RESUME_READ_VERIFY_REOBSERVE_CAPABILITY",
+    "remote_generation_authority": "TOTAL_FIELD_ENVELOPE_AFTER_FOUNDER_HUMAN_APPROVAL",
+    "onsite_maintenance_authority": "TOTAL_FIELD_ENVELOPE_AFTER_FOUNDER_HUMAN_APPROVAL",
+    "approval_dimensions_required": ["何時", "何地", "何人", "何事", "使用範圍", "有效時間"],
+    "founder_human_approval_required": true,
+    "approval_may_not_be_inferred_from_chat_history": true,
+    "fresh_total_field_decision_required_for_mutation": true,
+    "signature_state": "UNSIGNED_INTEGRITY_SEALED"
+  },
+  "resume_handshake": {
+    "required_acknowledgements": [
+      "AI_IS_NOT_AUTHORITY",
+      "UNKNOWN_WILL_NOT_BE_INVENTED",
+      "CANDIDATE_WILL_NOT_BE_PROMOTED_AUTOMATICALLY",
+      "LEGACY_WILL_NOT_DEFINE_TARGET",
+      "EXECUTION_REQUIRES_REOBSERVATION",
+      "LAN_PRECEDES_VPN",
+      "PAUSE_IS_ENFORCED"
+    ],
+    "on_failure": "ALIGNMENT_REJECTED",
+    "on_success": "ALIGNMENT_ACCEPTED_READ_VERIFY_REOBSERVE"
+  },
+  "automatic_resume_sequence": [
+    "驗證SNAPSHOT_SHA256.txt、ADI_GENERATIVE_TRANSFER_PACKET.json與SEAL.json",
+    "重新觀測ROOT、BRANCH、HEAD、WORKTREE，不符即停止",
+    "重新觀測總場現行正典與D8外部效果權威",
+    "重新觀測區網直連；只有區網不可達才評估VPN",
+    "重新觀測Odoo、04商米、語音控制封裝、GPU與模型材料",
+    "若為子系統生成或工程師維護，先向總場提出六項完整申請並等待創辦人本人審核核准",
+    "計算目前場對最新創辦人意圖的最小差異",
+    "只回報一個最短NEXT；未獲新指令不得恢復模型上傳"
+  ],
+  "current_next_when_resumed": "等待創辦人新的自然語言指令；目前不恢復模型材料上傳",
+  "translation_map": {
+    "Resume": "續接",
+    "Read": "讀取",
+    "Verify": "驗證",
+    "Reobserve": "重新觀測",
+    "Canonical": "正典",
+    "Authority": "權威",
+    "Evidence": "證據",
+    "Candidate": "候選",
+    "Hold": "暫停",
+    "Runtime": "執行環境",
+    "Material only": "僅材料",
+    "Dirty worktree": "髒工作樹／未分類變更工作樹"
+  }
+}

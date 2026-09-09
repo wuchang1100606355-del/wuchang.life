@@ -8,13 +8,17 @@ services:
       - odoo
       - -d
       - postgres
-      - --db-filter=^postgres$
       - --no-database-list
     depends_on:
       - wuchang_os_pg
 
+    networks:
+      - default
+      - taiji-ai
+
     ports:
       - "127.0.0.1:8069:8069"
+      - "192.168.50.82:8069:8069"
 
     volumes:
       - ./addons:/mnt/extra-addons
@@ -40,3 +44,8 @@ services:
 
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+
+networks:
+  taiji-ai:
+    external: true
+    name: taiji-ai

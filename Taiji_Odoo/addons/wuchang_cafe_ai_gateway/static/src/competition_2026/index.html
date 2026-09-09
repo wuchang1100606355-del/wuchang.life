@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>咖啡館服務員影音 AI 小 J｜8D ADI 完整 AI 應用系統</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="xiaoj_competition.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div class="brand-lockup">
+      <div class="brand-mark" aria-hidden="true">8D</div>
+      <div>
+        <div class="eyebrow">2026 中華電信智慧創新應用大賽候選作品</div>
+        <h1>咖啡館服務員影音 AI 小 J</h1>
+      </div>
+    </div>
+    <div class="state-pills" aria-label="目前狀態">
+      <span class="pill cyan">虛擬候選</span>
+      <span class="pill">非正式警報</span>
+      <span class="pill">無真實效果</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero panel">
+      <div class="hero-copy">
+        <p class="kicker">主權 AI 小 J 個人／組織服務員</p>
+        <h2>8D ADI 是完整的 AI 應用系統</h2>
+        <p class="lede">它讓影像、聲音、網路狀態、設備能力與動態上下文，透過數位腦細胞形成可驗證的理解，再落成可治理的執行。</p>
+        <div class="formula" aria-label="核心運算公式">
+          <span>離散精準索引</span><b>＋</b><span>高維浮點理解</span><b>→</b><span>數位腦細胞</span><b>→</b><span>總場裁決</span>
+        </div>
+        <div class="hero-actions">
+          <button class="primary" data-action="cafe-demo">開始咖啡館示範</button>
+          <button class="danger-outline" data-action="earthquake-demo">啟動地震演練</button>
+        </div>
+      </div>
+      <div class="xiaoj-stage" aria-label="自訂 Codex 外型的小 J">
+        <div class="stage-ring ring-one"></div>
+        <div class="stage-ring ring-two"></div>
+        <div id="xiaojPet" class="xiaoj-pet" role="img" aria-label="藍白科技系自訂 Codex 小 J"></div>
+        <div class="speech" id="xiaojSpeech">您好，我是小 J。說出需求，我會把理解變成可驗證的下一步。</div>
+        <div class="avatar-caption"><strong>自訂 Codex 小 J</strong><span>v2．11 列動作．16 方位</span></div>
+      </div>
+    </section>
+
+    <nav class="scene-tabs panel" aria-label="場景選擇">
+      <button class="scene-tab active" data-scene="cafe">咖啡館</button>
+      <button class="scene-tab" data-scene="property">管委會／物業</button>
+      <button class="scene-tab" data-scene="association">協會公益</button>
+      <button class="scene-tab" data-scene="personal">個人主權 AI</button>
+    </nav>
+
+    <section class="workspace-grid">
+      <article class="panel interaction-panel">
+        <div class="section-title">
+          <div><span class="step-number">01</span><h3>多模態理解入口</h3></div>
+          <span id="privacyState" class="safe-tag">資料留在本機</span>
+        </div>
+        <label for="intentInput">請告訴小 J 你想完成什麼</label>
+        <div class="intent-row">
+          <input id="intentInput" value="我想喝一杯不太甜、適合下午的咖啡" autocomplete="off">
+          <button class="primary compact" data-action="understand">理解並形成執行</button>
+        </div>
+        <div class="modality-grid">
+          <label class="modality-card file-card">
+            <input id="imageInput" type="file" accept="image/*">
+            <span class="modality-icon">◩</span>
+            <span><b>影像</b><small id="imageState">尚未選取</small></span>
+          </label>
+          <button class="modality-card" data-action="voice">
+            <span class="modality-icon">◉</span>
+            <span><b>聲音</b><small id="audioState">點擊後在本機辨識</small></span>
+          </button>
+          <button class="modality-card" data-action="network">
+            <span class="modality-icon">⌁</span>
+            <span><b>網路狀態</b><small id="networkState">等待觀測</small></span>
+          </button>
+          <button class="modality-card" data-action="device">
+            <span class="modality-icon">◇</span>
+            <span><b>設備能力</b><small id="deviceState">畫面／喇叭／麥克風</small></span>
+          </button>
+        </div>
+        <div class="lookup-grid">
+          <div class="compute-card exact">
+            <span>離散索引平面</span>
+            <b>精準查表</b>
+            <p>固定身份、場景、座標、能力、政策與譜系。</p>
+            <code id="lookupResult">等待意圖</code>
+          </div>
+          <div class="compute-card float">
+            <span>高維浮點平面</span>
+            <b>理解候選</b>
+            <p>處理語意與多模態，但不能創造座標或自授權。</p>
+            <code id="floatResult">等待感知</code>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel state-panel">
+        <div class="section-title">
+          <div><span class="step-number">02</span><h3>數位腦細胞</h3></div>
+          <span class="safe-tag">D1–D8 完整</span>
+        </div>
+        <div id="dimensions" class="dimensions" aria-live="polite"></div>
+        <div class="cell-footer">
+          <span>細胞狀態</span><strong id="cellState">等待形成</strong>
+          <span>外部效果</span><strong class="no-effect">未執行</strong>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel flow-panel">
+      <div class="section-title">
+        <div><span class="step-number">03</span><h3>理解落實於執行</h3></div>
+        <span id="flowState" class="safe-tag">等待輸入</span>
+      </div>
+      <div id="executionFlow" class="execution-flow"></div>
+      <div class="distributed-field">
+        <div class="node browser-node"><span>瀏覽器／店內設備</span><small>影像・聲音・畫面</small></div>
+        <div class="route"><b id="routeLabel">本機</b><span>最小必要差量</span></div>
+        <div class="node total-node"><span>8D ADI／總場</span><small>索引・防飄移・權威</small></div>
+        <div class="route"><b>受控算力</b><span>模型可替換</span></div>
+        <div class="node compute-node"><span>雲地模型／分散式主機</span><small>算力・轉譯・重建</small></div>
+      </div>
+    </section>
+
+    <section id="earthquakePanel" class="panel earthquake-panel" hidden>
+      <div class="exercise-banner">
+        <span class="pulse-dot"></span>
+        <div><b>地震特殊狀態演練</b><small>這是隔離模擬資料，不是國家警報，也沒有連接真實設備。</small></div>
+        <button data-action="close-earthquake">結束演練</button>
+      </div>
+      <div class="earthquake-grid">
+        <div class="safety-card hero-safety"><span>立即動作</span><strong>趴下、掩護、穩住</strong><p>小 J 以畫面與聲音同步引導，離線仍保留最低安全腳本。</p></div>
+        <div class="safety-card"><span>來源驗證</span><strong>演練封包</strong><p>正式來源僅接受已驗證的 NCDR CAP 或中央氣象署資訊。</p></div>
+        <div class="safety-card"><span>設備保護</span><strong>只產生提案</strong><p>瓦斯、電源、門鎖、電梯等作用必須由人員與總場放行。</p></div>
+        <div class="safety-card"><span>生成式傳輸</span><strong>傳差量，不搬整份資料</strong><p>接收端以安全基座重建警報畫面、語音及任務候選。</p></div>
+      </div>
+    </section>
+
+    <section class="story-grid">
+      <article class="panel story-panel">
+        <span class="kicker">Founder 故事主線</span>
+        <h3>從咖啡師公益夢，到 8D ADI</h3>
+        <div class="timeline">
+          <div><b>起點</b><p>想用咖啡館支持公益服務，從社工個案看見需求不是一句話，而是多維狀態。</p></div>
+          <div><b>十個月</b><p>將意圖、狀態、座標、證據、執行、傳輸、風險與權威，形成可索引的數位腦細胞。</p></div>
+          <div><b>現在</b><p>同一個完整 AI 系統可掛載咖啡館、物業、協會與個人服務場景。</p></div>
+        </div>
+      </article>
+      <article class="panel score-panel">
+        <span class="kicker">作品高分對準</span>
+        <h3>技術不是口號，場景直接可演</h3>
+        <ul>
+          <li><b>技術成熟</b><span>完整閉環、失敗封閉、離線最低服務</span></li>
+          <li><b>商業市場</b><span>一套核心掛載多種 Odoo 靜態場景</span></li>
+          <li><b>電信應用</b><span>低頻寬差量、示警轉譯、分散式節點</span></li>
+          <li><b>永續公益</b><span>舊設備復用、雲端最小用量、人機協作</span></li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <span>候選版本｜不含正式警報、不寫入 Odoo、不執行設備控制</span>
+    <span id="clock"></span>
+  </footer>
+  <script src="xiaoj_competition.js"></script>
+</body>
+</html>

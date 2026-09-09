@@ -25,6 +25,7 @@ CATALOG_PATH = ROOT / "web/founder_skill_catalog/index.html"
 
 ACTIVE_SKILL_ROOTS = (
     Path("/home/taiji_admin/.agents/skills"),
+    Path("/home/taiji_admin/.codex/skills/derive-8d-adi-insight"),
     Path("/home/taiji_admin/.codex/skills/.system"),
     Path("/home/taiji_admin/.codex/plugins/cache"),
 )
@@ -116,6 +117,22 @@ W7TP_SKILLS = (
         "status": "READY_LOCAL",
         "tool_refs": ["local:deterministic_reference_lookup"],
     },
+    {
+        "skill_id": "w7tp_8d_adi_origin_cell_fusion",
+        "name": "W7TP 8D ADI Origin-Cell Context Transmission",
+        "version": "1.0.0",
+        "source_path": "tools/total_field_dynamic_context.py",
+        "description": "沿既有總場主鏈合併 8D ADI 感知、動態上下文、生成式傳輸與狀態原胞投影驗證；所有輸出維持候選並返回總場重觀測。",
+        "triggers": ["原胞之力", "狀態原胞傳播", "原胞四投影", "8D ADI 感知", "原胞生成式傳輸"],
+        "status": "READY_LOCAL",
+        "tool_refs": [
+            "local:tools.total_field_dynamic_context.build_dynamic_context",
+            "local:tools.total_field_dynamic_context.build_8dadi_state_cell_projection",
+            "local:tools.total_field_dynamic_context.verify_8dadi_state_cell_projection",
+            "local:derive-8d-adi-insight/model_perception_amplifier.py",
+            "local:derive-8d-adi-insight/origin_cell_views_validator.py",
+        ],
+    },
 )
 
 PLATFORM_INTERNAL = (
@@ -204,6 +221,18 @@ def _triggers(description: str, skill_id: str) -> list[str]:
 
 def _classify(path: Path, skill_id: str) -> tuple[str, list[str], str]:
     value = path.as_posix()
+    if skill_id == "derive-8d-adi-insight":
+        return (
+            "READY_LOCAL",
+            [
+                "local:derive-8d-adi-insight/model_perception_amplifier.py",
+                "local:derive-8d-adi-insight/origin_cell_views_validator.py",
+                "local:tools.total_field_dynamic_context.build_dynamic_context",
+                "local:tools.total_field_dynamic_context.build_8dadi_state_cell_projection",
+                "local:tools.total_field_dynamic_context.verify_8dadi_state_cell_projection",
+            ],
+            "Exact installed Skill source, packet verifier, state-cell projection, dynamic-context and Total Field reobservation are required.",
+        )
     if "/.agents/skills/" in value:
         return (
             "NEEDS_CONNECTOR",

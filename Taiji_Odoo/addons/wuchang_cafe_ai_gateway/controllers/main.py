@@ -320,6 +320,10 @@ def _ordering_body() -> str:
           <div class="hero-tags"><span>外網中斷仍可服務</span><span>區網優先</span><span>D6 重建契約：CANDIDATE／UNKNOWN</span><span>Odoo 商業介面</span></div>
           <div class="warm-state" data-warm-state>固定迎賓動畫與招呼語可用 · 模型器官：CANDIDATE／UNKNOWN</div>
           <div class="display-toolbar">
+            <a href="/wuchang/xiaoj/ordering">會員聊國咖啡點餐</a>
+            <a href="/wuchang/xiaoj/workspace?mode=staff_pos">員工秘書小J</a>
+            <a href="/wuchang/xiaoj/workspace?mode=counter_service_touch">櫃台點餐</a>
+            <a href="/wuchang/xiaoj/workspace?mode=business_management">老闆秘書小J</a>
             <a href="/wuchang/xiaoj/display" target="_blank" rel="noopener" data-open-display>開啟 HDMI 小J 畫面</a>
             <button class="outfit-pick is-active" type="button" data-xiaoj-outfit="white">白色科技制服</button>
             <button class="outfit-pick" type="button" data-xiaoj-outfit="barista">咖啡師圍裙</button>

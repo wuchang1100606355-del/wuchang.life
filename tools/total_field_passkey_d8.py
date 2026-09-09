@@ -2,12 +2,14 @@
 """Founder-enrolled platform-passkey adapter for an exact Total Field D8 effect."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
 import re
 import sqlite3
 import tempfile
+import sys
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 from typing import Any, Mapping
@@ -27,6 +29,8 @@ PASSKEY_POINTER_SCHEMA = "W7TP_TOTAL_FIELD_PASSKEY_APPROVAL_POINTER_V1"
 PASSKEY_CREDENTIAL_SCHEMA = "W7TP_TOTAL_FIELD_FOUNDER_PASSKEY_CREDENTIAL_V1"
 GIT_PUSH_SCOPE = "AUTHORIZE_GIT_PUSH"
 DEPLOY_RESTART_SCOPE = "AUTHORIZE_EXACT_DEPLOY_RESTART"
+RECEIVE_CANDIDATE_SCOPE = "RECEIVE_CANDIDATE"
+EXACT_REPAIR_SCOPE = "EXACT_MINIMAL_REPAIR_ONLY"
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 GIT_OID = re.compile(r"^[0-9a-f]{40,64}$")
 
@@ -145,7 +149,7 @@ def normalized_scopes(value: Any) -> tuple[str, ...]:
         raise PasskeyD8Rejected("PASSKEY_SCOPE_INVALID")
     if not scopes or len(set(scopes)) != len(scopes):
         raise PasskeyD8Rejected("PASSKEY_SCOPE_INVALID")
-    admitted = {GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE}
+    admitted = {GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE, RECEIVE_CANDIDATE_SCOPE, EXACT_REPAIR_SCOPE}
     if any(scope not in admitted for scope in scopes):
         raise PasskeyD8Rejected("PASSKEY_SCOPE_INVALID")
     return scopes
@@ -226,7 +230,7 @@ def verify_passkey_authority(
         pointer = load_json(pointer_path, "PASSKEY_APPROVAL_POINTER_INVALID")
         if pointer.get("schema_id") != PASSKEY_POINTER_SCHEMA or pointer.get("state") != "ACTIVE_SINGLE_USE":
             raise PasskeyD8Rejected("PASSKEY_APPROVAL_POINTER_INVALID")
-        approval_path = safe_runtime_ref(root, pointer.get("approval_ref"), suffix="GIT_PUSH_PASSKEY_APPROVAL.json")
+        approval_path = safe_runtime_ref(root, pointer.get("approval_ref"), suffix="PASSKEY_APPROVAL.json")
         approval_bytes = approval_path.read_bytes()
         approval_hash = sha256(approval_bytes)
         if approval_hash != pointer.get("approval_sha256"):
@@ -253,8 +257,38 @@ def verify_passkey_authority(
         for field in ("request_packet_sha256", "review_registration_sha256"):
             if not isinstance(claims.get(field), str) or HEX64.fullmatch(str(claims[field])) is None:
                 raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")
-        for field in ("base_commit", "target_tree"):
-            if GIT_OID.fullmatch(str(constraints.get(field) or "")) is None:
+        if required_scope == GIT_PUSH_SCOPE:
+            for field in ("base_commit", "target_tree"):
+                if GIT_OID.fullmatch(str(constraints.get(field) or "")) is None:
+                    raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")
+        elif required_scope == RECEIVE_CANDIDATE_SCOPE:
+            if constraints.get("candidate_id") != "w7tp_8d_adi_origin_cell_fusion":
+                raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")
+            for field in (
+                "candidate_packet_sha256",
+                "skill_index_sha256",
+                "skill_source_manifest_sha256",
+                "dynamic_context_sha256",
+            ):
+                if HEX64.fullmatch(str(constraints.get(field) or "")) is None:
+                    raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")
+        elif required_scope == EXACT_REPAIR_SCOPE:
+            expected = {
+                "repo_root": "/home/taiji_admin/Taiji_Hub",
+                "branch": "agent/moving-v-v2-taiji8d-local-canary",
+                "head": "dd9b24c15e97564e19dc0a069d4cc96b735773f0",
+                "file": "tools/total_field_dynamic_context.py",
+                "function": "build_dynamic_context",
+                "intent": "閉合第一動態上下文污染入口，使 8D/ADI 譜系資格先於語義排序",
+                "allowed_effect": EXACT_REPAIR_SCOPE,
+                "prohibited_effects": [
+                    "DEPLOY", "SERVICE_RESTART", "POINTER_CHANGE", "CANONICAL_CHANGE",
+                    "RECEIVER_VERSION_CHANGE", "CROSS_LINEAGE_SUCCESSOR",
+                    "V2_3_TO_V2_1_PROJECTION", "HISTORICAL_FILE_DELETE",
+                    "GENERAL_REFACTOR", "GIT_PUSH",
+                ],
+            }
+            if any(constraints.get(key) != value for key, value in expected.items()):
                 raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")
         nonce = approval.get("nonce_b64url")
         expected_challenge = approval_challenge(claims, str(nonce or ""))
@@ -306,6 +340,8 @@ def verify_passkey_authority(
             "verified_scope": required_scope,
             "authority_scope_constraints": dict(constraints),
             "authority_sha256": approval_hash,
+            "issued_at": iso_z(issued),
+            "expires_at": iso_z(expires),
             "signer_type": "FOUNDER_ENROLLED_USER_VERIFIED_PASSKEY",
             "authenticator_attachment": authenticator_attachment,
             "user_verification": True,
@@ -321,9 +357,43 @@ def verify_passkey_authority(
         }
 
 
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo-root", required=True)
+    parser.add_argument(
+        "--gate-config",
+        default="configs/total_field/git_push_review_gate_v1.json",
+    )
+    parser.add_argument("--required-scope", required=True)
+    parser.add_argument("--consume", action="store_true")
+    args = parser.parse_args()
+    root = Path(args.repo_root).resolve()
+    config_path = (root / args.gate_config).resolve()
+    try:
+        config_path.relative_to(root / "configs" / "total_field")
+        gate = load_json(config_path, "PASSKEY_CONFIG_INVALID")
+        result = verify_passkey_authority(
+            repo_root=root,
+            config=gate.get("passkey_verifier") or {},
+            consume=args.consume,
+            required_scope=args.required_scope,
+        )
+    except (PasskeyD8Rejected, ValueError, OSError) as exc:
+        result = {
+            "state": "HOLD_DEVICE_PASSKEY_D8_AUTHORITY",
+            "authority_verified": False,
+            "reason": str(exc),
+            "scope": [],
+        }
+    print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+    return 0 if result.get("authority_verified") is True else 1
+
+
 __all__ = [
     "GIT_PUSH_SCOPE",
     "DEPLOY_RESTART_SCOPE",
+    "EXACT_REPAIR_SCOPE",
+    "RECEIVE_CANDIDATE_SCOPE",
     "PASSKEY_APPROVAL_SCHEMA",
     "PASSKEY_APPROVAL_STATE",
     "PASSKEY_CREDENTIAL_SCHEMA",
@@ -345,3 +415,7 @@ __all__ = [
     "utc_now",
     "verify_passkey_authority",
 ]
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -962,7 +962,7 @@
           <div class="status-row"><span>付款擷取</span><b class="badge hold">FALSE</b></div>
         </div>
         <h2 class="section-title" style="margin-top:18px">頁面封裝</h2>
-        <div class="proof-code">start_url=/wuchang/xiaoj/ordering<br/>display=standalone<br/>route_auth=user</div>
+        <div class="proof-code">start_url=/wuchang/xiaoj/workspace<br/>display=standalone<br/>route_auth=user</div>
       </aside>
     `;
   }

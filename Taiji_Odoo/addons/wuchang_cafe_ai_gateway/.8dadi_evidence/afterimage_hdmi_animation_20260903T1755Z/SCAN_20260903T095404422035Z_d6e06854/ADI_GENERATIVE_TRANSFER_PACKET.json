@@ -1,0 +1,24 @@
+{
+  "limitations": [
+    "不含原始程式內容",
+    "不能單獨重建來源檔或證明來源身分"
+  ],
+  "mode": "STATE_SNAPSHOT",
+  "protocol": "W7TP-8D-ADI-STATE-TRANSFER",
+  "protocol_version": "0.1.0",
+  "recipe": [
+    "驗證快照標準 SHA-256",
+    "依 logical_root_id 與 ADI 相對路徑重建節點",
+    "依證據強度重建狀態向量與待分析缺口索引",
+    "套用當次記憶體驗證結果與封印，不提升未證明權威"
+  ],
+  "reconstruction_target": "ANALYSIS_ARTIFACTS_ONLY",
+  "required_artifacts": [
+    "ADI_STATE_SNAPSHOT.json",
+    "SNAPSHOT_SHA256.txt",
+    "SEAL.json"
+  ],
+  "run_id": "SCAN_20260903T095404422035Z_d6e06854",
+  "source_content_embedded": false,
+  "source_snapshot_sha256": "5ae1a6d5db526227af24367c0259e6340b6342cf89c88e7c85810529729016c6"
+}
