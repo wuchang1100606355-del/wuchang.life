@@ -95,6 +95,35 @@
     "max_output_tokens_default": 1024,
     "max_output_tokens_ceiling": 4096
   },
+  "local_gpu_execution": {
+    "required": true,
+    "full_model_vram_residency_required": true,
+    "runtime_evidence_endpoint": "/api/ps",
+    "evidence_checked_after_each_local_inference": true,
+    "cpu_or_partial_gpu_fallback_allowed": false,
+    "failure_state": "HOLD_LOCAL_LLM_FULL_GPU_RESIDENCY_REQUIRED"
+  },
+  "alignment_prefix_binding": {
+    "prefix_ref": "manifests/ollama_xiaoj_total_field_v0_1/system_prefix.txt",
+    "contract_and_prefix_sha256_bound_per_request": true,
+    "dynamic_context_and_work_target_sha256_bound_per_request": true,
+    "missing_or_invalid_binding_fails_closed": true
+  },
+  "answer_source_attestation": {
+    "determined_by": "TOTAL_FIELD_GATEWAY",
+    "model_self_report_used": false,
+    "response_ref": "taiji.answer_source",
+    "routes": [
+      "LOCAL_DIRECT",
+      "CLOUD_DIRECT",
+      "LOCAL_AFTER_CLOUD_UNAVAILABLE"
+    ]
+  },
+  "model_selection_guard": {
+    "default_local_model": "xiaoj:latest",
+    "arbitrary_installed_model_substitution_allowed": false,
+    "unavailable_requested_model_state": "HOLD_REQUESTED_MODEL_UNAVAILABLE"
+  },
   "purpose_bound_profiles": {
     "selector": "TOTAL_FIELD_USING_8D_ADI_WORK_CELL_PURPOSE",
     "model_may_self_select": false,

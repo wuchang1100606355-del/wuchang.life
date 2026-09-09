@@ -13,6 +13,7 @@ from typing import Any
 
 import requests
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import StreamingResponse
 
 from services.gateway.total_field_google_vertex import (
     TOTAL_FIELD_GOOGLE_MODEL,
@@ -36,13 +37,13 @@ OLLAMA_BASE_URL = (
     or "http://127.0.0.1:11434"
 ).rstrip("/")
 
+LOCAL_FALLBACK_MODEL = os.getenv(
+    "TAIJI_TOTAL_FIELD_LOCAL_FALLBACK_MODEL", "xiaoj:latest"
+)
 DEFAULT_MODEL = (
     os.getenv("TAIJI_MODEL")
     or os.getenv("WUCHANG_DEFAULT_MODEL")
-    or "llama3.1:latest"
-)
-LOCAL_FALLBACK_MODEL = os.getenv(
-    "TAIJI_TOTAL_FIELD_LOCAL_FALLBACK_MODEL", "xiaoj:latest"
+    or LOCAL_FALLBACK_MODEL
 )
 
 MODEL_ALIASES = {
@@ -58,6 +59,11 @@ OLLAMA_TIMEOUT = float(os.getenv("TAIJI_OLLAMA_TIMEOUT", "120"))
 PROJECT_ROOT = Path(
     os.getenv("TAIJI_PROJECT_ROOT", "/home/taiji_admin/Taiji_Hub")
 ).resolve()
+LOCAL_MODEL_MANIFEST_ROOT = (
+    PROJECT_ROOT / "manifests" / "ollama_xiaoj_total_field_v0_1"
+)
+LOCAL_MODEL_CONTRACT_PATH = LOCAL_MODEL_MANIFEST_ROOT / "root_model_contract.json"
+LOCAL_MODEL_PREFIX_PATH = LOCAL_MODEL_MANIFEST_ROOT / "system_prefix.txt"
 LOCAL_CONTEXT_MAX_ITEMS = int(os.getenv("TAIJI_LOCAL_CONTEXT_MAX_ITEMS", "4"))
 CONTEXT_IDENTITY_CLASS = os.getenv(
     "TAIJI_CONTEXT_IDENTITY_CLASS", "unknown"
@@ -103,10 +109,53 @@ def list_models() -> dict[str, Any]:
     }
 
 
-@router.post("/v1/chat/completions")
-async def chat_completions(request: Request) -> dict[str, Any]:
+@router.post("/v1/chat/completions", response_model=None)
+async def chat_completions(request: Request) -> dict[str, Any] | StreamingResponse:
     body = await request.json()
+    if body.get("stream") is True:
+        non_streaming_body = dict(body)
+        non_streaming_body["stream"] = False
+        result = _complete_chat(non_streaming_body)
+        return StreamingResponse(
+            _openai_sse_events(result),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "X-Accel-Buffering": "no",
+            },
+        )
     return _complete_chat(body)
+
+
+def _openai_sse_events(result: dict[str, Any]):
+    completion_id = str(result["id"])
+    created = int(result["created"])
+    model = str(result["model"])
+    content = str(result["choices"][0]["message"]["content"])
+    first = {
+        "id": completion_id,
+        "object": "chat.completion.chunk",
+        "created": created,
+        "model": model,
+        "choices": [
+            {
+                "index": 0,
+                "delta": {"role": "assistant", "content": content},
+                "finish_reason": None,
+            }
+        ],
+        "taiji": result.get("taiji") or {},
+    }
+    final = {
+        "id": completion_id,
+        "object": "chat.completion.chunk",
+        "created": created,
+        "model": model,
+        "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}],
+    }
+    yield "data: " + json.dumps(first, ensure_ascii=False, separators=(",", ":")) + "\n\n"
+    yield "data: " + json.dumps(final, ensure_ascii=False, separators=(",", ":")) + "\n\n"
+    yield "data: [DONE]\n\n"
 
 
 def _complete_chat(body: dict[str, Any]) -> dict[str, Any]:
@@ -122,6 +171,13 @@ def _complete_chat(body: dict[str, Any]) -> dict[str, Any]:
         try:
             content, usage, total_field_metadata = total_field_google_chat(messages, body)
             backend = total_field_metadata["backend"]
+            total_field_metadata.setdefault("inference_route", "GOOGLE_VERTEX")
+            total_field_metadata["answer_source"] = _answer_source(
+                source_class="CLOUD_MODEL",
+                route="CLOUD_DIRECT",
+                provider="GOOGLE_VERTEX",
+                model=str(total_field_metadata.get("provider_model") or model),
+            )
         except HTTPException as exc:
             google_failure = _google_availability_failure(exc)
             if not google_failure:
@@ -133,6 +189,7 @@ def _complete_chat(body: dict[str, Any]) -> dict[str, Any]:
             )
             options = _ollama_options(body)
             data, backend = _chat_with_fallback(fallback_model, messages, options)
+            gpu_execution = _observe_local_gpu_execution(fallback_model)
             content = _extract_content(data)
             usage = _usage(data, messages, content)
             total_field_metadata = {
@@ -143,6 +200,13 @@ def _complete_chat(body: dict[str, Any]) -> dict[str, Any]:
                 "inference_route_is_generative_transmission": False,
                 "generative_transmission_used": False,
                 "provider_model": fallback_model,
+                "answer_source": _answer_source(
+                    source_class="LOCAL_MODEL",
+                    route="LOCAL_AFTER_CLOUD_UNAVAILABLE",
+                    provider="OLLAMA",
+                    model=fallback_model,
+                    gpu_execution=gpu_execution,
+                ),
                 "8dadi_index_only": True,
                 "candidate_authority": False,
                 "execution_authorized": False,
@@ -156,6 +220,7 @@ def _complete_chat(body: dict[str, Any]) -> dict[str, Any]:
         )
         options = _ollama_options(body)
         data, backend = _chat_with_fallback(model, messages, options)
+        gpu_execution = _observe_local_gpu_execution(model)
         content = _extract_content(data)
         usage = _usage(data, messages, content)
         total_field_metadata = {
@@ -164,6 +229,13 @@ def _complete_chat(body: dict[str, Any]) -> dict[str, Any]:
             "generative_transmission_used": False,
             "candidate_authority": False,
             "execution_authorized": False,
+            "answer_source": _answer_source(
+                source_class="LOCAL_MODEL",
+                route="LOCAL_DIRECT",
+                provider="OLLAMA",
+                model=model,
+                gpu_execution=gpu_execution,
+            ),
             **local_context_metadata,
         }
 
@@ -259,6 +331,7 @@ async def vision_analyze(request: Request) -> dict[str, Any]:
     )
     messages[-1]["images"] = [encoded]  # Ollama image input; memory-only request body.
     data, backend = _chat_with_fallback(model, messages, _ollama_options(body))
+    gpu_execution = _observe_local_gpu_execution(model)
     content = _extract_content(data)
     usage = _usage(data, messages, content)
     return {
@@ -281,6 +354,13 @@ async def vision_analyze(request: Request) -> dict[str, Any]:
             "generative_transmission_used": False,
             "candidate_authority": False,
             "execution_authorized": False,
+            "answer_source": _answer_source(
+                source_class="LOCAL_MODEL",
+                route="LOCAL_DIRECT",
+                provider="OLLAMA",
+                model=model,
+                gpu_execution=gpu_execution,
+            ),
             **context_metadata,
         },
     }
@@ -398,6 +478,7 @@ def _attach_local_total_field_context(
     if not query:
         raise HTTPException(status_code=422, detail="TOTAL_FIELD_CONTEXT_REQUIRES_USER_INTENT")
 
+    alignment_prefix, alignment = _load_local_model_alignment()
     context = build_dynamic_context(
         root=PROJECT_ROOT,
         query=query,
@@ -485,6 +566,9 @@ def _attach_local_total_field_context(
         "network_policy": "LAN_FIRST_VPN_ONLY_WHEN_LAN_UNAVAILABLE",
         "model_role": "PASSIVE_REPLACEABLE_REASONING_ORGAN",
         "model_output_state": "CANDIDATE_RETURN_TO_TOTAL_FIELD",
+        "total_field_alignment_prefix": alignment_prefix,
+        "total_field_alignment": alignment,
+        "model_may_self_report_answer_source": False,
         "execution_authorized": False,
         "system_mutation_allowed": False,
         "login": {
@@ -503,11 +587,15 @@ def _attach_local_total_field_context(
     contextual_messages = [
         {
             "role": "system",
-            "content": json.dumps(
-                header,
-                ensure_ascii=False,
-                sort_keys=True,
-                separators=(",", ":"),
+            "content": (
+                alignment_prefix
+                + "\n\nTOTAL_FIELD_CONTEXT_JSON\n"
+                + json.dumps(
+                    header,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                )
             ),
         },
         *messages,
@@ -525,8 +613,102 @@ def _attach_local_total_field_context(
         "context_evidence_count": len(evidence_items),
         "login_subject_present": bool(login_subject),
         "login_is_final_authority": False,
+        **alignment,
     }
     return contextual_messages, metadata
+
+
+def _load_local_model_alignment() -> tuple[str, dict[str, Any]]:
+    try:
+        contract_bytes = LOCAL_MODEL_CONTRACT_PATH.read_bytes()
+        prefix_bytes = LOCAL_MODEL_PREFIX_PATH.read_bytes()
+        contract = json.loads(contract_bytes)
+        prefix = prefix_bytes.decode("utf-8").strip()
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_LOCAL_LLM_ALIGNMENT_PREFIX_UNREADABLE",
+        ) from exc
+    if (
+        contract.get("schema_id") != "W7TP_XIAOJ_MODEL_ORGAN_CONTRACT_V2_3"
+        or contract.get("state") != "ACTIVE_RUNTIME_ALIGNMENT_CONTRACT"
+        or (contract.get("model") or {}).get("visible_model_id") != LOCAL_FALLBACK_MODEL
+        or not prefix.startswith("W7TP_XIAOJ_TOTAL_FIELD_MODEL_ORGAN_PREFIX_V2_3")
+    ):
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_LOCAL_LLM_ALIGNMENT_PREFIX_INVALID",
+        )
+    return prefix, {
+        "local_model_contract_sha256": hashlib.sha256(contract_bytes).hexdigest(),
+        "local_model_prefix_sha256": hashlib.sha256(prefix_bytes).hexdigest(),
+        "local_model_contract_version": str(contract.get("version") or ""),
+        "required_local_model": LOCAL_FALLBACK_MODEL,
+        "alignment_prefix_bound": True,
+    }
+
+
+def _answer_source(
+    *,
+    source_class: str,
+    route: str,
+    provider: str,
+    model: str,
+    gpu_execution: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    result = {
+        "source_class": source_class,
+        "route": route,
+        "provider": provider,
+        "model": model,
+        "determined_by": "TOTAL_FIELD_GATEWAY",
+        "model_self_report_used": False,
+    }
+    if gpu_execution is not None:
+        result["gpu_execution"] = gpu_execution
+    return result
+
+
+def _observe_local_gpu_execution(model: str) -> dict[str, Any]:
+    try:
+        response = requests.get(f"{OLLAMA_BASE_URL}/api/ps", timeout=5)
+        response.raise_for_status()
+        data = response.json()
+    except Exception as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_LOCAL_LLM_GPU_EXECUTION_NOT_OBSERVABLE",
+        ) from exc
+    models = data.get("models", []) if isinstance(data, dict) else []
+    observed = next(
+        (
+            item
+            for item in models
+            if isinstance(item, dict) and item.get("name") == model
+        ),
+        None,
+    )
+    if not observed:
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_LOCAL_LLM_GPU_EXECUTION_NOT_PROVEN",
+        )
+    size = int(observed.get("size") or 0)
+    size_vram = int(observed.get("size_vram") or 0)
+    if size <= 0 or size_vram < size:
+        raise HTTPException(
+            status_code=503,
+            detail="HOLD_LOCAL_LLM_FULL_GPU_RESIDENCY_REQUIRED",
+        )
+    return {
+        "state": "PASS_LOCAL_LLM_FULL_GPU_EXECUTION",
+        "model": model,
+        "digest": str(observed.get("digest") or ""),
+        "total_size_bytes": size,
+        "vram_size_bytes": size_vram,
+        "full_gpu_residency": True,
+        "observed_by": "TOTAL_FIELD_OLLAMA_RUNTIME",
+    }
 
 
 def _last_user_text(messages: list[dict[str, str]]) -> str:
@@ -660,7 +842,10 @@ def _resolve_model(name: Any) -> str:
     names = _available_models()
     if requested in names or not names:
         return requested
-    return names[0]
+    raise HTTPException(
+        status_code=503,
+        detail={"error": "HOLD_REQUESTED_MODEL_UNAVAILABLE", "model": requested},
+    )
 
 
 def _normalize_messages(body: dict[str, Any]) -> list[dict[str, str]]:
