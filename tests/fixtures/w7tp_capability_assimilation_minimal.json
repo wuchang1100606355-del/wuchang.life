@@ -1,0 +1,50 @@
+{
+  "state": "PASS_READ_ONLY_ASSIMILATION",
+  "operation": "VALIDATE",
+  "source": {
+    "repository": "source-ref:test-fixture",
+    "evidence_status": "VERIFIED_CURRENT_RUN"
+  },
+  "target": {
+    "total_field_ref": "total-field-ref:test"
+  },
+  "capabilities": [
+    {
+      "capability_id": "capability:test:read-only",
+      "source_component": "component-ref:test",
+      "status": "VERIFIED_CURRENT_RUN",
+      "input": "source evidence",
+      "output": "candidate capability contract",
+      "state_dependency": "exact source coordinate",
+      "side_effect": "NONE",
+      "evidence_output": "hash-bound source manifest",
+      "failure_mode": "PRECONDITION_MISSING",
+      "security_assumption": "NO_EXTERNAL_AUTHORITY_INHERITANCE",
+      "disposition": "ADAPT",
+      "d1": "READ_ONLY_CAPABILITY_EXTRACTION",
+      "d2": "OBSERVED_SOURCE_STATE",
+      "d3": "EXACT_SOURCE_COORDINATE",
+      "d4": "HASH_BOUND_EVIDENCE",
+      "d5": "NO_SOURCE_PROJECT_EXECUTION",
+      "d6": "NOT_APPLICABLE",
+      "d7": "FAIL_CLOSED",
+      "d8": "CANDIDATE_ONLY_NO_AUTHORITY"
+    }
+  ],
+  "target_base_state": {
+    "state": "OBSERVED"
+  },
+  "minimum_required_delta": {
+    "state": "CANDIDATE_ONLY"
+  },
+  "authority_conflicts": [],
+  "evidence_gaps": [],
+  "d1": "PRESERVE_FOUNDER_INTENT",
+  "d2": "READ_ONLY",
+  "d3": "TEST_FIXTURE",
+  "d4": "SOURCE_MANIFEST",
+  "d5": "VALIDATION_ONLY",
+  "d6": "NOT_APPLICABLE",
+  "d7": "FAIL_CLOSED",
+  "d8": "NO_AUTHORITY"
+}
