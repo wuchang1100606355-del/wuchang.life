@@ -1,0 +1,12 @@
+[Unit]
+Description=W7TP Total Field exact reviewed hourly commit
+After=default.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Taiji_Hub
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/flock -n %t/w7tp-hourly-reviewed-commit.lock /usr/bin/python3 %h/Taiji_Hub/tools/total_field_hourly_reviewed_commit.py --repo-root %h/Taiji_Hub
+
+[Install]
+WantedBy=default.target

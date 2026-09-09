@@ -1,0 +1,54 @@
+{
+  "schema_id": "W7TP_8DADI_MANDATORY_APPLICATION_GATE_V1",
+  "state": "ACTIVE_FAIL_CLOSED",
+  "authority": "TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+  "required_local_rule_refs": [
+    "01_admin/boot/root_authority_guard.yaml",
+    "01_admin/boot/boot_policy.yaml",
+    "boot/taiji_boot_order.yaml",
+    "configs/total_field/w7tp_8dadi_d6_contract_v2_3.json",
+    "configs/total_field/mandatory_application_gate_v1.json"
+  ],
+  "required_dynamic_context": {
+    "state": "TOTAL_FIELD_DYNAMIC_CONTEXT_READY",
+    "retrieval_method": "8DADI_MEMORY_INDEX_ONLY",
+    "authority": "READ_ONLY_CONTEXT_EVIDENCE_NO_DECISION_AUTHORITY"
+  },
+  "policy": {
+    "clean_worktree_required": true,
+    "coordinate_drift_action": "HOLD",
+    "missing_scan_action": "DENY_OPERATION",
+    "ai_output_state": "CANDIDATE_ONLY",
+    "ai_effect_authority": false,
+    "effect_requires_total_field_d8": true,
+    "dynamic_context_provider": "TOTAL_FIELD",
+    "ai_may_change_work_target": false,
+    "completed_change_requires_review": true,
+    "hourly_commit_requires_review_receipt": true
+  },
+  "operations": {
+    "PREFLIGHT": {"effect": false, "require_clean_worktree": true, "require_expected_work_target": false},
+    "AI_INFERENCE": {"effect": false, "require_clean_worktree": true, "require_expected_work_target": true},
+    "AI_TOOL_EFFECT": {"effect": true, "require_expected_work_target": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "EXTERNAL_CLOUD_CALL": {"effect": true, "require_expected_work_target": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "CHANGE_COMPLETION_REVIEW": {"effect": false, "require_clean_worktree": false, "require_expected_work_target": true},
+    "HOURLY_REVIEWED_COMMIT": {
+      "effect": true,
+      "require_clean_worktree": false,
+      "require_expected_work_target": true,
+      "required_scope": "REVIEWED_CHANGE_SET_ONLY",
+      "required_authority_state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW_RECEIPT"
+    },
+    "GIT_PUSH": {"effect": true, "require_expected_work_target": true, "required_scope": "AUTHORIZE_GIT_PUSH"},
+    "DEPLOY": {"effect": true, "require_expected_work_target": true, "required_scope": "AUTHORIZE_EXACT_DEPLOY_RESTART"},
+    "RESTART": {"effect": true, "require_expected_work_target": true, "required_scope": "AUTHORIZE_EXACT_DEPLOY_RESTART"},
+    "FORMAL_COMMIT": {"effect": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "DB_WRITE": {"effect": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "ADI_WRITE": {"effect": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "CANONICAL_MUTATION": {"effect": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "ACTIVE_POINTER_MUTATION": {"effect": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "PROMOTION": {"effect": true, "require_expected_work_target": true, "required_scope": "PROMOTE_ACCEPTED_CANDIDATE"},
+    "ACTIVATION": {"effect": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"},
+    "DELETE_OR_OVERWRITE": {"effect": true, "required_scope": "UNAVAILABLE_FAIL_CLOSED"}
+  }
+}

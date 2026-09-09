@@ -1,0 +1,10 @@
+[Unit]
+Description=Run W7TP Total Field reviewed commit every hour
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=w7tp-hourly-reviewed-commit.service
+
+[Install]
+WantedBy=timers.target

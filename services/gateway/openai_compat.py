@@ -19,6 +19,11 @@ from services.gateway.total_field_google_vertex import (
     total_field_google_chat,
 )
 from tools.total_field_dynamic_context import build_dynamic_context
+from tools.total_field_mandatory_application_gate import (
+    PASS_STATE as MANDATORY_APPLICATION_PASS,
+    reviewed_prompt_text,
+    scan_operation,
+)
 
 
 router = APIRouter(tags=["openai-compat"])
@@ -411,6 +416,34 @@ def _attach_local_total_field_context(
             detail="HOLD_8DADI_DYNAMIC_CONTEXT_NOT_READY",
         )
 
+    target_lock = scan_operation(
+        repo_root=PROJECT_ROOT,
+        operation="PREFLIGHT",
+        actor_class="SYSTEM",
+        query=query,
+    )
+    if target_lock.get("state") != MANDATORY_APPLICATION_PASS:
+        raise HTTPException(
+            status_code=503,
+            detail=str(target_lock.get("reason") or "HOLD_TOTAL_FIELD_TARGET_LOCK"),
+        )
+    inference_review = scan_operation(
+        repo_root=PROJECT_ROOT,
+        operation="AI_INFERENCE",
+        actor_class="AI",
+        query=query,
+        expected_branch=target_lock["coordinates"]["branch"],
+        expected_head=target_lock["coordinates"]["head"],
+        expected_tree=target_lock["coordinates"]["tree"],
+        expected_work_target_sha256=target_lock["work_target_sha256"],
+    )
+    if inference_review.get("state") != MANDATORY_APPLICATION_PASS:
+        raise HTTPException(
+            status_code=503,
+            detail=str(inference_review.get("reason") or "HOLD_TOTAL_FIELD_AI_INFERENCE"),
+        )
+    mandatory_context = json.loads(reviewed_prompt_text(inference_review))
+
     evidence_items: list[dict[str, Any]] = []
     for item in context.get("context_items") or []:
         if not isinstance(item, dict):
@@ -443,6 +476,8 @@ def _attach_local_total_field_context(
         "8dadi_retrieval_method": context.get("retrieval_method"),
         "context_identity_class": CONTEXT_IDENTITY_CLASS,
         "founder_intent_projection": context.get("founder_intent_projection"),
+        "mandatory_total_field_local_rule_context": mandatory_context,
+        "work_target_sha256": inference_review["work_target_sha256"],
         "evidence_items": evidence_items,
         "evidence_is_d4_only": True,
         "legacy_may_define_target": False,
@@ -481,6 +516,8 @@ def _attach_local_total_field_context(
         "8dadi_index_only": True,
         "8dadi_dynamic_context_used": True,
         "8dadi_context_packet_sha256": context.get("packet_sha256"),
+        "mandatory_application_review": True,
+        "work_target_sha256": inference_review["work_target_sha256"],
         "context_identity_class": CONTEXT_IDENTITY_CLASS,
         "founder_intent_projection_present": bool(
             context.get("founder_intent_projection")

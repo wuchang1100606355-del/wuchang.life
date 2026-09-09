@@ -21,6 +21,10 @@ from tools.total_field_authority_resolver import (
 )
 from tools.total_field_authority_runtime_bindings import build_authority_runtime_bindings
 from tools.total_field_ed25519_backend import Ed25519DetachedSignatureBackend
+from tools.total_field_mandatory_application_gate import (
+    PASS_STATE as MANDATORY_APPLICATION_PASS,
+    scan_operation as mandatory_application_scan,
+)
 
 CONFIG_REL = Path("configs/total_field/git_push_review_gate_v1.json")
 APPROVAL_SCHEMA = "W7TP_TOTAL_FIELD_GIT_PUSH_REVIEW_REGISTRATION_V1"
@@ -255,6 +259,23 @@ def main() -> int:
     parser.add_argument("--remote-url", required=True)
     args = parser.parse_args()
     root = Path(args.repo_root).resolve()
+    mandatory = mandatory_application_scan(
+        repo_root=root,
+        operation="PREFLIGHT",
+        actor_class="SYSTEM",
+        query="總場核定的精確 Git push 作業",
+    )
+    if mandatory.get("state") != MANDATORY_APPLICATION_PASS:
+        result = {
+            "state": "HOLD_TOTAL_FIELD_GIT_PUSH_GATE",
+            "reason": str(mandatory.get("reason") or "MANDATORY_APPLICATION_REVIEW_FAILED"),
+            "push_authorized": False,
+            "deploy_authorized": False,
+            "canonical_mutation_authorized": False,
+            "active_pointer_mutation_authorized": False,
+        }
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+        return 1
     config = _load_config(root)
     verifier_config = config.get("signature_verifier") or {}
     trusted = tuple(verifier_config.get("trusted_verifier_refs") or [])

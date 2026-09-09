@@ -30,6 +30,12 @@ do
   fi
 done
 
+python3 "$ROOT/tools/total_field_mandatory_application_gate.py" \
+  --repo-root "$ROOT" \
+  --operation PREFLIGHT \
+  --actor-class SYSTEM \
+  --query "系統啟動必須套用總場動態上下文與本地規則"
+
 if find "$ROOT" -maxdepth 4 \( -name "*.key" -o -name "id_rsa" -o -name ".env" \) | grep -q .; then
   log "warning" "possible_secret_files_detected_check_permissions"
 fi

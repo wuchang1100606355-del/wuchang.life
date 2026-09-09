@@ -72,9 +72,32 @@ def test_google_unavailable_uses_local_inference_without_claiming_d6() -> None:
                 "state": "TOTAL_FIELD_DYNAMIC_CONTEXT_READY",
                 "retrieval_method": "8DADI_MEMORY_INDEX_ONLY",
                 "packet_sha256": "a" * 64,
+                "founder_intent_projection": {"state": "CURRENT"},
                 "context_items": [],
                 "policy": {"8dadi_index_only": True, "workspace_search": False},
             },
+        ),
+        patch(
+            "services.gateway.openai_compat.scan_operation",
+            side_effect=[
+                {
+                    "state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+                    "coordinates": {
+                        "branch": "main",
+                        "head": "b" * 40,
+                        "tree": "c" * 40,
+                    },
+                    "work_target_sha256": "d" * 64,
+                },
+                {
+                    "state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+                    "work_target_sha256": "d" * 64,
+                },
+            ],
+        ),
+        patch(
+            "services.gateway.openai_compat.reviewed_prompt_text",
+            return_value='{"state":"REVIEWED_IN_MEMORY_AI_CONTEXT"}',
         ),
     ):
         result = asyncio.run(chat_completions(_Request(body)))
@@ -85,6 +108,8 @@ def test_google_unavailable_uses_local_inference_without_claiming_d6() -> None:
     assert result["taiji"]["generative_transmission_used"] is False
     assert result["taiji"]["inference_route_is_generative_transmission"] is False
     assert result["taiji"]["8dadi_dynamic_context_used"] is True
+    assert result["taiji"]["mandatory_application_review"] is True
+    assert result["taiji"]["work_target_sha256"] == "d" * 64
 
 
 def test_alignment_failure_does_not_fall_back_to_model() -> None:
