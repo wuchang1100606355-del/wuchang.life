@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest import mock
 
 from tools.total_field_hourly_reviewed_commit import (
     HOLD_COMMIT,
@@ -243,7 +244,7 @@ class MandatoryApplicationGateTests(unittest.TestCase):
         )
         self.assertEqual(human_result["reason"], "TOTAL_FIELD_D8_REQUIRED")
 
-    def test_exact_effect_scope_can_authorize_human_deploy_but_not_ai_authority(self) -> None:
+    def test_caller_cannot_forge_human_deploy_authority(self) -> None:
         target = self.target_lock()
         authority = {
             "state": "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED",
@@ -256,6 +257,27 @@ class MandatoryApplicationGateTests(unittest.TestCase):
             expected_work_target_sha256=target,
             effect_authority=authority,
         )
+        self.assertEqual(result["state"], HOLD_STATE)
+        self.assertEqual(result["reason"], "CALLER_SUPPLIED_EFFECT_AUTHORITY_FORBIDDEN")
+        self.assertFalse(result["deploy_authorized"])
+        self.assertFalse(result["ai_effect_authorized"])
+
+    def test_verified_passkey_scope_can_authorize_exact_human_deploy(self) -> None:
+        target = self.target_lock()
+        authority = {
+            "state": "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED",
+            "authority_verified": True,
+            "scope": ["AUTHORIZE_EXACT_DEPLOY_RESTART"],
+        }
+        with mock.patch(
+            "tools.total_field_mandatory_application_gate._resolve_passkey_effect_authority",
+            return_value=authority,
+        ):
+            result = self.scan(
+                "DEPLOY",
+                actor_class="HUMAN",
+                expected_work_target_sha256=target,
+            )
         self.assertEqual(result["state"], PASS_STATE)
         self.assertTrue(result["deploy_authorized"])
         self.assertFalse(result["ai_effect_authorized"])

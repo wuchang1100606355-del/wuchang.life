@@ -21,6 +21,7 @@ from tools.total_field_mandatory_application_gate import PASS_STATE, scan_operat
 
 CONFIG_REL = Path("configs/total_field/git_push_review_gate_v1.json")
 REQUEST_SCHEMA = "W7TP_TOTAL_FIELD_GIT_PUSH_REVIEW_REQUEST_V1"
+POINTER_SCHEMA = "W7TP_TOTAL_FIELD_ACTIVE_REVIEW_REQUEST_V1"
 PASS_REQUEST = "PASS_TOTAL_FIELD_GIT_PUSH_REVIEW_REQUEST_REGISTERED"
 HOLD_REQUEST = "HOLD_TOTAL_FIELD_GIT_PUSH_REVIEW_REQUEST"
 OID = re.compile(r"^[0-9a-f]{40,64}$")
@@ -70,6 +71,29 @@ def _safe_request_path(root: Path, value: Any) -> Path:
     return path
 
 
+def _active_pointer_path(root: Path, value: Any) -> Path:
+    if not isinstance(value, str):
+        raise ReviewRequestRejected("ACTIVE_REVIEW_REQUEST_POINTER_REF_MISSING")
+    relative = PurePosixPath(value)
+    if (
+        relative.is_absolute()
+        or ".." in relative.parts
+        or tuple(relative.parts[:2]) != ("runtime", "total_field")
+        or relative.name != "ACTIVE_REVIEW_REQUEST.json"
+    ):
+        raise ReviewRequestRejected("ACTIVE_REVIEW_REQUEST_POINTER_REF_INVALID")
+    return root.joinpath(*relative.parts)
+
+
+def active_review_request_pointer_path(repo_root: str | Path) -> Path:
+    root = Path(repo_root).resolve()
+    config = _load_config(root)
+    return _active_pointer_path(
+        root,
+        config["passkey_verifier"].get("active_review_request_pointer_ref"),
+    )
+
+
 def _load_config(root: Path) -> dict[str, Any]:
     try:
         value = json.loads((root / CONFIG_REL).read_text(encoding="utf-8"))
@@ -88,6 +112,7 @@ def build_review_request(
     target_commit: str,
     target_branch: str,
     remote_name: str,
+    deployment_id: str | None = None,
     canonical_repository_root: str = "/home/taiji_admin/Taiji_Hub",
     created_at: str | None = None,
 ) -> tuple[Path, dict[str, Any]]:
@@ -123,7 +148,22 @@ def build_review_request(
     changed_paths_sha256 = _sha256(("\n".join(changed_paths) + "\n").encode("utf-8"))
     patch = _git(root, "diff", "--binary", "--no-renames", base_commit, target_commit, "--", binary=True)
     passkey = config["passkey_verifier"]
-    request_path = _safe_request_path(root, passkey.get("review_request_ref"))
+    deployment = None
+    if deployment_id:
+        admitted = passkey.get("admitted_deployments")
+        if not isinstance(admitted, list):
+            raise ReviewRequestRejected("DEPLOYMENT_REGISTRY_MISSING")
+        matches = [
+            item
+            for item in admitted
+            if isinstance(item, Mapping) and item.get("deployment_id") == deployment_id
+        ]
+        if len(matches) != 1:
+            raise ReviewRequestRejected("DEPLOYMENT_NOT_ADMITTED")
+        deployment = dict(matches[0])
+    requested_scopes = ["AUTHORIZE_GIT_PUSH"]
+    if deployment is not None:
+        requested_scopes.append("AUTHORIZE_EXACT_DEPLOY_RESTART")
     timestamp = created_at or datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     packet: dict[str, Any] = {
         "schema_id": REQUEST_SCHEMA,
@@ -132,7 +172,11 @@ def build_review_request(
         "created_at": timestamp,
         "D1_INTENT": {
             "founder_intent_zh_TW": "將總場強制套用模組的精確已審提交送交人類 Passkey 核可後推送。",
-            "target_outcome": "只推送核定提交；不改 canonical 或 active pointer；不授權部署或重啟。",
+            "target_outcome": (
+                "只推送核定提交並部署重啟已登記的本機閘道與每小時排程；不改 canonical 或 active pointer。"
+                if deployment is not None
+                else "只推送核定提交；不改 canonical 或 active pointer；不授權部署或重啟。"
+            ),
         },
         "D2_STATE": {
             "repository_state": "CANDIDATE_COMMITTED_LOCAL_ONLY",
@@ -156,10 +200,19 @@ def build_review_request(
             "remote_candidate_received": False,
         },
         "D5_EXECUTION_POLICY": {
-            "requested_action": "REVIEW_AUTHORIZE_EXACT_GIT_PUSH",
-            "required_sequence": ["TOTAL_FIELD_REVIEW", "D8_PASSKEY", "GIT_PUSH", "REOBSERVE"],
+            "requested_action": (
+                "REVIEW_AUTHORIZE_EXACT_GIT_PUSH_DEPLOY_RESTART"
+                if deployment is not None
+                else "REVIEW_AUTHORIZE_EXACT_GIT_PUSH"
+            ),
+            "required_sequence": (
+                ["TOTAL_FIELD_REVIEW", "D8_PASSKEY", "GIT_PUSH", "CANARY", "DEPLOY", "RESTART", "REOBSERVE"]
+                if deployment is not None
+                else ["TOTAL_FIELD_REVIEW", "D8_PASSKEY", "GIT_PUSH", "REOBSERVE"]
+            ),
             "canonical_pointer_write": False,
             "active_pointer_write": False,
+            "deployment": deployment,
         },
         "D6_GENERATIVE_TRANSMISSION": {
             "used": False,
@@ -168,10 +221,10 @@ def build_review_request(
         "D7_RISK_QUARANTINE": {
             "wrong_branch_tree_or_path_set": "HOLD",
             "expired_or_replayed_passkey": "HOLD",
-            "deploy_or_restart": "DENY",
+            "deploy_or_restart": "ALLOW_ONLY_EXACT_REGISTERED_DEPLOYMENT" if deployment is not None else "DENY",
         },
         "D8_ENVELOPE_AUTHORITY": {
-            "requested_scopes": ["AUTHORIZE_GIT_PUSH"],
+            "requested_scopes": requested_scopes,
             "maximum_ttl_seconds": int(passkey["maximum_ttl_seconds"]),
             "single_use_authorization_required": True,
             "founder_enrolled_user_verified_passkey_required": True,
@@ -182,27 +235,60 @@ def build_review_request(
         "requested_review_registration_ref": "runtime/total_field/authority_artifacts/TO_BE_ISSUED/GIT_PUSH_REVIEW_REGISTRATION.json",
     }
     packet["packet_sha256"] = _sha256(_canonical_json(packet))
+    request_path = _safe_request_path(
+        root,
+        f"runtime/total_field/review_requests/by_packet/{packet['packet_sha256']}/REQUEST.json",
+    )
     return request_path, packet
 
 
-def register_review_request(path: Path, packet: Mapping[str, Any]) -> None:
+def register_review_request(
+    path: Path,
+    packet: Mapping[str, Any],
+    *,
+    active_pointer_path: Path | None = None,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(packet, ensure_ascii=False, sort_keys=True, indent=2).encode("utf-8") + b"\n"
     if path.exists():
         if path.is_symlink() or path.read_bytes() != payload:
             raise ReviewRequestRejected("REVIEW_REQUEST_APPEND_ONLY_COLLISION")
+    else:
+        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            with os.fdopen(descriptor, "wb") as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+        except Exception:
+            try:
+                path.unlink(missing_ok=True)
+            finally:
+                raise
+    if active_pointer_path is None:
         return
-    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    pointer = {
+        "schema_id": POINTER_SCHEMA,
+        "state": "ACTIVE_REVIEW_REQUEST",
+        "review_request_ref": path.relative_to(path.parents[5]).as_posix(),
+        "request_packet_sha256": packet["packet_sha256"],
+        "request_source_sha256": _sha256(path.read_bytes()),
+        "updated_at": packet["created_at"],
+    }
+    active_pointer_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = active_pointer_path.with_name(
+        f".{active_pointer_path.name}.{os.getpid()}.tmp"
+    )
+    payload = json.dumps(pointer, ensure_ascii=False, sort_keys=True, indent=2).encode("utf-8") + b"\n"
+    descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     try:
         with os.fdopen(descriptor, "wb") as handle:
             handle.write(payload)
             handle.flush()
             os.fsync(handle.fileno())
-    except Exception:
-        try:
-            path.unlink(missing_ok=True)
-        finally:
-            raise
+        os.replace(temporary, active_pointer_path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def main() -> int:
@@ -212,6 +298,7 @@ def main() -> int:
     parser.add_argument("--target-commit", required=True)
     parser.add_argument("--target-branch", required=True)
     parser.add_argument("--remote-name", default="origin")
+    parser.add_argument("--deployment-id")
     parser.add_argument("--canonical-repository-root", default="/home/taiji_admin/Taiji_Hub")
     args = parser.parse_args()
     try:
@@ -229,9 +316,14 @@ def main() -> int:
             target_commit=args.target_commit,
             target_branch=args.target_branch,
             remote_name=args.remote_name,
+            deployment_id=args.deployment_id,
             canonical_repository_root=args.canonical_repository_root,
         )
-        register_review_request(path, packet)
+        register_review_request(
+            path,
+            packet,
+            active_pointer_path=active_review_request_pointer_path(args.repo_root),
+        )
         result = {
             "state": PASS_REQUEST,
             "review_request_ref": path.relative_to(Path(args.repo_root).resolve()).as_posix(),

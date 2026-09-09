@@ -6,7 +6,7 @@ cd "$ROOT"
 mkdir -p runtime/logs runtime/ledger runtime/dead_letter
 
 if [ ! -f "services/gateway/main.py" ]; then
-  printf '{"ts":"%s","reason":"gateway_missing","detail":"services/gateway/main.py not found"}\n' "$(date -Is)" >> runtime/dead_letter/boot_rejected.jsonl
+  printf '{"ts":"%s","reason":"gateway_missing","detail":"services/gateway/main.py not found"}\n' "$(date -Is)" >> runtime/state/boot_rejected.jsonl
   exit 1
 fi
 

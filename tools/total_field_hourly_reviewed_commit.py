@@ -7,6 +7,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Mapping
@@ -88,6 +89,13 @@ def _matching_review(root: Path, current: list[dict[str, Any]]) -> dict[str, Any
             packet = _read_review(path)
         except MandatoryApplicationRejected:
             continue
+        outcome_root = (
+            root
+            / "runtime/total_field/rule_application_reviews/commit_outcomes"
+            / str(packet.get("review_sha256") or "")
+        )
+        if outcome_root.is_dir() and any(outcome_root.glob("*.json")):
+            continue
         if (
             packet.get("branch") == coordinates["branch"]
             and packet.get("base_head") == coordinates["head"]
@@ -102,13 +110,18 @@ def _matching_review(root: Path, current: list[dict[str, Any]]) -> dict[str, Any
     return matches[0]
 
 
-def _run_git(root: Path, *args: str) -> str:
+def _run_git(
+    root: Path,
+    *args: str,
+    environment: Mapping[str, str] | None = None,
+) -> str:
     result = subprocess.run(
         ["git", "-C", str(root), *args],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         check=False,
         text=True,
+        env=dict(environment) if environment is not None else None,
     )
     if result.returncode != 0:
         raise MandatoryApplicationRejected("REVIEWED_COMMIT_GIT_EFFECT_FAILED")
@@ -213,27 +226,81 @@ def hourly_reviewed_commit(
         ):
             raise MandatoryApplicationRejected("REVIEW_BINDING_DRIFT")
         reviewed_paths = [item["path"] for item in current]
-        _run_git(root, "add", "--", *reviewed_paths)
-        if change_bindings(root) != current:
-            raise MandatoryApplicationRejected("CHANGE_SET_DRIFT_DURING_STAGE")
-        staged = [line for line in _git(root, "diff", "--cached", "--name-only", "--no-renames", "--").splitlines() if line]
-        if sorted(staged) != reviewed_paths:
-            raise MandatoryApplicationRejected("STAGED_PATH_SET_DRIFT")
         message = f"chore: hourly reviewed change {review['review_sha256'][:12]}"
-        _run_git(root, "commit", "-m", message)
-        commit = _git(root, "rev-parse", "HEAD")
-        created_commit = commit
-        if _git(root, "rev-parse", "HEAD^") != review["base_head"]:
+        with tempfile.TemporaryDirectory(prefix="w7tp-reviewed-index-") as temporary:
+            index_path = Path(temporary) / "index"
+            isolated_environment = dict(os.environ)
+            isolated_environment["GIT_INDEX_FILE"] = str(index_path)
+            _run_git(
+                root,
+                "read-tree",
+                review["base_head"],
+                environment=isolated_environment,
+            )
+            _run_git(
+                root,
+                "add",
+                "--",
+                *reviewed_paths,
+                environment=isolated_environment,
+            )
+            if change_bindings(root) != current:
+                raise MandatoryApplicationRejected("CHANGE_SET_DRIFT_DURING_STAGE")
+            staged = [
+                line
+                for line in _run_git(
+                    root,
+                    "diff",
+                    "--cached",
+                    "--name-only",
+                    "--no-renames",
+                    "--",
+                    environment=isolated_environment,
+                ).splitlines()
+                if line
+            ]
+            if sorted(staged) != reviewed_paths:
+                raise MandatoryApplicationRejected("STAGED_PATH_SET_DRIFT")
+            target_tree = _run_git(root, "write-tree", environment=isolated_environment)
+            commit = _run_git(
+                root,
+                "commit-tree",
+                target_tree,
+                "-p",
+                review["base_head"],
+                "-m",
+                message,
+                environment=isolated_environment,
+            )
+        if _git(root, "rev-parse", f"{commit}^") != review["base_head"]:
             raise MandatoryApplicationRejected("COMMIT_PARENT_DRIFT")
         committed_paths = sorted(
             line
-            for line in _git(root, "diff", "--name-only", "--no-renames", "HEAD^", "HEAD", "--").splitlines()
+            for line in _git(
+                root,
+                "diff",
+                "--name-only",
+                "--no-renames",
+                review["base_head"],
+                commit,
+                "--",
+            ).splitlines()
             if line
         )
         if committed_paths != reviewed_paths:
             raise MandatoryApplicationRejected("COMMITTED_PATH_SET_DRIFT")
         if _commit_bindings(root, commit, reviewed_paths) != current:
             raise MandatoryApplicationRejected("COMMITTED_CONTENT_BINDING_DRIFT")
+        if _coordinates(root) != coordinates or change_bindings(root) != current:
+            raise MandatoryApplicationRejected("CHANGE_SET_DRIFT_BEFORE_REF_UPDATE")
+        branch_ref = f"refs/heads/{review['branch']}"
+        _run_git(root, "update-ref", branch_ref, commit, review["base_head"])
+        try:
+            _run_git(root, "read-tree", "--reset", commit)
+        except MandatoryApplicationRejected:
+            _run_git(root, "update-ref", branch_ref, review["base_head"], commit)
+            raise
+        created_commit = commit
         if change_bindings(root):
             raise MandatoryApplicationRejected("POST_COMMIT_WORKTREE_DRIFT")
         outcome = {

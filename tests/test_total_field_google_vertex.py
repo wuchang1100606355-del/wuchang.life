@@ -51,13 +51,33 @@ def test_header_holds_when_alignment_invariant_is_missing() -> None:
 
 @patch("services.gateway.total_field_google_vertex._google_access_token", return_value="opaque")
 @patch("services.gateway.total_field_google_vertex.requests.post")
+@patch("services.gateway.total_field_google_vertex.reviewed_prompt_text")
+@patch("services.gateway.total_field_google_vertex.scan_operation")
 @patch("services.gateway.total_field_google_vertex.build_dynamic_context")
 def test_total_field_google_pull_uses_8dadi_context(
     build_context: Mock,
+    scan: Mock,
+    reviewed_prompt: Mock,
     post: Mock,
     token: Mock,
 ) -> None:
     build_context.return_value = _context()
+    scan.side_effect = [
+        {
+            "state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+            "coordinates": {"branch": "main", "head": "b" * 40, "tree": "c" * 40},
+            "work_target_sha256": "d" * 64,
+        },
+        {
+            "state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+            "work_target_sha256": "d" * 64,
+        },
+        {
+            "state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+            "work_target_sha256": "d" * 64,
+        },
+    ]
+    reviewed_prompt.return_value = '{"state":"REVIEWED_IN_MEMORY_AI_CONTEXT"}'
     response = Mock(status_code=200)
     response.json.return_value = {
         "modelVersion": "gemini-2.5-flash-lite",
@@ -90,6 +110,52 @@ def test_total_field_google_pull_uses_8dadi_context(
     assert sent["generationConfig"]["temperature"] == 0
     assert sent["generationConfig"]["topP"] == 0.85
     assert sent["generationConfig"]["maxOutputTokens"] == 64
+    assert [call.kwargs["operation"] for call in scan.call_args_list] == [
+        "PREFLIGHT",
+        "AI_INFERENCE",
+        "EXTERNAL_CLOUD_CALL",
+    ]
+
+
+@patch("services.gateway.total_field_google_vertex._google_access_token")
+@patch("services.gateway.total_field_google_vertex.requests.post")
+@patch("services.gateway.total_field_google_vertex.reviewed_prompt_text")
+@patch("services.gateway.total_field_google_vertex.scan_operation")
+@patch("services.gateway.total_field_google_vertex.build_dynamic_context")
+def test_total_field_google_pull_never_calls_network_when_external_review_holds(
+    build_context: Mock,
+    scan: Mock,
+    reviewed_prompt: Mock,
+    post: Mock,
+    token: Mock,
+) -> None:
+    build_context.return_value = _context()
+    scan.side_effect = [
+        {
+            "state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+            "coordinates": {"branch": "main", "head": "b" * 40, "tree": "c" * 40},
+            "work_target_sha256": "d" * 64,
+        },
+        {
+            "state": "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+            "work_target_sha256": "d" * 64,
+        },
+        {
+            "state": "HOLD_TOTAL_FIELD_RULE_APPLICATION_REVIEW",
+            "reason": "EFFECT_SCOPE_UNAVAILABLE_FAIL_CLOSED",
+        },
+    ]
+    reviewed_prompt.return_value = '{"state":"REVIEWED_IN_MEMORY_AI_CONTEXT"}'
+
+    with pytest.raises(HTTPException) as exc:
+        total_field_google_chat(
+            [{"role": "user", "content": "請依 8DADI 建構"}],
+            {},
+        )
+
+    assert exc.value.detail == "EFFECT_SCOPE_UNAVAILABLE_FAIL_CLOSED"
+    token.assert_not_called()
+    post.assert_not_called()
 
 
 @patch("services.gateway.total_field_google_vertex.build_dynamic_context")

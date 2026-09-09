@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
 from tools.total_field_dynamic_context import build_dynamic_context
 
 CONFIG_REL = Path("configs/total_field/mandatory_application_gate_v1.json")
+PASSKEY_GATE_CONFIG_REL = Path("configs/total_field/git_push_review_gate_v1.json")
 PASS_STATE = "PASS_TOTAL_FIELD_RULE_APPLICATION_REVIEW"
 HOLD_STATE = "HOLD_TOTAL_FIELD_RULE_APPLICATION_REVIEW"
 REVIEW_SCHEMA = "W7TP_8DADI_COMPLETED_CHANGE_REVIEW_V1"
@@ -242,21 +243,70 @@ def _work_target_binding(
     return binding, _sha256(_canonical_json(binding))
 
 
+def _resolve_passkey_effect_authority(
+    root: Path,
+    required_scope: str,
+) -> Mapping[str, Any]:
+    try:
+        gate_config = json.loads((root / PASSKEY_GATE_CONFIG_REL).read_text(encoding="utf-8"))
+        passkey_config = gate_config["passkey_verifier"]
+        if not isinstance(passkey_config, Mapping):
+            raise KeyError("passkey_verifier")
+        python_runtime = passkey_config.get("python_runtime")
+        if not isinstance(python_runtime, str) or not Path(python_runtime).is_absolute():
+            raise ValueError("passkey python runtime")
+        completed = subprocess.run(
+            [
+                python_runtime,
+                str(root / "tools/total_field_passkey_d8.py"),
+                "--repo-root",
+                str(root),
+                "--gate-config",
+                PASSKEY_GATE_CONFIG_REL.as_posix(),
+                "--required-scope",
+                required_scope,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            text=True,
+        )
+        result = json.loads(completed.stdout)
+        if not isinstance(result, Mapping):
+            raise TypeError("passkey result")
+        return result
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        return {
+            "state": "HOLD_DEVICE_PASSKEY_D8_AUTHORITY",
+            "authority_verified": False,
+            "reason": "PASSKEY_EFFECT_AUTHORITY_UNAVAILABLE",
+            "scope": [],
+        }
+
+
 def _validate_effect_authority(
+    root: Path,
+    operation: str,
     operation_policy: Mapping[str, Any],
     effect_authority: Mapping[str, Any] | None,
 ) -> None:
     required_scope = operation_policy.get("required_scope")
     if required_scope == "UNAVAILABLE_FAIL_CLOSED":
         raise MandatoryApplicationRejected("EFFECT_SCOPE_UNAVAILABLE_FAIL_CLOSED")
+    if operation == "HOURLY_REVIEWED_COMMIT":
+        resolved_authority = effect_authority
+    else:
+        if effect_authority is not None:
+            raise MandatoryApplicationRejected("CALLER_SUPPLIED_EFFECT_AUTHORITY_FORBIDDEN")
+        resolved_authority = _resolve_passkey_effect_authority(root, str(required_scope))
     required_state = operation_policy.get(
         "required_authority_state", "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED"
     )
     if (
-        not isinstance(effect_authority, Mapping)
-        or effect_authority.get("state") != required_state
-        or effect_authority.get("authority_verified") is not True
-        or required_scope not in (effect_authority.get("scope") or [])
+        not isinstance(resolved_authority, Mapping)
+        or resolved_authority.get("state") != required_state
+        or resolved_authority.get("authority_verified") is not True
+        or required_scope not in (resolved_authority.get("scope") or [])
     ):
         raise MandatoryApplicationRejected("TOTAL_FIELD_D8_REQUIRED")
 
@@ -359,7 +409,7 @@ def scan_operation(
         if effect and actor_class == "AI":
             raise MandatoryApplicationRejected("AI_MAY_NOT_AUTHORIZE_EFFECT")
         if effect:
-            _validate_effect_authority(operation_policy, effect_authority)
+            _validate_effect_authority(root, operation, operation_policy, effect_authority)
         result: dict[str, Any] = {
             "state": PASS_STATE,
             "review": "TOTAL_FIELD_RULE_APPLICATION_REVIEW",

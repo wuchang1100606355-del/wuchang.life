@@ -57,6 +57,7 @@ CONFIG_REL = Path("configs/total_field/git_push_review_gate_v1.json")
 REVIEW_SCHEMA = "W7TP_TOTAL_FIELD_GIT_PUSH_REVIEW_REGISTRATION_V1"
 REVIEW_STATE = "PASS_TOTAL_FIELD_REVIEW_REGISTERED"
 REQUEST_SCHEMA = "W7TP_TOTAL_FIELD_GIT_PUSH_REVIEW_REQUEST_V1"
+ACTIVE_REQUEST_POINTER_SCHEMA = "W7TP_TOTAL_FIELD_ACTIVE_REVIEW_REQUEST_V1"
 RECEIVE_REVIEW_SCHEMA = "W7TP_TOTAL_FIELD_RECEIVE_CANDIDATE_REVIEW_REGISTRATION_V1"
 RECEIVE_REQUEST_SCHEMA = "W7TP_TOTAL_FIELD_RECEIVE_CANDIDATE_REVIEW_REQUEST_V1"
 EXACT_REPAIR_REVIEW_SCHEMA = "W7TP_TOTAL_FIELD_EXACT_REPAIR_REVIEW_REGISTRATION_V1"
@@ -104,7 +105,7 @@ const show=(m,ok=true)=>{statusEl.textContent=m;statusEl.className='state '+(ok?
 let enrolled=false;
 async function refresh(){try{const r=await fetch('/health');const j=await r.json();enrolled=Boolean(j.enrolled);const b=document.getElementById('enrol');b.disabled=false;b.textContent=enrolled?'手機沒有舊密鑰：重新建立 Face ID 通行密鑰':'首次建立手機 Face ID 通行密鑰';show(`狀態：${j.state}\n通行密鑰：${j.credential_state_zh_TW}\n簽發器：${j.signer_zh_TW}\n待簽範圍：${j.scope_zh_TW}`)}catch(e){show('無法連到總場簽發服務：'+e.message,false)}}
 document.getElementById('enrol').onclick=async()=>{try{const mode=enrolled?'rotate':'register';show('即將在手機建立一把新的 Face ID 通行密鑰；這不是輸入舊密碼。舊密鑰會保留到新密鑰建立成功。');const o=await post(`/v1/passkey/${mode}/options`);const c=await navigator.credentials.create(creation(o.options));const r=await post(`/v1/passkey/${mode}/complete`,{response:regJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW);await refresh()}catch(e){show('新密鑰尚未建立：'+e.message,false)}};
-document.getElementById('approve').onclick=async()=>{try{show('正在建立綁定本次變更的五分鐘簽發挑戰…');const o=await post('/v1/passkey/approve/options');const d=o.display;const deployment=d.deploy_node?`\n部署節點：${d.deploy_node}\n服務：${d.deploy_service}`:'';const yes=confirm(`只簽發以下作用：\n範圍：${d.scope_zh_TW}\n分支：${d.branch}\n目標樹：${d.target_tree}\n檔案數：${d.file_count}${deployment}\n有效：5 分鐘\n\n確定後請使用已登記的創辦人平台通行密鑰解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/approve/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
+document.getElementById('approve').onclick=async()=>{try{show('正在建立綁定本次變更的五分鐘簽發挑戰…');const o=await post('/v1/passkey/approve/options');const d=o.display;const deployment=d.deploy_node?`\n部署節點：${d.deploy_node}\n服務：${d.deploy_service}\n排程：${d.deploy_timer||'無'}`:'';const paths=(d.changed_paths||[]).map(p=>'・'+p).join('\n');const yes=confirm(`只簽發以下作用：\n範圍：${d.scope_zh_TW}\n分支：${d.branch}\n目標樹：${d.target_tree}\n變更檔案：\n${paths}${deployment}\n有效：5 分鐘\n\n確定後請使用已登記的創辦人平台通行密鑰解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/approve/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
 document.getElementById('receive').onclick=async()=>{try{show('正在建立只綁定原胞融合能力雜湊的五分鐘簽發挑戰…');const o=await post('/v1/passkey/receive-candidate/options');const d=o.display;const yes=confirm(`只簽發以下作用：\n範圍：${d.scope_zh_TW}\n能力：${d.candidate_id}\n能力封包：${d.candidate_packet_sha256}\n技能索引：${d.skill_index_sha256}\n有效：5 分鐘\n\n不授權部署、重啟、Git 推送或正典修改。確定後請使用已登記的創辦人平台通行密鑰解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/receive-candidate/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
 document.getElementById('exact-repair').onclick=async()=>{try{show('正在重驗 HEAD 並建立第一污染入口五分鐘精確修復挑戰…');const o=await post('/v1/passkey/exact-repair/options');const d=o.display;const yes=confirm(`只簽發以下作用：\n範圍：${d.scope_zh_TW}\n分支：${d.branch}\nHEAD：${d.head}\n檔案：${d.file}\n函式：${d.function}\n有效：5 分鐘\n\n禁止部署、重啟、pointer／canonical 修改、跨譜系推定、一般重構與 Git 推送。確定後請使用已登記的創辦人通行密鑰解鎖。`);if(!yes){show('你已取消，未簽發。',false);return}const c=await navigator.credentials.get(request(o.options));const r=await post('/v1/passkey/exact-repair/complete',{response:authJSON(c),ceremony_id:o.ceremony_id});show(r.message_zh_TW+'\n簽發收據：'+r.approval_sha256)}catch(e){show('簽發未完成：'+e.message,false)}};
 refresh();
@@ -161,6 +162,22 @@ class PasskeyApplication:
         required = str(self.passkey.get("required_client_user_agent_contains") or "")
         if required and required not in user_agent:
             raise PasskeyD8Rejected("簽發裝置不符合總場限制")
+
+    def _prune_expired_approval_challenges(self) -> int:
+        removed = 0
+        observed = utc_now()
+        for path in self.state_root.glob("approve-*.json"):
+            if path.is_symlink() or not path.is_file():
+                continue
+            try:
+                pending = load_json(path, "PASSKEY_APPROVAL_STATE_INVALID")
+                expired = observed > parse_time(pending["expires_at"])
+            except (PasskeyD8Rejected, KeyError):
+                continue
+            if expired:
+                path.unlink()
+                removed += 1
+        return removed
 
     def register_options(self, supplied: str, user_agent: str, *, rotate: bool = False) -> dict[str, Any]:
         credential_path = self.credential_path()
@@ -295,13 +312,49 @@ class PasskeyApplication:
         }
 
     def _request(self) -> tuple[Path, dict[str, Any]]:
-        path = self.root.joinpath(*PurePosixPath(str(self.passkey["review_request_ref"])).parts)
+        pointer_path = safe_runtime_ref(
+            self.root,
+            self.passkey.get("active_review_request_pointer_ref"),
+            suffix="ACTIVE_REVIEW_REQUEST.json",
+        )
+        pointer = load_json(pointer_path, "TOTAL_FIELD_REVIEW_REQUEST_POINTER_INVALID")
+        if (
+            pointer.get("schema_id") != ACTIVE_REQUEST_POINTER_SCHEMA
+            or pointer.get("state") != "ACTIVE_REVIEW_REQUEST"
+        ):
+            raise PasskeyD8Rejected("總場審查請求指標無效")
+        path = safe_runtime_ref(
+            self.root,
+            pointer.get("review_request_ref"),
+            suffix="REQUEST.json",
+        )
+        if sha256(path.read_bytes()) != pointer.get("request_source_sha256"):
+            raise PasskeyD8Rejected("總場審查請求來源漂移")
         request = load_json(path, "TOTAL_FIELD_REVIEW_REQUEST_INVALID")
         if request.get("schema_id") != REQUEST_SCHEMA or request.get("registration_state") != "REGISTERED_FOR_REVIEW":
             raise PasskeyD8Rejected("總場審查請求尚未完成登記")
-        d3, d8 = request.get("D3_COORDINATE"), request.get("D8_ENVELOPE_AUTHORITY")
-        if not isinstance(d3, Mapping) or not isinstance(d8, Mapping):
+        supplied_packet_sha256 = request.get("packet_sha256")
+        unsigned_request = {key: value for key, value in request.items() if key != "packet_sha256"}
+        if (
+            supplied_packet_sha256 != sha256(canonical_json(unsigned_request))
+            or supplied_packet_sha256 != pointer.get("request_packet_sha256")
+        ):
+            raise PasskeyD8Rejected("總場審查請求封包雜湊漂移")
+        d3 = request.get("D3_COORDINATE")
+        d4 = request.get("D4_EVIDENCE")
+        d8 = request.get("D8_ENVELOPE_AUTHORITY")
+        if not isinstance(d3, Mapping) or not isinstance(d4, Mapping) or not isinstance(d8, Mapping):
             raise PasskeyD8Rejected("總場審查請求缺少精確座標")
+        changed_paths = d3.get("changed_paths")
+        if (
+            not isinstance(changed_paths, list)
+            or not changed_paths
+            or any(not isinstance(item, str) or not item for item in changed_paths)
+            or changed_paths != sorted(set(changed_paths))
+            or sha256(("\n".join(changed_paths) + "\n").encode("utf-8"))
+            != d4.get("changed_paths_sha256")
+        ):
+            raise PasskeyD8Rejected("總場審查請求路徑雜湊漂移")
         scopes = normalized_scopes(d8.get("requested_scopes", d8.get("requested_scope")))
         allowed_scopes = {(GIT_PUSH_SCOPE,), (GIT_PUSH_SCOPE, DEPLOY_RESTART_SCOPE)}
         if scopes not in allowed_scopes or d8.get("maximum_ttl_seconds") != self.passkey["maximum_ttl_seconds"]:
@@ -310,30 +363,8 @@ class PasskeyApplication:
         if DEPLOY_RESTART_SCOPE in scopes:
             if not isinstance(deployment, Mapping):
                 raise PasskeyD8Rejected("總場審查請求缺少精確部署座標")
-            admitted_deployments = (
-                {
-                    "target_node": "taiji01",
-                    "repository_root": "/home/taiji_admin/Taiji_Hub",
-                    "service": "taiji_edge_gateway.service",
-                    "application": "services.gateway.main:app",
-                    "active_port": 9002,
-                    "canary_port": 9003,
-                    "carrier": "LAN",
-                },
-                {
-                    "target_node": "MSI_WSL",
-                    "repository_root": "/home/taiji_admin/Taiji_Hub",
-                    "service": "xiaoj-intent-field",
-                    "application": "services.xiaoj_intent_field.app:app",
-                    "active_port": 9107,
-                    "canary_port": 0,
-                    "carrier": "LOCAL_DOCKER_COMPOSE",
-                },
-            )
-            if not any(
-                all(deployment.get(key) == value for key, value in expected.items())
-                for expected in admitted_deployments
-            ):
+            admitted_deployments = self.passkey.get("admitted_deployments")
+            if not isinstance(admitted_deployments, list) or deployment not in admitted_deployments:
                 raise PasskeyD8Rejected("總場審查請求部署座標不符")
         elif deployment is not None:
             raise PasskeyD8Rejected("Git-only 審查請求不得攜帶部署座標")
@@ -385,6 +416,7 @@ class PasskeyApplication:
 
     def approve_options(self, user_agent: str) -> dict[str, Any]:
         self.require_client(user_agent)
+        self._prune_expired_approval_challenges()
         credential_record, credential = load_credential(self.root, self.passkey)
         request_path, request = self._request()
         d3 = request["D3_COORDINATE"]
@@ -486,10 +518,12 @@ class PasskeyApplication:
                 "branch": d3["branch"],
                 "target_tree": d3["target_tree"],
                 "file_count": len(d3.get("changed_paths") or []),
+                "changed_paths": list(d3.get("changed_paths") or []),
                 "ttl_seconds": self.passkey["maximum_ttl_seconds"],
                 "scope_zh_TW": "正式 Git 推送＋精確部署與重啟" if deploy_requested else "僅正式 Git 推送",
                 "deploy_node": deployment["target_node"] if deploy_requested else None,
                 "deploy_service": deployment["service"] if deploy_requested else None,
+                "deploy_timer": deployment.get("timer") if deploy_requested else None,
             },
         }
 
@@ -718,6 +752,7 @@ class PasskeyApplication:
             raise PasskeyD8Rejected("簽發挑戰不存在或已失效")
         pending = load_json(pending_path, "PASSKEY_APPROVAL_STATE_INVALID")
         if utc_now() > parse_time(pending["expires_at"]):
+            pending_path.unlink(missing_ok=True)
             raise PasskeyD8Rejected("簽發挑戰已超過五分鐘")
         response = body.get("response")
         if not isinstance(response, Mapping):
@@ -821,7 +856,7 @@ class PasskeyApplication:
                     "創辦人通行密鑰驗證成立；本次第一污染入口精確修復已取得單次五分鐘簽發。"
                     if claims["scope"] == EXACT_REPAIR_SCOPE
                     else (
-                        "創辦人平台通行密鑰解鎖驗證成立；本次精確推送與太極一號指定服務部署重啟已取得單次五分鐘簽發。"
+                        f"創辦人平台通行密鑰解鎖驗證成立；本次精確推送與 {claims['authority_scope_constraints']['deployment']['target_node']} 指定服務部署重啟已取得單次五分鐘簽發。"
                         if claims["authority_scope_constraints"].get("deploy")
                         else "創辦人平台通行密鑰解鎖驗證成立；本次僅限精確 Git 推送已取得單次五分鐘簽發。"
                     )

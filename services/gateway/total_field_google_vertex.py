@@ -11,6 +11,11 @@ import requests
 from fastapi import HTTPException
 
 from tools.total_field_dynamic_context import build_dynamic_context
+from tools.total_field_mandatory_application_gate import (
+    PASS_STATE as MANDATORY_APPLICATION_PASS,
+    reviewed_prompt_text,
+    scan_operation,
+)
 
 
 PROJECT_ROOT = Path(
@@ -195,6 +200,49 @@ def total_field_google_chat(
             detail="HOLD_8DADI_DYNAMIC_CONTEXT_NOT_READY",
         )
 
+    target_lock = scan_operation(
+        repo_root=PROJECT_ROOT,
+        operation="PREFLIGHT",
+        actor_class="SYSTEM",
+        query=query,
+    )
+    if target_lock.get("state") != MANDATORY_APPLICATION_PASS:
+        raise HTTPException(
+            status_code=503,
+            detail=str(target_lock.get("reason") or "HOLD_TOTAL_FIELD_TARGET_LOCK"),
+        )
+    inference_review = scan_operation(
+        repo_root=PROJECT_ROOT,
+        operation="AI_INFERENCE",
+        actor_class="AI",
+        query=query,
+        expected_branch=target_lock["coordinates"]["branch"],
+        expected_head=target_lock["coordinates"]["head"],
+        expected_tree=target_lock["coordinates"]["tree"],
+        expected_work_target_sha256=target_lock["work_target_sha256"],
+    )
+    if inference_review.get("state") != MANDATORY_APPLICATION_PASS:
+        raise HTTPException(
+            status_code=503,
+            detail=str(inference_review.get("reason") or "HOLD_TOTAL_FIELD_AI_INFERENCE"),
+        )
+    mandatory_context = json.loads(reviewed_prompt_text(inference_review))
+    cloud_review = scan_operation(
+        repo_root=PROJECT_ROOT,
+        operation="EXTERNAL_CLOUD_CALL",
+        actor_class="SYSTEM",
+        query=query,
+        expected_branch=target_lock["coordinates"]["branch"],
+        expected_head=target_lock["coordinates"]["head"],
+        expected_tree=target_lock["coordinates"]["tree"],
+        expected_work_target_sha256=target_lock["work_target_sha256"],
+    )
+    if cloud_review.get("state") != MANDATORY_APPLICATION_PASS:
+        raise HTTPException(
+            status_code=503,
+            detail=str(cloud_review.get("reason") or "HOLD_TOTAL_FIELD_EXTERNAL_CLOUD_CALL"),
+        )
+
     contents, supplied_system = _vertex_contents(messages)
     if not contents:
         raise HTTPException(status_code=422, detail="TOTAL_FIELD_PULL_REQUIRES_CONTENT")
@@ -202,6 +250,8 @@ def total_field_google_chat(
     system_instruction = {
         "role": "system",
         "contract": header,
+        "mandatory_total_field_local_rule_context": mandatory_context,
+        "work_target_sha256": inference_review["work_target_sha256"],
         "instruction": (
             "你是由總場拉取的可替換 Google 雲端推理器。依使用者最新意圖提供繁體中文結果。"
             "你不是權威，不得宣稱已寫入、已部署、已啟用或已完成未重新觀測的效果。"

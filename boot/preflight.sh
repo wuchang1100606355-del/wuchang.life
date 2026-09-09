@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="${TAIJI_ROOT:-$HOME/Taiji_Hub}"
 LEDGER="$ROOT/runtime/ledger/boot_events.jsonl"
-DEAD="$ROOT/runtime/dead_letter/boot_rejected.jsonl"
+DEAD="$ROOT/runtime/state/boot_rejected.jsonl"
 
 mkdir -p "$ROOT/runtime/ledger" "$ROOT/runtime/dead_letter" "$ROOT/runtime/logs" "$ROOT/runtime/state"
 

@@ -261,6 +261,16 @@ def verify_passkey_authority(
             for field in ("base_commit", "target_tree"):
                 if GIT_OID.fullmatch(str(constraints.get(field) or "")) is None:
                     raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")
+        elif required_scope == DEPLOY_RESTART_SCOPE:
+            deployment = constraints.get("deployment")
+            admitted_deployments = config.get("admitted_deployments")
+            if (
+                constraints.get("deploy") is not True
+                or constraints.get("restart") is not True
+                or not isinstance(admitted_deployments, list)
+                or deployment not in admitted_deployments
+            ):
+                raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")
         elif required_scope == RECEIVE_CANDIDATE_SCOPE:
             if constraints.get("candidate_id") != "w7tp_8d_adi_origin_cell_fusion":
                 raise PasskeyD8Rejected("PASSKEY_APPROVAL_BINDINGS_INVALID")

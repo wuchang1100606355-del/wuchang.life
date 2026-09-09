@@ -55,7 +55,7 @@
     "rp_id": "localhost",
     "rp_name": "W7TP 小J總場",
     "expected_origin": "http://localhost:9120",
-    "review_request_ref": "runtime/total_field/review_requests/20260909_8dadi_mandatory_application_module_git_push/REQUEST.json",
+    "active_review_request_pointer_ref": "runtime/total_field/runtime_state/passkey_d8/ACTIVE_REVIEW_REQUEST.json",
     "receive_candidate_review_request_ref": "runtime/total_field/review_requests/20260909_origin_cell_fusion_receive_candidate_v2/REQUEST.json",
     "credential_ref": "runtime/total_field/runtime_state/passkey_d8/FOUNDER_PASSKEY_CREDENTIAL.json",
     "active_approval_pointer_ref": "runtime/total_field/runtime_state/passkey_d8/ACTIVE_APPROVAL.json",
@@ -66,6 +66,19 @@
     "maximum_ttl_seconds": 300,
     "single_use": true,
     "allowed_effect_scopes": ["AUTHORIZE_GIT_PUSH", "AUTHORIZE_EXACT_DEPLOY_RESTART", "RECEIVE_CANDIDATE", "EXACT_MINIMAL_REPAIR_ONLY"],
+    "admitted_deployments": [
+      {
+        "deployment_id": "msi_wsl_gateway_hourly_v1",
+        "target_node": "MSI_WSL",
+        "repository_root": "/home/taiji_admin/Taiji_Hub",
+        "service": "taiji-gateway.service",
+        "timer": "w7tp-hourly-reviewed-commit.timer",
+        "application": "services.gateway.main:app",
+        "active_port": 8081,
+        "canary_port": 8083,
+        "carrier": "LOCAL_SYSTEMD_USER"
+      }
+    ],
     "authenticator_attachment": "device-bound-platform-or-hybrid-mobile",
     "hybrid_mobile_passkey_allowed": true,
     "external_security_key_allowed": false,
