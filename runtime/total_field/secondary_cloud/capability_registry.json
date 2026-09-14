@@ -72,6 +72,16 @@
       "version": "1.0",
       "source_refs": ["registry-source:professional-rule-approved"],
       "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
+    },
+    {
+      "capability_ref": "CAP_ON_DEMAND_VISION_WALL_V1",
+      "packet_schema": "schemas/w7tp_capability_packet.schema.json",
+      "version": "1.0",
+      "source_refs": [
+        "tool:tools/total_field/on_demand_vision_wall.py",
+        "manifest:runtime/total_field/vision/on_demand_vision_capability.json"
+      ],
+      "compatibility_profile": "W7TP-8D-PACKET-NATIVE/1.0"
     }
   ]
 }
