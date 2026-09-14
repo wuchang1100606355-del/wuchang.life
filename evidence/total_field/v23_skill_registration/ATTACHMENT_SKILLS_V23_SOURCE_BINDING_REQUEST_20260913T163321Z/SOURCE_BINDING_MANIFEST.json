@@ -1,0 +1,106 @@
+{
+  "schema_id": "W7TP_V2_3_SKILL_SOURCE_BINDING_CANDIDATE_V1",
+  "packet_type": "SKILL_SOURCE_BINDING_MANIFEST",
+  "run_id": "ATTACHMENT_SKILLS_V23_SOURCE_BINDING_REQUEST_20260913T163321Z",
+  "created_at": "2026-09-13T16:33:21Z",
+  "state": "HOLD_V2_3_SOURCE_BINDING_UNESTABLISHED",
+  "append_only": true,
+  "source_coordinate": {
+    "node": "GitHub",
+    "repository": "https://github.com/wuchang1100606355-del/wuchang.life.git",
+    "branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "live_remote_head": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+    "commit": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+    "tree": "cd04d92b4522c2db8395141969d760cb2e587856",
+    "live_remote_head_verified_at": "2026-09-13T16:29:00Z",
+    "remote_tracking_ref": "refs/remotes/origin/agent/moving-v-v2-taiji8d-local-canary",
+    "remote_tracking_ref_matches_live_remote": true
+  },
+  "skills": [
+    {
+      "skill_id": "8d-adi-state-field-intelligence",
+      "source_path": ".skill-build/8d-adi-state-field-intelligence",
+      "source_tree_git_oid": "75fd3634f3137ea6ba1665c8771101b98913896d",
+      "source_archive_sha256": "1c1585788550afe5a3f624d08e5eccde425e549629aa3da0d6d4eb53ab595318",
+      "source_archive_hash_method": "SHA256(git archive --format=tar <commit> <source_path>)",
+      "last_source_change_commit": "8acf287dfdbcbae49045cf0c7bb70838517ebfe6",
+      "last_source_change_time": "2026-08-28T19:21:44+08:00",
+      "source_declared_version": null,
+      "v2_3_binding_state": "NOT_ESTABLISHED",
+      "file_count": 14,
+      "files": [
+        {"path":"SKILL.md","git_blob_oid":"9a7c0f8bae5d34903ce7222b9c6d3881b31d2e74","bytes":14935,"sha256":"d2406397c93ed2b8be2febd9f286a069a5a000427fedd55bd3822b7990fbd29c"},
+        {"path":"agents/openai.yaml","git_blob_oid":"8dc74f017a72cecd5fdefccd7d38e92798e672c9","bytes":335,"sha256":"63ac188c73e5128816d1c4a5bfe8ce6d31d55f6b7035c27e1b5bc7b4e9405edd"},
+        {"path":"references/adi-map-routing.md","git_blob_oid":"3d18a90be660ea664bf333635d7be6a5f5d5034d","bytes":2899,"sha256":"655f98f31fbee884ec0ca412ddacf6998a5dbf8e74abc44f381ac16e1a5bda01"},
+        {"path":"references/archive-and-transfer.md","git_blob_oid":"8adb0902f889c8194007474f50836fca5b34b411","bytes":2816,"sha256":"d72ef32e7242c207e7e16308bc21f494f47c5ef6cf4aec5a132f244ab995769d"},
+        {"path":"references/code-loop-gaps.md","git_blob_oid":"b6dd5025346c89a995bb2c442991aa7e71dbe962","bytes":2071,"sha256":"99bead046bb5c2c71ae9db3459021ab01c204cc6c4f94b3521d850d61ceb2852"},
+        {"path":"references/cross-node.md","git_blob_oid":"fec8e34289512cab3d55de9eb3604d9c29fc53d6","bytes":2228,"sha256":"a0d793ec355bca586dfc70e27dce174cff4ac5c4c392a1c88a5d5c24ee952411"},
+        {"path":"references/delivery-routing.md","git_blob_oid":"fd0049c17138f151fd000b9de322ef99823637ff","bytes":5888,"sha256":"c27841906d76afdbc7274a747ba6334bcd8d81a745b816a651a27f6124a894e0"},
+        {"path":"references/github-causal-delivery.md","git_blob_oid":"36aa964d39b1b76377635e8fa45d4355ad0595bb","bytes":7619,"sha256":"bbe5dc2c26e3611a0411ba23b08d982c279c617b94c4d38784b669fa48d2ce69"},
+        {"path":"references/github-causal-manifest.schema.json","git_blob_oid":"c27e5ac815d47edc1ccfa796457241f9e1306b66","bytes":7933,"sha256":"edb7d250020f883056cc5b66a5de60b2b0c0d0db1f8c21f5311beacf9a657d13"},
+        {"path":"references/state-field-model.md","git_blob_oid":"5ee02a87f76d157995f3f26861e272ccde370059","bytes":7584,"sha256":"4e2d8bb3f6362d4c113ed2fcd55057eeac571f93b6792616e79b13a4aa8a6358"},
+        {"path":"scripts/adi_map_router.py","git_blob_oid":"9fa3b23d285e1fd25a86521490494e5faf7da58e","bytes":11131,"sha256":"573d8c0e9a476e145c0e763bfc29045151cc54619a1747937cf7f67e0c0fbb37"},
+        {"path":"scripts/adi_state_archive.py","git_blob_oid":"21ce874bd342df29159702369331663458978eff","bytes":26352,"sha256":"d33fd992f0254866a9a72cd53a369d6c2c0245df1209bd3f073ffd6c1a2925d8"},
+        {"path":"scripts/github_causal_gate.py","git_blob_oid":"8b3a0abcaf32a89b942408286d62d50d359d25bc","bytes":35018,"sha256":"bcc618dcd17e6e26a4e6e0cb790e0739fd3488992441fa6c33ef314d6fb5e252"},
+        {"path":"scripts/state_field_inventory.py","git_blob_oid":"b655935a968ffb829c10bece97b500d047dd9b87","bytes":17088,"sha256":"68671083fc50e47e663a2ac9f02c9db829c37a9966010f5c64f52b57947550d7"}
+      ]
+    },
+    {
+      "skill_id": "intent-field-generative-construction",
+      "source_path": ".skill-build/intent-field-generative-construction",
+      "source_tree_git_oid": "014afb12888c44e0f59885c72ee146eaa6cc62cd",
+      "source_archive_sha256": "8cbd0f2b48a92c27f83844a0e0b71b7ccfc0256b85292155d5266606f3a81cdd",
+      "source_archive_hash_method": "SHA256(git archive --format=tar <commit> <source_path>)",
+      "last_source_change_commit": "0549079a0c71102952bb587c62520f4add4b16e1",
+      "last_source_change_time": "2026-08-28T19:15:13+08:00",
+      "source_declared_version": "IFGC-GTP/1.0.0",
+      "v2_3_binding_state": "NOT_ESTABLISHED",
+      "file_count": 14,
+      "files": [
+        {"path":"SKILL.md","git_blob_oid":"6927230b088895ae251fe10a74ccfd88a370a322","bytes":10542,"sha256":"ee57332431a998c2fc526b1f503cf1498ae73ff5b2dfc92f6926b3b1fe998954"},
+        {"path":"agents/openai.yaml","git_blob_oid":"81d3ac32367dac594baf6451639bbe5980a662f7","bytes":935,"sha256":"3ccde11408f904d20fd5564a94220ee9751932824ca51333292eaef5ffac2ae1"},
+        {"path":"quick_validate","git_blob_oid":"ebcde2256a29d40b42bedc9ed65e671c24a943ce","bytes":163,"sha256":"ee907df6231bdaa9575c1d9a1d562015584f20fcff5342bbb7f27c6f29e3288e"},
+        {"path":"references/artifact-contract.md","git_blob_oid":"662ffc9c41703108f45cdd9cbc74d064960bc89e","bytes":10800,"sha256":"3a2ebbabcc620df4c58e6b36a33b93538fe383bad86b25ede99455f5ec5aa803"},
+        {"path":"references/authority-and-safety.md","git_blob_oid":"340ad24d0afbb924978dc87ad9d653ba31782992","bytes":5757,"sha256":"cd328647c72ff1a70bbbddf5ec836ef299378c11469d577509840f7a9fcc2dd6"},
+        {"path":"references/relational-closure.schema.json","git_blob_oid":"b30a11ff027784c5046eae4883c4ca2ab214bfb8","bytes":8454,"sha256":"99e25e01bb6805600abcfa3deb6237a2170d9086f0445e4366c4acbfa973bea7"},
+        {"path":"references/user-journey-gates.md","git_blob_oid":"d165abe4008e05932d3283be20941c4d14dced60","bytes":3688,"sha256":"78061dfb9ce9a3b81bd20f494f0bbd8fd62e5ca69c7d14d05cf1ca7415d877e9"},
+        {"path":"references/verification-and-receipts.md","git_blob_oid":"79f6b7d3e39f110bf8ff31752d226e09a1ee20f2","bytes":10237,"sha256":"f70ba0f61423e506feeff4201bf87d0d8aad5b256ccf06aa72e40d20eb2b2204"},
+        {"path":"references/workflow-contract.md","git_blob_oid":"9f6b0f6f13a794b2ca0790b6c8c5bbf0232c47eb","bytes":8395,"sha256":"e906e8494062866c425d55c9039acccfa730366cb1d6c649fad55c918c5e6076"},
+        {"path":"scripts/build_intent_field_candidate.py","git_blob_oid":"0d25d505d02ce0ffa7dd043c20089b64255b32ef","bytes":17654,"sha256":"11044d87660f65f07d5a6f9f6602406eadcbd7c04f1efe13a7ad2b483f3ecf77"},
+        {"path":"scripts/intent_field_construct.py","git_blob_oid":"f0277e7993c567e924305415dc37ee463357fd09","bytes":61781,"sha256":"0b4eea311a8a0875d2b7aa30760963d2fe3186ba5688a2ccc6bbbcd111160565"},
+        {"path":"scripts/test_intent_field_construct.py","git_blob_oid":"ed6aeb669db5372294e25e0546d76192dc2bb782","bytes":31443,"sha256":"b16d73cec9a1be26f901a54a90f76787189fc7c1893f74867a08744151ba80e8"},
+        {"path":"scripts/test_intent_field_detached_verifier.py","git_blob_oid":"a42386b8f54ea3f5afcf8a0778eef3aae625a1f3","bytes":51724,"sha256":"91ae2d5b18841f26fef3a6ca669c1ffb24f25edc9fd006035e976ec3f842080f"},
+        {"path":"scripts/verify_intent_field_construction.py","git_blob_oid":"298d5e96cdc2a1f4c6dc96da4402d3746178a0d9","bytes":75048,"sha256":"998fa2b32a75ada4e5ae7267ce4b7fe160e390eece2de0b4b326218c8db34706"}
+      ]
+    }
+  ],
+  "v2_3_registry_observation": {
+    "source_ref": "d32ebc73ea7e413daa61c58cc831964743dba99d:manifests/ollama_xiaoj_total_field_v0_1/capability_registry.json",
+    "source_sha256": "92d7a0675fb13a3e25a4cdf8576da0254728468570709abd8332b6d3a28767be",
+    "declared_version": "2.3.0",
+    "declared_baseline": "8DADI_W7TP_2_3",
+    "target_skill_ids_registered": [],
+    "validator_state": "FAIL_TOTAL_FIELD_SKILL_REGISTRY_VALIDATION",
+    "validator_error": "SOURCE_HASH_MISMATCH:w7tp_generative_transmission",
+    "authority_granted": false
+  },
+  "current_local_registry_observation": {
+    "ref": "runtime/total_field/xiaoj/xiaoj_skill_registry.json",
+    "sha256": "0812d1618c68d510f3e54c26f61739a7f58494be7c13f4bdc026b94fd2133f67",
+    "target_skill_ids_registered": [],
+    "registered_skill_ids": ["land-8d-worktree"]
+  },
+  "authority_boundary": {
+    "source_hash_binding_complete": true,
+    "v2_3_semantic_binding_complete": false,
+    "v2_3_canonical_binding_complete": false,
+    "registration_authorized": false,
+    "installation_authorized": false,
+    "registry_write_authorized": false,
+    "canonical_promotion": false,
+    "runtime_activation": false,
+    "skill_source_is_authority": false
+  },
+  "first_breakpoint": "NO_VERIFIED_V2_3_BINDING_FOR_EITHER_SOURCE_TREE",
+  "next": "TOTAL_FIELD_MUST_BIND_OR_REJECT_THE_TWO_EXACT_SOURCE_TREES_BEFORE_INSTALLATION_OR_REGISTRATION"
+}
