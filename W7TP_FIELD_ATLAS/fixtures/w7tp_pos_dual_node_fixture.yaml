@@ -1,0 +1,103 @@
+fixture_id: W7TP_POS_DUAL_NODE_FIXTURE_20260621
+state: DRY_RUN_ONLY
+store:
+  store_ref: LIAOGUO_CHONGXIN_MAIN
+  company_boundary: SHANGPIN_FOOD_COMPANY
+  branch_boundary: CHONGXIN_MAIN_STORE
+  accounting_scope: commercial_main_store_only
+nodes:
+  - node_ref: NODE_POS_MAINT
+    store_ref: LIAOGUO_CHONGXIN_MAIN
+    role: pos_maintenance_candidate_node
+    capabilities:
+      - odoo_pos_maintenance_candidate
+      - local_reconstruction
+      - evidence_capture
+    risk_tier: stage_2
+    action_boundary: dry_run_only
+  - node_ref: NODE_XIAOJ_DISPLAY_COMPUTE
+    store_ref: LIAOGUO_CHONGXIN_MAIN
+    role: linux_display_compute_node
+    capabilities:
+      - av_candidate_generation
+      - chrome_customer_display_candidate
+      - external_tv_xiaoj_image_display_candidate
+    display_target: external_tv_customer_display
+    risk_tier: stage_2
+    action_boundary: dry_run_only
+entitlements:
+  - subject_ref: NODE_POS_MAINT
+    entitlement: ADMIN
+    risk_tier: stage_2
+    allowed_actions:
+      - create_candidate
+      - local_reconstruct
+      - evidence_write
+    forbidden_actions:
+      - odoo_live_write
+      - lineworks_send
+      - service_restart
+  - subject_ref: NODE_XIAOJ_DISPLAY_COMPUTE
+    entitlement: GROUP_MEMBER
+    risk_tier: stage_2
+    allowed_actions:
+      - create_candidate
+      - display_candidate
+      - evidence_write
+    forbidden_actions:
+      - chrome_live_control
+      - tailscale_change
+      - member_plaintext_dump
+route_packets:
+  - route_code: MEMBER_SERVICE
+    lookup_key: member.service.lineworks.notify.v1
+    candidate_only: true
+    local_reconstruction_required: true
+  - route_code: ODOO_POS_ACTION
+    lookup_key: pos.local.reconstruct.v1
+    candidate_only: true
+    local_reconstruction_required: true
+  - route_code: XIAOJ_DISPLAY_COMPUTE
+    lookup_key: xiaoj.display.compute.v1
+    candidate_only: true
+    local_reconstruction_required: true
+pos_order_candidates:
+  - candidate_id: POS_CANDIDATE_AV_ORDER_001
+    store_ref: LIAOGUO_CHONGXIN_MAIN
+    source_node_ref: NODE_XIAOJ_DISPLAY_COMPUTE
+    menu_refs:
+      - MENU_SOURCE_QUICK_CLICK_CANDIDATE
+    confidence: 0.72
+    candidate_only: true
+    local_reconstruction_required: true
+    land_allowed: false
+spacetime_events:
+  - event_id: EVT_POS_DUAL_NODE_001
+    event_type: state
+    actor_ref: TOTAL_FIELD
+    node_ref: NODE_POS_MAINT
+    parent_hash: GENESIS
+    event_hash: h001_state_dual_node_profile
+    claim_label: FACT
+  - event_id: EVT_POS_DUAL_NODE_002
+    event_type: coordinate
+    actor_ref: TOTAL_FIELD
+    node_ref: NODE_XIAOJ_DISPLAY_COMPUTE
+    parent_hash: h001_state_dual_node_profile
+    event_hash: h002_coordinate_display_compute
+    claim_label: FACT
+  - event_id: EVT_POS_DUAL_NODE_003
+    event_type: generative_transfer
+    actor_ref: GT8D_FAST_LOOKUP_ROUTER
+    node_ref: NODE_POS_MAINT
+    parent_hash: h002_coordinate_display_compute
+    event_hash: h003_candidate_only_transfer
+    claim_label: FACT
+  - event_id: EVT_POS_DUAL_NODE_004
+    event_type: design_proposal
+    actor_ref: TOTAL_FIELD
+    node_ref: NODE_XIAOJ_DISPLAY_COMPUTE
+    parent_hash: h003_candidate_only_transfer
+    event_hash: h004_64_gua_router_not_verified
+    claim_label: DESIGN_PROPOSAL
+

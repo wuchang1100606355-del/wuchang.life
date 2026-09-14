@@ -22,6 +22,46 @@ schemas:
     file: W7TP_FIELD_ATLAS/schemas/blind_ai_subscription_packet.schema.yaml
     module: M06_blind_ai_subscription
 
+  - schema_id: W7TP_TOTAL_FIELD_REVIEW_PACKET
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_total_field_review_packet.schema.yaml
+    module: M07_total_field_review_gate
+
+  - schema_id: W7TP_STORE_NODE_PROFILE
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_store_node_profile.schema.yaml
+    module: M08_dual_node_pos_topology
+
+  - schema_id: W7TP_8D_IDENTITY_CODE
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_8d_identity_code.schema.yaml
+    module: M09_8d_identity_code
+
+  - schema_id: W7TP_GT8D_ROUTE_PACKET
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_gt8d_route_packet.schema.yaml
+    module: M10_gt8d_local_route
+
+  - schema_id: W7TP_SPACETIME_EVENT
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_spacetime_event.schema.yaml
+    module: M11_spacetime_event_ledger
+
+  - schema_id: W7TP_POS_ORDER_CANDIDATE
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_pos_order_candidate.schema.yaml
+    module: M12_pos_local_reconstruction
+
+  - schema_id: W7TP_SERVICE_ENTITLEMENT
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_service_entitlement.schema.yaml
+    module: M13_service_entitlement_gate
+
+  - schema_id: W7TP_POS_MARKET_GATE
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_pos_market_gate.schema.yaml
+    module: M14_pos_market_competitiveness_gate
+
+  - schema_id: W7TP_CLOUD_COMPUTE_RESILIENCE_GATE
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_cloud_compute_resilience_gate.schema.yaml
+    module: M15_cloud_compute_resilience_gate
+
+  - schema_id: W7TP_USER_STANCE_INTEGRITY_GATE
+    file: W7TP_FIELD_ATLAS/schemas/w7tp_user_stance_integrity_gate.schema.yaml
+    module: M16_user_stance_total_field_handhold_gate
+
 governance:
   plan_only: true
   no_runtime_write: true

@@ -23,6 +23,7 @@ STATE=MASTER_DEPLOY_INDEX_READY
 - Compliance Settings（合規設定）: docs/compliance/settings/COMPLIANCE_SETTINGS_GENERATIVE_WRITE_20260613_063312.md
 - Local Network Compliance（本地網路合規）: docs/compliance/network/LOCAL_NETWORK_COMPLIANCE_ADDENDUM_20260613_063900.md
 - Redteam Paste Integrity Gate（紅隊貼上完整性閘）: docs/redteam/operation_windows/REDTEAM_PASTE_INTEGRITY_GATE_20260613_064516.md
+- W3 Generative Transfer Deploy（生成式傳輸部署）: docs/deploy/generative_transfer/W3_GENERATIVE_TRANSFER_DEPLOY_20260621.md
 
 ## Deployment Windows（部署窗位）
 - W0_READONLY_PREFLIGHT = allowed.
@@ -34,14 +35,15 @@ STATE=MASTER_DEPLOY_INDEX_READY
 
 ## Next Deployable Items（下一批可生成式部署項目）
 1. 8D Packet Schema SDK（八維封包 SDK）.
-2. Member Sidebar XiaoJ UI Scaffold（會員側邊欄小J UI 骨架）.
-3. Browser Action Bus Contract（瀏覽器動作匯流排契約）.
-4. No-Plaintext Context Broker Spec（無明文上下文代理規格）.
-5. Hybrid Key / API Broker Spec（混合金鑰與 API 代理規格）.
-6. Counter XiaoJ Avatar Spec（櫃台小J主播規格）.
-7. Merchant / Committee Connector Spec（商家／管委會連接器規格）.
-8. Tailscale ACL / Grants Draft（Tailscale 權限草案，不套用）.
-9. Domain / DNS Plan（網域與 DNS 規劃，不套用）.
+2. Dual Node POS / XiaoJ Display Compute Schema（雙節點 POS／小J客顯算力規格）.
+3. Member Sidebar XiaoJ UI Scaffold（會員側邊欄小J UI 骨架）.
+4. Browser Action Bus Contract（瀏覽器動作匯流排契約）.
+5. No-Plaintext Context Broker Spec（無明文上下文代理規格）.
+6. Hybrid Key / API Broker Spec（混合金鑰與 API 代理規格）.
+7. Counter XiaoJ Avatar Spec（櫃台小J主播規格）.
+8. Merchant / Committee Connector Spec（商家／管委會連接器規格）.
+9. Tailscale ACL / Grants Draft（Tailscale 權限草案，不套用）.
+10. Domain / DNS Plan（網域與 DNS 規劃，不套用）.
 
 ## Core Rule（核心規則）
 生成式部署只產生規格、封包、驗證與證據；不啟動服務、不改網路、不讀密鑰、不碰會員明文。

@@ -1,0 +1,30 @@
+{
+  "packet_type": "w7tp_total_field_review_packet",
+  "review_id": "W7TP_POS_DUAL_NODE_TOTAL_FIELD_REVIEW_20260621",
+  "request_type": "runtime_landing_request_preflight",
+  "risk_level": "high_runtime_if_executed",
+  "state": "APPROVE_LIMITED_SPEC_EVIDENCE_ONLY",
+  "evidence_refs": [
+    "docs/project/total_field_liaoguo_pos_convergence_20260621T144929Z/TOTAL_FIELD_LIAOGUO_POS_CONVERGENCE.md",
+    "docs/project/total_field_gt8d_code_lookup_W7TP_TOTAL_FIELD_GT8D_CODE_LOOKUP_7D_20260621T113242Z/GT8D_CODE_LOOKUP_CONVERSATION_7D_PACKET.md",
+    "docs/project/total_field_spacetime_inference_boundary/W7TP_SPACETIME_INFERENCE_BOUNDARY_20260621T130311Z/W7TP_SPACETIME_INFERENCE_BOUNDARY.md",
+    "docs/project/TOTAL_FIELD_8D7D_LOOKUP_GT_PATENT_NICHE_20260621_144739/DESIGN_AND_PATENT_NICHE_8D7D_LOOKUP_GT.md",
+    "W7TP_FIELD_ATLAS/review_policies/W7TP_XIAOJ_PRE_REVIEW_OPINION_RULE_V1.yaml"
+  ],
+  "xiaoj_review_opinion": {
+    "recommendation": "approve_limited",
+    "reason": "The plan follows the main chain, keeps cloud and LLM output candidate-only, preserves local GT8D authority, and forbids runtime mutation in this package.",
+    "safe_option": "Allow W3 deploy package, review packet, schema, fixture, dry-run verifier, and evidence manifest only.",
+    "risk_if_approved": "Loose indexing or overbroad metadata could mislead a later agent into treating runtime action as approved.",
+    "risk_if_rejected": "W3 remains unindexed and the dual-node POS/display compute MVP cannot enter a verifiable productization path.",
+    "required_human_action": "approve_with_conditions"
+  },
+  "conditions": [
+    "Only W1 evidence write and non-runtime deploy package are approved.",
+    "Any DB, Odoo, LINE WORKS, Tailscale, service restart, or Chrome live control action needs a separate Stage 2 or Stage 3 review.",
+    "Invite tokens, secrets, member plaintext, and live credential paths must not appear in docs, fixtures, packets, or logs.",
+    "Ancient-math engineering mappings must retain claim labels and may not be stated as implemented facts."
+  ],
+  "expiry_or_reseal_required": "Reseal before any runtime action or after topology changes."
+}
+

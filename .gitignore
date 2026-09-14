@@ -59,6 +59,11 @@ runtime/archive/
 runtime/reports/*.tmp
 # T100B git debt cleanup - generated/runtime noise
 runtime/
+!runtime/
+runtime/*
+!runtime/gt8d_lookup/
+runtime/gt8d_lookup/*
+!runtime/gt8d_lookup/gt8d_route_resolver.py
 reports/
 reviews/
 simulations/
@@ -66,6 +71,7 @@ simulations/
 *.bak.*
 *.tar.gz
 *.sha256
+!docs/evidence/deploy/generative_transfer/W3_GENERATIVE_TRANSFER_DEPLOY_20260621.sha256
 patent_evidence_pack_*/
 patent_evidence_pack_*.tar.gz
 patent_evidence_pack_*.tar.gz.sha256
