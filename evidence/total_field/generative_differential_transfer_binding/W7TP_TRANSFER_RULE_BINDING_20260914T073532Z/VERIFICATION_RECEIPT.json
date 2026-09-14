@@ -1,0 +1,86 @@
+{
+  "schema_id": "W7TP_GENERATIVE_DIFFERENTIAL_TRANSFER_REPOSITORY_RULE_RECEIPT_V1",
+  "run_id": "W7TP_TRANSFER_RULE_BINDING_20260914T073532Z",
+  "observed_at_utc": "2026-09-14T07:36:31Z",
+  "state": "REPOSITORY_RULE_TESTS=PASS",
+  "candidate_state": "CANDIDATE_NOT_CANONICAL",
+  "scope": "REPOSITORY_RULE_CONFIGURATION_ONLY",
+  "live_coordinate": {
+    "node_identity": "taiji01",
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "main",
+    "head": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+    "tree": "fb994eecd89dbca4589b4d8bee959dc407f396e8",
+    "worktree_status_sha256_before": "73d0ab2ec272e26abf20c571b654ed796e26eb8584bdff83bbec4c7da4076174",
+    "dirty_tracked_count_before": 5,
+    "dirty_untracked_count_before": 14,
+    "preexisting_change_overlap": false
+  },
+  "authority_observation": {
+    "founder_canonical_identity": "W7TP / 8D ADI V2.3",
+    "verified_local_v2_3_canonical_locator": "UNRESOLVED",
+    "canonical_runtime_binding": "UNRESOLVED",
+    "current_8d_field_source": "NONE_QUALIFIED",
+    "total_field_decision": "NOT_PERFORMED",
+    "authority_scope": "NONE"
+  },
+  "reused_prior_evidence": {
+    "run_id": "TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z",
+    "reference": "evidence/total_field/file_8d_adi_causal_index/TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z",
+    "reuse_state": "PASS_NEW_STAGE",
+    "repeat_full_repository_scan": false
+  },
+  "implementation_classification": {
+    "existing_d6": "NO_VERIFIED_DISCRETE_INTEGER_LOOKUP_D6_IMPLEMENTATION_AT_LIVE_HEAD",
+    "existing_differential_transfer": [
+      "core/stp/delta_engine.py",
+      "core/stp/packet_delta.py",
+      "core/stp/delta_reconstruction.py"
+    ],
+    "existing_receiver": "runtime/total_field/receiver_reconstruction/RR_20260721T184831Z/receiver_reconstruction.py#HISTORICAL_CANDIDATE",
+    "repository_rule_binding": "configs/w7tp/generative_differential_transfer_binding_v2_3.json"
+  },
+  "files": {
+    "configs/w7tp/generative_differential_transfer_binding_v2_3.json": "2fc863e23191b78a38143be561a5de21de28298972d983ac099736fb4f17a135",
+    "schemas/8d/d6_generative_transmission_packet_v2_3.schema.json": "b1643455e3dc706b6934cba000362f3b68c7e097dab2c75192a54faf5b5ff843",
+    "schemas/8d/differential_transfer_packet_v1.schema.json": "d5c941178acbbe6d0bff0bc6992ce3def596afc66880b213712247d33f052fdb",
+    "schemas/8d/d6_integer_reconstruction_evidence_v2_3.schema.json": "e06a29e6d91dbb1106e0b5b949fafe7cbb5c3091a262dbc98f067e7f2ca83658",
+    "schemas/8d/delta_apply_receipt_v1.schema.json": "9eb6a4a677049f8700b8567996b6f0b7eef40701d343c8a4a316b646ac860421",
+    "tools/w7tp_transfer_rule_common.py": "010097856f1759e701d71be21999c26aa8083571c95d05601f989bdbc9da39c4",
+    "tools/w7tp_d6_generative_transmission_verifier_v2_3.py": "118dd26c9bbcf71336f866b1f245d43564fc570c16c5b50e4dcfe8b73c4daea4",
+    "tools/w7tp_differential_transfer_verifier_v1.py": "6fd134367d18489340f2451f31b1b248f46132a75639b961d6f07fe598d1faeb",
+    "tools/w7tp_transfer_packet_compatibility_v2_3.py": "204d72d3532bb628ea354f31434a2ae7d711a64ea0aaa1838262f0e5d10daf13",
+    "tests/test_w7tp_transfer_rule_binding_v2_3.py": "6978e1064746fdf361261423f70fa5b2c24b6fe03e7634daa1a6d12ee58bde92"
+  },
+  "verification": {
+    "command": "python3 -m unittest -v tests.test_w7tp_transfer_rule_binding_v2_3",
+    "tests_run": 15,
+    "tests_passed": 15,
+    "tests_failed": 0,
+    "python_compile": "PASS",
+    "json_and_schema_validation": "PASS",
+    "append_only_overwrite_rejected": true,
+    "legacy_stp_test_file": "EMPTY_NO_TESTS_DISCOVERED",
+    "pytest": "UNAVAILABLE_NOT_REQUIRED"
+  },
+  "verified_boundaries": {
+    "differential_receipt_scope": "D4_EVIDENCE_ONLY",
+    "differential_authority": "NONE",
+    "carrier_success_implies_d6": false,
+    "d6_packet_self_proves_success": false,
+    "target_pass": false,
+    "cross_node_pass": false,
+    "end_to_end_pass": false,
+    "runtime_effect": "NONE",
+    "canonical_promotion": false,
+    "active_pointer_mutation": false,
+    "deploy": false,
+    "restart": false,
+    "commit": false
+  },
+  "hold_state": [
+    "HOLD_D1_D8_JOINT_VERIFICATION_REQUIRED",
+    "HOLD_TOTAL_FIELD_AUTHORITY_REQUIRED"
+  ],
+  "lineage_reference": "user-attachment://GENERATIVE_TRANSMISSION_AND_DIFFERENTIAL_TRANSFER_RULE_BINDING"
+}

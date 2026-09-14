@@ -1,0 +1,203 @@
+{
+  "schema_id": "W7TP_GENERATIVE_DIFFERENTIAL_TRANSFER_RULE_BINDING_V2_3",
+  "version": "2.3.0-repository-rule-candidate.1",
+  "state": "CANDIDATE_NOT_CANONICAL",
+  "founder_canonical_identity": "W7TP / 8D ADI V2.3",
+  "w7tp_definition": "Intent Communication / State-Field Packet Communication",
+  "fixed_8d": {
+    "semantics": "8_IN_1_SINGLE_STATE_FIELD",
+    "D1": "Intent",
+    "D2": "State",
+    "D3": "Coordinate",
+    "D4": "Evidence",
+    "D5": "Execution / Policy",
+    "D6": "Generative Transmission",
+    "D7": "Risk / Quarantine",
+    "D8": "Envelope / Authority",
+    "requirements": [
+      "SIMULTANEOUS",
+      "COUPLED",
+      "MUTUALLY_CONSTRAINED",
+      "JOINTLY_CLOSED"
+    ]
+  },
+  "capability_bindings": {
+    "D6_GENERATIVE_TRANSMISSION": {
+      "role": "PRIMARY_OPERATION",
+      "computation_model": "DISCRETE_INTEGER_LOOKUP",
+      "numeric_domain": "INTEGER",
+      "determinism": "REQUIRED",
+      "packet_type": "D6_GENERATIVE_TRANSMISSION_PACKET",
+      "packet_schema": "schemas/8d/d6_generative_transmission_packet_v2_3.schema.json",
+      "verifier": "tools/w7tp_d6_generative_transmission_verifier_v2_3.py",
+      "receipt_type": "D6_INTEGER_RECONSTRUCTION_EVIDENCE",
+      "receipt_schema": "schemas/8d/d6_integer_reconstruction_evidence_v2_3.schema.json",
+      "registration_state": "REPOSITORY_RULE_CANDIDATE",
+      "runtime_registered": false,
+      "authority": "NONE"
+    },
+    "DIFFERENTIAL_TRANSFER": {
+      "role": "CARRIER_ONLY",
+      "packet_type": "DIFFERENTIAL_TRANSFER_PACKET",
+      "packet_schema": "schemas/8d/differential_transfer_packet_v1.schema.json",
+      "verifier": "tools/w7tp_differential_transfer_verifier_v1.py",
+      "receipt_type": "DELTA_APPLY_RECEIPT",
+      "receipt_schema": "schemas/8d/delta_apply_receipt_v1.schema.json",
+      "evidence_scope": "D4_EVIDENCE_ONLY",
+      "registration_state": "REPOSITORY_RULE_CANDIDATE",
+      "runtime_registered": false,
+      "authority": "NONE"
+    }
+  },
+  "generative_transmission_equation": [
+    "SOURCE_STATE_INTEGER_INDEX",
+    "TARGET_BASE_INTEGER_INDEX",
+    "MINIMUM_REQUIRED_INDEX_DELTA",
+    "LOOKUP_TABLE_REFERENCE",
+    "DISCRETE_TRANSITION_RULES",
+    "RECONSTRUCTION_COORDINATE",
+    "VERIFICATION_RULES",
+    "TARGET_STATE_INTEGER_INDEX",
+    "TARGET_NATIVE_RECONSTRUCTION"
+  ],
+  "delta_type_isolation": {
+    "MINIMUM_REQUIRED_INDEX_DELTA": "DISCRETE_STATE_INDEX_DIFFERENCE",
+    "BINARY_OR_OBJECT_DIFF": "CONTENT_DIFFERENCE_CARRIER_PAYLOAD",
+    "shared_schema_field": false,
+    "shared_packet_type": false,
+    "shared_receipt_type": false,
+    "shared_verifier": false,
+    "shared_pass_state": false
+  },
+  "carrier_routing": {
+    "primary_operation": "D6_GENERATIVE_TRANSMISSION",
+    "allowed_carriers": [
+      "REFERENCE_ONLY",
+      "DIFFERENTIAL_TRANSFER",
+      "BOUNDED_FULL_BOOTSTRAP"
+    ],
+    "differential_transfer_may_imply_d6": false,
+    "carrier_success_proves": ["CARRIER_RESULT=SUCCESS", "D4_EVIDENCE=AVAILABLE"],
+    "carrier_success_does_not_prove": [
+      "D6_PASS",
+      "TARGET_PASS",
+      "CROSS_NODE_PASS",
+      "END_TO_END_PASS",
+      "TOTAL_FIELD_EFFECT",
+      "CANONICAL",
+      "ACTIVE",
+      "ACTIVATED",
+      "PROMOTED",
+      "FINAL_AUTHORITY"
+    ]
+  },
+  "main_chain": [
+    "CURRENT_8D_FIELD",
+    "DISCRETE_INTEGER_LOOKUP",
+    "MINIMUM_REQUIRED_INDEX_DELTA",
+    "D6_GENERATIVE_TRANSMISSION_PACKET",
+    "CARRIER_SELECTION",
+    "TARGET_NATIVE_INTEGER_LOOKUP",
+    "TARGET_NATIVE_RECONSTRUCTION",
+    "D1_D8_VERIFICATION",
+    "TOTAL_FIELD_ADJUDICATION"
+  ],
+  "d6_verification_order": [
+    "TARGET_NODE_IDENTITY",
+    "CURRENT_TARGET_FIELD_SNAPSHOT",
+    "CANONICAL_IDENTITY",
+    "LOOKUP_TABLE_ID_VERSION_DIGEST",
+    "INTEGER_INDEX_DOMAIN",
+    "DISCRETE_INTEGER_LOOKUP",
+    "MINIMUM_REQUIRED_INDEX_DELTA",
+    "CARRIER_INPUT",
+    "DIFFERENTIAL_TRANSFER_APPLY_IF_REQUIRED",
+    "CARRIER_OUTPUT_DIGEST",
+    "DISCRETE_TARGET_NATIVE_RECONSTRUCTION",
+    "EXPECTED_TARGET_STATE_INTEGER_INDEX",
+    "TARGET_NATIVE_EVIDENCE",
+    "D1_D8_JOINT_VERIFICATION",
+    "TOTAL_FIELD_ADJUDICATION"
+  ],
+  "admission_prechecks": [
+    "PACKET_SCHEMA",
+    "FLOATING_POINT_FORBIDDEN",
+    "TTL",
+    "NONCE_REPLAY"
+  ],
+  "floating_point": {
+    "default": "FORBIDDEN_UNLESS_EXPLICIT_NUMERIC_CONTRACT_EXISTS",
+    "not_established": [
+      "FLOATING_DATA_INDEX",
+      "VECTOR_DISTANCE",
+      "SEMANTIC_DISTANCE",
+      "ORIGIN_CELL",
+      "ABSOLUTE_DISTANCE",
+      "SPIRAL_PATH"
+    ]
+  },
+  "compatibility_mapping": {
+    "mapping_version": "W7TP_TRANSFER_PACKET_COMPATIBILITY_V2_3/1.0",
+    "TRANSFER_PACKET": "HOLD_AMBIGUOUS_TRANSFER_SEMANTICS",
+    "DELTA_PACKET": "HOLD_AMBIGUOUS_TRANSFER_SEMANTICS",
+    "GENERATIVE_DELTA": "HOLD_AMBIGUOUS_TRANSFER_SEMANTICS",
+    "model_inference_allowed": false,
+    "filename_inference_allowed": false,
+    "content_guessing_allowed": false,
+    "router": "tools/w7tp_transfer_packet_compatibility_v2_3.py"
+  },
+  "hold_states": [
+    "HOLD_INTEGER_INDEX_DOMAIN_INVALID",
+    "HOLD_LOOKUP_TABLE_NOT_FOUND",
+    "HOLD_LOOKUP_TABLE_DIGEST_MISMATCH",
+    "HOLD_DISCRETE_RULE_MISMATCH",
+    "HOLD_TARGET_BASE_INDEX_MISMATCH",
+    "HOLD_TARGET_STATE_INDEX_MISMATCH",
+    "HOLD_DELTA_BASE_MISMATCH",
+    "HOLD_DELTA_OUTPUT_MISMATCH",
+    "HOLD_DELTA_BOUNDARY_VIOLATION",
+    "HOLD_PACKET_EXPIRED",
+    "HOLD_REPLAY_DETECTED",
+    "HOLD_COORDINATE_DRIFT",
+    "HOLD_AMBIGUOUS_TRANSFER_SEMANTICS",
+    "HOLD_D1_D8_JOINT_VERIFICATION_REQUIRED",
+    "HOLD_TOTAL_FIELD_AUTHORITY_REQUIRED"
+  ],
+  "receipt_isolation": [
+    "DELTA_APPLY_RECEIPT != D6_INTEGER_RECONSTRUCTION_EVIDENCE",
+    "D6_INTEGER_RECONSTRUCTION_EVIDENCE != TOTAL_FIELD_DECISION",
+    "TOTAL_FIELD_DECISION != CANONICAL_PROMOTION",
+    "SOURCE_SIDE_EVIDENCE != TARGET_PASS",
+    "SOURCE_SIDE_EVIDENCE != CROSS_NODE_PASS",
+    "SOURCE_SIDE_EVIDENCE != END_TO_END_PASS"
+  ],
+  "legacy_implementation_classification": {
+    "core/stp/delta_engine.py": "DIFFERENTIAL_TRANSFER_PRIMITIVE_CANDIDATE",
+    "core/stp/packet_delta.py": "COORDINATE_CONTENT_DIFF_PRIMITIVE_CANDIDATE",
+    "core/stp/delta_reconstruction.py": "COORDINATE_DIFF_APPLY_PRIMITIVE_CANDIDATE",
+    "services/w7tp_d6_linter.py": "REQUEST_SAFETY_LINTER_NOT_D6_INTEGER_VERIFIER"
+  },
+  "receiver_binding": {
+    "mode": "REPOSITORY_RULE_ADAPTER_ONLY",
+    "runtime_change": false,
+    "existing_receiver_replaced": false,
+    "activation_performed": false,
+    "required_next_authority": "TOTAL_FIELD_D8_REGISTRATION_DECISION"
+  },
+  "authority_boundary": {
+    "repository_tests_may_state": "REPOSITORY_RULE_TESTS=PASS",
+    "repository_tests_may_not_state": [
+      "TARGET_PASS",
+      "CROSS_NODE_PASS",
+      "END_TO_END_PASS",
+      "TOTAL_FIELD_ACTIVE",
+      "LIVE_EFFECT",
+      "CANONICAL_PROMOTED"
+    ],
+    "runtime_effect": "NONE",
+    "canonical_mutation": false,
+    "active_pointer_mutation": false,
+    "promotion": false,
+    "activation": false
+  }
+}
