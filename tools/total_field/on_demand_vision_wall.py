@@ -50,22 +50,36 @@ def parse_channels(text: str) -> list[int]:
     if not value:
         raise ValueError("VISION_INTENT_REQUIRED")
 
-    if any(token in value for token in ("全部", "全開", "所有", "八路", "8路")):
+    blocked = ("不要", "別", "不可", "禁止", "停止", "關閉", "關掉", "停用")
+    clauses = [part.strip() for part in re.split(r"[，,。；;！？!?]+", value) if part.strip()]
+    active_clauses = [part for part in clauses if not any(token in part for token in blocked)]
+    if not active_clauses:
+        raise ValueError("VISION_OPEN_INTENT_NOT_RESOLVED")
+
+    active = " ".join(active_clauses)
+    if not re.search(r"(?:看|查看|開|開啟|顯示|調出)", active):
+        raise ValueError("VISION_OPEN_INTENT_NOT_RESOLVED")
+
+    if any(token in active for token in ("全部", "全開", "所有")):
+        return list(range(CHANNEL_COUNT))
+    if re.search(r"(?:開|開啟|顯示|調出)\s*(?:八|8)\s*路(?:監視器|攝影機|畫面)", active):
         return list(range(CHANNEL_COUNT))
 
-    ranges = re.findall(r"([1-8])\s*(?:到|至|[-~～])\s*([1-8])", value)
+    chinese = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8}
     channels: list[int] = []
-    for start, end in ranges:
-        a, b = int(start), int(end)
+
+    range_pattern = re.compile(r"([一二三四五六七八1-8])\s*(?:到|至|[-~～])\s*([一二三四五六七八1-8])")
+    for match in range_pattern.finditer(active):
+        start, end = match.groups()
+        a = chinese.get(start, int(start) if start.isdigit() else 0)
+        b = chinese.get(end, int(end) if end.isdigit() else 0)
         lo, hi = sorted((a, b))
         channels.extend(range(lo - 1, hi))
 
-    chinese = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8}
-    for token, number in chinese.items():
-        if re.search(rf"(?:看|開|顯示)?\s*{token}\s*(?:號|路|台)?", value):
-            channels.append(number - 1)
-
-    for number in re.findall(r"(?<!\d)([1-8])(?!\d)", value):
+    without_ranges = range_pattern.sub(" ", active)
+    for number in re.findall(r"(?:第\s*)?([一二三四五六七八])\s*(?:號|路|台)", without_ranges):
+        channels.append(chinese[number] - 1)
+    for number in re.findall(r"(?:第\s*)?([1-8])\s*(?:號|路|台)", without_ranges):
         channels.append(int(number) - 1)
 
     result = _unique(channels)
