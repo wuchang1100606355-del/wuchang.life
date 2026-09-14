@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:evidence:d6-integer-reconstruction:2.3",
+  "title": "D6 Integer Reconstruction Repository Evidence V2.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "RECEIPT_TYPE", "EVIDENCE_SCOPE", "SOURCE_IDENTITY", "TARGET_IDENTITY",
+    "OBSERVED_AT", "INPUT_DIGESTS", "OUTPUT_DIGESTS", "LOOKUP_TABLE_REFERENCE",
+    "TRANSITION_RULE_REFERENCE", "VERIFIER_ID", "RESULT", "AUTHORITY_SCOPE",
+    "LINEAGE_REFERENCE"
+  ],
+  "properties": {
+    "RECEIPT_TYPE": {"const": "D6_INTEGER_RECONSTRUCTION_EVIDENCE"},
+    "EVIDENCE_SCOPE": {"const": "REPOSITORY_RULE_ONLY"},
+    "SOURCE_IDENTITY": {"type": "string", "minLength": 1},
+    "TARGET_IDENTITY": {"type": "string", "minLength": 1},
+    "OBSERVED_AT": {"type": "string", "minLength": 1},
+    "INPUT_DIGESTS": {"type": "object"},
+    "OUTPUT_DIGESTS": {"type": "object"},
+    "LOOKUP_TABLE_REFERENCE": {"type": "string", "minLength": 1},
+    "TRANSITION_RULE_REFERENCE": {"type": "string", "minLength": 1},
+    "VERIFIER_ID": {"const": "W7TP_D6_GENERATIVE_TRANSMISSION_VERIFIER_V2_3"},
+    "RESULT": {"enum": ["CANDIDATE_RECONSTRUCTION_VERIFIED", "HOLD"]},
+    "AUTHORITY_SCOPE": {"const": "NONE"},
+    "LINEAGE_REFERENCE": {"type": "string", "minLength": 1}
+  }
+}

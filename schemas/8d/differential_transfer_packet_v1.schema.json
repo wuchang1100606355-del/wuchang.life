@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:carrier:differential-transfer-packet:1",
+  "title": "W7TP Differential Transfer Carrier Packet V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "PACKET_TYPE",
+    "CAPABILITY_ID",
+    "BASE_OBJECT_IDENTITY",
+    "BASE_OBJECT_DIGEST",
+    "TARGET_OBJECT_IDENTITY",
+    "EXPECTED_TARGET_DIGEST",
+    "DIFF_PAYLOAD_DIGEST",
+    "DIFF_ALGORITHM_ID",
+    "APPLY_BOUNDARY",
+    "VERIFICATION_RULE"
+  ],
+  "properties": {
+    "PACKET_TYPE": {"const": "DIFFERENTIAL_TRANSFER_PACKET"},
+    "CAPABILITY_ID": {"const": "DIFFERENTIAL_TRANSFER"},
+    "BASE_OBJECT_IDENTITY": {"type": "string", "minLength": 1},
+    "BASE_OBJECT_DIGEST": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "TARGET_OBJECT_IDENTITY": {"type": "string", "minLength": 1},
+    "EXPECTED_TARGET_DIGEST": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "DIFF_PAYLOAD_DIGEST": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "DIFF_ALGORITHM_ID": {"const": "JSON_TOP_LEVEL_SET_DELETE_V1"},
+    "APPLY_BOUNDARY": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "VERIFICATION_RULE": {"const": "SHA256_TARGET_MATCH"}
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:8d:d6-generative-transmission-packet:2.3",
+  "title": "W7TP D6 Generative Transmission Packet V2.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "PACKET_TYPE",
+    "CAPABILITY_ID",
+    "PRIMARY_OPERATION",
+    "CARRIER",
+    "SOURCE_IDENTITY",
+    "TARGET_IDENTITY",
+    "CANONICAL_IDENTITY",
+    "TARGET_FIELD_SNAPSHOT_REFERENCE",
+    "SOURCE_STATE_INTEGER_INDEX",
+    "TARGET_BASE_INTEGER_INDEX",
+    "EXPECTED_TARGET_STATE_INTEGER_INDEX",
+    "MINIMUM_REQUIRED_INDEX_DELTA",
+    "LOOKUP_TABLE_ID",
+    "LOOKUP_TABLE_VERSION",
+    "LOOKUP_TABLE_DIGEST",
+    "DISCRETE_TRANSITION_RULE_ID",
+    "DISCRETE_TRANSITION_RULE_DIGEST",
+    "REFERENCES",
+    "RECONSTRUCTION_COORDINATE",
+    "RECONSTRUCTION_RULES",
+    "VERIFICATION_RULES",
+    "RECEIVER_IDENTITY",
+    "RUNTIME_BOUNDARY",
+    "NONCE",
+    "LOGICAL_TIME",
+    "TTL",
+    "EVIDENCE_DESTINATION"
+  ],
+  "properties": {
+    "PACKET_TYPE": {"const": "D6_GENERATIVE_TRANSMISSION_PACKET"},
+    "CAPABILITY_ID": {"const": "D6_GENERATIVE_TRANSMISSION"},
+    "PRIMARY_OPERATION": {"const": "D6_GENERATIVE_TRANSMISSION"},
+    "CARRIER": {
+      "enum": ["REFERENCE_ONLY", "DIFFERENTIAL_TRANSFER", "BOUNDED_FULL_BOOTSTRAP"]
+    },
+    "SOURCE_IDENTITY": {"type": "string", "minLength": 1},
+    "TARGET_IDENTITY": {"type": "string", "minLength": 1},
+    "CANONICAL_IDENTITY": {"const": "W7TP / 8D ADI V2.3"},
+    "TARGET_FIELD_SNAPSHOT_REFERENCE": {"type": "string", "minLength": 1},
+    "SOURCE_STATE_INTEGER_INDEX": {"type": "integer"},
+    "TARGET_BASE_INTEGER_INDEX": {"type": "integer"},
+    "EXPECTED_TARGET_STATE_INTEGER_INDEX": {"type": "integer"},
+    "MINIMUM_REQUIRED_INDEX_DELTA": {"type": "integer"},
+    "LOOKUP_TABLE_ID": {"type": "string", "minLength": 1},
+    "LOOKUP_TABLE_VERSION": {"type": "string", "minLength": 1},
+    "LOOKUP_TABLE_DIGEST": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "DISCRETE_TRANSITION_RULE_ID": {"type": "string", "minLength": 1},
+    "DISCRETE_TRANSITION_RULE_DIGEST": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "REFERENCES": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "RECONSTRUCTION_COORDINATE": {"type": "string", "minLength": 1},
+    "RECONSTRUCTION_RULES": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "VERIFICATION_RULES": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "RECEIVER_IDENTITY": {"type": "string", "minLength": 1},
+    "RUNTIME_BOUNDARY": {"const": "REPOSITORY_RULE_ONLY_NO_LIVE_EFFECT"},
+    "NONCE": {"type": "string", "minLength": 1},
+    "LOGICAL_TIME": {"type": "integer", "minimum": 0},
+    "TTL": {"type": "integer", "minimum": 1},
+    "EVIDENCE_DESTINATION": {"type": "string", "minLength": 1}
+  }
+}

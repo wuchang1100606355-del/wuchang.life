@@ -1,0 +1,72 @@
+{
+  "schema_id": "TOTAL_FIELD_CAPABILITY_REGISTRATION_REQUEST_V1",
+  "request_id": "W7TP_TRANSFER_CAPABILITY_REGISTRATION_REQUEST_20260914T073532Z",
+  "request_state": "PENDING_TOTAL_FIELD_ADJUDICATION",
+  "requested_at_utc": "2026-09-14T07:36:31Z",
+  "requester_scope": "REPOSITORY_RULE_CANDIDATE_SUBMISSION_ONLY",
+  "founder_canonical_identity": "W7TP / 8D ADI V2.3",
+  "source_coordinate": {
+    "node": "taiji01",
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "main",
+    "head": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+    "tree": "fb994eecd89dbca4589b4d8bee959dc407f396e8",
+    "binding": "configs/w7tp/generative_differential_transfer_binding_v2_3.json",
+    "binding_sha256": "2fc863e23191b78a38143be561a5de21de28298972d983ac099736fb4f17a135",
+    "verification_receipt": "evidence/total_field/generative_differential_transfer_binding/W7TP_TRANSFER_RULE_BINDING_20260914T073532Z/VERIFICATION_RECEIPT.json",
+    "verification_receipt_sha256": "495497bdae5f47a5dfdd850cdfa4210fe704e259d21e2a60f55e6418a5271124"
+  },
+  "requested_capability_bindings": [
+    {
+      "capability_id": "D6_GENERATIVE_TRANSMISSION",
+      "packet_type": "D6_GENERATIVE_TRANSMISSION_PACKET",
+      "schema_ref": "schemas/8d/d6_generative_transmission_packet_v2_3.schema.json",
+      "schema_sha256": "b1643455e3dc706b6934cba000362f3b68c7e097dab2c75192a54faf5b5ff843",
+      "verifier_ref": "tools/w7tp_d6_generative_transmission_verifier_v2_3.py",
+      "verifier_sha256": "118dd26c9bbcf71336f866b1f245d43564fc570c16c5b50e4dcfe8b73c4daea4",
+      "receipt_type": "D6_INTEGER_RECONSTRUCTION_EVIDENCE",
+      "requested_registration_state": "REGISTERED_REPOSITORY_RULE_AVAILABLE_NOT_ACTIVE"
+    },
+    {
+      "capability_id": "DIFFERENTIAL_TRANSFER",
+      "packet_type": "DIFFERENTIAL_TRANSFER_PACKET",
+      "schema_ref": "schemas/8d/differential_transfer_packet_v1.schema.json",
+      "schema_sha256": "d5c941178acbbe6d0bff0bc6992ce3def596afc66880b213712247d33f052fdb",
+      "verifier_ref": "tools/w7tp_differential_transfer_verifier_v1.py",
+      "verifier_sha256": "6fd134367d18489340f2451f31b1b248f46132a75639b961d6f07fe598d1faeb",
+      "receipt_type": "DELTA_APPLY_RECEIPT",
+      "requested_registration_state": "REGISTERED_REPOSITORY_RULE_AVAILABLE_NOT_ACTIVE"
+    }
+  ],
+  "mandatory_preconditions": [
+    "VERIFY_CURRENT_V2_3_CANONICAL_LOCATOR_POINTER_LINEAGE_RECEIPT_AND_D8_AUTHORITY",
+    "VERIFY_CURRENT_8D_FIELD_COORDINATE",
+    "VERIFY_RECEIVER_AND_ADI_BINDING_COORDINATES",
+    "VERIFY_CAPABILITY_REGISTRY_PREIMAGE_AND_NON_CONFLICT",
+    "VERIFY_D1_D8_JOINT_CLOSURE"
+  ],
+  "explicitly_not_requested": [
+    "RUNTIME_ACTIVATION",
+    "DEPLOY",
+    "RESTART",
+    "CANONICAL_PROMOTION",
+    "ACTIVE_POINTER_MUTATION",
+    "ROLE_ELEVATION",
+    "DATABASE_WRITE",
+    "COMMIT",
+    "PUSH"
+  ],
+  "known_holds": [
+    "HOLD_CURRENT_V2_3_CANONICAL_RUNTIME_BINDING_UNRESOLVED",
+    "HOLD_CURRENT_8D_FIELD_SOURCE_UNQUALIFIED",
+    "HOLD_TOTAL_FIELD_AUTHORITY_REQUIRED"
+  ],
+  "decision": {
+    "total_field_decision": "PENDING",
+    "d8_authority_receipt": "ABSENT",
+    "registration_applied": false,
+    "runtime_effect": "NONE",
+    "canonical_effect": "NONE"
+  },
+  "lineage_reference": "W7TP_TRANSFER_RULE_BINDING_20260914T073532Z"
+}
