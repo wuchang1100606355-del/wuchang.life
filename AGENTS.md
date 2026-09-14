@@ -94,3 +94,38 @@ Codex final responses for this repo must be minimal:
 - verifier result
 - git status
 - HOLD reason if any
+
+## Current Task Context Precedence Hard Gate
+
+Before naming or switching a branch, searching for implementation, replaying a
+run, or mutating any file, resolve the current execution intent in this order:
+
+`LATEST_EXPLICIT_USER_INTENT > CURRENT_LIVE_STATE > CURRENT_VALID_AUTHORITY > PRIOR_RUN > ATTACHED_OLD_TASK`
+
+`CURRENT_LIVE_STATE` and `CURRENT_VALID_AUTHORITY` constrain how the latest
+intent may execute. They do not replace the latest intent with a different task.
+`PRIOR_RUN` and `ATTACHED_OLD_TASK` are evidence only unless the latest explicit
+user intent names them as the current work.
+
+A file attached in the current user turn may supply the latest explicit intent
+only when that same turn explicitly designates the attachment as the request.
+An older attachment, an old run, a source-binding request, a registration task,
+a branch name, or a remembered task can never promote itself to execution
+authority.
+
+Before task work starts, establish:
+
+- `LATEST_INTENT_ID`
+- `SELECTED_TASK_ID`
+- `SELECTED_CONTEXT_SOURCE`
+- `SELECTED_CONTEXT_CARRIER`
+- `CURRENT_ATTACHMENT_DESIGNATED`
+- `LIVE_STATE_CHECKED`
+- `OLD_CONTEXT_ROLE`
+
+Then pass them to `scripts/verify/verify_task_context_precedence_gate.sh`.
+If the selected task does not equal the latest explicit user intent, if an old
+attachment or prior run is selected for execution, or if live state has not
+been checked, stop with `STATE=HOLD_TASK_CONTEXT_ROLLBACK`. Do not create a
+branch, restart the historical task, or reinterpret old evidence as current
+authority.
