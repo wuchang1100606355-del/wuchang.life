@@ -1,45 +1,118 @@
 id: T100_GIT_DEBT_CLEANUP
 task_id: T100
-status: PLAN_ONLY
+version: "2.0"
+status: IN_PROGRESS
+observed_at_utc: "2026-09-15T06:01:41Z"
 
-objective: "Scan current git status, classify untracked items, and prepare for safe git cleanup/staging without touching runtime, db, or secrets."
+objective: >-
+  Give every discovered local, GitHub, container, virtual-space, and cloud Git
+  coordinate one reviewed final disposition, then prove there is no staged,
+  modified, untracked, local-only, or unreviewed Git state left unresolved.
 
-git_status_scan:
-  untracked_items:
-    - path: "Taiji_Governance/xiaoj_new_sub_universe_candidate_scan_20260601_073945.md"
-      classification: KEEP
-      reason: "Governance scan documentation. Needs to be staged and committed to preserve the audit trail."
-    - path: "runtime/reports/"
-      classification: ARCHIVE
-      reason: "Execution reports (T091-T095). Valuable audit evidence. Should be preserved but ideally ignored by git and moved to a dedicated evidence volume."
-    - path: "runtime/backups/"
-      classification: IGNORE
-      reason: "Transient backup files created during the T091-T095 landing executions. Should be added to .gitignore."
-    - path: "runtime/sandbox/"
-      classification: DELETE_CANDIDATE
-      reason: "Sandbox artifacts from planning tasks (T081-T095). Since the canonical landing is complete and committed, these can safely be purged to free up space."
+execution_context:
+  node: taiji01
+  primary_repo: /home/taiji_admin/Taiji_Hub
+  default_branch: design/wish-tree-adi-thaw-launch-20260703-185047
+  default_head: d80c71cbae80b2405d6ce75e0b43dcbbaf676263
+  mode: AUTHORIZED_BOUNDED_EXECUTION
+  protected_secret_path: secrets/gcp-sa-key.json
+  protected_secret_rule: NEVER_READ_HASH_STAGE_OR_PRINT
+
+final_dispositions:
+  - id: REVIEWED_PUSHED_GITHUB
+    meaning: reviewed exact content is committed, non-force pushed, and linked to a live GitHub review coordinate
+    authority_state: USER_EXPLICIT
+  - id: REVOKED_OR_DELETED
+    meaning: obsolete or unsafe state is recoverably removed after duplicate, dependency, and authority checks
+    authority_state: USER_EXPLICIT
+  - id: VERIFIED_COLD_BUNDLE_ARCHIVE
+    meaning: unique history that should not remain active is preserved as a verified Git bundle plus SHA256, without a live cloud .git directory
+    authority_state: INFERRED_PENDING_USER_CONFIRMATION
+    inference_source: git_space/policies/git_central_management_policy_v1.yaml
+
+completion_invariants:
+  every_coordinate_has_exactly_one_final_disposition_receipt: true
+  local_dirty_staged_modified_untracked_entries: 0
+  local_only_commits: 0
+  nondefault_remote_branches_without_review_or_retirement: 0
+  cloud_live_dot_git_directories: 0
+  force_pushes: 0
+  broad_git_add_operations: 0
+  secrets_read_hashed_staged_or_printed: 0
+
+joint_8d_state_field:
+  semantics: 8_IN_1_SINGLE_STATE_FIELD
+  projections:
+    D1_INTENT: close all Git state through an explicit final disposition
+    D2_STATE: live repository, index, worktree, branch, PR, cloud, and container state
+    D3_COORDINATE: node, absolute root, common git dir, branch, head, tree, remote, and PR
+    D4_EVIDENCE: status, content hashes, commit objects, PR metadata, bundle verification, and receipts
+    D5_EXECUTION_POLICY: exact-path stage, non-force push, recoverable revocation, and bounded deletion
+    D6_GENERATIVE_TRANSMISSION: Git is only a carrier; no W7TP completion is inferred from Git transport
+    D7_RISK_QUARANTINE: secrets, incomplete object stores, pre-existing index state, and coordinate drift fail closed
+    D8_ENVELOPE_AUTHORITY: explicit user authorization plus valid remote and review coordinates
+  coupling_rule: every mutation must bind all eight projections to the same before-and-after coordinate
+  cross_dimension_constraint: no evidence, execution, or disposition may refer to different heads, trees, or paths
+  joint_state_transition: OBSERVED_TO_CLASSIFIED_TO_REVIEWED_TO_DISPOSED_TO_VERIFIED
+  closure_rule: all completion invariants must hold in one final full-system rescan
+  fail_closed_rule: any unknown content, missing authority, drift, or incomplete object graph remains HOLD
+
+live_inventory:
+  local_git_entrances: 16
+  independent_common_git_directories: 11
+  linked_taiji_hub_worktrees: 6
+  dirty_worktrees: 7
+  dirty_entries: 96
+  github_repositories: 3
+  github_branches: 61
+  github_open_pull_requests: 34
+  unique_nondefault_github_branches: 50
+  unique_nondefault_branches_without_open_review: 16
+  contained_nondefault_branches_pending_retirement_check: 8
+  running_containers_checked: 4
+  container_git_entrances: 0
+  cloud_dot_git_markers_observed: 14
+  cloud_invalid_or_incomplete_git_markers: 7
+  cloud_complete_candidates_pending_object_verification: 7
+
+execution_phases:
+  - order: 1
+    id: FREEZE_AND_REGISTER
+    result: IN_PROGRESS
+    exit_condition: every coordinate has a stable identifier and live before-state
+  - order: 2
+    id: REPAIR_GIT_CONTENT_AND_SCOPE_GUARDS
+    result: PENDING
+    exit_condition: exact paths, file bytes, index blobs, deletions, and staged state are machine-bound before mutation
+  - order: 3
+    id: CLOSE_LOCAL_WORKTREES
+    result: PENDING
+    exit_condition: every local worktree is clean and every local-only commit has a final disposition
+  - order: 4
+    id: CLOSE_GITHUB_BRANCHES_AND_REVIEWS
+    result: PENDING
+    exit_condition: every nondefault branch is reviewed, merged/retained by evidence, archived, or deleted
+  - order: 5
+    id: CLOSE_CLOUD_GIT
+    result: PENDING
+    exit_condition: unique history is verified and preserved, then every live cloud .git directory is removed
+  - order: 6
+    id: FINAL_FULL_SYSTEM_RESCAN
+    result: PENDING
+    exit_condition: all completion invariants pass without exclusions
+
+holds:
+  - HOLD_THIRD_DISPOSITION_USER_TEXT_INCOMPLETE
+  - HOLD_LAND_EXECUTOR_GUARDS_INCOMPLETE
+  - HOLD_PROTECTED_SECRET_DISPOSITION_UNRESOLVED
+  - HOLD_CLOUD_GIT_OBJECT_COMPLETENESS_UNPROVEN
 
 forbidden_actions:
-  - delete_any_file
-  - touch_runtime
-  - touch_db
-  - touch_secrets
-  - service_restart
-  - docker_action
+  - git_add_dot_or_all
+  - force_push
+  - reset_or_restore_primary_dirty_worktree
+  - read_hash_stage_or_print_protected_secret
+  - delete_unverified_git_objects
+  - declare_candidate_or_pass_as_authority
 
-next_required:
-  - human_review_of_classifications
-  - add_ignore_items_to_gitignore
-  - manual_git_add_safe_canonical_files
-  - purge_delete_candidates_only_after_approval
-
-xiaoj_review_opinion:
-  recommendation: REVIEW_PENDING
-  reason: "Untracked items classified safely. Awaiting human review before executing any staging, ignoring, or deletion actions."
-  safe_option: "Review the classifications. Manually stage the 'KEEP' items and update the .gitignore for 'IGNORE' items."
-  risk_if_approved: "Low. This is a review-only plan."
-  risk_if_rejected: "Git repository remains cluttered with untracked sandbox and backup files, obscuring real changes."
-  required_human_action:
-    - "Review T100 report."
-    - "Authorize staging of KEEP items."
-    - "Authorize deletion of DELETE_CANDIDATE items (optional)."
+next: REPAIR_EXISTING_GIT_GUARDS_WITHOUT_CREATING_A_PARALLEL_LANDING_SYSTEM

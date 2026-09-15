@@ -1,13 +1,85 @@
 policy_id: git_central_management_policy_v1
-purpose: Centralize Git governance without blindly committing all files.
+version: "1.1"
+status: CANDIDATE_ENFORCEMENT
+purpose: Close every Git coordinate through one reviewed final disposition without blindly committing, deleting, or archiving files.
+
+final_dispositions:
+  REVIEWED_PUSHED_GITHUB:
+    requires:
+      - exact_content_review
+      - exact_path_commit
+      - non_force_push
+      - live_remote_readback
+      - pull_request_or_explicit_default_branch_receipt
+  REVOKED_OR_DELETED:
+    requires:
+      - obsolete_or_unsafe_classification
+      - duplicate_and_dependency_check
+      - explicit_deletion_authority
+      - recoverable_removal_when_practical
+      - post_removal_readback
+  VERIFIED_COLD_BUNDLE_ARCHIVE:
+    authority_state: INFERRED_PENDING_USER_CONFIRMATION
+    requires:
+      - unique_history_classification
+      - git_bundle_verify_pass
+      - sha256_sidecar
+      - restore_drill_or_object_readback
+      - no_live_dot_git_in_cloud_storage
+
+completion_rules:
+  dirty_worktrees_allowed: false
+  staged_entries_allowed: false
+  modified_entries_allowed: false
+  untracked_entries_allowed: false
+  local_only_commits_allowed: false
+  unreviewed_nondefault_remote_branches_allowed: false
+  live_cloud_dot_git_allowed: false
+  unresolved_coordinates_allowed: false
 
 principles:
   - focused_git_add_only
   - no_git_add_dot
+  - exact_literal_paths_only
+  - bind_worktree_bytes_and_index_blobs
+  - reject_preexisting_staged_state
+  - explicit_deletion_authority
   - no_live_dot_git_on_google_drive
   - bundle_plus_sha256_for_cold_backup
   - removable_D_drive_for_physical_isolation
   - secrets_and_runtime_cache_forbidden
+  - non_force_push_only
+  - verify_remote_and_review_readback
+
+mutation_gates:
+  - bind_node_root_branch_head_tree_remote_before_mutation
+  - reject_empty_dot_absolute_parent_glob_and_pathspec_magic_inputs
+  - reject_directory_scope_unless_files_are_explicitly_enumerated
+  - bind_sha256_of_each_worktree_file_or_git_deletion_state
+  - require_empty_preexisting_index
+  - compare_staged_blob_ids_and_commit_diff_to_intended_manifest
+  - abort_on_coordinate_or_content_drift
+
+delete_gates:
+  - never_delete_unknown_or_protected_content
+  - verify_not_required_by_active_worktree_branch_pr_pointer_or_runtime
+  - verify_unique_history_is_elsewhere_or_intentionally_revoked
+  - record_exact_deleted_coordinate_and_recovery_state
+
+cloud_git_rule:
+  active_git_repository: FORBIDDEN
+  cold_archive_format: GIT_BUNDLE_PLUS_SHA256
+  archive_verification: REQUIRED_BEFORE_DOT_GIT_REMOVAL
+  incomplete_or_invalid_git_marker: QUARANTINE_UNTIL_UNIQUE_OBJECT_CHECK
+
+failure_states:
+  - HOLD_SCOPE_NOT_EXACT
+  - HOLD_CONTENT_NOT_BOUND
+  - HOLD_PREEXISTING_INDEX_STATE
+  - HOLD_COORDINATE_DRIFT
+  - HOLD_DELETE_AUTHORITY_MISSING
+  - HOLD_CLOUD_OBJECT_COMPLETENESS_UNPROVEN
+  - HOLD_REMOTE_OR_REVIEW_READBACK_FAILED
 
 git_spaces:
   working_repo: /home/taiji_admin/Taiji_Hub
