@@ -1,0 +1,67 @@
+<odoo>
+  <!-- Missing company coordinates fail closed for ordinary internal users. -->
+  <record id="rule_wuchang_association_merchant_tenant_company" model="ir.rule">
+    <field name="name">Association merchant tenant: active companies only</field>
+    <field name="model_id" ref="model_wuchang_association_merchant_tenant"/>
+    <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+  </record>
+
+  <record id="rule_wuchang_association_member_consent_company" model="ir.rule">
+    <field name="name">Association member consent: active companies only</field>
+    <field name="model_id" ref="model_wuchang_association_member_consent"/>
+    <field name="domain_force">[('merchant_id.company_id', 'in', company_ids)]</field>
+    <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+  </record>
+
+  <record id="rule_wuchang_association_member_data_request_company" model="ir.rule">
+    <field name="name">Association member data request: active companies only</field>
+    <field name="model_id" ref="model_wuchang_association_member_data_request"/>
+    <field name="domain_force">[('merchant_id.company_id', 'in', company_ids)]</field>
+    <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+  </record>
+
+  <!-- Group-rule union widens access only for explicit association managers. -->
+  <record id="rule_wuchang_association_merchant_tenant_manager_all" model="ir.rule">
+    <field name="name">Association manager: all merchant tenants</field>
+    <field name="model_id" ref="model_wuchang_association_merchant_tenant"/>
+    <field name="domain_force">[(1, '=', 1)]</field>
+    <field name="groups" eval="[(4, ref('wuchang_association_member_trust.group_wuchang_association_manager'))]"/>
+  </record>
+
+  <record id="rule_wuchang_association_member_consent_manager_all" model="ir.rule">
+    <field name="name">Association manager: all member consents</field>
+    <field name="model_id" ref="model_wuchang_association_member_consent"/>
+    <field name="domain_force">[(1, '=', 1)]</field>
+    <field name="groups" eval="[(4, ref('wuchang_association_member_trust.group_wuchang_association_manager'))]"/>
+  </record>
+
+  <record id="rule_wuchang_association_member_data_request_manager_all" model="ir.rule">
+    <field name="name">Association manager: all member data requests</field>
+    <field name="model_id" ref="model_wuchang_association_member_data_request"/>
+    <field name="domain_force">[(1, '=', 1)]</field>
+    <field name="groups" eval="[(4, ref('wuchang_association_member_trust.group_wuchang_association_manager'))]"/>
+  </record>
+
+  <!-- System administrators retain explicit recovery access. -->
+  <record id="rule_wuchang_association_merchant_tenant_system_all" model="ir.rule">
+    <field name="name">System administrators: all merchant tenants</field>
+    <field name="model_id" ref="model_wuchang_association_merchant_tenant"/>
+    <field name="domain_force">[(1, '=', 1)]</field>
+    <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+  </record>
+
+  <record id="rule_wuchang_association_member_consent_system_all" model="ir.rule">
+    <field name="name">System administrators: all member consents</field>
+    <field name="model_id" ref="model_wuchang_association_member_consent"/>
+    <field name="domain_force">[(1, '=', 1)]</field>
+    <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+  </record>
+
+  <record id="rule_wuchang_association_member_data_request_system_all" model="ir.rule">
+    <field name="name">System administrators: all member data requests</field>
+    <field name="model_id" ref="model_wuchang_association_member_data_request"/>
+    <field name="domain_force">[(1, '=', 1)]</field>
+    <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+  </record>
+</odoo>

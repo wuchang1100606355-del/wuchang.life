@@ -1,0 +1,49 @@
+{
+  "schema_id": "W7TP_V2_3_SKILL_SOURCE_BINDING_VALIDATION_RECEIPT_V1",
+  "packet_type": "SOURCE_BINDING_VALIDATION_RECEIPT",
+  "run_id": "ATTACHMENT_SKILLS_V23_SOURCE_BINDING_REQUEST_20260913T163321Z",
+  "created_at": "2026-09-13T16:33:21Z",
+  "state": "PASS_SOURCE_HASH_BINDING",
+  "source_commit": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+  "source_tree": "cd04d92b4522c2db8395141969d760cb2e587856",
+  "live_remote_head_match": "PASS",
+  "skill_count": 2,
+  "source_file_count": 28,
+  "skill_structure_validation": {
+    "8d-adi-state-field-intelligence": "PASS",
+    "intent-field-generative-construction": "PASS"
+  },
+  "source_manifest_validation": {
+    "state": "PASS_SOURCE_HASH_BINDING",
+    "errors": [],
+    "manifest_ref": "SOURCE_BINDING_MANIFEST.json",
+    "manifest_sha256": "52df05605278107c39883cde450202146b1de9218b758f491bfee9ffe215be63",
+    "verifier_ref": "verify_source_binding.py",
+    "verifier_sha256": "1f5ce3c4ec4da4fd35b9488c2da66fab5485b172a43831dc68650372fdaa5b88"
+  },
+  "registration_validation": {
+    "target_skills_in_historical_v2_3_registry": false,
+    "historical_v2_3_registry_validator_state": "FAIL_TOTAL_FIELD_SKILL_REGISTRY_VALIDATION",
+    "historical_v2_3_registry_validator_errors": ["SOURCE_HASH_MISMATCH:w7tp_generative_transmission"],
+    "target_skills_in_current_local_registry": false,
+    "current_local_registry_validator_state": "PASS_TOTAL_FIELD_SKILL_REGISTRY"
+  },
+  "authority_state": "HOLD_CANONICAL_VERSION_MISMATCH",
+  "v2_3_binding_state": "HOLD_V2_3_SOURCE_BINDING_UNESTABLISHED",
+  "authority_granted": false,
+  "mutation_scope": [
+    "SOURCE_BINDING_MANIFEST.json",
+    "TOTAL_FIELD_REGISTRATION_AUTHORITY_REQUEST.json",
+    "VALIDATION_RECEIPT.json",
+    "verify_source_binding.py",
+    "SHA256SUMS"
+  ],
+  "skill_installed": false,
+  "registry_write_performed": false,
+  "runtime_activation_performed": false,
+  "canonical_or_pointer_change": false,
+  "service_restart": false,
+  "database_write": false,
+  "git_commit": false,
+  "git_push": false
+}

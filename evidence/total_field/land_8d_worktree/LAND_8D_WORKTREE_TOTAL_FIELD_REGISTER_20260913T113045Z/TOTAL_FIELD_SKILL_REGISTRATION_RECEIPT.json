@@ -1,0 +1,89 @@
+{
+  "schema_id": "LAND_8D_WORKTREE_TOTAL_FIELD_SKILL_REGISTRATION_RECEIPT_V1",
+  "packet_type": "TOTAL_FIELD_SKILL_REGISTRATION_RECEIPT",
+  "run_id": "LAND_8D_WORKTREE_TOTAL_FIELD_REGISTER_20260913T113045Z",
+  "created_at": "2026-09-13T11:30:45Z",
+  "state": "REGISTERED",
+  "append_only": true,
+  "supersedes_registration_state_ref": {
+    "ref": "evidence/total_field/land_8d_worktree/LAND_8D_WORKTREE_TOTAL_FIELD_CANDIDATE_20260913T102304Z/TOTAL_FIELD_SKILL_REGISTRATION_CANDIDATE.json",
+    "sha256": "07f170fdbc40d6018d2e03deceb88a741ba2de26485ef634564d876b748ff2d4",
+    "scope": "REGISTRATION_STATE_ONLY"
+  },
+  "skill": {
+    "skill_id": "land-8d-worktree",
+    "version": "0.1.0-total-field.1",
+    "registration_state": "REGISTERED",
+    "availability": "AVAILABLE",
+    "invocation": "$land-8d-worktree",
+    "installed_path": "/home/taiji_admin/.codex/skills/land-8d-worktree",
+    "manifest_ref": "/home/taiji_admin/.codex/skills/land-8d-worktree/total-field-skill-manifest.json",
+    "manifest_sha256": "1e1e6093a7028425c5780bfb824ba2ab5a0a8fe358d6ef9f9c1fa1cd4b3093d8",
+    "manifest_self_sha256": "d7ba5b4eb297ec10513a5055455c61e948d0cd5328722944695b40e545ffb32d"
+  },
+  "registry": {
+    "state": "OPERABLE",
+    "ref": "runtime/total_field/xiaoj/xiaoj_skill_registry.json",
+    "sha256": "0812d1618c68d510f3e54c26f61739a7f58494be7c13f4bdc026b94fd2133f67",
+    "self_sha256": "501cc557fc5dcf864e053cf5de8a04bf1dd59dc48cc52ba283a62101083b8d5c",
+    "registered_skill_count": 1,
+    "registered_skill_ids": [
+      "land-8d-worktree"
+    ]
+  },
+  "registered_package": {
+    "ref": "msi-user-downloads://land-8d-worktree-total-field-registered-20260913T113045Z.zip",
+    "sha256": "a84cf22650f5e1149cfe4e2db2dc0ec177378dc44620f839109fcebed8e95e1f",
+    "bytes": 14787,
+    "msi_hash_readback": "PASS"
+  },
+  "verification": {
+    "registry_verifier": "scripts/verify/verify_xiaoj_skill_registry.py",
+    "registry_verifier_sha256": "105fe5fb18948104ab18cd0de82ee4db8c04437831c842f1391fa6dad5833442",
+    "registry_verifier_state": "PASS_TOTAL_FIELD_SKILL_REGISTRY",
+    "skill_creator_quick_validate": "PASS",
+    "installed_manifest_self_hash": "PASS",
+    "installed_manifest_file_hash": "PASS",
+    "implementation_hash_binding": "PASS",
+    "unique_skill_id": "PASS",
+    "installed_path_readback": "PASS"
+  },
+  "registration_authority": {
+    "authorization_ref": "user-current-turn://DIRECT_REGISTER_20260913T113045Z",
+    "authorized_effect": "REGISTER_LAND_8D_WORKTREE_IN_XIAOJ_TOTAL_FIELD_SKILL_REGISTRY",
+    "registry_write_performed": true,
+    "canonical_promotion": false,
+    "runtime_activation": false,
+    "identity_or_permission_grant": false,
+    "total_field_final_authority_claim": false
+  },
+  "runtime_boundary": {
+    "w7tp_exact_v3_service_touched": false,
+    "service_restart": false,
+    "observed_mode": "ADI_KNOWN_NOVEL_V3",
+    "observed_executable_help_identity": "w7tp-gt-mesh-v21",
+    "conflict": "CONFLICT_LIVE_BINARY_IDENTITY_V21",
+    "conflict_effect_on_registered_git_adapter": "ISOLATED_NO_RUNTIME_DEPENDENCY"
+  },
+  "repository_coordinate": {
+    "node": "taiji01",
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "main",
+    "head_before": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+    "head_after": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+    "tree_before": "fb994eecd89dbca4589b4d8bee959dc407f396e8",
+    "tree_after": "fb994eecd89dbca4589b4d8bee959dc407f396e8",
+    "worktree_status_sha256_before": "a56011eadb5bf97c6650238fc9bc32787b601e5fbcfd335e52188a99492c7ef1",
+    "worktree_status_sha256_after_registry_before_receipt": "f9fabb7000b9ffe2093bad6e491a9c1a91ca39e88ac822b08e4f87ea04de55de"
+  },
+  "preservation": {
+    "prior_candidate_evidence_overwritten": false,
+    "unrelated_worktree_state_cleaned_staged_or_modified": false,
+    "git_commit": false,
+    "git_push": false,
+    "database_write": false,
+    "service_restart": false,
+    "canonical_or_pointer_change": false
+  },
+  "next": "NONE"
+}

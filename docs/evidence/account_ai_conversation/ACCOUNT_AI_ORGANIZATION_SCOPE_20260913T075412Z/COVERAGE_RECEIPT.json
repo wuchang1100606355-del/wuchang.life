@@ -1,0 +1,52 @@
+{
+  "authority_state": "D4_EVIDENCE_ONLY",
+  "coverage_gaps": [
+    "ACCOUNT_MANAGED_AI_SOURCE_ENUMERATION_NOT_CLOSED",
+    "ACCOUNT_ORGANIZATION_SPACES_NOT_ENUMERATED",
+    "ACCOUNT_ORGANIZATION_SPACE_COORDINATES_UNRESOLVED",
+    "ACCOUNT_ORGANIZATION_SPACE_IDENTITIES_UNRESOLVED",
+    "AVAILABLE_ACCOUNT_INDEX_DOES_NOT_EXPOSE_ORGANIZATION_SPACE_BINDING",
+    "CHATGPT_ACCOUNT_THREAD_INDEX_PAGE_LIMIT_REACHED",
+    "GTP_TAIJI01_TAIJI_HUB_CONVERSATION_STORE_UNLOCATED",
+    "INSTALLED_AI_EXTENSION_CONVERSATION_STORE_NOT_LOCATED",
+    "OUTSIDE_DISCOVERABLE_APP_AND_TAIJI01_ACCOUNT_ROOTS_UNRESOLVED",
+    "UNREGISTERED_AI_OR_CONVERSATION_STORE_MAY_EXIST"
+  ],
+  "covered_source_count": 2,
+  "covered_source_ids": [
+    "codex_msi",
+    "codex_taiji01"
+  ],
+  "data_kind": "AI_CONVERSATION",
+  "global_completion_proven": false,
+  "localized_gap_source_ids": [
+    "gtp_taiji01_taiji_hub"
+  ],
+  "organization_space_count": 0,
+  "organization_space_state": "LOCALIZED_UNKNOWN",
+  "output_policy": "METADATA_ONLY",
+  "privacy": {
+    "frontend_raw_tool_output": false,
+    "original_content_emitted": false
+  },
+  "registered_source_count": 8,
+  "registry_state": "OPEN",
+  "reused_source_ids": [
+    "codex_msi",
+    "codex_taiji01"
+  ],
+  "schema_id": "ACCOUNT_AI_CONVERSATION_COVERAGE_RECEIPT_V1",
+  "scope_components": [
+    "PERSONAL_ACCOUNT_SPACES",
+    "ACCOUNT_ORGANIZATION_SPACES"
+  ],
+  "scope_id": "ACCOUNT_ALL_AI_ALL_SYSTEMS",
+  "state": "HOLD_ACCOUNT_ORGANIZATION_SPACES_UNRESOLVED",
+  "uncovered_source_ids": [
+    "chatgpt_account_codex_app",
+    "continue_taiji01_local",
+    "gemini_taiji01_local",
+    "grok_taiji01_local",
+    "ollama_taiji01_local"
+  ]
+}
