@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Fail-closed repository verifier for D6 discrete integer reconstruction."""
+"""Fail-closed V2.3 verifier for discrete D6 reconstruction.
+
+The packet carries one coupled D1-D8 state representation.  File-byte
+reconstruction is wired by ``tools.w7tp_d6_file_reconstruction_v2_3``; this
+module remains the shared state-index, coordinate, evidence, and authority
+gate.
+"""
 
 from __future__ import annotations
 
@@ -23,6 +29,19 @@ PACKET_SCHEMA = REPO_ROOT / "schemas/8d/d6_generative_transmission_packet_v2_3.s
 EVIDENCE_SCHEMA = REPO_ROOT / "schemas/8d/d6_integer_reconstruction_evidence_v2_3.schema.json"
 DELTA_RECEIPT_SCHEMA = REPO_ROOT / "schemas/8d/delta_apply_receipt_v1.schema.json"
 VERIFIER_ID = "W7TP_D6_GENERATIVE_TRANSMISSION_VERIFIER_V2_3"
+DIMENSIONS = tuple(f"D{number}" for number in range(1, 9))
+REQUIRED_CROSS_DIMENSION_CONSTRAINTS = frozenset(
+    {
+        "D1_D2_TARGET_BOUND",
+        "D2_D3_BASE_COORDINATE_BOUND",
+        "D3_D4_HASH_EVIDENCE_BOUND",
+        "D4_D5_EXECUTION_GATED",
+        "D5_D6_RECONSTRUCTION_ONLY",
+        "D6_D7_MISMATCH_HOLDS",
+        "D7_D8_NO_AUTHORITY_ESCALATION",
+        "D8_D1_SCOPE_BOUND",
+    }
+)
 
 
 def _observed_at(value: str | None) -> str:
@@ -99,18 +118,73 @@ def _carrier_ok(packet: Mapping[str, Any], carrier_result: Mapping[str, Any] | N
             raise RuleHold("HOLD_DELTA_BOUNDARY_VIOLATION", "BOOTSTRAP_EVIDENCE_SCOPE")
 
 
-def _joint_d1_d8_verified(receipt: Mapping[str, Any] | None) -> bool:
+def _strongly_connected(graph: Mapping[str, Any]) -> bool:
+    if set(graph) != set(DIMENSIONS):
+        return False
+    normalized: dict[str, tuple[str, ...]] = {}
+    for source, raw_targets in graph.items():
+        if not isinstance(raw_targets, list) or not raw_targets:
+            return False
+        if any(not isinstance(target, str) or target not in DIMENSIONS for target in raw_targets):
+            return False
+        normalized[source] = tuple(raw_targets)
+
+    def visit(edges: Mapping[str, tuple[str, ...]], start: str) -> set[str]:
+        seen: set[str] = set()
+        pending = [start]
+        while pending:
+            node = pending.pop()
+            if node in seen:
+                continue
+            seen.add(node)
+            pending.extend(edges[node])
+        return seen
+
+    if visit(normalized, DIMENSIONS[0]) != set(DIMENSIONS):
+        return False
+    reverse = {dimension: [] for dimension in DIMENSIONS}
+    for source, targets in normalized.items():
+        for target in targets:
+            reverse[target].append(source)
+    return visit({key: tuple(value) for key, value in reverse.items()}, DIMENSIONS[0]) == set(DIMENSIONS)
+
+
+def _validate_joint_state_field(packet: Mapping[str, Any]) -> None:
+    field = packet.get("JOINT_STATE_FIELD")
+    if not isinstance(field, Mapping):
+        raise RuleHold("HOLD_D1_D8_JOINT_STATE_REPRESENTATION_MISSING")
+    projections = field.get("PROJECTIONS")
+    graph = field.get("COUPLING_GRAPH")
+    constraints = field.get("CROSS_DIMENSION_CONSTRAINTS")
+    if not isinstance(projections, Mapping) or set(projections) != set(DIMENSIONS):
+        raise RuleHold("HOLD_D1_D8_JOINT_STATE_REPRESENTATION_MISSING")
+    if not isinstance(graph, Mapping) or not _strongly_connected(graph):
+        raise RuleHold("HOLD_D1_D8_COUPLING_NOT_CLOSED")
+    if not isinstance(constraints, list) or not REQUIRED_CROSS_DIMENSION_CONSTRAINTS <= set(constraints):
+        raise RuleHold("HOLD_D1_D8_CROSS_DIMENSION_CONSTRAINT_MISSING")
+    d8 = projections.get("D8")
+    if not isinstance(d8, Mapping) or d8.get("AUTHORITY_SCOPE") != "NONE":
+        raise RuleHold("HOLD_D8_PACKET_AUTHORITY_ESCALATION")
+
+
+def _joint_d1_d8_verified(
+    packet: Mapping[str, Any], receipt: Mapping[str, Any] | None
+) -> bool:
     if not isinstance(receipt, Mapping):
         return False
     if receipt.get("RECEIPT_TYPE") != "D1_D8_JOINT_VERIFICATION_RECEIPT":
         return False
     dimensions = receipt.get("DIMENSIONS")
+    field = packet.get("JOINT_STATE_FIELD")
     return (
         isinstance(dimensions, Mapping)
-        and set(dimensions) == {f"D{number}" for number in range(1, 9)}
+        and set(dimensions) == set(DIMENSIONS)
         and all(value == "VERIFIED" for value in dimensions.values())
         and receipt.get("JOINTLY_CLOSED") is True
         and receipt.get("RESULT") == "VERIFIED"
+        and receipt.get("PACKET_DIGEST") == object_sha256(dict(packet))
+        and isinstance(field, Mapping)
+        and receipt.get("JOINT_STATE_DIGEST") == object_sha256(dict(field))
     )
 
 
@@ -148,6 +222,7 @@ def verify_d6_generative_transmission(
             if integer_field in packet:
                 require_integer(packet[integer_field], integer_field)
         validate_schema(packet, PACKET_SCHEMA)
+        _validate_joint_state_field(packet)
 
         logical_time = require_integer(packet["LOGICAL_TIME"], "LOGICAL_TIME")
         ttl = require_integer(packet["TTL"], "TTL")
@@ -248,7 +323,7 @@ def verify_d6_generative_transmission(
 
         _step(steps, 13, "TARGET_NATIVE_EVIDENCE", "GENERATED_REPOSITORY_ONLY")
 
-        if not _joint_d1_d8_verified(d1_d8_receipt):
+        if not _joint_d1_d8_verified(packet, d1_d8_receipt):
             raise RuleHold("HOLD_D1_D8_JOINT_VERIFICATION_REQUIRED")
         _step(steps, 14, "D1_D8_JOINT_VERIFICATION", "VERIFIED_EXTERNAL_RECEIPT")
 
@@ -291,7 +366,9 @@ def verify_d6_generative_transmission(
         "TARGET_STATE_INTEGER_INDEX": reconstructed_index,
         "D6_INTEGER_RECONSTRUCTION_EVIDENCE": evidence,
         "D1_D8_VERIFICATION": (
-            "VERIFIED_EXTERNAL_RECEIPT" if _joint_d1_d8_verified(d1_d8_receipt) else "REQUIRED"
+            "VERIFIED_EXTERNAL_RECEIPT"
+            if _joint_d1_d8_verified(packet, d1_d8_receipt)
+            else "REQUIRED"
         ),
         "TOTAL_FIELD_DECISION": (
             "EXTERNAL_RECEIPT_OBSERVED" if total_field_decision is not None else "NOT_PERFORMED"

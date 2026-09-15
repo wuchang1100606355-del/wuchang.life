@@ -8,6 +8,7 @@
     "PACKET_TYPE",
     "CAPABILITY_ID",
     "PRIMARY_OPERATION",
+    "OPERATION_PROFILE",
     "CARRIER",
     "SOURCE_IDENTITY",
     "TARGET_IDENTITY",
@@ -27,6 +28,8 @@
     "RECONSTRUCTION_RULES",
     "VERIFICATION_RULES",
     "RECEIVER_IDENTITY",
+    "JOINT_STATE_FIELD",
+    "MODEL_ORGAN",
     "RUNTIME_BOUNDARY",
     "NONCE",
     "LOGICAL_TIME",
@@ -37,6 +40,9 @@
     "PACKET_TYPE": {"const": "D6_GENERATIVE_TRANSMISSION_PACKET"},
     "CAPABILITY_ID": {"const": "D6_GENERATIVE_TRANSMISSION"},
     "PRIMARY_OPERATION": {"const": "D6_GENERATIVE_TRANSMISSION"},
+    "OPERATION_PROFILE": {
+      "enum": ["INTEGER_STATE_INDEX", "DISCRETE_FILE_RECONSTRUCTION"]
+    },
     "CARRIER": {
       "enum": ["REFERENCE_ONLY", "DIFFERENTIAL_TRANSFER", "BOUNDED_FULL_BOOTSTRAP"]
     },
@@ -50,9 +56,9 @@
     "MINIMUM_REQUIRED_INDEX_DELTA": {"type": "integer"},
     "LOOKUP_TABLE_ID": {"type": "string", "minLength": 1},
     "LOOKUP_TABLE_VERSION": {"type": "string", "minLength": 1},
-    "LOOKUP_TABLE_DIGEST": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "LOOKUP_TABLE_DIGEST": {"$ref": "#/$defs/sha256"},
     "DISCRETE_TRANSITION_RULE_ID": {"type": "string", "minLength": 1},
-    "DISCRETE_TRANSITION_RULE_DIGEST": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "DISCRETE_TRANSITION_RULE_DIGEST": {"$ref": "#/$defs/sha256"},
     "REFERENCES": {
       "type": "array",
       "uniqueItems": true,
@@ -72,10 +78,148 @@
       "items": {"type": "string", "minLength": 1}
     },
     "RECEIVER_IDENTITY": {"type": "string", "minLength": 1},
+    "JOINT_STATE_FIELD": {"$ref": "#/$defs/jointStateField"},
+    "MODEL_ORGAN": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["LOCAL_LLM_ORGAN_REFERENCE", "ROLE", "DYNAMIC_CONTEXT_REFERENCE", "AUTHORITY"],
+      "properties": {
+        "LOCAL_LLM_ORGAN_REFERENCE": {"type": "string", "minLength": 1},
+        "ROLE": {"const": "PASSIVE_REPLACEABLE_REASONING_GENERATION_ORGAN"},
+        "DYNAMIC_CONTEXT_REFERENCE": {"type": "string", "minLength": 1},
+        "AUTHORITY": {"const": "NONE"}
+      }
+    },
+    "FILE_RECONSTRUCTION": {"$ref": "#/$defs/fileReconstruction"},
     "RUNTIME_BOUNDARY": {"const": "REPOSITORY_RULE_ONLY_NO_LIVE_EFFECT"},
     "NONCE": {"type": "string", "minLength": 1},
     "LOGICAL_TIME": {"type": "integer", "minimum": 0},
     "TTL": {"type": "integer", "minimum": 1},
     "EVIDENCE_DESTINATION": {"type": "string", "minLength": 1}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"OPERATION_PROFILE": {"const": "DISCRETE_FILE_RECONSTRUCTION"}},
+        "required": ["OPERATION_PROFILE"]
+      },
+      "then": {"required": ["FILE_RECONSTRUCTION"]}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "projection": {"type": "object", "minProperties": 1},
+    "couplingTargets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"]}
+    },
+    "jointStateField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "SEMANTICS",
+        "REPRESENTATION",
+        "PROJECTIONS",
+        "COUPLING_GRAPH",
+        "CROSS_DIMENSION_CONSTRAINTS",
+        "JOINT_STATE_TRANSITION",
+        "CLOSURE_RULE",
+        "FAIL_CLOSED_RULE"
+      ],
+      "properties": {
+        "SEMANTICS": {"const": "8_IN_1_SINGLE_STATE_FIELD"},
+        "REPRESENTATION": {"const": "ONE_IMMUTABLE_PACKET_STATE_WITH_EIGHT_COUPLED_PROJECTIONS"},
+        "PROJECTIONS": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+          "properties": {
+            "D1": {"$ref": "#/$defs/projection"},
+            "D2": {"$ref": "#/$defs/projection"},
+            "D3": {"$ref": "#/$defs/projection"},
+            "D4": {"$ref": "#/$defs/projection"},
+            "D5": {"$ref": "#/$defs/projection"},
+            "D6": {"$ref": "#/$defs/projection"},
+            "D7": {"$ref": "#/$defs/projection"},
+            "D8": {"$ref": "#/$defs/projection"}
+          }
+        },
+        "COUPLING_GRAPH": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+          "properties": {
+            "D1": {"$ref": "#/$defs/couplingTargets"},
+            "D2": {"$ref": "#/$defs/couplingTargets"},
+            "D3": {"$ref": "#/$defs/couplingTargets"},
+            "D4": {"$ref": "#/$defs/couplingTargets"},
+            "D5": {"$ref": "#/$defs/couplingTargets"},
+            "D6": {"$ref": "#/$defs/couplingTargets"},
+            "D7": {"$ref": "#/$defs/couplingTargets"},
+            "D8": {"$ref": "#/$defs/couplingTargets"}
+          }
+        },
+        "CROSS_DIMENSION_CONSTRAINTS": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "JOINT_STATE_TRANSITION": {"const": "CURRENT_8D_FIELD_TO_RECONSTRUCTED_TARGET_8D_FIELD"},
+        "CLOSURE_RULE": {"const": "ALL_EIGHT_PROJECTIONS_AND_TARGET_EFFECT_REOBSERVED"},
+        "FAIL_CLOSED_RULE": {"const": "ANY_MISMATCH_HOLDS_WHOLE_STATE_FIELD"}
+      }
+    },
+    "fileReconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "DESIGN_FILE_REFERENCE",
+        "CODEC_MODE",
+        "CODEC_PACKET_ENCODING",
+        "CODEC_PACKET_BYTES",
+        "CODEC_PACKET_SHA256",
+        "CODEC_PACKET_B64",
+        "TARGET_BASE_REFERENCE",
+        "TARGET_BASE_BYTES",
+        "TARGET_BASE_SHA256",
+        "EXPECTED_TARGET_BYTES",
+        "EXPECTED_TARGET_SHA256",
+        "OUTPUT_RELATIVE_PATH",
+        "LOCAL_PACKET_REFERENCE",
+        "CLOUD_PACKET_REFERENCE",
+        "STORAGE_RESOLUTION_ORDER",
+        "MEMORY_MAPPING_MODE",
+        "EVENT_STREAM_MODE",
+        "RAW_BYTES_IN_EVENTS"
+      ],
+      "properties": {
+        "DESIGN_FILE_REFERENCE": {"type": "string", "minLength": 1},
+        "CODEC_MODE": {"const": "PREVIOUS_BASE_BLOCK_LOOKUP"},
+        "CODEC_PACKET_ENCODING": {"const": "base64"},
+        "CODEC_PACKET_BYTES": {"type": "integer", "minimum": 1},
+        "CODEC_PACKET_SHA256": {"$ref": "#/$defs/sha256"},
+        "CODEC_PACKET_B64": {"type": "string", "minLength": 1},
+        "TARGET_BASE_REFERENCE": {"type": "string", "minLength": 1},
+        "TARGET_BASE_BYTES": {"type": "integer", "minimum": 1},
+        "TARGET_BASE_SHA256": {"$ref": "#/$defs/sha256"},
+        "EXPECTED_TARGET_BYTES": {"type": "integer", "minimum": 1},
+        "EXPECTED_TARGET_SHA256": {"$ref": "#/$defs/sha256"},
+        "OUTPUT_RELATIVE_PATH": {"type": "string", "pattern": "^[^/\\\\][^\\\\]*$"},
+        "LOCAL_PACKET_REFERENCE": {"type": "string", "minLength": 1},
+        "CLOUD_PACKET_REFERENCE": {"type": "string", "minLength": 1},
+        "STORAGE_RESOLUTION_ORDER": {
+          "type": "array",
+          "prefixItems": [{"const": "LOCAL"}, {"const": "CLOUD"}],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "MEMORY_MAPPING_MODE": {"const": "MMAP_EXCLUSIVE_CREATE"},
+        "EVENT_STREAM_MODE": {"const": "GENERATED_BLOCK_EVENT_STREAM"},
+        "RAW_BYTES_IN_EVENTS": {"const": false}
+      }
+    }
   }
 }
