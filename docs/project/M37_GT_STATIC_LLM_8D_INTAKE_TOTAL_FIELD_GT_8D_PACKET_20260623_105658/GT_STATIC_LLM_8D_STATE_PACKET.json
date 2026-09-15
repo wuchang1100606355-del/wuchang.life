@@ -1,0 +1,154 @@
+{
+  "D1_identity": {
+    "author_role": "creator_admin",
+    "classification": "Protocol-Native Computation-Result Lookup Generative AI Service System",
+    "object": "generative_transmission_ai_service_runtime",
+    "system": "W7TP / XiaoJ / Total Field",
+    "zh_classification": "自帶通信協議之運算結果查表生成式人工智慧服務系統"
+  },
+  "D2_intent": {
+    "design_intent": [
+      "生成式傳輸不得再被描述為差分補全、patch sync、cache update、AI猜測補完或單純壓縮",
+      "生成式傳輸正名為自帶通信協議之獨立檔案重構技術",
+      "正式生成機制正名為運算結果查表生成",
+      "正式重構與正式裁決路徑不依賴浮點生成模型",
+      "雲端只能承擔候選推理，不掌握完整意圖、完整上下文、查表本體、治理鏈或正式動作權"
+    ],
+    "primary_intent": "將本對話技術定義收斂為總場8D狀態封包"
+  },
+  "D3_state": {
+    "canonical_definition": "生成式傳輸是自帶通信協議的獨立檔案重構技術；其正式生成機制為運算結果查表生成，由狀態封包座標指向已定義或可驗證的運算結果，再由本地重構器與驗證器產生正式輸出。",
+    "core_formula": "GT protocol file / 8D state packet -> state_coordinate -> computation_result_lookup -> local_reconstruction -> verifier_gate -> verified_output_or_fail_closed",
+    "is_this": [
+      "protocol-native independent file reconstruction",
+      "computation-result lookup generation",
+      "state-coordinate keyed reconstruction",
+      "local verifier-gated formal output",
+      "no-plaintext cloud candidate reasoning",
+      "static LLM-like multi-task runtime for bounded service domains"
+    ],
+    "not_this": [
+      "不是差分補全",
+      "不是rsync或patch sync",
+      "不是cache update",
+      "不是AI猜測缺片",
+      "不是一般壓縮",
+      "不是單純RAG",
+      "不是單純AI agent",
+      "不是傳統模型權重切分"
+    ],
+    "static_llm_position": "靜態LLM應表述為Static LLM-like Multi-Task Runtime，不是傳統神經網路LLM，而是以運算結果查表生成提供類LLM服務效果的多工AI服務架構。"
+  },
+  "D4_topology": {
+    "device_targets": [
+      "Sunmi POS",
+      "customer display",
+      "voice / speaker lane",
+      "member sidebar",
+      "association backend",
+      "low-end edge devices"
+    ],
+    "local_total_field_path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/conversation_intake",
+    "runtime_lanes": {
+      "cloud_candidate_lane": "僅處理去識別、片段化、符號化候選推理",
+      "local_parser": "解析GT protocol file與8D state packet",
+      "local_reconstructor": "本地重構UI、語音、檔案、任務狀態、服務動作候選或證據封印",
+      "local_verifier": "裁決正式輸出、DB write、POS action、payment、device control是否允許",
+      "lookup_generation_layer": "查詢多維狀態結果表、codebook、symbol map與state-result mapping",
+      "state_coordinate_engine": "將任務、UI、POS、語音、會員治理、設備狀態座標化"
+    }
+  },
+  "D5_resource": {
+    "cloud_role": "Cloud = candidate reasoning / compute helper / draft generator",
+    "highest_value_use": [
+      "主權式AI POS / 會員 / 客顯 / 語音 / 社區公益服務設備群",
+      "無明文雲端候選推理閘道",
+      "多設備生成式UI傳輸",
+      "AI動作本地驗證裁決與證據封印",
+      "低階設備參與AI服務流程"
+    ],
+    "local_role": "Local = meaning owner / context owner / lookup owner / verifier / action authority",
+    "performance_claim": "效能優勢不應描述為單純下載速度較快，而是由傳輸成品轉為傳輸重構協議檔案，使接收端依state_coordinate、lookup_key、result_code、render_ref、governance_rule、verification_contract與envelope本地重構。",
+    "subjective_performance": [
+      "傳統傳輸讓使用者感覺資料從遠端載入",
+      "生成式傳輸讓使用者感覺服務在本地展開",
+      "同一封包可生成POS、客顯、語音、會員摘要、協會去識別統計",
+      "可查表任務不必等待雲端模型推理",
+      "雲端停用時，查表命中流程仍可本地完成；未知任務fail closed或進候選通道"
+    ]
+  },
+  "D6_governance": {
+    "action_gate": [
+      "DB write",
+      "POS action",
+      "payment",
+      "member plaintext display",
+      "device control",
+      "service restart",
+      "deploy",
+      "production release"
+    ],
+    "candidate_rule": "LLM、雲端模型或本地小模型僅得作為candidate lane，不得直接作為正式重構或正式裁決來源。",
+    "privacy_rule": "雲端不得取得完整明文意圖、完整上下文、會員明文、lookup table、codebook、state-result mapping、verifier contract、governance chain或正式動作權。",
+    "redteam_boundaries": [
+      "不得宣稱零頻寬",
+      "不得宣稱絕對不可回推",
+      "不得宣稱完整取代LLM",
+      "不得宣稱任意大型模型低成本切片運行",
+      "不得宣稱查表本身即為新穎性",
+      "不得讓lookup miss產生正式結果",
+      "不得暴露WHY_IT_RUNS、lookup table、codebook、symbol map、state-result mapping、展開規則或權重"
+    ],
+    "trade_secret": [
+      "WHY_IT_RUNS",
+      "lookup table",
+      "codebook",
+      "state-result mapping",
+      "symbol map",
+      "ancient_math_vector expansion rules",
+      "five_element_tensor mapping rules",
+      "verifier contract internals"
+    ]
+  },
+  "D7_verification": {
+    "blue_team_argument": "本技術不是讓雲端替我想完，也不是讓模型憑浮點推理生成正式結果；它是把想法本體留在本地，將可外包的候選算力切成盲化封包交給雲端，再由本地運算結果查表、重構與驗證產生正式輸出。",
+    "formal_path": "正式路徑為state_coordinate + lookup_key + verifier_contract -> computation_result -> local_reconstruction -> verified_output",
+    "model_path": "LLM/cloud model only returns candidate_result; candidate_result must return to local reconstruction and verifier gate.",
+    "tests_required": [
+      "same_packet_same_lookup_hash_reproducibility",
+      "lookup_miss_fail_closed",
+      "cloud_candidate_pollution_rejection",
+      "no_member_plaintext_in_cloud_request_log",
+      "ui_bandwidth_protocol_file_vs_full_payload",
+      "multi_device_reconstruction_from_single_packet",
+      "pos_action_check_blocks_unverified_action",
+      "cloud_disabled_lookup_hit_still_works"
+    ]
+  },
+  "D8_envelope": {
+    "authority": "local_total_field_review_required",
+    "final_packet_sha256": "e0e3eca1f8905f1c52791b12d095535433b37923d676bd964774203f1a0e1bd7",
+    "hmac_or_signature": "not_generated_in_this_safe_write",
+    "integrity_mode": "sha256_local_file_hash",
+    "packet_id": "TOTAL_FIELD_GT_8D_PACKET_20260623_105658",
+    "packet_sha256": "9c1f042198f92c9333e76b43f66002057cc0b593bbe4bdf03dc98df6ee25e1ac",
+    "replay_policy": "append_only_intake_with_hash",
+    "ttl": "persistent_total_field_design_record"
+  },
+  "created_at_utc": "2026-06-23T10:56:59.027343+00:00",
+  "packet_type": "TOTAL_FIELD_8D_CONVERSATION_INTAKE",
+  "run_id": "TOTAL_FIELD_GT_8D_PACKET_20260623_105658",
+  "safety_flags": {
+    "db_write": false,
+    "deploy": false,
+    "formal_pos_write": false,
+    "member_plaintext_read": false,
+    "payment_capture": false,
+    "production_release": false,
+    "secret_read": false,
+    "service_restart": false
+  },
+  "source_scope": "current_chat_concept_convergence",
+  "state": "READY_FOR_TOTAL_FIELD_REVIEW",
+  "title": "生成式傳輸、運算結果查表生成、靜態類LLM多工與雲地候選推理總場封包"
+}
