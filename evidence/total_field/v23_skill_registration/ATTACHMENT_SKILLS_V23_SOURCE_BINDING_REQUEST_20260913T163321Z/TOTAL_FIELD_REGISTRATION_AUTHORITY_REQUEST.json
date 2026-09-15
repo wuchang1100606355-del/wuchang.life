@@ -1,0 +1,126 @@
+{
+  "schema_id": "W7TP_V2_3_TOTAL_FIELD_SKILL_REGISTRATION_AUTHORITY_REQUEST_V1",
+  "packet_type": "TOTAL_FIELD_SKILL_REGISTRATION_AUTHORITY_REQUEST_CANDIDATE",
+  "run_id": "ATTACHMENT_SKILLS_V23_SOURCE_BINDING_REQUEST_20260913T163321Z",
+  "created_at": "2026-09-13T16:33:21Z",
+  "state": "HOLD_CANONICAL_VERSION_MISMATCH",
+  "request_scope": "REQUEST_ONLY",
+  "single_use": true,
+  "expires_on_source_or_repository_coordinate_change": true,
+  "requested_decision": "BIND_OR_REJECT_TWO_EXACT_SKILL_SOURCE_TREES_FOR_V2_3_REGISTRATION",
+  "user_directive": {
+    "ref": "current-session://2026-09-13/close-two-skill-v2.3-source-manifest-hashes-and-obtain-total-field-registration-authorization",
+    "classification": "USER_DIRECTED_REQUEST_CREATION_ONLY_NOT_TOTAL_FIELD_DECISION"
+  },
+  "requested_skills": [
+    {
+      "skill_id": "8d-adi-state-field-intelligence",
+      "source_tree_git_oid": "75fd3634f3137ea6ba1665c8771101b98913896d",
+      "source_archive_sha256": "1c1585788550afe5a3f624d08e5eccde425e549629aa3da0d6d4eb53ab595318"
+    },
+    {
+      "skill_id": "intent-field-generative-construction",
+      "source_tree_git_oid": "014afb12888c44e0f59885c72ee146eaa6cc62cd",
+      "source_archive_sha256": "8cbd0f2b48a92c27f83844a0e0b71b7ccfc0256b85292155d5266606f3a81cdd"
+    }
+  ],
+  "joint_8d_state": {
+    "semantics": "8_IN_1_SINGLE_STATE_FIELD",
+    "coupling": "SIMULTANEOUS_COUPLED_MUTUALLY_CONSTRAINED_JOINTLY_CLOSED",
+    "D1_INTENT": "Register the two attachment-named skills only after their exact source trees are validly bound to the Founder-confirmed V2.3 baseline.",
+    "D2_STATE": "Exact source bytes and hashes are closed. Both skills are absent from the current local registry and the historical V2.3 capability registry. V2.3 source and authority binding are unresolved.",
+    "D3_COORDINATE": {
+      "repository": "https://github.com/wuchang1100606355-del/wuchang.life.git",
+      "branch": "agent/moving-v-v2-taiji8d-local-canary",
+      "commit": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+      "tree": "cd04d92b4522c2db8395141969d760cb2e587856",
+      "target_node": "taiji01",
+      "target_root": "/home/taiji_admin/Taiji_Hub",
+      "target_registry": "runtime/total_field/xiaoj/xiaoj_skill_registry.json",
+      "target_head": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+      "target_tree": "fb994eecd89dbca4589b4d8bee959dc407f396e8"
+    },
+    "D4_EVIDENCE": {
+      "source_binding_manifest": {
+        "ref": "evidence/total_field/v23_skill_registration/ATTACHMENT_SKILLS_V23_SOURCE_BINDING_REQUEST_20260913T163321Z/SOURCE_BINDING_MANIFEST.json",
+        "sha256": "52df05605278107c39883cde450202146b1de9218b758f491bfee9ffe215be63"
+      },
+      "source_binding_verifier": {
+        "ref": "evidence/total_field/v23_skill_registration/ATTACHMENT_SKILLS_V23_SOURCE_BINDING_REQUEST_20260913T163321Z/verify_source_binding.py",
+        "sha256": "1f5ce3c4ec4da4fd35b9488c2da66fab5485b172a43831dc68650372fdaa5b88",
+        "state": "PASS_SOURCE_HASH_BINDING"
+      },
+      "skill_creator_quick_validate": {
+        "8d-adi-state-field-intelligence": "PASS",
+        "intent-field-generative-construction": "PASS"
+      },
+      "historical_v2_3_registry": {
+        "ref": "d32ebc73ea7e413daa61c58cc831964743dba99d:manifests/ollama_xiaoj_total_field_v0_1/capability_registry.json",
+        "sha256": "92d7a0675fb13a3e25a4cdf8576da0254728468570709abd8332b6d3a28767be",
+        "target_skills_registered": false,
+        "validator_state": "FAIL_TOTAL_FIELD_SKILL_REGISTRY_VALIDATION",
+        "validator_error": "SOURCE_HASH_MISMATCH:w7tp_generative_transmission"
+      },
+      "current_local_registry": {
+        "ref": "runtime/total_field/xiaoj/xiaoj_skill_registry.json",
+        "sha256": "0812d1618c68d510f3e54c26f61739a7f58494be7c13f4bdc026b94fd2133f67",
+        "validator_state": "PASS_TOTAL_FIELD_SKILL_REGISTRY",
+        "target_skills_registered": false
+      }
+    },
+    "D5_EXECUTION_POLICY": {
+      "source_read_allowed": true,
+      "candidate_evidence_write_allowed": true,
+      "skill_install_allowed_before_authority_closure": false,
+      "registry_write_allowed_before_authority_closure": false,
+      "runtime_activation_allowed": false,
+      "canonical_pointer_write_allowed": false,
+      "service_restart_allowed": false
+    },
+    "D6_GENERATIVE_TRANSMISSION": {
+      "invoked": false,
+      "reason": "SOURCE_AND_AUTHORITY_BINDING_ONLY; NO_INSTALL_SEND_RECEIVE_OR_RECONSTRUCTION"
+    },
+    "D7_RISK_QUARANTINE": {
+      "risk": "FALSE_V2_3_LABEL_OR_UNAUTHORIZED_TOTAL_FIELD_REGISTRATION",
+      "fail_closed_state": "HOLD_CANONICAL_VERSION_MISMATCH",
+      "legacy_source_may_be_relabelled_v2_3": false
+    },
+    "D8_ENVELOPE_AUTHORITY": {
+      "current_authority_state": "UNRESOLVED",
+      "required_binding": {
+        "v2_3_canonical_ref": null,
+        "v2_3_canonical_sha256": null,
+        "v2_3_active_pointer_ref": null,
+        "v2_3_active_pointer_sha256": null,
+        "v2_3_lineage_ref": null,
+        "v2_3_lineage_sha256": null,
+        "v2_3_receipt_ref": null,
+        "v2_3_receipt_sha256": null,
+        "v2_3_d8_authority_ref": null,
+        "v2_3_d8_authority_sha256": null,
+        "per_skill_source_binding_decision_ref": null,
+        "per_skill_source_binding_decision_sha256": null,
+        "authorized_registry_effect": null
+      },
+      "required_authorized_registry_effect": "REGISTER_8D_ADI_STATE_FIELD_INTELLIGENCE_AND_INTENT_FIELD_GENERATIVE_CONSTRUCTION_IN_XIAOJ_TOTAL_FIELD_SKILL_REGISTRY",
+      "all_fields_required": true,
+      "partial_binding_accepted": false,
+      "request_or_skill_is_authority": false
+    }
+  },
+  "closure_rule": "INSTALL_AND_REGISTER_ONLY_IF_THE_EXACT_SOURCE_TREES_ARE_V2_3_BOUND_ALL_REQUIRED_AUTHORITY_HASHES_MATCH_AND_THE_REGISTRY_EFFECT_IS_EXPLICITLY_AUTHORIZED",
+  "non_execution_assertions": {
+    "skill_install": false,
+    "registry_write": false,
+    "runtime_activation": false,
+    "canonical_change": false,
+    "pointer_change": false,
+    "adi_write": false,
+    "database_write": false,
+    "service_restart": false,
+    "git_commit": false,
+    "git_push": false
+  },
+  "next": "PROVIDE_A_HASH_VERIFIABLE_TOTAL_FIELD_D8_DECISION_FOR_THE_TWO_EXACT_SOURCE_TREES"
+}
