@@ -11,6 +11,8 @@ fail() {
 }
 
 [ -f AGENTS.md ] || fail "AGENTS.md missing"
+[ -x scripts/verify/verify_task_context_precedence_gate.sh ] \
+  || fail "task-context precedence gate missing or not executable"
 
 required_terms=(
   "Direct Shortest Path Rule"
@@ -20,6 +22,9 @@ required_terms=(
   "No Detour Rule"
   "W3_GENERATIVE_TRANSFER_DEPLOY"
   "STATE=HOLD_MAIN_CHAIN_DEVIATION"
+  "Current Task Context Precedence Hard Gate"
+  "LATEST_EXPLICIT_USER_INTENT > CURRENT_LIVE_STATE > CURRENT_VALID_AUTHORITY > PRIOR_RUN > ATTACHED_OLD_TASK"
+  "STATE=HOLD_TASK_CONTEXT_ROLLBACK"
 )
 
 for term in "${required_terms[@]}"; do
@@ -33,5 +38,9 @@ fi
 if grep -Eq '身分證|身份證|電話|地址|生日|電子信箱|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' AGENTS.md; then
   fail "member PII marker found in AGENTS.md"
 fi
+
+scripts/verify/verify_task_context_precedence_gate.sh --self-test \
+  | grep -Fq 'STATE=PASS_TASK_CONTEXT_PRECEDENCE_GATE_SELF_TEST' \
+  || fail "task-context precedence gate self-test failed"
 
 echo "STATE=PASS_VERIFY"
