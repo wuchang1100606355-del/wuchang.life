@@ -1,0 +1,95 @@
+{
+  "schema_id": "LAND_8D_WORKTREE_TOTAL_FIELD_SKILL_REGISTRATION_CANDIDATE_V1",
+  "packet_type": "TOTAL_FIELD_SKILL_REGISTRATION_CANDIDATE",
+  "run_id": "LAND_8D_WORKTREE_TOTAL_FIELD_CANDIDATE_20260913T102304Z",
+  "created_at": "2026-09-13T10:23:04Z",
+  "state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "append_only": true,
+  "skill": {
+    "skill_id": "land-8d-worktree",
+    "version": "0.1.0-total-field-candidate.1",
+    "installed_path": "/home/taiji_admin/.codex/skills/land-8d-worktree",
+    "manifest_ref": "/home/taiji_admin/.codex/skills/land-8d-worktree/total-field-skill-manifest.json",
+    "manifest_sha256": "9b4803404ec40f36732f32d8dca2922a85cb55b09203c3fb0f067e4fd637fe90"
+  },
+  "source_binding": {
+    "node": "MSI",
+    "source_ref": "msi-user-downloads://land-8d-worktree.zip",
+    "source_archive_sha256": "b88bf7131a00af55065edb62cd6e3b562c8f716be95bd387cf4ef7e02b405518",
+    "source_archive_bytes": 9398,
+    "source_preserved": true
+  },
+  "converted_package": {
+    "ref": "msi-user-downloads://land-8d-worktree-total-field-candidate-20260913T102304Z.zip",
+    "sha256": "e2e1e90c0089079f23c70dfe5cd7e34c69a2ce7f65cf28e74d1bcd89f4cd0136",
+    "bytes": 14632,
+    "archive_paths_safe": true,
+    "contains_total_field_manifest": true
+  },
+  "codex_installation": {
+    "state": "INSTALLED_VALIDATED",
+    "discoverable_on_next_turn": true,
+    "implicit_invocation_allowed": true,
+    "total_field_activation_implied": false
+  },
+  "total_field_registration": {
+    "state": "CANDIDATE_REGISTRATION_RECORDED",
+    "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+    "registry_authority": "UNRESOLVED",
+    "central_registry_path_observed": false,
+    "central_registry_write_performed": false,
+    "total_field_receiver_decision": "NOT_RUN",
+    "canonical_promotion": false,
+    "activation": false
+  },
+  "semantic_boundary": {
+    "role": "TOTAL_FIELD_GOVERNED_GIT_ACTION_ADAPTER",
+    "complete_8d_claim": false,
+    "w7tp_core_claim": false,
+    "adi_core_claim": false,
+    "carrier_is_not_w7tp": true,
+    "git_commit_is_not_deployment_or_authority": true
+  },
+  "verification": {
+    "skill_creator_quick_validate": "PASS",
+    "python_py_compile": "PASS",
+    "manifest_structure": "PASS",
+    "implementation_hash_binding": "PASS",
+    "isolated_dirty_worktree_preflight": "PASS",
+    "isolated_exact_path_local_commit": "PASS",
+    "isolated_unrelated_dirty_state_preserved": "PASS",
+    "msi_converted_package_hash_readback": "PASS"
+  },
+  "repository_coordinate": {
+    "node": "taiji01",
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "main",
+    "head_before": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+    "head_after": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+    "tree_before": "fb994eecd89dbca4589b4d8bee959dc407f396e8",
+    "tree_after": "fb994eecd89dbca4589b4d8bee959dc407f396e8",
+    "worktree_status_fingerprint_before_skill_install": "8a3fa5c6201471979751e627d0af208acb3d94856024d46c0352a3cbeb4d7fc8",
+    "worktree_status_fingerprint_after_skill_install_before_receipt": "8a3fa5c6201471979751e627d0af208acb3d94856024d46c0352a3cbeb4d7fc8"
+  },
+  "authority_gate": {
+    "state": "HOLD_CANONICAL_VERSION_MISMATCH",
+    "current_founder_canonical_baseline": "2.3",
+    "verified_v2_3_canonical_ref_and_sha256": false,
+    "verified_v2_3_active_pointer_ref_and_sha256": false,
+    "verified_v2_3_lineage_ref_and_sha256": false,
+    "verified_v2_3_receipt_ref_and_sha256": false,
+    "verified_v2_3_d8_authority_ref_and_sha256": false,
+    "candidate_or_skill_is_authority": false
+  },
+  "preservation": {
+    "source_archive_overwritten": false,
+    "preexisting_repository_files_modified": false,
+    "unrelated_dirty_state_cleaned_or_staged": false,
+    "git_commit": false,
+    "git_push": false,
+    "database_write": false,
+    "service_restart": false,
+    "canonical_or_pointer_change": false
+  },
+  "next": "PROVIDE_VERIFIED_V2_3_CANONICAL_POINTER_LINEAGE_RECEIPT_AND_D8_AUTHORITY_ENVELOPE_PLUS_TOTAL_FIELD_RECEIVER_DECISION"
+}

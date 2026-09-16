@@ -1,0 +1,60 @@
+{
+  "schema_id": "ACCOUNT_AI_ORGANIZATION_SCOPE_RECEIPT_V1",
+  "run_id": "ACCOUNT_AI_ORGANIZATION_SCOPE_20260913T075412Z",
+  "scope_id": "ACCOUNT_ALL_AI_ALL_SYSTEMS",
+  "scope_components": [
+    "PERSONAL_ACCOUNT_SPACES",
+    "ACCOUNT_ORGANIZATION_SPACES"
+  ],
+  "account_ref": "account://taiji_admin",
+  "authority_state": "D4_EVIDENCE_ONLY",
+  "output_policy": "METADATA_ONLY",
+  "founder_scope_input": {
+    "organization_spaces_in_scope": true,
+    "source": "FOUNDER_INPUT"
+  },
+  "repository_coordinate": {
+    "node": "taiji01",
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "main",
+    "head": "1e457352d6fd65c29a0dea7691426b3bfde4e533",
+    "tree": "fb994eecd89dbca4589b4d8bee959dc407f396e8",
+    "worktree": "DIRTY"
+  },
+  "prior_result_reuse": {
+    "run_id": "ACCOUNT_AI_SOURCE_ENUMERATION_20260913T072149Z",
+    "result_ref": "/home/taiji_admin/Taiji_Hub/docs/evidence/account_ai_conversation/ACCOUNT_AI_SOURCE_ENUMERATION_20260913T072149Z/SOURCE_ENUMERATION_RECEIPT.json",
+    "rescanned": false
+  },
+  "observed_account_metadata_surfaces": [
+    {
+      "surface_id": "CODEX_APP_ACCOUNT_THREAD_INDEX",
+      "organization_space_identity_exposed": false,
+      "organization_space_coordinate_exposed": false
+    },
+    {
+      "surface_id": "CODEX_APP_ACCOUNT_PROJECT_INDEX",
+      "organization_space_identity_exposed": false,
+      "organization_space_coordinate_exposed": false
+    },
+    {
+      "surface_id": "AVAILABLE_BACKEND_TOOL_CATALOG",
+      "chatgpt_organization_workspace_enumerator_exposed": false
+    }
+  ],
+  "organization_space_enumeration": {
+    "declared_present": true,
+    "state": "LOCALIZED_UNKNOWN",
+    "observed_space_count": 0,
+    "space_identities": [],
+    "space_coordinates": []
+  },
+  "coverage_gaps": [
+    "ACCOUNT_ORGANIZATION_SPACE_IDENTITIES_UNRESOLVED",
+    "ACCOUNT_ORGANIZATION_SPACE_COORDINATES_UNRESOLVED",
+    "AVAILABLE_ACCOUNT_INDEX_DOES_NOT_EXPOSE_ORGANIZATION_SPACE_BINDING"
+  ],
+  "registered_source_count": 8,
+  "original_content_emitted": false,
+  "frontend_raw_tool_output": false
+}
