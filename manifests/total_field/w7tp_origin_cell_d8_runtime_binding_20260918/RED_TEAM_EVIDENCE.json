@@ -1,0 +1,62 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-CHANGE-RED-TEAM/1.0",
+  "packet_type": "RED_TEAM_EVIDENCE",
+  "candidate_id": "W7TP_ORIGIN_CELL_D8_RUNTIME_BINDING_20260918",
+  "created_at": "2026-09-18T14:41:00Z",
+  "state": "OPEN_FINDINGS_BLOCK_ACTIVATION_NOT_REVIEW_REGISTRATION",
+  "implementation_commit": "9046e2510c10cd77e05600bc8186c587a0d4893d",
+  "implementation_tree": "2f59753d29a537f35bfd53c68949f0f7c0d8c152",
+  "findings": [
+    {
+      "id": "RT-D8-INGRESS-001",
+      "stage": "PRE_ACTIVATION",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "perspective": "verification",
+      "finding": "The modified candidate has not yet been executed by the repository test runner and GitHub reports no status checks for the candidate head.",
+      "possible_effect": "A syntax, import, startup-lifecycle, or adapter regression could block candidate ingress if activated.",
+      "remediation": "Run only the affected authority-adapter tests plus gateway import/startup checks against the exact implementation commit, then bind the results to this review.",
+      "authorization_required": false,
+      "activation_allowed": false
+    },
+    {
+      "id": "RT-D8-INGRESS-002",
+      "stage": "PRE_ACTIVATION",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "perspective": "actual_runtime",
+      "finding": "The new Gateway candidate-ingress runtime binding has not been observed on the actual MSI runtime.",
+      "possible_effect": "Source-level wiring could differ from the installed service/runtime state.",
+      "remediation": "After Total Field review permits an isolated canary, verify the candidate on the actual MSI target without canonical or pointer mutation.",
+      "authorization_required": true,
+      "activation_allowed": false
+    },
+    {
+      "id": "RT-D8-INGRESS-003",
+      "stage": "PRE_DEFINITION",
+      "severity": "MEDIUM",
+      "status": "MITIGATED_NOT_EXECUTED",
+      "perspective": "authority_scope",
+      "finding": "A compatibility fallback could otherwise accept an unrelated verified ACTIVE_TOTAL_FIELD_AUTHORITY scope.",
+      "possible_effect": "A promotion-only authority could be misused as RECEIVE_CANDIDATE authority.",
+      "remediation": "Compatibility fallback now requires authority_scope == [RECEIVE_CANDIDATE], with a dedicated regression test added.",
+      "closure_evidence": [
+        "tools/total_field_receive_candidate_authority_adapter.py@9046e2510c10cd77e05600bc8186c587a0d4893d",
+        "tests/test_total_field_receive_candidate_authority_adapter.py@9046e2510c10cd77e05600bc8186c587a0d4893d"
+      ],
+      "activation_allowed": false
+    }
+  ],
+  "preserved_boundaries": {
+    "candidate_authority": false,
+    "execution_authorized": false,
+    "canonical_write": false,
+    "active_pointer_write": false,
+    "database_write": false,
+    "deploy": false,
+    "restart": false,
+    "merge": false
+  },
+  "red_team_pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE",
+  "note": "Open findings block activation or landing, but do not block registering this exact candidate for Total Field review."
+}
