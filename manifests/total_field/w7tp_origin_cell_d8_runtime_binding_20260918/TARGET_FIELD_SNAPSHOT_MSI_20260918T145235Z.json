@@ -1,0 +1,40 @@
+{
+  "schema_version": "W7TP-TARGET-FIELD-SNAPSHOT/1.0",
+  "packet_type": "TARGET_FIELD_SNAPSHOT",
+  "target_node_id": "MSI_WSL",
+  "target_observed_at": "2026-09-18T14:52:35.481511+00:00",
+  "target_acquisition_method": "DIRECT_USER_SESSION_WSL_READ_ONLY_PROBE",
+  "target_acquisition_session": "MSI_D8_INGRESS_20260918T145235Z",
+  "target_repository_root": "/home/taiji_admin/Taiji_Hub",
+  "target_branch": "agent/moving-v-v2-taiji8d-local-canary",
+  "target_head": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+  "target_tree": "cd04d92b4522c2db8395141969d760cb2e587856",
+  "target_worktree": {
+    "state": "DIRTY",
+    "dirty_count": 71,
+    "path_set": "NOT_CAPTURED_PRESERVE_UNTOUCHED"
+  },
+  "runtime": {
+    "gateway_service": "active",
+    "health": {
+      "state": "PASS_GATEWAY_PROCESS",
+      "service": "w7tp-8dadi-total-field-organ-gateway",
+      "version": "2.3.0",
+      "role": "PASSIVE_MODEL_RESOURCE_AND_PERCEPTION_ORGAN",
+      "primary_decision_engine": "8D_ADI",
+      "total_field_is_final_effect_authority": true,
+      "lan_precedes_vpn": true,
+      "context_identity_class": "unknown"
+    }
+  },
+  "acquisition_coverage": {
+    "repository_coordinate": "OBSERVED",
+    "gateway_runtime": "OBSERVED",
+    "exact_dirty_path_set": "UNKNOWN_NOT_PROBED",
+    "canonical": "UNKNOWN_NOT_PROBED",
+    "containers": "UNKNOWN_NOT_PROBED",
+    "routes": "UNKNOWN_NOT_PROBED"
+  },
+  "protected_content_read": false,
+  "normalized_snapshot_sha256": "b2d5f8e72c4d5ec3b81467c8e41fd6d25748099426eeaedce9d09fe5f5a6cd8c"
+}
