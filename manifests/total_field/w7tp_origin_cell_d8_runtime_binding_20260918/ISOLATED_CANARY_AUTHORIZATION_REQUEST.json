@@ -1,0 +1,87 @@
+{
+  "schema_version": "W7TP-BOUNDED-AUTOMATION-AUTHORIZATION-REQUEST/1.0",
+  "packet_type": "AUTHORIZATION_REQUEST",
+  "authorization_request_id": "AUTHZ_D8_INGRESS_ISOLATED_CANARY_MSI_20260918T145235Z",
+  "created_at": "2026-09-18T14:55:00Z",
+  "expires_at": "2026-09-18T15:55:00Z",
+  "state": "PENDING_EXACT_FOUNDER_DECISION",
+  "requested_action": "RUN_EXACT_ISOLATED_D8_INGRESS_CANARY",
+  "target_node": "MSI_WSL",
+  "target_field_snapshot_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/TARGET_FIELD_SNAPSHOT_MSI_20260918T145235Z.json",
+  "target_field_snapshot_hash": "sha256:b2d5f8e72c4d5ec3b81467c8e41fd6d25748099426eeaedce9d09fe5f5a6cd8c",
+  "target_base_state_hash": "git-tree:cd04d92b4522c2db8395141969d760cb2e587856",
+  "target_branch": "agent/moving-v-v2-taiji8d-local-canary",
+  "target_head": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+  "minimum_change_delta_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/MINIMUM_CHANGE_DELTA.json",
+  "minimum_change_delta_hash": "sha256:3caf7cc6702e10516d4363b3cb97250330c9b912908ff83cd45bf8feea86ed65",
+  "minimum_generative_delta_hash": "NOT_APPLICABLE_NON_W7TP_D6",
+  "implementation_commit": "9046e2510c10cd77e05600bc8186c587a0d4893d",
+  "implementation_tree": "2f59753d29a537f35bfd53c68949f0f7c0d8c152",
+  "targets": [
+    "/tmp/w7tp-d8-ingress-canary-20260918T145235Z",
+    "127.0.0.1:8083",
+    "services.gateway.main:app@9046e2510c10cd77e05600bc8186c587a0d4893d"
+  ],
+  "input_hashes": {
+    "target_snapshot_sha256": "b2d5f8e72c4d5ec3b81467c8e41fd6d25748099426eeaedce9d09fe5f5a6cd8c",
+    "change_delta_sha256": "3caf7cc6702e10516d4363b3cb97250330c9b912908ff83cd45bf8feea86ed65",
+    "implementation_tree": "2f59753d29a537f35bfd53c68949f0f7c0d8c152"
+  },
+  "expected_effect": "在 MSI_WSL 的 /tmp 隔離目錄重構並驗證精確 implementation commit，啟動一次 127.0.0.1:8083 canary，確認 Gateway 候選入口可 fail-closed 綁定且 8081 現行 Gateway 不受影響；完成後停止 canary 並移除隔離目錄。",
+  "affected_state": [
+    "temporary files under /tmp/w7tp-d8-ingress-canary-20260918T145235Z",
+    "temporary localhost listener 127.0.0.1:8083",
+    "temporary SQLite replay ledger inside isolated canary workspace",
+    "temporary canary process"
+  ],
+  "existing_services": [
+    "taiji-gateway.service on 127.0.0.1:8081 MUST remain active and unchanged"
+  ],
+  "risks": [
+    "temporary CPU/disk use",
+    "candidate import or startup failure",
+    "temporary port 8083 bind conflict",
+    "test failure revealing implementation defect",
+    "unexpected attempt to touch state outside the isolated workspace"
+  ],
+  "safeguards": [
+    "reobserve branch/head/tree/dirty-count and production 8081 health before any canary write",
+    "stop immediately if target branch/head/tree differs from the bound snapshot",
+    "do not clean, reset, checkout, stash, commit, or alter the existing dirty worktree",
+    "reconstruct only under the named /tmp directory",
+    "bind canary only to 127.0.0.1:8083",
+    "do not call production /api/taiji/candidate",
+    "do not deploy or restart taiji-gateway.service",
+    "do not write canonical or active authority pointers",
+    "do not read credentials, member plaintext, protected ADI, or H64-TD material",
+    "verify production 8081 health again after canary stop"
+  ],
+  "authorized_steps": [
+    "PRE_TARGET_MUTATION_SAFETY_REOBSERVATION",
+    "RECONSTRUCT_EXACT_CANDIDATE_IN_ISOLATED_TMP_WORKSPACE",
+    "VERIFY_CHANGED_FILE_HASHES_AND_PYTHON_SYNTAX",
+    "RUN_AFFECTED_AUTHORITY_ADAPTER_TESTS_IF_DEPENDENCIES_ARE_AVAILABLE",
+    "START_LOCALHOST_CANARY_ON_8083",
+    "READ_CANARY_HEALTH_ONLY",
+    "STOP_CANARY",
+    "REOBSERVE_PRODUCTION_8081_HEALTH",
+    "REMOVE_ONLY_NEW_TMP_CANARY_WORKSPACE",
+    "EMIT_CANARY_EVIDENCE_RECEIPT"
+  ],
+  "maximum_effect": "E3_ISOLATED_TRANSIENT_EXECUTION_ONLY",
+  "rollback": "停止 8083 canary；刪除只由本次建立的 /tmp/w7tp-d8-ingress-canary-20260918T145235Z；不得觸碰既有工作樹、8081 服務、canonical、pointer 或其他資料。",
+  "stop_conditions": [
+    "target branch/head/tree drift",
+    "production 8081 gateway not active or health != PASS_GATEWAY_PROCESS",
+    "any write outside the isolated /tmp workspace",
+    "port 8083 already belongs to an unrelated process",
+    "candidate hash mismatch",
+    "new HIGH or CRITICAL red-team safety finding",
+    "protected-data access would be required",
+    "unexpected service restart/deploy/router/database/canonical/pointer effect"
+  ],
+  "single_use": true,
+  "total_field_review_required": true,
+  "founder_decision_required": true,
+  "question_zh_TW": "是否授權只在 MSI_WSL 的 /tmp 隔離工作區，以精確 implementation commit 9046e2510c10cd77e05600bc8186c587a0d4893d 執行一次 8083 canary 驗證，保持現行 8081 Gateway、71 個 dirty 狀態、canonical 與 pointer 全部不變，驗證後立即停止並清除隔離工作區？"
+}
