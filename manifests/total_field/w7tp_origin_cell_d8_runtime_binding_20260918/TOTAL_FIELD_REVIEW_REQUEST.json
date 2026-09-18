@@ -1,0 +1,81 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-CHANGE-REVIEW-REQUEST/1.0",
+  "packet_type": "TOTAL_FIELD_REVIEW_REQUEST",
+  "run_id": "W7TP_ORIGIN_CELL_D8_RUNTIME_BINDING_20260918",
+  "created_at": "2026-09-18T14:42:00Z",
+  "state": "SUBMITTED_FOR_TOTAL_FIELD_REVIEW",
+  "definition": "ORIGIN_CELL_D8_RUNTIME_BINDING_CHANGE_REVIEW",
+  "candidate_manifest": {
+    "path": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/CANDIDATE_MANIFEST.json",
+    "git_blob_sha": "5d5f1e82778bada9699490ffe85248bbfd6065e2",
+    "hash_type": "GIT_BLOB_SHA"
+  },
+  "red_team_evidence": {
+    "path": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/RED_TEAM_EVIDENCE.json",
+    "git_blob_sha": "3ffa104dc80369f5bdd71035398287ddf986d910",
+    "hash_type": "GIT_BLOB_SHA"
+  },
+  "exact_change_coordinate": {
+    "repository": "wuchang1100606355-del/wuchang.life",
+    "base_branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "base_commit": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+    "candidate_branch": "codex/origin-cell-d8-runtime-binding-20260918",
+    "implementation_commit": "9046e2510c10cd77e05600bc8186c587a0d4893d",
+    "implementation_tree": "2f59753d29a537f35bfd53c68949f0f7c0d8c152",
+    "pull_request": 22,
+    "changed_files": [
+      "services/gateway/authority_ingress.py",
+      "services/gateway/main.py",
+      "tests/test_total_field_receive_candidate_authority_adapter.py",
+      "tools/total_field_receive_candidate_authority_adapter.py"
+    ]
+  },
+  "requested_review": {
+    "scope": "EXACT_IMPLEMENTATION_COMMIT_AND_AUTHORITY_BOUNDARY_ONLY",
+    "requested_decision": "REVIEW_D8_PASSKEY_PRIMARY_RECEIVE_CANDIDATE_RUNTIME_BINDING",
+    "review_only": true,
+    "production_deploy_requested": false,
+    "runtime_activation_requested": false,
+    "service_restart_requested": false,
+    "canonical_write_requested": false,
+    "active_pointer_write_requested": false,
+    "database_write_requested": false,
+    "merge_requested": false,
+    "final_decision": null
+  },
+  "review_questions": [
+    "DOES_D8_PASSKEY_REMAIN_THE_PRIMARY_RECEIVE_CANDIDATE_AUTHORITY_PATH",
+    "DOES_INVALID_OR_EXPIRED_PASSKEY_FAIL_CLOSED_WITHOUT_LEGACY_FALLBACK",
+    "IS_LEGACY_ACTIVE_AUTHORITY_COMPATIBILITY_LIMITED_TO_RECEIVE_CANDIDATE_SCOPE_ONLY",
+    "DOES_GATEWAY_RUNTIME_BIND_THE_EXISTING_AUTHORITY_BOUND_RECEIVER_WITHOUT_GRANTING_EXECUTION_AUTHORITY",
+    "DOES_CALLER_AUTHORITY_INJECTION_REMAIN_FORBIDDEN",
+    "DOES_TOTAL_FIELD_REMAIN_FINAL_EFFECT_AUTHORITY",
+    "ARE_OPEN_TEST_AND_ACTUAL_RUNTIME_FINDINGS_CORRECTLY_BLOCKING_ACTIVATION_BUT_NOT_REVIEW_REGISTRATION"
+  ],
+  "validated_facts": {
+    "causal_root_cause": "AUTHORITY_MODEL_EVOLVED_FASTER_THAN_RUNTIME_BINDING",
+    "source_wiring": "CANDIDATE_IMPLEMENTED",
+    "passkey_primary": "CANDIDATE_IMPLEMENTED",
+    "compatibility_scope_guard": "CANDIDATE_IMPLEMENTED",
+    "dedicated_regression_tests": "ADDED_NOT_EXECUTED",
+    "github_status_checks": "NONE_REPORTED",
+    "actual_msi_runtime": "NOT_CHANGED_NOT_VERIFIED",
+    "red_team_pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE"
+  },
+  "authority_boundary": {
+    "candidate_is_not_approval": true,
+    "model_is_not_authority": true,
+    "passkey_provider_is_not_authority": true,
+    "total_field_is_final_effect_authority": true,
+    "candidate_authority": false,
+    "execution_authorized": false,
+    "canonical_write": false,
+    "active_pointer_write": false,
+    "database_write": false,
+    "deploy": false,
+    "restart": false,
+    "merge": false
+  },
+  "total_field_decision": "NOT_RUN",
+  "next": "AWAIT_TOTAL_FIELD_EXACT_CHANGE_REVIEW_DECISION"
+}
