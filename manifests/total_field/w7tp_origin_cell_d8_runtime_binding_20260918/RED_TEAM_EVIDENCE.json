@@ -45,6 +45,20 @@
         "tests/test_total_field_receive_candidate_authority_adapter.py@9046e2510c10cd77e05600bc8186c587a0d4893d"
       ],
       "activation_allowed": false
+    },
+    {
+      "id": "RT-D8-INGRESS-004",
+      "stage": "PRE_ACTIVATION",
+      "severity": "MEDIUM",
+      "status": "CLOSED_BY_DECLARATION_CORRECTION",
+      "perspective": "effect_classification",
+      "finding": "The initial review text could be read as if activation had no database or persistent-state effect, while replay protection creates/updates local SQLite ledgers.",
+      "possible_effect": "The implementation could be activated under an effect class that is too weak for its real persistent runtime-state writes.",
+      "remediation": "The candidate manifest now classifies the implementation maximum effect as E4 and names both persistent replay/consumption ledgers. The current review still requests no runtime write.",
+      "closure_evidence": [
+        "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/CANDIDATE_MANIFEST.json"
+      ],
+      "activation_allowed": false
     }
   ],
   "preserved_boundaries": {
@@ -55,7 +69,9 @@
     "database_write": false,
     "deploy": false,
     "restart": false,
-    "merge": false
+    "merge": false,
+    "review_phase_database_write": false,
+    "activation_requires_e4_authority": true
   },
   "red_team_pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE",
   "note": "Open findings block activation or landing, but do not block registering this exact candidate for Total Field review."
