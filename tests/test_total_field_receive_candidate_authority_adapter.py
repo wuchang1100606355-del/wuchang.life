@@ -485,5 +485,44 @@ class ResolverReceiveCandidateIntegrationTests(unittest.TestCase):
         self.assertEqual(self.owner_recorder.calls, 0)
 
 
+    def test_18_wrong_compatibility_scope_never_reaches_owner(self) -> None:
+        def wrong_scope_resolver(*args: Any, **kwargs: Any) -> dict[str, Any]:
+            del args, kwargs
+            return {
+                "state": adapter.PASS_AUTHORITY_STATE,
+                "authority_verified": True,
+                "authority_id": "authority_ref:promotion_only",
+                "authority_version": "1.0.0",
+                "founder_person_packet_ref": "person_packet_ref:founder",
+                "registered_device_ref": "device_ref:msi",
+                "founder_capability_assignment_ref": "capability_assignment_ref:promotion",
+                "access_profile_ref": "access_profile_ref:founder",
+                "authority_scope": ["PROMOTE_ACCEPTED_CANDIDATE"],
+                "authority_scope_constraints": {},
+                "expires_at": "2099-01-01T00:00:00Z",
+                "verifier_ref": "verifier_ref:total_field_runtime_v1",
+            }
+
+        self.pointer_path.unlink()
+        original = resolver.resolve_active_total_field_authority
+        resolver.resolve_active_total_field_authority = wrong_scope_resolver
+        try:
+            result = adapter.receive_candidate_authority_bound(
+                self._candidate(),
+                self._context(),
+                repo_root=self.root,
+                nonce_ledger=self.ledger,
+                signature_verifier=self.verifier,
+                trusted_verifier_refs=self.trusted,
+                authority_resolver=wrong_scope_resolver,
+                owner_receive_candidate=self.owner_recorder,
+            )
+        finally:
+            resolver.resolve_active_total_field_authority = original
+
+        self.assertEqual(result["state"], "HOLD_AUTHORITY_SCOPE_MISMATCH")
+        self.assertEqual(self.owner_recorder.calls, 0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
