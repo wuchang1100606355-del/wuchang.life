@@ -1,0 +1,95 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-CHANGE-CANDIDATE/1.0",
+  "packet_type": "TOTAL_FIELD_CHANGE_CANDIDATE",
+  "candidate_id": "W7TP_ORIGIN_CELL_D8_RUNTIME_BINDING_20260918",
+  "created_at": "2026-09-18T14:40:00Z",
+  "state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "founder_intent_zh_TW": "將原胞／狀態胞的 RECEIVE_CANDIDATE 權威主線改為 D8 Passkey 優先，正式接入 Gateway 執行期候選入口；舊 ACTIVE_TOTAL_FIELD_AUTHORITY 僅保留嚴格限域的相容回退，不授予候選或執行權。",
+  "repository": {
+    "full_name": "wuchang1100606355-del/wuchang.life",
+    "branch": "codex/origin-cell-d8-runtime-binding-20260918",
+    "base_branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "base_commit": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+    "implementation_commit": "9046e2510c10cd77e05600bc8186c587a0d4893d",
+    "implementation_tree": "2f59753d29a537f35bfd53c68949f0f7c0d8c152",
+    "pull_request": 22
+  },
+  "changed_files": [
+    "services/gateway/authority_ingress.py",
+    "services/gateway/main.py",
+    "tests/test_total_field_receive_candidate_authority_adapter.py",
+    "tools/total_field_receive_candidate_authority_adapter.py"
+  ],
+  "D1_INTENT": {
+    "target_effect": "D8 Passkey scoped RECEIVE_CANDIDATE becomes the primary governed ingress authority path while Total Field remains final effect authority.",
+    "prohibited_effects": [
+      "CANONICAL_WRITE",
+      "ACTIVE_POINTER_WRITE",
+      "DEPLOY",
+      "SERVICE_RESTART",
+      "DATABASE_WRITE",
+      "MERGE",
+      "RUNTIME_ACTIVATION"
+    ]
+  },
+  "D2_STATE": {
+    "current": "CODE_CANDIDATE_COMMITTED_REMOTE_DRAFT_PR",
+    "runtime": "UNCHANGED",
+    "total_field_decision": "NOT_RUN"
+  },
+  "D3_COORDINATE": {
+    "node_scope": [
+      "MSI_WSL_GATEWAY_CANDIDATE"
+    ],
+    "repository_root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "codex/origin-cell-d8-runtime-binding-20260918",
+    "pr": 22
+  },
+  "D4_EVIDENCE": {
+    "source_evidence": [
+      "tools/total_field_dynamic_context.py",
+      "tools/total_field_receive_candidate_authority_adapter.py",
+      "tools/total_field_authority_runtime_bindings.py",
+      "tools/total_field_passkey_d8.py",
+      "configs/total_field/git_push_review_gate_v1.json"
+    ],
+    "github_status_checks": "NONE_REPORTED",
+    "runtime_verification": "NOT_RUN"
+  },
+  "D5_EXECUTION_POLICY": {
+    "candidate_only": true,
+    "execution_authorized": false,
+    "deploy": false,
+    "restart": false,
+    "canonical_pointer_write": false,
+    "active_pointer_write": false
+  },
+  "D6_GENERATIVE_TRANSMISSION": {
+    "used": false,
+    "note": "This change governs candidate ingress authority; Git and HTTP carriers are not generative transmission by themselves."
+  },
+  "D7_RISK_QUARANTINE": {
+    "fail_closed": true,
+    "invalid_passkey_no_legacy_fallback": true,
+    "wrong_compatibility_scope_hold": true,
+    "live_activation_blocked_until_review_and_runtime_verification": true
+  },
+  "D8_ENVELOPE_AUTHORITY": {
+    "primary_receive_candidate_authority": "FOUNDER_USER_VERIFIED_PASSKEY",
+    "compatibility_authority": "ED25519_ACTIVE_AUTHORITY_COMPATIBILITY_RECEIVE_CANDIDATE_SCOPE_ONLY",
+    "candidate_authority": false,
+    "execution_authorized": false,
+    "total_field_final_effect_authority": true
+  },
+  "requested_review": {
+    "scope": "EXACT_HASH_BOUND_CHANGE_REVIEW_ONLY",
+    "requested_decision": "REVIEW_ORIGIN_CELL_D8_RUNTIME_BINDING_CANDIDATE",
+    "production_deploy_requested": false,
+    "canonical_write_requested": false,
+    "runtime_activation_requested": false,
+    "service_restart_requested": false,
+    "database_write_requested": false,
+    "merge_requested": false,
+    "final_decision": null
+  }
+}
