@@ -416,6 +416,19 @@ def receive_candidate_authority_bound(
 
         authority_source = "ED25519_ACTIVE_AUTHORITY_COMPATIBILITY"
         authority_state = authority_resolution.get("state")
+        if (
+            authority_state == PASS_AUTHORITY_STATE
+            and authority_resolution.get("authority_verified") is True
+            and authority_resolution.get("authority_scope")
+            != [RECEIVE_CANDIDATE_SCOPE]
+        ):
+            return _safe_result(
+                "HOLD_AUTHORITY_SCOPE_MISMATCH",
+                "compatibility authority scope is not RECEIVE_CANDIDATE",
+                candidate_packet=candidate,
+                dynamic_context_packet=context,
+                authority_resolution=authority_resolution,
+            )
 
     if (
         authority_state != PASS_AUTHORITY_STATE
