@@ -1,0 +1,43 @@
+{
+  "schema_version": "W7TP-FOUNDER-BOUNDED-AUTHORIZATION-DECISION/1.0",
+  "packet_type": "FOUNDER_AUTHORIZATION_DECISION",
+  "decision_id": "FOUNDER_DECISION_D8_INGRESS_CANARY_MSI_20260918_V2",
+  "authorization_request_id": "AUTHZ_D8_INGRESS_ISOLATED_CANARY_MSI_20260918T150316Z_V2",
+  "authorization_request_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/ISOLATED_CANARY_AUTHORIZATION_REQUEST_V2.json",
+  "authorization_request_git_blob_sha": "be5703a38573fc1174626d3f9bba6cac29e0fbef",
+  "target_snapshot_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/TARGET_FIELD_SNAPSHOT_MSI_20260918T150316Z.json",
+  "target_snapshot_git_blob_sha": "53958c5481b5c39b31749b39bb9596c34c3ea284",
+  "red_team_closure_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/RED_TEAM_DRIFT_CLOSURE_20260918T1505Z.json",
+  "red_team_closure_git_blob_sha": "33045288f67f9d38fbb9380a48abc18ea6d5385f",
+  "founder_response": "YES",
+  "decision": "APPROVE_EXACT_BOUNDED_REQUEST",
+  "decision_scope": "ONLY_AUTHZ_D8_INGRESS_ISOLATED_CANARY_MSI_20260918T150316Z_V2",
+  "single_use": true,
+  "expires_at": "2026-09-18T16:05:30Z",
+  "authorized_effect": "E3_ISOLATED_TRANSIENT_EXECUTION_ONLY",
+  "exact_bindings": {
+    "target_node": "MSI_WSL",
+    "target_branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "target_head": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+    "target_tree": "cd04d92b4522c2db8395141969d760cb2e587856",
+    "dirty_count": 86,
+    "dirty_status_sha256": "90cccd37f5bf0e7b3eb363cda47ca1a07f91362ddfbe8e953caaf083c4fd25ae",
+    "implementation_commit": "9046e2510c10cd77e05600bc8186c587a0d4893d",
+    "implementation_tree": "2f59753d29a537f35bfd53c68949f0f7c0d8c152",
+    "canary_endpoint": "127.0.0.1:8083"
+  },
+  "forbidden_effects": [
+    "DEPLOY",
+    "SERVICE_RESTART",
+    "MERGE",
+    "CANONICAL_WRITE",
+    "POINTER_WRITE",
+    "RUNTIME_ACTIVATION",
+    "PRODUCTION_DB_WRITE",
+    "ROUTER_MUTATION",
+    "DIRTY_WORKTREE_MUTATION"
+  ],
+  "total_field_decision": "NOT_ISSUED",
+  "execution_authorized_by_this_record": false,
+  "note": "This records the Founder's exact yes decision. It does not manufacture or replace a Total Field D8 receipt."
+}
