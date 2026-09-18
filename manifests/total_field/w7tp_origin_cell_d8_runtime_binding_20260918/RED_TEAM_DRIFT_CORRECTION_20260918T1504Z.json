@@ -1,0 +1,13 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-RED-TEAM-CORRECTION/1.0",
+  "packet_type": "RED_TEAM_CORRECTION",
+  "created_at": "2026-09-18T15:04:00Z",
+  "corrects": "RED_TEAM_DRIFT_EVENT_20260918T150316Z.json",
+  "reason": "TREE coordinate transcription typo in the drift event evidence block.",
+  "incorrect_value": "cd04d92b4522cdb8395141969d760cb2e587856",
+  "corrected_value": "cd04d92b4522c2db8395141969d760cb2e587856",
+  "source_evidence": "user-provided direct MSI_WSL read-only probe at 2026-09-18T15:03:16.600434+00:00",
+  "effect_on_conclusion": "NONE. Branch/HEAD/tree remain committed-state MATCH; worktree drift remains DIRTY_COUNT 71->86.",
+  "canonical_write": false,
+  "runtime_change": false
+}

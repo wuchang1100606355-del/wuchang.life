@@ -1,0 +1,46 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-RED-TEAM-DRIFT-CLOSURE/1.0",
+  "packet_type": "RED_TEAM_DRIFT_CLOSURE",
+  "created_at": "2026-09-18T15:05:00Z",
+  "finding_id": "RT-WORK-DRIFT-006",
+  "state": "PARTIAL_CLOSURE",
+  "target_node": "MSI_WSL",
+  "evidence": {
+    "command": "git status --porcelain=v1 -- <four D8 ingress implementation paths>",
+    "result": "NO_OUTPUT",
+    "interpretation": "Git reported no uncommitted state on the four D8 ingress implementation paths.",
+    "implementation_paths": [
+      "services/gateway/authority_ingress.py",
+      "services/gateway/main.py",
+      "tests/test_total_field_receive_candidate_authority_adapter.py",
+      "tools/total_field_receive_candidate_authority_adapter.py"
+    ],
+    "successor_snapshot_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/TARGET_FIELD_SNAPSHOT_MSI_20260918T150316Z.json",
+    "successor_snapshot_git_blob_sha": "53958c5481b5c39b31749b39bb9596c34c3ea284",
+    "dirty_count": 86,
+    "dirty_status_sha256": "90cccd37f5bf0e7b3eb363cda47ca1a07f91362ddfbe8e953caaf083c4fd25ae",
+    "gateway_state": "active",
+    "gateway_health": "PASS_GATEWAY_PROCESS"
+  },
+  "conclusion": {
+    "committed_source_drift": false,
+    "worktree_drift": true,
+    "candidate_path_overlap": false,
+    "unrelated_worktree_drift": true,
+    "production_gateway_healthy": true,
+    "prior_canary_authorization_valid": false,
+    "successor_canary_authorization_may_be_reissued": true
+  },
+  "remaining_findings": [
+    "RT-D8-INGRESS-001 exact candidate tests not yet executed",
+    "RT-D8-INGRESS-002 actual isolated MSI canary not yet executed"
+  ],
+  "forbidden_effects_preserved": [
+    "DEPLOY",
+    "SERVICE_RESTART",
+    "MERGE",
+    "CANONICAL_WRITE",
+    "POINTER_WRITE",
+    "RUNTIME_ACTIVATION"
+  ]
+}

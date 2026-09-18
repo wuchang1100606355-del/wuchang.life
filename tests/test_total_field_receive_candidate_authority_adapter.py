@@ -7,6 +7,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable, Mapping
@@ -387,6 +388,140 @@ class ResolverReceiveCandidateIntegrationTests(unittest.TestCase):
         self.assertEqual(result["state"], "BLOCK_OWNER_RECEIVER_INVALID")
         self.assertFalse(result["candidate_authority"])
         self.assertFalse(result["execution_authorized"])
+
+
+    def _write_passkey_gate(self) -> Path:
+        path = self.root / adapter.PASSKEY_CONFIG_REL
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps(
+                {
+                    "passkey_verifier": {
+                        "allowed_effect_scopes": [adapter.RECEIVE_CANDIDATE_SCOPE]
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+        return path
+
+    def _passkey_candidate_and_context(self) -> tuple[dict[str, Any], dict[str, Any]]:
+        candidate = self._candidate(
+            candidate_id="w7tp_8d_adi_origin_cell_fusion",
+            candidate_packet_sha256="1" * 64,
+            skill_index_sha256="2" * 64,
+            skill_source_manifest_sha256="3" * 64,
+        )
+        context = self._context()
+        return candidate, context
+
+    def _passkey_resolution(
+        self,
+        candidate: Mapping[str, Any],
+        context: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        return {
+            "state": adapter.PASS_AUTHORITY_STATE,
+            "authority_verified": True,
+            "scope": [adapter.RECEIVE_CANDIDATE_SCOPE],
+            "expires_at": "2099-01-01T00:00:00Z",
+            "authority_sha256": "4" * 64,
+            "signer_type": "FOUNDER_ENROLLED_USER_VERIFIED_PASSKEY",
+            "authority_scope_constraints": {
+                "candidate_id": candidate["candidate_id"],
+                "candidate_packet_sha256": candidate["candidate_packet_sha256"],
+                "skill_index_sha256": candidate["skill_index_sha256"],
+                "skill_source_manifest_sha256": candidate[
+                    "skill_source_manifest_sha256"
+                ],
+                "dynamic_context_sha256": context["packet_sha256"],
+                "receive_candidate": True,
+                "git_push": False,
+                "deploy": False,
+                "restart": False,
+                "canonical_pointer_write": False,
+                "active_pointer_write": False,
+            },
+        }
+
+    def test_16_passkey_is_primary_and_does_not_require_active_pointer(self) -> None:
+        self._write_passkey_gate()
+        candidate, context = self._passkey_candidate_and_context()
+        passkey_result = self._passkey_resolution(candidate, context)
+        self.pointer_path.unlink()
+        consumes: list[bool] = []
+
+        def fake_passkey(**kwargs: Any) -> dict[str, Any]:
+            consumes.append(bool(kwargs["consume"]))
+            return dict(passkey_result)
+
+        with patch.object(adapter, "_resolve_passkey_authority", side_effect=fake_passkey):
+            result = self._call(candidate=candidate, context=context)
+
+        self.assertEqual(result["state"], "ALLOW_CANDIDATE_ACCEPTED")
+        self.assertEqual(self.owner_recorder.calls, 1)
+        self.assertEqual(consumes, [False, True])
+        self.assertFalse(result["candidate_authority"])
+        self.assertFalse(result["execution_authorized"])
+
+    def test_17_invalid_passkey_does_not_fall_back_to_active_pointer(self) -> None:
+        self._write_passkey_gate()
+        candidate, context = self._passkey_candidate_and_context()
+
+        with patch.object(
+            adapter,
+            "_resolve_passkey_authority",
+            return_value={
+                "state": "HOLD_DEVICE_PASSKEY_D8_AUTHORITY",
+                "authority_verified": False,
+                "reason": "PASSKEY_APPROVAL_EXPIRED",
+                "scope": [],
+            },
+        ):
+            result = self._call(candidate=candidate, context=context)
+
+        self.assertEqual(result["state"], "HOLD_DEVICE_PASSKEY_D8_AUTHORITY")
+        self.assertEqual(result["reason"], "PASSKEY_APPROVAL_EXPIRED")
+        self.assertEqual(self.owner_recorder.calls, 0)
+
+
+    def test_18_wrong_compatibility_scope_never_reaches_owner(self) -> None:
+        def wrong_scope_resolver(*args: Any, **kwargs: Any) -> dict[str, Any]:
+            del args, kwargs
+            return {
+                "state": adapter.PASS_AUTHORITY_STATE,
+                "authority_verified": True,
+                "authority_id": "authority_ref:promotion_only",
+                "authority_version": "1.0.0",
+                "founder_person_packet_ref": "person_packet_ref:founder",
+                "registered_device_ref": "device_ref:msi",
+                "founder_capability_assignment_ref": "capability_assignment_ref:promotion",
+                "access_profile_ref": "access_profile_ref:founder",
+                "authority_scope": ["PROMOTE_ACCEPTED_CANDIDATE"],
+                "authority_scope_constraints": {},
+                "expires_at": "2099-01-01T00:00:00Z",
+                "verifier_ref": "verifier_ref:total_field_runtime_v1",
+            }
+
+        self.pointer_path.unlink()
+        original = resolver.resolve_active_total_field_authority
+        resolver.resolve_active_total_field_authority = wrong_scope_resolver
+        try:
+            result = adapter.receive_candidate_authority_bound(
+                self._candidate(),
+                self._context(),
+                repo_root=self.root,
+                nonce_ledger=self.ledger,
+                signature_verifier=self.verifier,
+                trusted_verifier_refs=self.trusted,
+                authority_resolver=wrong_scope_resolver,
+                owner_receive_candidate=self.owner_recorder,
+            )
+        finally:
+            resolver.resolve_active_total_field_authority = original
+
+        self.assertEqual(result["state"], "HOLD_AUTHORITY_SCOPE_MISMATCH")
+        self.assertEqual(self.owner_recorder.calls, 0)
 
 
 if __name__ == "__main__":

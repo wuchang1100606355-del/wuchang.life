@@ -1,0 +1,28 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-RED-TEAM-DRIFT-EVENT/1.0",
+  "packet_type": "RED_TEAM_DRIFT_EVENT",
+  "created_at": "2026-09-18T15:03:16.600434+00:00",
+  "finding_id": "RT-WORK-DRIFT-006",
+  "stage": "PRE_TARGET_MUTATION_SAFETY",
+  "severity": "HIGH",
+  "status": "OPEN",
+  "perspective": "successor_target_snapshot",
+  "evidence": {
+    "branch": "agent/moving-v-v2-taiji8d-local-canary",
+    "head": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+    "tree": "cd04d92b4522cdb8395141969d760cb2e587856",
+    "dirty_count": 86,
+    "dirty_status_sha256": "90cccd37f5bf0e7b3eb363cda47ca1a07f91362ddfbe8e953caaf083c4fd25ae",
+    "gateway": "active",
+    "gateway_health": "PASS_GATEWAY_PROCESS"
+  },
+  "conclusion": {
+    "committed_source_drift": false,
+    "worktree_drift": true,
+    "current_successor_snapshot_acquired": true,
+    "candidate_related_path_overlap": "UNKNOWN_NOT_PROBED",
+    "prior_canary_authorization_valid": false
+  },
+  "remediation": "Read only the four implementation target paths from git status to determine whether current worktree drift overlaps the D8 ingress candidate. Do not scan or clean unrelated dirty paths.",
+  "authorization_required": false
+}

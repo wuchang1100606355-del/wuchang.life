@@ -1,0 +1,42 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-ISOLATED-CANARY-REVIEW-SUBMISSION/1.0",
+  "packet_type": "TOTAL_FIELD_REVIEW_SUBMISSION",
+  "submission_id": "TF_REVIEW_D8_INGRESS_CANARY_MSI_20260918_V2",
+  "state": "SUBMITTED_PENDING_D8_DECISION",
+  "founder_decision_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/FOUNDER_AUTHORIZATION_DECISION_V2.json",
+  "authorization_request_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/ISOLATED_CANARY_AUTHORIZATION_REQUEST_V2.json",
+  "target_snapshot_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/TARGET_FIELD_SNAPSHOT_MSI_20260918T150316Z.json",
+  "red_team_closure_ref": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/RED_TEAM_DRIFT_CLOSURE_20260918T1505Z.json",
+  "requested_decision": "ALLOW_EXACT_ISOLATED_CANARY_ONLY",
+  "requested_effect_class": "E3_ISOLATED_TRANSIENT_EXECUTION_ONLY",
+  "exact_runtime_effect": {
+    "target_node": "MSI_WSL",
+    "temporary_workspace": "/tmp/w7tp-d8-ingress-canary-20260918T150316Z",
+    "canary_endpoint": "127.0.0.1:8083",
+    "production_endpoint": "127.0.0.1:8081",
+    "implementation_commit": "9046e2510c10cd77e05600bc8186c587a0d4893d"
+  },
+  "acceptance_gates": [
+    "preflight branch/head/tree match",
+    "dirty_count == 86",
+    "dirty_status_sha256 exact match",
+    "four implementation paths remain clean",
+    "production 8081 health == PASS_GATEWAY_PROCESS",
+    "candidate hashes match exact implementation",
+    "all writes remain inside new /tmp canary workspace",
+    "post-canary 8081 health and dirty fingerprint unchanged"
+  ],
+  "open_findings_targeted": [
+    "RT-D8-INGRESS-001",
+    "RT-D8-INGRESS-002"
+  ],
+  "canonical_write": false,
+  "pointer_write": false,
+  "deploy": false,
+  "service_restart": false,
+  "merge": false,
+  "runtime_activation": false,
+  "execution_authorized": false,
+  "total_field_decision": "NOT_RUN",
+  "next": "AWAIT_TOTAL_FIELD_D8_RECEIPT"
+}
