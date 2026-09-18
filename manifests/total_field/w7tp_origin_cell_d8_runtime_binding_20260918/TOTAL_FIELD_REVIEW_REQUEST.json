@@ -7,12 +7,12 @@
   "definition": "ORIGIN_CELL_D8_RUNTIME_BINDING_CHANGE_REVIEW",
   "candidate_manifest": {
     "path": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/CANDIDATE_MANIFEST.json",
-    "git_blob_sha": "5d5f1e82778bada9699490ffe85248bbfd6065e2",
+    "git_blob_sha": "70416770731f91db2803252c53486902558702ba",
     "hash_type": "GIT_BLOB_SHA"
   },
   "red_team_evidence": {
     "path": "manifests/total_field/w7tp_origin_cell_d8_runtime_binding_20260918/RED_TEAM_EVIDENCE.json",
-    "git_blob_sha": "3ffa104dc80369f5bdd71035398287ddf986d910",
+    "git_blob_sha": "58b9171fb194def5b345252d86b3bdc2d5c3c196",
     "hash_type": "GIT_BLOB_SHA"
   },
   "exact_change_coordinate": {
@@ -41,7 +41,8 @@
     "active_pointer_write_requested": false,
     "database_write_requested": false,
     "merge_requested": false,
-    "final_decision": null
+    "final_decision": null,
+    "note": "Review only. No runtime mutation is requested. Any later activation/use is E4 and requires separate Founder instruction, D8 decision, snapshot, health checks, rollback, and final human confirmation."
   },
   "review_questions": [
     "DOES_D8_PASSKEY_REMAIN_THE_PRIMARY_RECEIVE_CANDIDATE_AUTHORITY_PATH",
@@ -60,7 +61,13 @@
     "dedicated_regression_tests": "ADDED_NOT_EXECUTED",
     "github_status_checks": "NONE_REPORTED",
     "actual_msi_runtime": "NOT_CHANGED_NOT_VERIFIED",
-    "red_team_pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE"
+    "red_team_pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE",
+    "maximum_effect_class": "E4",
+    "review_phase_runtime_write": "NONE_REQUESTED",
+    "activation_persistent_state": [
+      "runtime/total_field/runtime_state/receive_candidate_authority_nonce_ledger.sqlite3",
+      "runtime/total_field/runtime_state/passkey_d8/consumed_approvals.sqlite3"
+    ]
   },
   "authority_boundary": {
     "candidate_is_not_approval": true,
