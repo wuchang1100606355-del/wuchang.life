@@ -62,7 +62,16 @@
     "deploy": false,
     "restart": false,
     "canonical_pointer_write": false,
-    "active_pointer_write": false
+    "active_pointer_write": false,
+    "activation_effects": {
+      "persistent_runtime_state_write": true,
+      "receive_candidate_nonce_ledger": "runtime/total_field/runtime_state/receive_candidate_authority_nonce_ledger.sqlite3",
+      "passkey_consumption_ledger": "runtime/total_field/runtime_state/passkey_d8/consumed_approvals.sqlite3",
+      "canonical_pointer_write": false,
+      "active_pointer_write": false,
+      "deploy_requires_separate_authority": true,
+      "restart_requires_separate_authority": true
+    }
   },
   "D6_GENERATIVE_TRANSMISSION": {
     "used": false,
@@ -90,6 +99,17 @@
     "service_restart_requested": false,
     "database_write_requested": false,
     "merge_requested": false,
-    "final_decision": null
+    "final_decision": null,
+    "note": "This review requests no runtime write. Any later activation/use is E4 because replay protection consumes persistent local authority state and requires a separate Founder instruction, D8 decision, snapshot, health checks, rollback, and final human confirmation."
+  },
+  "taxonomy": {
+    "primary_family": "F07_CANDIDATE_CONVERGENCE",
+    "secondary_families": [
+      "F10_SOFTWARE_DEVELOPMENT",
+      "F18_LIVE_CHANGE_ROLLBACK",
+      "F20_META_GOVERNANCE"
+    ],
+    "maximum_effect_class": "E4",
+    "rationale": "If activated, the ingress uses persistent replay/consumption ledgers under runtime/total_field/runtime_state. Review artifacts remain E2, but the implementation's strongest runtime effect is a governed persistent non-protected state change."
   }
 }
