@@ -5,7 +5,7 @@
     "NEEDS_CONNECTOR": 39,
     "NEEDS_LOCAL_ADAPTER": 47,
     "PLATFORM_INTERNAL_UNEXPORTABLE": 5,
-    "READY_LOCAL": 10,
+    "READY_LOCAL": 12,
     "READY_MCP": 2
   },
   "continue_local_tools": [
@@ -28,7 +28,7 @@
     "Taiji_Hub recovery copies",
     "Taiji_Hub virtual-environment copies"
   ],
-  "index_sha256": "c9922474859105455ac3e520bdd892249c47630709221cb823027bdd1e7a1f39",
+  "index_sha256": "098288efe893a429819d6bcbd57f6957f0698944d75edf9e2325ee35e2b936fc",
   "interface": "FOUNDER_VPN_FULL",
   "mcp_tools": [
     "get_total_field_dynamic_context",
@@ -39,6 +39,290 @@
   "owner": "江政隆",
   "schema_id": "W7TP_FOUNDER_ALL_SKILLS_8D_INDEX_V1",
   "skill_packets": [
+    {
+      "D1_INTENT": {
+        "description": "讓可替換模型沿既有總場 8D／ADI 索引理解 Founder 發明、讀取進度、定位已登記技能並提供一個最短下一步；不取得總場、D8 或對外代言權威。",
+        "required_context": "Current Founder intent, target lock, hash-bound 8DADI memory evidence, current progress, Founder all-skills index, invention/evidence references, and current authority boundary.",
+        "triggers": [
+          "小J",
+          "總場代言",
+          "Founder Partner",
+          "記住進度",
+          "進度建議",
+          "下一步建議",
+          "我的發明",
+          "所有技能"
+        ]
+      },
+      "D2_STATE": {
+        "mapping_state": "READY_LOCAL",
+        "runtime_claim": true,
+        "superseded": false
+      },
+      "D3_COORDINATE": {
+        "node": "MSI_LOCAL_WSL",
+        "ordinal": 1,
+        "repository": "/home/taiji_admin/Taiji_Hub",
+        "source_path": ".skill-build/8d-adi-founder-partner/SKILL.md"
+      },
+      "D4_EVIDENCE": {
+        "source_kind": "W7TP_LOCAL_CAPABILITY",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+        "source_sha256": "dd36d11e759a1fe9eb32f6463796e38cabdb725df4e08f83a33a2d117e48e4eb",
+        "supporting_sources": [
+          {
+            "path": ".skill-build/8d-adi-founder-partner/references/founder-invention-contract.md",
+            "sha256": "9d30d0291e9d167cf89d5e1833c53f7a8cf380114636698889b0c5759c7a4b2b"
+          },
+          {
+            "path": ".skill-build/8d-adi-founder-partner/references/proven-facts.md",
+            "sha256": "6aee794bb0937a4cead4959727c92f2d69b0700c0346c0ab6970c4583a39f3ed"
+          },
+          {
+            "path": ".skill-build/8d-adi-founder-partner/references/xiaoj-total-field-binding.md",
+            "sha256": "0730a7f580b642c3665ef9a75e3428c4abe7362c6591d903ae6c1fc21fc941c7"
+          },
+          {
+            "path": "manifests/ollama_xiaoj_total_field_v0_1/system_prefix.txt",
+            "sha256": "5e78365c7e7c2327a197beb5e3dedeb2e0fa15083998fda94b686a4e8dfa621b"
+          },
+          {
+            "path": "manifests/ollama_xiaoj_total_field_v0_1/root_model_contract.json",
+            "sha256": "355c56e67e686883f4c8fbdedc220e0eb5d83e577a596cbe392dcc8c72b1fb88"
+          },
+          {
+            "path": "tools/total_field_dynamic_context.py",
+            "sha256": "ea7ed43d69ef35867cfa7d746f4faaf8990ff8a0b18e29a5be78370e071201bc"
+          },
+          {
+            "path": "configs/total_field/active_total_field_authority_runtime_v1.json",
+            "sha256": "77e1a6fbf2e3f5290779dc55cfb3e996f6e396b180fb049359c3cbc0d1cbd003"
+          }
+        ]
+      },
+      "D5_EXECUTION": {
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "context_refs": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "identity_profile_ref": {
+              "const": "FOUNDER_ALL_SKILLS"
+            },
+            "intent": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "intent",
+            "identity_profile_ref"
+          ],
+          "type": "object"
+        },
+        "maximum_effect": "LOCAL_CANDIDATE",
+        "model_commit_allowed": false,
+        "output_schema": {
+          "additionalProperties": true,
+          "properties": {
+            "authority": {
+              "const": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
+            },
+            "candidate": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "evidence": {
+              "type": "array"
+            },
+            "skill_id": {
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "CANDIDATE_ONLY",
+                "HOLD",
+                "BLOCK"
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "skill_id",
+            "candidate",
+            "evidence",
+            "authority"
+          ],
+          "type": "object"
+        },
+        "single_founder_confirmation_required_for_side_effect": true,
+        "tool_refs": [
+          "local:tools.total_field_dynamic_context.build_dynamic_context",
+          "local:tools.total_field_dynamic_context.build_total_field_progress_projection",
+          "local:tools.total_field_dynamic_context.build_total_field_correction_contract"
+        ]
+      },
+      "D6_TECHNICAL_DEFINITION": {
+        "full_skill_body_in_default_context": false,
+        "load_on_demand": true,
+        "lookup": "DETERMINISTIC_INTEGER_TRIGGER_SCORE",
+        "validation": "Rebuild and validate the existing Founder skill index, verify all three local function bindings and fail-closed boundaries, and keep progress persistence, external representation, node projection, deployment, activation, ADI writes, and tool effects separately authorized."
+      },
+      "D7_RISK": {
+        "connector_login_only_at_use_time": false,
+        "credential_to_model": false,
+        "false_ready_claim_forbidden": true,
+        "platform_hidden_prompt_copied": false
+      },
+      "D8_ENVELOPE": {
+        "access_profile": "FOUNDER_ALL_SKILLS",
+        "interface": "FOUNDER_VPN_FULL",
+        "member_boundary": "OWNER_ONLY",
+        "model_identity": "FOUNDER_PRIVATE_XIAOJ",
+        "owner": "江政隆",
+        "receiver": "get_total_field_dynamic_context",
+        "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
+      },
+      "packet_id": "skill8d:0001:8d-adi-founder-partner:40bdbdf4df7e555a",
+      "packet_sha256": "0174f4a3a39c90df5a2466a7a9765aac03d48d486f7e7b079ed4edb87dc61b2e",
+      "schema_version": "1.0.0",
+      "skill_id": "8d-adi-founder-partner",
+      "skill_name": "8D ADI Founder Partner / 小J總場代言候選",
+      "skill_version": "1.0.0",
+      "status": "READY_LOCAL"
+    },
+    {
+      "D1_INTENT": {
+        "description": "以有界唯讀盤點與 ADI 段落映射建立狀態場，定位因果、供需、閉環缺口、影響與權威邊界。",
+        "required_context": "Exact node, root, revision, authority boundary, bounded read budget, and safe pivot paths.",
+        "triggers": [
+          "狀態場",
+          "8D ADI 檔案智能",
+          "閉環缺口",
+          "供需存依",
+          "修改影響",
+          "跨節點差異",
+          "送達排序"
+        ]
+      },
+      "D2_STATE": {
+        "mapping_state": "READY_LOCAL",
+        "runtime_claim": true,
+        "superseded": false
+      },
+      "D3_COORDINATE": {
+        "node": "MSI_LOCAL_WSL",
+        "ordinal": 2,
+        "repository": "/home/taiji_admin/Taiji_Hub",
+        "source_path": ".skill-build/8d-adi-state-field-intelligence/SKILL.md"
+      },
+      "D4_EVIDENCE": {
+        "source_kind": "W7TP_LOCAL_CAPABILITY",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+        "source_sha256": "d2406397c93ed2b8be2febd9f286a069a5a000427fedd55bd3822b7990fbd29c"
+      },
+      "D5_EXECUTION": {
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "context_refs": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "identity_profile_ref": {
+              "const": "FOUNDER_ALL_SKILLS"
+            },
+            "intent": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "intent",
+            "identity_profile_ref"
+          ],
+          "type": "object"
+        },
+        "maximum_effect": "LOCAL_CANDIDATE",
+        "model_commit_allowed": false,
+        "output_schema": {
+          "additionalProperties": true,
+          "properties": {
+            "authority": {
+              "const": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
+            },
+            "candidate": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "evidence": {
+              "type": "array"
+            },
+            "skill_id": {
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "CANDIDATE_ONLY",
+                "HOLD",
+                "BLOCK"
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "skill_id",
+            "candidate",
+            "evidence",
+            "authority"
+          ],
+          "type": "object"
+        },
+        "single_founder_confirmation_required_for_side_effect": true,
+        "tool_refs": [
+          "linux:python3 .skill-build/8d-adi-state-field-intelligence/scripts/state_field_inventory.py --root <ROOT>",
+          "linux:python3 .skill-build/8d-adi-state-field-intelligence/scripts/adi_map_router.py --root <ROOT> --path <SAFE_RELATIVE_PATH> --allow-content-read"
+        ]
+      },
+      "D6_TECHNICAL_DEFINITION": {
+        "full_skill_body_in_default_context": false,
+        "load_on_demand": true,
+        "lookup": "DETERMINISTIC_INTEGER_TRIGGER_SCORE",
+        "validation": "Run bounded inventory and ADI map checks; writes, archives, commits, pushes, deployments, activation effects, and canonical changes remain separately authorized."
+      },
+      "D7_RISK": {
+        "connector_login_only_at_use_time": false,
+        "credential_to_model": false,
+        "false_ready_claim_forbidden": true,
+        "platform_hidden_prompt_copied": false
+      },
+      "D8_ENVELOPE": {
+        "access_profile": "FOUNDER_ALL_SKILLS",
+        "interface": "FOUNDER_VPN_FULL",
+        "member_boundary": "OWNER_ONLY",
+        "model_identity": "FOUNDER_PRIVATE_XIAOJ",
+        "owner": "江政隆",
+        "receiver": "get_total_field_dynamic_context",
+        "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
+      },
+      "packet_id": "skill8d:0002:8d-adi-state-field-intelligence:bdb110064baf481e",
+      "packet_sha256": "b4cd1bf1988082f951639fa1174a58d7df2f34f1dd973d4af90fc3a8a88c82d9",
+      "schema_version": "1.0.0",
+      "skill_id": "8d-adi-state-field-intelligence",
+      "skill_name": "8D ADI State Field Intelligence",
+      "skill_version": "1.0.0",
+      "status": "READY_LOCAL"
+    },
     {
       "D1_INTENT": {
         "description": ">-",
@@ -54,13 +338,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 1,
+        "ordinal": 3,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/6.0.1/skills/airtable-cli/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/7.0.0/skills/airtable-cli/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "8c7aa197e1f14866cba1ff25e8365b46e08b6ec8f828ebee14e18bd9468da788"
       },
       "D5_EXECUTION": {
@@ -150,8 +434,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0001:airtable-cli:3fc8ba90e1d9b4ac",
-      "packet_sha256": "311d01cd2f8931dcddc638a72b5dad727c1fbd54f7bab617ec116c565903a23a",
+      "packet_id": "skill8d:0003:airtable-cli:8e14ecd74e354a10",
+      "packet_sha256": "3f50ea664b804e7ee969346dad62b39b81e02a915e8d35e4ff765ae14549c106",
       "schema_version": "1.0.0",
       "skill_id": "airtable-cli",
       "skill_name": "airtable-cli",
@@ -184,13 +468,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 2,
+        "ordinal": 4,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/6.0.1/skills/airtable-filters/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/7.0.0/skills/airtable-filters/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "a73cf412d5f806483eb90f0d4b0b820bdebddca999311d6c7798f888b6e70a73"
       },
       "D5_EXECUTION": {
@@ -280,8 +564,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0002:airtable-filters:0189fbb1ab8c5fcf",
-      "packet_sha256": "7c1a0b683e974886a9fcd19e23ddbaa8f5d529a68f49315d4d78099c9573ff4e",
+      "packet_id": "skill8d:0004:airtable-filters:46cdb51699e6b717",
+      "packet_sha256": "d1bb1f942452030f0f367f7c8135f92f716e5eb519528cd9f93f332cd2fa575c",
       "schema_version": "1.0.0",
       "skill_id": "airtable-filters",
       "skill_name": "airtable-filters",
@@ -314,13 +598,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 3,
+        "ordinal": 5,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/6.0.1/skills/airtable-overview/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/airtable/7.0.0/skills/airtable-overview/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "07111021f00157d505e088d054f10a1c4af95d28bba031ff6502201b6e2abec9"
       },
       "D5_EXECUTION": {
@@ -410,8 +694,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0003:airtable-overview:70528c9cd1bfdfc2",
-      "packet_sha256": "c506da29b3ecb8f637d321b487332d21515b99e71fff5f367095884c246310b3",
+      "packet_id": "skill8d:0005:airtable-overview:63954849b1517c91",
+      "packet_sha256": "7197595ef6db557e3d209fc94e662e83dd1ca03d139019f588ca2989753e5eb9",
       "schema_version": "1.0.0",
       "skill_id": "airtable-overview",
       "skill_name": "airtable-overview",
@@ -444,13 +728,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 4,
+        "ordinal": 6,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/airunway-aks-setup/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "89652e09aae17485d4f72e7417480c39289ac444a4985355ffbf2821e17fdd96"
       },
       "D5_EXECUTION": {
@@ -540,8 +824,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0004:airunway-aks-setup:a4a2bed8f37da373",
-      "packet_sha256": "6707beca618e50377e3766ae841995da58f07297aa1c482bdced4628fc19a0d8",
+      "packet_id": "skill8d:0006:airunway-aks-setup:abdfc338c7602f7c",
+      "packet_sha256": "51a645474f653de6b17ebfd4673efdeb39de9a4b34401ca56974f5182c82aa7a",
       "schema_version": "1.0.0",
       "skill_id": "airunway-aks-setup",
       "skill_name": "airunway-aks-setup",
@@ -574,13 +858,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 5,
+        "ordinal": 7,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/appinsights-instrumentation/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "0086a38ba8dcb1be0e828f5d86d768d73110729bce51be9c60431ec59c47106c"
       },
       "D5_EXECUTION": {
@@ -670,8 +954,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0005:appinsights-instrumentation:b60173b56d682827",
-      "packet_sha256": "5f70fe828a78882d3ce182bc277c1b1de159f566ee2714d2a9bf05732a0286be",
+      "packet_id": "skill8d:0007:appinsights-instrumentation:96289d0e00e6a971",
+      "packet_sha256": "8e7b3fad2819daa931119d60ab26b4df145f39a7e831baf167685e2055328236",
       "schema_version": "1.0.0",
       "skill_id": "appinsights-instrumentation",
       "skill_name": "appinsights-instrumentation",
@@ -704,13 +988,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 6,
+        "ordinal": 8,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "cf5360fd8b197673bb237c52c603c97fa319c875c3dfa2cd8efff52d4422f513"
       },
       "D5_EXECUTION": {
@@ -800,8 +1084,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0006:artifact-template-analytics-dashboard:35c8c8742cbe5492",
-      "packet_sha256": "117ec43e7921dc63db4e3859290f5a06ad0e4217a63e6bf22489401ef409c7da",
+      "packet_id": "skill8d:0008:artifact-template-analytics-dashboard:d7aa6a015e215190",
+      "packet_sha256": "5d173e247347fb5c69647cdcbc04c233030cff2033d15091fa5731557f260ee1",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-analytics-dashboard",
       "skill_name": "artifact-template-analytics-dashboard",
@@ -834,13 +1118,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 7,
+        "ordinal": 9,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "27721fc1d67d1b41949caa75ac8f94f81952ff124406878af6524047929e60d2"
       },
       "D5_EXECUTION": {
@@ -930,8 +1214,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0007:artifact-template-business-review:a19df2f361b53d07",
-      "packet_sha256": "4bd620dd6a17d55f8b61dab806fccba8a7e41970b6d983449b6672f32fe3d685",
+      "packet_id": "skill8d:0009:artifact-template-business-review:f175b974515c64b8",
+      "packet_sha256": "82ea2d7c88db085490064cc517063022e097e50f0c770e31556b8b8696655eff",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-business-review",
       "skill_name": "artifact-template-business-review",
@@ -964,13 +1248,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 8,
+        "ordinal": 10,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "563722f53854e606f8a9f87e37e72d7ef70a22d46d5836b8e4d6abfb1b79e9e0"
       },
       "D5_EXECUTION": {
@@ -1060,8 +1344,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0008:artifact-template-design-report:3bca2fb2b6dbab08",
-      "packet_sha256": "5aad75e8110a059f57d10a779620825607d757cde73c727c507a1beca36c6072",
+      "packet_id": "skill8d:0010:artifact-template-design-report:0d33fc1a1fa3ed76",
+      "packet_sha256": "244ecdd4681d65c46206dc7286b0f3aadbec670da86a99fbab4b7683bbcba430",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-design-report",
       "skill_name": "artifact-template-design-report",
@@ -1094,13 +1378,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 9,
+        "ordinal": 11,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "0b05effc47df0a14f8e0c3e3597e6722224747435546385d38a2cae279bd20b9"
       },
       "D5_EXECUTION": {
@@ -1190,8 +1474,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0009:artifact-template-experiment-analysis:24a00aecda7491d7",
-      "packet_sha256": "fb46657e0cdce2b74673b1e914dcef79ef466ef629475a90114f43d93e5c89f4",
+      "packet_id": "skill8d:0011:artifact-template-experiment-analysis:4fb252877c6811ac",
+      "packet_sha256": "a21fef517f56a4039daa6205f64fc41f6cc2f4d175ea41ff9ade0fcd48b44795",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-experiment-analysis",
       "skill_name": "artifact-template-experiment-analysis",
@@ -1224,13 +1508,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 10,
+        "ordinal": 12,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "c0b6b7a62a15597aaf2b1ec679e21da48f533b756127f0aef957cdfe9f3da738"
       },
       "D5_EXECUTION": {
@@ -1320,8 +1604,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0010:artifact-template-financial-budget:2fd8b037293d1121",
-      "packet_sha256": "e16ab03e37b08e7cba66825cc9fcba02265d9b19bbdd21a1ab90565c9e70bf18",
+      "packet_id": "skill8d:0012:artifact-template-financial-budget:e76f9087ce926645",
+      "packet_sha256": "46a741eb4430c7cb3883086d4a83816b65155eb5ccf5d64513d8fd920d96e1d5",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-financial-budget",
       "skill_name": "artifact-template-financial-budget",
@@ -1354,13 +1638,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 11,
+        "ordinal": 13,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "68abd08cfe5e073e3c446a3f675f44c5bf98f57434dba679e8acd8a763379a8b"
       },
       "D5_EXECUTION": {
@@ -1450,8 +1734,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0011:artifact-template-investment-committee-memo:8fc9e1bf5f6d6c02",
-      "packet_sha256": "48b2f7a8076367e8d945cbf2490f0274738ea236123bf7adfc7d5be1643c4acf",
+      "packet_id": "skill8d:0013:artifact-template-investment-committee-memo:fc0164682f080b19",
+      "packet_sha256": "c08078c68df67a244593d8d3a1a8bc4edc69d7e8d18dfd49215b19537e55bfd6",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-investment-committee-memo",
       "skill_name": "artifact-template-investment-committee-memo",
@@ -1484,13 +1768,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 12,
+        "ordinal": 14,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "51fb9d21baf6119c4ccb1903638a6bac0e859210de63460fffa7025d52e997e0"
       },
       "D5_EXECUTION": {
@@ -1580,8 +1864,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0012:artifact-template-legal-memorandum:a6335ec7db402bb0",
-      "packet_sha256": "468d90aefe16cd35285e2e9d2b4c1f2fe79afc7f03859549e8859f8bc49fd709",
+      "packet_id": "skill8d:0014:artifact-template-legal-memorandum:7bac918c9e8d7866",
+      "packet_sha256": "f3a46df4ebb7b6b9bdd10a44a9f80e10895412ecaae43857a1aac032e898ed24",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-legal-memorandum",
       "skill_name": "artifact-template-legal-memorandum",
@@ -1614,13 +1898,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 13,
+        "ordinal": 15,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "d58d019b89cb6f292ac3ab991d561489eef477ff53ce05fb024a0c936f5af26a"
       },
       "D5_EXECUTION": {
@@ -1710,8 +1994,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0013:artifact-template-market-trends-report:46aa3d043401b689",
-      "packet_sha256": "0011344f560bfc256c18860490609a95a5eb5d1a92f27bde3f69303ec77d65db",
+      "packet_id": "skill8d:0015:artifact-template-market-trends-report:ca1b16336226ba3f",
+      "packet_sha256": "c3bc6d0cdea3e326404a5cc88e2f21a99621ce93b71e1ea8c2f7c5ec424b6708",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-market-trends-report",
       "skill_name": "artifact-template-market-trends-report",
@@ -1744,13 +2028,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 14,
+        "ordinal": 16,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "880ef094d4d0c89a7bde5ce9bbe4086625c186651e9e6efc8ba8bdd7cc77f9d5"
       },
       "D5_EXECUTION": {
@@ -1840,8 +2124,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0014:artifact-template-minimal-letterhead:3cd144b80cb8f848",
-      "packet_sha256": "1b0764db5a4ffd9497af4360e1b89b32a875d5a65aa54e7ddf277290c09bf86f",
+      "packet_id": "skill8d:0016:artifact-template-minimal-letterhead:09d63b2c2e02ed44",
+      "packet_sha256": "a789b7d038f7cd050228eab8c768247dbdfa97aa2c1bd15a35dba9df7d5d3ba3",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-minimal-letterhead",
       "skill_name": "artifact-template-minimal-letterhead",
@@ -1874,13 +2158,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 15,
+        "ordinal": 17,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "33bb660791a0b9a21628a42c34934932220203b6aabd84e98cb1b45327d0384c"
       },
       "D5_EXECUTION": {
@@ -1970,8 +2254,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0015:artifact-template-operating-calendar:8609e04d17d38c4f",
-      "packet_sha256": "3b36aa0eae0a5d42fb1a73060db3b4f79ba2d640d0170e894f41e5fd4d321144",
+      "packet_id": "skill8d:0017:artifact-template-operating-calendar:49f806157ea66e28",
+      "packet_sha256": "f14d90edb975623f2f3c189c6fa7d3383f33a5da916da39ed5a1f41bb655920e",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-operating-calendar",
       "skill_name": "artifact-template-operating-calendar",
@@ -2004,13 +2288,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 16,
+        "ordinal": 18,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "6d63c5cd025ffe936e7bab5db3023672bbaec26af55c2bb8b057d38c202c9c32"
       },
       "D5_EXECUTION": {
@@ -2100,8 +2384,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0016:artifact-template-operating-review:a019dd2041d63d1f",
-      "packet_sha256": "548416cdf0c655d62f6015d836f78aabb24721bb093943150e75eae035095d93",
+      "packet_id": "skill8d:0018:artifact-template-operating-review:087e0c5fe3234bd7",
+      "packet_sha256": "e891c675181a6a047285dac2b2bfae34ffd1da72590172c3d42694e896a917ca",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-operating-review",
       "skill_name": "artifact-template-operating-review",
@@ -2134,13 +2418,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 17,
+        "ordinal": 19,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "aa893ebd89e7c8d1db4261d01cc2b1add35d78d00785871ccaaa5fc8db783ec9"
       },
       "D5_EXECUTION": {
@@ -2230,8 +2514,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0017:artifact-template-project-kickoff:356164b4b252c768",
-      "packet_sha256": "70a5416dfe21e77008fae2f6a1c40b740616720e25beb0da8e125f826d18b7d6",
+      "packet_id": "skill8d:0019:artifact-template-project-kickoff:763b4f63f3bf6680",
+      "packet_sha256": "224fb1d10282793ca93ca6544556142ed3ee4fb6f5e54ad1eddaa4836453fa08",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-project-kickoff",
       "skill_name": "artifact-template-project-kickoff",
@@ -2264,13 +2548,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 18,
+        "ordinal": 20,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "d97d5be20189b7f53dd269b6e1c5f694eaf53e5a72f6559fcb1578911b7cda82"
       },
       "D5_EXECUTION": {
@@ -2360,8 +2644,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0018:artifact-template-project-tracker:6f762d71e3362e93",
-      "packet_sha256": "c97aff2af9192e45bcaaa2700b14869737d000d779fa463da34c0cff3fc1ff40",
+      "packet_id": "skill8d:0020:artifact-template-project-tracker:b3e45299dc00d52e",
+      "packet_sha256": "8d1890a2260a393c485f03c46ca6ccc4b351e2137906f8c9421dc90ce339c929",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-project-tracker",
       "skill_name": "artifact-template-project-tracker",
@@ -2394,13 +2678,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 19,
+        "ordinal": 21,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "15cfeeedf440021f16ed3f3ad8c7c1ef6d48898b9447741e223d2fb41cfc9800"
       },
       "D5_EXECUTION": {
@@ -2490,8 +2774,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0019:artifact-template-sales-pipeline:3f97cef2452df323",
-      "packet_sha256": "793595debc87eb78bf146633e425439b56b19812dd435a4df4f4470e76a44f80",
+      "packet_id": "skill8d:0021:artifact-template-sales-pipeline:60ede85d7dcc0227",
+      "packet_sha256": "02cb0341b42ccc78c74c05b11e673e998891bf9d987aa55236120d75a9b8ddd9",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-sales-pipeline",
       "skill_name": "artifact-template-sales-pipeline",
@@ -2524,13 +2808,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 20,
+        "ordinal": 22,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "b7c8d0c05f75878b9bc21e56a57c41ec1aa29700aca0a24822be0f9f1bd53207"
       },
       "D5_EXECUTION": {
@@ -2620,8 +2904,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0020:artifact-template-simple-dark-mode:3c5e3727ed7f2ff6",
-      "packet_sha256": "f2d1b80ab2b860ae6ccacccfa68731fcc126f4cc57f0161378a6424ad5d67ee9",
+      "packet_id": "skill8d:0022:artifact-template-simple-dark-mode:cfd341c72948c614",
+      "packet_sha256": "45b3840707f239525c8761dc1c60bf9fb21960a15072e87e713ef1139726e757",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-simple-dark-mode",
       "skill_name": "artifact-template-simple-dark-mode",
@@ -2654,13 +2938,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 21,
+        "ordinal": 23,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "7c68430c6cf57b55b457d4735dbd1a46b889bef135a32222902dd0848b6e1752"
       },
       "D5_EXECUTION": {
@@ -2750,8 +3034,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0021:artifact-template-simple-light-mode:63b113abc288cf8d",
-      "packet_sha256": "d7929a949ef868a14e854d52214438962d357dbc41cb5613b03c577af4322c55",
+      "packet_id": "skill8d:0023:artifact-template-simple-light-mode:072945f444268a2b",
+      "packet_sha256": "53578f88495dfe441115e4c43943fffbf656478cf14a097daa4ea77990c2464c",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-simple-light-mode",
       "skill_name": "artifact-template-simple-light-mode",
@@ -2784,13 +3068,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 22,
+        "ordinal": 24,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "51d7882ac94e8e57b323394825728c33925af878806e37277217c2dc12a912e5"
       },
       "D5_EXECUTION": {
@@ -2880,8 +3164,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0022:artifact-template-strategy-memorandum:f2922fb7069f8020",
-      "packet_sha256": "de5641eb20c3ae781b263b2b37da1cabb0fae13e0608fc4229d5c91266c42270",
+      "packet_id": "skill8d:0024:artifact-template-strategy-memorandum:f95b7eeac856bc7f",
+      "packet_sha256": "7b334638dc94d356bc858734d06fdd53ed130a8bf93bcac88a6f0b7c814c5759",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-strategy-memorandum",
       "skill_name": "artifact-template-strategy-memorandum",
@@ -2914,13 +3198,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 23,
+        "ordinal": 25,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "87f7b7ed1b0d8410f5e5971cd7f7db9a4165e2f37069e97e52dbfb469b75a57c"
       },
       "D5_EXECUTION": {
@@ -3010,8 +3294,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0023:artifact-template-system-design:eb454ec26eec874a",
-      "packet_sha256": "4a060df2d7022897340c251c5f65a03103f2a92a1be24265928daf925a3697de",
+      "packet_id": "skill8d:0025:artifact-template-system-design:c4409fcf3267cfc4",
+      "packet_sha256": "1f881a201b65b67fe9231d57b7e1dad7209d71ba1f72a2ad85188545f4cf264f",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-system-design",
       "skill_name": "artifact-template-system-design",
@@ -3044,13 +3328,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 24,
+        "ordinal": 26,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "26d7cafdcd1899a937b325c5d02ac57c162d45002153be33a934d35f81eb6110"
       },
       "D5_EXECUTION": {
@@ -3140,8 +3424,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0024:artifact-template-team-alignment:7395ec1ac2855570",
-      "packet_sha256": "0bf0a6383ff9160bee77bcf596b3e778fd54f2d963a0b73cdf5c2b61cdaf6d48",
+      "packet_id": "skill8d:0026:artifact-template-team-alignment:d61c87909c18d2d2",
+      "packet_sha256": "b5aa90487c3bd1f9edee81f38cfaa4804650cde6dd6b820d336af100a25bf2ab",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-team-alignment",
       "skill_name": "artifact-template-team-alignment",
@@ -3174,13 +3458,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 25,
+        "ordinal": 27,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "74f4a5cccec0107b861548b157e04c51d9b58ec13a990c86394b4c529b8ecf41"
       },
       "D5_EXECUTION": {
@@ -3270,8 +3554,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0025:artifact-template-three-statement-forecast:65b8ad96808bd136",
-      "packet_sha256": "f3d5ad3731e3912d1570ab33a3e8677c471dada61f32d4ead0c64a4970089ad4",
+      "packet_id": "skill8d:0027:artifact-template-three-statement-forecast:a4548a49d3d0a4e2",
+      "packet_sha256": "befad67d6c2241ac34408c4b664eaa501c91835d2fa9f945d293469a8b38033b",
       "schema_version": "1.0.0",
       "skill_id": "artifact-template-three-statement-forecast",
       "skill_name": "artifact-template-three-statement-forecast",
@@ -3304,13 +3588,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 26,
+        "ordinal": 28,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/assess-patch-risk/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/assess-patch-risk/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "7fbbd0eb220408c0a0b27aaac8b43a165c7be3c49b48404f850546727133c97e"
       },
       "D5_EXECUTION": {
@@ -3400,8 +3684,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0026:assess-patch-risk:9d4117ebe511126e",
-      "packet_sha256": "de27c977c75745e71d7eac4a79ff33bd3cd71a8975a5eb6ae43ae3e11b72bc44",
+      "packet_id": "skill8d:0028:assess-patch-risk:514172263d57cf57",
+      "packet_sha256": "830a3f05c53e7d0457bb2614e0f6ea4ca2a5ac4e1064e194f23049d3a6710ee6",
       "schema_version": "1.0.0",
       "skill_id": "assess-patch-risk",
       "skill_name": "assess-patch-risk",
@@ -3434,13 +3718,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 27,
+        "ordinal": 29,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/attack-path-analysis/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/attack-path-analysis/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "63e820ce598dd62c897283eab91d60ba0e4d81ecae8dc6e516d709e2ba6b0eaa"
       },
       "D5_EXECUTION": {
@@ -3530,8 +3814,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0027:attack-path-analysis:c0667a457896da31",
-      "packet_sha256": "2231b16a7c4ee609bcbb3e9782e23ee6919f54aff72137337c33541002529589",
+      "packet_id": "skill8d:0029:attack-path-analysis:9ea0da8a83b70349",
+      "packet_sha256": "4e69202a9e9539309437c67b4e7a09df1d0c02d69061ad36590d028c7803cd19",
       "schema_version": "1.0.0",
       "skill_id": "attack-path-analysis",
       "skill_name": "attack-path-analysis",
@@ -3564,13 +3848,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 28,
+        "ordinal": 30,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-ai/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "9060994a74a9c8510c6e64d01edcef55440cefbba399c93cda18980651fff186"
       },
       "D5_EXECUTION": {
@@ -3660,8 +3944,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0028:azure-ai:add3dd66af5c52ed",
-      "packet_sha256": "0346041b43f20c6794902baeadfcc27abbbc5c156b53caf81456f9224f26215a",
+      "packet_id": "skill8d:0030:azure-ai:46889e3a18d41521",
+      "packet_sha256": "8cfc074632921d7ee3f34ba86ae97fdf5f1ea6fc9ba1976637935d0ceaab9ecc",
       "schema_version": "1.0.0",
       "skill_id": "azure-ai",
       "skill_name": "azure-ai",
@@ -3694,13 +3978,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 29,
+        "ordinal": 31,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-aigateway/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "2229d5e496d19e159bc97a7cc8b818be18a39d0a65578473d623af088aa21b4e"
       },
       "D5_EXECUTION": {
@@ -3790,8 +4074,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0029:azure-aigateway:bca583e0edabe7db",
-      "packet_sha256": "7da721cbf8e66a483565711198af2b298e05a7105c978f7c86633d3228f87d0f",
+      "packet_id": "skill8d:0031:azure-aigateway:ed8a6e0a3544a553",
+      "packet_sha256": "3602baa97a3153e1fe2ebbeeb6b5caf5570eefd3c7c96d61053fa82c4e1c0fbd",
       "schema_version": "1.0.0",
       "skill_id": "azure-aigateway",
       "skill_name": "azure-aigateway",
@@ -3824,13 +4108,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 30,
+        "ordinal": 32,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-cloud-migrate/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "db31a871e00002b6895c5e32ade22244d3a92fbf3db88314474cef8c74b354ef"
       },
       "D5_EXECUTION": {
@@ -3920,8 +4204,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0030:azure-cloud-migrate:976ccd62031065d8",
-      "packet_sha256": "1d9146fc1c7088cada489790eaef1da724b1fcf1473a559f24e1a7c484309cc7",
+      "packet_id": "skill8d:0032:azure-cloud-migrate:dc3530d43fc6cd84",
+      "packet_sha256": "1f68f5bc3bbf4b01a1085f98bb1aab68b849542196f0598573431e6a1c7096c4",
       "schema_version": "1.0.0",
       "skill_id": "azure-cloud-migrate",
       "skill_name": "azure-cloud-migrate",
@@ -3954,13 +4238,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 31,
+        "ordinal": 33,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-compliance/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "1f35685eadc0aa9f0c3299c248425d83740271e679170f8048356926fc1403aa"
       },
       "D5_EXECUTION": {
@@ -4050,8 +4334,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0031:azure-compliance:4cd48fabd6feea5d",
-      "packet_sha256": "1b2cd84245c60ad27c7ceadd256f75082eb72210b2291d470a3b7eca8af2bf81",
+      "packet_id": "skill8d:0033:azure-compliance:c56214ec6ad75e31",
+      "packet_sha256": "06acf4f69a161da5cd6296cd9cf2b40b34d844ba15c1f086571f7592376722db",
       "schema_version": "1.0.0",
       "skill_id": "azure-compliance",
       "skill_name": "azure-compliance",
@@ -4084,13 +4368,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 32,
+        "ordinal": 34,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-compute/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "0670f26a3f45029f74b8d400fcdb4d1d8394c3bda7c570c6738be5303d6799f8"
       },
       "D5_EXECUTION": {
@@ -4180,8 +4464,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0032:azure-compute:31b3ce620ef1c0f4",
-      "packet_sha256": "783d4ccc1b3c018e0f56c1cf898286ac2ec84fd871e1d1c8d1ea50406d2bf408",
+      "packet_id": "skill8d:0034:azure-compute:b0a540a45c3823f2",
+      "packet_sha256": "342408edb4ef1790a6b4ae586c99a557023cada365fb74985b1f1681f1660a58",
       "schema_version": "1.0.0",
       "skill_id": "azure-compute",
       "skill_name": "azure-compute",
@@ -4214,13 +4498,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 33,
+        "ordinal": 35,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-cost/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "bcd1c914d6960f769338a069ba1fe1ba4683ee2ea1781fc1310de21ff624de29"
       },
       "D5_EXECUTION": {
@@ -4310,8 +4594,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0033:azure-cost:7471301b9b12459e",
-      "packet_sha256": "7eea7fd8a379f2397358c3d17a9846a8887211a00965130bd70de898997ff6a6",
+      "packet_id": "skill8d:0035:azure-cost:4e5e00f437e802cc",
+      "packet_sha256": "ccc5fec78101eea831fb342fc0c144000385ef499505b4de44989c15708ba94c",
       "schema_version": "1.0.0",
       "skill_id": "azure-cost",
       "skill_name": "azure-cost",
@@ -4344,13 +4628,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 34,
+        "ordinal": 36,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-deploy/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "c3e877d874cac1834753e7b3b35a8a33e1257b3b5f3c429dcab238bd19c28601"
       },
       "D5_EXECUTION": {
@@ -4440,8 +4724,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0034:azure-deploy:8010cce5a9775432",
-      "packet_sha256": "a668407dcf15fca873225779d6a7857c18acdd0ac0c8d7d38bd87972fa73306f",
+      "packet_id": "skill8d:0036:azure-deploy:32fc7cab939440b6",
+      "packet_sha256": "15f16dc1db46ccca4c18932ddc8a15284cd0d2659455de2b626e74f9060a0f7c",
       "schema_version": "1.0.0",
       "skill_id": "azure-deploy",
       "skill_name": "azure-deploy",
@@ -4474,13 +4758,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 35,
+        "ordinal": 37,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-diagnostics/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "75f3e45d535efa721acf42931031d6ed27c1cca6574be9b881a0dd59139a88ad"
       },
       "D5_EXECUTION": {
@@ -4570,8 +4854,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0035:azure-diagnostics:9d5562c4347d403e",
-      "packet_sha256": "917abedf2c786d428328f381340d8ffc2eba9abee8ca0786ac661d262b3d7e9b",
+      "packet_id": "skill8d:0037:azure-diagnostics:5024ec4903a618e0",
+      "packet_sha256": "a804c7d4aab0fe4e1ea34e7a139e14529a2750e48063f3a0149185e4b888a659",
       "schema_version": "1.0.0",
       "skill_id": "azure-diagnostics",
       "skill_name": "azure-diagnostics",
@@ -4604,13 +4888,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 36,
+        "ordinal": 38,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-enterprise-infra-planner/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "0abc0bb437aad5a36037b08f0e91ea2b7cfedb01899e06827725540dd6d3867e"
       },
       "D5_EXECUTION": {
@@ -4700,8 +4984,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0036:azure-enterprise-infra-planner:f6e3721caf06020f",
-      "packet_sha256": "995cb17776511a737561e67dd117a508d85f939a765f56e4f7a0709458323821",
+      "packet_id": "skill8d:0038:azure-enterprise-infra-planner:bc43b0262420935a",
+      "packet_sha256": "9490a17c1a74167770fb8230c8ae709f45677a9b3c051e7df081907ed64e18e3",
       "schema_version": "1.0.0",
       "skill_id": "azure-enterprise-infra-planner",
       "skill_name": "azure-enterprise-infra-planner",
@@ -4734,13 +5018,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 37,
+        "ordinal": 39,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-hosted-copilot-sdk/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "342dda8b9eb682aa2349bfcfe4cf28524c246e2739604f2f88ca9cb23281fdb5"
       },
       "D5_EXECUTION": {
@@ -4830,8 +5114,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0037:azure-hosted-copilot-sdk:0913a83bfb2feee7",
-      "packet_sha256": "e5e5d47300a03e39a882f29584a02fda0cda958c16ea169feba0a8ff8cf1bd82",
+      "packet_id": "skill8d:0039:azure-hosted-copilot-sdk:740d12ce6bf676ed",
+      "packet_sha256": "d118ac52c1dfb66ae0bfb6a8bdefd071fe6f7f4e4ae8f20197f0c877ef80e06f",
       "schema_version": "1.0.0",
       "skill_id": "azure-hosted-copilot-sdk",
       "skill_name": "azure-hosted-copilot-sdk",
@@ -4864,13 +5148,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 38,
+        "ordinal": 40,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-kubernetes/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "9c8f61b2dd265ddbd08d2082e470f339c63c43d3c784324189a06927c75e80fb"
       },
       "D5_EXECUTION": {
@@ -4960,8 +5244,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0038:azure-kubernetes:cdc69d92f6e23f50",
-      "packet_sha256": "aa9bb0f1637e9c57c80f636baaddb11028464fba86de65b3d014ef97e98cd20c",
+      "packet_id": "skill8d:0040:azure-kubernetes:480aa830b6fcaaae",
+      "packet_sha256": "d264fb0dae110b4dd22039daa3e3eeb81242adea7bf660c896c9f95673b4f108",
       "schema_version": "1.0.0",
       "skill_id": "azure-kubernetes",
       "skill_name": "azure-kubernetes",
@@ -4994,13 +5278,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 39,
+        "ordinal": 41,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-kubernetes/azure-kubernetes-automatic-readiness/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "bc3ebaf7b6b8148d322e4155e9a490ad01985265deaa4d669ef0dfd1b19d4d43"
       },
       "D5_EXECUTION": {
@@ -5090,8 +5374,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0039:azure-kubernetes-automatic-readiness:1de004cafb29f6d4",
-      "packet_sha256": "3c2f6ded55d56a324e58c56b8df52ea1d667850704d54a218eff7eb63eb81f09",
+      "packet_id": "skill8d:0041:azure-kubernetes-automatic-readiness:0a744431e4ea0fbb",
+      "packet_sha256": "8f464c33fe386fc0abea110a960bc34364c80b255b53e8b1daad1003b405e338",
       "schema_version": "1.0.0",
       "skill_id": "azure-kubernetes-automatic-readiness",
       "skill_name": "azure-kubernetes-automatic-readiness",
@@ -5124,13 +5408,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 40,
+        "ordinal": 42,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-kusto/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "d3018c0de4b700f805cab55a40a16de7bab4ba3ed747f69819450c6edca891d7"
       },
       "D5_EXECUTION": {
@@ -5220,8 +5504,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0040:azure-kusto:d46805979331861e",
-      "packet_sha256": "3388503fe4eac864295302a05a2273058c6d0462f03f93a9f1f9670eece79894",
+      "packet_id": "skill8d:0042:azure-kusto:51eb8255a27d4d3f",
+      "packet_sha256": "ab80eedb0f684694b81348d52c0593e598045a62997ee126e3bce1371e245c1b",
       "schema_version": "1.0.0",
       "skill_id": "azure-kusto",
       "skill_name": "azure-kusto",
@@ -5254,13 +5538,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 41,
+        "ordinal": 43,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-messaging/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "6304fe3ccbb6f36a4dcafe1bfe30d0c03618019d68fb4a933fd716bf8763d84c"
       },
       "D5_EXECUTION": {
@@ -5350,8 +5634,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0041:azure-messaging:082c05a2e7f055c0",
-      "packet_sha256": "5c8fa63163b5e3749ee6674eb463d5929740565c460a4d45c6dc36cd820d8c11",
+      "packet_id": "skill8d:0043:azure-messaging:e4340311126ecd3d",
+      "packet_sha256": "f915bbb6a18bdd5a0aa33c9c95e1207c1e75e41373bb0b55528b104e8a927f1a",
       "schema_version": "1.0.0",
       "skill_id": "azure-messaging",
       "skill_name": "azure-messaging",
@@ -5384,13 +5668,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 42,
+        "ordinal": 44,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-prepare/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "ca7e3a1fa4030ef1923742a2a52b57f48181979a7263c9a82b439ed07211b18d"
       },
       "D5_EXECUTION": {
@@ -5480,8 +5764,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0042:azure-prepare:0c27d4df186bd750",
-      "packet_sha256": "2db867cfa8bc48ef193ec2bdcf9a2513f7561571a2735bb2d9699a084d0d27ae",
+      "packet_id": "skill8d:0044:azure-prepare:e633e84a5372495d",
+      "packet_sha256": "15b2e1a4623f3570f3eb880aa9f763d6421d7d381a125c7f10ce1ddabbb00f77",
       "schema_version": "1.0.0",
       "skill_id": "azure-prepare",
       "skill_name": "azure-prepare",
@@ -5514,13 +5798,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 43,
+        "ordinal": 45,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-quotas/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "b517e29b50ba07dc42dd4fd356c0c15d5d41435415f6835ddb2ad874d6997237"
       },
       "D5_EXECUTION": {
@@ -5610,8 +5894,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0043:azure-quotas:ee552c337bb9427f",
-      "packet_sha256": "49b05f603650e8c90db2169b48e22417bebd9822926daf98661040e91b4f7bf9",
+      "packet_id": "skill8d:0045:azure-quotas:c3389d4c2c74d279",
+      "packet_sha256": "c11ffab133e29802978e97076f0270cd1b48ac45ddb43de0f8f145b7548eab6c",
       "schema_version": "1.0.0",
       "skill_id": "azure-quotas",
       "skill_name": "azure-quotas",
@@ -5644,13 +5928,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 44,
+        "ordinal": 46,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-rbac/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "5fa1410b1526906d42f094bd38ec0dee952cd67a24d0dd15590833b954627cb7"
       },
       "D5_EXECUTION": {
@@ -5740,8 +6024,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0044:azure-rbac:5d3342d7d1241ce2",
-      "packet_sha256": "29b35f40750692dc293ee964f33598686b783f44dd38fbb6035aa461a4defaf8",
+      "packet_id": "skill8d:0046:azure-rbac:63e3676a903b8193",
+      "packet_sha256": "2e9dfe044e03058c4f0559df3955946809e424d44b0061a3a2fffa23dab97ffa",
       "schema_version": "1.0.0",
       "skill_id": "azure-rbac",
       "skill_name": "azure-rbac",
@@ -5774,13 +6058,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 45,
+        "ordinal": 47,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-reliability/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "001ca1733d1db5e950d7fc603eac7c28309458e54ab0ca54896002e08fe3285c"
       },
       "D5_EXECUTION": {
@@ -5870,8 +6154,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0045:azure-reliability:6d1de6f7c4636034",
-      "packet_sha256": "e44e6969d261afccc4d03e711408293dab7f96c46556cd7d8201a2b3a0a78e10",
+      "packet_id": "skill8d:0047:azure-reliability:e117f2d24ce0f2b8",
+      "packet_sha256": "136346df7aceab797623f85d7c5b6000d4aa09c05ac47744e08f690704040f22",
       "schema_version": "1.0.0",
       "skill_id": "azure-reliability",
       "skill_name": "azure-reliability",
@@ -5904,13 +6188,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 46,
+        "ordinal": 48,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-resource-lookup/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "81357bebb50b2a9cbfe46386eae4643d565445562882de4f891801b8b5dbfed1"
       },
       "D5_EXECUTION": {
@@ -6000,8 +6284,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0046:azure-resource-lookup:385eba124fac8057",
-      "packet_sha256": "4ba79ef263880c13ff418e85dc557b0ec808d0e2ff17b5021fbc39bd99a5a3c2",
+      "packet_id": "skill8d:0048:azure-resource-lookup:955c786a30f3a8c6",
+      "packet_sha256": "c0d5a5e17622e4ed0e116b2542cd688165ede3ddc8f13c70a05d013836c74497",
       "schema_version": "1.0.0",
       "skill_id": "azure-resource-lookup",
       "skill_name": "azure-resource-lookup",
@@ -6034,13 +6318,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 47,
+        "ordinal": 49,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-resource-visualizer/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "a0dd18d0f49514e53c0683b32f93c60c34fab454e941e28cdff72444cd5d4440"
       },
       "D5_EXECUTION": {
@@ -6130,8 +6414,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0047:azure-resource-visualizer:73fe89a09f7b3c9f",
-      "packet_sha256": "b661970ff9e3a99fec45c555d6d65bd113e73ac931e2837c1678b2a176d786b8",
+      "packet_id": "skill8d:0049:azure-resource-visualizer:f5b8cee431efb2fe",
+      "packet_sha256": "142c9b2575697cc3e354d027b6544c97d0ebce1ee52d3636dfd6f0c36e10d467",
       "schema_version": "1.0.0",
       "skill_id": "azure-resource-visualizer",
       "skill_name": "azure-resource-visualizer",
@@ -6164,13 +6448,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 48,
+        "ordinal": 50,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-storage/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "0bb1208ef49ffcce3400d803139b682901b0df93a7c0b72518b01543da244fe6"
       },
       "D5_EXECUTION": {
@@ -6260,8 +6544,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0048:azure-storage:81ede8a709434cd3",
-      "packet_sha256": "48f781240e464c6266ab446d457663b2b259ab39af831b372c6378d1168d80d1",
+      "packet_id": "skill8d:0050:azure-storage:59d2e92f71c51ab5",
+      "packet_sha256": "12206b6962b0fc3bec2ac6fa009d9769f8d9bb45e6d39eb0cb8dd6d3221681fd",
       "schema_version": "1.0.0",
       "skill_id": "azure-storage",
       "skill_name": "azure-storage",
@@ -6294,13 +6578,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 49,
+        "ordinal": 51,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-upgrade/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "56b6ce64bca0630e42a3691a08b624227fd5c45e082adc328bfd4ef356a00b20"
       },
       "D5_EXECUTION": {
@@ -6390,8 +6674,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0049:azure-upgrade:5df11f439e1f24ba",
-      "packet_sha256": "751b68e622d1ef8e716b80b24a99e1ca665e2ada3a0eb93ae22350f0341aef76",
+      "packet_id": "skill8d:0051:azure-upgrade:fa550068f82de78f",
+      "packet_sha256": "d0d0f7311fa1b1ff26c0f305ebad4f42642ee2a624d7db5494b84ce66b716198",
       "schema_version": "1.0.0",
       "skill_id": "azure-upgrade",
       "skill_name": "azure-upgrade",
@@ -6424,13 +6708,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 50,
+        "ordinal": 52,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/azure-validate/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "0b1b6ed62c1271f17538a347a76e06d255f3235be82b64162462ee766ff01967"
       },
       "D5_EXECUTION": {
@@ -6520,8 +6804,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0050:azure-validate:b39c285db7233e9b",
-      "packet_sha256": "2df9bb0305b1dea7af504b6f6fc593ccb490d0c2c146bb376339f2484715006a",
+      "packet_id": "skill8d:0052:azure-validate:17ffabfd7ab676c0",
+      "packet_sha256": "79532b4cb15803ac1927c575327b21175efc620bd79981e60b748524a9c2b504",
       "schema_version": "1.0.0",
       "skill_id": "azure-validate",
       "skill_name": "azure-validate",
@@ -6547,13 +6831,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 51,
+        "ordinal": 53,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "tools/ollama_total_field_skill_bridge.py"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7"
       },
       "D5_EXECUTION": {
@@ -6643,8 +6927,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0051:candidate_outline:8909d0f7ac194515",
-      "packet_sha256": "389a5ebfb360d3ec021eeb8474df765d9a267fb77569940fc74eac7d93a9aba4",
+      "packet_id": "skill8d:0053:candidate_outline:ab6810e92e8cd7d3",
+      "packet_sha256": "36caf1b8c9f05f6a61dc7270b913a9c3e8d56c8ccd2ee3f3f25698156cdd1948",
       "schema_version": "1.0.0",
       "skill_id": "candidate_outline",
       "skill_name": "W7TP Candidate Outline",
@@ -6677,13 +6961,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 52,
+        "ordinal": 54,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/capacity/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "91b3ce958de44f728453572747504e8c9146f119892aa690546fd19f8d96a344"
       },
       "D5_EXECUTION": {
@@ -6773,8 +7057,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0052:capacity:6eaf479bf10ecc19",
-      "packet_sha256": "0f8f6360cfc12a8da386730f81f91aa50d3ac2f2318d87b89df441a493d88541",
+      "packet_id": "skill8d:0054:capacity:7ae825227c4963fe",
+      "packet_sha256": "c9d246adf2eaacf1a6b915fc176294c3b3d39deb29c56f02a65e466627b539a1",
       "schema_version": "1.0.0",
       "skill_id": "capacity",
       "skill_name": "capacity",
@@ -6798,13 +7082,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 53,
+        "ordinal": 55,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "PLATFORM_INTERNAL_OPAQUE_REF"
       },
       "D4_EVIDENCE": {
         "source_kind": "PLATFORM_INTERNAL_NO_PORTABLE_SOURCE",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": null
       },
       "D5_EXECUTION": {
@@ -6894,8 +7178,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0053:codex_collaboration_runtime:9ec359800577e9ab",
-      "packet_sha256": "13803a63a0e3a8746588d079db07e727b3d3e0b027ed44912d3fc8cc2dcfcfd6",
+      "packet_id": "skill8d:0055:codex_collaboration_runtime:0e6d329dd9116bb9",
+      "packet_sha256": "5fa0d5a6a811236e33371f3167a0d45dc348ab14f7b7e3475eb5c8b03dd160be",
       "schema_version": "1.0.0",
       "skill_id": "codex_collaboration_runtime",
       "skill_name": "Codex Collaboration Runtime",
@@ -6920,13 +7204,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 54,
+        "ordinal": 56,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "PLATFORM_INTERNAL_OPAQUE_REF"
       },
       "D4_EVIDENCE": {
         "source_kind": "PLATFORM_INTERNAL_NO_PORTABLE_SOURCE",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": null
       },
       "D5_EXECUTION": {
@@ -7016,8 +7300,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0054:codex_document_control_runtime:92cf02950d59d277",
-      "packet_sha256": "16b6576cfaaf4dc5ec32ba123ec76b61e9b9ce0d8a83910e1c41b1dc874ca862",
+      "packet_id": "skill8d:0056:codex_document_control_runtime:ec47097bc669a5b2",
+      "packet_sha256": "feb72394e7f3ab17b0376559730663f0b7beedc1b70082fe2aa3c63bd987c5e6",
       "schema_version": "1.0.0",
       "skill_id": "codex_document_control_runtime",
       "skill_name": "Codex Document Control Runtime",
@@ -7040,13 +7324,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 55,
+        "ordinal": 57,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "PLATFORM_INTERNAL_OPAQUE_REF"
       },
       "D4_EVIDENCE": {
         "source_kind": "PLATFORM_INTERNAL_NO_PORTABLE_SOURCE",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": null
       },
       "D5_EXECUTION": {
@@ -7136,8 +7420,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0055:codex_image_runtime:d7430afa38ebdfce",
-      "packet_sha256": "57e4fa72489a77609452ec49bae3d06d8283fa084317d17ce9c335a45ed9bd75",
+      "packet_id": "skill8d:0057:codex_image_runtime:de073b9c52bbf144",
+      "packet_sha256": "b45497009aa9bd2ca3f4015493da82390f369a6f9c0d0822d769a1c67eb777a8",
       "schema_version": "1.0.0",
       "skill_id": "codex_image_runtime",
       "skill_name": "Codex Image Generation Runtime",
@@ -7161,13 +7445,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 56,
+        "ordinal": 58,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "PLATFORM_INTERNAL_OPAQUE_REF"
       },
       "D4_EVIDENCE": {
         "source_kind": "PLATFORM_INTERNAL_NO_PORTABLE_SOURCE",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": null
       },
       "D5_EXECUTION": {
@@ -7257,8 +7541,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0056:codex_sites_runtime:13cf9ece62a92cd9",
-      "packet_sha256": "734f05c65ac5ef816f4663846a01883f125b92afce95c9ff1f54da2ab976bc8e",
+      "packet_id": "skill8d:0058:codex_sites_runtime:7b59d51efbe0e04a",
+      "packet_sha256": "643c43f06ecee76af211540a94d22e3eedd51d8d9bdb25ff4fa6e5d0d591363b",
       "schema_version": "1.0.0",
       "skill_id": "codex_sites_runtime",
       "skill_name": "Codex Sites Hosting Runtime",
@@ -7282,13 +7566,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 57,
+        "ordinal": 59,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "PLATFORM_INTERNAL_OPAQUE_REF"
       },
       "D4_EVIDENCE": {
         "source_kind": "PLATFORM_INTERNAL_NO_PORTABLE_SOURCE",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": null
       },
       "D5_EXECUTION": {
@@ -7378,8 +7662,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0057:codex_web_research_runtime:70b9effdf503e4a3",
-      "packet_sha256": "295484a6852c9a845241d8505a502e39d6f29ac5358797a171ca1f88ada644a9",
+      "packet_id": "skill8d:0059:codex_web_research_runtime:38b6ba4b05125ee4",
+      "packet_sha256": "0fef77789bcace2201513ea82023dff9dd860f46663c22c20f8a7e3be5f1a0a0",
       "schema_version": "1.0.0",
       "skill_id": "codex_web_research_runtime",
       "skill_name": "Codex Web Research Runtime",
@@ -7412,13 +7696,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 58,
+        "ordinal": 60,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/customize/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "d0a25090ffc3e139ff2eaeca5f814a83aa61d596571d267f6a7ad534c153ba68"
       },
       "D5_EXECUTION": {
@@ -7508,8 +7792,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0058:customize:9cb0b77d31a4e997",
-      "packet_sha256": "edc77e232d4904deb38d4db4da81b55df6a55d55a575407c652975fc2a657799",
+      "packet_id": "skill8d:0060:customize:e37698c110f9b3fb",
+      "packet_sha256": "45296287cfadb032746c954ea4898fb59ac95e2b63120b25dd9d7e3e5e705b17",
       "schema_version": "1.0.0",
       "skill_id": "customize",
       "skill_name": "customize",
@@ -7533,13 +7817,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 59,
+        "ordinal": 61,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": ".skill-build/deep-research/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "fe92f226b47314a3963738a7b98d5afc5d51973c7b589c72277e3cc9e59d44eb"
       },
       "D5_EXECUTION": {
@@ -7629,8 +7913,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0059:deep-research:b178aa409492bff4",
-      "packet_sha256": "f0b30a42db73de0c967d949fa7e81eaa136ced3c1437609b564030c790d8f441",
+      "packet_id": "skill8d:0061:deep-research:92e953c55e5b5b0c",
+      "packet_sha256": "36ef70a978df3b63a3e18ffac582e56ad11df57db2ea55a7149db5594af59629",
       "schema_version": "1.0.0",
       "skill_id": "deep-research",
       "skill_name": "Deep Research",
@@ -7663,14 +7947,14 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 60,
+        "ordinal": 62,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/deep-security-scan/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/deep-security-scan/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
-        "source_sha256": "9f6dd957c2893531401f0ea16dbb969c6636dbc66793436eeb549c6894a01ef6"
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+        "source_sha256": "ab2ea3070a27880e27d06eae7d86d1aab759cc544e8b7760a8ed2da8b3606268"
       },
       "D5_EXECUTION": {
         "input_schema": {
@@ -7759,12 +8043,12 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0060:deep-security-scan:284eb4936e87e8bb",
-      "packet_sha256": "16d97a769a658271a2abbae2f7a9439c41fa7f5238616d7d707646856d701a04",
+      "packet_id": "skill8d:0062:deep-security-scan:808afcb1fc38cd0f",
+      "packet_sha256": "5fb07abb05bd962990f44d81ee20af94f0314889fd5ffe36c30badbc9724f744",
       "schema_version": "1.0.0",
       "skill_id": "deep-security-scan",
       "skill_name": "deep-security-scan",
-      "skill_version": "sha256:9f6dd957c289",
+      "skill_version": "sha256:ab2ea3070a27",
       "status": "NEEDS_LOCAL_ADAPTER"
     },
     {
@@ -7793,13 +8077,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 61,
+        "ordinal": 63,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/define-security-policy/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/define-security-policy/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "286f549d7d5b017e13e38031494723b5870949e3f82ac85b6a9c32d4718433bf"
       },
       "D5_EXECUTION": {
@@ -7889,8 +8173,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0061:define-security-policy:afd1ef2090664856",
-      "packet_sha256": "67ba2152e77124cf4e3dc7caab17ef5265e7e815a3eccc3661c2eacf744f46b8",
+      "packet_id": "skill8d:0063:define-security-policy:caaa6c385693c168",
+      "packet_sha256": "0923d0934ed9b6c7a5542d2c586a57378bb63fc20eaf89f584662d8984ad4872",
       "schema_version": "1.0.0",
       "skill_id": "define-security-policy",
       "skill_name": "define-security-policy",
@@ -7923,13 +8207,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 62,
+        "ordinal": 64,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "ae0de869fdaee1a6b6b04582e723a2363d482d85a5c119f1963a2c36eff5667c"
       },
       "D5_EXECUTION": {
@@ -8019,147 +8303,13 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0062:deploy-model:756a6a9d58bddb06",
-      "packet_sha256": "8040722c29d1065d3f32ece850bfdda3f5a3d342cf42b1ca69be267d96e9184f",
+      "packet_id": "skill8d:0064:deploy-model:f73284f6c805f7c5",
+      "packet_sha256": "31e61c5586b454ffef68d912234eb8585c83d2d7eb13a0170bad6db2743e850d",
       "schema_version": "1.0.0",
       "skill_id": "deploy-model",
       "skill_name": "deploy-model",
       "skill_version": "1.0.0",
       "status": "NEEDS_CONNECTOR"
-    },
-    {
-      "D1_INTENT": {
-        "description": "Use model-agnostic 8D intent-field ADI packets as an AI sensory and memory interface for evidence-grounded language, image, audio, mixed-modality, integer decision-index, spatial-temporal index-network, floating-point data-index analysis, and Founder-declared same-principle observation through origin-cell, absolute-distance, spiral-path, and floating-data projections; structure context, preserve evidence, perform recall, reconstruction, comparison, contradiction detection, path tracing, and data insight across local or cloud models. Use when the user supplies 8D packets, ADI indexes, packetized memories, numeric distance or path indexes, an origin-cell observation contract, or asks for perception amplification. Do not invent a grid, origin cell, coordinate basis, distance, spiral, numeric contract, or cross-view equivalence; do not benchmark, score, rank, or value skill or model effects. Operate read-only and require separate authorization before writing to ADI, a database, or canonical state.",
-        "required_context": "Exact installed Skill source, packet verifier, state-cell projection, dynamic-context and Total Field reobservation are required.",
-        "triggers": [
-          "derive-8d-adi-insight",
-          "Use",
-          "model-agnostic",
-          "intent-field",
-          "ADI",
-          "packets",
-          "sensory",
-          "and",
-          "memory",
-          "interface",
-          "for",
-          "evidence-grounded"
-        ]
-      },
-      "D2_STATE": {
-        "mapping_state": "READY_LOCAL",
-        "runtime_claim": true,
-        "superseded": false
-      },
-      "D3_COORDINATE": {
-        "node": "MSI_LOCAL_WSL",
-        "ordinal": 63,
-        "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/skills/derive-8d-adi-insight/SKILL.md"
-      },
-      "D4_EVIDENCE": {
-        "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
-        "source_sha256": "f89dec9aa79e2fa3a4b7bc282f62b601b91a3d9f00cd6af130ae50e9f589d521"
-      },
-      "D5_EXECUTION": {
-        "input_schema": {
-          "additionalProperties": false,
-          "properties": {
-            "context_refs": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "identity_profile_ref": {
-              "const": "FOUNDER_ALL_SKILLS"
-            },
-            "intent": {
-              "minLength": 1,
-              "type": "string"
-            }
-          },
-          "required": [
-            "intent",
-            "identity_profile_ref"
-          ],
-          "type": "object"
-        },
-        "maximum_effect": "LOCAL_CANDIDATE",
-        "model_commit_allowed": false,
-        "output_schema": {
-          "additionalProperties": true,
-          "properties": {
-            "authority": {
-              "const": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
-            },
-            "candidate": {
-              "type": [
-                "object",
-                "null"
-              ]
-            },
-            "evidence": {
-              "type": "array"
-            },
-            "skill_id": {
-              "type": "string"
-            },
-            "state": {
-              "enum": [
-                "CANDIDATE_ONLY",
-                "HOLD",
-                "BLOCK"
-              ]
-            }
-          },
-          "required": [
-            "state",
-            "skill_id",
-            "candidate",
-            "evidence",
-            "authority"
-          ],
-          "type": "object"
-        },
-        "single_founder_confirmation_required_for_side_effect": true,
-        "tool_refs": [
-          "local:derive-8d-adi-insight/model_perception_amplifier.py",
-          "local:derive-8d-adi-insight/origin_cell_views_validator.py",
-          "local:tools.total_field_dynamic_context.build_dynamic_context",
-          "local:tools.total_field_dynamic_context.build_8dadi_state_cell_projection",
-          "local:tools.total_field_dynamic_context.verify_8dadi_state_cell_projection"
-        ]
-      },
-      "D6_TECHNICAL_DEFINITION": {
-        "full_skill_body_in_default_context": false,
-        "load_on_demand": true,
-        "lookup": "DETERMINISTIC_INTEGER_TRIGGER_SCORE",
-        "validation": "Verify exact SKILL.md SHA-256, then load the body on demand under its declared tool boundary."
-      },
-      "D7_RISK": {
-        "connector_login_only_at_use_time": false,
-        "credential_to_model": false,
-        "false_ready_claim_forbidden": true,
-        "platform_hidden_prompt_copied": false
-      },
-      "D8_ENVELOPE": {
-        "access_profile": "FOUNDER_ALL_SKILLS",
-        "interface": "FOUNDER_VPN_FULL",
-        "member_boundary": "OWNER_ONLY",
-        "model_identity": "FOUNDER_PRIVATE_XIAOJ",
-        "owner": "江政隆",
-        "receiver": "get_total_field_dynamic_context",
-        "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
-      },
-      "packet_id": "skill8d:0063:derive-8d-adi-insight:d76f62e5ccb0f3d1",
-      "packet_sha256": "21cd334576ff471cd90d42273150c8aeb22cbf6bf9118b957e0215eb778bde91",
-      "schema_version": "1.0.0",
-      "skill_id": "derive-8d-adi-insight",
-      "skill_name": "derive-8d-adi-insight",
-      "skill_version": "sha256:f89dec9aa79e",
-      "status": "READY_LOCAL"
     },
     {
       "D1_INTENT": {
@@ -8187,13 +8337,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 64,
+        "ordinal": 65,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/entra-agent-id/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "a21b4ddbcaea5c2655ea1ba7593fe3268d07ab9f6a0ca98209f07282f3636cb7"
       },
       "D5_EXECUTION": {
@@ -8283,8 +8433,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0064:entra-agent-id:f4f9b541ca2792d1",
-      "packet_sha256": "0b91d4e6414d6d2131ea8952a6e829dd788a22dc0c7a9cc8375b895406a32111",
+      "packet_id": "skill8d:0065:entra-agent-id:90827cd8f86ebbaf",
+      "packet_sha256": "07d23d78d262ceba8498bb449c5c6dfc22189df8e9736e2761cd149af40f3cb4",
       "schema_version": "1.0.0",
       "skill_id": "entra-agent-id",
       "skill_name": "entra-agent-id",
@@ -8317,13 +8467,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 65,
+        "ordinal": 66,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/entra-app-registration/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "c95e095025be0579170293652ff89a0515870e2585e238cdbb2491f53d6f4fde"
       },
       "D5_EXECUTION": {
@@ -8413,8 +8563,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0065:entra-app-registration:919db8a59f00023f",
-      "packet_sha256": "ea031d603e7f7f06633c87f4a4999218bb40a3cc3906f032a9a418659671ea8f",
+      "packet_id": "skill8d:0066:entra-app-registration:d67003bd52ed8814",
+      "packet_sha256": "d756b953c9b4a2414febde4e2c13e13c75a6bdf20e0c79087249ec55dbe6b05e",
       "schema_version": "1.0.0",
       "skill_id": "entra-app-registration",
       "skill_name": "entra-app-registration",
@@ -8440,13 +8590,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 66,
+        "ordinal": 67,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "tools/ollama_total_field_skill_bridge.py"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7"
       },
       "D5_EXECUTION": {
@@ -8536,8 +8686,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0066:evidence_echo:864a7a0d0d276392",
-      "packet_sha256": "eb43c868fc40a840a988796967b1e8b523d5d86e5b4005b0e698929ed755ffbd",
+      "packet_id": "skill8d:0067:evidence_echo:b9050d88f6e14815",
+      "packet_sha256": "7fc4749c6f14d0b504409bd77090701d40ee7589428c73d9a6139c7c84a46383",
       "schema_version": "1.0.0",
       "skill_id": "evidence_echo",
       "skill_name": "W7TP Evidence Echo",
@@ -8570,13 +8720,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 67,
+        "ordinal": 68,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/finding-discovery/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/finding-discovery/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "938b73329188aa124770fcdf7cf7916e2941c8fdbf20acd9df96bc1a80185fe7"
       },
       "D5_EXECUTION": {
@@ -8666,8 +8816,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0067:finding-discovery:fb763c4fede5e8f3",
-      "packet_sha256": "33eb11e2f33e56e5695166f97a2d71bd882758fa00309343a7bc43df2d6e6ef5",
+      "packet_id": "skill8d:0068:finding-discovery:b28a8b3a833b0319",
+      "packet_sha256": "5af64ed111b3df10c27005b2dda40b1713720dc1fb80c4d6160623dc31843066",
       "schema_version": "1.0.0",
       "skill_id": "finding-discovery",
       "skill_name": "finding-discovery",
@@ -8700,13 +8850,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 68,
+        "ordinal": 69,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/finetuning/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "7a17789cb61e026a52071564b00624f2880e7b35c89fec9aa06c0dfcc8fe1e31"
       },
       "D5_EXECUTION": {
@@ -8796,8 +8946,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0068:finetuning:9ca536fbfb894459",
-      "packet_sha256": "5361b343b20d89e73b5fa6d486afa9b33411cc6bddc0a68984c7873064477be3",
+      "packet_id": "skill8d:0069:finetuning:a211a24326c6f15b",
+      "packet_sha256": "581d40cb497bba21b49a3956a17d1eb7475e816ae8bb55e1ebb881f8611d0f51",
       "schema_version": "1.0.0",
       "skill_id": "finetuning",
       "skill_name": "finetuning",
@@ -8830,13 +8980,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 69,
+        "ordinal": 70,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/fix-finding/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/fix-finding/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "7eca2ea1175edf2338ef08c69baef335abc5a57d09bcf405840f7e35e851cef9"
       },
       "D5_EXECUTION": {
@@ -8926,8 +9076,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0069:fix-finding:eb83cb1c66dc786b",
-      "packet_sha256": "ee4e125a17dcc9fa0c257cb63b5772d6ec6dd7e2a449770ddfe0a1200f46b1cf",
+      "packet_id": "skill8d:0070:fix-finding:ce22a19c0cd59641",
+      "packet_sha256": "3d4164b5cc94d925e1d10c046d2fdd5ad04406960334d4365cad1e9606c9f24d",
       "schema_version": "1.0.0",
       "skill_id": "fix-finding",
       "skill_name": "fix-finding",
@@ -8960,13 +9110,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 70,
+        "ordinal": 71,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-docs/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "8e5c26053d800e2980b74ab82c2ce95db94a17fbb443f8f6e30baeb442f1d464"
       },
       "D5_EXECUTION": {
@@ -9056,8 +9206,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0070:google-docs:dbf1404fc7d2527c",
-      "packet_sha256": "3ca406d38253e9d848106f1019826349f569b80a3462aad5594ee709bfad9e08",
+      "packet_id": "skill8d:0071:google-docs:4e061c13c686e197",
+      "packet_sha256": "cc427f3b43c9b32ed6b7cb02b5d197419e6e45a6a472d12760d6b8ad7bca7544",
       "schema_version": "1.0.0",
       "skill_id": "google-docs",
       "skill_name": "google-docs",
@@ -9090,13 +9240,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 71,
+        "ordinal": 72,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "dabae8a192c861b76cf7b5742bdf14f8ed35e67d8e6cacfd5f746ffbefd6da5c"
       },
       "D5_EXECUTION": {
@@ -9186,8 +9336,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0071:google-drive:f24cc928070597b1",
-      "packet_sha256": "174ad3c12a3bf0853c5a9a63c1b56726777aa9880b5857113bb3b3af114f131c",
+      "packet_id": "skill8d:0072:google-drive:a0d584a2bfca4049",
+      "packet_sha256": "a0db593a1f13e6460aa94f5d7b4db209cfedd31898730a3d31f67b401c7d6949",
       "schema_version": "1.0.0",
       "skill_id": "google-drive",
       "skill_name": "google-drive",
@@ -9220,13 +9370,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 72,
+        "ordinal": 73,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive-comments/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "a3077375a8f7558b9e052c98047747b8a4a1a90a9a90b552009c28fcdadfe94a"
       },
       "D5_EXECUTION": {
@@ -9316,8 +9466,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0072:google-drive-comments:a61ad429db424c37",
-      "packet_sha256": "374507e6d1ec5e6bd3ebb5e79c52b1b95a191f3b14a2b46dc8fb14e94eb9f11e",
+      "packet_id": "skill8d:0073:google-drive-comments:4231da6f0296c2c2",
+      "packet_sha256": "bb61c8bd05841b482802b4ec60609ffa8b54c0beedf0a81a87024455c2ec9bab",
       "schema_version": "1.0.0",
       "skill_id": "google-drive-comments",
       "skill_name": "google-drive-comments",
@@ -9350,13 +9500,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 73,
+        "ordinal": 74,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-sheets/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "54d160c27532e4ff610e9c5a7870fb80dc496b2d1d3f302996c21c505419c862"
       },
       "D5_EXECUTION": {
@@ -9446,8 +9596,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0073:google-sheets:210318b8e1da1d5c",
-      "packet_sha256": "111b27890c6c683c5d802feb84c83ae3a569b707b9312ae3fe72c487714576b4",
+      "packet_id": "skill8d:0074:google-sheets:f3588d48e7f862c2",
+      "packet_sha256": "877bf87d244816182a0654cd7b7e4ca3a14eff48944cd5e5abae1e630960aa51",
       "schema_version": "1.0.0",
       "skill_id": "google-sheets",
       "skill_name": "google-sheets",
@@ -9480,13 +9630,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 74,
+        "ordinal": 75,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-slides/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "fd14974d7c4ea9ff134bcc21cd32b2b1d61eeaa77c6dc757075b07eef6bedbdb"
       },
       "D5_EXECUTION": {
@@ -9576,8 +9726,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0074:google-slides:0c46e8ed76b4ca80",
-      "packet_sha256": "d998abc211200c0f62987a70c7b359101e58a0384097ae6f3effd694c6a60030",
+      "packet_id": "skill8d:0075:google-slides:7cc897a024630b72",
+      "packet_sha256": "d5c1b0b2ebab893ebfc7766c8b561a896c2073186c69cbc66085be3140cbe2ae",
       "schema_version": "1.0.0",
       "skill_id": "google-slides",
       "skill_name": "google-slides",
@@ -9610,13 +9760,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 75,
+        "ordinal": 76,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/skills/.system/imagegen/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "681ddb4ad6d06a2acc78a3535b583f8d0c1ea800ecda3d56370d3310fd2cd4ba"
       },
       "D5_EXECUTION": {
@@ -9706,8 +9856,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0075:imagegen:2e3669dfdddb5974",
-      "packet_sha256": "c9494e8fc0ef8056c1d9ba3f3a90a4b06a64bf070060727309c6e203f6843152",
+      "packet_id": "skill8d:0076:imagegen:850cc42812495c65",
+      "packet_sha256": "08395f0fe546bd9e76ea8c4cbb2a0678ac66f0c6b64b497316aa4d3a7c1410ca",
       "schema_version": "1.0.0",
       "skill_id": "imagegen",
       "skill_name": "imagegen",
@@ -9740,13 +9890,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 76,
+        "ordinal": 77,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "46718ed889e7ea84593a2f6d4213ab8a442e6f2d400491c4bd032df9e77296d5"
       },
       "D5_EXECUTION": {
@@ -9836,8 +9986,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0076:microsoft-foundry:af1bdcedda2f8dea",
-      "packet_sha256": "be9a21f8dd1c859ada374b78b567d2c6a095b3c72f1ec51887233bda02041eae",
+      "packet_id": "skill8d:0077:microsoft-foundry:0eb9dde0dccf0d88",
+      "packet_sha256": "dc64af418ec25fe0fedbeac7aa6c0aea9f6084d5a636aff2ad30c5219627a587",
       "schema_version": "1.0.0",
       "skill_id": "microsoft-foundry",
       "skill_name": "microsoft-foundry",
@@ -9870,13 +10020,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 77,
+        "ordinal": 78,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-knowledge-capture/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "ade7d8902823500f6af26bdf290f2a88e35b34ce9668739eb8807b773648e333"
       },
       "D5_EXECUTION": {
@@ -9966,8 +10116,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0077:notion-knowledge-capture:7c49802277cf7d9a",
-      "packet_sha256": "028f35fadca417c9b091dd0440466382f6ce78ca0b2112aca64ede33b3c64db3",
+      "packet_id": "skill8d:0078:notion-knowledge-capture:e12b704a5d59ebf4",
+      "packet_sha256": "9586dd65aef7968c7db1fd9adf51358b6334e55067a8f0b5dfec84dc4945b10d",
       "schema_version": "1.0.0",
       "skill_id": "notion-knowledge-capture",
       "skill_name": "notion-knowledge-capture",
@@ -10000,13 +10150,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 78,
+        "ordinal": 79,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-meeting-intelligence/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "1a8647c46cdfab399a1e0199924e0aecb83034e9a1b0957db211a045145b7771"
       },
       "D5_EXECUTION": {
@@ -10096,8 +10246,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0078:notion-meeting-intelligence:8b18ac4b5fae234f",
-      "packet_sha256": "496f020a99e7c0001502941100633f999f18df22846eb2978f126d300392a0e6",
+      "packet_id": "skill8d:0079:notion-meeting-intelligence:ca509f89cc6513ca",
+      "packet_sha256": "2efed4fa7610827f586f57a5f5b4322108e62c131d9a33446777b209a14052e7",
       "schema_version": "1.0.0",
       "skill_id": "notion-meeting-intelligence",
       "skill_name": "notion-meeting-intelligence",
@@ -10130,13 +10280,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 79,
+        "ordinal": 80,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-research-documentation/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "8ca523535915c1b9016202fa24d120545c60caea5c5545d74bfdec195f0a039a"
       },
       "D5_EXECUTION": {
@@ -10226,8 +10376,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0079:notion-research-documentation:720f27f08ed64c4a",
-      "packet_sha256": "5bbd66ac6be5eda846f6fe6897cbda92c3f448ea2ef1c1dc5cd30b7e4b19fc45",
+      "packet_id": "skill8d:0080:notion-research-documentation:f4b973e09c9c9120",
+      "packet_sha256": "da236556b619811d759fb885276c1f539e6087ce059c2ba20ce9322e3f17acdc",
       "schema_version": "1.0.0",
       "skill_id": "notion-research-documentation",
       "skill_name": "notion-research-documentation",
@@ -10260,13 +10410,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 80,
+        "ordinal": 81,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-spec-to-implementation/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "43b304aaff38fbd4fd5d81efcefb2fd92f5450649eba8b02a2371edb4599cf3f"
       },
       "D5_EXECUTION": {
@@ -10356,8 +10506,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0080:notion-spec-to-implementation:16cab193a519249b",
-      "packet_sha256": "c5d63c02a4ad37934e980657433fbe0340dd44f80d0c38a97c2af7910bc7b085",
+      "packet_id": "skill8d:0081:notion-spec-to-implementation:cd6f95a4a556f544",
+      "packet_sha256": "bfb3f34af668421cbaf8112deacece43167de930cc61b3defc9abee90972c569",
       "schema_version": "1.0.0",
       "skill_id": "notion-spec-to-implementation",
       "skill_name": "notion-spec-to-implementation",
@@ -10390,14 +10540,14 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 81,
+        "ordinal": 82,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/skills/.system/openai-docs/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
-        "source_sha256": "7cb8fa1b2a0c635b5c61ffe1da7b8594a7ea0fce5b71e8d523e2025d88b2a05e"
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+        "source_sha256": "aa6829e21df2223167c85d2e49b6337a7345c84c1033f1ec10182c7882b36d45"
       },
       "D5_EXECUTION": {
         "input_schema": {
@@ -10486,12 +10636,12 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0081:openai-docs:ba3122024e9dd234",
-      "packet_sha256": "6b94859de2cfca3a554f112c66d5542d0d180618316f8166e504e668fdc219dd",
+      "packet_id": "skill8d:0082:openai-docs:f445dede5cf89705",
+      "packet_sha256": "32f2f7b7bfaa7b0bb2a21e00230a3adc8817732e9b46f4c6b6ade11f125af23c",
       "schema_version": "1.0.0",
       "skill_id": "openai-docs",
       "skill_name": "openai-docs",
-      "skill_version": "sha256:7cb8fa1b2a0c",
+      "skill_version": "sha256:aa6829e21df2",
       "status": "NEEDS_LOCAL_ADAPTER"
     },
     {
@@ -10520,13 +10670,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 82,
+        "ordinal": 83,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/skills/.system/plugin-creator/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "71b95b8219644f95d633721e7f7cd3c469edfc8fe50f8415d400dfb2d74bc7b9"
       },
       "D5_EXECUTION": {
@@ -10620,8 +10770,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0082:plugin-creator:0ac555fd919f8528",
-      "packet_sha256": "18cd9f9d279606e686c71534caef61c5b33da5d08d0f0d0206b050030363bc52",
+      "packet_id": "skill8d:0083:plugin-creator:333b789315a5bed4",
+      "packet_sha256": "d50922a1d4ef726595d128d93a402158b7419954add41aee229039ec3289efc6",
       "schema_version": "1.0.0",
       "skill_id": "plugin-creator",
       "skill_name": "plugin-creator",
@@ -10654,13 +10804,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 83,
+        "ordinal": 84,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "653841cc21205269f08b0ce135891e1518dac616a766bcfb0b57d788d3f68b10"
       },
       "D5_EXECUTION": {
@@ -10750,8 +10900,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0083:plugin-management:d7a4fe29807f8dfd",
-      "packet_sha256": "61a3b2aa5dee97ac8ea6f09d3313a4bfb752fe9f108c02a52087cc322df4a2ed",
+      "packet_id": "skill8d:0084:plugin-management:e82d28841cedd84e",
+      "packet_sha256": "b2d78bcaab6e335a5f0cfbbe0b39508e62f0ef5e45e3d79d967579a8f8d307ee",
       "schema_version": "1.0.0",
       "skill_id": "plugin-management",
       "skill_name": "plugin-management",
@@ -10784,13 +10934,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 84,
+        "ordinal": 85,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.agents/skills/microsoft-foundry/models/deploy-model/preset/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "f4e44bf4eac06f75f17f5e3fc40e5a85a2cf23b27fcc99bf76c5df9d6e48eb5b"
       },
       "D5_EXECUTION": {
@@ -10880,8 +11030,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0084:preset:2e9ed7c5baac311e",
-      "packet_sha256": "34056fc123676d00ad69fa521c6709f5158b0b366206e64ff04c8b56c0203793",
+      "packet_id": "skill8d:0085:preset:7e9b069c32e08600",
+      "packet_sha256": "9323f17e6dc80b3c92d2bcee424bc6428ee5491eb43aa4718d04cd638b201ab0",
       "schema_version": "1.0.0",
       "skill_id": "preset",
       "skill_name": "preset",
@@ -10914,13 +11064,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 85,
+        "ordinal": 86,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/propose-security-hardening/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/propose-security-hardening/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "b9d2c81ecb99e6eb4ad6424dbd297a935feb66c2658692d48caf4d9840eaf306"
       },
       "D5_EXECUTION": {
@@ -11010,8 +11160,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0085:propose-security-hardening:ead9a8da563f92fb",
-      "packet_sha256": "3e11d4d5db999e090440c224c09486b2fbf0d29ca3b05cf97ae7b87e0023d077",
+      "packet_id": "skill8d:0086:propose-security-hardening:a03eda241601453a",
+      "packet_sha256": "b70782f1a55c178d32c2ab3f4559096803294887b493c79c174718b2bce9d143",
       "schema_version": "1.0.0",
       "skill_id": "propose-security-hardening",
       "skill_name": "propose-security-hardening",
@@ -11044,13 +11194,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 86,
+        "ordinal": 87,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/skills/.system/review-agent/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "07079efd0dc76f05fade424e5dfb048dce1de2df7626e1a4f56292a4f3f92228"
       },
       "D5_EXECUTION": {
@@ -11140,8 +11290,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0086:review-agent:b4fb26d26b584023",
-      "packet_sha256": "97657f9c4087672ccee238cf1b462870a33c97dfaf9a4a3bd6314a3abadfcf74",
+      "packet_id": "skill8d:0087:review-agent:e62249283006a372",
+      "packet_sha256": "444889ba14971a8bae6b63134fec8a7826aa33cfe8c42e3c8f1f9a628b964ae6",
       "schema_version": "1.0.0",
       "skill_id": "review-agent",
       "skill_name": "review-agent",
@@ -11174,13 +11324,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 87,
+        "ordinal": 88,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/security-diff-scan/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/security-diff-scan/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "0a4c519ad713585876ea7eb0a8af4b59892c86746f4c69851db9ab347b7fad2f"
       },
       "D5_EXECUTION": {
@@ -11270,8 +11420,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0087:security-diff-scan:5e0ca6c7324a005d",
-      "packet_sha256": "2cdce5ca9866b4437ceda5949b89ef7a8f9d5735093879755859350785ce8e31",
+      "packet_id": "skill8d:0088:security-diff-scan:d721979a25e787bd",
+      "packet_sha256": "94204bce4fb817eda87aee57919bc67b612dc032e4c73e67a7b753fe744d5d5e",
       "schema_version": "1.0.0",
       "skill_id": "security-diff-scan",
       "skill_name": "security-diff-scan",
@@ -11304,13 +11454,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 88,
+        "ordinal": 89,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/security-scan/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/security-scan/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "5b8f5d7debeca14c6b37e8e7ba737671362b8eb4b7f49e693c99c6bd04bc8fa0"
       },
       "D5_EXECUTION": {
@@ -11400,8 +11550,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0088:security-scan:cf0c277c813a2b25",
-      "packet_sha256": "9bf831dcb64bc55aaf23ce78c63c38c3162293f78807ab683640af4a57daa674",
+      "packet_id": "skill8d:0089:security-scan:d006f0780ddf57de",
+      "packet_sha256": "bead1bb68b93789cb67b67644da30147e6565685ede5e5fcc98b84ea2c40bec2",
       "schema_version": "1.0.0",
       "skill_id": "security-scan",
       "skill_name": "security-scan",
@@ -11434,13 +11584,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 89,
+        "ordinal": 90,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/skills/.system/skill-creator/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66"
       },
       "D5_EXECUTION": {
@@ -11534,8 +11684,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0089:skill-creator:1d195194aa72cffe",
-      "packet_sha256": "cbfb0361a43c3b25288040e4a436e3896af4e9c19868a1f5e35d287da31943dc",
+      "packet_id": "skill8d:0090:skill-creator:f56d76e71a179a83",
+      "packet_sha256": "b037d9239225597280c6d536ecea20f3f12d266fdda2bba4151038710d5e3fb4",
       "schema_version": "1.0.0",
       "skill_id": "skill-creator",
       "skill_name": "skill-creator",
@@ -11568,13 +11718,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 90,
+        "ordinal": 91,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "/home/taiji_admin/.codex/skills/.system/skill-installer/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "d68b77e5bbb34dedab89d134da52855f140fc4b4299b80104f534e3b9e98f8ee"
       },
       "D5_EXECUTION": {
@@ -11664,8 +11814,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0090:skill-installer:faa2cfe6b9432fc6",
-      "packet_sha256": "4cbcf06106e481b242b889c0b70f650aafcf31722951a518d732538b5c34450d",
+      "packet_id": "skill8d:0091:skill-installer:ff1e3d932f049eb1",
+      "packet_sha256": "9772b1ed397e6c0f64ec3dbc6da65b363e45fa6991a5e0c96016ef48e836fbb4",
       "schema_version": "1.0.0",
       "skill_id": "skill-installer",
       "skill_name": "skill-installer",
@@ -11698,13 +11848,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 91,
+        "ordinal": 92,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/threat-model/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/threat-model/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "9aa474aed20b89a350a1e9181c8fdf80c89b6ca05a300e5cc4727cd31ae3eadd"
       },
       "D5_EXECUTION": {
@@ -11794,8 +11944,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0091:threat-model:494e1a6b26856183",
-      "packet_sha256": "fe95e973a3923eceb3d5ef8183486e1d8a5fe28265513104d027302c1a3e236e",
+      "packet_id": "skill8d:0092:threat-model:ac3ec38d78e3afcb",
+      "packet_sha256": "511f3a5307fde5cba6082af86440d69fd45f13a79c3fb6a5f5df7efd4d9ed389",
       "schema_version": "1.0.0",
       "skill_id": "threat-model",
       "skill_name": "threat-model",
@@ -11822,13 +11972,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 92,
+        "ordinal": 93,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "tools/ollama_total_field_skill_bridge.py"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "86bfe88bddd2ed1f09579d07c7858e6b3f90b7119ed89f98d69e88eebdedfbf7"
       },
       "D5_EXECUTION": {
@@ -11918,8 +12068,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0092:total_field_policy_check:f8a242e6d1ce732d",
-      "packet_sha256": "1b5404403d4c7d2467ba8df901a8b8af3f75415cf78482e5e45e6a3c8f4d27b1",
+      "packet_id": "skill8d:0093:total_field_policy_check:a8046dddb798b9d3",
+      "packet_sha256": "0b94a2fcbdc421e8a7637cbd233cee52a7807217bb914d7a747f026700a3fd95",
       "schema_version": "1.0.0",
       "skill_id": "total_field_policy_check",
       "skill_name": "W7TP Total Field Policy Check",
@@ -11952,13 +12102,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 93,
+        "ordinal": 94,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/track-findings/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/track-findings/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "8e3726e86ef0df509f1a635961f268e1bf04a4622a83e21c1d079f546cc61dcb"
       },
       "D5_EXECUTION": {
@@ -12048,8 +12198,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0093:track-findings:a3404f95487e47e0",
-      "packet_sha256": "711d19799afbcfa217eb2c74c599c0eb74644e806c4e7c9a4751051ee617fe80",
+      "packet_id": "skill8d:0094:track-findings:bb249e98a33306fd",
+      "packet_sha256": "0ad3afbebae4849534639ee8747cac27886056737cb311261a63d00022a3e090",
       "schema_version": "1.0.0",
       "skill_id": "track-findings",
       "skill_name": "track-findings",
@@ -12082,13 +12232,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 94,
+        "ordinal": 95,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/triage-finding/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/triage-finding/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "70b0e771f286443ea32bbf466ad378b36f9123b4aa171ab02c6680fdbdb704f9"
       },
       "D5_EXECUTION": {
@@ -12178,8 +12328,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0094:triage-finding:de89360b83453a00",
-      "packet_sha256": "c14dc7dbeb85b1daa4ab219ebae655940c9be6e47553342d08a6b86ece56ca49",
+      "packet_id": "skill8d:0095:triage-finding:9beeb97d9ef5f1f2",
+      "packet_sha256": "6bb369fbae0fd2e9d5bb69b3891631b843d99b254652f4164c5044ce45a4fe5e",
       "schema_version": "1.0.0",
       "skill_id": "triage-finding",
       "skill_name": "triage-finding",
@@ -12212,13 +12362,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 95,
+        "ordinal": 96,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/validation/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/validation/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "9d9c2478c31d9eb8bcab6b3bbdc6d8aa1f58ceef75361148fef11e9311543f2e"
       },
       "D5_EXECUTION": {
@@ -12308,8 +12458,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0095:validation:cda706be3c2dfbb0",
-      "packet_sha256": "a4229bf08cf3de1bb53b6b4052732923117232555ad9f4d3568bdc62a5dfe4ce",
+      "packet_id": "skill8d:0096:validation:986f9fde5c8c806f",
+      "packet_sha256": "c76acadee2ca07488be9461322288a3f514a780ac5e831cecfa21050a967ba90",
       "schema_version": "1.0.0",
       "skill_id": "validation",
       "skill_name": "validation",
@@ -12318,21 +12468,21 @@
     },
     {
       "D1_INTENT": {
-        "description": "Use when the user asks whether an existing security fix, patch, finding, or completed issue actually remediates the original vulnerability without modifying the repository. Do not use to validate candidate findings, implement patches, or run full repository scans.",
+        "description": "Use only when the user explicitly requests verification that a security fix remediates a reported vulnerability. Do not invoke automatically while implementing fixes, reviewing ordinary code changes, or running tests. Do not use for non-security fixes, candidate finding validation, or full repository scans.",
         "required_context": "Skill definition exists but its Codex runtime tool is not exported to Continue.",
         "triggers": [
           "verify-fix",
           "Use",
+          "only",
           "when",
           "the",
           "user",
-          "asks",
-          "whether",
-          "existing",
+          "explicitly",
+          "requests",
+          "verification",
+          "that",
           "security",
-          "fix",
-          "patch",
-          "finding"
+          "fix"
         ]
       },
       "D2_STATE": {
@@ -12342,14 +12492,14 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 96,
+        "ordinal": 97,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/verify-fix/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/verify-fix/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
-        "source_sha256": "3b10a60ef709553c706a3b023c26889cfde3261df44663a53687ba32ca919d5d"
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+        "source_sha256": "3d4530484c7e4c18b6afe7c6527247e96517dce1ebd1bda9d349cd367ecb0ae3"
       },
       "D5_EXECUTION": {
         "input_schema": {
@@ -12438,12 +12588,12 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0096:verify-fix:a4de60fc72faa85d",
-      "packet_sha256": "d61185f865908eab6c17ed9d4de164f8f199a8ef05d6dc958d6e2ed745aebcad",
+      "packet_id": "skill8d:0097:verify-fix:14bc3bf771ea6995",
+      "packet_sha256": "ec927090daf2968eb6bd6cb5ed7ef5f2b2ae291cc8f7f54cf1fbc05069694577",
       "schema_version": "1.0.0",
       "skill_id": "verify-fix",
       "skill_name": "verify-fix",
-      "skill_version": "sha256:3b10a60ef709",
+      "skill_version": "sha256:3d4530484c7e",
       "status": "NEEDS_LOCAL_ADAPTER"
     },
     {
@@ -12472,13 +12622,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 97,
+        "ordinal": 98,
         "repository": "/home/taiji_admin/Taiji_Hub",
-        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.23/skills/vulnerability-writeup/SKILL.md"
+        "source_path": "/home/taiji_admin/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.24/skills/vulnerability-writeup/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "SKILL_MD",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "78105d91972d8d8fce44e4c24311a2b1a4c7acb23bbc3d69e628410cbcc35416"
       },
       "D5_EXECUTION": {
@@ -12568,8 +12718,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0097:vulnerability-writeup:8f2c44b09ae1e3ac",
-      "packet_sha256": "1752c8cb578d2a822cfa4c0f0b1dedb5438737f9ebfc5a2d111a2392c67bcc81",
+      "packet_id": "skill8d:0098:vulnerability-writeup:7ac0a9a94fa75d94",
+      "packet_sha256": "228a0ce7737a82ac1317380f61197c0ae7afd5ee2545d11a5597041e89e1573b",
       "schema_version": "1.0.0",
       "skill_id": "vulnerability-writeup",
       "skill_name": "vulnerability-writeup",
@@ -12595,13 +12745,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 98,
+        "ordinal": 99,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": ".skill-build/w7tp-capability-assimilator/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_package_sha256": "95c1621ba8435a650716b8efe252e21804609a71a36a1842a35fee4907bb3bfa",
         "source_sha256": "8842f092d9b4fec54585ee8ad0ca06488fb79dfe3c1d8adf901efae7b55945ae"
       },
@@ -12693,8 +12843,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0098:w7tp-capability-assimilator:ba9b74ed813dccb4",
-      "packet_sha256": "119c85e391138245bb48d550e73d73b95321df20d5f3677188620806afc70a01",
+      "packet_id": "skill8d:0099:w7tp-capability-assimilator:0ec55eaf80b3dddf",
+      "packet_sha256": "df21a76d1dba19a90255bb3b23f08aa1df34f7a98fe4404c4e1b05d7206b14e2",
       "schema_version": "1.0.0",
       "skill_id": "w7tp-capability-assimilator",
       "skill_name": "W7TP Capability Assimilator",
@@ -12720,13 +12870,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 99,
+        "ordinal": 100,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "tools/total_field_dynamic_context.py"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "ea7ed43d69ef35867cfa7d746f4faaf8990ff8a0b18e29a5be78370e071201bc"
       },
       "D5_EXECUTION": {
@@ -12820,8 +12970,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0099:w7tp_8d_adi_origin_cell_fusion:8fef4e4966391b09",
-      "packet_sha256": "ac8191c54188d9efec2ad179ad24c1af2091faf8c0553912078abb85467899b8",
+      "packet_id": "skill8d:0100:w7tp_8d_adi_origin_cell_fusion:0cca376b32b0c336",
+      "packet_sha256": "1b2259e953c3f58f9aa0f176b50a6a16806d21af9aa3d6ac0facb889c509c68f",
       "schema_version": "1.0.0",
       "skill_id": "w7tp_8d_adi_origin_cell_fusion",
       "skill_name": "W7TP 8D ADI Origin-Cell Context Transmission",
@@ -12846,13 +12996,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 100,
+        "ordinal": 101,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "tools/total_field_dynamic_context.py"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "ea7ed43d69ef35867cfa7d746f4faaf8990ff8a0b18e29a5be78370e071201bc"
       },
       "D5_EXECUTION": {
@@ -12942,8 +13092,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0100:w7tp_dynamic_context:192f3033183c9b98",
-      "packet_sha256": "312c079acf59bc12e7e62cd6f1b3b7a8ec222d1fa259926872cf161834e64ba6",
+      "packet_id": "skill8d:0101:w7tp_dynamic_context:86b9f19224cbaad4",
+      "packet_sha256": "61adbc41453efc3a53c2987f0804dbb30e0b8705eb6f10dae5de2f72829782a0",
       "schema_version": "1.0.0",
       "skill_id": "w7tp_dynamic_context",
       "skill_name": "W7TP Dynamic Context",
@@ -12976,14 +13126,14 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 101,
+        "ordinal": 102,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": ".skill-build/w7tp-internal-generative-transmission/SKILL.md"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
-        "source_sha256": "2e66aa1cf8570a4c5c2360ee86f568f914e95971d1c22bcf8970f67a0d87bbc5",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+        "source_sha256": "084fc69153df9e265757cbb573b3f7310cf48362ce5f808e7cbffcf2850a8a68",
         "supporting_sources": [
           {
             "path": "manifests/ollama_xiaoj_total_field_v0_1/routing_policy.json",
@@ -13085,8 +13235,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0101:w7tp_generative_transmission:dfd7995ef85ba07b",
-      "packet_sha256": "5e32bda7c56434deb6f9658f3785989416081e2b52033de19487690a999200f6",
+      "packet_id": "skill8d:0102:w7tp_generative_transmission:64e875a28577e8e4",
+      "packet_sha256": "a6be05d32302ca4ca316c6d96ddc3a5445cc209f7c133550386423068fc9b4ee",
       "schema_version": "1.0.0",
       "skill_id": "w7tp_generative_transmission",
       "skill_name": "W7TP Generative Transmission",
@@ -13114,13 +13264,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 102,
+        "ordinal": 103,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "tools/total_field_dynamic_context.py"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "ea7ed43d69ef35867cfa7d746f4faaf8990ff8a0b18e29a5be78370e071201bc"
       },
       "D5_EXECUTION": {
@@ -13210,13 +13360,169 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0102:w7tp_model_source_orchestration:37ee7e1fd5492295",
-      "packet_sha256": "260663d994a9b7169524a90375a2528d35e059749f6a6cad5e05756458775385",
+      "packet_id": "skill8d:0103:w7tp_model_source_orchestration:80d3bb9f04740d8f",
+      "packet_sha256": "8c9449a4b585c0c98b9746215319ae4ad7bd8227efec3f561b0f98fdb73af94f",
       "schema_version": "1.0.0",
       "skill_id": "w7tp_model_source_orchestration",
       "skill_name": "W7TP Model Source Orchestration",
       "skill_version": "1.0.0",
       "status": "READY_MCP"
+    },
+    {
+      "D1_INTENT": {
+        "description": "沿既有 Total Field Merlin 單一路由建立 RT-BE86U WireGuard 雙棧、逐裝置 peer、LAN 直連與路由器 DNS 的 8D ADI 計畫；路由器效果必須另有精確單次 D8。",
+        "required_context": "Exact RT-BE86U target, current redacted preimage, one registered router intent, rollback rules, reobservation rules, and separate short-lived single-use D8 authority for any network effect.",
+        "triggers": [
+          "路由器VPN",
+          "WireGuard",
+          "固定IP",
+          "IPv6",
+          "區域網路直連",
+          "路由器DNS",
+          "VPN切換",
+          "新增peer"
+        ]
+      },
+      "D2_STATE": {
+        "mapping_state": "READY_LOCAL",
+        "runtime_claim": true,
+        "superseded": false
+      },
+      "D3_COORDINATE": {
+        "node": "MSI_LOCAL_WSL",
+        "ordinal": 104,
+        "repository": "/home/taiji_admin/Taiji_Hub",
+        "source_path": ".skill-build/w7tp-router-wireguard-control/SKILL.md"
+      },
+      "D4_EVIDENCE": {
+        "source_kind": "W7TP_LOCAL_CAPABILITY",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+        "source_sha256": "ef6fb45dd0985f79b8545df66ecea7b35011876815d5c2292eec218e3f7db0ad",
+        "supporting_sources": [
+          {
+            "path": ".skill-build/w7tp-router-wireguard-control/references/total-field-capability-contract.json",
+            "sha256": "82de8a6b807d546ccdf2d5df9a33bf2916e0713cbb2dc395291a87ecd8746c80"
+          },
+          {
+            "path": ".skill-build/w7tp-router-wireguard-control/scripts/router_total_field_adapter.py",
+            "sha256": "55659c517cc79de15aa5126be4fe04abe58c882491f3dc4ad59552f356de9ad7"
+          },
+          {
+            "path": "runtime/router/merlin_intent_driver.py",
+            "sha256": "47d7bc80481056db9a0810fb0c5f42dd46cd981ab9b4a42069251a0caafb095b"
+          },
+          {
+            "path": "runtime/router/merlin_apply_queue.py",
+            "sha256": "e836d5e17277e1cddb9ca23a6f3eb9f101168c74aab39676b2c6a2966b01089c"
+          },
+          {
+            "path": "runtime/router/merlin_approval_gate.py",
+            "sha256": "1136e3ff7f476f4b1727b03fe0151e7d0be563aaa6bb5313a5b72ec751649cd8"
+          },
+          {
+            "path": "runtime/router/merlin_human_execution_checklist.py",
+            "sha256": "949de833b8653d31c34386735d00e63556a7d5d74007f766bf3c74aca9fc6fc3"
+          },
+          {
+            "path": "runtime/router/merlin_execution_result_recorder.py",
+            "sha256": "f728d655380c58b9d461621a5488eba3b2b48f0f2d7512b2cb27f3be2c085535"
+          }
+        ]
+      },
+      "D5_EXECUTION": {
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "context_refs": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "identity_profile_ref": {
+              "const": "FOUNDER_ALL_SKILLS"
+            },
+            "intent": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "intent",
+            "identity_profile_ref"
+          ],
+          "type": "object"
+        },
+        "maximum_effect": "LOCAL_CANDIDATE",
+        "model_commit_allowed": false,
+        "output_schema": {
+          "additionalProperties": true,
+          "properties": {
+            "authority": {
+              "const": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
+            },
+            "candidate": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "evidence": {
+              "type": "array"
+            },
+            "skill_id": {
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "CANDIDATE_ONLY",
+                "HOLD",
+                "BLOCK"
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "skill_id",
+            "candidate",
+            "evidence",
+            "authority"
+          ],
+          "type": "object"
+        },
+        "single_founder_confirmation_required_for_side_effect": true,
+        "tool_refs": [
+          "linux:python3 .skill-build/w7tp-router-wireguard-control/scripts/router_total_field_adapter.py --intent <REGISTERED_INTENT>"
+        ]
+      },
+      "D6_TECHNICAL_DEFINITION": {
+        "full_skill_body_in_default_context": false,
+        "load_on_demand": true,
+        "lookup": "DETERMINISTIC_INTEGER_TRIGGER_SCORE",
+        "validation": "Run the adapter and skill validator. The current tool is plan-only; router/NVRAM/firewall/restart/VPN effects must return HOLD until AUTHORIZE_EXACT_ROUTER_NETWORK_CHANGE is registered and verified."
+      },
+      "D7_RISK": {
+        "connector_login_only_at_use_time": false,
+        "credential_to_model": false,
+        "false_ready_claim_forbidden": true,
+        "platform_hidden_prompt_copied": false
+      },
+      "D8_ENVELOPE": {
+        "access_profile": "FOUNDER_ALL_SKILLS",
+        "interface": "FOUNDER_VPN_FULL",
+        "member_boundary": "OWNER_ONLY",
+        "model_identity": "FOUNDER_PRIVATE_XIAOJ",
+        "owner": "江政隆",
+        "receiver": "get_total_field_dynamic_context",
+        "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
+      },
+      "packet_id": "skill8d:0104:w7tp_router_wireguard_control:f65c7c2bf49690ac",
+      "packet_sha256": "5fe73b65e707810650cb2fe2edfc8036aa6055b7c868d5558ee818a28fdce3c1",
+      "schema_version": "1.0.0",
+      "skill_id": "w7tp_router_wireguard_control",
+      "skill_name": "W7TP Router WireGuard Control",
+      "skill_version": "1.0.0",
+      "status": "READY_LOCAL"
     },
     {
       "D1_INTENT": {
@@ -13237,13 +13543,13 @@
       },
       "D3_COORDINATE": {
         "node": "MSI_LOCAL_WSL",
-        "ordinal": 103,
+        "ordinal": 105,
         "repository": "/home/taiji_admin/Taiji_Hub",
         "source_path": "tools/total_field/w7tp_true8d_contract_sandbox.py"
       },
       "D4_EVIDENCE": {
         "source_kind": "W7TP_LOCAL_CAPABILITY",
-        "source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
+        "source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
         "source_sha256": "d5ad2b374f89160b94d5aa6222022dcc9cde733d49716e86427e1bc1b69db9f2"
       },
       "D5_EXECUTION": {
@@ -13333,8 +13639,8 @@
         "receiver": "get_total_field_dynamic_context",
         "return_authority": "FOUNDER_FULL_SKILL_USE_CANDIDATE_ONLY"
       },
-      "packet_id": "skill8d:0103:w7tp_true8d_contract:44b88a88491ce627",
-      "packet_sha256": "bcc4e9400c9d9dbb1311672f83472fbf4fe0dd66843b864e175870880533775c",
+      "packet_id": "skill8d:0105:w7tp_true8d_contract:43064045cebcd16d",
+      "packet_sha256": "6751d65aecc112555f6b3605449ebe623974c36491b9a2fc76e035feb5fb8183",
       "schema_version": "1.0.0",
       "skill_id": "w7tp_true8d_contract",
       "skill_name": "W7TP TRUE8D Contract Sandbox",
@@ -13342,7 +13648,7 @@
       "status": "READY_LOCAL"
     }
   ],
-  "skill_source_manifest_sha256": "6fbbe5de48efdb3c5ad02979ed7672a767ffa53012ce067e8ba9d38034eb7e96",
-  "skills_discovered": 103,
+  "skill_source_manifest_sha256": "7005fd52b77cc9924a21c5eb07e1478525e055f40c0ae6c072ad01483ab30b08",
+  "skills_discovered": 105,
   "version": "1.0.0"
 }

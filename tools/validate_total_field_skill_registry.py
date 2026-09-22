@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the three bounded Total Field skill registrations without mutation."""
+"""Validate the bounded Total Field skill registrations without mutation."""
 
 from __future__ import annotations
 
@@ -16,8 +16,11 @@ REGISTRY_PATH = PACK / "capability_registry.json"
 INDEX_PATH = PACK / "founder_all_skills_8d_index.json"
 
 EXPECTED = {
+    "8d-adi-founder-partner": "READY_LOCAL",
+    "8d-adi-state-field-intelligence": "READY_LOCAL",
     "w7tp-capability-assimilator": "READY_LOCAL",
     "w7tp_generative_transmission": "READY_LOCAL",
+    "w7tp_router_wireguard_control": "READY_LOCAL",
     "deep-research": "NEEDS_CONNECTOR",
 }
 MERGED_ALIAS = "w7tp-internal-generative-transmission"
@@ -118,6 +121,94 @@ def validate() -> dict[str, Any]:
     if research_refs != ["controlled_connector:deep_research_work"]:
         errors.append("DEEP_RESEARCH_CONNECTOR_BOUNDARY_MISMATCH")
 
+    router_packet = packet_by_id.get("w7tp_router_wireguard_control", {})
+    router_refs = router_packet.get("D5_EXECUTION", {}).get("tool_refs", [])
+    if (
+        len(router_refs) != 1
+        or not str(router_refs[0]).startswith("linux:python3 ")
+        or "router_total_field_adapter.py" not in str(router_refs[0])
+    ):
+        errors.append("ROUTER_TOTAL_FIELD_ADAPTER_BINDING_MISSING")
+    router_contract = contract_by_id.get("w7tp_router_wireguard_control", {})
+    if router_contract.get("skill_execution_state") != "READY_LOCAL_PLAN_ONLY_D8_REQUIRED_FOR_EFFECT":
+        errors.append("ROUTER_SKILL_EFFECT_BOUNDARY_MISMATCH")
+    if router_contract.get("side_effects") is not False:
+        errors.append("ROUTER_SKILL_SIDE_EFFECT_ESCALATION")
+    if router_contract.get("d6_mapping") != "NOT_APPLICABLE_NETWORK_TRANSPORT_ONLY":
+        errors.append("ROUTER_NETWORK_MISLABELED_AS_D6")
+    if "AUTHORIZE_EXACT_ROUTER_NETWORK_CHANGE" not in str(router_contract.get("d8_requirement")):
+        errors.append("ROUTER_D8_REQUIREMENT_MISSING")
+
+    state_field_contract = contract_by_id.get("8d-adi-state-field-intelligence", {})
+    if state_field_contract.get("skill_execution_state") != "READY_LOCAL_READ_ONLY_WRITE_EFFECTS_REQUIRE_SEPARATE_AUTHORIZATION":
+        errors.append("STATE_FIELD_SKILL_EXECUTION_BOUNDARY_MISMATCH")
+    if state_field_contract.get("side_effects") is not False:
+        errors.append("STATE_FIELD_SKILL_SIDE_EFFECT_ESCALATION")
+    state_field_refs = packet_by_id.get("8d-adi-state-field-intelligence", {}).get(
+        "D5_EXECUTION", {}
+    ).get("tool_refs", [])
+    if (
+        len(state_field_refs) != 2
+        or not all(str(ref).startswith("linux:python3 ") for ref in state_field_refs)
+        or not any("state_field_inventory.py" in str(ref) for ref in state_field_refs)
+        or not any("adi_map_router.py" in str(ref) for ref in state_field_refs)
+    ):
+        errors.append("STATE_FIELD_READ_ONLY_TOOL_BINDING_MISSING")
+    if any("adi_state_archive.py" in str(ref) for ref in state_field_refs):
+        errors.append("STATE_FIELD_WRITE_TOOL_ACTIVATED")
+
+    founder_partner_refs = packet_by_id.get("8d-adi-founder-partner", {}).get(
+        "D5_EXECUTION", {}
+    ).get("tool_refs", [])
+    if founder_partner_refs != [
+        "local:tools.total_field_dynamic_context.build_dynamic_context",
+        "local:tools.total_field_dynamic_context.build_total_field_progress_projection",
+        "local:tools.total_field_dynamic_context.build_total_field_correction_contract",
+    ]:
+        errors.append("FOUNDER_PARTNER_SINGLE_CHAIN_BINDING_MISMATCH")
+    founder_partner_contract = contract_by_id.get("8d-adi-founder-partner", {})
+    if (
+        founder_partner_contract.get("skill_execution_state")
+        != "READY_LOCAL_READ_ONLY_ADVISORY_CANDIDATE"
+    ):
+        errors.append("FOUNDER_PARTNER_CANDIDATE_BOUNDARY_MISMATCH")
+    if founder_partner_contract.get("side_effects") is not False:
+        errors.append("FOUNDER_PARTNER_SIDE_EFFECT_ESCALATION")
+    if (
+        founder_partner_contract.get("d6_mapping")
+        != "NOT_APPLICABLE_ADVISORY_CONTEXT_AND_PROGRESS_PROJECTION_ONLY"
+    ):
+        errors.append("FOUNDER_PARTNER_ADVISORY_MISLABELED_AS_D6")
+    if founder_partner_contract.get("external_representation_authority") is not False:
+        errors.append("FOUNDER_PARTNER_EXTERNAL_REPRESENTATION_ESCALATION")
+    if founder_partner_contract.get("progress_persistence_authority") is not False:
+        errors.append("FOUNDER_PARTNER_PROGRESS_PERSISTENCE_ESCALATION")
+    if founder_partner_contract.get("node_projection_activated") is not False:
+        errors.append("FOUNDER_PARTNER_NODE_PROJECTION_ACTIVATED")
+    if (
+        founder_partner_contract.get("skill_coverage_claim")
+        != "CURRENT_INDEX_ONLY_WITH_TRUTHFUL_READINESS_STATE"
+    ):
+        errors.append("FOUNDER_PARTNER_SKILL_COVERAGE_OVERCLAIM")
+    if (
+        founder_partner_contract.get("invention_coverage_claim")
+        != "INDEXED_EVIDENCE_ONLY_NOT_ALL_INVENTIONS_PROVEN"
+    ):
+        errors.append("FOUNDER_PARTNER_INVENTION_COVERAGE_OVERCLAIM")
+    founder_partner_d8 = str(founder_partner_contract.get("d8_requirement"))
+    if not all(
+        boundary in founder_partner_d8
+        for boundary in (
+            "PROGRESS_PERSISTENCE",
+            "ADI_WRITE",
+            "EXTERNAL_REPRESENTATION",
+            "NODE_PROJECTION",
+            "DEPLOYMENT",
+            "ACTIVATION",
+        )
+    ):
+        errors.append("FOUNDER_PARTNER_D8_BOUNDARY_INCOMPLETE")
+
     status_counts = Counter(
         packet.get("status") for packet in packets if isinstance(packet, dict)
     )
@@ -136,6 +227,12 @@ def validate() -> dict[str, Any]:
         errors.append("CURRENT_BASELINE_NOT_2_3")
     if governance.get("merged_aliases", {}).get(MERGED_ALIAS) != "w7tp_generative_transmission":
         errors.append("GOVERNANCE_MERGE_ALIAS_MISSING")
+    if "w7tp_router_wireguard_control" not in governance.get("registered_skill_ids", []):
+        errors.append("ROUTER_SKILL_GOVERNANCE_REGISTRATION_MISSING")
+    if "8d-adi-state-field-intelligence" not in governance.get("registered_skill_ids", []):
+        errors.append("STATE_FIELD_SKILL_GOVERNANCE_REGISTRATION_MISSING")
+    if "8d-adi-founder-partner" not in governance.get("registered_skill_ids", []):
+        errors.append("FOUNDER_PARTNER_GOVERNANCE_REGISTRATION_MISSING")
     rules = governance.get("registration_rules", {})
     if not all(
         rules.get(name) is True
@@ -163,8 +260,11 @@ def validate() -> dict[str, Any]:
         "registered": EXPECTED,
         "merged_alias": {MERGED_ALIAS: "w7tp_generative_transmission"},
         "linux_execution": {
+            "8d-adi-founder-partner": "READY_LOCAL_READ_ONLY_ADVISORY_CANDIDATE",
+            "8d-adi-state-field-intelligence": "READY_LOCAL_READ_ONLY_WRITE_EFFECTS_REQUIRE_SEPARATE_AUTHORIZATION",
             "w7tp-capability-assimilator": "READY_LOCAL",
             "w7tp_generative_transmission": "ADAPTER_COMMAND_READY_CURRENT_EFFECT_REQUIRES_2_3_BINDING_AND_AUTHORIZATION",
+            "w7tp_router_wireguard_control": "READY_LOCAL_PLAN_ONLY_D8_REQUIRED_FOR_EFFECT",
             "deep-research": "HOLD_CONNECTOR_REQUIRED",
         },
         "mutation_performed": False,

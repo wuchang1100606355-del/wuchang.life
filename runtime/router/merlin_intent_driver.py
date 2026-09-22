@@ -83,6 +83,62 @@ CATALOG: Dict[str, Dict[str, Any]] = {
         ],
         "allowed_actions": ["draft_plan", "pending_review"]
     },
+    "lan_dns_direct_plan": {
+        "risk": "high",
+        "summary": "Plan direct router LAN and router-DNS service for taiji02, taiji03, and taiji04 without a transit node",
+        "steps": [
+            "Verify each node has its own router DHCP reservation and uses the router as its DNS server.",
+            "Reject exit-node, subnet-router, policy-route, or gateway settings that make one client transit through another client.",
+            "Preserve ordinary direct LAN paths while remote VPN remains a separate router-hosted entry.",
+            "Reobserve node-to-router, node-to-node, DNS, default route, and throughput after any separately authorized change."
+        ],
+        "allowed_actions": ["draft_plan", "pending_review"]
+    },
+    "wireguard_dual_stack_plan": {
+        "risk": "high",
+        "summary": "Plan RT-BE86U WireGuard server on fixed public IPv4 with IPv4 and IPv6 client transport, router DNS, and LAN access",
+        "steps": [
+            "Capture a redacted preimage of current WireGuard, WAN IPv4, native IPv6, DNS, LAN-access, and listener state.",
+            "Keep private keys and preshared keys on the router or in owner-only client profiles; never print them.",
+            "Prepare UDP 51820, router DNS, LAN access, native IPv6/NAT6, and one peer without exposing the router admin surface to WAN.",
+            "Apply only after a short-lived single-use D8 scope binds the exact target, preimage, mutation, rollback, and verification rules.",
+            "Verify external IPv4, IPv6, DNS, LAN access, listener, and rollback before any VPN cutover."
+        ],
+        "allowed_actions": ["draft_plan", "pending_review"]
+    },
+    "wireguard_peer_plan": {
+        "risk": "high",
+        "summary": "Plan one individually named WireGuard peer without sharing private key material",
+        "steps": [
+            "Select one unused router peer slot and one non-conflicting tunnel address.",
+            "Generate peer key material in a protected execution boundary and never store it in the repository or model output.",
+            "Bind exactly one device profile, allowed addresses, router DNS, LAN access, and keepalive policy.",
+            "Reobserve that peer only; do not bulk-edit other peers."
+        ],
+        "allowed_actions": ["draft_plan", "pending_review"]
+    },
+    "wireguard_cutover_plan": {
+        "risk": "high",
+        "summary": "Plan cutover from Tailscale fallback only after router WireGuard dual-stack verification",
+        "steps": [
+            "Require PASS evidence for external IPv4, IPv6, router DNS, LAN access, and recovery access through WireGuard.",
+            "Record current Tailscale state as rollback evidence.",
+            "Disable only the exact approved Tailscale target; do not uninstall or erase node identity.",
+            "Reobserve every registered node and immediately roll back if management reachability fails."
+        ],
+        "allowed_actions": ["draft_plan", "pending_review"]
+    },
+    "wireguard_disable_plan": {
+        "risk": "high",
+        "summary": "Plan disabling router WireGuard while preserving recovery access and evidence",
+        "steps": [
+            "Verify an independent recovery path before disabling the WireGuard server.",
+            "Capture a redacted preimage and peer-slot inventory without secret material.",
+            "Disable only the WireGuard server service; do not erase keys, peers, logs, or unrelated VPN state unless separately authorized.",
+            "Reobserve LAN, WAN, DNS, IPv6, and management access."
+        ],
+        "allowed_actions": ["draft_plan", "pending_review"]
+    },
     "qos_xiaoj_priority_plan": {
         "risk": "medium",
         "summary": "Plan QoS priority for XiaoJ local service, Odoo, Open WebUI, and VPN",

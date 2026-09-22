@@ -1,0 +1,304 @@
+{
+  "schema_version": "w7tp-github-causal-declaration/1.0",
+  "candidate_only": true,
+  "intent": {
+    "intent_ref": "FOUNDER_REQUEST_2026-09-23_PRECISE_8DADI_ASSESS_AND_PUSH_CHANGES",
+    "product_effect": "Register three fail-closed Total Field skill candidates without deployment, activation, canonical promotion, or network effect."
+  },
+  "coordinate": {
+    "logical_root_id": "TAIJI_HUB",
+    "base_commit": "d32ebc73ea7e413daa61c58cc831964743dba99d",
+    "target_ref": "refs/heads/agent/moving-v-v2-taiji8d-local-canary"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "total-field-skill-candidate-routing",
+      "actor": "FOUNDER_AND_TOTAL_FIELD_MODEL_ORGAN",
+      "trigger": "A Founder query uniquely matches state-field analysis, router planning, or Founder Partner advice.",
+      "preconditions": [
+        "8DADI_W7TP_2_3_BASELINE",
+        "HASH_BOUND_CAPABILITY_PACK",
+        "NO_D8_EFFECT_AUTHORITY"
+      ],
+      "expected_effect": "Return one truthful candidate-only route with the registered readiness state and no external effect.",
+      "verifier_refs": [
+        "python3 tools/validate_total_field_skill_registry.py",
+        "python3 -m pytest -q tests/test_total_field_skill_registration.py tests/test_router_wireguard_total_field_skill.py"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "total-field-skill-registration-candidate-v1",
+      "purpose": "Bind existing state-field tools plus router plan-only and Founder Partner candidates into one deterministic registry, index, catalog, validation, and rollback boundary.",
+      "scenario_refs": [
+        "total-field-skill-candidate-routing"
+      ],
+      "depends_on": [],
+      "files": [
+        {
+          "path": ".skill-build/8d-adi-founder-partner/SKILL.md",
+          "change": "ADD",
+          "sha256": "dd36d11e759a1fe9eb32f6463796e38cabdb725df4e08f83a33a2d117e48e4eb",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/8d-adi-founder-partner/agents/openai.yaml",
+          "change": "ADD",
+          "sha256": "770d85ba82dfc450467b47d1ab6b12028e026d296c22327e175af7adb67de432",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/8d-adi-founder-partner/references/founder-invention-contract.md",
+          "change": "ADD",
+          "sha256": "9d30d0291e9d167cf89d5e1833c53f7a8cf380114636698889b0c5759c7a4b2b",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/8d-adi-founder-partner/references/proven-facts.md",
+          "change": "ADD",
+          "sha256": "6aee794bb0937a4cead4959727c92f2d69b0700c0346c0ab6970c4583a39f3ed",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/8d-adi-founder-partner/references/xiaoj-total-field-binding.md",
+          "change": "ADD",
+          "sha256": "0730a7f580b642c3665ef9a75e3428c4abe7362c6591d903ae6c1fc21fc941c7",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/w7tp-router-wireguard-control/SKILL.md",
+          "change": "ADD",
+          "sha256": "ef6fb45dd0985f79b8545df66ecea7b35011876815d5c2292eec218e3f7db0ad",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/w7tp-router-wireguard-control/agents/openai.yaml",
+          "change": "ADD",
+          "sha256": "98554df9f19bff411ec992416a9df65ad1cb680535b7c359fb0fb62f7afa284a",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/w7tp-router-wireguard-control/references/total-field-capability-contract.json",
+          "change": "ADD",
+          "sha256": "82de8a6b807d546ccdf2d5df9a33bf2916e0713cbb2dc395291a87ecd8746c80",
+          "base_sha256": null
+        },
+        {
+          "path": ".skill-build/w7tp-router-wireguard-control/scripts/router_total_field_adapter.py",
+          "change": "ADD",
+          "sha256": "55659c517cc79de15aa5126be4fe04abe58c882491f3dc4ad59552f356de9ad7",
+          "base_sha256": null
+        },
+        {
+          "path": "manifests/ollama_xiaoj_total_field_v0_1/capability_registry.json",
+          "change": "MODIFY",
+          "sha256": "cfdf5150c529662b961a75699e7c2e5671c2a769be019a9c6ccc83269cb747d9",
+          "base_sha256": "92d7a0675fb13a3e25a4cdf8576da0254728468570709abd8332b6d3a28767be"
+        },
+        {
+          "path": "manifests/ollama_xiaoj_total_field_v0_1/founder_all_skills_8d_index.json",
+          "change": "MODIFY",
+          "sha256": "1945817b484361cd0d513dcd8614a6dc7d50022efaec7aac1dda07c9d392ba76",
+          "base_sha256": "0a101b0c808f75f06498c02ebea86ef5308b29a4652729d8e1705ab1799ef561"
+        },
+        {
+          "path": "manifests/ollama_xiaoj_total_field_v0_1/source_manifest.sha256",
+          "change": "MODIFY",
+          "sha256": "7aee7e3de2ef52f17f0fa7bf1fd0765f44bc307602870483a992dedeaea4dcea",
+          "base_sha256": "f068de01696613f357db1e53667b034acf004d84d8062d2ffdd817715f1a3219"
+        },
+        {
+          "path": "runtime/router/merlin_human_execution_checklist.py",
+          "change": "MODIFY",
+          "sha256": "949de833b8653d31c34386735d00e63556a7d5d74007f766bf3c74aca9fc6fc3",
+          "base_sha256": "0ae0c3732c3a7ed51c61e34dacb00f1c0f5ada8e612653d345c280baa5306e6a"
+        },
+        {
+          "path": "runtime/router/merlin_intent_driver.py",
+          "change": "MODIFY",
+          "sha256": "47d7bc80481056db9a0810fb0c5f42dd46cd981ab9b4a42069251a0caafb095b",
+          "base_sha256": "03915caf6043904314d341a83897ee6d95ffec2d9ae9f39e834226a5af7c02d0"
+        },
+        {
+          "path": "tests/test_router_wireguard_total_field_skill.py",
+          "change": "ADD",
+          "sha256": "e16de78aaf3d694b4b9c0220d31a0f33477f21483fb913d1365941b5d2c0b740",
+          "base_sha256": null
+        },
+        {
+          "path": "tests/test_total_field_skill_registration.py",
+          "change": "MODIFY",
+          "sha256": "bba8edc419dfe8c68549a63084c7135cc41bf4908e68fa2abadcb5baa4fa4187",
+          "base_sha256": "ba49ee3788acbffbf010b4ef7796300e97b903bf1bcfd3d0badc08fc9582990c"
+        },
+        {
+          "path": "tools/build_founder_skill_index.py",
+          "change": "MODIFY",
+          "sha256": "aab09adb5ea50fc3c6169187764fa81bdef24714bc423115aa363ffb319bbbc0",
+          "base_sha256": "929ece41da089c62d9557e7ea3548675ac1b2a59b6274e1631db109e251de27c"
+        },
+        {
+          "path": "tools/validate_total_field_skill_registry.py",
+          "change": "MODIFY",
+          "sha256": "97e9e890ee11545a2d2dee3f4848a443ac21288665aa400074fea5ea7a58739e",
+          "base_sha256": "d886e31991d0278809eb9b5e0aaeb68a7384bfa6e1fe9d1a2476387232027c1c"
+        },
+        {
+          "path": "web/founder_skill_catalog/index.html",
+          "change": "MODIFY",
+          "sha256": "b4d3bb62fa8264aade16fca6c76d46f1650df67bef0bd4cade99e2b101530b2c",
+          "base_sha256": "97210b17f66c5e14100818ae50d01b47de43038622868ef8884cbc3dd0288177"
+        }
+      ],
+      "causal_edges": [
+        {
+          "edge_id": "skill-definitions-provide-generator-input",
+          "source": "skill definitions and capability contracts",
+          "target": "tools/build_founder_skill_index.py",
+          "relation": "provides",
+          "mechanism": "The deterministic generator reads each registered source path, hashes it, and emits one skill packet and formal contract.",
+          "evidence_class": "OBSERVED",
+          "evidence_refs": [
+            ".skill-build/8d-adi-founder-partner/SKILL.md",
+            ".skill-build/8d-adi-state-field-intelligence/SKILL.md",
+            ".skill-build/w7tp-router-wireguard-control/SKILL.md",
+            "tools/build_founder_skill_index.py"
+          ],
+          "verifier_refs": [
+            "tools/validate_total_field_skill_registry.py"
+          ]
+        },
+        {
+          "edge_id": "generator-produces-registry-index-catalog",
+          "source": "tools/build_founder_skill_index.py",
+          "target": "capability registry, Founder index, source manifest, and catalog",
+          "relation": "produces",
+          "mechanism": "One generator run emits hash-bound generated artifacts and classification counts from the same source set.",
+          "evidence_class": "OBSERVED",
+          "evidence_refs": [
+            "manifests/ollama_xiaoj_total_field_v0_1/capability_registry.json",
+            "manifests/ollama_xiaoj_total_field_v0_1/founder_all_skills_8d_index.json",
+            "manifests/ollama_xiaoj_total_field_v0_1/source_manifest.sha256",
+            "web/founder_skill_catalog/index.html"
+          ],
+          "verifier_refs": [
+            "python3 tools/validate_total_field_skill_registry.py"
+          ]
+        },
+        {
+          "edge_id": "registry-routes-candidate-only",
+          "source": "Founder skill index",
+          "target": "deterministic Total Field capability route",
+          "relation": "routes",
+          "mechanism": "Exact skill identifiers and trigger scores select one packet while readiness and D8 boundaries remain separate.",
+          "evidence_class": "OBSERVED",
+          "evidence_refs": [
+            "tests/test_total_field_skill_registration.py",
+            "tests/test_router_wireguard_total_field_skill.py"
+          ],
+          "verifier_refs": [
+            "python3 -m pytest -q tests/test_total_field_skill_registration.py tests/test_router_wireguard_total_field_skill.py"
+          ]
+        }
+      ],
+      "closure": {
+        "definition": {
+          "state": "CLOSED",
+          "evidence_refs": [
+            ".skill-build/8d-adi-founder-partner/SKILL.md",
+            ".skill-build/8d-adi-state-field-intelligence/SKILL.md",
+            ".skill-build/w7tp-router-wireguard-control/SKILL.md"
+          ]
+        },
+        "implementation": {
+          "state": "CLOSED",
+          "evidence_refs": [
+            "tools/build_founder_skill_index.py",
+            ".skill-build/w7tp-router-wireguard-control/scripts/router_total_field_adapter.py",
+            "runtime/router/merlin_intent_driver.py"
+          ]
+        },
+        "consumer": {
+          "state": "CLOSED",
+          "evidence_refs": [
+            "manifests/ollama_xiaoj_total_field_v0_1/capability_registry.json",
+            "manifests/ollama_xiaoj_total_field_v0_1/founder_all_skills_8d_index.json",
+            "web/founder_skill_catalog/index.html"
+          ]
+        },
+        "test": {
+          "state": "CLOSED",
+          "evidence_refs": [
+            "tests/test_total_field_skill_registration.py",
+            "tests/test_router_wireguard_total_field_skill.py",
+            "tools/validate_total_field_skill_registry.py"
+          ]
+        },
+        "wiring": {
+          "state": "CLOSED",
+          "evidence_refs": [
+            "manifests/ollama_xiaoj_total_field_v0_1/capability_registry.json",
+            "manifests/ollama_xiaoj_total_field_v0_1/founder_all_skills_8d_index.json",
+            "tests/test_total_field_skill_registration.py"
+          ]
+        },
+        "effect": {
+          "state": "NOT_APPLICABLE",
+          "evidence_refs": [
+            "CANDIDATE_ONLY_NO_DEPLOYMENT_NO_ACTIVATION_NO_NETWORK_EFFECT"
+          ]
+        },
+        "rollback": {
+          "state": "CLOSED",
+          "evidence_refs": [
+            "BASE_COMMIT:d32ebc73ea7e413daa61c58cc831964743dba99d",
+            "SINGLE_COMMIT_REVERT_BOUNDARY"
+          ]
+        }
+      },
+      "effects": {
+        "direct": [
+          "Adds three truthful candidate-only skill registrations and their deterministic validation."
+        ],
+        "first_order": [
+          "The Founder index and catalog expose state-field, router-plan, and Founder Partner routes."
+        ],
+        "second_order": [
+          "A clean checkout can rebuild the same registry and verify the same source manifest."
+        ],
+        "reverse": [
+          "The 8DADI 2.3 baseline, passive-model boundary, and separate D8 effect gate remain unchanged."
+        ],
+        "unknown_frontier": []
+      }
+    }
+  ],
+  "risk": {
+    "holds": [],
+    "unknown_boundaries": [],
+    "network_hold_set": []
+  },
+  "github_contract": {
+    "candidate_branch_ref": "refs/heads/agent/moving-v-v2-taiji8d-local-canary",
+    "target_ref": "refs/heads/agent/moving-v-v2-taiji8d-local-canary",
+    "required_checks": [
+      "causal-gate",
+      "total-field-d8",
+      "local-total-field-skill-tests"
+    ],
+    "pr_required": true,
+    "attestation_required": false,
+    "total_field_check_required": true
+  },
+  "authority": {
+    "lifecycle": "CANDIDATE",
+    "total_field_decision_ref": null,
+    "forbidden_claims": [
+      "SAFE",
+      "ALLOW",
+      "TOTAL_FIELD_D8_SELF_AUTHORITY",
+      "DEPLOYMENT_FROM_CHECK"
+    ]
+  }
+}

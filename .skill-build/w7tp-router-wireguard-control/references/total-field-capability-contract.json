@@ -1,0 +1,52 @@
+{
+  "schema_id": "W7TP_TOTAL_FIELD_ROUTER_WIREGUARD_CAPABILITY_CONTRACT_V1",
+  "skill_id": "w7tp-router-wireguard-control",
+  "baseline": "8DADI_W7TP_2_3",
+  "intent": "ROUTER_IS_THE_ONLY_REMOTE_VPN_ENTRY_AND_EACH_LAN_NODE_CONNECTS_DIRECTLY_TO_ROUTER_AND_ROUTER_DNS",
+  "target": {
+    "router_model": "RT-BE86U",
+    "wan_ipv4": "FIXED_PUBLIC_IPV4_REF",
+    "ipv6_mode": "NATIVE_DHCP6_OVER_PPPOE",
+    "wireguard_udp_port": 51820,
+    "wireguard_server_ipv4": "WIREGUARD_SERVER_IPV4_REF",
+    "wireguard_dns": "ROUTER_DNS",
+    "lan_access": true,
+    "ipv6_nat": true
+  },
+  "existing_total_field_chain": [
+    "runtime/router/merlin_intent_driver.py",
+    "runtime/router/merlin_apply_queue.py",
+    "runtime/router/merlin_approval_gate.py",
+    "runtime/router/merlin_human_execution_checklist.py",
+    "runtime/router/merlin_execution_result_recorder.py"
+  ],
+  "supported_intents": [
+    "observe_status",
+    "lan_dns_direct_plan",
+    "wireguard_dual_stack_plan",
+    "wireguard_peer_plan",
+    "wireguard_cutover_plan",
+    "wireguard_disable_plan"
+  ],
+  "execution": {
+    "current_maximum_effect": "PLAN_ONLY",
+    "required_effect_scope": "AUTHORIZE_EXACT_ROUTER_NETWORK_CHANGE",
+    "required_scope_state": "NOT_REGISTERED",
+    "single_mutation_only": true,
+    "expected_preimage_required": true,
+    "rollback_required": true,
+    "reobservation_required": true,
+    "tailscale_cutover_rule": "KEEP_UNTIL_WIREGUARD_EXTERNAL_IPV4_IPV6_DNS_AND_LAN_ACCESS_PASS"
+  },
+  "d6_mapping": "NOT_APPLICABLE_NETWORK_TRANSPORT_ONLY",
+  "forbidden_effects": [
+    "SECRET_OUTPUT",
+    "UNRESTRICTED_WAN_ADMIN",
+    "NODE_AS_TRANSIT_OR_EXIT",
+    "TAILSCALE_DISABLE_BEFORE_WIREGUARD_PASS",
+    "BULK_ROUTER_MUTATION",
+    "MODEL_SELF_AUTHORIZATION",
+    "CANONICAL_PROMOTION"
+  ],
+  "authority": "SKILL_IS_NOT_AUTHORITY"
+}

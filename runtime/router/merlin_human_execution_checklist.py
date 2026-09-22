@@ -107,12 +107,21 @@ def manual_steps_for_intent(intent: str, source_steps: list[str]) -> list[str]:
             "不要把 WiFi 連線視為會員身分認證。",
             "會員服務仍需登入、VPN 或其他授權機制。",
         ]
-    elif intent == "vpn_member_access_plan":
+    elif intent in {
+        "vpn_member_access_plan",
+        "wireguard_dual_stack_plan",
+        "wireguard_peer_plan",
+        "wireguard_cutover_plan",
+        "wireguard_disable_plan",
+        "lan_dns_direct_plan",
+    }:
         middle = [
             "前往 VPN 設定頁。",
-            "確認 VPN 只作為受控入口，不直接暴露 MSI 核心服務。",
-            "確認外網入口優先經 taiji01 或 VPN 邊界，再進 W7TP Gateway。",
-            "不要把 raw PII 或核心記憶場暴露給外網節點。",
+            "確認 RT-BE86U 是唯一遠端 VPN 入口；02、03、04 在區網各自直連路由器，不經其他節點轉送。",
+            "確認 WireGuard 的固定公網 IPv4 endpoint、IPv6、路由器 DNS、LAN access 與 UDP 51820 均綁定本次清單。",
+            "不得在 WireGuard 外部 IPv4、IPv6、DNS、LAN access 驗證前停用 Tailscale 備援。",
+            "不得將密碼、private key、PSK、token 或 raw PII 寫入 repo、LLM、log 或截圖。",
+            "任何實際設定只限單一精確 mutation；先保存 preimage 與回退路徑，完成後重新觀測。",
         ]
     else:
         middle = source_steps or [
