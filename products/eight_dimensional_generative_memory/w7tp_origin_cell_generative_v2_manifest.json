@@ -1,0 +1,54 @@
+{
+  "schema_version": "w7tp-origin-cell-generative-successor-manifest/2.3-candidate",
+  "candidate_id": "W7TP_ORIGIN_CELL_GENERATIVE_RULE_BASE_V2_20260922",
+  "state": "CANDIDATE_NOT_CANONICAL",
+  "founder_intent_zh_TW": "原胞以規則與生成基座重構目標狀態；差分、PATCH_CELL 或變更位元組不得冒充原胞主線。",
+  "predecessor": {
+    "program_sha256": "8ff6cb34dca458a33c108b7ae53acd3ac23cf38a8e8ceb67c40fd55ae68cdef1",
+    "receipt_file_sha256": "a5459ea4edae607ee691844130639f76a822151d14e7a3cf25e9897cdb66e23e",
+    "receipt_body_sha256": "dc38b90d71f80705e9fca78134196a49f1042a3da6bec3d0173ee3eec5e337fe",
+    "classification": "PROVEN_HISTORICAL_DIFFERENTIAL_RECONSTRUCTION",
+    "cross_node_result": "PROVEN_HISTORICAL_PASS",
+    "preserved_append_only": true,
+    "runtime_activation": false,
+    "canonical_write": false
+  },
+  "successor": {
+    "source": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
+    "source_sha256": "ca4ae6a565bd2e701b51c2cc9da5119792eba98347139550ec7586663b6610da",
+    "packet_schema": "w7tp-8dadi-origin-cell-generative-rule-packet/2.3-candidate",
+    "generator_contract": "w7tp-8dadi-origin-cell-generator-base/2.3-candidate",
+    "rule_profile": "COMPLEX_DATASET_TARGET_RULES_V1",
+    "verification_level": "L1_EXACT_MANIFEST"
+  },
+  "mainline_candidate": {
+    "mechanism": "RULE_GENERATIVE_BASE_ONLY",
+    "target_bytes_embedded": false,
+    "differential_payload_allowed": false,
+    "patch_cell_allowed": false,
+    "chunk_comparison_role": "SEPARATE_HISTORICAL_REFERENCE_ONLY"
+  },
+  "joint_8d_contract": {
+    "semantics": "8_IN_1_SINGLE_STATE_FIELD",
+    "simultaneous": true,
+    "coupled": true,
+    "mutually_constrained": true,
+    "jointly_closed": true,
+    "required_contracts": [
+      "JOINT_STATE_REPRESENTATION",
+      "COUPLING_RULE",
+      "CROSS_DIMENSION_CONSTRAINT",
+      "JOINT_STATE_TRANSITION",
+      "CLOSURE_RULE",
+      "FAIL_CLOSED_RULE"
+    ]
+  },
+  "authority": {
+    "candidate_only": true,
+    "canonical": false,
+    "active_pointer_write": false,
+    "canonical_write": false,
+    "runtime_activation": false,
+    "total_field_decision": "NOT_RUN"
+  }
+}
