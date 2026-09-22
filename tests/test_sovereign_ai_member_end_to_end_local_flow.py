@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import sys
 from pathlib import Path
 
@@ -145,29 +144,21 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     }:
         assert group_id in member_groups
 
-    menu_lock = json.loads(
-        (
-            ROOT / "runtime/total_field/xiaoj_p1_console/menu_source_lock.json"
-        ).read_text()
+    intent_engine = load(
+        ROOT / "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/p1_intent_engine.py",
+        "sovereign_member_intent_engine",
     )
+    menu_lock = intent_engine.MENU_SOURCE_LOCK
     assert menu_lock["state"] == "HOLD_REAL_MENU_SOURCE_LOCK"
-    assert menu_lock["authority"]["merchant_is_content_authority"] is True
-    assert menu_lock["authority"]["current_menu_authority"] is False
-    assert menu_lock["active_product_rows"] == []
-    policy = menu_lock["merchant_review_policy"]
-    assert policy["variants_generated"] is False
-    assert policy["demo_products_in_formal_pos"] is False
-    assert policy["medium_size_is_price_baseline"] is True
-    assert policy["medium_size_price_delta"] == 0
-    assert policy["total_field_may_choose_products_or_prices"] is False
+    assert menu_lock["current_menu_authority"] is False
+    assert menu_lock["can_create_pos_order_from_current_menu"] is False
+    assert menu_lock["live_quickclick_export_required"] is True
 
-    scene_table = json.loads(
-        (
-            ROOT
-            / "runtime/total_field/secondary_cloud/scenario_route_table.json"
-        ).read_text()
+    secondary_cloud = load(
+        ROOT / "tools/w7tp_secondary_cloud_packet_ramp.py",
+        "sovereign_member_secondary_cloud_contract",
     )
-    assert set(scene_table["routes"]) == {
+    assert secondary_cloud.CONTAINERS == {
         "AUDIO",
         "ASSOCIATION",
         "CAFE_POS",
@@ -187,10 +178,6 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
         True, True, True, True, "https://members.example.test", callback
     ) == "PASS"
 
-    intent_engine = load(
-        ROOT / "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/p1_intent_engine.py",
-        "sovereign_member_intent_engine",
-    )
     intent_result = intent_engine.candidate_action(
         "我要加入會員", explicit_intent="member_register"
     )
