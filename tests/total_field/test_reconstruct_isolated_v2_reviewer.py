@@ -28,6 +28,7 @@ def write_authority(repo: Path, request: dict) -> None:
         "state": "ACTIVE_TOTAL_FIELD_AUTHORITY",
         "contract_state": "ACTIVE_FORMAL",
         "formal_decision_authority": True,
+        "formal_seal_authority": True,
         "allowed_effects": ["AUTHORIZE_RECONSTRUCT_ISOLATED_REVIEW_ONLY"],
     }
     founder = {

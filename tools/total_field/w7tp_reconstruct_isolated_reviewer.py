@@ -14,6 +14,17 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 try:
+    from .w7tp_total_field_authority_binding_v1 import (
+        AuthorityBindingValidationError,
+        validate_authority_binding,
+    )
+except ImportError:  # pragma: no cover
+    from w7tp_total_field_authority_binding_v1 import (
+        AuthorityBindingValidationError,
+        validate_authority_binding,
+    )
+
+try:
     from .w7tp_reconstruct_isolated_contract import (
         DECISION_CONTRACT_ID,
         DECISION_HASH_ALGORITHM,
@@ -105,6 +116,14 @@ def _validate_authority(request: dict[str, Any], repo_root: Path, now: datetime)
         _deny(pointer.get(field) != expected, "TOTAL_FIELD_AUTHORITY_POINTER_MISMATCH", f"$.authority_pointer.{field}")
     allowed = pointer.get("allowed_effects", [])
     _deny(not isinstance(allowed, list) or AUTHORIZED_EFFECT not in allowed, "TOTAL_FIELD_EFFECT_NOT_ALLOWED", "$.authority_pointer.allowed_effects")
+    try:
+        validate_authority_binding(pointer, required_effect=AUTHORIZED_EFFECT)
+    except AuthorityBindingValidationError as exc:
+        suffix = exc.path[1:] if exc.path.startswith("$") else f".{exc.path}"
+        raise ReconstructIsolatedValidationError(
+            "TOTAL_FIELD_AUTHORITY_BINDING_SCHEMA_INVALID",
+            f"$.authority_pointer{suffix}",
+        ) from exc
 
     expected_founder = {
         "state": "FOUNDER_AUTHORIZATION_APPROVED",

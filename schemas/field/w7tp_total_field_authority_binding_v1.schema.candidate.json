@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "W7TP Formal Total Field Authority Binding V1 Schema Candidate",
+  "description": "Candidate legal object format only. Validation does not create, activate, promote, or bind authority.",
+  "type": "object",
+  "required": [
+    "node_id",
+    "state",
+    "contract_state",
+    "formal_decision_authority",
+    "formal_seal_authority",
+    "allowed_effects"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "const": "taiji01"
+    },
+    "state": {
+      "type": "string",
+      "const": "ACTIVE_TOTAL_FIELD_AUTHORITY"
+    },
+    "contract_state": {
+      "type": "string",
+      "const": "ACTIVE_FORMAL"
+    },
+    "formal_decision_authority": {
+      "type": "boolean",
+      "const": true
+    },
+    "formal_seal_authority": {
+      "type": "boolean",
+      "const": true
+    },
+    "allowed_effects": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Effect allowlist. Schema validity does not imply that any named effect is authorized; each consumer must require its exact effect."
+    },
+    "authority_scope": {
+      "$ref": "#/$defs/unresolved_semantics_marker"
+    },
+    "prohibited_effects": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/effect_string_array"
+        },
+        {
+          "$ref": "#/$defs/unresolved_semantics_marker"
+        }
+      ],
+      "description": "Effect denylist. An explicit unresolved marker preserves candidate-only semantics; consumers requiring an effect must hold while prohibited-effect semantics are unresolved."
+    },
+    "effective_at": {
+      "$ref": "#/$defs/unresolved_semantics_marker"
+    },
+    "expires_at": {
+      "$ref": "#/$defs/unresolved_semantics_marker"
+    },
+    "revocation": {
+      "$ref": "#/$defs/unresolved_semantics_marker"
+    },
+    "lineage": {
+      "$ref": "#/$defs/unresolved_semantics_marker"
+    },
+    "governing_contract_refs": {
+      "$ref": "#/$defs/unresolved_semantics_marker"
+    }
+  },
+  "$defs": {
+    "effect_string_array": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "unresolved_semantics_marker": {
+      "type": "object",
+      "required": [
+        "SEMANTICS_STATUS"
+      ],
+      "properties": {
+        "SEMANTICS_STATUS": {
+          "const": "UNRESOLVED"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

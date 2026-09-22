@@ -276,6 +276,7 @@ class SuccessorRebindContractV1Tests(unittest.TestCase):
             "node_id": "taiji01",
             "formal_decision_authority": True,
             "formal_seal_authority": True,
+            "allowed_effects": ["AUTHORIZE_FORMAL_SUCCESSOR_REBIND_REVIEW"],
         }
         self.write_json(package["authority"], authority)
         authority_hash = self.sha(package["authority"])

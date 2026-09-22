@@ -15,6 +15,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 from tools.total_field import w7tp_successor_rebind_reviewer_v1 as reviewer
+from tools.total_field.w7tp_total_field_authority_binding_v1 import (
+    AuthorityBindingValidationError,
+    validate_authority_binding,
+)
 
 
 SEAL_TOOL_VERSION = "w7tp-successor-rebind-seal/1.0-candidate"
@@ -63,6 +67,29 @@ def _seal_replay_seen(replay_root: Path | None, nonce: str, domain: str) -> bool
         if seal.get("nonce") == nonce and seal.get("replay_guard", {}).get("domain") == domain:
             return True
     return False
+
+
+def _validate_formal_authority(authority: dict[str, Any]) -> None:
+    required_authority = {
+        "state": "ACTIVE_TOTAL_FIELD_AUTHORITY",
+        "contract_state": "ACTIVE_FORMAL",
+        "formal_decision_authority": True,
+        "formal_seal_authority": True,
+    }
+    for key, expected in required_authority.items():
+        if authority.get(key) != expected:
+            raise SuccessorRebindSealError(
+                "REJECT_FORMAL_AUTHORITY_NOT_ACTIVE",
+                f"$.authority_pointer.{key}",
+            )
+    try:
+        validate_authority_binding(authority)
+    except AuthorityBindingValidationError as exc:
+        suffix = exc.path[1:] if exc.path.startswith("$") else f".{exc.path}"
+        raise SuccessorRebindSealError(
+            "REJECT_FORMAL_AUTHORITY_BINDING_SCHEMA",
+            f"$.authority_pointer{suffix}",
+        ) from exc
 
 
 def _write_json(path: Path, value: Any) -> None:
@@ -157,15 +184,7 @@ def create_seal(
         contract_approved = False
         seal_state = "TEST_SEAL_ONLY"
     else:
-        required_authority = {
-            "state": "ACTIVE_TOTAL_FIELD_AUTHORITY",
-            "contract_state": "ACTIVE_FORMAL",
-            "formal_decision_authority": True,
-            "formal_seal_authority": True,
-        }
-        for key, expected in required_authority.items():
-            if authority.get(key) != expected:
-                raise SuccessorRebindSealError("REJECT_FORMAL_AUTHORITY_NOT_ACTIVE", f"$.authority_pointer.{key}")
+        _validate_formal_authority(authority)
         if decision["formal"] is not True or receipt["formal"] is not True:
             raise SuccessorRebindSealError("REJECT_NONFORMAL_DECISION_OR_RECEIPT")
         if not all(tracked_checker(path) for path in paths):
