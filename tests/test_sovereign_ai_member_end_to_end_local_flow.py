@@ -20,8 +20,16 @@ def load(path: Path, name: str):
 
 def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     login_source = (ROOT / "Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py").read_text()
+    account_linking_source = (
+        ROOT
+        / "Taiji_Odoo/addons/wuchang_google_member_login/services/account_linking.py"
+    ).read_text()
     line_login_source = (ROOT / "Taiji_Odoo/addons/wuchang_line_login/controllers/main.py").read_text()
     registration_source = (ROOT / "Taiji_Odoo/addons/wuchang_member_registration/controllers/main.py").read_text()
+    member_entry_source = (
+        ROOT
+        / "Taiji_Odoo/addons/wuchang_member_registration/views/login_templates.xml"
+    ).read_text()
     candidate_shell_source = (
         ROOT / "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/controllers/main.py"
     ).read_text()
@@ -38,7 +46,9 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
         '@http.route("/wuchang/member/register/start"'
         not in candidate_shell_source
     )
-    assert 'href="/web/signup"' in candidate_shell_source
+    assert 'href="/web/signup"' in member_entry_source
+    assert 'href="/google/member/login"' not in member_entry_source
+    assert 'href="/line/login"' not in member_entry_source
 
     member_model_source = (
         ROOT
@@ -84,8 +94,10 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     assert "is_landing_enabled" in login_source
     assert "is_landing_enabled" in line_login_source
     assert "is_landing_enabled" in registration_source
-    assert "identity_projection_response_headers" in login_source
-    assert "IDENTITY_PREFIX_NOT_BOUND" in login_source
+    assert "IDENTITY_PROJECTION_HEADERS" in login_source
+    assert "identity_packet_ref_from_link_context" in login_source
+    assert "identity_projection_link_not_verified" in account_linking_source
+    assert "identity_projection_local_subject_ref_invalid" in account_linking_source
     for route in {
         "/google/member/*",
         "/line/*",
@@ -112,7 +124,8 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     assert '<field name="mode">discussions</field>' in member_views_source
     assert '<field name="privacy">connected</field>' in member_views_source
     assert '"website_forum"' in member_manifest_source
-    assert "copy_headers X-W7TP-Identity-Schema" in caddy_source
+    assert "copy_headers X-W7TP-Identity-Ref" in caddy_source
+    assert "copy_headers X-W7TP-Identity-Schema" not in caddy_source
     assert "w7tp_odoo_public_member_redirects_candidate" in caddy_source
     assert "https://member.wuchang.life{uri}" in caddy_source
     assert "The nonprofit homepage remains the sole public/Ad Grants destination" in caddy_source
@@ -155,6 +168,7 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
         ).read_text()
     )
     assert set(scene_table["routes"]) == {
+        "AUDIO",
         "ASSOCIATION",
         "CAFE_POS",
         "GENERIC",

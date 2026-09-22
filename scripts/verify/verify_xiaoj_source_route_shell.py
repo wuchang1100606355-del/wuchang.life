@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify source-only XiaoJ auth/transaction route shells.
+"""Verify source-only XiaoJ routes and external identity route ownership.
 
 This verifier reads source files only. It does not import Odoo, read secrets,
 inspect runtime env, write DB rows, create orders, capture payments, restart
@@ -19,14 +19,13 @@ CONTROLLER_INIT = ADDON / "controllers/__init__.py"
 MAIN = ADDON / "controllers/main.py"
 ENGINE = ADDON / "services/p1_intent_engine.py"
 ROOT_INIT = ADDON / "__init__.py"
+LINE_CONTROLLER = ROOT / "Taiji_Odoo/addons/wuchang_line_login/controllers/main.py"
+GOOGLE_CONTROLLER = ROOT / "Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py"
+MEMBER_CONTROLLER = ROOT / "Taiji_Odoo/addons/wuchang_member_registration/controllers/main.py"
+MEMBER_LOGIN_TEMPLATE = ROOT / "Taiji_Odoo/addons/wuchang_member_registration/views/login_templates.xml"
 
 REQUIRED_ROUTES = [
-    "/line/login",
-    "/line/callback",
-    "/wuchang/google/member/recruitment",
-    "/wuchang/google/member/recruitment/welcome",
     "/wuchang/internal/guard/google-member-login",
-    "/wuchang/member/register/start",
     "/wuchang/xiaoj/ordering",
     "/wuchang/xiaoj/order",
     "/wuchang/xiaoj/payment",
@@ -40,7 +39,6 @@ REQUIRED_ROUTES = [
 
 REQUIRED_STATES = [
     "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
-    "HOLD_MEMBER_REGISTRATION_GATE",
     "P1_TRANSACTION_CAPABLE_SHELL",
     "HOLD_RUNTIME_POS_ORDER_RELEASE_REQUIRED",
     "HOLD_RUNTIME_PAYMENT_RELEASE_REQUIRED",
@@ -76,22 +74,15 @@ def read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def function_block(source: str, name: str, next_decorator: str) -> str:
-    needle = f"def {name}"
-    if needle not in source:
-        fail(f"function_missing:{name}")
-    start = source.index(needle)
-    end = source.find(next_decorator, start)
-    if end == -1:
-        end = len(source)
-    return source[start:end]
-
-
 def main() -> int:
     root_init = read(ROOT_INIT)
     controller_init = read(CONTROLLER_INIT)
     source = read(MAIN)
     engine_source = read(ENGINE)
+    line_source = read(LINE_CONTROLLER)
+    google_source = read(GOOGLE_CONTROLLER)
+    member_source = read(MEMBER_CONTROLLER)
+    member_login_template = read(MEMBER_LOGIN_TEMPLATE)
     combined_source = source + "\n" + engine_source
 
     if "from . import controllers" not in root_init:
@@ -123,28 +114,38 @@ def main() -> int:
     if 'auth="user"' not in source or "/wuchang/internal/guard/google-member-login" not in source:
         fail("internal_guard_route_not_user_scoped")
 
-    google_login_block = function_block(
-        source,
-        "google_member_recruitment",
-        '@http.route("/wuchang/google/member/recruitment/welcome"',
-    )
-    for forbidden in [
-        "_json_payload",
-        "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
-        "safety_flags",
-        "runtime_ready",
+    route_owners = {
+        "line_login": (line_source, "@http.route('/line/login'"),
+        "line_callback": (line_source, "@http.route('/line/callback'"),
+        "google_login": (google_source, '@http.route("/google/member/login"'),
+        "google_callback": (google_source, '@http.route("/google/member/callback"'),
+        "member_registration": (member_source, '@http.route("/wuchang/member/register/start"'),
+    }
+    for owner, (owner_source, marker) in route_owners.items():
+        if marker not in owner_source:
+            fail(f"route_owner_missing:{owner}")
+
+    for duplicate in [
+        '@http.route("/line/login"',
+        '@http.route("/line/callback"',
+        '@http.route("/google/member/login"',
+        '@http.route("/google/member/callback"',
+        '@http.route("/wuchang/member/register/start"',
+        "/wuchang/google/member/recruitment",
     ]:
-        if forbidden in google_login_block:
-            fail(f"google_member_login_public_payload_leak:{forbidden}")
-    if "會員招募開放" not in google_login_block:
-        fail("google_member_login_product_copy_missing:會員招募開放")
+        if duplicate in source:
+            fail(f"gateway_duplicate_or_orphan_route:{duplicate}")
+
     for required in [
-        "五常會員招募",
-        "Google 登入準備",
-        "report-only",
+        'href="/web/login"',
+        'href="/web/signup"',
+        "Google／LINE 僅供登入後的 verified channel 綁定",
     ]:
-        if required not in source:
-            fail(f"google_member_login_product_copy_missing:{required}")
+        if required not in member_login_template:
+            fail(f"member_entry_product_copy_missing:{required}")
+    for forbidden in ['href="/google/member/login"', 'href="/line/login"']:
+        if forbidden in member_login_template:
+            fail(f"member_entry_public_channel_forbidden:{forbidden}")
 
     for flag in [
         '"SECRET_READ": False',
@@ -183,7 +184,8 @@ def main() -> int:
     print("SOURCE_ONLY=TRUE")
     print("RUNTIME_READY=FALSE")
     print("PRE_SEAL_REPORT_ONLY=TRUE")
-    print("GOOGLE_MEMBER_LOGIN_PRODUCT_UX=TRUE")
+    print("AUTH_ROUTE_OWNERSHIP=PASS")
+    print("PUBLIC_MEMBER_ENTRY=LOCAL_ODOO_ONLY")
     print("ODOO_DB_WRITE=FALSE")
     print("POS_ORDER_CREATED=FALSE")
     print("PAYMENT_CAPTURE=FALSE")

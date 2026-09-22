@@ -68,12 +68,21 @@ def verify() -> list[str]:
     for route in (
         "/wuchang/google/member/recruitment",
         "/wuchang/google/member/recruitment/welcome",
+        '@http.route("/google/member/login"',
+        '@http.route("/google/member/callback"',
     ):
-        if route not in gateway:
-            failures.append(f"gateway:preview_route_missing:{route}")
+        if route in gateway:
+            failures.append(f"gateway:duplicate_or_orphan_google_route:{route}")
 
-    if "/google/member/login" not in member or 'href="/google/member/login"' not in login_template:
-        failures.append("member_flow:google_login_entry_missing")
+    for marker in (
+        'href="/web/login"',
+        'href="/web/signup"',
+        "Google／LINE 僅供登入後的 verified channel 綁定",
+    ):
+        if marker not in login_template:
+            failures.append(f"member_flow:local_entry_missing:{marker}")
+    if "/google/member/login" in member or 'href="/google/member/login"' in login_template:
+        failures.append("member_flow:public_google_entry_forbidden")
 
     forbidden_literals = ("client_secret = \"", "client_secret = '", "access_token = \"", "access_token = '")
     for marker in forbidden_literals:

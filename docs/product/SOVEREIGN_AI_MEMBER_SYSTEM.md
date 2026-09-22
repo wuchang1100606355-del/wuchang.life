@@ -24,7 +24,7 @@ English name: **Sovereign AI Member System**
 
 | Product surface | Existing integration | Current source state |
 |---|---|---|
-| Member entry | `wuchang_member_registration/views/login_templates.xml` | Product name, login, signup, LINE and Google entry links |
+| Member entry | `wuchang_member_registration/views/login_templates.xml` | 產品名稱、單一 Odoo 登入／註冊、團體申請與討論區入口；Google／LINE 僅作登入後通道綁定 |
 | Member registration | `wuchang_member_registration` | Consent, review state, identity code and backend review action |
 | Google identity | `wuchang_google_member_login` | OAuth login/callback/welcome source; live use requires configured provider refs |
 | 8D identity | group registration routes and packet verifier | Candidate and confirmation flow; formal authority remains local |
@@ -39,8 +39,8 @@ The requested `Taiji_Odoo/addons/wuchang_member_ai_portal` path is not present i
 
 ## Member and operator flow
 
-1. The member opens `/web/login`, `/web/signup`, or the configured Google member entry.
-2. Odoo verifies the available identity and consent context. The system does not authorize on the member's behalf.
+1. The member opens `/web/login` or `/web/signup`; the public surface does not expose direct Google／LINE entry links.
+2. Odoo verifies the available identity and consent context. Google／LINE may be bound only after the local member login; the system does not authorize on the member's behalf.
 3. XiaoJ converts the service request into a local intent/candidate packet.
 4. Only de-identified refs, intent codes, schema context, and technical context may enter a cloud candidate request.
 5. Cloud output is normalized as `CANDIDATE_ONLY`.
@@ -94,7 +94,7 @@ The verifier parses the changed XML and manifest, verifies source routes/actions
 ## Demo flow
 
 1. Open the branded login page and identify the member-sovereignty, cloud-candidate, and local-authority states.
-2. Select login, registration, or the configured Google identity path.
+2. Select login or registration; after local authentication, inspect the configured Google channel-binding health state.
 3. In the backend product menu, open the member review queue.
 4. Present a de-identified XiaoJ intent packet and its candidate-only cloud result.
 5. Show the local `ALLOW` / `HOLD` / `BLOCK` result and any manual-confirmation requirement.

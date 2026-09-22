@@ -56,11 +56,7 @@ from ..services.productization_console import (
 
 
 ROUTE_STATE = {
-    "line_login": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
-    "line_callback": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
     "google_login": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
-    "google_welcome": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
-    "member_register_start": "HOLD_MEMBER_REGISTRATION_GATE",
     "xiaoj_ordering": "P1_TRANSACTION_CAPABLE_SHELL",
     "xiaoj_order": "HOLD_RUNTIME_POS_ORDER_RELEASE_REQUIRED",
     "xiaoj_payment": "HOLD_RUNTIME_PAYMENT_RELEASE_REQUIRED",
@@ -324,38 +320,6 @@ def _auth_body(provider: str) -> str:
     """
 
 
-def _google_member_recruitment_body() -> str:
-    return """
-    <section>
-      <h2>五常會員招募與 Google 登入準備</h2>
-      <p>這個入口用於會員招募、現場協助註冊與 Google 登入串接準備。封裝前安全層採 report-only，不阻擋使用者授權的產品落地與公開說明。</p>
-      <table>
-        <tr><th>目前可做</th><td>了解會員服務、進入註冊流程、由現場人員協助完成資料確認。</td></tr>
-        <tr><th>Google 登入</th><td>OAuth 正式導向會在 provider 設定完成後啟用；未啟用前，本頁維持產品級招募與準備入口。</td></tr>
-        <tr><th>安全層狀態</th><td>封裝前為 report-only；只有使用者明確下令系統封裝、seal、release gate、正式發布或嚴格執行時，才進入 strict enforcement。</td></tr>
-      </table>
-      <div class="actions">
-        <a class="button primary" href="/wuchang/member/register/start">開始會員註冊</a>
-        <a class="button" href="/web/signup">建立網站帳號</a>
-        <a class="button" href="/web/login">已有帳號登入</a>
-      </div>
-    </section>
-    """
-
-
-def _google_member_welcome_body() -> str:
-    return """
-    <section>
-      <h2>會員入口準備完成</h2>
-      <p>此頁保留給 Google 會員登入完成後的產品級歡迎流程。封裝前不顯示工程 payload，也不將未落地安全規則當作公開頁阻擋理由。</p>
-      <div class="actions">
-        <a class="button primary" href="/wuchang/member/register/start">繼續會員服務</a>
-        <a class="button" href="/">回到首頁</a>
-      </div>
-    </section>
-    """
-
-
 def _ordering_body() -> str:
     return """
     <section>
@@ -410,34 +374,6 @@ def _feature_hold(feature_key: str) -> dict:
 
 
 class WuchangCafeAiGatewayController(http.Controller):
-    @http.route("/line/login", type="http", auth="public", csrf=False)
-    def line_login(self, **_kwargs):
-        payload = _json_payload("line_login", ROUTE_STATE["line_login"])
-        return _page("LINE 註冊登入", ROUTE_STATE["line_login"], _auth_body("LINE"), payload)
-
-    @http.route("/line/callback", type="http", auth="public", csrf=False)
-    def line_callback(self, **_kwargs):
-        payload = _json_payload("line_callback", ROUTE_STATE["line_callback"])
-        return _page("LINE Callback", ROUTE_STATE["line_callback"], _auth_body("LINE Callback"), payload)
-
-    @http.route("/wuchang/google/member/recruitment", type="http", auth="public", csrf=False)
-    def google_member_recruitment(self, **_kwargs):
-        return _page(
-            "五常會員招募 / Google 登入準備",
-            ROUTE_STATE["google_login"],
-            _google_member_recruitment_body(),
-            state_label="會員招募開放",
-        )
-
-    @http.route("/wuchang/google/member/recruitment/welcome", type="http", auth="public", csrf=False)
-    def google_member_recruitment_welcome(self, **_kwargs):
-        return _page(
-            "Google 會員歡迎頁",
-            ROUTE_STATE["google_welcome"],
-            _google_member_welcome_body(),
-            state_label="會員服務準備完成",
-        )
-
     @http.route("/wuchang/internal/guard/google-member-login", type="http", auth="user", csrf=False)
     def google_member_login_internal_guard(self, **_kwargs):
         payload = _json_payload(
@@ -457,25 +393,6 @@ class WuchangCafeAiGatewayController(http.Controller):
             show_payload=True,
             state_label="REPORT_ONLY",
         )
-
-    @http.route("/wuchang/member/register/start", type="http", auth="public", csrf=False)
-    def member_register_start(self, **_kwargs):
-        payload = _json_payload(
-            "member_register_start",
-            ROUTE_STATE["member_register_start"],
-            {"member_plaintext_required": False},
-        )
-        body = """
-        <section>
-          <h2>會員註冊起點</h2>
-          <table>
-            <tr><th>識別</th><td>使用 member_ref / packet_ref，不讀會員明文。</td></tr>
-            <tr><th>渠道</th><td>LINE / Google / 店內 QR 均需通過 8D packet gate。</td></tr>
-            <tr><th>狀態</th><td>等待正式 auth provider 與 association governance release。</td></tr>
-          </table>
-        </section>
-        """
-        return _page("會員註冊起點", ROUTE_STATE["member_register_start"], body, payload)
 
     @http.route("/wuchang/xiaoj/ordering", type="http", auth="public", csrf=False)
     def xiaoj_ordering(self, **_kwargs):
