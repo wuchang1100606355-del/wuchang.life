@@ -198,10 +198,26 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     assert cloud_packet["generative_transmission"]["member_plaintext_transmitted"] is False
     assert cloud_packet["local_zero_latency_decision"]["execution_allowed"] is False
 
-    local_result = load(
+    inference_runtime = load(
         ROOT / "tools/w7tp_packet_inference_runtime.py",
         "sovereign_member_local_execution_gate",
-    ).run(
+    )
+    transition_coordinate = inference_runtime.transition_coordinate
+    synthetic_rule_registry = {
+        "status": "CANDIDATE_NON_CANONICAL",
+        "events": {
+            "STATE_UPDATE": {
+                "base_delta": {},
+                "d7_reference_required": False,
+                "status": "CANDIDATE_RULE",
+            }
+        },
+    }
+    inference_runtime.transition_coordinate = lambda **kwargs: transition_coordinate(
+        **kwargs,
+        rule_registry=synthetic_rule_registry,
+    )
+    local_result = inference_runtime.run(
         "我要加入會員",
         authenticated_role_ref="ROLE_MEMBER_SYNTHETIC",
         canonical_verifier_result={
