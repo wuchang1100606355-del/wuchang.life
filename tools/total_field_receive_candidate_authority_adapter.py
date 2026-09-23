@@ -303,9 +303,10 @@ def receive_candidate_authority_bound(
     ],
 ) -> dict[str, Any]:
     """
-    Candidate-only adapter. It preflights candidate evidence, resolves the fixed
-    independently issued runtime authority, and only then invokes the existing
-    receive_candidate owner. It cannot create or modify the active pointer.
+    Candidate-only adapter. It preflights candidate evidence, prefers the scoped
+    Founder user-verified D8 passkey for RECEIVE_CANDIDATE, and uses the signed
+    ACTIVE_TOTAL_FIELD_AUTHORITY path only as compatibility fallback when the
+    passkey runtime is unavailable. It cannot create or modify the active pointer.
     """
     candidate, context, preflight_state, preflight_reason = _preflight(
         candidate_packet,
@@ -319,78 +320,115 @@ def receive_candidate_authority_bound(
             dynamic_context_packet=context,
         )
 
-    try:
-        authority_resolution = authority_resolver(
-            ACTIVE_POINTER_LOOKUP_REF,
-            repo_root=Path(repo_root),
-            nonce_ledger=nonce_ledger,
-            signature_verifier=signature_verifier,
-            trusted_verifier_refs=trusted_verifier_refs,
-        )
-    except Exception as exc:
-        return _safe_result(
-            "HOLD_AUTHORITY_RESOLVER_FAILED",
-            f"authority resolver raised {type(exc).__name__}",
-            candidate_packet=candidate,
-            dynamic_context_packet=context,
-        )
+    authority_source = "UNRESOLVED"
+    authority_state: Any = None
+    authority_resolution: Mapping[str, Any] = {}
+    passkey_config: Mapping[str, Any] = {}
 
-    if not isinstance(authority_resolution, Mapping):
-        return _safe_result(
-            "BLOCK_AUTHORITY_RESOLVER_INVALID",
-            "authority resolver returned a non-mapping result",
-            candidate_packet=candidate,
-            dynamic_context_packet=context,
-        )
-
-    authority_source = "ED25519_ACTIVE_AUTHORITY"
-    authority_state = authority_resolution.get("state")
-    if (
-        authority_state != PASS_AUTHORITY_STATE
-        or authority_resolution.get("authority_verified") is not True
-    ):
-        passkey_config_path = Path(repo_root).resolve() / PASSKEY_CONFIG_REL
-        if passkey_config_path.is_file() and not passkey_config_path.is_symlink():
-            try:
-                passkey_gate = json.loads(passkey_config_path.read_text(encoding="utf-8"))
-                passkey_config = passkey_gate.get("passkey_verifier") or {}
-                if RECEIVE_CANDIDATE_SCOPE in (
-                    passkey_config.get("allowed_effect_scopes") or []
-                ):
-                    passkey_resolution = _resolve_passkey_authority(
-                        repo_root=Path(repo_root).resolve(),
-                        passkey_config=passkey_config,
-                        consume=False,
+    passkey_config_path = Path(repo_root).resolve() / PASSKEY_CONFIG_REL
+    if passkey_config_path.is_file() and not passkey_config_path.is_symlink():
+        try:
+            passkey_gate = json.loads(passkey_config_path.read_text(encoding="utf-8"))
+            raw_passkey_config = passkey_gate.get("passkey_verifier") or {}
+            if isinstance(raw_passkey_config, Mapping):
+                passkey_config = raw_passkey_config
+            if RECEIVE_CANDIDATE_SCOPE in (
+                passkey_config.get("allowed_effect_scopes") or []
+            ):
+                passkey_resolution = _resolve_passkey_authority(
+                    repo_root=Path(repo_root).resolve(),
+                    passkey_config=passkey_config,
+                    consume=False,
+                )
+                constraints = passkey_resolution.get("authority_scope_constraints")
+                expected = {
+                    "candidate_id": candidate.get("candidate_id"),
+                    "candidate_packet_sha256": candidate.get(
+                        "candidate_packet_sha256"
+                    ),
+                    "skill_index_sha256": candidate.get("skill_index_sha256"),
+                    "skill_source_manifest_sha256": candidate.get(
+                        "skill_source_manifest_sha256"
+                    ),
+                    "dynamic_context_sha256": context.get("packet_sha256"),
+                }
+                if (
+                    passkey_resolution.get("state") == PASS_AUTHORITY_STATE
+                    and passkey_resolution.get("authority_verified") is True
+                    and isinstance(constraints, Mapping)
+                    and all(
+                        constraints.get(key) == value
+                        for key, value in expected.items()
                     )
-                    constraints = passkey_resolution.get("authority_scope_constraints")
-                    expected = {
-                        "candidate_id": candidate.get("candidate_id"),
-                        "candidate_packet_sha256": candidate.get(
-                            "candidate_packet_sha256"
-                        ),
-                        "skill_index_sha256": candidate.get("skill_index_sha256"),
-                        "skill_source_manifest_sha256": candidate.get(
-                            "skill_source_manifest_sha256"
-                        ),
-                        "dynamic_context_sha256": context.get("packet_sha256"),
-                    }
-                    if (
-                        passkey_resolution.get("state") == PASS_AUTHORITY_STATE
-                        and passkey_resolution.get("authority_verified") is True
-                        and isinstance(constraints, Mapping)
-                        and all(constraints.get(key) == value for key, value in expected.items())
-                        and constraints.get("receive_candidate") is True
-                        and constraints.get("git_push") is False
-                        and constraints.get("deploy") is False
-                        and constraints.get("restart") is False
-                        and constraints.get("canonical_pointer_write") is False
-                        and constraints.get("active_pointer_write") is False
-                    ):
-                        authority_resolution = dict(passkey_resolution)
-                        authority_state = PASS_AUTHORITY_STATE
-                        authority_source = "FOUNDER_USER_VERIFIED_PASSKEY"
-            except (OSError, UnicodeDecodeError, json.JSONDecodeError, ImportError):
-                pass
+                    and constraints.get("receive_candidate") is True
+                    and constraints.get("git_push") is False
+                    and constraints.get("deploy") is False
+                    and constraints.get("restart") is False
+                    and constraints.get("canonical_pointer_write") is False
+                    and constraints.get("active_pointer_write") is False
+                ):
+                    authority_resolution = dict(passkey_resolution)
+                    authority_state = PASS_AUTHORITY_STATE
+                    authority_source = "FOUNDER_USER_VERIFIED_PASSKEY"
+                else:
+                    passkey_reason = str(
+                        passkey_resolution.get("reason")
+                        or "PASSKEY_APPROVAL_BINDINGS_INVALID"
+                    )
+                    if passkey_reason not in {
+                        "PASSKEY_VERIFIER_RUNTIME_UNAVAILABLE",
+                        "PASSKEY_VERIFIER_PROCESS_FAILED",
+                    }:
+                        return _safe_result(
+                            "HOLD_DEVICE_PASSKEY_D8_AUTHORITY",
+                            passkey_reason,
+                            candidate_packet=candidate,
+                            dynamic_context_packet=context,
+                            authority_resolution=passkey_resolution,
+                        )
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+            pass
+
+    if authority_source != "FOUNDER_USER_VERIFIED_PASSKEY":
+        try:
+            authority_resolution = authority_resolver(
+                ACTIVE_POINTER_LOOKUP_REF,
+                repo_root=Path(repo_root),
+                nonce_ledger=nonce_ledger,
+                signature_verifier=signature_verifier,
+                trusted_verifier_refs=trusted_verifier_refs,
+            )
+        except Exception as exc:
+            return _safe_result(
+                "HOLD_AUTHORITY_RESOLVER_FAILED",
+                f"authority resolver raised {type(exc).__name__}",
+                candidate_packet=candidate,
+                dynamic_context_packet=context,
+            )
+
+        if not isinstance(authority_resolution, Mapping):
+            return _safe_result(
+                "BLOCK_AUTHORITY_RESOLVER_INVALID",
+                "authority resolver returned a non-mapping result",
+                candidate_packet=candidate,
+                dynamic_context_packet=context,
+            )
+
+        authority_source = "ED25519_ACTIVE_AUTHORITY_COMPATIBILITY"
+        authority_state = authority_resolution.get("state")
+        if (
+            authority_state == PASS_AUTHORITY_STATE
+            and authority_resolution.get("authority_verified") is True
+            and authority_resolution.get("authority_scope")
+            != [RECEIVE_CANDIDATE_SCOPE]
+        ):
+            return _safe_result(
+                "HOLD_AUTHORITY_SCOPE_MISMATCH",
+                "compatibility authority scope is not RECEIVE_CANDIDATE",
+                candidate_packet=candidate,
+                dynamic_context_packet=context,
+                authority_resolution=authority_resolution,
+            )
 
     if (
         authority_state != PASS_AUTHORITY_STATE
@@ -406,7 +444,7 @@ def receive_candidate_authority_bound(
             str(
                 authority_resolution.get(
                     "reason",
-                    "active authority did not resolve",
+                    "receive-candidate authority did not resolve",
                 )
             ),
             candidate_packet=candidate,
