@@ -15,14 +15,14 @@
   },
   "successor": {
     "source": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
-    "source_sha256": "ca4ae6a565bd2e701b51c2cc9da5119792eba98347139550ec7586663b6610da",
+    "source_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
     "packet_schema": "w7tp-8dadi-origin-cell-generative-rule-packet/2.3-candidate",
-    "generator_contract": "w7tp-8dadi-origin-cell-generator-base/2.3-candidate",
-    "rule_profile": "COMPLEX_DATASET_TARGET_RULES_V1",
+    "generator_contract": "w7tp-8dadi-generic-rule-executor/2.3-candidate",
+    "d6_mode": "SOURCE_GENERATED_RULE_BODY",
     "verification_level": "L1_EXACT_MANIFEST"
   },
   "mainline_candidate": {
-    "mechanism": "RULE_GENERATIVE_BASE_ONLY",
+    "mechanism": "SOURCE_GENERATED_INLINE_RULE_BODY",
     "target_bytes_embedded": false,
     "differential_payload_allowed": false,
     "patch_cell_allowed": false,
