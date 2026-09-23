@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_8d_adi_adaptive_network_state_v1.json",
+  "title": "W7TP 8D ADI Adaptive Network Candidate Evidence",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "timestamp",
+    "observer",
+    "source_node",
+    "evidence_class",
+    "confidence",
+    "authority_scope"
+  ],
+  "properties": {
+    "schema_id": {"type": "string", "minLength": 1},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "observer": {"type": "string", "minLength": 1},
+    "source_node": {"type": "string", "minLength": 1},
+    "evidence_class": {"const": "D4_EVIDENCE"},
+    "confidence": {
+      "type": "string",
+      "enum": ["HIGH", "MEDIUM", "LOW", "LOCALIZED_UNKNOWN"]
+    },
+    "authority_scope": {
+      "type": "string",
+      "enum": ["CANDIDATE_EVIDENCE_ONLY", "CANDIDATE_D8_DECISION_ONLY"]
+    },
+    "network_state_field": {
+      "type": "object",
+      "required": ["semantics", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+      "properties": {
+        "semantics": {"const": "8_IN_1_SINGLE_STATE_FIELD"},
+        "D1": {"type": "object"},
+        "D2": {"type": "object"},
+        "D3": {"type": "object"},
+        "D4": {"type": "object"},
+        "D5": {"type": "object"},
+        "D6": {"type": "object"},
+        "D7": {"type": "object"},
+        "D8": {
+          "type": "object",
+          "required": ["decision", "total_field_decision"],
+          "properties": {
+            "decision": {
+              "enum": [
+                "ALLOW_LAN_IPV4",
+                "ALLOW_TAILSCALE_IPV4",
+                "ALLOW_QUALIFIED_IPV6",
+                "HOLD",
+                "DENY",
+                "LOCALIZED_UNKNOWN"
+              ]
+            },
+            "total_field_decision": {"const": "NOT_RUN"}
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
