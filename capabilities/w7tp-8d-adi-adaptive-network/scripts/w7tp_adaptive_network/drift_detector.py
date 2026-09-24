@@ -102,6 +102,31 @@ def detect_router_internet(router_reachable: bool, internet_reachable: bool) -> 
     ]
 
 
+def detect_wan_publication_drift(
+    *,
+    port_forwarding_enabled: bool,
+    forwarding_rule_count: int,
+    application_verified: bool,
+) -> list[dict[str, Any]]:
+    if not port_forwarding_enabled or forwarding_rule_count <= 0 or application_verified:
+        return []
+    return [
+        risk(
+            "WAN_PUBLICATION_DRIFT",
+            "MERLIN_WAN_PUBLICATION_PATH",
+            [
+                "port_forwarding_enabled=true",
+                f"forwarding_rule_count={forwarding_rule_count}",
+                "application_verified=false",
+            ],
+            "WAN publication rules exist without an intent-bound end-to-end application decision",
+            "HIGH",
+            "keep each publication binding on HOLD until the explicit service, target zone, TLS, response, and rollback are verified",
+            "make no router change; preserve the observed rules and disconnect the WAN carrier if immediate containment is required",
+        )
+    ]
+
+
 def detect_asymmetric_route(forward_interface: str, return_interface: str) -> list[dict[str, Any]]:
     if not forward_interface or not return_interface or forward_interface == return_interface:
         return []
@@ -268,6 +293,13 @@ def detect_risks(context: dict[str, Any]) -> list[dict[str, Any]]:
         detect_secondary_double_nat(
             context.get("router_routes_v4", []),
             context.get("router_wan_scope", "LOCALIZED_UNKNOWN"),
+        )
+    )
+    findings.extend(
+        detect_wan_publication_drift(
+            port_forwarding_enabled=context.get("port_forwarding_enabled", False),
+            forwarding_rule_count=int(context.get("forwarding_rule_count", 0)),
+            application_verified=context.get("wan_publication_application_verified", False),
         )
     )
     return _deduplicate(findings)

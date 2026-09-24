@@ -4,7 +4,17 @@ from collections import defaultdict
 from typing import Any
 
 
-FIXED_POLICY_PRIORITY = ("LAN_IPV4", "TAILSCALE_IPV4", "NATIVE_IPV6", "TAILSCALE_IPV6")
+KNOWN_PATH_TYPES = (
+    "LOOPBACK_SERVICE_PATH",
+    "CONTAINER_LOCAL_PATH",
+    "LAN_IPV4",
+    "TAILSCALE_IPV4",
+    "NATIVE_IPV6",
+    "TAILSCALE_IPV6",
+    "GUEST_SERVICE_PATH",
+    "IOT_SERVICE_PATH",
+    "WAN_PUBLICATION_PATH",
+)
 
 
 def build_learning_candidate(
@@ -16,11 +26,11 @@ def build_learning_candidate(
     for matrix in matrices:
         for path in matrix.get("paths", []):
             path_type = path.get("path_type")
-            if path_type in FIXED_POLICY_PRIORITY:
+            if path_type in KNOWN_PATH_TYPES:
                 samples[path_type].append(path)
 
     statistics: list[dict[str, Any]] = []
-    for path_type in FIXED_POLICY_PRIORITY:
+    for path_type in KNOWN_PATH_TYPES:
         records = samples.get(path_type, [])
         if not records:
             continue
@@ -36,7 +46,7 @@ def build_learning_candidate(
             }
         )
 
-    priority_index = {value: index for index, value in enumerate(FIXED_POLICY_PRIORITY)}
+    stable_index = {value: index for index, value in enumerate(KNOWN_PATH_TYPES)}
     observed_order = [
         item["path_type"]
         for item in sorted(
@@ -44,7 +54,7 @@ def build_learning_candidate(
             key=lambda item: (
                 -item["success_rate"],
                 -item["mean_candidate_score"],
-                priority_index[item["path_type"]],
+                stable_index[item["path_type"]],
             ),
         )
     ]
@@ -53,12 +63,14 @@ def build_learning_candidate(
         "history_sample_count": sum(item["sample_count"] for item in statistics),
         "path_statistics": statistics,
         "observed_performance_order": observed_order,
-        "fixed_policy_priority": list(FIXED_POLICY_PRIORITY),
-        "can_override_policy_priority": False,
+        "probe_order_candidate": observed_order,
+        "selection_scope": "PER_INTENT_BINDING",
+        "can_override_intent_policy": False,
+        "can_override_zone_policy": False,
         "can_modify_founder_authority": False,
         "can_modify_canonical": False,
         "can_modify_d8_authority": False,
-        "use": "future probe ordering and candidate evidence only",
+        "use": "future per-intent probe ordering and candidate evidence only",
     }
 
 
@@ -69,4 +81,3 @@ def _sample_success(path: dict[str, Any]) -> int:
     if path.get("path_type") in {"NATIVE_IPV6", "TAILSCALE_IPV6"}:
         base = base and bool(path.get("qualified"))
     return int(base)
-

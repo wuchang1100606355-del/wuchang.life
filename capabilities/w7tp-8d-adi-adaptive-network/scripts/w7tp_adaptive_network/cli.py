@@ -3,13 +3,16 @@ from __future__ import annotations
 import argparse
 import json
 import socket
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
 from .candidate_learning import build_learning_candidate
 from .common import evidence_envelope, utc_now
+from .consumer import resolve_service
 from .drift_detector import detect_risks, detect_stale_tailscale_ip
 from .evidence_writer import write_bundle
+from .failover import evaluate_binding_failover
 from .health_probe import (
     dns_resolution,
     http_probe,
@@ -23,7 +26,6 @@ from .identity_resolver import resolve_identities
 from .merlin_adapter import observe_merlin, to_redacted_inventory
 from .observer import observe_local
 from .path_evaluator import qualify_ipv6, score_path
-from .route_selector import select_route
 from .service_binding import binding_summary, enrich_container_services, parse_listeners
 
 
@@ -47,17 +49,47 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
     bindings = enrich_container_services(bindings, local.get("docker_containers", []))
     service_matrix = binding_summary(bindings)
 
-    paths, verification, default_application = _build_paths(local, merlin, args)
+    paths, verification, default_application = _build_paths(local, merlin, args, timestamp)
     intent = {
         "intent_id": args.intent_id,
         "source_node": source_node,
-        "target_node": merlin.get("hostname", "MERLIN_ROUTER"),
-        "service_identity": "MERLIN_READ_ONLY_SSH_OBSERVER",
+        "source_zone": args.source_zone,
+        "target_node": args.target_node or merlin.get("hostname", "MERLIN_ROUTER"),
+        "target_zone": args.target_zone,
+        "service_identity": args.service_identity,
+        "service_class": args.service_class,
+        "published_gateway_bound": args.published_gateway_bound,
         "cross_network_required": False,
-        "permitted_paths": ["LAN_IPV4", "TAILSCALE_IPV4", "NATIVE_IPV6", "TAILSCALE_IPV6"],
+        "permitted_paths": args.permitted_path,
+        "concurrent_paths": args.concurrent_path,
+        "allow_concurrent_paths": args.allow_concurrent_paths,
         "target_identity_state": "OBSERVED_PARTIAL" if merlin.get("reachable") else "LOCALIZED_UNKNOWN",
     }
-    route_decision = select_route(intent, paths, verification)
+    route_decision = resolve_service(
+        intent_id=intent["intent_id"],
+        source_node=intent["source_node"],
+        target_node=intent["target_node"],
+        service_identity=intent["service_identity"],
+        source_zone=intent["source_zone"],
+        target_zone=intent["target_zone"],
+        service_class=intent["service_class"],
+        published_gateway_bound=intent["published_gateway_bound"],
+        paths=paths,
+        verification=verification,
+        permitted_paths=intent["permitted_paths"],
+        concurrent_paths=intent["concurrent_paths"],
+        allow_concurrent_paths=intent["allow_concurrent_paths"],
+        target_identity_state=intent["target_identity_state"],
+        observed_at=timestamp,
+        ttl_seconds=args.evidence_ttl_seconds,
+    )
+    failover_binding = evaluate_binding_failover(
+        {**route_decision, "ttl_seconds": args.evidence_ttl_seconds},
+        paths,
+        verification,
+        now=timestamp,
+    )
+    zone_state = _zone_state(merlin, paths)
 
     risks = detect_risks(
         {
@@ -65,11 +97,14 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
             "identity_nodes": identities.get("nodes", []),
             "bindings": bindings,
             "default_application_family": default_application.get("address_family", "UNKNOWN"),
-            "generic_ipv6_policy_gate_present": False,
+            "generic_ipv6_policy_gate_present": True,
             "router_tailscale_interface_present": bool(merlin.get("tailscale_ipv4")),
             "router_tailscale_cli_observed": merlin.get("tailscale_cli") == "present",
             "router_routes_v4": merlin.get("routes_v4", []),
             "router_wan_scope": merlin.get("wan_ipv4_scope", "LOCALIZED_UNKNOWN"),
+            "port_forwarding_enabled": merlin.get("nvram", {}).get("vts_enable_x") == "1",
+            "forwarding_rule_count": len(merlin.get("port_forwarding_rules", [])),
+            "wan_publication_application_verified": False,
         }
     )
     dns_findings = _tailscale_dns_findings(local)
@@ -108,6 +143,10 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
                 "NATIVE_IPV6_NETWORK",
                 "APPLICATION_NETWORK",
                 "MERLIN_ROUTER",
+                "GUEST_SERVICE_ZONE",
+                "IOT_ZONE",
+                "WAN_PUBLICATION_ZONE",
+                "FUTURE_PUBLIC_SERVICE_ZONE",
             ],
             "interfaces_observed": len(local.get("links", [])),
             "routes_v4_observed": len(local.get("routes_v4", [])),
@@ -119,19 +158,25 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
                 "node_identity_map.json",
                 "path_matrix.json",
                 "service_binding_matrix.json",
+                "intent_path_bindings.json",
+                "failover_bindings.json",
+                "concurrent_path_bindings.json",
+                "zone_state.json",
                 "network_risks.json",
                 "merlin_observation.json",
             ],
             "single_probe_is_authority": False,
         },
         "D5": {
-            "priority": [
-                "LAN_IPV4",
-                "TAILSCALE_IPV4",
-                "QUALIFIED_NATIVE_IPV6",
-                "QUALIFIED_TAILSCALE_IPV6",
-                "HOLD",
-            ],
+            "network_model": "MULTI_PATH_CONCURRENT_FIELD",
+            "routing_unit": "PER_INTENT_BINDING",
+            "failover_scope": "PER_BINDING",
+            "global_three_way_selection": False,
+            "available_path_set": route_decision["available_path_set"],
+            "qualified_path_set": route_decision["qualified_path_set"],
+            "active_path_set": route_decision["active_path_set"],
+            "denied_path_set": route_decision["denied_path_set"],
+            "stale_path_set": route_decision["stale_path_set"],
             "score_is_authority": False,
             "unqualified_ipv6_selectable": False,
         },
@@ -139,7 +184,7 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
             "network_state_field": reconstruction_states,
             "reconstruction_rule": "TARGET_NATIVE_SERVICE_AND_APPLICATION_RESPONSE_REQUIRED",
             "learning_state": learning_candidate["state"],
-            "learning_can_override_policy": learning_candidate["can_override_policy_priority"],
+            "learning_can_override_policy": learning_candidate["can_override_intent_policy"],
         },
         "D7": {
             "risk_count": len(risks),
@@ -150,13 +195,16 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
             "decision": route_decision["decision"],
             "decision_scope": "CURRENT_INTENT_ONLY",
             "decision_state": route_decision["decision_state"],
+            "authorized": route_decision["authorized"],
+            "decision_id": route_decision["decision_id"],
+            "two_phase_gates": route_decision["d8_two_phase_gates"],
             "total_field_decision": "NOT_RUN",
             "canonical": False,
         },
         "coupling": {
             "joint_state_representation": True,
             "coupling_rule": "D1-D7 jointly constrain D8",
-            "cross_dimension_constraint": "identity + service + path + application + risk closure",
+            "cross_dimension_constraint": "intent + source/target zones + identity + service + path + application + risk closure",
             "joint_state_transition": "OBSERVED_TO_VERIFIED_CANDIDATE_OR_FAIL_CLOSED",
             "closure_rule": "selected path end-to-end chain must be complete",
             "fail_closed_rule": "conflict, missing evidence, or unqualified IPv6 is not selectable",
@@ -166,7 +214,7 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
     documents = {
         "network_state.json": {
             **evidence_envelope(
-                schema_id="W7TP_8D_ADI_NETWORK_STATE_V1",
+                schema_id="W7TP_8D_ADI_NETWORK_STATE_V2",
                 timestamp=timestamp,
                 source_node=source_node,
                 confidence="HIGH" if route_decision.get("end_to_end_verified") else "MEDIUM",
@@ -183,7 +231,7 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
         },
         "path_matrix.json": {
             **evidence_envelope(
-                schema_id="W7TP_8D_ADI_PATH_MATRIX_V1",
+                schema_id="W7TP_8D_ADI_PATH_MATRIX_V2",
                 timestamp=timestamp,
                 source_node=source_node,
             ),
@@ -202,13 +250,62 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
         },
         "route_decision.json": {
             **evidence_envelope(
-                schema_id="W7TP_8D_ADI_ROUTE_DECISION_V1",
+                schema_id="W7TP_8D_ADI_ROUTE_DECISION_V2",
                 timestamp=timestamp,
                 source_node=source_node,
                 confidence="HIGH" if route_decision.get("end_to_end_verified") else "MEDIUM",
                 authority_scope="CANDIDATE_D8_DECISION_ONLY",
             ),
             **route_decision,
+        },
+        "intent_path_bindings.json": {
+            **evidence_envelope(
+                schema_id="W7TP_8D_ADI_INTENT_PATH_BINDINGS_V1",
+                timestamp=timestamp,
+                source_node=source_node,
+                authority_scope="CANDIDATE_D8_DECISION_ONLY",
+            ),
+            "bindings": [route_decision],
+            "routing_unit": "PER_INTENT_BINDING",
+            "global_three_way_selection": False,
+        },
+        "failover_bindings.json": {
+            **evidence_envelope(
+                schema_id="W7TP_8D_ADI_FAILOVER_BINDINGS_V1",
+                timestamp=timestamp,
+                source_node=source_node,
+                authority_scope="CANDIDATE_D8_DECISION_ONLY",
+            ),
+            "bindings": [failover_binding],
+            "failover_scope": "PER_BINDING",
+            "global_path_state_modified": False,
+        },
+        "concurrent_path_bindings.json": {
+            **evidence_envelope(
+                schema_id="W7TP_8D_ADI_CONCURRENT_PATH_BINDINGS_V1",
+                timestamp=timestamp,
+                source_node=source_node,
+                authority_scope="CANDIDATE_D8_DECISION_ONLY",
+            ),
+            "bindings": [
+                {
+                    "intent_id": route_decision["intent_id"],
+                    "selected_path": route_decision["selected_path"],
+                    "concurrent_paths": route_decision["concurrent_paths"],
+                    "active_path_set": route_decision["active_path_set"],
+                    "authorized": route_decision["authorized"],
+                }
+            ],
+            "schema_supports_concurrent_paths": True,
+            "bonding_or_packet_duplication_implemented": False,
+        },
+        "zone_state.json": {
+            **evidence_envelope(
+                schema_id="W7TP_8D_ADI_ZONE_STATE_V1",
+                timestamp=timestamp,
+                source_node=source_node,
+            ),
+            **zone_state,
         },
         "network_risks.json": {
             **evidence_envelope(
@@ -246,24 +343,40 @@ def discover(args: argparse.Namespace) -> dict[str, Any]:
         "state": "PASS_CANDIDATE_EVIDENCE_CREATED",
         "source_node": source_node,
         "decision": route_decision["decision"],
+        "authorized": route_decision["authorized"],
         "selected_path": route_decision.get("selected_path"),
-        "ipv6_qualified": next(
-            (path.get("qualified") for path in paths if path.get("path_type") == "NATIVE_IPV6"),
-            False,
-        ),
+        "available_path_set": route_decision["available_path_set"],
+        "qualified_path_set": route_decision["qualified_path_set"],
+        "active_path_set": route_decision["active_path_set"],
+        "denied_path_set": route_decision["denied_path_set"],
+        "stale_path_set": route_decision["stale_path_set"],
+        "intent_path_bindings": 1,
+        "failover_bindings": 1,
+        "concurrent_path_bindings": 1,
+        "ipv6_qualified_candidates": [
+            path["path_id"]
+            for path in paths
+            if path.get("path_type") == "NATIVE_IPV6" and path.get("qualified")
+        ],
         "merlin_state": merlin.get("state"),
+        "zone_state": zone_state,
         "risk_count": len(risks),
         "written": written,
         "network_mutation": False,
         "router_mutation": False,
         "service_restart": False,
+        "registry_state": "CANDIDATE_NOT_REGISTERED",
+        "runtime_state": "NOT_ACTIVE",
         "total_field_decision": "NOT_RUN",
     }
 
 
 def _build_paths(
-    local: dict[str, Any], merlin: dict[str, Any], args: argparse.Namespace
-) -> tuple[list[dict[str, Any]], dict[str, bool], dict[str, Any]]:
+    local: dict[str, Any],
+    merlin: dict[str, Any],
+    args: argparse.Namespace,
+    timestamp: str,
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, bool]], dict[str, Any]]:
     default_v4 = next(
         (route for route in local.get("routes_v4", []) if route.get("dst") == "default"), {}
     )
@@ -278,8 +391,11 @@ def _build_paths(
         else {"passed": False}
     )
     lan_service = bool(merlin.get("reachable") and lan_ssh.get("passed"))
+    evidence_window = _evidence_window(timestamp, args.evidence_ttl_seconds)
+    lan_id = f"LAN_IPV4@{gateway or 'LOCALIZED_UNKNOWN'}"
     lan = score_path(
         {
+            "path_id": lan_id,
             "path_type": "LAN_IPV4",
             "interface": interface or "LOCALIZED_UNKNOWN",
             "target": gateway or "LOCALIZED_UNKNOWN",
@@ -290,6 +406,7 @@ def _build_paths(
             "identity_state": "OBSERVED_PARTIAL",
             "remote_agent_online": "NOT_REQUIRED",
             "evidence": {"ssh_handshake": lan_ssh, "http": lan_http, "https": lan_https},
+            **evidence_window,
             "score_components": {
                 "availability": 1.0 if merlin.get("reachable") else 0.0,
                 "latency": 0.95,
@@ -308,8 +425,10 @@ def _build_paths(
     ts_ping = tailscale_ping(router_ts_name) if router_ts_name else {"passed": False}
     ts_tcp = tcp_connect(router_ts4, 22, socket.AF_INET) if router_ts4 else {"passed": False}
     ts_ssh = ssh_handshake(router_ts4, family=socket.AF_INET) if router_ts4 else {"passed": False}
+    tailscale_v4_id = f"TAILSCALE_IPV4@{router_ts4 or 'LOCALIZED_UNKNOWN'}"
     tailscale_v4 = score_path(
         {
+            "path_id": tailscale_v4_id,
             "path_type": "TAILSCALE_IPV4",
             "interface": "tailscale0",
             "target": router_ts4 or "LOCALIZED_UNKNOWN",
@@ -320,6 +439,7 @@ def _build_paths(
             "identity_state": "OBSERVED_PARTIAL",
             "remote_agent_online": merlin.get("reachable", False),
             "evidence": {"tailscale_ping": ts_ping, "tcp": ts_tcp, "ssh_handshake": ts_ssh},
+            **evidence_window,
             "score_components": {
                 "availability": 1.0 if ts_ping.get("passed") else 0.0,
                 "latency": 0.8,
@@ -347,40 +467,71 @@ def _build_paths(
             "evidence": {},
             "probe_state": "NOT_RUN",
         }
-    ipv6_qualification = qualify_ipv6(ipv6_probe.get("gates", {}))
-    native_ipv6 = score_path(
-        {
-            "path_type": "NATIVE_IPV6",
-            "interface": _native_ipv6_interface(local),
-            "target": ipv6_probe.get("target_ipv6", "LOCALIZED_UNKNOWN"),
-            "available": bool(
-                ipv6_qualification["gates"]["ADDRESS_PRESENT"]
-                and ipv6_qualification["gates"]["DEFAULT_ROUTE_PRESENT"]
-            ),
-            "host_reachable": ipv6_qualification["gates"]["TARGET_REACHABLE"],
-            "service_reachable": ipv6_qualification["gates"]["TCP_SERVICE_REACHABLE"],
-            "qualified": ipv6_qualification["qualified"],
-            "qualification": ipv6_qualification,
-            "identity_state": "OBSERVED_PARTIAL",
-            "evidence": ipv6_probe.get("evidence", {}),
-            "score_components": {
-                "availability": 1.0 if ipv6_qualification["qualified"] else 0.0,
-                "latency": 0.75,
-                "packet_loss": 0.9,
-                "locality": 0.2,
-                "cost": 0.8,
-                "privacy": 0.55,
-                "route_stability": 0.6,
-                "observability": 0.8,
-            },
-        }
-    )
+    native_ipv6_paths: list[dict[str, Any]] = []
+    for candidate in ipv6_probe.get("candidates", []):
+        qualification = qualify_ipv6(candidate.get("gates", {}))
+        native_ipv6_paths.append(
+            score_path(
+                {
+                    "path_id": candidate["path_id"],
+                    "path_type": "NATIVE_IPV6",
+                    "interface": candidate.get("evidence", {})
+                    .get("route", {})
+                    .get("route", {})
+                    .get("dev", _native_ipv6_interface(local)),
+                    "target": candidate.get("target_ipv6", "LOCALIZED_UNKNOWN"),
+                    "available": bool(
+                        qualification["gates"]["ADDRESS_PRESENT"]
+                        and qualification["gates"]["DEFAULT_ROUTE_PRESENT"]
+                    ),
+                    "host_reachable": qualification["gates"]["TARGET_REACHABLE"],
+                    "service_reachable": qualification["gates"]["TCP_SERVICE_REACHABLE"],
+                    "qualified": qualification["qualified"],
+                    "qualification": qualification,
+                    "identity_state": "OBSERVED_PARTIAL",
+                    "evidence": candidate.get("evidence", {}),
+                    **evidence_window,
+                    "score_components": {
+                        "availability": 1.0 if qualification["qualified"] else 0.0,
+                        "latency": 0.75,
+                        "packet_loss": 0.9,
+                        "locality": 0.2,
+                        "cost": 0.8,
+                        "privacy": 0.55,
+                        "route_stability": 0.6,
+                        "observability": 0.8,
+                    },
+                }
+            )
+        )
+    if not native_ipv6_paths:
+        native_ipv6_paths.append(
+            score_path(
+                {
+                    "path_id": "NATIVE_IPV6@LOCALIZED_UNKNOWN",
+                    "path_type": "NATIVE_IPV6",
+                    "interface": _native_ipv6_interface(local),
+                    "target": "LOCALIZED_UNKNOWN",
+                    "available": False,
+                    "host_reachable": False,
+                    "service_reachable": False,
+                    "qualified": False,
+                    "qualification": qualify_ipv6({}),
+                    "identity_state": "LOCALIZED_UNKNOWN",
+                    "evidence": {"state": "NOT_RUN_OR_NO_AAAA_CANDIDATES"},
+                    **evidence_window,
+                    "score_components": {},
+                }
+            )
+        )
 
+    tailscale_v6_target = merlin.get("tailscale_ipv6", "LOCALIZED_UNKNOWN")
     tailscale_v6 = score_path(
         {
+            "path_id": f"TAILSCALE_IPV6@{tailscale_v6_target}",
             "path_type": "TAILSCALE_IPV6",
             "interface": "tailscale0",
-            "target": merlin.get("tailscale_ipv6", "LOCALIZED_UNKNOWN"),
+            "target": tailscale_v6_target,
             "available": bool(merlin.get("tailscale_ipv6")),
             "host_reachable": False,
             "service_reachable": False,
@@ -388,6 +539,73 @@ def _build_paths(
             "qualification": qualify_ipv6({}),
             "identity_state": "OBSERVED_PARTIAL",
             "evidence": {"state": "NOT_EXPLICITLY_QUALIFIED"},
+            **evidence_window,
+            "score_components": {},
+        }
+    )
+    guest_observed = bool(
+        merlin.get("nvram", {}).get("lan1_ipaddr")
+        or merlin.get("nvram", {}).get("lan2_ipaddr")
+        or merlin.get("nvram", {}).get("lan3_ipaddr")
+        or any(
+            bridge in str(row)
+            for row in merlin.get("bridges", [])
+            for bridge in ("br1", "br2", "br3")
+        )
+    )
+    guest_path = score_path(
+        {
+            "path_id": "GUEST_SERVICE_PATH@MERLIN",
+            "path_type": "GUEST_SERVICE_PATH",
+            "interface": "br1" if guest_observed else "LOCALIZED_UNKNOWN",
+            "target": "GUEST_SERVICE_ENDPOINT_LOCALIZED_UNKNOWN",
+            "available": guest_observed,
+            "host_reachable": False,
+            "service_reachable": False,
+            "qualified": False,
+            "identity_state": "OBSERVED_PARTIAL" if guest_observed else "LOCALIZED_UNKNOWN",
+            "evidence": {"zone_boundary_observed": guest_observed, "service_endpoint_verified": False},
+            **evidence_window,
+            "score_components": {},
+        }
+    )
+    iot_path = score_path(
+        {
+            "path_id": "IOT_SERVICE_PATH@MERLIN",
+            "path_type": "IOT_SERVICE_PATH",
+            "interface": "LOCALIZED_UNKNOWN",
+            "target": "IOT_SERVICE_ENDPOINT_LOCALIZED_UNKNOWN",
+            "available": False,
+            "host_reachable": False,
+            "service_reachable": False,
+            "qualified": False,
+            "identity_state": "LOCALIZED_UNKNOWN",
+            "evidence": {"future_zone_declared_by_user": True, "live_zone_binding_verified": False},
+            **evidence_window,
+            "score_components": {},
+        }
+    )
+    wan_transport_observed = bool(
+        merlin.get("wan_ipv4_scope") == "PUBLIC_OR_OTHER"
+        or merlin.get("nvram", {}).get("ddns_enable_x") == "1"
+    )
+    wan_path = score_path(
+        {
+            "path_id": "WAN_PUBLICATION_PATH@MERLIN",
+            "path_type": "WAN_PUBLICATION_PATH",
+            "interface": "WAN_EDGE",
+            "target": "PUBLISHED_GATEWAY_ENDPOINT_LOCALIZED_UNKNOWN",
+            "available": wan_transport_observed,
+            "host_reachable": False,
+            "service_reachable": False,
+            "qualified": False,
+            "identity_state": "OBSERVED_PARTIAL" if wan_transport_observed else "LOCALIZED_UNKNOWN",
+            "evidence": {
+                "wan_transport_observed": wan_transport_observed,
+                "published_service_verified": False,
+                "direct_internal_zone_access_allowed": False,
+            },
+            **evidence_window,
             "score_components": {},
         }
     )
@@ -396,16 +614,57 @@ def _build_paths(
         if args.probe_external_ipv6
         else {"probe": "HTTP_APPLICATION", "passed": False, "state": "NOT_RUN"}
     )
-    verification = {
-        "source": True,
-        "interface": bool(interface),
-        "route": bool(gateway),
-        "target": bool(merlin.get("reachable")),
-        "service": bool(lan_ssh.get("passed")),
-        "application": bool(lan_http.get("passed") or lan_https.get("passed")),
-        "response": bool(merlin.get("reachable")),
+    verification: dict[str, dict[str, bool]] = {
+        lan_id: {
+            "SOURCE_BOUND": True,
+            "SOURCE_ZONE_BOUND": args.source_zone != "LOCALIZED_UNKNOWN",
+            "INTERFACE_BOUND": bool(interface),
+            "ROUTE_BOUND": bool(gateway),
+            "TARGET_BOUND": bool(merlin.get("reachable")),
+            "TARGET_ZONE_BOUND": bool(
+                merlin.get("reachable") and args.target_zone != "LOCALIZED_UNKNOWN"
+            ),
+            "SERVICE_PASS": bool(lan_ssh.get("passed")),
+            "APPLICATION_PASS": bool(lan_ssh.get("passed")),
+            "RESPONSE_VERIFIED": bool(merlin.get("reachable") and lan_ssh.get("passed")),
+        },
+        tailscale_v4_id: {
+            "SOURCE_BOUND": True,
+            "SOURCE_ZONE_BOUND": args.source_zone != "LOCALIZED_UNKNOWN",
+            "INTERFACE_BOUND": bool(router_ts4),
+            "ROUTE_BOUND": bool(ts_ping.get("passed")),
+            "TARGET_BOUND": bool(ts_ping.get("passed")),
+            "TARGET_ZONE_BOUND": bool(
+                merlin.get("reachable") and args.target_zone != "LOCALIZED_UNKNOWN"
+            ),
+            "SERVICE_PASS": bool(ts_tcp.get("passed") and ts_ssh.get("passed")),
+            "APPLICATION_PASS": bool(ts_ssh.get("passed")),
+            "RESPONSE_VERIFIED": bool(ts_ssh.get("passed")),
+        },
     }
-    return [lan, tailscale_v4, native_ipv6, tailscale_v6], verification, default_application
+    for path in native_ipv6_paths:
+        gates = path.get("qualification", {}).get("gates", {})
+        verification[path["path_id"]] = {
+            "SOURCE_BOUND": bool(gates.get("SOURCE_SELECTION_VALID")),
+            "SOURCE_ZONE_BOUND": False,
+            "INTERFACE_BOUND": bool(path.get("interface") not in {None, "", "LOCALIZED_UNKNOWN"}),
+            "ROUTE_BOUND": bool(gates.get("DEFAULT_ROUTE_PRESENT")),
+            "TARGET_BOUND": bool(gates.get("TARGET_REACHABLE")),
+            "TARGET_ZONE_BOUND": False,
+            "SERVICE_PASS": bool(gates.get("TCP_SERVICE_REACHABLE")),
+            "APPLICATION_PASS": bool(gates.get("APPLICATION_PASS")),
+            "RESPONSE_VERIFIED": bool(gates.get("RETURN_PATH_VALID")),
+        }
+    paths = [
+        lan,
+        tailscale_v4,
+        *native_ipv6_paths,
+        tailscale_v6,
+        guest_path,
+        iot_path,
+        wan_path,
+    ]
+    return paths, verification, default_application
 
 
 def _local_health_probes(
@@ -492,6 +751,85 @@ def _reconstruction_states(
     return sorted(set(states))
 
 
+def _evidence_window(timestamp: str, ttl_seconds: int) -> dict[str, Any]:
+    observed = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    if observed.tzinfo is None:
+        observed = observed.replace(tzinfo=timezone.utc)
+    expires = observed.astimezone(timezone.utc) + timedelta(seconds=max(1, ttl_seconds))
+    return {
+        "observed_at": observed.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "expires_at": expires.isoformat().replace("+00:00", "Z"),
+        "evidence_ttl_seconds": max(1, ttl_seconds),
+        "stale": False,
+    }
+
+
+def _zone_state(merlin: dict[str, Any], paths: list[dict[str, Any]]) -> dict[str, Any]:
+    nvram = merlin.get("nvram", {})
+    guest_observed = any(path.get("path_type") == "GUEST_SERVICE_PATH" and path.get("available") for path in paths)
+    tailscale_observed = any(
+        path.get("path_type") in {"TAILSCALE_IPV4", "TAILSCALE_IPV6"} and path.get("available")
+        for path in paths
+    )
+    wan_transport = any(
+        path.get("path_type") == "WAN_PUBLICATION_PATH" and path.get("available")
+        for path in paths
+    )
+    forwarding_rules = merlin.get("port_forwarding_rules", [])
+    forwarding_enabled = nvram.get("vts_enable_x") == "1"
+    publication_state = (
+        "PUBLICATION_RULES_OBSERVED_APPLICATION_UNVERIFIED"
+        if forwarding_enabled and forwarding_rules
+        else "NOT_ACTIVE"
+    )
+    return {
+        "zones": {
+            "ZONE_CORE": {
+                "state": "OBSERVED_PARTIAL" if merlin.get("reachable") else "LOCALIZED_UNKNOWN",
+                "service_policy_verified": False,
+            },
+            "ZONE_GUEST_SERVICE": {
+                "state": "OBSERVED_PARTIAL" if guest_observed else "LOCALIZED_UNKNOWN",
+                "ordinary_guest_internet_only_assumed": False,
+                "service_endpoint_verified": False,
+            },
+            "ZONE_IOT": {
+                "state": "FUTURE_DECLARED_NOT_LIVE_VERIFIED",
+                "lateral_access_default": "DENY_CANDIDATE_POLICY",
+                "service_endpoint_verified": False,
+            },
+            "ZONE_MANAGEMENT": {
+                "state": "OBSERVED_PARTIAL" if merlin.get("reachable") else "LOCALIZED_UNKNOWN",
+                "wan_direct_access_allowed": False,
+            },
+            "ZONE_TAILSCALE": {
+                "state": "OBSERVED_PARTIAL" if tailscale_observed else "LOCALIZED_UNKNOWN",
+                "carrier_is_authority": False,
+            },
+            "ZONE_WAN": {
+                "state": "TRANSPORT_OBSERVED" if wan_transport else "LOCALIZED_UNKNOWN",
+                "fixed_public_ip_state": (
+                    "PUBLIC_OR_OTHER_OBSERVED_STABILITY_UNKNOWN"
+                    if merlin.get("wan_ipv4_scope") == "PUBLIC_OR_OTHER"
+                    else "LOCALIZED_UNKNOWN"
+                ),
+                "ddns_state": "OBSERVED_ENABLED" if nvram.get("ddns_enable_x") == "1" else "NOT_OBSERVED_ENABLED",
+            },
+            "ZONE_FUTURE_PUBLIC_SERVICE": {
+                "state": publication_state,
+                "external_users_planned": True,
+                "published_gateway_required": True,
+                "direct_core_management_iot_database_total_field_access": False,
+                "forwarding_rule_count_observed": len(forwarding_rules),
+                "application_verified": False,
+            },
+        },
+        "zone_policy_authority": "CANDIDATE_ONLY",
+        "router_modified": False,
+        "wan_public_service_state": publication_state,
+    }
+
+
 def _parse_role_hints(values: list[str]) -> dict[str, str]:
     hints: dict[str, str] = {}
     for value in values:
@@ -551,6 +889,28 @@ def build_parser() -> argparse.ArgumentParser:
     discover_parser.add_argument("--output-dir", default="runtime/network")
     discover_parser.add_argument("--router-alias", default=None)
     discover_parser.add_argument("--intent-id", default="NETWORK_READ_ONLY_DISCOVERY")
+    discover_parser.add_argument("--source-zone", default="ZONE_MANAGEMENT")
+    discover_parser.add_argument("--target-zone", default="ZONE_MANAGEMENT")
+    discover_parser.add_argument("--target-node", default=None)
+    discover_parser.add_argument(
+        "--service-identity", default="MERLIN_READ_ONLY_SSH_OBSERVER"
+    )
+    discover_parser.add_argument("--service-class", default="MANAGEMENT")
+    discover_parser.add_argument("--published-gateway-bound", action="store_true")
+    discover_parser.add_argument(
+        "--permitted-path",
+        action="append",
+        default=None,
+        help="path type permitted for this intent; repeat for multiple paths",
+    )
+    discover_parser.add_argument(
+        "--concurrent-path",
+        action="append",
+        default=[],
+        help="qualified path_id requested concurrently for this intent",
+    )
+    discover_parser.add_argument("--allow-concurrent-paths", action="store_true")
+    discover_parser.add_argument("--evidence-ttl-seconds", type=int, default=300)
     discover_parser.add_argument("--ipv6-host", default="example.com")
     discover_parser.add_argument("--ipv6-port", type=int, default=443)
     discover_parser.add_argument("--probe-external-ipv6", action="store_true")

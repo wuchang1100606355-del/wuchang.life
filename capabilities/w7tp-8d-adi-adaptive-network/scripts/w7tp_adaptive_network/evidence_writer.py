@@ -16,6 +16,10 @@ ALLOWED_FILES = {
     "path_matrix.json",
     "service_binding_matrix.json",
     "route_decision.json",
+    "intent_path_bindings.json",
+    "failover_bindings.json",
+    "concurrent_path_bindings.json",
+    "zone_state.json",
     "network_risks.json",
     "merlin_observation.json",
 }
@@ -58,7 +62,7 @@ def write_bundle(
 
     manifest = {
         **evidence_envelope(
-            schema_id="W7TP_8D_ADI_NETWORK_EVIDENCE_MANIFEST_V1",
+            schema_id="W7TP_8D_ADI_NETWORK_EVIDENCE_MANIFEST_V2",
             timestamp=timestamp,
             source_node=source_node,
             confidence="HIGH",

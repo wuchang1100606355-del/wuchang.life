@@ -13,7 +13,7 @@ _SAFE_ALIAS = re.compile(r"^[A-Za-z0-9_.-]+$")
 REMOTE_READ_ONLY_SCRIPT = r'''
 set -u
 printf 'HOSTNAME=%s\n' "$(hostname 2>/dev/null || true)"
-for k in productid firmver buildno extendno lan_ipaddr lan_netmask dhcp_enable_x dhcp_start dhcp_end dhcp_dns1_x dhcp_dns2_x dhcp_static_x wan0_state_t wan0_auxstate_t wan0_proto ipv6_service ipv6_prefix ipv6_prefix_length ipv6_rtr_addr ipv6_accept_defrtr ddns_enable_x ddns_server_x http_enable http_lanport https_lanport misc_http_x misc_httpport_x misc_httpsport_x sshd_wan fw_enable_x vts_enable_x lan_ifname lan_ifnames lan1_ipaddr lan1_netmask lan1_ifname lan1_ifnames br1_ifnames; do
+for k in productid firmver buildno extendno lan_ipaddr lan_netmask dhcp_enable_x dhcp_start dhcp_end dhcp_dns1_x dhcp_dns2_x dhcp_static_x wan0_state_t wan0_auxstate_t wan0_proto ipv6_service ipv6_prefix ipv6_prefix_length ipv6_rtr_addr ipv6_accept_defrtr ddns_enable_x ddns_server_x http_enable http_lanport https_lanport misc_http_x misc_httpport_x misc_httpsport_x sshd_wan fw_enable_x vts_enable_x lan_ifname lan_ifnames lan1_ipaddr lan1_netmask lan1_ifname lan1_ifnames br1_ifnames lan2_ipaddr lan2_netmask lan2_ifname lan2_ifnames br2_ifnames lan3_ipaddr lan3_netmask lan3_ifname lan3_ifnames br3_ifnames; do
   value=$(nvram get "$k" 2>/dev/null || true)
   printf 'NVRAM:%s=%s\n' "$k" "$value"
 done

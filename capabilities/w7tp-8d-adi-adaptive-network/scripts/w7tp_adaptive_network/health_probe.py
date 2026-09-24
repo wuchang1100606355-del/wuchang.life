@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import ipaddress
+import hashlib
 import socket
+import ssl
 import time
 from typing import Any
+from urllib.parse import urlsplit
 
 from .common import parse_json_result, run_command
 
@@ -105,12 +108,31 @@ def ssh_handshake(host: str, port: int = 22, family: int = socket.AF_UNSPEC) -> 
     }
 
 
-def http_probe(url: str, family: int = 0, timeout: float = 7.0) -> dict[str, Any]:
-    argv = ["curl", "-k", "-sS", "-o", "/dev/null"]
+def http_probe(
+    url: str,
+    family: int = 0,
+    timeout: float = 7.0,
+    *,
+    ca_file: str | None = None,
+    certificate_fingerprint_sha256: str | None = None,
+    insecure_diagnostic: bool = False,
+    resolve_address: str | None = None,
+) -> dict[str, Any]:
+    parsed = urlsplit(url)
+    is_tls = parsed.scheme.lower() == "https"
+    argv = ["curl", "-sS", "-o", "/dev/null"]
     if family == 4:
         argv.append("-4")
     elif family == 6:
         argv.append("-6")
+    if is_tls and insecure_diagnostic:
+        argv.append("-k")
+    elif is_tls and ca_file:
+        argv.extend(["--cacert", ca_file])
+    if resolve_address and parsed.hostname:
+        port = parsed.port or (443 if is_tls else 80)
+        resolved = f"[{resolve_address}]" if ":" in resolve_address else resolve_address
+        argv.extend(["--resolve", f"{parsed.hostname}:{port}:{resolved}"])
     argv.extend(
         [
             "--connect-timeout",
@@ -127,16 +149,58 @@ def http_probe(url: str, family: int = 0, timeout: float = 7.0) -> dict[str, Any
     fields = result.get("stdout", "").strip().split("|", 2)
     if len(fields) == 3:
         status, remote, elapsed = fields
-    passed = result.get("returncode") == 0 and status.isdigit() and 200 <= int(status) < 400
+    transport_passed = (
+        result.get("returncode") == 0 and status.isdigit() and 200 <= int(status) < 400
+    )
+    fingerprint_result = {
+        "requested": False,
+        "matched": None,
+        "error": None,
+    }
+    if is_tls and certificate_fingerprint_sha256 and not insecure_diagnostic:
+        fingerprint_result = _verify_certificate_fingerprint(
+            host=parsed.hostname or "",
+            port=parsed.port or 443,
+            expected=certificate_fingerprint_sha256,
+            connect_host=resolve_address,
+            ca_file=ca_file,
+            timeout=min(timeout, 5.0),
+        )
+    formal_tls = bool(
+        not is_tls
+        or (
+            transport_passed
+            and not insecure_diagnostic
+            and (not certificate_fingerprint_sha256 or fingerprint_result["matched"] is True)
+        )
+    )
+    passed = bool(transport_passed and formal_tls and not insecure_diagnostic)
     return {
         "probe": "HTTP_APPLICATION",
         "passed": passed,
+        "application_pass": passed,
+        "diagnostic_transport_reachable": transport_passed,
         "url": url,
         "http_status": int(status) if status.isdigit() else 0,
         "remote": remote,
         "time_total": elapsed,
         "address_family": "IPV6" if ":" in remote else ("IPV4" if remote else "UNKNOWN"),
         "error_class": "NONE" if result.get("returncode") == 0 else result.get("status"),
+        "tls_verification": (
+            "NOT_APPLICABLE"
+            if not is_tls
+            else (
+                "TLS_UNVERIFIED_DIAGNOSTIC"
+                if insecure_diagnostic
+                else (
+                    "SYSTEM_OR_EXPLICIT_CA_PLUS_CERTIFICATE_FINGERPRINT"
+                    if certificate_fingerprint_sha256
+                    else ("EXPLICIT_CA" if ca_file else "SYSTEM_CA")
+                )
+            )
+        ),
+        "formal_tls_verified": formal_tls,
+        "certificate_fingerprint": fingerprint_result,
     }
 
 
@@ -187,9 +251,44 @@ def ipv6_qualification_probe(
 ) -> dict[str, Any]:
     dns = dns_resolution(host)
     targets = [address for address in dns.get("addresses", []) if _is_ipv6(address)]
-    target = targets[0] if targets else ""
     global_addresses = _global_native_ipv6(local.get("addresses", []))
     defaults = [route for route in local.get("routes_v6", []) if route.get("dst") == "default"]
+    candidates = [
+        _probe_ipv6_candidate(
+            target=target,
+            host=host,
+            port=port,
+            application_url=application_url,
+            global_addresses=global_addresses,
+            defaults=defaults,
+        )
+        for target in targets
+    ]
+    return {
+        "target_host": host,
+        "target_port": port,
+        "application_url": application_url,
+        "candidate_count": len(candidates),
+        "candidates": candidates,
+        "qualified_candidate_ids": [
+            candidate["path_id"] for candidate in candidates if candidate["qualified"]
+        ],
+        "global_ipv6_pass": False,
+        "qualification_scope": "PER_AAAA_CANDIDATE",
+        "dns": dns,
+        "native_source_addresses": global_addresses,
+    }
+
+
+def _probe_ipv6_candidate(
+    *,
+    target: str,
+    host: str,
+    port: int,
+    application_url: str,
+    global_addresses: list[str],
+    defaults: list[dict[str, Any]],
+) -> dict[str, Any]:
     route = route_lookup(target, 6) if target else {"passed": False, "route": {}}
     route_data = route.get("route", {})
     interface = route_data.get("dev") or (defaults[0].get("dev") if defaults else None)
@@ -206,7 +305,8 @@ def ipv6_qualification_probe(
         else {"probe": "ICMP_REACHABILITY", "passed": False, "target": "UNKNOWN"}
     )
     tcp = tcp_connect(target, port, socket.AF_INET6) if target else {"passed": False}
-    application = http_probe(application_url, family=6)
+    application = http_probe(application_url, family=6, resolve_address=target)
+    response_matches_target = _same_ip(application.get("remote", ""), target)
     gates = {
         "ADDRESS_PRESENT": bool(global_addresses),
         "DEFAULT_ROUTE_PRESENT": bool(defaults),
@@ -214,18 +314,20 @@ def ipv6_qualification_probe(
         "NEXT_HOP_REACHABLE": bool(next_hop.get("passed")),
         "TARGET_REACHABLE": bool(target_ping.get("passed") or tcp.get("passed")),
         "TCP_SERVICE_REACHABLE": bool(tcp.get("passed")),
-        "RETURN_PATH_VALID": bool(tcp.get("passed") and application.get("remote")),
-        "APPLICATION_PASS": bool(application.get("passed")),
+        "RETURN_PATH_VALID": bool(tcp.get("passed") and response_matches_target),
+        "APPLICATION_PASS": bool(
+            application.get("passed") and application.get("formal_tls_verified")
+        ),
     }
     return {
+        "path_id": f"NATIVE_IPV6@{target}",
         "target_host": host,
-        "target_ipv6": target or "LOCALIZED_UNKNOWN",
+        "target_ipv6": target,
         "target_port": port,
         "application_url": application_url,
         "gates": gates,
         "qualified": all(gates.values()),
         "evidence": {
-            "dns": dns,
             "route": route,
             "next_hop": next_hop,
             "target_reachability": target_ping,
@@ -234,6 +336,28 @@ def ipv6_qualification_probe(
             "native_source_addresses": global_addresses,
         },
     }
+
+
+def _verify_certificate_fingerprint(
+    *,
+    host: str,
+    port: int,
+    expected: str,
+    connect_host: str | None,
+    ca_file: str | None,
+    timeout: float,
+) -> dict[str, Any]:
+    normalized = expected.lower().replace("sha256:", "").replace(":", "")
+    if len(normalized) != 64 or any(character not in "0123456789abcdef" for character in normalized):
+        return {"requested": True, "matched": False, "error": "INVALID_SHA256_FINGERPRINT"}
+    try:
+        context = ssl.create_default_context(cafile=ca_file)
+        with socket.create_connection((connect_host or host, port), timeout=timeout) as raw:
+            with context.wrap_socket(raw, server_hostname=host) as wrapped:
+                measured = hashlib.sha256(wrapped.getpeercert(binary_form=True)).hexdigest()
+    except (OSError, ssl.SSLError, ValueError):
+        return {"requested": True, "matched": False, "error": "TLS_FINGERPRINT_PROBE_FAILED"}
+    return {"requested": True, "matched": measured == normalized, "error": None}
 
 
 def _global_native_ipv6(addresses: list[dict[str, Any]]) -> list[str]:
@@ -257,5 +381,12 @@ def _global_native_ipv6(addresses: list[dict[str, Any]]) -> list[str]:
 def _is_ipv6(value: str) -> bool:
     try:
         return ipaddress.ip_address(value).version == 6
+    except ValueError:
+        return False
+
+
+def _same_ip(left: str, right: str) -> bool:
+    try:
+        return ipaddress.ip_address(left) == ipaddress.ip_address(right)
     except ValueError:
         return False

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 
-OBSERVER_ID = "w7tp-8d-adi-adaptive-network/0.1.0-candidate.1"
+OBSERVER_ID = "w7tp-8d-adi-adaptive-network/0.2.0-candidate.1"
 
 
 def utc_now() -> str:
@@ -99,4 +99,3 @@ def evidence_envelope(
         "confidence": confidence,
         "authority_scope": authority_scope,
     }
-

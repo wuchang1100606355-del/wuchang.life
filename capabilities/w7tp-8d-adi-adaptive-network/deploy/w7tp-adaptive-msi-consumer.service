@@ -1,0 +1,13 @@
+[Unit]
+Description=MSI read-only Native ADI dual carrier evidence consumer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/taiji_admin/.local/libexec/w7tp-adaptive-msi-consumer.py
+TimeoutStartSec=25
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
