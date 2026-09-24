@@ -276,16 +276,23 @@ class AdaptiveRuntime:
                 bindings.pop(REMOTE_INTENT, None)
             active = sorted({path for binding in bindings.values()
                              for path in binding.get("active_path_set", [])})
-            operational_active = bool(
+            candidate_operational_ready = bool(
                 fresh and REMOTE_INTENT in bindings
                 and bindings[REMOTE_INTENT].get("authorized")
                 and activation_gates_pass())
+            # No verified live-runtime Total Field decision consumer exists for
+            # this candidate. Local operational evidence cannot substitute for
+            # that authority decision, so activation must fail closed.
+            verified_total_field_runtime_decision = "NOT_RUN"
+            operational_active = bool(
+                candidate_operational_ready
+                and verified_total_field_runtime_decision == "PASS")
             return {
                 "capability_id": "w7tp-8d-adi-adaptive-network",
                 "scope": "TAIJI_HUB_SYSTEM_LEVEL",
                 "version": "v0.2.0-candidate.1",
                 "canonical_status": "CANDIDATE_ONLY",
-                "total_field_decision": "NOT_RUN",
+                "total_field_decision": verified_total_field_runtime_decision,
                 "runtime_state": ("ACTIVE" if operational_active
                                   else "OBSERVER_RUNNING_LIMITED" if fresh else "HOLD"),
                 "health": ("PASS_LOCAL_AND_MSI" if fresh and REMOTE_INTENT in bindings

@@ -874,7 +874,7 @@ def test_route_dns_drift_detected_from_new_observation():
     assert runtime.status()["dns_drift"] == "CHANGED"
     assert runtime.status()["route_drift"] == "CHANGED"
 
-def test_runtime_active_does_not_promote_canonical_with_verified_gates():
+def test_operational_gates_do_not_bypass_total_field_runtime_decision():
     from w7tp_adaptive_network import runtime_adapter as adapter
     import hashlib
     import time
@@ -918,8 +918,10 @@ def test_runtime_active_does_not_promote_canonical_with_verified_gates():
             runtime = adapter.AdaptiveRuntime(observer=_runtime_observer,
                                               application_probe=lambda: True)
             assert runtime.refresh()
-            assert runtime.status()["runtime_state"] == "ACTIVE"
-            assert runtime.status()["canonical_status"] == "CANDIDATE_ONLY"
+            state = runtime.status()
+            assert state["runtime_state"] == "OBSERVER_RUNNING_LIMITED"
+            assert state["total_field_decision"] == "NOT_RUN"
+            assert state["canonical_status"] == "CANDIDATE_ONLY"
             evidence.write_text('{"result":"TAMPERED"}')
             assert runtime.status()["runtime_state"] != "ACTIVE"
         finally:
