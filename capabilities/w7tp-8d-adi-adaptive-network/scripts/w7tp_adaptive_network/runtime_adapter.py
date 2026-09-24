@@ -180,6 +180,10 @@ def verify_total_field_runtime_decision(
             return hold("TOTAL_FIELD_ALLOWED_EFFECTS_INVALID")
         if decision.get("forbidden_effects") != list(TOTAL_FIELD_FORBIDDEN_EFFECTS):
             return hold("TOTAL_FIELD_FORBIDDEN_EFFECTS_INVALID")
+        historical_authority_hash = decision.get("authority_pointer_sha256")
+        if (not isinstance(historical_authority_hash, str)
+                or re.fullmatch(r"[0-9a-f]{64}", historical_authority_hash) is None):
+            return hold("TOTAL_FIELD_AUTHORITY_COORDINATE_INVALID")
 
         if (authority.get("state") != "ACTIVE_TOTAL_FIELD_AUTHORITY"
                 or authority.get("contract_state") != "ACTIVE_FORMAL"
@@ -191,7 +195,6 @@ def verify_total_field_runtime_decision(
             return hold("TOTAL_FIELD_AUTHORITY_SCOPE_INVALID")
 
         bindings = {
-            "authority_pointer_sha256": file_sha256(authority_path),
             "source_sha256sum_sha256": file_sha256(root / "SOURCE_SHA256SUMS"),
             "runtime_contract_sha256": file_sha256(
                 root / "deploy/w7tp-adaptive-network.service"),

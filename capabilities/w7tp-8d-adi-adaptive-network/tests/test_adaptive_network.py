@@ -1025,6 +1025,14 @@ def test_hash_bound_closed_total_field_decision_activates_runtime():
             assert state["runtime_state"] == "ACTIVE", state
             assert state["total_field_decision"] == "PASS"
             assert state["canonical_status"] == "CANDIDATE_ONLY"
+            authority["allowed_effects"].append("AUTHORIZE_ANOTHER_8D_ADI_RUNTIME_EFFECT")
+            adapter.TOTAL_FIELD_AUTHORITY_POINTER.write_text(json.dumps(authority))
+            assert runtime.status()["runtime_state"] == "ACTIVE"
+            authority["allowed_effects"].remove(adapter.TOTAL_FIELD_RUNTIME_EFFECT)
+            adapter.TOTAL_FIELD_AUTHORITY_POINTER.write_text(json.dumps(authority))
+            assert runtime.status()["runtime_state"] == "OBSERVER_RUNNING_LIMITED"
+            authority["allowed_effects"].append(adapter.TOTAL_FIELD_RUNTIME_EFFECT)
+            adapter.TOTAL_FIELD_AUTHORITY_POINTER.write_text(json.dumps(authority))
             decision["allowed_effects"] = []
             adapter.TOTAL_FIELD_RUNTIME_DECISION.write_text(json.dumps(decision))
             assert runtime.status()["runtime_state"] == "OBSERVER_RUNNING_LIMITED"
