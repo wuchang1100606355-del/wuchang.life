@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import ipaddress
+import re
 import os
 import threading
 import time
@@ -165,11 +167,22 @@ class AdaptiveRuntime:
                     raise ValueError("REMOTE_EVIDENCE_STALE_OR_INVALID")
                 remote_expiry = packet["observed_at_epoch"] + TTL
                 verification = {}
-                for kind, path_id, iface in (
-                    ("LAN_IPV4", "MSI_ADI_LAN", "eth2"),
-                    ("TAILSCALE_IPV4", "MSI_ADI_TAILSCALE", "tailscale0")):
+                for kind, path_id in (
+                    ("LAN_IPV4", "MSI_ADI_LAN"),
+                    ("TAILSCALE_IPV4", "MSI_ADI_TAILSCALE")):
                     row = packet["paths"][kind]
-                    qualified = (row.get("interface") == iface and
+                    iface = row.get("interface")
+                    try:
+                        source = ipaddress.ip_address(row.get("source_ipv4", ""))
+                        interface_bound = (
+                            bool(re.fullmatch(r"eth[0-9]+", iface or ""))
+                            and source in ipaddress.ip_network("192.168.50.0/24")
+                            if kind == "LAN_IPV4"
+                            else iface == "tailscale0"
+                            and source in ipaddress.ip_network("100.64.0.0/10"))
+                    except ValueError:
+                        interface_bound = False
+                    qualified = (interface_bound and
                                  row.get("route_bound") is True and
                                  row.get("application_pass") is True)
                     remote_paths.append({

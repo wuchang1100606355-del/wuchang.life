@@ -777,9 +777,9 @@ def test_msi_two_carriers_and_per_binding_failover():
                 "source_node": "MSI",
                 "observed_at_epoch": time.time(),
                 "paths": {
-                    "LAN_IPV4": {"interface": "eth2", "route_bound": True,
+                    "LAN_IPV4": {"interface": "eth2", "source_ipv4": "192.168.50.84", "route_bound": True,
                                  "application_pass": True},
-                    "TAILSCALE_IPV4": {"interface": "tailscale0", "route_bound": True,
+                    "TAILSCALE_IPV4": {"interface": "tailscale0", "source_ipv4": "100.84.204.114", "route_bound": True,
                                        "application_pass": True},
                 },
             }
@@ -830,10 +830,10 @@ def test_remote_ttl_expires_at_consumer_lookup():
             packet = {"schema": "MSI_TWO_PATH_HEALTH_OBSERVATION/1",
                       "source_node": "MSI", "observed_at_epoch": time.time(),
                       "paths": {
-                          "LAN_IPV4": {"interface": "eth2", "route_bound": True,
+                          "LAN_IPV4": {"interface": "eth2", "source_ipv4": "192.168.50.84", "route_bound": True,
                                        "application_pass": True},
                           "TAILSCALE_IPV4": {"interface": "tailscale0",
-                                            "route_bound": True, "application_pass": True},
+                                            "source_ipv4": "100.84.204.114", "route_bound": True, "application_pass": True},
                       }}
             adapter.REMOTE_EVIDENCE.write_text(json.dumps(packet))
             runtime = adapter.AdaptiveRuntime(observer=_runtime_observer,
@@ -908,10 +908,10 @@ def test_runtime_active_does_not_promote_canonical_with_verified_gates():
                 "schema": "MSI_TWO_PATH_HEALTH_OBSERVATION/1",
                 "source_node": "MSI", "observed_at_epoch": time.time(),
                 "paths": {
-                    "LAN_IPV4": {"interface": "eth2", "route_bound": True,
+                    "LAN_IPV4": {"interface": "eth2", "source_ipv4": "192.168.50.84", "route_bound": True,
                                  "application_pass": True},
                     "TAILSCALE_IPV4": {"interface": "tailscale0",
-                                       "route_bound": True, "application_pass": True},
+                                       "source_ipv4": "100.84.204.114", "route_bound": True, "application_pass": True},
                 },
             }
             adapter.REMOTE_EVIDENCE.write_text(json.dumps(packet))
@@ -924,3 +924,36 @@ def test_runtime_active_does_not_promote_canonical_with_verified_gates():
             assert runtime.status()["runtime_state"] != "ACTIVE"
         finally:
             adapter.ACTIVATION_MARKER, adapter.REMOTE_EVIDENCE = old_marker, old_remote
+
+def test_msi_lan_nic_renumber_uses_current_route():
+    from w7tp_adaptive_network import runtime_adapter as adapter
+    import time
+    with tempfile.TemporaryDirectory() as tmp:
+        old = adapter.REMOTE_EVIDENCE
+        adapter.REMOTE_EVIDENCE = Path(tmp) / "msi.json"
+        try:
+            packet = {
+                "schema": "MSI_TWO_PATH_HEALTH_OBSERVATION/1",
+                "source_node": "MSI", "observed_at_epoch": time.time(),
+                "paths": {
+                    "LAN_IPV4": {"interface": "eth1", "source_ipv4": "192.168.50.82",
+                                 "route_bound": True, "application_pass": True},
+                    "TAILSCALE_IPV4": {"interface": "tailscale0",
+                                       "source_ipv4": "100.84.204.114",
+                                       "route_bound": True, "application_pass": True},
+                },
+            }
+            adapter.REMOTE_EVIDENCE.write_text(json.dumps(packet))
+            runtime = adapter.AdaptiveRuntime(observer=_runtime_observer,
+                                              application_probe=lambda: True)
+            assert runtime.refresh()
+            resolved = runtime.resolve(adapter.REMOTE_INTENT)
+            assert resolved["selected_path"] == "MSI_ADI_LAN"
+            assert resolved["selected_interface"] == "eth1"
+            packet["paths"]["LAN_IPV4"]["interface"] = "tailscale0"
+            adapter.REMOTE_EVIDENCE.write_text(json.dumps(packet))
+            assert runtime.refresh()
+            assert runtime.resolve(adapter.REMOTE_INTENT)["selected_path"] == "MSI_ADI_TAILSCALE"
+            assert runtime.resolve(adapter.INTENT)["authorized"]
+        finally:
+            adapter.REMOTE_EVIDENCE = old

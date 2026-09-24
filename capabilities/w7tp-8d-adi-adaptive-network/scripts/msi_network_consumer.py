@@ -4,6 +4,8 @@
 No port allocation, router mutation, key reading, or socket listener.
 """
 import argparse
+import ipaddress
+import re
 import json
 import os
 import shlex
@@ -37,9 +39,21 @@ def ssh_args(host):
 def probe(host, iface):
     route = subprocess.run(["ip", "route", "get", host], capture_output=True,
                            text=True, timeout=3)
-    route_bound = route.returncode == 0 and " dev " + iface + " " in route.stdout
+    match = re.search(r"\bdev\s+(\S+)\s+.*?\bsrc\s+(\S+)", route.stdout)
+    device, source = match.groups() if route.returncode == 0 and match else ("", "")
+    try:
+        source_ip = ipaddress.ip_address(source)
+        if iface is None:
+            route_bound = (bool(re.fullmatch(r"eth[0-9]+", device))
+                           and source_ip in ipaddress.ip_network("192.168.50.0/24"))
+        else:
+            route_bound = (device == iface
+                           and source_ip in ipaddress.ip_network("100.64.0.0/10"))
+    except ValueError:
+        route_bound = False
     if not route_bound:
-        return {"interface": iface, "route_bound": False, "application_pass": False}
+        return {"interface": device, "source_ipv4": source,
+                "route_bound": False, "application_pass": False}
     result = subprocess.run(ssh_args(host) + ["-W", "127.0.0.1:9110"],
         input=b"GET /health HTTP/1.1\r\nHost:localhost\r\nConnection:close\r\n\r\n",
         capture_output=True, timeout=8)
@@ -51,14 +65,14 @@ def probe(host, iface):
                                 and health.get("state") == "PASS")
         except (ValueError, IndexError):
             pass
-    return {"interface": iface, "route_bound": route_bound,
-            "application_pass": application_pass}
+    return {"interface": device, "source_ipv4": source,
+            "route_bound": route_bound, "application_pass": application_pass}
 
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--suppress-lan-for-one-cycle", action="store_true")
     args = parser.parse_args(argv)
-    lan = probe(SERVER_LAN, "eth2")
+    lan = probe(SERVER_LAN, None)
     tailscale = probe(SERVER_TS, "tailscale0")
     if args.suppress_lan_for_one_cycle:
         lan["application_pass"] = False
@@ -81,7 +95,7 @@ def main(argv=None):
             binding = json.loads(query.stdout)
             selected = binding.get("selected_path") if binding.get("authorized") else None
             if selected == "MSI_ADI_LAN" and not args.suppress_lan_for_one_cycle:
-                selected_health = probe(SERVER_LAN, "eth2")["application_pass"]
+                selected_health = probe(SERVER_LAN, None)["application_pass"]
             elif selected == "MSI_ADI_TAILSCALE":
                 selected_health = probe(SERVER_TS, "tailscale0")["application_pass"]
         except (ValueError, KeyError):
