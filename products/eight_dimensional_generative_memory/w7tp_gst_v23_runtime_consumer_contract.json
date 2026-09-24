@@ -63,7 +63,8 @@
   "activation_gate": {
     "active_by_default": false,
     "candidate_execution_requires_explicit_isolated_mode": true,
-    "formal_activation_adapter_status": "NOT_BOUND_USE_EXISTING_TOTAL_FIELD_CONTRACT_ONLY",
+    "founder_direct_runtime_activation": "ALLOWED_BY_EXPLICIT_CURRENT_GOVERNANCE_COMMAND",
+    "formal_total_field_activation_adapter_status": "NOT_BOUND_SEPARATE_FROM_FOUNDER_DIRECT_ACTIVATION",
     "formal_activation_requires": [
       "FOUNDER_CONFIRMATION_FOR_THIS_BINDING_HASH",
       "TOTAL_FIELD_ALLOW_RECEIPT",
@@ -72,8 +73,8 @@
       "ROLLBACK_COORDINATE",
       "POST_ACTIVATION_RECONSTRUCTION_RECEIPT"
     ],
-    "formal_activation_command": "python3 products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py activate --packet <packet.json> --workspace <new-empty-workspace> --activation-receipt <allow-receipt.json>",
-    "formal_activation_command_status": "BLOCKED_UNTIL_EXISTING_TOTAL_FIELD_RECEIPT_ADAPTER_IS_BOUND",
+    "formal_activation_command": "python3 products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py activate --packet <packet.json> --workspace <new-empty-workspace> --activation-receipt <founder-activation.json> --result-receipt <new-result-receipt.json>",
+    "formal_activation_command_status": "AVAILABLE_FOR_FOUNDER_DIRECT_RUNTIME_ACTIVATION_RECORD",
     "formal_activation_effect": "GOVERNED_PACKET_RECONSTRUCTION_USING_PERSISTED_BINDING_RECEIPT_NO_SERVICE_OR_POINTER_MUTATION",
     "per_packet_human_confirmation_required": false
   },

@@ -147,9 +147,35 @@ def run_isolated_candidate(packet_path: Path, workspace: Path) -> dict[str, Any]
 
 
 def activate_once(packet_path: Path, workspace: Path, activation_receipt_path: Path) -> dict[str, Any]:
-    del packet_path, workspace, activation_receipt_path
-    load_contract()
-    raise ConsumerHold("HOLD_FORMAL_ACTIVATION_ADAPTER_NOT_BOUND")
+    contract = load_contract()
+    activation = load_json(activation_receipt_path)
+    expected = {
+        "schema_version": "w7tp-gst-v23-founder-runtime-activation/1",
+        "state": "FOUNDER_DIRECT_RUNTIME_ACTIVATION_AUTHORIZED",
+        "binding_id": contract["binding_id"],
+        "founder_baseline": "W7TP_8D_ADI_V2.3",
+        "contract_sha256": sha256_file(CONTRACT_PATH),
+        "activation_scope": "GST_V23_RUNTIME_CONSUMER_BINDING_ONLY",
+        "canonical_pointer_change": False,
+        "service_restart": False,
+        "rollback_operation": contract["rollback"]["operation"],
+    }
+    if any(activation.get(key) != value for key, value in expected.items()):
+        raise ConsumerHold("HOLD_FOUNDER_ACTIVATION_RECORD_INVALID")
+    if not activation.get("reviewed_commit") or not activation.get("founder_directive_ref"):
+        raise ConsumerHold("HOLD_FOUNDER_ACTIVATION_RECORD_INVALID")
+    result = run_isolated_candidate(packet_path, workspace)
+    result.update(
+        state="PASS_FOUNDER_AUTHORIZED_GST_V23_RUNTIME_RECONSTRUCTION",
+        runtime_activated=True,
+        candidate_isolated_execution=False,
+        founder_authorized_delivery=True,
+        formal_delivery=False,
+        activation_authority="FOUNDER_DIRECT_GOVERNANCE_COMMAND",
+        activation_receipt_sha256=sha256_file(activation_receipt_path),
+        total_field_decision="NOT_RUN",
+    )
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -163,6 +189,7 @@ def main(argv: list[str] | None = None) -> int:
     activate.add_argument("--packet", type=Path, required=True)
     activate.add_argument("--workspace", type=Path, required=True)
     activate.add_argument("--activation-receipt", type=Path, required=True)
+    activate.add_argument("--result-receipt", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
@@ -171,6 +198,10 @@ def main(argv: list[str] | None = None) -> int:
             result = run_isolated_candidate(args.packet, args.workspace)
         else:
             result = activate_once(args.packet, args.workspace, args.activation_receipt)
+            if args.result_receipt.exists():
+                raise ConsumerHold("HOLD_RESULT_RECEIPT_ALREADY_EXISTS")
+            args.result_receipt.parent.mkdir(parents=True, exist_ok=True)
+            args.result_receipt.write_bytes(canonical_json_bytes(result) + b"\n")
     except ConsumerHold as exc:
         print(json.dumps({"state": exc.code, "runtime_activated": False, "total_field_decision": "NOT_RUN"}))
         return 1

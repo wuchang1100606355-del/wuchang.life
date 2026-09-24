@@ -79,13 +79,37 @@ class GstV23RuntimeConsumerCandidateTests(unittest.TestCase):
         self.assertTrue((workspace / "empty_receiver").is_dir())
         self.assertTrue((workspace / "reconstructed").is_dir())
 
-    def test_formal_path_fails_before_workspace_until_existing_authority_adapter_is_bound(self) -> None:
+    def test_formal_path_fails_before_workspace_without_valid_founder_activation(self) -> None:
         receipt = self.root / "invalid-activation-receipt.json"
         receipt.write_text(json.dumps({"decision": "ALLOW"}), encoding="utf-8")
         workspace = self.root / "forbidden-formal-run"
-        with self.assertRaisesRegex(consumer.ConsumerHold, "HOLD_FORMAL_ACTIVATION_ADAPTER_NOT_BOUND"):
+        with self.assertRaisesRegex(consumer.ConsumerHold, "HOLD_FOUNDER_ACTIVATION_RECORD_INVALID"):
             consumer.activate_once(self.packet_path, workspace, receipt)
         self.assertFalse(workspace.exists())
+
+    def test_valid_founder_activation_executes_real_reconstruction(self) -> None:
+        contract = consumer.load_contract()
+        receipt = self.root / "founder-activation-receipt.json"
+        receipt.write_text(json.dumps({
+            "schema_version": "w7tp-gst-v23-founder-runtime-activation/1",
+            "state": "FOUNDER_DIRECT_RUNTIME_ACTIVATION_AUTHORIZED",
+            "binding_id": contract["binding_id"],
+            "founder_baseline": "W7TP_8D_ADI_V2.3",
+            "contract_sha256": consumer.sha256_file(CONTRACT_PATH),
+            "activation_scope": "GST_V23_RUNTIME_CONSUMER_BINDING_ONLY",
+            "canonical_pointer_change": False,
+            "service_restart": False,
+            "rollback_operation": contract["rollback"]["operation"],
+            "reviewed_commit": "f9776463cc40bf8cb39c57fa0585d14d18c2df84",
+            "founder_directive_ref": "CURRENT_SESSION_EXPLICIT_ACTIVATE",
+        }), encoding="utf-8")
+        result = consumer.activate_once(self.packet_path, self.root / "founder-active-run", receipt)
+        self.assertEqual(result["state"], "PASS_FOUNDER_AUTHORIZED_GST_V23_RUNTIME_RECONSTRUCTION")
+        self.assertTrue(result["runtime_activated"])
+        self.assertTrue(result["founder_authorized_delivery"])
+        self.assertFalse(result["formal_delivery"])
+        self.assertEqual(result["target_manifest_sha256"], self.expected_manifest)
+        self.assertEqual(result["total_field_decision"], "NOT_RUN")
 
     def test_contract_rejects_legacy_pointer_as_current_authority(self) -> None:
         contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))

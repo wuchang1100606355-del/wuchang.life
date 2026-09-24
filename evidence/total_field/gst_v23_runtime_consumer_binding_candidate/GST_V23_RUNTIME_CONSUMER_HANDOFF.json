@@ -1,17 +1,17 @@
 {
   "schema_version": "w7tp-gst-v23-runtime-consumer-handoff/1-candidate",
   "handoff_id": "GST_V23_RUNTIME_CONSUMER_BINDING_CANDIDATE_HANDOFF_20260924",
-  "state": "PASS_CANDIDATE_VALIDATED_NOT_ACTIVATED",
+  "state": "PASS_FOUNDER_AUTHORIZED_RUNTIME_ACTIVATED",
   "founder_current_baseline": "W7TP_8D_ADI_V2.3",
   "binding": {
     "contract_path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_contract.json",
-    "contract_sha256": "ca38b7e03b6a8a02d3a9c7c818035d3977cb38b7d57c5b05895e91b8f399a769",
+    "contract_sha256": "553b3f9d635cce76b42360e8e2d353d954ee333d3bb0d42ee8eea527f4006cca",
     "consumer_path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py",
-    "consumer_sha256": "9c022ce8d0edac5d5504db18434dc3cdf899c486d812c0063a0ab8cdfe4c6acd",
+    "consumer_sha256": "ee6001818c32fddd0e4942628b053ee40ec03c06cd82d2d049456503f0af6ee3",
     "existing_origin_cell_path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
     "existing_origin_cell_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
     "test_path": "tests/test_w7tp_gst_v23_runtime_consumer_candidate.py",
-    "test_sha256": "e0440a5f578b84e79b1cca2379f69d1341795f9687c3d235d3ae41f8e67cc46a"
+    "test_sha256": "85de21fa25cc385d260fe8ee4626da7bb3c07c3835cf83a71f7189bca3723277"
   },
   "connected_path": [
     "RECEIVED_GST_PACKET",
@@ -23,8 +23,9 @@
   "validation": {
     "synthetic_isolated_reconstruction": "PASS",
     "combined_tests": "18_OF_18_PASS",
-    "formal_path_without_bound_existing_authority_adapter": "HOLD_BEFORE_WORKSPACE_CREATION",
-    "runtime_activated": false,
+    "formal_path_without_valid_founder_activation": "HOLD_BEFORE_WORKSPACE_CREATION",
+    "founder_authorized_runtime_reconstruction": "PASS",
+    "runtime_activated": true,
     "service_installed": false,
     "deployed": false,
     "canonical_pointer_changed": false,
@@ -69,5 +70,13 @@
     "verification": "Require exact target manifest, reconstruction receipt, zero differential/target bytes, and no service or canonical-pointer mutation.",
     "rollback": "Stop admission through the exact binding receipt, quarantine the exact output and receipt for evidence, preserve bytes, and do not restore the stale V2.1 pointer."
   },
-  "remaining_gap": "EXISTING_TOTAL_FIELD_RECEIPT_ADAPTER_SELECTION_THEN_REVIEWED_COMMIT_AND_ALLOW_RECEIPT_BINDING"
+  "activation_receipt": {
+    "active_binding": "runtime/total_field/gst_v23_runtime_consumer/ACTIVE_BINDING.json",
+    "activation_record_sha256": "1c0ed4a349c7f903fec461c7e209c2df8cf2543c6a5ffe01f59e34c70700d644",
+    "activation_result_sha256": "2147b3e37713d1f82dffc1548db443957586ce12765cb4f92a73f5bf101905dd",
+    "target_manifest_sha256": "c5610b475db1ad7aa60d9fc8c83ce81346c6fdff3dcdf88217c1fdce63c1240b",
+    "target_bytes": 34152448,
+    "target_files": 147
+  },
+  "remaining_gap": "TOTAL_FIELD_FORMAL_DECISION_NOT_RUN_SEPARATE_FROM_FOUNDER_RUNTIME_ACTIVATION"
 }
