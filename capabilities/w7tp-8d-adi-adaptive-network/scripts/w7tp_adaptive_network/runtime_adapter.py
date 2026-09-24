@@ -419,6 +419,16 @@ class AdaptiveRuntime:
             operational_active = bool(
                 candidate_operational_ready
                 and verified_total_field_runtime_decision == "PASS")
+            runtime_bindings = {}
+            for intent_id, binding in bindings.items():
+                runtime_binding = dict(binding)
+                runtime_binding.update({
+                    "total_field_decision": verified_total_field_runtime_decision,
+                    "total_field_decision_reason": total_field_runtime["reason"],
+                    "total_field_decision_id": total_field_runtime["decision_id"],
+                    "total_field_decision_sha256": total_field_runtime["decision_sha256"],
+                })
+                runtime_bindings[intent_id] = runtime_binding
             return {
                 "capability_id": "w7tp-8d-adi-adaptive-network",
                 "scope": "TAIJI_HUB_SYSTEM_LEVEL",
@@ -443,7 +453,7 @@ class AdaptiveRuntime:
                     self.current["qualified_path_set"] if remote_fresh
                     else ["LOCAL_ADI_LOOPBACK"] if fresh else []),
                 "active_path_set": active,
-                "intent_path_bindings": dict(bindings),
+                "intent_path_bindings": runtime_bindings,
                 "failover_bindings": self.failover_bindings if fresh and remote_fresh else {},
                 "zone_state": self.current["zone_state"] if fresh else {},
                 "network_evidence_sha256": self.current["network_evidence_sha256"] if fresh else None,
@@ -452,7 +462,7 @@ class AdaptiveRuntime:
                 "route_drift": self.route_drift if fresh else "UNKNOWN",
                 "dns_drift": self.dns_drift if fresh else "UNKNOWN",
                 "binding_health": {key: ("PASS" if value.get("authorized") else "HOLD")
-                                   for key, value in bindings.items()},
+                                   for key, value in runtime_bindings.items()},
                 "last_error": self.last_error,
                 "port_9002_is_d8": False,
                 "fail_closed": True,

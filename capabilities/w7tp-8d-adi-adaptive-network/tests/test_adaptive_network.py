@@ -1025,6 +1025,9 @@ def test_hash_bound_closed_total_field_decision_activates_runtime():
             assert state["runtime_state"] == "ACTIVE", state
             assert state["total_field_decision"] == "PASS"
             assert state["canonical_status"] == "CANDIDATE_ONLY"
+            assert state["intent_path_bindings"][adapter.INTENT]["total_field_decision"] == "PASS"
+            assert state["intent_path_bindings"][adapter.REMOTE_INTENT]["total_field_decision"] == "PASS"
+            assert runtime.resolve(adapter.REMOTE_INTENT)["total_field_decision"] == "PASS"
             authority["allowed_effects"].append("AUTHORIZE_ANOTHER_8D_ADI_RUNTIME_EFFECT")
             adapter.TOTAL_FIELD_AUTHORITY_POINTER.write_text(json.dumps(authority))
             assert runtime.status()["runtime_state"] == "ACTIVE"
