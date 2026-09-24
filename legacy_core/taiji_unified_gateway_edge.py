@@ -103,19 +103,27 @@ async def enforce_client_whitelist(request: Request, call_next):
     return await call_next(request)
 
 # =============================================================================
-# 👑 [總司令核心技術] WSL 跨網域雷達：自動抓取 Windows 宿主機 IP
+# MSI / GPT control path: IPv4 LAN only
 # =============================================================================
 def get_windows_host_ip() -> str:
+    """Return the explicitly configured MSI IPv4 address for the control path.
+
+    Never infer the Windows host from /etc/resolv.conf. That only makes sense
+    inside a WSL instance and can point a taiji01 runtime at DNS, loopback or an
+    IPv6 resolver instead of MSI.
+    """
+    raw = os.getenv(
+        "MSI_OLLAMA_IPV4",
+        os.getenv("WINDOWS_OLLAMA_IP", "192.168.50.82"),
+    ).strip()
     try:
-        with open('/etc/resolv.conf', 'r') as f:
-            for line in f:
-                if line.startswith('nameserver'):
-                    ip = line.split()[1]
-                    logging.info(f"📡 [WSL Bridge] 成功鎖定 Windows 宿主機 IP: {ip}")
-                    return ip
-    except Exception as e:
-        logging.warning(f"⚠️ [WSL Bridge] 無法解析宿主機 IP，回退至 localhost ({e})")
-    return "127.0.0.1"
+        addr = ipaddress.ip_address(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"MSI_OLLAMA_IPV4_INVALID:{raw}") from exc
+    if addr.version != 4:
+        raise RuntimeError(f"MSI_CONTROL_PATH_IPV6_FORBIDDEN:{raw}")
+    logging.info(f"MSI control path pinned to IPv4 LAN: {addr}")
+    return str(addr)
 
 WINDOWS_OLLAMA_IP = get_windows_host_ip()
 WINDOWS_OLLAMA_URL = f"http://{WINDOWS_OLLAMA_IP}:11434/api/chat"
