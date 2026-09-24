@@ -31,6 +31,27 @@ TTL = 30
 REMOTE_INTENT = "MSI_READ_ONLY_NATIVE_ADI_HEALTH"
 REMOTE_EVIDENCE = Path.home() / ".local/share/w7tp-adaptive-network/state/msi-observation.json"
 ACTIVATION_MARKER = Path.home() / ".local/share/w7tp-adaptive-network/state/activation-gates.json"
+TOTAL_FIELD_RUNTIME_DECISION = (
+    Path.home() / ".local/share/w7tp-adaptive-network/state/total-field-runtime-decision.json"
+)
+TOTAL_FIELD_AUTHORITY_POINTER = ROOT.parents[1] / "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
+TOTAL_FIELD_RUNTIME_EFFECT = "AUTHORIZE_ADAPTIVE_NETWORK_RUNTIME_OBSERVER"
+TOTAL_FIELD_ALLOWED_EFFECTS = (
+    "READ_ONLY_SYSTEM_8D_ADI_NETWORK_OBSERVATION",
+    "PER_INTENT_PATH_BINDING",
+    "BINDING_LOCAL_FAILOVER",
+)
+TOTAL_FIELD_FORBIDDEN_EFFECTS = (
+    "ROUTER_WRITE",
+    "FIREWALL_WRITE",
+    "DNS_WRITE",
+    "DHCP_WRITE",
+    "WAN_PUBLICATION",
+    "DB_WRITE",
+    "CANONICAL_POINTER_CHANGE",
+    "OTHER_SERVICE_RESTART",
+    "REBOOT",
+)
 GATES = ("SOURCE_BOUND", "SOURCE_ZONE_BOUND", "INTERFACE_BOUND",
          "ROUTE_BOUND", "TARGET_BOUND", "TARGET_ZONE_BOUND",
          "SERVICE_PASS", "APPLICATION_PASS", "RESPONSE_VERIFIED")
@@ -85,6 +106,116 @@ def activation_gates_pass(root: Path = ROOT) -> bool:
         return True
     except (OSError, ValueError, TypeError, KeyError, AttributeError):
         return False
+
+
+def canonical_json_bytes(value: dict) -> bytes:
+    return json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False
+    ).encode("utf-8")
+
+
+def file_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def verify_total_field_runtime_decision(
+    root: Path = ROOT,
+    decision_path: Path | None = None,
+    authority_path: Path | None = None,
+    marker_path: Path | None = None,
+) -> dict:
+    """Consume one exact, hash-bound Total Field runtime decision or fail closed."""
+    decision_path = decision_path or TOTAL_FIELD_RUNTIME_DECISION
+    authority_path = authority_path or TOTAL_FIELD_AUTHORITY_POINTER
+    marker_path = marker_path or ACTIVATION_MARKER
+
+    def hold(reason: str) -> dict:
+        return {"decision": "NOT_RUN", "reason": reason, "decision_id": None,
+                "decision_sha256": None}
+
+    try:
+        if any(path.is_symlink() or not path.is_file()
+               for path in (decision_path, authority_path, marker_path)):
+            return hold("TOTAL_FIELD_RUNTIME_BINDING_MISSING")
+        decision_stat = decision_path.stat()
+        if decision_stat.st_uid != os.getuid() or decision_stat.st_mode & 0o077:
+            return hold("TOTAL_FIELD_DECISION_CUSTODY_INVALID")
+        authority_stat = authority_path.stat()
+        if authority_stat.st_uid != os.getuid() or authority_stat.st_mode & 0o022:
+            return hold("TOTAL_FIELD_AUTHORITY_CUSTODY_INVALID")
+
+        decision = json.loads(decision_path.read_text())
+        authority = json.loads(authority_path.read_text())
+        if not isinstance(decision, dict) or not isinstance(authority, dict):
+            return hold("TOTAL_FIELD_RUNTIME_OBJECT_REQUIRED")
+        required_fields = {
+            "schema_version", "packet_type", "decision_id", "state",
+            "final_decision", "decision_scope", "capability_id",
+            "capability_version", "node_id", "authority_pointer_ref",
+            "authority_pointer_sha256", "founder_command",
+            "source_sha256sum_sha256", "runtime_contract_sha256",
+            "activation_marker_sha256", "canonical_status", "allowed_effects",
+            "forbidden_effects", "decided_at", "revocation_operation",
+            "decision_self_sha256",
+        }
+        if set(decision) != required_fields:
+            return hold("TOTAL_FIELD_DECISION_FIELD_SET_INVALID")
+        expected_values = {
+            "schema_version": "W7TP-ADAPTIVE-NETWORK-RUNTIME-DECISION/1.0",
+            "packet_type": "TOTAL_FIELD_ADAPTIVE_NETWORK_RUNTIME_DECISION",
+            "state": "PASS_ADAPTIVE_NETWORK_RUNTIME_ACTIVATION",
+            "final_decision": "PASS",
+            "decision_scope": "ADAPTIVE_NETWORK_READ_ONLY_OBSERVER_RUNTIME_ONLY",
+            "capability_id": "w7tp-8d-adi-adaptive-network",
+            "capability_version": "v0.2.0-candidate.1",
+            "node_id": "taiji01",
+            "authority_pointer_ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+            "founder_command": "USE_EXISTING_CLOSED_8D_ADI_TOTAL_FIELD_FOR_LIVE_DEPLOYMENT",
+            "canonical_status": "CANDIDATE_ONLY",
+            "revocation_operation": "REMOVE_EXACT_RUNTIME_DECISION_AND_RESTART_SELF_ONLY",
+        }
+        if any(decision.get(key) != value for key, value in expected_values.items()):
+            return hold("TOTAL_FIELD_DECISION_SCOPE_INVALID")
+        if decision.get("allowed_effects") != list(TOTAL_FIELD_ALLOWED_EFFECTS):
+            return hold("TOTAL_FIELD_ALLOWED_EFFECTS_INVALID")
+        if decision.get("forbidden_effects") != list(TOTAL_FIELD_FORBIDDEN_EFFECTS):
+            return hold("TOTAL_FIELD_FORBIDDEN_EFFECTS_INVALID")
+
+        if (authority.get("state") != "ACTIVE_TOTAL_FIELD_AUTHORITY"
+                or authority.get("contract_state") != "ACTIVE_FORMAL"
+                or authority.get("formal_decision_authority") is not True
+                or authority.get("formal_seal_authority") is not True
+                or authority.get("node_id") != "taiji01"
+                or TOTAL_FIELD_RUNTIME_EFFECT not in authority.get("allowed_effects", [])
+                or TOTAL_FIELD_RUNTIME_EFFECT in authority.get("prohibited_effects", [])):
+            return hold("TOTAL_FIELD_AUTHORITY_SCOPE_INVALID")
+
+        bindings = {
+            "authority_pointer_sha256": file_sha256(authority_path),
+            "source_sha256sum_sha256": file_sha256(root / "SOURCE_SHA256SUMS"),
+            "runtime_contract_sha256": file_sha256(
+                root / "deploy/w7tp-adaptive-network.service"),
+            "activation_marker_sha256": file_sha256(marker_path),
+        }
+        if any(decision.get(key) != value for key, value in bindings.items()):
+            return hold("TOTAL_FIELD_DECISION_BINDING_MISMATCH")
+
+        decided_at = datetime.fromisoformat(
+            str(decision["decided_at"]).replace("Z", "+00:00"))
+        if decided_at.tzinfo is None or decided_at > datetime.now(timezone.utc):
+            return hold("TOTAL_FIELD_DECISION_TIME_INVALID")
+        self_hash_input = dict(decision)
+        expected_self_hash = self_hash_input.pop("decision_self_sha256")
+        if hashlib.sha256(canonical_json_bytes(self_hash_input)).hexdigest() != expected_self_hash:
+            return hold("TOTAL_FIELD_DECISION_SELF_HASH_MISMATCH")
+        return {
+            "decision": "PASS",
+            "reason": "PASS_HASH_BOUND_TOTAL_FIELD_RUNTIME_DECISION",
+            "decision_id": decision["decision_id"],
+            "decision_sha256": file_sha256(decision_path),
+        }
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, json.JSONDecodeError):
+        return hold("TOTAL_FIELD_RUNTIME_DECISION_INVALID")
 
 
 def probe(url: str = TARGET) -> bool:
@@ -280,10 +411,8 @@ class AdaptiveRuntime:
                 fresh and REMOTE_INTENT in bindings
                 and bindings[REMOTE_INTENT].get("authorized")
                 and activation_gates_pass())
-            # No verified live-runtime Total Field decision consumer exists for
-            # this candidate. Local operational evidence cannot substitute for
-            # that authority decision, so activation must fail closed.
-            verified_total_field_runtime_decision = "NOT_RUN"
+            total_field_runtime = verify_total_field_runtime_decision()
+            verified_total_field_runtime_decision = total_field_runtime["decision"]
             operational_active = bool(
                 candidate_operational_ready
                 and verified_total_field_runtime_decision == "PASS")
@@ -293,6 +422,9 @@ class AdaptiveRuntime:
                 "version": "v0.2.0-candidate.1",
                 "canonical_status": "CANDIDATE_ONLY",
                 "total_field_decision": verified_total_field_runtime_decision,
+                "total_field_decision_reason": total_field_runtime["reason"],
+                "total_field_decision_id": total_field_runtime["decision_id"],
+                "total_field_decision_sha256": total_field_runtime["decision_sha256"],
                 "runtime_state": ("ACTIVE" if operational_active
                                   else "OBSERVER_RUNNING_LIMITED" if fresh else "HOLD"),
                 "health": ("PASS_LOCAL_AND_MSI" if fresh and REMOTE_INTENT in bindings

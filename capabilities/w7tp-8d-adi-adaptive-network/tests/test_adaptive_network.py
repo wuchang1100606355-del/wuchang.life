@@ -927,6 +927,113 @@ def test_operational_gates_do_not_bypass_total_field_runtime_decision():
         finally:
             adapter.ACTIVATION_MARKER, adapter.REMOTE_EVIDENCE = old_marker, old_remote
 
+
+def test_hash_bound_closed_total_field_decision_activates_runtime():
+    from datetime import datetime, timezone
+    from w7tp_adaptive_network import runtime_adapter as adapter
+    import hashlib
+    import os
+    import time
+
+    with tempfile.TemporaryDirectory() as tmp:
+        old_paths = (
+            adapter.ACTIVATION_MARKER,
+            adapter.REMOTE_EVIDENCE,
+            adapter.TOTAL_FIELD_RUNTIME_DECISION,
+            adapter.TOTAL_FIELD_AUTHORITY_POINTER,
+        )
+        adapter.ACTIVATION_MARKER = Path(tmp) / "activation-gates.json"
+        adapter.REMOTE_EVIDENCE = Path(tmp) / "msi.json"
+        adapter.TOTAL_FIELD_RUNTIME_DECISION = Path(tmp) / "total-field-runtime-decision.json"
+        adapter.TOTAL_FIELD_AUTHORITY_POINTER = Path(tmp) / "ACTIVE_TOTAL_FIELD_AUTHORITY.json"
+        try:
+            evidence = Path(tmp) / "evidence.json"
+            evidence.write_text('{"result":"PASS"}')
+            evidence_sha = hashlib.sha256(evidence.read_bytes()).hexdigest()
+            marker = {
+                "schema": "SYSTEM_ADAPTIVE_NETWORK_RUNTIME_GATE/1",
+                "gates": {key: "PASS" for key in (
+                    "SYSTEM_RUNTIME_CONTRACT", "INSTALLATION", "RUNTIME_ENTRYPOINT",
+                    "CONTINUOUS_OBSERVER", "REAL_CONSUMER_BINDING",
+                    "PER_INTENT_BINDING", "PER_BINDING_FAILOVER",
+                    "RESTART_RECOVERY", "FAIL_CLOSED")},
+                "canonical_status": "CANDIDATE_ONLY",
+                "source_sha256sum_sha256": hashlib.sha256(
+                    (SKILL_ROOT / "SOURCE_SHA256SUMS").read_bytes()).hexdigest(),
+                "runtime_contract_sha256": hashlib.sha256(
+                    (SKILL_ROOT / "deploy/w7tp-adaptive-network.service").read_bytes()).hexdigest(),
+                "failover_evidence": {"filename": evidence.name, "sha256": evidence_sha},
+                "restart_evidence": {"filename": evidence.name, "sha256": evidence_sha},
+            }
+            adapter.ACTIVATION_MARKER.write_text(json.dumps(marker))
+            authority = {
+                "allowed_effects": [adapter.TOTAL_FIELD_RUNTIME_EFFECT],
+                "contract_state": "ACTIVE_FORMAL",
+                "formal_decision_authority": True,
+                "formal_seal_authority": True,
+                "node_id": "taiji01",
+                "prohibited_effects": [],
+                "state": "ACTIVE_TOTAL_FIELD_AUTHORITY",
+            }
+            adapter.TOTAL_FIELD_AUTHORITY_POINTER.write_text(json.dumps(authority))
+            os.chmod(adapter.TOTAL_FIELD_AUTHORITY_POINTER, 0o644)
+            decision = {
+                "schema_version": "W7TP-ADAPTIVE-NETWORK-RUNTIME-DECISION/1.0",
+                "packet_type": "TOTAL_FIELD_ADAPTIVE_NETWORK_RUNTIME_DECISION",
+                "decision_id": "TEST_ADAPTIVE_NETWORK_RUNTIME_ACTIVATION",
+                "state": "PASS_ADAPTIVE_NETWORK_RUNTIME_ACTIVATION",
+                "final_decision": "PASS",
+                "decision_scope": "ADAPTIVE_NETWORK_READ_ONLY_OBSERVER_RUNTIME_ONLY",
+                "capability_id": "w7tp-8d-adi-adaptive-network",
+                "capability_version": "v0.2.0-candidate.1",
+                "node_id": "taiji01",
+                "authority_pointer_ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+                "authority_pointer_sha256": adapter.file_sha256(
+                    adapter.TOTAL_FIELD_AUTHORITY_POINTER),
+                "founder_command": "USE_EXISTING_CLOSED_8D_ADI_TOTAL_FIELD_FOR_LIVE_DEPLOYMENT",
+                "source_sha256sum_sha256": adapter.file_sha256(
+                    SKILL_ROOT / "SOURCE_SHA256SUMS"),
+                "runtime_contract_sha256": adapter.file_sha256(
+                    SKILL_ROOT / "deploy/w7tp-adaptive-network.service"),
+                "activation_marker_sha256": adapter.file_sha256(adapter.ACTIVATION_MARKER),
+                "canonical_status": "CANDIDATE_ONLY",
+                "allowed_effects": list(adapter.TOTAL_FIELD_ALLOWED_EFFECTS),
+                "forbidden_effects": list(adapter.TOTAL_FIELD_FORBIDDEN_EFFECTS),
+                "decided_at": datetime.now(timezone.utc).isoformat(),
+                "revocation_operation": "REMOVE_EXACT_RUNTIME_DECISION_AND_RESTART_SELF_ONLY",
+            }
+            decision["decision_self_sha256"] = hashlib.sha256(
+                adapter.canonical_json_bytes(decision)).hexdigest()
+            adapter.TOTAL_FIELD_RUNTIME_DECISION.write_text(json.dumps(decision))
+            os.chmod(adapter.TOTAL_FIELD_RUNTIME_DECISION, 0o600)
+            packet = {
+                "schema": "MSI_TWO_PATH_HEALTH_OBSERVATION/1",
+                "source_node": "MSI", "observed_at_epoch": time.time(),
+                "paths": {
+                    "LAN_IPV4": {"interface": "eth2", "source_ipv4": "192.168.50.84",
+                                 "route_bound": True, "application_pass": True},
+                    "TAILSCALE_IPV4": {"interface": "tailscale0",
+                                       "source_ipv4": "100.84.204.114",
+                                       "route_bound": True, "application_pass": True},
+                },
+            }
+            adapter.REMOTE_EVIDENCE.write_text(json.dumps(packet))
+            runtime = adapter.AdaptiveRuntime(observer=_runtime_observer,
+                                              application_probe=lambda: True)
+            assert runtime.refresh()
+            state = runtime.status()
+            assert state["runtime_state"] == "ACTIVE", state
+            assert state["total_field_decision"] == "PASS"
+            assert state["canonical_status"] == "CANDIDATE_ONLY"
+            decision["allowed_effects"] = []
+            adapter.TOTAL_FIELD_RUNTIME_DECISION.write_text(json.dumps(decision))
+            assert runtime.status()["runtime_state"] == "OBSERVER_RUNNING_LIMITED"
+        finally:
+            (adapter.ACTIVATION_MARKER, adapter.REMOTE_EVIDENCE,
+             adapter.TOTAL_FIELD_RUNTIME_DECISION,
+             adapter.TOTAL_FIELD_AUTHORITY_POINTER) = old_paths
+
+
 def test_msi_lan_nic_renumber_uses_current_route():
     from w7tp_adaptive_network import runtime_adapter as adapter
     import time
