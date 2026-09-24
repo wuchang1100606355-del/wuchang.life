@@ -1,0 +1,29 @@
+name: W7TP Origin Cell Red Team
+
+on:
+  push:
+    branches:
+      - redteam/origin-cell-audit-20260925
+  workflow_dispatch:
+
+jobs:
+  redteam:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run red-team audit
+        run: |
+          mkdir -p redteam-results
+          python3 tools/w7tp_origin_cell_redteam_audit.py | tee redteam-results/origin_cell_redteam.json
+      - name: Upload red-team result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w7tp-origin-cell-redteam-result
+          path: redteam-results/origin_cell_redteam.json
