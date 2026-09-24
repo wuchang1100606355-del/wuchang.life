@@ -1,0 +1,76 @@
+{
+  "checks": {
+    "canonical_or_pointer_write": "NO",
+    "db_write": "NO",
+    "deploy": "NO",
+    "entrypoint_independent": "PASS",
+    "image_build": "NO",
+    "manifest_and_source_files": "PASS_4_OF_4",
+    "owner_seal": "PASS",
+    "replay": "PASS",
+    "request_schema_and_self_hash": "PASS",
+    "request_ttl": "PASS",
+    "runtime_activation": "NO",
+    "self_review": "PASS_NOT_SELF_REVIEW"
+  },
+  "entrypoint_version": "w7tp-total-field-static-review-entrypoint/1.0",
+  "fixed_authority_boundary": {
+    "canonical_change": false,
+    "container_start": false,
+    "db_write": false,
+    "deploy": false,
+    "git_commit": false,
+    "git_push": false,
+    "image_build": false,
+    "image_pull": false,
+    "image_tag": false,
+    "pointer_change": false,
+    "restart": false,
+    "runtime_activation": false
+  },
+  "manifest": {
+    "files_verified": 4,
+    "sha256": "c7e30d02bf49ef8bfd59f7db4cbaa5e5b4363ec029dd0085e96e00b72ae621d6",
+    "verified_sources": [
+      {
+        "path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py",
+        "sha256": "9c022ce8d0edac5d5504db18434dc3cdf899c486d812c0063a0ab8cdfe4c6acd",
+        "size_bytes": 7312
+      },
+      {
+        "path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_contract.json",
+        "sha256": "ca38b7e03b6a8a02d3a9c7c818035d3977cb38b7d57c5b05895e91b8f399a769",
+        "size_bytes": 4417
+      },
+      {
+        "path": "tests/test_w7tp_gst_v23_runtime_consumer_candidate.py",
+        "sha256": "e0440a5f578b84e79b1cca2379f69d1341795f9687c3d235d3ae41f8e67cc46a",
+        "size_bytes": 5977
+      },
+      {
+        "path": "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/GST_V23_RUNTIME_CONSUMER_HANDOFF.json",
+        "sha256": "ba1d5e2f3e05d95295abcbcc3d790084f6cbb944564f66dbad68c98af1c27094",
+        "size_bytes": 4334
+      }
+    ]
+  },
+  "owner_seal": {
+    "expires_at": "2026-09-24T09:07:42Z",
+    "seal_id": "owner-seal:GST_V23_FOUNDER_AUTHORIZED_CLOSURE_20260924",
+    "sha256": "dc4d469b43e6cac84bc000867245c182e61cd1e2eeff857b7772ca584371b684",
+    "single_use_id": "single-use:GST_V23_FOUNDER_AUTHORIZED_CLOSURE_20260924"
+  },
+  "packet_type": "REVIEW_EVIDENCE",
+  "reason_codes": [
+    "PASS_EXACT_HASH_BOUND_STATIC_IMPLEMENTATION_CANDIDATE_ONLY"
+  ],
+  "request": {
+    "purpose": "GST_V23_RUNTIME_CONSUMER_STATIC_REVIEW",
+    "requested_decision": "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY",
+    "run_id": "GST_V23_FOUNDER_AUTHORIZED_CLOSURE_20260924",
+    "sha256": "c2cf3f37ab639a108b76b05a9c479031212a9362a73992ac5d3f8a3ce778f213"
+  },
+  "reviewed_at": "2026-09-24T08:52:42Z",
+  "run_id": "GST_V23_FOUNDER_AUTHORIZED_CLOSURE_20260924_TOTAL_FIELD_STATIC_REVIEW",
+  "schema_version": "W7TP-TOTAL-FIELD-STATIC-REVIEW-EVIDENCE/1.0"
+}
