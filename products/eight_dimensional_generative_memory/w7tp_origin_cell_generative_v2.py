@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Source-generated-rule Origin Cell candidate for W7TP/8D ADI 2.3.
 
-The source analyzes a real source state and emits serializable state cells and
-an inline reconstruction rule body.  A clean receiver knows only generic rule
-primitives and reconstructs the target without a prior state, target data, a
-delta, or a target-specific rule profile.
+The source verifies a real source state against explicit source-side generative
+provenance, then emits serializable state cells and an inline reconstruction
+rule body. A clean receiver needs the committed generic executor, but no prior
+target state, target-data base, delta, or target-specific rule profile.
 
 Git, SSH, and the packet carrier are not authority.  This module never writes
 canonical pointers, activates a service, or issues a Total Field decision.
@@ -52,6 +52,19 @@ FORBIDDEN_PACKET_KEYS = frozenset(
         "target_artifact",
     }
 )
+
+RULE_ALLOWED_KEYS = {
+    "CREATE_DIRECTORY": frozenset({"id", "primitive", "path"}),
+    "WRITE_PRNG_BYTES": frozenset({"id", "primitive", "path", "size", "seed"}),
+    "WRITE_DETERMINISTIC_BYTES_AT_OFFSETS": frozenset({"id", "primitive", "path", "writes", "size"}),
+    "JSONL_WRITE": frozenset({"id", "primitive", "path", "row_count", "default_state", "changed_rows", "namespace"}),
+    "SQLITE_BUILD": frozenset({"id", "primitive", "path", "base_rows", "update_rows", "insert_rows", "namespace"}),
+    "WRITE_DETERMINISTIC_FILE_SERIES": frozenset({
+        "id", "primitive", "directory", "base_count", "file_size", "replace_count",
+        "delete_start", "delete_end", "rename_start", "rename_end", "new_count", "namespace",
+    }),
+}
+WRITE_ALLOWED_KEYS = frozenset({"offset", "seed"})
 
 
 class OriginCellHold(RuntimeError):
@@ -361,6 +374,11 @@ def build_rule_packet(
             "D6": {
                 "mode": "SOURCE_GENERATED_RULE_BODY",
                 "generator_base_required": False,
+                "target_data_base_required": False,
+                "shared_generic_executor_required": True,
+                "source_generative_provenance_required": True,
+                "byte_materialization_mechanism": "RECONSTRUCTION_RULES_AND_EXECUTION_ORDER",
+                "eight_dimensional_role": "GOVERNANCE_CONSTRAINTS_VERIFICATION",
                 "transmitted_target_bytes": 0,
                 "rule_body_sha256": rule_body_sha256,
             },
@@ -414,7 +432,7 @@ def _walk_keys(value: Any) -> list[str]:
 
 
 def transmitted_rule_literal_bytes(value: Any) -> int:
-    """Count actual byte literals; structured strings and coordinates are not byte payloads."""
+    """Auxiliary byte-literal detector; never use as the authoritative transmission metric."""
 
     if isinstance(value, (bytes, bytearray, memoryview)):
         return len(value)
@@ -423,6 +441,29 @@ def transmitted_rule_literal_bytes(value: Any) -> int:
     if isinstance(value, list):
         return sum(transmitted_rule_literal_bytes(nested) for nested in value)
     return 0
+
+
+def validate_reconstruction_rule_schema(rules: list[dict[str, Any]]) -> None:
+    """Fail closed on unknown primitives, unknown fields, or malformed nested writes."""
+
+    if not isinstance(rules, list):
+        raise OriginCellHold("HOLD_RULE_SCHEMA_INVALID")
+    for rule in rules:
+        if not isinstance(rule, dict):
+            raise OriginCellHold("HOLD_RULE_SCHEMA_INVALID")
+        primitive = rule.get("primitive")
+        allowed = RULE_ALLOWED_KEYS.get(primitive)
+        if allowed is None:
+            raise OriginCellHold("HOLD_RULE_PRIMITIVE_UNSUPPORTED")
+        if set(rule) != allowed:
+            raise OriginCellHold("HOLD_RULE_SCHEMA_UNKNOWN_OR_MISSING_FIELD")
+        if primitive == "WRITE_DETERMINISTIC_BYTES_AT_OFFSETS":
+            writes = rule.get("writes")
+            if not isinstance(writes, list):
+                raise OriginCellHold("HOLD_RULE_SCHEMA_INVALID")
+            for write in writes:
+                if not isinstance(write, dict) or set(write) != WRITE_ALLOWED_KEYS:
+                    raise OriginCellHold("HOLD_RULE_SCHEMA_UNKNOWN_OR_MISSING_FIELD")
 
 
 def validate_rule_packet(packet: dict[str, Any], generator_path: Path | None = None) -> None:
@@ -457,6 +498,14 @@ def validate_rule_packet(packet: dict[str, Any], generator_path: Path | None = N
         raise OriginCellHold("HOLD_D6_SOURCE_RULE_BODY_REQUIRED")
     if d6.get("transmitted_target_bytes") != 0 or d6.get("generator_base_required") is not False:
         raise OriginCellHold("HOLD_D6_TARGET_BYTES_OR_BASE_CONTRACT_INVALID")
+    if (
+        d6.get("target_data_base_required") is not False
+        or d6.get("shared_generic_executor_required") is not True
+        or d6.get("source_generative_provenance_required") is not True
+        or d6.get("byte_materialization_mechanism") != "RECONSTRUCTION_RULES_AND_EXECUTION_ORDER"
+        or d6.get("eight_dimensional_role") != "GOVERNANCE_CONSTRAINTS_VERIFICATION"
+    ):
+        raise OriginCellHold("HOLD_D6_CLAIM_BOUNDARY_INVALID")
 
     executor = packet.get("generator_executor")
     verification = packet.get("verification_rules")
@@ -474,6 +523,7 @@ def validate_rule_packet(packet: dict[str, Any], generator_path: Path | None = N
     rules = packet.get("reconstruction_rules")
     if not isinstance(rules, list) or packet["rule_body_sha256"] != sha256_bytes(canonical_json_bytes(rules)):
         raise OriginCellHold("HOLD_RULE_BODY_HASH_MISMATCH")
+    validate_reconstruction_rule_schema(rules)
     if transmitted_rule_literal_bytes(rules) != 0:
         raise OriginCellHold("FAIL_HIDDEN_FULL_TRANSFER")
     if any(rule.get("primitive") in {"WRITE_BYTES", "WRITE_FILE_BYTES"} for rule in rules if isinstance(rule, dict)):
@@ -505,12 +555,15 @@ def reconstruct_from_rule_packet(packet: dict[str, Any], receiver_root: Path, ou
         "state": "PASS_CANDIDATE_SOURCE_GENERATED_RULE_RECONSTRUCTION",
         "packet_sha256": packet["packet_sha256"],
         "packet_bytes": len(canonical_json_bytes(packet)),
+        "authoritative_transmission_bytes": len(canonical_json_bytes(packet)),
+        "authoritative_transmission_metric": "CANONICAL_SERIALIZED_PACKET_BYTES",
         "dataset_mib": packet["minimum_new_information"]["dataset_mib"],
         "source_generated_rules": len(packet["reconstruction_rules"]),
         "rule_body_transmitted": True,
         "rule_body_bytes": len(canonical_json_bytes(packet["reconstruction_rules"])),
         "state_cell_bytes": len(canonical_json_bytes(packet["source_state_cells"])),
         "transmitted_rule_literal_bytes": transmitted_rule_literal_bytes(packet["reconstruction_rules"]),
+        "transmitted_rule_literal_bytes_role": "AUXILIARY_DETECTOR_ONLY",
         "transmitted_rule_structure_bytes": len(canonical_json_bytes(packet["reconstruction_rules"])),
         "transmitted_state_cell_bytes": len(canonical_json_bytes(packet["source_state_cells"])),
         "transmitted_total_bytes": len(canonical_json_bytes(packet)),
@@ -526,6 +579,11 @@ def reconstruct_from_rule_packet(packet: dict[str, Any], receiver_root: Path, ou
         "full_target_bytes_transmitted": 0,
         "hidden_full_transfer": False,
         "previous_state_used": False,
+        "target_data_base_required": False,
+        "shared_generic_executor_required": True,
+        "source_generative_provenance_required": True,
+        "byte_materialization_mechanism": "RECONSTRUCTION_RULES_AND_EXECUTION_ORDER",
+        "eight_dimensional_role": "GOVERNANCE_CONSTRAINTS_VERIFICATION",
         "generator_base_sha256": packet["generator_executor"]["implementation_sha256"],
         "canonical": False,
         "runtime_activation": False,
@@ -606,6 +664,8 @@ def run_selftest(dataset_mib: int) -> dict[str, Any]:
             "transmitted_rule_structure_bytes": receipt["transmitted_rule_structure_bytes"],
             "transmitted_state_cell_bytes": receipt["transmitted_state_cell_bytes"],
             "transmitted_total_bytes": receipt["transmitted_total_bytes"],
+            "authoritative_transmission_bytes": receipt["authoritative_transmission_bytes"],
+            "authoritative_transmission_metric": receipt["authoritative_transmission_metric"],
             "target_preloaded_special_rules": receipt["target_preloaded_special_rules"],
             "target_preloaded_target_data": receipt["target_preloaded_target_data"],
             "target_preloaded_base_bytes": receipt["target_preloaded_base_bytes"],
