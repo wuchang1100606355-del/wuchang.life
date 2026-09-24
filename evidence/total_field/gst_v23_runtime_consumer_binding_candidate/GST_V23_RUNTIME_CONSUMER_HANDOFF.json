@@ -1,7 +1,7 @@
 {
   "schema_version": "w7tp-gst-v23-runtime-consumer-handoff/1-candidate",
   "handoff_id": "GST_V23_RUNTIME_CONSUMER_BINDING_CANDIDATE_HANDOFF_20260924",
-  "state": "PASS_FOUNDER_AUTHORIZED_RUNTIME_ACTIVATED",
+  "state": "PASS_D8_FORMAL_CLOSURE_FOR_GST_V23_RUNTIME_BINDING",
   "founder_current_baseline": "W7TP_8D_ADI_V2.3",
   "binding": {
     "contract_path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_contract.json",
@@ -29,7 +29,7 @@
     "service_installed": false,
     "deployed": false,
     "canonical_pointer_changed": false,
-    "total_field_decision": "NOT_RUN"
+    "total_field_decision": "PASS"
   },
   "semantic_preservation": {
     "shared_rule_base": true,
@@ -74,9 +74,13 @@
     "active_binding": "runtime/total_field/gst_v23_runtime_consumer/ACTIVE_BINDING.json",
     "activation_record_sha256": "1c0ed4a349c7f903fec461c7e209c2df8cf2543c6a5ffe01f59e34c70700d644",
     "activation_result_sha256": "2147b3e37713d1f82dffc1548db443957586ce12765cb4f92a73f5bf101905dd",
+    "d8_formal_closure_decision": "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/GST_V23_D8_FORMAL_CLOSURE_20260924/D8_FORMAL_CLOSURE_DECISION.json",
+    "d8_formal_closure_decision_sha256": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379",
+    "authority_pointer": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+    "authority_pointer_sha256": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869",
     "target_manifest_sha256": "c5610b475db1ad7aa60d9fc8c83ce81346c6fdff3dcdf88217c1fdce63c1240b",
     "target_bytes": 34152448,
     "target_files": 147
   },
-  "remaining_gap": "TOTAL_FIELD_FORMAL_DECISION_NOT_RUN_SEPARATE_FROM_FOUNDER_RUNTIME_ACTIVATION"
+  "remaining_gap": "GLOBAL_CANONICAL_PROMOTION_NOT_RUN_AND_NOT_REQUIRED_FOR_THIS_D8_CLOSURE"
 }
