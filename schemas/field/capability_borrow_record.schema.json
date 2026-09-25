@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/field/capability_borrow_record.schema.json",
+  "title": "W7TP Capability Borrow Record Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "borrow_id",
+    "ipv6_gt_session_ref",
+    "all_node_ip6_closed_loop",
+    "source_node_ref",
+    "target_node_ref",
+    "source_ipv6_ref",
+    "target_ipv6_ref",
+    "borrower_type",
+    "capability_ref",
+    "input_packet_hash",
+    "output_packet_hash",
+    "allowed_scope",
+    "forbidden_scope",
+    "member_plaintext_transferred",
+    "secret_transferred",
+    "token_transferred",
+    "private_key_transferred",
+    "raw_data_transferred",
+    "final_authority_granted",
+    "verifier_required",
+    "verifier_result",
+    "seal_ref",
+    "ttl_seconds",
+    "created_at"
+  ],
+  "properties": {
+    "borrow_id": { "type": "string", "minLength": 3 },
+    "ipv6_gt_session_ref": { "type": "string", "minLength": 3 },
+    "all_node_ip6_closed_loop": { "const": true },
+    "source_node_ref": { "type": "string", "minLength": 3 },
+    "target_node_ref": { "type": "string", "minLength": 3 },
+    "source_ipv6_ref": { "type": "string", "minLength": 3 },
+    "target_ipv6_ref": { "type": "string", "minLength": 3 },
+    "borrower_type": {
+      "enum": [
+        "CLOUD_MODEL",
+        "FIELD_NODE",
+        "STATIC_MODEL",
+        "DEVICE_SURFACE",
+        "VPN_NODE_CONTAINER",
+        "GOOGLE_EPHEMERAL_COMPUTE"
+      ]
+    },
+    "capability_ref": { "type": "string", "minLength": 3 },
+    "input_packet_hash": { "type": "string", "minLength": 16 },
+    "output_packet_hash": { "type": "string", "minLength": 16 },
+    "allowed_scope": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "TASK_REF",
+          "STATE_PROJECTION",
+          "LOOKUP_KEY_HINT",
+          "EVIDENCE_HASH",
+          "POLICY_SCOPE",
+          "CAPABILITY_REF",
+          "FIELD_PROJECTION",
+          "MEMBER_REF",
+          "BENEFIT_REF",
+          "OUTPUT_FORMAT",
+          "VERIFIER_CONTRACT"
+        ]
+      }
+    },
+    "forbidden_scope": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "member_plaintext",
+          "secret",
+          "token",
+          "private_key",
+          "raw_data",
+          "db_write",
+          "pos_write",
+          "payment_capture",
+          "deploy",
+          "service_restart",
+          "final_authority",
+          "lookup_table_source",
+          "WHY_IT_RUNS"
+        ]
+      }
+    },
+    "member_plaintext_transferred": { "const": false },
+    "secret_transferred": { "const": false },
+    "token_transferred": { "const": false },
+    "private_key_transferred": { "const": false },
+    "raw_data_transferred": { "const": false },
+    "final_authority_granted": { "const": false },
+    "verifier_required": { "const": true },
+    "verifier_result": {
+      "enum": ["ACCEPTED", "REJECTED", "HOLD", "REDTEAM", "DEAD_LETTER"]
+    },
+    "seal_ref": { "type": "string", "minLength": 3 },
+    "ttl_seconds": { "type": "integer", "minimum": 1 },
+    "created_at": { "type": "string" },
+    "expired_at": { "type": "string" }
+  }
+}

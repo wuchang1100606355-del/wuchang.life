@@ -1,0 +1,13 @@
+schema_id: W7TP_GT8D_ROUTE_PACKET
+status: DRAFT
+required_fields:
+  - route_code
+  - lookup_key
+  - candidate_only
+  - local_reconstruction_required
+  - safety_flags
+verification_rule:
+  local_lookup_table_is_authority: true
+  llm_may_not_create_unregistered_lookup_key: true
+  candidate_only_must_be_true: true
+

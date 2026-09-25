@@ -1,0 +1,340 @@
+{
+  "schema_version": "w7tp.property_association_merge_relation.p1",
+  "policy_id": "W7TP_PROPERTY_ASSOCIATION_MERGE_RELATION_MAP",
+  "merge_id": "PROPERTY_ASSOCIATION_SERVICE_RELATION_DRAFT_20260702",
+  "merge_mode": "candidate_relation_only",
+  "authority": "candidate_only",
+  "requires_total_field_verify": true,
+  "contains_member_plaintext": false,
+  "plaintext_identity_forbidden": true,
+  "source_refs": [
+    {
+      "source_ref": "CODEX_SESSION_REF:2026-06-28/019f0ec4-e4b8-7bf0-8075-a57447908611",
+      "thread_name": "Read pasted text file",
+      "source_type": "codex_session",
+      "relation_summary": "Scene Context Router defines PROPERTY_CONTEXT and ASSOCIATION_CONTEXT."
+    },
+    {
+      "source_ref": "CODEX_ATTACHMENT_REF:f3769bdf-07e2-4c75-9e2b-506b6b7160b6",
+      "thread_name": "Scene Context Router request",
+      "source_type": "codex_attachment",
+      "relation_summary": "Property and association aliases, allowed scopes, forbidden scopes, and cockpit UI badge."
+    },
+    {
+      "source_ref": "CODEX_SESSION_REF:2026-06-26/019f0526-d478-7ea3-912a-3f17ad165396",
+      "thread_name": "規劃會員功能介面",
+      "source_type": "codex_session",
+      "relation_summary": "AI Browser member UI product planning for property management organization and association unit."
+    },
+    {
+      "source_ref": "CODEX_SESSION_REF:2026-06-30/019f18ea-cdde-78c3-87d3-9c4e73669257",
+      "thread_name": "生成可上傳四個檔案",
+      "source_type": "codex_session",
+      "relation_summary": "Operator handoff groups include association_sovereign_member and resident_property_management."
+    },
+    {
+      "source_ref": "CODEX_SESSION_REF:2026-07-02/019f22d3-901a-7672-b5b1-72a21b67018c",
+      "thread_name": "修正小J角色命名",
+      "source_type": "codex_session",
+      "relation_summary": "XiaoJ service persona, 8D identity feature markers, property roles, association roles, immutable founder."
+    },
+    {
+      "source_ref": "CODEX_ATTACHMENT_REF:e937fc0a-516c-40d6-8a00-fc9c5ec2bd45",
+      "thread_name": "Member AI fallback request",
+      "source_type": "codex_attachment",
+      "relation_summary": "Member AI fallback, LLM prefix policy, and association-hosted candidate route boundary."
+    },
+    {
+      "source_ref": "REPO_DOC_REF:Taiji_Governance/system_info/wuchang_jurisdiction_coordinate_analysis_2026-05-12.md",
+      "thread_name": "五常社區轄區圖座標精密分析",
+      "source_type": "repo_doc",
+      "relation_summary": "Territory anchor and local metric coordinate basis for Wuchang community."
+    },
+    {
+      "source_ref": "REPO_DOC_REF:Taiji_Governance/system_info/community_branch_group_member_mapping_2026-05-12.md",
+      "thread_name": "Community branch group member mapping",
+      "source_type": "repo_doc",
+      "relation_summary": "Separates association, property platform, commerce platform, and branch service windows."
+    },
+    {
+      "source_ref": "REPO_DOC_REF:docs/strategy/wuchang_sovereign_economic_engine_v8_zh.md",
+      "thread_name": "Wuchang sovereign economic engine",
+      "source_type": "repo_doc",
+      "relation_summary": "Defines commerce serving public-interest community service with accounting windows."
+    },
+    {
+      "source_ref": "REPO_DOC_REF:docs/total_field/WUCHANG_PROPERTY_MANAGEMENT_TOTAL_FIELD_INFORMATION_SYNTHESIS.md",
+      "thread_name": "Wuchang property synthesis",
+      "source_type": "repo_doc",
+      "relation_summary": "Connects property, committee, resident service, merchant service, evidence seal, and 8D packets."
+    },
+    {
+      "source_ref": "REPO_DOC_REF:docs/total_field/ASSOCIATION_PATENT_SUBJECT_AND_REVENUE_GOVERNANCE.md",
+      "thread_name": "Association patent and revenue governance",
+      "source_type": "repo_doc",
+      "relation_summary": "Captures founder/community design intent and public-interest governance boundary."
+    },
+    {
+      "source_ref": "REPO_DOC_REF:docs/project/W7TP_007_VOLUNTEER_DELIVERY_STATUS.md",
+      "thread_name": "W7TP-007 volunteer delivery status",
+      "source_type": "repo_doc",
+      "relation_summary": "Preserves Renyi caregiver-qualified staff hardwall and volunteer delivery safety status."
+    },
+    {
+      "source_ref": "REPO_DOC_REF:docs/governance/XIAOJ_VOLUNTEER_QUALIFICATION_POLICY.md",
+      "thread_name": "XiaoJ volunteer qualification policy",
+      "source_type": "repo_doc",
+      "relation_summary": "Requires social-care safety checks, staff approval, no self-dispatch, and caregiver escort."
+    }
+  ],
+  "community_field_composition": {
+    "field_name": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+    "field_type": "community_total_field",
+    "composition_mode": "multi_domain_ref_relation",
+    "dimensions": [
+      {
+        "dimension_id": "PROPERTY_DIMENSION",
+        "name_zh": "物業",
+        "relation_scope": "物業、管委會、住戶、公設、修繕、設備設施",
+        "ref_boundary": "property refs and resident no-plaintext refs only"
+      },
+      {
+        "dimension_id": "COMMERCE_DIMENSION",
+        "name_zh": "商業",
+        "relation_scope": "商家、POS、商業協力、社區商家會員、基金池營運訊號",
+        "ref_boundary": "commerce refs and aggregate accounting refs only"
+      },
+      {
+        "dimension_id": "TERRITORY_DIMENSION",
+        "name_zh": "地域",
+        "relation_scope": "五常社區地域、轄區、地理座標、服務範圍",
+        "ref_boundary": "territory refs and coordinate refs only"
+      },
+      {
+        "dimension_id": "ASSOCIATION_DIMENSION",
+        "name_zh": "協會",
+        "relation_scope": "協會會務、公益、會員治理、志工、補助、活動",
+        "ref_boundary": "association refs and member no-plaintext refs only"
+      },
+      {
+        "dimension_id": "FOUNDER_CALCULATION_DIMENSION",
+        "name_zh": "創辦人推算",
+        "relation_scope": "創辦人對社區系統的細緻推算、技術路線、治理判準",
+        "ref_boundary": "founder calculation refs only"
+      },
+      {
+        "dimension_id": "COMMUNITY_LITERATURE_CORPUS_DIMENSION",
+        "name_zh": "社區文獻庫",
+        "relation_scope": "社區設計文獻、政策、策略、總場文件、證據封條",
+        "ref_boundary": "corpus refs, hash refs, and evidence refs only"
+      }
+    ],
+    "founder_design_knowledge": {
+      "calculation_ref_mode": "ref_only",
+      "literature_corpus_ref_mode": "ref_only",
+      "plaintext_corpus_inline": false,
+      "member_memory_authority": false,
+      "direct_execution_authority": false,
+      "requires_total_field_verify": true
+    }
+  },
+  "branches": {
+    "property_service_branch": {
+      "scene_context": "PROPERTY_CONTEXT",
+      "xiaoj_projection": "BUILDING_DIGITAL_SECRETARY",
+      "service_name_zh": "大樓數位秘書小J",
+      "identity_feature_domain": "property",
+      "handoff_group": "resident_property_management",
+      "role_functions": [
+        "PROPERTY_CHAIRPERSON",
+        "PROPERTY_VICE_CHAIRPERSON",
+        "PROPERTY_TREASURER",
+        "PROPERTY_GENERAL_MANAGER",
+        "PROPERTY_UNIT_OWNER",
+        "PROPERTY_RESIDENT",
+        "PROPERTY_VEHICLE_TYPE",
+        "PROPERTY_VEHICLE_COLOR",
+        "PROPERTY_EQUIPMENT",
+        "PROPERTY_FACILITY"
+      ],
+      "allowed_candidate_routes": [
+        "property_service_request_candidate",
+        "announcement_draft",
+        "repair_request_candidate",
+        "resident_no_plaintext_context"
+      ],
+      "forbidden_routes": [
+        "resident_plaintext_read",
+        "building_access_grant_without_verification",
+        "payment_capture",
+        "property_role_elevation_without_verifier"
+      ]
+    },
+    "association_service_branch": {
+      "scene_context": "ASSOCIATION_CONTEXT",
+      "xiaoj_projection": "COMMUNITY_SERVICE_STAFF",
+      "service_name_zh": "社區服務員小J",
+      "identity_feature_domain": "association",
+      "handoff_group": "association_sovereign_member",
+      "role_functions": [
+        "ASSOCIATION_IMMUTABLE_FOUNDER",
+        "ASSOCIATION_CHAIRPERSON",
+        "ASSOCIATION_SECRETARY_GENERAL",
+        "ASSOCIATION_VICE_CHAIRPERSON",
+        "ASSOCIATION_EXECUTIVE_DIRECTOR",
+        "ASSOCIATION_DIRECTOR",
+        "ASSOCIATION_EXECUTIVE_SUPERVISOR",
+        "ASSOCIATION_SUPERVISOR",
+        "ASSOCIATION_SECRETARY",
+        "ASSOCIATION_STAFF",
+        "ASSOCIATION_MEMBER"
+      ],
+      "allowed_candidate_routes": [
+        "association_service_admission_candidate",
+        "activity_rsvp_candidate",
+        "volunteer_service_candidate",
+        "no_plaintext_member_context"
+      ],
+      "forbidden_routes": [
+        "member_plaintext_read",
+        "subsidy_approval_without_verification",
+        "formal_association_notice_without_verifier",
+        "association_role_elevation_without_verifier"
+      ]
+    }
+  },
+  "relation_edges": [
+    {
+      "from": "PROPERTY_CONTEXT",
+      "to": "BUILDING_DIGITAL_SECRETARY",
+      "relation_type": "SCENE_CONTEXT_TO_PERSONA"
+    },
+    {
+      "from": "PROPERTY_CONTEXT",
+      "to": "feature_domains.property",
+      "relation_type": "IDENTITY_MARKER_TO_SERVICE_ROUTE"
+    },
+    {
+      "from": "PROPERTY_CONTEXT",
+      "to": "resident_property_management",
+      "relation_type": "HANDOFF_REF_GROUP"
+    },
+    {
+      "from": "ASSOCIATION_CONTEXT",
+      "to": "COMMUNITY_SERVICE_STAFF",
+      "relation_type": "SCENE_CONTEXT_TO_PERSONA"
+    },
+    {
+      "from": "ASSOCIATION_CONTEXT",
+      "to": "feature_domains.association",
+      "relation_type": "IDENTITY_MARKER_TO_SERVICE_ROUTE"
+    },
+    {
+      "from": "ASSOCIATION_CONTEXT",
+      "to": "association_sovereign_member",
+      "relation_type": "HANDOFF_REF_GROUP"
+    },
+    {
+      "from": "ASSOCIATION_IMMUTABLE_FOUNDER",
+      "to": "association_rotating_roles",
+      "relation_type": "FOUNDER_IMMUTABILITY_OVERRIDES_ROTATION"
+    },
+    {
+      "from": "property_role_ref",
+      "to": "association_role_ref",
+      "relation_type": "ROLE_BOUNDARY_SEPARATES_AUTHORITY"
+    },
+    {
+      "from": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "to": "PROPERTY_DIMENSION",
+      "relation_type": "COMMUNITY_FIELD_CONTAINS_DOMAIN"
+    },
+    {
+      "from": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "to": "COMMERCE_DIMENSION",
+      "relation_type": "COMMUNITY_FIELD_CONTAINS_DOMAIN"
+    },
+    {
+      "from": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "to": "TERRITORY_DIMENSION",
+      "relation_type": "COMMUNITY_FIELD_CONTAINS_DOMAIN"
+    },
+    {
+      "from": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "to": "ASSOCIATION_DIMENSION",
+      "relation_type": "COMMUNITY_FIELD_CONTAINS_DOMAIN"
+    },
+    {
+      "from": "TERRITORY_DIMENSION",
+      "to": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "relation_type": "TERRITORY_ANCHORS_COMMUNITY"
+    },
+    {
+      "from": "COMMERCE_DIMENSION",
+      "to": "ASSOCIATION_DIMENSION",
+      "relation_type": "COMMERCE_SUPPORTS_COMMUNITY_SERVICE"
+    },
+    {
+      "from": "8D_SOVEREIGN_AI_COMMUNITY_XIAOJ",
+      "to": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "relation_type": "SOVEREIGN_AI_PERSONA_ANCHORS_COMMUNITY_FIELD"
+    },
+    {
+      "from": "SOCIAL_WORKER_GOVERNANCE_CENTER",
+      "to": "8D_SOVEREIGN_AI_COMMUNITY_XIAOJ",
+      "relation_type": "SOCIAL_WORKER_GOVERNS_CARE_INTENT"
+    },
+    {
+      "from": "CAREGIVER_EMPLOYEE_EXECUTION",
+      "to": "8D_SOVEREIGN_AI_COMMUNITY_XIAOJ",
+      "relation_type": "CAREGIVER_EMPLOYEE_EXECUTES_CARE"
+    },
+    {
+      "from": "ELDER_ACTIVE_PARTICIPATION",
+      "to": "PUBLIC_VALUE_DIMENSION",
+      "relation_type": "ELDER_ACTIVE_PARTICIPATION_SUPPORTS_PUBLIC_VALUE"
+    },
+    {
+      "from": "W7TP_007_VOLUNTEER_DELIVERY",
+      "to": "PROPERTY_DIMENSION",
+      "relation_type": "VOLUNTEER_DELIVERY_BRIDGES_PROPERTY_COMMERCE"
+    },
+    {
+      "from": "W7TP_007_VOLUNTEER_DELIVERY",
+      "to": "COMMERCE_DIMENSION",
+      "relation_type": "VOLUNTEER_DELIVERY_BRIDGES_PROPERTY_COMMERCE"
+    },
+    {
+      "from": "FOUNDER_CALCULATION_DIMENSION",
+      "to": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "relation_type": "FOUNDER_CALCULATION_SUPPORTS_DESIGN"
+    },
+    {
+      "from": "COMMUNITY_LITERATURE_CORPUS_DIMENSION",
+      "to": "WUCHANG_COMMUNITY_TOTAL_FIELD",
+      "relation_type": "LITERATURE_CORPUS_SUPPORTS_DESIGN"
+    }
+  ],
+  "merge_rules": {
+    "service_view_can_merge": true,
+    "role_refs_remain_independent": true,
+    "no_cross_domain_role_override": true,
+    "founder_marker_immutable": true,
+    "community_field_contains_property_commerce_territory_association": true,
+    "founder_calculation_ref_only": true,
+    "community_literature_corpus_ref_only": true,
+    "relation_graph_not_identity_decision": true,
+    "requires_total_field_verify": true
+  },
+  "authority_boundary": {
+    "candidate_only": true,
+    "final_decision": false,
+    "db_write": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "payment_capture": false,
+    "formal_send": false,
+    "role_elevation_without_verifier": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji.local/schemas/w7tp_cloud_candidate_resilience_record.schema.json",
+  "title": "W7TP Cloud Candidate Resilience Record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "latency_ms",
+    "timeout_ms",
+    "cloud_available",
+    "cloud_authority",
+    "candidate_only",
+    "fallback_available",
+    "local_lookup_available",
+    "queue_available",
+    "dead_letter_available",
+    "raw_packet_echo"
+  ],
+  "properties": {
+    "latency_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "timeout_ms": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "cloud_available": {
+      "type": "boolean"
+    },
+    "cloud_authority": {
+      "const": false
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "fallback_available": {
+      "type": "boolean"
+    },
+    "local_lookup_available": {
+      "type": "boolean"
+    },
+    "queue_available": {
+      "type": "boolean"
+    },
+    "dead_letter_available": {
+      "type": "boolean"
+    },
+    "raw_packet_echo": {
+      "const": false
+    },
+    "cloud_call": {
+      "const": false
+    },
+    "db_write": {
+      "const": false
+    },
+    "router_write": {
+      "const": false
+    },
+    "service_restart": {
+      "const": false
+    },
+    "external_cloud_call": {
+      "const": false
+    }
+  }
+}

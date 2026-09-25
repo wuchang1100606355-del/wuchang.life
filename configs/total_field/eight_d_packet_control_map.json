@@ -1,0 +1,79 @@
+{
+  "state": "8D_PACKET_CONTROL_MAP_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_runtime_write",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false,
+    "production_activation": false,
+    "direct_physical_execution": false
+  },
+  "control_principle": {
+    "eight_d_packet_controls": true,
+    "control_scope": [
+      "state_gate",
+      "member_response",
+      "vrm_lut_state",
+      "redteam_hold",
+      "route_candidate",
+      "total_field_decision_flow"
+    ],
+    "not_direct_control": [
+      "db_write",
+      "deploy",
+      "restart",
+      "router_write",
+      "payment_capture",
+      "production_activation"
+    ]
+  },
+  "control_codes": {
+    "PASS_INTENT": {
+      "state_id": 1,
+      "member_facing": "我先幫你整理成可以確認的候選草稿。",
+      "vrm_expression": "smile",
+      "motion": "nod"
+    },
+    "ROOKIE_ESCALATE": {
+      "state_id": 7,
+      "member_facing": "這個我不懂，我只是個菜鳥，我幫你問店長或學長",
+      "vrm_expression": "confused",
+      "motion": "ask_senior"
+    },
+    "HOLD_DETOUR_ALERT": {
+      "state_id": 8,
+      "member_facing": "我先停一下，這一步可能走偏了，我幫你交給店長確認。",
+      "vrm_expression": "serious",
+      "motion": "stop_guard"
+    },
+    "TOTAL_FIELD_DECIDES": {
+      "state_id": 64,
+      "member_facing": "這一步要先等總場確認。",
+      "vrm_expression": "focus",
+      "motion": "verify"
+    },
+    "REDTEAM_DEFENSE": {
+      "state_id": 99,
+      "member_facing": "這個風險太高，我先幫你擋下來。",
+      "vrm_expression": "angry",
+      "motion": "defense"
+    }
+  },
+  "required_packet_dimensions": [
+    "d1_intent",
+    "d2_state",
+    "d3_coordinate",
+    "d4_evidence",
+    "d5_execution",
+    "d6_technical_definition",
+    "d7_risk",
+    "d8_envelope"
+  ],
+  "next": "WIRE_8D_PACKET_CONTROL_TO_MEMBER_RESPONSE_AND_VRM_LUT_SOURCE_ONLY"
+}

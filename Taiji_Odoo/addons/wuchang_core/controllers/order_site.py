@@ -4,6 +4,15 @@ from odoo.http import request
 import json
 
 
+def _landing_enabled(surface):
+    try:
+        return request.env["wuchang.community.feature.gate"].is_landing_enabled(
+            surface
+        )
+    except KeyError:
+        return False
+
+
 class WuchangOrderSite(http.Controller):
 
     @http.route('/order', type='http', auth='public', website=True)
@@ -13,7 +22,9 @@ class WuchangOrderSite(http.Controller):
         allow_delivery = request.env['ir.config_parameter'].sudo().get_param('wuchang.allow_delivery', 'True')
         min_amount = request.env['ir.config_parameter'].sudo().get_param('wuchang.min_amount', '0')
         return request.render('wuchang_core.order_website_page', {
-            'ordering_enabled': ordering_enabled == 'True',
+            'ordering_enabled': (
+                ordering_enabled == 'True' and _landing_enabled("pos_order")
+            ),
             'announcement': announcement,
             'allow_delivery': allow_delivery == 'True',
             'min_amount': float(min_amount or 0),
@@ -21,6 +32,12 @@ class WuchangOrderSite(http.Controller):
 
     @http.route('/api/order/create', type='json', auth='public')
     def create_order(self, **payload):
+        if not _landing_enabled("pos_order"):
+            return {
+                "ok": False,
+                "state": "HOLD_LANDING_CONTROL_DISABLED",
+                "feature_key": "landing.pos_order",
+            }
         try:
             data = payload or {}
             items = data.get('items', [])
@@ -69,12 +86,10 @@ class WuchangOrderSite(http.Controller):
 
     @http.route('/payment/mock_callback', type='http', auth='public')
     def payment_mock(self, **kw):
-        ref = kw.get('ref')
-        order = request.env['wuchang.order'].sudo().search([('name', '=', ref)], limit=1)
-        if order:
-            order.write({'state': 'paid'})
-            return http.Response('PAID', status=200)
-        return http.Response('NOT FOUND', status=404)
+        return http.Response(
+            'BLOCK_DEMO_PAYMENT_CALLBACK_NOT_PRODUCT_AUTHORITY',
+            status=410,
+        )
 
     @http.route('/api/public_benefit/summary', type='json', auth='user')
     def public_benefit_summary(self, days=30):

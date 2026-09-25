@@ -1,0 +1,101 @@
+{
+  "$id": "urn:w7tp:small-agent:capability-manifest:v0.1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agent_ref": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "agent_version": {
+      "const": "v0.1-d27230aba7a4"
+    },
+    "available_asset_refs": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "direct_commit": {
+      "const": false
+    },
+    "execution_permissions": {
+      "items": {
+        "enum": [
+          "RESOLVE_REFERENCE",
+          "BUILD_RECONSTRUCTION_REQUEST",
+          "REQUEST_EQUIVALENCE_VERIFICATION",
+          "SUBMIT_CANDIDATE"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "observation_domain_ref": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "policy_sha256": {
+      "const": "d27230aba7a4ecd051f4169184c1fa5357ce5efa1d62019238d68991b0140960",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "privacy_boundary_ref": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "w7tp.small-agent.capability-manifest/v0.1"
+    },
+    "status": {
+      "const": "CANDIDATE_DEPLOYABLE"
+    },
+    "supported_reconstructors": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "supported_rule_refs": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "supported_schema_versions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "agent_ref",
+    "agent_version",
+    "protocol_version",
+    "policy_sha256",
+    "supported_schema_versions",
+    "supported_rule_refs",
+    "supported_reconstructors",
+    "available_asset_refs",
+    "observation_domain_ref",
+    "privacy_boundary_ref",
+    "execution_permissions",
+    "direct_commit"
+  ],
+  "title": "W7TP Small Agent Candidate Capability Manifest",
+  "type": "object"
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "W7TP-MEMBER-SOVEREIGN-IDENTITY-VERIFIER-P1-SHA256-MANIFEST/1.0",
+  "candidate_id": "P1_W7TP_NATIVE_MEMBER_SOVEREIGN_IDENTITY_READ_ONLY_VERIFIER_V1",
+  "run_id": "P1_W7TP_MEMBER_IDENTITY_VERIFIER_20260729T134651Z",
+  "created_at": "2026-07-29T13:46:51Z",
+  "state": "SOURCE_READY_CANDIDATE",
+  "candidate_scope": "P1_READ_ONLY_VERIFIER_ONLY",
+  "candidate_only": true,
+  "p0_source_binding": {
+    "content_sha256": "2b8fec135a9a714af0a8b4cc5c9a77fcbc06c643ea13c66b73271c6834e592ce",
+    "manifest_sha256": "4ee5af92bfb674ae3f1ad5e761e09122477bf545b66f5e0b408f6a969a8e625c",
+    "schema_count": 3,
+    "focused_validation_reused": "PASS_36_OF_36",
+    "schema_validation_reused": "PASS_3_OF_3",
+    "red_team_validation_reused": "PASS_44_OF_44",
+    "p0_rescan": false
+  },
+  "verification_scope": {
+    "root_version_chain": true,
+    "registry_snapshot": true,
+    "proof_refs": true,
+    "revocation_epoch": true,
+    "ttl": true,
+    "nonce_replay_evidence": true,
+    "role_seat_snapshot": true,
+    "scope": true,
+    "effect_class": true,
+    "dual_receipts": true,
+    "all_snapshot_registry_evidence_hash_bound": true,
+    "missing_evidence_result": "HOLD_NOT_EVIDENCED",
+    "founder_parallel_root": false,
+    "founder_difference_limited_to_short_lived_role_seat_lease": true
+  },
+  "outcome_contract": {
+    "candidate_states": [
+      "PASS",
+      "HOLD",
+      "BLOCK"
+    ],
+    "candidate_only": true,
+    "issues_real_root": false,
+    "creates_registry": false,
+    "consumes_runtime_nonce": false,
+    "writes_runtime_state": false
+  },
+  "content_hash_rule": "SHA256_OF_SHA256SUM_OUTPUT_LINES_IN_LEXICOGRAPHIC_PATH_ORDER",
+  "content_sha256": "2e40172beca70eb5eb4a1805ea99f8a2d131c3622451b147c764e6488782dafc",
+  "file_count": 2,
+  "files": [
+    {
+      "path": "tests/test_member_sovereign_identity_verifier.py",
+      "sha256": "f5d58d94b4bc74b7cc6e4d376c25987401863e4de2000e839a09acaa33a574a2",
+      "size": 13279,
+      "role": "p1_focused_read_only_verifier_red_team_tests"
+    },
+    {
+      "path": "tools/total_field/w7tp_intent_field_suite/member_sovereign_identity.py",
+      "sha256": "3634cdb4e89e49e2f1a2a8058d869fffe29f6a679721b2bfaa8c082311ccca6b",
+      "size": 16285,
+      "role": "p1_w7tp_native_member_sovereign_identity_read_only_verifier"
+    }
+  ],
+  "validation": {
+    "py_compile": "PASS",
+    "focused_tests": "PASS_32_OF_32",
+    "negative_acceptance": "PASS_28_CASES",
+    "red_team_pre_construction": "PASS",
+    "red_team_pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE",
+    "red_team_pre_landing_evidence": "SOURCE_TEST_MANIFEST_ONLY; NO_RUNTIME_LANDING_TARGET",
+    "red_team_post_reconstruction": "PASS_32_OF_32",
+    "static_read_only_surface": "PASS",
+    "forbidden_output_surface": "PASS",
+    "p0_hash_unchanged": "PASS"
+  },
+  "self_hash": {
+    "included": false,
+    "reason": "SELF_REFERENCE_EXCLUDED; hash the completed manifest as an external seal value"
+  },
+  "p2_activation": false,
+  "odoo_write": false,
+  "database_write": false,
+  "oauth_action": false,
+  "line_google_action": false,
+  "pos_action": false,
+  "payment_action": false,
+  "restart": false,
+  "deploy": false,
+  "git_write": false,
+  "next_hold": "HOLD_P2_ODOO_AUTHORITY_LEDGER_NOT_AUTHORIZED"
+}

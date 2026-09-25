@@ -1,0 +1,39 @@
+{
+  "schema": "w7tp.total_field.runtime_deployment_receipt.v2_1",
+  "run_id": "W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z",
+  "state": "PASS",
+  "deployed_at_utc": "2026-07-28T05:58:58Z",
+  "node": "taiji01",
+  "service": "w7tp-intent-field.service",
+  "previous_release": "/home/taiji_admin/.local/share/w7tp-intent-field/releases/34ba42505a31cff2",
+  "active_release": "/home/taiji_admin/.local/share/w7tp-intent-field/releases/2a97cd5149f9fe68",
+  "release_content_sha256": "2a97cd5149f9fe68fc98d6a5c2f76eb5d68c39055f657450deff1a96f3d9fd54",
+  "release_manifest": {
+    "path": "runtime/isolated/w7tp_canonical_v2_1_promotion/W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z/release_bundle/w7tp-intent-field-2a97cd5149f9fe68.manifest.json",
+    "sha256": "042ee20b04a42c077f3512a97f443d62e1e2ace58aea30b8af6c8e5e9bcecea1"
+  },
+  "canonical_pointer": {
+    "path": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "sha256": "2edb0d87b95dc6290675fea38ab1a83cb429d8bcdddf9438e907bd051a16290b"
+  },
+  "promotion_receipt": {
+    "path": "runtime/total_field/w7tp_canonical_v2_1/W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z/receipts/PROMOTION_RECEIPT.json",
+    "sha256": "6c0da12c33fa55c311b76b58d9e1d2a4ead5ba2b2d4b43409fef5639485c37ed"
+  },
+  "service_mutation": false,
+  "restart": false,
+  "main_pid_before": 2381386,
+  "main_pid_after": 2381386,
+  "nrestarts_before": 0,
+  "nrestarts_after": 0,
+  "health": "PASS",
+  "readiness": "PASS",
+  "db_write": false,
+  "router_write": false,
+  "remote_push": false,
+  "rollback": {
+    "state": "ARMED",
+    "target": "/home/taiji_admin/.local/share/w7tp-intent-field/releases/34ba42505a31cff2",
+    "mode": "ATOMIC_CURRENT_SYMLINK_RESTORE"
+  }
+}

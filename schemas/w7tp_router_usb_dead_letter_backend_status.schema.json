@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_router_usb_dead_letter_backend_status.schema.json",
+  "title": "W7TP Router USB Dead-Letter Backend Status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "router_id_ref",
+    "created_at",
+    "jffs_status",
+    "usb_status",
+    "usb_dead_letter_status",
+    "jffs_pointer_status",
+    "backend_decision",
+    "evidence_ref",
+    "safety_flags"
+  ],
+  "properties": {
+    "router_id_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "jffs_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "healthy",
+        "degraded",
+        "pointer_path"
+      ],
+      "properties": {
+        "role": {
+          "const": "pointer_status_only"
+        },
+        "healthy": {
+          "type": "boolean"
+        },
+        "degraded": {
+          "type": "boolean"
+        },
+        "pointer_path": {
+          "type": "string"
+        }
+      }
+    },
+    "usb_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "healthy",
+        "mount_ref"
+      ],
+      "properties": {
+        "healthy": {
+          "type": "boolean"
+        },
+        "mount_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "usb_dead_letter_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "healthy",
+        "mount_ref",
+        "mailbox_path"
+      ],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "healthy": {
+          "type": "boolean"
+        },
+        "mount_ref": {
+          "type": "string"
+        },
+        "mailbox_path": {
+          "type": "string"
+        }
+      }
+    },
+    "jffs_pointer_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "healthy",
+        "degraded",
+        "pointer_path"
+      ],
+      "properties": {
+        "role": {
+          "const": "pointer_status_only"
+        },
+        "healthy": {
+          "type": "boolean"
+        },
+        "degraded": {
+          "type": "boolean"
+        },
+        "pointer_path": {
+          "type": "string"
+        }
+      }
+    },
+    "backend_decision": {
+      "type": "string",
+      "enum": [
+        "USB_MAILBOX_OK",
+        "USB_MAILBOX_OK_JFFS_POINTER_OK",
+        "USB_MAILBOX_OK_JFFS_DEGRADED",
+        "HOLD_USB_DEAD_LETTER_BACKEND_UNAVAILABLE",
+        "HOLD_NO_SAFE_BACKEND",
+        "HOLD_SECRET_PATTERN_DETECTED",
+        "HOLD_ROUTER_AUTHORITY_NOT_VERIFIED"
+      ]
+    },
+    "evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "safety_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "SECRET_READ",
+        "ENV_DUMP",
+        "MEMBER_PLAINTEXT_READ",
+        "RAW_AUDIO_READ",
+        "ROUTER_PASSWORD_SAVE",
+        "USB_DEAD_LETTER_REQUIRED",
+        "JFFS_POINTER_OR_STATUS_ONLY"
+      ],
+      "properties": {
+        "SECRET_READ": {
+          "const": false
+        },
+        "ENV_DUMP": {
+          "const": false
+        },
+        "MEMBER_PLAINTEXT_READ": {
+          "const": false
+        },
+        "RAW_AUDIO_READ": {
+          "const": false
+        },
+        "ROUTER_PASSWORD_SAVE": {
+          "const": false
+        },
+        "USB_DEAD_LETTER_REQUIRED": {
+          "const": true
+        },
+        "JFFS_POINTER_OR_STATUS_ONLY": {
+          "const": true
+        }
+      }
+    }
+  }
+}

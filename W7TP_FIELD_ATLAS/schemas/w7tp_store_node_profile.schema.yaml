@@ -1,0 +1,23 @@
+schema_id: W7TP_STORE_NODE_PROFILE
+status: DRAFT
+purpose: Store-local node capability profile without access-bearing tokens.
+required_fields:
+  - node_ref
+  - store_ref
+  - role
+  - capabilities
+  - risk_tier
+  - action_boundary
+fields:
+  node_ref: redacted stable node alias
+  store_ref: store or branch reference
+  role: POS maintenance, local reconstruction, display compute, or evidence node
+  capabilities: non-secret capability list
+  display_target: optional customer display target
+  risk_tier: stage_1, stage_2, or stage_3
+  action_boundary: candidate_only, dry_run_only, or requires_review
+security_boundary:
+  tailscale_invite_forbidden: true
+  token_material_forbidden: true
+  live_credential_path_forbidden: true
+

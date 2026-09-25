@@ -1,0 +1,110 @@
+<odoo>
+    <record id="view_wuchang_line_official_account_config_candidate_list" model="ir.ui.view">
+        <field name="name">wuchang.line.official.account.config.candidate.list</field>
+        <field name="model">wuchang.line.official.account.config.candidate</field>
+        <field name="arch" type="xml">
+            <list string="LINE Official Account Config Candidates">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="refs_draft_hash"/>
+                <field name="packet_hash"/>
+                <field name="evidence_hash"/>
+                <field name="external_api_call"/>
+                <field name="formal_line_message_send"/>
+                <field name="official_account_setting_changed"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_line_official_account_config_candidate_form" model="ir.ui.view">
+        <field name="name">wuchang.line.official.account.config.candidate.form</field>
+        <field name="model">wuchang.line.official.account.config.candidate</field>
+        <field name="arch" type="xml">
+            <form string="LINE Official Account Config Candidate">
+                <header>
+                    <button name="action_build_refs_draft"
+                            type="object"
+                            string="Build Refs Draft"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_config_candidate"
+                            type="object"
+                            string="Build Config Candidate"
+                            class="btn-primary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_dead_letter"
+                            type="object"
+                            string="Dead Letter"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,candidate_hold,ready_for_human_approval,dead_letter"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="style_ref"/>
+                        <field name="operator_ref"/>
+                    </group>
+                    <group string="Natural Language Intent">
+                        <field name="intent_text"
+                               placeholder="例如：幫我把 LINE 官方帳號設定成咖啡館會員客服模式；新朋友加入先歡迎並詢問是否領用會員小J；促銷只發給已同意會員；設定完成後給我核定，不要直接生效。"/>
+                    </group>
+                    <group string="Side Effect Boundary">
+                        <field name="external_api_call" readonly="1"/>
+                        <field name="formal_line_message_send" readonly="1"/>
+                        <field name="official_account_setting_changed" readonly="1"/>
+                        <field name="secret_read" readonly="1"/>
+                        <field name="member_plaintext_read" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="LINE Official Account Refs">
+                            <field name="refs_json" placeholder='{"line_official_account_ref":"LINE_OFFICIAL_ACCOUNT_REF_CAFE","messaging_api_channel_ref":"MESSAGING_API_CHANNEL_REF_CAFE","webhook_endpoint_ref":"WEBHOOK_ENDPOINT_REF_CAFE","channel_secret_ref":"CHANNEL_SECRET_REF_VAULT_ONLY","channel_access_token_runtime_ref":"CHANNEL_ACCESS_TOKEN_RUNTIME_REF_VAULT_ONLY","message_policy_ref":"MESSAGE_POLICY_REF_CAFE","audience_policy_ref":"AUDIENCE_POLICY_REF_CONSENTED_MEMBERS","consent_policy_ref":"CONSENT_POLICY_REF_CAFE","human_owner_admin_release_ref":"HUMAN_OWNER_ADMIN_RELEASE_REF_CAFE"}'/>
+                            <field name="refs_draft_hash" readonly="1"/>
+                            <field name="refs_draft_warnings" readonly="1"/>
+                        </page>
+                        <page string="Candidate Packet">
+                            <field name="config_candidate_json" readonly="1"/>
+                            <field name="packet_hash" readonly="1"/>
+                            <field name="evidence_hash" readonly="1"/>
+                        </page>
+                        <page string="Failure Reasons">
+                            <field name="failure_reasons" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_line_official_account_config_candidate_search" model="ir.ui.view">
+        <field name="name">wuchang.line.official.account.config.candidate.search</field>
+        <field name="model">wuchang.line.official.account.config.candidate</field>
+        <field name="arch" type="xml">
+            <search string="LINE Official Account Config Candidates">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="packet_hash"/>
+                <filter name="filter_candidate_hold" string="Candidate Hold" domain="[('state','=','candidate_hold')]"/>
+                <filter name="filter_ready_for_human_approval" string="Ready For Human Approval" domain="[('state','=','ready_for_human_approval')]"/>
+                <filter name="filter_dead_letter" string="Dead Letter" domain="[('state','=','dead_letter')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wuchang_line_official_account_config_candidate" model="ir.actions.act_window">
+        <field name="name">LINE Official Account Config</field>
+        <field name="res_model">wuchang.line.official.account.config.candidate</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_wuchang_line_official_account_config_candidate"
+              name="LINE Official Account Config"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_line_official_account_config_candidate"
+              sequence="30"/>
+</odoo>

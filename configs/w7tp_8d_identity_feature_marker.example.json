@@ -1,0 +1,123 @@
+{
+  "schema_version": "w7tp.8d_identity_feature_marker.p1",
+  "policy_id": "W7TP_8D_IDENTITY_FEATURE_MARKING_POLICY",
+  "feature_assertion_mode": "candidate_marker_only",
+  "requires_total_field_verify": true,
+  "contains_member_plaintext": false,
+  "plaintext_identity_forbidden": true,
+  "base_identity_features": {
+    "subject_basis_enum": ["NATURAL_PERSON", "GROUP_ENTITY", "VEHICLE", "EQUIPMENT", "FACILITY", "UNKNOWN"],
+    "residency_feature_enum": ["COMMUNITY_RESIDENT", "NON_COMMUNITY_RESIDENT", "UNKNOWN_REQUIRES_REVIEW"],
+    "merchant_feature_enum": ["COMMUNITY_MERCHANT", "NON_COMMUNITY_MERCHANT", "NOT_MERCHANT", "UNKNOWN_REQUIRES_REVIEW"],
+    "identity_scope_enum": ["BASIC_PERSONAL_IDENTITY", "GROUP_IDENTITY", "ASSET_OR_FACILITY_IDENTITY"]
+  },
+  "merchant_feature_functions": [
+    "MERCHANT_RESPONSIBLE_PERSON",
+    "MERCHANT_STORE_MANAGER",
+    "MERCHANT_STAFF",
+    "MERCHANT_TAGGED_MEMBER",
+    "MERCHANT_MEMBER"
+  ],
+  "property_feature_functions": [
+    "PROPERTY_CHAIRPERSON",
+    "PROPERTY_VICE_CHAIRPERSON",
+    "PROPERTY_TREASURER",
+    "PROPERTY_GENERAL_MANAGER",
+    "PROPERTY_UNIT_OWNER",
+    "PROPERTY_RESIDENT",
+    "PROPERTY_VEHICLE_TYPE",
+    "PROPERTY_VEHICLE_COLOR",
+    "PROPERTY_EQUIPMENT",
+    "PROPERTY_FACILITY"
+  ],
+  "association_feature_functions": [
+    "ASSOCIATION_IMMUTABLE_FOUNDER",
+    "ASSOCIATION_CHAIRPERSON",
+    "ASSOCIATION_SECRETARY_GENERAL",
+    "ASSOCIATION_VICE_CHAIRPERSON",
+    "ASSOCIATION_EXECUTIVE_DIRECTOR",
+    "ASSOCIATION_DIRECTOR",
+    "ASSOCIATION_EXECUTIVE_SUPERVISOR",
+    "ASSOCIATION_SUPERVISOR",
+    "ASSOCIATION_SECRETARY",
+    "ASSOCIATION_STAFF",
+    "ASSOCIATION_MEMBER"
+  ],
+  "immutable_founder_policy": {
+    "function": "ASSOCIATION_IMMUTABLE_FOUNDER",
+    "immutable_founder_marker": true,
+    "founder_marker_mutable": false,
+    "role_rotation_can_override": false,
+    "allowed_refs": ["founder_ref", "evidence_ref", "verifier_ref"],
+    "denied_plaintext": ["name", "phone", "address", "id_number"]
+  },
+  "static_group_spatial_positioning_policy": {
+    "enabled": true,
+    "purpose": "7D/8D packets may bind static group, organization, jurisdiction, property, merchant-site, equipment, or facility references to field coordinates or boundary geometry.",
+    "allowed_positioning_subjects": [
+      "GROUP_ENTITY",
+      "ORGANIZATION",
+      "ASSOCIATION_JURISDICTION",
+      "PROPERTY_OR_BUILDING",
+      "MERCHANT_SITE",
+      "EQUIPMENT",
+      "FACILITY"
+    ],
+    "allowed_geometry_scopes": ["POINT_ANCHOR", "BOUNDARY_POLYGON", "BBOX", "SERVICE_AREA"],
+    "allowed_refs": ["coordinate_ref", "geometry_ref", "jurisdiction_ref", "evidence_ref", "verifier_ref"],
+    "static_group_positioning_only": true,
+    "personal_positioning_allowed": false,
+    "contains_precise_person_location": false,
+    "contains_member_plaintext": false
+  },
+  "aggregate_demographic_spatial_policy": {
+    "enabled": true,
+    "authority_position": "community_association_public_interest_protection_authority",
+    "non_commercial_institution": true,
+    "resident_protection_intent": true,
+    "purpose": "The association may know, compare, and plan by aggregate public-benefit demographics such as which li has more elderly residents, children, youth, or young adults.",
+    "allowed_analysis_purposes": [
+      "COMMUNITY_SERVICE_PLANNING",
+      "ELDERLY_CHILD_YOUTH_RESOURCE_ALLOCATION",
+      "PUBLIC_BENEFIT_ACTIVITY_PLANNING",
+      "SUBSIDY_AND_CARE_SERVICE_PLANNING",
+      "DISASTER_AND_PUBLIC_NOTICE_PLANNING"
+    ],
+    "allowed_aggregation_levels": ["LI_LEVEL", "SERVICE_AREA_LEVEL", "PUBLIC_STATISTICAL_AREA"],
+    "allowed_cohort_buckets": ["CHILDREN", "YOUTH", "YOUNG_ADULTS", "WORKING_AGE", "ELDERLY", "OLDER_ELDERLY"],
+    "ranking_allowed": true,
+    "person_level_data_allowed": false,
+    "household_level_data_allowed": false,
+    "precise_member_location_allowed": false,
+    "allowed_refs": ["statistic_ref", "public_data_ref", "evidence_ref", "jurisdiction_ref", "geometry_ref"],
+    "requires_total_field_verify": true
+  },
+  "masking_definition_policy": {
+    "definition": "MASKED_DATA_IS_NON_IDENTIFIABLE_PERSONAL_DATA",
+    "rule": "If a payload can identify or re-identify a natural person, member, resident, household, or precise personal location, it is not masked data and must be treated as plaintext or high-risk personal data.",
+    "reidentification_possible": false,
+    "masked_payload_can_identify_person": false
+  },
+  "denied_authority": [
+    "final_decision",
+    "db_write",
+    "secret_read",
+    "member_plaintext_persist",
+    "personal_positioning",
+    "precise_member_location_persist",
+    "reidentifiable_masked_payload",
+    "payment_execute",
+    "formal_send",
+    "role_elevation_without_verifier"
+  ],
+  "ref_only_fields": [
+    "subject_ref",
+    "group_ref",
+    "role_ref",
+    "vehicle_ref",
+    "equipment_ref",
+    "facility_ref",
+    "evidence_ref",
+    "verifier_ref"
+  ]
+}

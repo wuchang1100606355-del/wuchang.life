@@ -1,0 +1,46 @@
+fixture_id: W7TP_USER_STANCE_INTEGRITY_FIXTURE_20260621
+state: USER_STANCE_HANDHOLD_GATE
+readonly_total_field_query_first: true
+user_stance_priority: true
+cloud_codex_gpt_candidate_only: true
+taiji01_total_field_authority: true
+no_self_invented_fact: true
+unified_questions_required_on_gap: true
+output_label_set:
+  - FACT
+  - INFERENCE
+  - DESIGN_PROPOSAL
+  - NOT_YET_VERIFIED
+  - INFO_REQUIRED
+unified_question_rule:
+  behavior: preserve_all_open_gaps_in_next_total_field_query
+  scattered_assumptions_allowed: false
+simplification_alert_rule:
+  alert_state: SIMPLIFICATION_MISSED_ALERT
+  breach_state: TRUST_BREACH_INTEGRITY_BREACH_ETHICS_BREACH
+  applies_when:
+    - W7TP_can_simplify_but_not_used
+    - GT8D_can_simplify_but_not_used
+    - Spacetime_can_simplify_but_not_used
+    - 8D_packet_can_simplify_but_not_used
+next_total_field_query:
+  prompt: 請總場指定第一個最小可安全落地模組
+  options:
+    - POS order_candidate API
+    - cashier_confirm gate
+    - kitchen_display
+    - spacetime_event wrapper
+    - Odoo sidecar candidate
+    - 8D identity binding skeleton
+    - GT8D route table POS expansion
+source_attachment: /home/taiji_admin/.codex/attachments/418af801-418d-4f9f-bf8b-f95a6a6a17d1/pasted-text-1.txt
+safety_flags:
+  secret_read: false
+  member_plaintext_read: false
+  db_write: false
+  service_restart: false
+  deploy: false
+  odoo_core_mutation: false
+  production_lineworks_action: false
+  google_token_validation: false
+

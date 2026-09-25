@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "小J會員主權 AI 瀏覽器橋",
+  "short_name": "小J瀏覽器橋",
+  "version": "0.1.0",
+  "description": "將小J 1B 的 8D 候選瀏覽器動作轉成最小權限、本地准駁後的瀏覽器操作。",
+  "action": {
+    "default_title": "開啟小J側邊欄"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "permissions": [
+    "activeTab",
+    "nativeMessaging",
+    "scripting",
+    "sidePanel",
+    "storage"
+  ],
+  "host_permissions": []
+}

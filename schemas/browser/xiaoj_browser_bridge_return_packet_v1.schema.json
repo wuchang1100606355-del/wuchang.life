@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/browser/xiaoj_browser_bridge_return_packet_v1.schema.json",
+  "title": "XiaoJ Browser Bridge Return Packet V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "candidate_only",
+    "must_not_execute",
+    "requires_total_field_verify",
+    "member_plaintext_transferred",
+    "secret_transferred",
+    "raw_browser_page_transferred",
+    "raw_text_returned",
+    "D1_identity",
+    "D2_intent",
+    "D3_state",
+    "D4_evidence",
+    "D5_execution",
+    "D6_generative_transmission",
+    "D7_risk",
+    "D8_envelope"
+  ],
+  "properties": {
+    "schema_version": { "const": "xiaoj.browser_bridge_return_packet.v1" },
+    "packet_type": { "const": "BROWSER_BRIDGE_RETURN_PACKET" },
+    "candidate_only": { "const": true },
+    "must_not_execute": { "const": true },
+    "requires_total_field_verify": { "const": true },
+    "member_plaintext_transferred": { "const": false },
+    "secret_transferred": { "const": false },
+    "raw_browser_page_transferred": { "const": false },
+    "raw_text_returned": { "const": false },
+    "D1_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor_ref", "device_ref", "plaintext_identity_forbidden"],
+      "properties": {
+        "actor_ref": { "type": "string", "minLength": 8 },
+        "device_ref": { "type": "string", "minLength": 8 },
+        "plaintext_identity_forbidden": { "const": true }
+      }
+    },
+    "D2_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent_ref", "action_type_candidate", "bridge_decision"],
+      "properties": {
+        "intent_ref": { "type": "string", "pattern": "^intent_ref:[A-Za-z0-9_./:-]+$" },
+        "action_type_candidate": { "type": "string" },
+        "bridge_decision": { "type": "string" }
+      }
+    },
+    "D3_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["browser_result_ref", "execution_allowed", "dry_run", "submit_forbidden"],
+      "properties": {
+        "browser_result_ref": { "type": "string", "pattern": "^browser_result_ref:[A-Za-z0-9_./:-]+$" },
+        "execution_allowed": { "const": false },
+        "dry_run": { "const": true },
+        "submit_forbidden": { "const": true }
+      }
+    },
+    "D4_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["behavior_info_ref", "action_trace_ref", "selected_text_ref", "draft_ref"],
+      "properties": {
+        "behavior_info_ref": { "type": "string", "pattern": "^behavior_ref:[A-Za-z0-9_./:-]+$" },
+        "action_trace_ref": { "type": "string", "pattern": "^action_trace_ref:[A-Za-z0-9_./:-]+$" },
+        "selected_text_ref": { "type": "string", "pattern": "^selected_text_ref:[A-Za-z0-9_./:-]+$" },
+        "draft_ref": { "type": "string", "pattern": "^draft_ref:[A-Za-z0-9_./:-]+$" }
+      }
+    },
+    "D5_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_allowed", "allowed_next_actions", "forbidden_actions", "human_confirm_required"],
+      "properties": {
+        "execution_allowed": { "const": false },
+        "allowed_next_actions": { "type": "array", "items": { "type": "string" } },
+        "forbidden_actions": { "type": "array", "items": { "type": "string" } },
+        "human_confirm_required": { "type": "boolean" }
+      }
+    },
+    "D6_generative_transmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "return_mode",
+        "cloud_compute_ref",
+        "reconstruction_hint_ref",
+        "cloud_candidate_only",
+        "member_plaintext_transferred",
+        "secret_transferred"
+      ],
+      "properties": {
+        "return_mode": { "const": "browser_bridge_packetized_candidate_result" },
+        "cloud_compute_ref": { "type": "string", "pattern": "^cloud_compute_ref:[A-Za-z0-9_./:-]+$" },
+        "reconstruction_hint_ref": { "type": "string", "pattern": "^reconstruct_ref:[A-Za-z0-9_./:-]+$" },
+        "cloud_candidate_only": { "const": true },
+        "member_plaintext_transferred": { "const": false },
+        "secret_transferred": { "const": false }
+      }
+    },
+    "D7_risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bridge_ok", "decision", "reason_ref"],
+      "properties": {
+        "bridge_ok": { "type": "boolean" },
+        "decision": { "type": "string" },
+        "reason_ref": { "type": "string", "pattern": "^reason_ref:[A-Za-z0-9_./:-]+$" }
+      }
+    },
+    "D8_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ttl_seconds", "nonce", "created_at", "return_packet_hash", "total_field_verifier_required", "replay_protection"],
+      "properties": {
+        "ttl_seconds": { "type": "integer", "minimum": 1 },
+        "nonce": { "type": "string", "pattern": "^nonce_ref:[A-Za-z0-9_./:-]+$" },
+        "created_at": { "type": "string" },
+        "return_packet_hash": { "type": "string", "pattern": "^return_packet_hash:[A-Za-z0-9_./:-]+$" },
+        "total_field_verifier_required": { "const": true },
+        "replay_protection": { "const": true }
+      }
+    }
+  }
+}

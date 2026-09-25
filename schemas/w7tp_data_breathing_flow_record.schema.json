@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_data_breathing_flow_record.schema.json",
+  "title": "W7TP Data Breathing Flow Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "created_at",
+    "stages",
+    "route_decision",
+    "source_redacted",
+    "candidate_only",
+    "cloud_authority",
+    "local_authority",
+    "packet_ref",
+    "evidence_ref"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stages": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "intake",
+          "redact",
+          "packetize",
+          "verify",
+          "route",
+          "materialize",
+          "exhale",
+          "expire"
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "const": "intake"
+          }
+        },
+        {
+          "contains": {
+            "const": "redact"
+          }
+        },
+        {
+          "contains": {
+            "const": "packetize"
+          }
+        },
+        {
+          "contains": {
+            "const": "verify"
+          }
+        },
+        {
+          "contains": {
+            "const": "route"
+          }
+        },
+        {
+          "contains": {
+            "const": "materialize"
+          }
+        },
+        {
+          "contains": {
+            "const": "exhale"
+          }
+        },
+        {
+          "contains": {
+            "const": "expire"
+          }
+        }
+      ]
+    },
+    "route_decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "QUARANTINE",
+        "DEAD_LETTER",
+        "EXECUTE_CANDIDATE_ONLY",
+        "UI_DISPLAY_ONLY"
+      ]
+    },
+    "dead_letter_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_redacted": {
+      "const": true
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "cloud_authority": {
+      "const": false
+    },
+    "local_authority": {
+      "const": "discrete_state_core"
+    },
+    "packet_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "route_decision": {
+            "const": "DEAD_LETTER"
+          }
+        },
+        "required": [
+          "route_decision"
+        ]
+      },
+      "then": {
+        "required": [
+          "dead_letter_ref"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "agent_ref": "agent/w7tp-small-generative-transport/v0_1",
+  "agent_version": "v0.1.2-d27230aba7a4",
+  "available_asset_refs": [],
+  "direct_commit": false,
+  "execution_permissions": [
+    "RESOLVE_REFERENCE",
+    "BUILD_RECONSTRUCTION_REQUEST",
+    "REQUEST_EQUIVALENCE_VERIFICATION",
+    "SUBMIT_CANDIDATE"
+  ],
+  "observation_domain_ref": "observation-domain/configured-at-install/v0_1",
+  "policy_sha256": "d27230aba7a4ecd051f4169184c1fa5357ce5efa1d62019238d68991b0140960",
+  "privacy_boundary_ref": "privacy/sovereign-node/v0_1",
+  "protocol_version": "w7tp/state-field-packet/v0.1",
+  "schema_version": "w7tp.small-agent.capability-manifest/v0.1",
+  "status": "CANDIDATE_DEPLOYABLE",
+  "supported_reconstructors": [
+    "reconstructor/w7tp/reference-only/v0_1"
+  ],
+  "supported_rule_refs": [
+    "rules/tfct/identity_v0_1",
+    "rules/tfct/normalize_v0_1"
+  ],
+  "supported_schema_versions": [
+    "tfct.true8d.runtime-candidate/0.1",
+    "8d-gte-runtime-profile-candidate/0.1"
+  ]
+}

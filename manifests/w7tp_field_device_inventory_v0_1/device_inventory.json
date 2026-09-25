@@ -1,0 +1,242 @@
+{
+  "schema_version": "w7tp.field-device-inventory/v0.1",
+  "run_id": "WIFI_SUNMI_HOMEPAD_FIELD_INVENTORY_AND_CONTAINER_PROFILE_V0_1",
+  "status": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED",
+  "evidence_snapshot": {
+    "snapshot_date": "2026-07-15",
+    "wifi_interface": "enp1s0",
+    "wifi_subnet": "192.168.50.0/24",
+    "wifi_devices_found": 10,
+    "wifi_discovery_method": "IP_NEIGHBOR_CACHE_ONLY_NMAP_UNAVAILABLE",
+    "tailscale_devices_found": 12,
+    "tailscale_discovery_method": "TAILSCALE_STATUS_JSON_SAFE_FIELDS_ONLY",
+    "adb_state": "NO_AUTHORIZED_DEVICE",
+    "router_client_list": "NOT_AVAILABLE",
+    "evidence_refs": [
+      "local-command:ip-j-address:enp1s0=192.168.50.249/24",
+      "local-command:ip-j-route:192.168.50.0/24:dev=enp1s0",
+      "local-command:ip-neigh-show:2026-07-15",
+      "local-command:tailscale-status-json:safe-fields:2026-07-15",
+      "local-command:adb-devices-l:no-devices:2026-07-15"
+    ]
+  },
+  "target_roles": [
+    "SUNMI_POS",
+    "HOME_PAD_1",
+    "HOME_PAD_2"
+  ],
+  "excluded_targets": [
+    {
+      "node_id": "taiji01",
+      "reason_code": "EXCLUDED_LOCAL_NODE"
+    }
+  ],
+  "devices": [
+    {
+      "device_role": "SUNMI_POS",
+      "node_id": "V3_MIX_EDLA_GL",
+      "governance_identity": "TDI-NODE-sunmi-pos",
+      "tailscale_machine_name": "V3_MIX_EDLA_GL",
+      "tailscale_ipv4": "100.98.69.115",
+      "wifi_ipv4": "192.168.50.176",
+      "mac_address": "74:f7:f6:b8:a6:b3",
+      "manufacturer": "Shanghai Sunmi Technology Co.,Ltd.",
+      "model": null,
+      "os": "Android",
+      "os_version": "13",
+      "hostname": "V3_MIX_EDLA_GL",
+      "online_state": "TAILSCALE_OFFLINE_LAN_NEIGHBOR_STALE",
+      "last_seen": "2026-07-09T19:25:46.1Z",
+      "connection_method": null,
+      "adb_state": "NO_AUTHORIZED_ADB_DEVICE",
+      "container_runtime": "OWNER_CONFIRMED_SUPPORTED_RUNTIME_UNVERIFIED",
+      "authority": "OWNER_CONFIRMED_DEVICE_MAPPING",
+      "observation_domain": "observation-domain:w7tp-field-device-inventory/v0.1/sunmi-pos",
+      "evidence_refs": [
+        "local-command:ip-neigh-show:192.168.50.176=74:f7:f6:b8:a6:b3:STALE",
+        "local-file:/usr/share/ieee-data/oui.txt:74F7F6=Shanghai Sunmi Technology Co.,Ltd.",
+        "local-command:tailscale-status-json:node=nexVobV7PA11CNTRL:name=V3_MIX_EDLA_GL:ipv4=100.98.69.115:os=android:online=false",
+        "owner-confirmation:V3_MIX_EDLA_GL=SUNMI_POS",
+        "owner-confirmation:SUNMI_PLATFORM=Android_13",
+        "owner-confirmation:SUNMI_GOOGLE_COMMERCIAL_VOICE_LICENSE=YES",
+        "owner-confirmation:SUNMI_CONTAINERIZATION_CAPABILITY=YES"
+      ],
+      "address_evidence_refs": {
+        "tailscale_ipv4": "local-command:tailscale-status-json:node=nexVobV7PA11CNTRL:ipv4=100.98.69.115",
+        "wifi_ipv4": "local-command:ip-neigh-show:192.168.50.176=74:f7:f6:b8:a6:b3:STALE"
+      },
+      "identity_method": "OWNER_CONFIRMED_TAILSCALE_MAPPING_PLUS_MAC_OUI_MANUFACTURER",
+      "identity_confidence": "OWNER_CONFIRMED_WITH_DIRECT_MANUFACTURER_EVIDENCE",
+      "deployment_eligibility": false,
+      "hold_reason": "HOLD_NODE_OFFLINE_AND_DEPLOYMENT_TRANSPORT_UNAVAILABLE"
+    },
+    {
+      "device_role": "HOME_PAD_1",
+      "node_id": null,
+      "tailscale_machine_name": null,
+      "tailscale_ipv4": null,
+      "wifi_ipv4": null,
+      "mac_address": null,
+      "manufacturer": null,
+      "model": null,
+      "os": null,
+      "os_version": null,
+      "hostname": null,
+      "online_state": "UNRESOLVED",
+      "last_seen": null,
+      "connection_method": null,
+      "adb_state": "NO_AUTHORIZED_ADB_DEVICE",
+      "container_runtime": "UNVERIFIED",
+      "authority": "UNRESOLVED",
+      "observation_domain": "observation-domain:w7tp-field-device-inventory/v0.1/home-pad-1",
+      "evidence_refs": [
+        "owner-specified-role:HOME_PAD_1",
+        "local-command:ip-neigh-show:no-direct-role-binding",
+        "local-command:tailscale-status-json:no-direct-role-binding"
+      ],
+      "address_evidence_refs": {},
+      "identity_method": "NO_DIRECT_DEVICE_BINDING",
+      "identity_confidence": "UNRESOLVED",
+      "deployment_eligibility": false,
+      "hold_reason": "HOLD_HOMEPAD_IDENTITY_UNRESOLVED"
+    },
+    {
+      "device_role": "HOME_PAD_2",
+      "node_id": null,
+      "tailscale_machine_name": null,
+      "tailscale_ipv4": null,
+      "wifi_ipv4": null,
+      "mac_address": null,
+      "manufacturer": null,
+      "model": null,
+      "os": null,
+      "os_version": null,
+      "hostname": null,
+      "online_state": "UNRESOLVED",
+      "last_seen": null,
+      "connection_method": null,
+      "adb_state": "NO_AUTHORIZED_ADB_DEVICE",
+      "container_runtime": "UNVERIFIED",
+      "authority": "UNRESOLVED",
+      "observation_domain": "observation-domain:w7tp-field-device-inventory/v0.1/home-pad-2",
+      "evidence_refs": [
+        "owner-specified-role:HOME_PAD_2",
+        "local-command:ip-neigh-show:no-direct-role-binding",
+        "local-command:tailscale-status-json:no-direct-role-binding"
+      ],
+      "address_evidence_refs": {},
+      "identity_method": "NO_DIRECT_DEVICE_BINDING",
+      "identity_confidence": "UNRESOLVED",
+      "deployment_eligibility": false,
+      "hold_reason": "HOLD_HOMEPAD_IDENTITY_UNRESOLVED"
+    }
+  ],
+  "unresolved_devices": [
+    {
+      "observation_id": "tailscale:drallion",
+      "tailscale_machine_name": "drallion",
+      "tailscale_node_id": "npjVBjj5Qf11CNTRL",
+      "tailscale_ipv4": "100.64.68.101",
+      "platform": "ChromeOS",
+      "tailscale_reported_os": "android",
+      "os_layer_interpretation": "CHROMEOS_ANDROID_ARC_LAYER_POSSIBLE",
+      "online_state": "OFFLINE",
+      "last_seen": "2026-07-13T09:43:17.1Z",
+      "candidate_roles": [
+        "HOME_PAD_1",
+        "HOME_PAD_2"
+      ],
+      "excluded_roles": [
+        "SUNMI_POS"
+      ],
+      "evidence_ref": "local-command:tailscale-status-json:node=npjVBjj5Qf11CNTRL",
+      "owner_evidence_ref": "owner-confirmation:drallion=ChromeOS:not-SUNMI",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    },
+    {
+      "observation_id": "lan:192.168.50.124",
+      "wifi_ipv4": "192.168.50.124",
+      "mac_address": "80:38:fb:88:b5:8f",
+      "manufacturer": "Intel Corporate",
+      "online_state": "LAN_NEIGHBOR_STALE",
+      "candidate_roles": ["HOME_PAD_1", "HOME_PAD_2"],
+      "evidence_ref": "local-command:ip-neigh-show:192.168.50.124=80:38:fb:88:b5:8f:STALE",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    },
+    {
+      "observation_id": "lan:192.168.50.113",
+      "wifi_ipv4": "192.168.50.113",
+      "mac_address": "2e:7e:8f:ec:11:d2",
+      "manufacturer": null,
+      "online_state": "LAN_NEIGHBOR_STALE",
+      "candidate_roles": ["HOME_PAD_1", "HOME_PAD_2"],
+      "evidence_ref": "local-command:ip-neigh-show:192.168.50.113=2e:7e:8f:ec:11:d2:STALE",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    },
+    {
+      "observation_id": "lan:192.168.50.29",
+      "wifi_ipv4": "192.168.50.29",
+      "mac_address": "d4:90:9c:d3:64:80",
+      "manufacturer": "Apple, Inc.",
+      "online_state": "LAN_NEIGHBOR_STALE",
+      "candidate_roles": ["HOME_PAD_1", "HOME_PAD_2"],
+      "evidence_ref": "local-command:ip-neigh-show:192.168.50.29=d4:90:9c:d3:64:80:STALE",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    },
+    {
+      "observation_id": "lan:192.168.50.101",
+      "wifi_ipv4": "192.168.50.101",
+      "mac_address": "d4:90:9c:d6:50:f6",
+      "manufacturer": "Apple, Inc.",
+      "online_state": "LAN_NEIGHBOR_STALE",
+      "candidate_roles": ["HOME_PAD_1", "HOME_PAD_2"],
+      "evidence_ref": "local-command:ip-neigh-show:192.168.50.101=d4:90:9c:d6:50:f6:STALE",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    },
+    {
+      "observation_id": "lan:192.168.50.84",
+      "wifi_ipv4": "192.168.50.84",
+      "mac_address": "04:7c:16:a5:cf:68",
+      "manufacturer": "Micro-Star INTL CO., LTD.",
+      "online_state": "LAN_NEIGHBOR_REACHABLE",
+      "candidate_roles": ["HOME_PAD_1", "HOME_PAD_2"],
+      "evidence_ref": "local-command:ip-neigh-show:192.168.50.84=04:7c:16:a5:cf:68:REACHABLE",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    },
+    {
+      "observation_id": "lan:192.168.50.150",
+      "wifi_ipv4": "192.168.50.150",
+      "mac_address": "50:e0:85:78:a3:e3",
+      "manufacturer": "Intel Corporate",
+      "online_state": "LAN_NEIGHBOR_REACHABLE",
+      "candidate_roles": ["HOME_PAD_1", "HOME_PAD_2"],
+      "evidence_ref": "local-command:ip-neigh-show:192.168.50.150=50:e0:85:78:a3:e3:REACHABLE",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    },
+    {
+      "observation_id": "lan:192.168.50.218",
+      "wifi_ipv4": "192.168.50.218",
+      "mac_address": "c6:fd:8d:1a:63:d0",
+      "manufacturer": null,
+      "online_state": "LAN_NEIGHBOR_STALE",
+      "candidate_roles": ["HOME_PAD_1", "HOME_PAD_2"],
+      "evidence_ref": "local-command:ip-neigh-show:192.168.50.218=c6:fd:8d:1a:63:d0:STALE",
+      "hold_reason": "HOLD_DEVICE_IDENTITY_MAPPING_UNRESOLVED"
+    }
+  ],
+  "protected_boundaries": {
+    "remote_write": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "canonical_write": false,
+    "pointer_write": false
+  },
+  "protected_file_baselines": {
+    "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json": "5ec55fec22504aa719803f398c8b408a785c145870bf4cd34434cad242ab9237",
+    "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_POINTER.txt": "0ee90811b6f9f4ebbf798369fa32eeb3950b1c03117490f9d7c4cdc3a5d1c4fa",
+    "runtime/total_field/active/ACTIVE_TFCT_TRUE8D_RUNTIME_POLICY_CANONICAL.json": "a3cf7ead429291afcc2fb7810877a04a9c57f7a10ccd102e5b46fedfeef01176",
+    "runtime/total_field/active/ACTIVE_TFCT_TRUE8D_RUNTIME_POLICY_POINTER.txt": "5e7367cde1b051cfb8ed71614114db1ee8b8c2ff60f08dacb3c2adbd43a037ad"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "allowed_evidence_labels": [
+    "LOCAL_REAL_PRODUCT_PHOTO",
+    "STAFF_APPROVED_PRODUCT_PHOTO"
+  ],
+  "authority": "taiji01_total_field_local_files",
+  "current_manifest_state": "LOCAL_PRODUCT_PHOTO_MANIFEST_EMPTY",
+  "external_photo_fetch": false,
+  "forbidden_evidence_labels": [
+    "GENERATED_IMAGE",
+    "STOCK_IMAGE",
+    "WEB_SCRAPED_IMAGE",
+    "UNKNOWN_SOURCE_IMAGE"
+  ],
+  "generated_photo_allowed_as_product_evidence": false,
+  "minimum_long_edge_px": 1800,
+  "photo_quality_tier": "PHOTOBOOK_PRODUCT_GRADE",
+  "preferred_aspect_ratios": [
+    "4:5",
+    "1:1",
+    "16:9"
+  ],
+  "required_metadata_per_photo": [
+    "item_code",
+    "local_file",
+    "sha256",
+    "shot_type",
+    "quality_tier",
+    "evidence_label"
+  ],
+  "required_shot_types": [
+    "hero_product",
+    "menu_grid_thumbnail",
+    "detail_texture",
+    "serving_context"
+  ],
+  "schema": "w7tp_pos_product_photobook_spec.v1",
+  "state": "PHOTOBOOK_PRODUCT_GRADE_REQUIRED"
+}

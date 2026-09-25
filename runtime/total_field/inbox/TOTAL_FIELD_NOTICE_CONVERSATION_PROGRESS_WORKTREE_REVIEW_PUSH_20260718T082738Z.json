@@ -1,0 +1,68 @@
+{
+  "schema_version": "TOTAL-FIELD-NOTICE-CONVERSATION-PROGRESS-WORKTREE-REVIEW-PUSH/1.0",
+  "state": "SUBMITTED_AND_PUSHED_FOR_REVIEW",
+  "run_id": "TOTAL_FIELD_NOTICE_CONVERSATION_PROGRESS_WORKTREE_REVIEW_PUSH_20260718T082738Z",
+  "progress_run_id": "W7TP_CONVERSATION_PROGRESS_DEVELOPMENT_QUEUE_20260718T081421Z",
+  "worktree_review_run_id": "W7TP_WORKTREE_CHANGE_REVIEW_MANIFEST_20260718T081421Z",
+  "review_entry": "runtime/total_field/inbox",
+  "git": {
+    "branch": "design/wish-tree-adi-thaw-launch-20260703-185047",
+    "commit": "69abb2f937e3081b5c1d1704a6901424490defc7",
+    "remote": "origin",
+    "remote_commit_verified": "69abb2f937e3081b5c1d1704a6901424490defc7",
+    "force_push": false
+  },
+  "submitted_artifacts": [
+    {
+      "path": "runtime/total_field/inbox/W7TP_CONVERSATION_PROGRESS_DEVELOPMENT_QUEUE_20260718T081421Z.json",
+      "file_sha256": "63d73965806d351fdf20361f8005ee5bbda00251f434f7a82493662ed542361c",
+      "conversation_progress_count": 13,
+      "development_queue_item_count": 11
+    },
+    {
+      "path": "runtime/total_field/inbox/W7TP_WORKTREE_CHANGE_REVIEW_MANIFEST_20260718T081421Z.json",
+      "file_sha256": "88c47ed11b15ac3347014ff9542e159761fbe38eae26a6339b6a5af0cef34d65",
+      "inventoried_file_count": 113,
+      "worktree_files_pushed_for_review": 110,
+      "held_file_count": 3
+    }
+  ],
+  "push_scope": {
+    "git_commit_file_count": 112,
+    "worktree_review_candidate_file_count": 110,
+    "total_field_review_packet_count": 2,
+    "internal_source_fusion_packet_pushed": false,
+    "internal_source_fusion_packet_reason": "CONTAINS_INTERNAL_SOURCE_COORDINATES_AND_IS_REFERENCED_BY_HASH_ONLY"
+  },
+  "validation": {
+    "python_ast_pass_count": 63,
+    "json_parse_pass_count": 23,
+    "json_schema_check_pass_count": 13,
+    "yaml_parse_pass_count": 2,
+    "xml_parse_pass_count": 1,
+    "pytest_pass_count": 183,
+    "pytest_subtests_pass_count": 220,
+    "pytest_fail_count": 1,
+    "known_test_hold": "GNP_WEB_04_ENCODED_PDF_INTERNAL_TARGET_STATIC_CHECK",
+    "javascript_syntax": "HOLD_NODE_RUNTIME_NOT_INSTALLED",
+    "actual_secret_evidence_count": 0,
+    "git_diff_check": "PASS",
+    "remote_push": "PASS"
+  },
+  "held_not_pushed": [
+    "missing／timeout／stale／schema／conflict／nonconvergence",
+    "replay／identity",
+    "八場全"
+  ],
+  "authority": {
+    "final_total_field_decision": null,
+    "implementation_approval": false,
+    "deployment_approval": false,
+    "db_write": false,
+    "restart": false,
+    "router_or_dns_write": false
+  },
+  "packet_sha256_basis": "SHA256_CANONICAL_JSON_WITH_PACKET_SHA256_REMOVED",
+  "packet_sha256": "b8b103249c8f5143d8c9ce48186f37b71ae77c5f00bcafb1cded7040c8ff4657",
+  "next": "TOTAL_FIELD_REVIEW_COMMIT_69ABB2F_AND_ASSIGN_TFDEV_01_WHILE_GNP_WEB_04_REMAINS_HOLD"
+}

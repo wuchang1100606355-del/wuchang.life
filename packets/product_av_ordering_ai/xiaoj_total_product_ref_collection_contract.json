@@ -1,0 +1,60 @@
+{
+  "schema": "W7TP_XIAOJ_TOTAL_PRODUCT_REF_COLLECTION_CONTRACT_V1",
+  "state": "P1_TOTAL_PRODUCT_REF_COLLECTION_READY_FOR_HUMAN_FILL",
+  "service": "wuchang_cafe_ai_gateway.services.total_product_ref_collection.build_total_product_ref_collection_draft",
+  "template_service": "wuchang_cafe_ai_gateway.services.total_product_ref_collection.build_total_product_ref_collection_input_template",
+  "tool": "tools/xiaoj_total_product_ref_collection_builder.py",
+  "api": "/wuchang/xiaoj/api/total-product-ref-collection",
+  "template_api": "/wuchang/xiaoj/api/total-product-ref-template",
+  "api_auth": "user",
+  "template": "packets/product_av_ordering_ai/xiaoj_total_product_ref_collection_template.json",
+  "template_cli": "tools/xiaoj_total_product_ref_collection_builder.py --emit-template",
+  "worksheet_cli": "tools/xiaoj_total_product_ref_collection_builder.py --worksheet-out <worksheet.md>",
+  "handoff_integration": {
+    "handoff_inputs_output": true,
+    "human_fill_checklist_output": true,
+    "operator_fill_summary_output": true,
+    "operator_fill_worksheet_md_output": true,
+    "handoff_cli_accepts_ref_collection": "tools/xiaoj_total_product_handoff_pack.py --ref-collection <draft.json>",
+    "handoff_api": "/wuchang/xiaoj/api/total-product-operator-handoff"
+  },
+  "ref_groups": [
+    "lineworks",
+    "line_official_account",
+    "merchant_formal_release",
+    "association_sovereign_member",
+    "resident_property_management"
+  ],
+  "requires_allow_verified_for_verified_refs": true,
+  "forbidden_inputs": [
+    "LINE password",
+    "LINE WORKS password",
+    "channel access token value",
+    "channel secret value",
+    "Google Gemini raw API key",
+    "Odoo password",
+    "router password",
+    "member plaintext",
+    "resident plaintext",
+    "payment card data",
+    "raw audio",
+    "raw video"
+  ],
+  "p1_side_effects": {
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "formal_line_message_send": false,
+    "official_account_setting_changed": false,
+    "formal_member_registration": false,
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "raw_audio_saved": false,
+    "raw_video_saved": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

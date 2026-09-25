@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:field:sovereign-ai-domain-completion:candidate:0.1",
+  "title": "Sovereign AI Domain Completion Candidate",
+  "description": "Closed candidate-only attribute completion contract. Candidate source is not authority and this document cannot commit a Total Field State.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "domain",
+    "entity_ref",
+    "attribute_name",
+    "candidate_value",
+    "source_mode",
+    "model_ref",
+    "provider_ref",
+    "event_ref",
+    "observation_domain_ref",
+    "rule_ref",
+    "evidence_refs",
+    "confidence",
+    "sensitivity",
+    "requires_human_confirmation",
+    "candidate_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "sovereign-ai-domain-completion-candidate/0.1"
+    },
+    "domain": {
+      "enum": [
+        "COMMUNITY",
+        "COMMERCE",
+        "PROPERTY"
+      ]
+    },
+    "entity_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "attribute_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_value": {
+      "type": [
+        "null",
+        "boolean",
+        "integer",
+        "number",
+        "string",
+        "array",
+        "object"
+      ]
+    },
+    "source_mode": {
+      "enum": [
+        "TOTAL_FIELD_PULL",
+        "LLM_PUSH",
+        "XIAOJ_LOCAL",
+        "RULE_LOOKUP",
+        "HUMAN_INPUT"
+      ]
+    },
+    "model_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "provider_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "event_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "observation_domain_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "rule_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/non_empty_ref"
+      },
+      "uniqueItems": true
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "sensitivity": {
+      "enum": [
+        "SAFE_DERIVED",
+        "EVIDENCE_REQUIRED",
+        "OWNER_CONFIRMATION_REQUIRED",
+        "PRIVACY_RESTRICTED",
+        "LEGAL_REVIEW_REQUIRED",
+        "FINANCIAL_REVIEW_REQUIRED",
+        "UNSUPPORTED"
+      ]
+    },
+    "requires_human_confirmation": {
+      "type": "boolean"
+    },
+    "candidate_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "non_empty_ref": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

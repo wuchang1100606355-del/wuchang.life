@@ -1,0 +1,105 @@
+{
+  "schema": "W7TP_XIAOJ_PRODUCTIZATION_CONSOLE_CONTRACT_V1",
+  "state": "P1_TOTAL_PRODUCT_CONSOLE_DRAFT_READY_P2_GATES_HOLD",
+  "goal": "Provide an Odoo-accessible XiaoJ total productization console for merchant, association member, sovereign member, property, and LINE WORKS dry-run handoff workflows without production side effects.",
+  "service": "wuchang_cafe_ai_gateway.services.productization_console",
+  "apis": {
+    "total_product_console_status": "/wuchang/xiaoj/api/total-product-console-status",
+    "member_llm_release_gate": "/wuchang/xiaoj/api/member-llm-release-gate",
+    "local_personal_data_return_packet": "/wuchang/xiaoj/api/local-personal-data-return-packet",
+    "eightd_delegate_rotation_draft": "/wuchang/xiaoj/api/8d-delegate-rotation-draft",
+    "sovereign_xiaoj_claim_draft": "/wuchang/xiaoj/api/sovereign-xiaoj-claim-draft"
+  },
+  "api_auth": "user",
+  "product_lines": [
+    "merchant_branch_xiaoj",
+    "association_total_field_member_service_xiaoj",
+    "eightd_sovereign_member_system",
+    "eightd_sovereign_resident_property_management"
+  ],
+  "human_world_identity_boundary": {
+    "owner_admin_ref": "opaque_ref_required",
+    "merchant_manager_ref": "opaque_ref_required",
+    "association_ref": "opaque_ref_required",
+    "sponsor_org_ref": "opaque_ref_required",
+    "plaintext_email_in_public_contract": false
+  },
+  "model_governance": {
+    "implementation_model": "gpt-5.4-mini",
+    "runtime_candidate_model": "gemini-2.5-flash-lite",
+    "nano_utility_only": true,
+    "nano_architecture_decision_allowed": false,
+    "cloud_model_candidate_only": true,
+    "local_discrete_verifier_is_authority": true
+  },
+  "p2_gates": {
+    "member_llm_release_gate": [
+      "member_ref",
+      "model_ref",
+      "quota_ref",
+      "consent_ref",
+      "truth_boundary_ref",
+      "gemini_key_ref",
+      "release_packet_hash"
+    ],
+    "local_personal_data_return_packet": [
+      "member_ref",
+      "consent_ref",
+      "local_vault_ref",
+      "encrypted_payload_hash"
+    ],
+    "eightd_delegate_rotation_draft": [
+      "old_packet_ref",
+      "new_packet_ref",
+      "revocation_ref",
+      "owner_admin_or_quorum_ref",
+      "evidence_chain_hash"
+    ],
+    "sovereign_xiaoj_claim_draft": [
+      "member_ref",
+      "xiaoj_instance_ref",
+      "device_ref",
+      "claim_packet_hash",
+      "revocation_ref",
+      "transfer_policy_ref"
+    ]
+  },
+  "forbidden_inputs": [
+    "raw password",
+    "raw token",
+    "raw API key",
+    "raw Google Gemini API key",
+    "LINE WORKS token value",
+    "LINE token value",
+    "member plaintext",
+    "resident plaintext",
+    "payment card data",
+    "raw audio",
+    "raw video",
+    "plaintext email in public contract"
+  ],
+  "p1_side_effects": {
+    "external_api_call": false,
+    "model_invocation": false,
+    "formal_lineworks_send": false,
+    "formal_line_message_send": false,
+    "formal_member_registration": false,
+    "formal_db_write": false,
+    "db_write": false,
+    "formal_pos_write": false,
+    "pos_order_created": false,
+    "payment_capture": false,
+    "secret_read": false,
+    "raw_api_key_read": false,
+    "raw_api_key_saved": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "member_plaintext_to_prompt": false,
+    "resident_plaintext_to_prompt": false,
+    "raw_audio_saved": false,
+    "raw_video_saved": false,
+    "runtime_model_changed": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

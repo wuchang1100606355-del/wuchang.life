@@ -58,6 +58,7 @@ High risk:
 - ssh_hardening_plan
 - vpn_member_access_plan
 - firewall_segmentation_plan
+- https_edge_routing_plan
 - emergency_lockdown_plan
 
 Hardwall:

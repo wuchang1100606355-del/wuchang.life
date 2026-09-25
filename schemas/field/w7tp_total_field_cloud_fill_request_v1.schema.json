@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:field:total-field-cloud-fill-request:1.0",
+  "title": "W7TP Total Field Cloud Fill Packet",
+  "description": "One single-use, candidate-only question packet with immutable Total Field fields and a closed cloud-fillable result zone.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "locked",
+    "cloud_fillable"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-TOTAL-FIELD-CLOUD-FILL-PACKET/1.0"
+    },
+    "locked": {
+      "$ref": "#/$defs/locked"
+    },
+    "cloud_fillable": {
+      "$ref": "#/$defs/blank_fillable"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "non_empty": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ref_array": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/non_empty"
+      },
+      "uniqueItems": true
+    },
+    "json_value": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "boolean"},
+        {"type": "integer"},
+        {"type": "number"},
+        {"type": "string"},
+        {
+          "type": "array",
+          "items": {"$ref": "#/$defs/json_value"}
+        },
+        {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/json_value"}
+        }
+      ]
+    },
+    "capsule_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capsule_id",
+        "version",
+        "sha256",
+        "receiver_version",
+        "reconstructor_version",
+        "validator_version"
+      ],
+      "properties": {
+        "capsule_id": {"$ref": "#/$defs/non_empty"},
+        "version": {"$ref": "#/$defs/non_empty"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "receiver_version": {"$ref": "#/$defs/non_empty"},
+        "reconstructor_version": {"$ref": "#/$defs/non_empty"},
+        "validator_version": {"$ref": "#/$defs/non_empty"}
+      }
+    },
+    "product_output_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "entity_ref",
+        "attribute_name",
+        "event_ref",
+        "observation_domain_ref",
+        "rule_ref",
+        "sensitivity",
+        "requires_human_confirmation"
+      ],
+      "properties": {
+        "domain": {"enum": ["COMMUNITY", "COMMERCE", "PROPERTY"]},
+        "entity_ref": {"$ref": "#/$defs/non_empty"},
+        "attribute_name": {"$ref": "#/$defs/non_empty"},
+        "event_ref": {"$ref": "#/$defs/non_empty"},
+        "observation_domain_ref": {"$ref": "#/$defs/non_empty"},
+        "rule_ref": {"$ref": "#/$defs/non_empty"},
+        "sensitivity": {
+          "enum": [
+            "SAFE_DERIVED",
+            "EVIDENCE_REQUIRED",
+            "OWNER_CONFIRMATION_REQUIRED",
+            "PRIVACY_RESTRICTED",
+            "LEGAL_REVIEW_REQUIRED",
+            "FINANCIAL_REVIEW_REQUIRED",
+            "UNSUPPORTED"
+          ]
+        },
+        "requires_human_confirmation": {"type": "boolean"}
+      }
+    },
+    "state_fragment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "sha256", "role"],
+      "properties": {
+        "ref": {"$ref": "#/$defs/non_empty"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "role": {"const": "DATA_NOT_GOVERNANCE_INSTRUCTION"}
+      }
+    },
+    "dynamic_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable_rule_refs",
+        "intent_delta",
+        "necessary_state_fragments",
+        "retrieved_context",
+        "acceptance_refs"
+      ],
+      "properties": {
+        "applicable_rule_refs": {"$ref": "#/$defs/ref_array"},
+        "intent_delta": {"$ref": "#/$defs/non_empty"},
+        "necessary_state_fragments": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/state_fragment"},
+          "maxItems": 16
+        },
+        "retrieved_context": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/state_fragment"},
+          "maxItems": 16
+        },
+        "acceptance_refs": {"$ref": "#/$defs/ref_array"}
+      }
+    },
+    "conditions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["condition_refs", "version"],
+      "properties": {
+        "condition_refs": {"$ref": "#/$defs/ref_array"},
+        "version": {"$ref": "#/$defs/non_empty"}
+      }
+    },
+    "accounting_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_transport_bytes",
+        "reconstructed_bytes",
+        "model_input_tokens",
+        "model_output_tokens"
+      ],
+      "properties": {
+        "request_transport_bytes": {"type": "integer", "minimum": 1},
+        "reconstructed_bytes": {"type": "integer", "minimum": 0},
+        "model_input_tokens": {"const": 0},
+        "model_output_tokens": {"const": 0}
+      }
+    },
+    "locked": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "request_mode",
+        "question_type_ref",
+        "sanitized_question",
+        "product_output_contract",
+        "static_rule_capsule_ref",
+        "dynamic_rule_projection",
+        "allowed_information_scope",
+        "fillable_paths",
+        "forbidden_claims",
+        "response_schema_ref",
+        "state_coordinate",
+        "relationship_refs",
+        "resource_refs",
+        "receiver_contract_ref",
+        "reconstruction_conditions",
+        "equivalent_candidate_state_rules",
+        "verification_conditions",
+        "evidence_refs",
+        "allowed_provider_refs",
+        "allowed_model_refs",
+        "accounting",
+        "request_sha256",
+        "nonce",
+        "expires_at",
+        "single_use",
+        "cloud_required",
+        "context_mode",
+        "duplicate_request",
+        "full_chain_of_thought",
+        "max_input_tokens",
+        "max_output_tokens",
+        "max_cloud_calls",
+        "return_coordinate"
+      ],
+      "properties": {
+        "packet_id": {"$ref": "#/$defs/non_empty"},
+        "request_mode": {"const": "TOTAL_FIELD_PULL"},
+        "question_type_ref": {"$ref": "#/$defs/non_empty"},
+        "sanitized_question": {"type": "string", "minLength": 1, "maxLength": 8192},
+        "product_output_contract": {"$ref": "#/$defs/product_output_contract"},
+        "static_rule_capsule_ref": {"$ref": "#/$defs/capsule_ref"},
+        "dynamic_rule_projection": {"$ref": "#/$defs/dynamic_projection"},
+        "allowed_information_scope": {"$ref": "#/$defs/ref_array"},
+        "fillable_paths": {"$ref": "#/$defs/ref_array"},
+        "forbidden_claims": {"$ref": "#/$defs/ref_array"},
+        "response_schema_ref": {"const": "W7TP-TOTAL-FIELD-CLOUD-FILL-RESPONSE/1.0"},
+        "state_coordinate": {"$ref": "#/$defs/non_empty"},
+        "relationship_refs": {"$ref": "#/$defs/ref_array"},
+        "resource_refs": {"$ref": "#/$defs/ref_array"},
+        "receiver_contract_ref": {"$ref": "#/$defs/non_empty"},
+        "reconstruction_conditions": {"$ref": "#/$defs/conditions"},
+        "equivalent_candidate_state_rules": {"$ref": "#/$defs/ref_array"},
+        "verification_conditions": {"$ref": "#/$defs/conditions"},
+        "evidence_refs": {"$ref": "#/$defs/ref_array"},
+        "allowed_provider_refs": {"$ref": "#/$defs/ref_array"},
+        "allowed_model_refs": {"$ref": "#/$defs/ref_array"},
+        "accounting": {"$ref": "#/$defs/accounting_contract"},
+        "request_sha256": {"$ref": "#/$defs/sha256"},
+        "nonce": {"type": "string", "minLength": 16, "maxLength": 256},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "single_use": {"const": true},
+        "cloud_required": {"const": false},
+        "context_mode": {"const": "MINIMUM_AUTHORIZED_FRAGMENTS"},
+        "duplicate_request": {"const": "REUSE_BY_EXACT_REQUEST_HASH"},
+        "full_chain_of_thought": {"const": "PROHIBITED"},
+        "max_input_tokens": {"type": "integer", "minimum": 1, "maximum": 2048},
+        "max_output_tokens": {"type": "integer", "minimum": 1, "maximum": 768},
+        "max_cloud_calls": {"const": 1},
+        "return_coordinate": {"$ref": "#/$defs/non_empty"}
+      }
+    },
+    "blank_fillable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_answer",
+        "concise_rationale",
+        "assumptions",
+        "uncertainties",
+        "risk_candidates",
+        "verification_candidate",
+        "evidence_refs"
+      ],
+      "properties": {
+        "candidate_answer": {"type": "null"},
+        "concise_rationale": {"type": "null"},
+        "assumptions": {"maxItems": 0},
+        "uncertainties": {"maxItems": 0},
+        "risk_candidates": {"maxItems": 0},
+        "verification_candidate": {"maxItems": 0},
+        "evidence_refs": {"maxItems": 0}
+      }
+    }
+  }
+}

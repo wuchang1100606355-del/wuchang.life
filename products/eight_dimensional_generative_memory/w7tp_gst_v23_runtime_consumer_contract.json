@@ -1,0 +1,95 @@
+{
+  "schema_version": "w7tp-gst-v23-runtime-consumer-binding/1-candidate",
+  "binding_id": "W7TP_GST_V23_RUNTIME_CONSUMER_BINDING_CANDIDATE_V1",
+  "state": "CANDIDATE_DISABLED",
+  "authority_resolution": {
+    "founder_current_baseline": "W7TP_8D_ADI_V2.3",
+    "founder_baseline_role": "DESIGN_AND_VERSION_AUTHORITY",
+    "legacy_v2_1_master_pointer_role": "STALE_HISTORICAL_COORDINATE_NOT_CURRENT_VERSION_AUTHORITY",
+    "true8d_allnode_router_canonical_role": "TOPOLOGY_AND_OBSERVATION_SCOPE_NOT_W7TP_VERSION_AUTHORITY",
+    "v2_3_structure_evidence_role": "STRUCTURE_EVIDENCE_NOT_RUNTIME_ACTIVATION",
+    "runtime_activation_evidence_role": "SEPARATE_REQUIRED_FORMAL_RECEIPT"
+  },
+  "existing_implementation_binding": {
+    "source_path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
+    "source_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
+    "packet_schema": "w7tp-8dadi-origin-cell-generative-rule-packet/2.3-candidate",
+    "receive_entrypoint": "validate_rule_packet",
+    "origin_cell_entrypoint": "execute_reconstruction_rules",
+    "reconstruction_entrypoint": "reconstruct_from_rule_packet",
+    "result_delivery": "RETURN_VERIFIED_RECONSTRUCTION_RECEIPT"
+  },
+  "consumer_relation": {
+    "cardinality": "ONE_EXPLICIT_BINDING_MANY_ALLOWED_RUNTIME_NODES_AND_CARRIERS",
+    "input": "RECEIVED_GST_PACKET",
+    "clean_room_receiver": true,
+    "shared_rule_base_preserved": true,
+    "zero_data_rule_forwarding_preserved": true,
+    "differential_transfer_allowed": false,
+    "file_copy_fallback_allowed": false,
+    "automatic_fallback_allowed": false,
+    "received_rule_code_formal_contract": false,
+    "received_rule_code_status": "SEPARATE_CANDIDATE_DISCUSSION_REQUIRED"
+  },
+  "identity_and_node_scope": {
+    "founder_identity": "JIANG_ZHENGLONG_ARCHITECTURE_DEFINER",
+    "taiji01_role": "TOTAL_FIELD_ENGINEERING_ENTRYPOINT_NOT_SINGLE_NODE_ARCHITECTURE",
+    "msi_role": "DEVELOPMENT_CAPABILITY_AND_EXPERIMENT_SOURCE_NOT_AUTOMATIC_AUTHORITY",
+    "my_j_role": "FOUNDER_PROJECT_IDENTITY",
+    "xiaoj_role": "SOVEREIGN_MEMBER_AI_IDENTITY",
+    "cloud_project_model_or_tool_account_is_identity": false,
+    "port_9002_is_d8": false
+  },
+  "execution_topology": {
+    "binding_scope": "PER_TASK_AND_RELATION_NOT_GLOBAL_CHANNEL_REPLACEMENT",
+    "allowed_capability_paths": [
+      "LOCAL_CPU",
+      "LAN_MULTI_NODE",
+      "DEPENDENCY_PIPELINE",
+      "REMOTE_ACCELERATOR",
+      "LOCAL_CLOUD_SINGLE_CANDIDATE",
+      "HYBRID_CONTINUATION"
+    ],
+    "selection_basis": "INTENT_SOURCE_CELL_TARGET_STATE_DEPENDENCIES_AND_LIVE_CAPABILITY",
+    "communication_coordinate_source": "EXISTING_TOTAL_FIELD_MANAGED_BINDING_ONLY",
+    "guessed_port_allowed": false,
+    "failover_scope": "AFFECTED_TASK_OR_RELATION_ONLY"
+  },
+  "cloud_context_boundary": {
+    "local_retains_identity_governance_and_complete_state_relations": true,
+    "external_context": "MINIMUM_SANITIZED_SUBTASK_CONTEXT_ONLY",
+    "external_model_authority": "NONE"
+  },
+  "activation_gate": {
+    "active_by_default": false,
+    "candidate_execution_requires_explicit_isolated_mode": true,
+    "founder_direct_runtime_activation": "ALLOWED_BY_EXPLICIT_CURRENT_GOVERNANCE_COMMAND",
+    "formal_total_field_activation_adapter_status": "NOT_BOUND_SEPARATE_FROM_FOUNDER_DIRECT_ACTIVATION",
+    "formal_activation_requires": [
+      "FOUNDER_CONFIRMATION_FOR_THIS_BINDING_HASH",
+      "TOTAL_FIELD_ALLOW_RECEIPT",
+      "REVIEWED_COMMIT",
+      "EXACT_RUNTIME_TARGET",
+      "ROLLBACK_COORDINATE",
+      "POST_ACTIVATION_RECONSTRUCTION_RECEIPT"
+    ],
+    "formal_activation_command": "python3 products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py activate --packet <packet.json> --workspace <new-empty-workspace> --activation-receipt <founder-activation.json> --result-receipt <new-result-receipt.json>",
+    "formal_activation_command_status": "AVAILABLE_FOR_FOUNDER_DIRECT_RUNTIME_ACTIVATION_RECORD",
+    "formal_activation_effect": "GOVERNED_PACKET_RECONSTRUCTION_USING_PERSISTED_BINDING_RECEIPT_NO_SERVICE_OR_POINTER_MUTATION",
+    "per_packet_human_confirmation_required": false
+  },
+  "rollback": {
+    "operation": "QUARANTINE_EXACT_OUTPUT_AND_REVOKE_EXACT_BINDING_RECEIPT",
+    "preserve_evidence": true,
+    "delete_output": false,
+    "restore_v2_1_pointer": false,
+    "service_restart": false
+  },
+  "governance": {
+    "canonical": false,
+    "runtime_activated": false,
+    "service_installed": false,
+    "deployed": false,
+    "total_field_decision": "NOT_RUN"
+  }
+}

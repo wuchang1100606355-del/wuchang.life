@@ -1,0 +1,62 @@
+{
+  "schema_version": "W7TP-ODOO-CAFE-MENU-SAFE-MANAGER-EVIDENCE/1.0",
+  "run_id": "ODOO_CAFE_MENU_SAFE_MANAGER_20260717T045222Z",
+  "state": "SOURCE_COMPLETE_HOLD_NOT_ACTIVATED",
+  "decision": "One natural person uses one account; every governed menu event records who, where, when, and what.",
+  "hardening": {
+    "human_menu_events_workflow_only": true,
+    "human_menu_events_immutable": true,
+    "human_menu_events_non_deletable": true,
+    "event_payload_content_sha256": true,
+    "w5c_code_database_unique_constraint": true,
+    "existing_nonempty_w5c_code_count": 0,
+    "existing_duplicate_w5c_code_group_count": 0
+  },
+  "scope": {
+    "single_item_create_edit_archive_reactivate": true,
+    "single_account_multiple_duties": true,
+    "distinct_second_person_required": false,
+    "remote_support_direct_product_write": false,
+    "explicit_later_human_confirmation_for_remote_support": true,
+    "eventbook_convergence": "wuchang.cafe.ai.eventbook",
+    "stable_total_field_product_code": true,
+    "formal_pos_order": false,
+    "payment_capture": false
+  },
+  "validation": {
+    "python_compile": "PASS",
+    "pure_governance_tests": "6 passed, 3 subtests passed",
+    "xml_manifest_acl_static_validation": "PASS; 22 XML IDs; 23 ACL rows",
+    "odoo_18_source_compatibility": "PASS_READ_ONLY; res.groups.category_id, pos.category, and product.template.pos_categ_ids verified",
+    "git_diff_check": "PASS",
+    "trailing_whitespace": "PASS",
+    "forbidden_and_fictional_copy": "PASS"
+  },
+  "activation_boundary": {
+    "runtime_read_only_observation": {
+      "database_module_state": "installed",
+      "database_module_version": "18.0.1.0.0",
+      "source_module_version": "18.0.2.0.0",
+      "activation_status": "NOT_ACTIVATED"
+    },
+    "odoo_module_upgrade": false,
+    "database_write": false,
+    "deploy": false,
+    "restart": false,
+    "public_release": false,
+    "reason": "Repository rules prohibit module upgrade and database write in this run."
+  },
+  "sha256_manifest": {
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/__manifest__.py": "2239f43163a57337ff88f13e6e44d1f1b9e64d9c088ce78920ca9ff1d0a454b6",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/__init__.py": "b7c2dced5c35c049f6b3a7b89a1d78addb6837760aed9228f95118dd41f50c7b",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_manager.py": "acf553bb398667d4b1da07ba7e9080b2c3610ea74f6c61cdd0be635efdcea347",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_change_request.py": "82d498fead084fa905224cfeb119f8b39129fcb19f607f2405e6ca64dea4c055",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/services/__init__.py": "93ace332a098fd4ff456c328b6f69dfd62c2d53c82f166ae17ad7d772c3857b7",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/services/menu_change_governance.py": "ec9c662e108ae8075d4c35c8b62dd888db850d6b6c0325ff371c51f2e6e63462",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/security/menu_change_security.xml": "40f385d8329d04e9347a9bd2838980caaa986bd4c48baa82006c16637c07f715",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/security/ir.model.access.csv": "1df2109db194e4a1f80699607e28c2b4f9edec65e9971d1da6991ad4c5d5e127",
+    "Taiji_Odoo/addons/wuchang_cafe_menu_options/views/menu_option_views.xml": "b1efe732b907985c4627d8314ab3d1720e809a8f26e526da9ac5c1535817b82d",
+    "docs/operations/ODOO_CAFE_MENU_SAFE_MANAGER_SURFACE_V1.md": "69210ceee9ffcdafbafdc81492cb87c182b121a92487d1ba1f65a8aaec355434",
+    "tests/test_wuchang_cafe_menu_governance.py": "ca3aef618fb007cdb2d2016dfdda124dd707ec6b5b888a4b5b6e1951888e6302"
+  }
+}

@@ -1,0 +1,322 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_dual_module_property_merchant_governance.schema.json",
+  "title": "W7TP Dual Module Property Merchant Governance Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "version",
+    "final_authority",
+    "candidate_only",
+    "human_review_required",
+    "property_container_ref",
+    "merchant_container_ref",
+    "management_committee_authorization_status",
+    "merchant_activation_status",
+    "total_field_decision",
+    "redteam_status",
+    "intent_field",
+    "state_field",
+    "coordinate_field",
+    "evidence_field",
+    "execution_field",
+    "generative_transport_field",
+    "risk_field",
+    "envelope_field"
+  ],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": [
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_CANDIDATE",
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_HOLD",
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_PASS",
+        "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_BLOCK"
+      ]
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "final_authority": {
+      "const": "total_field_verifier"
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "human_review_required": {
+      "const": true
+    },
+    "property_container_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "merchant_container_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "management_committee_authorization_status": {
+      "const": "HOLD_UNTIL_AUTHORIZED"
+    },
+    "merchant_activation_status": {
+      "type": "string",
+      "enum": [
+        "pending_group_member",
+        "inactive",
+        "active_after_total_field_seal"
+      ]
+    },
+    "total_field_decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "PASS_SAFE_CONTACT",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "redteam_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "intent_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "state_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "coordinate_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "evidence_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "execution_field": {
+      "$ref": "#/$defs/execution_field"
+    },
+    "generative_transport_field": {
+      "$ref": "#/$defs/generative_transport_field"
+    },
+    "risk_field": {
+      "$ref": "#/$defs/risk_field"
+    },
+    "envelope_field": {
+      "$ref": "#/$defs/envelope_field"
+    }
+  },
+  "$defs": {
+    "state_field_node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "execution_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "execution_allowed",
+        "db_write",
+        "deploy",
+        "restart",
+        "router_write"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution_allowed": {
+          "const": false
+        },
+        "db_write": {
+          "const": false
+        },
+        "deploy": {
+          "const": false
+        },
+        "restart": {
+          "const": false
+        },
+        "router_write": {
+          "const": false
+        }
+      }
+    },
+    "generative_transport_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "mode",
+        "not"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "const": "state_packet_ref_reconstruction_equivalent_state"
+        },
+        "not": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "file_copy",
+              "cloud_sync",
+              "plaintext_transport"
+            ]
+          },
+          "minItems": 3,
+          "uniqueItems": true
+        }
+      }
+    },
+    "risk_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "no_secret",
+        "no_member_plaintext",
+        "no_resident_plaintext",
+        "no_raw_image",
+        "no_db_write",
+        "no_deploy",
+        "no_restart",
+        "no_router_write"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_secret": {
+          "const": true
+        },
+        "no_member_plaintext": {
+          "const": true
+        },
+        "no_resident_plaintext": {
+          "const": true
+        },
+        "no_raw_image": {
+          "const": true
+        },
+        "no_db_write": {
+          "const": true
+        },
+        "no_deploy": {
+          "const": true
+        },
+        "no_restart": {
+          "const": true
+        },
+        "no_router_write": {
+          "const": true
+        }
+      }
+    },
+    "envelope_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "final_authority",
+        "human_review_required",
+        "candidate_only"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "final_authority": {
+          "const": "total_field_verifier"
+        },
+        "human_review_required": {
+          "const": true
+        },
+        "candidate_only": {
+          "const": true
+        }
+      }
+    }
+  }
+}

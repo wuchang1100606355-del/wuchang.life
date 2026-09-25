@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "W7TP Capability Assimilation Packet",
+  "type": "object",
+  "required": [
+    "state",
+    "operation",
+    "source",
+    "target",
+    "capabilities",
+    "target_base_state",
+    "minimum_required_delta",
+    "authority_conflicts",
+    "evidence_gaps",
+    "d1",
+    "d2",
+    "d3",
+    "d4",
+    "d5",
+    "d6",
+    "d7",
+    "d8"
+  ],
+  "properties": {
+    "state": {
+      "enum": [
+        "PASS_READ_ONLY_ASSIMILATION",
+        "PRECONDITION_MISSING",
+        "HOLD_TRUE_HARD_RISK",
+        "BLOCK_AUTHORITY_INVERSION"
+      ]
+    },
+    "operation": {
+      "enum": ["DISCOVER", "ACQUIRE", "EXTRACT", "COMPARE", "ASSIMILATE", "VALIDATE"]
+    },
+    "source": {
+      "type": "object",
+      "required": ["repository", "evidence_status"],
+      "properties": {
+        "repository": {"type": "string"},
+        "tag": {"type": ["string", "null"]},
+        "commit": {"type": ["string", "null"]},
+        "tree": {"type": ["string", "null"]},
+        "snapshot_sha256": {"type": ["string", "null"]},
+        "license": {"type": ["string", "null"]},
+        "evidence_status": {
+          "enum": ["DOCUMENTED_ONLY", "IMPLEMENTED", "UPSTREAM_TESTED", "VERIFIED_CURRENT_RUN", "UNKNOWN"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "target": {"type": ["string", "object"]},
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "capability_id",
+          "source_component",
+          "status",
+          "input",
+          "output",
+          "state_dependency",
+          "side_effect",
+          "evidence_output",
+          "failure_mode",
+          "security_assumption",
+          "disposition",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "d5",
+          "d6",
+          "d7",
+          "d8"
+        ],
+        "properties": {
+          "status": {
+            "enum": ["DOCUMENTED_ONLY", "IMPLEMENTED", "UPSTREAM_TESTED", "VERIFIED_CURRENT_RUN", "UNKNOWN", "ABSENT"]
+          },
+          "disposition": {"enum": ["REUSE_DIRECTLY", "ADAPT", "REIMPLEMENT", "REJECT"]},
+          "d8": {"type": ["string", "object", "array", "null"]}
+        },
+        "additionalProperties": true
+      }
+    },
+    "target_base_state": {},
+    "minimum_required_delta": {},
+    "authority_conflicts": {"type": "array"},
+    "evidence_gaps": {"type": "array"},
+    "d1": {},
+    "d2": {},
+    "d3": {},
+    "d4": {},
+    "d5": {},
+    "d6": {},
+    "d7": {},
+    "d8": {}
+  },
+  "additionalProperties": true
+}

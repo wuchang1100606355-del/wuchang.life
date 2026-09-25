@@ -1,0 +1,84 @@
+{
+  "state": "WUCHANG_BUSINESS_CLOUD_EXCHANGE_MAP_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_payment_no_formal_exchange",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false,
+    "payment_capture": false,
+    "formal_exchange": false,
+    "legal_tender_claim": false,
+    "token_mint": false,
+    "onchain_transfer": false,
+    "member_plaintext_exposure": false,
+    "production_activation": false
+  },
+  "main_organization": {
+    "name": "新北市三重區五常社區發展協會",
+    "branch_unit": "商業雲",
+    "authority": "owner_admin_review_required"
+  },
+  "business_cloud_scope": {
+    "merchant_registry": {
+      "name": "各家商業資料候選",
+      "ai_allowed": true,
+      "output": "merchant_profile_candidate",
+      "formal_activation": false
+    },
+    "ticket_system": {
+      "name": "票券候選系統",
+      "ai_allowed": true,
+      "output": "ticket_candidate_packet",
+      "issue_real_ticket_now": false,
+      "redeem_real_value_now": false
+    },
+    "happiness_coin_exchange": {
+      "name": "幸福幣交換候選系統",
+      "ai_allowed": true,
+      "output": "happiness_coin_exchange_candidate",
+      "real_money_exchange": false,
+      "payment_capture": false,
+      "legal_tender_claim": false
+    },
+    "community_business_info_platform": {
+      "name": "社區商業資訊共享平台",
+      "ai_allowed": true,
+      "output": "community_business_info_candidate",
+      "publish_now": false,
+      "owner_review_required": true
+    }
+  },
+  "required_candidate_fields": [
+    "task_type",
+    "organization_ref",
+    "business_cloud_ref",
+    "merchant_ref",
+    "requester_role_ref",
+    "intent_goal",
+    "evidence_refs",
+    "exchange_terms_candidate",
+    "review_chain"
+  ],
+  "task_types": {
+    "merchant_profile": "商家資料候選",
+    "ticket_candidate": "票券候選",
+    "happiness_coin_exchange": "幸福幣交換候選",
+    "business_info_share": "社區商業資訊共享候選"
+  },
+  "review_chain": [
+    "AI candidate draft",
+    "merchant / requester confirmation",
+    "business cloud review",
+    "secretariat or owner/admin review",
+    "Total Field PASS/HOLD/BLOCK",
+    "formal activation only after explicit approval"
+  ],
+  "fallback_member_message": "這個我不懂，我只是個菜鳥，我幫你問店長或學長",
+  "next": "WIRE_BUSINESS_CLOUD_EXCHANGE_TO_8D_PACKET_SOURCE_ONLY"
+}

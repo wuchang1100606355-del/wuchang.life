@@ -1,0 +1,95 @@
+{
+  "state": "DUAL_MODULE_PROPERTY_MERCHANT_GOVERNANCE_HOLD",
+  "version": "1.0.0",
+  "final_authority": "total_field_verifier",
+  "candidate_only": true,
+  "human_review_required": true,
+  "property_container_ref": "property_container_ref:demo_property_org",
+  "merchant_container_ref": "merchant_container_ref:demo_merchant_org",
+  "management_committee_authorization_status": "HOLD_UNTIL_AUTHORIZED",
+  "merchant_activation_status": "pending_group_member",
+  "total_field_decision": "HOLD",
+  "redteam_status": "HOLD",
+  "intent_field": {
+    "summary": "Property-to-merchant service candidate requires Total Field review.",
+    "refs": [
+      "property_container_ref:demo_property_org",
+      "merchant_container_ref:demo_merchant_org"
+    ],
+    "status": "candidate_pending_review"
+  },
+  "state_field": {
+    "summary": "Both property and merchant modules remain candidate-only.",
+    "refs": [
+      "total_field_decision:HOLD"
+    ],
+    "status": "hold"
+  },
+  "coordinate_field": {
+    "summary": "Projection uses organization refs and public service area refs only.",
+    "refs": [
+      "service_area_ref:public_candidate",
+      "role_ref:property_staff_candidate"
+    ],
+    "status": "ref_only"
+  },
+  "evidence_field": {
+    "summary": "Evidence is limited to public source refs and seal refs.",
+    "refs": [
+      "source_ref:public_candidate",
+      "seal_ref:pending"
+    ],
+    "status": "source_review_required"
+  },
+  "execution_field": {
+    "summary": "No formal action is executed from the candidate packet.",
+    "refs": [
+      "execution_policy_ref:no_live_write"
+    ],
+    "status": "blocked_until_authorized",
+    "execution_allowed": false,
+    "db_write": false,
+    "deploy": false,
+    "restart": false,
+    "router_write": false
+  },
+  "generative_transport_field": {
+    "summary": "Only state packet refs and reconstruction conditions are transported.",
+    "refs": [
+      "state_packet_ref:dual_module_candidate",
+      "reconstruction_ref:public_ref_only"
+    ],
+    "status": "candidate_only",
+    "mode": "state_packet_ref_reconstruction_equivalent_state",
+    "not": [
+      "file_copy",
+      "cloud_sync",
+      "plaintext_transport"
+    ]
+  },
+  "risk_field": {
+    "summary": "Privacy and execution boundaries remain closed.",
+    "refs": [
+      "risk_policy_ref:dual_module_no_plaintext"
+    ],
+    "status": "hold_safe",
+    "no_secret": true,
+    "no_member_plaintext": true,
+    "no_resident_plaintext": true,
+    "no_raw_image": true,
+    "no_db_write": true,
+    "no_deploy": true,
+    "no_restart": true,
+    "no_router_write": true
+  },
+  "envelope_field": {
+    "summary": "Total Field verifier remains final authority.",
+    "refs": [
+      "verifier_ref:total_field_verifier"
+    ],
+    "status": "sealed_candidate",
+    "final_authority": "total_field_verifier",
+    "human_review_required": true,
+    "candidate_only": true
+  }
+}

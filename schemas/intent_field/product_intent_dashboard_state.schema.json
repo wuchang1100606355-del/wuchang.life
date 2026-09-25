@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/intent_field/product_intent_dashboard_state.schema.json",
+  "title": "Product Intent Dashboard State",
+  "type": "object",
+  "required": [
+    "run_id",
+    "source_p0",
+    "intent_request_id",
+    "candidate_action_id",
+    "state_packet_id",
+    "multi_state_field_status",
+    "spacetime_index_ref_status",
+    "sovereign_identity_proxy_status",
+    "plaintext_archive_boundary_status",
+    "front_proxy_status",
+    "verifier_result",
+    "hold_reason_code",
+    "redteam_reason",
+    "accountability_chain_summary",
+    "cpu_only_no_gpu_evidence_status",
+    "db_write",
+    "deploy",
+    "restart"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "source_p0": { "type": "string", "minLength": 1 },
+    "intent_request_id": { "type": "string", "pattern": "^intent_request_id:" },
+    "candidate_action_id": { "type": "string", "pattern": "^candidate_action_id:" },
+    "state_packet_id": { "type": "string", "pattern": "^state_packet_id:" },
+    "multi_state_field_status": { "enum": ["PASS", "HOLD", "UNKNOWN"] },
+    "spacetime_index_ref_status": { "enum": ["PASS", "HOLD", "UNKNOWN"] },
+    "sovereign_identity_proxy_status": { "enum": ["PASS", "HOLD", "UNKNOWN"] },
+    "plaintext_archive_boundary_status": { "enum": ["PASS", "HOLD", "UNKNOWN"] },
+    "front_proxy_status": { "enum": ["PASS", "HOLD", "UNKNOWN"] },
+    "verifier_result": { "enum": ["PASS", "HOLD"] },
+    "hold_reason_code": { "type": "string" },
+    "redteam_reason": { "type": "array", "items": { "type": "string" } },
+    "accountability_chain_summary": {
+      "type": "object",
+      "required": [
+        "candidate_action_id",
+        "state_packet_id",
+        "previous_record_hash",
+        "current_record_hash",
+        "verifier_result"
+      ],
+      "properties": {
+        "candidate_action_id": { "type": "string" },
+        "state_packet_id": { "type": "string" },
+        "previous_record_hash": { "type": "string", "pattern": "^hash:" },
+        "current_record_hash": { "type": "string", "pattern": "^hash:" },
+        "verifier_result": { "enum": ["PASS", "HOLD"] }
+      },
+      "additionalProperties": true
+    },
+    "cpu_only_no_gpu_evidence_status": { "enum": ["PASS", "HOLD", "UNKNOWN"] },
+    "db_write": { "const": false },
+    "deploy": { "const": false },
+    "restart": { "const": false }
+  },
+  "additionalProperties": true
+}

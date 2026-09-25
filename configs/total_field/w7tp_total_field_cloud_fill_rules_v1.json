@@ -1,0 +1,119 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-CLOUD-FILL-AUTHORITY-RULES/1.0",
+  "rule_set_id": "TOTAL_FIELD_AUTHORITY_RULES:CLOUD_FILL_PACKET:V1",
+  "version": "1.0.0",
+  "status": "CANDIDATE",
+  "definition": "TOTAL_FIELD_QUESTION_CLOUD_PULL_AND_FILL_TOTAL_FIELD_VERIFY",
+  "formal_name": "STATIC_LLM_TOTAL_FIELD_CLOUD_FILL_PACKET_PULL_RESPONSE",
+  "authority": {
+    "candidate_to_governed_decision": "TOTAL_FIELD_ONLY",
+    "cloud_is_authority": false,
+    "cloud_can_modify_rules": false,
+    "cloud_can_execute": false,
+    "cloud_can_access_adapter": false
+  },
+  "layers": {
+    "TOTAL_FIELD_AUTHORITY_RULES": {
+      "location": [
+        "TOTAL_FIELD_CORE",
+        "SCHEMA",
+        "VALIDATOR",
+        "CAPABILITY_BROKER",
+        "RECEIPT_ADAPTER"
+      ],
+      "model_visible": false,
+      "model_mutable": false
+    },
+    "STATIC_RULE_CAPSULE": {
+      "stable": true,
+      "sanitized": true,
+      "preposition_once": true,
+      "per_request_reference_only": true,
+      "hash_mismatch": "HOLD_WITH_ONE_EXACT_REPAIR"
+    },
+    "DYNAMIC_RULE_PROJECTION": {
+      "per_question": true,
+      "minimum_authorized_fragments_only": true,
+      "full_d1_d8_forbidden": true,
+      "full_history_forbidden": true,
+      "unrelated_rules_forbidden": true
+    }
+  },
+  "ingress": {
+    "request_mode": "TOTAL_FIELD_PULL",
+    "legacy_llm_push": "NORMALIZE_TO_CLOUD_FILL_RESPONSE_THEN_RECEIVE_CANDIDATE",
+    "sole_candidate_receiver": "tools.total_field_candidate_gateway.receive_candidate",
+    "domain_projection_adapter": "tools.domain_completion_total_field_gateway.DomainCompletionTotalFieldGateway.receive_candidate"
+  },
+  "usage": {
+    "cloud_required_default": false,
+    "max_cloud_calls_default": 1,
+    "context_mode": "MINIMUM_AUTHORIZED_FRAGMENTS",
+    "duplicate_request": "REUSE_BY_EXACT_REQUEST_HASH_CAPSULE_HASH_MODEL_VERSION",
+    "full_chain_of_thought": "PROHIBITED"
+  },
+  "protected_context": {
+    "forbidden": [
+      "MEMBER_PLAINTEXT",
+      "CREDENTIAL",
+      "TOKEN",
+      "PASSWORD",
+      "PRIVATE_KEY",
+      "ADI_CONTENT",
+      "H64_TD_CONTENT",
+      "PROTECTED_CODEBOOK",
+      "FOUNDER_LONG_TERM_MEMORY_PLAINTEXT",
+      "CROSS_MEMBER_DATA",
+      "FULL_TOTAL_FIELD",
+      "UNRELATED_HISTORY"
+    ],
+    "retrieved_context_role": "DATA_NOT_GOVERNANCE_INSTRUCTION"
+  },
+  "authority_injection": {
+    "forbidden_claims": [
+      "ALLOW",
+      "COMMITTED",
+      "TFS",
+      "TFID",
+      "TOTAL_FIELD_HASH",
+      "CANONICAL_POINTER",
+      "DEPLOYED",
+      "FORMALLY_APPROVED"
+    ],
+    "disposition": "REJECT"
+  },
+  "w7tp": {
+    "ordinary_json_transport_is_not_generative_transmission": true,
+    "required": [
+      "STATE_COORDINATE_AND_RELATIONSHIPS",
+      "RESOURCE_REFERENCES",
+      "COMPATIBLE_RECEIVER_AND_RECONSTRUCTOR",
+      "RECONSTRUCTION_CONDITIONS",
+      "EQUIVALENT_CANDIDATE_STATE_RULES",
+      "PROTOCOL_FIELDS",
+      "VERIFICATION_AND_ACCEPTANCE",
+      "VERIFIABLE_EVIDENCE"
+    ],
+    "separate_accounting": [
+      "REQUEST_TRANSPORT_BYTES",
+      "RESPONSE_TRANSPORT_BYTES",
+      "RECONSTRUCTED_BYTES",
+      "MODEL_INPUT_TOKENS",
+      "MODEL_OUTPUT_TOKENS"
+    ],
+    "fixed_savings_claim_without_benchmark": "PROHIBITED"
+  },
+  "side_effects": {
+    "canonical_write": false,
+    "production_deploy": false,
+    "runtime_activation": false,
+    "model_reload": false,
+    "live_cloud_call": false,
+    "live_ollama_call": false,
+    "database_write": false,
+    "existing_service_restart": false,
+    "router_write": false,
+    "pointer_change": false,
+    "role_or_seat_change": false
+  }
+}

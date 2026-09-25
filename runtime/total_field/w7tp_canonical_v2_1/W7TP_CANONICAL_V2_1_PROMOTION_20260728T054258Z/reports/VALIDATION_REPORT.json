@@ -1,0 +1,59 @@
+{
+  "schema": "w7tp.total_field.canonical_v2_1_validation_report.v1",
+  "run_id": "W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z",
+  "state": "PASS_SOURCE_VALIDATION",
+  "canonical_sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+  "parent_sha256": "a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0",
+  "results": [
+    {
+      "gate": "V2_1_CANONICAL_VERIFIER",
+      "result": "PASS",
+      "locks": "12/12"
+    },
+    {
+      "gate": "FOCUSED_CONTRACT_SECURITY_COMPATIBILITY_CONSUMER_TESTS",
+      "result": "PASS",
+      "tests": 101,
+      "subtests": 35,
+      "duration_seconds": 3.7
+    },
+    {
+      "gate": "AFFECTED_ADAPTER_ACTIVE_CONSUMER_MANIFEST_REVALIDATION",
+      "result": "PASS",
+      "tests": 14,
+      "subtests": 3,
+      "duration_seconds": 1.9
+    },
+    {
+      "gate": "INTENT_FIELD_AFFECTED_TESTS",
+      "result": "PASS",
+      "tests": 11,
+      "deselected": 34,
+      "subtests": 8,
+      "duration_seconds": 0.9
+    },
+    {
+      "gate": "PYTHON_COMPILE",
+      "result": "PASS"
+    },
+    {
+      "gate": "NO_SIDE_EFFECT_V2_1_PROBE",
+      "result": "PASS",
+      "receipt_sha256": "cdd0fe5af743b92dadf555848abac8efb1d2fb9de779e90a8a3cf38773124739"
+    },
+    {
+      "gate": "RED_TEAM_PRE_PROMOTION",
+      "result": "PASS",
+      "receipt_sha256": "c99a24fcc203db59eed4c117c6dbcfbe60631b0021ded647a0f8f3fd9e67922e"
+    },
+    {
+      "gate": "INTENT_FIELD_RELEASE_TESTS",
+      "result": "PASS",
+      "tests": 8,
+      "deselected": 37,
+      "duration_seconds": 0.94
+    }
+  ],
+  "db_migration": "NOT_REQUIRED_NO_V2_DB_BINDING_OBSERVED",
+  "services_changed": false
+}

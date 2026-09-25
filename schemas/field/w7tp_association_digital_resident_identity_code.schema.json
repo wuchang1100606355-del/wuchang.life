@@ -1,0 +1,510 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_association_digital_resident_identity_code.schema.json",
+  "title": "W7TP Association Digital Resident Identity Code",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "version",
+    "primary_technology",
+    "final_authority",
+    "digital_resident_identity_code",
+    "contact_refs",
+    "role_mounts",
+    "group_8d_identity_mounts",
+    "scene_container",
+    "capability_projection",
+    "intent_field",
+    "state_field",
+    "coordinate_field",
+    "evidence_field",
+    "execution_field",
+    "generative_transport_field",
+    "risk_field",
+    "envelope_field",
+    "privacy_boundary",
+    "cloud_candidate_policy",
+    "redteam_status",
+    "human_review_required",
+    "total_field_decision"
+  ],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": [
+        "ASSOCIATION_DIGITAL_RESIDENT_IDENTITY_CODE_CANDIDATE",
+        "ASSOCIATION_DIGITAL_RESIDENT_IDENTITY_CODE_PASS",
+        "ASSOCIATION_DIGITAL_RESIDENT_IDENTITY_CODE_HOLD",
+        "ASSOCIATION_DIGITAL_RESIDENT_IDENTITY_CODE_BLOCK"
+      ]
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "primary_technology": {
+      "const": "8D_STATE_FIELD_PACKET"
+    },
+    "final_authority": {
+      "const": "total_field_verifier"
+    },
+    "digital_resident_identity_code": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_code_ref",
+        "local_identity_root_ref",
+        "plaintext_policy",
+        "one_person_one_body",
+        "roles_are_mounts_not_accounts"
+      ],
+      "properties": {
+        "identity_code_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "local_identity_root_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "plaintext_policy": {
+          "const": "LOCAL_ONLY_NO_CLOUD_NO_TOTAL_FIELD"
+        },
+        "one_person_one_body": {
+          "const": true
+        },
+        "roles_are_mounts_not_accounts": {
+          "const": true
+        }
+      }
+    },
+    "contact_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contact_ref",
+          "contact_role",
+          "contact_value_stored"
+        ],
+        "properties": {
+          "contact_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contact_role": {
+            "type": "string",
+            "enum": [
+              "mailbox_contact_entry",
+              "notification_ref",
+              "verification_ref"
+            ]
+          },
+          "contact_value_stored": {
+            "const": false
+          }
+        }
+      }
+    },
+    "role_mounts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role_type",
+          "role_ref",
+          "capability_refs",
+          "policy_ref",
+          "seal_ref"
+        ],
+        "properties": {
+          "role_type": {
+            "type": "string",
+            "enum": [
+              "resident_role",
+              "member_role",
+              "merchant_responsible_person_role",
+              "association_responsible_person_role",
+              "consumer_role",
+              "developer_role"
+            ]
+          },
+          "role_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "capability_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "policy_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "seal_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "group_8d_identity_mounts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "group_ref",
+          "mount_type",
+          "status"
+        ],
+        "properties": {
+          "group_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mount_type": {
+            "type": "string",
+            "enum": [
+              "association_ref",
+              "merchant_ref",
+              "property_ref"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "scene_container": {
+      "$ref": "#/$defs/ref_object"
+    },
+    "capability_projection": {
+      "$ref": "#/$defs/ref_object"
+    },
+    "intent_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "state_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "coordinate_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "evidence_field": {
+      "$ref": "#/$defs/state_field_node"
+    },
+    "execution_field": {
+      "$ref": "#/$defs/execution_field"
+    },
+    "generative_transport_field": {
+      "$ref": "#/$defs/generative_transport_field"
+    },
+    "risk_field": {
+      "$ref": "#/$defs/risk_field"
+    },
+    "envelope_field": {
+      "$ref": "#/$defs/envelope_field"
+    },
+    "privacy_boundary": {
+      "const": "ALL_IDENTIFIABLE_PLAINTEXT_LOCAL_ONLY"
+    },
+    "cloud_candidate_policy": {
+      "const": "CANDIDATE_ONLY_NO_AUTHORITY_NO_PLAINTEXT"
+    },
+    "redteam_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "human_review_required": {
+      "const": true
+    },
+    "total_field_decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "WARN",
+        "BLOCK"
+      ]
+    }
+  },
+  "$defs": {
+    "ref_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "state_field_node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "execution_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "execution_allowed",
+        "db_write",
+        "deploy",
+        "restart",
+        "router_write"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution_allowed": {
+          "const": false
+        },
+        "db_write": {
+          "const": false
+        },
+        "deploy": {
+          "const": false
+        },
+        "restart": {
+          "const": false
+        },
+        "router_write": {
+          "const": false
+        }
+      }
+    },
+    "generative_transport_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "mode",
+        "packet_ref",
+        "state_ref",
+        "evidence_ref",
+        "reconstruction_condition",
+        "equivalent_state_condition",
+        "verification_condition",
+        "full_data_required",
+        "plaintext_required"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "const": "incomplete_information_equivalent_state_transmission"
+        },
+        "packet_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reconstruction_condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "equivalent_state_condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "full_data_required": {
+          "const": false
+        },
+        "plaintext_required": {
+          "const": false
+        }
+      }
+    },
+    "risk_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "no_secret",
+        "no_member_plaintext",
+        "no_resident_plaintext",
+        "no_raw_image",
+        "no_raw_voice",
+        "no_raw_credentials",
+        "no_db_write",
+        "no_deploy",
+        "no_restart",
+        "no_router_write"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_secret": {
+          "const": true
+        },
+        "no_member_plaintext": {
+          "const": true
+        },
+        "no_resident_plaintext": {
+          "const": true
+        },
+        "no_raw_image": {
+          "const": true
+        },
+        "no_raw_voice": {
+          "const": true
+        },
+        "no_raw_credentials": {
+          "const": true
+        },
+        "no_db_write": {
+          "const": true
+        },
+        "no_deploy": {
+          "const": true
+        },
+        "no_restart": {
+          "const": true
+        },
+        "no_router_write": {
+          "const": true
+        }
+      }
+    },
+    "envelope_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "refs",
+        "status",
+        "final_authority",
+        "human_review_required",
+        "candidate_only"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "final_authority": {
+          "const": "total_field_verifier"
+        },
+        "human_review_required": {
+          "const": true
+        },
+        "candidate_only": {
+          "const": true
+        }
+      }
+    }
+  }
+}

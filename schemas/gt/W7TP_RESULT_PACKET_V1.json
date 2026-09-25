@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:W7TP_RESULT_PACKET_V1",
+  "title": "W7TP_RESULT_PACKET_V1",
+  "type": "object",
+  "required": [
+    "packet_type",
+    "original_packet_id",
+    "verifier_status",
+    "seal_ref"
+  ],
+  "properties": {
+    "packet_type": { "const": "W7TP_RESULT_PACKET_V1" },
+    "original_packet_id": { "type": "string" },
+    "verifier_status": { 
+      "type": "string", 
+      "enum": ["ACCEPTED", "REJECTED", "HOLD", "REDTEAM", "DEAD_LETTER"] 
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "next_safe_action": { "type": "string" },
+    "seal_ref": { "type": "string", "description": "Cryptographic seal of the approved action" },
+    "audit_trail": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

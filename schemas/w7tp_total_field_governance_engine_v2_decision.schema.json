@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji.local/schemas/w7tp_total_field_governance_engine_v2_decision.schema.json",
+  "title": "W7TP Total Field Governance Engine V2 Decision",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "state",
+    "decision",
+    "command_allowed",
+    "requires_human_approval",
+    "router_capacity_gate",
+    "cloud_resilience_gate",
+    "packet_hash",
+    "raw_packet_echo",
+    "safety"
+  ],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": [
+        "PASS_MANAGER_SANDBOX_READY",
+        "HOLD_ROUTER_CAPACITY_NOT_VERIFIED",
+        "HOLD_USB_STORAGE_ERRORS_DETECTED",
+        "HOLD_CLOUD_LATENCY_EXCEEDED",
+        "HOLD_CLOUD_UNAVAILABLE",
+        "HOLD_SECRET_VALUE_DETECTED",
+        "HOLD_RAW_PACKET_ECHO",
+        "HOLD_MISSING_EVIDENCE",
+        "HOLD_UNAPPROVED_ROUTER_ACTION",
+        "HOLD_CLOUD_AUTHORITY",
+        "HOLD_CANDIDATE_POLICY"
+      ]
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "HOLD",
+        "FALLBACK_LOCAL_LOOKUP",
+        "QUEUE_CANDIDATE",
+        "DEAD_LETTER_REQUIRED",
+        "UI_STATUS_ONLY"
+      ]
+    },
+    "command_allowed": {
+      "const": false
+    },
+    "requires_human_approval": {
+      "const": true
+    },
+    "router_capacity_gate": {
+      "type": "string"
+    },
+    "cloud_resilience_gate": {
+      "type": "string"
+    },
+    "packet_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "raw_packet_echo": {
+      "const": false
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "secret_read",
+        "env_dump",
+        "member_plaintext_read",
+        "raw_audio_read",
+        "db_write",
+        "deploy",
+        "service_restart",
+        "production_release",
+        "external_cloud_call",
+        "router_write",
+        "router_reboot",
+        "router_service_restart",
+        "usb_write",
+        "jffs_write"
+      ],
+      "properties": {
+        "secret_read": { "const": false },
+        "env_dump": { "const": false },
+        "member_plaintext_read": { "const": false },
+        "raw_audio_read": { "const": false },
+        "db_write": { "const": false },
+        "deploy": { "const": false },
+        "service_restart": { "const": false },
+        "production_release": { "const": false },
+        "external_cloud_call": { "const": false },
+        "router_write": { "const": false },
+        "router_reboot": { "const": false },
+        "router_service_restart": { "const": false },
+        "usb_write": { "const": false },
+        "jffs_write": { "const": false }
+      }
+    }
+  }
+}

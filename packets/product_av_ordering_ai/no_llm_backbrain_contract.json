@@ -1,0 +1,19 @@
+{
+  "schema": "W7TP_NO_LLM_BACKBRAIN_CONTRACT_V1",
+  "state": "SPEC_CONVERGED",
+  "authority": "local_verify_reconstruct",
+  "inputs": ["candidate_hash", "candidate_lines", "odoo_menu_snapshot_ref", "option_rules_ref", "topology_ref", "entitlement_ref"],
+  "checks": [
+    "menu_item_exists",
+    "option_allowed",
+    "price_recomputed",
+    "discount_authorized",
+    "member_plaintext_absent",
+    "cloud_authority_false",
+    "formal_write_false",
+    "packet_hash_valid",
+    "ttl_valid"
+  ],
+  "outputs": ["validated_candidate", "payable_amount", "rule_refs", "d8_ref", "evidence_ref"],
+  "failure_mode": "dead_letter_or_hold"
+}

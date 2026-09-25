@@ -3,11 +3,12 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from services.w7tp_d6_linter import lint_w7tp_request
 from services.w7tp_evidence_ledger import commit_evidence
 from services.w7tp_state_hash import canonical_hash, state_seal
+from services.w7tp_gst_v23_runtime import GstRuntimeHold, deliver_packet, runtime_status
 from services.w7tp_ui_models import (
     EvidenceCommitIn,
     EvidenceCommitOut,
@@ -23,6 +24,22 @@ from services.w7tp_ui_models import (
 
 
 router = APIRouter(prefix="/api/w7tp", tags=["w7tp-ui"])
+
+
+@router.get("/gst/v23/status")
+def gst_v23_status() -> dict[str, Any]:
+    try:
+        return runtime_status()
+    except GstRuntimeHold as exc:
+        raise HTTPException(status_code=503, detail={"state": exc.code}) from exc
+
+
+@router.post("/gst/v23/deliver")
+def gst_v23_deliver(packet: dict[str, Any]) -> dict[str, Any]:
+    try:
+        return deliver_packet(packet)
+    except GstRuntimeHold as exc:
+        raise HTTPException(status_code=409, detail={"state": exc.code}) from exc
 
 
 def _action(intent: str) -> str:

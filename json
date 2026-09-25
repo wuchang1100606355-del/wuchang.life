@@ -1,0 +1,155 @@
+{
+  "commercial_boundary_scope": [
+    "/",
+    "/about/",
+    "/programs/",
+    "/method/",
+    "/medical_care_demo/",
+    "/founder_manifesto/",
+    "/member_recruitment/",
+    "/contact/",
+    "/transparency/",
+    "/governance/",
+    "/total_field_review/",
+    "/total_field_review/envelope.html"
+  ],
+  "content_sha256": "d6bd1926cc6259232b278f7ad289cfb638215d807438665fe74dfe7d8be2c580",
+  "criteria": [
+    {
+      "evidence": [
+        "Canonical domain is wuchang.life; legal/control evidence is not derivable from HTML."
+      ],
+      "official_requirement": "The nonprofit owns and controls the ad destination domain.",
+      "requirement_id": "GNP-WEB-01",
+      "status": "HOLD_MANUAL_OWNERSHIP_EVIDENCE_REQUIRED",
+      "verification_class": "MANUAL_OR_ACCOUNT_EVIDENCE"
+    },
+    {
+      "evidence": [
+        "core_pages=9",
+        "minimum_visible_characters=930",
+        "unique_visible_text_hashes=9",
+        "placeholder_hits=0",
+        "Original authorship still requires organizational attestation."
+      ],
+      "official_requirement": "The site contains substantial, unique content related to the mission and activities.",
+      "requirement_id": "GNP-WEB-02",
+      "status": "PASS_LOCAL_CONTENT_DEPTH_PROXY",
+      "verification_class": "AUTOMATED_PROXY_PLUS_MANUAL_ORIGINALITY"
+    },
+    {
+      "evidence": [
+        "marker:五常社區發展協會",
+        "marker:以 AI 科技抵禦 AI 時代的衝擊，以科技服務社區",
+        "marker:不募款",
+        "marker:婉謝捐款",
+        "marker:以商以智養公益",
+        "mission_content=PASS",
+        "legal_registration=PASS_TOTAL_FIELD_PUBLIC_SAFE_PROJECTION",
+        "annual_report=NOT_FOUND_IN_TOTAL_FIELD_SEARCH_SCOPE",
+        "legal_registration_source_sha256=9b87af6ae15fabaee04e652dfb2eb66306939a886d50e787b942a33670bafef1",
+        "legal_registration_source_lock_sha256=77b5a065955110a4cd109cd58bbdd877cf1f558536c760c841d5a91ab34cd80c"
+      ],
+      "official_requirement": "The mission, activities, services, and served audience are clear and prominent.",
+      "requirement_id": "GNP-WEB-03",
+      "status": "PASS_MISSION_AND_TOTAL_FIELD_REGISTRATION_PROJECTION",
+      "verification_class": "AUTOMATED_SOURCE_CHAIN_PLUS_EXTERNAL_REVIEW"
+    },
+    {
+      "evidence": [
+        "broken_internal_targets=0",
+        "minimum_nav_links=5"
+      ],
+      "official_requirement": "Navigation is clear and all links and buttons work.",
+      "requirement_id": "GNP-WEB-04",
+      "status": "PASS_STATIC",
+      "verification_class": "AUTOMATED"
+    },
+    {
+      "evidence": [
+        "Static source cannot establish field performance; run --live and PageSpeed Insights mobile."
+      ],
+      "official_requirement": "Pages load quickly across devices and connection speeds.",
+      "requirement_id": "GNP-WEB-05",
+      "status": "HOLD_LIVE_PAGESPEED_EVIDENCE_REQUIRED",
+      "verification_class": "EXTERNAL_MEASUREMENT_REQUIRED"
+    },
+    {
+      "evidence": [
+        "viewport_missing=0",
+        "responsive_media_query=True"
+      ],
+      "official_requirement": "The site is mobile friendly and responsive.",
+      "requirement_id": "GNP-WEB-06",
+      "status": "PASS_SOURCE_RESPONSIVE",
+      "verification_class": "AUTOMATED_SOURCE_PLUS_DEVICE_QA_REQUIRED"
+    },
+    {
+      "evidence": [
+        "http_resource_literals=0",
+        "canonical_errors=0"
+      ],
+      "official_requirement": "The entire site uses HTTPS without mixed content.",
+      "requirement_id": "GNP-WEB-07",
+      "status": "PASS_SOURCE_HTTPS",
+      "verification_class": "AUTOMATED"
+    },
+    {
+      "evidence": [
+        "homepage_primary_identity=五常社區發展協會",
+        "commercial_operations=demo_debug_optimization_only",
+        "commercial_subdomain_plan=business.wuchang.life,property.wuchang.life",
+        "legacy_main_domain_sitemap_entries=0",
+        "legacy_main_domain_internal_links=1",
+        "legacy_main_domain_internal_link_sources=/method/->/pos_promo_sandbox/",
+        "patent_page_commercial_disclosure=True",
+        "legacy_main_domain_noindex_failures=0",
+        "third_party_ad_markers=0"
+      ],
+      "official_requirement": "Commercial activity is limited, mission-related, and not the site's primary focus; excessive ads and affiliate routing are prohibited.",
+      "requirement_id": "GNP-WEB-08",
+      "status": "PASS_STATIC_BOUNDARY",
+      "verification_class": "AUTOMATED"
+    },
+    {
+      "evidence": [
+        "Public policy states 不募款 and 婉謝捐款; no donation checkout is provided."
+      ],
+      "official_requirement": "Donation links, if present, work and lead to a dedicated secure donation page.",
+      "requirement_id": "GNP-WEB-09",
+      "status": "NOT_APPLICABLE_NO_DONATION_SOLICITATION",
+      "verification_class": "AUTOMATED"
+    },
+    {
+      "evidence": [
+        "No Google Ads destination configuration was inspected; business/property subdomains are not active homepage links."
+      ],
+      "official_requirement": "Additional ad destination domains require Google Grants approval.",
+      "requirement_id": "GNP-WEB-10",
+      "status": "HOLD_ACCOUNT_CONFIGURATION_REVIEW_REQUIRED",
+      "verification_class": "GOOGLE_ACCOUNT_EVIDENCE_REQUIRED"
+    }
+  ],
+  "disclaimer": "This evidence does not constitute Google approval; Google may approve or reject at its discretion.",
+  "dns_policy_interpretation": {
+    "blanket_dns_record_change_prohibition_found": false,
+    "dns_changed_by_verifier": false,
+    "inference": "DNS records are not immutable under the cited website policy, but ownership, control, HTTPS, availability, and approved ad destinations must be preserved.",
+    "official_rule": "The organization must own and control its destination domain; additional Google Ad Grants destination domains require review."
+  },
+  "hard_hold_ids": [],
+  "official_policy_source": "https://support.google.com/nonprofits/answer/1657899?hl=zh-Hant",
+  "review_scope": [
+    "/",
+    "/about/",
+    "/programs/",
+    "/method/",
+    "/medical_care_demo/",
+    "/founder_manifesto/",
+    "/member_recruitment/",
+    "/contact/",
+    "/transparency/"
+  ],
+  "schema_version": "WUCHANG-GOOGLE-NONPROFIT-WEBSITE-REVIEW/1.0",
+  "state": "PASS_STATIC_WITH_EXTERNAL_EVIDENCE_PENDING"
+}

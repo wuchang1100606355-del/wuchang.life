@@ -1,0 +1,147 @@
+<odoo>
+    <record id="view_wuchang_total_product_operator_handoff_list" model="ir.ui.view">
+        <field name="name">wuchang.total.product.operator.handoff.list</field>
+        <field name="model">wuchang.total.product.operator.handoff</field>
+        <field name="arch" type="xml">
+            <list string="Total Product Operator Handoff">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="draft_hash"/>
+                <field name="handoff_hash"/>
+                <field name="warnings_count"/>
+                <field name="ready_ref_count"/>
+                <field name="needs_human_fill_count"/>
+                <field name="ready_for_handoff_candidate"/>
+                <field name="handoff_ready_for_operator"/>
+                <field name="production_activation_ready"/>
+                <field name="secret_read"/>
+                <field name="member_plaintext_read"/>
+                <field name="resident_plaintext_read"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wuchang_total_product_operator_handoff_form" model="ir.ui.view">
+        <field name="name">wuchang.total.product.operator.handoff.form</field>
+        <field name="model">wuchang.total.product.operator.handoff</field>
+        <field name="arch" type="xml">
+            <form string="Total Product Operator Handoff">
+                <header>
+                    <button name="action_load_ref_template"
+                            type="object"
+                            string="Load Ref Template"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_ref_collection"
+                            type="object"
+                            string="Build Ref Collection"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_build_handoff_pack"
+                            type="object"
+                            string="Build Handoff Pack"
+                            class="btn-primary"
+                            invisible="state == 'dead_letter'"/>
+                    <button name="action_dead_letter"
+                            type="object"
+                            string="Dead Letter"
+                            class="btn-secondary"
+                            invisible="state == 'dead_letter'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,ref_collection_hold,refs_ready_for_handoff,handoff_ready,dead_letter"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="allow_verified"/>
+                        <field name="warnings_count" readonly="1"/>
+                        <field name="ready_ref_count" readonly="1"/>
+                        <field name="needs_human_fill_count" readonly="1"/>
+                    </group>
+                    <group string="Readiness">
+                        <field name="ready_for_handoff_candidate" readonly="1"/>
+                        <field name="handoff_ready_for_operator" readonly="1"/>
+                        <field name="product_ready_for_human_activation" readonly="1"/>
+                        <field name="production_activation_ready" readonly="1"/>
+                    </group>
+                    <group string="Side Effect Boundary">
+                        <field name="external_api_call" readonly="1"/>
+                        <field name="formal_lineworks_send" readonly="1"/>
+                        <field name="formal_line_message_send" readonly="1"/>
+                        <field name="official_account_setting_changed" readonly="1"/>
+                        <field name="formal_member_registration" readonly="1"/>
+                        <field name="formal_db_write" readonly="1"/>
+                        <field name="formal_pos_write" readonly="1"/>
+                        <field name="payment_capture" readonly="1"/>
+                        <field name="secret_read" readonly="1"/>
+                        <field name="member_plaintext_read" readonly="1"/>
+                        <field name="resident_plaintext_read" readonly="1"/>
+                        <field name="raw_audio_saved" readonly="1"/>
+                        <field name="raw_video_saved" readonly="1"/>
+                        <field name="deploy" readonly="1"/>
+                        <field name="service_restart" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Total Product Refs">
+                            <field name="refs_json" placeholder='{"lineworks":{"lineworks_send":{},"connector_refs":{}},"line_official_account":{"refs":{}},"merchant_formal_release":{},"association_sovereign_member":{},"resident_property_management":{}}'/>
+                        </page>
+                        <page string="Natural Language Intent">
+                            <field name="line_official_account_intent"/>
+                            <field name="lineworks_probe_json" placeholder='{"message":"候選通知文字","target_ref":"TARGET_REF_HASHED","channel":"member_service","actor_ref":"OPERATOR_REF"}'/>
+                        </page>
+                        <page string="Ref Collection">
+                            <field name="ref_collection_json" readonly="1"/>
+                            <field name="draft_hash" readonly="1"/>
+                        </page>
+                        <page string="Human Fill Checklist">
+                            <field name="human_fill_checklist_json" readonly="1"/>
+                        </page>
+                        <page string="Operator Worksheet">
+                            <field name="operator_fill_worksheet_md" readonly="1"/>
+                        </page>
+                        <page string="Handoff Pack">
+                            <field name="handoff_pack_json" readonly="1"/>
+                            <field name="handoff_hash" readonly="1"/>
+                        </page>
+                        <page string="Next Actions">
+                            <field name="failure_reasons" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wuchang_total_product_operator_handoff_search" model="ir.ui.view">
+        <field name="name">wuchang.total.product.operator.handoff.search</field>
+        <field name="model">wuchang.total.product.operator.handoff</field>
+        <field name="arch" type="xml">
+            <search string="Total Product Operator Handoff">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="draft_hash"/>
+                <field name="handoff_hash"/>
+                <filter name="filter_ref_collection_hold" string="Ref Collection Hold" domain="[('state','=','ref_collection_hold')]"/>
+                <filter name="filter_refs_ready" string="Refs Ready" domain="[('state','=','refs_ready_for_handoff')]"/>
+                <filter name="filter_handoff_ready" string="Handoff Ready" domain="[('state','=','handoff_ready')]"/>
+                <filter name="filter_dead_letter" string="Dead Letter" domain="[('state','=','dead_letter')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wuchang_total_product_operator_handoff" model="ir.actions.act_window">
+        <field name="name">Total Product Handoff</field>
+        <field name="res_model">wuchang.total.product.operator.handoff</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_wuchang_total_product_operator_handoff"
+              name="Total Product Handoff"
+              parent="menu_wuchang_cafe_root"
+              action="action_wuchang_total_product_operator_handoff"
+              sequence="40"/>
+</odoo>

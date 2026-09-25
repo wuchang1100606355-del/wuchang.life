@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/member/member_gt_packet.schema.json",
+  "title": "Member Generative Transmission Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "must_not_execute",
+    "requires_total_field_verify",
+    "member_plaintext_transferred",
+    "member_ref",
+    "member_packet",
+    "benefit_ref",
+    "d1_intent",
+    "d2_state",
+    "d3_coordinate",
+    "d4_evidence",
+    "d5_execution",
+    "d6_generative_transmission",
+    "d7_risk",
+    "d8_envelope"
+  ],
+  "properties": {
+    "schema_version": { "const": "w7tp.member_gt_packet.p0" },
+    "packet_type": { "const": "MEMBER_GT_PACKET" },
+    "must_not_execute": { "const": true },
+    "requires_total_field_verify": { "const": true },
+    "member_plaintext_transferred": { "const": false },
+    "member_ref": { "type": "string", "pattern": "^MEMBER_REF:[A-Za-z0-9_:-]+$" },
+    "member_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packet_ref", "plaintext_included", "allowed_fields"],
+      "properties": {
+        "packet_ref": { "type": "string", "pattern": "^MEMBER_PACKET:[A-Za-z0-9_:-]+$" },
+        "plaintext_included": { "const": false },
+        "allowed_fields": {
+          "type": "array",
+          "items": { "enum": ["MEMBER_REF", "MEMBER_PACKET", "BENEFIT_REF", "ROLE_REF", "PERMISSION_REF", "EVIDENCE_REF", "TTL"] }
+        }
+      }
+    },
+    "benefit_ref": { "type": "string", "pattern": "^BENEFIT_REF:[A-Za-z0-9_:-]+$" },
+    "d1_intent": { "type": "object" },
+    "d2_state": { "type": "object" },
+    "d3_coordinate": { "type": "object" },
+    "d4_evidence": { "type": "object" },
+    "d5_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_allowed"],
+      "properties": {
+        "execution_allowed": { "const": false }
+      }
+    },
+    "d6_generative_transmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["member_plaintext_transferred", "cloud_candidate_only"],
+      "properties": {
+        "member_plaintext_transferred": { "const": false },
+        "cloud_candidate_only": { "const": true }
+      }
+    },
+    "d7_risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["member_plaintext_read", "risk_flags"],
+      "properties": {
+        "member_plaintext_read": { "const": false },
+        "risk_flags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "d8_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packet_hash", "ttl_seconds", "total_field_verifier_required"],
+      "properties": {
+        "packet_hash": { "type": "string", "minLength": 16 },
+        "ttl_seconds": { "type": "integer", "minimum": 1 },
+        "total_field_verifier_required": { "const": true }
+      }
+    }
+  }
+}

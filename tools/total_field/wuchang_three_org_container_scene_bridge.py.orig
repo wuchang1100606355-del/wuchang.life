@@ -1,0 +1,567 @@
+"""Wuchang three-organization container scene bridge.
+
+商業組織 / 物業組織 / 公益組織三大模組共撐 Odoo 社區。
+
+Local devices can switch scenes by container-profile candidates:
+- business scene
+- property scene
+- association / public welfare scene
+
+Candidate-only:
+- no docker action
+- no live container switch
+- no deploy
+- no restart
+- no DB write
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+from typing import Any, Dict, Mapping, Sequence
+
+
+DEFAULT_MAP_PATH = Path("configs/total_field/wuchang_three_org_container_scene_map.json")
+ROOKIE_MESSAGE = "這個我不懂，我只是個菜鳥，我幫你問店長或學長"
+
+HARD_RISK_ACTIONS = {
+    "delete",
+    "restore",
+    "deploy",
+    "restart",
+    "db_write",
+    "router_write",
+    "docker_compose_up",
+    "docker_restart",
+    "live_container_switch",
+    "production_activation",
+    "payment_capture",
+    "formal_public_service_claim",
+    "member_plaintext_exposure",
+    "secret_exposure",
+    "raw_audio_to_cloud",
+    "raw_video_to_cloud",
+    "live_microphone_stream",
+    "live_camera_stream"
+}
+
+
+def _stable_json(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, default=str)
+
+
+def _fingerprint(value: Any, length: int = 16) -> str:
+    return hashlib.sha256(_stable_json(value).encode("utf-8")).hexdigest()[:length]
+
+
+def _sha256(value: Any) -> str:
+    return hashlib.sha256(_stable_json(value).encode("utf-8")).hexdigest()
+
+
+def _actions(values: Sequence[str] | None) -> set[str]:
+    return {
+        str(value).strip().lower().replace("-", "_")
+        for value in (values or [])
+        if str(value).strip()
+    }
+
+
+def load_three_org_scene_map(path: str | Path = DEFAULT_MAP_PATH) -> Dict[str, Any]:
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+
+    if data.get("mode") != "candidate_only_no_live_container_action":
+        raise ValueError("three-org scene map must remain candidate-only")
+
+    policy = data.get("policy") or {}
+    required_false = [
+        "delete",
+        "restore",
+        "deploy",
+        "restart",
+        "db_write",
+        "router_write",
+        "web_cockpit_touch",
+        "runtime_bulk_output",
+        "docker_compose_up",
+        "docker_restart",
+        "live_container_switch",
+        "production_activation",
+        "payment_capture",
+        "formal_public_service_claim",
+        "member_plaintext_exposure",
+        "secret_exposure"
+    ]
+    bad = [key for key in required_false if policy.get(key) is not False]
+    if bad:
+        raise ValueError("unsafe policy: " + ",".join(bad))
+
+    modules = data["odoo_community_core"]["supporting_modules"]
+    if modules != ["business_organization", "property_organization", "public_welfare_organization"]:
+        raise ValueError("Odoo community must be supported by three org modules")
+
+    service = data.get("taiji04_audiovisual_natural_language_service") or {}
+    required_false = [
+        "runtime_activation",
+        "live_microphone_stream",
+        "live_camera_stream",
+        "db_write",
+        "deploy",
+        "restart",
+        "router_write"
+    ]
+    unsafe = [key for key in required_false if service.get(key) is not False]
+    if unsafe:
+        raise ValueError("unsafe TAIJI04 audiovisual service: " + ",".join(unsafe))
+
+    return data
+
+
+def classify_scene(intent_text: str) -> str:
+    text = str(intent_text or "").lower()
+
+    if any(x in text for x in ["商業", "商家", "票券", "幸福幣", "商業雲", "business", "merchant"]):
+        return "business_scene"
+
+    if any(x in text for x in ["物業", "公道伯", "管委會", "法令", "優良社區", "property"]):
+        return "property_scene"
+
+    if any(x in text for x in ["協會", "公益", "志工", "社工", "照服", "許願樹", "基金", "association", "welfare"]):
+        return "association_scene"
+
+    return "business_scene"
+
+
+def resolve_scene_profile(scene: str, *, map_data: Mapping[str, Any] | None = None) -> Dict[str, Any]:
+    data = dict(map_data or load_three_org_scene_map())
+    profiles = data["local_device_scene_profiles"]
+    resolved = str(scene or "business_scene")
+    profile = dict(profiles.get(resolved) or profiles["business_scene"])
+
+    return {
+        "scene": resolved if resolved in profiles else "business_scene",
+        "zh": profile["zh"],
+        "container_profile_candidate": profile["container_profile"],
+        "primary_module": profile["primary_module"],
+        "visible_modules": list(profile["visible_modules"]),
+        "landing_message": profile["landing_message"],
+        "live_container_action": False
+    }
+
+
+def build_eight_d_media_transport_packet(
+    *,
+    domain: str,
+    scene_ref: str = "scene_ref:taiji04_local_media",
+    verification_level: str = "L2_EQUIVALENT"
+) -> Dict[str, Any]:
+    """Build a schema-shaped 8D image/audio/video transport packet."""
+
+    resolved_domain = str(domain or "").upper()
+    if resolved_domain not in {"IMAGE", "AUDIO", "VIDEO", "AUDIOVISUAL"}:
+        raise ValueError("unsupported 8D media domain")
+    if verification_level not in {"L1_FULL", "L2_EQUIVALENT", "L3_CANDIDATE"}:
+        raise ValueError("unsupported verification level")
+
+    profile_ref = {
+        "IMAGE": "profile_ref:w7tp_image_domain_profile_v1",
+        "AUDIO": "profile_ref:w7tp_audiovisual_domain_profile_v1:audio",
+        "VIDEO": "profile_ref:w7tp_audiovisual_domain_profile_v1:video_3d_scene",
+        "AUDIOVISUAL": "profile_ref:w7tp_audiovisual_domain_profile_v1:sync"
+    }[resolved_domain]
+    verification_ref = {
+        "L1_FULL": "verifier_ref:media_exact",
+        "L2_EQUIVALENT": "verifier_ref:media_state_equivalent",
+        "L3_CANDIDATE": "verifier_ref:media_candidate"
+    }[verification_level]
+    packet_seed = {
+        "domain": resolved_domain,
+        "scene_ref": scene_ref,
+        "verification_level": verification_level,
+        "profile_ref": profile_ref
+    }
+    packet_hash = _sha256(packet_seed)
+    packet_id = f"packet:taiji04:{resolved_domain.lower()}:{packet_hash[:16]}"
+    nonce = _sha256({"packet_id": packet_id, "scene_ref": scene_ref})[:32]
+    envelope = {
+        "packet_id": packet_id,
+        "authority_ref": "authority_ref:total_field",
+        "version": "2.0.0",
+        "ttl_seconds": 900,
+        "nonce": nonce,
+        "sha256": packet_hash,
+        "verifier_ref": verification_ref,
+        "seal_policy": "candidate_only_total_field_review"
+    }
+    risk = {"hard_risks": [], "decision": "PASS"}
+    d6 = {
+        "protocol": "W7TP_8D_GENERATIVE_TRANSMISSION_V2",
+        "routing": "total_field_to_authorized_local_reconstructor",
+        "segmentation": f"{resolved_domain.lower()}_state_coordinate_segment",
+        "merge_conditions": ["packet_order_valid", "hash_valid", "ttl_valid"],
+        "lookup": {"profile_ref": f"lookup_ref:{resolved_domain.lower()}"},
+        "references": [scene_ref, profile_ref],
+        "generation_rules": [
+            "integer_state_transition",
+            "coordinate_reconstruction",
+            "reference_resolution",
+            "on_demand_materialization"
+        ],
+        "reconstruction_contract": f"contract_ref:{resolved_domain.lower()}_local_reconstruction",
+        "verification_contract": f"contract_ref:{resolved_domain.lower()}_{verification_level.lower()}",
+        "residual": [],
+        "refill_policy": "reference_only_no_raw_media_cloud_refill",
+        "on_demand_materialization": True
+    }
+
+    return {
+        "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2",
+        "version": "2.0.0",
+        "packet_core": "UNIFIED_MULTIPURPOSE_8D_PACKET",
+        "technology_flags": {
+            "packet_carries_transport_protocol": True,
+            "packet_carries_reconstruction_conditions": True,
+            "packet_carries_reconstruction_contract": True,
+            "packet_carries_verification_method": True,
+            "packet_carries_verification_contract": True,
+            "model_required": False,
+            "llm_required": False,
+            "neural_network_required": False,
+            "floating_point_inference_required": False,
+            "diffusion_required": False,
+            "latent_codec": False,
+            "neural_codec": False
+        },
+        "dimensions": {
+            "D1_INTENT": {"profile_ref": f"intent_ref:{resolved_domain.lower()}_reconstruction"},
+            "D2_STATE": {"profile_ref": f"state_ref:{resolved_domain.lower()}_candidate"},
+            "D3_COORDINATE": {"profile_ref": f"coordinate_ref:{resolved_domain.lower()}"},
+            "D4_EVIDENCE": {"profile_ref": f"evidence_ref:{packet_hash}"},
+            "D5_EXECUTION": {"profile_ref": "execution_ref:authorized_local_reconstructor"},
+            "D6_GENERATIVE_TRANSMISSION": d6,
+            "D7_RISK": risk,
+            "D8_ENVELOPE": envelope
+        },
+        "domain_profile": {
+            "domain": resolved_domain,
+            "state_profile": {"profile_ref": profile_ref},
+            "coordinate_profile": {"profile_ref": f"coordinate_profile_ref:{resolved_domain.lower()}"},
+            "lookup_profile": {"profile_ref": f"lookup_profile_ref:{resolved_domain.lower()}"},
+            "generation_profile": {"profile_ref": f"generation_profile_ref:{resolved_domain.lower()}"},
+            "reconstruction_profile": {"profile_ref": f"reconstruction_profile_ref:{resolved_domain.lower()}"},
+            "verification_profile": {"profile_ref": verification_ref}
+        },
+        "generation_packet": {
+            "state": {"profile_ref": f"state_ref:{resolved_domain.lower()}_candidate"},
+            "coordinate": {"profile_ref": f"coordinate_ref:{resolved_domain.lower()}"},
+            "lookup": {"profile_ref": f"lookup_ref:{resolved_domain.lower()}"},
+            "generation_rule": d6["generation_rules"],
+            "reconstruction_contract": d6["reconstruction_contract"],
+            "verification_contract": d6["verification_contract"],
+            "target_equivalence": verification_level
+        },
+        "transmission_packet": {
+            "routing": d6["routing"],
+            "path": ["total_field", "authorized_linux_node", "local_reconstructor"],
+            "segment": 0,
+            "order": 0,
+            "ttl": envelope["ttl_seconds"],
+            "reference": d6["references"],
+            "hash": packet_hash,
+            "merge_condition": d6["merge_conditions"],
+            "delivery_state": "READY"
+        },
+        "composition_mode": "SEPARATE",
+        "reconstruction": {
+            "core": [
+                "NON_FLOAT_DETERMINISTIC_LOOKUP",
+                "INTEGER_STATE_TRANSITION",
+                "RULE_EXPANSION",
+                "REFERENCE_RESOLUTION",
+                "COORDINATE_RECONSTRUCTION",
+                "EQUIVALENT_STATE_GENERATION",
+                "TOTAL_FIELD_VERIFICATION"
+            ],
+            "zero_prior_content_receiver": True,
+            "materialization": "ON_DEMAND_MATERIALIZATION",
+            "economic_mode": "W7TP_GENERATIVE"
+        },
+        "verification": {
+            "level": verification_level,
+            "method_ref": verification_ref,
+            "contract_ref": d6["verification_contract"],
+            "decision": "PASS"
+        },
+        "risk": risk,
+        "envelope": envelope
+    }
+
+
+def build_audiovisual_natural_language_service_candidate(
+    *,
+    intent_text: str,
+    input_mode: str = "text",
+    requested_scene: str | None = None,
+    node_ref: str = "node_ref:taiji04",
+    requested_actions: Sequence[str] | None = None,
+    evidence_refs: Sequence[str] | None = None
+) -> Dict[str, Any]:
+    """Build the local-first TAIJI04 audiovisual service candidate."""
+
+    data = load_three_org_scene_map()
+    service = data["taiji04_audiovisual_natural_language_service"]
+    actions = _actions(requested_actions)
+    blocked_actions = sorted(actions & HARD_RISK_ACTIONS)
+    profile = resolve_scene_profile(
+        requested_scene or classify_scene(intent_text),
+        map_data=data
+    )
+    mode = str(input_mode or "").strip().lower()
+    evidence = list(evidence_refs or [])
+    missing_fields = []
+
+    if not str(intent_text or "").strip():
+        missing_fields.append("intent_text")
+    if not str(node_ref or "").startswith("node_ref:"):
+        missing_fields.append("node_ref")
+    if mode not in service["input_modes"]:
+        missing_fields.append("input_mode")
+
+    base = {
+        "intent_text": intent_text,
+        "input_mode": mode,
+        "node_ref": node_ref,
+        "target_scene": profile["scene"],
+        "evidence_refs": evidence,
+        "blocked_actions": blocked_actions,
+        "missing_fields": missing_fields
+    }
+    fp = _fingerprint(base)
+
+    if blocked_actions:
+        decision = "BLOCK"
+        reason = "AUDIOVISUAL_HARD_RISK_ACTION_REQUESTED"
+    elif missing_fields:
+        decision = "HOLD"
+        reason = "AUDIOVISUAL_REQUIRED_FIELD_MISSING"
+    else:
+        decision = "PASS_CANDIDATE"
+        reason = "TAIJI04_AUDIOVISUAL_SOURCE_CANDIDATE_READY_FOR_TOTAL_FIELD_REVIEW"
+
+    return {
+        "STATE": decision,
+        "candidate_ref": f"taiji04_audiovisual_service_candidate:{fp}",
+        "candidate_type": "wuchang_taiji04_audiovisual_natural_language_service_candidate",
+        "source_design_enabled": True,
+        "runtime_activation": False,
+        "node_ref": node_ref,
+        "node_role": service["node_role"],
+        "platform": service["platform"],
+        "role_workspaces": service["role_workspaces"],
+        "input_mode": mode,
+        "local_pipeline": service["local_pipeline"],
+        "touchscreen_window": service["touchscreen_window"],
+        "hdmi_window": service["hdmi_window"],
+        "cloud_boundary": service["cloud_boundary"],
+        "eight_d_media_transport_basis": service["eight_d_media_transport_basis"],
+        "linux_total_field_scheduling": service["linux_total_field_scheduling"],
+        "target_scene": profile["scene"],
+        "container_profile_candidate": profile["container_profile_candidate"],
+        "visible_modules": profile["visible_modules"],
+        "evidence_refs": evidence,
+        "blocked_actions": blocked_actions,
+        "missing_fields": missing_fields,
+        "live_microphone_stream": False,
+        "live_camera_stream": False,
+        "member_plaintext_to_cloud": False,
+        "raw_media_to_cloud": False,
+        "db_write": False,
+        "deploy": False,
+        "restart": False,
+        "router_write": False,
+        "eight_d_packet": {
+            "d1_intent": "taiji04_local_first_audiovisual_natural_language_service",
+            "d2_state": decision,
+            "d3_coordinate": {
+                "node_ref": node_ref,
+                "target_scene": profile["scene"],
+                "container_profile_candidate": profile["container_profile_candidate"],
+                "input_mode": mode
+            },
+            "d4_evidence": {
+                "evidence_refs": evidence,
+                "candidate_fingerprint": fp
+            },
+            "d5_execution": {
+                "mode": "source_candidate_local_first",
+                "pipeline": service["local_pipeline"],
+                "runtime_activation": False,
+                "db_write": False,
+                "deploy": False,
+                "restart": False
+            },
+            "d6_technical_definition": service["linux_total_field_scheduling"]["generative_transmission"],
+            "d6_media_transport_basis": service["eight_d_media_transport_basis"],
+            "d7_risk": {
+                "blocked_actions": blocked_actions,
+                "missing_fields": missing_fields,
+                "raw_media_to_cloud_blocked": True,
+                "member_plaintext_to_cloud_blocked": True,
+                "direct_runtime_write_blocked": True
+            },
+            "d8_envelope": {
+                "decision_authority": "total_field",
+                "owner_admin_review_required": True,
+                "ttl_required": True,
+                "nonce_required": True,
+                "seal": f"candidate:{fp}"
+            }
+        },
+        "total_field_candidate_decision": {
+            "decision": decision,
+            "reason": reason,
+            "next": "TOTAL_FIELD_OWNER_ADMIN_REVIEW"
+        }
+    }
+
+
+def build_three_org_scene_candidate(
+    *,
+    intent_text: str,
+    local_device_ref: str = "local_device_ref:node_c_or_lobby_xiaoj",
+    requested_scene: str | None = None,
+    requested_actions: Sequence[str] | None = None,
+    evidence_refs: Sequence[str] | None = None,
+    extra_fields: Mapping[str, Any] | None = None
+) -> Dict[str, Any]:
+    data = load_three_org_scene_map()
+    actions = _actions(requested_actions)
+    blocked_actions = sorted(actions & HARD_RISK_ACTIONS)
+    scene = requested_scene or classify_scene(intent_text)
+    profile = resolve_scene_profile(scene, map_data=data)
+    evidence = list(evidence_refs or [])
+    extra = dict(extra_fields or {})
+
+    missing_fields = []
+    for key, value in {
+        "intent_goal": intent_text,
+        "target_scene": profile["scene"],
+        "primary_module": profile["primary_module"],
+        "visible_modules": profile["visible_modules"],
+        "local_device_ref": local_device_ref,
+        "container_profile_candidate": profile["container_profile_candidate"]
+    }.items():
+        if not value:
+            missing_fields.append(key)
+
+    base = {
+        "intent_text": intent_text,
+        "local_device_ref": local_device_ref,
+        "scene_profile": profile,
+        "evidence_refs": evidence,
+        "blocked_actions": blocked_actions,
+        "missing_fields": missing_fields,
+        "extra_fields": extra
+    }
+    fp = _fingerprint(base)
+
+    if blocked_actions:
+        decision = "BLOCK"
+        reason = "HARD_RISK_ACTION_REQUESTED"
+    elif missing_fields:
+        decision = "HOLD"
+        reason = "MISSING_REQUIRED_THREE_ORG_SCENE_FIELD"
+    else:
+        decision = "PASS_CANDIDATE"
+        reason = "THREE_ORG_CONTAINER_SCENE_CANDIDATE_READY_FOR_TOTAL_FIELD_REVIEW"
+
+    return {
+        "STATE": decision,
+        "candidate_ref": f"three_org_scene_candidate:{fp}",
+        "candidate_type": "wuchang_three_org_container_scene_candidate",
+        "intent_goal": intent_text,
+        "odoo_community_core": data["odoo_community_core"],
+        "three_org_modules": data["three_org_modules"],
+        "target_scene": profile["scene"],
+        "primary_module": profile["primary_module"],
+        "visible_modules": profile["visible_modules"],
+        "local_device_ref": local_device_ref,
+        "container_profile_candidate": profile["container_profile_candidate"],
+        "landing_message": profile["landing_message"],
+        "business_landing_showcases_property_and_association": profile["scene"] == "business_scene",
+        "live_container_switch": False,
+        "docker_compose_up": False,
+        "docker_restart": False,
+        "db_write": False,
+        "deploy": False,
+        "restart": False,
+        "payment_capture": False,
+        "production_activation": False,
+        "evidence_refs": evidence,
+        "missing_fields": missing_fields,
+        "blocked_actions": blocked_actions,
+        "review_chain": data["scene_switch_rules"]["same_review_chain"],
+        "eight_d_packet": {
+            "d1_intent": "three_org_modules_support_odoo_community_container_scene_switch",
+            "d2_state": decision,
+            "d3_coordinate": {
+                "target_scene": profile["scene"],
+                "primary_module": profile["primary_module"],
+                "visible_modules": profile["visible_modules"],
+                "local_device_ref": local_device_ref
+            },
+            "d4_evidence": {
+                "evidence_refs": evidence,
+                "candidate_fingerprint": fp
+            },
+            "d5_execution": {
+                "mode": "candidate_only",
+                "container_profile_candidate": profile["container_profile_candidate"],
+                "live_container_switch": False,
+                "docker_compose_up": False,
+                "db_write": False,
+                "deploy": False,
+                "restart": False
+            },
+            "d6_technical_definition": "business_property_public_welfare_modules share Odoo community and local devices switch scene by container profile candidate",
+            "d7_risk": {
+                "blocked_actions": blocked_actions,
+                "missing_fields": missing_fields,
+                "live_container_switch_blocked": True,
+                "docker_action_blocked": True
+            },
+            "d8_envelope": {
+                "decision_authority": "total_field",
+                "owner_admin_review_required": True,
+                "seal": f"candidate:{fp}"
+            }
+        },
+        "total_field_candidate_decision": {
+            "decision": decision,
+            "reason": reason,
+            "next": "TOTAL_FIELD_OWNER_ADMIN_REVIEW"
+        }
+    }
+
+
+def render_three_org_scene_response(candidate: Mapping[str, Any]) -> Dict[str, Any]:
+    decision = str(candidate.get("STATE") or "HOLD")
+
+    if decision == "PASS_CANDIDATE":
+        msg = str(candidate.get("landing_message") or "我先幫你整理三大模組 Odoo 社區候選場景，交給總場確認。")
+    elif decision == "BLOCK":
+        msg = ROOKIE_MESSAGE
+    else:
+        msg = "資料還不夠，我先幫你列成缺件候選，交給店長或學長確認。"
+
+    return {
+        "decision": decision,
+        "member_facing_message": msg,
+        "live_container_switch": False,
+        "docker_compose_up": False,
+        "db_write": False,
+        "deploy": False,
+        "restart": False,
+        "next_action": "TOTAL_FIELD_OWNER_ADMIN_REVIEW"
+    }

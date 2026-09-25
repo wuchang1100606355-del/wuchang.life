@@ -1,0 +1,43 @@
+{
+  "schema_version": "W7TP-POS-MVP-ENDPOINT-LANDING-EVIDENCE/1.0",
+  "state": "ROLLBACK_COMPLETED_AFTER_FAILURE",
+  "run_id": "ODOO_CAFE_MENU_ENDPOINT_LANDING_20260717T055035Z",
+  "auth_event": "FOUNDER_EVENT_AUTH_CONFIRMED_BY_SAME_ACCOUNT_PROMPT",
+  "source_completion": "PASS_8_TESTS_23_SUBTESTS_SOURCE_ONLY",
+  "deployment_attempt": {
+    "module": "wuchang_cafe_menu_options",
+    "upgrade": "18.0.1.0.0_TO_18.0.2.0.0_EXIT_0",
+    "registry_reload": "PASS_DATABASE_SIGNAL_NO_RESTART"
+  },
+  "runtime_acceptance": {
+    "state": "FAIL_PRE_TEST_DATA",
+    "failure": "Invalid field group_ids on res.users in rollback-only acceptance harness",
+    "temporary_marker_rows_after_rollback": 0
+  },
+  "rollback": {
+    "state": "COMPLETED_AND_HEALTH_VERIFIED",
+    "database_version": "18.0.1.0.0",
+    "live_source_version": "18.0.1.0.0",
+    "public_https_http_status": 200,
+    "odoo_web_http_status": 303,
+    "odoo_modules_loaded": 124,
+    "postgres_restarted": false,
+    "caddy_restarted": false,
+    "odoo_stop_start_for_rollback": true
+  },
+  "rollback_point": {
+    "database_dump_sha256": "c010e7d90be6cca59cf135ec5bb24c5c9558f8bd28418855b826da4f1b42af7a",
+    "module_sha256_ref": "runtime/total_field/odoo_cafe_menu_endpoint_landing/ODOO_CAFE_MENU_ENDPOINT_LANDING_20260717T055035Z/rollback/module/SHA256_BEFORE.txt",
+    "public_files_sha256_ref": "runtime/total_field/odoo_cafe_menu_endpoint_landing/ODOO_CAFE_MENU_ENDPOINT_LANDING_20260717T055035Z/rollback/public_files/SHA256_BEFORE.txt"
+  },
+  "public_source_chain": {
+    "canonical_sha256": "a84dcddb27fb014ea47523144f908601b12d85dc198d0e1a115ab0f973f168b0",
+    "source_sha256": "9b87af6ae15fabaee04e652dfb2eb66306939a886d50e787b942a33670bafef1",
+    "source_lock_sha256": "77b5a065955110a4cd109cd58bbdd877cf1f558536c760c841d5a91ab34cd80c",
+    "registration_number": "新北市社區補字第1100606355號",
+    "annual_report": "NOT_FOUND_IN_TOTAL_FIELD_SEARCH_SCOPE"
+  },
+  "secret_value_read_or_reported": false,
+  "member_plaintext_read_or_reported": false,
+  "unrelated_change": false
+}

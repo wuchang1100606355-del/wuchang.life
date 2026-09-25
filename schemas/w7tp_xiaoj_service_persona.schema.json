@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/w7tp_xiaoj_service_persona.schema.json",
+  "title": "W7TP XiaoJ Service Persona Candidate Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_name",
+    "persona_projection",
+    "service_context",
+    "role",
+    "authority",
+    "member_facing_message",
+    "intent_packet",
+    "risk_flags",
+    "required_member_confirmation",
+    "requires_total_field_verify"
+  ],
+  "properties": {
+    "agent_name": { "const": "小J" },
+    "persona_projection": {
+      "enum": [
+        "COMMUNITY_SERVICE_STAFF",
+        "MERCHANT_SERVICE_STAFF",
+        "PERSONAL_STEWARD",
+        "BUILDING_DIGITAL_SECRETARY",
+        "GENERAL_XIAOJ"
+      ]
+    },
+    "service_context": {
+      "enum": ["community", "merchant", "personal", "building", "general"]
+    },
+    "role": { "const": "service_persona_language_layer" },
+    "authority": { "const": "candidate_only" },
+    "member_facing_message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "intent_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent_type", "requires_member_confirmation"],
+      "properties": {
+        "intent_type": { "type": "string", "minLength": 2 },
+        "requires_member_confirmation": { "const": true },
+        "required_checks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "hold_required": { "type": "boolean" }
+      }
+    },
+    "knowledge_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string", "maxLength": 1000 },
+        "source_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "ui_prompt": { "type": "string", "maxLength": 500 },
+    "risk_flags": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 120 },
+      "maxItems": 50,
+      "uniqueItems": true
+    },
+    "required_member_confirmation": { "const": true },
+    "schema_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_id": { "type": "string" },
+        "valid": { "type": "boolean" },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "candidate_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_only"],
+      "properties": {
+        "packet_type": { "type": "string" },
+        "packet_ref": { "type": "string" },
+        "candidate_only": { "const": true }
+      }
+    },
+    "requires_total_field_verify": { "const": true }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "persona_projection": { "const": "COMMUNITY_SERVICE_STAFF" }
+        }
+      },
+      "then": {
+        "properties": {
+          "service_context": { "const": "community" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "persona_projection": { "const": "MERCHANT_SERVICE_STAFF" }
+        }
+      },
+      "then": {
+        "properties": {
+          "service_context": { "const": "merchant" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "persona_projection": { "const": "PERSONAL_STEWARD" }
+        }
+      },
+      "then": {
+        "properties": {
+          "service_context": { "const": "personal" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "persona_projection": { "const": "BUILDING_DIGITAL_SECRETARY" }
+        }
+      },
+      "then": {
+        "properties": {
+          "service_context": { "const": "building" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "persona_projection": { "const": "GENERAL_XIAOJ" }
+        }
+      },
+      "then": {
+        "properties": {
+          "service_context": { "const": "general" }
+        }
+      }
+    }
+  ]
+}

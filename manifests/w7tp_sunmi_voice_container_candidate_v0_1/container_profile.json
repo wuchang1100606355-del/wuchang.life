@@ -1,0 +1,52 @@
+{
+  "schema_version": "w7tp.sunmi-voice-container-profile/v0.1",
+  "status": "CANDIDATE",
+  "container_status": "OWNER_CONFIRMED_RUNTIME_EVIDENCE_PENDING",
+  "device_role": "SUNMI_POS",
+  "node_id_ref": "V3_MIX_EDLA_GL",
+  "platform": "Android 13",
+  "non_root_required": true,
+  "credential_embedded": false,
+  "secret_mount_required": true,
+  "network_listener_default": false,
+  "db_write": false,
+  "router_write": false,
+  "canonical_write": false,
+  "pointer_write": false,
+  "allow_only_commit": true,
+  "total_field_gateway_required": true,
+  "supported_architecture": [],
+  "required_runtime": {
+    "interface": "OCI_COMPATIBLE_RUNTIME",
+    "verified": false,
+    "accepted_candidates": [
+      "docker",
+      "podman",
+      "containerd",
+      "nerdctl"
+    ]
+  },
+  "required_storage": {
+    "minimum_bytes": null,
+    "state": "PENDING_DEVICE_EVIDENCE",
+    "persistent_member_plaintext": false
+  },
+  "healthcheck_command": [
+    "w7tp-small-agent",
+    "health"
+  ],
+  "self_test_command": [
+    "w7tp-small-agent",
+    "self-test"
+  ],
+  "runtime_evidence": {
+    "owner_containerization_capability": "YES",
+    "adb_authorized_device": false,
+    "runtime_binary_verified": false,
+    "cpu_abi": null,
+    "selinux_state": null,
+    "storage_state": null
+  },
+  "deployment_eligibility": false,
+  "hold_reason": "HOLD_CONTAINER_RUNTIME_EVIDENCE_AND_DEPLOYMENT_TRANSPORT_PENDING"
+}

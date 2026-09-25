@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/intent_field_launch_manifest.schema.json",
+  "title": "Intent Field Launch Manifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "created_at_utc",
+    "active_patent_packet_ref",
+    "outputs",
+    "safety",
+    "final_decision"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "created_at_utc": { "type": "string" },
+    "active_patent_packet_ref": { "type": "object" },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "safety": {
+      "type": "object",
+      "required": [
+        "no_db_write",
+        "no_deploy",
+        "no_restart",
+        "no_tipo_submission",
+        "no_secret",
+        "no_member_plaintext",
+        "no_raw_audio",
+        "no_router_write",
+        "dry_run_only"
+      ],
+      "properties": {
+        "no_db_write": { "const": true },
+        "no_deploy": { "const": true },
+        "no_restart": { "const": true },
+        "no_tipo_submission": { "const": true },
+        "no_secret": { "const": true },
+        "no_member_plaintext": { "const": true },
+        "no_raw_audio": { "const": true },
+        "no_router_write": { "const": true },
+        "dry_run_only": { "const": true }
+      }
+    },
+    "final_decision": { "enum": ["PASS", "HOLD"] }
+  }
+}

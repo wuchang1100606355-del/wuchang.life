@@ -1,0 +1,409 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_member_sovereign_identity_root_v1.schema.json",
+  "title": "W7TP Member Sovereign Identity Root v1 Candidate",
+  "$comment": "P0 source-contract candidate only. The root is a verifiable identity anchor and sovereign interface reference, never a bearer credential or execution authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "lifecycle",
+    "identity_root_ref",
+    "root_packet_ref",
+    "subject_binding_ref",
+    "root_generation",
+    "previous_root_packet_ref",
+    "root_state",
+    "rotation_epoch",
+    "revocation_epoch",
+    "identity_registry_ref",
+    "member_display_hash",
+    "terms_version",
+    "member_verification_key_commitment",
+    "member_verification_method_ref",
+    "member_verification_proof_ref",
+    "issuer_attestation_ref",
+    "trusted_issuer_registry_ref",
+    "revocation_registry_ref",
+    "rotation_policy_ref",
+    "recovery_policy_ref",
+    "verified_channel_binding_set_ref",
+    "root_policy",
+    "authority_model",
+    "candidate_only",
+    "runtime_enabled",
+    "formal_execution_authority",
+    "authority_granted",
+    "bearer_authority",
+    "member_plaintext_included",
+    "credential_material_included",
+    "issued_at",
+    "generative_transmission",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-MEMBER-SOVEREIGN-IDENTITY-ROOT/1.0"
+    },
+    "packet_type": {
+      "const": "MEMBER_SOVEREIGN_IDENTITY_ROOT"
+    },
+    "lifecycle": {
+      "const": "CANDIDATE"
+    },
+    "identity_root_ref": {
+      "type": "string",
+      "pattern": "^member_identity_root_ref:sha256:[0-9a-f]{64}$"
+    },
+    "root_packet_ref": {
+      "type": "string",
+      "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+    },
+    "subject_binding_ref": {
+      "type": "string",
+      "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+    },
+    "root_generation": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "previous_root_packet_ref": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+        }
+      ]
+    },
+    "root_state": {
+      "enum": [
+        "ACTIVE_CANDIDATE",
+        "SUSPENDED_CANDIDATE",
+        "RECOVERY_PENDING_CANDIDATE",
+        "REVOKED_CANDIDATE",
+        "SUPERSEDED_CANDIDATE"
+      ]
+    },
+    "rotation_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "revocation_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "identity_registry_ref": {
+      "type": "string",
+      "pattern": "^identity_registry_ref:sha256:[0-9a-f]{64}$"
+    },
+    "member_display_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "terms_version": {
+      "$ref": "#/$defs/version"
+    },
+    "member_verification_key_commitment": {
+      "type": "string",
+      "pattern": "^member_key_commitment:sha256:[0-9a-f]{64}$"
+    },
+    "member_verification_method_ref": {
+      "type": "string",
+      "pattern": "^member_verification_method_ref:sha256:[0-9a-f]{64}$"
+    },
+    "member_verification_proof_ref": {
+      "type": "string",
+      "pattern": "^member_proof_ref:sha256:[0-9a-f]{64}$"
+    },
+    "issuer_attestation_ref": {
+      "type": "string",
+      "pattern": "^issuer_attestation_ref:sha256:[0-9a-f]{64}$"
+    },
+    "trusted_issuer_registry_ref": {
+      "type": "string",
+      "pattern": "^trusted_issuer_registry_ref:sha256:[0-9a-f]{64}$"
+    },
+    "revocation_registry_ref": {
+      "type": "string",
+      "pattern": "^revocation_registry_ref:sha256:[0-9a-f]{64}$"
+    },
+    "rotation_policy_ref": {
+      "type": "string",
+      "pattern": "^rotation_policy_ref:sha256:[0-9a-f]{64}$"
+    },
+    "recovery_policy_ref": {
+      "type": "string",
+      "pattern": "^recovery_policy_ref:sha256:[0-9a-f]{64}$"
+    },
+    "verified_channel_binding_set_ref": {
+      "type": "string",
+      "pattern": "^verified_channel_binding_set_ref:sha256:[0-9a-f]{64}$"
+    },
+    "root_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_active_root_generation_per_member",
+        "unique",
+        "verifiable",
+        "rotatable",
+        "revocable",
+        "recoverable",
+        "non_bearer",
+        "possession_conveys_authority",
+        "permanent_roles_in_root",
+        "permanent_scopes_in_root",
+        "verified_channel_binding_is_sovereign_identity"
+      ],
+      "properties": {
+        "one_active_root_generation_per_member": {
+          "const": true
+        },
+        "unique": {
+          "const": true
+        },
+        "verifiable": {
+          "const": true
+        },
+        "rotatable": {
+          "const": true
+        },
+        "revocable": {
+          "const": true
+        },
+        "recoverable": {
+          "const": true
+        },
+        "non_bearer": {
+          "const": true
+        },
+        "possession_conveys_authority": {
+          "const": false
+        },
+        "permanent_roles_in_root": {
+          "const": false
+        },
+        "permanent_scopes_in_root": {
+          "const": false
+        },
+        "verified_channel_binding_is_sovereign_identity": {
+          "const": false
+        }
+      }
+    },
+    "authority_model": {
+      "$ref": "#/$defs/authority_model"
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "runtime_enabled": {
+      "const": false
+    },
+    "formal_execution_authority": {
+      "const": false
+    },
+    "authority_granted": {
+      "const": false
+    },
+    "bearer_authority": {
+      "const": false
+    },
+    "member_plaintext_included": {
+      "const": false
+    },
+    "credential_material_included": {
+      "const": false
+    },
+    "issued_at": {
+      "$ref": "#/$defs/zulu_datetime"
+    },
+    "generative_transmission": {
+      "$ref": "#/$defs/generative_transmission"
+    },
+    "integrity": {
+      "$ref": "#/$defs/integrity"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "root_generation": {
+            "const": 1
+          }
+        },
+        "required": [
+          "root_generation"
+        ]
+      },
+      "then": {
+        "properties": {
+          "previous_root_packet_ref": {
+            "type": "null"
+          },
+          "rotation_epoch": {
+            "const": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "previous_root_packet_ref": {
+            "type": "string",
+            "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+          },
+          "rotation_epoch": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "zulu_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "purpose_ref": {
+      "type": "string",
+      "pattern": "^purpose_ref:sha256:[0-9a-f]{64}$"
+    },
+    "scope_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^scope_ref:sha256:[0-9a-f]{64}$"
+      }
+    },
+    "effect_class": {
+      "enum": [
+        "E0_ANSWER",
+        "E1_READ",
+        "E2_CANDIDATE",
+        "E3_SANDBOX",
+        "E4_REVERSIBLE_WRITE",
+        "E5_HIGH_IMPACT"
+      ]
+    },
+    "authority_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_consent_authority",
+        "safety_and_landing_authority",
+        "process_authority",
+        "candidate_authority"
+      ],
+      "properties": {
+        "member_consent_authority": {
+          "const": "member"
+        },
+        "safety_and_landing_authority": {
+          "const": "total_field_verifier"
+        },
+        "process_authority": {
+          "const": "odoo"
+        },
+        "candidate_authority": {
+          "const": "none"
+        }
+      }
+    },
+    "generative_transmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "state_packet_ref",
+        "reconstruction_condition_ref",
+        "equivalent_state_ref",
+        "total_field_verify_ref",
+        "ordinary_file_movement",
+        "cloud_sync",
+        "backup",
+        "download_decryption"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "W7TP_8D_INTENT_FIELD_PACKET"
+        },
+        "state_packet_ref": {
+          "type": "string",
+          "pattern": "^state_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "reconstruction_condition_ref": {
+          "type": "string",
+          "pattern": "^reconstruction_condition_ref:sha256:[0-9a-f]{64}$"
+        },
+        "equivalent_state_ref": {
+          "type": "string",
+          "pattern": "^equivalent_state_ref:sha256:[0-9a-f]{64}$"
+        },
+        "total_field_verify_ref": {
+          "type": "string",
+          "pattern": "^total_field_verify_ref:sha256:[0-9a-f]{64}$"
+        },
+        "ordinary_file_movement": {
+          "const": false
+        },
+        "cloud_sync": {
+          "const": false
+        },
+        "backup": {
+          "const": false
+        },
+        "download_decryption": {
+          "const": false
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization",
+        "hash_algorithm",
+        "hash_scope",
+        "content_sha256",
+        "member_proof_verification_required",
+        "trusted_issuer_registry_verification_required"
+      ],
+      "properties": {
+        "canonicalization": {
+          "const": "UTF8_NFC_SORTED_KEYS_NO_WHITESPACE_NO_FLOATS"
+        },
+        "hash_algorithm": {
+          "const": "SHA-256"
+        },
+        "hash_scope": {
+          "const": "ALL_PACKET_FIELDS_EXCEPT_INTEGRITY_CONTENT_SHA256"
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "member_proof_verification_required": {
+          "const": true
+        },
+        "trusted_issuer_registry_verification_required": {
+          "const": true
+        }
+      }
+    }
+  }
+}

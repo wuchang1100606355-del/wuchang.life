@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/front_edge_proxy_blocking.schema.json",
+  "title": "Front Edge Proxy Blocking Sandbox",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "packet_type",
+    "sandbox_only",
+    "source_refs",
+    "proxy_request",
+    "proxy_decision",
+    "technical_means",
+    "safety_boundary"
+  ],
+  "properties": {
+    "packet_type": { "const": "front_edge_proxy_blocking_sandbox" },
+    "sandbox_only": { "const": true },
+    "source_refs": {
+      "type": "object",
+      "required": ["seal_ref", "state_field_packet_runtime_ref", "accountable_record_chain_ref", "candidate_ref"]
+    },
+    "proxy_request": {
+      "type": "object",
+      "required": [
+        "access_request_id",
+        "requester_identity_ref",
+        "identity_proxy_ref",
+        "authority_scope_code",
+        "consent_state_code",
+        "target_system_ref",
+        "target_operation_code",
+        "verifier_result",
+        "blocking_condition"
+      ],
+      "properties": {
+        "access_request_id": { "type": "string", "minLength": 1 },
+        "requester_identity_ref": { "type": "string", "minLength": 1 },
+        "identity_proxy_ref": { "type": "string", "minLength": 1 },
+        "authority_scope_code": { "type": "string", "minLength": 1 },
+        "consent_state_code": { "type": "string", "minLength": 1 },
+        "target_system_ref": { "type": "string", "minLength": 1 },
+        "target_operation_code": { "type": "string", "minLength": 1 },
+        "verifier_result": { "type": "string", "minLength": 1 },
+        "blocking_condition": { "type": "string", "minLength": 1 }
+      }
+    },
+    "proxy_decision": {
+      "type": "object",
+      "required": [
+        "decision",
+        "restricted_execution_instruction_ref",
+        "result_packet_ref",
+        "accountable_record_ref",
+        "executable_api_call_generated",
+        "business_write_forwarded"
+      ],
+      "properties": {
+        "decision": { "enum": ["ALLOW_RESTRICTED", "HOLD", "REJECT", "BLOCK"] },
+        "restricted_execution_instruction_ref": { "type": "string" },
+        "result_packet_ref": { "type": "string" },
+        "accountable_record_ref": { "type": "string", "minLength": 1 },
+        "executable_api_call_generated": { "const": false },
+        "business_write_forwarded": { "const": false }
+      }
+    },
+    "technical_means": {
+      "type": "object",
+      "required": [
+        "modules",
+        "data_structures",
+        "packet_fields",
+        "verification_conditions",
+        "blocking_conditions",
+        "record_fields"
+      ]
+    },
+    "safety_boundary": {
+      "type": "object",
+      "required": [
+        "production_system_connected",
+        "db_write",
+        "deploy",
+        "restart",
+        "auto_landing",
+        "no_secret",
+        "no_member_plaintext",
+        "h64_td_ref_only"
+      ],
+      "properties": {
+        "production_system_connected": { "const": false },
+        "db_write": { "const": false },
+        "deploy": { "const": false },
+        "restart": { "const": false },
+        "auto_landing": { "const": false },
+        "no_secret": { "const": true },
+        "no_member_plaintext": { "const": true },
+        "h64_td_ref_only": { "const": true }
+      }
+    }
+  }
+}

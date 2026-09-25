@@ -1,0 +1,11 @@
+[Unit]
+Description=Periodically verify read-only provider consumer binding
+
+[Timer]
+OnBootSec=90sec
+OnUnitActiveSec=60sec
+AccuracySec=5sec
+Unit=w7tp-adaptive-network-consumer.service
+
+[Install]
+WantedBy=timers.target

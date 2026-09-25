@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/intent_field/product_intent_dry_run_result.schema.json",
+  "title": "Product Intent Field Dry-Run Result",
+  "type": "object",
+  "required": [
+    "run_id",
+    "state",
+    "dry_run_only",
+    "request",
+    "state_packet",
+    "verifier_result",
+    "dry_run_output",
+    "accountability_record",
+    "db_write",
+    "deploy",
+    "restart"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "state": { "const": "PRODUCT_INTENT_FIELD_DRY_RUN_P0" },
+    "dry_run_only": { "const": true },
+    "request": { "type": "object" },
+    "state_packet": { "$ref": "product_intent_state_packet.schema.json" },
+    "verifier_result": {
+      "type": "object",
+      "required": ["result", "risk_code", "hold_reason_code"],
+      "properties": {
+        "result": { "enum": ["PASS", "HOLD"] },
+        "risk_code": { "type": "string" },
+        "hold_reason_code": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "dry_run_output": { "type": "object" },
+    "accountability_record": { "type": "object" },
+    "db_write": { "const": false },
+    "deploy": { "const": false },
+    "restart": { "const": false }
+  },
+  "additionalProperties": true
+}

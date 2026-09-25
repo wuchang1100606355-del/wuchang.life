@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XiaoJ LINE WORKS 產品化操作指南</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18212f;
+      --muted: #5c6878;
+      --line: #d9e2ec;
+      --paper: #fbfcfe;
+      --panel: #ffffff;
+      --accent: #0f766e;
+      --warn: #9a5b00;
+      --hold: #9f1239;
+      --code: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      line-height: 1.65;
+    }
+    header {
+      padding: 32px clamp(18px, 4vw, 56px);
+      background: #102139;
+      color: #fff;
+    }
+    header p { margin: 6px 0 0; color: #d6e5ee; }
+    h1 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.15; letter-spacing: 0; }
+    h2 { margin: 0 0 12px; font-size: 24px; letter-spacing: 0; }
+    main { max-width: 1160px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 56px; }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+    }
+    .badge {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      background: #eefaf7;
+      color: var(--accent);
+    }
+    .hold { color: var(--hold); background: #fff1f2; }
+    .warn { color: var(--warn); background: #fff7ed; }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #f3f6f9;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    code { padding: 2px 5px; }
+    pre {
+      padding: 14px;
+      overflow: auto;
+      color: var(--code);
+    }
+    ol, ul { padding-left: 22px; }
+    li { margin: 8px 0; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; vertical-align: top; padding: 10px; border-bottom: 1px solid var(--line); }
+    th { width: 240px; background: #f8fafc; color: #0f3d3a; }
+    .do-not {
+      border-color: #fecdd3;
+      background: #fff1f2;
+    }
+    .done {
+      border-color: #99f6e4;
+      background: #f0fdfa;
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      th, td { display: block; width: 100%; }
+      th { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="badge">STATE=LINE_WORKS_PRODUCTIZATION_P1_CANDIDATE_GATE_READY</span>
+    <h1>XiaoJ LINE WORKS 產品化操作指南</h1>
+    <p>目標：先上候選通知與本地權威 gate，不讓 AI 或 UI 直接發送 LINE WORKS 訊息。</p>
+  </header>
+  <main>
+    <section>
+      <h2>目前你已經有什麼</h2>
+      <div class="grid">
+        <div class="card"><span class="badge">API</span><p><code>/wuchang/xiaoj/api/lineworks-notify</code> 已設計為登入使用者可呼叫的候選通知 API。</p></div>
+        <div class="card"><span class="badge hold">HOLD</span><p>正式發送 gate 是 <code>lineworks_send</code>，未有 verified release refs 前不發送。</p></div>
+        <div class="card"><span class="badge">Preflight</span><p><code>/wuchang/xiaoj/api/lineworks-send-preflight</code> 可檢查是否具備正式發送條件，但仍不連外。</p></div>
+      </div>
+    </section>
+
+    <section class="do-not">
+      <h2>不要做</h2>
+      <ul>
+        <li>不要把 LINE WORKS access token、refresh token、client secret、private key 貼到聊天、文件或 repo。</li>
+        <li>不要把會員電話、完整姓名、地址、LINE/WORKS raw profile 當通知 payload。</li>
+        <li>不要直接呼叫 LINE WORKS API 測試正式發送，先完成 verified release refs。</li>
+        <li>不要讓雲端 AI 決定誰可接收通知；AI 只能產生候選文字。</li>
+        <li>不要讓總場持有 Google Workspace、LINE WORKS、Odoo、router 或付款系統的明文高權限憑證。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>總場數位代理邊界</h2>
+      <p>總場可以作為你的數位代理做候選判斷、分場查詢、本地准駁、release preflight 與 evidence seal；它不應成為無限制超管，也不應超越人類 owner/admin root-of-trust。</p>
+      <table>
+        <tr><th>可代理</th><td>建立候選、查分場、產生 authority packet、執行 local verifier、整理 HOLD / READY / DEAD_LETTER 狀態。</td></tr>
+        <tr><th>不可代理</th><td>保存明文密碼、保存 token、繞過 verified release refs、直接變更 Google Workspace 或外部平台高風險設定。</td></tr>
+        <tr><th>正式動作</th><td>必須由人類 owner/admin 或已驗證 release packet 啟用；總場只能提供預檢與證據封存。</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>你在 LINE WORKS 後台要做的事</h2>
+      <ol>
+        <li>進入 LINE WORKS Developer Console 或管理後台。</li>
+        <li>建立或確認 XiaoJ 專用 App，不要用個人測試 App 混用正式店務。</li>
+        <li>建立或確認 Bot，記下 Bot ID。只記 Bot ID ref，不貼 token。</li>
+        <li>啟用 scope：<code>bot</code> 與 <code>bot.message</code>。</li>
+        <li>決定第一版授權方式：Service Account JWT 或 OAuth。若不確定，先選 Service Account JWT 做後端 connector。</li>
+        <li>把 Bot 加到測試網域與測試使用者可收到訊息的位置。</li>
+        <li>準備一個測試 target user ref。只提供 ref 或 hash，不提供會員明文。</li>
+        <li>先執行 <code>xiaoj_lineworks_operator_handoff_pack.py</code> 產生操作交接包，確認缺哪些 refs。</li>
+        <li>使用 <code>lineworks-release-refs-draft</code> API 或 <code>xiaoj_lineworks_release_refs_builder.py</code> 產生 refs 草稿。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>你在 Odoo 後台要做的事</h2>
+      <ol>
+        <li>等我完成 module upgrade 前，不要急著正式送出；目前只是程式已具備模型與畫面。</li>
+        <li>升級後進入 <code>WuChang Cafe / LINE WORKS Candidates</code>。</li>
+        <li>建立候選通知，填 <code>message_preview</code>、<code>target_ref_hash</code>、channel。</li>
+        <li>按 <code>Build Candidate</code> 產生候選封包與 evidence hash。</li>
+        <li>填入 verified release refs JSON 與 connector refs。</li>
+        <li>按 <code>Build Release Refs Draft</code> 正規化 refs，產生 draft hash 與 warnings。</li>
+        <li>按 <code>Run Preflight</code>。若狀態是 <code>preflight_ready</code>，代表正式 connector 條件齊備，但仍未送出。</li>
+        <li>按 <code>Build Execution Envelope</code> 產生 redacted execution envelope，不要交付 token 或會員明文。</li>
+        <li>填入 <code>runtime_operator_ref</code> 後，按 <code>Build Runtime Activation</code> 產生 activation packet hash。</li>
+        <li>填入 resolver binding metadata 後，按 <code>Build Resolver Contract</code>；只填 binding ref 與 value hash，不填 bot ID、user ID 或 token 原文。</li>
+        <li>按 <code>Runtime Dry-Run</code> 檢查 P2 connector 是否具備人審啟用條件。</li>
+        <li>按 <code>Build Handoff Pack</code> 產生操作交接包，集中查看 release refs、execution envelope、activation、dry-run 與下一步。</li>
+        <li>若資料錯誤或可疑，按 <code>Dead Letter</code> 留存審核。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>完成後請回報給我</h2>
+      <table>
+        <tr><th>需要回報</th><td>Bot ID 是否已建立。可以給 masked/ref，例如 <code>BOT_REF_CAFE_XIAOJ_PILOT</code>。</td></tr>
+        <tr><th>需要回報</th><td>scope 是否包含 <code>bot</code> 與 <code>bot.message</code>。</td></tr>
+        <tr><th>需要回報</th><td>第一個測試對象是否可由 Bot 發訊息。請只給 <code>lineworks_target_user_ref</code>，不要給會員明文。</td></tr>
+        <tr><th>需要回報</th><td>你選擇 JWT 或 OAuth 作為 P2 connector 的授權方式。</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Verified Release Refs 清單</h2>
+      <p>這些 ref 都要是 verified object，不接受單純字串。可從 <code>packets/product_av_ordering_ai/lineworks_release_refs_template.json</code> 複製欄位結構後填寫。</p>
+      <p>也可以用 <code>/wuchang/xiaoj/api/lineworks-release-refs-draft</code> 或本機 builder 產生草稿，避免手寫 JSON 結構。</p>
+      <pre>{
+  "lineworks_send": {
+    "authenticated_staff_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true},
+    "lineworks_release_packet_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true},
+    "lineworks_app_config_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true},
+    "lineworks_bot_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true},
+    "lineworks_target_user_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true},
+    "message_policy_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true},
+    "consent_policy_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true},
+    "total_field_release_ref": {"ref": "...", "packet_hash": "64hex", "verifier": "total_field_release_registry", "verified": true}
+  }
+}</pre>
+    </section>
+
+    <section>
+      <h2>P2 Connector Refs</h2>
+      <p>正式 connector 只接受 ref，不接受 token 或 private key 原文。模板檔同樣在 <code>packets/product_av_ordering_ai/lineworks_release_refs_template.json</code>。</p>
+      <pre>{
+  "connector_refs": {
+    "lineworks_bot_ref": "BOT_REF_CAFE_XIAOJ_PILOT",
+    "lineworks_target_user_ref": "TARGET_REF_HASHED_PILOT",
+    "lineworks_access_token_runtime_ref": "RUNTIME_TOKEN_PROVIDER_REF_ONLY"
+  }
+}</pre>
+      <p>若任何 ref 長得像 access token、Bearer token、client secret 或 private key，preflight 會 HOLD。</p>
+    </section>
+
+    <section>
+      <h2>P2 Runtime Connector 邊界</h2>
+      <p>目前已有可接上的 runtime connector 函式，但預設只做 dry-run，不會發送 LINE WORKS。</p>
+      <table>
+        <tr><th>函式</th><td><code>wuchang_cafe_ai_gateway.services.lineworks_connector.execute_lineworks_send_envelope</code></td></tr>
+        <tr><th>API</th><td><code>/wuchang/xiaoj/api/lineworks-execution-envelope</code>、<code>/wuchang/xiaoj/api/lineworks-runtime-activation-draft</code>、<code>/wuchang/xiaoj/api/lineworks-runtime-resolver-contract</code>、<code>/wuchang/xiaoj/api/lineworks-runtime-dry-run</code> 與 <code>/wuchang/xiaoj/api/lineworks-operator-handoff</code></td></tr>
+        <tr><th>預設</th><td><code>enable_external_call=false</code>，所以 <code>external_api_call=false</code>、<code>formal_lineworks_send=false</code>。</td></tr>
+        <tr><th>正式送出前</th><td>必須有 human activation packet、64-hex activation hash、安全 operator ref、runtime resolver。</td></tr>
+        <tr><th>不可回顯</th><td>bot ID、target user ID、access token、LINE WORKS response body。</td></tr>
+        <tr><th>安全限制</th><td>Dry-run API 不接受也不採用前端傳來的 <code>enable_external_call</code>。</td></tr>
+      </table>
+    </section>
+
+    <section class="done">
+      <h2>本機驗證命令</h2>
+      <p>我已把這些納入 verifier。你不用先執行，除非要自行複查。</p>
+      <pre>cd /home/taiji_admin/Taiji_Hub
+python3 tools/xiaoj_lineworks_release_readiness.py --refs packets/product_av_ordering_ai/lineworks_release_refs_template.json --pretty
+python3 tools/xiaoj_lineworks_operator_handoff_pack.py --refs packets/product_av_ordering_ai/lineworks_release_refs_template.json --pretty
+python3 tools/xiaoj_lineworks_release_refs_builder.py --input packets/product_av_ordering_ai/lineworks_release_refs_template.json --pretty
+python3 tools/xiaoj_lineworks_execution_envelope_export.py --refs packets/product_av_ordering_ai/lineworks_release_refs_template.json --target-ref TARGET_REF_HASHED_OR_MASKED --pretty
+python3 tools/xiaoj_lineworks_runtime_activation_builder.py --operator-ref OPERATOR_REF_VERIFIED_PILOT --execution-envelope-hash 64hex --confirm-human-activation --pretty
+python3 tools/xiaoj_lineworks_runtime_resolver_contract_builder.py --refs packets/product_av_ordering_ai/lineworks_release_refs_template.json --pretty
+python3 scripts/verify/verify_xiaoj_p1_intent_engine.py
+python3 scripts/verify/verify_xiaoj_browser_packaged_pages.py
+python3 scripts/verify/verify_xiaoj_lineworks_productization.py</pre>
+    </section>
+
+    <section>
+      <h2>VS Code 內建瀏覽器開啟方式</h2>
+      <ol>
+        <li>在 VS Code 按 <code>Ctrl+Shift+P</code>。</li>
+        <li>輸入並選擇 <code>Simple Browser: Show</code>。</li>
+        <li>貼上我提供的本機 URL 或 file path。</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>

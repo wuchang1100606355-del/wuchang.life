@@ -1,0 +1,1231 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>五常總場｜系統動態落地進度管制</title>
+  <style>
+    :root {
+      --bg0:#020617;
+      --bg1:#06101f;
+      --bg2:#0f172a;
+      --card:rgba(15,23,42,.76);
+      --line:rgba(148,163,184,.22);
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --soft:#cbd5e1;
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --hold:#ef4444;
+      --info:#38bdf8;
+      --blue:#60a5fa;
+      --violet:#a78bfa;
+      --shadow:0 24px 80px rgba(0,0,0,.38);
+      --radius:24px;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      margin:0;
+      min-height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Microsoft JhengHei","PingFang TC",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(56,189,248,.22), transparent 28%),
+        radial-gradient(circle at 88% 16%, rgba(167,139,250,.2), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(34,197,94,.13), transparent 32%),
+        linear-gradient(180deg,var(--bg0),var(--bg2) 42%,var(--bg0));
+      overflow-x:hidden;
+    }
+
+    body:before {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:42px 42px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.9), transparent 82%);
+      opacity:.48;
+      z-index:-1;
+    }
+
+    .shell { max-width:1440px; margin:0 auto; padding:22px; }
+
+    .topbar {
+      position:sticky;
+      top:0;
+      z-index:30;
+      border-bottom:1px solid var(--line);
+      background:rgba(2,6,23,.78);
+      backdrop-filter:blur(22px);
+      box-shadow:0 18px 60px rgba(0,0,0,.22);
+    }
+
+    .hero {
+      display:grid;
+      grid-template-columns:1.35fr .65fr;
+      gap:18px;
+      align-items:stretch;
+      padding-block:18px;
+    }
+
+    .brand-card,.rule-card,.card {
+      border:1px solid var(--line);
+      background:linear-gradient(145deg, rgba(15,23,42,.82), rgba(2,6,23,.56));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .brand-card {
+      position:relative;
+      padding:22px;
+      overflow:hidden;
+    }
+
+    .eyebrow {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:#bae6fd;
+      border:1px solid rgba(56,189,248,.38);
+      background:rgba(56,189,248,.08);
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .dot {
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:var(--good);
+      box-shadow:0 0 18px var(--good);
+    }
+
+    h1 {
+      margin:14px 0 8px;
+      font-size:clamp(28px, 4vw, 52px);
+      line-height:1.05;
+      letter-spacing:.02em;
+    }
+
+    .subtitle {
+      max-width:860px;
+      margin:0;
+      color:var(--muted);
+      line-height:1.85;
+      font-size:15px;
+    }
+
+    .toolbar {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .rule-card { padding:18px; }
+
+    .rule-title {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+      color:#fde68a;
+      font-weight:800;
+    }
+
+    .rule-grid { display:grid; gap:8px; }
+
+    .rule {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:16px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.07);
+      color:var(--soft);
+      font-size:12px;
+      font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    }
+
+    .rule b { color:#bbf7d0; font-weight:800; }
+
+    button,select,input {
+      min-height:42px;
+      border:1px solid var(--line);
+      background:rgba(2,6,23,.64);
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 13px;
+      font-size:14px;
+      outline:none;
+    }
+
+    input { min-width:min(360px, 100%); flex:1; }
+    button { cursor:pointer; transition:.18s ease; }
+
+    button:hover,select:hover,input:focus {
+      border-color:rgba(96,165,250,.78);
+      box-shadow:0 0 0 4px rgba(96,165,250,.11);
+      transform:translateY(-1px);
+    }
+
+    .btn-primary {
+      border-color:rgba(56,189,248,.5);
+      background:linear-gradient(135deg, rgba(56,189,248,.22), rgba(167,139,250,.16));
+    }
+
+    .btn-danger { border-color:rgba(239,68,68,.42); color:#fecaca; }
+    .btn-update { border-color:rgba(34,197,94,.55); color:#bbf7d0; background:rgba(34,197,94,.10); }
+
+    .detour-panel {
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      padding:12px;
+      border:1px solid rgba(245,158,11,.32);
+      background:rgba(245,158,11,.07);
+      border-radius:18px;
+    }
+
+    .detour-light {
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      background:var(--good);
+      box-shadow:0 0 22px var(--good);
+      flex:0 0 auto;
+    }
+
+    .detour-light.warn {
+      background:var(--warn);
+      box-shadow:0 0 22px var(--warn);
+    }
+
+    .detour-light.hold {
+      background:var(--hold);
+      box-shadow:0 0 22px var(--hold);
+    }
+
+    #detourText {
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .layout {
+      display:grid;
+      grid-template-columns:290px 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .side {
+      position:sticky;
+      top:148px;
+      align-self:start;
+      padding:14px;
+      max-height:calc(100vh - 170px);
+      overflow:auto;
+    }
+
+    .side h2 {
+      margin:4px 4px 12px;
+      font-size:14px;
+      color:#bfdbfe;
+      letter-spacing:.08em;
+    }
+
+    .navlane {
+      width:100%;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      align-items:center;
+      text-align:left;
+      margin-bottom:8px;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,.045);
+      border:1px solid transparent;
+    }
+
+    .kpi-grid {
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:14px;
+      margin-bottom:16px;
+    }
+
+    .kpi { padding:18px; }
+
+    .kpi-label { color:var(--muted); font-size:13px; }
+    .kpi-value { margin-top:8px; font-size:32px; font-weight:900; letter-spacing:-.03em; }
+    .kpi-note { margin-top:8px; color:var(--muted); font-size:12px; line-height:1.6; }
+
+    .progress {
+      position:relative;
+      height:10px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.86);
+      border-radius:999px;
+    }
+
+    .progress > i {
+      display:block;
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--info), var(--violet), var(--good));
+      box-shadow:0 0 18px rgba(56,189,248,.28);
+    }
+
+    .progress.warn > i { background:linear-gradient(90deg, var(--warn), #fbbf24); }
+    .progress.hold > i { background:linear-gradient(90deg, var(--hold), #fb7185); }
+
+    .lane {
+      margin-bottom:16px;
+      overflow:hidden;
+    }
+
+    .lane-top {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:16px;
+      padding:18px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+    }
+
+    .lane-title { margin:0; font-size:21px; line-height:1.35; letter-spacing:.01em; }
+
+    .lane-meta {
+      margin-top:8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .meta-chip,.pill {
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      min-height:28px;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(2,6,23,.48);
+      color:var(--muted);
+      white-space:nowrap;
+      font-size:12px;
+    }
+
+    .pill.good { color:#bbf7d0; border-color:rgba(34,197,94,.42); background:rgba(34,197,94,.09); }
+    .pill.warn { color:#fde68a; border-color:rgba(245,158,11,.45); background:rgba(245,158,11,.09); }
+    .pill.hold { color:#fecaca; border-color:rgba(239,68,68,.48); background:rgba(239,68,68,.09); }
+    .pill.info { color:#bae6fd; border-color:rgba(56,189,248,.42); background:rgba(56,189,248,.09); }
+
+    .lane-score { min-width:180px; text-align:right; }
+    .lane-score strong { display:block; font-size:26px; margin-bottom:8px; }
+
+    .items { display:grid; gap:10px; padding:14px; }
+
+    .item {
+      display:grid;
+      grid-template-columns:1.1fr 150px 130px 1.2fr;
+      gap:12px;
+      align-items:center;
+      padding:13px;
+      border:1px solid rgba(148,163,184,.16);
+      background:rgba(2,6,23,.34);
+      border-radius:18px;
+    }
+
+    .item-id {
+      color:#bfdbfe;
+      font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+      font-weight:800;
+      font-size:12px;
+    }
+
+    .item-name { margin-top:4px; color:var(--soft); line-height:1.5; font-weight:650; }
+    .evidence { color:var(--muted); font-size:12px; line-height:1.55; overflow-wrap:anywhere; }
+    .state-code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:11px; }
+    .empty { padding:36px; text-align:center; color:var(--muted); }
+    .hidden { display:none !important; }
+
+    .editor {
+      margin-top:18px;
+      padding:18px;
+      border-color:rgba(239,68,68,.42);
+    }
+
+    textarea {
+      width:100%;
+      min-height:360px;
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(2,6,23,.78);
+      color:var(--text);
+      padding:14px;
+      font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+      line-height:1.6;
+      resize:vertical;
+    }
+
+    .toast {
+      position:fixed;
+      right:22px;
+      bottom:22px;
+      z-index:60;
+      width:min(420px, calc(100vw - 44px));
+      padding:14px 16px;
+      border:1px solid rgba(56,189,248,.42);
+      border-radius:18px;
+      background:rgba(2,6,23,.9);
+      box-shadow:var(--shadow);
+      color:#dbeafe;
+      transform:translateY(24px);
+      opacity:0;
+      pointer-events:none;
+      transition:.22s ease;
+    }
+
+    .toast.show {
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .footer {
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.8;
+      padding:24px 4px 42px;
+    }
+
+    mark { color:#0f172a; background:#fde68a; border-radius:6px; padding:0 4px; }
+
+    @media (max-width:1100px) {
+      .hero,.layout { grid-template-columns:1fr; }
+      .side { position:relative; top:auto; max-height:none; }
+      .kpi-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+      .item { grid-template-columns:1fr; }
+      .lane-score { text-align:left; }
+    }
+
+    @media (max-width:680px) {
+      .shell { padding:14px; }
+      .kpi-grid { grid-template-columns:1fr; }
+      .lane-top { grid-template-columns:1fr; }
+      h1 { font-size:32px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="shell">
+      <section class="hero">
+        <div class="brand-card">
+          <div class="eyebrow"><span class="dot"></span> TOTAL FIELD CONTROL CENTER</div>
+          <h1>五常總場｜系統動態落地進度管制</h1>
+          <p class="subtitle">
+            STATIC_WEB_LOCALSTORAGE_NO_DB_NO_RESTART｜本頁僅於瀏覽器 localStorage 更新。
+            不寫 Odoo DB、不 deploy、不 restart、不 router write、不輸出 secret。
+          </p>
+
+          <div class="toolbar">
+            <button class="btn-primary" onclick="resetData()">載入預設快照</button>
+            <button onclick="saveData()">儲存本機</button>
+            <button class="btn-update" onclick="refreshControl()">更新</button>
+            <button onclick="exportJson()">匯出 JSON</button>
+            <button onclick="toggleEditor()">JSON 編輯器</button>
+            <button onclick="window.print()">列印 / PDF</button>
+          </div>
+
+          <div class="toolbar">
+            <select id="filterState" onchange="render()">
+              <option value="">全部狀態</option>
+              <option value="PASS">PASS</option>
+              <option value="IN_PROGRESS">IN_PROGRESS</option>
+              <option value="NEXT">NEXT</option>
+              <option value="HOLD">HOLD</option>
+              <option value="HOLD_CONFIRM">HOLD_CONFIRM</option>
+              <option value="PARTIAL">PARTIAL</option>
+            </select>
+            <select id="sortMode" onchange="render()">
+              <option value="default">原始排序</option>
+              <option value="progress_desc">進度高到低</option>
+              <option value="progress_asc">進度低到高</option>
+              <option value="risk_first">HOLD 優先</option>
+            </select>
+            <input id="keyword" placeholder="搜尋：P1、小J、Odoo、POS、物業、專利..." oninput="render()" />
+          </div>
+
+          <div id="detourGuard" class="detour-panel">
+            <span id="detourLight" class="detour-light"></span>
+            <strong>防繞路警示燈</strong>
+            <span id="detourText">監控中：禁止 public controller、container direct patch、DB write、restart、deploy、router write。</span>
+          </div>
+        </div>
+
+        <aside class="rule-card">
+          <div class="rule-title">
+            <span>硬規則封印</span>
+            <span class="pill good">PUBLIC SAFE</span>
+          </div>
+          <div class="rule-grid" id="rules"></div>
+        </aside>
+      </section>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="layout">
+      <aside class="side card">
+        <h2>管制線導航</h2>
+        <div id="laneNav"></div>
+      </aside>
+
+      <section class="content">
+        <section class="kpi-grid" id="kpis"></section>
+        <section id="lanes"></section>
+
+        <section id="editorBox" class="editor card hidden">
+          <div class="lane-title">JSON 編輯器</div>
+          <p class="subtitle">可貼入更新後的 snapshot；按「套用 JSON」只更新本頁 localStorage，不寫 DB。</p>
+          <textarea id="jsonEditor" spellcheck="false"></textarea>
+          <div class="toolbar">
+            <button class="btn-primary" onclick="applyJson()">套用 JSON</button>
+            <button class="btn-danger" onclick="toggleEditor()">關閉</button>
+          </div>
+        </section>
+
+        <div class="footer">
+          HARD RULES：
+          NO_PUBLIC_CONTROLLER_PATCH=TRUE ·
+          NO_CONTAINER_DIRECT_PATCH=TRUE ·
+          NO_DB_WRITE=TRUE ·
+          NO_RESTART=TRUE ·
+          NO_DEPLOY=TRUE ·
+          NO_ROUTER_WRITE=TRUE ·
+          NO_MEMBER_PLAINTEXT=TRUE ·
+          NO_SECRET_OUTPUT=TRUE
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script id="initialData" type="application/json">
+{
+  "state": "SYSTEM_DYNAMIC_LANDING_PROGRESS_CONTROL",
+  "version": "0.1.0",
+  "authority": "TOTAL_FIELD",
+  "mode": "STATIC_WEB_LOCALSTORAGE_NO_DB_NO_RESTART",
+  "updated_at": "2026-07-09",
+  "rules": {
+    "no_public_controller_patch": true,
+    "no_container_direct_patch": true,
+    "no_db_write": true,
+    "no_restart": true,
+    "no_deploy": true,
+    "no_router_write": true,
+    "no_member_plaintext": true,
+    "no_secret_output": true
+  },
+  "lanes": [
+    {
+      "id": "L0_PATENT",
+      "name": "專利 / 智財封印",
+      "progress": 92,
+      "state": "PASS_FILED",
+      "owner": "TOTAL_FIELD",
+      "next": "公開揭露邊界與後續專利族策略",
+      "items": [
+        {
+          "id": "PAT-01",
+          "name": "TIPO 發明專利送件",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "115127138"
+        },
+        {
+          "id": "PAT-02",
+          "name": "公開揭露邊界",
+          "state": "NEXT",
+          "progress": 70,
+          "evidence": "public-safe only"
+        },
+        {
+          "id": "PAT-03",
+          "name": "後續專利族策略",
+          "state": "NEXT",
+          "progress": 50,
+          "evidence": "PCT/US/EU/JP candidate"
+        }
+      ]
+    },
+    {
+      "id": "L1_ODOO_RECOVERY",
+      "name": "Odoo 恢復與漂移封印",
+      "progress": 100,
+      "state": "PASS_RECOVERED",
+      "owner": "TOTAL_FIELD",
+      "next": "停止 route patching，改用既有 Odoo Menu / View / Action",
+      "items": [
+        {
+          "id": "ODOO-01",
+          "name": "Odoo safe restart after restore",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "PASS_SAFE_RESTART_AFTER_RESTORE_NO_PYC"
+        },
+        {
+          "id": "ODOO-02",
+          "name": "停止 public controller route patching",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "PASS_STOP_ROUTE_PATCHING_USE_EXISTING_ODOO_MENU"
+        },
+        {
+          "id": "ODOO-03",
+          "name": "DB selector / 8069 服務確認",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "/web=303"
+        }
+      ]
+    },
+    {
+      "id": "L2_P1_PRODUCT",
+      "name": "P1 產品級封閉試營運",
+      "progress": 56,
+      "state": "IN_PROGRESS",
+      "owner": "PRODUCT_FIELD",
+      "next": "P1 menu/action XML exact patch confirm",
+      "items": [
+        {
+          "id": "P1-01",
+          "name": "產品路徑鎖定",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "Odoo POS + Member + 8D Gate"
+        },
+        {
+          "id": "P1-02",
+          "name": "畫面差距表",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "P1_SCREEN_GAP_INVENTORY"
+        },
+        {
+          "id": "P1-03",
+          "name": "Menu / Action / View 盤點",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "PASS_P1_EXISTING_MENU_ACTION_INVENTORY_READONLY"
+        },
+        {
+          "id": "P1-04",
+          "name": "P1 Menu XML 候選乾跑",
+          "state": "PASS",
+          "progress": 80,
+          "evidence": "XML_PARSE=PASS"
+        },
+        {
+          "id": "P1-05",
+          "name": "正式套用 P1 Menu XML",
+          "state": "HOLD_CONFIRM",
+          "progress": 0,
+          "evidence": "requires owner confirm"
+        },
+        {
+          "id": "P1-06",
+          "name": "Odoo module upgrade / restart",
+          "state": "HOLD_CONFIRM",
+          "progress": 0,
+          "evidence": "hard risk"
+        }
+      ]
+    },
+    {
+      "id": "L3_XIAOJ_AV",
+      "name": "通用組織用影音 AI 小J",
+      "progress": 75,
+      "state": "PASS_SOURCE_MODULE",
+      "owner": "XIAOJ_FIELD",
+      "next": "場景優先順序與 backend menu/action/view",
+      "items": [
+        {
+          "id": "XJ-01",
+          "name": "影音小J總場記憶封包",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "PASS_XIAOJ_AVATAR_8D_TENSOR_MEMORY_MODULE_RECORD"
+        },
+        {
+          "id": "XJ-02",
+          "name": "通用組織用影音小J contract/service/spec",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "PASS_UNIVERSAL_ORG_AV_XIAOJ_MODULE_VERIFY"
+        },
+        {
+          "id": "XJ-03",
+          "name": "場景盤點",
+          "state": "NEXT",
+          "progress": 60,
+          "evidence": "business/property/community/developer"
+        },
+        {
+          "id": "XJ-04",
+          "name": "Odoo 後台選單入口",
+          "state": "HOLD_CONFIRM",
+          "progress": 0,
+          "evidence": "XML + manifest write"
+        }
+      ]
+    },
+    {
+      "id": "L4_VOICE_CLEANROOM",
+      "name": "語音 / STT / TTS cleanroom",
+      "progress": 35,
+      "state": "PARTIAL_RUNTIME_HOLD",
+      "owner": "VOICE_FIELD",
+      "next": "raw-audio no-save seal",
+      "items": [
+        {
+          "id": "VOC-01",
+          "name": "RAW_AUDIO_SAVED=FALSE 邊界",
+          "state": "PASS_POLICY",
+          "progress": 70,
+          "evidence": "policy sealed"
+        },
+        {
+          "id": "VOC-02",
+          "name": "STT cleanroom verifier",
+          "state": "NEXT",
+          "progress": 20,
+          "evidence": "synthetic/text fixture only"
+        },
+        {
+          "id": "VOC-03",
+          "name": "TTS controlled script broker",
+          "state": "NEXT",
+          "progress": 20,
+          "evidence": "no raw audio cloud"
+        }
+      ]
+    },
+    {
+      "id": "L5_PROPERTY",
+      "name": "物業 / 管委會 / 社區場景",
+      "progress": 48,
+      "state": "IN_PROGRESS",
+      "owner": "PROPERTY_FIELD",
+      "next": "物業櫃台小J + existing property models",
+      "items": [
+        {
+          "id": "PROP-01",
+          "name": "物業模型存在",
+          "state": "PASS",
+          "progress": 100,
+          "evidence": "wuchang.property.*"
+        },
+        {
+          "id": "PROP-02",
+          "name": "物業場景小J安全邊界",
+          "state": "PASS_POLICY",
+          "progress": 80,
+          "evidence": "no door open without Total Field"
+        },
+        {
+          "id": "PROP-03",
+          "name": "物業大廳 P1 demo",
+          "state": "NEXT",
+          "progress": 20,
+          "evidence": "menu/view candidate"
+        }
+      ]
+    },
+    {
+      "id": "L6_BUSINESS_POS",
+      "name": "商業 / POS / 店務",
+      "progress": 52,
+      "state": "IN_PROGRESS",
+      "owner": "BUSINESS_FIELD",
+      "next": "商業櫃台小J + POS read-only demo",
+      "items": [
+        {
+          "id": "BUS-01",
+          "name": "Odoo POS 既有路徑",
+          "state": "PASS",
+          "progress": 80,
+          "evidence": "/web"
+        },
+        {
+          "id": "BUS-02",
+          "name": "商業櫃台小J安全邊界",
+          "state": "PASS_POLICY",
+          "progress": 100,
+          "evidence": "no payment / no order create"
+        },
+        {
+          "id": "BUS-03",
+          "name": "產品級 POS demo script",
+          "state": "NEXT",
+          "progress": 20,
+          "evidence": "needs menu/action entry"
+        }
+      ]
+    },
+    {
+      "id": "L7_PUBLIC_PRESS",
+      "name": "公開 / 記者 / 證據頁",
+      "progress": 58,
+      "state": "IN_PROGRESS",
+      "owner": "PUBLIC_FIELD",
+      "next": "公開安全證據頁與新聞敘事包",
+      "items": [
+        {
+          "id": "PUB-01",
+          "name": "非專業素人 AI 賦能敘事",
+          "state": "PASS_COPY",
+          "progress": 90,
+          "evidence": "journalist story draft"
+        },
+        {
+          "id": "PUB-02",
+          "name": "公開安全證據包",
+          "state": "NEXT",
+          "progress": 40,
+          "evidence": "public-safe only"
+        },
+        {
+          "id": "PUB-03",
+          "name": "不可反推營業秘密",
+          "state": "PASS_POLICY",
+          "progress": 100,
+          "evidence": "no raw transcript / no secret"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script>
+    const STORAGE_KEY = "w7tp_system_dynamic_landing_progress_v03";
+    const $ = id => document.getElementById(id);
+
+    function escapeHTML(value){
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function clampProgress(value){
+      const n = Number(value);
+      if(!Number.isFinite(n)) return 0;
+      return Math.max(0, Math.min(100, Math.round(n)));
+    }
+
+    function toast(message, type="info"){
+      const box = $("toast");
+      box.textContent = message;
+      box.style.borderColor =
+        type === "error" ? "rgba(239,68,68,.55)" :
+        type === "success" ? "rgba(34,197,94,.55)" :
+        "rgba(56,189,248,.42)";
+      box.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => box.classList.remove("show"), 2600);
+    }
+
+    function initialData(){
+      return JSON.parse($("initialData").textContent.trim());
+    }
+
+    function loadData(){
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if(saved){
+        try{ return JSON.parse(saved); }catch(e){ console.warn(e); }
+      }
+      return initialData();
+    }
+
+    let data = loadData();
+
+    function stateClass(state){
+      const s = String(state || "").toUpperCase();
+      if(s.includes("PASS")) return "good";
+      if(s.includes("HOLD") || s.includes("BLOCK")) return "hold";
+      if(s.includes("NEXT") || s.includes("PROGRESS") || s.includes("PARTIAL")) return "warn";
+      return "info";
+    }
+
+    function progressClass(state){
+      const s = String(state || "").toUpperCase();
+      if(s.includes("HOLD") || s.includes("BLOCK")) return "hold";
+      if(s.includes("NEXT") || s.includes("PROGRESS") || s.includes("PARTIAL")) return "warn";
+      return "";
+    }
+
+    function allItems(){
+      return (data.lanes || []).flatMap(lane =>
+        (lane.items || []).map(item => ({...item, lane: lane.name, laneId: lane.id}))
+      );
+    }
+
+    function computeKpis(){
+      const lanes = data.lanes || [];
+      const items = allItems();
+      const avg = lanes.length
+        ? Math.round(lanes.reduce((sum,lane) => sum + clampProgress(lane.progress), 0) / lanes.length)
+        : 0;
+
+      const pass = items.filter(i => String(i.state).toUpperCase().includes("PASS")).length;
+      const hold = items.filter(i => /HOLD|BLOCK/.test(String(i.state).toUpperCase())).length;
+      const next = items.filter(i => /NEXT|IN_PROGRESS|PARTIAL/.test(String(i.state).toUpperCase())).length;
+      const risk = lanes.filter(l => /HOLD|PARTIAL|IN_PROGRESS/.test(String(l.state).toUpperCase())).length;
+
+      return {avg, pass, hold, next, risk, lanes:lanes.length, items:items.length};
+    }
+
+    function renderRules(){
+      const rules = data.rules || {};
+      $("rules").innerHTML = Object.entries(rules).map(([key, value]) => `
+        <div class="rule"><span>${escapeHTML(key)}</span><b>${value ? "TRUE" : "FALSE"}</b></div>
+      `).join("") || `<div class="rule"><span>rules</span><b>EMPTY</b></div>`;
+    }
+
+    function renderKpis(){
+      const k = computeKpis();
+      $("kpis").innerHTML = `
+        <article class="kpi card">
+          <div class="kpi-label">總體落地進度</div>
+          <div class="kpi-value">${k.avg}%</div>
+          <div class="progress"><i style="width:${k.avg}%"></i></div>
+          <div class="kpi-note">依全部管制線平均進度計算</div>
+        </article>
+        <article class="kpi card">
+          <div class="kpi-label">PASS / 封印工項</div>
+          <div class="kpi-value">${k.pass}</div>
+          <div class="kpi-note">已通過、已封印或已完成之證據工項</div>
+        </article>
+        <article class="kpi card">
+          <div class="kpi-label">HOLD / 人工確認</div>
+          <div class="kpi-value">${k.hold}</div>
+          <div class="kpi-note">命中硬風險、需 owner confirm 或禁止自動套用</div>
+        </article>
+        <article class="kpi card">
+          <div class="kpi-label">管制線 / 工項</div>
+          <div class="kpi-value">${k.lanes}/${k.items}</div>
+          <div class="kpi-note">動態落地矩陣，目前風險線：${k.risk}</div>
+        </article>
+      `;
+    }
+
+    function matchKeyword(lane, kw){
+      if(!kw) return true;
+      return JSON.stringify(lane).toLowerCase().includes(kw);
+    }
+
+    function matchState(lane, filter){
+      if(!filter) return true;
+      const laneHit = String(lane.state).toUpperCase().includes(filter);
+      const itemHit = (lane.items || []).some(i => String(i.state).toUpperCase().includes(filter));
+      return laneHit || itemHit;
+    }
+
+    function sortLanes(lanes){
+      const mode = $("sortMode").value;
+      const copy = [...lanes];
+
+      if(mode === "progress_desc") copy.sort((a,b) => clampProgress(b.progress) - clampProgress(a.progress));
+      if(mode === "progress_asc") copy.sort((a,b) => clampProgress(a.progress) - clampProgress(b.progress));
+      if(mode === "risk_first"){
+        copy.sort((a,b) => {
+          const ar = /HOLD|BLOCK|PARTIAL|IN_PROGRESS/.test(String(a.state).toUpperCase()) ? 1 : 0;
+          const br = /HOLD|BLOCK|PARTIAL|IN_PROGRESS/.test(String(b.state).toUpperCase()) ? 1 : 0;
+          return br - ar;
+        });
+      }
+      return copy;
+    }
+
+    function highlight(text, kw){
+      const safe = escapeHTML(text);
+      if(!kw) return safe;
+      const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return safe.replace(new RegExp(escaped, "ig"), match => `<mark>${match}</mark>`);
+    }
+
+    function renderNav(lanes){
+      $("laneNav").innerHTML = lanes.map(lane => {
+        const p = clampProgress(lane.progress);
+        return `
+          <button class="navlane" onclick="document.getElementById('${escapeHTML(lane.id)}').scrollIntoView({behavior:'smooth', block:'start'})">
+            <span><strong>${escapeHTML(lane.name)}</strong><br><small>${escapeHTML(lane.id)}</small></span>
+            <span class="pill ${stateClass(lane.state)}">${p}%</span>
+          </button>
+        `;
+      }).join("") || `<div class="empty">沒有符合條件的管制線。</div>`;
+    }
+
+    function renderLanes(lanes){
+      const filter = $("filterState").value.toUpperCase();
+      const kw = $("keyword").value.trim().toLowerCase();
+
+      $("lanes").innerHTML = lanes.map(lane => {
+        const laneProgress = clampProgress(lane.progress);
+        const items = (lane.items || []).filter(item => {
+          if(!filter) return true;
+          return String(item.state).toUpperCase().includes(filter) ||
+                 String(lane.state).toUpperCase().includes(filter);
+        });
+
+        return `
+          <article class="lane card" id="${escapeHTML(lane.id)}">
+            <header class="lane-top">
+              <div>
+                <h2 class="lane-title">${highlight(lane.name, kw)}</h2>
+                <div class="lane-meta">
+                  <span class="meta-chip">ID=${escapeHTML(lane.id)}</span>
+                  <span class="meta-chip">owner=${escapeHTML(lane.owner || "")}</span>
+                  <span class="meta-chip">next=${highlight(lane.next || "", kw)}</span>
+                </div>
+              </div>
+              <div class="lane-score">
+                <span class="pill ${stateClass(lane.state)}">${escapeHTML(lane.state)}</span>
+                <strong>${laneProgress}%</strong>
+                <div class="progress ${progressClass(lane.state)}"><i style="width:${laneProgress}%"></i></div>
+              </div>
+            </header>
+            <section class="items">
+              ${items.map(item => {
+                const itemProgress = clampProgress(item.progress);
+                return `
+                  <div class="item">
+                    <div>
+                      <div class="item-id">${escapeHTML(item.id)}</div>
+                      <div class="item-name">${highlight(item.name, kw)}</div>
+                    </div>
+                    <div><span class="pill ${stateClass(item.state)} state-code">${escapeHTML(item.state)}</span></div>
+                    <div>
+                      <div class="progress ${progressClass(item.state)}"><i style="width:${itemProgress}%"></i></div>
+                      <div class="evidence" style="margin-top:6px">${itemProgress}%</div>
+                    </div>
+                    <div class="evidence">${highlight(item.evidence || "", kw)}</div>
+                  </div>
+                `;
+              }).join("") || `<div class="empty">此狀態篩選下沒有工項。</div>`}
+            </section>
+          </article>
+        `;
+      }).join("") || `<section class="card empty">沒有符合搜尋與狀態條件的資料。</section>`;
+    }
+
+    function validateData(next){
+      if(!next || typeof next !== "object") throw new Error("root must be object");
+      if(!Array.isArray(next.lanes)) throw new Error("missing lanes[]");
+
+      next.lanes.forEach((lane, laneIndex) => {
+        if(!lane.id) throw new Error(`lanes[${laneIndex}].id is required`);
+        if(!lane.name) throw new Error(`lanes[${laneIndex}].name is required`);
+        if(!Array.isArray(lane.items)) lane.items = [];
+        lane.progress = clampProgress(lane.progress);
+
+        lane.items.forEach((item, itemIndex) => {
+          if(!item.id) throw new Error(`lanes[${laneIndex}].items[${itemIndex}].id is required`);
+          if(!item.name) throw new Error(`lanes[${laneIndex}].items[${itemIndex}].name is required`);
+          item.progress = clampProgress(item.progress);
+        });
+      });
+
+      return next;
+    }
+
+    function scanRisk(node, path="", hard=[], warn=[]){
+      const hardKeys = new Set([
+        "public_controller_patch",
+        "container_direct_patch",
+        "db_write",
+        "odoo_db_write",
+        "production_db_write",
+        "restart",
+        "service_restart",
+        "deploy",
+        "router_write",
+        "member_plaintext_read",
+        "secret_read",
+        "raw_secret_read",
+        "raw_audio_read",
+        "raw_audio_saved",
+        "raw_audio_cloud",
+        "payment_capture",
+        "pos_order_created",
+        "door_open",
+        "gate_open"
+      ]);
+
+      if(Array.isArray(node)){
+        node.forEach((v, i) => scanRisk(v, `${path}[${i}]`, hard, warn));
+        return {hard, warn};
+      }
+
+      if(node && typeof node === "object"){
+        Object.entries(node).forEach(([k, v]) => {
+          const key = String(k).toLowerCase();
+
+          if(key.startsWith("no_") && v !== true) hard.push(`${path}.${k}=${v}`);
+          if(hardKeys.has(key) && v === true) hard.push(`${path}.${k}=TRUE`);
+
+          scanRisk(v, path ? `${path}.${k}` : k, hard, warn);
+        });
+        return {hard, warn};
+      }
+
+      const text = String(node || "").toUpperCase();
+      if(text.includes("HOLD_FALSE_PASS") || text.includes("HOLD_DETOUR_ALERT")) hard.push(`${path}=${text}`);
+      if(text.includes("HOLD_CONFIRM") || text.includes("PARTIAL_RUNTIME_HOLD")) warn.push(`${path}=${text}`);
+
+      return {hard, warn};
+    }
+
+    function detectDetour(){
+      const light = $("detourLight");
+      const msg = $("detourText");
+      if(!light || !msg) return;
+
+      const result = scanRisk(data);
+      light.classList.remove("warn", "hold");
+
+      if(result.hard.length){
+        light.classList.add("hold");
+        msg.textContent = "紅燈：偵測到繞路或硬風險：" + result.hard.slice(0, 6).join("；") + "。下一步只能 HOLD、收斂或人工確認。";
+        return;
+      }
+
+      if(result.warn.length){
+        light.classList.add("warn");
+        msg.textContent = "黃燈：有 HOLD_CONFIRM / PARTIAL 項目，下一步需人工確認，不可自動套用。";
+        return;
+      }
+
+      msg.textContent = "綠燈：目前未偵測到繞路硬風險。";
+    }
+
+    function render(){
+      renderRules();
+      renderKpis();
+
+      const filter = $("filterState").value.toUpperCase();
+      const kw = $("keyword").value.trim().toLowerCase();
+
+      const lanes = sortLanes((data.lanes || []).filter(lane =>
+        matchKeyword(lane, kw) && matchState(lane, filter)
+      ));
+
+      renderNav(lanes);
+      renderLanes(lanes);
+      detectDetour();
+    }
+
+    function saveData(){
+      data.updated_at = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data, null, 2));
+      toast("已儲存到本機瀏覽器 localStorage。", "success");
+      render();
+    }
+
+    function refreshControl(){
+      try{
+        data.updated_at = new Date().toISOString();
+        data = validateData(data);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data, null, 2));
+        render();
+        toast("已更新：KPI、管制線、搜尋結果與防繞路警示燈已重算。", "success");
+      }catch(e){
+        toast("更新失敗：" + e.message, "error");
+      }
+    }
+
+    function resetData(){
+      data = validateData(initialData());
+      saveData();
+      toast("已載入預設快照。", "success");
+    }
+
+    function exportJson(){
+      const payload = JSON.stringify(data, null, 2);
+      const blob = new Blob([payload], {type:"application/json;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = "system_landing_progress_snapshot.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      toast("JSON 已匯出。", "success");
+    }
+
+    function toggleEditor(){
+      const box = $("editorBox");
+      const editor = $("jsonEditor");
+      box.classList.toggle("hidden");
+      editor.value = JSON.stringify(data, null, 2);
+
+      if(!box.classList.contains("hidden")){
+        box.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    }
+
+    function applyJson(){
+      try{
+        data = validateData(JSON.parse($("jsonEditor").value));
+        saveData();
+        toast("JSON 已套用並完成格式檢查。", "success");
+      }catch(e){
+        toast("JSON 錯誤：" + e.message, "error");
+      }
+    }
+
+    try{
+      data = validateData(data);
+      render();
+    }catch(e){
+      console.error(e);
+      data = validateData(initialData());
+      render();
+      toast("資料格式異常，已回復預設快照：" + e.message, "error");
+    }
+  </script>
+</body>
+</html>

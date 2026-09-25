@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="以全合成資料展示 8D 總場如何連結醫師覆核、護理交班、病人醫囑理解與紅隊告警；公開招募醫療及護理合作組織共同研發。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#103f35">
+  <link rel="canonical" href="https://wuchang.life/medical_care_demo/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="stylesheet" href="../assets/wuchang-site-design.css">
+  <link rel="stylesheet" href="../assets/medical-care-demo.css">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="五常社區發展協會｜小J主權AI服務">
+  <meta property="og:title" content="醫病日常照護｜8D 總場互動示範">
+  <meta property="og:description" content="同一條可追溯照護時間線，分別服務醫師、護理師與病人；全合成資料、只產生候選、不作診斷。">
+  <meta property="og:url" content="https://wuchang.life/medical_care_demo/">
+  <meta property="og:image" content="https://wuchang.life/assets/wuchang-og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="醫病日常照護｜8D 總場互動示範">
+  <meta name="twitter:description" content="合成案例展示醫師覆核、護理交班、病人理解與總場驗證如何共用同一證據鏈。">
+  <meta name="twitter:image" content="https://wuchang.life/assets/wuchang-og-card.png">
+  <title>醫病日常照護｜8D 總場互動示範</title>
+  <script src="../assets/medical-care-demo.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<div class="site-shell care-site-shell">
+  <header class="site-header">
+    <div class="brand-row">
+      <a class="brand-lockup" href="../" aria-label="回到五常社區發展協會首頁">
+        <span class="logo-mark" aria-hidden="true">五</span>
+        <span class="brand-text"><strong>五常社區發展協會｜小J主權AI服務</strong><span>公益技術研究、總場候選治理、合作實證</span></span>
+      </a>
+      <a class="cafe-lockup" href="../method/" aria-label="查看專利技術方法">
+        <span class="cafe-mark" aria-hidden="true">研</span>
+        <span><strong>8D 總場研究示範</strong><span>synthetic data · L3 candidate only</span></span>
+      </a>
+    </div>
+    <nav class="site-nav" aria-label="主要導覽">
+      <div class="nav-links"><a href="../">首頁</a><a href="../about/">協會願景</a><a href="../programs/">服務預告</a><a href="../method/">技術方法</a><a href="./" aria-current="page">照護示範</a><a href="../transparency/">透明狀態</a><a href="../contact/">聯絡我們</a></div>
+      <div class="nav-actions"><a class="support" href="#research-boundary">研究邊界</a><a class="join" href="#co-design">合作研發</a></div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="page-label">照護示範<small>Care demo</small></div>
+    <section class="care-hero" aria-labelledby="page-title">
+      <div class="care-hero-copy">
+        <p class="care-kicker"><span>全合成案例</span><span>瀏覽器本地運作</span><span>LLM 僅限使用者設備</span><span>非臨床服務</span></p>
+        <p class="eyebrow">One evidence chain · Three human views</p>
+        <h1 id="page-title">一次交班，讓醫師、護理師與病人看見同一個照護事實</h1>
+        <p class="lead">這不是替醫療人員下決定的 AI。示範把已簽署醫囑、病人自述、護理交班與醫師覆核拆成不同權限，卻維持同一條來源、版本與風險鏈；每個 AI 結果都只停在可查證、可否決的 L3 候選。</p>
+        <div class="hero-actions"><a class="button primary" href="#interactive-demo">進入合成案例</a><a class="button support" href="#co-design">招募合作組織</a><a class="button support" href="../method/#sec-medical-adi">了解專利技術構想</a></div>
+        <p class="care-safety-note"><strong>重要：</strong>本頁不是醫療器材、病歷系統、診斷工具或緊急服務，不接受真實病人資料；目前互動是固定合成資料與瀏覽器程式，未載入 LLM。未來模型也只允許在使用者設備執行。真實醫療問題請聯絡合格醫療人員；緊急狀況請使用所在地急救系統。</p>
+      </div>
+      <div class="care-hero-visual" aria-label="照護事實從病人、護理師到醫師，再由總場驗證的示意圖">
+        <div class="care-orbit orbit-patient"><span>病人</span><small>理解與回報</small></div>
+        <div class="care-orbit orbit-nurse"><span>護理師</span><small>交班與分級</small></div>
+        <div class="care-orbit orbit-doctor"><span>醫師</span><small>覆核與決策</small></div>
+        <div class="care-field-core"><span class="field-pulse" aria-hidden="true"></span><strong>總場</strong><small>8D evidence envelope</small><b>L3</b></div>
+        <div class="care-evidence-line line-a" aria-hidden="true"></div>
+        <div class="care-evidence-line line-b" aria-hidden="true"></div>
+        <div class="care-evidence-line line-c" aria-hidden="true"></div>
+        <p>同一證據鏈<br><strong>不同角色、最小視圖</strong></p>
+      </div>
+    </section>
+
+    <section class="care-proof-strip" aria-label="示範可信邊界">
+      <div><span>01</span><strong>零真實病歷</strong><small>案例與事件完全合成</small></div>
+      <div><span>02</span><strong>零自動診斷</strong><small>AI 只整理候選與缺口</small></div>
+      <div><span>03</span><strong>零隱性升權</strong><small>角色與目的逐次驗證</small></div>
+      <div><span>04</span><strong>全程可否決</strong><small>人類保留正式責任</small></div>
+    </section>
+
+    <section class="content-band human-perspective-band" id="human-perspectives" aria-labelledby="human-perspectives-title">
+      <div class="section-head"><div><p class="eyebrow">Human-first information architecture</p><h2 id="human-perspectives-title">先分清楚「誰正在做什麼」，再顯示 AI 與技術</h2></div><p>同一件照護事件不應讓所有人看同一張控制台。每個角色只看完成當下任務所需的內容，並清楚知道下一步由誰負責。</p></div>
+      <div class="human-perspective-grid">
+        <article class="human-card patient-human-card">
+          <p class="human-role-label"><span aria-hidden="true">人</span>病人視角</p>
+          <h3>「我現在發生什麼？哪些內容已被醫療團隊確認？」</h3>
+          <dl><div><dt>今天要完成</dt><dd>看懂已簽署提醒、回述理解、記錄自己的狀態與問題。</dd></div><div><dt>畫面優先顯示</dt><dd>白話說明、來源日期、下一個提醒、待醫療人員回答事項。</dd></div><div><dt>不應看見</dt><dd>他人病歷、內部模型推論、未確認診斷或自行改寫的醫囑。</dd></div></dl>
+          <a href="#interactive-demo" data-perspective-role="patient">以病人視角開啟案例 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="human-card nurse-human-card">
+          <p class="human-role-label"><span aria-hidden="true">護</span>護理師視角</p>
+          <h3>「這一班不能漏掉什麼？下一位接手者需要知道什麼？」</h3>
+          <dl><div><dt>今天要完成</dt><dd>人工分級、完成聯絡、標記未完成事項、交付可追溯交班。</dd></div><div><dt>畫面優先顯示</dt><dd>新事件、醫囑版本、責任角色、到期時間與升級狀態。</dd></div><div><dt>不應看見</dt><dd>與工作無關的完整病歷，或 AI 自動產生的診斷與處置命令。</dd></div></dl>
+          <a href="#interactive-demo" data-perspective-role="nurse">以護理視角開啟案例 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="human-card doctor-human-card">
+          <p class="human-role-label"><span aria-hidden="true">醫</span>醫師視角</p>
+          <h3>「哪些事實需要我覆核？候選依據與不確定性在哪裡？」</h3>
+          <dl><div><dt>今天要完成</dt><dd>查核來源、修正或否決候選、決定正式醫療內容與追蹤。</dd></div><div><dt>畫面優先顯示</dt><dd>專業紀錄、證據 ref、版本衝突、變化時序與風險候選。</dd></div><div><dt>不應發生</dt><dd>AI 代簽病歷、處方、醫囑，或因模型更大而取得裁決權。</dd></div></dl>
+          <a href="#interactive-demo" data-perspective-role="doctor">以醫師視角開啟案例 <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+      <div class="human-day-flow" aria-labelledby="human-day-title">
+        <div class="human-day-heading"><p class="panel-overline">A REALISTIC CARE DAY</p><h3 id="human-day-title">合成工作日：每一步都有負責的人與可驗收結果</h3></div>
+        <ol><li><time>08:30</time><div><strong>病人端</strong><p>讀取已簽署照護計畫 v3，完成理解回述；一項疑問進入待澄清，不修改醫囑。</p></div><span>產出：teach-back 候選</span></li><li><time>11:10</time><div><strong>護理端</strong><p>收到合成居家狀態回報，依合作機構定義的流程人工分級，記錄聯絡與待辦。</p></div><span>產出：可交班待辦</span></li><li><time>15:20</time><div><strong>醫師端</strong><p>檢查來源、時序與護理紀錄，接受、修正或否決候選；只有醫師處理正式醫療內容。</p></div><span>產出：人類覆核結果</span></li></ol>
+      </div>
+      <div class="product-truth-grid" aria-label="寫實產品狀態">
+        <article><span class="boundary-status ready">現在真的可操作</span><h3>三角色切換、四事件、8D 封套、雜湊與離線模擬</h3><p>公開 HTTPS 頁面使用全合成資料與固定瀏覽器邏輯；不載入模型，不需登入即可檢查互動與治理行為。</p></article>
+        <article><span class="boundary-status pending">合作後才建立</span><h3>機構工作流、角色權限、TW Core／FHIR mapping 與正式驗收</h3><p>由合作組織提供臨床正確性與治理權限，我們提供原型、總場與證據工程。</p></article>
+        <article><span class="boundary-status blocked">不包裝成已完成</span><h3>EMR 介接、真實病歷、臨床決策、醫療器材或正式營運</h3><p>沒有專業、倫理、法規、資安與機構核准前一律保持未啟用。</p></article>
+      </div>
+      <div class="notice"><h3>裝置端推論、伺服器端總場</h3><p>若合作後接入 LLM，模型只在醫師、護理師或病人實際使用且經授權的設備執行。taiji01 與合作伺服器不執行 LLM，只接收使用者確認的最小化候選與 evidence ref，負責 route／capability 查表、總場驗證、雜湊、去重與封印。</p></div>
+    </section>
+
+    <section class="content-band care-demo-band" id="interactive-demo" aria-labelledby="demo-title">
+      <div class="section-head"><div><p class="eyebrow">Interactive synthetic case</p><h2 id="demo-title">出院後第 3 日：一個需要被理解、交班與覆核的訊號</h2></div><p>切換三種角色、選取事件，再模擬離線與回線。所有互動只改變本頁展示狀態，不會上傳、儲存或送出資料。</p></div>
+
+      <div class="demo-banner" role="status">
+        <span class="demo-live-dot" aria-hidden="true"></span>
+        <div><strong>研究展示執行中</strong><small>案例 SYN-CARE-014 · synthetic · read-only · no network</small></div>
+        <span class="demo-state" id="connection-state">TAIJI01 LINKED / DEMO</span>
+      </div>
+
+      <div class="role-tabs" role="tablist" aria-label="依人類角色選擇照護視角">
+        <button type="button" id="role-patient" role="tab" aria-selected="true" aria-controls="role-panel" tabindex="0" data-role="patient"><span aria-hidden="true">人</span><strong>病人視圖</strong><small>理解與提醒</small></button>
+        <button type="button" id="role-nurse" role="tab" aria-selected="false" aria-controls="role-panel" tabindex="-1" data-role="nurse"><span aria-hidden="true">護</span><strong>護理視圖</strong><small>交班與分級</small></button>
+        <button type="button" id="role-doctor" role="tab" aria-selected="false" aria-controls="role-panel" tabindex="-1" data-role="doctor"><span aria-hidden="true">醫</span><strong>醫師視圖</strong><small>證據與覆核</small></button>
+      </div>
+
+      <div class="care-workspace">
+        <aside class="case-rail" aria-labelledby="case-title">
+          <div class="case-summary">
+            <p class="case-label">SYNTHETIC CASE</p>
+            <h3 id="case-title">SYN-CARE-014</h3>
+            <p>成人出院後照護追蹤</p>
+            <dl>
+              <div><dt>資料性質</dt><dd>100% 合成</dd></div>
+              <div><dt>正式病歷</dt><dd>未連接</dd></div>
+              <div><dt>AI 權限</dt><dd>L3 候選</dd></div>
+              <div><dt>最終裁決</dt><dd>醫療人員</dd></div>
+            </dl>
+          </div>
+          <div class="event-list" aria-label="合成照護事件時間線">
+            <button class="event-button is-active" type="button" data-event="plan" aria-pressed="true"><span class="event-index">01</span><span><strong>出院照護計畫 v3</strong><small>醫師已簽署 · 來源鎖定</small></span></button>
+            <button class="event-button" type="button" data-event="teachback" aria-pressed="false"><span class="event-index">02</span><span><strong>病人理解回述</strong><small>1 項待澄清 · 不改醫囑</small></span></button>
+            <button class="event-button" type="button" data-event="signal" aria-pressed="false"><span class="event-index">03</span><span><strong>居家狀態回報</strong><small>新事件 · 等待人工分級</small></span></button>
+            <button class="event-button" type="button" data-event="handoff" aria-pressed="false"><span class="event-index">04</span><span><strong>護理交班候選</strong><small>醫師覆核前保持 HOLD</small></span></button>
+          </div>
+        </aside>
+
+        <section class="role-panel" id="role-panel" role="tabpanel" aria-labelledby="role-patient" tabindex="0">
+          <div class="panel-heading">
+            <div><p class="panel-overline" id="role-overline">PATIENT CARE JOURNEY</p><h3 id="role-title">我的照護旅程</h3></div>
+            <span class="candidate-chip">AI CANDIDATE · NOT SIGNED</span>
+          </div>
+          <div class="role-kpis" aria-label="目前角色摘要">
+            <div><small>證據來源</small><strong id="role-evidence-count">2 個</strong></div>
+            <div><small>待人類處理</small><strong id="role-review-count">1 項</strong></div>
+            <div><small>資料暴露</small><strong id="role-exposure">本人已授權</strong></div>
+          </div>
+          <article class="focus-card">
+            <span class="focus-icon" aria-hidden="true">◎</span>
+            <div><p class="panel-overline">CURRENT FOCUS</p><h4 id="event-title">出院照護計畫 v3 已簽署</h4><p id="event-summary">這是後續提醒與交班唯一可引用的醫囑版本；AI 只能解釋與對齊來源，不能新增、刪除或改寫內容。</p></div>
+          </article>
+          <div class="role-detail-grid">
+            <article><h4>這個角色現在看見什麼</h4><p id="role-focus">以白話呈現已簽署醫囑的來源、下一個提醒與尚待醫療人員回答的問題，不隱藏不確定性。</p></article>
+            <article><h4>系統建議的下一步</h4><p id="role-next">確認自己是否理解、記錄實際狀態並準備問題；不依 AI 候選自行改藥或取代就醫。</p></article>
+            <article class="boundary-card"><h4>被總場擋住的事</h4><p id="role-boundary">病人登入不等於取得所有病歷；代理人也不能只靠姓名或關係字串取得存取權。</p></article>
+          </div>
+          <div class="communication-bridge">
+            <div><p class="panel-overline">PROFESSIONAL SOURCE</p><strong id="professional-source">「所有病人端解釋均須綁定原始醫囑版本、provenance 與醫療人員確認狀態。」</strong></div>
+            <span aria-hidden="true">→</span>
+            <div><p class="panel-overline">PATIENT-FACING LAYER</p><strong id="plain-language">「你可以看到這段說明來自哪一份醫囑，也可以標記不懂；正式內容仍由醫療團隊確認。」</strong></div>
+          </div>
+        </section>
+
+        <aside class="verification-rail" aria-labelledby="verification-title">
+          <div class="verification-head"><p class="panel-overline">TOTAL FIELD VERIFIER</p><h3 id="verification-title">8D 候選封套</h3><span id="packet-state">HOLD · HUMAN REVIEW</span></div>
+          <dl class="packet-grid" id="packet-grid">
+            <div><dt>D1 意圖</dt><dd id="packet-d1">依正式照護計畫提供一致提醒</dd></div>
+            <div><dt>D2 狀態</dt><dd id="packet-d2">LINKED_DEMO</dd></div>
+            <div><dt>D3 座標</dt><dd id="packet-d3">SYN-CARE-014 / plan</dd></div>
+            <div><dt>D4 證據</dt><dd id="packet-d4">signed-care-plan:v3</dd></div>
+            <div><dt>D5 執行</dt><dd id="packet-d5">呈現來源，不改內容</dd></div>
+            <div><dt>D6 生成式傳輸</dt><dd id="packet-d6">L3 candidate reconstruction</dd></div>
+            <div><dt>D7 風險</dt><dd id="packet-d7">過期版本／角色越權</dd></div>
+            <div><dt>D8 封套</dt><dd id="packet-d8">HOLD · 未形成正式裁決</dd></div>
+          </dl>
+          <div class="hash-box"><span>DEMO CONTENT SHA-256</span><code id="content-hash">計算中…</code><small>由固定合成事件字串計算；角色呈現不改變事件身分。</small></div>
+          <div class="redteam-box" id="care-redteam-monitor" data-state="MONITORING_CLEAR" role="status" aria-live="polite">
+            <p class="redteam-state-line"><span aria-hidden="true">!</span><strong>常駐紅隊觀點</strong><b id="care-redteam-state">MONITORING CLEAR</b></p>
+            <p id="redteam-message">若引用的醫囑不是最新簽署版本，阻擋提醒並要求人工核對。</p>
+            <small>每次角色、事件、離線與回線狀態轉換都以裝置端確定性規則重驗；不使用伺服器 LLM。</small>
+            <code id="care-redteam-cycle">cycle 0 · INITIAL</code>
+          </div>
+        </aside>
+      </div>
+
+      <div class="offline-lab" aria-labelledby="offline-title">
+        <div><p class="panel-overline">OFFLINE CONTINUITY LAB</p><h3 id="offline-title">主節點離線時，能繼續整理，但不能偷做決定</h3><p id="offline-description">互動模擬會把目前事件封成唯讀 L3 候選並排入雜湊鏈；回線後只示意重驗與去重流程。</p></div>
+        <div class="offline-actions"><button type="button" class="demo-button danger" id="simulate-offline">模擬離線接班</button><button type="button" class="demo-button" id="restore-link" disabled>恢復連線並重驗</button></div>
+        <ol class="queue-flow" aria-label="離線候選流程">
+          <li class="is-complete"><span>1</span><strong>sealed snapshot</strong><small>來源與規則唯讀</small></li>
+          <li id="queue-step"><span>2</span><strong>hash-chain queue</strong><small id="queue-label">等待離線事件</small></li>
+          <li id="revalidate-step"><span>3</span><strong>taiji01 revalidate</strong><small id="revalidate-label">尚未觸發</small></li>
+          <li><span>4</span><strong>human D8</strong><small>永遠不由 edge 指定</small></li>
+        </ol>
+        <p class="sr-status" id="demo-announcement" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="content-band alt" aria-labelledby="surprise-title">
+      <div class="section-head"><div><p class="eyebrow">What changes for care teams</p><h2 id="surprise-title">真正值得醫護團隊評估的，不是聊天更像人</h2></div><p>價值在於把「誰說的、依據什麼、版本何時改、誰能否決」做成同一個可驗證產品行為。</p></div>
+      <div class="care-value-grid">
+        <article><span>01</span><h3>一條事實，多種語言層</h3><p>醫師保留專業術語、證據與不確定性；護理師看交班與待辦；病人看白話解釋與理解確認。三者指回同一來源 ref，不生成三份彼此漂移的事實。</p></article>
+        <article><span>02</span><h3>失敗案例不是被刪掉</h3><p>誤摘要、漏提醒、越權與流程延誤先轉成去識別 failure signature，再成為紅隊測試與品質改善候選；原始病歷不進一般 log。</p></article>
+        <article><span>03</span><h3>離線可交班，回線再收斂</h3><p>edge 只拿 sealed snapshot，能形成具雜湊鏈的 L3 候選；總場回線後重驗、去重，任何離線節點都不能冒充正式醫療決策。</p></article>
+        <article><span>04</span><h3>LLM 在設備，總場在伺服器</h3><p>模型只在使用者設備形成候選；伺服器不執行 LLM，只驗證最小候選與來源。設備算力再大也不會取得病歷全讀權、醫師角色或 D8。</p></article>
+      </div>
+    </section>
+
+    <section class="content-band" id="research-boundary" aria-labelledby="architecture-title">
+      <div class="section-head"><div><p class="eyebrow">ADI × 8D × device-local LLM</p><h2 id="architecture-title">推論留在使用者設備，總場與既有醫療系統各守自己的責任</h2></div><p>目前完成的是不載入模型的可互動研究展示。真正介接必須由合作機構決定設備授權、資料責任、臨床流程、TW Core／FHIR profile、術語與驗證門檻。</p></div>
+      <div class="care-architecture" aria-label="四層醫療照護研究架構">
+        <article><p class="layer-index">LAYER 01</p><h3>醫療機構來源系統</h3><p>正式病歷、醫囑、護理紀錄與身分權限留在機構既有系統；8D 層不取代法定紀錄。</p><span>SOURCE OF TRUTH</span></article>
+        <div aria-hidden="true">→</div>
+        <article><p class="layer-index">LAYER 02</p><h3>使用者設備 LLM</h3><p>只在醫師、護理師或病人的授權設備處理可見內容；原始提示、上下文與模型權重不送往伺服器。</p><span>DEVICE-ONLY INFERENCE</span></article>
+        <div aria-hidden="true">→</div>
+        <article><p class="layer-index">LAYER 03</p><h3>ADI 狀態關係層／8D 最小候選</h3><p>只帶目的、角色、版本、狀態、evidence ref、風險與驗證條件；不帶原始提示或完整病歷，且永遠停在候選權限。</p><span>MINIMIZED CANDIDATE</span></article>
+        <div aria-hidden="true">→</div>
+        <article><p class="layer-index">LAYER 04</p><h3>總場與人類治理</h3><p>伺服器只做查表、驗證、雜湊與封印；醫師、護理師與機構依正式流程覆核、簽署、修正或否決。</p><span>TOTAL FIELD + HUMAN AUTHORITY</span></article>
+      </div>
+      <div class="contract-preview">
+        <div><p class="panel-overline">INTEROPERABILITY REVIEW</p><h3>TW Core IG／FHIR R4 對接準備</h3><p>預計與合作方逐項評估 Patient、Encounter、Observation、CarePlan、MedicationRequest、Communication 等資源及臺灣核心實作指引；此清單是 mapping 候選，不表示已通過 TW Core 驗證或任何醫療認證。</p></div>
+        <ul>
+          <li><span>01</span>先用合作方核准的合成測試資料定義最小資料集</li>
+          <li><span>02</span>逐欄驗證 profile、terminology、cardinality 與版本</li>
+          <li><span>03</span>保留來源系統 identifier 與 provenance，不在 ADI 另創正式病歷</li>
+          <li><span>04</span>以誤警、漏警、人因、偏差、資安與回復演練共同驗收</li>
+        </ul>
+        <div class="actions"><a class="button support" href="https://twcore.mohw.gov.tw/ig/twcore/index.html" target="_blank" rel="noopener noreferrer">衛福部 TW Core IG</a><a class="button support" href="https://www.pdpc.gov.tw/News_Content/100/293/" target="_blank" rel="noopener noreferrer">個資法第六條說明</a></div>
+      </div>
+      <div class="research-boundary-grid">
+        <article><span class="boundary-status ready">已做成展示</span><h3>可互動角色視圖與 8D 封套</h3><p>合成事件、醫師／護理師／病人視角、一次一事、內容雜湊、離線候選與紅隊邊界可直接檢視。</p></article>
+        <article><span class="boundary-status pending">待合作驗證</span><h3>臨床流程與資料契約</h3><p>醫囑、護理評估、交班、升級、代理權、同意與 TW Core／FHIR 對接需由醫療專業與機構治理共同定義。</p></article>
+        <article><span class="boundary-status blocked">目前未啟用</span><h3>真實病歷與臨床決策</h3><p>未接 EMR、未保存病人資料、未提供診斷處方、未作醫療器材宣稱，也不是臨床試驗或病人招募入口。</p></article>
+      </div>
+    </section>
+
+    <section class="content-band care-collaboration" id="co-design" aria-labelledby="co-design-title">
+      <div class="collaboration-lead">
+        <p class="eyebrow">Open co-research invitation</p>
+        <h2 id="co-design-title">公開招募醫療與護理合作組織，共同把專利技術變成可驗證的照護價值</h2>
+        <p>我們的專業是管理、總場治理與技術整合；醫療專業必須由醫師、護理師、醫療機構與研究夥伴共同帶入。我們願在法律狀態、授權範圍、機密與成果歸屬都書面釐清後，以已取得專利相關技術及申請中研發成果配合共同研發。</p>
+      </div>
+      <div class="collaboration-grid">
+        <article><p class="panel-overline">WE ARE LOOKING FOR</p><h3>合作對象</h3><ul><li>醫院、診所、護理機構與居家照護組織</li><li>醫師、護理師、藥師及醫療資訊團隊</li><li>大學、研究中心、倫理／法遵與資安團隊</li><li>EMR、FHIR、醫療設備與照護平台業者</li></ul></article>
+        <article><p class="panel-overline">WE CONTRIBUTE</p><h3>我們投入</h3><ul><li>同一總場與 8D 意圖場封包研究核心</li><li>ADI 狀態關係、候選治理與離線收斂設計</li><li>專利相關技術配合、原型工程與測試封套</li><li>逐項證據、失敗案例、紅隊與產品化管理</li></ul></article>
+        <article><p class="panel-overline">PARTNER AUTHORITY</p><h3>合作方主導</h3><ul><li>臨床問題、專業詞彙與工作流是否正確</li><li>安全門檻、誤警／漏警與人類責任</li><li>資料最小化、同意、法規、倫理與資安</li><li>何時只能停止、何時可進下一階段</li></ul></article>
+      </div>
+      <div class="co-design-path" aria-label="合作研發四階段">
+        <div><span>01</span><strong>臨床發現</strong><small>先聽工作流程與真正痛點</small></div>
+        <div><span>02</span><strong>合成沙盒</strong><small>不接真實資料做端到端演練</small></div>
+        <div><span>03</span><strong>共同紅隊</strong><small>用失敗案例建立驗收門檻</small></div>
+        <div><span>04</span><strong>治理後實證</strong><small>只在專業與法規核准後進場</small></div>
+      </div>
+      <section class="pilot-roadmap" aria-labelledby="pilot-roadmap-title">
+        <div class="pilot-roadmap-heading"><p class="panel-overline">CONDITIONAL 90-DAY CO-RESEARCH</p><h3 id="pilot-roadmap-title">簽署合作後的 30／60／90 日寫實交付路徑</h3><p>以下是共同研發的建議驗收節奏，不是尚未簽約的時程承諾；每一階段均可由合作機構依風險決定 HOLD。</p></div>
+        <div class="pilot-roadmap-grid">
+          <article><span>0–30 日</span><h4>把真實工作說清楚</h4><ul><li>訪談醫師、護理師、資訊與治理角色</li><li>完成現況流程、責任 RACI 與風險登錄</li><li>共同定義 2–3 個全合成端到端案例</li></ul><strong>驗收物：工作流地圖＋合成案例＋停止條件</strong></article>
+          <article><span>31–60 日</span><h4>把資料與權限做成可測契約</h4><ul><li>建立 TW Core／FHIR sandbox mapping 候選</li><li>完成角色／目的／同意的權限矩陣</li><li>跑誤警、漏警、越權與離線回復測試</li></ul><strong>驗收物：mapping 表＋權限矩陣＋紅隊報告</strong></article>
+          <article><span>61–90 日</span><h4>證明是否值得進實證</h4><ul><li>由目標使用者完成可用性與交班演練</li><li>比較現況與示範的時間、遺漏與理解差異</li><li>形成 PASS／HOLD 的實證就緒建議</li></ul><strong>驗收物：人因結果＋風險餘額＋實證決策包</strong></article>
+        </div>
+        <p class="pilot-roadmap-gate"><strong>硬門檻：</strong>前三階段預設只使用合成資料；任何真實資料、正式介接或臨床使用，都必須另有機構權限、倫理／法規依據、資安驗證與書面核准。</p>
+      </section>
+      <section class="patent-community-return" aria-labelledby="patent-community-title">
+        <div class="patent-community-heading">
+          <p class="panel-overline">PATENT VALUE → COMMUNITY VALUE</p>
+          <h3 id="patent-community-title">讓智慧財產的成果回到社區：授權收入公益回流原則</h3>
+          <p>參考學術界產學合作、技術移轉與利益回饋的常見治理慣例，未來若共同研發產生專利或技術授權收入，在完成契約約定之發明人與合作機構分配、法定稅費、權利維護及必要研發成本後，屬五常社區發展協會依法可支配的淨收入，將依章程、正式決策程序與會計制度，以「五常社區數位發展基金」內部專款管理，並透過基金挹注社區。</p>
+        </div>
+        <div class="community-return-flow" aria-label="專利授權收入回流社區流程">
+          <div><span>01</span><strong>共同研發</strong><small>醫療專業與總場技術共同驗證</small></div><b aria-hidden="true">→</b><div><span>02</span><strong>技術移轉／授權</strong><small>法律狀態、範圍與分配書面化</small></div><b aria-hidden="true">→</b><div><span>03</span><strong>依法可支配淨收入</strong><small>扣除契約分配、稅費與必要成本</small></div><b aria-hidden="true">→</b><div><span>04</span><strong>五常社區數位發展基金</strong><small>內部專款、獨立核算、非對外募款</small></div><b aria-hidden="true">→</b><div><span>05</span><strong>挹注社區</strong><small>依公開計畫形成可驗收成果</small></div>
+        </div>
+        <div class="community-return-grid">
+          <article><h4>預定公益用途</h4><ul><li>社區數位近用、識讀與高齡友善教育</li><li>規劃聘請照服員及支持日常照護服務</li><li>辦志工隊、培訓與提供必要數位工具</li><li>社區公共數位服務、資安與韌性建設</li></ul></article>
+          <article><h4>透明與利益衝突治理</h4><ul><li>以彙總方式公開收入來源類型、年度分配與實際支出</li><li>公開計畫目標、受益範圍、完成成果與未達原因</li><li>關係人交易、發明人利益與合作方分配依規則揭露及迴避</li><li>不公開營業秘密、個資或受契約保密的技術細節</li></ul></article>
+          <article><h4>目前真實狀態</h4><ul><li>公益回流原則：本頁公開承諾</li><li>專利法律狀態：已取得、申請中與研究成果分開揭露</li><li>基金專款制度：仍須協會正式決議、預算科目及會計辦法</li><li>授權收入：尚不保證發生，不列為既有收入或募款成果</li></ul></article>
+        </div>
+        <p class="community-return-note"><strong>界線：</strong>「五常社區數位發展基金」在此指協會治理下的規劃中內部專款，不宣稱已成立獨立基金會、公益信託或對外募款帳戶；正式啟用前須完成協會法定程序、會計與公開辦法。專利或技術授權收入屬契約收入，不等同捐款。</p>
+      </section>
+      <div class="collaboration-cta">
+        <div><h3>第一階段只談問題與合成案例，不需要提供病人資料</h3><p>聯絡時請說明組織類型、希望改善的照護流程、可參與的專業角色，以及是否願意先以合成資料共同定義驗收。請勿在公開 Email 傳送病歷、身分證號、影像、檢驗或任何可識別健康資料。</p></div>
+        <div class="actions"><a class="button primary" href="../contact/">提出合作交流</a><a class="button support" href="../#intellectual-property-and-patents">查閱智慧財產法律狀態</a><a class="button support" href="../method/">閱讀完整技術方法</a></div>
+      </div>
+      <p class="collaboration-disclaimer">此公開邀請不是募款、病人招募、臨床試驗招募、醫療服務或採用承諾；任何合作均須另行確認組織權限、倫理與法規責任、智慧財產範圍、資訊安全及正式書面協議。</p>
+    </section>
+  </main>
+
+  <footer class="system-footer">
+    <h2>示範與合作資訊</h2>
+    <div class="system-info"><div><strong>示範資料</strong><span>全合成、無真實病人、無表單寫入、無分析追蹤；互動狀態不離開瀏覽器。</span></div><div><strong>推論位置</strong><span>目前不載入模型；未來 LLM 也只在使用者設備執行，伺服器僅負責總場驗證、雜湊與封印。</span></div><div><strong>醫療邊界</strong><span>不診斷、不處方、不治療、不分流緊急個案；候選不能成為正式醫療決定。</span></div><div><strong>技術核心</strong><span>沿用單一總場與 8D 核心；醫療契約需專業合作驗證，不建立影子總場。</span></div><div><strong>專利聲明</strong><span>已取得、申請中與研究成果分開揭露；提出申請不等於取得專利權。</span></div><div><strong>合作原則</strong><span>第一階段不收真實病歷；權限、機密、成果與授權須書面確認。</span></div><div><strong>Google 非營利界線</strong><span>本頁為公益研發展示與合作說明，不代表 Google 核准、保證或背書。</span></div></div>
+    <div class="footer-bottom"><span>研究示範</span><span>|</span><span>全合成資料</span><span>|</span><span>L3 候選治理</span><span>|</span><a href="../">公開首頁</a><span>|</span><a href="../transparency/">透明狀態</a><span>|</span><a href="../contact/">合作聯絡</a></div>
+  </footer>
+</div>
+</body>
+</html>

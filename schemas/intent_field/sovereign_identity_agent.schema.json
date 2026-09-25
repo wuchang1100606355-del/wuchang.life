@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/sovereign_identity_agent.schema.json",
+  "title": "Sovereign Identity Agent Sandbox",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "packet_type",
+    "sandbox_only",
+    "source_refs",
+    "identity_request",
+    "identity_proxy_output",
+    "identity_decision",
+    "technical_means",
+    "safety_boundary"
+  ],
+  "properties": {
+    "packet_type": { "const": "sovereign_identity_agent_sandbox" },
+    "sandbox_only": { "const": true },
+    "source_refs": { "type": "object" },
+    "identity_request": {
+      "type": "object",
+      "required": [
+        "subject_type_code",
+        "candidate_action_id",
+        "required_authority_scope_code",
+        "requires_consent_state",
+        "requires_device_binding",
+        "requires_agent_binding"
+      ]
+    },
+    "identity_proxy_output": {
+      "type": "object",
+      "required": [
+        "identity_proxy_ref",
+        "authority_scope_code",
+        "consent_state_code",
+        "device_binding_ref",
+        "agent_binding_ref",
+        "responsible_person_ref",
+        "accountable_record_ref"
+      ],
+      "properties": {
+        "identity_proxy_ref": { "type": "string" },
+        "authority_scope_code": { "type": "string" },
+        "consent_state_code": { "type": "string" },
+        "device_binding_ref": { "type": "string" },
+        "agent_binding_ref": { "type": "string" },
+        "responsible_person_ref": { "type": "string" },
+        "accountable_record_ref": { "type": "string" }
+      }
+    },
+    "identity_decision": {
+      "type": "object",
+      "required": [
+        "decision",
+        "front_edge_restricted_instruction_allowed",
+        "reasons"
+      ],
+      "properties": {
+        "decision": { "enum": ["ALLOW_REF_ONLY", "HOLD", "REJECT", "BLOCK"] },
+        "front_edge_restricted_instruction_allowed": { "type": "boolean" },
+        "reasons": { "type": "array" }
+      }
+    },
+    "technical_means": { "type": "object" },
+    "safety_boundary": {
+      "type": "object",
+      "required": [
+        "production_member_db_connected",
+        "member_plaintext_read",
+        "db_write",
+        "deploy",
+        "restart",
+        "auto_landing",
+        "no_secret",
+        "no_member_plaintext",
+        "h64_td_ref_only"
+      ],
+      "properties": {
+        "production_member_db_connected": { "const": false },
+        "member_plaintext_read": { "const": false },
+        "db_write": { "const": false },
+        "deploy": { "const": false },
+        "restart": { "const": false },
+        "auto_landing": { "const": false },
+        "no_secret": { "const": true },
+        "no_member_plaintext": { "const": true },
+        "h64_td_ref_only": { "const": true }
+      }
+    }
+  }
+}

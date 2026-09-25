@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_total_field_successor_rebind_seal_v1.schema.json",
+  "title": "W7TP Total Field Successor Rebind Seal V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_type",
+    "seal_id",
+    "run_id",
+    "issued_at",
+    "expires_at",
+    "source_manifest_sha256",
+    "decision_sha256",
+    "receipt_sha256",
+    "authority_pointer_ref",
+    "authority_pointer_sha256",
+    "nonce",
+    "replay_guard",
+    "seal_state",
+    "formal",
+    "contract_approved",
+    "core_landing",
+    "seal_self_hash_algorithm",
+    "seal_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-SEAL/1.0"},
+    "packet_type": {"const": "TOTAL_FIELD_SUCCESSOR_REBIND_SEAL"},
+    "seal_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decision_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authority_pointer_ref": {"type": "string", "minLength": 1},
+    "authority_pointer_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nonce": {"type": "string", "pattern": "^nonce:sha256:[0-9a-f]{64}$"},
+    "replay_guard": {
+      "type": "object",
+      "required": ["single_use", "domain", "disposition"],
+      "properties": {
+        "single_use": {"const": true},
+        "domain": {"type": "string", "minLength": 1},
+        "disposition": {"const": "CONSUMED"}
+      },
+      "additionalProperties": false
+    },
+    "seal_state": {"enum": ["TEST_SEAL_ONLY", "FORMAL_SEAL"]},
+    "formal": {"type": "boolean"},
+    "contract_approved": {"type": "boolean"},
+    "core_landing": {"const": "HOLD_PENDING_SEPARATE_AUTHORIZATION"},
+    "seal_self_hash_algorithm": {"const": "SHA256_CANONICAL_JSON_EXCLUDING_SEAL_SHA256/1.0"},
+    "seal_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"formal": {"const": false}}, "required": ["formal"]},
+      "then": {"properties": {"seal_state": {"const": "TEST_SEAL_ONLY"}, "contract_approved": {"const": false}}}
+    },
+    {
+      "if": {"properties": {"formal": {"const": true}}, "required": ["formal"]},
+      "then": {"properties": {"seal_state": {"const": "FORMAL_SEAL"}, "contract_approved": {"const": true}}}
+    }
+  ],
+  "additionalProperties": false
+}

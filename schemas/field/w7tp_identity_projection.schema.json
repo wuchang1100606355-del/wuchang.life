@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_identity_projection.schema.json",
+  "title": "W7TP Odoo Identity Projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identity_ref",
+    "canonical_ref",
+    "prefix_ref",
+    "prefix_version",
+    "issuer_ref",
+    "projection_ref",
+    "projection_sha256",
+    "issued_at",
+    "expires_at",
+    "nonce"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-ODOO-IDENTITY-PROJECTION/1.0"
+    },
+    "identity_ref": {
+      "type": "string",
+      "pattern": "^identity_packet_ref:sha256:[0-9a-f]{64}$"
+    },
+    "canonical_ref": {
+      "const": "canonical_ref:W7TP_8D_IDENTITY_PACKET"
+    },
+    "prefix_ref": {
+      "type": "string",
+      "pattern": "^identity_prefix_ref:sha256:[0-9a-f]{64}$"
+    },
+    "prefix_version": {
+      "const": "W7TP-NATURAL-PERSON-IDENTITY-PREFIX/1.0"
+    },
+    "issuer_ref": {
+      "const": "issuer_ref:taiji01:odoo-member-authority"
+    },
+    "projection_ref": {
+      "type": "string",
+      "pattern": "^identity_projection_ref:sha256:[0-9a-f]{64}$"
+    },
+    "projection_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^nonce_ref:sha256:[0-9a-f]{64}$"
+    }
+  }
+}

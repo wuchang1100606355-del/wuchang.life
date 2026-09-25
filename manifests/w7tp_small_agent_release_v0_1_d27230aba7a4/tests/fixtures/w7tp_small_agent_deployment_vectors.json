@@ -1,0 +1,190 @@
+{
+  "schema_version": "w7tp-small-agent-deployment-vectors/v0.1",
+  "run_id": "W7TP_SMALL_AGENT_ALL_NODE_DEPLOYMENT_V0_1_D27230ABA7A4",
+  "release_version": "v0.1-d27230aba7a4",
+  "policy_sha256": "d27230aba7a4ecd051f4169184c1fa5357ce5efa1d62019238d68991b0140960",
+  "capability_manifest": {
+    "agent_ref": "agent/w7tp-small-agent/v0.1-d27230aba7a4",
+    "version": "v0.1-d27230aba7a4",
+    "protocol_version": "w7tp/0.1",
+    "supported_schema_versions": [
+      "8d-gte-runtime-candidate-profile/0.1"
+    ],
+    "supported_rule_refs": [
+      "rules/tfct/identity_v0_1"
+    ],
+    "supported_reconstructors": [
+      "reconstructor/w7tp/reference-only/v0.1"
+    ],
+    "available_asset_refs": [
+      "asset/test/reference/v0.1"
+    ],
+    "observation_domain_ref": "observation/test/deployment/v0.1",
+    "privacy_boundary_ref": "privacy/tfct/sovereign/v0.1",
+    "execution_permissions": [
+      "RESOLVE_REFERENCE",
+      "BUILD_RECONSTRUCTION_REQUEST",
+      "REQUEST_EQUIVALENCE_VERIFICATION",
+      "SUBMIT_CANDIDATE"
+    ]
+  },
+  "candidate": {
+    "candidate_ref": "candidate/deployment/fixed/001",
+    "schema_version": "8d-gte-runtime-candidate-profile/0.1",
+    "protocol_version": "w7tp/0.1",
+    "required_agent_version": "v0.1-d27230aba7a4",
+    "rule_ref": "rules/tfct/identity_v0_1",
+    "reconstructor_ref": "reconstructor/w7tp/reference-only/v0.1",
+    "reconstruction_mode": "L2",
+    "observation_domain_ref": "observation/test/deployment/v0.1",
+    "privacy_boundary_ref": "privacy/tfct/sovereign/v0.1",
+    "asset_refs": [
+      "asset/test/reference/v0.1"
+    ],
+    "lookup_refs": [
+      "lookup/deployment/fixed/v0.1"
+    ],
+    "reconstruction_condition_refs": [
+      "condition/equivalent-state/fixed/v0.1"
+    ],
+    "routing_refs": [
+      "routing/total-field/local/v0.1"
+    ],
+    "requires_raw_channel": false,
+    "raw_channel_ref": null
+  },
+  "d1_intent": {
+    "intent_ref": "intent/deployment/self-test/v0.1",
+    "task_ref": "task/small-agent/self-test/v0.1",
+    "goal_ref": "goal/verify-candidate-ingress/v0.1"
+  },
+  "persona_text": "TEST_ONLY_PRESENTATION_LAYER_A",
+  "gateway_request": {},
+  "previous_state": {
+    "coordinate": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  "proposed_state": {
+    "coordinate": {
+      "x": 2,
+      "y": 3
+    }
+  },
+  "observation_domains": {
+    "observation/test/deployment/v0.1": {
+      "configured": true,
+      "observations": {
+        "fixture_ref": "fixture/w7tp-small-agent/deployment/v0.1"
+      }
+    }
+  },
+  "gateway_results": {
+    "ALLOW": {
+      "final_decision": "ALLOW",
+      "decision_reason": "FIXTURE_ALLOW",
+      "previous": {
+        "coordinate": {
+          "x": 1,
+          "y": 2
+        }
+      },
+      "proposed": {
+        "coordinate": {
+          "x": 2,
+          "y": 3
+        }
+      },
+      "committed": {
+        "coordinate": {
+          "x": 2,
+          "y": 3
+        }
+      },
+      "commit_applied": true,
+      "tfid": "tfid:test:w7tp-small-agent:allow",
+      "total_field_hash": "d27230aba7a4ecd051f4169184c1fa5357ce5efa1d62019238d68991b0140960"
+    },
+    "HOLD": {
+      "final_decision": "HOLD",
+      "decision_reason": "FIXTURE_HOLD",
+      "previous": {
+        "coordinate": {
+          "x": 1,
+          "y": 2
+        }
+      },
+      "proposed": {
+        "coordinate": {
+          "x": 2,
+          "y": 3
+        }
+      },
+      "committed": {
+        "coordinate": {
+          "x": 1,
+          "y": 2
+        }
+      },
+      "commit_applied": false
+    },
+    "BLOCK": {
+      "final_decision": "BLOCK",
+      "decision_reason": "FIXTURE_BLOCK",
+      "previous": {
+        "coordinate": {
+          "x": 1,
+          "y": 2
+        }
+      },
+      "proposed": {
+        "coordinate": {
+          "x": 2,
+          "y": 3
+        }
+      },
+      "committed": {
+        "coordinate": {
+          "x": 1,
+          "y": 2
+        }
+      },
+      "commit_applied": false
+    },
+    "QUARANTINE": {
+      "final_decision": "QUARANTINE",
+      "decision_reason": "FIXTURE_QUARANTINE",
+      "previous": {
+        "coordinate": {
+          "x": 1,
+          "y": 2
+        }
+      },
+      "proposed": {
+        "coordinate": {
+          "x": 2,
+          "y": 3
+        }
+      },
+      "committed": {
+        "coordinate": {
+          "x": 1,
+          "y": 2
+        }
+      },
+      "commit_applied": false
+    }
+  },
+  "expected": {
+    "candidate_status": "CANDIDATE",
+    "candidate_reason": "CANDIDATE_READY",
+    "d1_projection": "PASS",
+    "candidate_replay": "PASS",
+    "common_receive_path": "PASS",
+    "allow_only_commit": "PASS",
+    "persona_governance_separation": "PASS",
+    "d7_reference_only": "PASS",
+    "llm_direct_commit": "BLOCKED"
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:field:8d-governance-tensor-expression:candidate:0.1",
+  "title": "8D Governance Tensor Expression Candidate",
+  "description": "Candidate-only representation contract. This schema is not an Active Canonical, parser, or Total Field State authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lifecycle",
+    "event_ref",
+    "observation_domain_ref",
+    "dimensions",
+    "constraint_hypergraph_ref",
+    "convergence_operator_ref",
+    "priority_policy_ref",
+    "fixed_point_status",
+    "verification",
+    "tfs_result"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "8d-gte-candidate/0.1"
+    },
+    "lifecycle": {
+      "enum": [
+        "CANDIDATE",
+        "COMMITTED"
+      ]
+    },
+    "event_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "observation_domain_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "D1_ref",
+        "D2_ref",
+        "D3_ref",
+        "D4_ref",
+        "D5_ref",
+        "D6_ref",
+        "D7_ref",
+        "D8_ref"
+      ],
+      "properties": {
+        "D1_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "D2_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "D3_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "D4_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "D5_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "D6_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "D7_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "D8_ref": { "$ref": "#/$defs/non_empty_ref" }
+      }
+    },
+    "constraint_hypergraph_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "convergence_operator_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "priority_policy_ref": {
+      "$ref": "#/$defs/non_empty_ref"
+    },
+    "fixed_point_status": {
+      "enum": [
+        "PENDING",
+        "REACHED",
+        "NOT_REACHED",
+        "UNKNOWN"
+      ]
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "final_decision",
+        "commit_applied"
+      ],
+      "properties": {
+        "final_decision": {
+          "enum": [
+            "PENDING",
+            "ALLOW",
+            "HOLD",
+            "BLOCK",
+            "QUARANTINE"
+          ]
+        },
+        "commit_applied": {
+          "type": "boolean"
+        }
+      }
+    },
+    "tfs_result": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/tfs_result"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "non_empty_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tfs_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state_ref",
+        "tfid",
+        "total_field_hash"
+      ],
+      "properties": {
+        "state_ref": { "$ref": "#/$defs/non_empty_ref" },
+        "tfid": { "$ref": "#/$defs/non_empty_ref" },
+        "total_field_hash": { "$ref": "#/$defs/non_empty_ref" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "lifecycle": { "const": "CANDIDATE" }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "verification": {
+            "properties": {
+              "final_decision": {
+                "enum": [
+                  "PENDING",
+                  "HOLD",
+                  "BLOCK",
+                  "QUARANTINE"
+                ]
+              },
+              "commit_applied": { "const": false }
+            }
+          },
+          "tfs_result": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": { "const": "COMMITTED" }
+        },
+        "required": ["lifecycle"]
+      },
+      "then": {
+        "properties": {
+          "fixed_point_status": { "const": "REACHED" },
+          "verification": {
+            "properties": {
+              "final_decision": { "const": "ALLOW" },
+              "commit_applied": { "const": true }
+            }
+          },
+          "tfs_result": { "$ref": "#/$defs/tfs_result" }
+        }
+      }
+    }
+  ]
+}

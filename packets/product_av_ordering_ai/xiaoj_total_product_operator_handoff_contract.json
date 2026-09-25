@@ -1,0 +1,64 @@
+{
+  "schema": "W7TP_XIAOJ_TOTAL_PRODUCT_OPERATOR_HANDOFF_CONTRACT_V1",
+  "state": "P1_TOTAL_PRODUCT_OPERATOR_HANDOFF_READY",
+  "service": "wuchang_cafe_ai_gateway.services.total_product_handoff.build_total_product_operator_handoff",
+  "tool": "tools/xiaoj_total_product_handoff_pack.py",
+  "api": "/wuchang/xiaoj/api/total-product-operator-handoff",
+  "api_auth": "user",
+  "aggregates": [
+    "8d_system_assembly_status",
+    "merchant_productization_readiness",
+    "total_product_ref_collection",
+    "lineworks_operator_inputs",
+    "line_official_account_operator_inputs",
+    "association_sovereign_member_operator_inputs",
+    "resident_property_management_operator_inputs",
+    "forbidden_operator_inputs",
+    "operator_checklist"
+  ],
+  "systems": [
+    "merchant_management",
+    "association_sovereign_member",
+    "resident_property_management"
+  ],
+  "human_ref_groups": [
+    "lineworks",
+    "line_official_account",
+    "merchant_formal_release",
+    "association_sovereign_member",
+    "resident_property_management"
+  ],
+  "production_activation_ready_by_default": false,
+  "handoff_ready_for_operator": true,
+  "forbidden_operator_inputs": [
+    "LINE password",
+    "LINE WORKS password",
+    "channel access token value",
+    "channel secret value",
+    "Google Gemini raw API key",
+    "Odoo password",
+    "router password",
+    "member plaintext",
+    "resident plaintext",
+    "payment card data",
+    "raw audio",
+    "raw video"
+  ],
+  "p1_side_effects": {
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "formal_line_message_send": false,
+    "official_account_setting_changed": false,
+    "formal_member_registration": false,
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "raw_audio_saved": false,
+    "raw_video_saved": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

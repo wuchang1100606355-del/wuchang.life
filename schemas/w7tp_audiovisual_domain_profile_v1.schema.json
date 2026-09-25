@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_audiovisual_domain_profile_v1.schema.json",
+  "title": "W7TP Audio Visual Domain Profile V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "domain", "timeline", "frame_coordinate", "segment_coordinate",
+    "audio_sample_coordinate", "audio_visual_sync", "scene_state", "motion_state",
+    "temporal_state_transition", "color_vector_state", "audio_state",
+    "lookup_profile", "temporal_rule", "reconstruction_contract", "verification_profile"
+  ],
+  "properties": {
+    "domain": { "enum": ["AUDIO", "VIDEO", "AUDIOVISUAL"] },
+    "timeline": { "$ref": "#/$defs/integerRange" },
+    "frame_coordinate": { "$ref": "#/$defs/integerRange" },
+    "segment_coordinate": { "$ref": "#/$defs/integerRange" },
+    "audio_sample_coordinate": { "$ref": "#/$defs/integerRange" },
+    "audio_visual_sync": { "$ref": "#/$defs/integerRange" },
+    "scene_state": { "$ref": "#/$defs/refList" },
+    "motion_state": { "$ref": "#/$defs/refList" },
+    "temporal_state_transition": { "$ref": "#/$defs/refList" },
+    "color_vector_state": { "type": "array", "items": { "type": "integer" }, "minItems": 1 },
+    "audio_state": { "$ref": "#/$defs/ref" },
+    "lookup_profile": { "$ref": "#/$defs/ref" },
+    "temporal_rule": { "$ref": "#/$defs/refList" },
+    "reconstruction_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "sync_required", "target_equivalence"],
+      "properties": {
+        "scope": { "enum": ["SEGMENT", "SCENE", "FRAME_RANGE", "AUDIO_RANGE", "FULL", "ON_DEMAND"] },
+        "sync_required": { "type": "boolean" },
+        "target_equivalence": { "$ref": "#/$defs/ref" }
+      }
+    },
+    "verification_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "verifier_ref"],
+      "properties": {
+        "mode": { "enum": ["FRAME_HASH_EXACT", "TIMELINE_EXACT", "AUDIO_SAMPLE_EXACT", "AUDIO_VISUAL_SYNC_EXACT", "SCENE_EQUIVALENT", "MOTION_EQUIVALENT", "STATE_EQUIVALENT"] },
+        "verifier_ref": { "$ref": "#/$defs/ref" }
+      }
+    }
+  },
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1 },
+    "refList": { "type": "array", "items": { "$ref": "#/$defs/ref" }, "uniqueItems": true },
+    "integerRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "state": "WUCHANG_PROPERTY_CLOUD_CASE_LAW_MAP_SOURCE_ONLY",
+  "authority": "TOTAL_FIELD",
+  "mode": "candidate_only_no_formal_legal_advice_no_submission",
+  "policy": {
+    "delete": false,
+    "restore": false,
+    "deploy": false,
+    "restart": false,
+    "db_write": false,
+    "router_write": false,
+    "web_cockpit_touch": false,
+    "runtime_bulk_output": false,
+    "formal_legal_advice": false,
+    "formal_submission": false,
+    "public_publish": false,
+    "member_plaintext_exposure": false,
+    "production_activation": false
+  },
+  "main_organization": {
+    "name": "新北市三重區五常社區發展協會",
+    "branch_unit": "物業雲",
+    "authority": "owner_admin_review_required"
+  },
+  "property_cloud_scope": {
+    "community_mediator": {
+      "name": "社區公道伯",
+      "ai_allowed": true,
+      "output": "mediation_case_candidate",
+      "formal_legal_advice": false,
+      "requires_owner_review": true
+    },
+    "property_case_query_ai": {
+      "name": "物業案例查詢 AI",
+      "ai_allowed": true,
+      "output": "property_case_query_candidate",
+      "source_refs_required": true,
+      "formal_legal_advice": false
+    },
+    "subsidy_links": {
+      "name": "各類補助連結與候選整理",
+      "ai_allowed": true,
+      "output": "property_subsidy_candidate",
+      "formal_submission": false
+    },
+    "excellent_community_application": {
+      "name": "優良社區申報候選包",
+      "ai_allowed": true,
+      "output": "excellent_community_application_candidate",
+      "formal_submission": false,
+      "evidence_required": true
+    },
+    "property_law_collection": {
+      "name": "各類物業法令收集",
+      "ai_allowed": true,
+      "output": "property_law_collection_candidate",
+      "legal_conclusion_allowed": false,
+      "source_refs_required": true
+    }
+  },
+  "group_member_cloud_affiliation": {
+    "principle": "團體會員依性質掛接商業雲、物業雲或雙雲",
+    "business_cloud": [
+      "merchant_organization",
+      "store",
+      "vendor",
+      "commercial_partner",
+      "ticket_partner",
+      "happiness_coin_exchange_partner"
+    ],
+    "property_cloud": [
+      "property_management_company",
+      "management_committee",
+      "community_building",
+      "apartment_building",
+      "building_service_vendor",
+      "social_care_property_case_unit"
+    ],
+    "dual_cloud": [
+      "community_merchant",
+      "building_store",
+      "property_service_merchant",
+      "association_partner_with_business_and_property_services",
+      "ticket_or_happiness_coin_partner_serving_building_communities"
+    ]
+  },
+  "required_candidate_fields": [
+    "task_type",
+    "organization_ref",
+    "property_cloud_ref",
+    "group_member_ref",
+    "group_member_nature",
+    "requester_role_ref",
+    "intent_goal",
+    "source_refs",
+    "evidence_refs",
+    "review_chain"
+  ],
+  "task_types": {
+    "community_mediation": "社區公道伯候選",
+    "property_case_query": "物業案例查詢候選",
+    "property_subsidy": "物業補助候選",
+    "excellent_community_application": "優良社區申報候選",
+    "property_law_collection": "物業法令收集候選",
+    "group_member_cloud_affiliation": "團體會員雙雲掛接候選"
+  },
+  "review_chain": [
+    "AI candidate draft",
+    "property cloud review",
+    "secretariat or owner/admin review",
+    "Total Field PASS/HOLD/BLOCK",
+    "formal legal/submission action only after explicit approval"
+  ],
+  "fallback_member_message": "這個我不懂，我只是個菜鳥，我幫你問店長或學長",
+  "next": "WIRE_PROPERTY_CLOUD_CASE_LAW_TO_8D_PACKET_SOURCE_ONLY"
+}

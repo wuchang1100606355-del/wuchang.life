@@ -1,0 +1,177 @@
+{
+  "state": "W7TP_8D_STATE_FIELD_METRIC_TENSOR_PACKET_CANDIDATE",
+  "version": "1.0.0",
+  "primary_technology": "8D_STATE_FIELD_PACKET",
+  "final_authority": "total_field_verifier",
+  "packet_vector": {
+    "notation": "P_8D=(F_I,F_S,F_C,F_Ev,F_X,F_GT,F_R,F_Env)",
+    "intent_field": {
+      "summary": "Member service intent is represented by refs only.",
+      "refs": [
+        "member_ref:sealed_member_candidate",
+        "merchant_ref:public_merchant_candidate",
+        "service_ref:merchant_service_request"
+      ],
+      "status": "candidate"
+    },
+    "state_field": {
+      "summary": "Request remains candidate until Total Field verifier decides.",
+      "refs": [
+        "state_ref:member_to_merchant_candidate"
+      ],
+      "status": "HOLD"
+    },
+    "coordinate_field": {
+      "summary": "Coordinate uses member, merchant, service, and organization refs.",
+      "refs": [
+        "ADI_5D_METRIC_REF:member_merchant_service_route",
+        "organization_ref:merchant_group_candidate"
+      ],
+      "status": "ref_only"
+    },
+    "evidence_field": {
+      "summary": "Evidence is source refs and seal refs, not plaintext.",
+      "refs": [
+        "evidence_ref:service_intent_hash",
+        "seal_ref:pending_total_field_review"
+      ],
+      "status": "sealed_candidate"
+    },
+    "execution_field": {
+      "summary": "No formal business action is executed from this packet.",
+      "refs": [
+        "execution_policy_ref:no_live_write"
+      ],
+      "status": "blocked_until_verifier",
+      "execution_allowed": false,
+      "db_write": false,
+      "deploy": false,
+      "restart": false,
+      "router_write": false
+    },
+    "generative_transport_field": {
+      "summary": "The receiver reconstructs an equivalent candidate state from refs.",
+      "refs": [
+        "packet_ref:member_to_merchant_gt",
+        "state_ref:member_merchant_candidate",
+        "evidence_ref:service_intent_hash"
+      ],
+      "status": "candidate_only",
+      "mode": "state_packet_ref_reconstruction_equivalent_state",
+      "not": [
+        "file_copy",
+        "cloud_sync",
+        "plaintext_transport"
+      ]
+    },
+    "risk_field": {
+      "summary": "Hard risk checks remain closed.",
+      "refs": [
+        "risk_policy_ref:no_plaintext_no_live_write"
+      ],
+      "status": "hold_safe",
+      "no_secret": true,
+      "no_member_plaintext": true,
+      "no_resident_plaintext": true,
+      "no_raw_image": true,
+      "no_db_write": true,
+      "no_deploy": true,
+      "no_restart": true,
+      "no_router_write": true
+    },
+    "envelope_field": {
+      "summary": "Total Field verifier is final authority.",
+      "refs": [
+        "verifier_ref:total_field_verifier"
+      ],
+      "status": "candidate_sealed",
+      "final_authority": "total_field_verifier",
+      "human_review_required": true,
+      "candidate_only": true
+    }
+  },
+  "metric_tensor": {
+    "notation": "G_8D=diag(g_I,g_S,g_C,g_Ev,g_X,g_GT,g_R,g_Env)",
+    "diagonal_components": [
+      "g_I",
+      "g_S",
+      "g_C",
+      "g_Ev",
+      "g_X",
+      "g_GT",
+      "g_R",
+      "g_Env"
+    ],
+    "numeric_weights_public": false
+  },
+  "reference_state": {
+    "notation": "R_8D",
+    "local_total_field_baseline_ref": "total_field_baseline_ref:member_merchant_service"
+  },
+  "distance_function": {
+    "notation": "Delta(P,R)=sqrt((P_8D-R_8D)^T G_8D (P_8D-R_8D))",
+    "hard_risk_overrides_distance": true
+  },
+  "generative_transport": {
+    "mode": "incomplete_information_equivalent_state_transmission",
+    "packet_ref": "packet_ref:member_to_merchant_gt",
+    "state_ref": "state_ref:member_merchant_candidate",
+    "evidence_ref": "evidence_ref:service_intent_hash",
+    "reconstruction_condition": "receiver_has_schema_and_ref_access",
+    "equivalent_state_condition": "equivalent_candidate_service_intent",
+    "verification_condition": "total_field_verifier_required",
+    "full_data_required": false,
+    "plaintext_required": false,
+    "equivalent_state_verifiable": true,
+    "total_field_final_authority": true
+  },
+  "adi_5d_metric_ref": "ADI_5D_METRIC_REF:member_merchant_service_route",
+  "adi_policy": "ADI_5D_METRIC_INDEX_ONLY_NOT_8D_TABLE",
+  "internal_communication_policy": {
+    "notation": "COMM(A,B)=GT(P_8D)",
+    "receiver_reconstructs": "Receiver(B).Reconstruct(GT(P_8D))->P'_8D",
+    "total_field_verifies": "TotalField.Verify(P'_8D)->PASS/HOLD/WARN/BLOCK"
+  },
+  "total_field_verifier": {
+    "final_authority": "total_field_verifier",
+    "decisions": [
+      "PASS",
+      "HOLD",
+      "WARN",
+      "BLOCK"
+    ]
+  },
+  "hard_risk_policy": {
+    "hard_risk_direct_block": true,
+    "risk_refs": [
+      "raw_key_or_token",
+      "member_plaintext",
+      "resident_plaintext",
+      "raw_image",
+      "live_write",
+      "router_write"
+    ]
+  },
+  "organization_container_policy": {
+    "system_body_ref": "system_body_ref:w7tp",
+    "scene_container_ref": "scene_container_ref:merchant_service",
+    "group_8d_identity_ref": "group_8d_identity_ref:merchant_group_candidate",
+    "personal_8d_permission_ref": "personal_8d_permission_ref:member_ref_only",
+    "organization_dedicated_application_system": true
+  },
+  "xiaoj_translation_policy": {
+    "humanized_compliance_translator": true,
+    "may_offer_safe_alternatives": true,
+    "may_replace_total_field_authority": false
+  },
+  "cloud_candidate_policy": "CANDIDATE_ONLY_NO_AUTHORITY",
+  "redteam_status": "HOLD",
+  "human_review_required": true,
+  "total_field_decision": "HOLD",
+  "humanized_response": "小J已把服務意圖轉成候選封包，會等總場確認後再進入下一步。",
+  "safe_alternatives": [
+    "查看公開商家資訊",
+    "送總場審查",
+    "等待人工確認"
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp-small-agent-node-authority-registry-candidate-v0.1.json",
+  "title": "W7TP Small Agent Node Authority Registry Candidate",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "owner_confirmation",
+    "owner_authority_grant",
+    "owner_authority_scope",
+    "canonical_source",
+    "candidate_schema_ref",
+    "formal_node_ids",
+    "not_in_active_canonical",
+    "remote_platform_role_mappings",
+    "nodes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "w7tp.small-agent.node-authority-registry/v0.1"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner_confirmation": {
+      "const": "YES"
+    },
+    "owner_authority_grant": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner_authority_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonical_source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_schema_ref": {
+      "const": "schemas/w7tp_small_agent_node_authority_registry_candidate.schema.json"
+    },
+    "formal_node_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "not_in_active_canonical": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "subject",
+          "reason_code"
+        ],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason_code": {
+            "const": "NOT_IN_ACTIVE_CANONICAL"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "remote_platform_role_mappings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/remotePlatformRoleMapping"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/authorityNode"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "platformRoleFields": {
+      "type": "object",
+      "properties": {
+        "node_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform_variant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "voice_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "containerization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "container_transport": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formal_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapping_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/evidenceRefs"
+        },
+        "hold_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "remotePlatformRoleMapping": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "node_role",
+        "platform",
+        "mapping_source",
+        "evidence_refs",
+        "deployment_eligibility",
+        "hold_reason"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "node_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform_variant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "voice_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "containerization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "container_transport": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formal_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapping_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/evidenceRefs"
+        },
+        "hold_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deployment_eligibility": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "authorityNode": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "canonical_source",
+        "kind",
+        "hostname",
+        "address",
+        "authority",
+        "authority_scope",
+        "observation_domain",
+        "connection_method",
+        "deployment_eligibility",
+        "evidence_refs",
+        "alias_of",
+        "reason_code"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hostname": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "address": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "authority": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authority_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observation_domain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "connection_method": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "deployment_eligibility": {
+          "type": "boolean"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/evidenceRefs"
+        },
+        "alias_of": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "reason_code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ssh_user": {
+          "type": "string",
+          "minLength": 1
+        },
+        "node_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform_variant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "voice_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "containerization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "container_transport": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formal_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapping_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hold_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

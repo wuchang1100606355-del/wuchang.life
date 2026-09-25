@@ -1,0 +1,110 @@
+{
+  "schema_version": "W7TP-MEMBER-SOVEREIGN-IDENTITY-P0-SHA256-MANIFEST/1.0",
+  "candidate_id": "P0_MEMBER_SOVEREIGN_IDENTITY_CONTRACT_CANDIDATE_V1",
+  "created_at": "2026-07-25T06:37:19Z",
+  "state": "SOURCE_READY_CANDIDATE_NOT_REVIEWED",
+  "candidate_scope": "P0_SOURCE_CONTRACT_ONLY",
+  "candidate_only": true,
+  "authority_granted": false,
+  "authority_model": {
+    "member_consent_authority": "member",
+    "safety_and_landing_authority": "total_field_verifier",
+    "process_authority": "odoo",
+    "candidate_authority": "none"
+  },
+  "action_hash_binding": {
+    "canonical_serialization_required_fields": [
+      "root_ref",
+      "root_generation",
+      "session_ref",
+      "scene_ref",
+      "action_type",
+      "target_ref",
+      "parameters_sha256",
+      "purpose_ref",
+      "scope_refs",
+      "resource_refs",
+      "effect_class",
+      "member_display_hash",
+      "terms_version"
+    ],
+    "purpose_ref_required": true,
+    "scope_refs_required": true,
+    "scope_refs_canonicalization": "LEXICOGRAPHIC_SORT_AFTER_DEDUPLICATION",
+    "effect_class_required": true,
+    "effect_class_enum": [
+      "E0_ANSWER",
+      "E1_READ",
+      "E2_CANDIDATE",
+      "E3_SANDBOX",
+      "E4_REVERSIBLE_WRITE",
+      "E5_HIGH_IMPACT"
+    ],
+    "member_display_hash_required": true,
+    "terms_version_required": true,
+    "transaction_amount_currency_hash_required": true,
+    "non_transaction_amount_currency_hash": null,
+    "amount_currency_hash_scope": "CANONICAL_AMOUNT_MINOR_CURRENCY_TARGET_REF/1.0"
+  },
+  "content_hash_rule": "SHA256_OF_SHA256SUM_OUTPUT_LINES_IN_LEXICOGRAPHIC_PATH_ORDER",
+  "content_sha256": "2b8fec135a9a714af0a8b4cc5c9a77fcbc06c643ea13c66b73271c6834e592ce",
+  "file_count": 5,
+  "files": [
+    {
+      "path": "schemas/field/w7tp_member_action_dual_receipt_v1.schema.json",
+      "sha256": "15e78ae443b05f1d48bc2122f10dab540322cdd717aa5424709926bf99de0ad2",
+      "size": 21456,
+      "role": "new_dual_receipt_schema"
+    },
+    {
+      "path": "schemas/field/w7tp_member_sovereign_derived_packets_v1.schema.json",
+      "sha256": "01b68fe6c7856f62546003bd9501789813bba4d00d1fc7e0ea789de2f12e4e59",
+      "size": 26544,
+      "role": "new_derived_packets_schema"
+    },
+    {
+      "path": "schemas/field/w7tp_member_sovereign_identity_root_v1.schema.json",
+      "sha256": "875d94cb27f0b48f79744776b3b2e54adf72e9f05196efa88430f43517a7f0e1",
+      "size": 10409,
+      "role": "new_identity_root_schema"
+    },
+    {
+      "path": "scripts/verify/verify_member_sovereign_identity_root_contract.py",
+      "sha256": "1925e9a902947f071d4ca04e46505514f1256e8144e9f100450fbf1538dcaef7",
+      "size": 75798,
+      "role": "new_read_only_contract_verifier"
+    },
+    {
+      "path": "tests/test_member_sovereign_identity_root_contract.py",
+      "sha256": "12879020a5fdd356b49bfc49887cee5e10828b31f8c504ee1f60efc4a5ddc734",
+      "size": 28372,
+      "role": "new_focused_contract_red_team_tests"
+    }
+  ],
+  "validation": {
+    "py_compile": "PASS",
+    "schema_count": 3,
+    "derived_variant_count": 6,
+    "contract_self_check": "PASS",
+    "red_team_result": "PASS",
+    "red_team_case_count": 44,
+    "focused_pytest": "PASS_36_TESTS",
+    "manifest_self_check": "PASS"
+  },
+  "evidence_level": "SOURCE_READY",
+  "final_decision": null,
+  "canonical_write": false,
+  "runtime_activation": false,
+  "deploy": false,
+  "database_write": false,
+  "odoo_upgrade": false,
+  "restart": false,
+  "pos_action": false,
+  "payment_action": false,
+  "oauth_action": false,
+  "self_hash": {
+    "included": false,
+    "reason": "SELF_REFERENCE_EXCLUDED; hash the completed manifest as an external seal value"
+  },
+  "next_hold": "HOLD_P1_RUNTIME_VERIFIER_NOT_AUTHORIZED"
+}

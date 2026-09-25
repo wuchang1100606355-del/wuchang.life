@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/total_field_candidate_verification.schema.json",
+  "title": "Total Field Candidate Verification",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "state",
+    "checks",
+    "errors",
+    "final_decision",
+    "cloud_call_executed",
+    "db_write",
+    "deploy",
+    "restart"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "state": { "type": "string" },
+    "checks": {
+      "type": "object",
+      "required": [
+        "json_parse",
+        "field_drift_check",
+        "adi_check",
+        "technical_means_check",
+        "no_secret",
+        "no_member_plaintext",
+        "h64_td_ref_only",
+        "cloud_candidate_only",
+        "patent_type_conformity"
+      ],
+      "properties": {
+        "json_parse": { "enum": ["PASS", "FAIL"] },
+        "field_drift_check": { "enum": ["PASS", "FAIL"] },
+        "adi_check": { "enum": ["PASS", "FAIL"] },
+        "technical_means_check": { "enum": ["PASS", "FAIL"] },
+        "no_secret": { "enum": ["PASS", "FAIL"] },
+        "no_member_plaintext": { "enum": ["PASS", "FAIL"] },
+        "h64_td_ref_only": { "enum": ["PASS", "FAIL"] },
+        "cloud_candidate_only": { "enum": ["PASS", "FAIL"] },
+        "patent_type_conformity": { "enum": ["PASS", "FAIL"] }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "final_decision": { "enum": ["PASS", "HOLD"] },
+    "cloud_call_executed": { "const": false },
+    "db_write": { "const": false },
+    "deploy": { "const": false },
+    "restart": { "const": false }
+  }
+}

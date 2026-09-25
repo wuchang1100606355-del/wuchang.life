@@ -1,0 +1,120 @@
+{
+  "schema": "W7TP_XIAOJ_LLM_COST_SAVING_MODEL_ROUTER_CONTRACT_V1",
+  "state": "P1_LLM_COST_SAVING_MODEL_ROUTER_READY",
+  "goal": "Route XiaoJ tasks to local-first, local-authority-only, or external-candidate model lanes to reduce cost while preserving total-field authority.",
+  "service": "wuchang_cafe_ai_gateway.services.llm_cost_saving_model_router.build_llm_cost_saving_model_router_candidate",
+  "tool": "tools/xiaoj_llm_cost_saving_model_router.py",
+  "api": "/wuchang/xiaoj/api/llm-cost-saving-model-router",
+  "api_auth": "user",
+  "runtime_model_changed": false,
+  "raw_api_key_accepted": false,
+  "raw_member_plaintext_accepted": false,
+  "pricing_snapshot": {
+    "snapshot_date": "2026-07-01",
+    "must_recheck_before_procurement": true,
+    "sources": [
+      "https://platform.openai.com/docs/pricing",
+      "https://ai.google.dev/gemini-api/docs/pricing"
+    ],
+    "models": {
+      "gpt-5.4-mini": {
+        "input_per_1m_usd": 0.75,
+        "output_per_1m_usd": 4.5,
+        "recommended_for": "codex_engineering_cost_saving"
+      },
+      "gpt-5.4-nano": {
+        "input_per_1m_usd": 0.2,
+        "output_per_1m_usd": 1.25,
+        "recommended_for": "classification_formatting_field_backfill_only"
+      },
+      "gemini-2.5-flash-lite": {
+        "input_per_1m_usd": 0.1,
+        "output_per_1m_usd": 0.4,
+        "recommended_for": "merchant_runtime_candidate_generation"
+      }
+    }
+  },
+  "model_role_policy": {
+    "gpt-5.5": [
+      "total-field planning",
+      "patent core review",
+      "red-team review",
+      "final release judgment"
+    ],
+    "gpt-5.4-mini": [
+      "Codex implementation",
+      "documentation fill",
+      "focused verifier repair",
+      "Odoo/LINE module modification"
+    ],
+    "gemini-2.5-flash-lite": [
+      "customer-service draft",
+      "menu copy candidate",
+      "social post candidate",
+      "natural-language intent candidate"
+    ],
+    "gpt-5.4-nano": [
+      "classification",
+      "format conversion",
+      "field backfill",
+      "verification report summary"
+    ]
+  },
+  "nano_architecture_decision_allowed": false,
+  "gemini_runtime_authority": false,
+  "cloud_model_candidate_only": true,
+  "lanes": [
+    "LOCAL_FIRST",
+    "LOCAL_FALLBACK_HOLD_EXTERNAL_REFS",
+    "CLOUD_CANDIDATE_WITH_LOCAL_AUTHORITY",
+    "LOCAL_AUTHORITY_ONLY"
+  ],
+  "required_refs": [
+    "local_model_ref",
+    "external_candidate_model_ref",
+    "gemini_key_ref_vault_binding",
+    "member_llm_release_ref",
+    "quota_policy_ref",
+    "consent_policy_ref"
+  ],
+  "cost_policy": {
+    "routine_member_service": "LOCAL_FIRST",
+    "merchant_social_management": "LOCAL_FIRST",
+    "pos_language_assist": "LOCAL_FIRST",
+    "property_lobby_service": "LOCAL_FIRST",
+    "av_humanoid_service": "CLOUD_CANDIDATE_WITH_LOCAL_AUTHORITY only after refs and release",
+    "payment_execution": "LOCAL_AUTHORITY_ONLY",
+    "pos_order_execution": "LOCAL_AUTHORITY_ONLY",
+    "member_identity_authority": "LOCAL_AUTHORITY_ONLY",
+    "property_access_authority": "LOCAL_AUTHORITY_ONLY"
+  },
+  "release_sequence": [
+    "complete_llm_cost_saving_model_router_doc_contract_verifier",
+    "migrate_gemini_raw_key_to_gemini_key_ref_vault_binding",
+    "add_member_llm_release_gate",
+    "add_local_personal_data_return_packet",
+    "add_8d_delegate_rotation_and_revocation",
+    "add_sovereign_xiaoj_claim_activation",
+    "only_then_enable_formal_pos_member_payment_release_gates"
+  ],
+  "authority_boundary": {
+    "llm_is_candidate_worker": true,
+    "local_discrete_verifier_is_authority": true,
+    "cloud_model_authority": false,
+    "llm_direct_execution": false,
+    "human_release_required": true
+  },
+  "p1_side_effects": {
+    "external_api_call": false,
+    "model_invocation": false,
+    "raw_api_key_read": false,
+    "raw_api_key_saved": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "formal_db_write": false,
+    "runtime_model_changed": false,
+    "llm_execution_authority": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

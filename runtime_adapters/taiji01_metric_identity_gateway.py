@@ -20,6 +20,17 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
+try:
+    from runtime_adapters.w7tp_secondary_cloud_runtime import (
+        RUNTIME_PATH as SECONDARY_CLOUD_RUNTIME_PATH,
+        run_secondary_cloud_runtime,
+    )
+except ModuleNotFoundError:
+    from w7tp_secondary_cloud_runtime import (
+        RUNTIME_PATH as SECONDARY_CLOUD_RUNTIME_PATH,
+        run_secondary_cloud_runtime,
+    )
+
 
 VERSION = "taiji01_metric_identity_gateway_v0_1"
 HOP_BY_HOP = {
@@ -232,6 +243,27 @@ class Handler(BaseHTTPRequestHandler):
         body = self.rfile.read(length) if length else b""
         allowed, node_id, reason = self._authorize_or_reply()
         if not allowed:
+            return
+        if self.path == SECONDARY_CLOUD_RUNTIME_PATH:
+            try:
+                request = json.loads(body.decode("utf-8"))
+            except (UnicodeDecodeError, json.JSONDecodeError):
+                self._json(400, {"state": "HOLD_REQUEST_REJECTED", "errors": ["INVALID_JSON"]})
+                return
+            result = run_secondary_cloud_runtime(request)
+            audit(
+                {
+                    "client_ip": self._client_ip(),
+                    "path": self.path,
+                    "body_sha256": sha256_bytes(body),
+                    "allowed": True,
+                    "reason": reason,
+                    "node_id": node_id,
+                    "runtime_state": result["state"],
+                    "external_network_called": False,
+                }
+            )
+            self._json(200, result)
             return
         hazard = block_payload(body)
         model = parse_model(body)

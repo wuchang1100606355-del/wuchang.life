@@ -1,0 +1,21 @@
+{
+  "schema": "W7TP_BROWSER_GUI_ACTION_MAP_V1",
+  "state": "SPEC_CONVERGED",
+  "mount": {
+    "preferred_route": "/wuchang/xiaoj/ordering",
+    "integration": "odoo_controller_and_static_asset",
+    "standalone_server": false
+  },
+  "modes": ["customer_display", "staff_display", "creditor_demo_display", "evidence_display"],
+  "actions": [
+    {"ui_action": "scan_8d_code", "function_code": "menu.browse.v1", "formal_write": false},
+    {"ui_action": "browse_menu", "function_code": "menu.browse.v1", "formal_write": false},
+    {"ui_action": "add_item_candidate", "function_code": "order.candidate.create.v1", "formal_write": false},
+    {"ui_action": "validate_candidate", "function_code": "order.candidate.validate.v1", "formal_write": false},
+    {"ui_action": "confirm_dry_run", "function_code": "order.confirm.dry_run.v1", "formal_write": false},
+    {"ui_action": "open_group_registration", "function_code": "member.group.register.v1", "formal_write": false},
+    {"ui_action": "speak_candidate", "function_code": "voice.say_candidate.v1", "formal_write": false},
+    {"ui_action": "render_anchor_state", "function_code": "anchor.render_state.v1", "formal_write": false},
+    {"ui_action": "show_proof", "function_code": "evidence.seal.v1", "formal_write": false}
+  ]
+}

@@ -1,0 +1,58 @@
+export const PRODUCT_CONTRACT = Object.freeze({
+  productName: "五常小J社區服務完成系統",
+  candidateRunId: "WUCHANG_XIAOJ_COMMUNITY_PRODUCT_CANDIDATE_20260730T192244Z",
+  rootRunId: "PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z",
+  rootSha256: "336ec63144db4840c2cb716cd7e035a1e8c6441fc4d12b67779bd0da0627fafe",
+  activePointerSha256: "7f549057d958802f67628f25e98c6a5159f06ff661114bd1949388626b0f4119",
+  canonicalV21Sha256: "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+  mode: "ISOLATED_CANDIDATE_NO_LIVE_EFFECT",
+  authority: Object.freeze({
+    membership: "ODOO",
+    roles: "ODOO",
+    organizations: "ODOO",
+    business: "ODOO",
+    property: "ODOO",
+    workflow: "ODOO",
+    accounting: "ODOO",
+    totalField: "GOVERNANCE_VERIFICATION",
+    xiaoj9107: "CANDIDATE_CAPABILITY_ONLY",
+    google: "VERIFICATION_CHANNEL_ONLY",
+    line: "VERIFICATION_CHANNEL_ONLY",
+    openWebUI: "OPTIONAL_ISOLATED_CAPABILITY_ONLY",
+  }),
+  scenes: Object.freeze(["RESIDENT", "BUSINESS_CLOUD", "PROPERTY_CLOUD"]),
+  pricing: Object.freeze({
+    inDistrict: "免費訂閱",
+    outOfDistrict: "付費訂閱",
+    beneficiary: "社區數位發展基金",
+    founderShare: 0,
+    headStoreShare: 0,
+  }),
+  personalization: Object.freeze({
+    xiaojImage: Object.freeze({
+      ownerScope: "CURRENT_MEMBER_ROOT_ONLY",
+      approval: "SAME_MEMBER_SESSION_HUMAN_REVIEW_REQUIRED",
+      llmCanModify: false,
+      otherMemberCanModify: false,
+      candidateExternalUpload: false,
+      candidatePersistentWrite: false,
+      maximumBytes: 5242880,
+      allowedMimeTypes: Object.freeze(["image/png", "image/jpeg", "image/webp"]),
+    }),
+  }),
+  gates: Object.freeze([
+    "ROOT_PACKET_GATE",
+    "HUMAN_PRODUCT_QUALITY_GATE",
+    "DUAL_VALIDATION_GATE",
+  ]),
+});
+
+export const SYNTHETIC_SESSION = Object.freeze({
+  memberRefHash: "synthetic:member:sha256:7b31e1f",
+  rootRef: "synthetic:root:wuchang-candidate",
+  rootGeneration: 1,
+  sessionRef: "synthetic:session:isolated-product-candidate",
+  sceneRef: "RESIDENT",
+  roleRef: "synthetic:role:resident-candidate",
+  seatRef: "synthetic:seat:resident-candidate",
+});

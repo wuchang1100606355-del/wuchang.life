@@ -1,0 +1,980 @@
+{
+  "schema_version": "W7TP-WORKTREE-CHANGE-REVIEW-MANIFEST/1.0",
+  "state": "SUBMITTED_FOR_TOTAL_FIELD_REVIEW",
+  "run_id": "W7TP_WORKTREE_CHANGE_REVIEW_MANIFEST_20260718T081421Z",
+  "source_progress_run_id": "W7TP_CONVERSATION_PROGRESS_DEVELOPMENT_QUEUE_20260718T081421Z",
+  "mode": "REVIEW_SUBMISSION_WITH_KNOWN_HOLDS_NO_DEPLOY",
+  "scope": {
+    "requested_by_founder": "INCLUDE_RELATED_AND_UNRELATED_CURRENT_WORKTREE_CHANGES_FOR_REVIEW_AND_PUSH",
+    "inventory_file_count": 113,
+    "push_candidate_file_count": 110,
+    "held_file_count": 3,
+    "unrelated_changes_preserved_without_edit": true
+  },
+  "validation": {
+    "python_ast_pass_count": 63,
+    "json_parse_pass_count": 23,
+    "json_schema_check_pass_count": 13,
+    "yaml_parse_pass_count": 2,
+    "xml_parse_pass_count": 1,
+    "git_diff_check": "PASS",
+    "secret_pattern_scan": {
+      "actual_secret_evidence_count": 0,
+      "safe_forbidden_marker_literal_count": 1,
+      "safe_marker_path": "scripts/verify/verify_w7tp_field_device_inventory.py"
+    },
+    "pdf_review": {
+      "path": "web/evidence/patents/877-24-0046.UTW_證書(3).PDF",
+      "pages": 1,
+      "encrypted": false,
+      "patent_number_title_and_public_owner_match": true,
+      "taiwan_id_pattern_count": 0,
+      "email_pattern_count": 0,
+      "phone_pattern_count": 0
+    },
+    "javascript_syntax": "HOLD_NODE_RUNTIME_NOT_INSTALLED",
+    "pytest": {
+      "passed": 183,
+      "subtests_passed": 220,
+      "failed": 1,
+      "failed_test": "tests/test_google_nonprofit_website_review.py::GoogleNonprofitWebsiteReviewTest::test_all_official_website_policy_criteria_are_individually_reported",
+      "reason": "GNP-WEB-04 reports two broken internal targets because encoded PDF href resolution is not recognized by the static checker"
+    }
+  },
+  "held_from_push": [
+    {
+      "path": "missing／timeout／stale／schema／conflict／nonconvergence",
+      "reason": "ZERO_BYTE_UNEXPLAINED_ROOT_ARTIFACT"
+    },
+    {
+      "path": "replay／identity",
+      "reason": "ZERO_BYTE_UNEXPLAINED_ROOT_ARTIFACT"
+    },
+    {
+      "path": "八場全",
+      "reason": "ZERO_BYTE_UNEXPLAINED_ROOT_ARTIFACT"
+    }
+  ],
+  "files": [
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/__init__.py",
+      "size": 88,
+      "sha256": "55fb9abd0271dfe058ac24ef95719c1a878c1dbdf85e9aa068e7732f312d16fe",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_change_request.py",
+      "size": 35315,
+      "sha256": "4bcda724b1db1223b4908f4c99062268d787e757da21b071a10d3a4509c16908",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_manager.py",
+      "size": 21851,
+      "sha256": "bfbc637bd95f579b1fbebe14b059a9fbd7d8cc5b1e4859c2d5fd88475e95f631",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_options.py",
+      "size": 14974,
+      "sha256": "caa7ce478d6dc5a1750ba49bbfb59e3fe02c6ec8b50fdad24d832adec6ac2363",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/services/menu_change_governance.py",
+      "size": 15215,
+      "sha256": "c760330c4ee24bccbb9fbaae122c24819a944ff108086779af5896907c78d328",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/views/menu_option_views.xml",
+      "size": 26072,
+      "sha256": "59f206d52ae157240ba38148f29f617169ed2963c2badf411de94dbd754776c8",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/README_zh.md",
+      "size": 2755,
+      "sha256": "9a9c0e3e928971ab94c10f0579731f07f8f859b4806a374a656ed63f3909de13",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py",
+      "size": 13098,
+      "sha256": "c4d57c94ab4426525b9d44e5b1c6b9bd93a683080bf1efb94d5ec7382af77f11",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/models/res_partner.py",
+      "size": 884,
+      "sha256": "82d42287a5429ead0bc30cfb2d0bbaebb6da29467cd8207eb28bf64bbf68f60d",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/services/__init__.py",
+      "size": 44,
+      "sha256": "7abbf9e4799c32a61303e85129031c50ad3a574af6e5cd2c20673f0e13070389",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/services/oauth_config.py",
+      "size": 3867,
+      "sha256": "5a8ea7e148d8ea54310863414939a0a898c238783e954985fe641e0fc3429506",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_line_login/controllers/main.py",
+      "size": 11081,
+      "sha256": "60b6626033a2fb8a6c2ef849d95b5b20eaa148548b4ff48dfb82bc7c3ae61e1a",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_line_login/models/line_user.py",
+      "size": 842,
+      "sha256": "e8394fa1e78d9c54212190a9f2716992b3537ac29292e86133cfd2ea563b4c93",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/addons/wuchang_member_registration/models/member_registration.py",
+      "size": 55859,
+      "sha256": "433d78b413d7b20f02a4b08f25d09ae673ccec22a1b737ff6f2e09abde6a0f1b",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "Taiji_Odoo/docker-compose.yml",
+      "size": 1623,
+      "sha256": "407753172667bfe71e66419598858e98cc3edba8566ecbf5d8479b6928a35f0f",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "deploy/packages/taiji01_metric_identity_gateway_v0_1/Dockerfile",
+      "size": 2076,
+      "sha256": "d07d3d476ca6bd3050f335b35981dcec388d38c40da49cd8fdacd4a696628d7c",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "deploy/packages/taiji01_metric_identity_gateway_v0_1/README_CONTAINER.md",
+      "size": 4912,
+      "sha256": "78595fda4b91a381a9173007739839be127c382aac95726e106879d2ee902584",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "deploy/packages/taiji01_metric_identity_gateway_v0_1/SHA256SUMS",
+      "size": 975,
+      "sha256": "838e99b4c4f6fd4b935f3a923c8c71df87bd780e564826d5e61f1f3d8c958cf9",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "deploy/packages/taiji01_metric_identity_gateway_v0_1/docker-compose.yml",
+      "size": 1209,
+      "sha256": "1875d5ee3077a25e0c344811f8541db60b8e9ded6254842ceca82acf4de1e1e9",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "deploy/packages/taiji01_metric_identity_gateway_v0_1/taiji01_metric_identity_gateway.py",
+      "size": 47520,
+      "sha256": "037e5c989439bc7cb069be58df64a25b66155aff6bc771d1afc52d7b9ff6cb19",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "manifests/w7tp_small_agent_node_authority_v0_1/node_authority_registry.json",
+      "size": 9857,
+      "sha256": "0765cc8da918850064c6c01e77fc163d4f350db8912a9a24f76f7faa130d50db",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "schemas/w7tp_identity_authority_packet.schema.json",
+      "size": 1642,
+      "sha256": "b1ec08318cdcec256606f6f049fc10af837ce20c395d4d7676f3eccd36ff9758",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "schemas/w7tp_member_entry_packet.schema.json",
+      "size": 1957,
+      "sha256": "b0d1f730c65e1723c8580a2490d3d1bceab3839a1e7cbf78f749529d1f80d99d",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "scripts/verify/verify_google_member_login_exact_remediation.py",
+      "size": 3729,
+      "sha256": "a08e8a4fb57ea923e29f738628613c73e41ee60c27fe5e9cd26420665639b402",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "scripts/verify/verify_google_nonprofit_website.py",
+      "size": 20332,
+      "sha256": "c040d2f01c6eee84e0f7406851be8f9c6cdf61f2b77d68be8a7718a2f27dc8ee",
+      "review_state": "SUBMITTED_WITH_KNOWN_GNP_WEB_04_URL_ENCODING_TEST_HOLD",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "scripts/verify/verify_w7tp_small_agent_node_authority.py",
+      "size": 20214,
+      "sha256": "552b9cf17fe4b9dbea4c7d630e50e93c123ab57ef075fe09b81fbbb96f6e0275",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tests/test_cafe_pos_demo.py",
+      "size": 18248,
+      "sha256": "2fe57c22c78869dee59d9f2d10ee811fc9870536246c0e577bee6687d52a9db1",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tests/test_google_member_provider_configuration.py",
+      "size": 5164,
+      "sha256": "fd21f27f69fb2751ef83017da7e3bb6e17b98decd8a19dca8842e993e7f27da9",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tests/test_google_nonprofit_website_review.py",
+      "size": 6806,
+      "sha256": "fe733075fea73a15aa8c9adb7247bb7c4b86b93ee4ebdabbdb974c14d92066d2",
+      "review_state": "SUBMITTED_WITH_KNOWN_GNP_WEB_04_URL_ENCODING_TEST_HOLD",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tests/test_w7tp_secondary_cloud_packet_ramp.py",
+      "size": 12543,
+      "sha256": "22775bb225b633592976d826a506882c322a36ac22dd80f7ace5be1b58398bc3",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tests/test_w7tp_small_agent_node_authority.py",
+      "size": 16767,
+      "sha256": "801dc96d6277291eafd3589ce9172a904d4d434c3b64bc0a4964ec9a00ee9f04",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tests/test_wuchang_cafe_menu_governance.py",
+      "size": 11484,
+      "sha256": "e8788a6f86ba5256582fb26c61b3cd089748723b98230e9f0aa61c471e9dac1d",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tools/cloud_proxy/w7tp_openwebui_cloud_proxy.py",
+      "size": 28356,
+      "sha256": "17ff045095a9e75ec3b17db1b83889b4e61bc11f7c8cfb0a6facc0d52af85c32",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tools/odoo/configure_google_member_provider.py",
+      "size": 15020,
+      "sha256": "324f94b4406bf5b03f3e9c920d9a0840d424a70faed0b1344651a5135480e196",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tools/total_field/quickclick_menu_snapshot.py",
+      "size": 22910,
+      "sha256": "8530f177eb3956d188f45700c11ac91c60ac17d5fa9114ced036a48e1abd1bee",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tools/total_field/w7tp_vertex_candidate_gateway.py",
+      "size": 17879,
+      "sha256": "afcd79e436ab5c4f25f064165c32fe627798453113a5d27c95535a95f43f2ec2",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tools/w7tp_packet_inference_runtime.py",
+      "size": 47815,
+      "sha256": "f698f686d4e6c81754863dba92b72abe61314913f1313e8f6ab373c2f428ca9f",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "tools/w7tp_secondary_cloud_packet_ramp.py",
+      "size": 19361,
+      "sha256": "fb901353d09d8db6938c9fa9099e25921042a49bbd126a4a60f81b7640e5e339",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/assets/cafe-pos-demo.css",
+      "size": 27261,
+      "sha256": "3394f955ec9a80d7f9fff634568b08cfc42e1c1609374ec7ffa8fa9c4ddb0496",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/assets/cafe-pos-demo.js",
+      "size": 47220,
+      "sha256": "744ae82ff67be10c7c6b718908cd570b763bbeb717565ef6a17ed2687fc334a6",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/data/public_organization_profile.json",
+      "size": 11430,
+      "sha256": "eb97eee054dd8989ed55f0b26bfd82f9269c69051868352d77c8c6433e7df41e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/index.html",
+      "size": 26545,
+      "sha256": "d31d04a11c5c46870af2c1fbe8c59ed843eaaae0dd4afecd7885655b1c4f4e38",
+      "review_state": "SUBMITTED_WITH_KNOWN_GNP_WEB_04_URL_ENCODING_TEST_HOLD",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/nonprofit_readiness/index.html",
+      "size": 16078,
+      "sha256": "31786443ffadc3a73eaa7d91b4a015c56ef3a60691c057c56ce95d7bff7839c3",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/packet_inference_cockpit/index.html",
+      "size": 15304,
+      "sha256": "fd4162a35c34857c29b88e0d742c59c26a92dc26aef5618ff6e2e30686eb9238",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/pos_promo_sandbox/index.html",
+      "size": 22693,
+      "sha256": "6906548ec3c5f290bba9b8a08e228802f79dd27dfbf10545971930629ddcfab4",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/transparency/index.html",
+      "size": 16184,
+      "sha256": "a67d5118a4153e83a1dc4642182859578fe0909b1307022ed5dd65855d54a6a8",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/w7tp_8d_control_panel.html",
+      "size": 15571,
+      "sha256": "4d3565b4a161e0c92191328f103be1c110594d0b3ce81e5009d5c14a198e5693",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/xiaoj_delivery_review_card/index.html",
+      "size": 10738,
+      "sha256": "4045d5152554873ea08cded09aa48e0e2d663a11f41d8a8c2d2b4cad751ac10e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/xiaoj_member_browser_cockpit/index.html",
+      "size": 10179,
+      "sha256": "cf52a245dd9721a504c62a30544c1d20b00906fd34abe1893e781f7f80b72c04",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": " M",
+      "path": "web/xiaoj_openwebui_workbench/index.html",
+      "size": 10192,
+      "sha256": "28d2a9e6afb18e1d755fb5c30e82b90c1b351ce3d0addf14fb1762c78ec1566e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "Taiji_Odoo/addons/wuchang_google_member_login/services/account_linking.py",
+      "size": 3319,
+      "sha256": "9ad44c40da2843ee7d8c8d2d010d28b7819c7dee130c614f75998b9be809c50a",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "Taiji_Odoo/addons/wuchang_line_login/services/__init__.py",
+      "size": 35,
+      "sha256": "bd6e7cbe80154a8db7c98e555706e90fbe9edc64ad5149b57d68443f136c833e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "Taiji_Odoo/addons/wuchang_line_login/services/profile_minimization.py",
+      "size": 3325,
+      "sha256": "5ff58467cd599b75fdac7d188b0185a4aa8a95b8dbdcf42db29450c6aee236e1",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "config/w7tp_vertex_candidate_gateway.json",
+      "size": 406,
+      "sha256": "c5fec66e75cd792da89dd8a5222976572defee270e394cc01ce43b66f90aee44",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "deploy/systemd/w7tp-intent-field.service",
+      "size": 910,
+      "sha256": "b13cdf20a7c0ecc980eb1b4676461f860c109cd1b932414844cffd59ba1ae4b0",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "docs/evidence/pos_mvp/ODOO_CAFE_MENU_ENDPOINT_LANDING_20260717T055035Z.json",
+      "size": 2063,
+      "sha256": "f613052d10f91747287f4695ec817e973b9387aa76dfb7b247ebb2b861c4f4f2",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "docs/total_field/W7TP_CORE_FIELD_ENCODING_MANAGEMENT_V1.md",
+      "size": 4811,
+      "sha256": "1e7484d8c6a27bd0e47369099cff3719689619580edb4238da83778d67be0f0f",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "docs/total_field/W7TP_FOUNDER_IDENTITY_ROOT_AND_VARIABLE_COGNITION_PACKAGE_CANONICAL.md",
+      "size": 4902,
+      "sha256": "89f1e73813f4d9fd32dfe3e32be18ae6e07dc0d76e57b753d7d76d7c10e8f228",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "docs/total_field/W7TP_REMOTE_PLATFORM_ROLE_MAPPING_CANDIDATE_REPORT.md",
+      "size": 1767,
+      "sha256": "0ab45cf46db3b9170bfa5f9551d8278ca3524a7fc3f333141206165a630f70c3",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "docs/total_field/W7TP_WIFI_SUNMI_HOMEPAD_INVENTORY_REPORT.md",
+      "size": 3004,
+      "sha256": "be0436bcffae4bc0afd09486cdf0b63128fc87d392b0e34bf26056419a5b6970",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "manifests/w7tp_field_device_inventory_v0_1/device_inventory.json",
+      "size": 9913,
+      "sha256": "8c8840fa83fe908b3cbf8fd93854a8a7e48ec4e66c587f7275b30ef2124902a9",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "manifests/w7tp_founder_identity_variable_cognition_v0_1/SHA256_MANIFEST.json",
+      "size": 1595,
+      "sha256": "65fa501d5d6ed02d80a4eb31d4854c6b0552c66ae13710de667bd5c7f264804f",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "manifests/w7tp_small_agent_node_authority_v0_1/node_authority_registry_runtime_minimized.json",
+      "size": 1367,
+      "sha256": "61e0390695388c0b58cfadfc7c03dae69a7b09d0552539ab920e70380f8c7b5e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "manifests/w7tp_sunmi_voice_container_candidate_v0_1/capability_manifest.json",
+      "size": 1008,
+      "sha256": "af055d6580c3f87b063391b993d3ec8021699ef5484b1064c4b0c65f8229d521",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "manifests/w7tp_sunmi_voice_container_candidate_v0_1/container_profile.json",
+      "size": 1401,
+      "sha256": "fef9329a067966b9d4f0dc6bd0a5d1e8801a3a48979deaa49927e70bd34d8aa6",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "manifests/w7tp_sunmi_voice_container_candidate_v0_1/voice_license_profile.json",
+      "size": 1014,
+      "sha256": "154771e82faca42451689143ef0fac69251c336434f3527a539646933123c3aa",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "missing／timeout／stale／schema／conflict／nonconvergence",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "review_state": "HOLD_EMPTY_UNEXPLAINED_ARTIFACT",
+      "include_in_git_push": false
+    },
+    {
+      "git_status": "??",
+      "path": "replay／identity",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "review_state": "HOLD_EMPTY_UNEXPLAINED_ARTIFACT",
+      "include_in_git_push": false
+    },
+    {
+      "git_status": "??",
+      "path": "runtime_adapters/sovereign_ai_candidate_intake.py",
+      "size": 8268,
+      "sha256": "d5ef59f016f7bcbafcb616c2b9f3b494b02a771c259d1750013144d40061b67c",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/founder_identity_gate.schema.json",
+      "size": 1400,
+      "sha256": "3cd6cf869622437137ca2de348d7a7e5e8485040b4b4189197c751d1e3d3b43e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/variable_cognition_package_manifest.schema.json",
+      "size": 4910,
+      "sha256": "7f0aaa9abd8aa0fd42850ef23a77d60b29d08fdc7b4ec4f4af996cc10baba1c8",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/w7tp_adaptive_cognition.schema.json",
+      "size": 1262,
+      "sha256": "3c6fab1283a99d7298e115768897e6026e6b26847d7e775783b1e944a1878e15",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/w7tp_cafe_pos_binding_seal.schema.json",
+      "size": 6464,
+      "sha256": "a849dc2908a53ab32085bd975644ec9efe63a57941d740780185daf30d1e9659",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/w7tp_cafe_pos_interop_candidate.schema.json",
+      "size": 8723,
+      "sha256": "a9da64f8001ca3c2b83d4d5b020273aa12a4b39b40a5677e1236a91f8441c4f6",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/w7tp_core_encoding_registry.schema.json",
+      "size": 2920,
+      "sha256": "ad33eb95d8d11daa7507626b3045435330554c6bf16c842b6766772fd8db1ebc",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/w7tp_deployment_manifest.schema.json",
+      "size": 2578,
+      "sha256": "e5940a4af681f9be223e24aa5dac9cbac8302dce8a31937dd7a4aed0e22bb5e2",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/w7tp_guided_completion.schema.json",
+      "size": 4238,
+      "sha256": "a6f88625ffd8e08fe2f0364983bc53777c172ecf2734e8650e4a336362ec902d",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/field/w7tp_node_capability.schema.json",
+      "size": 3723,
+      "sha256": "9575ac35a0992f4bde0220900933726873c47247613232f6dc2dca0eed2e6280",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/sovereign_ai_candidate_intake_request.schema.json",
+      "size": 1368,
+      "sha256": "49da0fd38482156e4bf1488b47d3daffd50397264d76d0a2ef524b201344af07",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "schemas/w7tp_small_agent_node_authority_registry_candidate.schema.json",
+      "size": 7527,
+      "sha256": "b7eecfd3742d675c280a4d58f20e2e46b64d4a704aa86196467ed8020171f57a",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "scripts/verify/verify_member_oauth_pre_activation_remediations.py",
+      "size": 5597,
+      "sha256": "fb9756d10ed55bb190c250be212bf896b7344f4bfb58510fafc8bb76db928739",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "scripts/verify/verify_member_sovereign_ai_gate.py",
+      "size": 22155,
+      "sha256": "bdfa7f3ddde3ddbb9502fae881b69c0c5601579b7cb055d6bb59614ed8309a42",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "scripts/verify/verify_shared_intent_browser_product.py",
+      "size": 19106,
+      "sha256": "d2d0ab7b8f8df4a55a8cc5db5a833be17e179de1fa32a0e77ea2f392eb628525",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "scripts/verify/verify_w7tp_field_device_inventory.py",
+      "size": 13169,
+      "sha256": "678d166e788ad81ecb4dcb4f563f207807b6a407d48e15374e41b2e0d486f85d",
+      "review_state": "PASS_SECRET_MARKER_IS_FORBIDDEN_TEST_LITERAL_NOT_SECRET_VALUE",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_cafe_pos_interop.py",
+      "size": 20849,
+      "sha256": "4bf7b82d84c4713d0130b629ba657f45cfd5659d4f015e844f50c1e0697c64e7",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_founder_variable_cognition_gate.py",
+      "size": 13411,
+      "sha256": "33899e306b3251d61ff5f70c96565fab75d89216f449b325253dc7d635be843c",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_member_oauth_pre_activation_remediations.py",
+      "size": 9787,
+      "sha256": "9171208f08dd8fa38dc63a3cab5241ddfc5a40e671b78b00f1251e1748f34c2f",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_member_sovereign_ai_gate.py",
+      "size": 8236,
+      "sha256": "30b7cc497042a19c5c002bbbc0d39386156988b003c0e0e2732eb38f221f911a",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_sovereign_ai_member_candidate_intake.py",
+      "size": 15875,
+      "sha256": "94e85ba14eeaecf867ea91df3fb42270e11b8e3c95ac778a893548bd80a324df",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_w7tp_field_application_runtime.py",
+      "size": 6945,
+      "sha256": "eb6ed4f6c22ad09567f227989cf291e73567b5937366d49b3f7b6e70a7b16ae2",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_w7tp_field_device_inventory.py",
+      "size": 6291,
+      "sha256": "b8f6ae59628d299d61f5c01cd9069357a1a6bbc37117f2f1df0d5cd4d6be2d85",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_w7tp_intent_field_suite.py",
+      "size": 40061,
+      "sha256": "3ce9a8f2973a003a90258f6898d7dbaa8facffb216ba7a52e06e29636d2d24c1",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tests/test_w7tp_vertex_candidate_gateway.py",
+      "size": 4057,
+      "sha256": "9f0201250b9f9851fd3858a91a71f7e785314c5cd231321f91b0f79a8ed8588d",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/founder_variable_cognition_gate.py",
+      "size": 20927,
+      "sha256": "54e21e92d5a2371b4c33d907da31a58e2c2d0fcb1c44707b02b71f94f37ad66e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_bundle_installer.py",
+      "size": 13860,
+      "sha256": "90898a1e2549514da0888c41d2731ab7daebd7b996ab1125bc5a2ca679c6c02b",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_core_encoding.py",
+      "size": 18796,
+      "sha256": "cafd4c97871c1b242f8f22bd7710a83cb3410d72ca98f63df778c3abb76708ef",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_field_application_runtime.py",
+      "size": 13013,
+      "sha256": "b9e98a78337881dcde04af9a266a5333744ebe53ed01cc6be211daa0fe80af5e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/__init__.py",
+      "size": 148,
+      "sha256": "06a16a272e3e489cbc90921c03eca258073961fe8462d6c189727b418e5547d8",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py",
+      "size": 2903,
+      "sha256": "3694d005b44a1d2ccb371bad6afe9f5a9d52ccd1b3b99b689371979a3729d15e",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/api.py",
+      "size": 32028,
+      "sha256": "8262dbc82ab9c9c452414e88994b545d97f2f8fc24e290cccdc6e167f1a9afe5",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/cafe_pos_interop.py",
+      "size": 29356,
+      "sha256": "e1d097e89b1254297edeea27ca87fd1056c6b41ca79dc3cc0bcd571fb85bd7fa",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/canonical_hash.py",
+      "size": 2043,
+      "sha256": "9c19d182d9889a72c319988a58cc7533a71def4ab1dad49d1ace5199e872ca7f",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/cli.py",
+      "size": 11625,
+      "sha256": "4e6c07dae32c1329d0ff9ba3932447db351cbcf077f9e93397ac2fb0f7023ffa",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/contracts.py",
+      "size": 4155,
+      "sha256": "39dea6b32ddc38f249aa8bc778c35a2785aeeed9e2f48671efed2f14ca49172d",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/deployment.py",
+      "size": 15955,
+      "sha256": "d21a97330705e801a3bb143d9fef9e1537b5617faa204c5fd4bd45cdd44a3f7c",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/drift_monitor.py",
+      "size": 5489,
+      "sha256": "c5c3231b68babb6fa203107f0f3bbae4c25da5eea4d37fdb83ae61afff4f2763",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/edge_queue.py",
+      "size": 12986,
+      "sha256": "20405dcb39ab5efe56d5615d96b1029aa4671c8d0e7a8bf2a52bcf45fe41d7ed",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/gpu_scheduler.py",
+      "size": 2682,
+      "sha256": "447ef939dfa6d2fbcddc4d2a97072cea825248a70bdcf2fe9a0853a10de6617d",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/guided_completion.py",
+      "size": 4976,
+      "sha256": "cad616b0bbd8b6f7c1f2c2ae46348361708da3b96eb379bcdcecfd0037cc1c5c",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/node_inventory.py",
+      "size": 15159,
+      "sha256": "9879f6c19c6350fb4aaae19427fae16eb5570857914ebc08cfd9c848beb63a32",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "tools/total_field/w7tp_intent_field_suite/packet_builder.py",
+      "size": 5916,
+      "sha256": "bc6bc3e9acb1561dd93085af6b026c99b95937ec85d0e0c15c9583bb559ff1ce",
+      "review_state": "SUBMITTED_SYNTAX_AND_SECRET_PATTERN_PREFLIGHT_PASS",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "web/evidence/patents/877-24-0046.UTW_證書(3).PDF",
+      "size": 1953414,
+      "sha256": "321fb2ba975ea3a8d4194ea742cb6f797ac2b71f01861693fa47b35d1eb89ca1",
+      "review_state": "SUBMITTED_WITH_KNOWN_GNP_WEB_04_URL_ENCODING_TEST_HOLD",
+      "include_in_git_push": true
+    },
+    {
+      "git_status": "??",
+      "path": "八場全",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "review_state": "HOLD_EMPTY_UNEXPLAINED_ARTIFACT",
+      "include_in_git_push": false
+    }
+  ],
+  "review_request": {
+    "review_entry": "runtime/total_field/inbox",
+    "final_decision": null,
+    "allowed_decisions": [
+      "PASS_REVIEW_SUBMISSION",
+      "HOLD_CHANGES_REQUIRED",
+      "BLOCK_SECRET_PRIVACY_AUTHORITY_OR_TECHNICAL_DRIFT"
+    ],
+    "known_hold": "GNP_WEB_04_ENCODED_PDF_TARGET_STATIC_CHECK",
+    "deploy_authorized": false,
+    "db_write_authorized": false,
+    "restart_authorized": false
+  },
+  "packet_sha256_basis": "SHA256_CANONICAL_JSON_WITH_PACKET_SHA256_REMOVED",
+  "packet_sha256": "9581445b4fb32feeda23e8f2ecefc89fe06053a4f4c5247fb949a9235c8b995a",
+  "next": "PUSH_SANITIZED_PROGRESS_PACKET_AND_110_REVIEW_CANDIDATE_FILES_TO_CURRENT_FEATURE_BRANCH_WITH_EXACT_ISOLATED_INDEX"
+}

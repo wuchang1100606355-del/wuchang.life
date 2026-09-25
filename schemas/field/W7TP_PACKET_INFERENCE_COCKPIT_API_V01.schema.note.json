@@ -1,0 +1,65 @@
+{
+  "schema_note": "Human-readable schema note for W7TP Packet Inference Cockpit API",
+  "endpoints": {
+    "GET /api/health": {
+      "response": {
+        "STATE": "PASS_W7TP_PACKET_INFERENCE_COCKPIT_HEALTH",
+        "runtime_available": true,
+        "external_api": false,
+        "db_write": false,
+        "payment_capture": false,
+        "member_plaintext_read": false
+      }
+    },
+    "POST /api/chat": {
+      "request": {
+        "text": "natural language input",
+        "branch": "cafe_main",
+        "actor_role": "counter_ai",
+        "channel": "web_cockpit"
+      },
+      "response": "verifier-gated packet inference result for cockpit rendering"
+    }
+  },
+  "request_fields": [
+    "text",
+    "branch",
+    "actor_role",
+    "channel"
+  ],
+  "response_fields": [
+    "STATE",
+    "RUN_MODE",
+    "SAFETY_FLAGS",
+    "INPUT_TEXT_HASH",
+    "PACKET_CHAIN",
+    "FINAL_VERIFIER",
+    "LANGUAGE_RECONSTRUCTION",
+    "COCKPIT_VIEW"
+  ],
+  "cockpit_view_fields": [
+    "timeline",
+    "badges",
+    "summary"
+  ],
+  "timeline_fields": [
+    "index",
+    "step",
+    "packet_type",
+    "packet_hash",
+    "parent_packet_hash",
+    "risk_code",
+    "decision",
+    "table_ref",
+    "template_ref",
+    "packet"
+  ],
+  "safety_rules": [
+    "No external API call",
+    "No model authority",
+    "No DB write",
+    "No payment capture",
+    "No member plaintext read",
+    "Runtime output is verifier-gated"
+  ]
+}

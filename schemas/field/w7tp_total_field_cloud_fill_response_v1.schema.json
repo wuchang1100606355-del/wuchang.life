@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:field:total-field-cloud-fill-response:1.0",
+  "title": "W7TP Total Field Cloud Fill Response",
+  "description": "Strict candidate-only cloud fill response bound to one immutable Total Field request.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_id",
+    "request_mode",
+    "request_sha256",
+    "nonce",
+    "expires_at",
+    "capsule_sha256",
+    "provider_ref",
+    "model_ref",
+    "model_version",
+    "response_schema_ref",
+    "cloud_fillable",
+    "accounting",
+    "response_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-TOTAL-FIELD-CLOUD-FILL-RESPONSE/1.0"},
+    "packet_id": {"$ref": "#/$defs/non_empty"},
+    "request_mode": {"const": "TOTAL_FIELD_PULL"},
+    "request_sha256": {"$ref": "#/$defs/sha256"},
+    "nonce": {"type": "string", "minLength": 16, "maxLength": 256},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "capsule_sha256": {"$ref": "#/$defs/sha256"},
+    "provider_ref": {"$ref": "#/$defs/non_empty"},
+    "model_ref": {"$ref": "#/$defs/non_empty"},
+    "model_version": {"$ref": "#/$defs/non_empty"},
+    "response_schema_ref": {"const": "W7TP-TOTAL-FIELD-CLOUD-FILL-RESPONSE/1.0"},
+    "cloud_fillable": {"$ref": "#/$defs/cloud_fillable"},
+    "accounting": {"$ref": "#/$defs/accounting"},
+    "response_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "non_empty": {"type": "string", "minLength": 1},
+    "json_value": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "boolean"},
+        {"type": "integer"},
+        {"type": "number"},
+        {"type": "string"},
+        {"type": "array", "items": {"$ref": "#/$defs/json_value"}},
+        {"type": "object", "additionalProperties": {"$ref": "#/$defs/json_value"}}
+      ]
+    },
+    "candidate_answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "confidence"],
+      "properties": {
+        "value": {"$ref": "#/$defs/json_value"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "string_list": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "maxLength": 2048},
+      "maxItems": 32
+    },
+    "cloud_fillable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_answer",
+        "concise_rationale",
+        "assumptions",
+        "uncertainties",
+        "risk_candidates",
+        "verification_candidate",
+        "evidence_refs"
+      ],
+      "properties": {
+        "candidate_answer": {"$ref": "#/$defs/candidate_answer"},
+        "concise_rationale": {"type": ["null", "string"], "maxLength": 4096},
+        "assumptions": {"$ref": "#/$defs/string_list"},
+        "uncertainties": {"$ref": "#/$defs/string_list"},
+        "risk_candidates": {"$ref": "#/$defs/string_list"},
+        "verification_candidate": {"$ref": "#/$defs/string_list"},
+        "evidence_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/non_empty"},
+          "uniqueItems": true,
+          "maxItems": 32
+        }
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_transport_bytes",
+        "response_transport_bytes",
+        "reconstructed_bytes",
+        "model_input_tokens",
+        "model_output_tokens",
+        "cloud_calls"
+      ],
+      "properties": {
+        "request_transport_bytes": {"type": "integer", "minimum": 1},
+        "response_transport_bytes": {"type": "integer", "minimum": 1},
+        "reconstructed_bytes": {"type": "integer", "minimum": 0},
+        "model_input_tokens": {"type": "integer", "minimum": 0},
+        "model_output_tokens": {"type": "integer", "minimum": 0},
+        "cloud_calls": {"const": 1}
+      }
+    }
+  }
+}

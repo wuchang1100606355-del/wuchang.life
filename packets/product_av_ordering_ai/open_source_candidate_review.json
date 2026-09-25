@@ -1,0 +1,13 @@
+{
+  "schema": "W7TP_OPEN_SOURCE_CANDIDATE_REVIEW_V1",
+  "state": "REVIEW_NEEDED_NO_INSTALL",
+  "candidates": [
+    {"category": "web_qr_scanner", "examples": ["ZXing browser family", "html5-qrcode family"], "status": "OPEN_SOURCE_REVIEW_NEEDED"},
+    {"category": "qr_generator", "examples": ["qrcode generator JS family"], "status": "OPEN_SOURCE_REVIEW_NEEDED"},
+    {"category": "browser_tts", "examples": ["Web Speech API wrapper"], "status": "OPEN_SOURCE_REVIEW_NEEDED"},
+    {"category": "odoo_pos_extension_examples", "examples": ["Odoo POS OWL extension examples"], "status": "OPEN_SOURCE_REVIEW_NEEDED"},
+    {"category": "menu_card_ui", "examples": ["CSS/OWL component patterns"], "status": "OPEN_SOURCE_REVIEW_NEEDED"},
+    {"category": "evidence_dashboard_ui", "examples": ["Odoo backend views first"], "status": "OPEN_SOURCE_REVIEW_NEEDED"}
+  ],
+  "review_required": ["license", "commercial_use", "maintenance_state", "security_risk", "browser_compatibility", "odoo_compatibility", "packaging_method", "secret_or_member_plaintext_touch"]
+}

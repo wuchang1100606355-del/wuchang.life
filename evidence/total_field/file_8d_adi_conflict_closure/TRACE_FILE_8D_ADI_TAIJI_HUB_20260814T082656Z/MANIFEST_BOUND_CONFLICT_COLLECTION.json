@@ -1,0 +1,126 @@
+{
+  "schema_version": "w7tp-8d-adi-manifest-bound-conflict-collection/1.0",
+  "state": "CANDIDATE_NOT_CANONICAL",
+  "artifact_type": "MANIFEST_BOUND_CONFLICT_COLLECTION",
+  "run_id": "TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z",
+  "source_root": "/home/taiji_admin/Taiji_Hub",
+  "generated_at_utc": "2026-08-14T09:11:01Z",
+  "source_rescan": false,
+  "source_rescan_count": 0,
+  "bindings": {
+    "source_snapshot_id": "14095ebd773c8c0179a520541eead9551ac0b68f7aa09dd7d2875fd8c9e47010",
+    "source_snapshot_sha256": "e1149b3225486e1b4461e194642143a7842d76c553b55b33d84164c260f1ca89",
+    "existing_manifest": {
+      "path": "evidence/total_field/file_8d_adi_causal_index/TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z/99_SHA256_MANIFEST.json",
+      "sha256": "c9d1f72cf70c0139bd2ff00ac07aca3e0049a654bcbeae57f7342327ea72d9f3"
+    },
+    "intent_field_root": {
+      "path": "evidence/total_field/file_8d_adi_causal_index/TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z/00_INTENT_FIELD_ROOT.json",
+      "sha256": "d9d0361e35cd3d4192f24c060ddd43440707b6b98d0320be45c59dd7878b730d"
+    },
+    "file_state_nodes": {
+      "path": "evidence/total_field/file_8d_adi_causal_index/TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z/02_FILE_8D_ADI_STATE_NODES.jsonl",
+      "sha256": "2be9ec3b37cf08598f9dfd61b3c7392ce1ea4bf9585c45f7b170734e339fc25e",
+      "record_count": 28797
+    },
+    "supply_demand_pair_plan": {
+      "path": "evidence/total_field/file_8d_adi_causal_index/TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z/03_SUPPLY_DEMAND_PAIR_PLAN.json",
+      "sha256": "79b8ff2ecb2942c58ab500642fbf4af7c098c81ad8f6fd5f009e6d3443e429c0",
+      "pair_count": 106839
+    },
+    "causal_field": {
+      "path": "evidence/total_field/file_8d_adi_causal_index/TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z/90_8D_ADI_SUPPLY_DEMAND_CAUSAL_FIELD.jsonl",
+      "sha256": "9c539a6d392af4487b664a193ff85d825473c44845df84f71e99c73bada5f3f5",
+      "record_count": 361144
+    },
+    "prior_unknown_report": {
+      "path": "evidence/total_field/file_8d_adi_causal_index/TRACE_FILE_8D_ADI_TAIJI_HUB_20260814T082656Z/91_CONFLICTS_AND_UNKNOWNS.json",
+      "sha256": "4b08d9b68f6a2cafbfe584a82b83d31333f5c54e4d7479a1e2d7025a43699a53",
+      "unknown_count": 3428
+    }
+  },
+  "conflict_classification_rule": {
+    "rule_id": "EXACT_STRUCTURED_MUTUALLY_EXCLUSIVE_STATE_PAIR_V1",
+    "classification_semantics": "A conflict exists only when the same governed subject, scope, frozen time coordinate, reconstruction coordinate, and authority boundary contain an explicit pair of structured candidate states or relations that cannot both hold.",
+    "coordinate_dimensions": [
+      "source_snapshot_id and source_snapshot_sha256",
+      "supply-demand pair-plan SHA256",
+      "source_id and target_id",
+      "ADI spatiotemporal source and target",
+      "structured claim field",
+      "authority boundary"
+    ],
+    "structured_fields_examined": [
+      "node.D2_STATE.state",
+      "node.D8_ENVELOPE.authority",
+      "node.D8_ENVELOPE.total_field_decision",
+      "edge.authority_state",
+      "edge.causal_status",
+      "edge.relation_type",
+      "edge.dependency_type",
+      "edge.D1_D8.D8.authority",
+      "edge.D1_D8.D8.total_field"
+    ],
+    "mutually_exclusive_pairs": {
+      "authority_state": [
+        ["ALLOW", "DENY"],
+        ["PASS", "HOLD"],
+        ["PASS", "REJECT"],
+        ["ACTIVE", "SUSPENDED"],
+        ["ACTIVE", "INACTIVE"],
+        ["CANONICAL", "NON_CANONICAL"]
+      ],
+      "causal_status": [
+        ["VERIFIED", "REJECTED"],
+        ["PRESENT", "ABSENT"],
+        ["REQUIRED", "FORBIDDEN"],
+        ["ALLOW", "DENY"]
+      ],
+      "relation_or_dependency": [
+        ["REQUIRES", "FORBIDS"],
+        ["PRESENT", "ABSENT"],
+        ["ALLOW", "DENY"]
+      ],
+      "node_state": [
+        ["ACTIVE", "SUSPENDED"],
+        ["RUNNING", "STOPPED"],
+        ["PRESENT", "ABSENT"],
+        ["ALLOW", "DENY"],
+        ["PASS", "HOLD"],
+        ["PASS", "REJECT"]
+      ],
+      "total_field_decision": [
+        ["PASS", "HOLD"],
+        ["PASS", "REJECT"]
+      ]
+    },
+    "explicit_exclusions": [
+      "UNKNOWN is not classified as CONFLICT",
+      "path, filename, directory name, and text literals containing conflict are not classified as CONFLICT",
+      "different source, target, snapshot, pair-plan, spatial coordinate, or authority boundary are not the same governed coordinate",
+      "Git, hashes, receipts, tests, and dependency-graph interpretations do not supply final authority",
+      "absence of Total Field adjudication is not a technical failure"
+    ]
+  },
+  "classification_execution": {
+    "method": "READ_ONLY_STREAMING_OVER_FROZEN_EVIDENCE",
+    "node_records_examined": 28797,
+    "causal_edge_records_examined": 361144,
+    "structured_claim_coordinates_examined": 872553,
+    "false_positive_path_literal_count": 57,
+    "snapshot_mismatch_count": 0,
+    "pair_plan_mismatch_count": 0,
+    "source_files_read": 0,
+    "source_rescan_count": 0,
+    "full_trace_rerun": false
+  },
+  "conflict_count": 0,
+  "conflicts": [],
+  "classification_result": "CLASSIFICATION_EXECUTED_EMPTY_COLLECTION",
+  "evidence_closure": "HOLD_MISSING_MANIFEST_BOUND_CONFLICT_EVIDENCE_CLOSED",
+  "source_modified": false,
+  "core_tech_modified": false,
+  "canonical_promotion": false,
+  "total_field_decision": "NOT_RUN",
+  "authority_boundary": "CANDIDATE_EVIDENCE_ONLY_TOTAL_FIELD_IS_SOLE_FINAL_AUTHORITY"
+}

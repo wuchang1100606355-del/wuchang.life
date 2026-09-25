@@ -1,0 +1,141 @@
+{
+  "D1_identity": {
+    "actor_ref": "actor_ref:member_browser_1b:demo_member",
+    "actor_type": "member",
+    "device_ref": "device_ref:member_browser_1b:demo_device",
+    "plaintext_identity_forbidden": true,
+    "role": "member_role_ref"
+  },
+  "D2_intent": {
+    "primary_intent": "intent_ref:47ab1fe19c30658e",
+    "risk_level": "low",
+    "secondary_intent": "redacted_ref:selected_text_hash_demo",
+    "transaction_intent": "browse"
+  },
+  "D3_state": {
+    "browser_state": "dry_run",
+    "context_mode": "ref_only",
+    "order_state": "none",
+    "session_state": "active",
+    "task_state": "dry_run"
+  },
+  "D4_topology": {
+    "channel": "browser_action_bus",
+    "device_topology": "member_browser_to_total_field",
+    "origin_scope": "member_owned",
+    "site_ref": "site_ref:member_browser_1b:demo_site"
+  },
+  "D5_resource": {
+    "api_refs": [
+      "api_ref:member_browser_1b:local_1b_controller"
+    ],
+    "cache_policy": "ref_cache_only",
+    "cost_policy": "budget_cap_ref",
+    "key_policy": "hybrid_ref_only",
+    "model_tier": "small",
+    "selected_key_ref": "key_ref:member_browser_1b:broker_managed_default"
+  },
+  "D6_governance": {
+    "allowed_actions": [
+      "ask_human_confirm",
+      "broker_api_call_ref",
+      "cache_lookup_ref",
+      "click_ref",
+      "close_sidebar_ref",
+      "create_order_draft_ref",
+      "extract_ref",
+      "fill_ref",
+      "handoff_to_human",
+      "navigate_ref",
+      "notify_staff_ref",
+      "open_sidebar_ref",
+      "queue_service_ref",
+      "read_context_ref",
+      "read_menu_ref",
+      "read_text_ref",
+      "render_sidebar_ref",
+      "route_to_connector_ref",
+      "screenshot_ref",
+      "select_ref",
+      "wait_ref",
+      "write_draft_ref"
+    ],
+    "forbidden_actions": [
+      "login_with_plaintext",
+      "submit_payment",
+      "submit_order_without_human",
+      "read_raw_cookie",
+      "read_raw_local_storage",
+      "write_database",
+      "router_change",
+      "tailscale_change",
+      "dns_change",
+      "service_restart",
+      "docker_restart",
+      "systemctl_restart"
+    ],
+    "human_confirm_required": false,
+    "no_plaintext_context": true,
+    "staff_confirm_required": false
+  },
+  "D7_verification": {
+    "action_allowlist_required": true,
+    "leak_check_required": true,
+    "redaction_check_required": true,
+    "response_verify_required": true,
+    "usage_log_required": true
+  },
+  "D8_envelope": {
+    "content_hash": "f00190d6d08ad0828f1e244366d58150a240385acfceccf8aad2924e9ef8ebe6",
+    "counter": 1,
+    "created_at": "2026-06-27T10:42:45.629156+00:00",
+    "hmac_ref": "hmac_ref:xiaoj_member_browser_1b:verifier_required",
+    "nonce": "nonce_ref:55751661251c4f8f8714512b86f6ff5d",
+    "packet_ref": "packet_ref:xiaoj_member_browser_1b:c328336da56e4963",
+    "replay_protection": true,
+    "schema_version": "8d.packet.v1",
+    "signature_ref": "signature_ref:xiaoj_member_browser_1b:verifier_required",
+    "ttl_seconds": 300
+  },
+  "browser_action": {
+    "action_ref": "action_ref:xiaoj_member_browser_1b:073aedf447a74342",
+    "action_type": "open_sidebar_ref",
+    "dry_run": true,
+    "params": {
+      "behavior_info_ref": "behavior_ref:60e735db515e9a8b",
+      "benefit_ref": "benefit_ref:member_browser_1b:community_ai_benefit",
+      "boundary_hits_ref": "risk_ref:140bedbf9c3f6d56",
+      "candidate_only": true,
+      "cloud_candidate_only": true,
+      "cloud_compute_ref": "cloud_compute_ref:local_1b_first_cloud_candidate_if_needed",
+      "controller_ref": "controller_ref:xiaoj_member_browser_1b",
+      "generative_transmission_ref": "gt_ref:w7tp_member_browser_1b_no_plaintext",
+      "intent_ref": "intent_ref:47ab1fe19c30658e",
+      "management_fee_bill_ref": "management_fee_bill_ref:none",
+      "member_preference_ref": "preference_ref:member:concise_accessible_daily",
+      "odoo_connector_mode": "ref_only_no_db",
+      "odoo_function_item_refs_csv": "odoo_function_ref:resident.notice_read,odoo_function_ref:resident.activity_query,odoo_function_ref:resident.activity_rsvp_candidate,odoo_function_ref:resident.benefit_masked_read,odoo_function_ref:resident.management_fee_masked_read,odoo_function_ref:resident.management_fee_payment_intent_candidate,odoo_function_ref:resident.service_request_draft,odoo_function_ref:resident.personal_status_masked",
+      "odoo_function_item_set_ref": "odoo_function_item_set_ref:dd2d1248caedef3c",
+      "odoo_function_scope_ref": "odoo_role_ref:resident",
+      "odoo_identity_ref": "odoo_identity_ref:member_browser_1b:demo_identity",
+      "odoo_member_plaintext_read": false,
+      "odoo_permission_bucket_ref": "odoo_role_ref:resident",
+      "odoo_role_ref": "odoo_role_ref:resident",
+      "odoo_write_authority": false,
+      "payment_amount_bucket_ref": "payment_amount_bucket_ref:not_requested",
+      "payment_capture_authority": false,
+      "payment_data_transferred": false,
+      "payment_intent_ref": "payment_intent_ref:76accbcf453f8ab7",
+      "payment_tool_ref": "payment_tool_ref:member_selected_external_tool",
+      "public_activity_cache_ref": "public_activity_cache_ref:none",
+      "quota_bucket_ref": "quota_bucket_ref:member_browser_1b:free_member",
+      "requires_total_field_verify": true,
+      "return_packet_schema": "w7tp.cloud_candidate_return_packet.v1",
+      "safe_context_ref": "redacted_ref:selected_text_hash_demo",
+      "service_style_ref": "service_style_ref:community_xiaoj_warm_daily"
+    },
+    "submit_forbidden": true,
+    "target_ref": "target_ref:08e2299d8566866b"
+  },
+  "packet_type": "xiaoj_8d_action_packet"
+}

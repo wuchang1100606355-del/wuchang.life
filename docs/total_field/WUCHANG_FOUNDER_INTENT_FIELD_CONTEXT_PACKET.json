@@ -1,0 +1,99 @@
+{
+  "packet_id": "WUCHANG_FOUNDER_INTENT_FIELD_CONTEXT_PACKET",
+  "state": "FOUNDER_CONTEXT_PACKET_CREATED",
+  "mode": "TOTAL_FIELD_CONTEXT",
+  "authority": "OMEGA_GI_TOTAL_FIELD",
+  "ai_status": "CANDIDATE_ONLY",
+  "pre_seal_policy": "REPORT_ONLY",
+  "founder_context_source": [
+    "web/founder_manifesto/index.html",
+    "web/assets/homepage-intent-field-hero.png",
+    "web/assets/homepage-intent-field-hero.webp",
+    "docs/total_field/WUCHANG_FOUNDER_DONOR_ROLE_AND_PUBLIC_INTEREST_IP_BOUNDARY.md",
+    "docs/total_field/W7TP_PROPERTY_ASSOCIATION_MERGE_RELATION_MAP.md",
+    "docs/total_field/W7TP_XIAOJ_SERVICE_PERSONA_POLICY.md",
+    "user_authorized_founder_manifesto_attachment"
+  ],
+  "founder_context": {
+    "role": [
+      "technical_developer",
+      "technical_donor",
+      "community_public_interest_operator"
+    ],
+    "narrative": [
+      "14_year_single_origin_coffee_service",
+      "7_month_ai_enabled_self_build_path",
+      "community_total_field_public_interest_orientation",
+      "8d_spatial_packet_topological_map_visual_semantics",
+      "elder_breakfast_subsidy_and_local_merchant_support"
+    ],
+    "core_intent": [
+      "human_final_authority",
+      "local_first_evidence_context",
+      "public_interest_before_extraction",
+      "candidate_only_ai",
+      "pre_seal_report_only"
+    ],
+    "must_not_reduce_to": [
+      "generic_chatbot",
+      "generic_erp_customization",
+      "generic_ai_agent_workflow",
+      "gpu_cloud_inference_service"
+    ]
+  },
+  "branch_rules": {
+    "association": {
+      "output": "candidate_only",
+      "requires": [
+        "human_confirm_ref",
+        "total_field_verify",
+        "role_conflict_disclosure"
+      ],
+      "forbidden": [
+        "automatic_subsidy_approval",
+        "automatic_role_elevation",
+        "formal_notice_without_verifier"
+      ]
+    },
+    "property": {
+      "output": "candidate_only",
+      "requires": [
+        "human_confirm_ref",
+        "total_field_verify"
+      ],
+      "forbidden": [
+        "resident_plaintext_read",
+        "access_grant_without_verifier",
+        "payment_capture_without_owner_seal"
+      ]
+    },
+    "merchant": {
+      "output": "candidate_only",
+      "requires": [
+        "commerce_ref_boundary",
+        "public_interest_accounting_ref"
+      ],
+      "forbidden": [
+        "private_commerce_nonprofit_resource_mix",
+        "payment_execution_without_owner_seal"
+      ]
+    },
+    "product_web": {
+      "output": "owner_authorized_public_candidate",
+      "pre_seal": "allow_by_default_with_report_only_warnings",
+      "forbidden": [
+        "debug_payload_as_public_product_page",
+        "strict_unlanded_guard_blocking_owner_development"
+      ]
+    }
+  },
+  "output_gate": {
+    "db_write": "HOLD",
+    "deploy": "HOLD",
+    "payment": "HOLD",
+    "formal_send": "HOLD",
+    "role_elevation": "HOLD",
+    "public_page_candidate": "ALLOW_PRE_SEAL_REPORT_ONLY"
+  },
+  "final_decision": "FOUNDER_CONTEXT_ACCEPTED_AS_TOTAL_FIELD_CONTEXT_PACKET"
+}

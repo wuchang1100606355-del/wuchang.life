@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_usb_dead_letter_mailbox_record.schema.json",
+  "title": "W7TP USB Dead-Letter Mailbox Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "created_at",
+    "packet_hash",
+    "source_channel",
+    "source_node_type",
+    "failure_stage",
+    "failure_reason",
+    "decision",
+    "retryable",
+    "redacted_summary",
+    "evidence_ref",
+    "mailbox_backend",
+    "usb_mount_ref",
+    "mailbox_backend_path",
+    "safety_flags",
+    "recommended_next_action"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "packet_hash": {
+      "type": "string",
+      "minLength": 12
+    },
+    "source_channel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_node_type": {
+      "type": "string",
+      "enum": [
+        "cloud_candidate",
+        "router_edge",
+        "local_runtime",
+        "ui",
+        "openwebui",
+        "odoo",
+        "pos",
+        "ai_browser"
+      ]
+    },
+    "failure_stage": {
+      "type": "string",
+      "enum": [
+        "intake",
+        "redact",
+        "packetize",
+        "verify",
+        "route",
+        "materialize",
+        "exhale",
+        "expire"
+      ]
+    },
+    "failure_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "DEAD_LETTER",
+        "HOLD"
+      ]
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "redacted_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mailbox_backend": {
+      "type": "string",
+      "enum": [
+        "usb"
+      ]
+    },
+    "usb_mount_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mailbox_backend_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "safety_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "SECRET_READ",
+        "ENV_DUMP",
+        "MEMBER_PLAINTEXT_READ",
+        "RAW_AUDIO_READ",
+        "ROUTER_PASSWORD_SAVE",
+        "USB_DEAD_LETTER_REQUIRED"
+      ],
+      "properties": {
+        "SECRET_READ": {
+          "const": false
+        },
+        "ENV_DUMP": {
+          "const": false
+        },
+        "MEMBER_PLAINTEXT_READ": {
+          "const": false
+        },
+        "RAW_AUDIO_READ": {
+          "const": false
+        },
+        "ROUTER_PASSWORD_SAVE": {
+          "const": false
+        },
+        "USB_DEAD_LETTER_REQUIRED": {
+          "const": true
+        }
+      }
+    },
+    "recommended_next_action": {
+      "type": "string",
+      "enum": [
+        "RETRY_AFTER_EVIDENCE",
+        "HOLD_FOR_VERIFIER",
+        "INSPECT_USB_MAILBOX",
+        "FIX_PACKET_SOURCE",
+        "DROP_AFTER_TTL"
+      ]
+    }
+  }
+}

@@ -1,0 +1,465 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/w7tp_8d_identity_feature_marker.schema.json",
+  "title": "W7TP 8D Identity Feature Marker",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "identity_code_ref",
+    "subject_ref",
+    "subject_basis",
+    "identity_scope",
+    "residency_feature",
+    "merchant_feature",
+    "feature_domains",
+    "feature_assertion_mode",
+    "contains_member_plaintext",
+    "plaintext_identity_forbidden",
+    "requires_total_field_verify"
+  ],
+  "properties": {
+    "schema_version": { "const": "w7tp.8d_identity_feature_marker.p1" },
+    "packet_type": { "const": "W7TP_8D_IDENTITY_FEATURE_MARKER" },
+    "identity_code_ref": {
+      "type": "string",
+      "pattern": "^8D_IDENTITY_REF:[A-Za-z0-9_./:-]+$"
+    },
+    "subject_ref": {
+      "type": "string",
+      "pattern": "^SUBJECT_REF:[A-Za-z0-9_./:-]+$"
+    },
+    "group_ref": {
+      "type": "string",
+      "pattern": "^GROUP_REF:[A-Za-z0-9_./:-]+$"
+    },
+    "role_ref": {
+      "type": "string",
+      "pattern": "^ROLE_REF:[A-Za-z0-9_./:-]+$"
+    },
+    "subject_basis": {
+      "enum": ["NATURAL_PERSON", "GROUP_ENTITY", "VEHICLE", "EQUIPMENT", "FACILITY", "UNKNOWN"]
+    },
+    "identity_scope": {
+      "enum": ["BASIC_PERSONAL_IDENTITY", "GROUP_IDENTITY", "ASSET_OR_FACILITY_IDENTITY"]
+    },
+    "residency_feature": {
+      "enum": ["COMMUNITY_RESIDENT", "NON_COMMUNITY_RESIDENT", "UNKNOWN_REQUIRES_REVIEW"]
+    },
+    "merchant_feature": {
+      "enum": ["COMMUNITY_MERCHANT", "NON_COMMUNITY_MERCHANT", "NOT_MERCHANT", "UNKNOWN_REQUIRES_REVIEW"]
+    },
+    "feature_domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["merchant", "property", "association"],
+      "properties": {
+        "merchant": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "functions"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "functions": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "MERCHANT_RESPONSIBLE_PERSON",
+                  "MERCHANT_STORE_MANAGER",
+                  "MERCHANT_STAFF",
+                  "MERCHANT_TAGGED_MEMBER",
+                  "MERCHANT_MEMBER"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "enabled": { "const": false } } },
+              "then": { "properties": { "functions": { "maxItems": 0 } } }
+            },
+            {
+              "if": { "properties": { "enabled": { "const": true } } },
+              "then": { "properties": { "functions": { "minItems": 1 } } }
+            }
+          ]
+        },
+        "property": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "functions", "vehicle_features", "asset_features"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "functions": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "PROPERTY_CHAIRPERSON",
+                  "PROPERTY_VICE_CHAIRPERSON",
+                  "PROPERTY_TREASURER",
+                  "PROPERTY_GENERAL_MANAGER",
+                  "PROPERTY_UNIT_OWNER",
+                  "PROPERTY_RESIDENT",
+                  "PROPERTY_VEHICLE_TYPE",
+                  "PROPERTY_VEHICLE_COLOR",
+                  "PROPERTY_EQUIPMENT",
+                  "PROPERTY_FACILITY"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "vehicle_features": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "vehicle_ref": { "type": "string", "pattern": "^VEHICLE_REF:[A-Za-z0-9_./:-]+$" },
+                "vehicle_type": { "enum": ["CAR", "MOTORCYCLE", "BICYCLE", "EV", "OTHER", "UNKNOWN"] },
+                "vehicle_color": { "type": "string", "maxLength": 40 },
+                "license_plate_plaintext_included": { "const": false }
+              }
+            },
+            "asset_features": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["asset_ref", "asset_type"],
+                "properties": {
+                  "asset_ref": { "type": "string", "pattern": "^(EQUIPMENT_REF|FACILITY_REF):[A-Za-z0-9_./:-]+$" },
+                  "asset_type": { "enum": ["EQUIPMENT", "FACILITY"] },
+                  "label": { "type": "string", "maxLength": 80 }
+                }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "enabled": { "const": false } } },
+              "then": {
+                "properties": {
+                  "functions": { "maxItems": 0 },
+                  "asset_features": { "maxItems": 0 }
+                }
+              }
+            },
+            {
+              "if": { "properties": { "enabled": { "const": true } } },
+              "then": { "properties": { "functions": { "minItems": 1 } } }
+            }
+          ]
+        },
+        "association": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "functions"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "functions": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "ASSOCIATION_CHAIRPERSON",
+                  "ASSOCIATION_SECRETARY_GENERAL",
+                  "ASSOCIATION_VICE_CHAIRPERSON",
+                  "ASSOCIATION_EXECUTIVE_DIRECTOR",
+                  "ASSOCIATION_DIRECTOR",
+                  "ASSOCIATION_EXECUTIVE_SUPERVISOR",
+                  "ASSOCIATION_SUPERVISOR",
+                  "ASSOCIATION_SECRETARY",
+                  "ASSOCIATION_STAFF",
+                  "ASSOCIATION_MEMBER",
+                  "ASSOCIATION_IMMUTABLE_FOUNDER"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "immutable_founder_marker": { "type": "boolean" },
+            "founder_marker_mutable": { "type": "boolean" },
+            "role_rotation_can_override": { "type": "boolean" },
+            "founder_ref": {
+              "type": "string",
+              "pattern": "^FOUNDER_REF:[A-Za-z0-9_./:-]+$"
+            }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "enabled": { "const": false } } },
+              "then": { "properties": { "functions": { "maxItems": 0 } } }
+            },
+            {
+              "if": { "properties": { "enabled": { "const": true } } },
+              "then": { "properties": { "functions": { "minItems": 1 } } }
+            },
+            {
+              "if": {
+                "properties": {
+                  "functions": {
+                    "contains": { "const": "ASSOCIATION_IMMUTABLE_FOUNDER" }
+                  }
+                }
+              },
+              "then": {
+                "required": ["immutable_founder_marker", "founder_marker_mutable", "role_rotation_can_override", "founder_ref"],
+                "properties": {
+                  "immutable_founder_marker": { "const": true },
+                  "founder_marker_mutable": { "const": false },
+                  "role_rotation_can_override": { "const": false },
+                  "founder_ref": {
+                    "type": "string",
+                    "pattern": "^FOUNDER_REF:[A-Za-z0-9_./:-]+$"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^EVIDENCE_REF:[A-Za-z0-9_./:-]+$" }
+    },
+    "spatial_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "binding_mode",
+        "positioning_subject",
+        "geometry_scope",
+        "coordinate_ref",
+        "geometry_ref",
+        "jurisdiction_ref",
+        "static_group_positioning_only",
+        "personal_positioning_allowed",
+        "contains_precise_person_location",
+        "contains_member_plaintext",
+        "masking_definition",
+        "reidentification_possible",
+        "masked_payload_can_identify_person",
+        "requires_total_field_verify"
+      ],
+      "properties": {
+        "enabled": { "const": true },
+        "binding_mode": {
+          "enum": [
+            "STATIC_GROUP_FIELD_ANCHOR",
+            "STATIC_ORGANIZATION_JURISDICTION",
+            "STATIC_PROPERTY_OR_FACILITY_ANCHOR",
+            "STATIC_MERCHANT_OR_SERVICE_AREA"
+          ]
+        },
+        "positioning_subject": {
+          "enum": [
+            "GROUP_ENTITY",
+            "ORGANIZATION",
+            "ASSOCIATION_JURISDICTION",
+            "PROPERTY_OR_BUILDING",
+            "MERCHANT_SITE",
+            "EQUIPMENT",
+            "FACILITY"
+          ]
+        },
+        "geometry_scope": {
+          "enum": ["POINT_ANCHOR", "BOUNDARY_POLYGON", "BBOX", "SERVICE_AREA"]
+        },
+        "coordinate_ref": {
+          "type": "string",
+          "pattern": "^COORDINATE_REF:[A-Za-z0-9_./:\\-]+$"
+        },
+        "geometry_ref": {
+          "type": "string",
+          "pattern": "^(GEOMETRY_REF|GEOJSON_REF|KML_REF):[A-Za-z0-9_./:\\-]+$"
+        },
+        "jurisdiction_ref": {
+          "type": "string",
+          "pattern": "^JURISDICTION_REF:[A-Za-z0-9_./:\\-]+$"
+        },
+        "coordinate_version": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}([T ][0-9:Z+\\-]*)?$"
+        },
+        "aggregate_demographic_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "analysis_purpose",
+            "aggregation_level",
+            "cohort_buckets",
+            "statistic_ref",
+            "source_refs",
+            "ranking_allowed",
+            "person_level_data_allowed",
+            "household_level_data_allowed",
+            "contains_member_plaintext",
+            "masking_definition",
+            "reidentification_possible",
+            "masked_payload_can_identify_person",
+            "requires_total_field_verify"
+          ],
+          "properties": {
+            "enabled": { "const": true },
+            "analysis_purpose": {
+              "enum": [
+                "COMMUNITY_SERVICE_PLANNING",
+                "ELDERLY_CHILD_YOUTH_RESOURCE_ALLOCATION",
+                "PUBLIC_BENEFIT_ACTIVITY_PLANNING",
+                "SUBSIDY_AND_CARE_SERVICE_PLANNING",
+                "DISASTER_AND_PUBLIC_NOTICE_PLANNING"
+              ]
+            },
+            "aggregation_level": {
+              "enum": ["LI_LEVEL", "SERVICE_AREA_LEVEL", "PUBLIC_STATISTICAL_AREA"]
+            },
+            "cohort_buckets": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "CHILDREN",
+                  "YOUTH",
+                  "YOUNG_ADULTS",
+                  "WORKING_AGE",
+                  "ELDERLY",
+                  "OLDER_ELDERLY"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "statistic_ref": {
+              "type": "string",
+              "pattern": "^STATISTIC_REF:[A-Za-z0-9_./:\\-]+$"
+            },
+            "source_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(PUBLIC_DATA_REF|STATISTIC_REF|EVIDENCE_REF):[A-Za-z0-9_./:\\-]+$"
+              },
+              "minItems": 1
+            },
+            "minimum_group_size": { "type": "integer", "minimum": 3 },
+            "ranking_allowed": { "const": true },
+            "person_level_data_allowed": { "const": false },
+            "household_level_data_allowed": { "const": false },
+            "contains_member_plaintext": { "const": false },
+            "masking_definition": { "const": "MASKED_DATA_IS_NON_IDENTIFIABLE_PERSONAL_DATA" },
+            "reidentification_possible": { "const": false },
+            "masked_payload_can_identify_person": { "const": false },
+            "requires_total_field_verify": { "const": true }
+          }
+        },
+        "static_group_positioning_only": { "const": true },
+        "personal_positioning_allowed": { "const": false },
+        "contains_precise_person_location": { "const": false },
+        "contains_member_plaintext": { "const": false },
+        "masking_definition": { "const": "MASKED_DATA_IS_NON_IDENTIFIABLE_PERSONAL_DATA" },
+        "reidentification_possible": { "const": false },
+        "masked_payload_can_identify_person": { "const": false },
+        "requires_total_field_verify": { "const": true }
+      }
+    },
+    "feature_assertion_mode": { "const": "candidate_marker_only" },
+    "contains_member_plaintext": { "const": false },
+    "plaintext_identity_forbidden": { "const": true },
+    "requires_total_field_verify": { "const": true }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "merchant_feature": { "const": "NOT_MERCHANT" } } },
+      "then": {
+        "properties": {
+          "feature_domains": {
+            "properties": {
+              "merchant": {
+                "properties": {
+                  "enabled": { "const": false },
+                  "functions": { "maxItems": 0 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "merchant_feature": { "enum": ["COMMUNITY_MERCHANT", "NON_COMMUNITY_MERCHANT"] } } },
+      "then": {
+        "properties": {
+          "feature_domains": {
+            "properties": {
+              "merchant": {
+                "properties": {
+                  "enabled": { "const": true },
+                  "functions": { "minItems": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "required": ["spatial_binding"] },
+      "then": {
+        "properties": {
+          "subject_basis": { "enum": ["GROUP_ENTITY", "EQUIPMENT", "FACILITY"] },
+          "identity_scope": { "enum": ["GROUP_IDENTITY", "ASSET_OR_FACILITY_IDENTITY"] },
+          "spatial_binding": {
+            "properties": {
+              "static_group_positioning_only": { "const": true },
+              "personal_positioning_allowed": { "const": false },
+              "contains_precise_person_location": { "const": false },
+              "contains_member_plaintext": { "const": false },
+              "masking_definition": { "const": "MASKED_DATA_IS_NON_IDENTIFIABLE_PERSONAL_DATA" },
+              "reidentification_possible": { "const": false },
+              "masked_payload_can_identify_person": { "const": false },
+              "requires_total_field_verify": { "const": true }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "subject_basis": { "const": "NATURAL_PERSON" }
+        }
+      },
+      "then": {
+        "properties": {
+          "identity_scope": { "const": "BASIC_PERSONAL_IDENTITY" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "identity_scope": { "const": "BASIC_PERSONAL_IDENTITY" }
+        }
+      },
+      "then": {
+        "properties": {
+          "subject_basis": { "const": "NATURAL_PERSON" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "subject_basis": { "enum": ["GROUP_ENTITY", "EQUIPMENT", "FACILITY"] }
+        }
+      },
+      "then": {
+        "properties": {
+          "identity_scope": {
+            "enum": ["GROUP_IDENTITY", "ASSET_OR_FACILITY_IDENTITY"]
+          }
+        }
+      }
+    }
+  ]
+}

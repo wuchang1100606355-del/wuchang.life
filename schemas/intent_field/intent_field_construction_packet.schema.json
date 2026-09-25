@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/intent_field_construction_packet.schema.json",
+  "title": "Intent Field Construction Packet",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "active_patent_packet_ref",
+    "product_target_refs",
+    "current_system_refs",
+    "gap_items",
+    "candidate_request",
+    "forbidden_data_policy",
+    "redaction_policy",
+    "field_lock",
+    "technical_means_lock",
+    "patent_type_conformity_lock",
+    "sovereign_identity_agent",
+    "spacetime_state_index_database",
+    "isolated_plaintext_archive_boundary",
+    "accountable_access_record_fields",
+    "verifier_requirements"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "active_patent_packet_ref": { "$ref": "#/$defs/file_ref" },
+    "product_target_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/file_ref" }
+    },
+    "current_system_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/file_ref" }
+    },
+    "gap_items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/gap_item" }
+    },
+    "candidate_request": { "type": "object" },
+    "forbidden_data_policy": { "$ref": "#/$defs/forbidden_data_policy" },
+    "redaction_policy": { "$ref": "#/$defs/redaction_policy" },
+    "field_lock": { "$ref": "#/$defs/field_lock" },
+    "technical_means_lock": { "$ref": "#/$defs/technical_means_lock" },
+    "patent_type_conformity_lock": { "$ref": "#/$defs/patent_type_conformity_lock" },
+    "sovereign_identity_agent": { "$ref": "#/$defs/sovereign_identity_agent" },
+    "spacetime_state_index_database": { "$ref": "#/$defs/spacetime_state_index_database" },
+    "isolated_plaintext_archive_boundary": { "$ref": "#/$defs/isolated_plaintext_archive_boundary" },
+    "accountable_access_record_fields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "verifier_requirements": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "file_ref": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "role": { "type": "string" },
+        "state": { "type": "string" }
+      }
+    },
+    "gap_item": {
+      "type": "object",
+      "required": [
+        "gap_id",
+        "classification",
+        "patent_claim_ref",
+        "product_module_ref",
+        "repo_evidence_ref",
+        "suggested_next_action",
+        "risk_level"
+      ],
+      "properties": {
+        "gap_id": { "type": "string" },
+        "classification": {
+          "enum": [
+            "IMPLEMENTED",
+            "PARTIAL_IMPLEMENTED",
+            "DESIGN_EXISTS",
+            "NOT_IMPLEMENTED",
+            "UPPER_PROTECTION_ONLY",
+            "NEEDS_HUMAN_REVIEW"
+          ]
+        },
+        "patent_claim_ref": { "type": "string" },
+        "product_module_ref": { "type": "string" },
+        "repo_evidence_ref": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/file_ref" }
+        },
+        "suggested_next_action": { "type": "string" },
+        "risk_level": { "enum": ["LOW", "MEDIUM", "HIGH", "REVIEW"] }
+      }
+    },
+    "forbidden_data_policy": {
+      "type": "object",
+      "required": [
+        "no_secret",
+        "no_member_plaintext",
+        "no_raw_audio",
+        "no_router_write",
+        "h64_td_ref_only",
+        "external_model_candidate_only"
+      ],
+      "properties": {
+        "no_secret": { "const": true },
+        "no_member_plaintext": { "const": true },
+        "no_raw_audio": { "const": true },
+        "no_router_write": { "const": true },
+        "h64_td_ref_only": { "const": true },
+        "external_model_candidate_only": { "const": true },
+        "allowed_trade_secret_refs": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "trade_secret_ref:h64_codebook",
+              "trade_secret_ref:td_hash_runtime"
+            ]
+          }
+        }
+      }
+    },
+    "redaction_policy": {
+      "type": "object",
+      "required": ["mode", "hard_risk_action", "output_contains_only_refs"],
+      "properties": {
+        "mode": { "const": "redact_or_hold" },
+        "hard_risk_action": { "const": "HOLD" },
+        "output_contains_only_refs": { "const": true }
+      }
+    },
+    "field_lock": {
+      "type": "object",
+      "required": [
+        "total_field_is_state_field",
+        "preferred_upper_term",
+        "implementation_example_state_count",
+        "forbidden_core_terms",
+        "adi_definition"
+      ],
+      "properties": {
+        "total_field_is_state_field": { "const": false },
+        "preferred_upper_term": { "const": "多個狀態場/多狀態場" },
+        "implementation_example_state_count": { "const": "八個狀態場" },
+        "forbidden_core_terms": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "adi_definition": { "const": "使用者自有 ADI 時空資料庫；專利種類詞為時空狀態索引資料庫" }
+      }
+    },
+    "technical_means_lock": {
+      "type": "object",
+      "required": ["effect_requires_means", "required_means"],
+      "properties": {
+        "effect_requires_means": { "const": true },
+        "required_means": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "patent_type_conformity_lock": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "patent_type",
+        "independent_claim_subject",
+        "eight_state_field_usage",
+        "forbidden_core_limitations",
+        "candidate_output_sections",
+        "cloud_candidate_only",
+        "total_field_final_authority"
+      ],
+      "properties": {
+        "enabled": { "const": true },
+        "patent_type": {
+          "const": "人工智慧候選行動之多狀態場封包化控管方法、系統及非暫態電腦可讀取媒體"
+        },
+        "independent_claim_subject": { "const": "多個狀態場/多狀態場" },
+        "eight_state_field_usage": { "const": "附屬項或實施例" },
+        "forbidden_core_limitations": {
+          "type": "array",
+          "items": {
+            "enum": ["W7TP", "小J", "Odoo", "POS", "一般 AI 產品", "一般 chatbot", "一般 agent gateway"]
+          }
+        },
+        "candidate_output_sections": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "patent_type_alignment",
+              "product_completion_plan",
+              "claim_support_matrix",
+              "forbidden_output_check"
+            ]
+          },
+          "minItems": 4
+        },
+        "cloud_candidate_only": { "const": true },
+        "total_field_final_authority": { "const": true }
+      }
+    },
+    "sovereign_identity_agent": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "identity_proxy_ref",
+        "authority_scope_code",
+        "consent_state_code",
+        "device_binding_ref",
+        "agent_binding_ref",
+        "responsible_person_ref",
+        "access_request_id"
+      ],
+      "properties": {
+        "enabled": { "const": true },
+        "identity_proxy_ref": { "type": "string" },
+        "authority_scope_code": { "type": "string" },
+        "consent_state_code": { "type": "string" },
+        "device_binding_ref": { "type": "string" },
+        "agent_binding_ref": { "type": "string" },
+        "responsible_person_ref": { "type": "string" },
+        "access_request_id": { "type": "string" }
+      }
+    },
+    "spacetime_state_index_database": {
+      "type": "object",
+      "required": ["generic_name", "owner_adi_allowed_as_implementation"],
+      "properties": {
+        "generic_name": { "const": "時空狀態索引資料庫" },
+        "owner_adi_allowed_as_implementation": { "const": true }
+      }
+    },
+    "isolated_plaintext_archive_boundary": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "excluded_from_external_model_input",
+        "excluded_from_state_packet",
+        "accountable_access_required"
+      ],
+      "properties": {
+        "enabled": { "const": true },
+        "excluded_from_external_model_input": { "const": true },
+        "excluded_from_state_packet": { "const": true },
+        "accountable_access_required": { "const": true }
+      }
+    }
+  }
+}

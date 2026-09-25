@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/adi_5d_absolute_index_packet.schema.json",
+  "title": "ADI 5D Absolute Index Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_type",
+    "sandbox_only",
+    "run_id",
+    "p10a_addendum_ref",
+    "next_packet_name",
+    "generic_5d_schema_used",
+    "architecture_order",
+    "within_8d_envelope",
+    "adi_absolute_index",
+    "five_dimensions",
+    "lookup_reference_reconstruction_conditions",
+    "verifier_contract",
+    "safety_boundary",
+    "hash_chain"
+  ],
+  "properties": {
+    "packet_type": { "const": "adi_5d_absolute_index_packet" },
+    "sandbox_only": { "const": true },
+    "run_id": { "type": "string", "minLength": 1 },
+    "p10a_addendum_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path_ref", "sha256"],
+      "properties": {
+        "path_ref": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "next_packet_name": { "const": "ADI_5D_ABSOLUTE_INDEX_SCHEMA_VERIFIER_MIN_LANDING" },
+    "generic_5d_schema_used": { "const": false },
+    "architecture_order": {
+      "type": "array",
+      "prefixItems": [
+        { "const": "VPN_PRIVATE_CHANNEL" },
+        { "const": "8D_AUTHORITY_ENVELOPE" },
+        { "const": "ADI_5D_ABSOLUTE_INDEX" },
+        { "const": "LOOKUP_REFERENCE_RECONSTRUCTION_CONDITIONS" },
+        { "const": "7D_FUNCTIONAL_STATE_GENERATION" },
+        { "const": "TOTAL_FIELD_VERIFICATION_HOLD_SEAL" }
+      ],
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "within_8d_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_ref",
+        "authority_envelope",
+        "adi_5d_inside_8d",
+        "five_dimensions_do_not_replace_8d"
+      ],
+      "properties": {
+        "packet_ref": { "type": "string", "minLength": 1 },
+        "adi_5d_inside_8d": { "const": true },
+        "five_dimensions_do_not_replace_8d": { "const": true },
+        "authority_envelope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ttl_seconds",
+            "nonce_ref",
+            "content_hash",
+            "authority_scope_ref",
+            "seal_required"
+          ],
+          "properties": {
+            "ttl_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+            "nonce_ref": { "type": "string", "minLength": 1 },
+            "content_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" },
+            "authority_scope_ref": { "type": "string", "minLength": 1 },
+            "seal_required": { "const": true }
+          }
+        }
+      }
+    },
+    "adi_absolute_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index_id",
+        "index_version",
+        "absolute_index_ref",
+        "absolute_position_code",
+        "lookup_route_ref",
+        "state_position_ref",
+        "reconstruction_condition_ref",
+        "authority_anchor_ref",
+        "conflict_resolution_ref",
+        "route_weight_ref",
+        "actual_index_rules_disclosed",
+        "h64_td_ref_only"
+      ],
+      "properties": {
+        "index_id": { "type": "string", "minLength": 1 },
+        "index_version": { "type": "string", "minLength": 1 },
+        "absolute_index_ref": { "type": "string", "minLength": 1 },
+        "absolute_position_code": { "type": "string", "minLength": 1 },
+        "lookup_route_ref": { "type": "string", "minLength": 1 },
+        "state_position_ref": { "type": "string", "minLength": 1 },
+        "reconstruction_condition_ref": { "type": "string", "minLength": 1 },
+        "authority_anchor_ref": { "type": "string", "minLength": 1 },
+        "conflict_resolution_ref": { "type": "string", "minLength": 1 },
+        "route_weight_ref": { "type": "string", "minLength": 1 },
+        "actual_index_rules_disclosed": { "const": false },
+        "h64_td_ref_only": { "const": true }
+      }
+    },
+    "five_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "time_coordinate",
+        "space_coordinate",
+        "state_coordinate",
+        "evidence_coordinate",
+        "authority_coordinate"
+      ],
+      "properties": {
+        "time_coordinate": { "$ref": "#/$defs/coordinate" },
+        "space_coordinate": { "$ref": "#/$defs/coordinate" },
+        "state_coordinate": { "$ref": "#/$defs/coordinate" },
+        "evidence_coordinate": { "$ref": "#/$defs/coordinate" },
+        "authority_coordinate": { "$ref": "#/$defs/coordinate" }
+      }
+    },
+    "lookup_reference_reconstruction_conditions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lookup_refs", "reference_refs", "reconstruction_condition_refs"],
+      "properties": {
+        "lookup_refs": { "$ref": "#/$defs/nonemptyStringArray" },
+        "reference_refs": { "$ref": "#/$defs/nonemptyStringArray" },
+        "reconstruction_condition_refs": { "$ref": "#/$defs/nonemptyStringArray" }
+      }
+    },
+    "verifier_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local_total_field_authority",
+        "cloud_candidate_only",
+        "final_decision_by_cloud",
+        "requires_total_field_verify",
+        "allowed_decisions",
+        "hold_on_definition_drift",
+        "hold_on_generic_5d",
+        "hold_on_adi_rule_disclosure"
+      ],
+      "properties": {
+        "local_total_field_authority": { "const": true },
+        "cloud_candidate_only": { "const": true },
+        "final_decision_by_cloud": { "const": false },
+        "requires_total_field_verify": { "const": true },
+        "allowed_decisions": {
+          "type": "array",
+          "items": { "enum": ["PASS", "HOLD", "BLOCK"] },
+          "minItems": 3
+        },
+        "hold_on_definition_drift": { "const": true },
+        "hold_on_generic_5d": { "const": true },
+        "hold_on_adi_rule_disclosure": { "const": true }
+      }
+    },
+    "safety_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "db_write",
+        "odoo_write",
+        "deploy",
+        "restart",
+        "cloud_call_executed",
+        "no_secret",
+        "no_member_plaintext",
+        "h64_td_ref_only",
+        "legal_patent_exclusivity_claimed"
+      ],
+      "properties": {
+        "db_write": { "const": false },
+        "odoo_write": { "const": false },
+        "deploy": { "const": false },
+        "restart": { "const": false },
+        "cloud_call_executed": { "const": false },
+        "no_secret": { "const": true },
+        "no_member_plaintext": { "const": true },
+        "h64_td_ref_only": { "const": true },
+        "legal_patent_exclusivity_claimed": { "const": false }
+      }
+    },
+    "hash_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["previous_record_hash", "current_record_hash"],
+      "properties": {
+        "previous_record_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" },
+        "current_record_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" }
+      }
+    }
+  },
+  "$defs": {
+    "coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coordinate_role", "coordinate_ref", "coordinate_hash", "index_scope_ref"],
+      "properties": {
+        "coordinate_role": { "type": "string", "minLength": 1 },
+        "coordinate_ref": { "type": "string", "minLength": 1 },
+        "coordinate_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" },
+        "index_scope_ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "nonemptyStringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    }
+  }
+}

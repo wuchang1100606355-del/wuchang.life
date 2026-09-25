@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_core_encoding_registry.schema.json",
+  "title": "W7TP Core Position-aware Encoding Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "state", "registry_version", "authority", "formats", "field_dimensions", "mutation_rules", "invariants", "side_effects", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "W7TP-CORE-ENCODING-REGISTRY/1.0"},
+    "state": {"const": "CORE_INVARIANT_ACTIVE"},
+    "registry_version": {"const": "W7TP-CORE-ENCODING/1.0"},
+    "authority": {"const": "LOCAL_TOTAL_FIELD_ONLY"},
+    "formats": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code_class", "example_shape", "positions"],
+        "properties": {
+          "code_class": {"type": "string", "minLength": 1},
+          "example_shape": {"type": "string", "minLength": 1},
+          "positions": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "field_dimensions": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimension", "semantic_role", "relationship"],
+        "properties": {
+          "dimension": {"enum": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"]},
+          "semantic_role": {"type": "string", "minLength": 1},
+          "relationship": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "mutation_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["add_entity", "delete_entity", "change_display_or_price", "change_source_identity"],
+      "properties": {
+        "add_entity": {"const": "ALLOCATE_ONLY_THE_NEW_SOURCE_COORDINATE_AND_BINDING"},
+        "delete_entity": {"const": "REMOVE_ONLY_THE_DELETED_ENTITY_FROM_ACTIVE_REGISTRY"},
+        "change_display_or_price": {"const": "KEEP_IDENTITY_CODE_AND_RESEAL_REGISTRY_VERSION"},
+        "change_source_identity": {"const": "ISSUE_NEW_CODE_AND_RETAIN_OLD_CODE_AS_RETIRED_EVIDENCE"}
+      }
+    },
+    "invariants": {"type": "array", "minItems": 8, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "side_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["db_write", "odoo_write", "adi_write", "network_call", "formal_pos_order"],
+      "properties": {
+        "db_write": {"const": false},
+        "odoo_write": {"const": false},
+        "adi_write": {"const": false},
+        "network_call": {"const": false},
+        "formal_pos_order": {"const": false}
+      }
+    },
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

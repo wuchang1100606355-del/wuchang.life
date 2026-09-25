@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/field/ipv6_gt_packet.schema.json",
+  "title": "W7TP IPv6-GT Packet Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "transport",
+    "all_node_ip6_closed_loop",
+    "packet_type",
+    "source_node_ref",
+    "target_node_ref",
+    "source_ipv6_ref",
+    "target_ipv6_ref",
+    "execution_layer",
+    "authority_mode",
+    "d1_intent",
+    "d2_state",
+    "d3_coordinate",
+    "d4_evidence",
+    "d5_execution",
+    "d6_generative_transmission",
+    "d7_risk",
+    "d8_envelope"
+  ],
+  "properties": {
+    "protocol_version": { "const": "w7tp.ipv6_gt.v2" },
+    "transport": { "const": "IPv6" },
+    "all_node_ip6_closed_loop": { "const": true },
+    "packet_type": { "type": "string" },
+    "source_node_ref": { "type": "string", "minLength": 3 },
+    "target_node_ref": { "type": "string", "minLength": 3 },
+    "source_ipv6_ref": { "type": "string", "minLength": 3 },
+    "target_ipv6_ref": { "type": "string", "minLength": 3 },
+    "execution_layer": {
+      "enum": [
+        "TOTAL_FIELD_MAINTENANCE",
+        "FIELD_NODE_EXECUTION",
+        "FIELD_CANDIDATE_EXECUTION",
+        "CLOUD_CANDIDATE_COMPUTE",
+        "PRODUCT_RUNTIME_OPERATION"
+      ]
+    },
+    "authority_mode": {
+      "enum": [
+        "CANDIDATE_ONLY",
+        "VERIFY_ONLY",
+        "FINAL_SEAL_ONLY",
+        "HUMAN_APPROVAL_REQUIRED"
+      ]
+    },
+    "d1_intent": { "type": "object" },
+    "d2_state": { "type": "object" },
+    "d3_coordinate": {
+      "type": "object",
+      "required": ["ipv6_coordinate_ref", "node_ref", "field_ref", "container_ref"],
+      "properties": {
+        "ipv6_coordinate_ref": { "type": "string" },
+        "node_ref": { "type": "string" },
+        "field_ref": { "type": "string" },
+        "container_ref": { "type": "string" }
+      }
+    },
+    "d4_evidence": { "type": "object" },
+    "d5_execution": {
+      "type": "object",
+      "required": [
+        "candidate_only",
+        "must_not_execute",
+        "requires_total_field_verify",
+        "db_write",
+        "pos_write",
+        "payment_capture",
+        "deploy",
+        "service_restart",
+        "final_authority_granted"
+      ],
+      "properties": {
+        "candidate_only": { "const": true },
+        "must_not_execute": { "const": true },
+        "requires_total_field_verify": { "const": true },
+        "db_write": { "const": false },
+        "pos_write": { "const": false },
+        "payment_capture": { "const": false },
+        "deploy": { "const": false },
+        "service_restart": { "const": false },
+        "final_authority_granted": { "const": false }
+      }
+    },
+    "d6_generative_transmission": {
+      "type": "object",
+      "required": ["raw_data_export", "packet_ref_only", "reconstruction_required", "allowed_payload"],
+      "properties": {
+        "raw_data_export": { "const": false },
+        "packet_ref_only": { "const": true },
+        "reconstruction_required": { "const": true },
+        "allowed_payload": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "packet",
+              "ref",
+              "hash",
+              "manifest",
+              "state_projection",
+              "capability_ref",
+              "lookup_key_hint",
+              "result_packet",
+              "seal_ref"
+            ]
+          }
+        }
+      }
+    },
+    "d7_risk": {
+      "type": "object",
+      "required": [
+        "member_plaintext_sent",
+        "secret_sent",
+        "token_sent",
+        "private_key_sent"
+      ],
+      "properties": {
+        "member_plaintext_sent": { "const": false },
+        "secret_sent": { "const": false },
+        "token_sent": { "const": false },
+        "private_key_sent": { "const": false },
+        "risk_flags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "d8_envelope": {
+      "type": "object",
+      "required": [
+        "ttl_seconds",
+        "nonce",
+        "packet_hash",
+        "pollution_guard",
+        "reverse_index_only",
+        "verifier_required",
+        "seal_required"
+      ],
+      "properties": {
+        "ttl_seconds": { "type": "integer", "minimum": 1 },
+        "nonce": { "type": "string", "minLength": 8 },
+        "packet_hash": { "type": "string", "minLength": 16 },
+        "pollution_guard": { "const": true },
+        "reverse_index_only": { "const": true },
+        "verifier_required": { "const": true },
+        "seal_required": { "const": true }
+      }
+    }
+  }
+}

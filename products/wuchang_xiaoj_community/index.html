@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17494d">
+    <meta
+      name="description"
+      content="五常小J社區服務完成系統，讓居民、商家與物業人員用看得懂的方式找到服務、確認操作並掌握結果。"
+    >
+    <title>五常小J｜社區服務完成系統</title>
+    <link rel="stylesheet" href="./assets/styles.css">
+    <script type="module" src="./src/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要內容</a>
+
+    <header class="site-header" aria-label="主要導覽">
+      <a class="brand" href="#home" data-view-target="home" aria-label="五常社區發展協會小J服務首頁">
+        <span class="brand-mark" aria-hidden="true">五</span>
+        <span>
+          <strong>五常社區</strong>
+          <small>WUCHANG COMMUNITY</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="桌面版主要選單">
+        <button class="nav-link is-active" type="button" data-view-target="home" aria-current="page">首頁</button>
+        <button class="nav-link" type="button" data-view-target="xiaoj">找小J</button>
+        <button class="nav-link" type="button" data-view-target="services">居民服務</button>
+        <button class="nav-link" type="button" data-view-target="professional">專業服務</button>
+        <button class="nav-link review-nav" type="button" data-view-target="review">
+          待我確認
+          <span class="nav-count" id="review-count" aria-label="0筆待確認">0</span>
+        </button>
+      </nav>
+
+      <button class="member-chip" type="button" data-view-target="profile" aria-label="查看候選會員狀態">
+        <span class="member-avatar" aria-hidden="true">五</span>
+        <span>
+          <strong>候選會員</strong>
+          <small>隔離驗收模式</small>
+        </span>
+      </button>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <section class="app-view is-active" id="view-home" data-view="home" aria-labelledby="home-title">
+        <div class="hero-shell">
+          <div class="hero-content">
+            <p class="eyebrow"><span aria-hidden="true">●</span> 五常社區專屬服務</p>
+            <h1 id="home-title">社區大小事，<br><span>從這裡開始。</span></h1>
+            <p class="hero-lead">
+              小J會先聽懂您的需要、整理下一步；需要改變資料時，一定先讓您看清楚再決定。
+            </p>
+            <div class="hero-actions" aria-label="首頁主要操作">
+              <button class="button button-primary button-large" type="button" data-view-target="xiaoj">
+                <span class="button-icon" aria-hidden="true">✦</span>
+                找小J協助
+              </button>
+              <button class="button button-secondary button-large" type="button" data-view-target="services">
+                查看居民服務
+              </button>
+            </div>
+            <ul class="trust-list" aria-label="服務承諾">
+              <li><span aria-hidden="true">✓</span> 先看預計結果，再決定是否執行</li>
+              <li><span aria-hidden="true">✓</span> 不會因使用小J而增加您的權限</li>
+              <li><span aria-hidden="true">✓</span> 候選模式不會寫入正式資料</li>
+            </ul>
+          </div>
+
+          <div class="hero-visual" aria-label="五常小J社區服務流程預覽">
+            <section class="service-console" aria-labelledby="service-console-title">
+              <header class="console-header">
+                <div>
+                  <p>五常社區服務台</p>
+                  <h2 id="service-console-title">一件事，清楚走完</h2>
+                </div>
+                <span class="console-mode"><i aria-hidden="true"></i> 流程預覽</span>
+              </header>
+
+              <div class="console-request">
+                <div class="xiaoj-console-profile">
+                  <img
+                    class="xiaoj-white-haired-service-worker"
+                    src="./assets/xiaoj-white-haired-service-worker.png"
+                    alt="先前 Codex 設計的白髮少女小J社區服務員"
+                  />
+                  <div>
+                    <span>小J協助整理</span>
+                    <strong>先把需求說清楚</strong>
+                  </div>
+                </div>
+                <p>「我需要社區服務，但不知道應該找誰。」</p>
+              </div>
+
+              <ol class="service-progress" aria-label="服務處理步驟">
+                <li class="is-complete">
+                  <span>1</span>
+                  <div><strong>說明需要</strong><small>用平常說話的方式即可</small></div>
+                  <b>已整理</b>
+                </li>
+                <li class="is-current">
+                  <span>2</span>
+                  <div><strong>查看適合服務</strong><small>對象、下一步與影響一次看懂</small></div>
+                  <b>目前步驟</b>
+                </li>
+                <li>
+                  <span>3</span>
+                  <div><strong>本人確認</strong><small>沒有您的決定，不會送出</small></div>
+                  <b>尚未進行</b>
+                </li>
+              </ol>
+
+              <div class="console-review">
+                <div>
+                  <span class="console-review-icon" aria-hidden="true">審</span>
+                  <div><small>待我確認</small><strong>所有改變，先說明再執行</strong></div>
+                </div>
+                <button class="console-link" type="button" data-view-target="review">查看確認內容 <span aria-hidden="true">→</span></button>
+              </div>
+
+              <footer class="console-footer">
+                <span><i aria-hidden="true">✓</i> 不含真實居民資料</span>
+                <span><i aria-hidden="true">✓</i> 候選模式不會送出</span>
+              </footer>
+            </section>
+          </div>
+        </div>
+
+        <section class="section quick-section" aria-labelledby="quick-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">今天想處理什麼？</p>
+              <h2 id="quick-title">常用服務，一眼就找到</h2>
+            </div>
+            <button class="text-link" type="button" data-view-target="services">查看全部居民服務 <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="quick-grid">
+            <button class="quick-card" type="button" data-xiaoj-prompt="我想找適合的居民服務">
+              <span class="quick-icon mint" aria-hidden="true">問</span>
+              <span><strong>不知道找誰？</strong><small>讓小J幫您整理</small></span>
+              <span class="card-arrow" aria-hidden="true">→</span>
+            </button>
+            <button class="quick-card" type="button" data-view-target="review">
+              <span class="quick-icon amber" aria-hidden="true">審</span>
+              <span><strong>待我確認</strong><small>先看清楚會改變什麼</small></span>
+              <span class="card-arrow" aria-hidden="true">→</span>
+            </button>
+            <button class="quick-card" type="button" data-action-template="resident-service-request">
+              <span class="quick-icon coral" aria-hidden="true">辦</span>
+              <span><strong>建立服務需求</strong><small>只先產生候選，不送出</small></span>
+              <span class="card-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="section scene-section" aria-labelledby="scene-title">
+          <div class="section-heading scene-heading">
+            <div>
+              <p class="section-kicker">一套入口，三種需要</p>
+              <h2 id="scene-title">選擇您現在的身分與場景</h2>
+            </div>
+            <p class="section-note">切換場景不會改變會員權限</p>
+          </div>
+
+          <div class="scene-tabs" role="tablist" aria-label="三場景切換">
+            <button class="scene-tab is-active" id="tab-resident" type="button" role="tab" aria-selected="true" aria-controls="scene-resident" data-scene-target="resident">
+              <span aria-hidden="true">居</span> 我是居民
+            </button>
+            <button class="scene-tab" id="tab-business" type="button" role="tab" aria-selected="false" aria-controls="scene-business" data-scene-target="business">
+              <span aria-hidden="true">商</span> 我是商家
+            </button>
+            <button class="scene-tab" id="tab-property" type="button" role="tab" aria-selected="false" aria-controls="scene-property" data-scene-target="property">
+              <span aria-hidden="true">物</span> 我是物業人員
+            </button>
+          </div>
+
+          <div class="scene-panel is-active" id="scene-resident" role="tabpanel" aria-labelledby="tab-resident" data-scene="resident">
+            <div class="scene-copy">
+              <p class="panel-label">居民服務</p>
+              <h3>不用懂系統，也能把事情說清楚</h3>
+              <p>先描述您遇到的情況，小J會整理可行選項；任何需要送出或改變資料的操作，都會進入「待我確認」。</p>
+              <div class="panel-actions">
+                <button class="button button-primary" type="button" data-view-target="xiaoj">找小J協助</button>
+                <button class="button button-quiet" type="button" data-view-target="services">瀏覽服務</button>
+              </div>
+            </div>
+            <div class="scene-feature-list" aria-label="居民服務特點">
+              <article><span aria-hidden="true">1</span><div><strong>說出需要</strong><p>用平常說話的方式即可。</p></div></article>
+              <article><span aria-hidden="true">2</span><div><strong>看懂下一步</strong><p>選項、風險與結果一次說清楚。</p></div></article>
+              <article><span aria-hidden="true">3</span><div><strong>自己做決定</strong><p>沒有您的確認，不會產生副作用。</p></div></article>
+            </div>
+          </div>
+
+          <div class="scene-panel" id="scene-business" role="tabpanel" aria-labelledby="tab-business" data-scene="business" hidden>
+            <div class="scene-copy">
+              <p class="panel-label">商業雲專業版</p>
+              <h3>讓在地經營更省力，也讓成果回到社區</h3>
+              <p>轄區內商家免費訂閱；轄區外採付費訂閱，收入全數歸社區數位發展基金。</p>
+              <div class="price-row">
+                <span><strong>轄區內</strong> 免費訂閱</span>
+                <span><strong>轄區外</strong> 付費訂閱</span>
+              </div>
+              <button class="button button-primary" type="button" data-action-template="business-subscription-review">查看適用方案</button>
+            </div>
+            <div class="scene-feature-list" aria-label="商業雲原則">
+              <article><span aria-hidden="true">✓</span><div><strong>Odoo資料權威</strong><p>商家、流程與帳務不另造平行來源。</p></div></article>
+              <article><span aria-hidden="true">✓</span><div><strong>訂閱不買權力</strong><p>不能購買Founder、治理或會員主權權限。</p></div></article>
+              <article><span aria-hidden="true">✓</span><div><strong>收入透明</strong><p>訂閱收入全數歸社區數位發展基金。</p></div></article>
+            </div>
+          </div>
+
+          <div class="scene-panel" id="scene-property" role="tabpanel" aria-labelledby="tab-property" data-scene="property" hidden>
+            <div class="scene-copy">
+              <p class="panel-label">物業雲專業版</p>
+              <h3>協助把服務做好，不取代管委會決策</h3>
+              <p>轄區內物業免費訂閱；轄區外採付費訂閱。系統提供架構與維護，不取得管委會依法享有的決策權。</p>
+              <div class="price-row">
+                <span><strong>轄區內</strong> 免費訂閱</span>
+                <span><strong>轄區外</strong> 付費訂閱</span>
+              </div>
+              <button class="button button-primary" type="button" data-action-template="property-service-review">建立物業服務候選</button>
+            </div>
+            <div class="scene-feature-list" aria-label="物業雲原則">
+              <article><span aria-hidden="true">✓</span><div><strong>權責說清楚</strong><p>物業執行與管委會決策明確分開。</p></div></article>
+              <article><span aria-hidden="true">✓</span><div><strong>團體會員治理</strong><p>商家管委會受Odoo物業雲分公司及商業雲組織管轄。</p></div></article>
+              <article><span aria-hidden="true">✓</span><div><strong>操作先人審</strong><p>公告、帳務與資料變更都必須確認。</p></div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section impact-section" aria-labelledby="impact-title">
+          <div class="impact-card">
+            <div class="impact-copy">
+              <p class="section-kicker light">商業養公益</p>
+              <h2 id="impact-title">把數位服務的成果，留在社區</h2>
+              <p>
+                現階段仁義店尚未啟動，主要缺少展店第一桶金。我們不募款、婉謝捐款，
+                由Founder與咖啡館同仁以自身商業努力支持公益。
+              </p>
+              <div class="impact-points">
+                <span>技術由Founder江政隆無償提供</span>
+                <span>設備與網路由重新總店提供</span>
+                <span>訂閱收入全數歸社區數位發展基金</span>
+              </div>
+            </div>
+            <div class="fund-card" aria-label="社區數位發展基金分配">
+              <p>訂閱收入分配</p>
+              <strong>100%</strong>
+              <span>社區數位發展基金</span>
+              <hr>
+              <small>Founder與重新總店分文不取</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="section account-section" aria-labelledby="account-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">用途清楚、期限清楚</p>
+              <h2 id="account-title">宣傳與研究免費帳號</h2>
+            </div>
+          </div>
+          <div class="account-grid">
+            <article>
+              <span class="account-type">宣傳帳號</span>
+              <h3>只使用核准素材</h3>
+              <p>必須指定用途、責任人、場景、能力範圍與到期時間；不能取得正式作用預設權限。</p>
+            </article>
+            <article>
+              <span class="account-type">研究免費帳號</span>
+              <h3>只使用去識別資料</h3>
+              <p>費用為零但仍準用訂閱資格規則；到期自動HOLD，並保留可撤銷、append-only稽核紀錄。</p>
+            </article>
+          </div>
+        </section>
+
+        <details class="technical-area">
+          <summary>技術研究專區</summary>
+          <div>
+            <h2>給想深入了解技術的人</h2>
+            <p>
+              W7TP、8D、ADI與生成式傳輸只在這裡說明，不影響一般居民使用服務。
+              生成式傳輸是由封包攜帶引用、查表、重構條件與驗證規則的狀態場通訊；
+              不是一般檔案搬運、備份或下載解密。
+            </p>
+            <p class="research-copy">
+              生成式傳輸測試：聊國咖啡館老闆的私家傳輸技術，小傳輸量，可產生大檔案結果。
+              以 AI 科技抵禦 AI 時代的衝擊，以科技服務社區。
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="app-view" id="view-xiaoj" data-view="xiaoj" aria-labelledby="xiaoj-title" hidden>
+        <div class="page-shell assistant-page">
+          <header class="page-heading">
+            <p class="section-kicker">社區服務員與居民的AI助理</p>
+            <h1 id="xiaoj-title">找小J協助</h1>
+            <p>先把事情說出來，小J只整理候選與下一步，不會代替您執行。</p>
+          </header>
+          <div class="assistant-layout">
+            <section class="chat-panel" aria-label="小J對話候選">
+              <div class="candidate-banner"><span aria-hidden="true">i</span> 隔離候選：不連模型、不讀正式會員資料、不執行工具</div>
+              <div class="message-list" id="message-list" aria-live="polite">
+                <article class="message assistant-message">
+                  <span class="message-avatar" aria-hidden="true">J</span>
+                  <div>
+                    <strong>小J</strong>
+                    <p>您好，我可以先幫您把需要整理成清楚的下一步。今天想處理什麼？</p>
+                  </div>
+                </article>
+              </div>
+              <div class="prompt-chips" aria-label="常用提問">
+                <button type="button" data-prompt-value="我想找居民服務">我想找居民服務</button>
+                <button type="button" data-prompt-value="我是轄區內商家">我是轄區內商家</button>
+                <button type="button" data-prompt-value="我想瞭解物業雲">我想瞭解物業雲</button>
+              </div>
+              <form class="composer" id="xiaoj-form">
+                <label for="xiaoj-input">請說明您的需要</label>
+                <div>
+                  <textarea id="xiaoj-input" rows="2" maxlength="500" placeholder="例如：我想知道可以找哪些居民服務"></textarea>
+                  <button class="button button-primary" type="submit">讓小J整理</button>
+                </div>
+                <small>不必輸入身分證、電話、地址或其他個人明文。</small>
+              </form>
+            </section>
+
+            <aside class="assistant-guide" aria-label="小J工作方式">
+              <h2>小J會怎麼幫您？</h2>
+              <ol>
+                <li><span>1</span><div><strong>理解目的</strong><p>先確認您真正想完成什麼。</p></div></li>
+                <li><span>2</span><div><strong>整理候選</strong><p>列出功能、參數、結果與風險。</p></div></li>
+                <li><span>3</span><div><strong>等您確認</strong><p>有副作用時一定進入「待我確認」。</p></div></li>
+              </ol>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-services" data-view="services" aria-labelledby="services-title" hidden>
+        <div class="page-shell">
+          <header class="page-heading">
+            <p class="section-kicker">居民優先</p>
+            <h1 id="services-title">居民服務</h1>
+            <p>這裡只列出根封包允許的服務入口；正式資料與流程仍以Odoo權威為準。</p>
+          </header>
+          <div class="service-directory">
+            <article>
+              <span class="directory-icon mint" aria-hidden="true">J</span>
+              <div><h2>小J服務整理</h2><p>不知道該找誰時，先把需要說給小J聽。</p></div>
+              <button class="button button-quiet" type="button" data-view-target="xiaoj">開始整理</button>
+            </article>
+            <article>
+              <span class="directory-icon amber" aria-hidden="true">需</span>
+              <div><h2>服務需求候選</h2><p>先建立候選卡，不送出、不寫入Odoo。</p></div>
+              <button class="button button-quiet" type="button" data-action-template="resident-service-request">建立候選</button>
+            </article>
+            <article>
+              <span class="directory-icon coral" aria-hidden="true">審</span>
+              <div><h2>待我確認</h2><p>查看會改變什麼、不會改變什麼，以及回滾方式。</p></div>
+              <button class="button button-quiet" type="button" data-view-target="review">查看確認卡</button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-professional" data-view="professional" aria-labelledby="professional-title" hidden>
+        <div class="page-shell">
+          <header class="page-heading">
+            <p class="section-kicker">清楚分區、公開原則</p>
+            <h1 id="professional-title">專業服務</h1>
+            <p>商業雲與物業雲都區分轄區內、轄區外；訂閱不會擴張治理或會員權限。</p>
+          </header>
+          <div class="professional-grid">
+            <article class="professional-card business-card">
+              <p class="panel-label">商業雲專業版</p>
+              <h2>商家經營服務</h2>
+              <div class="professional-price"><span>轄區內</span><strong>免費訂閱</strong></div>
+              <div class="professional-price"><span>轄區外</span><strong>付費訂閱</strong></div>
+              <p>付費訂閱收入全數歸社區數位發展基金。</p>
+              <button class="button button-primary" type="button" data-action-template="business-subscription-review">查看適用方案</button>
+            </article>
+            <article class="professional-card property-card">
+              <p class="panel-label">物業雲專業版</p>
+              <h2>物業服務協作</h2>
+              <div class="professional-price"><span>轄區內</span><strong>免費訂閱</strong></div>
+              <div class="professional-price"><span>轄區外</span><strong>付費訂閱</strong></div>
+              <p>提供架構與維護，不取得管委會依法享有的決策權。</p>
+              <button class="button button-primary" type="button" data-action-template="property-service-review">建立服務候選</button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-review" data-view="review" aria-labelledby="review-title" hidden>
+        <div class="page-shell">
+          <header class="page-heading review-heading">
+            <div>
+              <p class="section-kicker">每次操作，只批准這一次</p>
+              <h1 id="review-title">待我確認</h1>
+              <p>小J不能替您按下批准；參數變更後，原本的批准立即失效。</p>
+            </div>
+            <span class="candidate-status"><span aria-hidden="true">●</span> 候選模式：正式執行封鎖</span>
+          </header>
+          <div class="review-list" id="review-list">
+            <div class="empty-state" id="review-empty">
+              <span aria-hidden="true">✓</span>
+              <h2>目前沒有待確認操作</h2>
+              <p>當您建立會改變資料的候選，小J會把完整效果放在這裡。</p>
+              <button class="button button-secondary" type="button" data-view-target="services">查看居民服務</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-view" id="view-profile" data-view="profile" aria-labelledby="profile-title" hidden>
+        <div class="page-shell personal-xiaoj-shell">
+          <header class="personal-xiaoj-heading">
+            <div>
+              <p class="section-kicker">我的專屬小J</p>
+              <h1 id="profile-title">讓小J，保有您熟悉的樣子</h1>
+              <p>換一張喜歡的圖片、調整到剛好的位置；送出前，您會再看一次完整變更。</p>
+            </div>
+            <div class="ownership-lock">
+              <span aria-hidden="true">鎖</span>
+              <div><strong>只有您能更換</strong><small>小J不會自己改，別人也不能代替您</small></div>
+            </div>
+          </header>
+
+          <section class="xiaoj-personalization-studio" aria-labelledby="xiaoj-image-title">
+            <div class="studio-preview-panel">
+              <div class="studio-preview-topline">
+                <span class="live-preview-dot"><i aria-hidden="true"></i> 即時預覽</span>
+                <span id="xiaoj-image-preview-state">目前使用</span>
+              </div>
+              <div class="studio-canvas">
+                <img
+                  id="personal-xiaoj-image-preview"
+                  src="./assets/xiaoj-white-haired-service-worker.png"
+                  alt="目前使用的白髮少女小J圖片預覽"
+                />
+                <div class="studio-nameplate">
+                  <span>我的小J</span>
+                  <strong>熟悉的社區服務員</strong>
+                </div>
+              </div>
+              <ol class="personalization-steps" aria-label="圖片更換步驟">
+                <li class="is-current" id="image-step-select"><span>1</span><strong>選擇圖片</strong></li>
+                <li id="image-step-adjust"><span>2</span><strong>調整位置</strong></li>
+                <li id="image-step-review"><span>3</span><strong>確認變更</strong></li>
+              </ol>
+            </div>
+
+            <form class="studio-control-panel" id="xiaoj-image-form">
+              <section class="studio-control-section" aria-labelledby="xiaoj-image-title">
+                <p class="step-label">步驟 1</p>
+                <h2 id="xiaoj-image-title">更換我的小J圖像</h2>
+                <p>選擇一張清楚、讓您感到親切的圖片。正方形效果最好。</p>
+                <label class="image-picker" for="xiaoj-image-input">
+                  <span class="image-picker-icon" aria-hidden="true">＋</span>
+                  <span><strong>從這台裝置選擇圖片</strong><small>PNG、JPEG或WebP，最多5 MB</small></span>
+                </label>
+                <input
+                  class="visually-hidden-file"
+                  id="xiaoj-image-input"
+                  name="xiaoj-image"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  aria-describedby="xiaoj-image-file-state xiaoj-image-privacy"
+                />
+                <p class="image-file-state" id="xiaoj-image-file-state" aria-live="polite">還沒有選擇新圖片</p>
+              </section>
+
+              <fieldset class="studio-control-section image-adjustments" id="xiaoj-image-adjustments" disabled>
+                <legend><span class="step-label">步驟 2</span>調整顯示方式</legend>
+                <label for="xiaoj-image-zoom">
+                  <span>圖片大小</span>
+                  <output id="xiaoj-image-zoom-value" for="xiaoj-image-zoom">100%</output>
+                </label>
+                <input id="xiaoj-image-zoom" type="range" min="100" max="170" value="100" step="1">
+                <label for="xiaoj-image-position">
+                  <span>上下位置</span>
+                  <output id="xiaoj-image-position-value" for="xiaoj-image-position">置中</output>
+                </label>
+                <input id="xiaoj-image-position" type="range" min="0" max="100" value="50" step="1">
+              </fieldset>
+
+              <section class="change-effect-card" aria-label="變更效果摘要">
+                <div><span aria-hidden="true">✓</span><p><strong>只會改變</strong>您自己的小J顯示圖片</p></div>
+                <div><span aria-hidden="true">—</span><p><strong>不會改變</strong>會員權限、角色、資料或其他人的小J</p></div>
+              </section>
+
+              <div class="studio-actions">
+                <button class="button button-primary button-large" id="create-image-review" type="submit" disabled>
+                  前往確認變更
+                </button>
+                <button class="button button-quiet" id="cancel-image-preview" type="button" disabled>
+                  保留目前圖片
+                </button>
+              </div>
+              <p class="privacy-note" id="xiaoj-image-privacy">選圖後先在本機預覽，不會自動上傳，也不會直接套用。</p>
+              <details class="image-technical-details">
+                <summary>查看圖片安全資訊</summary>
+                <p id="xiaoj-image-technical-state">尚未產生圖片摘要。</p>
+              </details>
+            </form>
+          </section>
+
+          <section class="personal-permission-card" aria-labelledby="personal-permission-title">
+            <span class="permission-icon" aria-hidden="true">本人</span>
+            <div>
+              <h2 id="personal-permission-title">這項設定屬於您</h2>
+              <p>只有同一會員帳號、同一次登入，才能確認這張圖片。圖片一變，原確認就會失效。</p>
+            </div>
+            <span class="status-pill">本人專屬</span>
+          </section>
+
+          <details class="member-safety-details">
+            <summary>查看會員安全摘要</summary>
+            <div class="profile-summary">
+              <div class="profile-avatar" aria-hidden="true">五</div>
+              <div>
+                <h2>隔離驗收會員</h2>
+                <p>本頁只顯示合成參考，不含真實會員明文。</p>
+              </div>
+              <span class="status-pill">候選有效</span>
+            </div>
+            <dl class="safe-summary">
+              <div><dt>會員根</dt><dd>synthetic-member-root</dd></div>
+              <div><dt>角色</dt><dd>居民候選</dd></div>
+              <div><dt>Seat</dt><dd>synthetic-seat</dd></div>
+              <div><dt>資料權威</dt><dd>Odoo（未連線）</dd></div>
+              <div><dt>正式作用權</dt><dd>無</dd></div>
+            </dl>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="行動版主要選單">
+      <button class="is-active" type="button" data-view-target="home" aria-current="page"><span aria-hidden="true">⌂</span>首頁</button>
+      <button type="button" data-view-target="xiaoj"><span aria-hidden="true">✦</span>小J</button>
+      <button type="button" data-view-target="services"><span aria-hidden="true">服</span>服務</button>
+      <button type="button" data-view-target="professional"><span aria-hidden="true">專</span>專業</button>
+      <button type="button" data-view-target="review"><span aria-hidden="true">審</span>確認</button>
+    </nav>
+
+    <dialog class="review-dialog" id="review-dialog" aria-labelledby="dialog-title">
+      <form method="dialog" class="dialog-close-row">
+        <button type="submit" class="icon-button" aria-label="關閉詳細內容">×</button>
+      </form>
+      <div id="dialog-content"></div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+  </body>
+</html>

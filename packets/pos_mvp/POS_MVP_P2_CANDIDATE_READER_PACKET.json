@@ -1,0 +1,24 @@
+{
+  "schema": "W7TP_POS_MVP_P2_CANDIDATE_READER_PACKET_V1",
+  "state": "POS_P2_CANDIDATE_READER_SPEC",
+  "target": "POS_MVP_SANDBOX_ORDER_CANDIDATE_READER_UI_CONFIRM_GATE",
+  "candidate_glob": "runtime/sandbox/pos_mvp_autodev_run/*/orders/POS_SANDBOX_ORDER_CANDIDATE.json",
+  "run_dir": "runtime/sandbox/pos_mvp_autodev_run/POS_MVP_P2_CANDIDATE_READER",
+  "total_field_evidence": "runtime/total_field/evidence/TOTAL_FIELD_SEAL_POS_MVP_P2_CANDIDATE_READER/TOTAL_FIELD_POS_MVP_P2_CANDIDATE_READER_SEAL.json",
+  "total_field_index": "runtime/total_field/evidence/POS_MVP_P2_CANDIDATE_READER_INDEX.jsonl",
+  "outputs": [
+    "projection/POS_P2_UI_PROJECTION.json",
+    "ui/pos_p2_candidate_projection.html",
+    "confirm/POS_P2_CONFIRM_DRY_RUN.json",
+    "evidence/POS_P2_CANDIDATE_READER_EVIDENCE.json"
+  ],
+  "human_confirm_gate": "CONFIRM_DRY_RUN",
+  "formal_db_write": false,
+  "formal_pos_write": false,
+  "payment_capture": false,
+  "service_restart": false,
+  "deploy": false,
+  "production_release": false,
+  "secret_read": false,
+  "member_plaintext_read": false
+}

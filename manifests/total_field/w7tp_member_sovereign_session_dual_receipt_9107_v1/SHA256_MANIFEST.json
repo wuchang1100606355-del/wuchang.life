@@ -1,0 +1,63 @@
+{
+  "schema_version": "w7tp.sha256-manifest.v1",
+  "run_id": "P3_SESSION_DUAL_RECEIPT_9107_20260729T145217Z",
+  "candidate": "W7TP_MEMBER_SOVEREIGN_SESSION_DUAL_RECEIPT_9107_V1",
+  "candidate_only": true,
+  "runtime_released": false,
+  "base_hash_binding": {
+    "p0_content_sha256": "2b8fec135a9a714af0a8b4cc5c9a77fcbc06c643ea13c66b73271c6834e592ce",
+    "p1_content_sha256": "2e40172beca70eb5eb4a1805ea99f8a2d131c3622451b147c764e6488782dafc",
+    "p2_content_sha256": "bb92ec360e72b0ffb34160e21f8d6b989d5a44f9af00cb87bd3d664ffef217c",
+    "p2_manifest_sha256": "2530b9403b232131be5e6e9e3497e6bf4e9a977d3316f08a8d467d53546bec3b",
+    "p0_p1_p2_rescan": "FORBIDDEN_REUSED_SUPPLIED_EVIDENCE"
+  },
+  "authority": {
+    "member_consent_authority": "member",
+    "safety_and_landing_authority": "total_field_verifier",
+    "process_authority": "odoo",
+    "candidate_authority": "none"
+  },
+  "content_hash_algorithm": "sha256(sorted(path_utf8 + NUL + file_bytes + NUL))",
+  "content_sha256": "1679caf92d24ac711dd341defdd725b0b408cde30c6b2577d06df1b72e773d04",
+  "files": [
+    {
+      "path": "schemas/xiaoj_member_bound_developer_seat_candidate.schema.json",
+      "sha256": "120430c13f9888b5768cd02caca865c95fd819538576ecf838650dc756917ad0"
+    },
+    {
+      "path": "tests/test_member_sovereign_session_dual_receipt_9107.py",
+      "sha256": "f1120061abdc70f74456cb663bf1ea52751582c6ac21b53b8fca06b42d2ad900"
+    },
+    {
+      "path": "tools/total_field/w7tp_intent_field_suite/api.py",
+      "sha256": "7ac1843524f1a5f5c21296fd62a1da4b22430b6c5a71197b2ac7514fca506dea"
+    },
+    {
+      "path": "tools/total_field/xiaoj_member_bound_session_candidate.py",
+      "sha256": "b4438b09cb4eb3056941c707fa493fc7f989cba12ebec3fa2755864499d67a27"
+    },
+    {
+      "path": "tools/total_field_candidate_gateway.py",
+      "sha256": "22ede7107108fef0a96461dc42ba2b419e854fe1f13d9579584578e64c4ce9ee"
+    },
+    {
+      "path": "tools/w7tp_secondary_cloud_packet_ramp.py",
+      "sha256": "de582c88511642c9838c994ef54a3cfbce490890a26ed5651071f4e6825c4308"
+    },
+    {
+      "path": "tools/xiaoj_candidate_adapter.py",
+      "sha256": "14851a0dd97a8d821d5d83899dca05ce6266e22389076fb323119b9b6ea0f078"
+    }
+  ],
+  "validation": {
+    "focused_tests": "PASS_96_OF_96",
+    "p3_negative_acceptance": "PASS_23_OF_23",
+    "py_compile": "PASS_6_OF_6",
+    "schema": "PASS_DRAFT_2020_12_AND_P3_FIXTURE",
+    "route_collision": "PASS_NO_NEW_ROUTE_DECLARATION",
+    "git_diff_check": "PASS_SCOPED",
+    "red_team_pre_construction": "PASS",
+    "red_team_post_reconstruction": "PASS",
+    "red_team_pre_landing": "NOT_APPLICABLE_WITH_EVIDENCE_SOURCE_ONLY_NO_DEPLOY"
+  }
+}

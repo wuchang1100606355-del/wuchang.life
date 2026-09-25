@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_total_field_d8_review_request_v2.schema.json",
+  "title": "W7TP Total Field Reconstruct Isolated Request V2",
+  "type": "object",
+  "required": [
+    "contract",
+    "request_id",
+    "request_self_hash_algorithm",
+    "request_self_sha256",
+    "scope_hash_algorithm",
+    "scope_sha256",
+    "requested_action",
+    "target",
+    "delta",
+    "workspace",
+    "reconstruction_base",
+    "exact_targets",
+    "input_hashes",
+    "authority",
+    "authorized_steps",
+    "maximum_effect",
+    "expected_effect",
+    "affected_state",
+    "risks",
+    "safeguards",
+    "rollback",
+    "stop_conditions",
+    "existing_services",
+    "forbidden_effects",
+    "single_use",
+    "created_at",
+    "expires_at",
+    "replay_root",
+    "total_field_review_required",
+    "lineage"
+  ],
+  "properties": {
+    "contract": {
+      "const": "W7TP-TOTAL-FIELD-RECONSTRUCT-ISOLATED/2.0"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^W7TP_RECONSTRUCT_ISOLATED_V2_[A-Za-z0-9._-]+$"
+    },
+    "request_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
+    },
+    "request_self_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "scope_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_RECONSTRUCT_ISOLATED_SCOPE/2.0"
+    },
+    "scope_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "requested_action": {
+      "const": "RECONSTRUCT_ISOLATED"
+    },
+    "target": {
+      "type": "object",
+      "required": [
+        "node",
+        "field_snapshot_sha256",
+        "base_state_sha256",
+        "canonical_sha256"
+      ],
+      "properties": {
+        "node": {"const": "taiji01"},
+        "field_snapshot_sha256": {
+          "const": "4acccea6e5caaa085857fa65c665e25bb9463394860e324de158d5bec35dc323"
+        },
+        "base_state_sha256": {
+          "const": "2253afcc5d72625ed8f3af5a4267669f5dd8e9a9c6cbea044a90c3ba70f2dce2"
+        },
+        "canonical_sha256": {
+          "const": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d"
+        }
+      },
+      "additionalProperties": false
+    },
+    "delta": {
+      "type": "object",
+      "required": ["sha256", "items"],
+      "properties": {
+        "sha256": {
+          "const": "ab875e3ea504cdcdbedd63416dd89e36ab9e491a4dfa34b28a21da411d269782"
+        },
+        "items": {
+          "type": "array",
+          "const": [
+            "SUCCESSOR_EXACT_SHA_SHADOW_CONSUMER_BINDING",
+            "9107_OUTPUT_TO_RECONSTRUCT_LOCAL_STATE_BINDING_ONLY"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "workspace": {
+      "type": "object",
+      "required": [
+        "root",
+        "write_scope",
+        "repository_mount",
+        "network",
+        "service_autoload",
+        "live_volume_mount",
+        "db_access",
+        "state_store_access"
+      ],
+      "properties": {
+        "root": {
+          "type": "string",
+          "pattern": "^runtime/isolated/[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+        },
+        "write_scope": {"const": "THIS_DIRECTORY_ONLY"},
+        "repository_mount": {"const": "READ_ONLY"},
+        "network": {"const": "NONE"},
+        "service_autoload": {"const": false},
+        "live_volume_mount": {"const": false},
+        "db_access": {"const": false},
+        "state_store_access": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "reconstruction_base": {
+      "type": "object",
+      "required": ["callable", "new_adapter_required", "gateway"],
+      "properties": {
+        "callable": {
+          "const": "tools.w7tp_secondary_cloud_packet_ramp.reconstruct_local_state"
+        },
+        "new_adapter_required": {"const": false},
+        "gateway": {"const": "tools/total_field_candidate_gateway.py"}
+      },
+      "additionalProperties": false
+    },
+    "exact_targets": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "input_hashes": {
+      "type": "object",
+      "required": [
+        "target_field_snapshot_sha256",
+        "target_base_state_sha256",
+        "target_successor_canonical_sha256",
+        "minimum_generative_delta_sha256"
+      ],
+      "properties": {
+        "target_field_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "target_base_state_sha256": {"$ref": "#/$defs/sha256"},
+        "target_successor_canonical_sha256": {"$ref": "#/$defs/sha256"},
+        "minimum_generative_delta_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "pointer_ref",
+        "pointer_sha256",
+        "founder_authorization_ref",
+        "founder_authorization_sha256",
+        "authorized_effect"
+      ],
+      "properties": {
+        "pointer_ref": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000\\\\]+$"
+        },
+        "pointer_sha256": {"$ref": "#/$defs/sha256"},
+        "founder_authorization_ref": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000\\\\]+$"
+        },
+        "founder_authorization_sha256": {"$ref": "#/$defs/sha256"},
+        "authorized_effect": {"const": "AUTHORIZE_RECONSTRUCT_ISOLATED_REVIEW_ONLY"}
+      },
+      "additionalProperties": false
+    },
+    "authorized_steps": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "VERIFY_BOUND_TARGET_STATE_AND_AUTHORIZATION",
+          "CREATE_ONE_BOUNDED_ISOLATED_WORKSPACE",
+          "FORM_SUCCESSOR_SHADOW_BINDING",
+          "FORM_9107_RECONSTRUCTION_CALL_EDGE_BINDING",
+          "RUN_TARGET_NATIVE_VERIFICATION",
+          "EMIT_TARGET_NATIVE_RECONSTRUCTION_EVIDENCE",
+          "RUN_RED_TEAM_POST_RECONSTRUCTION"
+        ]
+      }
+    },
+    "maximum_effect": {
+      "const": "ONE_ISOLATED_TARGET_NATIVE_RECONSTRUCTION_RUN"
+    },
+    "expected_effect": {
+      "const": "FORM_TWO_ISOLATED_BINDING_CANDIDATES_VERIFY_AND_EMIT_EVIDENCE"
+    },
+    "affected_state": {
+      "type": "array",
+      "const": [
+        "ISOLATED_SUCCESSOR_SHADOW_CONSUMER_BINDING_CANDIDATE",
+        "ISOLATED_9107_RECONSTRUCTION_CALL_EDGE_BINDING_CANDIDATE"
+      ]
+    },
+    "risks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "safeguards": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "rollback": {
+      "type": "object",
+      "required": ["method", "live_state_restore_required"],
+      "properties": {
+        "method": {"const": "DELETE_ONLY_THIS_ISOLATED_WORKSPACE"},
+        "live_state_restore_required": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "stop_conditions": {
+      "type": "array",
+      "const": [
+        "ANY_HASH_OR_COORDINATE_MISMATCH",
+        "ANY_SCOPE_OR_DECISION_MISMATCH",
+        "AUTHORIZATION_EXPIRED_OR_REPLAYED",
+        "WORKSPACE_CONTAINMENT_UNPROVEN",
+        "ANY_FORBIDDEN_EFFECT_REQUESTED",
+        "ANY_EXISTING_SERVICE_STATE_CHANGE",
+        "UNEXPECTED_NEW_ADAPTER_REQUIREMENT",
+        "ANY_9110_REQUIREMENT",
+        "ANY_RED_TEAM_HIGH_OR_CRITICAL"
+      ]
+    },
+    "existing_services": {"const": "UNCHANGED"},
+    "forbidden_effects": {
+      "type": "object",
+      "required": [
+        "LIVE_REBIND",
+        "LIVE_9107_MUTATION",
+        "LIVE_STATE_STORE_WRITE",
+        "DB_WRITE",
+        "SERVICE_RESTART",
+        "DEPLOYMENT",
+        "CANONICAL_MUTATION",
+        "POINTER_MUTATION",
+        "PROMOTION",
+        "ACTIVATION",
+        "LANDING",
+        "FINAL_AUTHORITY_BOOTSTRAP",
+        "SIGNER_REPAIR",
+        "KEY_ROTATION",
+        "IMAGE_PULL",
+        "NETWORK_BUILD",
+        "9110_CREATION",
+        "UNDECLARED_ADAPTER_CREATION"
+      ],
+      "properties": {
+        "LIVE_REBIND": {"const": false},
+        "LIVE_9107_MUTATION": {"const": false},
+        "LIVE_STATE_STORE_WRITE": {"const": false},
+        "DB_WRITE": {"const": false},
+        "SERVICE_RESTART": {"const": false},
+        "DEPLOYMENT": {"const": false},
+        "CANONICAL_MUTATION": {"const": false},
+        "POINTER_MUTATION": {"const": false},
+        "PROMOTION": {"const": false},
+        "ACTIVATION": {"const": false},
+        "LANDING": {"const": false},
+        "FINAL_AUTHORITY_BOOTSTRAP": {"const": false},
+        "SIGNER_REPAIR": {"const": false},
+        "KEY_ROTATION": {"const": false},
+        "IMAGE_PULL": {"const": false},
+        "NETWORK_BUILD": {"const": false},
+        "9110_CREATION": {"const": false},
+        "UNDECLARED_ADAPTER_CREATION": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "single_use": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "replay_root": {
+      "type": "string",
+      "pattern": "^runtime/isolated/[A-Za-z0-9][A-Za-z0-9._-]{0,127}/evidence$"
+    },
+    "total_field_review_required": {"const": true},
+    "lineage": {
+      "type": "object",
+      "required": ["predecessor", "relation", "v1_preserved", "v1_mutated"],
+      "properties": {
+        "predecessor": {"const": "P2_ISOLATED_CANARY_V1"},
+        "relation": {"const": "VERSIONED_STRONG_COVER"},
+        "v1_preserved": {"const": true},
+        "v1_mutated": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,240 @@
+{
+  "schema": "W7TP_XIAOJ_TOTAL_PRODUCT_REF_COLLECTION_INPUT_V1",
+  "state": "TEMPLATE_REQUIRES_HUMAN_FILLED_REFS",
+  "usage": "Fill refs only. Do not paste LINE, LINE WORKS, Google, Odoo, POS, payment, router, member, resident, raw audio, or raw video plaintext/secrets.",
+  "lineworks": {
+    "lineworks_send": {
+      "authenticated_staff_ref": {
+        "ref": "REF_LINEWORKS_AUTHENTICATED_STAFF_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "lineworks_release_packet_ref": {
+        "ref": "REF_LINEWORKS_RELEASE_PACKET_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "lineworks_app_config_ref": {
+        "ref": "REF_LINEWORKS_APP_CONFIG_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "lineworks_bot_ref": {
+        "ref": "REF_LINEWORKS_BOT_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "lineworks_target_user_ref": {
+        "ref": "REF_LINEWORKS_TARGET_USER_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "message_policy_ref": {
+        "ref": "REF_LINEWORKS_MESSAGE_POLICY_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "consent_policy_ref": {
+        "ref": "REF_LINEWORKS_CONSENT_POLICY_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "total_field_release_ref": {
+        "ref": "REF_LINEWORKS_TOTAL_FIELD_RELEASE_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      }
+    },
+    "connector_refs": {
+      "lineworks_bot_ref": "REF_LINEWORKS_BOT_RUNTIME_TO_FILL",
+      "lineworks_target_user_ref": "REF_LINEWORKS_TARGET_RUNTIME_TO_FILL",
+      "lineworks_access_token_runtime_ref": "REF_LINEWORKS_ACCESS_TOKEN_RUNTIME_PROVIDER_TO_FILL"
+    }
+  },
+  "line_official_account": {
+    "refs": {
+      "line_official_account_ref": "REF_LINE_OFFICIAL_ACCOUNT_TO_FILL",
+      "line_provider_ref": "REF_LINE_PROVIDER_TO_FILL",
+      "messaging_api_channel_ref": "REF_MESSAGING_API_CHANNEL_TO_FILL",
+      "webhook_endpoint_ref": "REF_WEBHOOK_ENDPOINT_TO_FILL",
+      "channel_secret_ref": "REF_CHANNEL_SECRET_VAULT_BINDING_TO_FILL",
+      "channel_access_token_runtime_ref": "REF_CHANNEL_ACCESS_TOKEN_RUNTIME_BINDING_TO_FILL",
+      "message_policy_ref": "REF_MESSAGE_POLICY_TO_FILL",
+      "audience_policy_ref": "REF_AUDIENCE_POLICY_TO_FILL",
+      "consent_policy_ref": "REF_CONSENT_POLICY_TO_FILL",
+      "human_owner_admin_release_ref": "REF_HUMAN_OWNER_ADMIN_RELEASE_TO_FILL"
+    }
+  },
+  "merchant_formal_release": {
+    "member_registration": {
+      "authenticated_staff_ref": {
+        "ref": "REF_MEMBER_AUTHENTICATED_STAFF_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "member_release_packet_ref": {
+        "ref": "REF_MEMBER_RELEASE_PACKET_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "auth_provider_config_ref": {
+        "ref": "REF_AUTH_PROVIDER_CONFIG_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "consent_policy_ref": {
+        "ref": "REF_MEMBER_CONSENT_POLICY_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "privacy_policy_ref": {
+        "ref": "REF_MEMBER_PRIVACY_POLICY_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "member_schema_ref": {
+        "ref": "REF_MEMBER_SCHEMA_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "total_field_release_ref": {
+        "ref": "REF_MEMBER_TOTAL_FIELD_RELEASE_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      }
+    },
+    "pos_order": {
+      "authenticated_staff_ref": {
+        "ref": "REF_POS_AUTHENTICATED_STAFF_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "pos_release_packet_ref": {
+        "ref": "REF_POS_RELEASE_PACKET_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "validated_packet_hash": {
+        "ref": "REF_POS_VALIDATED_PACKET_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "menu_authority_ref": {
+        "ref": "REF_MENU_AUTHORITY_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "odoo_pos_session_ref": {
+        "ref": "REF_ODOO_POS_SESSION_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "odoo_recomputed_total_ref": {
+        "ref": "REF_ODOO_RECOMPUTED_TOTAL_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "fresh_human_confirmation_ref": {
+        "ref": "REF_POS_FRESH_HUMAN_CONFIRMATION_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "total_field_release_ref": {
+        "ref": "REF_POS_TOTAL_FIELD_RELEASE_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      }
+    },
+    "payment": {
+      "authenticated_staff_ref": {
+        "ref": "REF_PAYMENT_AUTHENTICATED_STAFF_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "payment_release_packet_ref": {
+        "ref": "REF_PAYMENT_RELEASE_PACKET_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "payment_provider_config_ref": {
+        "ref": "REF_PAYMENT_PROVIDER_CONFIG_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "payment_policy_ref": {
+        "ref": "REF_PAYMENT_POLICY_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "payable_amount_ref": {
+        "ref": "REF_PAYMENT_PAYABLE_AMOUNT_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "cashier_confirmation_ref": {
+        "ref": "REF_PAYMENT_CASHIER_CONFIRMATION_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "separate_payment_gate_ref": {
+        "ref": "REF_SEPARATE_PAYMENT_GATE_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      },
+      "total_field_release_ref": {
+        "ref": "REF_PAYMENT_TOTAL_FIELD_RELEASE_TO_FILL",
+        "packet_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "verifier": "total_field_release_registry",
+        "verified": false
+      }
+    }
+  },
+  "association_sovereign_member": {
+    "member_identity_ref": "REF_MEMBER_IDENTITY_TO_FILL",
+    "member_consent_ref": "REF_MEMBER_CONSENT_TO_FILL",
+    "sovereign_xiaoj_claim_ref": "REF_SOVEREIGN_XIAOJ_CLAIM_TO_FILL",
+    "delegate_rotation_ref": "REF_DELEGATE_ROTATION_TO_FILL",
+    "gemini_key_ref_vault_binding": "REF_GEMINI_KEY_VAULT_BINDING_TO_FILL",
+    "member_llm_release_ref": "REF_MEMBER_LLM_RELEASE_TO_FILL"
+  },
+  "resident_property_management": {
+    "resident_ref": "REF_RESIDENT_TO_FILL",
+    "unit_ref": "REF_UNIT_TO_FILL",
+    "role_ref": "REF_ROLE_TO_FILL",
+    "facility_ref": "REF_FACILITY_TO_FILL",
+    "repair_or_service_case_ref": "REF_REPAIR_OR_SERVICE_CASE_TO_FILL",
+    "resident_unit_role_policy_ref": "REF_RESIDENT_UNIT_ROLE_POLICY_TO_FILL",
+    "property_action_approval_ref": "REF_PROPERTY_ACTION_APPROVAL_TO_FILL",
+    "resident_plaintext_redaction_verifier_ref": "REF_RESIDENT_PLAINTEXT_REDACTION_VERIFIER_TO_FILL"
+  }
+}

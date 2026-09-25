@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_capability_pull_request_packet.schema.json",
+  "title": "W7TP Minimal Capability Pull Request Packet",
+  "type": "object",
+  "required": ["capability_id", "capability_ref", "packet_type", "schema_version", "domain_code", "language_code", "compatibility_profile", "request_nonce", "return_protocol"],
+  "properties": {
+    "capability_id": {"type": "string", "pattern": "^(capability:[A-Za-z0-9._-]+|CAP_[A-Z0-9_]+)$"},
+    "capability_ref": {"type": "string", "pattern": "^(capability:[A-Za-z0-9._-]+|CAP_[A-Z0-9_]+)$"},
+    "packet_type": {"enum": ["LANGUAGE_CAPABILITY_PACKET", "CODE_COMPONENT_PACKET", "RESEARCH_CANDIDATE_PACKET", "PROFESSIONAL_RULE_PACKET"]},
+    "schema_version": {"const": "W7TP-CAPABILITY-PULL/1.0"},
+    "domain_code": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+    "language_code": {"type": "string", "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$"},
+    "compatibility_profile": {"type": "string", "minLength": 3},
+    "request_nonce": {"type": "string", "minLength": 8},
+    "return_protocol": {"const": "W7TP-PULL-PACKET-ONLY/1.0"}
+  },
+  "additionalProperties": false
+}

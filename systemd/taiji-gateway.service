@@ -6,7 +6,8 @@ After=network.target
 Type=simple
 User=taiji_admin
 WorkingDirectory=/home/taiji_admin/Taiji_Hub
-ExecStart=/usr/bin/uvicorn services.gateway.main:app --host 127.0.0.1 --port 8081
+ExecStart=/usr/bin/python3 -m uvicorn services.gateway.main:app --host 127.0.0.1 --port 8081
+Environment=PYTHONUNBUFFERED=1
 Restart=always
 RestartSec=5
 

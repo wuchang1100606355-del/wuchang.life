@@ -1,0 +1,314 @@
+{
+  "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_OPTIMIZATION_CONTRACT_V1",
+  "state": "P1_BACKEND_OPTIMIZATION_REVIEW_READY",
+  "goal": "Strengthen business-system operations and backend management for a high-quality audiovisual AI merchant system while preserving current manual cafe operation and blocking new automated production side effects.",
+  "guide": "docs/product/XIAOJ_BUSINESS_BACKEND_OPTIMIZATION_AND_AV_AI_MERCHANT_SYSTEM_PLAN.md",
+  "odoo_backend_surface": {
+    "model": "wuchang.business.backend.optimization",
+    "checklist_item_model": "wuchang.business.backend.optimization.item",
+    "kpi_snapshot_model": "wuchang.business.backend.kpi.snapshot",
+    "view": "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/views/business_backend_optimization_views.xml",
+    "menu": "WuChang Cafe / Business Backend Optimization",
+    "decision_item_menu": "WuChang Cafe / Management Decision Items",
+    "service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_optimization_packet",
+    "operating_review_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_operating_review_packet",
+    "process_walkthrough_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_process_walkthrough_packet",
+    "readiness_scorecard_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_readiness_scorecard_packet",
+    "daily_signal_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_daily_signal_packet",
+    "av_candidate_quality_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_av_candidate_quality_packet",
+    "product_menu_quality_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_product_menu_quality_packet",
+    "signal_trend_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_signal_trend_packet",
+    "management_decision_queue_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_management_decision_queue_packet",
+    "operator_runbook_service": "wuchang_cafe_ai_gateway.services.business_backend_optimization.build_business_backend_operator_runbook_packet",
+    "daily_signal_model": "wuchang.business.backend.daily.signal",
+    "av_candidate_model": "wuchang.business.backend.av.candidate",
+    "product_quality_model": "wuchang.business.backend.product.quality",
+    "management_decision_item_model": "wuchang.business.backend.management.decision.item",
+    "mode": "packet_backed_readonly_checklist_kpi_daily_signal_av_candidate_product_menu_trend_decision_queue_runbook_review_walkthrough_scorecard_p1_review",
+    "production_activation_ready": false
+  },
+  "product_menu_quality_review": {
+    "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_PRODUCT_MENU_QUALITY_PACKET_V1",
+    "button": "Build Product Menu Quality",
+    "model": "wuchang.business.backend.product.quality",
+    "required_refs": [
+      "odoo_product_ref",
+      "price_ref",
+      "custom_options_ref",
+      "photo_evidence_ref"
+    ],
+    "blocker_types": [
+      "missing_odoo_product_ref",
+      "missing_price_ref",
+      "missing_custom_options_ref",
+      "missing_photo_evidence_ref",
+      "generated_image_only",
+      "inactive_or_unavailable",
+      "ai_candidate_not_allowed"
+    ],
+    "production_activation_ready": false
+  },
+  "av_candidate_quality_review": {
+    "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_AV_CANDIDATE_QUALITY_PACKET_V1",
+    "button": "Build AV Candidate Quality",
+    "model": "wuchang.business.backend.av.candidate",
+    "candidate_modalities": [
+      "audio_intent",
+      "video_product_recognition",
+      "menu_text_candidate",
+      "product_image_candidate",
+      "multimodal_order_candidate"
+    ],
+    "red_flag_types": [
+      "low_confidence",
+      "menu_item_not_found",
+      "custom_option_unmapped",
+      "price_mismatch",
+      "allergy_or_safety_risk",
+      "payment_or_voucher_request",
+      "member_plaintext_risk",
+      "generated_image_not_product_evidence",
+      "raw_media_storage_risk"
+    ],
+    "confidence_staff_review_threshold": 0.75,
+    "production_activation_ready": false
+  },
+  "operator_runbook": {
+    "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_OPERATOR_RUNBOOK_PACKET_V1",
+    "button": "Build Operator Runbook",
+    "phase_keys": [
+      "opening_check",
+      "pre_service_ai_gate_check",
+      "service_period_monitoring",
+      "staff_correction_review",
+      "daily_close_signal_entry",
+      "signal_trend_review",
+      "decision_queue_review",
+      "weekly_sustainability_review",
+      "total_field_packet_review"
+    ],
+    "production_activation_ready": false
+  },
+  "signal_trend_review": {
+    "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_SIGNAL_TREND_PACKET_V1",
+    "button": "Build Signal Trend Review",
+    "trend_rules": {
+      "order_count_signal": "higher_is_better",
+      "revenue_signal": "higher_is_better",
+      "unresolved_candidate_count": "lower_is_better",
+      "line_incident_count": "lower_is_better",
+      "course_income_signal": "higher_is_better",
+      "operator_burden_hours": "lower_is_better",
+      "manual_fallback_status": "higher_is_better"
+    },
+    "production_activation_ready": false
+  },
+  "daily_operating_signals": {
+    "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_DAILY_SIGNAL_PACKET_V1",
+    "button": "Build Daily Signal Review",
+    "signal_types": [
+      "order_count_signal",
+      "revenue_signal",
+      "unresolved_candidate_count",
+      "line_incident_count",
+      "course_income_signal",
+      "operator_burden_hours",
+      "manual_fallback_status"
+    ],
+    "production_activation_ready": false
+  },
+  "readiness_scorecard": {
+    "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_READINESS_SCORECARD_PACKET_V1",
+    "button": "Build Readiness Scorecard",
+    "score_weights": {
+      "checklist": 40,
+      "kpi": 30,
+      "improvement": 30
+    },
+    "minimum_score_before_activation_discussion": 85,
+    "production_activation_ready": false
+  },
+  "management_decision_queue": {
+    "schema": "W7TP_XIAOJ_BUSINESS_BACKEND_MANAGEMENT_DECISION_QUEUE_PACKET_V1",
+    "button": "Build Decision Queue",
+    "sources": [
+      "signal_trend",
+      "readiness_scorecard",
+      "operating_review"
+    ],
+    "production_activation_ready": false
+  },
+  "recommended_backend_panels": [
+    "business_continuity_cockpit",
+    "av_ai_merchant_quality_panel",
+    "menu_product_custom_option_control",
+    "line_domain_api_control_plane",
+    "financial_sustainability_panel",
+    "sanchong_demonstration_self_funding_panel",
+    "founder_mission_sustainability_panel",
+    "release_gate_board",
+    "staff_correction_queue"
+  ],
+  "end_to_end_flow": [
+    "inquiry_or_order_intent_received",
+    "av_ai_candidate_capture",
+    "structured_order_candidate",
+    "odoo_authority_validation",
+    "operator_review_or_staff_correction",
+    "manual_or_released_pos_confirmation",
+    "payment_voucher_member_gate",
+    "line_lineworks_candidate_or_released_notification",
+    "daily_revenue_and_incident_reconciliation",
+    "total_field_evaluation_packet"
+  ],
+  "ai_technology_features": [
+    "audio_intent_candidate",
+    "video_or_product_recognition_candidate",
+    "anti_hallucination_gate",
+    "odoo_authority_node",
+    "custom_options_json",
+    "staff_correction_feedback_loop",
+    "local_discrete_verifier",
+    "candidate_only_cloud_model",
+    "risk_flag_extraction",
+    "evidence_hash_packet"
+  ],
+  "backend_checklist_item_keys": [
+    "manual_order_fallback",
+    "daily_revenue_reconciliation",
+    "low_confidence_staff_review",
+    "staff_correction_feedback_loop",
+    "custom_options_json_coverage",
+    "cafe_subdomain_gateway",
+    "vendor_access_review",
+    "debt_reduction_plan",
+    "course_cost_allocation",
+    "demo_success_metric",
+    "operator_burden_reduction",
+    "release_gate_board"
+  ],
+  "kpi_snapshot_types": [
+    "daily_revenue_reconciliation",
+    "av_ai_candidate_quality",
+    "staff_correction_queue",
+    "course_to_member_conversion",
+    "sanchong_demo_signal",
+    "operator_burden",
+    "release_blocker_count"
+  ],
+  "process_walkthrough_stage_keys": [
+    "customer_inquiry_entry",
+    "av_ai_candidate_capture",
+    "structured_order_candidate",
+    "odoo_authority_validation",
+    "staff_confirmation",
+    "pos_payment_voucher_gate",
+    "line_lineworks_notification",
+    "daily_close_reconciliation",
+    "sanchong_demo_loop",
+    "total_field_packet_review"
+  ],
+  "process_improvement_item_keys": [
+    "unified_entry_intake_board",
+    "av_candidate_confidence_and_red_flag_panel",
+    "custom_options_json_mapping_queue",
+    "authority_validation_failure_reasons",
+    "staff_correction_resolution_sla",
+    "release_gate_blocker_board",
+    "line_subject_scope_dashboard",
+    "daily_close_reconciliation_packet",
+    "demo_to_self_funding_trigger_tracker",
+    "evidence_hash_and_ref_readiness"
+  ],
+  "quality_gates": {
+    "no_ai_direct_pos_write": true,
+    "no_ai_direct_payment_capture": true,
+    "no_ai_direct_voucher_mutation": true,
+    "no_ai_invented_price": true,
+    "low_confidence_requires_staff_review": true,
+    "generated_image_not_product_evidence": true,
+    "real_or_staff_approved_product_photo_required": true,
+    "raw_audio_saved_in_p1": false,
+    "raw_video_saved_in_p1": false,
+    "cloud_model_authority": false
+  },
+  "business_continuity_refs": [
+    "manual_order_fallback_ref",
+    "manual_payment_fallback_ref",
+    "existing_pos_continuity_ref",
+    "line_manual_customer_service_ref",
+    "dns_gateway_rollback_ref",
+    "lost_order_prevention_ref",
+    "daily_revenue_reconciliation_ref"
+  ],
+  "line_domain_api_control_refs": [
+    "association_domain_approval_ref",
+    "cafe_subdomain_ref",
+    "provider_admin_role_review_ref",
+    "vendor_access_review_ref",
+    "association_gateway_ref",
+    "webhook_relay_ref",
+    "callback_relay_ref",
+    "runtime_secret_rotation_ref"
+  ],
+  "financial_sustainability_refs": [
+    "debt_increase_review_ref",
+    "association_course_expansion_ref",
+    "course_cost_allocation_ref",
+    "cafe_cashflow_recovery_ref",
+    "debt_reduction_plan_ref",
+    "revenue_recovery_ref"
+  ],
+  "local_demonstration_refs": [
+    "sanchong_local_readiness_ref",
+    "community_trust_building_ref",
+    "demo_success_metric_ref",
+    "course_to_member_conversion_ref",
+    "cafe_revenue_signal_ref",
+    "community_self_funding_trigger_ref"
+  ],
+  "founder_mission_refs": [
+    "founder_mission_ref",
+    "association_governance_handoff_ref",
+    "volunteer_role_split_ref",
+    "operator_burden_reduction_ref",
+    "public_service_continuity_ref"
+  ],
+  "subject_boundaries": {
+    "association_line_official_account_is_not_cafe_line_official_account": true,
+    "cafe_must_use_association_approved_subdomain": true,
+    "association_can_provide_protective_gateway": true,
+    "association_protective_gateway_is_cafe_commercial_takeover": false,
+    "vendor_controlled_api_can_write_pos_payment_member_or_line_send": false
+  },
+  "business_context": {
+    "current_cafe_business_status": "ACTIVE_BUSINESS_CONTINUES_MANUALLY",
+    "production_hold_does_not_mean_business_shutdown": true,
+    "association_depends_on_cafe_operating_cashflow": true,
+    "operator_reported_three_year_debt_increase_ntd": 2000000,
+    "operator_reported_association_added_full_year_courses": 3,
+    "founder_mission": "FOUNDER_LIFELONG_MISSION_PUBLIC_SERVICE_COMMITMENT",
+    "sanchong_local_readiness": "SANCHONG_COMMUNITY_SELF_FUNDING_NOT_YET_MATURE",
+    "strategy": "DEMONSTRATE_RESULTS_FIRST_THEN_TRIGGER_COMMUNITY_SELF_FUNDING"
+  },
+  "p1_side_effects": {
+    "external_api_call": false,
+    "model_invocation": false,
+    "formal_lineworks_send": false,
+    "formal_line_message_send": false,
+    "formal_member_registration": false,
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "pos_order_created": false,
+    "payment_capture": false,
+    "voucher_redemption": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "raw_audio_saved": false,
+    "raw_video_saved": false,
+    "deploy": false,
+    "service_restart": false,
+    "odoo_upgrade": false
+  }
+}

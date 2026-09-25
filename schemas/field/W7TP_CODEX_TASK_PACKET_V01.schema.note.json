@@ -1,0 +1,25 @@
+{
+  "packet_type": "W7TP_CODEX_TASK_PACKET",
+  "version": "v0.1",
+  "codex_authority": false,
+  "candidate_only": true,
+  "work_id": "string",
+  "title": "string",
+  "intent": "string",
+  "allowed_files": [],
+  "forbidden_files": [],
+  "required_outputs": [],
+  "verify_commands": [],
+  "risk_scan_commands": [],
+  "completion_state": "READY_FOR_REVIEW",
+  "forbidden_actions": [
+    "git_add_dot",
+    "auto_commit",
+    "deploy",
+    "service_restart",
+    "secret_read",
+    "member_plaintext_read",
+    "db_write",
+    "payment_capture"
+  ]
+}

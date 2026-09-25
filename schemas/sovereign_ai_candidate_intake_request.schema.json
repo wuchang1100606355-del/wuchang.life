@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:w7tp:schemas:sovereign-ai:candidate-intake-request:0.1",
+  "title": "W7TP Sovereign AI Candidate Intake Request",
+  "description": "Closed LAN/VPN request wrapper for one LLM_PUSH candidate. The caller has no commit, seal, or execution authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "candidate",
+    "previous_value",
+    "observation_domains"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "w7tp-sovereign-ai-candidate-intake-request/0.1"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
+    },
+    "candidate": {
+      "type": "object"
+    },
+    "previous_value": {},
+    "observation_domains": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 1,
+      "propertyNames": {
+        "pattern": "^observation-domain:[A-Za-z0-9._:-]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "configured",
+          "observations"
+        ],
+        "properties": {
+          "configured": {
+            "type": "boolean"
+          },
+          "observations": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

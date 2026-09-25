@@ -1,0 +1,182 @@
+{
+  "schema": "W7TP_XIAOJ_SOVEREIGN_MEMBER_LLM_READINESS_CONTRACT_V1",
+  "state": "HOLD_P2_PRODUCT_RELEASE_GAPS_PRESENT",
+  "generated_for": "member_information_factory_governance_8d_delegate_sovereign_xiaoj_user_gemini_llm",
+  "overall_assessment": "partial_landing_not_full_product_release",
+  "capabilities": [
+    {
+      "id": "association_human_world_authority_governance",
+      "status": "PARTIAL_LANDED",
+      "evidence": [
+        "Taiji_Odoo/addons/wuchang_member_registration/security/wuchang_member_groups.xml",
+        "Taiji_Odoo/addons/wuchang_member_registration/models/member_registration.py",
+        "configs/identity/WUCHANG_ROOT_IDENTITY.yaml"
+      ],
+      "landed": [
+        "association/member/staff/admin group concepts",
+        "owner/admin review gate for organization or responsible-person registrations",
+        "consent ledger and external auth binding model"
+      ],
+      "gaps": [
+        "formal association role delegation UI for human-world offices is incomplete",
+        "no verified release packet for replacing association-level authority",
+        "no production operating procedure for legal-person role proof upload"
+      ]
+    },
+    {
+      "id": "odoo_member_pii_to_local_packet_return",
+      "status": "NOT_FULLY_LANDED",
+      "evidence": [
+        "Taiji_Odoo/addons/wuchang_google_member_login/models/res_partner.py",
+        "Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py",
+        "Taiji_Odoo/addons/wuchang_member_registration/models/member_registration.py"
+      ],
+      "landed": [
+        "Google OAuth can create/update res.partner with Google subject, email, and name",
+        "group 8D packet returns hashed provider_user_ref and provisional_member_ref",
+        "member runtime packets avoid member plaintext"
+      ],
+      "gaps": [
+        "no explicit local return/export endpoint for Odoo-held personal data",
+        "no encrypted local vault import flow",
+        "no verified user consent/ref packet for personal-data return",
+        "no redaction verifier proving returned data excludes unnecessary plaintext"
+      ],
+      "required_target_flow": [
+        "Odoo stores personal data under normal Odoo ACL",
+        "local user requests data return",
+        "Odoo emits encrypted local-return packet to user-owned device/vault",
+        "packet contains evidence hash, consent ref, data class, expiry, and revocation ref",
+        "cloud/LLM receives only member_ref or behavior_ref, not plaintext"
+      ]
+    },
+    {
+      "id": "replace_8d_delegate_identity",
+      "status": "PARTIAL_LANDED",
+      "evidence": [
+        "Taiji_Odoo/addons/wuchang_member_registration/models/member_registration.py",
+        "Taiji_Odoo/addons/wuchang_member_registration/controllers/main.py",
+        "scripts/verify/verify_group_member_8d_registration.py"
+      ],
+      "landed": [
+        "group 8D batch generation",
+        "group 8D claim route",
+        "manual/Google/LINE provider hash binding",
+        "dry-run confirmation packet"
+      ],
+      "gaps": [
+        "no formal rotate/revoke/replace delegate identity action",
+        "no recovery quorum for delegate replacement",
+        "no QR invalidation list or replacement evidence chain"
+      ],
+      "required_target_flow": [
+        "create replacement request",
+        "verify owner/admin or recovery quorum",
+        "revoke old packet_ref and provider binding",
+        "issue new 8D packet_ref and d8_ref",
+        "seal replacement evidence and UI status"
+      ]
+    },
+    {
+      "id": "claim_sovereign_xiaoj",
+      "status": "PARTIAL_LANDED",
+      "evidence": [
+        "runtime/member_browser/ACTIVE_XIAOJ_MEMBER_BROWSER_RELEASE.json",
+        "scripts/verify/verify_xiaoj_member_browser_release.py",
+        "scripts/verify/verify_xiaoj_sovereign_1b_product_goal.py",
+        "docs/total_field/XIAOJ_MEMBER_BROWSER_1B_CONTROL_SPEC.md"
+      ],
+      "landed": [
+        "member browser packaged release artifact exists",
+        "sovereign 1B product goal verifier exists",
+        "candidate-only browser packets support member refs and behavior refs"
+      ],
+      "gaps": [
+        "no Odoo-facing claim/activate endpoint for a specific human member",
+        "no installation wizard linking member identity code to XiaoJ instance",
+        "no production revocation/transfer UI"
+      ],
+      "required_target_flow": [
+        "member logs in or scans 8D",
+        "local device creates XiaoJ claim packet",
+        "Odoo verifies member/ref consent without cloud plaintext",
+        "XiaoJ instance binds to member_identity_code and device_ref",
+        "member can revoke or transfer the claim"
+      ]
+    },
+    {
+      "id": "total_field_llm_reality_layer_governance",
+      "status": "P1_CONTRACT_LANDED",
+      "evidence": [
+        "packets/product_av_ordering_ai/gemini_no_plaintext_candidate_worker_contract.json",
+        "tools/xiaoj_gemini_no_plaintext_candidate_packet.py",
+        "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/p1_intent_engine.py"
+      ],
+      "landed": [
+        "LLM hallucination is conditionally allowed only as IMAGINED_CANDIDATE",
+        "REAL_VERIFIED must come from local reconstruction plus evidence",
+        "EXECUTABLE_AUTHORIZED must come from the local discrete-state verifier",
+        "cloud model cannot upgrade a candidate to real or executable state",
+        "truth boundary and evidence-anchor policy are supplied by the total-field environment",
+        "LLM self-truth authority is explicitly false"
+      ],
+      "gaps": [
+        "production UI still needs explicit labels for imagined candidate versus verified real state",
+        "future Gemini runtime connector must preserve reality_mode and truth_boundary_ref"
+      ]
+    },
+    {
+      "id": "user_google_gemini_api_dedicated_llm",
+      "status": "P1_NO_PLAINTEXT_CONTRACT_LANDED_RUNTIME_NOT_RELEASE_READY",
+      "evidence": [
+        "Taiji_Odoo/addons/wuchang_core/models/settings.py",
+        "Taiji_Odoo/addons/wuchang_core/views/settings_views.xml",
+        "Taiji_Odoo/addons/wuchang_core/controllers/main.py",
+        "Taiji_Odoo/addons/wuchang_core/models/api_account_separation.py",
+        "packets/product_av_ordering_ai/gemini_no_plaintext_candidate_worker_contract.json",
+        "tools/xiaoj_gemini_no_plaintext_candidate_packet.py",
+        "scripts/verify/verify_xiaoj_gemini_no_plaintext_candidate_worker.py"
+      ],
+      "landed": [
+        "settings fields for ai_mode, gen_model, google_api_key, ollama_model",
+        "LLM config JSON routes exist",
+        "Gemini health and generate paths exist",
+        "API account separation model exists",
+        "P1 no-plaintext Gemini candidate-worker packet contract exists",
+        "offline packet builder proves redacted task view and local zero-network-RTT decision"
+      ],
+      "gaps": [
+        "API key is still stored as Odoo ir.config_parameter value in legacy routes",
+        "raw Google API key can be passed to config routes",
+        "public generate endpoint exists and must be gated before production",
+        "no user-owned Gemini key ref/vault model",
+        "no per-member dedicated LLM release packet",
+        "no production Gemini connector consuming only the no-plaintext packet",
+        "legacy routes still need to be migrated behind key-ref vault and member release gate"
+      ],
+      "required_target_flow": [
+        "user provides Gemini API key only to a secret/vault provider",
+        "Odoo stores only gemini_key_ref, never raw key",
+        "member LLM config binds member_ref + model_ref + quota_ref + consent_ref",
+        "generation uses cloud candidate-only mode",
+        "local verifier checks no member plaintext, no raw API key, and no execution authority"
+      ]
+    }
+  ],
+  "p1_side_effects": {
+    "db_write_performed_by_this_contract": false,
+    "deploy": false,
+    "service_restart": false,
+    "raw_member_plaintext_read": false,
+    "raw_api_key_read": false,
+    "external_api_call": false
+  },
+  "production_release_required_before_true": [
+    "local_personal_data_return_packet",
+    "8d_delegate_rotation_and_revocation",
+    "sovereign_xiaoj_claim_activation",
+    "gemini_key_ref_vault_connector",
+    "member_llm_release_gate",
+    "privacy_and_secret_verifier"
+  ]
+}

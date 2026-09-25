@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/founder_identity_gate.schema.json",
+  "title": "Founder Dual Root Identity Gate Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "device_principal_fingerprint",
+    "google_oidc_issuer",
+    "google_oidc_subject_sha256",
+    "explicit_founder_command",
+    "founder_command_ref",
+    "d8_decision",
+    "future_identity_adapters"
+  ],
+  "properties": {
+    "device_principal_fingerprint": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "google_oidc_issuer": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "google_oidc_subject_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "explicit_founder_command": {"const": true},
+    "founder_command_ref": {"type": "string", "minLength": 1},
+    "d8_decision": {"const": "ALLOW"},
+    "future_identity_adapters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tw_moi_digital_natural_person_id",
+        "physical_natural_person_certificate_card"
+      ],
+      "properties": {
+        "tw_moi_digital_natural_person_id": {"const": "DISABLED_NOT_CONFIGURED"},
+        "physical_natural_person_certificate_card": {"const": "DISABLED_NOT_CONFIGURED"}
+      }
+    }
+  }
+}

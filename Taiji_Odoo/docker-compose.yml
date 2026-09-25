@@ -3,18 +3,18 @@ services:
   wuchang_os_odoo_18:
     image: odoo:18.0
     container_name: wuchang_os_odoo_18
-    restart: always
+    restart: unless-stopped
     command:
       - odoo
       - -d
-      - postgres
-      - --db-filter=^postgres$
+      - wuchang_odoo
+      - --db-filter=^wuchang_odoo$
       - --no-database-list
     depends_on:
       - wuchang_os_pg
 
     ports:
-      - "127.0.0.1:8069:8069"
+      - "192.168.50.249:8069:8069"
 
     volumes:
       - ./addons:/mnt/extra-addons
@@ -25,8 +25,8 @@ services:
     environment:
       HOST: wuchang_os_pg
       USER: odoo
-      PASSWORD: taiji_secret
-      PM3_IDENTITY_HMAC_SECRET: "2e5d42e5c3d3ad716d1fa18a5c41f814eddcae7e60b44fee4e5706490e478d21"
+      PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      PM3_IDENTITY_HMAC_SECRET: ${PM3_IDENTITY_HMAC_SECRET:?PM3_IDENTITY_HMAC_SECRET is required}
 
   wuchang_os_pg:
     image: postgres:15
@@ -34,9 +34,9 @@ services:
     restart: always
 
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: wuchang_odoo
       POSTGRES_USER: odoo
-      POSTGRES_PASSWORD: taiji_secret
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
 
     volumes:
       - ./postgres_data:/var/lib/postgresql/data

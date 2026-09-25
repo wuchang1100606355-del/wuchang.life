@@ -1,0 +1,73 @@
+{
+  "schema_version": "W7TP-FIVE-SKILL-ID-BINDING-MATRIX/1.0",
+  "mapping_id": "W7TP_FIVE_SKILL_ID_SOURCE_KEY_VCP_PACKAGE_ID_BINDING_V1",
+  "state": "CANDIDATE_HASH_BOUND_IDENTITY_MAPPING",
+  "binding_count": 5,
+  "hash_canonicalization": "NFC_SORTED_COMPACT_JSON_NO_FLOAT/1.0",
+  "identity_binding_hash_algorithm": "SHA256_CANONICAL_JSON_EXCLUDING_IDENTITY_BINDING_SHA256/1.0",
+  "binding_matrix_self_hash_algorithm": "SHA256_CANONICAL_JSON_EXCLUDING_BINDING_MATRIX_SELF_SHA256/1.0",
+  "canonical_target": {
+    "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2",
+    "version": "2.0.0",
+    "canonical_doc_ref": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md",
+    "canonical_doc_file_sha256": "a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0",
+    "machine_schema_ref": "schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json",
+    "machine_schema_file_sha256": "4869f6583b3a475652c0a852e35e089c03f7551343d05f90c6c7ffa339f4674e"
+  },
+  "package_manifest_schema": {
+    "ref": "schemas/field/variable_cognition_package_manifest.schema.json",
+    "file_sha256": "7f0aaa9abd8aa0fd42850ef23a77d60b29d08fdc7b4ec4f4af996cc10baba1c8"
+  },
+  "bindings": {
+    "w7tp.total-field.skill-governance": {
+      "target_skill_id": "w7tp.total-field.skill-governance",
+      "source_key": "govern-total-field-skills",
+      "package_id": "vcp:w7tp.total-field.skill-governance",
+      "manifest_path": "govern-total-field-skills/total-field-skill-manifest.json",
+      "manifest_schema_ref": "schemas/field/variable_cognition_package_manifest.schema.json",
+      "identity_binding_sha256": "ad2907d0b7c2867ab3d6e9cb423ed2797a213897ee3d7f096154c064f8dd1bea"
+    },
+    "w7tp.intent-field-construction": {
+      "target_skill_id": "w7tp.intent-field-construction",
+      "source_key": "build-intent-field",
+      "package_id": "vcp:w7tp.intent-field-construction",
+      "manifest_path": "build-intent-field/total-field-skill-manifest.json",
+      "manifest_schema_ref": "schemas/field/variable_cognition_package_manifest.schema.json",
+      "identity_binding_sha256": "ce50c4c6ad95d1868563e3fa3ec304ebb1b9d044cbf011cd1037e93892887efb"
+    },
+    "w7tp.reconstruct-private-media": {
+      "target_skill_id": "w7tp.reconstruct-private-media",
+      "source_key": "reconstruct-private-media",
+      "package_id": "vcp:w7tp.reconstruct-private-media",
+      "manifest_path": "reconstruct-private-media/total-field-skill-manifest.json",
+      "manifest_schema_ref": "schemas/field/variable_cognition_package_manifest.schema.json",
+      "identity_binding_sha256": "1c636612093cdca5c8491c2b2f2e786a59012c1882afbcfa58bec49ce60cfe8c"
+    },
+    "w7tp.wuchang.community-announcement-xiaoj": {
+      "target_skill_id": "w7tp.wuchang.community-announcement-xiaoj",
+      "source_key": "wuchang.community-announcement-xiaoj",
+      "package_id": "vcp:w7tp.wuchang.community-announcement-xiaoj",
+      "manifest_path": "wuchang.community-announcement-xiaoj/total-field-skill-manifest.json",
+      "manifest_schema_ref": "schemas/field/variable_cognition_package_manifest.schema.json",
+      "identity_binding_sha256": "519209d63ad2e0320b952c8deed64c113dbd54a169932d99f903e5d42c73f726"
+    },
+    "w7tp.generative-transmission": {
+      "target_skill_id": "w7tp.generative-transmission",
+      "source_key": "w7tp-generative-transmission",
+      "package_id": "vcp:w7tp.generative-transmission",
+      "manifest_path": "w7tp-generative-transmission/total-field-skill-manifest.json",
+      "manifest_schema_ref": "schemas/field/variable_cognition_package_manifest.schema.json",
+      "identity_binding_sha256": "3beb1400ace03b2ace718e08d16dbde591983cede8fdae55150ec44fee43934e"
+    }
+  },
+  "manifest_file_hashes_embedded": false,
+  "non_execution_assertions": {
+    "lifecycle_transition": false,
+    "registry_write": false,
+    "canonical_change": false,
+    "deploy": false,
+    "database_write": false,
+    "router_write": false
+  },
+  "binding_matrix_self_sha256": "42445e366e19c977afbc5deadf5bd799db1faf7ac3665353e33d477a2bc3269f"
+}

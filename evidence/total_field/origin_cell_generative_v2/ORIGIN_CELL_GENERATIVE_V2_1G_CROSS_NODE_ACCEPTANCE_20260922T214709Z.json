@@ -1,0 +1,74 @@
+{
+  "schema_version": "w7tp-origin-cell-generative-cross-node-acceptance/2.3-candidate",
+  "run_id": "ORIGIN_CELL_GENERATIVE_V2_1G_TAIJI01_TO_MSI_20260922T214709Z",
+  "observed_at": "2026-09-22T21:47:09Z",
+  "state": "PASS_CANDIDATE_CROSS_NODE_EXACT_RULE_RECONSTRUCTION",
+  "intent": "RULE_GENERATIVE_BASE_ORIGIN_CELL_WITHOUT_DIFFERENTIAL_PAYLOAD",
+  "source": {
+    "node": "taiji01",
+    "repository": "wuchang1100606355-del/wuchang.life",
+    "branch": "codex/current-live-state-consolidation-20260915",
+    "commit": "cdb5102598e5580735e23753f8c84b540d2e0e3f",
+    "tree": "2a965d9b8ce4d097ba0dc80c255127aa9a9cadf1"
+  },
+  "target": {
+    "node": "MSI",
+    "repository_branch_observed": "agent/moving-v-v2-taiji8d-local-canary",
+    "repository_head_observed": "680f646bd383077695b5a44e1d40657f7b6a358d",
+    "repository_worktree_status_sha256_observed": "830a764a5f4acae723dd95b74d6253bc3f5f23e886a405776d841ebdaf3408e1",
+    "deployment_mode": "ISOLATED_CANDIDATE_WORKSPACE",
+    "deployment_coordinate": "/tmp/w7tp-origin-cell-generative-v2-1g-canary-20260922T212641Z",
+    "production_service_changed": false
+  },
+  "lineage": {
+    "predecessor_program_sha256": "8ff6cb34dca458a33c108b7ae53acd3ac23cf38a8e8ceb67c40fd55ae68cdef1",
+    "predecessor_receipt_file_sha256": "a5459ea4edae607ee691844130639f76a822151d14e7a3cf25e9897cdb66e23e",
+    "predecessor_classification": "PROVEN_HISTORICAL_DIFFERENTIAL_RECONSTRUCTION",
+    "predecessor_preserved": true
+  },
+  "generator": {
+    "path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
+    "sha256": "ca4ae6a565bd2e701b51c2cc9da5119792eba98347139550ec7586663b6610da",
+    "rule_profile": "COMPLEX_DATASET_TARGET_RULES_V1",
+    "target_generator_sha256_match": true
+  },
+  "packet": {
+    "file_sha256": "90aeeec24cf11be129b7ac98a9883a992b66870dcd795360d2a3e7c117bdb2e8",
+    "canonical_packet_sha256": "c1187bfc13940341dbf84d7fa81402243cb7fbad90aacddcab2e3425c5d14024",
+    "file_bytes": 2772,
+    "canonical_bytes": 2771,
+    "transmitted_target_bytes": 0,
+    "differential_payload_bytes": 0
+  },
+  "reconstruction": {
+    "dataset_mib": 1024,
+    "base_bytes": 1075847168,
+    "base_manifest_sha256": "bbd0476bf5eb776ca06d1c0afd44d260adc6cb5021357a8c15feccfefa3cf5fd",
+    "target_bytes": 1076912128,
+    "target_files": 4099,
+    "target_manifest_sha256": "d81f931f9dfd1c4e650681dad3527c5d3812bbd54049b4363c264f4e0a419e9a",
+    "historical_target_manifest_match": true,
+    "verification_level": "L1_EXACT_MANIFEST"
+  },
+  "raw_receipt": {
+    "path": "evidence/total_field/origin_cell_generative_v2/ORIGIN_CELL_GENERATIVE_V2_1G_MSI_RAW_RECEIPT_20260922T214709Z.json",
+    "file_sha256": "5c99d370e40850ed1a94f52a66817a338809c01741ae59e9bb290a13e24a8b06",
+    "body_sha256": "25eab9b2c24dc104e87ffc825fdb2407dc8034bec3d0d805c83dab2cf3e49535"
+  },
+  "effects": {
+    "source_commit_pushed": true,
+    "isolated_candidate_deployed": true,
+    "service_restart": false,
+    "reboot": false,
+    "database_write": false,
+    "canonical_write": false,
+    "active_pointer_write": false,
+    "runtime_activation": false
+  },
+  "authority": {
+    "candidate_only": true,
+    "canonical": false,
+    "total_field_decision": "NOT_RUN"
+  },
+  "envelope_sha256": "a37b25ea8da76e8c7bdac78d30168c72cf890563cc174a442a1a79beef9352b5"
+}

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">日夜學習與八維度意圖場封包重構視覺</title>
+  <desc id="desc">夜晚書桌、古勘筆記、數學圖形、AI 科技專利林、倒站紀錄與高維度網格，象徵長期學習與系統重建。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071827"/>
+      <stop offset=".48" stop-color="#173956"/>
+      <stop offset="1" stop-color="#f2c56f"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b3b27"/>
+      <stop offset="1" stop-color="#9a6a3d"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff5c2" stop-opacity=".95"/>
+      <stop offset=".42" stop-color="#ffd26f" stop-opacity=".58"/>
+      <stop offset="1" stop-color="#ffd26f" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="970" cy="140" r="86" fill="#f8d87c"/>
+  <circle cx="935" cy="117" r="86" fill="#173956"/>
+  <circle cx="270" cy="230" r="190" fill="url(#lamp)" filter="url(#soft)"/>
+  <g opacity=".18" stroke="#e9f3ff" stroke-width="2">
+    <path d="M90 115h1020M90 195h1020M90 275h1020M90 355h1020M90 435h1020M90 515h1020"/>
+    <path d="M150 70v540M270 70v540M390 70v540M510 70v540M630 70v540M750 70v540M870 70v540M990 70v540"/>
+  </g>
+  <g opacity=".58" stroke="#f7fbff" stroke-width="3" fill="none">
+    <path d="M145 455C265 310 340 328 420 410s180 80 282-8 196-122 350 18"/>
+    <path d="M178 392l80 42 86-112 108 146 112-72 116 38 96-130 172 116"/>
+    <circle cx="258" cy="434" r="8" fill="#f7fbff"/>
+    <circle cx="344" cy="322" r="8" fill="#f7fbff"/>
+    <circle cx="452" cy="468" r="8" fill="#f7fbff"/>
+    <circle cx="680" cy="434" r="8" fill="#f7fbff"/>
+    <circle cx="776" cy="304" r="8" fill="#f7fbff"/>
+  </g>
+  <rect x="80" y="565" width="1040" height="180" rx="24" fill="url(#desk)"/>
+  <rect x="155" y="515" width="310" height="170" rx="14" fill="#f5e2bd"/>
+  <rect x="186" y="548" width="250" height="12" rx="6" fill="#9f7248" opacity=".5"/>
+  <rect x="186" y="582" width="180" height="10" rx="5" fill="#9f7248" opacity=".42"/>
+  <rect x="186" y="614" width="230" height="10" rx="5" fill="#9f7248" opacity=".38"/>
+  <text x="188" y="658" fill="#513a2b" font-family="Noto Sans TC, sans-serif" font-size="26" font-weight="800">古勘</text>
+  <rect x="505" y="500" width="330" height="205" rx="18" fill="#0b1c2e" stroke="#9cc7ff" stroke-opacity=".45"/>
+  <text x="548" y="558" fill="#d7f1ff" font-family="ui-monospace, monospace" font-size="26">D1 → D8</text>
+  <text x="548" y="604" fill="#f8d87c" font-family="ui-monospace, monospace" font-size="22">intent + evidence</text>
+  <text x="548" y="646" fill="#f8d87c" font-family="ui-monospace, monospace" font-size="22">HOLD until verified</text>
+  <g fill="none" stroke="#f8d87c" stroke-width="4">
+    <circle cx="925" cy="604" r="52"/>
+    <path d="M875 604h100M925 554v100M888 568l74 74M962 568l-74 74"/>
+  </g>
+  <g fill="#ffefb1" font-family="Noto Sans TC, sans-serif" font-weight="900" font-size="22">
+    <text x="900" y="520">20+ 倒站</text>
+    <text x="880" y="695">再次站起</text>
+  </g>
+  <g opacity=".9">
+    <circle cx="996" cy="350" r="7" fill="#fff5c2"/>
+    <circle cx="1048" cy="292" r="5" fill="#fff5c2"/>
+    <circle cx="888" cy="255" r="5" fill="#fff5c2"/>
+    <circle cx="1018" cy="210" r="4" fill="#fff5c2"/>
+    <path d="M888 255l108 95 52-58-30-82" stroke="#fff5c2" stroke-width="2" fill="none" opacity=".55"/>
+  </g>
+  <g transform="translate(78 92)" opacity=".94">
+    <rect x="0" y="0" width="250" height="118" rx="18" fill="#f6efe2" fill-opacity=".12" stroke="#f8d87c" stroke-opacity=".48"/>
+    <text x="24" y="44" fill="#fff2bd" font-family="Noto Sans TC, sans-serif" font-size="24" font-weight="900">AI 專利林</text>
+    <path d="M42 86h32l18-42 30 68 20-42h54" fill="none" stroke="#fff2bd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="80" y="820" fill="#f8fbff" font-family="Noto Sans TC, sans-serif" font-size="34" font-weight="900">從 AI 科技專利林與寂寞高維度，重構成可以被人靠近的公開入口</text>
+</svg>

@@ -1,0 +1,46 @@
+{
+  "schema": "w7tp.total_field.v2_1_no_side_effect_probe_receipt.v1",
+  "run_id": "W7TP_CANONICAL_V2_1_PROMOTION_20260728T054258Z",
+  "executed_at_utc": "2026-07-28T05:54:33Z",
+  "state": "PASS_SOURCE_PACKET_RECONSTRUCT_VERIFY_SEAL",
+  "source": {
+    "kind": "SYNTHETIC_REVIEW_CANDIDATE_PACKET",
+    "sha256": "383ad5281131a3751a941a0c31eec5fbc8c80491baa80ea86750427b2c926364",
+    "persisted": false,
+    "side_effect": false
+  },
+  "packet": {
+    "version": "2.1",
+    "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1",
+    "sha256": "71a23e0d0865c84e02195d4c2278f39ae0bdf954551a30206adb74291c6ba907",
+    "candidate_only": true,
+    "authority_granted": false,
+    "persisted_payload": false
+  },
+  "reconstruct": {
+    "successor_adapter": "PASS",
+    "legacy_v2_projection": "PASS",
+    "legacy_projection_sha256": "03ddb3a6574c19f6e88faf341568f6b896ffaec4acf376a0a1114854d911951c",
+    "source_bytes_unchanged": true,
+    "historical_packet_rewritten": false
+  },
+  "verify": {
+    "v2_1_schema": "PASS",
+    "v2_1_packet_hash": "PASS",
+    "legacy_projection_schema": "PASS",
+    "protected_material_violations": 0,
+    "legacy_replay_tuple_sha256": "03ddb3a6574c19f6e88faf341568f6b896ffaec4acf376a0a1114854d911951c"
+  },
+  "seal": {
+    "mode": "LOCAL_HASH_ONLY_NO_RUNTIME_ACTIVATION",
+    "packet_sha256": "71a23e0d0865c84e02195d4c2278f39ae0bdf954551a30206adb74291c6ba907",
+    "state": "PASS"
+  },
+  "writes": {
+    "adi": false,
+    "database": false,
+    "runtime_activation": false,
+    "router": false,
+    "canonical_pointer": false
+  }
+}

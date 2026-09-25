@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://taiji-hub.local/schemas/intent_field/dynamic_state_field_verifier.schema.json",
+  "title": "Dynamic Multi-State Field Candidate Verifier Packet",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "request_id",
+    "candidate_only",
+    "cloud_call_executed",
+    "patent_type_alignment",
+    "dynamic_state_field",
+    "sovereign_identity_agent",
+    "spacetime_state_index_database",
+    "isolated_plaintext_archive_boundary",
+    "front_edge_proxy_layer",
+    "cloud_authority_boundary",
+    "technical_means",
+    "forbidden_output_check"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "request_id": { "type": "string", "minLength": 1 },
+    "candidate_only": { "const": true },
+    "cloud_call_executed": { "const": false },
+    "total_field_final_authority": { "const": true },
+    "patent_type_alignment": {
+      "type": "object",
+      "required": [
+        "patent_type",
+        "independent_claim_subject",
+        "eight_state_field_usage",
+        "total_field_role"
+      ],
+      "properties": {
+        "patent_type": {
+          "const": "人工智慧候選行動之多狀態場封包化控管方法、系統及非暫態電腦可讀取媒體"
+        },
+        "independent_claim_subject": {
+          "enum": ["多個狀態場", "多狀態場", "多個狀態場/多狀態場"]
+        },
+        "eight_state_field_usage": {
+          "enum": ["附屬項", "實施例", "附屬項或實施例"]
+        },
+        "total_field_role": {
+          "enum": ["總體治理系統", "系統", "governance control plane", "總體治理系統/系統/governance control plane"]
+        },
+        "total_field_is_state_field": { "const": false }
+      }
+    },
+    "dynamic_state_field": {
+      "type": "object",
+      "required": [
+        "state_field_set_id",
+        "state_field_version",
+        "state_field_relation_table",
+        "dynamic_field_policy_id",
+        "transition_reason_code",
+        "transition_trigger_code",
+        "before_state_field_hash",
+        "after_state_field_hash",
+        "verifier_result",
+        "responsible_person_ref",
+        "timestamp_coordinate",
+        "previous_record_hash",
+        "current_record_hash"
+      ],
+      "properties": {
+        "state_field_set_id": { "type": "string", "minLength": 1 },
+        "state_field_version": { "type": "string", "minLength": 1 },
+        "state_field_relation_table": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "object" }
+        },
+        "dynamic_field_policy_id": { "type": "string", "minLength": 1 },
+        "transition_reason_code": { "type": "string", "minLength": 1 },
+        "transition_trigger_code": { "type": "string", "minLength": 1 },
+        "before_state_field_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" },
+        "after_state_field_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" },
+        "verifier_result": { "enum": ["PASS", "FAIL", "HOLD", "REVIEW"] },
+        "responsible_person_ref": { "type": "string", "minLength": 1 },
+        "timestamp_coordinate": { "type": "string", "minLength": 1 },
+        "previous_record_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" },
+        "current_record_hash": { "type": "string", "pattern": "^hash:[a-f0-9]{64}$" },
+        "rollback_target_version": { "type": "string" }
+      }
+    },
+    "sovereign_identity_agent": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "identity_proxy_ref",
+        "authority_scope_code",
+        "consent_state_code",
+        "device_binding_ref",
+        "agent_binding_ref"
+      ],
+      "properties": {
+        "enabled": { "const": true },
+        "identity_proxy_ref": { "type": "string", "minLength": 1 },
+        "authority_scope_code": { "type": "string", "minLength": 1 },
+        "consent_state_code": { "type": "string", "minLength": 1 },
+        "device_binding_ref": { "type": "string", "minLength": 1 },
+        "agent_binding_ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "spacetime_state_index_database": {
+      "type": "object",
+      "required": ["generic_name", "owner_adi_allowed_as_implementation", "government_adi_case", "actual_index_rules_disclosed"],
+      "properties": {
+        "generic_name": { "const": "時空狀態索引資料庫" },
+        "owner_adi_allowed_as_implementation": { "const": true },
+        "owner_adi_description": { "type": "string" },
+        "government_adi_case": { "const": false },
+        "actual_index_rules_disclosed": { "const": false }
+      }
+    },
+    "isolated_plaintext_archive_boundary": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "plaintext_archive_ref",
+        "excluded_from_external_model_input",
+        "excluded_from_state_packet",
+        "general_execution_plaintext_access",
+        "accountable_access_record"
+      ],
+      "properties": {
+        "enabled": { "const": true },
+        "plaintext_archive_ref": { "type": "string", "minLength": 1 },
+        "excluded_from_external_model_input": { "const": true },
+        "excluded_from_state_packet": { "const": true },
+        "general_execution_plaintext_access": { "const": false },
+        "accountable_access_record": {
+          "type": "object",
+          "required": [
+            "plaintext_archive_ref",
+            "access_request_id",
+            "requester_identity_ref",
+            "responsible_person_ref",
+            "authority_basis",
+            "access_reason_code",
+            "rule_version",
+            "approval_result",
+            "timestamp_coordinate",
+            "previous_record_hash",
+            "current_record_hash"
+          ]
+        }
+      }
+    },
+    "front_edge_proxy_layer": {
+      "type": "object",
+      "required": ["enabled", "blocks_external_model_output_to_business_write", "blocks_unverified_executable_api_call"],
+      "properties": {
+        "enabled": { "const": true },
+        "blocks_external_model_output_to_business_write": { "const": true },
+        "blocks_unverified_executable_api_call": { "const": true }
+      }
+    },
+    "cloud_authority_boundary": {
+      "type": "object",
+      "required": [
+        "cloud_candidate_only",
+        "cloud_can_decide",
+        "cloud_can_land",
+        "db_write",
+        "deploy",
+        "restart"
+      ],
+      "properties": {
+        "cloud_candidate_only": { "const": true },
+        "cloud_can_decide": { "const": false },
+        "cloud_can_land": { "const": false },
+        "db_write": { "const": false },
+        "deploy": { "const": false },
+        "restart": { "const": false }
+      }
+    },
+    "technical_means": {
+      "type": "object",
+      "required": [
+        "modules",
+        "data_structures",
+        "packet_fields",
+        "verification_conditions",
+        "blocking_conditions",
+        "record_fields"
+      ],
+      "properties": {
+        "modules": { "type": "array", "minItems": 1 },
+        "data_structures": { "type": "array", "minItems": 1 },
+        "packet_fields": { "type": "array", "minItems": 1 },
+        "verification_conditions": { "type": "array", "minItems": 1 },
+        "blocking_conditions": { "type": "array", "minItems": 1 },
+        "record_fields": { "type": "array", "minItems": 1 }
+      }
+    },
+    "forbidden_output_check": {
+      "type": "object",
+      "required": [
+        "no_member_plaintext",
+        "no_secret",
+        "no_h64_td_mapping",
+        "no_h64_td_table",
+        "no_h64_td_rules",
+        "no_adi_index_rules",
+        "cloud_candidate_only"
+      ],
+      "properties": {
+        "no_member_plaintext": { "const": true },
+        "no_secret": { "const": true },
+        "no_h64_td_mapping": { "const": true },
+        "no_h64_td_table": { "const": true },
+        "no_h64_td_rules": { "const": true },
+        "no_adi_index_rules": { "const": true },
+        "cloud_candidate_only": { "const": true }
+      }
+    }
+  }
+}

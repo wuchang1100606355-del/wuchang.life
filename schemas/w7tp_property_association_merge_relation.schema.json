@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/w7tp_property_association_merge_relation.schema.json",
+  "title": "W7TP Property Association Merge Relation Map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "merge_id",
+    "merge_mode",
+    "authority",
+    "requires_total_field_verify",
+    "contains_member_plaintext",
+    "plaintext_identity_forbidden",
+    "source_refs",
+    "community_field_composition",
+    "branches",
+    "relation_edges",
+    "merge_rules",
+    "authority_boundary"
+  ],
+  "properties": {
+    "schema_version": { "const": "w7tp.property_association_merge_relation.p1" },
+    "policy_id": { "const": "W7TP_PROPERTY_ASSOCIATION_MERGE_RELATION_MAP" },
+    "merge_id": { "type": "string", "minLength": 8 },
+    "merge_mode": { "const": "candidate_relation_only" },
+    "authority": { "const": "candidate_only" },
+    "requires_total_field_verify": { "const": true },
+    "contains_member_plaintext": { "const": false },
+    "plaintext_identity_forbidden": { "const": true },
+    "source_refs": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_ref", "thread_name", "source_type", "relation_summary"],
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "pattern": "^(CODEX_SESSION_REF|CODEX_ATTACHMENT_REF|REPO_DOC_REF):[A-Za-z0-9_./:-]+$"
+          },
+          "thread_name": { "type": "string", "minLength": 1 },
+          "source_type": { "enum": ["codex_session", "codex_attachment", "repo_doc", "runtime_packet"] },
+          "relation_summary": { "type": "string", "minLength": 1, "maxLength": 300 }
+        }
+      }
+    },
+    "community_field_composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field_name", "field_type", "composition_mode", "dimensions", "founder_design_knowledge"],
+      "properties": {
+        "field_name": { "const": "WUCHANG_COMMUNITY_TOTAL_FIELD" },
+        "field_type": { "const": "community_total_field" },
+        "composition_mode": { "const": "multi_domain_ref_relation" },
+        "dimensions": {
+          "type": "array",
+          "minItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["dimension_id", "name_zh", "relation_scope", "ref_boundary"],
+            "properties": {
+              "dimension_id": {
+                "enum": [
+                  "PROPERTY_DIMENSION",
+                  "COMMERCE_DIMENSION",
+                  "TERRITORY_DIMENSION",
+                  "ASSOCIATION_DIMENSION",
+                  "FOUNDER_CALCULATION_DIMENSION",
+                  "COMMUNITY_LITERATURE_CORPUS_DIMENSION"
+                ]
+              },
+              "name_zh": { "type": "string", "minLength": 1 },
+              "relation_scope": { "type": "string", "minLength": 1 },
+              "ref_boundary": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "founder_design_knowledge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "calculation_ref_mode",
+            "literature_corpus_ref_mode",
+            "plaintext_corpus_inline",
+            "member_memory_authority",
+            "direct_execution_authority",
+            "requires_total_field_verify"
+          ],
+          "properties": {
+            "calculation_ref_mode": { "const": "ref_only" },
+            "literature_corpus_ref_mode": { "const": "ref_only" },
+            "plaintext_corpus_inline": { "const": false },
+            "member_memory_authority": { "const": false },
+            "direct_execution_authority": { "const": false },
+            "requires_total_field_verify": { "const": true }
+          }
+        }
+      }
+    },
+    "branches": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["property_service_branch", "association_service_branch"],
+      "properties": {
+        "property_service_branch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scene_context",
+            "xiaoj_projection",
+            "service_name_zh",
+            "identity_feature_domain",
+            "handoff_group",
+            "role_functions",
+            "allowed_candidate_routes",
+            "forbidden_routes"
+          ],
+          "properties": {
+            "scene_context": { "const": "PROPERTY_CONTEXT" },
+            "xiaoj_projection": { "const": "BUILDING_DIGITAL_SECRETARY" },
+            "service_name_zh": { "const": "大樓數位秘書小J" },
+            "identity_feature_domain": { "const": "property" },
+            "handoff_group": { "const": "resident_property_management" },
+            "role_functions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "PROPERTY_CHAIRPERSON",
+                  "PROPERTY_VICE_CHAIRPERSON",
+                  "PROPERTY_TREASURER",
+                  "PROPERTY_GENERAL_MANAGER",
+                  "PROPERTY_UNIT_OWNER",
+                  "PROPERTY_RESIDENT",
+                  "PROPERTY_VEHICLE_TYPE",
+                  "PROPERTY_VEHICLE_COLOR",
+                  "PROPERTY_EQUIPMENT",
+                  "PROPERTY_FACILITY"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "allowed_candidate_routes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "uniqueItems": true
+            },
+            "forbidden_routes": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "resident_plaintext_read",
+                  "building_access_grant_without_verification",
+                  "payment_capture",
+                  "property_role_elevation_without_verifier"
+                ]
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "association_service_branch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scene_context",
+            "xiaoj_projection",
+            "service_name_zh",
+            "identity_feature_domain",
+            "handoff_group",
+            "role_functions",
+            "allowed_candidate_routes",
+            "forbidden_routes"
+          ],
+          "properties": {
+            "scene_context": { "const": "ASSOCIATION_CONTEXT" },
+            "xiaoj_projection": { "const": "COMMUNITY_SERVICE_STAFF" },
+            "service_name_zh": { "const": "社區服務員小J" },
+            "identity_feature_domain": { "const": "association" },
+            "handoff_group": { "const": "association_sovereign_member" },
+            "role_functions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "ASSOCIATION_IMMUTABLE_FOUNDER",
+                  "ASSOCIATION_CHAIRPERSON",
+                  "ASSOCIATION_SECRETARY_GENERAL",
+                  "ASSOCIATION_VICE_CHAIRPERSON",
+                  "ASSOCIATION_EXECUTIVE_DIRECTOR",
+                  "ASSOCIATION_DIRECTOR",
+                  "ASSOCIATION_EXECUTIVE_SUPERVISOR",
+                  "ASSOCIATION_SUPERVISOR",
+                  "ASSOCIATION_SECRETARY",
+                  "ASSOCIATION_STAFF",
+                  "ASSOCIATION_MEMBER"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "allowed_candidate_routes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "uniqueItems": true
+            },
+            "forbidden_routes": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "member_plaintext_read",
+                  "subsidy_approval_without_verification",
+                  "formal_association_notice_without_verifier",
+                  "association_role_elevation_without_verifier"
+                ]
+              },
+              "uniqueItems": true
+            }
+          }
+        }
+      }
+    },
+    "relation_edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to", "relation_type"],
+        "properties": {
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 },
+          "relation_type": {
+            "enum": [
+              "SOURCE_SUPPORTS_POLICY",
+              "COMMUNITY_FIELD_CONTAINS_DOMAIN",
+              "TERRITORY_ANCHORS_COMMUNITY",
+              "COMMERCE_SUPPORTS_COMMUNITY_SERVICE",
+              "SOVEREIGN_AI_PERSONA_ANCHORS_COMMUNITY_FIELD",
+              "SOCIAL_WORKER_GOVERNS_CARE_INTENT",
+              "CAREGIVER_EMPLOYEE_EXECUTES_CARE",
+              "ELDER_ACTIVE_PARTICIPATION_SUPPORTS_PUBLIC_VALUE",
+              "VOLUNTEER_DELIVERY_BRIDGES_PROPERTY_COMMERCE",
+              "FOUNDER_CALCULATION_SUPPORTS_DESIGN",
+              "LITERATURE_CORPUS_SUPPORTS_DESIGN",
+              "SCENE_CONTEXT_TO_PERSONA",
+              "IDENTITY_MARKER_TO_SERVICE_ROUTE",
+              "HANDOFF_REF_GROUP",
+              "ROLE_BOUNDARY_SEPARATES_AUTHORITY",
+              "FOUNDER_IMMUTABILITY_OVERRIDES_ROTATION"
+            ]
+          }
+        }
+      }
+    },
+    "merge_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service_view_can_merge",
+        "role_refs_remain_independent",
+        "no_cross_domain_role_override",
+        "founder_marker_immutable",
+        "community_field_contains_property_commerce_territory_association",
+        "founder_calculation_ref_only",
+        "community_literature_corpus_ref_only",
+        "relation_graph_not_identity_decision",
+        "requires_total_field_verify"
+      ],
+      "properties": {
+        "service_view_can_merge": { "const": true },
+        "role_refs_remain_independent": { "const": true },
+        "no_cross_domain_role_override": { "const": true },
+        "founder_marker_immutable": { "const": true },
+        "community_field_contains_property_commerce_territory_association": { "const": true },
+        "founder_calculation_ref_only": { "const": true },
+        "community_literature_corpus_ref_only": { "const": true },
+        "relation_graph_not_identity_decision": { "const": true },
+        "requires_total_field_verify": { "const": true }
+      }
+    },
+    "authority_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_only",
+        "final_decision",
+        "db_write",
+        "secret_read",
+        "member_plaintext_read",
+        "resident_plaintext_read",
+        "payment_capture",
+        "formal_send",
+        "role_elevation_without_verifier"
+      ],
+      "properties": {
+        "candidate_only": { "const": true },
+        "final_decision": { "const": false },
+        "db_write": { "const": false },
+        "secret_read": { "const": false },
+        "member_plaintext_read": { "const": false },
+        "resident_plaintext_read": { "const": false },
+        "payment_capture": { "const": false },
+        "formal_send": { "const": false },
+        "role_elevation_without_verifier": { "const": false }
+      }
+    }
+  }
+}

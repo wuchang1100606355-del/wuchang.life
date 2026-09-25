@@ -1,0 +1,309 @@
+.wuchang-auth-page,
+.wuchang-status-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(19, 41, 75, 0.94), rgba(35, 68, 60, 0.92)),
+    radial-gradient(circle at 80% 15%, rgba(220, 186, 104, 0.24), transparent 30%),
+    #102139;
+  color: #f8fafc;
+}
+
+.wuchang-auth-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
+  gap: 40px;
+  align-items: stretch;
+  padding: 56px clamp(24px, 5vw, 72px);
+}
+
+.wuchang-auth-hero,
+.wuchang-auth-panel,
+.wuchang-status-page {
+  display: flex;
+  align-items: center;
+}
+
+.wuchang-auth-hero {
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 720px;
+}
+
+.wuchang-auth-kicker {
+  margin: 0 0 12px;
+  color: #e8c36a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.wuchang-auth-brand h1,
+.wuchang-status-card h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 4.6vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.wuchang-auth-lead,
+.wuchang-status-message {
+  margin: 22px 0 0;
+  color: #dbeafe;
+  font-size: 1.18rem;
+  line-height: 1.7;
+}
+
+.wuchang-auth-mission,
+.wuchang-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin: 36px 0 0;
+}
+
+.wuchang-auth-mission div,
+.wuchang-status-grid div {
+  min-height: 112px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.wuchang-auth-mission strong,
+.wuchang-status-grid strong {
+  display: block;
+  color: #ffffff;
+  font-size: 1.05rem;
+}
+
+.wuchang-auth-mission span,
+.wuchang-status-grid span {
+  display: block;
+  margin-top: 10px;
+  color: #cbd5e1;
+  line-height: 1.55;
+}
+
+.wuchang-auth-note {
+  max-width: 680px;
+  margin: 28px 0 0;
+  color: #cbd5e1;
+  line-height: 1.75;
+}
+
+.wuchang-auth-panel {
+  justify-content: center;
+}
+
+.wuchang-auth-card,
+.wuchang-status-card {
+  width: min(100%, 520px);
+  padding: 30px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172033;
+  box-shadow: 0 24px 80px rgba(2, 8, 23, 0.28);
+}
+
+.wuchang-auth-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.wuchang-auth-card h2,
+.wuchang-signup-context h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.45rem;
+  letter-spacing: 0;
+}
+
+.wuchang-auth-lang {
+  flex: 0 0 auto;
+  color: #64748b;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.wuchang-auth-card .form-control {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  border-radius: 6px;
+}
+
+.wuchang-auth-card .mb-3 {
+  display: block;
+  margin-bottom: 14px !important;
+}
+
+.wuchang-auth-card label {
+  display: block;
+  margin-bottom: 7px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.wuchang-auth-card .oe_login_buttons,
+.wuchang-auth-card .oe_signup_form .oe_login_buttons {
+  display: grid !important;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.wuchang-auth-card .oe_login_buttons .btn,
+.wuchang-auth-card .oe_signup_form .oe_login_buttons .btn {
+  width: 100%;
+  min-height: 44px;
+}
+
+.wuchang-auth-card .oe_login_form > p.mt-2.text-center {
+  display: none !important;
+}
+
+.wuchang-auth-card .btn-primary,
+.wuchang-auth-action.primary {
+  border-color: #17466f;
+  background: #17466f;
+}
+
+.wuchang-auth-actions,
+.wuchang-status-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.wuchang-auth-action {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1px solid #d8dee8;
+  border-radius: 6px;
+  color: #172033;
+  background: #f8fafc;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.wuchang-auth-action:hover {
+  color: #0f2f4b;
+  border-color: #9fb4ca;
+  background: #eef5fb;
+  text-decoration: none;
+}
+
+.wuchang-auth-action.primary {
+  color: #ffffff;
+}
+
+.wuchang-auth-action.line {
+  border-color: #04b900;
+  color: #027a11;
+}
+
+.wuchang-auth-action.google {
+  border-color: #d7b15b;
+  color: #8a5a00;
+}
+
+.wuchang-signup-context {
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid #dbe7f4;
+  border-radius: 6px;
+  background: #f6fbff;
+}
+
+.wuchang-signup-context p {
+  margin: 10px 0 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.wuchang-status-page {
+  justify-content: center;
+  padding: 48px 20px;
+}
+
+.wuchang-status-card {
+  width: min(100%, 680px);
+}
+
+.wuchang-status-card.success {
+  border-top: 6px solid #1f9d63;
+}
+
+.wuchang-status-message {
+  color: #334155;
+}
+
+.wuchang-status-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wuchang-status-grid div {
+  background: #f8fafc;
+  color: #172033;
+}
+
+.wuchang-status-grid strong {
+  color: #172033;
+}
+
+.wuchang-status-grid span {
+  color: #475569;
+}
+
+.wuchang-status-ref {
+  margin: 22px 0 0;
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
+.wuchang-auth-card .o_login_auth {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  .wuchang-auth-page {
+    grid-template-columns: 1fr;
+    padding: 28px 18px;
+  }
+
+  .wuchang-auth-mission,
+  .wuchang-status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .wuchang-auth-card,
+  .wuchang-status-card {
+    padding: 22px;
+  }
+
+  .wuchang-auth-card-header,
+  .wuchang-auth-actions,
+  .wuchang-status-actions {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .wuchang-auth-card-header {
+    gap: 8px;
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "W7TP-TRUE8D-P2-SHADOW-VECTORS/1.0",
+  "profiles": ["ASSOCIATION", "CAFE_POS", "GENERIC", "HOUSEHOLD", "PROPERTY"],
+  "consumers": ["INTENT", "ODOO", "POS", "MEDICAL", "BUSINESS", "PROPERTY", "COMMUNITY"],
+  "expected_case_count": 35,
+  "expected_profile_set_sha256": "9f64e6a570f0270acd385e2246d9a3c9cdd9eaa02236c719fa63a985eb39e680",
+  "hard_risk_codes": [
+    "RAW_KEY_TOKEN_PASSWORD",
+    "MEMBER_PLAINTEXT",
+    "DELETE_OVERWRITE_MOVE_ORIGINAL_FILE",
+    "LIVE_DB_WRITE",
+    "DEPLOY_RESTART_REBOOT",
+    "ROUTER_WRITE",
+    "UNCONFIRMED_FORMAL_SUBMISSION",
+    "DELETE_LOCAL_BEFORE_CLOUD_VERIFICATION"
+  ],
+  "resource_totals": {
+    "cpu_request_m": 1150,
+    "cpu_limit_m": 3000,
+    "memory_request_mib": 1408,
+    "memory_limit_mib": 3072
+  },
+  "total_ceiling": {"cpu_m": 4250, "memory_mib": 4608, "disk_mib": 2048},
+  "projection_container_start_count": 0,
+  "commit_count": 0,
+  "seal_count": 0
+}

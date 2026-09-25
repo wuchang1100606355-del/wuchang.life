@@ -1,0 +1,810 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_member_action_dual_receipt_v1.schema.json",
+  "title": "W7TP Member Action Dual Receipt v1 Candidate",
+  "$comment": "P0 source-contract candidate. Member consent and Total Field safety/landing verification are independent receipts whose action commitments must match. Odoo binds process state only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_type",
+    "lifecycle",
+    "receipt_set_ref",
+    "identity_root_ref",
+    "root_packet_ref",
+    "subject_binding_ref",
+    "root_generation",
+    "revocation_epoch",
+    "session_ref",
+    "scene_ref",
+    "action_binding",
+    "member_receipt",
+    "total_field_receipt",
+    "odoo_binding",
+    "aggregate_state",
+    "join_policy",
+    "authority_model",
+    "candidate_only",
+    "runtime_enabled",
+    "formal_execution_authority",
+    "authority_granted",
+    "member_plaintext_included",
+    "credential_material_included",
+    "raw_amount_currency_included",
+    "generative_transmission",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-MEMBER-ACTION-DUAL-RECEIPT/1.0"
+    },
+    "packet_type": {
+      "const": "MEMBER_ACTION_DUAL_RECEIPT"
+    },
+    "lifecycle": {
+      "const": "CANDIDATE"
+    },
+    "receipt_set_ref": {
+      "type": "string",
+      "pattern": "^member_dual_receipt_set_ref:sha256:[0-9a-f]{64}$"
+    },
+    "identity_root_ref": {
+      "type": "string",
+      "pattern": "^member_identity_root_ref:sha256:[0-9a-f]{64}$"
+    },
+    "root_packet_ref": {
+      "type": "string",
+      "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+    },
+    "subject_binding_ref": {
+      "type": "string",
+      "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+    },
+    "root_generation": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "revocation_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "session_ref": {
+      "type": "string",
+      "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+    },
+    "scene_ref": {
+      "type": "string",
+      "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+    },
+    "action_binding": {
+      "$ref": "#/$defs/action_binding"
+    },
+    "member_receipt": {
+      "$ref": "#/$defs/member_receipt"
+    },
+    "total_field_receipt": {
+      "$ref": "#/$defs/total_field_receipt"
+    },
+    "odoo_binding": {
+      "$ref": "#/$defs/odoo_binding"
+    },
+    "aggregate_state": {
+      "enum": [
+        "READY_CANDIDATE",
+        "HOLD",
+        "BLOCK"
+      ]
+    },
+    "join_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_receipt_required",
+        "total_field_receipt_required",
+        "odoo_process_binding_required",
+        "independent_receipt_authorities_required",
+        "action_hash_equality_required",
+        "purpose_ref_equality_required",
+        "scope_refs_equality_required",
+        "effect_class_equality_required",
+        "member_display_hash_equality_required",
+        "terms_version_equality_required",
+        "amount_currency_hash_equality_required",
+        "durable_atomic_nonce_consumption_required",
+        "root_session_scene_equality_required",
+        "revocation_epoch_equality_required",
+        "ready_state_is_candidate_only",
+        "execution_authority_granted"
+      ],
+      "properties": {
+        "member_receipt_required": {
+          "const": true
+        },
+        "total_field_receipt_required": {
+          "const": true
+        },
+        "odoo_process_binding_required": {
+          "const": true
+        },
+        "independent_receipt_authorities_required": {
+          "const": true
+        },
+        "action_hash_equality_required": {
+          "const": true
+        },
+        "purpose_ref_equality_required": {
+          "const": true
+        },
+        "scope_refs_equality_required": {
+          "const": true
+        },
+        "effect_class_equality_required": {
+          "const": true
+        },
+        "member_display_hash_equality_required": {
+          "const": true
+        },
+        "terms_version_equality_required": {
+          "const": true
+        },
+        "amount_currency_hash_equality_required": {
+          "const": true
+        },
+        "durable_atomic_nonce_consumption_required": {
+          "const": true
+        },
+        "root_session_scene_equality_required": {
+          "const": true
+        },
+        "revocation_epoch_equality_required": {
+          "const": true
+        },
+        "ready_state_is_candidate_only": {
+          "const": true
+        },
+        "execution_authority_granted": {
+          "const": false
+        }
+      }
+    },
+    "authority_model": {
+      "$ref": "#/$defs/authority_model"
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "runtime_enabled": {
+      "const": false
+    },
+    "formal_execution_authority": {
+      "const": false
+    },
+    "authority_granted": {
+      "const": false
+    },
+    "member_plaintext_included": {
+      "const": false
+    },
+    "credential_material_included": {
+      "const": false
+    },
+    "raw_amount_currency_included": {
+      "const": false
+    },
+    "generative_transmission": {
+      "$ref": "#/$defs/generative_transmission"
+    },
+    "integrity": {
+      "$ref": "#/$defs/integrity"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "zulu_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "nullable_amount_currency_hash": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/sha256"
+        }
+      ]
+    },
+    "purpose_ref": {
+      "type": "string",
+      "pattern": "^purpose_ref:sha256:[0-9a-f]{64}$"
+    },
+    "scope_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^scope_ref:sha256:[0-9a-f]{64}$"
+      }
+    },
+    "effect_class": {
+      "enum": [
+        "E0_ANSWER",
+        "E1_READ",
+        "E2_CANDIDATE",
+        "E3_SANDBOX",
+        "E4_REVERSIBLE_WRITE",
+        "E5_HIGH_IMPACT"
+      ]
+    },
+    "action_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "identity_root_ref",
+        "root_packet_ref",
+        "subject_binding_ref",
+        "root_generation",
+        "revocation_epoch",
+        "session_ref",
+        "scene_ref",
+        "action_ref",
+        "action_code",
+        "action_class",
+        "target_ref",
+        "parameters_sha256",
+        "purpose_ref",
+        "scope_refs",
+        "resource_refs",
+        "effect_class",
+        "member_display_hash",
+        "terms_version",
+        "amount_currency_hash_scope",
+        "amount_currency_hash",
+        "action_hash_algorithm",
+        "action_hash"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "W7TP-MEMBER-ACTION-HASH-BASIS/1.0"
+        },
+        "identity_root_ref": {
+          "type": "string",
+          "pattern": "^member_identity_root_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_packet_ref": {
+          "type": "string",
+          "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "subject_binding_ref": {
+          "type": "string",
+          "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_generation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revocation_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "session_ref": {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scene_ref": {
+          "type": "string",
+          "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+        },
+        "action_ref": {
+          "type": "string",
+          "pattern": "^action_ref:sha256:[0-9a-f]{64}$"
+        },
+        "action_code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{1,127}$"
+        },
+        "action_class": {
+          "enum": [
+            "NON_TRANSACTION",
+            "TRANSACTION"
+          ]
+        },
+        "target_ref": {
+          "type": "string",
+          "pattern": "^target_ref:sha256:[0-9a-f]{64}$"
+        },
+        "parameters_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "purpose_ref": {
+          "$ref": "#/$defs/purpose_ref"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "resource_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^resource_ref:sha256:[0-9a-f]{64}$"
+          }
+        },
+        "effect_class": {
+          "$ref": "#/$defs/effect_class"
+        },
+        "member_display_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "terms_version": {
+          "$ref": "#/$defs/version"
+        },
+        "amount_currency_hash_scope": {
+          "const": "CANONICAL_AMOUNT_MINOR_CURRENCY_TARGET_REF/1.0"
+        },
+        "amount_currency_hash": {
+          "$ref": "#/$defs/nullable_amount_currency_hash"
+        },
+        "action_hash_algorithm": {
+          "const": "SHA256_CANONICAL_MEMBER_ACTION_BASIS/1.0"
+        },
+        "action_hash": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action_class": {
+                "const": "TRANSACTION"
+              }
+            },
+            "required": [
+              "action_class"
+            ]
+          },
+          "then": {
+            "properties": {
+              "amount_currency_hash": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "amount_currency_hash": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "member_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_ref",
+        "authority",
+        "decision",
+        "identity_root_ref",
+        "root_packet_ref",
+        "subject_binding_ref",
+        "root_generation",
+        "revocation_epoch",
+        "session_ref",
+        "scene_ref",
+        "action_hash",
+        "purpose_ref",
+        "scope_refs",
+        "effect_class",
+        "member_display_hash",
+        "terms_version",
+        "amount_currency_hash",
+        "member_proof_ref",
+        "member_verification_key_commitment",
+        "member_verification_method_ref",
+        "trusted_member_proof_registry_ref",
+        "member_proof_verification_required",
+        "issued_at",
+        "expires_at",
+        "nonce_ref",
+        "nonce_consumption_required",
+        "independent_receipt",
+        "receipt_hash_algorithm",
+        "receipt_sha256"
+      ],
+      "properties": {
+        "receipt_ref": {
+          "type": "string",
+          "pattern": "^member_consent_receipt_ref:sha256:[0-9a-f]{64}$"
+        },
+        "authority": {
+          "const": "member"
+        },
+        "decision": {
+          "enum": [
+            "CONSENT",
+            "DENY",
+            "WITHDRAW",
+            "HOLD"
+          ]
+        },
+        "identity_root_ref": {
+          "type": "string",
+          "pattern": "^member_identity_root_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_packet_ref": {
+          "type": "string",
+          "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "subject_binding_ref": {
+          "type": "string",
+          "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_generation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revocation_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "session_ref": {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scene_ref": {
+          "type": "string",
+          "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+        },
+        "action_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "purpose_ref": {
+          "$ref": "#/$defs/purpose_ref"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "effect_class": {
+          "$ref": "#/$defs/effect_class"
+        },
+        "member_display_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "terms_version": {
+          "$ref": "#/$defs/version"
+        },
+        "amount_currency_hash": {
+          "$ref": "#/$defs/nullable_amount_currency_hash"
+        },
+        "member_proof_ref": {
+          "type": "string",
+          "pattern": "^member_proof_ref:sha256:[0-9a-f]{64}$"
+        },
+        "member_verification_key_commitment": {
+          "type": "string",
+          "pattern": "^member_key_commitment:sha256:[0-9a-f]{64}$"
+        },
+        "member_verification_method_ref": {
+          "type": "string",
+          "pattern": "^member_verification_method_ref:sha256:[0-9a-f]{64}$"
+        },
+        "trusted_member_proof_registry_ref": {
+          "type": "string",
+          "pattern": "^trusted_member_proof_registry_ref:sha256:[0-9a-f]{64}$"
+        },
+        "member_proof_verification_required": {
+          "const": true
+        },
+        "issued_at": {
+          "$ref": "#/$defs/zulu_datetime"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/zulu_datetime"
+        },
+        "nonce_ref": {
+          "type": "string",
+          "pattern": "^nonce_ref:sha256:[0-9a-f]{64}$"
+        },
+        "nonce_consumption_required": {
+          "const": true
+        },
+        "independent_receipt": {
+          "const": true
+        },
+        "receipt_hash_algorithm": {
+          "const": "SHA256_CANONICAL_RECEIPT_EXCLUDING_RECEIPT_SHA256/1.0"
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "total_field_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_ref",
+        "authority",
+        "decision",
+        "identity_root_ref",
+        "root_packet_ref",
+        "subject_binding_ref",
+        "root_generation",
+        "revocation_epoch",
+        "session_ref",
+        "scene_ref",
+        "action_hash",
+        "purpose_ref",
+        "scope_refs",
+        "effect_class",
+        "member_display_hash",
+        "terms_version",
+        "amount_currency_hash",
+        "verifier_ref",
+        "verifier_version",
+        "evidence_refs",
+        "verification_result_hash",
+        "issued_at",
+        "expires_at",
+        "nonce_ref",
+        "nonce_consumption_required",
+        "independent_receipt",
+        "receipt_hash_algorithm",
+        "receipt_sha256"
+      ],
+      "properties": {
+        "receipt_ref": {
+          "type": "string",
+          "pattern": "^total_field_receipt_ref:sha256:[0-9a-f]{64}$"
+        },
+        "authority": {
+          "const": "total_field_verifier"
+        },
+        "decision": {
+          "enum": [
+            "PASS",
+            "HOLD",
+            "BLOCK"
+          ]
+        },
+        "identity_root_ref": {
+          "type": "string",
+          "pattern": "^member_identity_root_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_packet_ref": {
+          "type": "string",
+          "pattern": "^member_root_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "subject_binding_ref": {
+          "type": "string",
+          "pattern": "^member_subject_binding_ref:sha256:[0-9a-f]{64}$"
+        },
+        "root_generation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revocation_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "session_ref": {
+          "type": "string",
+          "pattern": "^member_session_ref:sha256:[0-9a-f]{64}$"
+        },
+        "scene_ref": {
+          "type": "string",
+          "pattern": "^member_scene_ref:sha256:[0-9a-f]{64}$"
+        },
+        "action_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "purpose_ref": {
+          "$ref": "#/$defs/purpose_ref"
+        },
+        "scope_refs": {
+          "$ref": "#/$defs/scope_refs"
+        },
+        "effect_class": {
+          "$ref": "#/$defs/effect_class"
+        },
+        "member_display_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "terms_version": {
+          "$ref": "#/$defs/version"
+        },
+        "amount_currency_hash": {
+          "$ref": "#/$defs/nullable_amount_currency_hash"
+        },
+        "verifier_ref": {
+          "type": "string",
+          "pattern": "^total_field_verifier_ref:sha256:[0-9a-f]{64}$"
+        },
+        "verifier_version": {
+          "$ref": "#/$defs/version"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^evidence_ref:sha256:[0-9a-f]{64}$"
+          }
+        },
+        "verification_result_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "issued_at": {
+          "$ref": "#/$defs/zulu_datetime"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/zulu_datetime"
+        },
+        "nonce_ref": {
+          "type": "string",
+          "pattern": "^nonce_ref:sha256:[0-9a-f]{64}$"
+        },
+        "nonce_consumption_required": {
+          "const": true
+        },
+        "independent_receipt": {
+          "const": true
+        },
+        "receipt_hash_algorithm": {
+          "const": "SHA256_CANONICAL_RECEIPT_EXCLUDING_RECEIPT_SHA256/1.0"
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "odoo_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "not_authorization_receipt",
+        "workflow_ref",
+        "workflow_state_hash",
+        "action_hash",
+        "state"
+      ],
+      "properties": {
+        "authority": {
+          "const": "odoo"
+        },
+        "not_authorization_receipt": {
+          "const": true
+        },
+        "workflow_ref": {
+          "type": "string",
+          "pattern": "^odoo_workflow_ref:sha256:[0-9a-f]{64}$"
+        },
+        "workflow_state_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "action_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "state": {
+          "enum": [
+            "BOUND",
+            "HOLD",
+            "REVOKED"
+          ]
+        }
+      }
+    },
+    "authority_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_consent_authority",
+        "safety_and_landing_authority",
+        "process_authority",
+        "candidate_authority"
+      ],
+      "properties": {
+        "member_consent_authority": {
+          "const": "member"
+        },
+        "safety_and_landing_authority": {
+          "const": "total_field_verifier"
+        },
+        "process_authority": {
+          "const": "odoo"
+        },
+        "candidate_authority": {
+          "const": "none"
+        }
+      }
+    },
+    "generative_transmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "state_packet_ref",
+        "reconstruction_condition_ref",
+        "equivalent_state_ref",
+        "total_field_verify_ref",
+        "ordinary_file_movement",
+        "cloud_sync",
+        "backup",
+        "download_decryption"
+      ],
+      "properties": {
+        "protocol": {
+          "const": "W7TP_8D_INTENT_FIELD_PACKET"
+        },
+        "state_packet_ref": {
+          "type": "string",
+          "pattern": "^state_packet_ref:sha256:[0-9a-f]{64}$"
+        },
+        "reconstruction_condition_ref": {
+          "type": "string",
+          "pattern": "^reconstruction_condition_ref:sha256:[0-9a-f]{64}$"
+        },
+        "equivalent_state_ref": {
+          "type": "string",
+          "pattern": "^equivalent_state_ref:sha256:[0-9a-f]{64}$"
+        },
+        "total_field_verify_ref": {
+          "type": "string",
+          "pattern": "^total_field_verify_ref:sha256:[0-9a-f]{64}$"
+        },
+        "ordinary_file_movement": {
+          "const": false
+        },
+        "cloud_sync": {
+          "const": false
+        },
+        "backup": {
+          "const": false
+        },
+        "download_decryption": {
+          "const": false
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization",
+        "hash_algorithm",
+        "hash_scope",
+        "content_sha256"
+      ],
+      "properties": {
+        "canonicalization": {
+          "const": "UTF8_NFC_SORTED_KEYS_NO_WHITESPACE_NO_FLOATS"
+        },
+        "hash_algorithm": {
+          "const": "SHA-256"
+        },
+        "hash_scope": {
+          "const": "ALL_PACKET_FIELDS_EXCEPT_INTEGRITY_CONTENT_SHA256"
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

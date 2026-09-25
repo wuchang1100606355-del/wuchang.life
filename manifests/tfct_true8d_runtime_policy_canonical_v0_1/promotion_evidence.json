@@ -1,0 +1,81 @@
+{
+  "PATENT_CANDIDATE_REVIEW_REQUIRED": "YES",
+  "accepted_validation": [
+    {
+      "stage": "D3_CANDIDATE",
+      "status": "PASS",
+      "test_count": "15/15"
+    },
+    {
+      "stage": "D3_VERIFIER",
+      "status": "PASS",
+      "test_count": "4/4"
+    },
+    {
+      "stage": "RUNTIME_REPLAY",
+      "status": "PASS",
+      "test_count": "4/4"
+    },
+    {
+      "stage": "RUNTIME_REPLAY_VERIFIER",
+      "status": "PASS",
+      "test_count": "9/9"
+    },
+    {
+      "stage": "RUNTIME_CANDIDATE",
+      "status": "PASS_TFCT_TRUE8D_RUNTIME_CANDIDATE_IMPLEMENTED",
+      "test_count": "45/45",
+      "verifier": "PASS_VERIFY_TFCT_TRUE8D_RUNTIME_CANDIDATE"
+    },
+    {
+      "stage": "CANDIDATE_PACKAGE",
+      "status": "PASS_TFCT_TRUE8D_RUNTIME_CANDIDATE_PACKAGED",
+      "test_count": "15/15",
+      "verifier": "PASS_VERIFY_TFCT_TRUE8D_RUNTIME_CANDIDATE_PACKAGE"
+    },
+    {
+      "stage": "DOCUMENT_INTEGRATION",
+      "status": "PASS",
+      "test_count": "8/8"
+    }
+  ],
+  "d3_write": false,
+  "db_write": false,
+  "deploy": false,
+  "other_active_canonical_write": false,
+  "other_pointer_write": false,
+  "owner": {
+    "owner_confirmation": "YES",
+    "owner_decision": "確認升格",
+    "owner_excludes": [
+      "THEOREM_PROMOTION",
+      "DISTRIBUTED_CONSENSUS",
+      "PRODUCTION_ADI",
+      "DEPLOYMENT",
+      "PERFORMANCE_CLAIMS"
+    ],
+    "owner_scope": "僅升格已通過驗證的 TFCT／TRUE8D Runtime Policy 與工程契約"
+  },
+  "packet_runtime_write": false,
+  "policy_sha256": "d27230aba7a4ecd051f4169184c1fa5357ce5efa1d62019238d68991b0140960",
+  "promotion_run_id": "TFCT_TRUE8D_RUNTIME_POLICY_CANONICAL_PROMOTION_V0_1",
+  "protected_files_unchanged": true,
+  "restart": false,
+  "router_write": false,
+  "runtime_policy": "runtime/total_field/candidate/tfct_true8d_runtime_policy_v0_1.json",
+  "schema_version": "tfct_true8d_runtime_policy_promotion_evidence_v0.1",
+  "source_documents": [
+    "docs/total_field/TFCT_TRUE8D_RUNTIME_CANDIDATE_IMPLEMENTATION_REPORT.md",
+    "docs/total_field/TFCT_TRUE8D_RUNTIME_CANDIDATE_PACKAGE_REPORT.md",
+    "scripts/verify/verify_tfct_true8d_runtime_candidate.py",
+    "scripts/verify/verify_tfct_true8d_runtime_candidate_package.py"
+  ],
+  "source_policy": "manifests/tfct_true8d_runtime_candidate_v0_1/policy.json",
+  "source_run_ids": {
+    "candidate_package": "TFCT_TRUE8D_RUNTIME_CANDIDATE_POLICY_PACKAGE_V0_1",
+    "d3_candidate": "D3_COORDINATE_TRANSITION_V0_3_CANDIDATE",
+    "document_consolidation": "TFCT_TRUE8D_W7TP_8DGTE_SYSTEM_CONSOLIDATION_CANDIDATE_V0_1",
+    "runtime_candidate": "TFCT_TRUE8D_RUNTIME_CANDIDATE_V0_1"
+  },
+  "state": "PASS"
+}

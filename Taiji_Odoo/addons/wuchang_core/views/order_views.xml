@@ -4,17 +4,26 @@
     <field name="name">wuchang.order.tree</field>
     <field name="model">wuchang.order</field>
     <field name="arch" type="xml">
-      <tree string="線上訂單">
+      <list string="線上訂單">
         <field name="name"/>
         <field name="state"/>
         <field name="customer_name"/>
         <field name="phone"/>
         <field name="sale_mode"/>
+        <field name="service_relation_type"/>
+        <field name="care_context"/>
+        <field name="sovereign_ai_persona"/>
+        <field name="eight_dimensional_code_ref"/>
+        <field name="property_community_id"/>
+        <field name="merchant_id"/>
+        <field name="delivery_team_id"/>
+        <field name="social_worker_governance_required"/>
+        <field name="caregiver_employee_required"/>
         <field name="delivery_address"/>
         <field name="delivery_time"/>
         <field name="total_amount"/>
         <field name="create_date"/>
-      </tree>
+      </list>
     </field>
   </record>
 
@@ -34,6 +43,22 @@
           </group>
           <group string="外送資訊">
             <field name="sale_mode"/>
+            <field name="service_relation_type"/>
+            <field name="care_context"/>
+            <field name="property_community_id"/>
+            <field name="property_unit_id"/>
+            <field name="merchant_id"/>
+            <field name="delivery_team_id"/>
+            <field name="caregiver_staff_id"/>
+            <field name="social_worker_partner_id"/>
+            <field name="social_worker_governance_required"/>
+            <field name="caregiver_employee_required"/>
+            <field name="requires_caregiver_escort"/>
+            <field name="requires_social_worker_review"/>
+            <field name="total_field_relation_ref"/>
+            <field name="sovereign_ai_persona"/>
+            <field name="eight_dimensional_code_ref"/>
+            <field name="property_commerce_relation_summary" readonly="1"/>
             <field name="delivery_address"/>
             <field name="delivery_time"/>
             <field name="delivery_note"/>
@@ -50,9 +75,9 @@
   <record id="action_wuchang_order" model="ir.actions.act_window">
     <field name="name">線上訂單</field>
     <field name="res_model">wuchang.order</field>
-    <field name="view_mode">tree,form</field>
+    <field name="view_mode">list,form</field>
     <field name="context">{"search_default_delivery": 1}</field>
   </record>
 
-  <menuitem id="menu_wuchang_order" name="線上訂單" parent="wuchang_core.menu_wuchang_task_root" action="action_wuchang_order" sequence="15" groups="base.group_user"/>
+  <menuitem id="menu_wuchang_order" name="物業商業外送訂單" parent="wuchang_core.menu_wuchang_root" action="action_wuchang_order" sequence="35" groups="base.group_user"/>
 </odoo>

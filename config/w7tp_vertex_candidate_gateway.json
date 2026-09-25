@@ -1,0 +1,12 @@
+{
+  "schema_version": "W7TP-VERTEX-CANDIDATE-GATEWAY/1.0",
+  "provider": "GOOGLE_VERTEX_AI",
+  "project": "my-j-483304",
+  "location": "global",
+  "model": "gemini-2.5-flash",
+  "credential_file_ref": "secrets/gcp-sa-key.json",
+  "cloud_output_authority": "CANDIDATE_ONLY",
+  "formal_execution_authority": "LOCAL_TOTAL_FIELD_ONLY",
+  "founder_authorization_per_request": true,
+  "auto_cloud_call": false
+}

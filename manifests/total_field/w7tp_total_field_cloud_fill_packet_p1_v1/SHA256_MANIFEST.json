@@ -1,0 +1,33 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-CLOUD-FILL-P1-SHA256-MANIFEST/1.0",
+  "run_id": "W7TP_TOTAL_FIELD_CLOUD_FILL_PACKET_P1_STATIC_CANDIDATE_V1",
+  "created_at": "2026-07-19T13:36:35Z",
+  "state": "SUBMITTED_FOR_TOTAL_FIELD_REVIEW",
+  "content_hash_rule": "SHA256_OF_SHA256SUM_OUTPUT_LINES_IN_LISTED_ORDER",
+  "content_sha256": "ed81d9eb03c8bacf73eb5518cf68aca5e7efb0113efca26a6c21aeedd8234d4e",
+  "files": [
+    {"path": "configs/total_field/w7tp_total_field_cloud_fill_rules_v1.json", "sha256": "ce7acd2d740e440949dae0d0598789d651e6b57de9042bdef1100f0325b2104a", "size": 3578, "role": "new_authority_rules"},
+    {"path": "configs/total_field/w7tp_static_cloud_fill_rule_capsule_v1.json", "sha256": "aa6af1c7e359ee9f96e908d8b87f80bdb12a94baf62a52e56d01bc57f88858d3", "size": 1566, "role": "new_static_rule_capsule"},
+    {"path": "schemas/field/w7tp_total_field_cloud_fill_request_v1.schema.json", "sha256": "74a898496b3a22ceb4eadf003aa7abc5c598a08b3bd89674f1163b9379ce80f1", "size": 8931, "role": "new_request_schema"},
+    {"path": "schemas/field/w7tp_total_field_cloud_fill_response_v1.schema.json", "sha256": "26e293952039b3e44aadaf1d397439b36b0339af0826687a2a8bb1ff9a993b8c", "size": 3971, "role": "new_response_schema"},
+    {"path": "tools/total_field_cloud_fill_packet.py", "sha256": "44c8ca234590698dcbb39283718c27deca909f7ca50e5988ef15164fb2951979", "size": 34955, "role": "new_validator_broker_receipt_adapter"},
+    {"path": "tools/cloud_agent_candidate_provider.py", "sha256": "08d82942136dd26fbc6aa5b6138749ad458533500e72140560222c7c696a440a", "size": 16085, "role": "modified_existing_provider_adapter"},
+    {"path": "tests/test_w7tp_total_field_cloud_fill_packet.py", "sha256": "0f7c1c3e3e0d857f371f396341019f383a7aba80c9b9658445d0260ffcff1814", "size": 21580, "role": "new_red_team_tests"},
+    {"path": "docs/total_field/W7TP_TOTAL_FIELD_CLOUD_FILL_PACKET_P1_STATIC_CANDIDATE.md", "sha256": "df151fa2e64708e06a1b8e643a2575fa324a95ee299eb8f197c3e6c72c1fed9c", "size": 6202, "role": "new_candidate_document"},
+    {"path": "tools/total_field_candidate_gateway.py", "sha256": "545c4f843f3e81340181b8fb904186418a5e32d2ca87b875f30e6cdf4259a792", "size": 20509, "role": "reused_single_receiver"},
+    {"path": "tools/domain_completion_total_field_gateway.py", "sha256": "f16c34305a7a87e568bf729a3e49a69830d9fa41df7d7efabe84f461c00c8f13", "size": 21233, "role": "reused_d1_d8_adapter"},
+    {"path": "tools/total_field/human_response_renderer.py", "sha256": "721677c9332744ea8008cfc1d2cfd9e71bade4b7705dc0ab849b0efdf34c7e44", "size": 26892, "role": "reused_human_renderer"},
+    {"path": "schemas/field/sovereign_ai_domain_completion_candidate.schema.json", "sha256": "8bbf893abfbd98278e8987bb0fef8eac7d7d369ae7b2e20c30d3fe23f78e7d07", "size": 2561, "role": "reused_candidate_schema"},
+    {"path": "manifests/total_field/w7tp_total_field_cloud_fill_packet_p1_v1/CANDIDATE_MANIFEST.json", "sha256": "37311ffd74a7aae107246f31d2383345e44127b76eccaccd8aa5d1b5a2691f74", "size": 5284, "role": "candidate_manifest"},
+    {"path": "manifests/total_field/w7tp_total_field_cloud_fill_packet_p1_v1/RED_TEAM_EVIDENCE.json", "sha256": "40e3d4b22a8b8c644ce6c305399f29c1bec747a3ece7a5eaeb585d9a0028f253", "size": 6375, "role": "red_team_evidence"},
+    {"path": "manifests/total_field/w7tp_total_field_cloud_fill_packet_p1_v1/TOTAL_FIELD_REVIEW_REQUEST.json", "sha256": "a0042713fb3d4999f26c683222df54491ac15b63b31ac1d58f3f4d2234ffbe25", "size": 3289, "role": "total_field_review_request"}
+  ],
+  "static_rule_capsule_content_sha256": "3f2022c894697751719217674a197971c6d85ae24ba245eaac22193df75ef44a",
+  "final_decision": null,
+  "canonical_write": false,
+  "runtime_activation": false,
+  "deploy": false,
+  "model_reload": false,
+  "database_write": false,
+  "next": "AWAIT_TOTAL_FIELD_EXPLICIT_EXACT_HASH_BOUND_REVIEW_DECISION"
+}

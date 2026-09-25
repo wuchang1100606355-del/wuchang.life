@@ -1,0 +1,35 @@
+name: w7tp-xiaoj-dual-llm-c1-c9-runner
+
+services:
+  c1-c9-runner:
+    image: w7tp-true8d-contract-sandbox@sha256:066cf56812708adef0fdbfd1677fb6bf3401c86e0c1c309ab4472920abde7ae5
+    pull_policy: never
+    profiles: ["explicit-canary-only"]
+    network_mode: none
+    read_only: true
+    restart: "no"
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m"]
+    pids_limit: 32
+    deploy:
+      resources:
+        limits:
+          cpus: "1.000"
+          memory: 1024M
+          pids: 32
+    volumes:
+      - type: bind
+        source: /home/taiji_admin/Taiji_Hub
+        target: /workspace
+        read_only: true
+    working_dir: /workspace
+    entrypoint:
+      - python3
+      - /workspace/tools/total_field/w7tp_xiaoj_dual_llm_c1_c9_runner.py
+    command: []
+    labels:
+      w7tp.run_id: W7TP_XIAOJ_DUAL_LLM_C1_C9_REPO_RUNNER_BINDING_V1
+      w7tp.execution_mode: ISOLATED_TRANSIENT_SINGLE_USE
+      w7tp.total_field_authority: "true"
+      w7tp.canary_only: "true"

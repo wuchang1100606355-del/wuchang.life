@@ -1,0 +1,61 @@
+<svg width="1400" height="900" viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1f3f"/>
+      <stop offset="50%" stop-color="#16476a"/>
+      <stop offset="100%" stop-color="#0e2f45"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.73" cy="0.16" r="0.8" spreadMethod="pad">
+      <stop offset="0%" stop-color="#ffd38a" stop-opacity="0.62"/>
+      <stop offset="42%" stop-color="#ffd38a" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#ffd38a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="river" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7cc7ff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#6cc3c1" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="900" fill="url(#sky)"/>
+  <g opacity="0.35">
+    <path d="M0 0H1400V900H0z" fill="url(#halo)"/>
+    <ellipse cx="1120" cy="150" rx="220" ry="120" fill="url(#halo)"/>
+    <ellipse cx="250" cy="640" rx="500" ry="260" fill="#7ed6ad" fill-opacity="0.12"/>
+  </g>
+
+  <g fill="none" stroke="#d8ecef" stroke-width="1.5" opacity="0.45">
+    <line x1="0" y1="640" x2="1400" y2="640"/>
+    <line x1="0" y1="690" x2="1400" y2="690"/>
+    <line x1="0" y1="560" x2="1400" y2="560" opacity="0.35"/>
+    <line x1="0" y1="730" x2="1400" y2="730" opacity="0.35"/>
+  </g>
+
+  <g opacity="0.6">
+    <circle cx="220" cy="150" r="120" fill="#67d4b9" fill-opacity="0.06"/>
+    <circle cx="1040" cy="180" r="190" fill="#ffd38a" fill-opacity="0.08"/>
+    <circle cx="760" cy="720" r="250" fill="#8ec5ff" fill-opacity="0.14"/>
+  </g>
+
+  <path d="M90 760 C200 700 300 730 380 690 C490 640 520 600 620 620 C720 638 780 640 860 610 C940 580 1010 560 1100 590 C1170 614 1260 658 1400 620" fill="none" stroke="url(#river)" stroke-width="40" stroke-linecap="round" opacity="0.55"/>
+  <path d="M-40 760 C80 700 220 760 330 710 C450 655 520 684 610 680 C705 676 820 700 910 666 C990 635 1060 646 1170 620 C1250 599 1350 648 1490 600" fill="none" stroke="#f7f8dc" stroke-opacity="0.28" stroke-width="8"/>
+
+  <g fill="#dff7f2" opacity="0.6">
+    <rect x="190" y="450" width="130" height="220" rx="24" fill="#9bd2d6" fill-opacity="0.22"/>
+    <rect x="240" y="410" width="130" height="120" rx="22" fill="#f4d59d" fill-opacity="0.35"/>
+    <rect x="350" y="480" width="160" height="190" rx="24" fill="#8f6d5a" fill-opacity="0.25"/>
+    <rect x="590" y="445" width="170" height="225" rx="26" fill="#8ec5ff" fill-opacity="0.2"/>
+    <rect x="780" y="465" width="220" height="205" rx="24" fill="#ffd6a5" fill-opacity="0.22"/>
+    <rect x="1040" y="440" width="190" height="235" rx="28" fill="#89d7c8" fill-opacity="0.2"/>
+  </g>
+
+  <g opacity="0.6">
+    <circle cx="270" cy="350" r="28" fill="#ffd3a2"/>
+    <circle cx="620" cy="270" r="18" fill="#a9e2ff"/>
+    <circle cx="1090" cy="320" r="35" fill="#c8ffd2"/>
+  </g>
+
+  <g opacity="0.65" fill="#f8fafb" font-family="'Noto Sans TC', 'PingFang TC', sans-serif" font-size="40" font-weight="700">
+    <text x="90" y="120">社區 × 技術</text>
+    <text x="700" y="820" fill="white" opacity="0.78" font-size="30">精準治理、公益共好</text>
+  </g>
+</svg>

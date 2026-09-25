@@ -18,24 +18,8 @@ class ResPartner(models.Model):
     )
 
     def _wuchang_get_or_create_google_member(self, userinfo):
+        """Backward-compatible lookup that never creates or email-merges."""
         google_sub = userinfo.get("sub")
-        email = (userinfo.get("email") or "").strip().lower()
-        name = userinfo.get("name") or email or "Google Member"
         if not google_sub:
             raise ValueError("Google userinfo missing subject")
-
-        partner = self.search([("wuchang_google_sub", "=", google_sub)], limit=1)
-        if not partner and email:
-            partner = self.search([("email", "=", email)], limit=1)
-
-        values = {
-            "name": name,
-            "email": email or False,
-            "wuchang_google_sub": google_sub,
-            "wuchang_google_email_verified": bool(userinfo.get("email_verified")),
-            "wuchang_member_join_source": "google",
-        }
-        if partner:
-            partner.write(values)
-            return partner
-        return self.create(values)
+        return self.search([("wuchang_google_sub", "=", google_sub)], limit=1)

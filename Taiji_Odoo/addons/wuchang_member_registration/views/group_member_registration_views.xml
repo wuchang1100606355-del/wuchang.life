@@ -1,0 +1,166 @@
+<odoo>
+  <record id="view_wuchang_member_group_registration_batch_list" model="ir.ui.view">
+    <field name="name">wuchang.member.group.registration.batch.list</field>
+    <field name="model">wuchang.member.group.registration.batch</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="group_ref"/>
+        <field name="packet_ref"/>
+        <field name="issuer_user_id"/>
+        <field name="topology_ref"/>
+        <field name="registration_scope"/>
+        <field name="business_onboarding_enabled"/>
+        <field name="business_onboarding_state"/>
+        <field name="expires_at"/>
+        <field name="state"/>
+        <field name="tenant_ref"/>
+        <field name="public_page_path"/>
+        <field name="packet_hash"/>
+        <field name="d8_ref"/>
+        <field name="evidence_ref"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_wuchang_member_group_registration_batch_form" model="ir.ui.view">
+    <field name="name">wuchang.member.group.registration.batch.form</field>
+    <field name="model">wuchang.member.group.registration.batch</field>
+    <field name="arch" type="xml">
+      <form string="Group Member 8D Registration Batch">
+        <header>
+          <button name="action_submit_business_onboarding" type="object" string="Submit Business Onboarding" class="btn-primary" groups="wuchang_member_registration.group_wuchang_member_manager"/>
+          <button name="action_total_field_approve_business_onboarding" type="object" string="Approve Business Onboarding" class="btn-success" groups="wuchang_member_registration.group_wuchang_member_admin"/>
+          <field name="business_onboarding_state" widget="statusbar"/>
+        </header>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="state"/>
+            <field name="business_onboarding_enabled"/>
+            <field name="expires_at"/>
+            <field name="issuer_user_id" readonly="1"/>
+          </group>
+          <group string="Topology">
+            <field name="group_ref" readonly="1"/>
+            <field name="packet_ref" readonly="1"/>
+            <field name="topology_ref"/>
+            <field name="registration_scope"/>
+          </group>
+          <group string="8D Payload">
+            <field name="packet_hash" readonly="1"/>
+            <field name="d8_ref" readonly="1"/>
+            <field name="evidence_ref" readonly="1"/>
+            <field name="qr_payload" readonly="1"/>
+          </group>
+          <group string="Cafe Business Onboarding">
+            <field name="responsible_registration_id"/>
+            <field name="responsible_person_ref"/>
+            <field name="responsible_role"/>
+            <field name="business_name"/>
+            <field name="business_ref"/>
+            <field name="business_address_ref"/>
+            <field name="business_registration_ref"/>
+            <field name="store_name"/>
+            <field name="store_ref"/>
+            <field name="service_area_ref"/>
+            <field name="service_items_json"/>
+            <field name="line_official_account_ref"/>
+            <field name="odoo_service_ref"/>
+            <field name="pos_config_ref"/>
+            <field name="total_field_review_ref" readonly="1"/>
+          </group>
+          <group string="Operational Entry Settings">
+            <field name="tenant_ref" readonly="1"/>
+            <field name="service_profile_ref" readonly="1"/>
+            <field name="container_config_ref" readonly="1"/>
+            <field name="url_routing_ref" readonly="1"/>
+            <field name="public_page_path" readonly="1"/>
+            <field name="member_entry_path" readonly="1"/>
+            <field name="line_ai_entry_ref" readonly="1"/>
+            <field name="odoo_pos_management_entry_ref" readonly="1"/>
+            <field name="ordering_or_service_entry_path" readonly="1"/>
+          </group>
+          <notebook>
+            <page string="Registration Packets">
+              <field name="packet_ids" readonly="1"/>
+            </page>
+            <page string="Merchant 8D+7D State Packet">
+              <field name="merchant_state_packet_json" readonly="1"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_wuchang_member_group_registration_packet_list" model="ir.ui.view">
+    <field name="name">wuchang.member.group.registration.packet.list</field>
+    <field name="model">wuchang.member.group.registration.packet</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="packet_ref"/>
+        <field name="group_ref"/>
+        <field name="provider"/>
+        <field name="provider_user_ref"/>
+        <field name="provisional_member_ref"/>
+        <field name="state"/>
+        <field name="packet_hash"/>
+        <field name="d8_ref"/>
+        <field name="evidence_ref"/>
+        <field name="create_date"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_wuchang_member_group_registration_packet_form" model="ir.ui.view">
+    <field name="name">wuchang.member.group.registration.packet.form</field>
+    <field name="model">wuchang.member.group.registration.packet</field>
+    <field name="arch" type="xml">
+      <form string="Group Member 8D Registration Packet">
+        <sheet>
+          <group>
+            <field name="packet_ref" readonly="1"/>
+            <field name="group_ref" readonly="1"/>
+            <field name="provider" readonly="1"/>
+            <field name="provider_user_ref" readonly="1"/>
+            <field name="provisional_member_ref" readonly="1"/>
+            <field name="state" readonly="1"/>
+          </group>
+          <group string="8D Evidence">
+            <field name="packet_hash" readonly="1"/>
+            <field name="d8_ref" readonly="1"/>
+            <field name="evidence_ref" readonly="1"/>
+            <field name="packet_json" readonly="1"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_wuchang_member_group_registration_batch" model="ir.actions.act_window">
+    <field name="name">Group 8D Registration Batches</field>
+    <field name="res_model">wuchang.member.group.registration.batch</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <record id="action_wuchang_member_group_registration_packet" model="ir.actions.act_window">
+    <field name="name">Group 8D Registration Packets</field>
+    <field name="res_model">wuchang.member.group.registration.packet</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <menuitem id="menu_wuchang_member_group_registration_batch"
+            name="Group 8D Batches"
+            parent="menu_wuchang_member_registration_root"
+            action="action_wuchang_member_group_registration_batch"
+            groups="wuchang_member_registration.group_wuchang_member_manager"
+            sequence="20"/>
+
+  <menuitem id="menu_wuchang_member_group_registration_packet"
+            name="Group 8D Packets"
+            parent="menu_wuchang_member_registration_root"
+            action="action_wuchang_member_group_registration_packet"
+            groups="wuchang_member_registration.group_wuchang_member_manager"
+            sequence="30"/>
+</odoo>

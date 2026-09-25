@@ -5,11 +5,28 @@
     "category": "Wuchang/W7TP",
     "author": "Wuchang Smart Cloud",
     "license": "LGPL-3",
-    "depends": ["base", "web"],
-    "data": [
-        "security/ir.model.access.csv",
-        "views/member_registration_views.xml",
+    "depends": [
+        "base",
+        "web",
+        "auth_signup",
+        "product",
+        "point_of_sale",
+        "website_forum",
     ],
+    "data": [
+        "security/wuchang_member_groups.xml",
+        "security/ir.model.access.csv",
+        "views/login_templates.xml",
+        "views/signup_templates.xml",
+        "views/error_templates.xml",
+        "views/member_registration_views.xml",
+        "views/group_member_registration_views.xml",
+    ],
+    "assets": {
+        "web.assets_frontend": [
+            "wuchang_member_registration/static/src/scss/portal.scss",
+        ],
+    },
     "installable": True,
     "application": False,
 }

@@ -1,0 +1,28 @@
+# W7TP Redteam Hold Rules
+# Defines absolute boundaries and static constraints for the HOLD/FAIL lane.
+# Parsed by Local Verifier and 8D Gateway.
+
+governance_boundaries:
+  # Paths that cloud compute candidates are NEVER allowed to target for PATCH/UPDATE.
+  blocked_paths:
+    - "/etc/"
+    - "/root/"
+    - ".env"
+    - "secrets/"
+    - "keys/"
+    - "odoo.conf"
+    - "application_default_credentials.json"
+
+  # Mutation intents that are strictly forbidden in standard generative offloading.
+  forbidden_intents:
+    - "DEPLOY_PROD"
+    - "DB_DROP"
+    - "MEMBER_PLAINTEXT_DUMP"
+    - "FINANCIAL_TRANSFER"
+    - "SERVICE_RESTART"
+
+  # Enforce evidence ledger logging for every transaction
+  enforce_evidence_logging: true
+  
+  # Time-to-Live for dry-run tokens or candidate packets (Time Dimension)
+  max_dry_run_ttl_seconds: 300

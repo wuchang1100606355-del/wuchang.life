@@ -1,0 +1,25 @@
+{
+  "schema_version": "W7TP-TOTAL-FIELD-AUTHORITY-BINDING-REQUEST/1.0",
+  "packet_type": "AUTHORITY_BINDING_REQUEST",
+  "request_id": "PKT_05C_SUCCESSOR_REBIND_AUTHORITY_BINDING_REQUEST_20260804_V1",
+  "run_id": "PKT_05C_SUCCESSOR_REBIND_REVIEW_CONTRACT_CANDIDATE_20260804_V1",
+  "node_id": "taiji01",
+  "state": "REQUEST_ONLY",
+  "contract_state": "CANDIDATE_ONLY",
+  "created_at": "2026-08-03T18:03:45Z",
+  "requested_contracts": [
+    "w7tp_total_field_successor_rebind_review_request_v1",
+    "w7tp_total_field_successor_rebind_decision_v1",
+    "w7tp_total_field_successor_rebind_receipt_v1",
+    "w7tp_total_field_successor_rebind_seal_v1"
+  ],
+  "requested_tools": [
+    "w7tp_successor_rebind_reviewer_v1",
+    "w7tp_successor_rebind_seal_v1"
+  ],
+  "formal_decision_authority": false,
+  "formal_seal_authority": false,
+  "active_pointer_created": false,
+  "replay_ledger_state": "REQUEST_ONLY",
+  "core_landing": "HOLD_PENDING_SEPARATE_AUTHORIZATION"
+}

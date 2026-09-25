@@ -1,0 +1,56 @@
+{
+  "schema": "W7TP_IMAGE_SKELETON_PROCESSING_CONTRACT_V1",
+  "state": "IMAGE_SKELETON_PROCESSING_SPEC_READY",
+  "authority": {
+    "avatar_layer": "display_only",
+    "cloud_compute": "candidate_only",
+    "local_w7tp": "script_pose_audio_verification_authority",
+    "human_gate": "formal_playback_approval"
+  },
+  "tracks": {
+    "skeleton_track": ["spine", "head", "shoulder_l", "shoulder_r", "elbow_l", "elbow_r", "hand_l", "hand_r"],
+    "face_track": ["head_yaw", "head_pitch", "eye_state", "brow_state", "expression_ref"],
+    "mouth_track": ["viseme_ref", "mouth_open", "mouth_wide", "mouth_round", "timecode"],
+    "gesture_track": ["greet", "recommend", "confirm", "wait", "thank"],
+    "scene_track": ["menu_ref", "ticker_ref", "order_candidate_ref", "evidence_ref"],
+    "audio_track": ["voice_ref", "tts_ref", "homepod_route_ref", "sunmi_route_ref"]
+  },
+  "packet_flow": [
+    "script_candidate",
+    "local_script_verify",
+    "audio_or_tts_candidate",
+    "viseme_timeline_candidate",
+    "skeleton_scene_packet",
+    "human_playback_confirm",
+    "browser_display_playback",
+    "evidence_seal"
+  ],
+  "8d_dimensions": {
+    "D1_IDENTITY": ["avatar_ref", "operator_ref", "display_device_ref"],
+    "D2_INTENT": ["avatar.play_script", "avatar.play_menu_intro", "avatar.play_order_candidate"],
+    "D3_STATE": ["idle", "speaking", "confirming", "hold", "offline"],
+    "D4_TOPOLOGY": ["store_ref", "screen_ref", "audio_ref", "customer_display_ref"],
+    "D5_RESOURCE": ["skeleton_ref", "face_ref", "mouth_ref", "audio_ref", "scene_ref"],
+    "D6_GOVERNANCE": ["approved_script_only", "no_member_plaintext", "no_payment_data", "no_secret"],
+    "D7_VERIFICATION": ["script_hash", "audio_hash", "pose_hash", "ttl", "human_gate"],
+    "D8_ENVELOPE": ["packet_hash", "hmac_ref", "seal_ref", "version"]
+  },
+  "forbidden": [
+    "direct_pos_write",
+    "payment_capture",
+    "member_plaintext_to_avatar",
+    "secret_to_cloud",
+    "unreviewed_package_install",
+    "raw_customer_video_cloud_upload"
+  ],
+  "safety": {
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "service_restart": false,
+    "deploy": false,
+    "production_release": false,
+    "secret_read": false,
+    "member_plaintext_read": false
+  }
+}

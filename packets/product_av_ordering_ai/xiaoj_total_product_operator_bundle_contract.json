@@ -1,0 +1,65 @@
+{
+  "schema": "W7TP_XIAOJ_TOTAL_PRODUCT_OPERATOR_BUNDLE_CONTRACT_V1",
+  "state": "P1_TOTAL_PRODUCT_OPERATOR_BUNDLE_READY",
+  "tool": "tools/xiaoj_total_product_operator_bundle.py",
+  "service": "wuchang_cafe_ai_gateway.services.total_product_operator_bundle.build_total_product_operator_bundle_payload",
+  "api": "/wuchang/xiaoj/api/total-product-operator-bundle",
+  "api_auth": "user",
+  "api_writes_files": false,
+  "tool_refresh_with_filled_refs": "tools/xiaoj_total_product_operator_bundle.py --input-refs <filled_refs.json> --allow-verified --out-dir <bundle_dir>",
+  "output_root": "runtime/product_av_ordering_ai/total_product_operator_bundle/",
+  "bundle_files": [
+    "README.md",
+    "MANIFEST.json",
+    "ref_template.json",
+    "ref_collection.json",
+    "ref_worksheet.md",
+    "handoff.json"
+  ],
+  "aggregates": [
+    "total_product_ref_template",
+    "total_product_ref_collection",
+    "operator_fill_worksheet",
+    "total_product_operator_handoff",
+    "total_product_operator_bundle_payload"
+  ],
+  "operator_flow": [
+    "open README.md",
+    "open ref_worksheet.md",
+    "fill refs only",
+    "rerun bundle with input refs and allow_verified only after human owner/admin review",
+    "review refreshed ref_collection, worksheet, handoff, and manifest"
+  ],
+  "production_activation_ready_by_default": false,
+  "forbidden_inputs": [
+    "LINE password",
+    "LINE WORKS password",
+    "channel access token value",
+    "channel secret value",
+    "Google Gemini raw API key",
+    "Odoo password",
+    "router password",
+    "member plaintext",
+    "resident plaintext",
+    "payment card data",
+    "raw audio",
+    "raw video"
+  ],
+  "p1_side_effects": {
+    "external_api_call": false,
+    "formal_lineworks_send": false,
+    "formal_line_message_send": false,
+    "official_account_setting_changed": false,
+    "formal_member_registration": false,
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "resident_plaintext_read": false,
+    "raw_audio_saved": false,
+    "raw_video_saved": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}

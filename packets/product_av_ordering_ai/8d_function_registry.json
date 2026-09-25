@@ -1,0 +1,76 @@
+{
+  "schema": "W7TP_8D_FUNCTION_REGISTRY_V1",
+  "state": "SPEC_CONVERGED",
+  "registry": [
+    {
+      "function_code": "menu.browse.v1",
+      "intent": "browse_menu",
+      "odoo_surface": "product.product / pos.category / wuchang.menu.item",
+      "gui_actions": ["browse_menu", "scan_8d_code"],
+      "formal_write": false
+    },
+    {
+      "function_code": "order.candidate.create.v1",
+      "intent": "create_order_candidate",
+      "odoo_surface": "none_formal",
+      "gui_actions": ["add_item_candidate"],
+      "formal_write": false
+    },
+    {
+      "function_code": "order.candidate.validate.v1",
+      "intent": "validate_order_candidate",
+      "odoo_surface": "product.product read and option rules",
+      "gui_actions": ["validate_candidate"],
+      "formal_write": false
+    },
+    {
+      "function_code": "order.confirm.dry_run.v1",
+      "intent": "human_confirm_dry_run",
+      "odoo_surface": "evidence only",
+      "gui_actions": ["confirm_dry_run"],
+      "formal_write": false
+    },
+    {
+      "function_code": "member.group.register.v1",
+      "intent": "group_member_registration",
+      "odoo_surface": "wuchang.member.group.registration.batch / packet",
+      "gui_actions": ["open_group_registration"],
+      "formal_write": false
+    },
+    {
+      "function_code": "voice.say_candidate.v1",
+      "intent": "speak_safe_candidate",
+      "odoo_surface": "wuchang.device.audio adapter",
+      "gui_actions": ["speak_candidate"],
+      "formal_write": false
+    },
+    {
+      "function_code": "display.render_candidate.v1",
+      "intent": "render_customer_display",
+      "odoo_surface": "wuchang.device.display / customer display",
+      "gui_actions": ["render_candidate"],
+      "formal_write": false
+    },
+    {
+      "function_code": "anchor.render_state.v1",
+      "intent": "render_cloud_anchor_safe_state",
+      "odoo_surface": "config key refs only",
+      "gui_actions": ["render_anchor_state"],
+      "formal_write": false
+    },
+    {
+      "function_code": "evidence.seal.v1",
+      "intent": "seal_candidate_process",
+      "odoo_surface": "Total Field evidence",
+      "gui_actions": ["show_proof"],
+      "formal_write": false
+    },
+    {
+      "function_code": "pos.formal.submit.request.v1",
+      "intent": "request_formal_pos_submit",
+      "odoo_surface": "pos.order",
+      "gui_actions": ["request_formal_submit"],
+      "formal_write": "HOLD_OPERATOR_CONFIRM"
+    }
+  ]
+}

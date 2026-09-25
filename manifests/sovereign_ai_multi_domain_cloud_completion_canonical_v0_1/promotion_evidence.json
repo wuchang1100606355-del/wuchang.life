@@ -1,0 +1,39 @@
+{
+  "allow_only_commit": true,
+  "candidate_only": true,
+  "common_gateway_sources": [
+    "TOTAL_FIELD_PULL",
+    "LLM_PUSH",
+    "XIAOJ_LOCAL"
+  ],
+  "gates": {
+    "D4": "REQUIRED",
+    "D6": "REQUIRED",
+    "D8": "REQUIRED"
+  },
+  "owner_confirmation": "YES",
+  "patent_candidate_review_required": true,
+  "promoted_scope": [
+    "COMMUNITY",
+    "COMMERCE",
+    "PROPERTY"
+  ],
+  "promotion_run_id": "SOVEREIGN_AI_MULTI_DOMAIN_CLOUD_COMPLETION_CANONICAL_V0_1",
+  "protected_other_active_and_pointers": true,
+  "schema_version": "sovereign-ai.multi-domain-cloud-completion-promotion-evidence/0.1",
+  "side_effects": {
+    "db_write": false,
+    "deploy": false,
+    "restart": false,
+    "router_write": false
+  },
+  "source_candidate": {
+    "focused_tests": "30/30",
+    "policy": "runtime/total_field/candidate/sovereign_ai_domain_completion_policy_v0_1.json",
+    "policy_sha256": "795d86f1ab04047a4c212fa6c11231539119b5a0b96561981902d67aabad868a",
+    "run_id": "TFCT_TRUE8D_RUNTIME_SECURITY_CORRECTION_V0_1",
+    "state": "PASS_SOVEREIGN_AI_MULTI_DOMAIN_CLOUD_COMPLETION_CANDIDATE",
+    "verifier": "PASS_VERIFY_SOVEREIGN_AI_DOMAIN_COMPLETION_CANDIDATE"
+  },
+  "state": "PASS"
+}

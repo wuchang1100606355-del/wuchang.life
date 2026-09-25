@@ -1,0 +1,103 @@
+{
+  "schema": "W7TP_XIAOJ_GEMINI_NO_PLAINTEXT_CANDIDATE_WORKER_CONTRACT_V1",
+  "state": "P1_CONTRACT_READY_NO_EXTERNAL_CALL",
+  "purpose": "turn Gemini into a no-plaintext candidate worker while local total-field packets remain the authority",
+  "provider": "gemini",
+  "cloud_role": "candidate_worker_only",
+  "authority_boundary": {
+    "gemini_authority": false,
+    "local_discrete_state_authority": true,
+    "execution_allowed_from_cloud": false,
+    "execution_allowed_source": "local_zero_network_rtt_verifier",
+    "human_release_required_for_execution": true
+  },
+  "reality_boundary": {
+    "schema": "W7TP_LLM_REALITY_BOUNDARY_V1",
+    "llm_hallucination_allowed": "conditional",
+    "allowed_hallucination_layer": "IMAGINED_CANDIDATE",
+    "environment_provided_by_total_field": true,
+    "llm_self_truth_authority": false,
+    "truth_boundary_ref_required": true,
+    "reality_discrimination_method": "total_field_supplied_environment_with_evidence_anchors_truth_boundary_ref_local_reconstruction_and_discrete_verifier_status",
+    "imagined_content_must_be_labeled": true,
+    "real_claim_requires_evidence_ref": true,
+    "execution_claim_requires_local_gate": true,
+    "reality_layers": [
+      "REAL_VERIFIED",
+      "IMAGINED_CANDIDATE",
+      "EXECUTABLE_AUTHORIZED"
+    ],
+    "cloud_can_mark_real_verified": false,
+    "cloud_can_mark_executable_authorized": false,
+    "total_field_distinguishes_real_or_imagined": true,
+    "real_verified_source": "local_reconstruction_plus_evidence",
+    "execution_source": "local_discrete_state_verifier"
+  },
+  "generative_transmission": {
+    "full_body_transmitted": false,
+    "member_plaintext_transmitted": false,
+    "raw_api_key_transmitted": false,
+    "raw_audio_transmitted": false,
+    "payment_data_transmitted": false,
+    "transmitted_to_cloud": [
+      "packet_ref",
+      "intent_code",
+      "state_code",
+      "route_key",
+      "style_ref",
+      "quality_rubric_ref",
+      "candidate_schema_ref",
+      "redacted_task_view",
+      "task_hash",
+      "local_reconstruction_index",
+      "ttl",
+      "nonce",
+      "evidence_hash"
+    ],
+    "kept_local_only": [
+      "member_plaintext",
+      "raw_member_profile",
+      "raw_api_key",
+      "oauth_token",
+      "private_lookup_table",
+      "full_odoo_record",
+      "raw_audio",
+      "payment_data"
+    ],
+    "quality_method": [
+      "local prompt scaffold is selected by intent and style refs",
+      "domain facts are referenced by hash or public cache ref",
+      "Gemini returns only candidate text or candidate JSON",
+      "local verifier checks schema, risk, permission, ttl, nonce, and evidence hash",
+      "local fallback can answer from lookup when Gemini is slow or unavailable"
+    ]
+  },
+  "zero_latency_local_decision": {
+    "meaning": "zero external network round trip for authority decision, not zero physical compute time",
+    "decision_before_cloud_return": true,
+    "decision_latency_class": "LOCAL_ZERO_NETWORK_RTT",
+    "execution_allowed_default": false,
+    "safe_ui_state_before_cloud": "CANDIDATE_PENDING_OR_LOCAL_FALLBACK",
+    "cloud_timeout_state": "QUEUE_OR_HOLD_NOT_AUTHORITY"
+  },
+  "p1_side_effects": {
+    "external_api_call": false,
+    "raw_api_key_read": false,
+    "secret_read": false,
+    "member_plaintext_read": false,
+    "member_plaintext_to_cloud": false,
+    "formal_db_write": false,
+    "formal_pos_write": false,
+    "payment_capture": false,
+    "service_restart": false,
+    "deploy": false
+  },
+  "red_team_controls": {
+    "reject_raw_api_key_in_payload": true,
+    "reject_member_plaintext_in_cloud_payload": true,
+    "cloud_candidate_cannot_set_execution_allowed": true,
+    "cloud_candidate_cannot_override_local_verifier": true,
+    "ttl_nonce_and_evidence_required": true,
+    "candidate_schema_required": true
+  }
+}
