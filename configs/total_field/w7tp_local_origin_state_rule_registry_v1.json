@@ -10,7 +10,26 @@
       "builder_symbol": "_build_fixture_recipe",
       "executor_symbol": "execute_reconstruction_rules",
       "manifest_symbol": "file_manifest",
-      "minimum_information_keys": ["dataset_mib", "variant"],
+      "minimum_information_keys": [
+        "dataset_mib",
+        "variant"
+      ],
+      "storage_policy": "LOCAL_ONLY",
+      "packet_rule_body_allowed": false,
+      "formal_authority": false
+    },
+    {
+      "rule_ref": "local-rule:w7tp-task-state-ledger-reconstruction/v1",
+      "implementation_ref": "tools/w7tp_task_state_local_rule.py",
+      "implementation_sha256": "970d39d61d77c55b0a2a7a8cb4a8edb781f783f69f2adc83848322dd2fb8e69b",
+      "builder_symbol": "build_task_state_recipe",
+      "executor_symbol": "execute_task_state_rules",
+      "manifest_symbol": "task_state_manifest",
+      "minimum_information_keys": [
+        "task_id",
+        "action_refs",
+        "adi_record_ids"
+      ],
       "storage_policy": "LOCAL_ONLY",
       "packet_rule_body_allowed": false,
       "formal_authority": false
