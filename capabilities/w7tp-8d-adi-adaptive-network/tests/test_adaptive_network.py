@@ -874,6 +874,46 @@ def test_route_dns_drift_detected_from_new_observation():
     assert runtime.status()["dns_drift"] == "CHANGED"
     assert runtime.status()["route_drift"] == "CHANGED"
 
+
+def test_route_expiry_telemetry_does_not_create_false_drift():
+    counter = [600]
+    def observer():
+        counter[0] -= 1
+        local = _runtime_observer()
+        local["routes_v6"] = [{
+            "dst": "default", "gateway": "fe80::1", "dev": "eth0",
+            "protocol": "ra", "expires": counter[0],
+        }]
+        return local
+    runtime = AdaptiveRuntime(observer=observer, application_probe=lambda: True)
+    assert runtime.refresh()
+    assert runtime.status()["route_drift"] == "FIRST_OBSERVATION"
+    assert runtime.refresh()
+    assert runtime.status()["route_drift"] == "UNCHANGED"
+
+
+def test_refresh_keeps_fresh_snapshot_until_new_observation_completes():
+    import threading
+    entered = threading.Event()
+    release = threading.Event()
+    calls = [0]
+    def observer():
+        calls[0] += 1
+        if calls[0] == 2:
+            entered.set()
+            assert release.wait(2)
+        return _runtime_observer()
+    runtime = AdaptiveRuntime(observer=observer, application_probe=lambda: True)
+    assert runtime.refresh()
+    worker = threading.Thread(target=runtime.refresh)
+    worker.start()
+    assert entered.wait(2)
+    assert runtime.status()["health"].startswith("PASS_")
+    assert runtime.resolve(INTENT)["authorized"] is True
+    release.set()
+    worker.join(2)
+    assert not worker.is_alive()
+
 def test_operational_gates_do_not_bypass_total_field_runtime_decision():
     from w7tp_adaptive_network import runtime_adapter as adapter
     import hashlib

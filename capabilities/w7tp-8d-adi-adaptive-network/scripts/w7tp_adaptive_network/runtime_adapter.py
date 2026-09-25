@@ -57,6 +57,26 @@ GATES = ("SOURCE_BOUND", "SOURCE_ZONE_BOUND", "INTERFACE_BOUND",
          "SERVICE_PASS", "APPLICATION_PASS", "RESPONSE_VERIFIED")
 
 
+def stable_route_state(routes: list[dict]) -> list[dict]:
+    """Remove expiring telemetry before comparing forwarding semantics."""
+    def normalize(value):
+        if isinstance(value, dict):
+            return {
+                key: normalize(item)
+                for key, item in sorted(value.items())
+                if key != "expires"
+            }
+        if isinstance(value, list):
+            normalized = [normalize(item) for item in value]
+            return sorted(
+                normalized,
+                key=lambda item: json.dumps(item, sort_keys=True, separators=(",", ":")),
+            )
+        return value
+
+    return normalize(routes)
+
+
 def load_contract(root: Path = ROOT) -> dict:
     manifest = json.loads((root / "manifest.json").read_text())
     if (manifest.get("skill_id") != "w7tp-8d-adi-adaptive-network"
@@ -246,14 +266,12 @@ class AdaptiveRuntime:
         self.process_started_at = datetime.now(timezone.utc).isoformat()
 
     def refresh(self):
-        # Never retain a past decision when a new observation fails.
+        # Keep a still-fresh snapshot available while the next observation is in
+        # progress. A failed observation clears it below and therefore still
+        # fails closed without introducing a periodic transient HOLD.
         with self.lock:
             previous_remote = self.bindings.get(REMOTE_INTENT)
             previous_failover = dict(self.failover_bindings)
-            self.current = None
-            self.bindings = {}
-            self.failover_bindings = {}
-            self.remote_valid_until_epoch = 0.0
             self.last_error = "REFRESH_IN_PROGRESS"
         try:
             local = self.observer()
@@ -284,7 +302,8 @@ class AdaptiveRuntime:
             if not decision.get("authorized"):
                 raise ValueError("BINDING_NOT_VERIFIED")
             route_hash = hashlib.sha256(json.dumps(
-                [local.get("routes_v4"), local.get("routes_v6")],
+                [stable_route_state(local.get("routes_v4", [])),
+                 stable_route_state(local.get("routes_v6", []))],
                 sort_keys=True).encode()).hexdigest()
             dns_hash = hashlib.sha256(
                 local.get("dns_summary", "").encode()).hexdigest()
@@ -397,6 +416,10 @@ class AdaptiveRuntime:
                 self.observation_count += 1
         except Exception as exc:
             with self.lock:
+                self.current = None
+                self.bindings = {}
+                self.failover_bindings = {}
+                self.remote_valid_until_epoch = 0.0
                 self.last_error = type(exc).__name__ + ":" + str(exc)
             return False
         return True
