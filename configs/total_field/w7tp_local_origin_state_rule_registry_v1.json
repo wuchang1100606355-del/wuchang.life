@@ -1,0 +1,19 @@
+{
+  "schema_id": "W7TP_LOCAL_ORIGIN_STATE_RULE_REGISTRY_V1",
+  "state": "LOCAL_ONLY_RULE_CAPABILITY_REGISTRY",
+  "cloud_visible": false,
+  "rules": [
+    {
+      "rule_ref": "local-rule:w7tp-origin-cell-fixture-recipe/v2",
+      "implementation_ref": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
+      "implementation_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
+      "builder_symbol": "_build_fixture_recipe",
+      "executor_symbol": "execute_reconstruction_rules",
+      "manifest_symbol": "file_manifest",
+      "minimum_information_keys": ["dataset_mib", "variant"],
+      "storage_policy": "LOCAL_ONLY",
+      "packet_rule_body_allowed": false,
+      "formal_authority": false
+    }
+  ]
+}
