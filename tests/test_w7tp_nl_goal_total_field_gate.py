@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 from unittest.mock import patch
 
+from services.gateway import natural_language_control as nl_control
 from tools import w7tp_nl_goal_runner as runner
 
 
@@ -64,6 +65,55 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
                     changes=self.changes,
                     deterministic_validation=self.validation,
                 )
+
+    def test_plan_requires_pointer_first_context_delivery(self) -> None:
+        resource_decision = {
+            "RESOURCE_COORDINATES": [],
+            "QUALIFIED_SET": ["MSI_OLLAMA_LOCAL"],
+            "PREFERRED_SET": ["MSI_OLLAMA_LOCAL"],
+        }
+        with (
+            patch.object(
+                nl_control,
+                "arbitrate_resources",
+                return_value=resource_decision,
+            ),
+            patch.object(
+                nl_control,
+                "build_static_state_cell_envelope",
+                return_value={"state": "STATIC_TEST_CELL"},
+            ),
+            patch.object(nl_control, "_git", return_value="fixture"),
+        ):
+            plan = nl_control.build_plan(
+                nl_control.NaturalLanguageRequest(
+                    intent="test pointer first context delivery",
+                    task_id="NLDEV-005",
+                    dry_run=True,
+                )
+            )
+        execution = plan["D5_EXECUTION"]
+        risk = plan["D7_RISK"]
+        self.assertEqual(
+            execution["context_delivery_mode"],
+            "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+        )
+        self.assertEqual(
+            execution["context_bootstrap"],
+            "POINTER_AND_REFERENCES_ONLY",
+        )
+        self.assertEqual(
+            execution["dynamic_context_materialization"],
+            "LOCAL_VOLATILE_ON_PULL",
+        )
+        self.assertEqual(
+            execution["context_persistence"],
+            "EPHEMERAL_BODY_REFERENCES_ONLY",
+        )
+        self.assertFalse(
+            risk["full_dynamic_context_in_initial_model_bootstrap"]
+        )
+        self.assertFalse(risk["local_rule_ref_cloud_visible"])
 
 
 if __name__ == "__main__":

@@ -111,6 +111,7 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 - 不得用「整個工作樹本來就很髒」掩蓋本次變更；每個 action 必須保存自己的 affected paths（受影響路徑）與 preimage（前像），結案只核對本 action 的 dirty delta（髒差異）。
 - 已通過相稱驗證且屬本次授權範圍的程式／設定，必須在同一工作原胞內建立精確 commit（提交）；若有核實的現行 remote tracking branch（遠端追蹤分支），以 non-force push（非強制推送）同步。只有真實 push 阻塞才可保留「已提交未推送」，且必須記錄精確阻塞。
 - Deterministic validation（確定性驗證）只證明候選可驗證，不授予 live effect（現行效果）。任何 local／cloud model（地端／雲端模型）或外掛產生的 source delta（來源差異）在 live land（現行落地）前，必須先經既有 Total Field sole receiver（總場唯一候選接收器）形成 ALLOW 固定點；模型、provider（供應商）、Git 或測試不得繞過此閘門。
+- Model context delivery（模型上下文傳遞）固定採 pointer-first（指標優先）：模型初始上下文只能取得 Total Field 發行的 single-use pull coordinate（單次拉取座標）與必要 refs（引用）；完整 Dynamic Context（動態上下文）不得直接內嵌於 bootstrap（啟動內容）。pull 必須精確綁定 task／provider／model／TTL，在地端以最小狀態原胞＋Local Rule（地端規則）於 volatile workset（揮發工作集）重構後，才生成本次最小 model-visible projection（模型可見投影）；完整上下文本體不得持久化，僅 refs／hash／receipt／non-core rule capsule（非核心規則膠囊）可依契約保留。
 - 未通過驗證的本次部分實作不得以 dirty state（髒狀態）保存作為續接方法；應回復前像，將設計、證據與下一步寫入帳本後再結案。
 
 ## 事實與創造力雙軌

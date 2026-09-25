@@ -199,6 +199,14 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "google_candidate_fallback": google_allowed,
             "cloud_authority": "CANDIDATE_ONLY",
             "formal_land_gate": "TAIJI01_TOTAL_FIELD_SOLE_RECEIVER",
+            "context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+            "context_pull_owner": (
+                "tools.total_field_dynamic_context_pull."
+                "TotalFieldDynamicContextPullBroker"
+            ),
+            "context_bootstrap": "POINTER_AND_REFERENCES_ONLY",
+            "dynamic_context_materialization": "LOCAL_VOLATILE_ON_PULL",
+            "context_persistence": "EPHEMERAL_BODY_REFERENCES_ONLY",
             "resource_binding_state": (
                 "EXECUTABLE_LOCAL_WITH_RESOURCE_DECISION"
                 if preferred[:1] == ["MSI_OLLAMA_LOCAL"]
@@ -213,6 +221,10 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
         "D7_RISK": {
             "unrelated_dirty_state_must_be_preserved": True,
             "cloud_requires_static_state_cell": True,
+            "context_pull_single_use": True,
+            "context_pull_exact_task_provider_model_binding": True,
+            "full_dynamic_context_in_initial_model_bootstrap": False,
+            "local_rule_ref_cloud_visible": False,
         },
         "D8_AUTHORITY": {
             "source": "CURRENT_FOUNDER_INTENT_ENVELOPE",
@@ -232,6 +244,7 @@ Mandatory:
 - Separate OBSERVED_FACT, HYPOTHESIS, DESIGN, IMPLEMENTATION, LANDED, ACTIVE, and CANONICAL.
 - Global addressability does not mean full scan. Follow only the affected closure and stop expansion at the first breakpoint.
 - Reuse/extend/fuse existing capabilities before creating a new framework.
+- Model context delivery is pointer-first: initial model context may carry only governed pull coordinates and references; full Dynamic Context must be materialized locally on pull and remain ephemeral.
 - For product/design work include product level and competitor comparison with evidence coordinates; unknown competitor facts remain UNKNOWN.
 - AUTO-LAND is enabled for reversible effects inside this intent scope: do not stop at candidate or ready-to-land.
 - Preserve unrelated dirty worktree state. Never use git reset --hard, clean -fd, force push, or bulk staging.
