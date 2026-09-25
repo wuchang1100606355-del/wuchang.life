@@ -1,5 +1,6 @@
 from services.gateway.openai_compat import router as openai_compat_router
 from services.gateway.topology_router import router as taiji_topology_router
+from services.gateway.natural_language_control import router as natural_language_control_router
 # -*- coding: utf-8 -*-
 from fastapi import FastAPI
 from pathlib import Path
@@ -296,6 +297,7 @@ def voice(payload: dict):
 app.include_router(taiji_topology_router)
 app.include_router(openai_compat_router)
 app.include_router(w7tp_ui_router)
+app.include_router(natural_language_control_router)
 
 W7TP_WEB_ROOT = Path(__file__).resolve().parents[2] / "web"
 
