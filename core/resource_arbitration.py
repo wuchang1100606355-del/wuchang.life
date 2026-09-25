@@ -345,22 +345,49 @@ def probe_gemini_code_assist() -> dict[str, Any]:
         probe = _http_json(url, timeout=0.35)
         card = probe.get("data") if probe.get("ok") else None
         if isinstance(card, dict) and card.get("name") == "Gemini SDLC Agent":
+            adapter_path = DEFAULT_ROOT / "tools/gemini_code_assist_a2a_candidate.py"
+            context_pull_path = DEFAULT_ROOT / "tools/total_field_dynamic_context_pull.py"
+            pointer_bound = adapter_path.is_file() and context_pull_path.is_file()
+            capabilities = [
+                "CODE_GENERATION", "MULTI_FILE_REASONING", "PLAN",
+                "WRITE_CANDIDATE", "CHECKPOINT_RESTORE",
+            ]
+            if pointer_bound:
+                capabilities.extend([
+                    "POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+                    "TOTAL_FIELD_CANDIDATE_RETURN",
+                    "ISOLATED_A2A_WORKSPACE",
+                ])
             item.update({
                 "CURRENT_STATE": "AVAILABLE",
-                "CAPABILITY_SET": [
-                    "CODE_GENERATION", "MULTI_FILE_REASONING", "PLAN",
-                    "WRITE_CANDIDATE", "CHECKPOINT_RESTORE",
-                ],
+                "CAPABILITY_SET": capabilities,
                 "PRIVACY_CLASS": "CLOUD_SUBSCRIPTION",
                 "AUTHORITY_CLASS": "CANDIDATE_ONLY_NOT_D8",
                 "COST_CLASS": "SUBSCRIPTION",
                 "SUBSCRIPTION_CLASS": "PAID_CURRENT_MONTH",
                 "LATENCY_CLASS": "CLOUD_INTERACTIVE",
-                "TRANSFER_COST": "STATIC_CELL_REQUIRED",
-                "TOOL_CAPABILITY": "A2A_AGENT",
+                "TRANSFER_COST": (
+                    "POINTER_FIRST_CONTEXT_PULL_REQUIRED"
+                    if pointer_bound else "STATIC_CELL_REQUIRED"
+                ),
+                "TOOL_CAPABILITY": (
+                    "A2A_POINTER_FIRST_CANDIDATE"
+                    if pointer_bound else "A2A_AGENT"
+                ),
+                "CONTEXT_BINDING_STATE": (
+                    "POINTER_FIRST_TOTAL_FIELD_BOUND"
+                    if pointer_bound else "HOLD_POINTER_FIRST_ADAPTER_MISSING"
+                ),
+                "SOURCE_WRITE_AUTHORITY": "NONE",
+                "FORMAL_EFFECT_RETURN": "TAIJI01_TOTAL_FIELD",
+                "WORKSPACE_POLICY": "ISOLATED_TASK_WORKSPACE_REQUIRED",
                 "VERIFICATION_COST": "MEDIUM",
                 "RECOVERY_DISTANCE": "MEDIUM",
-                "EVIDENCE_REFS": [url],
+                "EVIDENCE_REFS": [
+                    url,
+                    str(adapter_path),
+                    str(context_pull_path),
+                ],
                 "A2A_URL": f"http://127.0.0.1:{port}/",
                 "AGENT_VERSION": card.get("version"),
             })

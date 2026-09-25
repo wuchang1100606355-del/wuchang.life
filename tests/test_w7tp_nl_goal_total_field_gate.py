@@ -115,6 +115,61 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
         )
         self.assertFalse(risk["local_rule_ref_cloud_visible"])
 
+    def test_bound_gemini_is_reasoning_organ_not_source_writer(self) -> None:
+        resource_decision = {
+            "RESOURCE_COORDINATES": [
+                {
+                    "RESOURCE_ID": "GEMINI_CODE_ASSIST",
+                    "CONTEXT_BINDING_STATE": (
+                        "POINTER_FIRST_TOTAL_FIELD_BOUND"
+                    ),
+                }
+            ],
+            "QUALIFIED_SET": [
+                "GEMINI_CODE_ASSIST",
+                "MSI_OLLAMA_LOCAL",
+            ],
+            "PREFERRED_SET": ["GEMINI_CODE_ASSIST"],
+        }
+        with (
+            patch.object(
+                nl_control,
+                "arbitrate_resources",
+                return_value=resource_decision,
+            ),
+            patch.object(
+                nl_control,
+                "build_static_state_cell_envelope",
+                return_value={"state": "STATIC_TEST_CELL"},
+            ),
+            patch.object(nl_control, "_git", return_value="fixture"),
+        ):
+            plan = nl_control.build_plan(
+                nl_control.NaturalLanguageRequest(
+                    intent="test bound gemini reasoning organ",
+                    task_id="NLDEV-005",
+                    dry_run=True,
+                )
+            )
+        execution = plan["D5_EXECUTION"]
+        self.assertEqual(
+            execution["selected_candidate_builder"],
+            "MSI_OLLAMA_LOCAL",
+        )
+        self.assertEqual(
+            execution["bound_reasoning_organs"],
+            ["GEMINI_CODE_ASSIST"],
+        )
+        self.assertEqual(
+            execution["gemini_a2a_binding"],
+            "POINTER_FIRST_TOTAL_FIELD_BOUND",
+        )
+        self.assertFalse(execution["gemini_direct_source_write"])
+        self.assertEqual(
+            execution["resource_binding_state"],
+            "EXECUTABLE_LOCAL_SOURCE_BUILDER_WITH_BOUND_GEMINI_REASONING_ORGAN",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

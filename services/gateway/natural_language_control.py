@@ -158,10 +158,32 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
     )
     preferred = resource_decision.get("PREFERRED_SET", [])
     qualified = resource_decision.get("QUALIFIED_SET", [])
+    resource_coordinates = resource_decision.get(
+        "RESOURCE_COORDINATES",
+        [],
+    )
+    gemini_resource = next(
+        (
+            item
+            for item in resource_coordinates
+            if isinstance(item, dict)
+            and item.get("RESOURCE_ID") == "GEMINI_CODE_ASSIST"
+        ),
+        {},
+    )
+    gemini_pointer_bound = (
+        gemini_resource.get("CONTEXT_BINDING_STATE")
+        == "POINTER_FIRST_TOTAL_FIELD_BOUND"
+    )
     selected_candidate_builder = (
         "MSI_OLLAMA_LOCAL"
         if "MSI_OLLAMA_LOCAL" in qualified
         else None
+    )
+    bound_reasoning_organs = (
+        ["GEMINI_CODE_ASSIST"]
+        if gemini_pointer_bound
+        else []
     )
     return {
         "state": "READY_GOAL_MODE",
@@ -207,13 +229,28 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "context_bootstrap": "POINTER_AND_REFERENCES_ONLY",
             "dynamic_context_materialization": "LOCAL_VOLATILE_ON_PULL",
             "context_persistence": "EPHEMERAL_BODY_REFERENCES_ONLY",
+            "bound_reasoning_organs": bound_reasoning_organs,
+            "gemini_a2a_binding": (
+                "POINTER_FIRST_TOTAL_FIELD_BOUND"
+                if gemini_pointer_bound
+                else "HOLD_POINTER_FIRST_A2A_NOT_BOUND"
+            ),
+            "gemini_direct_source_write": False,
             "resource_binding_state": (
                 "EXECUTABLE_LOCAL_WITH_RESOURCE_DECISION"
                 if preferred[:1] == ["MSI_OLLAMA_LOCAL"]
                 else (
-                    "EXECUTABLE_LOCAL_FALLBACK_SPECIALIST_PENDING"
-                    if selected_candidate_builder == "MSI_OLLAMA_LOCAL"
-                    else "HOLD_NO_EXECUTABLE_CANDIDATE_BUILDER"
+                    "EXECUTABLE_LOCAL_SOURCE_BUILDER_WITH_BOUND_GEMINI_REASONING_ORGAN"
+                    if (
+                        preferred[:1] == ["GEMINI_CODE_ASSIST"]
+                        and gemini_pointer_bound
+                        and selected_candidate_builder == "MSI_OLLAMA_LOCAL"
+                    )
+                    else (
+                        "EXECUTABLE_LOCAL_FALLBACK_SPECIALIST_PENDING"
+                        if selected_candidate_builder == "MSI_OLLAMA_LOCAL"
+                        else "HOLD_NO_EXECUTABLE_CANDIDATE_BUILDER"
+                    )
                 )
             ),
         },
