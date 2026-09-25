@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import json
 import shutil
@@ -148,6 +149,59 @@ class GstV23RuntimeDeliveryTests(unittest.TestCase):
         self.assertEqual(result["target_bytes_transmitted"], 0)
         self.assertGreater(result["reconstructed_bytes"], 32 * 1024 * 1024)
         self.assertTrue((self.temp / result["output_ref"]).is_dir())
+
+    def test_semantic_purity_blocks_compression_and_delta_before_workspace(self) -> None:
+        cases = []
+
+        compressed = copy.deepcopy(self.packet)
+        compressed["compressed_payload"] = "forbidden"
+        cases.append(compressed)
+
+        differential = copy.deepcopy(self.packet)
+        differential["delta_payload"] = {"mode": "diff"}
+        cases.append(differential)
+
+        patched = copy.deepcopy(self.packet)
+        patched["reconstruction_rules"][0]["patch_blob"] = "forbidden"
+        cases.append(patched)
+
+        for index, packet in enumerate(cases):
+            delivery_root = self.temp / f"runtime/purity-block-{index}"
+            with self.assertRaisesRegex(
+                runtime.GstRuntimeHold,
+                "HOLD_GST_RUNTIME_SEMANTIC_PURITY",
+            ):
+                runtime.deliver_packet(
+                    packet,
+                    **self.paths(),
+                    delivery_root=delivery_root,
+                )
+            self.assertFalse(delivery_root.exists())
+
+    def test_semantic_purity_blocks_previous_state_and_unknown_rule_fields(self) -> None:
+        previous_state = copy.deepcopy(self.packet)
+        previous_state["construction_conditions"]["previous_state_allowed"] = True
+        with self.assertRaisesRegex(
+            runtime.GstRuntimeHold,
+            "HOLD_GST_RUNTIME_CONSTRUCTION_PURITY_CONTRACT",
+        ):
+            runtime.deliver_packet(
+                previous_state,
+                **self.paths(),
+                delivery_root=self.temp / "runtime/previous-state-block",
+            )
+
+        unknown_rule_field = copy.deepcopy(self.packet)
+        unknown_rule_field["reconstruction_rules"][0]["notes"] = "not executable rule data"
+        with self.assertRaisesRegex(
+            runtime.GstRuntimeHold,
+            "HOLD_GST_RUNTIME_RULE_FIELDS_NOT_PURE",
+        ):
+            runtime.deliver_packet(
+                unknown_rule_field,
+                **self.paths(),
+                delivery_root=self.temp / "runtime/unknown-rule-field-block",
+            )
 
     def test_tampered_authority_fails_before_delivery_workspace(self) -> None:
         authority = json.loads(self.authority_path.read_text(encoding="utf-8"))

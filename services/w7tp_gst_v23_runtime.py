@@ -22,11 +22,176 @@ REQUIRED_EFFECT = "AUTHORIZE_GST_V23_RUNTIME_CONSUMER_FORMAL_DELIVERY"
 MAX_PACKET_BYTES = 16 * 1024 * 1024
 _DELIVERY_LOCK = Lock()
 
+# Origin Cell semantic purity is stricter than generic transport safety.
+# Historical differential evidence may be referenced, but active packet semantics
+# must remain source-generated rule-body reconstruction from a clean receiver.
+_FORBIDDEN_SEMANTIC_KEYS = frozenset({
+    "blob", "blobs", "base64", "literal_bytes", "file_fragment",
+    "changed_bytes", "chunk_payload", "chunks", "diff", "delta",
+    "patch", "patch_cells", "payload", "source_target", "target_artifact",
+    "target_data", "target_bytes", "previous_state", "prior_state",
+    "base_payload", "compressed_payload", "compressed_blob",
+})
+_FORBIDDEN_KEY_MARKERS = (
+    "compress", "gzip", "zlib", "bz2", "lzma", "archive",
+    "xdelta", "bsdiff", "rsync", "delta", "patch",
+)
+_ALLOWED_RULE_FIELDS = {
+    "CREATE_DIRECTORY": frozenset({"id", "primitive", "path"}),
+    "WRITE_PRNG_BYTES": frozenset({"id", "primitive", "path", "size", "seed"}),
+    "WRITE_DETERMINISTIC_BYTES_AT_OFFSETS": frozenset(
+        {"id", "primitive", "path", "size", "writes"}
+    ),
+    "JSONL_WRITE": frozenset(
+        {"id", "primitive", "path", "row_count", "default_state", "changed_rows", "namespace"}
+    ),
+    "SQLITE_BUILD": frozenset(
+        {"id", "primitive", "path", "base_rows", "update_rows", "insert_rows", "namespace"}
+    ),
+    "WRITE_DETERMINISTIC_FILE_SERIES": frozenset({
+        "id", "primitive", "directory", "base_count", "file_size",
+        "replace_count", "delete_start", "delete_end", "rename_start",
+        "rename_end", "new_count", "namespace",
+    }),
+}
+_ALLOWED_STATE_CELL_FIELDS = {
+    "SOURCE_MANIFEST": frozenset({"cell", "manifest_sha256", "bytes", "files"}),
+    "DATASET_COORDINATE": frozenset({"cell", "dataset_mib"}),
+    "CONSTRUCTION_GRAPH": frozenset({"cell", "rule_ids"}),
+}
+
 
 class GstRuntimeHold(RuntimeError):
     def __init__(self, code: str):
         super().__init__(code)
         self.code = code
+
+
+def _normalized_key(value: Any) -> str:
+    return str(value).strip().lower().replace("-", "_")
+
+
+def _reject_polluting_keys(value: Any, path: str = "$") -> None:
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            normalized = _normalized_key(key)
+            if normalized == "differential_input_allowed":
+                pass
+            elif (
+                normalized in _FORBIDDEN_SEMANTIC_KEYS
+                or any(marker in normalized for marker in _FORBIDDEN_KEY_MARKERS)
+            ):
+                raise GstRuntimeHold(
+                    f"HOLD_GST_RUNTIME_SEMANTIC_PURITY_KEY:{path}.{key}"
+                )
+            _reject_polluting_keys(nested, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, nested in enumerate(value):
+            _reject_polluting_keys(nested, f"{path}[{index}]")
+
+
+def _validate_rule_body_purity(packet: dict[str, Any]) -> None:
+    rules = packet.get("reconstruction_rules")
+    if not isinstance(rules, list) or not rules:
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_RULE_BODY_REQUIRED")
+    for index, rule in enumerate(rules):
+        if not isinstance(rule, dict):
+            raise GstRuntimeHold("HOLD_GST_RUNTIME_RULE_OBJECT_REQUIRED")
+        primitive = rule.get("primitive")
+        allowed = _ALLOWED_RULE_FIELDS.get(str(primitive))
+        if allowed is None:
+            raise GstRuntimeHold("HOLD_GST_RUNTIME_RULE_PRIMITIVE_NOT_PURE")
+        if frozenset(rule) != allowed:
+            raise GstRuntimeHold(
+                f"HOLD_GST_RUNTIME_RULE_FIELDS_NOT_PURE:{index}"
+            )
+        for key, value in rule.items():
+            if isinstance(value, str) and len(value.encode("utf-8")) > 1024:
+                raise GstRuntimeHold(
+                    f"HOLD_GST_RUNTIME_RULE_STRING_TOO_LARGE:{index}:{key}"
+                )
+        if primitive == "WRITE_DETERMINISTIC_BYTES_AT_OFFSETS":
+            writes = rule.get("writes")
+            if not isinstance(writes, list):
+                raise GstRuntimeHold("HOLD_GST_RUNTIME_RULE_WRITES_INVALID")
+            for write_index, write in enumerate(writes):
+                if not isinstance(write, dict) or frozenset(write) != frozenset({"offset", "seed"}):
+                    raise GstRuntimeHold(
+                        f"HOLD_GST_RUNTIME_RULE_WRITE_FIELDS_NOT_PURE:{index}:{write_index}"
+                    )
+                seed = write.get("seed")
+                if not isinstance(seed, str) or len(seed.encode("utf-8")) > 256:
+                    raise GstRuntimeHold(
+                        f"HOLD_GST_RUNTIME_RULE_SEED_INVALID:{index}:{write_index}"
+                    )
+
+
+def _validate_state_cell_purity(packet: dict[str, Any]) -> None:
+    cells = packet.get("source_state_cells")
+    if not isinstance(cells, list) or not cells:
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_STATE_CELLS_REQUIRED")
+    for index, cell in enumerate(cells):
+        if not isinstance(cell, dict):
+            raise GstRuntimeHold("HOLD_GST_RUNTIME_STATE_CELL_INVALID")
+        allowed = _ALLOWED_STATE_CELL_FIELDS.get(str(cell.get("cell")))
+        if allowed is None or frozenset(cell) != allowed:
+            raise GstRuntimeHold(
+                f"HOLD_GST_RUNTIME_STATE_CELL_FIELDS_NOT_PURE:{index}"
+            )
+
+
+def verify_origin_cell_semantic_purity(packet: dict[str, Any]) -> None:
+    if not isinstance(packet, dict):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_PACKET_OBJECT_REQUIRED")
+    if packet.get("packet_type") != "ORIGIN_CELL_GENERATIVE_RULE_PACKET":
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_ORIGIN_CELL_PACKET_REQUIRED")
+
+    _reject_polluting_keys(packet)
+
+    field = packet.get("joint_state_field")
+    if not isinstance(field, dict):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_JOINT_FIELD_REQUIRED")
+    d6 = field.get("D6")
+    if not isinstance(d6, dict):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_D6_REQUIRED")
+    if (
+        d6.get("mode") != "SOURCE_GENERATED_RULE_BODY"
+        or d6.get("generator_base_required") is not False
+        or d6.get("transmitted_target_bytes") != 0
+    ):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_D6_PURITY_CONTRACT")
+
+    conditions = packet.get("construction_conditions")
+    if not isinstance(conditions, dict):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSTRUCTION_CONDITIONS_REQUIRED")
+    required_conditions = {
+        "receiver_root": "EMPTY_CLEAN_ROOM",
+        "executor": "GENERIC_PRIMITIVES_ONLY",
+        "previous_state_allowed": False,
+        "differential_input_allowed": False,
+    }
+    if any(conditions.get(key) != expected for key, expected in required_conditions.items()):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSTRUCTION_PURITY_CONTRACT")
+    if frozenset(conditions) != frozenset(required_conditions):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSTRUCTION_FIELDS_NOT_PURE")
+
+    minimum = packet.get("minimum_new_information")
+    if not isinstance(minimum, dict) or frozenset(minimum) != frozenset({"dataset_mib"}):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_MINIMUM_INFORMATION_NOT_PURE")
+
+    _validate_state_cell_purity(packet)
+    _validate_rule_body_purity(packet)
+
+    relations = packet.get("relations")
+    if not isinstance(relations, list):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_RELATIONS_REQUIRED")
+    for index, relation in enumerate(relations):
+        if not isinstance(relation, dict) or frozenset(relation) != frozenset(
+            {"from", "to", "relation"}
+        ):
+            raise GstRuntimeHold(
+                f"HOLD_GST_RUNTIME_RELATION_FIELDS_NOT_PURE:{index}"
+            )
 
 
 def canonical_json_bytes(value: Any) -> bytes:
@@ -165,6 +330,8 @@ def runtime_status(**paths: Any) -> dict[str, Any]:
         "formal_delivery": True,
         "total_field_decision": "PASS",
         "d8_closure": decision["d8_closure"],
+        "semantic_purity_guard": "ACTIVE_NO_DIFF_NO_COMPRESSION_NO_PATCH",
+        "origin_cell_semantics": "SOURCE_GENERATED_RULE_BODY_CLEAN_RECEIVER",
         "service_ready": True,
     }
 
@@ -189,6 +356,7 @@ def deliver_packet(
     d8_decision_path: Path = D8_DECISION_PATH,
     delivery_root: Path = DELIVERY_ROOT,
 ) -> dict[str, Any]:
+    verify_origin_cell_semantic_purity(packet)
     packet_bytes = canonical_json_bytes(packet)
     if len(packet_bytes) > MAX_PACKET_BYTES:
         raise GstRuntimeHold("HOLD_GST_RUNTIME_PACKET_TOO_LARGE")
