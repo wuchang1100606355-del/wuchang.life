@@ -1,0 +1,43 @@
+{
+  "examples": [
+    {
+      "phrase": "把辦公室音量調到三十五",
+      "payload": {
+        "request_id": "SIRI-EXAMPLE-001",
+        "trigger_type": "APP_INTENT",
+        "target_ref": "辦公室",
+        "operation": "SET_OUTPUT_VOLUME",
+        "level": 35,
+        "issued_at": "2026-09-26T07:00:00+00:00",
+        "nonce": "example-nonce-0001",
+        "source_device_ref": "iphone-11"
+      }
+    },
+    {
+      "phrase": "把辦公室音效關閉",
+      "payload": {
+        "request_id": "SIRI-EXAMPLE-002",
+        "trigger_type": "SIRI_SHORTCUT",
+        "target_ref": "辦公室",
+        "operation": "OUTPUT_CLOSE",
+        "level": null,
+        "issued_at": "2026-09-26T07:00:00+00:00",
+        "nonce": "example-nonce-0002",
+        "source_device_ref": "homepod-personal-request"
+      }
+    },
+    {
+      "phrase": "全部音量調到四十二",
+      "payload": {
+        "request_id": "SIRI-EXAMPLE-003",
+        "trigger_type": "APP_INTENT",
+        "target_ref": "全部",
+        "operation": "GROUP_SET_VOLUME",
+        "level": 42,
+        "issued_at": "2026-09-26T07:00:00+00:00",
+        "nonce": "example-nonce-0003",
+        "source_device_ref": "iphone-11"
+      }
+    }
+  ]
+}

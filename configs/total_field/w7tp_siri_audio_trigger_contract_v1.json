@@ -1,0 +1,47 @@
+{
+  "schema_version": "W7TP-SIRI-AUDIO-TRIGGER/1.0",
+  "state": "CANDIDATE_NOT_RUNTIME_BOUND",
+  "canonical": false,
+  "trigger_role": "D1_INTENT_TRIGGER_ONLY",
+  "authority": false,
+  "preferred_apple_path": {
+    "homepod": "SIRI_PERSONAL_REQUEST_TO_SHORTCUT",
+    "iphone_ipad": "SIRI_TO_SHORTCUT_OR_APP_INTENT",
+    "parameterized_control": "APP_INTENT_PREFERRED"
+  },
+  "intents": [
+    {"name": "OpenAudioOutput", "operation": "OUTPUT_OPEN", "parameters": ["target_ref"]},
+    {"name": "CloseAudioOutput", "operation": "OUTPUT_CLOSE", "parameters": ["target_ref"]},
+    {"name": "SetAudioVolume", "operation": "SET_OUTPUT_VOLUME", "parameters": ["target_ref", "level"]},
+    {"name": "SetMicrophoneGain", "operation": "SET_INPUT_GAIN", "parameters": ["target_ref", "level"]},
+    {"name": "MuteAudioOutput", "operation": "MUTE_OUTPUT", "parameters": ["target_ref"]},
+    {"name": "UnmuteAudioOutput", "operation": "UNMUTE_OUTPUT", "parameters": ["target_ref"]},
+    {"name": "SetAudioGroupVolume", "operation": "GROUP_SET_VOLUME", "parameters": ["target_ref", "level"]},
+    {"name": "GetAudioStatus", "operation": "STATUS", "parameters": ["target_ref"]}
+  ],
+  "target_aliases": {
+    "辦公室": "OFFICE",
+    "HomePod": "OFFICE",
+    "我的電腦": "MSI",
+    "MSI": "MSI",
+    "03": "TAIJI03",
+    "太極03": "TAIJI03",
+    "MSI麥克風": "MSI_MIC",
+    "03麥克風": "TAIJI03_MIC",
+    "全部": "ALL_OUTPUTS"
+  },
+  "voice_examples": [
+    "把辦公室音效打開",
+    "把辦公室音效關閉",
+    "把辦公室音量調到三十五",
+    "把我的電腦音量調到五十",
+    "把 MSI 麥克風調到七十",
+    "全部靜音"
+  ],
+  "effect_boundary": {
+    "shortcut_or_app_intent_may_execute_directly": false,
+    "total_field_decision_required": true,
+    "endpoint_volume_readback_required": true,
+    "rollback_preimage_required": true
+  }
+}

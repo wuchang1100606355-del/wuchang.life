@@ -1,0 +1,64 @@
+{
+  "schema_version": "W7TP-NAHIMIC-CAPABILITY-EVIDENCE/1.0",
+  "state": "D4_EVIDENCE_ONLY",
+  "authority": false,
+  "provider": "A-Volute.Nahimic",
+  "package": {
+    "name": "A-Volute.Nahimic",
+    "version": "1.10.15.0",
+    "status": "OK",
+    "protocol": "nh3-msi"
+  },
+  "services": [
+    {"name": "NahimicService", "status": "Running", "start_type": "Automatic"},
+    {"name": "NahimicSvc64.exe", "state": "OBSERVED_RUNNING"},
+    {"name": "NahimicSvc32.exe", "state": "OBSERVED_RUNNING"},
+    {"name": "NahimicAPO4Volume.exe", "state": "OBSERVED_RUNNING"}
+  ],
+  "observed_components": [
+    "AudioDevice.AudioDeviceAPI",
+    "AudioGraphSettingsClient.AGSClientFactory",
+    "AGSWRC.Expert",
+    "AGSWRC.Basic",
+    "AGSWRC2.Expert",
+    "AGSWRC2.Basic",
+    "MirroringWRC.Mirroring",
+    "StreamingDashboardWRC.StreamingDashboard",
+    "SonicMapperGfxWRC.SonicMapperGfx",
+    "SonicMapperProfileWrc.GameScanning"
+  ],
+  "ui_observed_capabilities": [
+    "MUSIC_SCENE",
+    "MOVIE_SCENE",
+    "COMMUNICATION_SCENE",
+    "GAMING_SCENE",
+    "SMART_MODE",
+    "EQUALIZER",
+    "VIRTUAL_SURROUND",
+    "SMART_SOUND",
+    "VOICE_CLARITY",
+    "BASS_ENHANCEMENT",
+    "TREBLE_ENHANCEMENT",
+    "MICROPHONE_PAGE",
+    "SOUND_TRACKER",
+    "SHARE_AUDIO"
+  ],
+  "ui_observed_current_music_values_db": {
+    "voice_clarity": 7,
+    "bass_enhancement": 8,
+    "treble_enhancement": 3
+  },
+  "preset_families": {
+    "COMMUNICATION": ["Balanced", "Clear Chat", "Custom", "Livestream"],
+    "GAMING": ["Atmospheric", "Custom", "Fast-paced", "FPS Competition", "Racing"],
+    "MOVIE": ["Custom", "Dialogues", "Immersion"],
+    "MUSIC": ["Brilliant", "Custom", "Dynamic", "Heavy Bass", "Vocals"]
+  },
+  "eq_bands_hz": [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000],
+  "equivalent_reconstruction_rule": {
+    "copy_proprietary_algorithm": false,
+    "reconstruct_effect_semantics": true,
+    "provider_replaceable": true,
+    "total_field_authority_created": false
+  }
+}
