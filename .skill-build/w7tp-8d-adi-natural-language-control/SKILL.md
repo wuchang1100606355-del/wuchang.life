@@ -8,9 +8,9 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 本技能的目標不是「少做以避免幻覺」，而是做到：
 **FACT 不可幻覺；HYPOTHESIS 可自由產生；DESIGN 可完整推演；ACTION 必須證據閉合。**
 
-所有分析、理解、比對、設計與落地判斷固定以 **8D 分析作為洞察／關係引擎，以 ADI（絕對距離索引）作為座標定位引擎**。先定位來源、版本、時間、節點、功能、場景、證據與權威座標，再進行比較與推論；禁止脫離座標做印象式理解或把不同條件的結果直接混比。
+所有分析、理解、比對、設計與落地判斷固定以 **8D 聯合狀態場作為洞察／關係引擎，以現行 ADI 索引／座標契約作為定位與比較基礎**。ADI 的精確子語義由現行 governing contract（治理契約）與座標層決定；本技能不得把 ADI 硬編成單一「絕對距離索引」定義。先定位來源、版本、時間、節點、功能、場景、證據與權威座標，再進行比較與推論；禁止脫離座標做印象式理解或把不同條件的結果直接混比。
 
-自然語言是唯一人類入口。能由工具取得的系統、節點、程式、網路、版本、文件或外掛狀態，由代理自行取得，不把指令搬運工作轉嫁給使用者。
+自然語言對話是原生／主要人類執行介面；按鈕、表單、快捷入口或其他受治理介面可以觸發能力，但不得因此形成第二權威入口。能由工具取得的系統、節點、程式、網路、版本、文件或外掛狀態，由代理自行取得，不把指令搬運工作轉嫁給使用者。
 
 ## 固定知識型別
 
@@ -51,9 +51,17 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 - D3 Coordinate（座標）：節點、檔案、服務、網路、版本、時間、上下游關係。
 - D4 Evidence（證據）：收據、雜湊、測試、runtime、外掛回讀、版本紀錄。
 - D5 Execution/Policy（執行／政策）：精確工具入口、可做／不可做、作用域、副作用。
-- D6 GST（生成式狀態傳輸）：僅在目標基座＋最小新資訊＋座標＋重構／驗證規則閉合時成立；一般外掛傳輸、SSH、VPN、Git、Drive 不是 D6。
+- D6 GST（生成式狀態傳輸）：以 8D 狀態分析求同存異，表達同、異、同異關係及生成／重構／驗證規則，使目的端可生成式還原並驗證目標狀態。共同基座、最小新資訊或差異量可在特定契約中使用，但不得升格為 GST 永久必要定義；一般外掛傳輸、SSH、VPN、Git、Drive 不是 D6。
 - D7 Risk（風險）：漂移、污染、錯節點、錯權威、不可回復、時機不成熟。
 - D8 Authority（權威）：只決定正式效果是否可發生；不決定假設能否提出或設計能否生成。
+
+## 現行語義硬邊界
+
+- `8D ADI = 8_IN_1_SINGLE_STATE_FIELD（八合一單一狀態場）`：D1-D8 是同時耦合、互相制約、共同閉合的聯合狀態，不得把本體退回 D1→D8 八步流水線；工作程序可以有順序，但不改變本體語義。
+- 權威定位脊柱固定為 `Founder Intent → 8D/ADI Index → Current 8D Field → taiji01 Total Field`；Git、PR、SHA、測試、服務狀態、模型、Provider、外掛與節點只能提供能力或 D4 證據，不得自行升格。
+- `FI-023 ADI_EXACT_DEFINITION` 仍是 mandatory gate（必要閘門）：ADI 精確定義不得由本技能自行收斂成單一索引種類；必須服從當前作用域的 governing contract（治理契約）與既有索引／座標語義。
+- `FI-024 D8_WARN_FINAL_STATUS` 仍是 mandatory gate（必要閘門）：若來源出現 `WARN`，本技能只能保留來源分類與證據，不得自行決定 WARN 應屬 D7 或 D8，也不得自行把它轉成 PASS／HOLD／BLOCK。正式效果只能採用現行 governing contract 已明確接受的 D8 終局裁決。
+- HYPOTHESIS、DESIGN、EVIDENCE、RUNTIME_EFFECT、ACTIVE、CANONICAL、AUTHORITY 必須分離；任何較低層狀態不得靠命名、測試或模型輸出自行升格。
 
 ## 外掛融合
 
@@ -68,7 +76,7 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 ## 單一工作原胞流程
 
 1. 鎖定 `USER_EXPLICIT（使用者明示）`、完成條件、禁止效果與當前座標。
-2. 以 ADI（絕對距離索引）取最少且資訊增益最高的現場證據；同一已閉合座標不重讀。
+2. 依現行 ADI 索引／座標契約取最少且資訊增益最高的現場證據；同一已閉合座標不重讀，不自行把 ADI 簡化為單一索引型別。
 3. 將所有主張依固定知識型別分流；現況證據不足直接標 `UNKNOWN（未知）`。
 4. 遇到未知時允許產生一個或多個 `HYPOTHESIS（假設）`，但每個都必須可證偽。
 5. 依需求、事實與顯式假設產生 `DESIGN（設計）`；不得把設計語句寫成現況語句。每個設計同時建立 Product Level（產品水準）與 Competitor Benchmark（競品基準）：目標產品級別、品質軸、競品／替代方案、逐軸比較、差異化主張與距離目標產品級別的缺口都必須明示。
@@ -77,7 +85,7 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 8. 對指定版本執行相稱驗證，產生 `VERIFIED_IMPLEMENTATION（已驗證實作）` 或精確 HOLD（保留）。
 9. 每一個可驗證工作段落告一段落時，執行 `DESIGN_SYSTEM_TECHNICAL_ASSESSMENT（設計系統技術評估）`；至少在 AUTO-LAND 前與 ACTIVE_VERIFIED 後各做一次。評估不得自行授予 D8、CANONICAL 或新的效果權限。
 10. 依 [hypothesis-design-landing.md](references/hypothesis-design-landing.md) 判斷落地時機。
-11. AUTO-LAND（自動落地）為預設：使用者自然語言明示要求做、修、整合、建構、啟用、部署或恢復，且未明示唯讀時，該語句同時提供本次意圖範圍內的實作與可回復落地效果授權；不得再要求第二次同意。
+11. AUTO-LAND（自動落地）為可回復工程效果的預設：使用者自然語言明示要求做、修、整合、建構、啟用、部署或恢復，且未明示唯讀時，可直接涵蓋本次意圖範圍內、已證明可回復且不擴張人類權利的工程效果。個資同意、付款／扣款、正式法律或組織效果、角色／權限／身分升級、帳號或付費變更、對外公開、不可逆或破壞性效果，仍需其各自獨立權威與證據，不得由模型或本技能擴張授權。
 12. 驗證閉合後直接用已登記工具落地，完成後立即重新觀測；若效果未達標，自動回復至上一個已驗證 preimage（前像），再只修剩餘差異。
 13. ACTIVE_VERIFIED 後再次執行設計系統技術評估；若發現架構漂移、語義污染、版本依賴失配或可回復性下降，只修受影響閉包，不重開架構。
 14. 只有不可逆／破壞性效果、超出本次意圖的外部效果、權限或憑證確實不可取得、或兩個互斥目標無法由證據消解時才 HOLD（保留）並指出單一真阻塞。
@@ -101,9 +109,9 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 ## AUTO-LAND（自動落地）預設政策
 
 - `AUTO_LAND_DEFAULT=true`。
-- 使用者要求「做／修／整合／建構／啟用／部署／恢復／處理」而未說唯讀，禁止停在 `CANDIDATE`、`READY_TO_LAND`、`WAITING_FOR_APPROVAL` 等中間狀態。
+- 在前述可回復工程作用域內，使用者要求「做／修／整合／建構／啟用／部署／恢復／處理」而未說唯讀，禁止停在 `CANDIDATE`、`READY_TO_LAND`、`WAITING_FOR_APPROVAL` 等中間狀態；需要獨立人類／組織／法律權威的效果不適用此規則。
 - `HYPOTHESIS` 可先驗證；`DESIGN` 可立即轉實作；`VERIFIED_IMPLEMENTATION` 一旦滿足落地硬閘，直接進入 `LAND_NOW -> LANDED_REOBSERVE -> ACTIVE_VERIFIED`。
-- D8 在此技能中的正常可回復工程效果解析為「本次 Founder 自然語言意圖封套」；不另造第二次聊天核可。工具或正式 authority runtime 若有不可繞過的外部硬閘，才回報該真實硬閘。
+- 本次明確自然語言意圖可作為其明示、可回復工程效果的人類意圖封套，但**不等於模型、技能或 Provider 自行授予 D8**。正式效果仍須沿 Founder Intent → 8D／ADI Index → Current 8D Field → taiji01 Total Field 權威脊柱閉合；個資同意、付款、正式提交、法律／組織效果、角色／權限／身分、帳號／付費、對外公開與不可逆破壞性效果不得由 AUTO-LAND 擴張。
 - 自動落地不代表自動 `CANONICAL`。正典升格仍需現行正典權威鏈明示成立；但正典未升格不得阻止本次合法 runtime／程式／服務效果落地。
 - 自動落地不等於任意擴權：不得刪除無關資料、洩露秘密、改變未要求的帳號／付費／對外公開／法律效果。
 - 若工作樹含無關髒變更，只精確修改本次受影響閉包；不得因工作樹不乾淨停止整個工作。
@@ -129,7 +137,7 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 - 假設／設計／實作／落地與落地時機：讀 [references/hypothesis-design-landing.md](references/hypothesis-design-landing.md)。
 - 產品水準與競品比較：任何新產品、新功能、產品化重構或競賽／展示設計時讀 [references/product-competitor-design.md](references/product-competitor-design.md)。
 - 外掛與工具路由：任務涉及跨工具或跨節點時讀 [references/plugin-routing.md](references/plugin-routing.md)。
-- 系統狀態場與 ADI（絕對距離索引）細節沿用 `8d-adi-state-field-intelligence`，不複製第二套規則。
+- 系統狀態場與 ADI 精確子語義沿用現行 8D／ADI governing contract（治理契約）與既有 `8d-adi-state-field-intelligence` 能力；本技能不複製第二套規則，也不把 ADI 固定成單一「絕對距離索引」定義。
 
 ## 機器驗證
 
