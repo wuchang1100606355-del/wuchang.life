@@ -13,7 +13,13 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
-DEFAULT_OLLAMA_URL = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "http://100.84.204.114:11434")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from core.msi_local_llm_route import resolve_msi_ollama_url
+
+DEFAULT_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
 DEFAULT_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "taiji-qwen2.5-coder-7b:ctx16k")
 MAX_STEPS = int(os.getenv("TAIJI_LOCAL_AGENT_MAX_STEPS", "32"))
 MAX_READ_LINES = 400
@@ -249,9 +255,18 @@ def main() -> int:
     parser.add_argument("--shadow-root", required=True)
     parser.add_argument("--allowed-json", required=True)
     parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--ollama-url", default=DEFAULT_OLLAMA_URL)
+    parser.add_argument("--ollama-url", default="")
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args()
+    if not args.ollama_url:
+        route = resolve_msi_ollama_url(
+            args.model,
+            override_url=DEFAULT_OLLAMA_URL_OVERRIDE or None,
+            timeout=1.5,
+        )
+        if not route.get("selected_url"):
+            raise RuntimeError("LOCAL_MODEL_ENDPOINT_UNREACHABLE")
+        args.ollama_url = str(route["selected_url"])
     if args.max_steps < 1 or args.max_steps > 128:
         raise RuntimeError("LOCAL_MODEL_STEP_BUDGET_INVALID")
     prompt = sys.stdin.read()

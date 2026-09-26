@@ -17,6 +17,13 @@ from pathlib import Path
 from typing import Any
 from urllib.request import urlopen
 
+from core.msi_local_llm_route import (
+    MSI_LAN_IP,
+    MSI_LAN_OLLAMA_URL,
+    MSI_WINDOWS_TAILSCALE_IP,
+    MSI_WINDOWS_TAILSCALE_OLLAMA_URL,
+)
+
 DEFAULT_ROOT = Path("/home/taiji_admin/Taiji_Hub")
 TOPOLOGY_PATH = DEFAULT_ROOT / "configs" / "taiji_topology.json"
 PRIMARY_INFORMATION_SEARCH_NODES = ["taiji01", "MSI"]
@@ -254,16 +261,39 @@ def probe_msi_node() -> dict[str, Any]:
     )
     reachable = False
     latency = "UNKNOWN"
+    route = "NONE"
     try:
-        proc = subprocess.run(
-            ["tailscale", "ping", "-c", "1", "--timeout=3s", "100.84.204.114"],
-            text=True, capture_output=True, timeout=5,
+        lan = subprocess.run(
+            ["ping", "-c", "1", "-W", "1", MSI_LAN_IP],
+            text=True, capture_output=True, timeout=3,
         )
-        reachable = proc.returncode == 0
+        reachable = lan.returncode == 0
         if reachable:
-            latency = "TAILNET_DIRECT_OR_RELAY_REACHABLE"
+            latency = "LAN_REACHABLE"
+            route = "LAN_PRIMARY"
     except Exception:
         reachable = False
+    if not reachable:
+        try:
+            tailnet = subprocess.run(
+                [
+                    "tailscale",
+                    "ping",
+                    "-c",
+                    "1",
+                    "--timeout=3s",
+                    MSI_WINDOWS_TAILSCALE_IP,
+                ],
+                text=True,
+                capture_output=True,
+                timeout=5,
+            )
+            reachable = tailnet.returncode == 0
+            if reachable:
+                latency = "TAILSCALE_WINDOWS_DIRECT_OR_RELAY_REACHABLE"
+                route = "TAILSCALE_WINDOWS_FALLBACK"
+        except Exception:
+            reachable = False
     item.update({
         "CURRENT_STATE": "AVAILABLE_CONNECTED" if reachable else "HOLD_NODE_UNREACHABLE",
         "CAPABILITY_SET": [
@@ -277,12 +307,16 @@ def probe_msi_node() -> dict[str, Any]:
         "COST_CLASS": "OWNED_LOCAL_COMPUTE",
         "SUBSCRIPTION_CLASS": "OWNED",
         "LATENCY_CLASS": latency,
+        "NETWORK_ROUTE": route,
         "TRANSFER_COST": "ADI_AFFECTED_CLOSURE_ONLY",
         "TOOL_CAPABILITY": "REMOTE_NODE_CAPABILITY_SOURCE",
         "VERIFICATION_COST": "LOCALIZE_AND_REOBSERVE",
         "RECOVERY_DISTANCE": "SHORT",
         "EVIDENCE_REFS": [
-            "tailscale://MSI/100.84.204.114",
+            f"lan://MSI/{MSI_LAN_IP}",
+            f"tailscale-windows://MSI/{MSI_WINDOWS_TAILSCALE_IP}",
+            MSI_LAN_OLLAMA_URL,
+            MSI_WINDOWS_TAILSCALE_OLLAMA_URL,
             "MSI:/home/taiji_admin/Taiji_Hub",
             "MSI:/home/taiji_admin/Taiji_Hub/.skill-build",
             "MSI:/home/taiji_admin/Taiji_Hub/docs",

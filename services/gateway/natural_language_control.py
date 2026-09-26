@@ -16,6 +16,10 @@ from urllib.request import urlopen
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from core.msi_local_llm_route import (
+    MSI_WINDOWS_TAILSCALE_OLLAMA_URL,
+    resolve_msi_ollama_url,
+)
 from core.resource_arbitration import (
     arbitrate_resources,
     build_static_state_cell_envelope,
@@ -30,7 +34,7 @@ RUNTIME_ROOT = PROJECT_ROOT / "runtime" / "natural_language_control"
 RUNNER_PATH = PROJECT_ROOT / "tools" / "w7tp_nl_goal_runner.py"
 LOCAL_AGENT_PATH = PROJECT_ROOT / "tools" / "w7tp_local_model_agent.py"
 CLEAN_EXEC_ROOT = Path("/tmp/w7tp-nl-control-exec")
-LOCAL_OLLAMA_URL = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "http://100.84.204.114:11434")
+LOCAL_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
 LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "taiji-qwen2.5-coder-7b:ctx16k")
 GOOGLE_FALLBACK = os.getenv("TAIJI_GOOGLE_CANDIDATE_FALLBACK", "1") == "1"
 AUTO_LAND_DEFAULT = True
@@ -70,19 +74,31 @@ def _http_json(url: str) -> dict[str, Any]:
         return {"ok": False, "error": type(exc).__name__}
 
 
+def _current_local_model_route() -> dict[str, Any]:
+    return resolve_msi_ollama_url(
+        LOCAL_MODEL,
+        override_url=LOCAL_OLLAMA_URL_OVERRIDE or None,
+        timeout=1.5,
+    )
+
+
 def _local_model_health() -> dict[str, Any]:
-    probe = _http_json(LOCAL_OLLAMA_URL.rstrip("/") + "/api/tags")
-    if not probe.get("ok"):
-        return {"ok": False, "model": LOCAL_MODEL}
-    models = [
-        item.get("name")
-        for item in probe.get("data", {}).get("models", [])
-        if isinstance(item, dict)
-    ]
+    route = _current_local_model_route()
+    selected = route.get("selected_url")
+    if not selected:
+        return {
+            "ok": False,
+            "model": LOCAL_MODEL,
+            "provider": "MSI_OLLAMA_LOCAL",
+            "route": route,
+        }
     return {
-        "ok": LOCAL_MODEL in models,
+        "ok": True,
         "model": LOCAL_MODEL,
         "provider": "MSI_OLLAMA_LOCAL",
+        "selected_url": selected,
+        "selected_transport": route.get("selected_transport"),
+        "route": route,
     }
 
 
@@ -143,13 +159,19 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
     task_id = _resolve_task_id(req.task_id)
     closure = _affected_closure(req.intent)
     google_allowed = bool(req.google_fallback and GOOGLE_FALLBACK)
+    local_model_route = _current_local_model_route()
+    local_ollama_url = (
+        local_model_route.get("selected_url")
+        or MSI_WINDOWS_TAILSCALE_OLLAMA_URL
+    )
     resource_decision = arbitrate_resources(
         req.intent,
         root=PROJECT_ROOT,
-        local_ollama_url=LOCAL_OLLAMA_URL,
+        local_ollama_url=str(local_ollama_url),
         local_model=LOCAL_MODEL,
         google_allowed=google_allowed,
     )
+    resource_decision["MSI_LOCAL_LLM_ROUTE"] = local_model_route
     static_cell = build_static_state_cell_envelope(
         req.intent,
         task_id=task_id,
@@ -333,7 +355,7 @@ def status():
         "local_agent_present": LOCAL_AGENT_PATH.exists(),
         "local_model_primary": LOCAL_MODEL,
         "local_model_host": "MSI",
-        "local_ollama_url": LOCAL_OLLAMA_URL,
+        "local_ollama_route": _current_local_model_route(),
         "local_model_health": _local_model_health(),
         "development_ui": "https://taiji01.tailea1eef.ts.net:8444/?folder=/home/taiji_admin/Taiji_Hub",
         "google_fallback": GOOGLE_FALLBACK,

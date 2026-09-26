@@ -19,6 +19,10 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from core.execution_continuity import ActionLedger, build_idempotency_key
+from core.msi_local_llm_route import (
+    MSI_WINDOWS_TAILSCALE_OLLAMA_URL,
+    resolve_msi_ollama_url,
+)
 from core.work_ledger import WorkLedger
 from tools.gemini_code_assist_a2a_candidate import (
     MODEL_REF as GEMINI_MODEL_REF,
@@ -38,7 +42,7 @@ from tools.w7tp_task_state_minimum_packet import (
 SKILL_ID = "w7tp-8d-adi-natural-language-control"
 LOCAL_AGENT = PROJECT_ROOT / "tools" / "w7tp_local_model_agent.py"
 LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "taiji-qwen2.5-coder-7b:ctx16k")
-LOCAL_OLLAMA_URL = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "http://100.84.204.114:11434")
+LOCAL_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
 VERTEX_GATEWAY = PROJECT_ROOT / "tools" / "total_field" / "w7tp_vertex_candidate_gateway.py"
 GEMINI_PACKET = PROJECT_ROOT / "tools" / "xiaoj_gemini_no_plaintext_candidate_packet.py"
 STATE_ROOT = PROJECT_ROOT / "runtime" / "natural_language_control" / "runs"
@@ -563,7 +567,24 @@ def _json_get(url: str) -> dict[str, Any]:
         return {"ok": False, "error_type": type(exc).__name__}
 
 
+def current_local_model_route() -> dict[str, Any]:
+    return resolve_msi_ollama_url(
+        LOCAL_MODEL,
+        override_url=LOCAL_OLLAMA_URL_OVERRIDE or None,
+        timeout=1.5,
+    )
+
+
+def current_local_ollama_url() -> str:
+    route = current_local_model_route()
+    selected = route.get("selected_url")
+    if not selected:
+        raise RuntimeError("HOLD_LOCAL_MODEL_UNREACHABLE")
+    return str(selected)
+
+
 def run_local_transform(intent: str, plan: dict[str, Any], timeout_seconds: int) -> str:
+    local_ollama_url = current_local_ollama_url()
     packet = {
         "schema": "W7TP_STATIC_STATE_CELL_READONLY_V1",
         "intent_hash": hashlib.sha256(intent.encode("utf-8")).hexdigest(),
@@ -574,7 +595,8 @@ def run_local_transform(intent: str, plan: dict[str, Any], timeout_seconds: int)
             "gateway": _json_get("http://127.0.0.1:8081/health"),
             "total_field": _json_get("http://127.0.0.1:8082/healthz"),
             "native_adi": _json_get("http://127.0.0.1:9110/health"),
-            "local_models": _json_get(LOCAL_OLLAMA_URL.rstrip("/") + "/api/tags"),
+            "local_models": _json_get(local_ollama_url.rstrip("/") + "/api/tags"),
+            "local_model_route": current_local_model_route(),
         },
         "constraints": {
             "read_only": True,
@@ -601,7 +623,7 @@ def run_local_transform(intent: str, plan: dict[str, Any], timeout_seconds: int)
         "options": {"temperature": 0.0},
     }
     req = Request(
-        LOCAL_OLLAMA_URL.rstrip("/") + "/api/chat",
+        local_ollama_url.rstrip("/") + "/api/chat",
         data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
         headers={"Content-Type": "application/json"},
         method="POST",
@@ -623,13 +645,14 @@ def local_agent_step_budget(plan: dict[str, Any]) -> int:
 
 def run_local_agent(prompt: str, shadow: Path, plan: dict[str, Any], timeout_seconds: int) -> str:
     step_budget = local_agent_step_budget(plan)
+    local_ollama_url = current_local_ollama_url()
     cmd = [
         "/usr/bin/python3", str(LOCAL_AGENT),
         "--live-root", str(PROJECT_ROOT),
         "--shadow-root", str(shadow),
         "--allowed-json", json.dumps(closure_paths(plan), ensure_ascii=False),
         "--model", LOCAL_MODEL,
-        "--ollama-url", LOCAL_OLLAMA_URL,
+        "--ollama-url", local_ollama_url,
         "--max-steps", str(step_budget),
     ]
     proc = subprocess.run(
