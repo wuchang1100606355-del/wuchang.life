@@ -5,6 +5,8 @@ import json
 import unittest
 from pathlib import Path
 
+from core.work_ledger import WorkLedger
+
 from products.eight_dimensional_generative_memory.w7tp_origin_state_minimum_packet_v1 import (
     packet_sha256,
     validate_minimum_packet,
