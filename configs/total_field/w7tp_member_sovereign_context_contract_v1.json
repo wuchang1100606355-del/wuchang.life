@@ -1,0 +1,35 @@
+{
+  "schema_id": "W7TP_MEMBER_SOVEREIGN_CONTEXT_CONTRACT_V1",
+  "task_coordinate": "T-011A",
+  "state": "CANDIDATE_CONTRACT_READY",
+  "role": "PRE_MODEL_MEMBER_SOVEREIGN_CONTEXT_BOUNDARY",
+  "reuse": {
+    "member_identity_root_schema": "schemas/field/w7tp_member_sovereign_identity_root_v1.schema.json",
+    "member_derived_packets_schema": "schemas/field/w7tp_member_sovereign_derived_packets_v1.schema.json",
+    "member_identity_verifier": "tools/total_field/w7tp_intent_field_suite/member_sovereign_identity.py",
+    "member_session_dual_receipt_gate": "tools/total_field/xiaoj_member_bound_session_candidate.py:evaluate_member_action_session",
+    "dynamic_context_validator": "tools/total_field_dynamic_context_pull.py:validate_model_visible_context",
+    "member_sovereignty_policy": "docs/total_field/MEMBER_SOVEREIGNTY_NON_OVERRIDE_POLICY.md"
+  },
+  "invariants": {
+    "natural_person_is_not_seat": true,
+    "organization_request_is_not_member_authorization": true,
+    "odoo_is_not_sovereign_identity_root": true,
+    "model_visible_member_data": "OPAQUE_REFERENCES_ONLY",
+    "plaintext_policy": "LOCAL_ONLY_NEVER_MODEL_VISIBLE",
+    "member_authorization_authority": "member",
+    "total_field_role": "SAFETY_AND_LANDING_NOT_MEMBER_CONSENT",
+    "legal_basis_path": "MODELED_BUT_HOLD_UNTIL_EXISTING_VERIFIER_IS_BOUND",
+    "runtime_effect": false,
+    "second_identity_root_created": false,
+    "second_8d_created": false,
+    "second_d8_created": false,
+    "second_gst_created": false,
+    "second_total_field_created": false
+  },
+  "output": {
+    "adapter": "tools/total_field/member_sovereign_context_adapter.py",
+    "model_visible_shape": "w7tp-total-field-model-visible-context/1.0",
+    "next_owner": "T-011 Dynamic Context -> MSI LLM adapter candidate"
+  }
+}
