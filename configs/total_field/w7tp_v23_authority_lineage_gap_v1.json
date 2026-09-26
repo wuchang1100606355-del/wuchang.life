@@ -1,0 +1,166 @@
+{
+  "schema_id": "W7TP_V23_AUTHORITY_LINEAGE_GAP_V1",
+  "task_id": "T-007",
+  "state": "PASS_PRECISE_HOLD_GAPS_IDENTIFIED",
+  "completion_mode": "PRECISE_HOLD_GAPS_IDENTIFIED_NO_POINTER_MUTATION",
+  "authority": {
+    "canonical_pointer_mutated": false,
+    "runtime_mutated": false,
+    "d8_authority_created": false,
+    "report_role": "D4_EVIDENCE_AND_GAP_CLASSIFICATION"
+  },
+  "safe_conclusion": {
+    "gst_v23_exact_runtime_binding": "ACTIVE_AND_D8_CLOSED_FOR_EXACT_BINDING",
+    "global_w7tp_v23_canonical": "NOT_CLOSED",
+    "current_machine_global_pointer": "V2.1",
+    "pointer_change_allowed_now": false
+  },
+  "links": [
+    {
+      "id": "L1",
+      "name": "FOUNDER_TRUE_INTENT_LINEAGE",
+      "state": "PASS",
+      "evidence_ref": "configs/total_field/w7tp_founder_intent_lineage_v1.json"
+    },
+    {
+      "id": "L2",
+      "name": "DEVELOPER_INTENT_CANONICAL",
+      "state": "PASS",
+      "evidence_ref": "configs/total_field/w7tp_developer_intent_canonical_v1.json"
+    },
+    {
+      "id": "L3",
+      "name": "MACHINE_ACTIVE_CANONICAL_POINTER",
+      "state": "PASS_OBSERVED_V21",
+      "observed_version": "2.1",
+      "evidence_ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"
+    },
+    {
+      "id": "L4",
+      "name": "GST_V23_CONSUMER_SOURCE_HASH_BINDING",
+      "state": "PASS_EXACT",
+      "consumer_sha256": "ee6001818c32fddd0e4942628b053ee40ec03c06cd82d2d049456503f0af6ee3",
+      "recorded_sha256": "ee6001818c32fddd0e4942628b053ee40ec03c06cd82d2d049456503f0af6ee3"
+    },
+    {
+      "id": "L5",
+      "name": "GST_V23_CONTRACT_HASH_BINDING",
+      "state": "PASS_EXACT",
+      "contract_sha256": "553b3f9d635cce76b42360e8e2d353d954ee333d3bb0d42ee8eea527f4006cca",
+      "recorded_sha256": "553b3f9d635cce76b42360e8e2d353d954ee333d3bb0d42ee8eea527f4006cca"
+    },
+    {
+      "id": "L6",
+      "name": "GST_V23_FOUNDER_RUNTIME_ACTIVATION",
+      "state": "PASS_EXACT",
+      "activation_sha256": "1c0ed4a349c7f903fec461c7e209c2df8cf2543c6a5ffe01f59e34c70700d644",
+      "recorded_sha256": "1c0ed4a349c7f903fec461c7e209c2df8cf2543c6a5ffe01f59e34c70700d644"
+    },
+    {
+      "id": "L7",
+      "name": "GST_V23_ACTIVATION_RESULT",
+      "state": "PASS_EXACT",
+      "activation_result_sha256": "2147b3e37713d1f82dffc1548db443957586ce12765cb4f92a73f5bf101905dd",
+      "recorded_sha256": "2147b3e37713d1f82dffc1548db443957586ce12765cb4f92a73f5bf101905dd"
+    },
+    {
+      "id": "L8",
+      "name": "GST_V23_D8_FORMAL_CLOSURE",
+      "state": "PASS_EXACT_BINDING_SCOPE_ONLY",
+      "d8_sha256": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379",
+      "scope": "CLOSED_FOR_EXACT_GST_V23_RUNTIME_CONSUMER_BINDING",
+      "global_scope_boundary": "DOES_NOT_PROMOTE_GLOBAL_CANONICAL_OR_SECOND_TOTAL_FIELD"
+    },
+    {
+      "id": "L9",
+      "name": "TOTAL_FIELD_REQUIRED_EFFECT",
+      "state": "PASS_CURRENT_AUTHORITY_PRESERVES_EFFECT",
+      "required_effect": "AUTHORIZE_GST_V23_RUNTIME_CONSUMER_FORMAL_DELIVERY",
+      "present": true
+    },
+    {
+      "id": "L10",
+      "name": "TOTAL_FIELD_AUTHORITY_POINTER_HASH_LINEAGE",
+      "state": "HOLD_SUCCESSOR_RECEIPT_NOT_LOCATED",
+      "d8_bound_authority_sha256": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869",
+      "preimage_sha256": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869",
+      "current_authority_sha256": "fa8f355bcafa63e8b97a798a5b157f8b5ef3fd2e2d73e043947bb5c99c7587d4",
+      "preimage_is_exact_d8_bound_hash": true,
+      "current_is_additive_effect_superset": true
+    },
+    {
+      "id": "L11",
+      "name": "CURRENT_8D_FIELD_SEMANTICS",
+      "state": "HOLD_SEMANTIC_MAPPING_CONFLICT",
+      "current_field": {
+        "D6": "Sovereign Privacy Field",
+        "D7": "Generative Transmission & Resource Routing Field",
+        "D8": "Red-Team Detour Alert & Quarantine Field"
+      },
+      "developer_intent": {
+        "D6": "Generative State Transmission",
+        "D7": "Risk/Quarantine",
+        "D8": "Envelope/Authority"
+      }
+    },
+    {
+      "id": "L12",
+      "name": "GLOBAL_V21_TO_V23_SUCCESSOR_CONTRACT",
+      "state": "HOLD_DIRECT_GLOBAL_SUCCESSOR_NOT_LOCATED",
+      "generic_mechanism_state": "PASS_CANDIDATE_CONSTRUCTION_GATES",
+      "generic_mechanism_target": "core/adi_native/verifier.py:total_field_candidate_decision",
+      "reason": "Reviewed successor-rebind mechanism is generic and bound to core/adi_native/verifier.py, not a formal global W7TP V2.1 to V2.3 canonical successor package."
+    },
+    {
+      "id": "L13",
+      "name": "GLOBAL_CANONICAL_PROMOTION",
+      "state": "HOLD_NOT_RUN",
+      "machine_pointer_version": "2.1",
+      "d8_closure_canonical_pointer_changed": false,
+      "handoff_remaining_gap": "GLOBAL_CANONICAL_PROMOTION_NOT_RUN_AND_NOT_REQUIRED_FOR_THIS_D8_CLOSURE"
+    }
+  ],
+  "gaps": [
+    {
+      "gap_id": "G1",
+      "code": "HOLD_GLOBAL_V21_TO_V23_SUCCESSOR_CONTRACT_NOT_LOCATED",
+      "meaning": "No reviewed direct formal successor package was located that binds the global V2.1 canonical pointer to the Founder-defined V2.3 identity.",
+      "required_closure": "Create/review an exact successor package bound to V2.1 pointer hash, V2.3 governing contract, Founder authority, Current 8D Field, Total Field decision, rollback coordinate and promotion receipt."
+    },
+    {
+      "gap_id": "G2",
+      "code": "HOLD_CURRENT_8D_FIELD_SEMANTIC_MAPPING_CONFLICT",
+      "meaning": "The active TRUE8D all-node field still maps D6 to Sovereign Privacy and D7 to Generative Transmission, while the current Developer Intent Canonical maps D6 to GST and D7 to Risk/Quarantine.",
+      "required_closure": "Produce an additive Current 8D Field successor whose D1-D8 semantics are derived from T-001/T-002 and verify downstream consumers before promotion."
+    },
+    {
+      "gap_id": "G3",
+      "code": "HOLD_TOTAL_FIELD_AUTHORITY_POINTER_SUCCESSOR_RECEIPT_NOT_LOCATED",
+      "meaning": "The GST V2.3 D8 closure is hash-bound to the prior Total Field authority pointer. The current authority pointer is an additive effect superset and preserves the GST effect, but an explicit successor receipt linking the two authority-pointer hashes was not located.",
+      "required_closure": "Bind the old authority hash to the current authority hash with an explicit append-only successor receipt proving preserved formal GST delivery authority."
+    },
+    {
+      "gap_id": "G4",
+      "code": "HOLD_GLOBAL_ACTIVE_CANONICAL_POINTER_STILL_V21",
+      "meaning": "The global machine canonical pointer remains V2.1. Exact GST V2.3 runtime activation and D8 closure were scoped to the consumer binding and explicitly did not change the global pointer.",
+      "required_closure": "Only after G1-G3 close, run the formal pointer promotion path with preimage, rollback, exact hashes, Total Field decision and post-promotion re-observation."
+    }
+  ],
+  "evidence_hashes": {
+    "founder_lineage": "a046bb9b862ffd7424056ca12484f553ad9ba30d01c3bfd5c72669734abd35c6",
+    "developer_canonical": "42020814d4ba652053ebd9957ca4d23f88b2ef0642bdad2c8cc4e2f7029be87e",
+    "machine_pointer": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed",
+    "current_field": "4f15212984d06f7d39ad7727aa2006b493425da3f797ae3aa134b9f292091d90",
+    "total_field_authority": "fa8f355bcafa63e8b97a798a5b157f8b5ef3fd2e2d73e043947bb5c99c7587d4",
+    "authority_preimage": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869",
+    "consumer_contract": "553b3f9d635cce76b42360e8e2d353d954ee333d3bb0d42ee8eea527f4006cca",
+    "consumer": "ee6001818c32fddd0e4942628b053ee40ec03c06cd82d2d049456503f0af6ee3",
+    "active_binding": "4282a1f74bf1ae931c018ac76654b87030ff941e1cdf7015b82b350029b12c96",
+    "activation_record": "1c0ed4a349c7f903fec461c7e209c2df8cf2543c6a5ffe01f59e34c70700d644",
+    "activation_result": "2147b3e37713d1f82dffc1548db443957586ce12765cb4f92a73f5bf101905dd",
+    "d8_closure": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379",
+    "handoff": "1a4f8a221fa5323796344bdc6c253f5feebae1447ecabe042aeaac623a6ba91a",
+    "generic_successor_report": "0ede2c4fb7ab8727931381c4db38cbb12a70730f15fe98fa2b644a14a9d43634"
+  },
+  "next_action": "Close G1-G3 in order, then and only then evaluate G4 global pointer promotion."
+}
