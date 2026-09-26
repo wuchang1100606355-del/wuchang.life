@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_capability_internalization_registry.schema.json",
+  "title": "W7TP 8D ADI Capability Internalization Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state",
+    "registry_role",
+    "canonical",
+    "authority_boundary",
+    "source_registry_refs",
+    "capabilities"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-CAPABILITY-INTERNALIZATION-REGISTRY/1.0"},
+    "state": {"const": "ACTIVE_INTERNALIZATION_INDEX"},
+    "registry_role": {"const": "OVERLAY_ONLY_DOES_NOT_REPLACE_EXISTING_OWNERS"},
+    "canonical": {"const": false},
+    "source_registry_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "authority_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formal_effect_boundary",
+        "provider_authority",
+        "external_authority_inherited",
+        "total_field_verify_required"
+      ],
+      "properties": {
+        "formal_effect_boundary": {"const": "TAIJI01_TOTAL_FIELD"},
+        "provider_authority": {"const": false},
+        "external_authority_inherited": {"const": false},
+        "total_field_verify_required": {"const": true}
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 7,
+      "items": {"$ref": "#/$defs/capability"}
+    }
+  },
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "capability_class",
+        "status",
+        "source_refs",
+        "resource_refs",
+        "selection_tags",
+        "d3_coordinate",
+        "d5_execution",
+        "d7_risk",
+        "d8_authority"
+      ],
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "pattern": "^CAP_INTERNAL_[A-Z0-9_]+_V1$"
+        },
+        "capability_class": {
+          "enum": [
+            "CLAW",
+            "LLM",
+            "STATIC_PULL",
+            "DYNAMIC_CONTEXT",
+            "NODE_COMPUTE",
+            "ORIGIN_CELL",
+            "GST"
+          ]
+        },
+        "status": {
+          "enum": [
+            "REGISTERED_CAPABILITY",
+            "IMPLEMENTED",
+            "ACTIVE_RUNTIME",
+            "EVIDENCE_ONLY"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "resource_refs": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "selection_tags": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "d3_coordinate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["node_scope", "owner_ref", "coordinate_ref"],
+          "properties": {
+            "node_scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "owner_ref": {"type": "string", "minLength": 1},
+            "coordinate_ref": {"type": "string", "minLength": 1}
+          }
+        },
+        "d5_execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "direct_effect", "side_effect_boundary"],
+          "properties": {
+            "mode": {
+              "enum": ["READ_ONLY", "CANDIDATE_ONLY", "BOUNDED_EFFECT"]
+            },
+            "direct_effect": {"type": "boolean"},
+            "side_effect_boundary": {"type": "string", "minLength": 1}
+          }
+        },
+        "d7_risk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fail_closed", "risk_tags"],
+          "properties": {
+            "fail_closed": {"const": true},
+            "risk_tags": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "d8_authority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider_authority",
+            "final_decision",
+            "canonical",
+            "requires_total_field_verify"
+          ],
+          "properties": {
+            "provider_authority": {"const": false},
+            "final_decision": {"const": false},
+            "canonical": {"const": false},
+            "requires_total_field_verify": {"const": true}
+          }
+        }
+      }
+    }
+  }
+}

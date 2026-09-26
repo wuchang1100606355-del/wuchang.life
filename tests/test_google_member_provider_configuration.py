@@ -100,7 +100,7 @@ def test_provider_check_uses_runtime_secret_file_metadata_and_trusted_origins() 
     tool = load(TOOL_PATH, "configure_google_member_provider_runtime_health")
     program = tool.build_odoo_shell_program("check")
     assert tool.CANONICAL_CALLBACK_URL == (
-        "https://member.wuchang.life/google/member/callback"
+        "https://wuchang.life/google/member/callback"
     )
     assert tool.GOOGLE_CLIENT_SECRET_FILE in program
     assert tool.CANONICAL_CALLBACK_URL in program

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "w7tp://schemas/audio_control_intent/v1",
+  "title": "W7TP Audio Control Intent V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "trigger_type",
+    "target_ref",
+    "operation",
+    "issued_at",
+    "nonce"
+  ],
+  "properties": {
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "trigger_type": {
+      "enum": ["SIRI_SHORTCUT", "APP_INTENT", "LOCAL_UI", "TOTAL_FIELD_INTERNAL"]
+    },
+    "target_ref": {"type": "string", "minLength": 1, "maxLength": 128},
+    "operation": {
+      "enum": [
+        "OUTPUT_OPEN",
+        "OUTPUT_CLOSE",
+        "SET_OUTPUT_VOLUME",
+        "SET_INPUT_GAIN",
+        "MUTE_OUTPUT",
+        "UNMUTE_OUTPUT",
+        "GROUP_SET_VOLUME",
+        "GROUP_OPEN",
+        "GROUP_CLOSE",
+        "STATUS"
+      ]
+    },
+    "level": {"type": ["integer", "null"], "minimum": 0, "maximum": 100},
+    "issued_at": {"type": "string", "minLength": 1},
+    "nonce": {"type": "string", "minLength": 8, "maxLength": 128},
+    "source_device_ref": {"type": ["string", "null"], "maxLength": 128}
+  }
+}

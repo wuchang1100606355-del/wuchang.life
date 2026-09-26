@@ -1,0 +1,14 @@
+[Unit]
+Description=Read-only Native ADI health consumer using adaptive network binding
+After=w7tp-adaptive-network.service
+Wants=w7tp-adaptive-network.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/taiji_admin/Taiji_Hub
+Environment=XDG_RUNTIME_DIR=%t
+ExecStart=/usr/bin/python3 /home/taiji_admin/Taiji_Hub/capabilities/w7tp-8d-adi-adaptive-network/scripts/native_adi_health_consumer.py
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

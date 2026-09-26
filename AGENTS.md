@@ -1545,3 +1545,75 @@ Founder decides what becomes canonical.
 Total Field executes, validates, seals, and reports Founder Canonical.
 （證據建立可觀測與可驗證事實；Founder 決定正典；
 總場執行、驗證、封存並回報 Founder Canonical。）
+
+---
+
+# 37. Current Task Context Precedence Hard Gate
+# 37. 目前任務脈絡優先序硬閘門
+
+在命名或切換分支、搜尋實作、重播既有執行，或修改任何檔案前，
+必須依下列順序解析目前執行意圖：
+
+`LATEST_EXPLICIT_USER_INTENT > CURRENT_LIVE_STATE > CURRENT_VALID_AUTHORITY > PRIOR_RUN > ATTACHED_OLD_TASK`
+
+`CURRENT_LIVE_STATE` 與 `CURRENT_VALID_AUTHORITY` 只能約束最新意圖如何執行，
+不得用另一項任務取代最新意圖。`PRIOR_RUN` 與 `ATTACHED_OLD_TASK` 僅是證據，
+除非最新明確使用者意圖把它指定為目前工作。
+
+只有當目前使用者回合明確指定附件為本次要求時，該附件才能提供最新明確意圖。
+舊附件、舊執行、來源綁定要求、登錄工作、分支名稱或記憶中的任務，
+都不得自行升格為執行權威。
+
+開始工作前必須建立：
+
+- `LATEST_INTENT_ID`
+- `SELECTED_TASK_ID`
+- `SELECTED_CONTEXT_SOURCE`
+- `SELECTED_CONTEXT_CARRIER`
+- `CURRENT_ATTACHMENT_DESIGNATED`
+- `LIVE_STATE_CHECKED`
+- `OLD_CONTEXT_ROLE`
+
+接著將上述座標交給 `scripts/verify/verify_task_context_precedence_gate.sh` 驗證。
+若選定任務不等於最新明確使用者意圖、選用舊附件或舊執行作為目前任務，
+或尚未檢查現場狀態，必須停止並輸出 `STATE=HOLD_TASK_CONTEXT_ROLLBACK（狀態＝暫停，任務脈絡倒退）`。
+不得建立分支、重新啟動歷史任務，或把舊證據重新解釋為目前權威。
+
+---
+
+# 38. Direct Shortest Path Rule
+# 38. 直接最短路徑規則
+
+任何 W7TP／小J／Five-in-One（五合一）／8D Packet（8D 封包）工作，
+必須保留狀態編碼、座標、雜湊、封包、生成式傳輸、驗證、重構、證據，
+最後才執行動作；不得降格成一般聊天機器人、同步、檔案複製或瀏覽器自動化。
+
+## Generative Transfer Priority Gate
+## 生成式傳輸優先閘門
+
+當工作涉及小J會員系統、8D 封包、會員所有側邊欄小J、Cloud Blind Compute（雲端盲算）、
+No-Plaintext Context（無明文上下文）、BYOK（自帶金鑰）或 Five-in-One（五合一）部署，
+若 `W3_GENERATIVE_TRANSFER_DEPLOY` 尚未存在或尚未納入 Master Deploy Index（主部署索引），
+下一步固定為 `W3_GENERATIVE_TRANSFER_DEPLOY`。
+
+## Main Chain Rule
+## 主鏈規則
+
+所有下一步必須遵守：
+
+State（狀態）→ Coordinate（座標）→ Hash（雜湊）→ Packet（封包）→
+Generative Transfer（生成式傳輸）→ Verify（驗證）→ Reconstruct（重構）→
+Evidence（證據）→ Action（動作）。
+
+偏離主鏈時輸出 `STATE=HOLD_MAIN_CHAIN_DEVIATION（狀態＝暫停，偏離主鏈）`。
+
+## Redteam Rule
+## 紅隊規則
+
+紅隊用來找出風險、設定邊界並產生安全最短路徑，不得以一般合規檢查無限延後生成式傳輸主幹。
+
+## No Detour Rule
+## 禁止繞路規則
+
+若 8D Schema SDK（8D 結構描述開發套件）已完成而生成式傳輸尚未完成，
+不得先跳到 UI（使用者介面）、Action Bus（動作匯流排）或 Broker（中介服務）。

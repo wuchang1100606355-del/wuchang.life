@@ -1,0 +1,42 @@
+<odoo>
+    <record id="action_wuchang_association_merchant_tenant" model="ir.actions.act_window">
+        <field name="name">Merchant Tenants</field>
+        <field name="res_model">wuchang.association.merchant.tenant</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_wuchang_association_member_consent" model="ir.actions.act_window">
+        <field name="name">Member Consents</field>
+        <field name="res_model">wuchang.association.member.consent</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_wuchang_association_member_data_request" model="ir.actions.act_window">
+        <field name="name">Member Data Requests</field>
+        <field name="res_model">wuchang.association.member.data.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_wuchang_association_member_trust_root"
+              name="Association Member Trust"
+              parent="wuchang_cafe_ai_gateway.menu_wuchang_cafe_root"
+              sequence="20"/>
+
+    <menuitem id="menu_wuchang_association_merchant_tenant"
+              name="Merchant Tenants"
+              parent="menu_wuchang_association_member_trust_root"
+              action="action_wuchang_association_merchant_tenant"
+              sequence="10"/>
+
+    <menuitem id="menu_wuchang_association_member_consent"
+              name="Member Consents"
+              parent="menu_wuchang_association_member_trust_root"
+              action="action_wuchang_association_member_consent"
+              sequence="20"/>
+
+    <menuitem id="menu_wuchang_association_member_data_request"
+              name="Member Data Requests"
+              parent="menu_wuchang_association_member_trust_root"
+              action="action_wuchang_association_member_data_request"
+              sequence="30"/>
+</odoo>

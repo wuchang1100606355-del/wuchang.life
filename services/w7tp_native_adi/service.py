@@ -9,7 +9,7 @@ import signal
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any
 from urllib.parse import urlsplit
 
 from .core import ADIError, PROTOCOL_VERSION, SERVICE_NAME, SpacetimeADI
@@ -22,16 +22,13 @@ DEFAULT_PORT = 9110
 DEFAULT_STATE_DIR = Path("/home/taiji_admin/.local/state/w7tp-native-adi")
 
 
-def health_payload(*, authority_receipt_wired: bool = False) -> dict[str, Any]:
+def health_payload() -> dict[str, Any]:
     return {
         "state": "PASS",
         "service": SERVICE_NAME,
         "authority": AUTHORITY,
         "protocol": "W7TP_8D_GENERATIVE_TRANSMISSION",
         "production": True,
-        "reconstruction_authority_receipt": (
-            "CONFIRMED_PROTECTION" if authority_receipt_wired else "UNVERIFIED_LIVE_WIRING"
-        ),
     }
 
 
@@ -96,16 +93,10 @@ class NativeADIHandler(BaseHTTPRequestHandler):
         try:
             payload = self._request_json()
             if path == "/v1/adi/insert":
-                time_keys = {"time_slot", "logical_time_uint64"} & set(payload)
-                if (
-                    len(time_keys) != 1
-                    or set(payload) - {"id", "time_slot", "logical_time_uint64", "payload"}
-                    or not {"id", "payload"} <= set(payload)
-                ):
+                if set(payload) != {"id", "time_slot", "payload"}:
                     raise ADIError("INSERT_REQUEST_SHAPE_INVALID")
-                logical_time = payload[next(iter(time_keys))]
                 result = self.server.engine.insert(
-                    payload["id"], logical_time, payload["payload"]
+                    payload["id"], payload["time_slot"], payload["payload"]
                 )
                 self._json(200, {"state": "PASS", "record": result})
                 return
@@ -114,54 +105,36 @@ class NativeADIHandler(BaseHTTPRequestHandler):
                     "start_slot",
                     "end_slot",
                     "limit",
-                    "query_budget",
                 }:
                     raise ADIError("SEARCH_REQUEST_SHAPE_INVALID")
                 result = self.server.engine.search(
-                    payload["start_slot"],
-                    payload["end_slot"],
-                    payload.get("limit", 100),
-                    payload.get("query_budget"),
+                    payload["start_slot"], payload["end_slot"], payload.get("limit", 100)
                 )
                 self._json(200, {"state": "PASS", "results": result})
                 return
             if path == "/v1/adi/packet":
-                if set(payload) - {
-                    "ids",
-                    "receiver_lookup",
-                    "parent_snapshot_ref",
-                }:
+                if set(payload) - {"ids", "receiver_lookup"}:
                     raise ADIError("PACKET_REQUEST_SHAPE_INVALID")
                 result = self.server.engine.packet(
-                    payload.get("ids"),
-                    payload.get("receiver_lookup"),
-                    payload.get("parent_snapshot_ref"),
+                    payload.get("ids"), payload.get("receiver_lookup")
                 )
                 self._json(200, result)
                 return
             if path == "/v1/adi/reconstruct":
-                if set(payload) != {"packet", "authority_receipt_ref"}:
+                if set(payload) != {"packet"}:
                     raise ADIError("RECONSTRUCT_REQUEST_SHAPE_INVALID")
-                result = self.server.engine.reconstruct(
-                    payload["packet"], payload["authority_receipt_ref"]
-                )
+                result = self.server.engine.reconstruct(payload["packet"])
                 self._json(200, result)
                 return
             self._json(404, {"state": "HOLD", "reason_code": "ROUTE_NOT_FOUND"})
         except ADIError as exc:
-            if not exc.dead_lettered:
-                self.server.engine.record_rejection(exc, f"HTTP:{path}")
-            dead_letter = dict(exc.dead_letter_receipt or {})
             self._json(
                 422,
                 {
                     "state": "HOLD",
                     "reason_code": exc.reason_code,
                     "path": exc.path,
-                    "dead_letter_state": dead_letter.get(
-                        "state", "UNVERIFIED_LIVE_WIRING"
-                    ),
-                    "dead_letter_id": dead_letter.get("dead_letter_id"),
+                    "side_effects": 0,
                 },
             )
 
@@ -183,14 +156,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     arguments = build_parser().parse_args(argv)
-    from runtime.dead_letter.dead_letter_24h_hash_writer import (
-        append_24h_hash_dead_letter,
-    )
-
-    engine = SpacetimeADI(
-        arguments.state_dir,
-        dead_letter_writer=append_24h_hash_dead_letter,
-    )
+    engine = SpacetimeADI(arguments.state_dir)
     server = NativeADIHTTPServer((arguments.host, arguments.port), engine)
 
     def stop(_signum: int, _frame: Any) -> None:

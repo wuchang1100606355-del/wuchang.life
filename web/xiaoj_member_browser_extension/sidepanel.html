@@ -59,6 +59,15 @@
       <button id="runBtn" type="button">送入瀏覽器橋</button>
     </section>
 
+    <section class="fieldGroup" aria-label="T-011C 本地模型候選檢視">
+      <h2>T-011C 本地 LLM 候選 PoC</h2>
+      <p>僅顯示 Total Field 待驗證／已驗證候選；不執行候選、不呼叫 Codex。</p>
+      <label for="t011cCandidateJson">T-011C Interface Candidate JSON</label>
+      <textarea id="t011cCandidateJson" rows="8" placeholder="貼入 w7tp.t011c-interface-candidate.v1 封包"></textarea>
+      <button id="loadT011cBtn" type="button">驗證並顯示候選</button>
+      <pre id="t011cViewOut">尚未載入候選</pre>
+    </section>
+
     <section class="outputGroup" aria-label="執行結果">
       <h2>Bridge Result</h2>
       <pre id="resultOut">尚未執行</pre>
@@ -66,6 +75,7 @@
       <pre id="packetOut">尚未產生</pre>
     </section>
   </main>
+  <script src="t011c_candidate_view.js"></script>
   <script src="sidepanel.js"></script>
 </body>
 </html>

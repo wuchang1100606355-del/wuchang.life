@@ -1,0 +1,547 @@
+{
+  "schema_id": "W7TP_FOUNDER_INTENT_LINEAGE_V1",
+  "generated_at_utc": "2026-09-26T02:00:00Z",
+  "task_id": "T-001",
+  "state": "PASS_AVAILABLE_FOUNDER_INTENT_LINEAGE_CLASSIFIED",
+  "coverage": {
+    "source_scope": "AVAILABLE_REPO_EVIDENCE_PLUS_CURRENT_EXPLICIT_FOUNDER_CORRECTIONS",
+    "exhaustive_history_claim": false,
+    "missing_or_unavailable_history_policy": "UNRESOLVED_NOT_INFERRED"
+  },
+  "classification_vocabulary": [
+    "ACTIVE",
+    "SUPERSEDED",
+    "REVOKED",
+    "CONFLICT",
+    "UNRESOLVED"
+  ],
+  "authority": {
+    "artifact_role": "D4_EVIDENCE_AND_LINEAGE_INDEX",
+    "canonical_mutation": false,
+    "runtime_effect": false,
+    "active_pointer_mutation": false,
+    "d8_authority_created": false,
+    "formal_effect_authority": "TAIJI01_TOTAL_FIELD_ONLY"
+  },
+  "current_true_intent_coordinate": {
+    "task_id": "T-001",
+    "d3_coordinate": "Taiji_Hub/canonical",
+    "current_goal": "建立 Founder 真實意圖譜系，先分類再讓譜系決定後續程式供給是否可進主線",
+    "next_after_close": "T-002 Developer Intent Canonical",
+    "branch_merge_rule": "Supply 必須符合真實意圖在相同 8D ADI 座標的需求；Git clean merge 不足以授權合併"
+  },
+  "entries": [
+    {
+      "intent_id": "FI-001",
+      "status": "ACTIVE",
+      "topic": "8D_ADI_STATE_FIELD",
+      "assertion": "8D ADI 是 8_IN_1_SINGLE_STATE_FIELD（八合一單一狀態場）；D1-D8 為同時耦合、互相制約、共同閉合的聯合狀態，不是八步線性流水線。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-008"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    },
+    {
+      "intent_id": "FI-002",
+      "status": "ACTIVE",
+      "topic": "AUTHORITY_SPINE",
+      "assertion": "Founder Intent（創辦人意圖）→ 8D/ADI Index（索引）→ Current 8D Field（當前八維場）→ taiji01 Total Field（總場）是權威定位脊柱；Git、PR、SHA、測試、服務狀態與檔名都只能作 D4 證據。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "docs/total_field/WUCHANG_FOUNDER_INTENT_FIELD_CONTEXT_PACKET.md"
+      ]
+    },
+    {
+      "intent_id": "FI-003",
+      "status": "ACTIVE",
+      "topic": "CAPABILITY_NOT_AUTHORITY",
+      "assertion": "LLM（大型語言模型）、Gemini、Codex、雲端、外掛、工具與節點是可替換能力，不因具備運算或輸出能力而自動取得 D8、自然人主權或正式效果權威。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-005",
+        "T-008"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "docs/total_field/WUCHANG_FOUNDER_INTENT_FIELD_CONTEXT_PACKET.md"
+      ]
+    },
+    {
+      "intent_id": "FI-004",
+      "status": "ACTIVE",
+      "topic": "CHAT_NATIVE_CONTROL",
+      "assertion": "自然語言對話是原生／主要執行介面；AI 應以真實意圖、真實狀態、真實座標、證據、政策、風險與權威聯合判讀後調用能力，不把終端機或單一模型當成系統本體。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-004",
+        "T-008"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    },
+    {
+      "intent_id": "FI-005",
+      "status": "ACTIVE",
+      "topic": "STATE_CLASS_SEPARATION",
+      "assertion": "HYPOTHESIS、DESIGN、EVIDENCE、RUNTIME_EFFECT、ACTIVE、CANONICAL、AUTHORITY 必須分離；存在、測試通過或可合併都不得自行升格成現行正典或正式效果。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007",
+        "T-009"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    },
+    {
+      "intent_id": "FI-006",
+      "status": "ACTIVE",
+      "topic": "D6_GST_LATEST",
+      "assertion": "D6 是生成式狀態傳輸。以 8D 狀態分析求同存異，將可規則化之異改為可由共同生成關係表達，記錄同、異、同異關係及生成／還原規則，形成傳輸模組；目的端依規則生成式還原並驗證目標狀態。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "commit:712b5b5",
+        "commit:1f77a67"
+      ],
+      "founder_current_directive": "2026-09-25～26 明確修正：不是差分、不是壓縮、不是檔案搬運；差異是分析材料，不等於傳輸 payload。"
+    },
+    {
+      "intent_id": "FI-007",
+      "status": "ACTIVE",
+      "topic": "ORIGIN_CELL_LATEST",
+      "assertion": "Origin Cell（狀態原胞）不是 chunk、delta、patch 或普通資料區塊，而是受 8D 狀態／規則關係約束的最小治理／邏輯狀態單位；其意義需連同生成／重構規則與可驗證譜系理解。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "commit:712b5b5"
+      ]
+    },
+    {
+      "intent_id": "FI-008",
+      "status": "ACTIVE",
+      "topic": "NATURAL_PERSON_SOVEREIGNTY",
+      "assertion": "自然人是主權身分根；Seat（席位）是組織提供的服務／權限投影而不是身分。組織不得建立第二套自然人主權、8D、D8 或 Total Field。",
+      "demand": [
+        "T-001",
+        "T-002"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    },
+    {
+      "intent_id": "FI-009",
+      "status": "ACTIVE",
+      "topic": "MEMBER_PLAINTEXT_GOVERNANCE",
+      "assertion": "一般會員服務中，組織會員具有明文需求請求權，自然人會員具有明文資訊合成授權權；8D ADI 必須驗證目的、範圍、時間、法律／契約依據、證據與風險後才可受控合成。依法另有處理依據者走獨立法定路徑，不偽造會員同意。",
+      "demand": [
+        "T-001",
+        "T-002"
+      ],
+      "evidence": [
+        "docs/total_field/W7TP_FOUNDER_INTENT_FIELD_SEAL_FOUNDER_INTENT_FIELD_SEAL_20260708_160142.md",
+        "docs/total_field/WUCHANG_FOUNDER_INTENT_FIELD_CONTEXT_PACKET.md"
+      ],
+      "founder_current_directive": "2026-09-26 會員明文治理最新修正。"
+    },
+    {
+      "intent_id": "FI-010",
+      "status": "ACTIVE",
+      "topic": "LOCAL_PLAINTEXT_BOUNDARY",
+      "assertion": "個資明文以本地／地方節點治理為原則，不進雲端候選、公開封包或總場明文；遮罩／假名化若仍可重識別，仍視為受治理個資。",
+      "demand": [
+        "T-001",
+        "T-002"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "docs/total_field/W7TP_FOUNDER_INTENT_FIELD_SEAL_FOUNDER_INTENT_FIELD_SEAL_20260708_160142.md",
+        "docs/total_field/WUCHANG_FOUNDER_INTENT_FIELD_CONTEXT_PACKET.md"
+      ]
+    },
+    {
+      "intent_id": "FI-011",
+      "status": "ACTIVE",
+      "topic": "WORK_CONTINUITY",
+      "assertion": "工作狀態、決策、待驗證與下一步必須跨對話持久化；已完成工作必須封口，後續新需求不得偷偷延長原完成條件或把已完成主線重新標成 DOING。",
+      "demand": [
+        "T-001",
+        "T-002"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "commit:0f90d31",
+        "commit:9e4852f"
+      ]
+    },
+    {
+      "intent_id": "FI-012",
+      "status": "ACTIVE",
+      "topic": "COMMUNITY_MISSION",
+      "assertion": "系統長期目的為社區公益、自然人服務、在地商業造血與地方節點治理；AI 與算力能力服務社區，而不是建立另一個中心化平台抽走地方價值。",
+      "demand": [
+        "T-001",
+        "T-002"
+      ],
+      "evidence": [
+        "docs/total_field/W7TP_FOUNDER_INTENT_FIELD_SEAL_FOUNDER_INTENT_FIELD_SEAL_20260708_160142.md",
+        "docs/total_field/WUCHANG_FOUNDER_INTENT_FIELD_CONTEXT_PACKET.md"
+      ]
+    },
+    {
+      "intent_id": "FI-013",
+      "status": "ACTIVE",
+      "topic": "FOUNDER_DEFINED_V23_IDENTITY",
+      "assertion": "Founder 最新主線身分指定為 W7TP／8D ADI V2.3；這是 Founder 意圖層的現行身分定義，但不得僅靠宣告假裝 runtime、pointer 或 D8 已閉合。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "commit:f977646",
+        "commit:abe4d87",
+        "commit:088c3fe"
+      ]
+    },
+    {
+      "intent_id": "FI-014",
+      "status": "CONFLICT",
+      "topic": "ACTIVE_MACHINE_POINTER_V21",
+      "assertion": "目前 ACTIVE_W7TP_CANONICAL_POINTER 仍指向 V2.1。這是可觀測機器狀態，與 Founder-defined V2.3 身分形成權威譜系衝突；兩者都不能自動覆蓋對方。",
+      "demand": [
+        "T-001",
+        "T-007"
+      ],
+      "evidence": [
+        "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"
+      ]
+    },
+    {
+      "intent_id": "FI-015",
+      "status": "UNRESOLVED",
+      "topic": "V21_TO_V23_AUTHORITY_LINEAGE",
+      "assertion": "V2.1→V2.3 的 successor relation（後繼關係）、governing contract（治理契約）、Current 8D Field、Total Field authority、consumer binding 與 activation evidence 尚需 T-007 精確閉合。",
+      "demand": [
+        "T-007"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+        "commit:f977646",
+        "commit:abe4d87",
+        "commit:088c3fe"
+      ]
+    },
+    {
+      "intent_id": "FI-016",
+      "status": "SUPERSEDED",
+      "topic": "EIGHT_STEP_PIPELINE_MODEL",
+      "assertion": "把 8D ADI 定義成 D1→D2→…→D8 的八步依序流水線已被 8_IN_1_SINGLE_STATE_FIELD 語義取代；操作程序可以有順序，但本體決策模型不是八步流程。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-008"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    },
+    {
+      "intent_id": "FI-017",
+      "status": "SUPERSEDED",
+      "topic": "OLD_D6_D7_MAPPING",
+      "assertion": "把 D6 定義成一般 Action／Privacy，或把 D7 定義成 Generative Transmission 的舊映射不得再作現行核心語義；現行 D6=GST，D7=Risk/Quarantine。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007"
+      ],
+      "evidence": [
+        "docs/total_field/W7TP_SMALL_GENERATIVE_TRANSPORT_AGENT_CANDIDATE.md",
+        "docs/total_field/D3_DETERMINISTIC_COORDINATE_TRANSITION_CANDIDATE_REPORT.md"
+      ]
+    },
+    {
+      "intent_id": "FI-018",
+      "status": "REVOKED",
+      "topic": "GST_AS_DELTA_COMPRESSION_FILE_TRANSFER",
+      "assertion": "把 GST／Origin Cell 解讀成差分傳輸、壓縮、patch、檔案搬運或同步的路徑已被 Founder 明確撤回。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "commit:1f77a67"
+      ],
+      "founder_current_directive": "2026-09-24～26 多次明確修正。"
+    },
+    {
+      "intent_id": "FI-019",
+      "status": "SUPERSEDED",
+      "topic": "MANDATORY_SHARED_BASE_MINIMUM_DELTA",
+      "assertion": "把「共同基座＋最小差量」視為 GST 永遠必要的定義已被後續 Founder 修正；基座不必然必要，差異是分析材料，不得直接等同傳輸承載。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-007"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ],
+      "founder_current_directive": "2026-09-24～25 明確修正：基座不一定需要；改異為同後由規則還原。"
+    },
+    {
+      "intent_id": "FI-020",
+      "status": "REVOKED",
+      "topic": "MODEL_OR_CLOUD_AS_AUTHORITY",
+      "assertion": "任何模型、雲端、外掛、provider 或 Receiver 自行取得正式效果、D8 或自然人主權權威的設計均撤銷。",
+      "demand": [
+        "T-001",
+        "T-002",
+        "T-005"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "docs/total_field/WUCHANG_FOUNDER_INTENT_FIELD_CONTEXT_PACKET.md"
+      ]
+    },
+    {
+      "intent_id": "FI-021",
+      "status": "SUPERSEDED",
+      "topic": "ODOO_AS_MEMBER_SOVEREIGN_ROOT",
+      "assertion": "把 Odoo 當作完整會員主權明文 source-of-truth 的理解已被更新：Odoo 是流程／業務投影與遮罩身分代理，完整自然人主權狀態不可由 Odoo 單獨定義。",
+      "demand": [
+        "T-001",
+        "T-002"
+      ],
+      "evidence": [
+        "docs/total_field/W7TP_FOUNDER_INTENT_FIELD_SEAL_FOUNDER_INTENT_FIELD_SEAL_20260708_160142.md"
+      ],
+      "founder_current_directive": "2026-09-26 會員資料架構最新定義。"
+    },
+    {
+      "intent_id": "FI-022",
+      "status": "SUPERSEDED",
+      "topic": "SEAT_EQUALS_IDENTITY",
+      "assertion": "Seat=Identity 的理解已被取代；Seat 只代表服務／權限投影，自然人不因多個 Seat 被拆成多個主權人格。",
+      "demand": [
+        "T-001",
+        "T-002"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    },
+    {
+      "intent_id": "FI-023",
+      "status": "UNRESOLVED",
+      "topic": "ADI_EXACT_DEFINITION",
+      "assertion": "ADI 曾被新技能直接定義為 absolute-distance index（絕對距離索引），但既有治理資料包含 packet-level local decision index、system-level index network 等多層語義；在 T-002／T-008 閉合前不得把單一定義升格。",
+      "demand": [
+        "T-002",
+        "T-008"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    },
+    {
+      "intent_id": "FI-024",
+      "status": "UNRESOLVED",
+      "topic": "D8_WARN_FINAL_STATUS",
+      "assertion": "歷史 Founder seal 含 PASS/HOLD/WARN/BLOCK，而近期討論傾向 D8 final 只用 PASS/HOLD/BLOCK；WARN 應落 D7 還是 D8 尚未閉合。",
+      "demand": [
+        "T-002",
+        "T-008"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md",
+        "docs/total_field/W7TP_FOUNDER_INTENT_FIELD_SEAL_FOUNDER_INTENT_FIELD_SEAL_20260708_160142.md"
+      ]
+    },
+    {
+      "intent_id": "FI-025",
+      "status": "UNRESOLVED",
+      "topic": "AI_BROWSER_FINAL_ROLE",
+      "assertion": "AI Browser／Chrome 側邊欄可作介面或能力入口，但最終產品定位與權威邊界尚未形成足以升格為正典的完整譜系。",
+      "demand": [
+        "T-002",
+        "T-005",
+        "T-011"
+      ],
+      "evidence": [
+        "docs/audit/GPT_CODEX_CONVERSATION_AUDIT_20260925.md"
+      ]
+    }
+  ],
+  "branch_supply_demand": [
+    {
+      "branch": "origin/total-field/20260918-results-freeze",
+      "classification": "CURRENT_DEMAND_MATCH_D4",
+      "supply": "GST／Origin Cell 2026-09-17~18 結果凍結與檔案狀態原胞契約",
+      "demand_match": [
+        "T-001",
+        "T-007"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/review/total-field-genesis-authority-8995df2-v1",
+      "classification": "CURRENT_DEMAND_MATCH_EVIDENCE",
+      "supply": "Founder 身分證據、會員主權、Genesis Authority 候選",
+      "demand_match": [
+        "T-001",
+        "T-007"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/total-field/m37-gt-static-llm-intake-20260623_113931",
+      "classification": "D4_HISTORICAL_SUPPLY",
+      "supply": "早期 LLM／8D 狀態封包歷史",
+      "demand_match": [
+        "T-001"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/codex/git-final-disposition-governance-20260915",
+      "classification": "VALID_SUPPLY_FOR_T009",
+      "supply": "Git 最終處置／安全歸檔治理",
+      "demand_match": [
+        "T-009"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/codex/d8-read-only-preflight-clean-20260915",
+      "classification": "VALID_SUPPLY_NOT_CURRENT",
+      "supply": "D8 唯讀預檢與 fail-closed",
+      "demand_match": [
+        "T-007"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/redteam/origin-cell-audit-20260925",
+      "classification": "VALID_D7_SUPPLY_AFTER_LINEAGE",
+      "supply": "Origin Cell 紅隊／規則 schema／傳輸量與負向測試",
+      "demand_match": [
+        "T-007"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/review/device-approval-candidate",
+      "classification": "VALID_SUPPLY_NOT_CURRENT",
+      "supply": "Founder 裝置核准候選",
+      "demand_match": [],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/feature/total-field-on-demand-vision-20260904",
+      "classification": "OUT_OF_CURRENT_COORDINATE",
+      "supply": "按需視覺牆能力",
+      "demand_match": [],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/codex/d6-file-reconstruction-candidate-20260915",
+      "classification": "SUPERSEDED_OR_SEMANTIC_REVIEW_REQUIRED",
+      "supply": "舊 D6 檔案重構候選",
+      "demand_match": [
+        "T-007"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/codex/completed-work-skill-first-gates-20260914",
+      "classification": "AUTHORITY_CONFLICT",
+      "supply": "防重做與 skill-first 閘門，但內含 V2.3 current-canonical 預設",
+      "demand_match": [
+        "T-001",
+        "T-002"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/codex/w3-main-chain-recovery-20260914",
+      "classification": "HISTORICAL_SUPPLY_ONLY",
+      "supply": "舊部署鏈、POS、雲端韌性、Field Atlas",
+      "demand_match": [
+        "T-001"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/agent/moving-v-v2-taiji8d-local-canary",
+      "classification": "LINEAGE_DISCONNECTED",
+      "supply": "大型舊工作樹",
+      "demand_match": [],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/codex/origin-cell-d8-runtime-binding-20260918",
+      "classification": "LINEAGE_DISCONNECTED_SUPERSEDED",
+      "supply": "舊 Origin Cell D8 runtime 綁定",
+      "demand_match": [
+        "T-007"
+      ],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/fix/msi-gpt-ipv4-control-20260923",
+      "classification": "REVOKED_BY_CURRENT_STATE",
+      "supply": "強制 MSI 控制路徑走 IPv4",
+      "demand_match": [],
+      "merge_now": false
+    },
+    {
+      "branch": "origin/fix/msi-gpt-ipv4-control-20260924-v2",
+      "classification": "DUPLICATE_REVOKED",
+      "supply": "重複舊 IPv4／MSI 工作樹",
+      "demand_match": [],
+      "merge_now": false
+    }
+  ],
+  "next_gates": [
+    {
+      "task_id": "T-002",
+      "purpose": "只以 ACTIVE Founder Intent 生成機器可讀 Developer Intent Canonical；SUPERSEDED／REVOKED 不得混回。CONFLICT／UNRESOLVED 必須保留成 gate。"
+    },
+    {
+      "task_id": "T-007",
+      "purpose": "閉合 FI-014/FI-015：V2.1 machine pointer 與 Founder-defined V2.3 的 authority lineage。pointer 最後才可能改。"
+    },
+    {
+      "task_id": "T-009",
+      "purpose": "以本譜系作需求座標，分類 remote/local 支線供給，不以可合併性代替真實意圖符合性。"
+    }
+  ]
+}

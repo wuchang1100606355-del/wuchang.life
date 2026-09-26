@@ -1,0 +1,321 @@
+{
+  "schema_version": "W7TP-AUDIO-OPEN-SOURCE-MARKET-MATCH/1.0",
+  "state": "PASS_RESEARCH_MATCH_CANDIDATE_ONLY",
+  "canonical": false,
+  "purpose": "以 8D ADI 單一狀態場，將 Founder 音效意圖與外部開源能力物件媒合；外部模組只提供能力，不取得 D8 權威。",
+  "authority_boundary": {
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    "odoo_community_authority": false,
+    "external_provider_authority": false,
+    "device_authority": false,
+    "llm_authority": false,
+    "runtime_install_authorized": false
+  },
+  "founder_intent": {
+    "D1_intent": [
+      "NAHIMIC_EFFECT_SEMANTICS_EQUIVALENT_RECONSTRUCTION",
+      "APPLE_MUSIC_SOURCE_WITHOUT_APP_AUTHORITY",
+      "HOMEPOD_AND_MULTIROOM_OUTPUT_ROUTING",
+      "ALL_NODE_AUDIO_STATE_COLLECTION",
+      "ODOO_COMMUNITY_AS_CONTROL_AUDIT_SURFACE",
+      "LOCAL_FIRST_PROVIDER_REPLACEABLE"
+    ],
+    "D2_state": "AUDIO_FIELD_AND_TOPOLOGY_EXIST_BUT_ODOO_EQUIVALENT_MODEL_NOT_CLOSED",
+    "D3_coordinates": [
+      "taiji01",
+      "MSI",
+      "taiji03",
+      "taiji04",
+      "drallion",
+      "penguin",
+      "OFFICE_HOMEPOD_01",
+      "OFFICE_HOMEPOD_02"
+    ],
+    "D4_evidence_refs": [
+      "configs/total_field/w7tp_all_node_audio_topology_v1.json",
+      "configs/total_field/w7tp_nahimic_capability_evidence_v1.json",
+      "capabilities/w7tp-8d-adi-audio-field/manifest.json",
+      "Taiji_Odoo/addons/wuchang_core/models/device_control.py",
+      "Taiji_Odoo/addons/wuchang_core/models/customer_display_music.py"
+    ],
+    "D5_policy": [
+      "NO_SECOND_AUTHORITY_CORE",
+      "NO_RAW_AUDIO_TO_CLOUD_BY_DEFAULT",
+      "PROVIDER_REPLACEABLE",
+      "ODOO_COMMUNITY_IS_SURFACE_NOT_AUTHORITY",
+      "EXTERNAL_MODULE_INSTALL_REQUIRES_SEPARATE_RUNTIME_DECISION"
+    ],
+    "D6_gst": "TRANSMIT_AUDIO_STATE_REFS_RULES_AND_RECEIPTS_NOT_RAW_AUDIO_BY_DEFAULT",
+    "D7_risk": [
+      "APPLE_MUSIC_DRM_AND_PROVIDER_TERMS",
+      "GPL_AGPL_LICENSE_BOUNDARIES",
+      "WINDOWS_APO_DRIVER_INTEGRATION",
+      "AIRPLAY_PAIRING_AND_DISCOVERY_DRIFT",
+      "ANDROID_NODE_IDENTITY_GAPS"
+    ],
+    "D8_authority": "TAIJI01_TOTAL_FIELD_ONLY"
+  },
+  "matched_objects": [
+    {
+      "id": "MUSIC_ASSISTANT_SERVER",
+      "source": "music-assistant/server",
+      "license": "Apache-2.0",
+      "role": "MEDIA_SOURCE_AND_PLAYER_BROKER",
+      "match_state": "PRIMARY_CANDIDATE",
+      "capabilities": [
+        "APPLE_MUSIC_PROVIDER",
+        "AIRPLAY_1_AND_AIRPLAY_2",
+        "HOMEPOD_PLAYER_SUPPORT",
+        "MULTIROOM_SYNC",
+        "NOW_PLAYING_METADATA",
+        "WEBSOCKET_AND_HTTP_JSON_RPC_API"
+      ],
+      "coordinate_fit": [
+        "taiji01",
+        "OFFICE_HOMEPOD_01",
+        "OFFICE_HOMEPOD_02"
+      ],
+      "boundary": "RUN_SEPARATE_FROM_ODOO_AND_RETURN_STATE_RECEIPTS",
+      "risk": "APPLE_MUSIC_PROVIDER_USES_PYWIDEVINE_AND_REQUIRES_USER_OWNED_CDM; KEEP_PROVIDER_ACTIVATION_HOLD_UNTIL_POLICY_REVIEW"
+    },
+    {
+      "id": "CAMILLA_DSP",
+      "source": "HEnquist/camilladsp",
+      "license": "GPL-3.0-or-MPL-2.0; ASIO build GPL-3.0 only",
+      "role": "DSP_SEMANTIC_ENGINE",
+      "match_state": "PRIMARY_CANDIDATE",
+      "capabilities": [
+        "IIR",
+        "FIR",
+        "CONVOLUTION",
+        "GAIN",
+        "VOLUME",
+        "LOUDNESS",
+        "DELAY",
+        "LIMITER",
+        "COMPRESSOR",
+        "NOISE_GATE",
+        "MIXER",
+        "WEBSOCKET_CONTROL",
+        "LINUX_WINDOWS_MACOS"
+      ],
+      "coordinate_fit": [
+        "taiji01",
+        "MSI",
+        "taiji03"
+      ],
+      "boundary": "RECONSTRUCT_NAHIMIC_EFFECT_SEMANTICS_NOT_PROPRIETARY_ALGORITHM"
+    },
+    {
+      "id": "PY_CAMILLA_DSP",
+      "source": "HEnquist/pycamilladsp",
+      "license": "OPEN_SOURCE_COMPANION_OF_CAMILLA_DSP",
+      "role": "PYTHON_DSP_ADAPTER",
+      "match_state": "PRIMARY_ADAPTER_CANDIDATE",
+      "capabilities": [
+        "WEBSOCKET_CLIENT",
+        "STATE_READBACK",
+        "CONFIG_CONTROL"
+      ],
+      "coordinate_fit": [
+        "taiji01"
+      ],
+      "boundary": "TOTAL_FIELD_TO_DSP_ADAPTER_ONLY"
+    },
+    {
+      "id": "EQUALIZER_APO",
+      "source": "SourceForge/equalizerapo",
+      "observed_release": "1.4.2",
+      "observed_update": "2025-11-28",
+      "license": "GPL-2.0",
+      "role": "WINDOWS_SYSTEM_WIDE_DSP_PROVIDER",
+      "match_state": "WINDOWS_PROVIDER_CANDIDATE",
+      "capabilities": [
+        "SYSTEM_WIDE_AUDIO_PROCESSING_OBJECT",
+        "PARAMETRIC_EQ",
+        "GRAPHIC_EQ",
+        "CONVOLUTION",
+        "VST_PLUGIN_SUPPORT",
+        "LOW_LATENCY"
+      ],
+      "coordinate_fit": [
+        "MSI",
+        "taiji03"
+      ],
+      "boundary": "WINDOWS_LOCAL_EFFECT_PROVIDER_ONLY; NO_D8_AUTHORITY",
+      "risk": "APPLICATIONS_USING_ASIO_OR_WASAPI_EXCLUSIVE_CAN_BYPASS_SYSTEM_EFFECT_PATH"
+    },
+    {
+      "id": "EASY_EFFECTS",
+      "source": "wwmm/easyeffects",
+      "license": "GPL-3.0-or-later",
+      "role": "LINUX_PIPEWIRE_EFFECT_PROVIDER",
+      "match_state": "SECONDARY_LINUX_PROVIDER",
+      "capabilities": [
+        "EQUALIZER",
+        "LIMITER",
+        "COMPRESSOR",
+        "CONVOLVER",
+        "BASS_ENHANCER",
+        "NOISE_REDUCTION",
+        "DEEP_NOISE_REMOVER",
+        "SPEECH_PROCESSOR",
+        "STEREO_TOOLS"
+      ],
+      "coordinate_fit": [
+        "FUTURE_PIPEWIRE_AUDIO_NODE"
+      ],
+      "boundary": "NOT_PRIMARY_ON_CURRENT_TAIJI01_PULSEAUDIO_STATE"
+    },
+    {
+      "id": "SNAPCAST",
+      "source": "snapcast/snapcast",
+      "license": "GPL-3.0",
+      "role": "NON_APPLE_MULTIROOM_SYNC_FABRIC",
+      "match_state": "SECONDARY_MULTIROOM_CANDIDATE",
+      "capabilities": [
+        "TIME_SYNCHRONIZED_MULTIROOM",
+        "PCM_FLAC_VORBIS_OPUS",
+        "PIPE_ALSA_TCP_PROCESS_PIPEWIRE_INPUTS",
+        "JSON_RPC_HTTP_WEBSOCKET_CONTROL",
+        "LINUX_ANDROID_WINDOWS_CLIENTS"
+      ],
+      "coordinate_fit": [
+        "taiji01",
+        "taiji04",
+        "drallion"
+      ],
+      "boundary": "USE_AFTER_D3_IDENTITY_AND_RUNTIME_HOLDS_CLOSE"
+    },
+    {
+      "id": "PYATV",
+      "source": "postlund/pyatv",
+      "license": "MIT",
+      "role": "APPLE_DEVICE_LIGHTWEIGHT_ADAPTER",
+      "match_state": "FALLBACK_ADAPTER_CANDIDATE",
+      "capabilities": [
+        "ZEROCONF_DISCOVERY",
+        "DEVICE_INFO",
+        "METADATA",
+        "VOLUME_CONTROL",
+        "AIRPLAY_STREAM_FILE",
+        "HOMEPOD_PROTOCOL_SUPPORT"
+      ],
+      "coordinate_fit": [
+        "taiji01",
+        "OFFICE_HOMEPOD_01",
+        "OFFICE_HOMEPOD_02"
+      ],
+      "boundary": "LIGHTWEIGHT_FALLBACK_WHEN_FULL_MEDIA_BROKER_NOT_NEEDED"
+    },
+    {
+      "id": "SHAIRPORT_SYNC",
+      "source": "mikebrady/shairport-sync",
+      "license": "MIT-style project license with bundled component licenses",
+      "role": "AIRPLAY_RECEIVER_INGRESS",
+      "match_state": "INGRESS_CANDIDATE",
+      "capabilities": [
+        "AIRPLAY_RECEIVER",
+        "METADATA",
+        "LOCAL_AUDIO_INGRESS"
+      ],
+      "coordinate_fit": [
+        "taiji01"
+      ],
+      "boundary": "RECEIVE_APPLE_AUDIO_INTO_FIELD; NOT_HOMEPOD_OUTPUT_BROKER"
+    },
+    {
+      "id": "OCA_IOT_OCA",
+      "source": "OCA/iot:iot_oca",
+      "version_signal": "18.0.1.0.1",
+      "license": "AGPL-3",
+      "role": "ODOO_COMMUNITY_DEVICE_ACTION_BASE",
+      "match_state": "PRIMARY_ODOO_BASE_CANDIDATE",
+      "capabilities": [
+        "IOT_DEVICE",
+        "DEVICE_GROUP",
+        "DEVICE_TAG",
+        "COMMUNICATION_SYSTEM",
+        "DEVICE_ACTION"
+      ],
+      "coordinate_fit": [
+        "Odoo Community 18 on taiji01"
+      ],
+      "boundary": "EXTEND_WITH_WUCHANG_AUDIO_STATE_FIELDS; DO_NOT_TREAT_AS_AUTHORITY"
+    },
+    {
+      "id": "OCA_CONNECTOR_COMPONENTS",
+      "source": "OCA/connector:component,component_event,connector",
+      "version_signal": "18.0",
+      "license": "LGPL-3",
+      "role": "ODOO_PROVIDER_ADAPTER_LAYER",
+      "match_state": "PRIMARY_ODOO_ADAPTER_CANDIDATE",
+      "capabilities": [
+        "DECOUPLED_COMPONENTS",
+        "COMPONENT_EVENTS",
+        "CONNECTOR_PATTERN"
+      ],
+      "coordinate_fit": [
+        "Odoo Community 18 on taiji01"
+      ],
+      "boundary": "ADAPTERS_TO_MUSIC_ASSISTANT_CAMILLA_DSP_PYATV"
+    },
+    {
+      "id": "OCA_QUEUE_JOB",
+      "source": "OCA/queue:queue_job",
+      "version_signal": "18.0.4.0.1",
+      "license": "LGPL-3",
+      "role": "ODOO_ASYNC_EFFECT_REQUEST_QUEUE",
+      "match_state": "PRIMARY_ODOO_ASYNC_CANDIDATE",
+      "capabilities": [
+        "JOB_QUEUE",
+        "RETRY",
+        "BATCH",
+        "CRON_INTEGRATION"
+      ],
+      "coordinate_fit": [
+        "Odoo Community 18 on taiji01"
+      ],
+      "boundary": "QUEUE_REQUESTS_ONLY; EFFECT_REQUIRES_TOTAL_FIELD_RECEIPT"
+    },
+    {
+      "id": "OCA_AUDITLOG",
+      "source": "OCA/server-tools:auditlog",
+      "version_signal": "18.0.2.0.9",
+      "license": "AGPL-3",
+      "role": "ODOO_D4_AUDIT_EVIDENCE",
+      "match_state": "PRIMARY_ODOO_AUDIT_CANDIDATE",
+      "capabilities": [
+        "MODEL_AUDIT_LOG",
+        "HTTP_SESSION",
+        "HTTP_REQUEST_RECORDS"
+      ],
+      "coordinate_fit": [
+        "Odoo Community 18 on taiji01"
+      ],
+      "boundary": "D4_EVIDENCE_ONLY; NEVER_FINAL_DECISION"
+    }
+  ],
+  "composition_candidate": {
+    "media_plane": "Music Assistant",
+    "dsp_plane": "CamillaDSP",
+    "windows_local_dsp": "Equalizer APO or CamillaDSP",
+    "apple_device_fallback": "pyatv",
+    "non_apple_multiroom": "Snapcast",
+    "airplay_ingress": "Shairport Sync",
+    "odoo_device_base": "OCA iot_oca",
+    "odoo_adapter_layer": "OCA component + component_event + connector",
+    "odoo_async_layer": "OCA queue_job",
+    "odoo_audit_layer": "OCA auditlog",
+    "authority": "8D ADI / taiji01 Total Field"
+  },
+  "install_policy": {
+    "now": "RESEARCH_AND_BINDING_CANDIDATE_ONLY",
+    "no_install_without": [
+      "LICENSE_REVIEW",
+      "NODE_COORDINATE_VERIFICATION",
+      "STAGING_TEST",
+      "TOTAL_FIELD_SOURCE_AND_RUNTIME_GATE"
+    ]
+  }
+}

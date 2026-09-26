@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_local_llm_candidate_return_v1.schema.json",
+  "title": "W7TP Local LLM Candidate Return V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state",
+    "task_ref",
+    "intent_ref",
+    "provider_ref",
+    "model_ref",
+    "context_ref",
+    "context_sha256",
+    "candidate_ref",
+    "candidate_sha256",
+    "candidate_text",
+    "candidate_only",
+    "must_not_execute",
+    "requires_total_field_verify",
+    "member_plaintext_transferred",
+    "secret_transferred",
+    "raw_browser_page_transferred",
+    "authority",
+    "d4_evidence",
+    "d7_risk",
+    "return_coordinate"
+  ],
+  "properties": {
+    "schema_version": {"const": "w7tp.local-llm-candidate-return.v1"},
+    "state": {"enum": ["CANDIDATE_READY", "HOLD"]},
+    "task_ref": {"type": "string", "minLength": 1},
+    "intent_ref": {"type": "string", "minLength": 1},
+    "provider_ref": {"const": "MSI_OLLAMA_LOCAL"},
+    "model_ref": {"type": "string", "minLength": 1},
+    "context_ref": {"type": "string", "minLength": 1},
+    "context_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "candidate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "candidate_text": {"type": "string", "maxLength": 8192},
+    "candidate_only": {"const": true},
+    "must_not_execute": {"const": true},
+    "requires_total_field_verify": {"const": true},
+    "member_plaintext_transferred": {"const": false},
+    "secret_transferred": {"const": false},
+    "raw_browser_page_transferred": {"const": false},
+    "return_coordinate": {"type": "string", "minLength": 1},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_authority",
+        "model_authority",
+        "codex_authority",
+        "browser_authority",
+        "formal_effect_boundary"
+      ],
+      "properties": {
+        "provider_authority": {"const": false},
+        "model_authority": {"const": false},
+        "codex_authority": {"const": false},
+        "browser_authority": {"const": false},
+        "formal_effect_boundary": {"const": "TAIJI01_TOTAL_FIELD"}
+      }
+    },
+    "d4_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_selection_sha256",
+        "dynamic_context_ref",
+        "member_context_ref",
+        "model_response_sha256",
+        "endpoint_ref",
+        "endpoint_transport"
+      ],
+      "properties": {
+        "model_selection_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "dynamic_context_ref": {"type": "string", "minLength": 1},
+        "member_context_ref": {"type": "string", "minLength": 1},
+        "model_response_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "endpoint_ref": {"type": "string", "minLength": 1},
+        "endpoint_transport": {"enum": ["LAN", "TAILSCALE_WINDOWS", "EXPLICIT"]}
+      }
+    },
+    "d7_risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["risk_flags", "output_scan_pass", "hold_reason"],
+      "properties": {
+        "risk_flags": {"type": "array", "items": {"type": "string"}},
+        "output_scan_pass": {"type": "boolean"},
+        "hold_reason": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

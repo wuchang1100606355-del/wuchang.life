@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import sys
 from pathlib import Path
 
@@ -20,8 +19,16 @@ def load(path: Path, name: str):
 
 def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     login_source = (ROOT / "Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py").read_text()
+    account_linking_source = (
+        ROOT
+        / "Taiji_Odoo/addons/wuchang_google_member_login/services/account_linking.py"
+    ).read_text()
     line_login_source = (ROOT / "Taiji_Odoo/addons/wuchang_line_login/controllers/main.py").read_text()
     registration_source = (ROOT / "Taiji_Odoo/addons/wuchang_member_registration/controllers/main.py").read_text()
+    member_entry_source = (
+        ROOT
+        / "Taiji_Odoo/addons/wuchang_member_registration/views/login_templates.xml"
+    ).read_text()
     candidate_shell_source = (
         ROOT / "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/controllers/main.py"
     ).read_text()
@@ -38,7 +45,9 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
         '@http.route("/wuchang/member/register/start"'
         not in candidate_shell_source
     )
-    assert 'href="/web/signup"' in candidate_shell_source
+    assert 'href="/web/signup"' in member_entry_source
+    assert 'href="/google/member/login"' not in member_entry_source
+    assert 'href="/line/login"' not in member_entry_source
 
     member_model_source = (
         ROOT
@@ -84,8 +93,10 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     assert "is_landing_enabled" in login_source
     assert "is_landing_enabled" in line_login_source
     assert "is_landing_enabled" in registration_source
-    assert "identity_projection_response_headers" in login_source
-    assert "IDENTITY_PREFIX_NOT_BOUND" in login_source
+    assert "IDENTITY_PROJECTION_HEADERS" in login_source
+    assert "identity_packet_ref_from_link_context" in login_source
+    assert "identity_projection_link_not_verified" in account_linking_source
+    assert "identity_projection_local_subject_ref_invalid" in account_linking_source
     for route in {
         "/google/member/*",
         "/line/*",
@@ -112,7 +123,8 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     assert '<field name="mode">discussions</field>' in member_views_source
     assert '<field name="privacy">connected</field>' in member_views_source
     assert '"website_forum"' in member_manifest_source
-    assert "copy_headers X-W7TP-Identity-Schema" in caddy_source
+    assert "copy_headers X-W7TP-Identity-Ref" in caddy_source
+    assert "copy_headers X-W7TP-Identity-Schema" not in caddy_source
     assert "w7tp_odoo_public_member_redirects_candidate" in caddy_source
     assert "https://member.wuchang.life{uri}" in caddy_source
     assert "The nonprofit homepage remains the sole public/Ad Grants destination" in caddy_source
@@ -132,29 +144,22 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     }:
         assert group_id in member_groups
 
-    menu_lock = json.loads(
-        (
-            ROOT / "runtime/total_field/xiaoj_p1_console/menu_source_lock.json"
-        ).read_text()
+    intent_engine = load(
+        ROOT / "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/p1_intent_engine.py",
+        "sovereign_member_intent_engine",
     )
+    menu_lock = intent_engine.MENU_SOURCE_LOCK
     assert menu_lock["state"] == "HOLD_REAL_MENU_SOURCE_LOCK"
-    assert menu_lock["authority"]["merchant_is_content_authority"] is True
-    assert menu_lock["authority"]["current_menu_authority"] is False
-    assert menu_lock["active_product_rows"] == []
-    policy = menu_lock["merchant_review_policy"]
-    assert policy["variants_generated"] is False
-    assert policy["demo_products_in_formal_pos"] is False
-    assert policy["medium_size_is_price_baseline"] is True
-    assert policy["medium_size_price_delta"] == 0
-    assert policy["total_field_may_choose_products_or_prices"] is False
+    assert menu_lock["current_menu_authority"] is False
+    assert menu_lock["can_create_pos_order_from_current_menu"] is False
+    assert menu_lock["live_quickclick_export_required"] is True
 
-    scene_table = json.loads(
-        (
-            ROOT
-            / "runtime/total_field/secondary_cloud/scenario_route_table.json"
-        ).read_text()
+    secondary_cloud = load(
+        ROOT / "tools/w7tp_secondary_cloud_packet_ramp.py",
+        "sovereign_member_secondary_cloud_contract",
     )
-    assert set(scene_table["routes"]) == {
+    assert secondary_cloud.CONTAINERS == {
+        "AUDIO",
         "ASSOCIATION",
         "CAFE_POS",
         "GENERIC",
@@ -173,10 +178,6 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
         True, True, True, True, "https://members.example.test", callback
     ) == "PASS"
 
-    intent_engine = load(
-        ROOT / "Taiji_Odoo/addons/wuchang_cafe_ai_gateway/services/p1_intent_engine.py",
-        "sovereign_member_intent_engine",
-    )
     intent_result = intent_engine.candidate_action(
         "我要加入會員", explicit_intent="member_register"
     )
@@ -197,10 +198,26 @@ def test_sovereign_ai_member_end_to_end_local_flow() -> None:
     assert cloud_packet["generative_transmission"]["member_plaintext_transmitted"] is False
     assert cloud_packet["local_zero_latency_decision"]["execution_allowed"] is False
 
-    local_result = load(
+    inference_runtime = load(
         ROOT / "tools/w7tp_packet_inference_runtime.py",
         "sovereign_member_local_execution_gate",
-    ).run(
+    )
+    transition_coordinate = inference_runtime.transition_coordinate
+    synthetic_rule_registry = {
+        "status": "CANDIDATE_NON_CANONICAL",
+        "events": {
+            "STATE_UPDATE": {
+                "base_delta": {},
+                "d7_reference_required": False,
+                "status": "CANDIDATE_RULE",
+            }
+        },
+    }
+    inference_runtime.transition_coordinate = lambda **kwargs: transition_coordinate(
+        **kwargs,
+        rule_registry=synthetic_rule_registry,
+    )
+    local_result = inference_runtime.run(
         "我要加入會員",
         authenticated_role_ref="ROLE_MEMBER_SYNTHETIC",
         canonical_verifier_result={

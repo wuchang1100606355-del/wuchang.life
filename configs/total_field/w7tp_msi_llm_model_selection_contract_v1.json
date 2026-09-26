@@ -1,0 +1,72 @@
+{
+  "schema_version": "w7tp.msi-llm-model-selection-contract.v1",
+  "task_coordinate": "T-011B",
+  "state": "CANDIDATE_ONLY_MODEL_SELECTION_CONTRACT",
+  "provider_ref": "MSI_OLLAMA_LOCAL",
+  "model_ref": "taiji-qwen2.5-coder-7b:ctx16k",
+  "endpoint_env": "TAIJI_LOCAL_OLLAMA_URL",
+  "endpoint_candidates": [
+    {
+      "ref": "MSI_LAN_PRIMARY",
+      "url": "http://192.168.50.82:11434",
+      "priority": 10,
+      "transport": "LAN"
+    },
+    {
+      "ref": "MSI_WINDOWS_TAILSCALE_FALLBACK",
+      "url": "http://100.105.82.28:11434",
+      "priority": 20,
+      "transport": "TAILSCALE_WINDOWS"
+    }
+  ],
+  "internalized_capability_id": "CAP_INTERNAL_LLM_V1",
+  "required_resource_state": "AVAILABLE",
+  "required_capabilities": [
+    "LANGUAGE",
+    "INTENT",
+    "CODE",
+    "TOOLS",
+    "LOCAL_REVIEW"
+  ],
+  "required_context_interfaces": [
+    "w7tp-total-field-model-visible-context/1.0",
+    "interface:member-sovereign-context:v1"
+  ],
+  "selection_policy": {
+    "preferred_provider_required": false,
+    "qualified_provider_required": true,
+    "d3_node": "MSI",
+    "d5_mode": "CANDIDATE_ONLY",
+    "d7_fail_closed": true
+  },
+  "candidate_return": {
+    "schema_version": "w7tp.local-llm-candidate-return.v1",
+    "candidate_only": true,
+    "must_not_execute": true,
+    "requires_total_field_verify": true,
+    "return_coordinate": "total-field:candidate-gateway:llm-push",
+    "max_candidate_chars": 8192
+  },
+  "authority_boundary": {
+    "provider_authority": false,
+    "model_authority": false,
+    "codex_authority": false,
+    "browser_authority": false,
+    "canonical": false,
+    "runtime_effect": false,
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD"
+  },
+  "data_boundary": {
+    "member_plaintext_to_model": false,
+    "secret_to_model": false,
+    "credential_to_model": false,
+    "raw_browser_page_to_model": false,
+    "member_context_mode": "OPAQUE_REFERENCES_ONLY",
+    "dynamic_context_persistence": false
+  },
+  "fallback_policy": {
+    "provider_failure": "RETURN_HOLD_TO_TOTAL_FIELD_RESOURCE_ARBITRATION",
+    "model_missing": "RETURN_HOLD_TO_TOTAL_FIELD_RESOURCE_ARBITRATION",
+    "authority_drift": "BLOCK"
+  }
+}

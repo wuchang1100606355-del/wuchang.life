@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wuchang.life/schemas/w7tp_8d_adi_adaptive_network_state_v2.json",
+  "title": "W7TP 8D ADI Per-Intent Multipath Candidate Evidence",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "timestamp",
+    "observer",
+    "source_node",
+    "evidence_class",
+    "confidence",
+    "authority_scope"
+  ],
+  "properties": {
+    "schema_id": {"type": "string", "minLength": 1},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "observer": {"type": "string", "minLength": 1},
+    "source_node": {"type": "string", "minLength": 1},
+    "evidence_class": {"const": "D4_EVIDENCE"},
+    "confidence": {
+      "type": "string",
+      "enum": ["HIGH", "MEDIUM", "LOW", "LOCALIZED_UNKNOWN"]
+    },
+    "authority_scope": {
+      "type": "string",
+      "enum": ["CANDIDATE_EVIDENCE_ONLY", "CANDIDATE_D8_DECISION_ONLY"]
+    },
+    "network_state_field": {
+      "type": "object",
+      "required": ["semantics", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+      "properties": {
+        "semantics": {"const": "8_IN_1_SINGLE_STATE_FIELD"},
+        "D1": {"type": "object"},
+        "D2": {"type": "object"},
+        "D3": {"type": "object"},
+        "D4": {"type": "object"},
+        "D5": {
+          "type": "object",
+          "required": [
+            "network_model",
+            "routing_unit",
+            "failover_scope",
+            "global_three_way_selection",
+            "available_path_set",
+            "qualified_path_set",
+            "active_path_set",
+            "denied_path_set",
+            "stale_path_set"
+          ],
+          "properties": {
+            "network_model": {"const": "MULTI_PATH_CONCURRENT_FIELD"},
+            "routing_unit": {"const": "PER_INTENT_BINDING"},
+            "failover_scope": {"const": "PER_BINDING"},
+            "global_three_way_selection": {"const": false},
+            "available_path_set": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "qualified_path_set": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "active_path_set": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "denied_path_set": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "stale_path_set": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+          },
+          "additionalProperties": true
+        },
+        "D6": {"type": "object"},
+        "D7": {"type": "object"},
+        "D8": {
+          "type": "object",
+          "required": ["decision", "authorized", "decision_id", "total_field_decision"],
+          "properties": {
+            "decision": {
+              "enum": ["D8_ALLOW_FOR_THIS_INTENT", "HOLD", "DENY", "LOCALIZED_UNKNOWN"]
+            },
+            "authorized": {"type": "boolean"},
+            "decision_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+            "total_field_decision": {"const": "NOT_RUN"}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "intent_path_bindings": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/intentPathBinding"}
+    }
+  },
+  "$defs": {
+    "intentPathBinding": {
+      "type": "object",
+      "required": [
+        "intent_id",
+        "source_node",
+        "source_zone",
+        "target_node",
+        "target_zone",
+        "service_identity",
+        "service_class",
+        "published_gateway_bound",
+        "qualified_path_set",
+        "selected_path",
+        "alternate_paths",
+        "concurrent_paths",
+        "authorized",
+        "decision_id",
+        "observed_at",
+        "expires_at",
+        "policy_version"
+      ],
+      "properties": {
+        "intent_id": {"type": "string", "minLength": 1},
+        "source_node": {"type": "string", "minLength": 1},
+        "source_zone": {"type": "string", "minLength": 1},
+        "target_node": {"type": "string", "minLength": 1},
+        "target_zone": {"type": "string", "minLength": 1},
+        "service_identity": {"type": "string", "minLength": 1},
+        "service_class": {"type": "string", "minLength": 1},
+        "published_gateway_bound": {"type": "boolean"},
+        "qualified_path_set": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "selected_path": {"type": ["string", "null"]},
+        "alternate_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "concurrent_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "authorized": {"type": "boolean"},
+        "decision_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "policy_version": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

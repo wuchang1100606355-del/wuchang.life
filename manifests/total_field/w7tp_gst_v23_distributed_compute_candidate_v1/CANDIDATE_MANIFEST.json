@@ -1,0 +1,321 @@
+{
+  "schema_version": "W7TP-GST-V23-DISTRIBUTED-COMPUTE-CANDIDATE-MANIFEST/1.0",
+  "manifest_id": "W7TP_GST_V23_DISTRIBUTED_COMPUTE_CANDIDATE_V1_20260924",
+  "created_at_utc": "2026-09-24T12:05:48Z",
+  "state": "CANDIDATE_NOT_CANONICAL",
+  "purpose": "BIND_EXISTING_GST_V23_ORIGIN_CELL_TO_A_FAIL_CLOSED_WHOLE_PACKET_DISTRIBUTED_COMPUTE_PLAN",
+  "scope": {
+    "design_manifest_only": true,
+    "distributed_runtime_activation": false,
+    "worker_dispatch": false,
+    "canonical_write": false,
+    "active_pointer_write": false,
+    "service_restart": false,
+    "deployment": false,
+    "database_write": false,
+    "router_write": false,
+    "git_commit": false,
+    "git_push": false
+  },
+  "observed_coordinate": {
+    "node_id": "taiji01",
+    "repository_root": "/home/taiji_admin/Taiji_Hub",
+    "branch": "codex/current-live-state-consolidation-20260915",
+    "head": "088c3fe3d3abb52ff93c6bba64f2944d838b203a",
+    "tree": "8e113e6cc00cf42229eadf51af9bd73655fd5224",
+    "staging_empty": true,
+    "preexisting_unrelated_dirty_paths": [
+      "capabilities/w7tp-8d-adi-adaptive-network/SOURCE_SHA256SUMS",
+      "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/runtime_adapter.py",
+      "capabilities/w7tp-8d-adi-adaptive-network/tests/test_adaptive_network.py",
+      "legacy_core/taiji_unified_gateway_edge.py",
+      "tests/test_w7tp_ed25519_verifier.py.orig",
+      "tools/taiji04_control.sh"
+    ],
+    "dirty_paths_preserved": true
+  },
+  "authority_scope": {
+    "founder_canonical_authority_preserved": true,
+    "existing_exact_gst_v23_binding_d8_decision": "PASS",
+    "existing_exact_binding_decision_ref": "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/GST_V23_D8_FORMAL_CLOSURE_20260924/D8_FORMAL_CLOSURE_DECISION.json",
+    "existing_exact_binding_decision_sha256": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379",
+    "existing_exact_binding_scope": "EXACT_GST_V23_RUNTIME_CONSUMER_BINDING_ONLY",
+    "existing_decision_extends_to_distributed_worker_pool": false,
+    "distributed_compute_candidate_total_field_decision": "NOT_RUN",
+    "distributed_compute_candidate_canonical": false,
+    "distributed_compute_candidate_runtime_active": false
+  },
+  "implementation_bindings": [
+    {
+      "path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
+      "sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
+      "size_bytes": 32445,
+      "role": "source_generated_rule_origin_cell_and_generic_executor",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    },
+    {
+      "path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py",
+      "sha256": "ee6001818c32fddd0e4942628b053ee40ec03c06cd82d2d049456503f0af6ee3",
+      "size_bytes": 8927,
+      "role": "existing_fail_closed_packet_consumer",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    },
+    {
+      "path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_contract.json",
+      "sha256": "553b3f9d635cce76b42360e8e2d353d954ee333d3bb0d42ee8eea527f4006cca",
+      "size_bytes": 4564,
+      "role": "existing_consumer_and_multi_path_topology_contract",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    },
+    {
+      "path": "tools/intent_field/intent_field_product_preflight.py",
+      "sha256": "8c7dd09bc7a578aff27d8d874ab792cf0b1d9e7baadb0348cc154e04613745d0",
+      "size_bytes": 33871,
+      "role": "existing_taiji01_intent_field_preflight",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    },
+    {
+      "path": "tools/intent_field/verify_intent_field_packet.py",
+      "sha256": "78cd3ae269fd634d2aedf6f5930907ff88d08b4018a7a649bde9887f2de4ef50",
+      "size_bytes": 12852,
+      "role": "existing_intent_field_preflight_output_verifier",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    },
+    {
+      "path": "tools/total_field/w7tp_intent_field_suite/node_inventory.py",
+      "sha256": "9879f6c19c6350fb4aaae19427fae16eb5570857914ebc08cfd9c848beb63a32",
+      "size_bytes": 15159,
+      "role": "existing_privacy_minimized_node_inventory",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    },
+    {
+      "path": "schemas/field/w7tp_node_capability.schema.json",
+      "sha256": "9575ac35a0992f4bde0220900933726873c47247613232f6dc2dca0eed2e6280",
+      "size_bytes": 3723,
+      "role": "existing_node_capability_inventory_schema",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    },
+    {
+      "path": "tests/test_w7tp_origin_cell_generative_v2.py",
+      "sha256": "bf85b67010b7c9d2dceaecd18c68c428dc0cbf88b7318e33d0712aae83a2501c",
+      "size_bytes": 9728,
+      "role": "existing_origin_cell_contract_and_negative_tests",
+      "tracking_state": "TRACKED_AT_OBSERVED_HEAD"
+    }
+  ],
+  "operational_pipeline": {
+    "semantics": "ORDERED_OPERATIONAL_STAGES_NOT_SPLIT_8D_DIMENSIONS",
+    "joint_8d_state_field_preserved": true,
+    "stages": [
+      {
+        "order": 1,
+        "stage": "RECEIVE_COMPLETE_GST_ORIGIN_CELL_PACKET",
+        "execution_location": "taiji01"
+      },
+      {
+        "order": 2,
+        "stage": "FAIL_CLOSED_ORIGIN_CELL_VALIDATION",
+        "entrypoint": "validate_rule_packet",
+        "execution_location": "taiji01"
+      },
+      {
+        "order": 3,
+        "stage": "EXISTING_INTENT_FIELD_PREFLIGHT",
+        "implementation_path": "tools/intent_field/intent_field_product_preflight.py",
+        "verification_path": "tools/intent_field/verify_intent_field_packet.py",
+        "execution_location": "taiji01",
+        "design_hash_bound": true,
+        "runtime_call_observed_in_existing_consumer": false,
+        "binding_claim": "DESIGN_SEQUENCE_ONLY_PENDING_DISTRIBUTED_DESIGN_VALIDATION"
+      },
+      {
+        "order": 4,
+        "stage": "WHOLE_PACKET_WORKER_ADMISSION",
+        "execution_location": "taiji01",
+        "active": false
+      },
+      {
+        "order": 5,
+        "stage": "TARGET_NATIVE_RECONSTRUCTION",
+        "entrypoint": "reconstruct_from_rule_packet",
+        "execution_location": "EXACT_ATTESTED_WORKER_ONLY"
+      },
+      {
+        "order": 6,
+        "stage": "LOCAL_FINAL_MANIFEST_AND_RECEIPT",
+        "execution_location": "EXACT_ATTESTED_WORKER_ONLY"
+      },
+      {
+        "order": 7,
+        "stage": "TAIJI01_DESIGN_REVALIDATION",
+        "execution_location": "taiji01"
+      },
+      {
+        "order": 8,
+        "stage": "SEPARATE_APPEND_ONLY_SHA256_SEAL",
+        "execution_location": "taiji01"
+      }
+    ]
+  },
+  "distribution_contract": {
+    "dispatch_unit": "WHOLE_ORIGIN_CELL_PACKET",
+    "parallelism_boundary": "INDEPENDENT_PACKETS_ONLY",
+    "intra_packet_rule_sharding_allowed": false,
+    "execution_order_may_be_rewritten": false,
+    "target_bytes_may_be_transmitted": false,
+    "differential_payload_allowed": false,
+    "file_copy_fallback_allowed": false,
+    "automatic_fallback_allowed": false,
+    "guessed_port_allowed": false,
+    "carrier_is_authority": false,
+    "communication_coordinate_source": "EXISTING_TOTAL_FIELD_MANAGED_BINDING_ONLY",
+    "worker_returns": [
+      "RECONSTRUCTION_RECEIPT",
+      "TARGET_MANIFEST_SHA256",
+      "TARGET_BYTES",
+      "TARGET_FILES",
+      "EXECUTOR_SHA256",
+      "PACKET_SHA256",
+      "ZERO_TARGET_AND_DIFFERENTIAL_BYTE_MEASUREMENTS"
+    ]
+  },
+  "node_inventory_observation": {
+    "observed_at_utc": "2026-09-24T12:05:48Z",
+    "inventory_state": "READ_ONLY_INVENTORY",
+    "inventory_content_sha256": "90e2b765ab5b8c53da7be827d5ed2688d9e58b3d9d89a7ca211f03ab631fbb2c",
+    "msi_duplicate_hostname_observed": true,
+    "msi_identity_rule": "BIND_EXACT_OS_RUNTIME_MANAGEMENT_PROFILE_AND_HOST_IDENTITY_NOT_HOSTNAME_ALONE",
+    "unlisted_or_unattested_nodes_eligible": false
+  },
+  "node_roles": {
+    "taiji01": {
+      "role": "CONTROL_PREFLIGHT_REVALIDATION_AND_SEAL",
+      "node_inventory_state": "INSTALLED_USABLE",
+      "protocol_version": "W7TP-SHARED-8D-INTENT-FIELD/1.0",
+      "validator_compatible": true,
+      "logical_cpus": 8,
+      "physical_cores": 4,
+      "memory_total_kib": 24496548,
+      "memory_available_kib_observed": 15813788,
+      "scratch_available_bytes_observed": 102792065024,
+      "large_reconstruction_primary": false,
+      "small_fallback_max_dataset_mib": 256,
+      "small_fallback_max_concurrency": 1,
+      "fallback_active": false
+    },
+    "msi_wsl2_candidate": {
+      "role": "PRIMARY_RECONSTRUCTION_WORKER_CANDIDATE",
+      "node_inventory_selector": "MSI#2",
+      "expected_os_runtime": "LINUX_WSL2",
+      "management_profile": "w7tp-msi",
+      "strict_host_key_checking_observed": true,
+      "node_inventory_state": "REACHABLE_PROBE_UNAVAILABLE",
+      "protocol_version": null,
+      "validator_compatible": null,
+      "logical_cpus": 10,
+      "physical_cores": 5,
+      "memory_total_kib": 24610520,
+      "memory_available_kib_observed": 21861768,
+      "scratch_available_bytes_observed": 774672400384,
+      "eligible_for_dispatch": false,
+      "candidate_limits_after_attestation": {
+        "max_concurrency_at_or_below_1024_mib": 2,
+        "max_concurrency_above_1024_through_4096_mib": 1
+      },
+      "required_before_dispatch": [
+        "EXACT_NODE_IDENTITY_BINDING",
+        "EXACT_ORIGIN_CELL_EXECUTOR_SHA256_MATCH",
+        "PACKET_SCHEMA_COMPATIBILITY",
+        "VALIDATOR_COMPATIBILITY",
+        "EMPTY_CLEAN_ROOM_WORKSPACE",
+        "RESOURCE_ADMISSION_PASS",
+        "DISTRIBUTED_DESIGN_VALIDATION_PASS"
+      ]
+    },
+    "other_nodes": {
+      "role": "NOT_ELIGIBLE_BY_DEFAULT",
+      "eligible_for_dispatch": false,
+      "reason": "EXACT_CAPABILITY_IDENTITY_EXECUTOR_AND_RESOURCE_ATTESTATION_NOT_ESTABLISHED"
+    }
+  },
+  "resource_admission_policy": {
+    "dataset_mib_contract": {
+      "minimum": 32,
+      "maximum": 4096,
+      "multiple_of": 8
+    },
+    "scratch_required_bytes_formula": "3 * dataset_bytes + 2147483648",
+    "memory_reserved_bytes_per_job": 2147483648,
+    "logical_cpu_slots_per_job": 1,
+    "admission_fails_closed_on_unknown_resource": true,
+    "admission_fails_closed_on_insufficient_resource": true,
+    "resource_observation_is_authority": false,
+    "resource_observation_requires_fresh_recheck_before_execution": true
+  },
+  "validation_evidence_reused": {
+    "reuse_basis": "UNCHANGED_HASH_BOUND_ORIGIN_CELL_AND_TEST_SOURCE",
+    "implementation_commit": "712b5b5814c91e1559559ce5cece32b01dcd4dda",
+    "origin_cell_executor_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
+    "origin_cell_test_sha256": "bf85b67010b7c9d2dceaecd18c68c428dc0cbf88b7318e33d0712aae83a2501c",
+    "contract_and_negative_tests": "10_OF_10_PASS",
+    "validated_dataset_sizes_mib": [
+      32,
+      1024
+    ],
+    "same_executor_multi_target_proof": "PASS",
+    "provenance_drift_rejection": "PASS",
+    "transmitted_rule_literal_bytes": 0,
+    "transmitted_target_bytes": 0,
+    "differential_payload_bytes": 0,
+    "current_turn_test_rerun": false,
+    "authority_role": "HISTORICAL_VERIFIED_EVIDENCE_NOT_DISTRIBUTED_POOL_ACTIVATION"
+  },
+  "distributed_design_validation": {
+    "state": "NOT_RUN",
+    "required_checks": [
+      "MANIFEST_SCHEMA_AND_REQUIRED_FIELD_VALIDATION",
+      "ALL_IMPLEMENTATION_BINDING_HASHES_MATCH",
+      "MSI_WINDOWS_AND_LINUX_IDENTITIES_CANNOT_COLLIDE",
+      "UNATTESTED_WORKER_REJECTED_BEFORE_WORKSPACE_CREATION",
+      "STALE_RESOURCE_OBSERVATION_REJECTED",
+      "INSUFFICIENT_SCRATCH_REJECTED",
+      "EXECUTOR_HASH_MISMATCH_REJECTED",
+      "INTENT_FIELD_PREFLIGHT_HOLD_PREVENTS_DISPATCH",
+      "PARTIAL_WORKER_OUTPUT_QUARANTINED_WITHOUT_AUTOMATIC_DELETE",
+      "DUPLICATE_RECEIPT_PRESERVED_AND_DEDUPLICATED_BY_HASH",
+      "NO_TARGET_BYTES_OR_DIFFERENTIAL_PAYLOAD_ON_CARRIER",
+      "NO_SERVICE_POINTER_CANONICAL_OR_AUTHORITY_MUTATION"
+    ],
+    "pass_effect": "CANDIDATE_VALIDATED_ONLY",
+    "runtime_activation_effect": false,
+    "total_field_decision_effect": false
+  },
+  "archive_seal_plan": {
+    "state": "NOT_RUN",
+    "algorithm": "SHA256",
+    "canonicalization": "UTF8_JSON_SORTED_KEYS_COMPACT_SEPARATORS",
+    "manifest_self_hash_excluded": true,
+    "seal_stored_separately": true,
+    "planned_seal_path": "manifests/total_field/w7tp_gst_v23_distributed_compute_candidate_v1/SHA256_MANIFEST.json",
+    "planned_validation_path": "manifests/total_field/w7tp_gst_v23_distributed_compute_candidate_v1/DESIGN_VALIDATION.json",
+    "root_hash_rule": "SHA256_OF_CANONICAL_ORDERED_FILE_RECORDS",
+    "append_only_evidence": true,
+    "automatic_output_delete": false,
+    "hash_alone_proves_storage_custody": false
+  },
+  "effects": {
+    "worker_dispatched": false,
+    "runtime_activated": false,
+    "service_installed": false,
+    "service_restarted": false,
+    "deployed": false,
+    "canonical_written": false,
+    "active_pointer_changed": false,
+    "total_field_decision_issued": false,
+    "database_written": false,
+    "router_written": false,
+    "git_committed": false,
+    "git_pushed": false
+  },
+  "next": "RUN_DISTRIBUTED_DESIGN_VALIDATION_AND_CREATE_SEPARATE_SHA256_MANIFEST"
+}

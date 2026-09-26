@@ -1,0 +1,86 @@
+{
+  "schema_version": "w7tp-gst-v23-runtime-consumer-handoff/1-candidate",
+  "handoff_id": "GST_V23_RUNTIME_CONSUMER_BINDING_CANDIDATE_HANDOFF_20260924",
+  "state": "PASS_D8_FORMAL_CLOSURE_FOR_GST_V23_RUNTIME_BINDING",
+  "founder_current_baseline": "W7TP_8D_ADI_V2.3",
+  "binding": {
+    "contract_path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_contract.json",
+    "contract_sha256": "553b3f9d635cce76b42360e8e2d353d954ee333d3bb0d42ee8eea527f4006cca",
+    "consumer_path": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py",
+    "consumer_sha256": "ee6001818c32fddd0e4942628b053ee40ec03c06cd82d2d049456503f0af6ee3",
+    "existing_origin_cell_path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
+    "existing_origin_cell_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
+    "test_path": "tests/test_w7tp_gst_v23_runtime_consumer_candidate.py",
+    "test_sha256": "85de21fa25cc385d260fe8ee4626da7bb3c07c3835cf83a71f7189bca3723277"
+  },
+  "connected_path": [
+    "RECEIVED_GST_PACKET",
+    "validate_rule_packet",
+    "execute_reconstruction_rules",
+    "reconstruct_from_rule_packet",
+    "VERIFIED_RECONSTRUCTION_RECEIPT"
+  ],
+  "validation": {
+    "synthetic_isolated_reconstruction": "PASS",
+    "combined_tests": "18_OF_18_PASS",
+    "formal_path_without_valid_founder_activation": "HOLD_BEFORE_WORKSPACE_CREATION",
+    "founder_authorized_runtime_reconstruction": "PASS",
+    "runtime_activated": true,
+    "service_installed": false,
+    "deployed": false,
+    "canonical_pointer_changed": false,
+    "total_field_decision": "PASS"
+  },
+  "semantic_preservation": {
+    "shared_rule_base": true,
+    "zero_data_rule_forwarding": true,
+    "differential_transfer": false,
+    "file_copy_fallback": false,
+    "automatic_fallback": false,
+    "received_rule_code_formalized": false,
+    "multi_node_and_multi_carrier_preserved": true
+  },
+  "verifier_baseline_correction_basis": [
+    {
+      "verifier": "scripts/verify/verify_tfct_true8d_runtime_policy_canonical.py",
+      "observed_failure": "PROTECTED_BASELINE_CHANGED:tools/total_field_candidate_gateway.py",
+      "required_correction": "Resolve the gateway change against its accepted promotion evidence, consumer compatibility and rollback manifest; do not replace its expected hash from current bytes alone.",
+      "required_for_this_binding": false
+    },
+    {
+      "verifier": "scripts/verify/verify_w7tp_small_agent_node_authority.py",
+      "observed_failure": "PROTECTED_FILE_CHANGED:runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+      "observed_runtime_sha256": "4f15212984d06f7d39ad7727aa2006b493425da3f797ae3aa134b9f292091d90",
+      "hardcoded_expected_sha256": "5ec55fec22504aa719803f398c8b408a785c145870bf4cd34434cad242ab9237",
+      "pointer_target_byte_match": true,
+      "required_correction": "Verify the ignored runtime successor lineage, pointer-target receipt, node registry compatibility and rollback coordinate, then update all bound release manifests and verifier baselines together; do not edit only this hash.",
+      "required_for_this_binding": false
+    }
+  ],
+  "formal_activation_handoff": {
+    "preconditions": [
+      "REVIEWED_COMMIT_CONTAINING_EXACT_BINDING_PATHS",
+      "FOUNDER_CONFIRMATION_FOR_EXACT_CONTRACT_HASH",
+      "EXISTING_TOTAL_FIELD_RECEIPT_ADAPTER_SELECTED_AND_BOUND",
+      "TOTAL_FIELD_ALLOW_RECEIPT_BOUND_TO_BINDING_AND_CONTRACT_HASH",
+      "EXACT_RUNTIME_TARGET_AND_EXISTING_TOTAL_FIELD_COMMUNICATION_COORDINATE",
+      "ROLLBACK_COORDINATE"
+    ],
+    "operation": "Bind the repository's reviewed Total Field receipt adapter to this consumer without inventing a new receipt schema; persist the reviewed ALLOW receipt, then invoke the consumer activate command with one received packet, a new empty workspace and that persistent receipt.",
+    "verification": "Require exact target manifest, reconstruction receipt, zero differential/target bytes, and no service or canonical-pointer mutation.",
+    "rollback": "Stop admission through the exact binding receipt, quarantine the exact output and receipt for evidence, preserve bytes, and do not restore the stale V2.1 pointer."
+  },
+  "activation_receipt": {
+    "active_binding": "runtime/total_field/gst_v23_runtime_consumer/ACTIVE_BINDING.json",
+    "activation_record_sha256": "1c0ed4a349c7f903fec461c7e209c2df8cf2543c6a5ffe01f59e34c70700d644",
+    "activation_result_sha256": "2147b3e37713d1f82dffc1548db443957586ce12765cb4f92a73f5bf101905dd",
+    "d8_formal_closure_decision": "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/GST_V23_D8_FORMAL_CLOSURE_20260924/D8_FORMAL_CLOSURE_DECISION.json",
+    "d8_formal_closure_decision_sha256": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379",
+    "authority_pointer": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+    "authority_pointer_sha256": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869",
+    "target_manifest_sha256": "c5610b475db1ad7aa60d9fc8c83ce81346c6fdff3dcdf88217c1fdce63c1240b",
+    "target_bytes": 34152448,
+    "target_files": 147
+  },
+  "remaining_gap": "GLOBAL_CANONICAL_PROMOTION_NOT_RUN_AND_NOT_REQUIRED_FOR_THIS_D8_CLOSURE"
+}

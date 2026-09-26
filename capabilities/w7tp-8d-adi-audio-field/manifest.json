@@ -1,0 +1,143 @@
+{
+  "schema_id": "W7TP_8D_ADI_AUDIO_FIELD_SKILL_MANIFEST_V1",
+  "skill_id": "w7tp-8d-adi-audio-field",
+  "version": "0.1.0-candidate.1",
+  "state": "CANDIDATE_NOT_REGISTERED",
+  "runtime_state": "NOT_ACTIVATED",
+  "canonical": false,
+  "final_authority": false,
+  "total_field_decision": "NOT_RUN",
+  "default_mode": "CANDIDATE_PLAN_ONLY",
+  "authority_scope": "CANDIDATE_EVIDENCE_ONLY",
+  "capability_type": "8D_ADI_AUDIO_FIELD_PROVIDER",
+  "owner_scope": "W7TP_8D_ADI",
+  "provider_authority": false,
+  "siri_authority": false,
+  "nahimic_authority": false,
+  "joint_state_contract": {
+    "representation": "AUDIO_STATE_FIELD",
+    "semantics": "8_IN_1_SINGLE_STATE_FIELD",
+    "fail_closed_rule": "missing volume/gain control, stale endpoint identity, held node, missing rollback preimage, or unresolved route makes the effect non-selectable"
+  },
+  "operations": [
+    "OUTPUT_OPEN",
+    "OUTPUT_CLOSE",
+    "SET_OUTPUT_VOLUME",
+    "SET_INPUT_GAIN",
+    "MUTE_OUTPUT",
+    "UNMUTE_OUTPUT",
+    "GROUP_SET_VOLUME",
+    "GROUP_OPEN",
+    "GROUP_CLOSE",
+    "STATUS"
+  ],
+  "volume_control_contract": {
+    "all_selectable_ingress_egress_require_control": true,
+    "read_required": true,
+    "write_required": true,
+    "readback_verification_required": true,
+    "rollback_preimage_required": true,
+    "normalized_range": [
+      0,
+      100
+    ],
+    "backend_over_100_is_risk": true,
+    "missing_control_state": "HOLD_VOLUME_CONTROL_UNPROVEN"
+  },
+  "siri_trigger": {
+    "role": "D1_INTENT_TRIGGER_ONLY",
+    "homepod_shortcut_supported": true,
+    "preferred_interface": "APP_INTENT_OR_SHORTCUT",
+    "structured_parameters": [
+      "target_ref",
+      "operation",
+      "level",
+      "request_id",
+      "issued_at",
+      "nonce"
+    ],
+    "raw_voice_is_authority": false,
+    "total_field_effect_gate_required": true
+  },
+  "nahimic_equivalent_capabilities": {
+    "provider": "A-Volute.Nahimic",
+    "observed_version": "1.10.15.0",
+    "scenes": [
+      "MUSIC",
+      "MOVIE",
+      "COMMUNICATION",
+      "GAMING",
+      "SMART"
+    ],
+    "eq_bands_hz": [
+      32,
+      64,
+      125,
+      250,
+      500,
+      1000,
+      2000,
+      4000,
+      8000,
+      16000
+    ],
+    "operators": [
+      "EQ",
+      "SPATIAL_SURROUND",
+      "VOICE_CLARITY",
+      "BASS_SHAPING",
+      "TREBLE_SHAPING",
+      "MICROPHONE_PROCESSING",
+      "MIRRORING",
+      "SHARE_AUDIO",
+      "ENDPOINT_ROUTING",
+      "ENDPOINT_VOLUME_GAIN"
+    ],
+    "proprietary_algorithm_copy_required": false
+  },
+  "backends": [
+    "WINDOWS_CORE_AUDIO",
+    "PULSEAUDIO",
+    "PYATV_RAOP",
+    "NAHIMIC_PROVIDER",
+    "QUALIFIED_EQUIVALENT_DSP"
+  ],
+  "forbidden_effects_without_exact_authority": [
+    "LIVE_VOLUME_CHANGE",
+    "LIVE_GAIN_CHANGE",
+    "LIVE_ROUTE_CHANGE",
+    "LIVE_MUTE_CHANGE",
+    "DRIVER_DISABLE",
+    "DEVICE_UNINSTALL",
+    "RAW_AUDIO_TO_CLOUD",
+    "RAW_AUDIO_TO_VPN"
+  ],
+  "entrypoint": "scripts/audio_field.py",
+  "schema": "schemas/audio_control_intent.schema.json",
+  "source_hash_manifest": "SOURCE_SHA256SUMS",
+  "source_files": [
+    "SKILL.md",
+    "manifest.json",
+    "schemas/audio_control_intent.schema.json",
+    "scripts/audio_field.py",
+    "scripts/siri_trigger_adapter.py",
+    "tests/run_tests.py",
+    "siri_payload_examples.json",
+    "SOURCE_SHA256SUMS"
+  ],
+  "external_contract_refs": [
+    "configs/total_field/w7tp_all_node_audio_topology_v1.json",
+    "configs/total_field/w7tp_siri_audio_trigger_contract_v1.json",
+    "configs/total_field/w7tp_audio_volume_capability_evidence_v1.json",
+    "configs/total_field/w7tp_nahimic_capability_evidence_v1.json"
+  ],
+  "runtime_activation_gates": [
+    "ALL_SELECTABLE_ENDPOINTS_VOLUME_GAIN_READ_WRITE_READBACK_PASS",
+    "SIRI_TRIGGER_SOURCE_BINDING_PASS",
+    "TOTAL_FIELD_EFFECT_GATE_PASS",
+    "ROLLBACK_PREIMAGE_PASS",
+    "ENDPOINT_READBACK_PASS",
+    "NO_HIDDEN_PARTIAL_GROUP_SUCCESS",
+    "HELD_ENDPOINTS_NOT_SELECTABLE"
+  ]
+}

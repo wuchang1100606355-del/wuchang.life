@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh MSI adaptive health binding evidence
+
+[Timer]
+OnBootSec=60sec
+OnUnitActiveSec=15sec
+AccuracySec=2sec
+Unit=w7tp-adaptive-msi-consumer.service
+
+[Install]
+WantedBy=timers.target

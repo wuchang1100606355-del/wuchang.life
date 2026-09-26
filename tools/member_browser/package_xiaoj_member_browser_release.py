@@ -39,6 +39,7 @@ EXTENSION_FILES = [
     "web/xiaoj_member_browser_extension/background.js",
     "web/xiaoj_member_browser_extension/sidepanel.html",
     "web/xiaoj_member_browser_extension/sidepanel.css",
+    "web/xiaoj_member_browser_extension/t011c_candidate_view.js",
     "web/xiaoj_member_browser_extension/sidepanel.js",
     "web/xiaoj_member_browser_extension/README.md",
     "web/xiaoj_member_browser_extension/native_host/tw.taiji.xiaoj_member_browser_gateway.template.json",

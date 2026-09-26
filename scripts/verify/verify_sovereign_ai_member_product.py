@@ -107,11 +107,19 @@ def run_checks() -> tuple[dict[str, str], list[str]]:
             "PASS／HOLD／人工確認／錯誤",
             'href="/web/login"',
             'href="/web/signup"',
-            'href="/google/member/login"',
+            'href="/wuchang/business/onboarding"',
+            'href="/forum"',
+            "Google／LINE 僅供登入後的 verified channel 綁定",
         ),
         "member_portal",
         failures,
     )
+    for public_channel_entry in (
+        'href="/google/member/login"',
+        'href="/line/login"',
+    ):
+        if public_channel_entry in login:
+            failures.append(f"member_portal:public_channel_entry_forbidden:{public_channel_entry}")
 
     product_views = read(PRODUCT_VIEWS)
     require(

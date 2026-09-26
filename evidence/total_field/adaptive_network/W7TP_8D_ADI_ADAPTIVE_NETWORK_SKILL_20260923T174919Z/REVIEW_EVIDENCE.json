@@ -1,0 +1,176 @@
+{
+  "checks": {
+    "canonical_or_pointer_write": "NO",
+    "db_write": "NO",
+    "deploy": "NO",
+    "entrypoint_independent": "PASS",
+    "image_build": "NO",
+    "manifest_and_source_files": "PASS_24_OF_24",
+    "owner_seal": "PASS",
+    "replay": "PASS",
+    "request_schema_and_self_hash": "PASS",
+    "request_ttl": "PASS",
+    "runtime_activation": "NO",
+    "self_review": "PASS_NOT_SELF_REVIEW"
+  },
+  "entrypoint_version": "w7tp-total-field-static-review-entrypoint/1.0",
+  "fixed_authority_boundary": {
+    "canonical_change": false,
+    "container_start": false,
+    "db_write": false,
+    "deploy": false,
+    "git_commit": false,
+    "git_push": false,
+    "image_build": false,
+    "image_pull": false,
+    "image_tag": false,
+    "pointer_change": false,
+    "restart": false,
+    "runtime_activation": false
+  },
+  "manifest": {
+    "files_verified": 24,
+    "sha256": "72d9981f81ab1836b108a85f0914b13b475d5817c9cb47babbc24cd19bd766c2",
+    "verified_sources": [
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/SKILL.md",
+        "sha256": "aca9effa9eb31582c8f0860e617bcd262da927c7056c905882c6b82cf4bdfea3",
+        "size_bytes": 5714
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/SOURCE_SHA256SUMS",
+        "sha256": "a837004b4d79e4e3ac6f223f098591335a9fc6e84f9b9a8360b53ffd7a22a2eb",
+        "size_bytes": 3394
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/manifest.json",
+        "sha256": "268037b8d0decf4de1aa3555575983abeb1a17d3d8dd2f8034d916ecdfe68649",
+        "size_bytes": 3489
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/schemas/network_state.schema.json",
+        "sha256": "950548941833c0c8c215e65d4a7cca5379a0b1b6e8c1a0652ed33cf06fadff78",
+        "size_bytes": 1930
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/network_skill.py",
+        "sha256": "eda4d5575fd2ae4d7e70264326e710817159babb420fa92f3ae6c806e4b1316c",
+        "size_bytes": 125
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/__init__.py",
+        "sha256": "eaa6adc3b2b2eefabbb9a7041cb884b136295b631e365e5d94eac873a8279d53",
+        "size_bytes": 93
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/__main__.py",
+        "sha256": "2cdd23d4f5cd6c3b3e4cb690ad16d560637767b9ca5b2a3cf129fcc0a5ebc82b",
+        "size_bytes": 81
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/candidate_learning.py",
+        "sha256": "ae75db4c186948b2095c348f2b79d1c8a1afe5b96644e7cdf2da995e780e696c",
+        "size_bytes": 2625
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/cli.py",
+        "sha256": "e29406e37cc9310148e298002d3b7a8af742abeae0b91574708ef78c41d795f7",
+        "size_bytes": 22950
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/common.py",
+        "sha256": "1e098314f7ab35a7d4bd2c829aa070cd91bf6081384dd86a514e67a29d14dbb0",
+        "size_bytes": 2903
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/drift_detector.py",
+        "sha256": "aaec2ffeedfb1879512de824b5d8f795ca21a08c2840cafbad3062207834189a",
+        "size_bytes": 11484
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/evidence_writer.py",
+        "sha256": "8072848e8640367c5d306ee9205a24e97c6237f98c5077eb1e0f5a246ef08c54",
+        "size_bytes": 4972
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/healing.py",
+        "sha256": "3b0431c76df16a0c6cf7cccc1a7339345f326cba32c93a5102bcbef5531c9b06",
+        "size_bytes": 1380
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/health_probe.py",
+        "sha256": "03372c9d953d967f024da3d51660dcb0ceffb06d485ff65d9988f45512605b6a",
+        "size_bytes": 9543
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/identity_resolver.py",
+        "sha256": "78dd2abc967a75a0bf1989474329de9854e8098e03d128f6fe0408ad25ae306c",
+        "size_bytes": 8790
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/merlin_adapter.py",
+        "sha256": "6c67a7554270a596d743f62648f0d9715f8009acdb7632ae8d43af66e91d5b52",
+        "size_bytes": 11559
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/observer.py",
+        "sha256": "279ae1b59f73495e71376202b83ad0070568e67d6d92461e4cb5bd6f538def1a",
+        "size_bytes": 3471
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/path_evaluator.py",
+        "sha256": "c84b205996108c02e6a70f870834b2d19403b61a57f1454f678368cb68732f24",
+        "size_bytes": 2130
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/policy_engine.py",
+        "sha256": "1a81c0e99f00ed510977823a261f8e62494e9d3ce52f4e001f88dae6054193df",
+        "size_bytes": 2781
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/rollback_guard.py",
+        "sha256": "bdb7ffbf6c057f6471a5af1eec6c7b6cf152a4b8f547841c1fabf39dd2f0e3e9",
+        "size_bytes": 1688
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/route_selector.py",
+        "sha256": "db118b30bfcc5eb9b00d920a8688322b20326b84434c40ddd02c0e8ab0eb35e1",
+        "size_bytes": 1281
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/scripts/w7tp_adaptive_network/service_binding.py",
+        "sha256": "2424c5031e896096a5654586f0141d8dccc695a9e75cbb40b7529ee8ffd717fc",
+        "size_bytes": 4492
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/tests/run_tests.py",
+        "sha256": "43ebe5e06905ed81cfe43ca63179eb42004ec144eccf20e4e245b28c6a133aac",
+        "size_bytes": 1116
+      },
+      {
+        "path": "capabilities/w7tp-8d-adi-adaptive-network/tests/test_adaptive_network.py",
+        "sha256": "8502fbbe2df7f34ff7f0e46b78d942a5afb18d676440a547f1e4e0b5a76798a7",
+        "size_bytes": 8940
+      }
+    ]
+  },
+  "owner_seal": {
+    "expires_at": "2026-09-23T18:05:15Z",
+    "seal_id": "owner-seal:W7TP_8D_ADI_ADAPTIVE_NETWORK_SKILL_20260923T174919Z:c0b9592d15c1c1e3",
+    "sha256": "7e7740d6b308233139b93ef073d57e0e0734ea0ca6e571dcb872b15332729387",
+    "single_use_id": "single-use:W7TP_8D_ADI_ADAPTIVE_NETWORK_SKILL_20260923T174919Z:c0b9592d15c1c1e3"
+  },
+  "packet_type": "REVIEW_EVIDENCE",
+  "reason_codes": [
+    "PASS_EXACT_HASH_BOUND_STATIC_IMPLEMENTATION_CANDIDATE_ONLY"
+  ],
+  "request": {
+    "purpose": "W7TP_8D_ADI_ADAPTIVE_NETWORK_SKILL_CANDIDATE_ONLY",
+    "requested_decision": "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY",
+    "run_id": "W7TP_8D_ADI_ADAPTIVE_NETWORK_SKILL_20260923T174919Z",
+    "sha256": "ae2e027190e8266bf173a6c0d0710dc2bb3a071d37e70e68b89532ccc970d41f"
+  },
+  "reviewed_at": "2026-09-23T17:50:15Z",
+  "run_id": "W7TP_8D_ADI_ADAPTIVE_NETWORK_SKILL_20260923T174919Z_TOTAL_FIELD_STATIC_REVIEW",
+  "schema_version": "W7TP-TOTAL-FIELD-STATIC-REVIEW-EVIDENCE/1.0"
+}

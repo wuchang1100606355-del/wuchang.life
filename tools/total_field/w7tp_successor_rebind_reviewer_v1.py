@@ -20,6 +20,11 @@ from typing import Any, Callable
 
 from jsonschema import Draft202012Validator
 
+from tools.total_field.w7tp_total_field_authority_binding_v1 import (
+    AuthorityBindingValidationError,
+    validate_authority_binding,
+)
+
 
 REVIEWER_VERSION = "w7tp-successor-rebind-reviewer/1.0-candidate"
 REQUEST_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-REVIEW-REQUEST/1.0"
@@ -235,6 +240,15 @@ def _validate_authority(pointer: dict[str, Any], *, test_mode: bool) -> bool:
     for key, expected in required.items():
         if pointer.get(key) != expected:
             raise SuccessorRebindReviewError(DECISION_HOLD, "HOLD_FORMAL_AUTHORITY_POINTER_MISSING", f"$.authority_pointer.{key}")
+    try:
+        validate_authority_binding(pointer)
+    except AuthorityBindingValidationError as exc:
+        suffix = exc.path[1:] if exc.path.startswith("$") else f".{exc.path}"
+        raise SuccessorRebindReviewError(
+            DECISION_HOLD,
+            "HOLD_FORMAL_AUTHORITY_BINDING_SCHEMA",
+            f"$.authority_pointer{suffix}",
+        ) from exc
     return True
 
 

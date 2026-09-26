@@ -56,10 +56,7 @@ from ..services.productization_console import (
 
 
 ROUTE_STATE = {
-    "line_login": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
-    "line_callback": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
     "google_login": "HOLD_AUTH_PROVIDER_CONFIG_REQUIRED",
-    "member_register_start": "HOLD_MEMBER_REGISTRATION_GATE",
     "xiaoj_ordering": "P1_TRANSACTION_CAPABLE_SHELL",
     "xiaoj_order": "HOLD_RUNTIME_POS_ORDER_RELEASE_REQUIRED",
     "xiaoj_payment": "HOLD_RUNTIME_PAYMENT_RELEASE_REQUIRED",
@@ -351,28 +348,21 @@ def _error_candidate(state: str, **extra) -> dict:
     return payload
 
 
-def _current_member_identity():
+def _member_identity_from_ref(member_ref: str):
     env = http.request.env
-    if env.su or not http.request.session.uid:
+    member_ref = (member_ref or "").strip()
+    if not member_ref:
         return env["wuchang.member.identity.code"].browse()
-    binding = env["wuchang.member.external.auth"].search([
-        ("member_user_id", "=", env.user.id),
-        ("binding_status", "=", "bound"),
+    return env["wuchang.member.identity.code"].sudo().search([
+        "|", "|",
+        ("member_id", "=", member_ref),
+        ("identity_code_7d", "=", member_ref),
+        ("service_code_masked", "=", member_ref),
     ], limit=1)
-    return binding.member_identity_id
 
 
 def _community_feature_enabled(feature_key: str) -> bool:
-    gate = http.request.env["wuchang.community.feature.gate"]
-    if feature_key.startswith("sovereign_member_") and not gate.is_landing_enabled(
-        "member_ai"
-    ):
-        return False
-    return gate.is_enabled(feature_key, default=False)
-
-
-def _landing_feature_enabled(surface: str) -> bool:
-    return http.request.env["wuchang.community.feature.gate"].is_landing_enabled(surface)
+    return http.request.env["wuchang.community.feature.gate"].is_enabled(feature_key, default=False)
 
 
 def _feature_hold(feature_key: str) -> dict:
@@ -426,8 +416,6 @@ class WuchangCafeAiGatewayController(http.Controller):
 
     @http.route("/wuchang/xiaoj/api/intent", type="json", auth="public", csrf=False)
     def xiaoj_api_intent(self, **kwargs):
-        if not _landing_feature_enabled("external_api"):
-            return _feature_hold("landing.external_api")
         params = _request_params()
         params.update(kwargs)
         text = str(params.get("text") or params.get("transcript") or "")
@@ -435,32 +423,24 @@ class WuchangCafeAiGatewayController(http.Controller):
 
     @http.route("/wuchang/xiaoj/api/order", type="json", auth="public", csrf=False)
     def xiaoj_api_order(self, **kwargs):
-        if not _landing_feature_enabled("pos_order"):
-            return _feature_hold("landing.pos_order")
         params = _request_params()
         params.update(kwargs)
         return order_payload(params.get("order_lines") or params.get("lines") or [])
 
     @http.route("/wuchang/xiaoj/api/payment", type="json", auth="public", csrf=False)
     def xiaoj_api_payment(self, **kwargs):
-        if not _landing_feature_enabled("payment"):
-            return _feature_hold("landing.payment")
         params = _request_params()
         params.update(kwargs)
         return payment_payload(params.get("amount") or 0, params.get("mode") or "cash")
 
     @http.route("/wuchang/xiaoj/api/receipt", type="json", auth="public", csrf=False)
     def xiaoj_api_receipt(self, **kwargs):
-        if not _landing_feature_enabled("external_api"):
-            return _feature_hold("landing.external_api")
         params = _request_params()
         params.update(kwargs)
         return receipt_payload(params.get("order_ref") or "")
 
     @http.route("/wuchang/xiaoj/api/voice-pos", type="json", auth="public", csrf=False)
     def xiaoj_api_voice_pos(self, **kwargs):
-        if not _landing_feature_enabled("pos_order"):
-            return _feature_hold("landing.pos_order")
         params = _request_params()
         params.update(kwargs)
         return staff_voice_pos_payload(
@@ -745,8 +725,6 @@ class WuchangCafeAiGatewayController(http.Controller):
 
     @http.route("/wuchang/xiaoj/api/member-llm-release-gate", type="json", auth="user", csrf=False)
     def xiaoj_api_member_llm_release_gate(self, **kwargs):
-        if not _landing_feature_enabled("member_ai"):
-            return _feature_hold("landing.member_ai")
         params = _request_params()
         params.update(kwargs)
         return build_sovereign_member_llm_release_gate(
@@ -755,8 +733,6 @@ class WuchangCafeAiGatewayController(http.Controller):
 
     @http.route("/wuchang/xiaoj/api/local-personal-data-return-packet", type="json", auth="user", csrf=False)
     def xiaoj_api_local_personal_data_return_packet(self, **kwargs):
-        if not _landing_feature_enabled("member_ai"):
-            return _feature_hold("landing.member_ai")
         params = _request_params()
         params.update(kwargs)
         return build_local_personal_data_return_packet(
@@ -769,16 +745,8 @@ class WuchangCafeAiGatewayController(http.Controller):
             return _feature_hold("sovereign_member_preference")
         params = _request_params()
         params.update(kwargs)
-        if params.get("member_ref") or params.get("member_id"):
-            return _error_candidate("HOLD_BODY_MEMBER_REF_FORBIDDEN")
-        identity = _current_member_identity()
-        if not identity:
-            return _error_candidate("HOLD_AUTHENTICATED_MEMBER_BINDING_REQUIRED")
-        preference = http.request.env[
-            "wuchang.member.preference.vault"
-        ].search([
-            ("member_identity_id", "=", identity.id),
-        ], limit=1)
+        member_ref = params.get("member_ref") or params.get("member_id") or ""
+        preference = http.request.env["wuchang.member.preference.vault"].find_by_member_ref(member_ref)
         if not preference:
             return _error_candidate(
                 "HOLD_MEMBER_PREFERENCE_NOT_FOUND",
@@ -793,31 +761,27 @@ class WuchangCafeAiGatewayController(http.Controller):
             return _feature_hold("sovereign_member_ai_memory")
         params = _request_params()
         params.update(kwargs)
-        if params.get("member_ref") or params.get("member_id"):
-            return _error_candidate("HOLD_BODY_MEMBER_REF_FORBIDDEN")
-        identity = _current_member_identity()
+        identity = _member_identity_from_ref(params.get("member_ref") or params.get("member_id") or "")
         if not identity:
-            return _error_candidate("HOLD_AUTHENTICATED_MEMBER_BINDING_REQUIRED")
-        preference = http.request.env["wuchang.member.preference.vault"].search([
+            return _error_candidate("HOLD_MEMBER_IDENTITY_NOT_FOUND")
+        preference = http.request.env["wuchang.member.preference.vault"].sudo().search([
             ("member_identity_id", "=", identity.id),
         ], limit=1)
         if not preference:
-            return _error_candidate("HOLD_MEMBER_PREFERENCE_NOT_FOUND")
+            preference = http.request.env["wuchang.member.preference.vault"].sudo().create({
+                "member_identity_id": identity.id,
+            })
         enabled = params.get("enabled")
         if enabled is None:
             enabled = params.get("ai_memory_enabled")
         enabled = enabled is True or str(enabled).lower() in {"1", "true", "yes", "on"}
-        result = preference.build_pos_candidate_context(
-            params.get("utterance") or params.get("text") or ""
-        )
-        result.update({
-            "state": "PASS_MEMBER_MEMORY_TOGGLE_DRY_RUN_CANDIDATE",
-            "requested_memory_state": enabled,
-            "db_write": False,
-            "preference_write": False,
-            "candidate_only": True,
+        preference.sudo().write({
+            "ai_memory_enabled": enabled,
+            "pos_personalization_enabled": enabled,
+            "recommendation_enabled": enabled,
+            "cloud_context_allowed": False,
         })
-        return result
+        return preference.build_pos_candidate_context(params.get("utterance") or params.get("text") or "")
 
     @http.route("/wuchang/xiaoj/api/member-voucher-candidate", type="json", auth="user", csrf=False)
     def xiaoj_api_member_voucher_candidate(self, **kwargs):
@@ -846,15 +810,6 @@ class WuchangCafeAiGatewayController(http.Controller):
 
     @http.route("/wuchang/xiaoj/api/community-feature-gate", type="json", auth="user", csrf=False)
     def xiaoj_api_community_feature_gate(self, **kwargs):
-        user = http.request.env.user
-        if not (
-            user.has_group("base.group_system")
-            or user.has_group("base.group_erp_manager")
-            or user.has_group(
-                "wuchang_member_registration.group_wuchang_member_manager"
-            )
-        ):
-            return _error_candidate("BLOCK_FEATURE_GATE_OPERATOR_REQUIRED")
         params = _request_params()
         params.update(kwargs)
         feature_key = params.get("feature_key") or params.get("key") or ""

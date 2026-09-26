@@ -175,7 +175,18 @@ def _profile_validator(
     registry = Registry().with_resource(
         base_id, Resource.from_contents(resolvable_base)
     )
-    return Draft202012Validator(profile, registry=registry)
+    try:
+        return Draft202012Validator(profile, registry=registry)
+    except TypeError:
+        # jsonschema < 4.18 has no registry= constructor argument.
+        # Preserve the same schema/resource semantics through its legacy resolver.
+        from jsonschema import RefResolver
+
+        resolver = RefResolver.from_schema(
+            profile,
+            store={base_id: resolvable_base},
+        )
+        return Draft202012Validator(profile, resolver=resolver)
 
 
 def _error_path(error: ValidationError) -> str:

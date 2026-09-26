@@ -1,0 +1,35 @@
+{
+  "schema_version": "W7TP-BRANCH-CONVERGENCE/1.0",
+  "convergence_id": "W7TP_TRANSFER_BRANCH_CONVERGENCE_20260925",
+  "state": "MERGED_WITH_SEMANTIC_QUARANTINE",
+  "target_branch": "codex/current-live-state-consolidation-20260915",
+  "target_head_before": "6d3e1b3e1080208f2c6a0b33f496bf4dd86cc8ef",
+  "merged_branch": "codex/w7tp-transfer-rule-binding-v2-3-20260914",
+  "merged_branch_head": "9595c3c94f83ff98c72f6abcdaf5e7325511b5d8",
+  "merge_policy": "PRESERVE_HISTORY_DO_NOT_IMPORT_SUPERSEDED_DIFFERENTIAL_RUNTIME_SEMANTICS",
+  "classification": {
+    "side_branch_role": "D4_HISTORICAL_EVIDENCE_ONLY",
+    "active_gst_baseline": "W7TP_8D_ADI_V2.3_NON_DIFFERENTIAL_ORIGIN_CELL_PATH",
+    "differential_transfer_runtime_authority": "NONE",
+    "canonical_promotion": false,
+    "runtime_activation": false,
+    "total_field_decision": "NOT_CHANGED_BY_THIS_MERGE"
+  },
+  "reasons": [
+    "SIDE_BRANCH_DEPENDS_ON_TARGET_BASE_INTEGER_INDEX_AND_MINIMUM_REQUIRED_INDEX_DELTA",
+    "SIDE_BRANCH_EXPLICITLY_ALLOWS_DIFFERENTIAL_TRANSFER_CARRIER",
+    "CURRENT_GST_V23_PATH_FORBIDS_DIFFERENTIAL_TRANSFER_AND_TARGET_BYTES",
+    "MERGE_HISTORY_IS_PRESERVED_WITHOUT_REINTRODUCING_SUPERSEDED_RUNTIME_SEMANTICS"
+  ],
+  "preserved_side_branch_commit": "9595c3c94f83ff98c72f6abcdaf5e7325511b5d8",
+  "current_tree_kept_as_resolution_base": "e0999dba0ac1ff37aa19ec38e2d2d6c7f0522d31",
+  "effects": {
+    "new_branch_created": false,
+    "current_branch_updated": true,
+    "side_branch_history_preserved_as_merge_parent": true,
+    "differential_files_imported_into_current_tree": false,
+    "canonical_pointer_changed": false,
+    "service_restarted": false,
+    "deployed": false
+  }
+}
