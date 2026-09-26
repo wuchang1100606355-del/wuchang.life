@@ -1,0 +1,264 @@
+{
+  "schema_version": "W7TP-XIAOJ-ORGANIZATION-AV-AI/1.0",
+  "state": "PASS_FOUNDER_INTENT_ORGANIZATION_SCENE_CONTROL",
+  "canonical": false,
+  "product_identity": {
+    "product_ref": "XIAOJ_ORGANIZATION_AUDIOVISUAL_AI",
+    "class": "ORGANIZATION_AI",
+    "purpose": "組織場域中的影音服務、場控、音樂、播報、顯示、互動與設備協調",
+    "not_personal_assistant_only": true,
+    "not_single_player_app": true,
+    "not_odoo_plugin": true
+  },
+  "authority_boundary": {
+    "nervous_system": "8D_ADI_8_IN_1_SINGLE_STATE_FIELD",
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    "organization_policy_required": true,
+    "natural_person_sovereignty_preserved": true,
+    "member_consent_not_inferred_from_org_policy": true,
+    "provider_authority": false,
+    "odoo_community_authority": false,
+    "device_authority": false
+  },
+  "scene_control_contract": {
+    "role": "ORGANIZATION_SCENE_CONTROLLER",
+    "bounded_reversible_effects_may_execute_when_preauthorized": true,
+    "preauthorized_effects": [
+      "PLAY_MUSIC",
+      "PAUSE_MUSIC",
+      "STOP_MUSIC",
+      "NEXT_TRACK",
+      "PREVIOUS_TRACK",
+      "SET_ZONE_VOLUME",
+      "SET_GROUP_VOLUME",
+      "MUTE_ZONE",
+      "UNMUTE_ZONE",
+      "SELECT_PLAYLIST_REF",
+      "SELECT_AUDIO_SCENE",
+      "ROUTE_AUDIO_TO_ZONE",
+      "SHOW_PUBLIC_DISPLAY_SCENE",
+      "RUN_APPROVED_ANNOUNCEMENT_REF",
+      "DUCK_MUSIC_FOR_APPROVED_ANNOUNCEMENT",
+      "RESTORE_PREVIOUS_SCENE"
+    ],
+    "always_separate_authorization": [
+      "PAYMENT",
+      "MEMBER_PLAINTEXT_ACCESS",
+      "SENSITIVE_PERSONAL_DATA",
+      "LEGAL_ORGANIZATION_DECISION",
+      "IDENTITY_AUTHORITY_CHANGE",
+      "NEW_EXTERNAL_PUBLICATION",
+      "UNBOUNDED_DEVICE_ADMINISTRATION"
+    ],
+    "required_effect_cycle": [
+      "DESIRED_SCENE_STATE",
+      "8D_ADI_EVALUATION",
+      "TOTAL_FIELD_DECISION",
+      "PROVIDER_SELECTION",
+      "BOUNDED_EFFECT",
+      "READBACK",
+      "VERIFY",
+      "RECEIPT",
+      "ROLLBACK_IF_MISMATCH"
+    ]
+  },
+  "organization_scene_state": {
+    "dimensions": [
+      "ORGANIZATION_REF",
+      "VENUE_REF",
+      "ZONE_REF",
+      "SCENE_REF",
+      "TIME_WINDOW_REF",
+      "AUDIO_SOURCE_REF",
+      "PLAYLIST_REF",
+      "NOW_PLAYING_REF",
+      "OUTPUT_GROUP_REF",
+      "VOLUME_STATE",
+      "DSP_SCENE_REF",
+      "DISPLAY_SCENE_REF",
+      "ANNOUNCEMENT_REF",
+      "OPERATOR_REF",
+      "POLICY_REF",
+      "EFFECT_RECEIPT_REF"
+    ],
+    "example_scenes": [
+      "CAFE_OPENING",
+      "CAFE_NORMAL",
+      "QUIET_SERVICE",
+      "EVENT_MODE",
+      "ANNOUNCEMENT",
+      "CLOSING",
+      "EMERGENCY_DUCK_AND_ANNOUNCE"
+    ]
+  },
+  "organs": [
+    {
+      "organ_id": "MEDIA_AND_MUSIC",
+      "role": "音樂與媒體器官",
+      "functions": [
+        "APPLE_MUSIC_SOURCE",
+        "LOCAL_MEDIA",
+        "PLAYLIST",
+        "QUEUE",
+        "NOW_PLAYING"
+      ],
+      "providers": [
+        "Music Assistant（音樂助理）",
+        "MSI Apple Music（MSI 蘋果音樂）"
+      ],
+      "state": "CANDIDATE_WITH_EXISTING_LOCAL_SOURCE"
+    },
+    {
+      "organ_id": "AUDIO_DSP",
+      "role": "音效處理器官",
+      "functions": [
+        "NAHIMIC_EQUIVALENT_SEMANTICS",
+        "EQ",
+        "SPATIAL",
+        "VOICE_CLARITY",
+        "BASS",
+        "TREBLE",
+        "GAIN",
+        "LIMITER",
+        "COMPRESSOR",
+        "CONVOLUTION"
+      ],
+      "providers": [
+        "CamillaDSP（Camilla 數位訊號處理）",
+        "Equalizer APO（等化器音訊處理物件）",
+        "EasyEffects（簡易音效）",
+        "Nahimic（音效處理套件，證據供應者）"
+      ],
+      "state": "CANDIDATE"
+    },
+    {
+      "organ_id": "AUDIO_OUTPUT",
+      "role": "聲音輸出器官",
+      "functions": [
+        "HOMEPOD",
+        "AIRPLAY",
+        "LOCAL_SPEAKER",
+        "MULTIROOM",
+        "VOLUME",
+        "GROUP_ROUTE"
+      ],
+      "providers": [
+        "Music Assistant AirPlay（音樂助理隔空播放）",
+        "pyatv（Apple 裝置 Python 控制庫）",
+        "Snapcast（同步音訊廣播）"
+      ],
+      "state": "CANDIDATE_WITH_ACTIVE_HOMEPOD_EVIDENCE"
+    },
+    {
+      "organ_id": "VOICE_EXPRESSION",
+      "role": "語音播報器官",
+      "functions": [
+        "TTS",
+        "APPROVED_ANNOUNCEMENT",
+        "DUCK_AND_RESTORE",
+        "SPEECH_RATE",
+        "VOICE_PROFILE"
+      ],
+      "providers": [
+        "Piper（本地文字轉語音）",
+        "Browser Speech Synthesis（瀏覽器語音合成）",
+        "Authorized Commercial TTS Broker（經授權商用文字轉語音仲介）"
+      ],
+      "state": "CANDIDATE"
+    },
+    {
+      "organ_id": "VISION_AND_SCENE_INPUT",
+      "role": "視覺與場景感知器官",
+      "functions": [
+        "CAMERA_EVENT",
+        "OBJECT_EVENT",
+        "POSE_EVENT",
+        "SCENE_FEATURE",
+        "PUBLIC_SPACE_STATUS"
+      ],
+      "providers": [
+        "OpenCV（開源電腦視覺）",
+        "MediaPipe（媒體管線）",
+        "Existing XiaoJ Vision Adapters（既有小J視覺轉接器）"
+      ],
+      "state": "CANDIDATE"
+    },
+    {
+      "organ_id": "VISUAL_EXPRESSION",
+      "role": "視覺表達器官",
+      "functions": [
+        "AVATAR",
+        "CUSTOMER_DISPLAY",
+        "STAFF_DISPLAY",
+        "PUBLIC_SCENE_STATE",
+        "VISUAL_CUE"
+      ],
+      "providers": [
+        "J.vrm（小J虛擬人模型）",
+        "Browser Renderer（瀏覽器渲染器）"
+      ],
+      "state": "EXISTING_WITH_LICENSE_HOLD_FOR_COMMERCIAL_AVATAR"
+    },
+    {
+      "organ_id": "SCENE_ORCHESTRATION",
+      "role": "組織場控協調器官",
+      "functions": [
+        "SCENE_TRANSITION",
+        "ZONE_GROUPING",
+        "MUSIC_POLICY",
+        "ANNOUNCEMENT_PRIORITY",
+        "DISPLAY_AUDIO_SYNC",
+        "ROLLBACK"
+      ],
+      "providers": [
+        "W7TP 8D ADI Audio Field（W7TP 八維自適應意圖音效場）",
+        "W7TP Audiovisual Domain Profile（W7TP 影音領域描述）"
+      ],
+      "state": "NATIVE_CORE"
+    },
+    {
+      "organ_id": "ODOO_ORGAN_SURFACE",
+      "role": "組織操作與器官狀態表面",
+      "functions": [
+        "DEVICE_REGISTRY",
+        "SCENE_POLICY_UI",
+        "DESIRED_STATE",
+        "OBSERVED_STATE",
+        "REQUEST_QUEUE",
+        "AUDIT_RECEIPT"
+      ],
+      "providers": [
+        "Odoo Community 18（Odoo 社群開源版 18）",
+        "OCA iot_oca（OCA 物聯網基座）",
+        "OCA Connector（OCA 連接器）",
+        "OCA queue_job（OCA 工作佇列）",
+        "OCA auditlog（OCA 稽核紀錄）"
+      ],
+      "state": "SURFACE_CANDIDATE"
+    }
+  ],
+  "node_roles": {
+    "taiji01": "TOTAL_FIELD_AND_ORGANIZATION_AV_BROKER",
+    "MSI": "FOUNDER_AUDIOVISUAL_WORKSTATION_AND_LOCAL_MEDIA_SOURCE",
+    "taiji03": "ORGANIZATION_SUPER_ADMIN_CONTROL_DEVICE",
+    "taiji04": "SUNMI_POS_AND_COMMERCIAL_VOICE_HARDWARE_CANDIDATE",
+    "drallion": "ORGANIZATION_SERVICE_DESK_AUDIOVISUAL_AI_EXECUTION_POINT",
+    "penguin": "NO_USER_AUDIO_ROLE",
+    "homepod_01": "ORGANIZATION_AUDIO_OUTPUT_ZONE",
+    "homepod_02": "ORGANIZATION_AUDIO_OUTPUT_ZONE"
+  },
+  "odoo_target_models": [
+    "wuchang.xiaoj.av.scene",
+    "wuchang.xiaoj.av.zone",
+    "wuchang.xiaoj.av.device",
+    "wuchang.xiaoj.av.provider",
+    "wuchang.xiaoj.av.desired.state",
+    "wuchang.xiaoj.av.observed.state",
+    "wuchang.xiaoj.av.effect.request",
+    "wuchang.xiaoj.av.effect.receipt",
+    "wuchang.xiaoj.av.playlist.policy",
+    "wuchang.xiaoj.av.announcement.policy"
+  ],
+  "cross_node_default": "STATE_REFS_RULE_REFS_RECEIPTS_NOT_RAW_AUDIO_VIDEO",
+  "runtime_install_state": "NOT_AUTHORIZED_BY_THIS_SPEC"
+}
