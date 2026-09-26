@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_t011c_interface_candidate_v1.schema.json",
+  "title": "W7TP T-011C Chrome/Codex Interface Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state",
+    "candidate_only",
+    "runtime_effect",
+    "chrome_view",
+    "codex_task_packet_candidate",
+    "codex_invocation_performed",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": {"const": "w7tp.t011c-interface-candidate.v1"},
+    "state": {"const": "PASS_T011C_INTERFACE_CANDIDATE"},
+    "candidate_only": {"const": true},
+    "runtime_effect": {"const": false},
+    "codex_invocation_performed": {"const": false},
+    "chrome_view": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "display_only",
+        "execution_allowed",
+        "candidate_sha256",
+        "candidate_text",
+        "provider_ref",
+        "model_ref",
+        "total_field_decision",
+        "allowed_user_actions"
+      ],
+      "properties": {
+        "state": {"const": "TOTAL_FIELD_REVIEWED_CANDIDATE"},
+        "display_only": {"const": true},
+        "execution_allowed": {"const": false},
+        "candidate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "candidate_text": {"type": "string", "maxLength": 8192},
+        "provider_ref": {"const": "MSI_OLLAMA_LOCAL"},
+        "model_ref": {"type": "string", "minLength": 1},
+        "total_field_decision": {"const": "ALLOW"},
+        "allowed_user_actions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "review_candidate",
+              "copy_candidate",
+              "build_codex_task_packet_candidate"
+            ]
+          }
+        }
+      }
+    },
+    "codex_task_packet_candidate": {
+      "type": "object",
+      "required": [
+        "packet_type",
+        "version",
+        "codex_authority",
+        "candidate_only",
+        "work_id",
+        "title",
+        "intent",
+        "allowed_files",
+        "forbidden_actions",
+        "safety_flags"
+      ],
+      "properties": {
+        "packet_type": {"const": "W7TP_CODEX_TASK_PACKET"},
+        "codex_authority": {"const": false},
+        "candidate_only": {"const": true}
+      },
+      "additionalProperties": true
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_authority",
+        "codex_authority",
+        "browser_authority",
+        "formal_effect_boundary"
+      ],
+      "properties": {
+        "model_authority": {"const": false},
+        "codex_authority": {"const": false},
+        "browser_authority": {"const": false},
+        "formal_effect_boundary": {"const": "TAIJI01_TOTAL_FIELD"}
+      }
+    }
+  }
+}

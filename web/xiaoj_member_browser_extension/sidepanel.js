@@ -193,12 +193,58 @@ async function runBridge() {
   $("decisionText").className = result && result.ok ? "allowed" : "blocked";
 }
 
+async function loadT011CCandidateView() {
+  const raw = $("t011cCandidateJson").value.trim();
+  if (!raw) {
+    $("t011cViewOut").textContent = JSON.stringify({
+      ok: false,
+      state: "HOLD_T011C_CHROME_CANDIDATE_VIEW",
+      reason: "candidate_json_required",
+      execution_allowed: false
+    }, null, 2);
+    return;
+  }
+  try {
+    const packet = JSON.parse(raw);
+    const adapter = globalThis.T011CCandidateView;
+    const view = adapter && typeof adapter.buildView === "function"
+      ? await adapter.buildView(packet)
+      : {
+          ok: false,
+          state: "HOLD_T011C_CHROME_CANDIDATE_VIEW",
+          reason: "candidate_view_adapter_unavailable",
+          execution_allowed: false
+        };
+    $("t011cViewOut").textContent = JSON.stringify(view, null, 2);
+  } catch (error) {
+    $("t011cViewOut").textContent = JSON.stringify({
+      ok: false,
+      state: "HOLD_T011C_CHROME_CANDIDATE_VIEW",
+      reason: "candidate_json_invalid",
+      error_ref: ref("error_ref", String(error)),
+      execution_allowed: false
+    }, null, 2);
+  }
+}
+
 $("runBtn").addEventListener("click", () => {
   runBridge().catch((error) => {
     $("resultOut").textContent = JSON.stringify({
       ok: false,
       decision: "BLOCK",
       reason: "sidepanel_exception",
+      error_ref: ref("error_ref", String(error)),
+      execution_allowed: false
+    }, null, 2);
+  });
+});
+
+$("loadT011cBtn").addEventListener("click", () => {
+  loadT011CCandidateView().catch((error) => {
+    $("t011cViewOut").textContent = JSON.stringify({
+      ok: false,
+      state: "HOLD_T011C_CHROME_CANDIDATE_VIEW",
+      reason: "candidate_view_exception",
       error_ref: ref("error_ref", String(error)),
       execution_allowed: false
     }, null, 2);
