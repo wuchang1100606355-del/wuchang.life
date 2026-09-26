@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from services.gateway import natural_language_control as nl_control
 from tools import w7tp_nl_goal_runner as runner
@@ -114,6 +114,80 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
             risk["full_dynamic_context_in_initial_model_bootstrap"]
         )
         self.assertFalse(risk["local_rule_ref_cloud_visible"])
+
+    def test_local_agent_step_budget_is_adaptive(self) -> None:
+        self.assertEqual(
+            runner.local_agent_step_budget(
+                {
+                    "RESOURCE_DECISION": {
+                        "TASK_PROFILE": {"complex_code": True}
+                    }
+                }
+            ),
+            64,
+        )
+        self.assertEqual(
+            runner.local_agent_step_budget(
+                {
+                    "RESOURCE_DECISION": {
+                        "TASK_PROFILE": {"complex_code": False}
+                    }
+                }
+            ),
+            32,
+        )
+        self.assertEqual(runner.local_agent_step_budget({}), 32)
+
+    def test_local_agent_failure_codes_and_complex_step_budget(self) -> None:
+        plan = {
+            "RESOURCE_DECISION": {
+                "TASK_PROFILE": {"complex_code": True}
+            },
+            "D3_COORDINATE": {
+                "affected_closure": ["core"],
+            },
+        }
+        cases = [
+            (
+                "Traceback\nRuntimeError: LOCAL_MODEL_STEP_LIMIT\n",
+                "HOLD_LOCAL_MODEL_STEP_LIMIT",
+            ),
+            (
+                "Traceback\nRuntimeError: LOCAL_MODEL_CALL_FAILED\n",
+                "HOLD_LOCAL_MODEL_CALL_FAILED",
+            ),
+            (
+                "Traceback\nRuntimeError: OTHER_FAILURE\n",
+                "HOLD_LOCAL_MODEL_AGENT_FAILED",
+            ),
+        ]
+        for stderr, expected in cases:
+            mocked = Mock(
+                returncode=1,
+                stdout="",
+                stderr=stderr,
+            )
+            with patch.object(
+                runner.subprocess,
+                "run",
+                return_value=mocked,
+            ) as run_mock:
+                with self.assertRaisesRegex(
+                    RuntimeError,
+                    expected + r":stderr_sha256:[0-9a-f]{64}",
+                ):
+                    runner.run_local_agent(
+                        "bounded prompt",
+                        runner.PROJECT_ROOT,
+                        plan,
+                        120,
+                    )
+            cmd = run_mock.call_args.args[0]
+            self.assertIn("--max-steps", cmd)
+            self.assertEqual(
+                cmd[cmd.index("--max-steps") + 1],
+                "64",
+            )
 
     def test_runner_real_task_gemini_reasoning_helper(self) -> None:
         plan = {

@@ -250,7 +250,10 @@ def main() -> int:
     parser.add_argument("--allowed-json", required=True)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--ollama-url", default=DEFAULT_OLLAMA_URL)
+    parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args()
+    if args.max_steps < 1 or args.max_steps > 128:
+        raise RuntimeError("LOCAL_MODEL_STEP_BUDGET_INVALID")
     prompt = sys.stdin.read()
     if not prompt.strip():
         return 2
@@ -271,7 +274,7 @@ def main() -> int:
         {"role": "user", "content": prompt},
     ]
     final = ""
-    for _ in range(MAX_STEPS):
+    for _ in range(args.max_steps):
         response = ollama_chat(args.ollama_url, args.model, messages)
         message = response.get("message") or {}
         tool_calls = message.get("tool_calls") or []

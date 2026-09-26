@@ -611,7 +611,18 @@ def run_local_transform(intent: str, plan: dict[str, Any], timeout_seconds: int)
     return str((data.get("message") or {}).get("content") or "").strip()
 
 
+def local_agent_step_budget(plan: dict[str, Any]) -> int:
+    resource = plan.get("RESOURCE_DECISION", {})
+    profile = (
+        resource.get("TASK_PROFILE", {})
+        if isinstance(resource, dict)
+        else {}
+    )
+    return 64 if isinstance(profile, dict) and profile.get("complex_code") is True else 32
+
+
 def run_local_agent(prompt: str, shadow: Path, plan: dict[str, Any], timeout_seconds: int) -> str:
+    step_budget = local_agent_step_budget(plan)
     cmd = [
         "/usr/bin/python3", str(LOCAL_AGENT),
         "--live-root", str(PROJECT_ROOT),
@@ -619,13 +630,28 @@ def run_local_agent(prompt: str, shadow: Path, plan: dict[str, Any], timeout_sec
         "--allowed-json", json.dumps(closure_paths(plan), ensure_ascii=False),
         "--model", LOCAL_MODEL,
         "--ollama-url", LOCAL_OLLAMA_URL,
+        "--max-steps", str(step_budget),
     ]
     proc = subprocess.run(
         cmd, input=prompt, text=True, capture_output=True,
         timeout=timeout_seconds, cwd=shadow,
     )
     if proc.returncode != 0:
-        raise RuntimeError("HOLD_LOCAL_MODEL_AGENT_FAILED")
+        stderr = str(proc.stderr or "")
+        stderr_sha256 = hashlib.sha256(
+            stderr.encode("utf-8")
+        ).hexdigest()
+        if "LOCAL_MODEL_STEP_LIMIT" in stderr:
+            code = "HOLD_LOCAL_MODEL_STEP_LIMIT"
+        elif "LOCAL_MODEL_CALL_FAILED" in stderr:
+            code = "HOLD_LOCAL_MODEL_CALL_FAILED"
+        elif "LOCAL_MODEL_STEP_BUDGET_INVALID" in stderr:
+            code = "HOLD_LOCAL_MODEL_STEP_BUDGET_INVALID"
+        else:
+            code = "HOLD_LOCAL_MODEL_AGENT_FAILED"
+        raise RuntimeError(
+            code + ":stderr_sha256:" + stderr_sha256
+        )
     return proc.stdout.strip()
 
 
