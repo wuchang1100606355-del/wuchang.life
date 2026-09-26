@@ -88,6 +88,179 @@ def _post_json(path: str, payload: Mapping[str, Any]) -> dict[str, Any]:
     return value
 
 
+_ADI_REF_PREFIXES = (
+    "capability:",
+    "design:",
+    "evidence:",
+    "history:",
+    "skill:",
+    "task-state:",
+)
+
+
+def _collect_adi_ref_candidates(value: Any, out: list[str]) -> None:
+    if isinstance(value, str):
+        if value.startswith(_ADI_REF_PREFIXES):
+            out.append(value)
+        return
+    if isinstance(value, Mapping):
+        for nested in value.values():
+            _collect_adi_ref_candidates(nested, out)
+        return
+    if isinstance(value, list):
+        for nested in value:
+            _collect_adi_ref_candidates(nested, out)
+
+
+def _adi_record_exists(record_id: str) -> bool:
+    try:
+        value = _post_json("/v1/adi/packet", {"ids": [record_id]})
+    except TaskStatePacketError:
+        return False
+    lookup = value.get("reference_lookup")
+    entries = lookup.get("entries") if isinstance(lookup, Mapping) else None
+    return bool(
+        isinstance(entries, list)
+        and len(entries) == 1
+        and isinstance(entries[0], Mapping)
+        and entries[0].get("id") == record_id
+    )
+
+
+def select_task_state_support_refs(
+    *,
+    task_id: str,
+    current_action_id: str | None = None,
+    max_actions: int = 8,
+    max_adi_refs: int = 16,
+    root: Path = ROOT,
+) -> dict[str, list[str]]:
+    """Select bounded real task/action/ADI references for one task packet."""
+
+    task_ref = _require_ref(
+        task_id,
+        "HOLD_TASK_PACKET_TASK_ID_INVALID",
+    )
+    if (
+        not isinstance(max_actions, int)
+        or isinstance(max_actions, bool)
+        or max_actions < 1
+        or max_actions > 32
+        or not isinstance(max_adi_refs, int)
+        or isinstance(max_adi_refs, bool)
+        or max_adi_refs < 1
+        or max_adi_refs > 64
+    ):
+        raise TaskStatePacketError("HOLD_TASK_PACKET_SELECTION_BUDGET_INVALID")
+
+    try:
+        work = json.loads(
+            (root / "state/WORK_LEDGER.json").read_text(encoding="utf-8")
+        )
+        action = json.loads(
+            (root / "state/ACTION_LEDGER.json").read_text(encoding="utf-8")
+        )
+    except Exception as exc:
+        raise TaskStatePacketError(
+            "HOLD_TASK_PACKET_LEDGER_SELECTION_UNAVAILABLE"
+        ) from exc
+    if not isinstance(work, dict) or not isinstance(action, dict):
+        raise TaskStatePacketError(
+            "HOLD_TASK_PACKET_LEDGER_SELECTION_INVALID"
+        )
+
+    task = next(
+        (
+            item
+            for item in work.get("TASKS", [])
+            if isinstance(item, dict)
+            and item.get("TASK_ID") == task_ref
+        ),
+        None,
+    )
+    if task is None:
+        raise TaskStatePacketError("HOLD_TASK_PACKET_TASK_NOT_FOUND")
+
+    matching_actions = [
+        item
+        for item in action.get("ACTIONS", [])
+        if isinstance(item, dict)
+        and item.get("TASK_ID") == task_ref
+        and isinstance(item.get("ACTION_ID"), str)
+    ]
+    matching_actions.sort(
+        key=lambda item: (
+            str(item.get("LAST_UPDATE") or item.get("STARTED_AT") or ""),
+            str(item.get("ACTION_ID") or ""),
+        )
+    )
+    completed = [
+        item
+        for item in matching_actions
+        if item.get("STATE") == "DONE"
+        and isinstance(item.get("LAST_CONFIRMED_EFFECT"), Mapping)
+    ]
+    selected_actions = completed[-max_actions:]
+    if current_action_id:
+        current = next(
+            (
+                item
+                for item in matching_actions
+                if item.get("ACTION_ID") == current_action_id
+            ),
+            None,
+        )
+        if current is None:
+            raise TaskStatePacketError(
+                "HOLD_TASK_PACKET_CURRENT_ACTION_NOT_FOUND"
+            )
+        selected_actions = [
+            item
+            for item in selected_actions
+            if item.get("ACTION_ID") != current_action_id
+        ]
+        selected_actions = selected_actions[-max(0, max_actions - 1):]
+        selected_actions.append(current)
+    if not selected_actions:
+        raise TaskStatePacketError(
+            "HOLD_TASK_PACKET_NO_ACTION_REFS_SELECTED"
+        )
+    action_refs = [
+        str(item["ACTION_ID"])
+        for item in selected_actions
+    ]
+
+    candidates: list[str] = []
+    task_evidence = task.get("D4_EVIDENCE", [])
+    if isinstance(task_evidence, list):
+        for evidence_item in reversed(task_evidence):
+            _collect_adi_ref_candidates(evidence_item, candidates)
+    for item in reversed(selected_actions):
+        _collect_adi_ref_candidates(
+            item.get("LAST_CONFIRMED_EFFECT"),
+            candidates,
+        )
+        _collect_adi_ref_candidates(
+            item.get("LAST_TOOL_EFFECT"),
+            candidates,
+        )
+    ordered_candidates = list(dict.fromkeys(candidates))
+    adi_record_ids: list[str] = []
+    for candidate in ordered_candidates:
+        if len(adi_record_ids) >= max_adi_refs:
+            break
+        if _adi_record_exists(candidate):
+            adi_record_ids.append(candidate)
+    if not adi_record_ids:
+        raise TaskStatePacketError(
+            "HOLD_TASK_PACKET_NO_NATIVE_ADI_REFS_SELECTED"
+        )
+    return {
+        "action_refs": action_refs,
+        "adi_record_ids": adi_record_ids,
+    }
+
+
 def _snapshot_time_slot(snapshot: Mapping[str, Any]) -> int:
     task = snapshot.get("task")
     checkpoint = snapshot.get("checkpoint")
@@ -577,4 +750,5 @@ __all__ = [
     "build_task_state_minimum_packet",
     "insert_task_state_adi_record",
     "issue_task_state_minimum_packet",
+    "select_task_state_support_refs",
 ]

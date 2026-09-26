@@ -18,6 +18,7 @@ from tools.w7tp_task_state_minimum_packet import (
     RULE_REF,
     build_task_model_visible_context,
     build_task_state_minimum_packet,
+    select_task_state_support_refs,
 )
 
 
@@ -162,6 +163,31 @@ class TaskStateMinimumPacketTests(unittest.TestCase):
             "HOLD_MINIMUM_PACKET_SELF_HASH_MISMATCH",
         ):
             validate_minimum_packet(tampered)
+
+    def test_selector_uses_real_task_actions_and_existing_adi_refs(self) -> None:
+        selected = select_task_state_support_refs(
+            task_id=TASK_ID,
+            current_action_id=(
+                "A-NLDEV-005-AUTO-TASK-PACKET-GEMINI-RUNNER-20260926"
+            ),
+            max_actions=8,
+            max_adi_refs=16,
+        )
+        self.assertIn(
+            "A-NLDEV-005-AUTO-TASK-PACKET-GEMINI-RUNNER-20260926",
+            selected["action_refs"],
+        )
+        self.assertLessEqual(len(selected["action_refs"]), 8)
+        self.assertTrue(selected["adi_record_ids"])
+        self.assertLessEqual(len(selected["adi_record_ids"]), 16)
+        self.assertIn(
+            "capability:gemini-code-assist-a2a-pointer-first:20260926:v1",
+            selected["adi_record_ids"],
+        )
+        self.assertIn(
+            "capability:total-field-pointer-first-context-pull:20260926:v1",
+            selected["adi_record_ids"],
+        )
 
 
 if __name__ == "__main__":

@@ -229,6 +229,22 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "context_bootstrap": "POINTER_AND_REFERENCES_ONLY",
             "dynamic_context_materialization": "LOCAL_VOLATILE_ON_PULL",
             "context_persistence": "EPHEMERAL_BODY_REFERENCES_ONLY",
+            "real_task_state_packet_auto_issue": gemini_pointer_bound,
+            "real_task_state_sources": [
+                "WORK_LEDGER",
+                "ACTION_LEDGER",
+                "CURRENT_CONVERSATION_CHECKPOINT",
+                "NATIVE_ADI_SELECTED_RECORDS",
+            ],
+            "complex_code_reasoning_pipeline": (
+                "REAL_TASK_STATE_MINIMUM_PACKET"
+                "->GEMINI_A2A_POINTER_FIRST_CANDIDATE"
+                "->MSI_LOCAL_SOURCE_BUILDER"
+                "->DETERMINISTIC_VALIDATION"
+                "->TOTAL_FIELD_SOURCE_DELTA_GATE"
+                "->LAND"
+            ),
+            "legacy_vertex_direct_context_allowed": False,
             "bound_reasoning_organs": bound_reasoning_organs,
             "gemini_a2a_binding": (
                 "POINTER_FIRST_TOTAL_FIELD_BOUND"
@@ -262,6 +278,8 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "context_pull_exact_task_provider_model_binding": True,
             "full_dynamic_context_in_initial_model_bootstrap": False,
             "local_rule_ref_cloud_visible": False,
+            "gemini_reasoning_failure_local_fallback": True,
+            "gemini_candidate_never_becomes_source_truth": True,
         },
         "D8_AUTHORITY": {
             "source": "CURRENT_FOUNDER_INTENT_ENVELOPE",

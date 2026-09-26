@@ -9,7 +9,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.request import Request, urlopen
@@ -20,7 +20,20 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from core.execution_continuity import ActionLedger, build_idempotency_key
 from core.work_ledger import WorkLedger
+from tools.gemini_code_assist_a2a_candidate import (
+    MODEL_REF as GEMINI_MODEL_REF,
+    PROVIDER_REF as GEMINI_PROVIDER_REF,
+    run_pointer_first_candidate as run_gemini_pointer_first_candidate,
+)
 from tools.total_field_candidate_gateway import llm_push
+from tools.total_field_dynamic_context_pull import (
+    TotalFieldDynamicContextPullBroker,
+)
+from tools.w7tp_task_state_minimum_packet import (
+    build_task_model_visible_context,
+    issue_task_state_minimum_packet,
+    select_task_state_support_refs,
+)
 
 SKILL_ID = "w7tp-8d-adi-natural-language-control"
 LOCAL_AGENT = PROJECT_ROOT / "tools" / "w7tp_local_model_agent.py"
@@ -616,6 +629,114 @@ def run_local_agent(prompt: str, shadow: Path, plan: dict[str, Any], timeout_sec
     return proc.stdout.strip()
 
 
+def gemini_task_state_reasoning_hint(
+    *,
+    intent: str,
+    plan: dict[str, Any],
+    action_id: str,
+    timeout_seconds: int,
+) -> dict[str, Any] | None:
+    """Issue the current real task packet and obtain one governed Gemini hint."""
+
+    execution = plan.get("D5_EXECUTION", {})
+    if (
+        not isinstance(execution, dict)
+        or execution.get("gemini_a2a_binding")
+        != "POINTER_FIRST_TOTAL_FIELD_BOUND"
+        or "GEMINI_CODE_ASSIST"
+        not in execution.get("bound_reasoning_organs", [])
+    ):
+        return None
+    task_id = str(plan.get("TASK_ID") or "")
+    if not task_id:
+        raise RuntimeError("HOLD_GEMINI_TASK_PACKET_TASK_ID_MISSING")
+
+    selected = select_task_state_support_refs(
+        task_id=task_id,
+        current_action_id=action_id,
+        max_actions=8,
+        max_adi_refs=16,
+    )
+    issued = issue_task_state_minimum_packet(
+        task_id=task_id,
+        action_refs=selected["action_refs"],
+        support_adi_record_ids=selected["adi_record_ids"],
+    )
+    packet = issued.get("packet")
+    if not isinstance(packet, dict):
+        raise RuntimeError("HOLD_GEMINI_TASK_PACKET_ISSUANCE_INVALID")
+
+    broker = TotalFieldDynamicContextPullBroker()
+    bootstrap = broker.register(
+        packet=packet,
+        task_ref=f"task:{task_id}",
+        provider_ref=GEMINI_PROVIDER_REF,
+        model_ref=GEMINI_MODEL_REF,
+        expires_at=(
+            datetime.now(timezone.utc) + timedelta(minutes=10)
+        ).isoformat(),
+        return_coordinate="total-field:candidate-gateway:llm-push",
+        context_builder=build_task_model_visible_context,
+    )
+    instruction = (
+        "Analyze the current real task state and the Founder intent below. "
+        "Return a candidate-only engineering reasoning object for the local "
+        "source builder. Do not claim source-code facts that are not in the "
+        "provided task context; the local builder will inspect source "
+        "independently. Candidate body should focus on engineering_hypothesis, "
+        "implementation_focus, risks, verification_focus, and next_local_step. "
+        "Do not request or perform file writes. FOUNDER_INTENT="
+        + intent
+    )
+    result = run_gemini_pointer_first_candidate(
+        broker=broker,
+        bootstrap=bootstrap,
+        task_ref=f"task:{task_id}",
+        candidate_instruction=instruction,
+        provider_ref=GEMINI_PROVIDER_REF,
+        model_ref=GEMINI_MODEL_REF,
+        timeout_seconds=min(timeout_seconds, 180),
+    )
+    if result.get("state") != "PASS_GEMINI_A2A_POINTER_FIRST_CANDIDATE":
+        raise RuntimeError("HOLD_GEMINI_TASK_REASONING_NOT_PASS")
+    candidate = result.get("candidate")
+    if not isinstance(candidate, dict):
+        raise RuntimeError("HOLD_GEMINI_TASK_REASONING_CANDIDATE_INVALID")
+    total_field = result.get("total_field")
+    if not isinstance(total_field, dict):
+        raise RuntimeError("HOLD_GEMINI_TASK_REASONING_TOTAL_FIELD_MISSING")
+    return {
+        "state": "PASS_REAL_TASK_GEMINI_REASONING",
+        "task_state_record_id": issued.get("task_state_record_id"),
+        "packet_ref": packet.get("packet_ref"),
+        "packet_sha256": packet.get("packet_sha256"),
+        "bootstrap_sha256": bootstrap.get("bootstrap_sha256"),
+        "context_ref": result.get("context_ref"),
+        "candidate_sha256": result.get("candidate_sha256"),
+        "candidate": candidate.get("candidate"),
+        "total_field_decision": total_field.get("final_decision"),
+        "total_field_state_ref": total_field.get("state_ref"),
+        "total_field_hash": total_field.get("total_field_hash"),
+        "provider_reported_model": result.get("provider_reported_model"),
+        "provider_internal_context_controlled": result.get(
+            "provider_internal_context_controlled"
+        ),
+        "action_refs": selected["action_refs"],
+        "adi_record_ids": selected["adi_record_ids"],
+    }
+
+
+def legacy_google_fallback_allowed(plan: dict[str, Any]) -> bool:
+    """Legacy direct cloud hint path is forbidden under pointer-first context."""
+
+    execution = plan.get("D5_EXECUTION", {})
+    return not (
+        isinstance(execution, dict)
+        and execution.get("context_delivery_mode")
+        == "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL"
+    )
+
+
 def google_candidate_hint(intent: str, plan: dict[str, Any], run_dir: Path) -> dict[str, Any] | None:
     if not (GEMINI_PACKET.is_file() and VERTEX_GATEWAY.is_file()):
         return None
@@ -715,14 +836,84 @@ def main() -> int:
         action_ledger.update_action(
             action_id,
             LAST_TOOL_EFFECT={"phase": "AFFECTED_CLOSURE_LOCATED", "paths": copied_closure},
-            RESUME_FROM="LOCAL_MODEL_CANDIDATE",
+            RESUME_FROM="GEMINI_TASK_STATE_REASONING_OR_LOCAL_MODEL",
         )
-        phase = "LOCAL_MODEL_CANDIDATE"
         before = snapshot(shadow)
         prompt = build_prompt(intent, shadow, plan)
+        gemini_reasoning: dict[str, Any] | None = None
+        gemini_reasoning_used = False
+        gemini_reasoning_hold: str | None = None
+        google_candidate_used = False
+
         if effectful_intent(intent):
+            phase = "GEMINI_TASK_STATE_REASONING"
+            try:
+                gemini_reasoning = gemini_task_state_reasoning_hint(
+                    intent=intent,
+                    plan=plan,
+                    action_id=action_id,
+                    timeout_seconds=timeout_seconds,
+                )
+                if gemini_reasoning is not None:
+                    gemini_reasoning_used = True
+                    google_candidate_used = True
+                    action_ledger.update_action(
+                        action_id,
+                        LAST_TOOL_EFFECT={
+                            "phase": "GEMINI_TASK_STATE_REASONING_PASS",
+                            "task_state_record_id": gemini_reasoning.get(
+                                "task_state_record_id"
+                            ),
+                            "packet_ref": gemini_reasoning.get("packet_ref"),
+                            "packet_sha256": gemini_reasoning.get("packet_sha256"),
+                            "context_ref": gemini_reasoning.get("context_ref"),
+                            "candidate_sha256": gemini_reasoning.get(
+                                "candidate_sha256"
+                            ),
+                            "total_field_decision": gemini_reasoning.get(
+                                "total_field_decision"
+                            ),
+                            "total_field_hash": gemini_reasoning.get(
+                                "total_field_hash"
+                            ),
+                            "provider_reported_model": gemini_reasoning.get(
+                                "provider_reported_model"
+                            ),
+                        },
+                        RESUME_FROM="LOCAL_MODEL_CANDIDATE",
+                    )
+                    prompt += (
+                        "\n\nA Total Field-adjudicated Gemini candidate-only "
+                        "reasoning result derived from the current real task-state "
+                        "Origin-State Minimum Packet is available below. It has no "
+                        "source-write or execution authority. Treat it only as a "
+                        "hypothesis/design aid. Independently inspect the allowed "
+                        "shadow source and implement only locally justified changes.\n"
+                        "GEMINI_REAL_TASK_REASONING_CANDIDATE:\n"
+                        + json.dumps(
+                            gemini_reasoning.get("candidate"),
+                            ensure_ascii=False,
+                            sort_keys=True,
+                        )
+                    )
+            except Exception as exc:
+                gemini_reasoning_hold = str(exc)
+                action_ledger.update_action(
+                    action_id,
+                    LAST_TOOL_EFFECT={
+                        "phase": "GEMINI_TASK_STATE_REASONING_HOLD_LOCAL_FALLBACK",
+                        "error": gemini_reasoning_hold,
+                    },
+                    RESUME_FROM="LOCAL_MODEL_CANDIDATE",
+                )
+
             phase = "LOCAL_MODEL_CANDIDATE"
-            last_message = run_local_agent(prompt, shadow, plan, timeout_seconds)
+            last_message = run_local_agent(
+                prompt,
+                shadow,
+                plan,
+                timeout_seconds,
+            )
         else:
             phase = "LOCAL_GPU_READONLY_TRANSFORM"
             action_ledger.update_action(
@@ -735,13 +926,19 @@ def main() -> int:
         changes = diff_snapshot(before, after)
         changed = changes["created"] + changes["modified"] + changes["deleted"]
         retry_count = 0
-        google_candidate_used = False
         action_ledger.update_action(
             action_id,
             LAST_TOOL_EFFECT={
                 "phase": phase,
                 "candidate_changes": changes,
                 "model": LOCAL_MODEL,
+                "gemini_a2a_reasoning_used": gemini_reasoning_used,
+                "gemini_candidate_sha256": (
+                    gemini_reasoning.get("candidate_sha256")
+                    if isinstance(gemini_reasoning, dict)
+                    else None
+                ),
+                "gemini_reasoning_hold": gemini_reasoning_hold,
             },
             RESUME_FROM="VERIFY_OR_RESOURCE_ARBITRATION",
         )
@@ -765,6 +962,7 @@ change in the shadow, run deterministic checks, and do not stop at analysis or r
             not changed
             and effectful_intent(intent)
             and bool(plan.get("D5_EXECUTION", {}).get("google_candidate_fallback"))
+            and legacy_google_fallback_allowed(plan)
         ):
             cloud_hint = google_candidate_hint(intent, plan, run_dir)
             if cloud_hint is not None:
@@ -794,6 +992,18 @@ GOOGLE_CANDIDATE_HINT:
                 "phase": "CANDIDATE_READY_FOR_VERIFY",
                 "candidate_changes": changes,
                 "google_candidate_used": google_candidate_used,
+                "gemini_a2a_reasoning_used": gemini_reasoning_used,
+                "gemini_task_state_record_id": (
+                    gemini_reasoning.get("task_state_record_id")
+                    if isinstance(gemini_reasoning, dict)
+                    else None
+                ),
+                "gemini_candidate_sha256": (
+                    gemini_reasoning.get("candidate_sha256")
+                    if isinstance(gemini_reasoning, dict)
+                    else None
+                ),
+                "gemini_reasoning_hold": gemini_reasoning_hold,
             },
             RESUME_FROM="VERIFY_CANDIDATE",
         )
@@ -821,6 +1031,18 @@ GOOGLE_CANDIDATE_HINT:
                 "model_provider": "MSI_OLLAMA_LOCAL",
                 "model": LOCAL_MODEL,
                 "google_candidate_used": google_candidate_used,
+                "gemini_a2a_reasoning_used": gemini_reasoning_used,
+                "gemini_task_state_record_id": (
+                    gemini_reasoning.get("task_state_record_id")
+                    if isinstance(gemini_reasoning, dict)
+                    else None
+                ),
+                "gemini_candidate_sha256": (
+                    gemini_reasoning.get("candidate_sha256")
+                    if isinstance(gemini_reasoning, dict)
+                    else None
+                ),
+                "gemini_reasoning_hold": gemini_reasoning_hold,
                 "codex_used": False,
                 "agent_output_sha256": sha_bytes(last_message.encode("utf-8")),
                 "candidate_changes": changes,
@@ -890,6 +1112,18 @@ GOOGLE_CANDIDATE_HINT:
                 "model_provider": "MSI_OLLAMA_LOCAL",
                 "model": LOCAL_MODEL,
                 "google_candidate_used": google_candidate_used,
+                "gemini_a2a_reasoning_used": gemini_reasoning_used,
+                "gemini_task_state_record_id": (
+                    gemini_reasoning.get("task_state_record_id")
+                    if isinstance(gemini_reasoning, dict)
+                    else None
+                ),
+                "gemini_candidate_sha256": (
+                    gemini_reasoning.get("candidate_sha256")
+                    if isinstance(gemini_reasoning, dict)
+                    else None
+                ),
+                "gemini_reasoning_hold": gemini_reasoning_hold,
                 "codex_used": False,
                 "agent_output_sha256": sha_bytes(last_message.encode("utf-8")),
                 "candidate_changes": changes,
@@ -915,6 +1149,18 @@ GOOGLE_CANDIDATE_HINT:
                     "services_restarted": landing.get("services_restarted", []),
                     "verification": landing.get("live_validation") or deterministic,
                     "total_field_source_delta_gate": total_field_gate,
+                    "gemini_a2a_reasoning_used": gemini_reasoning_used,
+                    "gemini_task_state_record_id": (
+                        gemini_reasoning.get("task_state_record_id")
+                        if isinstance(gemini_reasoning, dict)
+                        else None
+                    ),
+                    "gemini_candidate_sha256": (
+                        gemini_reasoning.get("candidate_sha256")
+                        if isinstance(gemini_reasoning, dict)
+                        else None
+                    ),
+                    "gemini_reasoning_hold": gemini_reasoning_hold,
                     "rollback_preimage": landing.get("rollback_preimage"),
                 },
             )
@@ -928,6 +1174,17 @@ GOOGLE_CANDIDATE_HINT:
                     "CHANGED_FILES": landing.get("changed_files", []),
                     "TOTAL_FIELD_DECISION": total_field_gate.get("final_decision"),
                     "TOTAL_FIELD_STATE_REF": total_field_gate.get("state_ref"),
+                    "GEMINI_A2A_REASONING_USED": gemini_reasoning_used,
+                    "GEMINI_TASK_STATE_RECORD_ID": (
+                        gemini_reasoning.get("task_state_record_id")
+                        if isinstance(gemini_reasoning, dict)
+                        else None
+                    ),
+                    "GEMINI_CANDIDATE_SHA256": (
+                        gemini_reasoning.get("candidate_sha256")
+                        if isinstance(gemini_reasoning, dict)
+                        else None
+                    ),
                 },
             )
         write_state(run_dir, final)
