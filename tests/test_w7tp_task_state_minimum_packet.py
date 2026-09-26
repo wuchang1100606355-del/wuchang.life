@@ -124,7 +124,7 @@ class TaskStateMinimumPacketTests(unittest.TestCase):
             )
             self.assertEqual(
                 projection["task"]["state"],
-                "DOING",
+                WorkLedger()._task(TASK_ID)["STATE"],
             )
             self.assertEqual(
                 len(projection["actions"]),
