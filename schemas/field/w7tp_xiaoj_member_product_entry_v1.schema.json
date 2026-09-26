@@ -21,29 +21,74 @@
     "member_context_sha256",
     "member_model_visible_context",
     "xiaoj_member_browser_binding",
-    "entry_sha256"
+    "entry_sha256",
+    "human_need_route",
+    "open_source_product_mode"
   ],
   "properties": {
-    "schema_version": {"const": "w7tp.xiaoj-member-product-entry.v1"},
-    "state": {"const": "PASS_XIAOJ_MEMBER_PRODUCT_ENTRY_CANDIDATE"},
-    "reason_code": {"const": "PASS_T019_MEMBER_PRODUCT_ENTRY"},
-    "candidate_only": {"const": true},
-    "runtime_effect": {"const": false},
-    "execution_allowed": {"const": false},
-    "requires_total_field_verify": {"const": true},
-    "db_write": {"const": false},
-    "deploy": {"const": false},
-    "restart": {"const": false},
-    "member_plaintext_read": {"const": false},
-    "secret_read": {"const": false},
-    "odoo_role": {"const": "PROCESS_AND_MASKED_PROJECTION_NOT_SOVEREIGN_ROOT"},
-    "member_consent_authority": {"const": "member"},
-    "safety_and_landing_authority": {"const": "total_field_verifier"},
-    "candidate_authority": {"const": "none"},
-    "member_gate_ref": {"type": "string", "minLength": 1},
-    "member_context_ref": {"type": "string", "minLength": 1},
-    "member_context_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "member_model_visible_context": {"type": "object"},
+    "schema_version": {
+      "const": "w7tp.xiaoj-member-product-entry.v1"
+    },
+    "state": {
+      "const": "PASS_XIAOJ_MEMBER_PRODUCT_ENTRY_CANDIDATE"
+    },
+    "reason_code": {
+      "const": "PASS_T019_MEMBER_PRODUCT_ENTRY"
+    },
+    "candidate_only": {
+      "const": true
+    },
+    "runtime_effect": {
+      "const": false
+    },
+    "execution_allowed": {
+      "const": false
+    },
+    "requires_total_field_verify": {
+      "const": true
+    },
+    "db_write": {
+      "const": false
+    },
+    "deploy": {
+      "const": false
+    },
+    "restart": {
+      "const": false
+    },
+    "member_plaintext_read": {
+      "const": false
+    },
+    "secret_read": {
+      "const": false
+    },
+    "odoo_role": {
+      "const": "PROCESS_AND_MASKED_PROJECTION_NOT_SOVEREIGN_ROOT"
+    },
+    "member_consent_authority": {
+      "const": "member"
+    },
+    "safety_and_landing_authority": {
+      "const": "total_field_verifier"
+    },
+    "candidate_authority": {
+      "const": "none"
+    },
+    "member_gate_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "member_context_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "member_context_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "member_model_visible_context": {
+      "type": "object"
+    },
     "xiaoj_member_browser_binding": {
       "type": "object",
       "additionalProperties": false,
@@ -66,24 +111,168 @@
         "submit_forbidden"
       ],
       "properties": {
-        "member_ref": {"type": "string", "pattern": "^actor_ref:[A-Za-z0-9_./:-]+$"},
-        "sovereign_member_ref": {"type": "string", "minLength": 1},
-        "device_ref": {"type": "string", "minLength": 1},
-        "safe_context_ref": {"type": "string", "minLength": 1},
-        "member_preference_ref": {"type": "string", "minLength": 1},
-        "service_style_ref": {"type": "string", "minLength": 1},
-        "behavior_info_ref": {"type": "string"},
-        "cloud_compute_ref": {"type": "string", "minLength": 1},
-        "benefit_ref": {"type": "string", "minLength": 1},
-        "quota_ref": {"type": "string", "minLength": 1},
-        "odoo_identity_ref": {"type": "string", "minLength": 1},
-        "odoo_role_ref": {"type": "string", "minLength": 1},
-        "odoo_function_scope_ref": {"type": "string", "minLength": 1},
-        "odoo_permission_bucket_ref": {"type": "string", "minLength": 1},
-        "requires_total_field_verify": {"const": true},
-        "submit_forbidden": {"const": true}
+        "member_ref": {
+          "type": "string",
+          "pattern": "^actor_ref:[A-Za-z0-9_./:-]+$"
+        },
+        "sovereign_member_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "device_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "safe_context_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "member_preference_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "service_style_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "behavior_info_ref": {
+          "type": "string"
+        },
+        "cloud_compute_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "benefit_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quota_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "odoo_identity_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "odoo_role_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "odoo_function_scope_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "odoo_permission_bucket_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requires_total_field_verify": {
+          "const": true
+        },
+        "submit_forbidden": {
+          "const": true
+        }
       }
     },
-    "entry_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    "entry_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "human_need_route": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "state",
+        "candidate_only",
+        "execution_allowed",
+        "local_only",
+        "cloud_required",
+        "enterprise_sso_required",
+        "paid_service_required",
+        "kubernetes_required",
+        "raw_intent_persisted",
+        "intent_sha256",
+        "active_roles"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "w7tp.xiaoj-human-need-route.v1"
+        },
+        "candidate_only": {
+          "const": true
+        },
+        "execution_allowed": {
+          "const": false
+        },
+        "local_only": {
+          "const": true
+        },
+        "cloud_required": {
+          "const": false
+        },
+        "enterprise_sso_required": {
+          "const": false
+        },
+        "paid_service_required": {
+          "const": false
+        },
+        "kubernetes_required": {
+          "const": false
+        },
+        "raw_intent_persisted": {
+          "const": false
+        },
+        "intent_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "active_roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "open_source_product_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "single_node_core_supported",
+        "paid_cloud_required",
+        "enterprise_sso_required",
+        "kubernetes_required",
+        "google_required",
+        "line_required",
+        "cloud_llm_required"
+      ],
+      "properties": {
+        "mode": {
+          "const": "OPEN_SOURCE_LOCAL_FIRST"
+        },
+        "single_node_core_supported": {
+          "const": true
+        },
+        "paid_cloud_required": {
+          "const": false
+        },
+        "enterprise_sso_required": {
+          "const": false
+        },
+        "kubernetes_required": {
+          "const": false
+        },
+        "google_required": {
+          "const": false
+        },
+        "line_required": {
+          "const": false
+        },
+        "cloud_llm_required": {
+          "const": false
+        }
+      }
+    }
   }
 }

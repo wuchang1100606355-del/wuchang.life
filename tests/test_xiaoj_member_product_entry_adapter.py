@@ -39,7 +39,12 @@ def odoo_projection(candidate: dict) -> dict:
     }
 
 
-def product_entry(candidate: dict | None = None) -> dict:
+def product_entry(
+    candidate: dict | None = None,
+    *,
+    human_intent: str = "",
+    active_role_refs: tuple[str, ...] = (),
+) -> dict:
     candidate = copy.deepcopy(candidate or fixture._candidate())
     role_payload = candidate["p1_identity_candidate"]["derived_packets_evidence"]["payload"]["role_seat"]["payload"]
     role_payload["organization_ref"] = fixture._ref("organization", "wuchang-community")
@@ -55,6 +60,8 @@ def product_entry(candidate: dict | None = None) -> dict:
             fixture._ref("capability", "xiaoj-member-browser"),
             fixture._ref("capability", "candidate-return"),
         ],
+        active_role_refs=active_role_refs,
+        human_intent=human_intent,
     )
 
 
@@ -96,6 +103,47 @@ class XiaoJMemberProductEntryAdapterTest(unittest.TestCase):
             "phone_number_value",
         ):
             self.assertNotIn(forbidden, encoded)
+
+
+    def test_open_source_mode_is_core_and_cloud_optional(self) -> None:
+        result = product_entry(human_intent="我要看社區公告")
+        mode = result["open_source_product_mode"]
+        self.assertEqual(mode["mode"], "OPEN_SOURCE_LOCAL_FIRST")
+        self.assertTrue(mode["single_node_core_supported"])
+        self.assertFalse(mode["paid_cloud_required"])
+        self.assertFalse(mode["enterprise_sso_required"])
+        self.assertFalse(mode["kubernetes_required"])
+        self.assertFalse(mode["google_required"])
+        self.assertFalse(mode["line_required"])
+        self.assertFalse(mode["cloud_llm_required"])
+
+    def test_resident_need_routes_to_notice(self) -> None:
+        result = product_entry(human_intent="社區停水公告在哪裡")
+        route = result["human_need_route"]
+        self.assertEqual(route["state"], "PASS_HUMAN_NEED_ROUTE_CANDIDATE")
+        self.assertEqual(route["selected"]["role"], "resident")
+        self.assertEqual(route["selected"]["need"], "notice")
+        self.assertFalse(route["execution_allowed"])
+
+    def test_same_person_resident_and_volunteer_routes_by_current_need(self) -> None:
+        result = product_entry(
+            human_intent="我今天可以接哪個志工外送任務",
+            active_role_refs=(
+                "odoo_role_ref:resident",
+                "odoo_role_ref:volunteer",
+            ),
+        )
+        route = result["human_need_route"]
+        self.assertEqual(route["state"], "PASS_HUMAN_NEED_ROUTE_CANDIDATE")
+        self.assertEqual(route["selected"]["role"], "volunteer")
+        self.assertEqual(route["selected"]["need"], "volunteer_task")
+
+    def test_no_intent_does_not_guess_human_need(self) -> None:
+        result = product_entry()
+        route = result["human_need_route"]
+        self.assertEqual(route["state"], "HOLD_HUMAN_NEED_REQUIRED")
+        self.assertTrue(route["human_choice_required"])
+        self.assertGreaterEqual(len(route["candidate_options"]), 1)
 
     def test_google_and_line_are_not_core_entry_blockers(self) -> None:
         result = product_entry()

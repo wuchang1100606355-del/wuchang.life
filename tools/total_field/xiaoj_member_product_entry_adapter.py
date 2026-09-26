@@ -27,6 +27,7 @@ from tools.total_field.xiaoj_member_bound_session_candidate import (
     DurableNonceConsumer,
     evaluate_member_action_session,
 )
+from tools.total_field.xiaoj_human_need_router import route_human_need
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = ROOT / "schemas/field/w7tp_xiaoj_member_product_entry_v1.schema.json"
@@ -141,6 +142,8 @@ def build_xiaoj_member_product_entry_candidate(
     allowed_capability_refs: Sequence[str],
     p1_verifier: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
     active_seat_leases: Sequence[Mapping[str, Any]] = (),
+    active_role_refs: Sequence[str] = (),
+    human_intent: str = "",
 ) -> dict[str, Any]:
     """Compose the existing member sovereignty chain into one product entry."""
 
@@ -177,6 +180,11 @@ def build_xiaoj_member_product_entry_candidate(
 
     projection = copy.deepcopy(dict(odoo_member_projection))
     sovereign_member_ref = str(member_action_request["member_ref"])
+    effective_role_refs = list(active_role_refs) or [str(projection["odoo_role_ref"])]
+    human_need_route = route_human_need(
+        active_role_refs=effective_role_refs,
+        intent=human_intent,
+    )
     browser_binding = {
         "member_ref": _browser_actor_ref(sovereign_member_ref),
         "sovereign_member_ref": sovereign_member_ref,
@@ -218,8 +226,19 @@ def build_xiaoj_member_product_entry_candidate(
             "member_context_ref": model_context["context_ref"],
             "member_context_sha256": member_contract["context_sha256"],
             "member_model_visible_context": model_context,
+            "human_need_route": human_need_route,
+            "open_source_product_mode": {
+                "mode": "OPEN_SOURCE_LOCAL_FIRST",
+                "single_node_core_supported": True,
+                "paid_cloud_required": False,
+                "enterprise_sso_required": False,
+                "kubernetes_required": False,
+                "google_required": False,
+                "line_required": False,
+                "cloud_llm_required": False,
+            },
             "xiaoj_member_browser_binding": browser_binding,
-            "next_route": "EXISTING_TAIJI01_TOTAL_FIELD_THEN_XIAOJ_MEMBER_BROWSER_GATEWAY",
+            "next_route": "HUMAN_NEED_ROUTE_THEN_EXISTING_TAIJI01_TOTAL_FIELD_THEN_XIAOJ_MEMBER_BROWSER_GATEWAY",
         }
     )
     material = copy.deepcopy(result)

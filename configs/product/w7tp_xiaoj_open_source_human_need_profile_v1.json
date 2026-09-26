@@ -1,0 +1,447 @@
+{
+  "schema_version": "w7tp.xiaoj-open-source-human-need-profile.v1",
+  "product_mode": "OPEN_SOURCE_LOCAL_FIRST",
+  "product_name": "XiaoJ Sovereign Member System",
+  "core_deployment": {
+    "single_node_core_supported": true,
+    "minimum_stack": [
+      "taiji01",
+      "Odoo",
+      "PostgreSQL",
+      "Python",
+      "Browser_or_PWA"
+    ],
+    "paid_cloud_required": false,
+    "enterprise_sso_required": false,
+    "kubernetes_required": false,
+    "google_required": false,
+    "line_required": false,
+    "cloud_llm_required": false,
+    "tailscale_required": false,
+    "offline_or_local_degraded_mode_required": true,
+    "provider_replaceable": true,
+    "forkable_role_need_registry": true
+  },
+  "competitive_value": [
+    "natural_person_sovereignty",
+    "multi_role_same_person",
+    "human_need_first_routing",
+    "local_first_privacy",
+    "provider_optional",
+    "auditable_candidate_before_effect",
+    "low_cost_single_node_deployment",
+    "community_and_small_organization_fit"
+  ],
+  "routing_rules": {
+    "natural_person_is_not_role": true,
+    "role_is_not_seat": true,
+    "role_is_not_need": true,
+    "same_person_may_have_multiple_roles": true,
+    "no_role_inference_from_sensitive_data": true,
+    "ambiguous_role_or_need_requires_human_choice": true,
+    "raw_intent_must_not_be_persisted_by_router": true,
+    "candidate_only": true,
+    "execution_allowed": false
+  },
+  "role_aliases": {
+    "member": "member",
+    "resident": "resident",
+    "tenant": "resident",
+    "unit_owner": "unit_owner",
+    "consumer": "consumer",
+    "volunteer": "volunteer",
+    "staff": "staff",
+    "merchant_staff": "merchant_staff",
+    "committee_chair": "committee_member",
+    "committee_member": "committee_member",
+    "property_manager": "property_staff",
+    "guard": "property_staff",
+    "responsible_person": "organization_responsible",
+    "representative": "organization_responsible",
+    "position_responsible": "organization_responsible",
+    "owner_reviewer": "organization_responsible",
+    "social_worker": "social_worker",
+    "caregiver": "caregiver",
+    "family_head": "family_head",
+    "family_member": "family_member",
+    "operator": "operator"
+  },
+  "roles": {
+    "member": {
+      "label": "一般會員",
+      "default_need": "member_status",
+      "needs": {
+        "member_status": {
+          "label": "查看我的會員狀態",
+          "keywords": ["會員", "狀態", "資格", "權益", "我的資料"],
+          "human_outcome": "看懂目前會員狀態、可用服務與下一步",
+          "capability_refs": ["odoo_function_ref:member.personal_status_masked"]
+        },
+        "my_xiaoj": {
+          "label": "使用或管理我的小J",
+          "keywords": ["小J", "我的小J", "領用", "裝置", "撤回", "更換"],
+          "human_outcome": "取得本人小J的使用、裝置與撤回候選入口",
+          "capability_refs": ["capability_ref:xiaoj.member.self_service"]
+        },
+        "consent_control": {
+          "label": "管理我的授權",
+          "keywords": ["授權", "同意", "撤回同意", "隱私", "資料使用"],
+          "human_outcome": "看懂並控制本人授權範圍與撤回狀態",
+          "capability_refs": ["capability_ref:member.consent_control"]
+        }
+      }
+    },
+    "resident": {
+      "label": "居民／住戶",
+      "default_need": "resident_service",
+      "needs": {
+        "notice": {
+          "label": "查看公告與重要通知",
+          "keywords": ["公告", "通知", "停水", "停電", "社區消息"],
+          "human_outcome": "快速知道與自己生活有關的最新事項",
+          "capability_refs": ["odoo_function_ref:resident.notice_read"]
+        },
+        "activity": {
+          "label": "查活動與報名候選",
+          "keywords": ["活動", "課程", "報名", "志工活動", "社團"],
+          "human_outcome": "找到適合活動並建立本人確認前的報名候選",
+          "capability_refs": [
+            "odoo_function_ref:resident.activity_query",
+            "odoo_function_ref:resident.activity_rsvp_candidate"
+          ]
+        },
+        "resident_service": {
+          "label": "提出生活服務需求",
+          "keywords": ["報修", "服務", "協助", "問題", "不知道找誰", "包裹", "設施"],
+          "human_outcome": "把生活問題整理成清楚、可追蹤的服務需求候選",
+          "capability_refs": ["odoo_function_ref:resident.service_request_draft"]
+        },
+        "fee": {
+          "label": "查看管理費或建立付款意圖",
+          "keywords": ["管理費", "繳費", "帳單", "費用"],
+          "human_outcome": "看懂費用狀態；付款仍由本人確認",
+          "capability_refs": [
+            "odoo_function_ref:resident.management_fee_masked_read",
+            "odoo_function_ref:resident.management_fee_payment_intent_candidate"
+          ]
+        },
+        "benefit": {
+          "label": "查看福利與會員利益",
+          "keywords": ["福利", "優惠", "補助", "權益"],
+          "human_outcome": "知道自己可使用的福利與下一步",
+          "capability_refs": ["odoo_function_ref:resident.benefit_masked_read"]
+        }
+      }
+    },
+    "unit_owner": {
+      "label": "屋主／區分所有權人",
+      "default_need": "property_issue",
+      "needs": {
+        "property_issue": {
+          "label": "處理大樓與管委會議題",
+          "keywords": ["管委會", "大樓", "公共設施", "議題", "維修"],
+          "human_outcome": "看懂議題、文件與可提出的服務候選",
+          "capability_refs": [
+            "odoo_function_ref:owner.hoa_issue_summary",
+            "odoo_function_ref:owner.service_request_draft"
+          ]
+        },
+        "property_document": {
+          "label": "查看物業文件摘要",
+          "keywords": ["文件", "規約", "會議紀錄", "契約"],
+          "human_outcome": "快速看懂與本人權益相關的物業文件",
+          "capability_refs": ["odoo_function_ref:owner.property_document_summary"]
+        },
+        "fee": {
+          "label": "查看管理費",
+          "keywords": ["管理費", "帳單", "繳費"],
+          "human_outcome": "查看費用狀態並建立本人確認前的付款意圖",
+          "capability_refs": [
+            "odoo_function_ref:owner.management_fee_masked_read",
+            "odoo_function_ref:owner.management_fee_payment_intent_candidate"
+          ]
+        }
+      }
+    },
+    "consumer": {
+      "label": "消費者／咖啡館會員",
+      "default_need": "menu",
+      "needs": {
+        "menu": {
+          "label": "看菜單與商品",
+          "keywords": ["菜單", "咖啡", "飲料", "餐點", "價格"],
+          "human_outcome": "快速找到適合的商品與選項",
+          "capability_refs": ["odoo_function_ref:consumer.menu_read"]
+        },
+        "order": {
+          "label": "建立點餐候選",
+          "keywords": ["點餐", "下單", "我要", "買", "訂單"],
+          "human_outcome": "把需求整理成訂單草稿，最後由本人確認",
+          "capability_refs": ["odoo_function_ref:consumer.order_draft_candidate"]
+        },
+        "points_benefit": {
+          "label": "查看點數、票券與優惠",
+          "keywords": ["點數", "票券", "券", "優惠", "回饋"],
+          "human_outcome": "看懂目前可用利益，不曝露不必要個資",
+          "capability_refs": [
+            "odoo_function_ref:consumer.points_bucket_read",
+            "odoo_function_ref:consumer.benefit_masked_read"
+          ]
+        }
+      }
+    },
+    "volunteer": {
+      "label": "志工",
+      "default_need": "volunteer_task",
+      "needs": {
+        "volunteer_task": {
+          "label": "查看可參與任務",
+          "keywords": ["志工", "任務", "接單", "派工", "外送", "送餐"],
+          "human_outcome": "只看到已核定且符合資格的任務摘要與下一步",
+          "capability_refs": [
+            "capability_ref:volunteer.task_read",
+            "capability_ref:volunteer.delivery_candidate"
+          ],
+          "human_confirmation_required": true
+        },
+        "shift_signup": {
+          "label": "查看排班與報名",
+          "keywords": ["排班", "值班", "報名", "時段", "出勤"],
+          "human_outcome": "找到可參與時段並建立報名候選",
+          "capability_refs": [
+            "capability_ref:volunteer.shift_read",
+            "capability_ref:volunteer.signup_candidate"
+          ]
+        },
+        "service_report": {
+          "label": "回報服務狀態",
+          "keywords": ["回報", "送達", "完成", "異常", "取消"],
+          "human_outcome": "以最小必要資料回報任務進度",
+          "capability_refs": ["capability_ref:volunteer.service_status_candidate"],
+          "human_confirmation_required": true
+        }
+      }
+    },
+    "staff": {
+      "label": "一般工作人員",
+      "default_need": "staff_queue",
+      "needs": {
+        "staff_queue": {
+          "label": "查看我的工作佇列",
+          "keywords": ["工作", "待辦", "任務", "今天", "值班"],
+          "human_outcome": "看見本人當下需要處理的工作與優先順序",
+          "capability_refs": ["capability_ref:staff.task_queue"]
+        },
+        "member_assist": {
+          "label": "協助會員完成流程",
+          "keywords": ["會員", "協助", "櫃台", "登入", "註冊"],
+          "human_outcome": "協助會員找到正確流程，但不代替會員授權",
+          "capability_refs": ["capability_ref:staff.member_service_assist"]
+        }
+      }
+    },
+    "merchant_staff": {
+      "label": "商家店員／店長",
+      "default_need": "order_queue",
+      "needs": {
+        "order_queue": {
+          "label": "處理訂單與點餐",
+          "keywords": ["訂單", "點餐", "POS", "出單", "客人"],
+          "human_outcome": "快速確認訂單候選、減少重複輸入",
+          "capability_refs": ["odoo_function_ref:merchant_staff.order_candidate_review"]
+        },
+        "menu_ops": {
+          "label": "查看菜單與營運摘要",
+          "keywords": ["菜單", "商品", "價格", "營運"],
+          "human_outcome": "快速看到營運相關資訊與待確認變更",
+          "capability_refs": ["odoo_function_ref:merchant_staff.menu_ops_summary"]
+        },
+        "inventory_notice": {
+          "label": "處理庫存提醒",
+          "keywords": ["庫存", "缺貨", "補貨"],
+          "human_outcome": "看到需要處理的庫存異常與提醒",
+          "capability_refs": ["odoo_function_ref:merchant_staff.inventory_notice_summary"]
+        },
+        "customer_service": {
+          "label": "整理顧客服務回覆",
+          "keywords": ["客訴", "顧客", "回覆", "服務"],
+          "human_outcome": "產生可供店員確認的顧客服務草稿",
+          "capability_refs": ["odoo_function_ref:merchant_staff.customer_service_draft"]
+        }
+      }
+    },
+    "committee_member": {
+      "label": "管委會成員",
+      "default_need": "issue_summary",
+      "needs": {
+        "issue_summary": {
+          "label": "整理社區議題",
+          "keywords": ["議題", "住戶反映", "報修", "問題", "維修"],
+          "human_outcome": "把住戶與物業問題整理成可討論的議題摘要",
+          "capability_refs": [
+            "odoo_function_ref:committee.issue_summary",
+            "odoo_function_ref:committee.maintenance_ticket_summary"
+          ]
+        },
+        "announcement": {
+          "label": "公告與活動草稿",
+          "keywords": ["公告", "通知", "活動"],
+          "human_outcome": "建立供管委會確認的公告或活動通知草稿",
+          "capability_refs": [
+            "odoo_function_ref:committee.announcement_draft",
+            "odoo_function_ref:committee.activity_notice_draft"
+          ]
+        },
+        "vote_finance": {
+          "label": "表決與財務公開摘要",
+          "keywords": ["表決", "投票", "財務", "公開帳", "預算"],
+          "human_outcome": "快速掌握表決與公開財務資訊，不替代管委會決議",
+          "capability_refs": [
+            "odoo_function_ref:committee.vote_summary",
+            "odoo_function_ref:committee.finance_public_summary"
+          ],
+          "human_confirmation_required": true
+        }
+      }
+    },
+    "property_staff": {
+      "label": "物業／保全人員",
+      "default_need": "service_triage",
+      "needs": {
+        "service_triage": {
+          "label": "住戶服務分流",
+          "keywords": ["住戶", "服務", "報修", "問題", "櫃台"],
+          "human_outcome": "快速分類住戶需求並交給正確人員",
+          "capability_refs": ["odoo_function_ref:property_staff.service_request_triage"]
+        },
+        "work_order": {
+          "label": "工單與設施處理",
+          "keywords": ["工單", "維修", "設備", "設施"],
+          "human_outcome": "看見工單摘要與需要執行的下一步",
+          "capability_refs": [
+            "odoo_function_ref:property_staff.work_order_summary",
+            "odoo_function_ref:property_staff.facility_booking_summary"
+          ]
+        },
+        "emergency_notice": {
+          "label": "緊急通知候選",
+          "keywords": ["緊急", "事故", "停電", "火警", "危險"],
+          "human_outcome": "立即整理緊急通知與人工通報路徑",
+          "capability_refs": ["odoo_function_ref:property_staff.emergency_notice_route"],
+          "human_confirmation_required": true
+        }
+      }
+    },
+    "organization_responsible": {
+      "label": "組織負責人／代表人",
+      "default_need": "organization_service",
+      "needs": {
+        "organization_service": {
+          "label": "掌握組織服務狀態",
+          "keywords": ["組織", "協會", "團體", "狀態", "服務"],
+          "human_outcome": "掌握組織會員、服務與待處理事項",
+          "capability_refs": ["capability_ref:organization.service_dashboard"]
+        },
+        "member_governance": {
+          "label": "會員治理與審查",
+          "keywords": ["會員", "審查", "資格", "角色", "授權"],
+          "human_outcome": "看到待審會員與證據，不允許自我核准",
+          "capability_refs": ["capability_ref:organization.member_governance"],
+          "human_confirmation_required": true
+        },
+        "volunteer_coordination": {
+          "label": "志工與服務協調",
+          "keywords": ["志工", "排班", "服務", "派工", "活動"],
+          "human_outcome": "協調志工與服務需求，正式派發仍由人確認",
+          "capability_refs": ["capability_ref:organization.volunteer_coordination"],
+          "human_confirmation_required": true
+        }
+      }
+    },
+    "social_worker": {
+      "label": "社工",
+      "default_need": "case_triage",
+      "needs": {
+        "case_triage": {
+          "label": "案件風險與服務分流",
+          "keywords": ["個案", "風險", "弱勢", "家庭", "關懷", "需求"],
+          "human_outcome": "讓社工快速判斷 allow／hold／human-confirm 與服務路徑",
+          "capability_refs": ["capability_ref:social_worker.case_triage"],
+          "human_confirmation_required": true
+        },
+        "visit_referral": {
+          "label": "訪視與轉介草稿",
+          "keywords": ["訪視", "轉介", "社會局", "長照", "關懷"],
+          "human_outcome": "產生供社工審閱的訪視或轉介草稿，不自動送出",
+          "capability_refs": ["capability_ref:social_worker.visit_referral_candidate"],
+          "human_confirmation_required": true
+        }
+      }
+    },
+    "caregiver": {
+      "label": "照服員",
+      "default_need": "duty_task",
+      "needs": {
+        "duty_task": {
+          "label": "查看當勤照護任務",
+          "keywords": ["當勤", "照護", "陪同", "任務", "長輩"],
+          "human_outcome": "只看到當勤所需的最小必要任務資訊",
+          "capability_refs": ["capability_ref:caregiver.duty_task"],
+          "human_confirmation_required": true
+        },
+        "observation_report": {
+          "label": "觀察與異常回報",
+          "keywords": ["觀察", "回報", "異常", "狀況"],
+          "human_outcome": "記錄服務觀察與異常，交由社工或責任人判斷",
+          "capability_refs": ["capability_ref:caregiver.observation_report_candidate"],
+          "human_confirmation_required": true
+        }
+      }
+    },
+    "family_head": {
+      "label": "家庭主要協調者",
+      "default_need": "family_coordination",
+      "needs": {
+        "family_coordination": {
+          "label": "家庭待辦與照護協調",
+          "keywords": ["家人", "家庭", "提醒", "照護", "行程"],
+          "human_outcome": "整理家庭待辦與照護提醒，敏感事項仍由本人或專業人員確認",
+          "capability_refs": ["capability_ref:family.coordination_candidate"]
+        }
+      }
+    },
+    "family_member": {
+      "label": "家庭成員",
+      "default_need": "family_self_service",
+      "needs": {
+        "family_self_service": {
+          "label": "本人家庭事項",
+          "keywords": ["家人", "提醒", "行程", "家庭"],
+          "human_outcome": "處理本人可見的家庭事項，不跨越其他家人的資料權限",
+          "capability_refs": ["capability_ref:family.self_service"]
+        }
+      }
+    },
+    "operator": {
+      "label": "系統維運者",
+      "default_need": "health",
+      "needs": {
+        "health": {
+          "label": "系統健康摘要",
+          "keywords": ["健康", "狀態", "服務", "故障", "節點"],
+          "human_outcome": "快速看到系統健康與真正阻塞",
+          "capability_refs": ["odoo_function_ref:operator.gateway_health_summary"]
+        },
+        "audit_release": {
+          "label": "稽核與發布就緒",
+          "keywords": ["稽核", "證據", "發布", "release", "驗收"],
+          "human_outcome": "看到證據與發布阻塞，不讓維運工具自行升權",
+          "capability_refs": [
+            "odoo_function_ref:operator.audit_dashboard_summary",
+            "odoo_function_ref:operator.release_readiness_summary"
+          ]
+        }
+      }
+    }
+  }
+}
