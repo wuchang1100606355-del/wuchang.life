@@ -10,7 +10,9 @@ from pathlib import Path
 
 from core.intent_continuity import (
     apply_conversation_event,
+    extract_conversation_event_candidates,
     load_checkpoint,
+    project_verified_conversation_candidate,
     refresh_checkpoint_from_ledger,
 )
 from core.work_ledger import WorkLedger
@@ -191,6 +193,73 @@ class WorkLedgerTest(unittest.TestCase):
             WorkLedger(self.ledger_path)._task("T-001")["NEXT_ACTION"],
             "new next",
         )
+
+    def test_extract_conversation_candidates_is_candidate_only(self) -> None:
+        envelope = extract_conversation_event_candidates(
+            "T-001 Example task\nSTATE=DOING\nNEXT_ACTION=continue\nRESULT=PASS_PARTIAL",
+            source_coordinate="chat:test",
+        )
+        self.assertTrue(envelope["candidate_only"])
+        self.assertFalse(envelope["authority_granted"])
+        self.assertTrue(envelope["requires_total_field_verify"])
+        kinds = [event["kind"] for event in envelope["events"]]
+        self.assertEqual(kinds, ["TASK", "STATE_CHANGE", "NEXT_ACTION", "EVIDENCE"])
+        self.assertTrue(all(event["task_id"] == "T-001" for event in envelope["events"]))
+        self.assertTrue(all(event["authority_granted"] is False for event in envelope["events"]))
+
+    def test_extract_hold_and_blocker_constraints(self) -> None:
+        envelope = extract_conversation_event_candidates(
+            "T-001 Example task\nSTATE=HOLD\nBLOCKER=PAUSED_BY_FOUNDER\n不得自行恢復或重建候選",
+        )
+        kinds = [event["kind"] for event in envelope["events"]]
+        self.assertIn("STATE_CHANGE", kinds)
+        self.assertIn("BLOCKER", kinds)
+        self.assertIn("HOLD", kinds)
+
+    def test_non_conflict_phrase_does_not_create_conflict_event(self) -> None:
+        envelope = extract_conversation_event_candidates(
+            "T-001 Example task\n支線合併原則：\nGit clean merge（無衝突合併）不等於允許合併。",
+        )
+        conflicts = [event for event in envelope["events"] if event["kind"] == "CONFLICT"]
+        self.assertEqual(conflicts, [])
+        intent = next(event for event in envelope["events"] if event["kind"] == "INTENT")
+        self.assertIsNone(intent["task_id"])
+
+    def test_unverified_candidate_cannot_project_to_ledger_event(self) -> None:
+        envelope = extract_conversation_event_candidates(
+            "T-001 Example task\nNEXT_ACTION=verified next",
+        )
+        candidate = next(event for event in envelope["events"] if event["kind"] == "NEXT_ACTION")
+        with self.assertRaisesRegex(ValueError, "not verified by Total Field"):
+            project_verified_conversation_candidate(
+                candidate,
+                {"final_decision": "HOLD", "fixed_point_status": "REACHED"},
+                self.ledger_path,
+            )
+
+    def test_verified_candidate_projects_updates_ledger_and_checkpoint(self) -> None:
+        envelope = extract_conversation_event_candidates(
+            "T-001 Example task\nNEXT_ACTION=verified next",
+            source_coordinate="chat:test",
+        )
+        candidate = next(event for event in envelope["events"] if event["kind"] == "NEXT_ACTION")
+        event = project_verified_conversation_candidate(
+            candidate,
+            {"final_decision": "ALLOW", "fixed_point_status": "REACHED"},
+            self.ledger_path,
+        )
+        self.assertIsNotNone(event)
+        result = apply_conversation_event(event, self.ledger_path)
+        self.assertEqual(result["NEXT_ACTION"], "verified next")
+        checkpoint = refresh_checkpoint_from_ledger(
+            self.ledger_path,
+            self.checkpoint_path,
+            current_goal="event extraction",
+            current_state="VERIFIED",
+            last_decision="apply verified candidate",
+            d8="PASS",
+        )
+        self.assertEqual(checkpoint["next_action"], "verified next")
 
 
 if __name__ == "__main__":
