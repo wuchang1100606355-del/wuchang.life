@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import os
 import tempfile
@@ -24,6 +25,18 @@ PRIORITY_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def _canonical_sha256(value: Any) -> str:
+    raw = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
 
 class WorkLedger:
     """Atomic JSON-backed work ledger. It does not make D8 decisions."""
@@ -96,6 +109,15 @@ class WorkLedger:
         if "STATE" in changes and changes["STATE"] not in ALLOWED_STATES:
             raise ValueError(f"invalid STATE: {changes['STATE']}")
         task = self._task(task_id)
+        if task["STATE"] == "DONE" or task.get("COMPLETION_SEAL"):
+            effective = {
+                key: value
+                for key, value in changes.items()
+                if task.get(key) != value
+            }
+            if effective:
+                raise ValueError("closed task requires explicit reopen_task")
+            return copy.deepcopy(task)
         task.update(copy.deepcopy(changes))
         task["LAST_UPDATE"] = _now()
         self._validate_task(task)
@@ -103,19 +125,87 @@ class WorkLedger:
         return copy.deepcopy(task)
 
     def complete_task(
-        self, task_id: str, evidence: dict[str, Any] | None = None
+        self,
+        task_id: str,
+        evidence: dict[str, Any] | None = None,
+        *,
+        closed_head: str | None = None,
     ) -> dict[str, Any]:
         task = self._task(task_id)
+        if task["STATE"] == "DONE" or task.get("COMPLETION_SEAL"):
+            raise ValueError("task already closed")
         evidence_items = copy.deepcopy(task["D4_EVIDENCE"])
         if evidence is not None:
             evidence_items.append(copy.deepcopy(evidence))
+        closed_at = _now()
+        scope_payload = {
+            "TASK_ID": task["TASK_ID"],
+            "PARENT_INTENT": task["PARENT_INTENT"],
+            "TITLE": task["TITLE"],
+            "DESCRIPTION": task["DESCRIPTION"],
+            "PRIORITY": task["PRIORITY"],
+            "D3_COORDINATE": task["D3_COORDINATE"],
+            "DEPENDENCIES": task["DEPENDENCIES"],
+            "COMPLETION_CRITERIA": task["COMPLETION_CRITERIA"],
+        }
+        completion_seal = {
+            "CLOSED_AT": closed_at,
+            "CLOSED_HEAD": closed_head or "UNSPECIFIED",
+            "SCOPE_SHA256": _canonical_sha256(scope_payload),
+            "EVIDENCE_SHA256": _canonical_sha256(evidence_items),
+        }
         return self.update_task(
             task_id,
             STATE="DONE",
             D4_EVIDENCE=evidence_items,
             BLOCKERS=[],
             NEXT_ACTION="NONE",
+            CLOSED_AT=closed_at,
+            CLOSED_HEAD=closed_head or "UNSPECIFIED",
+            COMPLETION_SEAL=completion_seal,
         )
+
+    def reopen_task(
+        self,
+        task_id: str,
+        *,
+        reason: str,
+        authority_ref: str,
+        next_action: str,
+    ) -> dict[str, Any]:
+        if not reason.strip():
+            raise ValueError("reopen reason required")
+        if not authority_ref.strip():
+            raise ValueError("reopen authority_ref required")
+        if not next_action.strip() or next_action == "NONE":
+            raise ValueError("explicit reopen next_action required")
+        task = self._task(task_id)
+        if task["STATE"] != "DONE":
+            raise ValueError("only DONE task can be reopened")
+        previous_seal = copy.deepcopy(task.get("COMPLETION_SEAL"))
+        if previous_seal is None:
+            previous_seal = {
+                "LEGACY_UNSEALED": True,
+                "TASK_STATE_SHA256": _canonical_sha256(task),
+            }
+        history = copy.deepcopy(task.get("REOPEN_HISTORY", []))
+        history.append({
+            "REOPENED_AT": _now(),
+            "REASON": reason,
+            "AUTHORITY_REF": authority_ref,
+            "PREVIOUS_COMPLETION_SEAL": previous_seal,
+        })
+        task["STATE"] = "TODO"
+        task["NEXT_ACTION"] = next_action
+        task["BLOCKERS"] = []
+        task["REOPEN_HISTORY"] = history
+        task.pop("COMPLETION_SEAL", None)
+        task.pop("CLOSED_AT", None)
+        task.pop("CLOSED_HEAD", None)
+        task["LAST_UPDATE"] = _now()
+        self._validate_task(task)
+        self._save()
+        return copy.deepcopy(task)
 
     def block_task(self, task_id: str, blocker: str) -> dict[str, Any]:
         task = self._task(task_id)
@@ -142,7 +232,10 @@ class WorkLedger:
                 return False
         return True
 
-    def get_next_action(self) -> dict[str, str] | None:
+    def get_next_action(
+        self, verified_active_task_ids: set[str] | None = None
+    ) -> dict[str, str] | None:
+        verified_active = set(verified_active_task_ids or set())
         candidates = [
             t for t in self.list_open_tasks()
             if t["STATE"] in {"DOING", "TODO"}
@@ -154,8 +247,9 @@ class WorkLedger:
             return None
         candidates.sort(
             key=lambda t: (
-                0 if t["STATE"] == "DOING" else 1,
+                0 if t["TASK_ID"] in verified_active else 1,
                 PRIORITY_RANK.get(t["PRIORITY"], 99),
+                0 if t["STATE"] == "DOING" else 1,
                 t["TASK_ID"],
             )
         )
@@ -176,8 +270,28 @@ def complete_task(
     task_id: str,
     evidence: dict[str, Any] | None = None,
     path: str | Path = DEFAULT_LEDGER_PATH,
+    *,
+    closed_head: str | None = None,
 ) -> dict[str, Any]:
-    return WorkLedger(path).complete_task(task_id, evidence)
+    return WorkLedger(path).complete_task(
+        task_id, evidence, closed_head=closed_head
+    )
+
+
+def reopen_task(
+    task_id: str,
+    *,
+    reason: str,
+    authority_ref: str,
+    next_action: str,
+    path: str | Path = DEFAULT_LEDGER_PATH,
+) -> dict[str, Any]:
+    return WorkLedger(path).reopen_task(
+        task_id,
+        reason=reason,
+        authority_ref=authority_ref,
+        next_action=next_action,
+    )
 
 
 def block_task(
@@ -190,5 +304,8 @@ def list_open_tasks(path: str | Path = DEFAULT_LEDGER_PATH) -> list[dict[str, An
     return WorkLedger(path).list_open_tasks()
 
 
-def get_next_action(path: str | Path = DEFAULT_LEDGER_PATH) -> dict[str, str] | None:
-    return WorkLedger(path).get_next_action()
+def get_next_action(
+    path: str | Path = DEFAULT_LEDGER_PATH,
+    verified_active_task_ids: set[str] | None = None,
+) -> dict[str, str] | None:
+    return WorkLedger(path).get_next_action(verified_active_task_ids)

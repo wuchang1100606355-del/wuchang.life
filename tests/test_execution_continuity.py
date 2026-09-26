@@ -119,6 +119,21 @@ class ExecutionContinuityTest(unittest.TestCase):
         )
         self.assertEqual(result["ACTION"], "VERIFY_AND_COMPLETE")
 
+    def test_failed_action_clears_resume_coordinate(self) -> None:
+        ledger, _ = self._begin()
+        ledger.mark_interrupted(
+            "A-001",
+            error="stream lost",
+            resume_from="VERIFY_EFFECT",
+        )
+        failed = ledger.fail_action(
+            "A-001",
+            error="confirmed failed with no effect",
+            last_tool_effect={"result": "NO_EFFECT"},
+        )
+        self.assertEqual(failed["STATE"], "FAILED")
+        self.assertIsNone(failed["RESUME_FROM"])
+
     def test_completed_action_is_not_resumable(self) -> None:
         ledger, _ = self._begin()
         ledger.complete_action("A-001", confirmed_effect={"result": "PASS"})

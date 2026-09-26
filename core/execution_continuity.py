@@ -107,6 +107,11 @@ class ActionLedger:
             raise ValueError(f"invalid action STATE: {action['STATE']}")
         if not action["IDEMPOTENCY_KEY"]:
             raise ValueError("IDEMPOTENCY_KEY required")
+        if (
+            action["STATE"] in TERMINAL_ACTION_STATES
+            and action.get("RESUME_FROM") is not None
+        ):
+            raise ValueError("terminal action cannot retain RESUME_FROM")
 
     def _save(self) -> None:
         self.data["UPDATED_AT"] = _now()
@@ -253,6 +258,7 @@ class ActionLedger:
             STATE="FAILED",
             ERROR=error,
             LAST_TOOL_EFFECT=last_tool_effect,
+            RESUME_FROM=None,
         )
 
     def list_open_actions(self) -> list[dict[str, Any]]:

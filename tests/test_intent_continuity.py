@@ -97,6 +97,72 @@ class WorkLedgerTest(unittest.TestCase):
         result = ledger.get_next_action()
         self.assertEqual(result, {"TASK_ID": "T-001", "NEXT_ACTION": "next T-001"})
 
+    def test_closed_task_is_sealed_and_generic_update_cannot_reopen(self) -> None:
+        ledger = WorkLedger(self.ledger_path)
+        closed = ledger.complete_task(
+            "T-001",
+            {"RESULT": "PASS"},
+            closed_head="abc123",
+        )
+        self.assertEqual(closed["STATE"], "DONE")
+        self.assertEqual(closed["NEXT_ACTION"], "NONE")
+        self.assertEqual(closed["CLOSED_HEAD"], "abc123")
+        self.assertIn("COMPLETION_SEAL", closed)
+        with self.assertRaisesRegex(ValueError, "closed task requires explicit reopen_task"):
+            ledger.update_task("T-001", STATE="DOING", NEXT_ACTION="scope drift")
+
+    def test_explicit_reopen_requires_reason_authority_and_next_action(self) -> None:
+        ledger = WorkLedger(self.ledger_path)
+        ledger.complete_task("T-001", closed_head="abc123")
+        with self.assertRaises(ValueError):
+            ledger.reopen_task(
+                "T-001",
+                reason="",
+                authority_ref="founder:test",
+                next_action="continue",
+            )
+        reopened = ledger.reopen_task(
+            "T-001",
+            reason="new founder-scoped requirement",
+            authority_ref="founder:test",
+            next_action="continue explicit reopened scope",
+        )
+        self.assertEqual(reopened["STATE"], "TODO")
+        self.assertEqual(reopened["NEXT_ACTION"], "continue explicit reopened scope")
+        self.assertNotIn("COMPLETION_SEAL", reopened)
+        self.assertEqual(len(reopened["REOPEN_HISTORY"]), 1)
+
+    def test_legacy_done_task_can_only_reopen_explicitly(self) -> None:
+        ledger = WorkLedger(self.ledger_path)
+        legacy = ledger._task("T-001")
+        legacy["STATE"] = "DONE"
+        legacy["NEXT_ACTION"] = "NONE"
+        ledger._save()
+        reopened = ledger.reopen_task(
+            "T-001",
+            reason="explicit legacy correction",
+            authority_ref="founder:test",
+            next_action="review legacy task",
+        )
+        self.assertEqual(reopened["STATE"], "TODO")
+        self.assertTrue(
+            reopened["REOPEN_HISTORY"][0]["PREVIOUS_COMPLETION_SEAL"]["LEGACY_UNSEALED"]
+        )
+
+    def test_p0_todo_preempts_unverified_p1_doing(self) -> None:
+        ledger = WorkLedger(self.ledger_path)
+        ledger.update_task("T-001", PRIORITY="P1")
+        ledger.create_task(make_task("T-000", state="TODO", priority="P0"))
+        result = ledger.get_next_action()
+        self.assertEqual(result, {"TASK_ID": "T-000", "NEXT_ACTION": "next T-000"})
+
+    def test_verified_active_task_may_continue_before_higher_priority_todo(self) -> None:
+        ledger = WorkLedger(self.ledger_path)
+        ledger.update_task("T-001", PRIORITY="P1")
+        ledger.create_task(make_task("T-000", state="TODO", priority="P0"))
+        result = ledger.get_next_action({"T-001"})
+        self.assertEqual(result, {"TASK_ID": "T-001", "NEXT_ACTION": "next T-001"})
+
     def test_checkpoint_round_trip(self) -> None:
         payload = refresh_checkpoint_from_ledger(
             self.ledger_path,

@@ -98,7 +98,6 @@ def apply_conversation_event(
 ) -> dict[str, Any]:
     """Apply a structured task/action event; this stores state only."""
     ledger = WorkLedger(ledger_path)
-    actions = ActionLedger(action_ledger_path)
     kind = event.get("type")
 
     if kind == "TASK_CREATED":
@@ -110,6 +109,7 @@ def apply_conversation_event(
     if kind == "TASK_BLOCKED":
         return ledger.block_task(event["TASK_ID"], event["blocker"])
 
+    actions = ActionLedger(action_ledger_path)
     if kind == "ACTION_STARTED":
         return actions.begin_action(**event["action"])
     if kind == "ACTION_WAITING":
