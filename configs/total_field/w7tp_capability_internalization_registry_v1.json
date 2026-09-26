@@ -1,0 +1,252 @@
+{
+  "schema_version": "W7TP-CAPABILITY-INTERNALIZATION-REGISTRY/1.0",
+  "state": "ACTIVE_INTERNALIZATION_INDEX",
+  "registry_role": "OVERLAY_ONLY_DOES_NOT_REPLACE_EXISTING_OWNERS",
+  "canonical": false,
+  "authority_boundary": {
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    "provider_authority": false,
+    "external_authority_inherited": false,
+    "total_field_verify_required": true
+  },
+  "source_registry_refs": [
+    "core/resource_arbitration.py",
+    "runtime/total_field/secondary_cloud/capability_registry.json",
+    "capabilities/W7TP_NATIVE_SKILLS_INDEX.json"
+  ],
+  "capabilities": [
+    {
+      "capability_id": "CAP_INTERNAL_CLAW_V1",
+      "capability_class": "CLAW",
+      "status": "REGISTERED_CAPABILITY",
+      "source_refs": [
+        "Taiji_Claw_Safe",
+        "configs/taiji_topology.json"
+      ],
+      "resource_refs": ["ROUTER_SERVICE_CLAW"],
+      "selection_tags": ["AUTOMATION", "PHYSICAL_SCAN", "TOOL_EXECUTION"],
+      "d3_coordinate": {
+        "node_scope": ["taiji01"],
+        "owner_ref": "core/runtime/runtime_orchestrator.py",
+        "coordinate_ref": "service:claw:9004"
+      },
+      "d5_execution": {
+        "mode": "BOUNDED_EFFECT",
+        "direct_effect": true,
+        "side_effect_boundary": "TOTAL_FIELD_GOVERNED_CLAW_EFFECTS_ONLY"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": ["LEGACY_SERVICE", "TOOL_SIDE_EFFECT", "NETWORK_BOUNDARY"]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
+    },
+    {
+      "capability_id": "CAP_INTERNAL_LLM_V1",
+      "capability_class": "LLM",
+      "status": "REGISTERED_CAPABILITY",
+      "source_refs": [
+        "core/resource_arbitration.py",
+        "tools/nlp_d1_intent_adapter.py",
+        "tools/gemini_code_assist_a2a_candidate.py"
+      ],
+      "resource_refs": [
+        "MSI_OLLAMA_LOCAL",
+        "GEMINI_CODE_ASSIST",
+        "GOOGLE_VERTEX_GEMINI"
+      ],
+      "selection_tags": [
+        "LANGUAGE",
+        "INTENT",
+        "CODE",
+        "REASONING",
+        "CANDIDATE_GENERATION"
+      ],
+      "d3_coordinate": {
+        "node_scope": ["MSI", "taiji01-code-server", "cloud-candidate"],
+        "owner_ref": "core/resource_arbitration.py",
+        "coordinate_ref": "resource-router:model-compute"
+      },
+      "d5_execution": {
+        "mode": "CANDIDATE_ONLY",
+        "direct_effect": false,
+        "side_effect_boundary": "MODEL_OUTPUT_RETURNS_TO_TOTAL_FIELD"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": ["MODEL_HALLUCINATION", "PROVIDER_BLACK_BOX", "CONTEXT_LEAK"]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
+    },
+    {
+      "capability_id": "CAP_INTERNAL_STATIC_PULL_V1",
+      "capability_class": "STATIC_PULL",
+      "status": "IMPLEMENTED",
+      "source_refs": [
+        "core/resource_arbitration.py#build_static_state_cell_envelope",
+        "services/gateway/natural_language_control.py"
+      ],
+      "resource_refs": ["TAIJI01_TOTAL_FIELD"],
+      "selection_tags": ["STATIC_STATE_CELL", "CONTEXT_MINIMIZATION", "MODEL_BOUNDARY"],
+      "d3_coordinate": {
+        "node_scope": ["taiji01"],
+        "owner_ref": "core/resource_arbitration.py",
+        "coordinate_ref": "taiji01:static-state-cell"
+      },
+      "d5_execution": {
+        "mode": "READ_ONLY",
+        "direct_effect": false,
+        "side_effect_boundary": "STATE_PROJECTION_ONLY"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": ["STALE_STATE", "OVERBROAD_CONTEXT"]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
+    },
+    {
+      "capability_id": "CAP_INTERNAL_DYNAMIC_CONTEXT_V1",
+      "capability_class": "DYNAMIC_CONTEXT",
+      "status": "IMPLEMENTED",
+      "source_refs": [
+        "tools/total_field_dynamic_context_pull.py",
+        "tools/w7tp_task_state_minimum_packet.py"
+      ],
+      "resource_refs": ["TAIJI01_TOTAL_FIELD"],
+      "selection_tags": ["POINTER_FIRST", "DYNAMIC_CONTEXT", "SINGLE_USE_PULL"],
+      "d3_coordinate": {
+        "node_scope": ["taiji01"],
+        "owner_ref": "tools/total_field_dynamic_context_pull.py",
+        "coordinate_ref": "taiji01:total-field:pointer-first-pull"
+      },
+      "d5_execution": {
+        "mode": "CANDIDATE_ONLY",
+        "direct_effect": false,
+        "side_effect_boundary": "LOCAL_VOLATILE_CONTEXT_MATERIALIZATION"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": ["REPLAY", "STALE_CONTEXT", "PROVIDER_CONTEXT_EXPOSURE"]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
+    },
+    {
+      "capability_id": "CAP_INTERNAL_NODE_COMPUTE_V1",
+      "capability_class": "NODE_COMPUTE",
+      "status": "REGISTERED_CAPABILITY",
+      "source_refs": [
+        "core/resource_arbitration.py",
+        "configs/taiji_topology.json"
+      ],
+      "resource_refs": ["TAIJI01_NODE", "MSI_NODE"],
+      "selection_tags": ["CPU", "RAM", "GPU_VRAM", "DISTRIBUTED_COMPUTE"],
+      "d3_coordinate": {
+        "node_scope": ["taiji01", "MSI", "tailnet-node"],
+        "owner_ref": "core/resource_arbitration.py",
+        "coordinate_ref": "resource-router:node-compute"
+      },
+      "d5_execution": {
+        "mode": "CANDIDATE_ONLY",
+        "direct_effect": false,
+        "side_effect_boundary": "EXECUTION_REQUIRES_SEPARATE_ACTION_AND_TOTAL_FIELD_GATE"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": ["NODE_DRIFT", "NETWORK_UNREACHABLE", "WRONG_COORDINATE"]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
+    },
+    {
+      "capability_id": "CAP_INTERNAL_ORIGIN_CELL_V1",
+      "capability_class": "ORIGIN_CELL",
+      "status": "IMPLEMENTED",
+      "source_refs": [
+        "products/eight_dimensional_generative_memory/w7tp_origin_state_minimum_packet_v1.py",
+        "tools/w7tp_task_state_minimum_packet.py",
+        "configs/total_field/w7tp_local_origin_state_rule_registry_v1.json"
+      ],
+      "resource_refs": ["TAIJI01_NATIVE_ADI", "TAIJI01_TOTAL_FIELD"],
+      "selection_tags": [
+        "ORIGIN_STATE_MINIMUM_PACKET",
+        "LOCAL_RULE_BINDING",
+        "STATE_CELL"
+      ],
+      "d3_coordinate": {
+        "node_scope": ["taiji01"],
+        "owner_ref": "products/eight_dimensional_generative_memory/w7tp_origin_state_minimum_packet_v1.py",
+        "coordinate_ref": "taiji01:origin-state-minimum-packet"
+      },
+      "d5_execution": {
+        "mode": "CANDIDATE_ONLY",
+        "direct_effect": false,
+        "side_effect_boundary": "LOCAL_RULE_BINDING_AND_VERIFICATION_REQUIRED"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": ["RULE_REF_MISMATCH", "MANIFEST_MISMATCH", "SEMANTIC_PURITY"]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
+    },
+    {
+      "capability_id": "CAP_INTERNAL_GST_V23_V1",
+      "capability_class": "GST",
+      "status": "ACTIVE_RUNTIME",
+      "source_refs": [
+        "services/w7tp_gst_v23_runtime.py",
+        "tests/test_w7tp_gst_v23_runtime_delivery.py"
+      ],
+      "resource_refs": ["TAIJI01_TOTAL_FIELD"],
+      "selection_tags": ["GST_V23", "ORIGIN_CELL_RECONSTRUCTION", "USER_DELIVERY"],
+      "d3_coordinate": {
+        "node_scope": ["taiji01"],
+        "owner_ref": "services/w7tp_gst_v23_runtime.py",
+        "coordinate_ref": "taiji01:GST-V23-runtime"
+      },
+      "d5_execution": {
+        "mode": "BOUNDED_EFFECT",
+        "direct_effect": true,
+        "side_effect_boundary": "EXACT_GST_V23_RUNTIME_BINDING_ONLY"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": ["SEMANTIC_PURITY", "PACKET_VALIDATION", "RUNTIME_BINDING"]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
+    }
+  ]
+}
