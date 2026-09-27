@@ -139,7 +139,13 @@ def table_exists(name: str) -> bool:
 
 
 def cmd_doctor(args: argparse.Namespace) -> int:
-    checks: dict[str, bool] = {"root_path": ROOT.as_posix() == "/home/taiji_admin/Taiji_Hub"}
+    try:
+        resolved_root = Path(subprocess.check_output(
+            ["git", "-C", str(ROOT), "rev-parse", "--show-toplevel"], text=True
+        ).strip()).resolve()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        resolved_root = Path("/")
+    checks: dict[str, bool] = {"root_path": resolved_root == ROOT.resolve()}
     try:
         psql("SELECT 1;")
         checks["db_reachable"] = True
