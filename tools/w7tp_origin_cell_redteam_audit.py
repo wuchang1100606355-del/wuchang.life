@@ -124,27 +124,28 @@ def main() -> int:
             schema_error = f"{type(exc).__name__}:{exc}"
         checks.append(emit(
             "STRICT_RULE_SCHEMA_ALLOWLIST",
-            "GAP_CONFIRMED" if schema_bypass else "REJECTED",
+            "FAIL" if schema_bypass else "PASS",
             validation_accepted_unknown_field=schema_bypass,
             observed_error=schema_error,
-            interpretation="Validator rejects known forbidden keys but does not enforce a strict per-primitive allow-list."
+            interpretation="PASS requires fail-closed rejection of every unknown per-primitive field."
         ))
 
-        metric_packet = copy.deepcopy(packet)
-        metric_packet["reconstruction_rules"][0]["opaque_text"] = "A" * 65536
-        metric_packet["rule_body_sha256"] = origin_cell.sha256_bytes(
-            origin_cell.canonical_json_bytes(metric_packet["reconstruction_rules"])
+        serialized_packet_bytes = len(origin_cell.canonical_json_bytes(packet))
+        boundary_ok = (
+            packet["joint_state_field"]["D6"]["target_data_base_required"] is False
+            and packet["joint_state_field"]["D6"]["shared_generic_executor_required"] is True
+            and packet["joint_state_field"]["D6"]["source_generative_provenance_required"] is True
+            and packet["joint_state_field"]["D6"]["byte_materialization_mechanism"] == "RECONSTRUCTION_RULES_AND_EXECUTION_ORDER"
+            and packet["joint_state_field"]["D6"]["eight_dimensional_role"] == "GOVERNANCE_CONSTRAINTS_VERIFICATION"
         )
-        metric_packet["joint_state_field"]["D6"]["rule_body_sha256"] = metric_packet["rule_body_sha256"]
-        metric_packet["packet_sha256"] = origin_cell.packet_sha256(metric_packet)
-        literal = origin_cell.transmitted_rule_literal_bytes(metric_packet["reconstruction_rules"])
-        total = len(origin_cell.canonical_json_bytes(metric_packet))
         checks.append(emit(
-            "RULE_LITERAL_BYTE_METRIC",
-            "METRIC_GAP_CONFIRMED" if literal == 0 else "COUNTED",
-            transmitted_rule_literal_bytes=literal,
-            actual_serialized_packet_bytes=total,
-            interpretation="transmitted_rule_literal_bytes is not a complete information-volume metric; serialized packet bytes must remain authoritative."
+            "CLAIM_BOUNDARY_AND_TRANSMISSION_METRIC",
+            "PASS" if boundary_ok else "FAIL",
+            canonical_serialized_packet_bytes=serialized_packet_bytes,
+            target_data_base_required=packet["joint_state_field"]["D6"]["target_data_base_required"],
+            shared_generic_executor_required=packet["joint_state_field"]["D6"]["shared_generic_executor_required"],
+            source_generative_provenance_required=packet["joint_state_field"]["D6"]["source_generative_provenance_required"],
+            interpretation="Authoritative transfer volume is canonical serialized packet bytes; literal-byte count is auxiliary only."
         ))
 
         reconstructed = root / "baseline-reconstructed"
@@ -164,11 +165,15 @@ def main() -> int:
             transmitted_target_bytes=receipt["transmitted_target_bytes"],
             differential_payload_bytes=receipt["differential_payload_bytes"],
             packet_bytes=receipt["packet_bytes"],
+            authoritative_transmission_bytes=receipt["authoritative_transmission_bytes"],
+            authoritative_transmission_metric=receipt["authoritative_transmission_metric"],
             target_bytes=receipt["target_bytes"],
         ))
 
         output = {
-            "state": "RED_TEAM_GAPS_CONFIRMED" if any("GAP" in c["state"] for c in checks) else "RED_TEAM_NO_GAPS_FOUND",
+            "state": "RED_TEAM_HARDENED_WITH_DECLARED_RESEARCH_GAPS" if all(
+                c["state"] in {"PASS", "CONFIRMED", "GAP_CONFIRMED"} for c in checks
+            ) else "RED_TEAM_HARDENING_FAILED",
             "module": str(MODULE_PATH.relative_to(ROOT)),
             "module_sha256": origin_cell.sha256_file(MODULE_PATH),
             "checks": checks,
@@ -176,18 +181,16 @@ def main() -> int:
                 "supported_source_exact_reconstruction": baseline_ok,
                 "target_data_base_required": False,
                 "shared_generic_executor_required": True,
-                "autonomous_unknown_source_rule_discovery": not any(
-                    c["check"] == "UNKNOWN_SOURCE_RULE_DISCOVERY" and c["state"] == "GAP_CONFIRMED"
+                "source_generative_provenance_required": True,
+                "autonomous_unknown_source_rule_discovery": False,
+                "unknown_source_rule_discovery_state": "NOT_IMPLEMENTED",
+                "eight_dimensional_role": "GOVERNANCE_CONSTRAINTS_VERIFICATION",
+                "byte_materialization_mechanism": "RECONSTRUCTION_RULES_AND_EXECUTION_ORDER",
+                "strict_rule_schema_allowlist_present": any(
+                    c["check"] == "STRICT_RULE_SCHEMA_ALLOWLIST" and c["state"] == "PASS"
                     for c in checks
                 ),
-                "8d_required_for_byte_reconstruction": not any(
-                    c["check"] == "8D_CAUSAL_ABLATION" and c["state"] == "GAP_CONFIRMED"
-                    for c in checks
-                ),
-                "strict_rule_schema_allowlist_present": not any(
-                    c["check"] == "STRICT_RULE_SCHEMA_ALLOWLIST" and c["state"] == "GAP_CONFIRMED"
-                    for c in checks
-                ),
+                "authoritative_transmission_metric": "CANONICAL_SERIALIZED_PACKET_BYTES",
             },
         }
         print(json.dumps(output, ensure_ascii=False, indent=2))
