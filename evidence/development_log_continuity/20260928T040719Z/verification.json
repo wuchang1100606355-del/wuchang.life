@@ -1,0 +1,27 @@
+{
+  "state": "PASS_SCOPED_SOURCE_REPAIR",
+  "observed_at": "2026-09-28T04:07:59.307359+00:00",
+  "task": "T-020",
+  "tests_passed": 34,
+  "real_recording": "RECORDED",
+  "original_tasks_unchanged": true,
+  "protected_dirty_files_unchanged": true,
+  "authority_fields_unchanged": true,
+  "files": {
+    "core/intent_continuity.py": "bcf688fb4db982a29ba2904f3763381c2f53dfebcfb4208a8f28744519235877",
+    "tools/w7tp_nl_goal_runner.py": "7867661a92424deae76e4082ca207238943fe51ba63318965aed8e2b3123b402",
+    "tests/test_development_log_continuity.py": "58ac351aacc885cbfbc598140a100ead592ca89115386c14c2b47c5ea2e449e7",
+    "state/WORK_LEDGER.json": "c31f10c3f8196f07c5bd1854bb9d8e3744bcadb90ab4fc78bfa276a09d85c0c2",
+    "state/ACTION_LEDGER.json": "f501b4e1f096799eb1f081f32910498e3a393d83ab7d718bc504698c9d76d387",
+    "state/CURRENT_CONVERSATION_CHECKPOINT.json": "b2e95976fa8fb5dd537f8fbd529d79d72610467fb61669bfa3edb58757a77a7c"
+  },
+  "work_ledger_updated_at": "2026-09-28T04:07:59.300538+00:00",
+  "checkpoint_updated_at": "2026-09-28T04:07:59.305398+00:00",
+  "total_field_decision": "NOT_RUN",
+  "git_commit": false,
+  "git_push": false,
+  "deployed": false,
+  "services_restarted": false,
+  "rollback_preimage": "/home/taiji_admin/Taiji_Hub/evidence/development_log_continuity/20260928T040719Z/preimage",
+  "limitation": "Repairs existing runner terminal recording. External edits bypassing this runner are not automatically ingested; historical D4 commit observations do not prove deployment or completion."
+}

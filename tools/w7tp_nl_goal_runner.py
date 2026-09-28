@@ -24,6 +24,7 @@ from core.msi_local_llm_route import (
     resolve_msi_ollama_url,
 )
 from core.work_ledger import WorkLedger
+from core.intent_continuity import sync_checkpoint_evidence
 from tools.gemini_code_assist_a2a_candidate import (
     MODEL_REF as GEMINI_MODEL_REF,
     PROVIDER_REF as GEMINI_PROVIDER_REF,
@@ -457,6 +458,23 @@ def land(shadow: Path, changes: dict[str, list[str]], run_dir: Path, intent: str
 
 def write_state(run_dir: Path, payload: dict[str, Any]) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
+    payload = dict(payload)
+    if payload.get("finished_at"):
+        # The run outcome remains evidence even when ledger projection is pending.
+        result = _append_work_evidence(
+            str(payload.get("task_id") or "UNBOUND-NATURAL-LANGUAGE"),
+            {
+                "EVIDENCE_TYPE": "RUN_FINAL_STATE",
+                "RUN_ID": payload.get("run_id"),
+                "ACTION_ID": payload.get("action_id"),
+                "STATE": payload.get("state"),
+                "FINISHED_AT": payload.get("finished_at"),
+                "STATE_REF": str(run_dir / "state.json"),
+            },
+        )
+        payload["continuity"] = result
+        if result["state"] != "RECORDED":
+            print("CONTINUITY_PENDING:" + result["reason"], file=sys.stderr)
     path = run_dir / "state.json"
     fd, temp_name = tempfile.mkstemp(prefix=".state.", suffix=".tmp", dir=run_dir)
     with os.fdopen(fd, "w", encoding="utf-8") as h:
@@ -465,20 +483,31 @@ def write_state(run_dir: Path, payload: dict[str, Any]) -> None:
         h.flush()
         os.fsync(h.fileno())
     os.replace(temp_name, path)
-def _append_work_evidence(task_id: str, evidence: dict[str, Any], *, next_action: str | None = None) -> None:
+def _append_work_evidence(task_id: str, evidence: dict[str, Any], *, next_action: str | None = None) -> dict[str, Any]:
+    """Report persistence gaps explicitly; never reopen or fabricate a task."""
     try:
-        ledger = WorkLedger()
+        ledger = WorkLedger(PROJECT_ROOT / "state" / "WORK_LEDGER.json")
         task = next((item for item in ledger.data.get("TASKS", []) if item.get("TASK_ID") == task_id), None)
         if task is None:
-            return
+            return {"state": "PENDING", "reason": "TASK_NOT_FOUND", "task_id": task_id}
+        if task.get("STATE") in {"DONE", "CANCELLED", "HOLD"} or task.get("COMPLETION_SEAL"):
+            return {"state": "PENDING", "reason": "TASK_PROTECTED", "task_id": task_id}
         items = list(task.get("D4_EVIDENCE", []))
-        items.append(evidence)
+        if evidence not in items:
+            items.append(evidence)
         changes: dict[str, Any] = {"D4_EVIDENCE": items}
         if next_action is not None:
             changes["NEXT_ACTION"] = next_action
-        ledger.update_task(task_id, **changes)
-    except Exception:
-        return
+        if any(task.get(key) != value for key, value in changes.items()):
+            ledger.update_task(task_id, **changes)
+        sync_checkpoint_evidence(
+            ledger_path=PROJECT_ROOT / "state" / "WORK_LEDGER.json",
+            action_ledger_path=PROJECT_ROOT / "state" / "ACTION_LEDGER.json",
+            checkpoint_path=PROJECT_ROOT / "state" / "CURRENT_CONVERSATION_CHECKPOINT.json",
+        )
+        return {"state": "RECORDED", "task_id": task_id}
+    except Exception as exc:
+        return {"state": "PENDING", "reason": "PERSISTENCE_ERROR", "error_type": type(exc).__name__, "task_id": task_id}
 
 
 def _prepare_action(run_id: str, plan: dict[str, Any], intent_hash: str) -> tuple[ActionLedger, str, str]:

@@ -1,0 +1,43 @@
+{
+  "observed_at": "2026-09-28T04:07:19.598068+00:00",
+  "node": "taiji01",
+  "root": "/home/taiji_admin/Taiji_Hub",
+  "head": "71b89ecfde75fe43ef26a6f1ca7fbeee1ba61e22",
+  "branch": "codex/current-live-state-consolidation-20260915",
+  "status_before": [
+    " M tools/d8_guard_eval.py",
+    "?? docs/total_field/W7TP_8D_CAUSAL_CLAIMS_V1.md",
+    "?? evidence/development_log_continuity/",
+    "?? tests/test_d8_causal_claims.py"
+  ],
+  "work_ledger_updated_at": "2026-09-26T20:28:16.552319+00:00",
+  "action_ledger_updated_at": "2026-09-26T13:00:51.487534+00:00",
+  "recent_commits_d4_only": [
+    "71b89ecfde75fe43ef26a6f1ca7fbeee1ba61e22 feat(d8): harden bootstrap and worktree isolation",
+    "d92de83ceebfd3045d78f886bb3d04bd55138d84 feat(d8): add fail-closed read-only preflight",
+    "63844451286b6c408d1844997b05a9fed97c3ecf feat(governance): add atomic exact git staging",
+    "e78d8e19e4cfc4251c8fae79d4d045ec2812d5bd feat(governance): restore reusable skill-first gates",
+    "e222255d3c16f733f5665e0a27ad048fdad58273 ci: bind origin-cell red-team audit to current live state",
+    "bba18a7aab3b19729164516216458a5e888238af fix: harden origin-cell red-team boundaries",
+    "e18b6856eec06371355992f098c4a0ec34029a92 ci: run W7TP origin-cell red-team audit",
+    "a8ec290e7b36f67c603124fae5b93d3fa3d69bb0 test: add W7TP origin-cell red-team audit"
+  ],
+  "protected_hashes": {
+    "tools/d8_guard_eval.py": "ba7fedc7cae1eb447fab2fd34d4018a01efb476a3b61017fb0ef30807c9e5b8b",
+    "docs/total_field/W7TP_8D_CAUSAL_CLAIMS_V1.md": "8a25c985cb115c944249191f71a3476dfc7810afb9a9638662c9bf3f94a673aa",
+    "tests/test_d8_causal_claims.py": "4a5242ff630b52d9a4f474e90ad141a53432e09cc973a5921a4ed1ab7a7b0904"
+  },
+  "existing_tasks_sha256": "8fccf8db459d822c462f65dc1e8a8df88f5cf94defa3c775440d9b0d23adc28d",
+  "root_cause": [
+    "runner work-evidence errors silently ignored",
+    "terminal run write_state lacks checkpoint projection"
+  ],
+  "scope": "Existing D2/D4 recording repair; no authority promotion, no historic task completion inferred",
+  "candidate_tests": {
+    "passed": 34
+  },
+  "backup": "/home/taiji_admin/Taiji_Hub/evidence/development_log_continuity/20260928T040719Z/preimage",
+  "git_commit": false,
+  "git_push": false,
+  "services_restarted": false
+}

@@ -377,3 +377,26 @@ def apply_conversation_event(
             last_tool_effect=event.get("last_tool_effect"),
         )
     raise ValueError(f"unsupported conversation event type: {kind}")
+
+
+def sync_checkpoint_evidence(
+    ledger_path: str | Path = DEFAULT_LEDGER_PATH,
+    action_ledger_path: str | Path = DEFAULT_ACTION_LEDGER_PATH,
+    checkpoint_path: str | Path = DEFAULT_CHECKPOINT_PATH,
+) -> dict[str, Any]:
+    """Refresh D2/D4 references only; preserve goal, decisions and D8 verbatim."""
+    ledger = WorkLedger(ledger_path)
+    actions = ActionLedger(action_ledger_path)
+    payload = load_checkpoint(checkpoint_path)
+    payload["open_tasks"] = [task["TASK_ID"] for task in ledger.list_open_tasks()]
+    next_item = ledger.get_next_action()
+    payload["next_action"] = next_item["NEXT_ACTION"] if next_item else "NONE"
+    payload["continuity_evidence"] = {
+        "evidence_only": True,
+        "authority_changed": False,
+        "work_ledger_updated_at": ledger.data.get("UPDATED_AT"),
+        "action_ledger_updated_at": actions.data.get("UPDATED_AT"),
+        "work_ledger_sha256": hashlib.sha256(Path(ledger_path).read_bytes()).hexdigest(),
+        "action_ledger_sha256": hashlib.sha256(Path(action_ledger_path).read_bytes()).hexdigest(),
+    }
+    return checkpoint_conversation(payload, checkpoint_path)
