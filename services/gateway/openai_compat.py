@@ -59,6 +59,16 @@ def list_models() -> dict[str, Any]:
 @router.post("/v1/chat/completions")
 async def chat_completions(request: Request) -> dict[str, Any]:
     body = await request.json()
+    raise HTTPException(
+        status_code=409,
+        detail={
+            "error": "governed_dynamic_context_route_required",
+            "governed_route": "/api/taiji/nl-control/execute",
+            "context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+            "context_target_scope": "ALL_CONTEXT_REQUIRING_LLM",
+            "direct_model_call": "BLOCKED",
+        },
+    )
     if body.get("stream") is True:
         raise HTTPException(status_code=400, detail="streaming_not_supported_in_phase_b")
 

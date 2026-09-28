@@ -117,6 +117,60 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
         )
         self.assertFalse(risk["local_rule_ref_cloud_visible"])
 
+    def test_local_model_dynamic_context_pull_is_task_bound(self) -> None:
+        bootstrap = {
+            "pull_coordinate": "pull:test:local-model",
+            "bootstrap_sha256": "a" * 64,
+        }
+        pulled = {
+            "model_visible_context": {
+                "context_ref": "context:test:local-model",
+            },
+            "transmission_semantics": {
+                "semantic_class": "NON_DIFFERENTIAL_POINTER_FIRST_STATE_RECONSTRUCTION",
+            },
+        }
+        broker = Mock()
+        broker.register.return_value = bootstrap
+        broker.pull.return_value = pulled
+        with (
+            patch.object(
+                runner,
+                "select_task_state_support_refs",
+                return_value={"action_refs": ["A-1"], "adi_record_ids": ["ADI-1"]},
+            ),
+            patch.object(
+                runner,
+                "issue_task_state_minimum_packet",
+                return_value={
+                    "task_state_record_id": "ADI-TASK",
+                    "packet": {
+                        "packet_ref": "packet:test",
+                        "packet_sha256": "b" * 64,
+                    },
+                },
+            ),
+            patch.object(
+                runner,
+                "TotalFieldDynamicContextPullBroker",
+                return_value=broker,
+            ),
+        ):
+            result = runner.pull_task_dynamic_context_for_model(
+                task_id="NLDEV-005",
+                action_id="A-1",
+                provider_ref="provider:MSI_OLLAMA_LOCAL",
+                model_ref="model:xiaoj:8b",
+            )
+        self.assertEqual(result["state"], "PASS_MODEL_DYNAMIC_CONTEXT_PULL")
+        self.assertEqual(result["context_ref"], "context:test:local-model")
+        broker.pull.assert_called_once_with(
+            "pull:test:local-model",
+            task_ref="task:NLDEV-005",
+            provider_ref="provider:MSI_OLLAMA_LOCAL",
+            model_ref="model:xiaoj:8b",
+        )
+
     def test_local_agent_step_budget_is_adaptive(self) -> None:
         self.assertEqual(
             runner.local_agent_step_budget(

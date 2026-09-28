@@ -612,40 +612,33 @@ def current_local_ollama_url() -> str:
     return str(selected)
 
 
-def run_local_transform(intent: str, plan: dict[str, Any], timeout_seconds: int) -> str:
+def run_local_transform(
+    intent: str,
+    plan: dict[str, Any],
+    timeout_seconds: int,
+    dynamic_context: dict[str, Any],
+) -> str:
     local_ollama_url = current_local_ollama_url()
-    packet = {
-        "schema": "W7TP_STATIC_STATE_CELL_READONLY_V1",
-        "intent_hash": hashlib.sha256(intent.encode("utf-8")).hexdigest(),
-        "TASK_ID": plan.get("TASK_ID"),
-        "D3_COORDINATE": plan.get("D3_COORDINATE"),
-        "D5_EXECUTION": plan.get("D5_EXECUTION"),
-        "observed": {
-            "gateway": _json_get("http://127.0.0.1:8081/health"),
-            "total_field": _json_get("http://127.0.0.1:8082/healthz"),
-            "native_adi": _json_get("http://127.0.0.1:9110/health"),
-            "local_models": _json_get(local_ollama_url.rstrip("/") + "/api/tags"),
-            "local_model_route": current_local_model_route(),
-        },
-        "constraints": {
-            "read_only": True,
-            "no_file_write": True,
-            "no_service_restart": True,
-            "no_cloud": True,
-            "facts_require_observed_field": True,
-        },
-    }
     prompt = (
         "你是 W7TP 8D ADI 的本地 GPU 語言／狀態轉換器。"
-        "只能根據下方 static state cell（靜態狀態原胞）回覆，不得假設未觀測事實。"
-        "請用繁體中文精簡回報：目前主要模型來源、是否使用 MSI 本地模型、是否使用 Codex 雲端、"
-        "以及是否需要任何實際修改。若不需修改，明確寫 NO_SOURCE_CHANGE。\n\n"
-        + json.dumps(packet, ensure_ascii=False, sort_keys=True)
+        "系統上下文只能使用下方由 Total Field Dynamic Context 單次拉取形成的 model-visible context。"
+        "不得自行回退 static state cell、舊狀態、差分或未觀測歷史。"
+        "Founder 本次自然語言意圖可作為 D1 輸入，但不是系統狀態證據。"
+        "請用繁體中文精簡回報；若不需修改，明確寫 NO_SOURCE_CHANGE。\n\n"
+        "FOUNDER_INTENT=" + intent + "\n"
+        "DYNAMIC_CONTEXT="
+        + json.dumps(dynamic_context, ensure_ascii=False, sort_keys=True)
     )
     body = {
         "model": LOCAL_MODEL,
         "messages": [
-            {"role": "system", "content": "Facts only from provided state cell. No tools. No hidden reasoning."},
+            {
+                "role": "system",
+                "content": (
+                    "Use only the governed Dynamic Context for system-state context. "
+                    "No tools. No predecessor-state or differential fallback."
+                ),
+            },
             {"role": "user", "content": prompt},
         ],
         "stream": False,
@@ -660,7 +653,6 @@ def run_local_transform(intent: str, plan: dict[str, Any], timeout_seconds: int)
     with urlopen(req, timeout=min(timeout_seconds, 120)) as response:
         data = json.loads(response.read().decode("utf-8"))
     return str((data.get("message") or {}).get("content") or "").strip()
-
 
 def local_agent_step_budget(plan: dict[str, Any]) -> int:
     resource = plan.get("RESOURCE_DECISION", {})
@@ -804,6 +796,57 @@ def gemini_task_state_reasoning_hint(
     }
 
 
+def pull_task_dynamic_context_for_model(
+    *,
+    task_id: str,
+    action_id: str,
+    provider_ref: str,
+    model_ref: str,
+) -> dict[str, Any]:
+    """Materialize one single-use governed task context for one model organ."""
+
+    selected = select_task_state_support_refs(
+        task_id=task_id,
+        current_action_id=action_id,
+        max_actions=8,
+        max_adi_refs=16,
+    )
+    issued = issue_task_state_minimum_packet(
+        task_id=task_id,
+        action_refs=selected["action_refs"],
+        support_adi_record_ids=selected["adi_record_ids"],
+    )
+    packet = issued.get("packet")
+    if not isinstance(packet, dict):
+        raise RuntimeError("HOLD_LOCAL_DYNAMIC_CONTEXT_PACKET_INVALID")
+    broker = TotalFieldDynamicContextPullBroker()
+    bootstrap = broker.register(
+        packet=packet,
+        task_ref=f"task:{task_id}",
+        provider_ref=provider_ref,
+        model_ref=model_ref,
+        expires_at=(datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
+        return_coordinate="total-field:candidate-gateway:llm-push",
+        context_builder=build_task_model_visible_context,
+    )
+    result = broker.pull(
+        str(bootstrap["pull_coordinate"]),
+        task_ref=f"task:{task_id}",
+        provider_ref=provider_ref,
+        model_ref=model_ref,
+    )
+    return {
+        "state": "PASS_MODEL_DYNAMIC_CONTEXT_PULL",
+        "task_state_record_id": issued.get("task_state_record_id"),
+        "packet_ref": packet.get("packet_ref"),
+        "packet_sha256": packet.get("packet_sha256"),
+        "bootstrap_sha256": bootstrap.get("bootstrap_sha256"),
+        "context_ref": result["model_visible_context"]["context_ref"],
+        "model_visible_context": result["model_visible_context"],
+        "transmission_semantics": result.get("transmission_semantics"),
+    }
+
+
 def legacy_google_fallback_allowed(plan: dict[str, Any]) -> bool:
     """Legacy direct cloud hint path is forbidden under pointer-first context."""
 
@@ -918,6 +961,31 @@ def main() -> int:
         )
         before = snapshot(shadow)
         prompt = build_prompt(intent, shadow, plan)
+        local_dynamic_context = pull_task_dynamic_context_for_model(
+            task_id=task_id,
+            action_id=action_id,
+            provider_ref="provider:MSI_OLLAMA_LOCAL",
+            model_ref=f"model:{LOCAL_MODEL}",
+        )
+        prompt += (
+            "\n\nTOTAL_FIELD_DYNAMIC_CONTEXT (single-use, task-bound, non-differential):\n"
+            + json.dumps(
+                local_dynamic_context["model_visible_context"],
+                ensure_ascii=False,
+                sort_keys=True,
+            )
+        )
+        action_ledger.update_action(
+            action_id,
+            LAST_TOOL_EFFECT={
+                "phase": "LOCAL_DYNAMIC_CONTEXT_PULL_PASS",
+                "context_ref": local_dynamic_context["context_ref"],
+                "packet_ref": local_dynamic_context["packet_ref"],
+                "packet_sha256": local_dynamic_context["packet_sha256"],
+                "transmission_semantics": local_dynamic_context.get("transmission_semantics"),
+            },
+            RESUME_FROM="GEMINI_TASK_STATE_REASONING_OR_LOCAL_MODEL",
+        )
         gemini_reasoning: dict[str, Any] | None = None
         gemini_reasoning_used = False
         gemini_reasoning_hold: str | None = None
@@ -999,7 +1067,9 @@ def main() -> int:
                 LAST_TOOL_EFFECT={"phase": phase, "model": LOCAL_MODEL},
                 RESUME_FROM="COMPLETE_READONLY_OBSERVATION",
             )
-            last_message = run_local_transform(intent, plan, timeout_seconds)
+            last_message = run_local_transform(
+                intent, plan, timeout_seconds, local_dynamic_context["model_visible_context"]
+            )
         after = snapshot(shadow)
         changes = diff_snapshot(before, after)
         changed = changes["created"] + changes["modified"] + changes["deleted"]

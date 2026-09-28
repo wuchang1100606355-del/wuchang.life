@@ -1,6 +1,11 @@
 from services.gateway.openai_compat import router as openai_compat_router
 from services.gateway.topology_router import router as taiji_topology_router
-from services.gateway.natural_language_control import router as natural_language_control_router
+from services.gateway.natural_language_control import (
+    NaturalLanguageRequest,
+    build_plan as governed_build_plan,
+    execute as governed_execute,
+    router as natural_language_control_router,
+)
 # -*- coding: utf-8 -*-
 from fastapi import FastAPI
 from pathlib import Path
@@ -270,29 +275,49 @@ def health():
         "timestamp": datetime.now().isoformat()
     }
 
+def _legacy_payload_to_governed_request(
+    payload: dict,
+    *,
+    voice: bool = False,
+) -> NaturalLanguageRequest:
+    intent = (
+        payload.get("text") or payload.get("utterance") or payload.get("prompt") or ""
+        if voice
+        else payload.get("prompt") or payload.get("text") or payload.get("utterance") or ""
+    )
+    return NaturalLanguageRequest(
+        intent=str(intent),
+        task_id=payload.get("task_id"),
+        goal_mode=True,
+        auto_land=bool(payload.get("auto_land", True)),
+        timeout_seconds=int(payload.get("timeout_seconds", 1200)),
+        dry_run=bool(payload.get("dry_run", False)),
+        google_fallback=bool(payload.get("google_fallback", True)),
+    )
+
+
 @app.get("/api/taiji/plan")
 def plan_get():
-    return {"status": "online", "hint": "POST /api/taiji/execute with prompt"}
+    return {
+        "status": "online",
+        "governed_route": "/api/taiji/nl-control/plan",
+        "context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+    }
+
 
 @app.post("/api/taiji/plan")
 def plan(payload: dict):
-    prompt = payload.get("prompt", "")
-    keyword = payload.get("keyword", "")
-    rt = runtime_snapshot()
-    shards = context_shards(prompt, keyword)
-    G, scores, decision = metric_tensor(shards, rt)
-    return {"status": "planned", "runtime": rt, "context_shards": shards, "metric_tensor": G, "scores": scores, "decision": decision}
+    return governed_build_plan(_legacy_payload_to_governed_request(payload))
+
 
 @app.post("/api/taiji/execute")
 def execute(payload: dict):
-    return run_taiji(payload)
+    return governed_execute(_legacy_payload_to_governed_request(payload))
+
 
 @app.post("/api/taiji/voice")
 def voice(payload: dict):
-    text = payload.get("text") or payload.get("utterance") or payload.get("prompt") or ""
-    payload["prompt"] = text
-    payload["source"] = "voice"
-    return run_taiji(payload)
+    return governed_execute(_legacy_payload_to_governed_request(payload, voice=True))
 
 app.include_router(taiji_topology_router)
 app.include_router(openai_compat_router)
