@@ -1,0 +1,31 @@
+{
+  "artifact_sha256": {
+    "evidence/total_field/operation_capability_cells/NVR_ROUTER_OPERATION_CAPABILITY_ASSIMILATION_CANDIDATE_V1.json": "c3bcfb7e72b9e45bb64bf70809199d378ebec4acc17659b3f8e50172bfc270ae",
+    "tests/test_w7tp_operation_capability_cell_candidate.py": "ca30bce33c08ea748037cb530a5b61f9aaff4ecd3798336e7708d30d772ecf37",
+    "tools/total_field/w7tp_operation_capability_cell_candidate.py": "29602c3ebe1a18c56f1adfd635a7cee69ca89bece0694039dd9b57f280ea80cc"
+  },
+  "canonical_state": "CANDIDATE_ONLY",
+  "capability_ids": [
+    "NVR_CONFIG_READ",
+    "ROUTER_NAT_OBSERVE"
+  ],
+  "cell_graph_sha256": "57f5952c26f921a2b9e909b7dfdccb35dc666f4be69daf1f3a6ada84f5371eec",
+  "composite_sha256": "aaf518fad9467e92e22da6e41f6667ab56558502545ad3e892de1187a7e57f28",
+  "cross_node_d6_reconstruction": "NOT_TESTED",
+  "d8_authority_created": false,
+  "effect_authorized": false,
+  "engineering_root": "/home/taiji_admin/Taiji_Hub",
+  "evidence_binding_sha256": "870cccc3abab557d7b7bf721c37e0ebb1533e96fd9ab5123a9e574789d95627f",
+  "execution_performed": false,
+  "git_head": "ef7ba0c88d5092540005a61df922974764345323",
+  "node": "taiji01",
+  "reconstruction_state": "PASS_COMPOSITE_OPERATION_CAPABILITY_RECONSTRUCTED_CANDIDATE",
+  "registry_state": "NOT_REGISTERED",
+  "runtime_state": "NOT_ACTIVE",
+  "schema_version": "W7TP-OPERATION-CAPABILITY-CELL-RECEIPT/0.1-candidate",
+  "state": "PASS_CANDIDATE_RECONSTRUCTION_VALIDATED",
+  "test_command": "python3 -m unittest -v tests.test_w7tp_operation_capability_cell_candidate",
+  "test_result": "5/5 PASS",
+  "unrelated_preexisting_dirty_state_preserved": true,
+  "validation_state": "PASS_OPERATION_CAPABILITY_CELL_PACKET_VALIDATED"
+}

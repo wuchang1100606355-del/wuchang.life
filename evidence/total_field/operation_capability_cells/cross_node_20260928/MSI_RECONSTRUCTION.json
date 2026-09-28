@@ -1,0 +1,68 @@
+{
+  "composite": {
+    "acceptance": "reconstruct the same composite read-only observation capability without treating provider UI/SSH as authority",
+    "canonical": false,
+    "capability_ids": [
+      "NVR_CONFIG_READ",
+      "ROUTER_NAT_OBSERVE"
+    ],
+    "cell_graph_sha256": "57f5952c26f921a2b9e909b7dfdccb35dc666f4be69daf1f3a6ada84f5371eec",
+    "cells": [
+      {
+        "capability_id": "NVR_CONFIG_READ",
+        "cell_id": "cell:NVR_CONFIG_READ",
+        "coordinate_ref": "NVR@192.168.50.34",
+        "effect_contract": "READ_NETWORK_CONFIG",
+        "effect_mode": "READ_ONLY",
+        "evidence_refs": [
+          "current-run:MSI:NVR_UI_NETWORK_SETTINGS"
+        ]
+      },
+      {
+        "capability_id": "ROUTER_NAT_OBSERVE",
+        "cell_id": "cell:ROUTER_NAT_OBSERVE",
+        "coordinate_ref": "ASUS_RT_BE86U@192.168.50.1",
+        "effect_contract": "READ_NAT_STATE",
+        "effect_mode": "READ_ONLY",
+        "evidence_refs": [
+          "current-run:MSI:ASUS_SSH_VTS_RULELIST",
+          "current-run:MSI:ASUS_IPTABLES_NAT"
+        ]
+      }
+    ],
+    "composite_sha256": "aaf518fad9467e92e22da6e41f6667ab56558502545ad3e892de1187a7e57f28",
+    "effect_authorized": false,
+    "effect_mode": "READ_ONLY",
+    "evidence_binding_sha256": "870cccc3abab557d7b7bf721c37e0ebb1533e96fd9ab5123a9e574789d95627f",
+    "execution_performed": false,
+    "provider_authority": false,
+    "reconstruction_conditions": [
+      "all cell coordinates resolve to current observed targets",
+      "all evidence refs remain bound to the same observation scope",
+      "all requested effects remain READ_ONLY",
+      "D8 remains candidate-only with Total Field verification required"
+    ],
+    "relations": [
+      {
+        "from": "cell:NVR_CONFIG_READ",
+        "relation": "CROSS_CHECKS_NETWORK_BINDING",
+        "to": "cell:ROUTER_NAT_OBSERVE"
+      },
+      {
+        "from": "cell:ROUTER_NAT_OBSERVE",
+        "relation": "BINDS_PUBLICATION_TO_TARGET",
+        "to": "cell:NVR_CONFIG_READ"
+      }
+    ],
+    "state": "PASS_COMPOSITE_OPERATION_CAPABILITY_RECONSTRUCTED_CANDIDATE",
+    "total_field_verify_required": true
+  },
+  "validation": {
+    "cell_count": 2,
+    "cell_ids": [
+      "cell:NVR_CONFIG_READ",
+      "cell:ROUTER_NAT_OBSERVE"
+    ],
+    "state": "PASS_OPERATION_CAPABILITY_CELL_PACKET_VALIDATED"
+  }
+}

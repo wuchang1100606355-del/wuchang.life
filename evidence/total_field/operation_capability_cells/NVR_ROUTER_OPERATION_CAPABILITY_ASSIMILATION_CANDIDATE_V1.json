@@ -1,0 +1,134 @@
+{
+  "state": "PASS_READ_ONLY_ASSIMILATION",
+  "operation": "ASSIMILATE",
+  "source": {
+    "repository": "local-capability-source://MSI/NVR-ASUS",
+    "tag": null,
+    "commit": null,
+    "tree": null,
+    "snapshot_sha256": null,
+    "license": null,
+    "evidence_status": "VERIFIED_CURRENT_RUN",
+    "observation_scope": "MSI remote observation plus NVR UI and ASUS router SSH read-only state"
+  },
+  "target": {
+    "system": "W7TP/8D ADI V2.3",
+    "engineering_root": "/home/taiji_admin/Taiji_Hub",
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    "artifact_role": "OPERATION_CAPABILITY_STATE_CELL_CANDIDATE"
+  },
+  "capabilities": [
+    {
+      "capability_id": "NVR_CONFIG_READ",
+      "source_component": "NVR web control plane",
+      "status": "VERIFIED_CURRENT_RUN",
+      "input": "authorized read intent bound to current NVR coordinate",
+      "output": "current network configuration observation",
+      "state_dependency": "NVR reachable and authenticated session available",
+      "side_effect": "READ_ONLY",
+      "evidence_output": "network mode, LAN IP, gateway, HTTP/RTSP ports, MAC",
+      "failure_mode": "coordinate/auth/session mismatch -> HOLD",
+      "security_assumption": "read capability does not grant write or D8 authority",
+      "disposition": "REIMPLEMENT",
+      "d1": {"intent": "observe current NVR network configuration"},
+      "d2": {"observed_state": "STATIC_NETWORK_CONFIG_PRESENT"},
+      "d3": {"node": "NVR", "lan_ip": "192.168.50.34", "mac": "00:0F:FC:12:6E:35"},
+      "d4": {"evidence_refs": ["current-run:MSI:NVR_UI_NETWORK_SETTINGS", "current-run:MSI:LAN_MAC_PORT_OBSERVATION"]},
+      "d5": {"mode": "READ_ONLY", "allowed_effect": "READ_NETWORK_CONFIG", "write_forbidden": true},
+      "d6": {"role": "STATE_CELL_EFFECT_RECONSTRUCTION_CANDIDATE", "raw_ui_recording_required": false},
+      "d7": {"fail_closed": true, "risks": ["STALE_COORDINATE", "AUTH_SESSION_MISMATCH", "ACCIDENTAL_WRITE"]},
+      "d8": {"authority": "NONE", "candidate_only": true, "total_field_verify_required": true}
+    },
+    {
+      "capability_id": "ROUTER_NAT_OBSERVE",
+      "source_component": "ASUS RT-BE86U ASUSWRT-Merlin SSH read path",
+      "status": "VERIFIED_CURRENT_RUN",
+      "input": "authorized read intent bound to router coordinate",
+      "output": "current configured and loaded NAT forwarding observation",
+      "state_dependency": "router SSH read path reachable with existing authorized key",
+      "side_effect": "READ_ONLY",
+      "evidence_output": "VTS rule list, loaded DNAT rules, WAN/DDNS state",
+      "failure_mode": "router/key/command mismatch -> HOLD",
+      "security_assumption": "provider/router admin identity is evidence only and does not grant W7TP authority",
+      "disposition": "REIMPLEMENT",
+      "d1": {"intent": "observe current router NAT bindings for NVR"},
+      "d2": {"observed_state": "VTS_ENABLED_AND_DNAT_RULES_LOADED"},
+      "d3": {"node": "ASUS_RT_BE86U", "lan_ip": "192.168.50.1", "wan_ipv4": "220.135.21.74"},
+      "d4": {"evidence_refs": ["current-run:MSI:ASUS_SSH_VTS_RULELIST", "current-run:MSI:ASUS_IPTABLES_NAT"]},
+      "d5": {"mode": "READ_ONLY", "allowed_effect": "READ_NAT_STATE", "write_forbidden": true},
+      "d6": {"role": "STATE_CELL_EFFECT_RECONSTRUCTION_CANDIDATE", "raw_terminal_recording_required": false},
+      "d7": {"fail_closed": true, "risks": ["STALE_ROUTER_STATE", "WRONG_RULE_TARGET", "ACCIDENTAL_WRITE"]},
+      "d8": {"authority": "NONE", "candidate_only": true, "total_field_verify_required": true}
+    }
+  ],
+  "target_base_state": {
+    "reuse": [
+      "configs/total_field/w7tp_capability_internalization_registry_v1.json",
+      "products/eight_dimensional_generative_memory/w7tp_origin_state_minimum_packet_v1.py",
+      "configs/total_field/w7tp_local_origin_state_rule_registry_v1.json",
+      "capabilities/w7tp-capability-assimilator/w7tp-capability-assimilator/SKILL.md"
+    ],
+    "core_replacement_required": false,
+    "new_authority_model_required": false
+  },
+  "minimum_required_delta": {
+    "candidate_packet": "this artifact",
+    "candidate_reconstructor": "tools/total_field/w7tp_operation_capability_cell_candidate.py",
+    "core_change": false,
+    "runtime_activation": false,
+    "canonical_change": false
+  },
+  "authority_conflicts": [],
+  "evidence_gaps": [
+    "cross-node D6 transport/reconstruction has not yet been executed for this operation packet",
+    "operation effect equivalence beyond read-only observation has not been claimed"
+  ],
+  "d1": {"intent": "package observed NVR and router read operations as composable 8D ADI capability cells"},
+  "d2": {"state": "CANDIDATE_OPERATION_CAPABILITY_CELLS_FROM_CURRENT_RUN_EVIDENCE"},
+  "d3": {"observer": "MSI", "targets": ["NVR@192.168.50.34", "ASUS_RT_BE86U@192.168.50.1"], "formal_effect_boundary": "taiji01 Total Field"},
+  "d4": {
+    "observed_facts": {
+      "nvr": {"network_mode": "Static", "ip": "192.168.50.34", "mac": "00:0F:FC:12:6E:35", "http_port": 30080, "rtsp_port": 554},
+      "router": {
+        "vts_enabled": true,
+        "wan_ipv4": "220.135.21.74",
+        "ddns": "wuchang.asuscomm.com",
+        "dnat": [
+          "TCP 30080 -> 192.168.50.34:30080",
+          "TCP 554 -> 192.168.50.34:554",
+          "TCP 80 -> 192.168.50.34:30080"
+        ]
+      }
+    },
+    "evidence_class": "CURRENT_RUN_DIRECT_OBSERVATION"
+  },
+  "d5": {"execution_policy": "READ_ONLY_CANDIDATE_RECONSTRUCTION", "direct_write_effect": false},
+  "d6": {
+    "mode": "CAPABILITY_CELL_RELATION_RECONSTRUCTION_CANDIDATE",
+    "transport_unit": "STATE_CELL",
+    "raw_screen_or_terminal_macro_required": false,
+    "reconstruction_target": "COMPOSITE_READ_ONLY_OPERATION_CAPABILITY",
+    "execution_is_not_implied": true
+  },
+  "d7": {"fail_closed": true, "localized_unknown_only": true, "write_effect_forbidden": true, "coordinate_mismatch": "HOLD"},
+  "d8": {"authority": "NONE", "candidate_only": true, "canonical": false, "provider_authority": false, "total_field_verify_required": true},
+  "cell_model": {
+    "cells": [
+      {"cell_id": "cell:NVR_CONFIG_READ", "capability_id": "NVR_CONFIG_READ", "coordinate_ref": "NVR@192.168.50.34", "evidence_refs": ["current-run:MSI:NVR_UI_NETWORK_SETTINGS"], "effect_contract": "READ_NETWORK_CONFIG", "effect_mode": "READ_ONLY"},
+      {"cell_id": "cell:ROUTER_NAT_OBSERVE", "capability_id": "ROUTER_NAT_OBSERVE", "coordinate_ref": "ASUS_RT_BE86U@192.168.50.1", "evidence_refs": ["current-run:MSI:ASUS_SSH_VTS_RULELIST", "current-run:MSI:ASUS_IPTABLES_NAT"], "effect_contract": "READ_NAT_STATE", "effect_mode": "READ_ONLY"}
+    ],
+    "relations": [
+      {"from": "cell:NVR_CONFIG_READ", "to": "cell:ROUTER_NAT_OBSERVE", "relation": "CROSS_CHECKS_NETWORK_BINDING"},
+      {"from": "cell:ROUTER_NAT_OBSERVE", "to": "cell:NVR_CONFIG_READ", "relation": "BINDS_PUBLICATION_TO_TARGET"}
+    ],
+    "reconstruction_conditions": [
+      "all cell coordinates resolve to current observed targets",
+      "all evidence refs remain bound to the same observation scope",
+      "all requested effects remain READ_ONLY",
+      "D8 remains candidate-only with Total Field verification required"
+    ],
+    "acceptance": "reconstruct the same composite read-only observation capability without treating provider UI/SSH as authority"
+  },
+  "project_code_executed": false,
+  "files_changed_scope": "candidate evidence packet plus candidate reconstructor/test only"
+}

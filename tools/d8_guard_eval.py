@@ -7,6 +7,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import uuid
 from pathlib import Path
 
@@ -639,6 +640,133 @@ def _make_finding(
         "severity": rule["severity"],
         "correction": correction,
     }
+
+
+
+# Founder intent: current conversation, 2026-09-27, Jiang Zhenglong.
+# This is a bounded operational projection, never a definition of the whole field.
+CAUSAL_CLAIM_CONTRACTS = {
+    "FIELD_MODEL": (
+        {"model": {"8_IN_1_SINGLE_STATE_FIELD", "EIGHT_LINEAR_STEPS", "EIGHT_FLAT_FIELDS"}},
+        "8D_FIELD_FLATTENED", "八維是單一狀態場；流程步驟不等於八維。",
+    ),
+    "RECONSTRUCTION": (
+        {"mechanism": {"RULE_RECONSTRUCTION", "LOCAL_QUERY", "REMOTE_QUERY"},
+         "claim": {"RECONSTRUCTION", "QUERY"}},
+        "QUERY_PROMOTED_TO_RECONSTRUCTION", "查詢可提供證據，但不能直接當成原胞重構。",
+    ),
+    "CAPABILITY_EFFECT": (
+        {"observed": {"REGISTERED", "SELECTED", "QUEUED", "EXECUTED", "VERIFIED"},
+         "claimed": {"REGISTERED", "SELECTED", "QUEUED", "EXECUTED", "VERIFIED"}},
+        "CAPABILITY_STAGE_PROMOTION", "登錄、選取、排隊、執行與驗收必須分別取證。",
+    ),
+    "CURRENT_BINDING": (
+        {"evidence_scope": {"CURRENT", "HISTORICAL"},
+         "binding_matches": {True, False}, "claims_current_ready": {True, False}},
+        "HISTORICAL_OR_MISMATCHED_BINDING_PROMOTED", "歷史啟用不證明當前可用；版本失配需局部定位。",
+    ),
+    "RULE_TRANSFER": (
+        {"rule_body_transmitted": {True, False}, "claims_no_rules_transmitted": {True, False}},
+        "RULE_BYTES_METRIC_MISINTERPRETED", "原始位元組計數為零，不等於規則結構沒有傳送。",
+    ),
+    "COMPOSITION": (
+        {"required_dependency_failed": {True, False}, "continue_dependent_action": {True, False},
+         "authority_expanded_by_composition": {True, False}},
+        "UNSAFE_COMPOSITION_INFERENCE", "必要依賴失敗停止依賴動作；堆疊本身不增加權限。",
+    ),
+    "CAUSAL_ATTRIBUTION": (
+        {"basis": {"CAUSAL_TEST", "EXPLICIT_CODE_PATH", "TIME_ONLY", "NAME_ONLY"},
+         "claims_proven_cause": {True, False}},
+        "CORRELATION_PROMOTED_TO_CAUSE", "名稱或時間相近不能單獨證明因果。",
+    ),
+    "EFFECT_EQUIVALENCE": (
+        {"same_task": {True, False}, "same_acceptance": {True, False},
+         "paired_test_observed": {True, False}, "claims_proven": {True, False}},
+        "UNTESTED_EQUIVALENCE_PROMOTED", "指定相同任務與驗收，取得對照實驗後才能主張已證實等價。",
+    ),
+    "OBSERVATION_EFFECT": (
+        {"may_mutate": {True, False}, "claims_read_only": {True, False}},
+        "MUTATING_OBSERVER_MARKED_READ_ONLY", "函式名稱不是唯讀證明，需查實際副作用。",
+    ),
+}
+
+
+def evaluate_causal_claims(payload: object) -> dict:
+    """Check declared operands only; no IO, evidence authentication or D8 decision.
+
+    Coordinates bind each evidence declaration to the claim's node/object/state.
+    They do not prove freshness or authenticity. Empty and malformed input HOLD.
+    """
+    findings = []
+    def add(code, claim_id, correction):
+        findings.append({"rule_id": code, "claim_id": claim_id, "correction": correction})
+    base = {"ruleset": "W7TP_8D_CAUSAL_CLAIMS_V1", "authority": "CANDIDATE_ONLY",
+            "total_field_decision": "NOT_RUN", "evidence_authenticated": False,
+            "live_effect_verified": False, "writeback": False}
+    if not isinstance(payload, dict) or set(payload) != {"schema", "claims"} or payload.get("schema") != "w7tp-causal-claims/1":
+        add("INPUT_SCHEMA_INVALID", None, "需提供明確版本與主張清單。")
+    else:
+        claims = payload["claims"]
+        if not isinstance(claims, list) or not 1 <= len(claims) <= 256:
+            add("CLAIMS_MISSING_OR_LIMIT", None, "主張數量須為 1 至 256。")
+        else:
+            ids = set()
+            for c in claims:
+                if not isinstance(c, dict) or set(c) != {"id", "kind", "coordinate", "evidence", "operands"}:
+                    add("CLAIM_SCHEMA_INVALID", None, "每项主張需識別、種類、座標、證據與運算元。")
+                    continue
+                cid = c["id"]
+                if not isinstance(cid, str) or not cid.strip() or cid in ids:
+                    add("CLAIM_ID_INVALID", None, "主張識別不得空白或重複。")
+                    continue
+                ids.add(cid)
+                coordinate = c["coordinate"]
+                keys = {"node_ref", "object_ref", "state_ref", "observed_at"}
+                if not isinstance(coordinate, dict) or set(coordinate) != keys or any(not isinstance(v, str) or not v.strip() for v in coordinate.values()):
+                    add("COORDINATE_MISSING", cid, "需節點、物件、狀態版本與含時區觀測時間。")
+                    continue
+                try:
+                    timestamp = dt.datetime.fromisoformat(coordinate["observed_at"].replace("Z", "+00:00"))
+                    if timestamp.utcoffset() is None:
+                        raise ValueError("timezone required")
+                except ValueError:
+                    add("TIME_COORDINATE_INVALID", cid, "觀測時間需為含時區的有效時間。")
+                    continue
+                evidence = c["evidence"]
+                if not isinstance(evidence, dict) or set(evidence) != {"ref", "coordinate"} or not isinstance(evidence["ref"], str) or not evidence["ref"].strip():
+                    add("EVIDENCE_MISSING", cid, "需明確證據引用及其座標；不以宣告取代核實。")
+                    continue
+                if evidence["coordinate"] != coordinate:
+                    add("EVIDENCE_COORDINATE_MISMATCH", cid, "其他節點、物件、版本或時刻的證據不得直接代入。")
+                    continue
+                kind = c["kind"]
+                if not isinstance(kind, str) or kind not in CAUSAL_CLAIM_CONTRACTS:
+                    add("UNKNOWN_CLAIM_KIND", cid, "未知主張不能預設通過。")
+                    continue
+                schema, code, correction = CAUSAL_CLAIM_CONTRACTS[kind]
+                o = c["operands"]
+                if not isinstance(o, dict) or set(o) != set(schema) or any(
+                    not any(type(o[k]) is type(v) and o[k] == v for v in choices)
+                    for k, choices in schema.items()
+                ):
+                    add("OPERANDS_INVALID", cid, "缺少、未知或型別錯誤的運算元不能預設成立。")
+                    continue
+                invalid = (
+                    (kind == "FIELD_MODEL" and o["model"] != "8_IN_1_SINGLE_STATE_FIELD")
+                    or (kind == "RECONSTRUCTION" and o["claim"] == "RECONSTRUCTION" and o["mechanism"] != "RULE_RECONSTRUCTION")
+                    or (kind == "CAPABILITY_EFFECT" and o["observed"] != o["claimed"])
+                    or (kind == "CURRENT_BINDING" and o["claims_current_ready"] and (o["evidence_scope"] != "CURRENT" or not o["binding_matches"]))
+                    or (kind == "RULE_TRANSFER" and o["rule_body_transmitted"] and o["claims_no_rules_transmitted"])
+                    or (kind == "COMPOSITION" and ((o["required_dependency_failed"] and o["continue_dependent_action"]) or o["authority_expanded_by_composition"]))
+                    or (kind == "CAUSAL_ATTRIBUTION" and o["claims_proven_cause"] and o["basis"] != "CAUSAL_TEST")
+                    or (kind == "EFFECT_EQUIVALENCE" and o["claims_proven"] and not (o["same_task"] and o["same_acceptance"] and o["paired_test_observed"]))
+                    or (kind == "OBSERVATION_EFFECT" and o["may_mutate"] and o["claims_read_only"])
+                )
+                if invalid:
+                    add(code, cid, correction)
+    return {**base, "state": "HOLD_CAUSAL_CLAIMS" if findings else "CANDIDATE_CONSISTENT",
+            "findings": findings}
+
 
 
 def scan_technical_definition_drift(
@@ -1492,6 +1620,7 @@ def _insert_evaluation(projection: dict) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Evaluate task scope against D8 possible alerts")
+    parser.add_argument("--causal-claims-stdin", action="store_true")
     parser.add_argument("--run-id")
     parser.add_argument("--task-name")
     parser.add_argument("--scope-json")
@@ -1502,6 +1631,15 @@ def main() -> int:
     parser.add_argument("--domain", default="GTP")
     parser.add_argument("--context-json", default="{}")
     args = parser.parse_args()
+
+    if args.causal_claims_stdin:
+        try:
+            payload = json.load(sys.stdin)
+        except (ValueError, UnicodeError):
+            payload = None
+        result = evaluate_causal_claims(payload)
+        print(json.dumps(result, ensure_ascii=False))
+        return 30 if result["findings"] else 0
 
     if args.scan_root:
         if not args.run_id or not args.report_path:

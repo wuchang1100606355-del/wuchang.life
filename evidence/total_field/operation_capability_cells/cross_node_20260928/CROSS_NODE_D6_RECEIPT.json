@@ -1,0 +1,45 @@
+{
+  "schema_version": "W7TP-OPERATION-CAPABILITY-CROSS-NODE-D6-RECEIPT/0.1-candidate",
+  "state": "PASS_CROSS_NODE_D6_RECONSTRUCTION_CANDIDATE",
+  "observed_at": "2026-09-28T13:28:08+08:00",
+  "sender_node": "taiji01",
+  "receiver_node": "MSI",
+  "carrier": "SSH_SCP_OVER_LAN",
+  "carrier_authority": false,
+  "source_git_head": "ef7ba0c88d5092540005a61df922974764345323",
+  "packet": {
+    "bytes": 7410,
+    "sha256": "c3bcfb7e72b9e45bb64bf70809199d378ebec4acc17659b3f8e50172bfc270ae",
+    "source_receiver_hash_match": true,
+    "measured_scp_elapsed_ns": 325326310
+  },
+  "receiver_prerequisite": {
+    "kind": "GENERIC_OPERATION_CAPABILITY_CELL_EXECUTOR_CANDIDATE",
+    "bytes": 7065,
+    "sha256": "29602c3ebe1a18c56f1adfd635a7cee69ca89bece0694039dd9b57f280ea80cc",
+    "preinstalled_before_experiment": false,
+    "transferred_separately_before_packet": true,
+    "must_be_counted_as_prerequisite_cost": true
+  },
+  "reconstruction": {
+    "state": "PASS_COMPOSITE_OPERATION_CAPABILITY_RECONSTRUCTED_CANDIDATE",
+    "bytes": 2337,
+    "file_sha256": "adaeffe6fa17565904527d9b9505ac23af464f438b751028751ea571017c1a97",
+    "cell_graph_sha256": "57f5952c26f921a2b9e909b7dfdccb35dc666f4be69daf1f3a6ada84f5371eec",
+    "evidence_binding_sha256": "870cccc3abab557d7b7bf721c37e0ebb1533e96fd9ab5123a9e574789d95627f",
+    "composite_sha256": "aaf518fad9467e92e22da6e41f6667ab56558502545ad3e892de1187a7e57f28",
+    "same_as_sender_candidate_composite": true
+  },
+  "negative_tests": {
+    "write_escalation": "HOLD_EXPECTED",
+    "d8_escalation": "HOLD_EXPECTED"
+  },
+  "raw_ui_or_terminal_recording_transmitted_in_packet": false,
+  "effect_execution": "NOT_EXECUTED",
+  "effect_equivalence": "NOT_YET_ACCEPTED",
+  "runtime_activation": false,
+  "registry_activation": false,
+  "canonical_promotion": false,
+  "d8_authority_created": false,
+  "scope_note": "This proves candidate packet delivery and deterministic composite-capability reconstruction on MSI with explicit prerequisite cost. It does not prove live operation-effect equivalence."
+}
