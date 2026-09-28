@@ -20,7 +20,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from core.msi_local_llm_route import resolve_msi_ollama_url
 
 DEFAULT_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
-DEFAULT_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "taiji-qwen2.5-coder-7b:ctx16k")
+DEFAULT_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "xiaoj:latest")
 MAX_STEPS = int(os.getenv("TAIJI_LOCAL_AGENT_MAX_STEPS", "32"))
 MAX_READ_LINES = 400
 MAX_SEARCH_HITS = 80

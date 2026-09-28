@@ -42,7 +42,7 @@ from tools.w7tp_task_state_minimum_packet import (
 
 SKILL_ID = "w7tp-8d-adi-natural-language-control"
 LOCAL_AGENT = PROJECT_ROOT / "tools" / "w7tp_local_model_agent.py"
-LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "taiji-qwen2.5-coder-7b:ctx16k")
+LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "xiaoj:latest")
 LOCAL_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
 VERTEX_GATEWAY = PROJECT_ROOT / "tools" / "total_field" / "w7tp_vertex_candidate_gateway.py"
 GEMINI_PACKET = PROJECT_ROOT / "tools" / "xiaoj_gemini_no_plaintext_candidate_packet.py"

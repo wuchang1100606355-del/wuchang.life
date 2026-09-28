@@ -23,7 +23,7 @@ def candidate_packet() -> dict:
         "task_ref": "task:T-011B",
         "intent_ref": "intent_ref:t011c:test",
         "provider_ref": "MSI_OLLAMA_LOCAL",
-        "model_ref": "taiji-qwen2.5-coder-7b:ctx16k",
+        "model_ref": "xiaoj:latest",
         "context_ref": "t011bctx:sha256:abc",
         "context_sha256": "a" * 64,
         "candidate_ref": "candidate:sha256:" + digest,

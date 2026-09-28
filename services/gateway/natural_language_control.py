@@ -35,7 +35,7 @@ RUNNER_PATH = PROJECT_ROOT / "tools" / "w7tp_nl_goal_runner.py"
 LOCAL_AGENT_PATH = PROJECT_ROOT / "tools" / "w7tp_local_model_agent.py"
 CLEAN_EXEC_ROOT = Path("/tmp/w7tp-nl-control-exec")
 LOCAL_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
-LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "taiji-qwen2.5-coder-7b:ctx16k")
+LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "xiaoj:latest")
 GOOGLE_FALLBACK = os.getenv("TAIJI_GOOGLE_CANDIDATE_FALLBACK", "1") == "1"
 AUTO_LAND_DEFAULT = True
 class NaturalLanguageRequest(BaseModel):

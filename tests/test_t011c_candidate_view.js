@@ -26,7 +26,7 @@ function envelope() {
       candidate_sha256: digest,
       candidate_text: text,
       provider_ref: "MSI_OLLAMA_LOCAL",
-      model_ref: "taiji-qwen2.5-coder-7b:ctx16k",
+      model_ref: "xiaoj:latest",
       total_field_decision: "ALLOW",
       allowed_user_actions: ["review_candidate", "copy_candidate"]
     },

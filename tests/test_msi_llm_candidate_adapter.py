@@ -195,7 +195,7 @@ class MSILLMCandidateAdapterTest(unittest.TestCase):
             intent_ref="intent_ref:sha256:t011b",
         )
         self.assertEqual(selection["provider_ref"], "MSI_OLLAMA_LOCAL")
-        self.assertEqual(selection["model_ref"], "taiji-qwen2.5-coder-7b:ctx16k")
+        self.assertEqual(selection["model_ref"], "xiaoj:latest")
         self.assertTrue(selection["candidate_only"])
         self.assertFalse(selection["runtime_effect"])
         self.assertFalse(selection["provider_authority"])
@@ -273,7 +273,7 @@ class MSILLMCandidateAdapterTest(unittest.TestCase):
         self.assertTrue(result["requires_total_field_verify"])
         self.assertFalse(result["member_plaintext_transferred"])
         self.assertFalse(result["authority"]["model_authority"])
-        self.assertEqual(captured["model"], "taiji-qwen2.5-coder-7b:ctx16k")
+        self.assertEqual(captured["model"], "xiaoj:latest")
         self.assertEqual(captured["url"], "http://192.168.50.82:11434")
         self.assertEqual(result["d4_evidence"]["endpoint_ref"], "MSI_LAN_PRIMARY")
         self.assertEqual(result["d4_evidence"]["endpoint_transport"], "LAN")
