@@ -1,0 +1,56 @@
+{
+  "boundary": {
+    "canonical_promotion": false,
+    "d8_authority_created": false,
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    "provider_authority": "NONE"
+  },
+  "dynamic_context": {
+    "delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+    "non_differential_hardening_commit": "c5bacfeb321b004b9093d65025d9500de3155a90",
+    "service_state": "ACTIVE_POLICY_BOUND",
+    "target_scope": "ALL_CONTEXT_REQUIRING_LLM",
+    "unbound_context_requiring_llm": "HOLD"
+  },
+  "git_head": "f76e37e9b01042dacaf2af8737416f74db5a1a87",
+  "interpretation": "All system-work MODEL_COMPUTE resources that require governed context must be pointer-first Dynamic Context bound; available unbound model-compute resources are held rather than silently falling back.",
+  "llm_context_policy": {
+    "delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    "provider_authority": "NONE",
+    "scope": "ALL_CONTEXT_REQUIRING_LLM",
+    "unbound_model_compute": "HOLD"
+  },
+  "model_compute_observation": [
+    {
+      "context_binding_state": "POINTER_FIRST_TOTAL_FIELD_BOUND",
+      "current_state": "AVAILABLE",
+      "denied": false,
+      "resource_id": "MSI_OLLAMA_LOCAL"
+    },
+    {
+      "context_binding_state": null,
+      "current_state": "HOLD_AGENT_NOT_DISCOVERED",
+      "denied": false,
+      "resource_id": "GEMINI_CODE_ASSIST"
+    },
+    {
+      "context_binding_state": "HOLD_POINTER_FIRST_ADAPTER_MISSING",
+      "current_state": "AVAILABLE_CONFIGURED",
+      "denied": true,
+      "resource_id": "GOOGLE_VERTEX_GEMINI"
+    }
+  ],
+  "node": "taiji01",
+  "observed_at": "2026-09-28T06:21:25+00:00",
+  "preferred_set": [
+    "MSI_OLLAMA_LOCAL"
+  ],
+  "schema_version": "W7TP-DYNAMIC-CONTEXT-GLOBAL-LLM-ACTIVATION/1.0",
+  "service": {
+    "health_http": 200,
+    "main_pid": 3779848,
+    "name": "taiji-gateway.service"
+  },
+  "state": "ACTIVE_VERIFIED_POLICY_BOUND"
+}
