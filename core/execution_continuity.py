@@ -13,13 +13,20 @@ import hashlib
 import json
 import os
 import tempfile
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from contextlib import contextmanager
+from core.adi_native.evidence_ledger import _locked as _exclusive_stream_lock
 
 DEFAULT_ACTION_LEDGER_PATH = (
     Path(__file__).resolve().parents[1] / "state" / "ACTION_LEDGER.json"
 )
+DEFAULT_CONTINUITY_LOCK_PATH = (
+    Path(__file__).resolve().parents[1] / "state" / ".W7TP_CONTINUITY.lock"
+)
+_CONTINUITY_LOCK_STATE = threading.local()
 
 ACTION_STATES = {
     "RUNNING",
@@ -71,6 +78,39 @@ def build_idempotency_key(
     }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+IMMUTABLE_ACTION_FIELDS = {
+    "ACTION_ID",
+    "TASK_ID",
+    "TURN_ID",
+    "TARGET_COORDINATE",
+    "TOOL",
+    "IDEMPOTENCY_KEY",
+    "STARTED_AT",
+}
+
+
+@contextmanager
+def continuity_effect_scope(lock_path: str | Path = DEFAULT_CONTINUITY_LOCK_PATH):
+    """Re-entrant process scope backed by the existing cross-process file lock."""
+    depth = int(getattr(_CONTINUITY_LOCK_STATE, "depth", 0))
+    if depth:
+        _CONTINUITY_LOCK_STATE.depth = depth + 1
+        try:
+            yield
+        finally:
+            _CONTINUITY_LOCK_STATE.depth = depth
+        return
+    path = Path(lock_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a+", encoding="utf-8") as lock_stream:
+        with _exclusive_stream_lock(lock_stream):
+            _CONTINUITY_LOCK_STATE.depth = 1
+            try:
+                yield
+            finally:
+                _CONTINUITY_LOCK_STATE.depth = 0
 
 
 class ActionLedger:
@@ -137,64 +177,92 @@ class ActionLedger:
         raise KeyError(action_id)
 
     def begin_action(
-        self,
-        *,
-        action_id: str,
-        task_id: str,
-        turn_id: str,
-        process_id: int | str | None,
-        target_coordinate: str,
-        tool: str,
-        idempotency_key: str,
-    ) -> dict[str, Any]:
-        if any(a["ACTION_ID"] == action_id for a in self.data["ACTIONS"]):
-            raise ValueError(f"ACTION_ID already exists: {action_id}")
-        for existing in self.data["ACTIONS"]:
-            if (
-                existing["IDEMPOTENCY_KEY"] == idempotency_key
-                and existing["STATE"] not in TERMINAL_ACTION_STATES
-            ):
-                raise ValueError(
-                    f"active action with same IDEMPOTENCY_KEY: {existing['ACTION_ID']}"
+        self, *, action_id, task_id, turn_id, process_id,
+        target_coordinate, tool, idempotency_key
+    ):
+        with self._exclusive_mutation():
+            if any(a["ACTION_ID"] == action_id for a in self.data["ACTIONS"]):
+                raise ValueError(f"ACTION_ID already exists: {action_id}")
+            same_key = [
+                a for a in self.data["ACTIONS"]
+                if a["IDEMPOTENCY_KEY"] == idempotency_key
+            ]
+            completed = [a for a in same_key if a["STATE"] == "DONE"]
+            if completed:
+                completed.sort(
+                    key=lambda a: (a["LAST_UPDATE"], a["ACTION_ID"]),
+                    reverse=True,
                 )
-        now = _now()
-        action = {
-            "ACTION_ID": action_id,
-            "TASK_ID": task_id,
-            "TURN_ID": turn_id,
-            "PROCESS_ID": process_id,
-            "STATE": "RUNNING",
-            "TARGET_COORDINATE": target_coordinate,
-            "TOOL": tool,
-            "IDEMPOTENCY_KEY": idempotency_key,
-            "STARTED_AT": now,
-            "LAST_UPDATE": now,
-            "LAST_CONFIRMED_EFFECT": None,
-            "LAST_TOOL_EFFECT": None,
-            "RESUME_FROM": None,
-            "ERROR": None,
-        }
-        self._validate_action(action)
-        self.data["ACTIONS"].append(action)
-        self._save()
-        return copy.deepcopy(action)
+                raise ValueError(
+                    "completed action with same IDEMPOTENCY_KEY: "
+                    + completed[0]["ACTION_ID"]
+                )
+            active = [
+                a for a in same_key
+                if a["STATE"] not in TERMINAL_ACTION_STATES
+            ]
+            if active:
+                active.sort(
+                    key=lambda a: (a["LAST_UPDATE"], a["ACTION_ID"]),
+                    reverse=True,
+                )
+                raise ValueError(
+                    "active action with same IDEMPOTENCY_KEY: "
+                    + active[0]["ACTION_ID"]
+                )
+            now = _now()
+            action = {
+                "ACTION_ID": action_id,
+                "TASK_ID": task_id,
+                "TURN_ID": turn_id,
+                "PROCESS_ID": process_id,
+                "STATE": "RUNNING",
+                "TARGET_COORDINATE": target_coordinate,
+                "TOOL": tool,
+                "IDEMPOTENCY_KEY": idempotency_key,
+                "STARTED_AT": now,
+                "LAST_UPDATE": now,
+                "LAST_CONFIRMED_EFFECT": None,
+                "LAST_TOOL_EFFECT": None,
+                "RESUME_FROM": None,
+                "ERROR": None,
+            }
+            self._validate_action(action)
+            self.data["ACTIONS"].append(action)
+            self._save()
+            return copy.deepcopy(action)
 
-    def update_action(self, action_id: str, **changes: Any) -> dict[str, Any]:
+    def update_action(self, action_id, **changes):
         if "ACTION_ID" in changes and changes["ACTION_ID"] != action_id:
             raise ValueError("ACTION_ID is immutable")
         if "STATE" in changes and changes["STATE"] not in ACTION_STATES:
             raise ValueError(f"invalid action STATE: {changes['STATE']}")
-        action = self._action(action_id)
-        if action["STATE"] in TERMINAL_ACTION_STATES and changes.get("STATE") not in {
-            None,
-            action["STATE"],
-        }:
-            raise ValueError("terminal action cannot transition")
-        action.update(copy.deepcopy(changes))
-        action["LAST_UPDATE"] = _now()
-        self._validate_action(action)
-        self._save()
-        return copy.deepcopy(action)
+        with self._exclusive_mutation():
+            action = self._action(action_id)
+            for field in IMMUTABLE_ACTION_FIELDS:
+                if field in changes and changes[field] != action.get(field):
+                    raise ValueError(f"{field} is immutable")
+            effective = {
+                key: value for key, value in changes.items()
+                if action.get(key) != value
+            }
+            if action["STATE"] in TERMINAL_ACTION_STATES:
+                if effective:
+                    raise ValueError("terminal action is immutable")
+                return copy.deepcopy(action)
+            requested_state = changes.get("STATE")
+            if (
+                requested_state == "RESUMED"
+                and action["STATE"] not in RESUMABLE_ACTION_STATES
+            ):
+                raise ValueError(
+                    f"action not resumable from state {action['STATE']}"
+                )
+            action.update(copy.deepcopy(changes))
+            action["LAST_UPDATE"] = _now()
+            self._validate_action(action)
+            self._save()
+            return copy.deepcopy(action)
 
     def mark_waiting(
         self, action_id: str, *, last_tool_effect: Any = None
@@ -268,20 +336,13 @@ class ActionLedger:
             if a["STATE"] not in TERMINAL_ACTION_STATES
         ]
 
-    def find_by_idempotency_key(
-        self, idempotency_key: str
-    ) -> dict[str, Any] | None:
-        matches = [
-            a for a in self.data["ACTIONS"]
-            if a["IDEMPOTENCY_KEY"] == idempotency_key
-        ]
-        if not matches:
-            return None
-        matches.sort(
-            key=lambda a: (a["LAST_UPDATE"], a["ACTION_ID"]),
-            reverse=True,
-        )
-        return copy.deepcopy(matches[0])
+    def find_by_idempotency_key(self, idempotency_key):
+        matches = self.find_all_by_idempotency_key(idempotency_key)
+        # Retain the full history, but do not hide an already completed effect.
+        completed = [action for action in matches if action["STATE"] == "DONE"]
+        if completed:
+            return completed[0]
+        return matches[0] if matches else None
 
     def get_resumable_action(self) -> dict[str, Any] | None:
         candidates = [
@@ -323,3 +384,23 @@ class ActionLedger:
             "STATE": "INTERRUPTED_UNKNOWN_EFFECT",
             "ACTION": "CHECK_ACTUAL_EFFECT_BEFORE_RESUME",
         }
+
+    @contextmanager
+    def _exclusive_mutation(self):
+        with continuity_effect_scope():
+            self.data = self._load_or_init()
+            yield
+
+    def find_all_by_idempotency_key(self, idempotency_key):
+        # Reloading self.data is a shared-instance mutation, even for a query.
+        # Serialize it with writers using the same existing lock primitive.
+        with self._exclusive_mutation():
+            matches = [
+                a for a in self.data["ACTIONS"]
+                if a["IDEMPOTENCY_KEY"] == idempotency_key
+            ]
+            matches.sort(
+                key=lambda a: (a["LAST_UPDATE"], a["ACTION_ID"]),
+                reverse=True,
+            )
+            return [copy.deepcopy(a) for a in matches]

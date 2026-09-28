@@ -13,7 +13,11 @@ from pathlib import Path
 from typing import Any
 
 from core.work_ledger import DEFAULT_LEDGER_PATH, WorkLedger
-from core.execution_continuity import DEFAULT_ACTION_LEDGER_PATH, ActionLedger
+from core.execution_continuity import (
+    DEFAULT_ACTION_LEDGER_PATH,
+    ActionLedger,
+    continuity_effect_scope,
+)
 
 DEFAULT_CHECKPOINT_PATH = (
     Path(__file__).resolve().parents[1] / "state" / "CURRENT_CONVERSATION_CHECKPOINT.json"
@@ -56,7 +60,7 @@ def validate_checkpoint(data: dict[str, Any]) -> None:
         raise ValueError("open_tasks must be a list")
 
 
-def checkpoint_conversation(
+def _checkpoint_conversation_unlocked(
     data: dict[str, Any], path: str | Path = DEFAULT_CHECKPOINT_PATH
 ) -> dict[str, Any]:
     payload = dict(data)
@@ -78,6 +82,14 @@ def checkpoint_conversation(
         if os.path.exists(tmp_name):
             os.unlink(tmp_name)
     return payload
+
+
+def checkpoint_conversation(
+    data: dict[str, Any], path: str | Path = DEFAULT_CHECKPOINT_PATH
+) -> dict[str, Any]:
+    with continuity_effect_scope():
+        return _checkpoint_conversation_unlocked(data, path)
+
 
 def refresh_checkpoint_from_ledger(
     ledger_path: str | Path = DEFAULT_LEDGER_PATH,
@@ -379,17 +391,18 @@ def apply_conversation_event(
     raise ValueError(f"unsupported conversation event type: {kind}")
 
 
-def sync_checkpoint_evidence(
+def _sync_checkpoint_evidence_locked(
     ledger_path: str | Path = DEFAULT_LEDGER_PATH,
     action_ledger_path: str | Path = DEFAULT_ACTION_LEDGER_PATH,
     checkpoint_path: str | Path = DEFAULT_CHECKPOINT_PATH,
+    verified_active_task_ids: set[str] | None = None,
 ) -> dict[str, Any]:
     """Refresh D2/D4 references only; preserve goal, decisions and D8 verbatim."""
     ledger = WorkLedger(ledger_path)
     actions = ActionLedger(action_ledger_path)
     payload = load_checkpoint(checkpoint_path)
     payload["open_tasks"] = [task["TASK_ID"] for task in ledger.list_open_tasks()]
-    next_item = ledger.get_next_action()
+    next_item = ledger.get_next_action(verified_active_task_ids)
     payload["next_action"] = next_item["NEXT_ACTION"] if next_item else "NONE"
     payload["continuity_evidence"] = {
         "evidence_only": True,
@@ -400,3 +413,18 @@ def sync_checkpoint_evidence(
         "action_ledger_sha256": hashlib.sha256(Path(action_ledger_path).read_bytes()).hexdigest(),
     }
     return checkpoint_conversation(payload, checkpoint_path)
+
+
+def sync_checkpoint_evidence(
+    ledger_path: str | Path = DEFAULT_LEDGER_PATH,
+    action_ledger_path: str | Path = DEFAULT_ACTION_LEDGER_PATH,
+    checkpoint_path: str | Path = DEFAULT_CHECKPOINT_PATH,
+    verified_active_task_ids: set[str] | None = None,
+) -> dict[str, Any]:
+    with continuity_effect_scope():
+        return _sync_checkpoint_evidence_locked(
+            ledger_path=ledger_path,
+            action_ledger_path=action_ledger_path,
+            checkpoint_path=checkpoint_path,
+            verified_active_task_ids=verified_active_task_ids,
+        )

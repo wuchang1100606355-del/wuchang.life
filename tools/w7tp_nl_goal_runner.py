@@ -18,7 +18,11 @@ PROJECT_ROOT = Path("/home/taiji_admin/Taiji_Hub")
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from core.execution_continuity import ActionLedger, build_idempotency_key
+from core.execution_continuity import (
+    ActionLedger,
+    build_idempotency_key,
+    continuity_effect_scope,
+)
 from core.msi_local_llm_route import (
     MSI_WINDOWS_TAILSCALE_OLLAMA_URL,
     resolve_msi_ollama_url,
@@ -411,10 +415,33 @@ def restore(preimage: Path, changes: dict[str, list[str]], services: list[str]) 
             atomic_copy(src, PROJECT_ROOT / rel)
     for service in services:
         subprocess.run(["sudo", "-n", "systemctl", "restart", service], timeout=30)
-def land(shadow: Path, changes: dict[str, list[str]], run_dir: Path, intent: str) -> dict[str, Any]:
+def _assert_live_preimage(
+    before: dict[str, dict[str, Any]], changes: dict[str, list[str]]
+) -> None:
+    for rel in changes["modified"] + changes["deleted"]:
+        expected = before.get(rel)
+        live = PROJECT_ROOT / rel
+        if expected is None or not live.is_file():
+            raise RuntimeError("HOLD_LIVE_PREIMAGE_MISSING")
+        observed = {"sha256": sha_file(live), "size": live.stat().st_size}
+        if observed != {"sha256": expected.get("sha256"), "size": expected.get("size")}:
+            raise RuntimeError("HOLD_LIVE_PREIMAGE_DRIFT")
+    for rel in changes["created"]:
+        if (PROJECT_ROOT / rel).exists():
+            raise RuntimeError("HOLD_LIVE_CREATE_COLLISION")
+
+
+def land(
+    shadow: Path,
+    changes: dict[str, list[str]],
+    run_dir: Path,
+    intent: str,
+    before: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
     changed = changes["created"] + changes["modified"] + changes["deleted"]
     if changes["deleted"] and not explicit_delete_allowed(intent):
         raise RuntimeError("HOLD_DELETE_NOT_EXPLICIT")
+    _assert_live_preimage(before, changes)
     preimage = run_dir / "preimage"
     preimage.mkdir(parents=True, exist_ok=True)
     for rel in changes["modified"] + changes["deleted"]:
@@ -504,6 +531,7 @@ def _append_work_evidence(task_id: str, evidence: dict[str, Any], *, next_action
             ledger_path=PROJECT_ROOT / "state" / "WORK_LEDGER.json",
             action_ledger_path=PROJECT_ROOT / "state" / "ACTION_LEDGER.json",
             checkpoint_path=PROJECT_ROOT / "state" / "CURRENT_CONVERSATION_CHECKPOINT.json",
+            verified_active_task_ids={task_id},
         )
         return {"state": "RECORDED", "task_id": task_id}
     except Exception as exc:
@@ -925,6 +953,20 @@ def main() -> int:
     intent_hash = hashlib.sha256(intent.encode("utf-8")).hexdigest()
     plan_path = run_dir / "plan.json"
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    with continuity_effect_scope():
+        return _main_effect_scope(
+            run_id, timeout_seconds, intent, run_dir, intent_hash, plan
+        )
+
+
+def _main_effect_scope(
+    run_id: str,
+    timeout_seconds: int,
+    intent: str,
+    run_dir: Path,
+    intent_hash: str,
+    plan: dict[str, Any],
+) -> int:
     try:
         action_ledger, action_id, task_id = _prepare_action(run_id, plan, intent_hash)
     except Exception as exc:
@@ -1258,7 +1300,7 @@ GOOGLE_CANDIDATE_HINT:
                 RESUME_FROM="LAND_CANDIDATE",
             )
             phase = "LAND_CANDIDATE"
-            landing = land(shadow, changes, run_dir, intent)
+            landing = land(shadow, changes, run_dir, intent, before)
             final = {
                 **state, **landing, "finished_at": now(),
                 "retry_count": retry_count,

@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from core.execution_continuity import continuity_effect_scope
+
 DEFAULT_LEDGER_PATH = Path(__file__).resolve().parents[1] / "state" / "WORK_LEDGER.json"
 ALLOWED_STATES = {"TODO", "DOING", "BLOCKED", "HOLD", "DONE", "CANCELLED"}
 OPEN_STATES = {"TODO", "DOING", "BLOCKED", "HOLD"}
@@ -44,6 +46,7 @@ class WorkLedger:
     def __init__(self, path: str | Path = DEFAULT_LEDGER_PATH) -> None:
         self.path = Path(path)
         self.data = self._load()
+        self._loaded_sha256 = hashlib.sha256(self.path.read_bytes()).hexdigest()
 
     def _load(self) -> dict[str, Any]:
         if not self.path.exists():
@@ -71,21 +74,26 @@ class WorkLedger:
                 raise ValueError(f"{field} must be a list")
 
     def _save(self) -> None:
-        self.data["UPDATED_AT"] = _now()
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        fd, tmp_name = tempfile.mkstemp(
-            prefix=f".{self.path.name}.", suffix=".tmp", dir=self.path.parent
-        )
-        try:
-            with os.fdopen(fd, "w", encoding="utf-8") as handle:
-                json.dump(self.data, handle, ensure_ascii=False, indent=2)
-                handle.write("\n")
-                handle.flush()
-                os.fsync(handle.fileno())
-            os.replace(tmp_name, self.path)
-        finally:
-            if os.path.exists(tmp_name):
-                os.unlink(tmp_name)
+        with continuity_effect_scope():
+            current_sha = hashlib.sha256(self.path.read_bytes()).hexdigest()
+            if current_sha != self._loaded_sha256:
+                raise RuntimeError("WORK_LEDGER_PREIMAGE_DRIFT")
+            self.data["UPDATED_AT"] = _now()
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            fd, tmp_name = tempfile.mkstemp(
+                prefix=f".{self.path.name}.", suffix=".tmp", dir=self.path.parent
+            )
+            try:
+                with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                    json.dump(self.data, handle, ensure_ascii=False, indent=2)
+                    handle.write("\n")
+                    handle.flush()
+                    os.fsync(handle.fileno())
+                os.replace(tmp_name, self.path)
+                self._loaded_sha256 = hashlib.sha256(self.path.read_bytes()).hexdigest()
+            finally:
+                if os.path.exists(tmp_name):
+                    os.unlink(tmp_name)
 
     def _task(self, task_id: str) -> dict[str, Any]:
         for task in self.data["TASKS"]:
