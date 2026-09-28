@@ -567,6 +567,11 @@ def _prepare_action(run_id: str, plan: dict[str, Any], intent_hash: str) -> tupl
 
 def build_prompt(intent: str, shadow: Path, plan: dict[str, Any]) -> str:
     skill = shadow / ".skill-build" / SKILL_ID / "SKILL.md"
+    route_policy = {
+        "TASK_ID": plan.get("TASK_ID"),
+        "D5_EXECUTION": plan.get("D5_EXECUTION"),
+        "D7_RISK": plan.get("D7_RISK"),
+    }
     return f"""Read {skill} and treat it as the task-local 8D ADI control contract.
 Do not load or depend on old project AGENTS, old memories, or historical task authority.
 
@@ -585,7 +590,7 @@ Run proportionate shadow tests. Do not claim ACTIVE or CANONICAL.
 Return a concise factual summary of the candidate and verification.
 
 Route plan:
-{json.dumps(plan, ensure_ascii=False, sort_keys=True)}
+{json.dumps(route_policy, ensure_ascii=False, sort_keys=True)}
 """
 def _json_get(url: str) -> dict[str, Any]:
     try:

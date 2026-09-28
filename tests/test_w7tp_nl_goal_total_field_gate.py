@@ -117,6 +117,21 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
         )
         self.assertFalse(risk["local_rule_ref_cloud_visible"])
 
+    def test_local_model_prompt_excludes_static_state_cell(self) -> None:
+        plan = {
+            "TASK_ID": "NLDEV-005",
+            "STATIC_STATE_CELL": {"legacy": "must-not-reach-model"},
+            "RESOURCE_DECISION": {"legacy": "must-not-reach-model"},
+            "D3_COORDINATE": {"affected_closure": ["core"]},
+            "D5_EXECUTION": {"context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL"},
+            "D7_RISK": {"unbound_context_requiring_llm": "HOLD"},
+        }
+        prompt = runner.build_prompt("intent", runner.PROJECT_ROOT, plan)
+        self.assertNotIn("STATIC_STATE_CELL", prompt)
+        self.assertNotIn("must-not-reach-model", prompt)
+        self.assertNotIn("RESOURCE_DECISION", prompt)
+        self.assertIn("TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL", prompt)
+
     def test_local_model_dynamic_context_pull_is_task_bound(self) -> None:
         bootstrap = {
             "pull_coordinate": "pull:test:local-model",
