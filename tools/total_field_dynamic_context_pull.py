@@ -154,6 +154,32 @@ def _validate_no_forbidden_context(value: Any) -> None:
             raise DynamicContextPullHold(
                 f"HOLD_CONTEXT_SECRET_VALUE:{path}.{raw_key}"
             )
+
+
+def _validate_non_differential_context_packet(packet: Mapping[str, Any]) -> None:
+    """Keep dynamic-context pull independent of predecessor/delta reconstruction."""
+
+    field = packet.get("joint_state_field")
+    d6 = field.get("D6") if isinstance(field, Mapping) else None
+    if (
+        not isinstance(d6, Mapping)
+        or d6.get("mode") != "LOCAL_RULE_REF_MINIMUM_STATE"
+        or d6.get("rule_body_transmitted") is not False
+        or d6.get("target_bytes_transmitted") != 0
+        or d6.get("differential_payload_bytes") != 0
+        or d6.get("compression_payload_bytes") != 0
+    ):
+        raise DynamicContextPullHold("HOLD_CONTEXT_PULL_NON_DIFFERENTIAL_CONTRACT_REQUIRED")
+
+    forbidden_old_state_keys = {"delta", "diff", "patch", "previous_state", "prior_state"}
+    for path, raw_key, _ in _walk_items(packet):
+        key = raw_key.strip().lower().replace("-", "_")
+        if key in forbidden_old_state_keys:
+            raise DynamicContextPullHold(
+                f"HOLD_CONTEXT_PULL_PREDECESSOR_OR_DELTA_FORBIDDEN:{path}.{raw_key}"
+            )
+
+
 def _validate_ref_list(value: Any, code: str) -> list[str]:
     if not isinstance(value, list):
         raise DynamicContextPullHold(code)
@@ -218,6 +244,7 @@ class TotalFieldDynamicContextPullBroker:
         return_coordinate: str,
         context_builder: ContextBuilder,
     ) -> dict[str, Any]:
+        _validate_non_differential_context_packet(packet)
         validated_packet = validate_minimum_packet(packet)
         packet_copy = copy.deepcopy(dict(packet))
         task = _require_ref(task_ref, "HOLD_CONTEXT_PULL_TASK_REF_INVALID")
@@ -310,6 +337,7 @@ class TotalFieldDynamicContextPullBroker:
         # Consume before local reconstruction; failed pulls require a new coordinate.
         self._consumed.add(coordinate)
         packet = copy.deepcopy(record["packet"])
+        _validate_non_differential_context_packet(packet)
         validate_minimum_packet(packet)
 
         workset_path: Path | None = None
@@ -369,6 +397,14 @@ class TotalFieldDynamicContextPullBroker:
                     "INTERFACE_REF",
                     "NON_CORE_RULE_CAPSULE_REF",
                 ],
+            },
+            "transmission_semantics": {
+                "predecessor_state_required": False,
+                "differential_payload_bytes": 0,
+                "target_bytes_transmitted": 0,
+                "rule_body_transmitted": False,
+                "local_rule_capability_required": True,
+                "semantic_class": "NON_DIFFERENTIAL_POINTER_FIRST_STATE_RECONSTRUCTION",
             },
             "reconstruction_evidence": {
                 "packet_sha256": local_receipt["packet_sha256"],

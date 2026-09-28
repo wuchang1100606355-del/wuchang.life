@@ -1,0 +1,40 @@
+{
+  "artifact_sha256": {
+    "configs/total_field/w7tp_local_origin_state_rule_registry_v1.json": "85007b6bce5ad40c1c6ff5985a765a3e015e94867ab3f6be246c2bedc6518eaf",
+    "tests/test_total_field_dynamic_context_pull.py": "877cb316583b16447b0069f4bbbe580361b4112c176b52855c446109c2db91a0",
+    "tools/total_field_dynamic_context_pull.py": "c5c7d3a1180a53d3562b4cb3873d3998a1cff51263ed737f5f6defe2a053577a"
+  },
+  "base_head": "ef7ba0c88d5092540005a61df922974764345323",
+  "boundaries": {
+    "canonical_promotion": false,
+    "d8_authority_created": false,
+    "old_native_adi_dynamic_context_modified": false,
+    "runtime_activation": false
+  },
+  "capability_id": "CAP_INTERNAL_DYNAMIC_CONTEXT_V1",
+  "hardening": [
+    "explicit non-differential D6 contract at dynamic-context boundary",
+    "predecessor/delta/diff/patch keys fail closed before registration",
+    "non-differential transmission semantics exposed in pull result",
+    "single-use exact task/provider/model binding preserved",
+    "references-only persistence preserved"
+  ],
+  "module": "tools/total_field_dynamic_context_pull.py",
+  "node": "taiji01",
+  "observed_at": "2026-09-28T06:12:00+00:00",
+  "origin_rule_rebind": {
+    "ancestry_verified": true,
+    "current_file_hash_match": true,
+    "predecessor_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
+    "rule_ref": "local-rule:w7tp-origin-cell-fixture-recipe/v2",
+    "successor_commit": "bba18a7aab3b19729164516216458a5e888238af",
+    "successor_sha256": "5cde10544819f3783c083a229b04569fd054a0cacc5bb981d99708b0e132ce19"
+  },
+  "schema_version": "W7TP-DYNAMIC-CONTEXT-HARDENING-RECEIPT/1.0",
+  "state": "PASS_CANDIDATE_HARDENED_CURRENT_RUN",
+  "tests": {
+    "command": "python3 -m unittest -q tests.test_total_field_dynamic_context_pull tests.test_w7tp_origin_state_minimum_packet_v1 tests.test_capability_internalization tests.test_msi_llm_candidate_adapter tests.test_member_sovereign_context_adapter tests.test_gemini_code_assist_a2a_candidate tests.test_w7tp_nl_goal_total_field_gate",
+    "dynamic_context": "11/11 PASS",
+    "targeted_total": "54/54 PASS"
+  }
+}

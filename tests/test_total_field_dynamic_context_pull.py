@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import json
 import shutil
@@ -227,6 +228,60 @@ class DynamicContextPullTests(unittest.TestCase):
         self.assertTrue(
             broker.is_consumed(bootstrap["pull_coordinate"])
         )
+
+    def test_dynamic_context_declares_non_differential_semantics(self) -> None:
+        broker = TotalFieldDynamicContextPullBroker()
+        bootstrap = self.register(broker)
+        result = self.pull(broker, bootstrap)
+        semantics = result["transmission_semantics"]
+        self.assertFalse(semantics["predecessor_state_required"])
+        self.assertEqual(semantics["differential_payload_bytes"], 0)
+        self.assertEqual(semantics["target_bytes_transmitted"], 0)
+        self.assertFalse(semantics["rule_body_transmitted"])
+        self.assertTrue(semantics["local_rule_capability_required"])
+        self.assertEqual(
+            semantics["semantic_class"],
+            "NON_DIFFERENTIAL_POINTER_FIRST_STATE_RECONSTRUCTION",
+        )
+
+    def test_differential_payload_escalation_fails_before_registration(self) -> None:
+        packet = copy.deepcopy(self.packet)
+        packet["joint_state_field"]["D6"]["differential_payload_bytes"] = 1
+        packet["packet_sha256"] = minimum.packet_sha256(packet)
+        broker = TotalFieldDynamicContextPullBroker()
+        with self.assertRaisesRegex(
+            DynamicContextPullHold,
+            "HOLD_CONTEXT_PULL_NON_DIFFERENTIAL_CONTRACT_REQUIRED",
+        ):
+            broker.register(
+                packet=packet,
+                task_ref="task:NLDEV-005",
+                provider_ref="provider:gemini-code-assist",
+                model_ref="model:gemini-code-assist:current",
+                expires_at=self.future_expiry(),
+                return_coordinate="total-field:candidate-gateway:llm-push",
+                context_builder=self.good_builder,
+            )
+
+    def test_predecessor_state_key_fails_before_registration(self) -> None:
+        packet = copy.deepcopy(self.packet)
+        packet["minimum_new_information"]["previous_state"] = "state:forbidden"
+        packet["packet_sha256"] = minimum.packet_sha256(packet)
+        broker = TotalFieldDynamicContextPullBroker()
+        with self.assertRaisesRegex(
+            DynamicContextPullHold,
+            "HOLD_CONTEXT_PULL_PREDECESSOR_OR_DELTA_FORBIDDEN",
+        ):
+            broker.register(
+                packet=packet,
+                task_ref="task:NLDEV-005",
+                provider_ref="provider:gemini-code-assist",
+                model_ref="model:gemini-code-assist:current",
+                expires_at=self.future_expiry(),
+                return_coordinate="total-field:candidate-gateway:llm-push",
+                context_builder=self.good_builder,
+            )
+
     def test_persistence_boundary_is_references_only(self) -> None:
         broker = TotalFieldDynamicContextPullBroker()
         bootstrap = self.register(broker)
