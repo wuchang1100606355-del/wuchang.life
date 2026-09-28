@@ -83,7 +83,7 @@ class CapabilityInternalizationTest(unittest.TestCase):
         self.assertIn("NON_DIFFERENTIAL_CONTEXT", item["selection_tags"])
         self.assertEqual(
             set(item["resource_refs"]),
-            {"TAIJI01_TOTAL_FIELD", "MSI_OLLAMA_LOCAL", "GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI"},
+            {"TAIJI01_TOTAL_FIELD", "MSI_OLLAMA_LOCAL", "GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI", "OLLAMA_CLOUD"},
         )
         self.assertFalse(item["d5_execution"]["direct_effect"])
 

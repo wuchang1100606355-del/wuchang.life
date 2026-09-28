@@ -58,7 +58,8 @@
       "resource_refs": [
         "MSI_OLLAMA_LOCAL",
         "GEMINI_CODE_ASSIST",
-        "GOOGLE_VERTEX_GEMINI"
+        "GOOGLE_VERTEX_GEMINI",
+        "OLLAMA_CLOUD"
       ],
       "selection_tags": [
         "LANGUAGE",
@@ -127,7 +128,7 @@
         "tools/total_field_dynamic_context_pull.py",
         "tools/w7tp_task_state_minimum_packet.py"
       ],
-      "resource_refs": ["TAIJI01_TOTAL_FIELD", "MSI_OLLAMA_LOCAL", "GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI"],
+      "resource_refs": ["TAIJI01_TOTAL_FIELD", "MSI_OLLAMA_LOCAL", "GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI", "OLLAMA_CLOUD"],
       "selection_tags": ["POINTER_FIRST", "DYNAMIC_CONTEXT", "SINGLE_USE_PULL", "ALL_CONTEXT_REQUIRING_LLM", "NON_DIFFERENTIAL_CONTEXT"],
       "d3_coordinate": {
         "node_scope": ["taiji01"],

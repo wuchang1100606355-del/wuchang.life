@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import secrets
 import subprocess
@@ -367,6 +368,65 @@ def probe_local_ollama(url: str, model: str) -> dict[str, Any]:
     return item
 
 
+def probe_ollama_cloud(url: str) -> dict[str, Any]:
+    """Register Ollama Cloud as a governed capability without auto-egress."""
+    model_env = "TAIJI_OLLAMA_CLOUD_MODEL"
+    model = os.getenv(model_env, "").strip()
+    item = _resource_base(
+        "OLLAMA_CLOUD",
+        "MODEL_COMPUTE",
+        "MSI",
+        "OLLAMA_CLOUD",
+        model or "UNCONFIGURED",
+    )
+    model_present = False
+    if model:
+        probe = _http_json(url.rstrip("/") + "/api/tags", timeout=3.0)
+        if probe.get("ok"):
+            names = [
+                row.get("name")
+                for row in probe["data"].get("models", [])
+                if isinstance(row, dict)
+            ]
+            model_present = model in names
+    if not model:
+        state = "HOLD_PROVIDER_MODEL_UNCONFIGURED"
+    elif not model_present:
+        state = "HOLD_CLOUD_MODEL_NOT_PRESENT"
+    else:
+        state = "REGISTERED_MODEL_REF_PRESENT_ADAPTER_PENDING"
+    item.update({
+        "CURRENT_STATE": state,
+        "CAPABILITY_SET": [
+            "LANGUAGE",
+            "REASONING",
+            "STRUCTURED_CANDIDATE",
+            "CLOUD_CANDIDATE",
+        ],
+        "PRIVACY_CLASS": "CLOUD_MINIMUM_DEIDENTIFIED_ONLY",
+        "AUTHORITY_CLASS": "CANDIDATE_ONLY_NOT_D8",
+        "COST_CLASS": "CLOUD_SUBSCRIPTION_OR_API",
+        "SUBSCRIPTION_CLASS": "OLLAMA_ACCOUNT_RESOURCE",
+        "LATENCY_CLASS": "CLOUD_VIA_MSI_OLLAMA",
+        "TRANSFER_COST": "MINIMUM_DEIDENTIFIED_PACKET_ONLY",
+        "CONTEXT_BINDING_STATE": "HOLD_PROVIDER_ADAPTER_NOT_BOUND",
+        "CONTEXT_POLICY": "POINTER_FIRST_MINIMUM_DEIDENTIFIED_ONLY",
+        "TOOL_CAPABILITY": "REGISTERED_CLOUD_MODEL_CAPABILITY_NO_LIVE_ADAPTER",
+        "VERIFICATION_COST": "MEDIUM_TO_HIGH",
+        "RECOVERY_DISTANCE": "SHORT_NO_DIRECT_EFFECT",
+        "EVIDENCE_REFS": [
+            url.rstrip("/") + "/api/tags",
+            "env:" + model_env,
+            "configs/total_field/w7tp_capability_internalization_registry_v1.json",
+        ],
+        "MODEL_REF_SOURCE": model_env,
+        "MODEL_REF_CONFIGURED": bool(model),
+        "CLOUD_INFERENCE_IS_D6": False,
+        "DIRECT_EXTERNAL_EFFECT": False,
+    })
+    return item
+
+
 def probe_gemini_code_assist() -> dict[str, Any]:
     item = _resource_base(
         "GEMINI_CODE_ASSIST", "MODEL_COMPUTE", "taiji01-code-server",
@@ -582,6 +642,7 @@ def arbitrate_resources(
         probe_taiji01_node(),
         probe_msi_node(),
         probe_local_ollama(local_ollama_url, local_model),
+        probe_ollama_cloud(local_ollama_url),
         probe_gemini_code_assist(),
         probe_vertex(root),
         probe_workspace(root),
@@ -621,14 +682,15 @@ def arbitrate_resources(
                 "bound to taiji01 Total Field."
             )
 
-    cloud_ids = {"GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI"}
+    cloud_ids = {"GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI", "OLLAMA_CLOUD"}
+    google_ids = {"GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI"}
     if profile["sensitive"]:
         denied.extend(rid for rid in cloud_ids if rid in available)
         for rid in cloud_ids:
             why_not[rid] = "Sensitive payload requires local truth/context reduction first."
     elif not google_allowed:
-        denied.extend(rid for rid in cloud_ids if rid in available)
-        for rid in cloud_ids:
+        denied.extend(rid for rid in google_ids if rid in available)
+        for rid in google_ids:
             why_not[rid] = "Google compute disabled for this request."
 
     information_search_required = (
