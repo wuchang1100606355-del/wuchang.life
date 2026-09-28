@@ -1,0 +1,48 @@
+{
+  "authority": {
+    "canonical_promotion": false,
+    "d8_authority_created": false,
+    "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    "provider_authority": "NONE"
+  },
+  "dynamic_context": {
+    "delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+    "service_state": "ACTIVE_POLICY_BOUND",
+    "target_scope": "ALL_CONTEXT_REQUIRING_LLM",
+    "unbound_context_requiring_llm": "HOLD"
+  },
+  "gateway": {
+    "health": {
+      "gateway": "online",
+      "service": "taiji-gateway",
+      "timestamp": "2026-09-28T10:20:17.636917",
+      "version": "1.1.0-redteam"
+    },
+    "main_pid": 4023248,
+    "service": "taiji-gateway.service"
+  },
+  "git_head": "bf93223ef9f6fb2a0abea96c0e0d49d9ce07a41a",
+  "legacy_gateway_convergence": {
+    "api_taiji_execute_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+    "api_taiji_execute_dry_run_state": "PASS_DRY_RUN",
+    "api_taiji_execute_target_scope": "ALL_CONTEXT_REQUIRING_LLM",
+    "openai_compat_direct_model_call": "BLOCKED",
+    "openai_compat_governed_route": "/api/taiji/nl-control/execute",
+    "openai_compat_http_status": 409
+  },
+  "limitations": [
+    "Gemini Code Assist availability remains runtime-discovery dependent.",
+    "Google Vertex Gemini remains held until a pointer-first adapter is bound.",
+    "Ollama Cloud remains held until provider model and governed adapter are bound."
+  ],
+  "local_model_runner": {
+    "dynamic_context_pull": "IMPLEMENTED_TASK_BOUND_SINGLE_USE",
+    "source_tool_evidence": "ALLOWED_WITHIN_ISOLATED_SHADOW",
+    "static_state_cell_in_model_prompt": "REMOVED"
+  },
+  "node": "taiji01",
+  "observed_at": "2026-09-28T10:20:00+00:00",
+  "schema_version": "W7TP-DYNAMIC-CONTEXT-LLM-CONVERGENCE/1.0",
+  "state": "ACTIVE_VERIFIED_GOVERNED_CONTEXT_CONVERGENCE",
+  "tests": "49/49 PASS targeted after final commit"
+}
