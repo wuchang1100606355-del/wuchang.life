@@ -244,6 +244,8 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "cloud_authority": "CANDIDATE_ONLY",
             "formal_land_gate": "TAIJI01_TOTAL_FIELD_SOLE_RECEIVER",
             "context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+            "context_target_scope": "ALL_CONTEXT_REQUIRING_LLM",
+            "unbound_context_requiring_llm": "HOLD",
             "context_pull_owner": (
                 "tools.total_field_dynamic_context_pull."
                 "TotalFieldDynamicContextPullBroker"
@@ -360,6 +362,10 @@ def status():
         "development_ui": "https://taiji01.tailea1eef.ts.net:8444/?folder=/home/taiji_admin/Taiji_Hub",
         "google_fallback": GOOGLE_FALLBACK,
         "google_cloud_role": "CANDIDATE_ONLY_AFTER_LOCAL_HOLD",
+        "dynamic_context_service": "ACTIVE_POLICY_BOUND",
+        "dynamic_context_target_scope": "ALL_CONTEXT_REQUIRING_LLM",
+        "dynamic_context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+        "unbound_context_requiring_llm": "HOLD",
         "auto_land_default": AUTO_LAND_DEFAULT,
         "execution_architecture": "8D_ADI_LOCAL_MODEL_SHADOW_GOOGLE_CANDIDATE_AUTOLAND",
         "runner_isolation": "SYSTEMD_TRANSIENT_SERVICE",

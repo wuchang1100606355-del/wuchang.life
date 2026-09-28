@@ -339,6 +339,9 @@ def probe_local_ollama(url: str, model: str) -> dict[str, Any]:
             row.get("name") for row in probe["data"].get("models", [])
             if isinstance(row, dict)
         ]
+    context_pull = DEFAULT_ROOT / "tools/total_field_dynamic_context_pull.py"
+    context_adapter = DEFAULT_ROOT / "tools/total_field/msi_llm_candidate_adapter.py"
+    pointer_bound = context_pull.is_file() and context_adapter.is_file()
     item.update({
         "CURRENT_STATE": "AVAILABLE" if model in names else "HOLD_MODEL_NOT_PRESENT",
         "CAPABILITY_SET": ["LANGUAGE", "INTENT", "CODE", "TOOLS", "LOCAL_REVIEW"],
@@ -347,7 +350,15 @@ def probe_local_ollama(url: str, model: str) -> dict[str, Any]:
         "COST_CLASS": "LOCAL_COMPUTE",
         "SUBSCRIPTION_CLASS": "LOCAL_OWNED",
         "LATENCY_CLASS": "LAN_OR_TAILNET",
-        "TRANSFER_COST": "LOW",
+        "TRANSFER_COST": (
+            "POINTER_FIRST_CONTEXT_PULL_REQUIRED"
+            if pointer_bound else "HOLD_DYNAMIC_CONTEXT_ADAPTER_MISSING"
+        ),
+        "CONTEXT_BINDING_STATE": (
+            "POINTER_FIRST_TOTAL_FIELD_BOUND"
+            if pointer_bound else "HOLD_POINTER_FIRST_ADAPTER_MISSING"
+        ),
+        "CONTEXT_POLICY": "ALL_CONTEXT_REQUIRING_LLM",
         "TOOL_CAPABILITY": "SHADOW_SOURCE_TOOLS",
         "VERIFICATION_COST": "LOW_TO_MEDIUM",
         "RECOVERY_DISTANCE": "SHORT",
@@ -412,6 +423,7 @@ def probe_gemini_code_assist() -> dict[str, Any]:
                     "POINTER_FIRST_TOTAL_FIELD_BOUND"
                     if pointer_bound else "HOLD_POINTER_FIRST_ADAPTER_MISSING"
                 ),
+                "CONTEXT_POLICY": "ALL_CONTEXT_REQUIRING_LLM",
                 "SOURCE_WRITE_AUTHORITY": "NONE",
                 "FORMAL_EFFECT_RETURN": "TAIJI01_TOTAL_FIELD",
                 "WORKSPACE_POLICY": "ISOLATED_TASK_WORKSPACE_REQUIRED",
@@ -455,7 +467,9 @@ def probe_vertex(root: Path) -> dict[str, Any]:
         "COST_CLASS": "CLOUD_API",
         "SUBSCRIPTION_CLASS": "PROJECT_RESOURCE",
         "LATENCY_CLASS": "CLOUD",
-        "TRANSFER_COST": "STATIC_CELL_REQUIRED",
+        "TRANSFER_COST": "POINTER_FIRST_CONTEXT_PULL_REQUIRED",
+        "CONTEXT_BINDING_STATE": "HOLD_POINTER_FIRST_ADAPTER_MISSING",
+        "CONTEXT_POLICY": "ALL_CONTEXT_REQUIRING_LLM",
         "TOOL_CAPABILITY": "VERTEX_CANDIDATE_GATEWAY",
         "VERIFICATION_COST": "MEDIUM_TO_HIGH",
         "RECOVERY_DISTANCE": "SHORT_NO_DIRECT_EFFECT",
@@ -588,6 +602,25 @@ def arbitrate_resources(
     why_selected: dict[str, str] = {}
     why_not: dict[str, str] = {}
 
+    llm_context_policy = {
+        "scope": "ALL_CONTEXT_REQUIRING_LLM",
+        "delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+        "unbound_model_compute": "HOLD",
+        "provider_authority": "NONE",
+        "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+    }
+    for rid, item in by_id.items():
+        if (
+            item.get("RESOURCE_TYPE") == "MODEL_COMPUTE"
+            and rid in available
+            and item.get("CONTEXT_BINDING_STATE") != "POINTER_FIRST_TOTAL_FIELD_BOUND"
+        ):
+            denied.append(rid)
+            why_not[rid] = (
+                "Context-requiring LLM work requires pointer-first Dynamic Context "
+                "bound to taiji01 Total Field."
+            )
+
     cloud_ids = {"GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI"}
     if profile["sensitive"]:
         denied.extend(rid for rid in cloud_ids if rid in available)
@@ -613,7 +646,7 @@ def arbitrate_resources(
                     "Required information-search node for 8D ADI affected-closure localization."
                 )
 
-    if "MSI_OLLAMA_LOCAL" in available:
+    if "MSI_OLLAMA_LOCAL" in available and "MSI_OLLAMA_LOCAL" not in denied:
         qualified.append("MSI_OLLAMA_LOCAL")
         if information_search_required:
             why_selected["MSI_OLLAMA_LOCAL"] = (
@@ -688,6 +721,7 @@ def arbitrate_resources(
         "HOLD_SET": hold,
         "WHY_SELECTED": why_selected,
         "WHY_NOT_SELECTED": why_not,
+        "LLM_CONTEXT_POLICY": llm_context_policy,
         "PRIMARY_INFORMATION_SEARCH_NODES": PRIMARY_INFORMATION_SEARCH_NODES,
         "RESOURCE_FABRIC_SCOPE": RESOURCE_FABRIC_SCOPE,
         "ROUTER_RESOURCE_SET": [
@@ -711,8 +745,8 @@ def arbitrate_resources(
             "read only the affected closure, not the whole device."
         ),
         "REQUIRED_HANDOFF": (
-            "STATIC_STATE_CELL_PACKET for any cloud/model boundary; "
-            "Total Field remains formal effect boundary."
+            "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL for every context-requiring "
+            "MODEL_COMPUTE resource; Total Field remains formal effect boundary."
         ),
         "EXPECTED_RETURN": ALLOWED_CLOUD_RETURNS,
         "OBSERVED_AT": _now(),

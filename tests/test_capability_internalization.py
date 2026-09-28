@@ -79,6 +79,12 @@ class CapabilityInternalizationTest(unittest.TestCase):
         )
         item = result["selected_capabilities"][0]
         self.assertIn("POINTER_FIRST", item["selection_tags"])
+        self.assertIn("ALL_CONTEXT_REQUIRING_LLM", item["selection_tags"])
+        self.assertIn("NON_DIFFERENTIAL_CONTEXT", item["selection_tags"])
+        self.assertEqual(
+            set(item["resource_refs"]),
+            {"TAIJI01_TOTAL_FIELD", "MSI_OLLAMA_LOCAL", "GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI"},
+        )
         self.assertFalse(item["d5_execution"]["direct_effect"])
 
     def test_gst_selection_preserves_bounded_runtime_and_no_d8(self) -> None:

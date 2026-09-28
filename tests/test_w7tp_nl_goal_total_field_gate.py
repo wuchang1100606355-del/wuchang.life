@@ -98,6 +98,8 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
             execution["context_delivery_mode"],
             "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
         )
+        self.assertEqual(execution["context_target_scope"], "ALL_CONTEXT_REQUIRING_LLM")
+        self.assertEqual(execution["unbound_context_requiring_llm"], "HOLD")
         self.assertEqual(
             execution["context_bootstrap"],
             "POINTER_AND_REFERENCES_ONLY",
