@@ -1184,13 +1184,64 @@ def lineworks_notify_payload(message: Any, target_ref: Any = "", channel: Any = 
     )
 
 
-def staff_voice_pos_payload(transcript: Any, staff_ref: Any = "", language: Any = "zh-Hant") -> dict:
+def _candidate_preview_ref(preview_kind: str, projection: dict) -> str:
+    return _stable_hash({"preview_kind": preview_kind, "projection": projection})
+
+
+def _voice_touch_confirmation(
+    *,
+    preview_ref: str,
+    voice_readback_completed: Any = False,
+    human_touch_confirmed: Any = False,
+) -> dict:
+    readback_done = voice_readback_completed is True
+    touch_requested = human_touch_confirmed is True
+    touch_confirmed = readback_done and touch_requested
+    if not readback_done:
+        state = "HOLD_VOICE_READBACK_REQUIRED"
+    elif not touch_requested:
+        state = "AWAITING_CUSTOMER_TOUCH"
+    else:
+        state = "HUMAN_TOUCH_CONFIRMED_CANDIDATE_ONLY"
+    return {
+        "preview_ref": preview_ref,
+        "voice_readback_completed": readback_done,
+        "human_touch_requested": touch_requested,
+        "human_touch_confirmed": touch_confirmed,
+        "confirmation_state": state,
+        "pos_order_created": False,
+        "odoo_db_write": False,
+        "payment_capture": False,
+    }
+
+
+def staff_voice_pos_payload(
+    transcript: Any,
+    staff_ref: Any = "",
+    language: Any = "zh-Hant",
+    *,
+    voice_readback_completed: Any = False,
+    human_touch_confirmed: Any = False,
+) -> dict:
     detected = detect_intent(transcript)
     if detected == "menu_lookup":
         detected = "order_candidate"
     grammar = parse_staff_voice_order(transcript)
     if grammar["valid"]:
         detected = "order_candidate"
+    preview_ref = _candidate_preview_ref(
+        "staff_voice_pos",
+        {
+            "detected_pos_intent": detected,
+            "voice_pos_grammar": grammar,
+            "language": str(language or "zh-Hant"),
+        },
+    )
+    confirmation = _voice_touch_confirmation(
+        preview_ref=preview_ref,
+        voice_readback_completed=voice_readback_completed,
+        human_touch_confirmed=human_touch_confirmed,
+    )
     return base_payload(
         "staff_voice_pos_operation",
         "P1_STAFF_VOICE_POS_API_SHELL",
@@ -1201,6 +1252,11 @@ def staff_voice_pos_payload(transcript: Any, staff_ref: Any = "", language: Any 
             "staff_ref": str(staff_ref or ""),
             "voice_pos_grammar": grammar,
             "detected_pos_intent": detected,
+            "preview_ref": preview_ref,
+            "voice_readback_completed": confirmation["voice_readback_completed"],
+            "human_touch_confirmed": confirmation["human_touch_confirmed"],
+            "confirmation_state": confirmation["confirmation_state"],
+            "confirmation_gate": confirmation,
             "candidate_action": {
                 "intent": detected,
                 "confirm_state": "draft",
@@ -1235,23 +1291,33 @@ def parse_order_lines(raw_lines: Any) -> list[OrderLine]:
 
 def order_payload(raw_lines: Any) -> dict:
     lines = parse_order_lines(raw_lines)
+    order_lines = [
+        {
+            "product_ref": line.product_ref,
+            "name": line.name,
+            "quantity": line.quantity,
+            "price": line.price,
+            "subtotal": line.subtotal,
+        }
+        for line in lines
+    ]
+    amount = sum(line.subtotal for line in lines)
+    preview_ref = _candidate_preview_ref(
+        "pos_order_preview",
+        {"order_lines": order_lines, "amount": amount},
+    )
     return base_payload(
         "pos_order_create",
         "HOLD_RUNTIME_POS_ORDER_RELEASE_REQUIRED",
         {
-            "order_lines": [
-                {
-                    "product_ref": line.product_ref,
-                    "name": line.name,
-                    "quantity": line.quantity,
-                    "price": line.price,
-                    "subtotal": line.subtotal,
-                }
-                for line in lines
-            ],
-            "amount": sum(line.subtotal for line in lines),
+            "order_lines": order_lines,
+            "amount": amount,
+            "preview_ref": preview_ref,
+            "confirmation_state": "AWAITING_CUSTOMER_TOUCH",
+            "human_touch_confirmed": False,
             "pos_order_created": False,
             "odoo_db_write": False,
+            "payment_capture": False,
         },
     )
 
