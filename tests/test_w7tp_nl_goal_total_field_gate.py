@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from services.gateway import natural_language_control as nl_control
+from tools import w7tp_local_model_agent as local_agent
 from tools import w7tp_nl_goal_runner as runner
 
 
@@ -193,6 +194,47 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
             task_ref="task:NLDEV-005",
             provider_ref="provider:MSI_OLLAMA_LOCAL",
             model_ref="model:xiaoj:8b",
+        )
+
+    def test_effectful_intent_scoped_read_only_markers_do_not_mask_effect(self) -> None:
+        self.assertFalse(runner.effectful_intent("分析目前狀態"))
+        marker_a = "禁止" + "修改"
+        marker_b = "不得" + "寫入"
+        self.assertTrue(
+            runner.effectful_intent(
+                f"新增工作並完成驗證，{marker_a}其他檔案"
+            )
+        )
+        self.assertTrue(
+            runner.effectful_intent(
+                f"修改 X 的判定邏輯，{marker_b}外部系統"
+            )
+        )
+
+    def test_stage_path_remains_available_after_observation_budget(self) -> None:
+        streak = local_agent.MAX_CONSECUTIVE_OBSERVATION_CALLS + 1
+        blocked, observed = local_agent._tool_budget("stage_path", streak)
+        self.assertFalse(blocked)
+        self.assertEqual(observed, streak)
+        blocked, observed = local_agent._tool_budget("read_file", streak)
+        self.assertTrue(blocked)
+        self.assertGreater(observed, streak)
+
+    def test_changed_python_tests_fall_back_to_unittest(self) -> None:
+        with patch.object(runner.importlib.util, "find_spec", return_value=None):
+            cmd, kind = runner._python_test_command(
+                ["tests/test_w7tp_nl_goal_total_field_gate.py"]
+            )
+        self.assertEqual(kind, "unittest_changed")
+        self.assertEqual(
+            cmd,
+            [
+                "python3",
+                "-m",
+                "unittest",
+                "-v",
+                "tests.test_w7tp_nl_goal_total_field_gate",
+            ],
         )
 
     def test_local_agent_step_budget_is_adaptive(self) -> None:

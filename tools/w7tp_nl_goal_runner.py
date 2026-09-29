@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import os
 import shutil
@@ -313,6 +314,15 @@ def run(cmd: list[str], *, cwd: Path, timeout: int = 300) -> subprocess.Complete
     )
 
 
+def _python_test_command(paths: list[str]) -> tuple[list[str], str]:
+    if importlib.util.find_spec("pytest") is not None:
+        return ["python3", "-m", "pytest", "-q", *paths], "pytest_changed"
+    if not paths or not all(path.startswith("tests/") and path.endswith(".py") for path in paths):
+        raise RuntimeError("HOLD_CHANGED_TEST_RUNNER_UNAVAILABLE")
+    modules = [Path(path).with_suffix("").as_posix().replace("/", ".") for path in paths]
+    return ["python3", "-m", "unittest", "-v", *modules], "unittest_changed"
+
+
 def validate_candidate(shadow: Path, changes: dict[str, list[str]]) -> dict[str, Any]:
     changed = changes["created"] + changes["modified"] + changes["deleted"]
     if len(changed) > MAX_CHANGED_FILES:
@@ -346,8 +356,9 @@ def validate_candidate(shadow: Path, changes: dict[str, list[str]]) -> dict[str,
         if rel.startswith("tests/") and rel.endswith(".py")
     ]
     if changed_tests:
-        p = run(["python3", "-m", "pytest", "-q", *changed_tests], cwd=shadow, timeout=300)
-        results.append({"kind": "pytest_changed", "paths": changed_tests, "rc": p.returncode})
+        test_cmd, test_kind = _python_test_command(changed_tests)
+        p = run(test_cmd, cwd=shadow, timeout=300)
+        results.append({"kind": test_kind, "paths": changed_tests, "rc": p.returncode})
         if p.returncode != 0:
             raise RuntimeError("HOLD_CHANGED_TEST_FAILED")
     return {"state": "PASS_DETERMINISTIC_VALIDATION", "checks": results}
@@ -363,13 +374,16 @@ def effectful_intent(intent: str) -> bool:
         "不要修改", "不修改", "禁止寫入", "不得寫入", "不要寫入",
         "read-only", "readonly", "read only", "no write", "do not modify",
     )
-    if any(marker in text for marker in read_only_markers):
-        return False
-    return any(k in text for k in (
+    effect_markers = (
         "新增", "修改", "修正", "修復", "建立", "實作", "加入", "改成",
         "部署", "啟用", "整合", "建構", "落地", "add", "modify", "change",
         "implement", "fix", "create", "update", "deploy", "enable", "integrate",
-    ))
+    )
+    remaining = text
+    for marker in read_only_markers:
+        remaining = remaining.replace(marker, " ")
+    remaining = " ".join(remaining.split())
+    return any(marker in remaining for marker in effect_markers)
 
 
 def atomic_copy(src: Path, dst: Path) -> None:

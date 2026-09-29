@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 import re
@@ -34,8 +35,8 @@ OBSERVATION_TOOLS = {
     "read_file",
     "search_text",
     "run_check",
-    "stage_path",
 }
+NON_CONTENT_PROGRESS_TOOLS = {"stage_path"}
 MUTATION_TOOLS = {"replace_text", "write_file"}
 SOURCE_ROOTS = {
     "core", "services", "tools", "capabilities", "configs", "schemas",
@@ -219,8 +220,19 @@ class AgentTools:
         safe = [_safe_rel(p) for p in paths]
         if kind == "py_compile":
             cmd = ["python3", "-m", "py_compile", *safe]
+        elif kind == "unittest":
+            if not safe or not all(p.startswith("tests/") and p.endswith(".py") for p in safe):
+                return {"state": "HOLD_CHECK_NOT_ALLOWED", "kind": kind}
+            modules = [Path(p).with_suffix("").as_posix().replace("/", ".") for p in safe]
+            cmd = ["python3", "-m", "unittest", "-v", *modules]
         elif kind == "pytest":
-            cmd = ["python3", "-m", "pytest", "-q", *safe]
+            if importlib.util.find_spec("pytest") is not None:
+                cmd = ["python3", "-m", "pytest", "-q", *safe]
+            elif safe and all(p.startswith("tests/") and p.endswith(".py") for p in safe):
+                modules = [Path(p).with_suffix("").as_posix().replace("/", ".") for p in safe]
+                cmd = ["python3", "-m", "unittest", "-v", *modules]
+            else:
+                return {"state": "HOLD_CHECK_TOOL_UNAVAILABLE", "kind": kind}
         elif kind == "node_check" and len(safe) == 1:
             cmd = ["node", "--check", safe[0]]
         else:
@@ -259,7 +271,7 @@ def _tool_trace_entry(name: str, result: dict[str, Any]) -> str:
 
 
 def _tool_budget(name: str, streak: int) -> tuple[bool, int]:
-    if name in MUTATION_TOOLS:
+    if name in MUTATION_TOOLS or name in NON_CONTENT_PROGRESS_TOOLS:
         return False, streak
     if name in OBSERVATION_TOOLS:
         next_streak = streak + 1
@@ -274,7 +286,7 @@ TOOL_DEFS = [
     {"type":"function","function":{"name":"stage_path","description":"Copy a needed live source file or small directory into the isolated writable shadow and authorize writes only there.","parameters":{"type":"object","required":["path"],"properties":{"path":{"type":"string"}}}}},
     {"type":"function","function":{"name":"replace_text","description":"Perform an exact replacement in a staged shadow file.","parameters":{"type":"object","required":["path","old","new"],"properties":{"path":{"type":"string"},"old":{"type":"string"},"new":{"type":"string"},"expected":{"type":"integer"}}}}},
     {"type":"function","function":{"name":"write_file","description":"Create or overwrite a staged shadow file.","parameters":{"type":"object","required":["path","content"],"properties":{"path":{"type":"string"},"content":{"type":"string"}}}}},
-    {"type":"function","function":{"name":"run_check","description":"Run only allowed deterministic checks in the shadow.","parameters":{"type":"object","required":["kind","paths"],"properties":{"kind":{"type":"string","enum":["py_compile","pytest","node_check"]},"paths":{"type":"array","items":{"type":"string"}}}}}},
+    {"type":"function","function":{"name":"run_check","description":"Run only allowed deterministic checks in the shadow.","parameters":{"type":"object","required":["kind","paths"],"properties":{"kind":{"type":"string","enum":["py_compile","pytest","unittest","node_check"]},"paths":{"type":"array","items":{"type":"string"}}}}}},
 ]
 def ollama_chat(url: str, model: str, messages: list[dict[str, Any]]) -> dict[str, Any]:
     payload = {"model": model, "messages": messages, "tools": TOOL_DEFS, "stream": False, "options": {"temperature": 0.1}}
