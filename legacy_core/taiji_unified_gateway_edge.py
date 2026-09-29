@@ -18,6 +18,7 @@ import uvicorn
 import httpx
 import ipaddress
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List, Tuple
 from fastapi import FastAPI, HTTPException, Request
@@ -35,6 +36,7 @@ from tools.total_field_mandatory_application_gate import (
     reviewed_prompt_text,
     scan_operation,
 )
+from tools.physical_actuator_authority_gate import PASS_STATE as PHYSICAL_ACTUATOR_PASS
 
 class SecurityError(Exception):
     pass
@@ -409,12 +411,15 @@ class OpenClawProxy:
 # 👑 全能融合閘道器 (Wuchang Universal Gateway)
 # =============================================================================
 class WuchangUniversalGateway:
-    def __init__(self):
+    PHYSICAL_ACTUATOR_TOOLS = frozenset({"lobster_code_writer"})
+
+    def __init__(self, physical_actuator_authority_gate: Any | None = None):
         self.privacy = PrivacyGatewayEngine()
         self.network = MerlinIPv6VPNNetwork()
         self.memory = FoldedMemoryManager()
         self.concurrency = TaijiConcurrencyEngine(self.memory)
         self.open_claw = OpenClawProxy()
+        self.physical_actuator_authority_gate = physical_actuator_authority_gate
         self.api_url = WINDOWS_OLLAMA_URL # 👉 精準指向宿主機
 
         self.tools = [
@@ -454,6 +459,7 @@ class WuchangUniversalGateway:
         context_id: str,
         work_target_query: str,
         target_lock: Dict[str, Any],
+        physical_effect_envelope: Dict[str, Any] | None,
     ) -> str:
         name = call["function"]["name"]
         args = json.loads(call["function"]["arguments"]) if isinstance(call["function"]["arguments"], str) else call["function"]["arguments"]
@@ -472,6 +478,24 @@ class WuchangUniversalGateway:
             raise PermissionError(
                 str(effect_review.get("reason") or "HOLD_UNREVIEWED_AI_TOOL_EFFECT")
             )
+        if name in self.PHYSICAL_ACTUATOR_TOOLS:
+            gate = self.physical_actuator_authority_gate
+            if gate is None or not callable(getattr(gate, "validate_and_consume", None)):
+                raise PermissionError("BLOCK_9002_PHYSICAL_ACTUATOR_GATE_NOT_BOUND")
+            gate_result = gate.validate_and_consume(
+                physical_effect_envelope,
+                actuator_id="9002:lobster_code_writer",
+                action=name,
+                parameters=args,
+                now=datetime.now(timezone.utc),
+            )
+            if (
+                gate_result.get("state") != PHYSICAL_ACTUATOR_PASS
+                or gate_result.get("actuator_authorized") is not True
+            ):
+                raise PermissionError(
+                    str(gate_result.get("state") or "BLOCK_9002_PHYSICAL_ACTUATOR_GATE")
+                )
         
         if name == "delegate_to_cloud_brain":
             raw_payload = args.get("anonymized_payload", "")
@@ -495,7 +519,12 @@ class WuchangUniversalGateway:
             logging.info(f"🦀 [龍蝦雙螯] 實體寫檔: {args.get('file_path')}")
             return self.open_claw.lobster_code_writer(args.get("file_path", ""), args.get("code_content", ""))
 
-    async def process_intent_routing(self, user_input: str, webui_system_prompt: str = ""):
+    async def process_intent_routing(
+        self,
+        user_input: str,
+        webui_system_prompt: str = "",
+        physical_effect_envelope: Dict[str, Any] | None = None,
+    ):
         context_id = f"CTX_{int(time.time())}"
         await self.concurrency.start_taiji_matrix(context_id)
         
@@ -553,7 +582,11 @@ class WuchangUniversalGateway:
                 results = []
                 for call in msg["tool_calls"]:
                     res = await self._execute_tool(
-                        call, context_id, user_input, target_lock
+                        call,
+                        context_id,
+                        user_input,
+                        target_lock,
+                        physical_effect_envelope,
                     )
                     results.append(res)
                 return self.privacy.deanonymize("\n\n".join(results))
@@ -583,6 +616,7 @@ async def startup_event():
 class OpenAIChatRequest(BaseModel):
     messages: List[Dict[str, str]]
     model: str = "wuchang-v14"
+    physical_effect_envelope: Dict[str, Any] | None = None
 
 @app.get("/v1/models")
 def get_openai_models():
@@ -594,7 +628,11 @@ async def openai_chat_endpoint(req: OpenAIChatRequest):
     user_msg = [m["content"] for m in req.messages if m["role"] == "user"][-1]
     
     logging.info(f"\n📥 [WebUI 請求接入] {user_msg}")
-    final_answer = await wuchang_gateway.process_intent_routing(user_msg, webui_sys_prompt)
+    final_answer = await wuchang_gateway.process_intent_routing(
+        user_msg,
+        webui_sys_prompt,
+        req.physical_effect_envelope,
+    )
     
     return {
         "id": f"chatcmpl-{int(time.time())}",

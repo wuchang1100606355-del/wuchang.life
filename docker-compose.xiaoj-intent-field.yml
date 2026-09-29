@@ -6,7 +6,7 @@ services:
     image: wuchang/xiaoj-intent-field:dev
     container_name: xiaoj-intent-field
     ports:
-      - "9107:9107"
+      - "127.0.0.1:9107:9107"
     volumes:
       - ./runtime/reports:/app/runtime/reports
       - ./runtime/dead_letter:/app/runtime/dead_letter
@@ -14,4 +14,6 @@ services:
     environment:
       XIAOJ_W7TP_RUNTIME_ROOT: /app/runtime/w7tp
       XIAOJ_TOTAL_FIELD_LAN_URL: http://192.168.50.249:9238/v2.1/packets
+      XIAOJ_TOTAL_FIELD_VPN_URL: http://100.71.224.18:9238/v2.1/packets
+      XIAOJ_BROWSER_ORIGINS: http://127.0.0.1:8069,http://localhost:8069
     restart: unless-stopped

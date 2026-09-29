@@ -1,26 +1,98 @@
 import os
 from datetime import datetime, timezone
 from typing import Any
+import urllib.error
+import urllib.parse
+import urllib.request
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from w7tp_gt_mesh import core
 from w7tp_gt_mesh.core import MeshError, TOTAL_FIELD_AUTHORITY_REF
 from w7tp_gt_mesh.journal import MeshStorage
 from w7tp_gt_mesh.packet import build_transfer
-from w7tp_gt_mesh.transport import MeshTransport
+from w7tp_gt_mesh.transport import MeshTransport, validate_peer_url
+
+DEFAULT_BROWSER_ORIGINS = (
+    "http://127.0.0.1:8069",
+    "http://localhost:8069",
+)
+BROWSER_ORIGINS = tuple(
+    origin.strip()
+    for origin in os.environ.get(
+        "XIAOJ_BROWSER_ORIGINS",
+        ",".join(DEFAULT_BROWSER_ORIGINS),
+    ).split(",")
+    if origin.strip()
+)
+if not BROWSER_ORIGINS or "*" in BROWSER_ORIGINS:
+    raise RuntimeError("XIAOJ_BROWSER_ORIGINS must contain exact origins and cannot use '*'")
 
 app = FastAPI(title="XiaoJ Intent Field")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=list(BROWSER_ORIGINS),
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
+    max_age=600,
+)
 
 RUNTIME_ROOT = os.environ.get("XIAOJ_W7TP_RUNTIME_ROOT", "/app/runtime/w7tp")
 TOTAL_FIELD_LAN_URL = os.environ.get(
     "XIAOJ_TOTAL_FIELD_LAN_URL",
     "http://192.168.50.249:9238/v2.1/packets",
 )
+TOTAL_FIELD_VPN_URL = os.environ.get(
+    "XIAOJ_TOTAL_FIELD_VPN_URL",
+    "http://100.71.224.18:9238/v2.1/packets",
+)
 FOUNDER_REF = "founder:CHIANG_CHENG_LUNG"
 ROUTE_ID = "CANDIDATE_FOUNDER_INTENT_TO_W7TP_V1"
 SOURCE_NODE_REF = "node:msi:xiaoj-intent-field:route-v1"
+
+
+def _receiver_health_url(peer_url: str) -> str:
+    parsed = urllib.parse.urlsplit(validate_peer_url(peer_url))
+    return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, "/healthz", "", ""))
+
+
+def _receiver_ready(peer_url: str) -> bool:
+    request = urllib.request.Request(
+        _receiver_health_url(peer_url),
+        method="GET",
+        headers={"Accept": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=3) as response:
+            raw = response.read(64 * 1024 + 1)
+            if response.status != 200 or len(raw) > 64 * 1024:
+                return False
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError, ValueError):
+        return False
+    try:
+        payload = core.require_core().canonical_json_loads(raw, require_canonical=False)
+    except (ValueError, TypeError, core.MeshError):
+        return False
+    return bool(
+        isinstance(payload, dict)
+        and payload.get("state") == "LIVE_SERVICE_PRESENCE_ONLY"
+        and payload.get("authority_node_ref") == "node:taiji01"
+        and payload.get("authority_ref") == TOTAL_FIELD_AUTHORITY_REF
+        and payload.get("canonical_id") == core.CANONICAL_ID
+        and payload.get("final_authority_granted") is False
+    )
+
+
+def _select_receiver_url(probe=None) -> tuple[str, str]:
+    check = probe or _receiver_ready
+    if check(TOTAL_FIELD_LAN_URL):
+        return TOTAL_FIELD_LAN_URL, "LAN_PRIMARY"
+    if TOTAL_FIELD_VPN_URL and TOTAL_FIELD_VPN_URL != TOTAL_FIELD_LAN_URL and check(TOTAL_FIELD_VPN_URL):
+        return TOTAL_FIELD_VPN_URL, "VPN_FALLBACK_AFTER_LAN_UNAVAILABLE"
+    raise HTTPException(status_code=503, detail="HOLD_TOTAL_FIELD_RECEIVER_UNAVAILABLE")
 
 
 class FounderIntentPacket(BaseModel):
@@ -93,12 +165,15 @@ def status():
         "secrets_allowed": False,
         "founder_intent_route": ROUTE_ID,
         "founder_intent_route_state": "CANDIDATE_WIRED_INTERNAL_EVIDENCE_ONLY",
+        "receiver_route_policy": "LAN_PRIMARY_VPN_FALLBACK",
+        "queue_on_failure": False,
     }
 
 
 @app.post("/v1/founder-intents")
 def submit_founder_intent(request: FounderIntentPacket):
     try:
+        peer_url, route_used = _select_receiver_url()
         with MeshStorage(RUNTIME_ROOT) as storage:
             logical_time = storage.journal.next_logical_time(SOURCE_NODE_REF)
             snapshot = _build_snapshot(request, logical_time)
@@ -112,7 +187,7 @@ def submit_founder_intent(request: FounderIntentPacket):
             receipt = MeshTransport(storage).send(
                 transfer.carrier,
                 carrier_ref=transfer.carrier_ref,
-                peer_url=TOTAL_FIELD_LAN_URL,
+                peer_url=peer_url,
                 queue_on_failure=False,
             )
             if receipt.get("delivery_state") != "PASS_RECEIVED":
@@ -126,6 +201,7 @@ def submit_founder_intent(request: FounderIntentPacket):
         "intent_packet_ref": transfer.packet_ref,
         "target_snapshot_ref": transfer.target_snapshot_ref,
         "transfer_mode": transfer.transfer_mode,
+        "route_used": route_used,
         "receipt": receipt,
         "canonical_promoted": False,
         "final_authority_granted": False,

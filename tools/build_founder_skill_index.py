@@ -826,6 +826,11 @@ def _refresh_source_manifest() -> None:
             if line.strip():
                 _, path = line.split("  ", 1)
                 existing_paths.append(path)
+    existing_paths = [
+        path
+        for path in existing_paths
+        if "/__pycache__/" not in f"/{path}/" and not path.endswith(".pyc")
+    ]
     for path in (
         "tools/build_founder_skill_index.py",
         "tools/validate_total_field_skill_registry.py",

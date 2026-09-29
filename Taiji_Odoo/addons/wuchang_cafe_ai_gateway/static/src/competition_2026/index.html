@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#07111f">
-  <title>咖啡館服務員影音 AI 小 J｜8D ADI 完整 AI 應用系統</title>
+  <title>W7TP 8D ADI｜2026 智慧創新應用大賽候選作品</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="xiaoj_competition.css">
+  <link rel="stylesheet" href="xiaoj_competition.css?v=20260913.6">
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -15,57 +15,89 @@
     <div class="brand-lockup">
       <div class="brand-mark" aria-hidden="true">8D</div>
       <div>
-        <div class="eyebrow">2026 中華電信智慧創新應用大賽候選作品</div>
-        <h1>咖啡館服務員影音 AI 小 J</h1>
+        <div class="eyebrow">2026 智慧創新應用大賽 · 候選作品</div>
+        <h1>上品聊國咖啡 × 會員小 J</h1>
       </div>
     </div>
     <div class="state-pills" aria-label="目前狀態">
-      <span class="pill cyan">虛擬候選</span>
-      <span class="pill">非正式警報</span>
+      <span class="pill cyan">競賽候選作品</span>
+      <span class="pill" id="fieldStatusPill">尚未接入總場執行</span>
       <span class="pill">無真實效果</span>
     </div>
   </header>
 
+  <nav class="page-switcher" aria-label="產品頁面">
+    <button class="page-tab active" data-view="customer"><span>外場</span>AI 點餐</button>
+    <button class="page-tab" data-view="member"><span>內頁</span>會員小 J</button>
+    <button class="page-tab" data-view="organization"><span>營運</span>協會管理</button>
+    <button class="page-tab" data-view="technology"><span>評審</span>技術透視</button>
+  </nav>
+
   <main>
-    <section class="hero panel">
+    <section class="hero panel" data-page="customer">
       <div class="hero-copy">
-        <p class="kicker">主權 AI 小 J 個人／組織服務員</p>
-        <h2>8D ADI 是完整的 AI 應用系統</h2>
-        <p class="lede">它讓影像、聲音、網路狀態、設備能力與動態上下文，透過數位腦細胞形成可驗證的理解，再落成可治理的執行。</p>
-        <div class="formula" aria-label="核心運算公式">
-          <span>離散精準索引</span><b>＋</b><span>高維浮點理解</span><b>→</b><span>數位腦細胞</span><b>→</b><span>總場裁決</span>
+        <p class="kicker">上品聊國咖啡 · 會員專屬 AI</p>
+        <h2>不用找菜單。跟小 J 說就好。</h2>
+        <p class="lede">從一杯適合你的咖啡開始，把點餐、會員與每天要辦的事放進同一個入口。</p>
+        <div class="quick-prompts" aria-label="快速點餐需求">
+          <button data-prompt="不太甜，下午喝了也不想太有負擔">不太甜・下午喝</button>
+          <button data-prompt="今天很累，想要有精神但口感柔和">提神・口感柔和</button>
+          <button data-prompt="想喝有咖啡香、適合慢慢聊天的飲品">咖啡香・慢慢聊</button>
+        </div>
+        <div class="member-offer" role="note">
+          <span>會員多一點</span>
+          <div><strong>記得你的偏好，也能接著幫你辦事</strong><small>正式會員、計費與資料綁定仍待治理接線。</small></div>
         </div>
         <div class="hero-actions">
-          <button class="primary" data-action="cafe-demo">開始咖啡館示範</button>
-          <button class="danger-outline" data-action="earthquake-demo">啟動地震演練</button>
+          <button class="primary" data-action="start-order">開始點餐</button>
+          <button class="quiet-button" data-view-jump="member">看看會員多了什麼</button>
         </div>
       </div>
-      <div class="xiaoj-stage" aria-label="自訂 Codex 外型的小 J">
-        <div class="stage-ring ring-one"></div>
-        <div class="stage-ring ring-two"></div>
-        <div id="xiaojPet" class="xiaoj-pet" role="img" aria-label="藍白科技系自訂 Codex 小 J"></div>
-        <div class="speech" id="xiaojSpeech">您好，我是小 J。說出需求，我會把理解變成可驗證的下一步。</div>
-        <div class="avatar-caption"><strong>自訂 Codex 小 J</strong><span>v2．11 列動作．16 方位</span></div>
-      </div>
+      <div class="hero-atmosphere" aria-label="小 J 咖啡師候選形象"><span>咖啡師小 J</span><small>先服務人，再讓技術被看見</small></div>
     </section>
 
-    <nav class="scene-tabs panel" aria-label="場景選擇">
+    <section class="impact-strip" aria-label="顧客價值摘要" data-page="technology" hidden>
+      <article><span>01 · 點餐</span><strong>先成為 AI 點餐佼佼者</strong><p>自然理解口味與情境，讓第一次體驗就值得記住。</p></article>
+      <article><span>02 · 會員</span><strong>從點數升級成 AI 能力</strong><p>會員關係承接偏好與工作，不是用完即走的一次對話。</p></article>
+      <article><span>03 · 節費</span><strong>把算力用在最值得的地方</strong><p>本機優先、模型可替換、能力可重用，降低重複成本。</p></article>
+      <article><span>04 · 成長</span><strong>個人與組織互相增值</strong><p>日常使用帶來黏著，組織能力帶來更深、更長的服務關係。</p></article>
+    </section>
+
+    <div class="section-intro" data-page="technology" hidden>
+      <div><span class="kicker">TRY THE EXPERIENCE</span><h2>現在就用一句話，讓小 J 幫你選</h2></div>
+      <p>先體驗一個真正好用的 AI 點餐服務；完成互動後，再往下看它如何以 8D／ADI 做到連續、可驗證與可治理。</p>
+    </div>
+    <nav class="scene-tabs panel" aria-label="能力場景選擇" data-page="technology" hidden>
       <button class="scene-tab active" data-scene="cafe">咖啡館</button>
       <button class="scene-tab" data-scene="property">管委會／物業</button>
       <button class="scene-tab" data-scene="association">協會公益</button>
       <button class="scene-tab" data-scene="personal">個人主權 AI</button>
     </nav>
 
-    <section class="workspace-grid">
-      <article class="panel interaction-panel">
+    <section class="workspace-grid" data-page="customer">
+      <aside class="panel tool-rail" aria-label="常用工具">
+        <div class="rail-heading"><span>今天要做什麼？</span><strong>小 J 工具</strong></div>
+        <button class="tool-button active" data-tool-prompt="cafe|我想喝一杯不太甜、適合下午的咖啡"><b>☕</b><span>幫我選咖啡<small>依口味與情境推薦</small></span></button>
+        <button class="tool-button" data-tool-prompt="cafe|找出符合我偏好的會員飲品候選"><b>♡</b><span>我的常喝<small>會員偏好候選</small></span></button>
+        <button class="tool-button" data-tool-prompt="personal|整理今天要完成的事情並找出最省成本路徑"><b>✓</b><span>今天待辦<small>接著上次的工作</small></span></button>
+        <button class="tool-button" data-tool-prompt="personal|幫我整理文件並列出下一個可執行動作"><b>▤</b><span>文件助手<small>整理、比較、產出</small></span></button>
+        <button class="tool-button" data-tool-prompt="association|幫我準備下週的社區活動"><b>◎</b><span>協會活動<small>報名、場地、供餐</small></span></button>
+        <div class="rail-saving"><span>節費模式</span><strong>本機優先</strong><small>需要時才使用外部算力</small></div>
+      </aside>
+      <article class="panel interaction-panel" id="orderExperience">
         <div class="section-title">
-          <div><span class="step-number">01</span><h3>多模態理解入口</h3></div>
-          <span id="privacyState" class="safe-tag">資料留在本機</span>
+          <div><span class="step-number">01</span><h3>告訴小 J 你現在想喝什麼</h3></div>
+          <span id="privacyState" class="safe-tag">原始影像／聲音留本機</span>
         </div>
         <label for="intentInput">請告訴小 J 你想完成什麼</label>
         <div class="intent-row">
           <input id="intentInput" value="我想喝一杯不太甜、適合下午的咖啡" autocomplete="off">
           <button class="primary compact" data-action="understand">理解並形成執行</button>
+        </div>
+        <div class="voice-route" role="status">
+          <span class="route-lock">預設靜音</span>
+          <div><strong>語音頻道未綁定，不會送到藍牙或全店廣播</strong><small id="voiceRouteState">Google 商用語音正式端點與指定輸出頻道尚未解析</small></div>
+          <button data-action="voice-preview">檢查語音能力</button>
         </div>
         <div class="modality-grid">
           <label class="modality-card file-card">
@@ -75,7 +107,7 @@
           </label>
           <button class="modality-card" data-action="voice">
             <span class="modality-icon">◉</span>
-            <span><b>聲音</b><small id="audioState">點擊後在本機辨識</small></span>
+            <span><b>聲音</b><small id="audioState">瀏覽器辨識路徑未驗證</small></span>
           </button>
           <button class="modality-card" data-action="network">
             <span class="modality-icon">⌁</span>
@@ -86,15 +118,20 @@
             <span><b>設備能力</b><small id="deviceState">畫面／喇叭／麥克風</small></span>
           </button>
         </div>
-        <div class="lookup-grid">
+        <div class="order-result" id="orderResult" aria-live="polite">
+          <span>小 J 的建議會顯示在這裡</span>
+          <strong id="orderSuggestion">先說說今天的感覺</strong>
+          <p id="orderReason">這是展示建議，不會自動下單、付款或廣播。</p>
+        </div>
+        <div class="lookup-grid tech-only">
           <div class="compute-card exact">
-            <span>離散索引平面</span>
+            <span>離散精準索引平面</span>
             <b>精準查表</b>
-            <p>固定身份、場景、座標、能力、政策與譜系。</p>
+            <p>依登入授權解析身分、Seat、能力、政策與可追溯譜系。</p>
             <code id="lookupResult">等待意圖</code>
           </div>
           <div class="compute-card float">
-            <span>高維浮點平面</span>
+            <span>高維浮點理解平面</span>
             <b>理解候選</b>
             <p>處理語意與多模態，但不能創造座標或自授權。</p>
             <code id="floatResult">等待感知</code>
@@ -102,35 +139,148 @@
         </div>
       </article>
 
-      <article class="panel state-panel">
-        <div class="section-title">
-          <div><span class="step-number">02</span><h3>數位腦細胞</h3></div>
-          <span class="safe-tag">D1–D8 完整</span>
+      <aside class="panel assistant-rail" aria-label="小 J 助理狀態">
+        <div class="assistant-head"><span class="online-dot"></span><div><strong>小 J 正在這裡</strong><small>候選作品 · 未執行外部效果</small></div></div>
+        <div class="assistant-avatar-wrap"><div id="xiaojPet" class="xiaoj-pet" role="img" aria-label="藍白科技系自訂 Codex 小 J"></div></div>
+        <div class="speech" id="xiaojSpeech">歡迎。說出想完成的事，我會先在畫面上整理成可確認的結果。</div>
+        <div class="assistant-actions">
+          <button data-action="voice-preview"><b>◉</b><span>語音<small>預設靜音</small></span></button>
+          <button data-action="network"><b>⌁</b><span>連線<small>路徑觀測</small></span></button>
+          <button data-view-jump="member"><b>◇</b><span>會員<small>接續工作</small></span></button>
         </div>
-        <div id="dimensions" class="dimensions" aria-live="polite"></div>
-        <div class="cell-footer">
-          <span>細胞狀態</span><strong id="cellState">等待形成</strong>
-          <span>外部效果</span><strong class="no-effect">未執行</strong>
+        <div class="node-mini-list" aria-label="節點統合狀態">
+          <div><span>Odoo 點餐</span><b id="odooRouteState">等待請求</b></div>
+          <div><span>本機 GPU 語氣</span><b id="gpuRouteState">等待請求</b></div>
+          <div><span>跨節點總場</span><b class="hold">V2.3 權威 HOLD</b></div>
         </div>
-      </article>
+      </aside>
+
     </section>
 
-    <section class="panel flow-panel">
+    <section class="panel state-panel" data-page="technology" hidden>
       <div class="section-title">
-        <div><span class="step-number">03</span><h3>理解落實於執行</h3></div>
+        <div><span class="step-number">02</span><h3>8D 數位腦細胞</h3></div>
+        <span class="safe-tag">D1–D8 完整</span>
+      </div>
+      <div id="dimensions" class="dimensions" aria-live="polite"></div>
+      <div class="cell-footer">
+        <span>細胞狀態</span><strong id="cellState">等待形成</strong>
+        <span>外部效果</span><strong class="no-effect">未執行</strong>
+      </div>
+    </section>
+
+    <section class="panel flow-panel" data-page="technology" hidden>
+      <div class="section-title">
+        <div><span class="step-number">03</span><h3>結果可驗證的執行路徑</h3></div>
         <span id="flowState" class="safe-tag">等待輸入</span>
       </div>
       <div id="executionFlow" class="execution-flow"></div>
       <div class="distributed-field">
-        <div class="node browser-node"><span>瀏覽器／店內設備</span><small>影像・聲音・畫面</small></div>
-        <div class="route"><b id="routeLabel">本機</b><span>最小必要差量</span></div>
+        <div class="node browser-node"><span>瀏覽器／當前頁面</span><small>意圖・文件・畫面・狀態</small></div>
+        <div class="route"><b id="routeLabel">本機</b><span>候選最小必要資訊</span></div>
         <div class="node total-node"><span>8D ADI／總場</span><small>索引・防飄移・權威</small></div>
         <div class="route"><b>受控算力</b><span>模型可替換</span></div>
         <div class="node compute-node"><span>雲地模型／分散式主機</span><small>算力・轉譯・重建</small></div>
       </div>
     </section>
 
-    <section id="earthquakePanel" class="panel earthquake-panel" hidden>
+    <section class="workbench panel" data-page="organization" hidden>
+      <div class="workbench-top"><div><span class="kicker">協會營運工作台</span><h2>一句話，把活動辦完</h2></div><span class="candidate-badge">外部效果等待授權</span></div>
+      <div class="operation-board">
+        <article><span>正在進行</span><strong>下週社區交流日</strong><small>報名 · 場地 · 供餐 · 通知</small><button data-tool-prompt="association|接著準備下週社區交流日，統整報名、場地、供餐與通知">繼續工作</button></article>
+        <article><span>會員服務</span><strong>待回覆需求</strong><small>未登入，不讀取會員明文</small><button data-tool-prompt="association|整理會員待回覆需求，不顯示未授權個資">整理候選</button></article>
+        <article><span>咖啡館協作</span><strong>活動供餐</strong><small>沿同一點餐能力形成清單</small><button data-tool-prompt="association|形成活動供餐需求與待確認清單">準備清單</button></article>
+        <article><span>文件與通知</span><strong>一次產出</strong><small>草稿不等於寄送</small><button data-tool-prompt="association|產生活動通知草稿與責任分工候選">產生草稿</button></article>
+      </div>
+    </section>
+
+    <section class="organization-panel panel" aria-labelledby="organizationTitle" data-page="organization" hidden>
+      <div class="organization-heading">
+        <div>
+          <span class="kicker">FROM GREAT EXPERIENCE TO DAILY OPERATIONS</span>
+          <h2 id="organizationTitle">從一杯咖啡，長成組織每天都要打開的工作入口</h2>
+        </div>
+        <p>協會管理就是公司層級產品的真實縮影：同時有人員、會員、活動、場地、供餐、通知與責任紀錄。小 J 的價值，是讓同一件事不中斷地跨過這些工作。</p>
+      </div>
+      <div class="organization-grid">
+        <article class="workday-card">
+          <div class="card-label">一個協會活動，從一句話開始</div>
+          <h3>「幫我準備下週的社區活動」</h3>
+          <div class="workday-flow">
+            <div><b>上午</b><span>整理活動目標、會員報名與場地條件</span><small>意圖與現況不必重新交代</small></div>
+            <div><b>中午</b><span>協調咖啡館供餐、物資與志工需求</span><small>同一工作跨能力接續</small></div>
+            <div><b>下午</b><span>形成通知、待確認事項與責任分工</span><small>重要效果等待授權</small></div>
+            <div><b>活動後</b><span>重新觀測結果，保留可追溯紀錄</span><small>不是回答完就失憶</small></div>
+          </div>
+        </article>
+        <article class="retention-card">
+          <div class="card-label">高黏著度來自工作真的接得起來</div>
+          <h3>四個讓組織持續使用的理由</h3>
+          <ul class="retention-list">
+            <li><span>01</span><div><b>工作脈絡不歸零</b><small>今天的活動規劃，可以沿同一血緣在明天繼續。</small></div></li>
+            <li><span>02</span><div><b>一個入口協調多系統</b><small>不要求使用者先判斷該開會員、文件或供餐系統。</small></div></li>
+            <li><span>03</span><div><b>能力越用越完整</b><small>累積的是可引用能力與狀態關係，不是另一個 AI 人格。</small></div></li>
+            <li><span>04</span><div><b>每個效果都有邊界</b><small>提案、核准、執行與結果各自可見，降低導入風險。</small></div></li>
+          </ul>
+        </article>
+      </div>
+      <div class="integration-truth" role="note">
+        <span>目前作品狀態</span>
+        <strong>已展示同一小 J 的跨場景理解與 8D 狀態呈現</strong>
+        <small>Odoo、Google Workspace、正式身分／Seat 與 Total Field 效果接線仍待現行合法關係完成；本頁不冒充已部署。</small>
+      </div>
+    </section>
+
+    <section class="workbench panel" data-page="member" hidden>
+      <div class="workbench-top"><div><span class="kicker">MY XIAOJ</span><h2>今天，從哪件事繼續？</h2></div><span class="candidate-badge">會員身分尚未正式綁定</span></div>
+      <div class="member-board">
+        <article class="focus-card"><span>接著完成</span><h3>準備下週社區活動</h3><p>場地條件、供餐需求與通知草稿仍待確認。</p><button data-tool-prompt="association|接著準備下週的社區活動，整理目前進度與下一步">繼續這件事</button></article>
+        <article><span>快速工具</span><button data-tool-prompt="personal|整理今天的待辦並排出優先順序">✓ 整理待辦</button><button data-tool-prompt="personal|比較目前方案並找出最省成本的選擇">⌁ 比較節費</button><button data-tool-prompt="personal|整理我正在看的文件並產生摘要">▤ 整理文件</button></article>
+        <article class="saving-card"><span>算力節費</span><h3>先用現有能力，再花雲端費用</h3><div class="saving-meter"><i></i></div><p>不假造金額或節省比例；每次路由都要能說明來源。</p></article>
+      </div>
+    </section>
+
+    <section class="personal-value panel" aria-labelledby="personalValueTitle" data-page="member" hidden>
+      <div class="personal-copy">
+        <span class="kicker">PERSONAL AI THAT PAYS BACK</span>
+        <h2 id="personalValueTitle">個人願意天天用，因為每一次都在省時間、少花錢</h2>
+        <p>小 J 不要求所有工作都送往昂貴雲端。能在本機完成的理解、索引與重用就留在本機；真正需要外部模型或組織能力時，再依當次需求與授權調用。節費不是犧牲能力，而是把每一份算力用在最有價值的位置。</p>
+      </div>
+      <div class="saving-grid">
+        <article><span>少重複</span><strong>上下文可接續</strong><p>不用每次重新交代背景、文件與已完成進度。</p></article>
+        <article><span>少雲端</span><strong>本機優先處理</strong><p>可本機完成的索引與整理，不浪費高成本推理。</p></article>
+        <article><span>少切換</span><strong>一個入口辦多件事</strong><p>個人、點餐與組織工作共享能力，不需購買多套孤島工具。</p></article>
+        <article><span>多價值</span><strong>個人與組織互相增益</strong><p>個人養成使用習慣，組織提供真實能力；使用越深，協作越完整。</p></article>
+      </div>
+      <div class="value-loop" aria-label="個人與組織價值循環">
+        <span>好用的民生入口</span><b>→</b><span>形成個人使用黏著</span><b>→</b><span>接入組織真實工作</span><b>→</b><span>能力與價值共同提升</span>
+      </div>
+    </section>
+
+    <section class="market-capabilities panel" aria-labelledby="capabilityTitle" data-page="member" hidden>
+      <div class="capability-heading">
+        <div><span class="kicker">POPULAR AI ASSISTANT CAPABILITIES · 2026</span><h2 id="capabilityTitle">熱門功能，小 J 全部收進同一條工作主線</h2></div>
+        <p>吸收的是使用者真正需要的效果，不是複製別人的人格、架構或權威。每項功能都要能沿同一工作接續，並依成本、隱私與授權選擇合適能力。</p>
+      </div>
+      <div class="capability-legend" aria-label="功能成熟度圖例">
+        <span class="status demonstrated">本頁已展示</span>
+        <span class="status reusable">既有能力可接續</span>
+        <span class="status pending">待正式接線</span>
+      </div>
+      <div class="capability-grid">
+        <article><span class="cap-icon">◎</span><div><b>自然語音與多模態</b><p>文字、聲音、影像與畫面共同理解，維持同一工作脈絡。</p><small class="status demonstrated">本頁已展示</small></div></article>
+        <article><span class="cap-icon">⌕</span><div><b>即時搜尋與深度研究</b><p>需要最新資訊時查找來源，整理成可引用而非憑空回答。</p><small class="status reusable">既有能力可接續</small></div></article>
+        <article><span class="cap-icon">▤</span><div><b>文件與資料分析</b><p>讀取文件、表格與資料，產生摘要、洞察及可交付成果。</p><small class="status reusable">既有能力可接續</small></div></article>
+        <article><span class="cap-icon">∞</span><div><b>連續記憶與專案脈絡</b><p>保留可追溯狀態與前驅關係，不必每次重新交代一切。</p><small class="status pending">待正式接線</small></div></article>
+        <article><span class="cap-icon">◇</span><div><b>共編工作空間</b><p>在側欄共同修改文件、程式與成果，讓對話直接成為工作。</p><small class="status reusable">既有能力可接續</small></div></article>
+        <article><span class="cap-icon">◷</span><div><b>主動提醒與排程</b><p>活動、會員與待辦可在適當時間接續，不靠人力反覆追蹤。</p><small class="status pending">待正式接線</small></div></article>
+        <article><span class="cap-icon">⌘</span><div><b>應用連接與工具執行</b><p>依授權調用 Odoo、Google 與工程工具，把建議推進成結果。</p><small class="status pending">待正式接線</small></div></article>
+        <article><span class="cap-icon">▣</span><div><b>當前頁面與螢幕協助</b><p>理解人正在看的頁面與必要內容，提供不中斷的側欄協助。</p><small class="status pending">待正式接線</small></div></article>
+      </div>
+      <div class="assimilation-rule"><strong>小 J 的差異</strong><span>熱門能力不是八個獨立 AI；它們是同一個人、同一個工作、同一個小 J 可以精準調用的能力。</span></div>
+    </section>
+
+    <section id="earthquakePanel" class="panel earthquake-panel" data-page="technology" hidden>
       <div class="exercise-banner">
         <span class="pulse-dot"></span>
         <div><b>地震特殊狀態演練</b><small>這是隔離模擬資料，不是國家警報，也沒有連接真實設備。</small></div>
@@ -144,33 +294,33 @@
       </div>
     </section>
 
-    <section class="story-grid">
+    <section class="story-grid" data-page="technology" hidden>
       <article class="panel story-panel">
-        <span class="kicker">Founder 故事主線</span>
-        <h3>從咖啡師公益夢，到 8D ADI</h3>
+        <span class="kicker">一切從真實生活開始</span>
+        <h3>一家咖啡館，如何長出服務社區的 AI</h3>
         <div class="timeline">
-          <div><b>起點</b><p>想用咖啡館支持公益服務，從社工個案看見需求不是一句話，而是多維狀態。</p></div>
-          <div><b>十個月</b><p>將意圖、狀態、座標、證據、執行、傳輸、風險與權威，形成可索引的數位腦細胞。</p></div>
-          <div><b>現在</b><p>同一個完整 AI 系統可掛載咖啡館、物業、協會與個人服務場景。</p></div>
+          <div><b>一杯咖啡</b><p>咖啡館不只是生意，也是支持公益與接住社區需求的起點。</p></div>
+          <div><b>一個難題</b><p>人的需求會跨越生活、組織與服務，傳統系統卻把工作切得支離破碎。</p></div>
+          <div><b>一項發明</b><p>同一個小 J 在自然互動背後，以 8D／ADI 維持完整狀態與可治理的協作。</p></div>
         </div>
       </article>
       <article class="panel score-panel">
-        <span class="kicker">作品高分對準</span>
-        <h3>技術不是口號，場景直接可演</h3>
+        <span class="kicker">從看得見的價值，走進專業創新</span>
+        <h3>不只會回答，而是真的理解工作怎麼完成</h3>
         <ul>
-          <li><b>技術成熟</b><span>完整閉環、失敗封閉、離線最低服務</span></li>
-          <li><b>商業市場</b><span>一套核心掛載多種 Odoo 靜態場景</span></li>
-          <li><b>電信應用</b><span>低頻寬差量、示警轉譯、分散式節點</span></li>
-          <li><b>永續公益</b><span>舊設備復用、雲端最小用量、人機協作</span></li>
+          <li><b>創新突破</b><span>從對話工具提升為意圖與狀態場協作系統</span></li>
+          <li><b>產品價值</b><span>同一入口承接協會、社區、商業與個人工作</span></li>
+          <li><b>電信價值</b><span>支援節點協作、路徑治理與最小必要資訊</span></li>
+          <li><b>社會影響</b><span>讓有限人力與既有設備支撐更多公益服務</span></li>
         </ul>
       </article>
     </section>
   </main>
 
   <footer>
-    <span>候選版本｜不含正式警報、不寫入 Odoo、不執行設備控制</span>
+    <span>Odoo 點餐預覽可使用；不建立正式訂單、不付款、不廣播、不執行設備控制</span>
     <span id="clock"></span>
   </footer>
-  <script src="xiaoj_competition.js"></script>
+  <script src="xiaoj_competition.js?v=20260913.4"></script>
 </body>
 </html>

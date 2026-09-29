@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "w7tp://schemas/total-field/formal-review-entry-candidate-v1",
+  "title": "W7TP V2.3 Formal Total Field Review Entry Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "FOUNDER_INTENT_REFERENCE",
+    "SOURCE_LINEAGE",
+    "CURRENT_8D_FIELD_REFERENCE",
+    "CANDIDATE_STATE",
+    "D4_EVIDENCE",
+    "RISK_RESULT",
+    "EFFECT_SCOPE"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "W7TP_V23_FORMAL_TOTAL_FIELD_REVIEW_INPUT_CANDIDATE_V1"
+    },
+    "FOUNDER_INTENT_REFERENCE": {"$ref": "#/$defs/reference"},
+    "SOURCE_LINEAGE": {
+      "type": "object",
+      "required": [
+        "COMMON_PARENT",
+        "SOURCE_A",
+        "SOURCE_B",
+        "SOURCE_C_SHA256",
+        "LINEAGE_RECEIPT",
+        "authority"
+      ],
+      "properties": {
+        "COMMON_PARENT": {"const": "d32ebc73ea7e413daa61c58cc831964743dba99d"},
+        "SOURCE_A": {"const": "680f646bd383077695b5a44e1d40657f7b6a358d"},
+        "SOURCE_B": {"const": "dbf06fca1fcee33d6a695c7be657146c543298ca"},
+        "SOURCE_C_SHA256": {"const": "0ba43b83fd9da27fa60751aeed22d2de1e8859a024775b78a99c6a5862b2577c"},
+        "LINEAGE_RECEIPT": {"const": "runtime/total_field/candidates/w7tp_v23_founder_semantic_successor_c/LINEAGE_RECEIPT.json"},
+        "authority": {"const": "D4_EVIDENCE_ONLY"}
+      }
+    },
+    "CURRENT_8D_FIELD_REFERENCE": {"$ref": "#/$defs/reference"},
+    "CANDIDATE_STATE": {
+      "type": "object",
+      "required": [
+        "SOURCE_C_SHA",
+        "SEMANTIC_GUARD_RESULT",
+        "CAPABILITY_PACK_HASH",
+        "CAPABILITY_PACK_SEMANTIC_RESULT",
+        "FOUNDER_DYNAMIC_CONTEXT_RESULT",
+        "CLOUD_CANDIDATE_ONLY",
+        "D4_D8_SEPARATION"
+      ]
+    },
+    "D4_EVIDENCE": {
+      "type": "object",
+      "required": [
+        "source_c_sha_match",
+        "lineage_receipt_sha256",
+        "semantic_guard",
+        "manifest_source_hash_match",
+        "authority",
+        "d4_evidence_is_authority"
+      ]
+    },
+    "RISK_RESULT": {"enum": ["PASS", "HOLD", "BLOCK", "UNKNOWN"]},
+    "EFFECT_SCOPE": {"const": "ACTIVE_CAPABILITY_PACK_BINDING_CANDIDATE"}
+  },
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "required": ["status", "reference"],
+      "properties": {
+        "status": {"enum": ["BOUND", "CANDIDATE_ONLY", "UNKNOWN", "INVALID", "UNBOUND"]},
+        "reference": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "x-review-output-contract": {
+    "review_result": [
+      "ACCEPT_BINDING_CANDIDATE",
+      "HOLD_BINDING_CANDIDATE",
+      "REJECT_BINDING_CANDIDATE"
+    ],
+    "total_field_effect_decision": "NOT_RUN",
+    "d8_decision": "NOT_RUN",
+    "runtime_effect": "NONE"
+  }
+}

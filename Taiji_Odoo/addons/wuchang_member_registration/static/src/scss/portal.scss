@@ -100,7 +100,8 @@
 
 .wuchang-auth-card,
 .wuchang-status-card {
-  width: min(100%, 520px);
+  width: 100%;
+  max-width: 520px;
   padding: 30px;
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 8px;
@@ -240,7 +241,7 @@
 }
 
 .wuchang-status-card {
-  width: min(100%, 680px);
+  max-width: 680px;
 }
 
 .wuchang-status-card.success {

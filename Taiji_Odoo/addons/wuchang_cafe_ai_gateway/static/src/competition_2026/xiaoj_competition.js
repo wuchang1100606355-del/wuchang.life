@@ -75,10 +75,13 @@
   const state = {
     scene: "cafe",
     imageRef: null,
+    imageEvidenceRef: null,
     audioObserved: false,
     network: "尚未觀測",
     deviceObserved: false,
-    earthquake: false
+    earthquake: false,
+    busy: false,
+    voiceConsentPending: false
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -130,12 +133,10 @@
   }
 
   function speak(text) {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "zh-TW";
-    utterance.rate = 1.02;
-    window.speechSynthesis.speak(utterance);
+    // The browser TTS API follows the operating system's default output and cannot
+    // prove that audio will stay on a private device. Keep this candidate silent
+    // until a governed TTS endpoint and an explicit output sink are both bound.
+    return false;
   }
 
   function setSpeech(text, shouldSpeak = false) {
@@ -147,6 +148,59 @@
     return SCENES[state.scene];
   }
 
+  async function callOdoo(route, params) {
+    if (!/^https?:$/.test(window.location.protocol)) throw new Error("HOLD_NOT_ODOO_ORIGIN");
+    const response = await fetch(route, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "call",
+        params,
+        id: window.crypto?.randomUUID?.() || `${Date.now()}`
+      })
+    });
+    const body = await response.json();
+    if (!response.ok || body.error) throw new Error("ODOO_ROUTE_FAILED");
+    return body.result || body;
+  }
+
+  async function requestStorefront(intent) {
+    $("#odooRouteState").textContent = "讀取中";
+    $("#gpuRouteState").textContent = "候選請求中";
+    const [facts, flair] = await Promise.allSettled([
+      callOdoo("/wuchang/xiaoj/api/store-chat", { text: intent }),
+      callOdoo("/wuchang/xiaoj/api/store-flair", { text: intent })
+    ]);
+    if (facts.status !== "fulfilled") {
+      $("#odooRouteState").textContent = facts.reason?.message === "HOLD_NOT_ODOO_ORIGIN" ? "請由 Odoo 頁面開啟" : "HOLD";
+      $("#gpuRouteState").textContent = "未調用";
+      throw facts.reason;
+    }
+    $("#odooRouteState").textContent = "PASS · 確定性結果";
+    $("#gpuRouteState").textContent = flair.status === "fulfilled"
+      ? (flair.value.flair ? "PASS · 可替換語氣" : "確定性備援")
+      : "HOLD · 不影響結果";
+    return { facts: facts.value, flair: flair.status === "fulfilled" ? flair.value : null };
+  }
+
+  function renderStorefrontProduct(product) {
+    const payload = product.facts;
+    const lines = payload.frozen_facts?.order_lines || [];
+    if (lines.length) {
+      $("#orderSuggestion").textContent = lines.map(line => `${line.name} × ${line.quantity}｜NT$${line.subtotal}`).join("　");
+      $("#orderReason").textContent = `${payload.state_zh}；展示預覽合計 NT$${payload.frozen_facts.total}。正式價格、庫存與送單仍待店內 Odoo 對齊。`;
+    } else {
+      $("#orderSuggestion").textContent = "小 J 已理解，但還需要一個菜單品項";
+      $("#orderReason").textContent = payload.xiaoj_line;
+    }
+    const flair = product.flair?.flair;
+    setSpeech(flair ? `${flair} ${payload.xiaoj_line}` : payload.xiaoj_line, false);
+    $("#orderResult").classList.add("ready");
+    $("#fieldStatusPill").textContent = "Odoo 點餐工具已回應";
+  }
+
   async function understand() {
     const intent = $("#intentInput").value.trim();
     if (!intent) {
@@ -154,11 +208,15 @@
       setSpeech("請先給我一個明確意圖，我不會替您補造未知需求。", true);
       return;
     }
+    if (state.busy) return;
+    state.busy = true;
+    $$('[data-action="understand"], [data-action="cafe-demo"]').forEach(button => { button.disabled = true; });
     animatePet("working");
     $("#flowState").textContent = "形成數位腦細胞中";
     $("#cellState").textContent = "組成中";
     renderFlow(0);
     const scene = currentScene();
+    const storefrontRequest = state.scene === "cafe" ? requestStorefront(intent).catch(error => ({ error })) : null;
     const digest = await digestText(`${state.scene}:${intent}:${scene.capabilities.join("|")}`);
     $("#lookupResult").textContent = `${scene.capabilities.length} 項能力全部命中｜${digest.slice(0, 12)}`;
     $("#floatResult").textContent = `理解候選：${intent.slice(0, 28)}${intent.length > 28 ? "…" : ""}｜權威=false`;
@@ -172,17 +230,44 @@
       D7: "去識別、失敗封閉、座標衝突即停止",
       D8: "總場＋自然人；目前未請求真實效果"
     };
-    for (let i = 1; i <= 9; i += 1) {
-      await new Promise(resolve => window.setTimeout(resolve, 95));
-      renderFlow(i);
-      if (i <= 8) renderDimensions(i, dValues);
+    try {
+      for (let i = 1; i <= 8; i += 1) {
+        await new Promise(resolve => window.setTimeout(resolve, 95));
+        renderFlow(i);
+        renderDimensions(i, dValues);
+      }
+      $("#cellState").textContent = "目前僅供展示";
+      $("#flowState").textContent = "尚未送出或執行";
+      $("#routeLabel").textContent = "NO_TRANSMISSION";
+      $("#fieldStatusPill").textContent = "尚未接入總場執行";
+      const suggestions = {
+        cafe: ["午後柔和咖啡候選", `我依「${intent.slice(0, 22)}${intent.length > 22 ? "…" : ""}」形成口味建議；請再由現場菜單確認品項與價格。`],
+        property: ["報修內容候選", "已整理問題、位置與待確認事項；尚未派工。"],
+        association: ["服務需求候選", "已整理需求與下一個人工確認點；尚未指派。"],
+        personal: ["節費工作路徑候選", "先重用本機上下文，再決定是否需要外部算力。"]
+      };
+      const [suggestion, reason] = suggestions[state.scene];
+      $("#orderSuggestion").textContent = suggestion;
+      $("#orderReason").textContent = reason;
+      $("#orderResult").classList.add("ready");
+      let productHandled = false;
+      if (storefrontRequest) {
+        const product = await storefrontRequest;
+        if (!product.error) {
+          renderStorefrontProduct(product);
+          productHandled = true;
+        }
+        else if (product.error.message === "HOLD_NOT_ODOO_ORIGIN") {
+          $("#orderSuggestion").textContent = "請從 Odoo 網址開啟，即可使用真實點餐工具";
+          $("#orderReason").textContent = "目前是 file:// 檔案預覽；已拒絕假裝連線，也沒有改送其他通路。";
+        }
+      }
+      animatePet("review", true);
+      if (!productHandled) setSpeech("我已把你的需求整理成畫面建議；目前沒有下單、付款或播音。", false);
+    } finally {
+      state.busy = false;
+      $$('[data-action="understand"], [data-action="cafe-demo"]').forEach(button => { button.disabled = false; });
     }
-    renderFlow(9, 9);
-    $("#cellState").textContent = "候選已形成";
-    $("#flowState").textContent = "停在總場作用邊界前";
-    $("#routeLabel").textContent = state.network.includes("VPN") ? "VPN 備援" : state.network.includes("離線") ? "離線重建" : "路徑待驗證";
-    animatePet("review", true);
-    setSpeech(scene.answer, true);
   }
 
   function setScene(sceneId) {
@@ -196,6 +281,18 @@
     renderDimensions();
     renderFlow();
     animatePet("wave", true);
+  }
+
+  function setView(viewId) {
+    $$('[data-page]').forEach(section => { section.hidden = section.dataset.page !== viewId; });
+    $$('.page-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.view === viewId));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function checkVoiceCapability() {
+    $("#voiceRouteState").textContent = "已封閉：找不到同時綁定 Google 商用語音與指定輸出頻道的正式入口；維持靜音";
+    setSpeech("語音維持靜音，避免誤送到藍牙或店內廣播。", false);
+    animatePet("review", true);
   }
 
   function observeNetwork() {
@@ -215,6 +312,12 @@
   }
 
   function voiceInput() {
+    if (!state.voiceConsentPending) {
+      state.voiceConsentPending = true;
+      $("#audioState").textContent = "辨識可能由瀏覽器供應商處理；再按一次才同意啟動";
+      setSpeech("語音辨識路徑尚未驗證。若你同意瀏覽器可能使用供應商服務，請再按一次語音。", false);
+      return;
+    }
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) {
       state.audioObserved = true;
@@ -225,7 +328,7 @@
     const recognition = new Recognition();
     recognition.lang = "zh-TW";
     recognition.interimResults = false;
-    $("#audioState").textContent = "本機等待說話…";
+    $("#audioState").textContent = "瀏覽器正在辨識；處理路徑未驗證";
     animatePet("waiting");
     recognition.onresult = event => {
       const text = event.results[0][0].transcript;
@@ -233,10 +336,12 @@
       $("#intentInput").value = text;
       $("#audioState").textContent = "語音意圖已轉成文字候選";
       animatePet("review", true);
+      state.voiceConsentPending = false;
       setSpeech("聲音已在瀏覽器形成文字候選，尚未執行任何外部作用。", true);
     };
     recognition.onerror = () => {
       $("#audioState").textContent = "語音不可用，保持未知";
+      state.voiceConsentPending = false;
       animatePet("failed", true);
     };
     recognition.start();
@@ -246,8 +351,10 @@
     if (!file) return;
     const buffer = await file.arrayBuffer();
     const digest = window.crypto?.subtle ? await crypto.subtle.digest("SHA-256", buffer) : null;
-    const ref = digest ? [...new Uint8Array(digest)].slice(0, 6).map(byte => byte.toString(16).padStart(2, "0")).join("") : "無雜湊";
+    const fullRef = digest ? [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("") : null;
+    const ref = fullRef ? fullRef.slice(0, 12) : "無雜湊";
     state.imageRef = `image:${ref}`;
+    state.imageEvidenceRef = fullRef ? `sha256:${fullRef}` : null;
     $("#imageState").textContent = `${file.name}｜${ref}`;
     setSpeech("影像只在本機形成雜湊與觀測參照，不上傳，也不做人臉年齡或性別推論。", true);
     animatePet("review", true);
@@ -276,10 +383,25 @@
   }
 
   function bindEvents() {
+    $$("[data-view]").forEach(button => button.addEventListener("click", () => setView(button.dataset.view)));
+    $$("[data-view-jump]").forEach(button => button.addEventListener("click", () => setView(button.dataset.viewJump)));
+    $$("[data-prompt]").forEach(button => button.addEventListener("click", () => {
+      $("#intentInput").value = button.dataset.prompt;
+      $("#orderExperience").scrollIntoView({ behavior: "smooth", block: "center" });
+    }));
+    $$("[data-tool-prompt]").forEach(button => button.addEventListener("click", () => {
+      const [scene, prompt] = button.dataset.toolPrompt.split("|", 2);
+      setScene(scene);
+      setView("customer");
+      $("#intentInput").value = prompt;
+      window.setTimeout(() => $("#orderExperience").scrollIntoView({ behavior: "smooth", block: "center" }), 80);
+    }));
     $$("[data-scene]").forEach(button => button.addEventListener("click", () => setScene(button.dataset.scene)));
     $$("[data-action]").forEach(button => button.addEventListener("click", () => {
       const actions = {
         "cafe-demo": () => { setScene("cafe"); window.setTimeout(understand, 250); },
+        "start-order": () => $("#orderExperience").scrollIntoView({ behavior: "smooth", block: "center" }),
+        "voice-preview": checkVoiceCapability,
         "earthquake-demo": startEarthquakeExercise,
         understand,
         voice: voiceInput,
@@ -302,6 +424,7 @@
     animatePet("idle");
     bindEvents();
     observeNetwork();
+    setView("customer");
     $("#clock").textContent = new Intl.DateTimeFormat("zh-TW", { dateStyle: "medium", timeStyle: "short" }).format(new Date());
     window.XiaoJCompetitionDemo = Object.freeze({ understand, setScene, startEarthquakeExercise });
   }

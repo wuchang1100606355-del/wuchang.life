@@ -3,9 +3,13 @@ import unittest
 from fastapi import HTTPException
 
 from services.xiaoj_intent_field.app import (
+    BROWSER_ORIGINS,
     FOUNDER_REF,
     FounderIntentPacket,
     _build_snapshot,
+    _select_receiver_url,
+    TOTAL_FIELD_LAN_URL,
+    TOTAL_FIELD_VPN_URL,
 )
 from w7tp_gt_mesh import core
 
@@ -26,6 +30,45 @@ def request(**overrides):
 
 
 class FounderIntentRouteTests(unittest.TestCase):
+    def test_browser_origins_are_exact_local_competition_origins(self):
+        self.assertEqual(
+            {
+                "http://127.0.0.1:8069",
+                "http://localhost:8069",
+            },
+            set(BROWSER_ORIGINS),
+        )
+        self.assertNotIn("*", BROWSER_ORIGINS)
+
+    def test_receiver_route_uses_lan_before_vpn(self):
+        calls = []
+
+        def probe(url):
+            calls.append(url)
+            return True
+
+        self.assertEqual((TOTAL_FIELD_LAN_URL, "LAN_PRIMARY"), _select_receiver_url(probe))
+        self.assertEqual([TOTAL_FIELD_LAN_URL], calls)
+
+    def test_receiver_route_uses_registered_vpn_only_after_lan_is_unavailable(self):
+        calls = []
+
+        def probe(url):
+            calls.append(url)
+            return url == TOTAL_FIELD_VPN_URL
+
+        self.assertEqual(
+            (TOTAL_FIELD_VPN_URL, "VPN_FALLBACK_AFTER_LAN_UNAVAILABLE"),
+            _select_receiver_url(probe),
+        )
+        self.assertEqual([TOTAL_FIELD_LAN_URL, TOTAL_FIELD_VPN_URL], calls)
+
+    def test_receiver_route_fails_closed_when_both_paths_are_unavailable(self):
+        with self.assertRaises(HTTPException) as caught:
+            _select_receiver_url(lambda _url: False)
+        self.assertEqual(503, caught.exception.status_code)
+        self.assertEqual("HOLD_TOTAL_FIELD_RECEIVER_UNAVAILABLE", caught.exception.detail)
+
     def test_candidate_snapshot_has_fixed_8d_and_no_final_authority(self):
         snapshot = _build_snapshot(request(), 1)
         self.assertEqual(core.SNAPSHOT_SCHEMA, snapshot["schema_id"])

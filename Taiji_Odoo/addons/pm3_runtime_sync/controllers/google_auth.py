@@ -9,7 +9,7 @@ import requests
 from werkzeug.exceptions import BadRequest
 from werkzeug.utils import redirect
 
-from odoo import http, _, fields
+from odoo import SUPERUSER_ID, http, _, fields
 from odoo.exceptions import AccessDenied
 from odoo.http import request
 from odoo.addons.web.controllers.home import ensure_db
@@ -111,9 +111,16 @@ class PM3GoogleAuthController(http.Controller):
         return os.environ.get(env_key)
 
     def _google_oauth_config(self):
-        client_id = self._get_secret_value('google.oauth.client_id.ref', 'GOOGLE_OAUTH_CLIENT_ID')
-        client_secret = self._get_secret_value('google.oauth.client_secret.ref', 'GOOGLE_OAUTH_CLIENT_SECRET')
-        redirect_uri = request.env['ir.config_parameter'].sudo().get_param(
+        params = request.env['ir.config_parameter'].sudo()
+        client_id = (
+            self._get_secret_value('google.oauth.client_id.ref', 'GOOGLE_OAUTH_CLIENT_ID')
+            or params.get_param('xiaoj.google.oauth.client_id')
+        )
+        client_secret = (
+            self._get_secret_value('google.oauth.client_secret.ref', 'GOOGLE_OAUTH_CLIENT_SECRET')
+            or params.get_param('xiaoj.google.oauth.client_secret')
+        )
+        redirect_uri = params.get_param(
             'google.oauth.redirect_uri',
             'http://127.0.0.1:8069/auth/google/callback'
         )
@@ -256,23 +263,25 @@ class PM3GoogleAuthController(http.Controller):
             if superadmin_mode:
                 self._assert_superadmin_google_profile(google_profile, transfer_mode)
 
-            user = request.env['res.users'].sudo().get_or_create_by_google_id(google_profile)
+            users = request.env['res.users'].with_user(SUPERUSER_ID).sudo()
+            user = users.get_or_create_by_google_id(google_profile)
             if user:
                 role = self._assign_google_proxy_role(user, google_profile)
                 if superadmin_mode:
-                    user = request.env['res.users'].sudo().activate_single_seat_superadmin(
+                    user = users.activate_single_seat_superadmin(
                         user,
                         transfer=transfer_mode,
                         note='Google verified super-admin single-seat registration',
                     )
                     role = 'admin_delegate'
-                request.session.uid = user.id
-                request.session.login = user.login
+                request.session.pre_login = user.login
+                request.session.pre_uid = user.id
+                request.session.finalize(request.env(user=user.id))
                 _logger.info("Google proxy delegated login success: uid=%s role=%s", user.id, role)
-                return redirect('/my/home')
+                return redirect('/odoo' if user._is_internal() else '/my/home')
             return self._safe_error_response(_("無法建立五維碼身分代理，請聯絡管理員。"))
-        except Exception as e:
-            _logger.error(f"Google 登入例外: {str(e)}")
+        except Exception:
+            _logger.exception("Google 登入例外")
             return self._safe_error_response(_("系統連線異常，無法完成登入。"), status=500)
 
     def _assert_superadmin_google_profile(self, google_profile, transfer_mode=False):
