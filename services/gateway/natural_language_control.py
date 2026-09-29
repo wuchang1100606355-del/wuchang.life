@@ -413,6 +413,55 @@ def _run_state_path(run_id: str) -> Path:
     return RUNTIME_ROOT / "runs" / run_id / "state.json"
 
 
+def _validate_task_id(task_id: str) -> str:
+    allowed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._:-"
+    if not task_id or len(task_id) > 128 or any(ch not in allowed for ch in task_id):
+        raise HTTPException(status_code=400, detail="TASK_ID_INVALID")
+    return task_id
+
+
+def _run_projection(payload: dict[str, Any]) -> dict[str, Any]:
+    fields = (
+        "run_id", "action_id", "task_id", "state", "started_at", "finished_at",
+        "model_provider", "model", "google_candidate_used",
+        "gemini_a2a_reasoning_used", "codex_used", "candidate_changes",
+        "deterministic_validation", "continuity",
+    )
+    return {field: payload.get(field) for field in fields if field in payload}
+
+
+def _latest_task_run(task_id: str) -> dict[str, Any] | None:
+    runs_root = RUNTIME_ROOT / "runs"
+    if not runs_root.is_dir():
+        return None
+    latest: tuple[str, float, dict[str, Any]] | None = None
+    for path in runs_root.glob("*/state.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            continue
+        if payload.get("task_id") != task_id:
+            continue
+        logical_time = str(payload.get("finished_at") or payload.get("started_at") or "")
+        candidate = (logical_time, path.stat().st_mtime, payload)
+        if latest is None or candidate[:2] > latest[:2]:
+            latest = candidate
+    return _run_projection(latest[2]) if latest else None
+
+
+def _work_task_projection(task_id: str) -> dict[str, Any] | None:
+    path = PROJECT_ROOT / "state" / "WORK_LEDGER.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    for task in payload.get("TASKS", []):
+        if task.get("TASK_ID") == task_id:
+            fields = ("TASK_ID", "STATE", "PRIORITY", "NEXT_ACTION", "LAST_UPDATE")
+            return {field: task.get(field) for field in fields if field in task}
+    return None
+
+
 def _atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, temp_name = tempfile.mkstemp(prefix=".state.", suffix=".tmp", dir=path.parent)
@@ -430,6 +479,18 @@ def run_state(run_id: str):
     if not path.exists():
         raise HTTPException(status_code=404, detail="RUN_NOT_FOUND")
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+@router.get("/task/{task_id}/state")
+def task_state(task_id: str):
+    task_id = _validate_task_id(task_id)
+    return {
+        "state": "PASS_TASK_STATE",
+        "task_id": task_id,
+        "authoritative_source": "TAIJI01_NL_CONTROL",
+        "work_task": _work_task_projection(task_id),
+        "latest_run": _latest_task_run(task_id),
+    }
 
 
 @router.post("/execute")

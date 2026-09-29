@@ -8,6 +8,7 @@ from services.gateway.natural_language_control import (
 )
 # -*- coding: utf-8 -*-
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import requests, subprocess, json, hashlib, os
 from datetime import datetime
@@ -325,6 +326,11 @@ app.include_router(w7tp_ui_router)
 app.include_router(natural_language_control_router)
 
 W7TP_WEB_ROOT = Path(__file__).resolve().parents[2] / "web"
+app.mount(
+    "/ui",
+    StaticFiles(directory=str(W7TP_WEB_ROOT), html=True),
+    name="w7tp-web",
+)
 
 @app.get("/web/w7tp_8d_control_panel.html")
 def w7tp_8d_control_panel():

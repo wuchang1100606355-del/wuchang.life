@@ -477,6 +477,53 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
                 )
             )
 
+    def test_shared_workcell_task_state_uses_backend_authority(self) -> None:
+        with (
+            patch.object(
+                nl_control,
+                "_work_task_projection",
+                return_value={"TASK_ID": "T-XIAOJ-LAUNCH", "STATE": "DOING"},
+            ),
+            patch.object(
+                nl_control,
+                "_latest_task_run",
+                return_value={"run_id": "d" * 32, "state": "RUNNING"},
+            ),
+        ):
+            result = nl_control.task_state("T-XIAOJ-LAUNCH")
+        self.assertEqual(result["state"], "PASS_TASK_STATE")
+        self.assertEqual(result["authoritative_source"], "TAIJI01_NL_CONTROL")
+        self.assertEqual(result["work_task"]["STATE"], "DOING")
+        self.assertEqual(result["latest_run"]["state"], "RUNNING")
+
+    def test_shared_workcell_gateway_mounts_ui_same_origin(self) -> None:
+        from services.gateway import main as gateway_main
+
+        mounts = [
+            route
+            for route in gateway_main.app.routes
+            if getattr(route, "path", None) == "/ui"
+        ]
+        self.assertEqual(len(mounts), 1)
+
+    def test_shared_workcell_pages_use_one_frontend_module(self) -> None:
+        root = nl_control.PROJECT_ROOT
+        script_ref = "../assets/xiaoj-shared-workcell.js"
+        openwebui = (
+            root / "web/xiaoj_openwebui_workbench/index.html"
+        ).read_text(encoding="utf-8")
+        member = (
+            root / "web/xiaoj_member_browser_cockpit/index.html"
+        ).read_text(encoding="utf-8")
+        shared = (
+            root / "web/assets/xiaoj-shared-workcell.js"
+        ).read_text(encoding="utf-8")
+        self.assertIn(script_ref, openwebui)
+        self.assertIn(script_ref, member)
+        self.assertIn("/api/taiji/nl-control", shared)
+        self.assertIn("T-XIAOJ-LAUNCH", shared)
+        self.assertNotIn("localStorage", shared)
+
     def test_bound_gemini_is_reasoning_organ_not_source_writer(self) -> None:
         resource_decision = {
             "RESOURCE_COORDINATES": [

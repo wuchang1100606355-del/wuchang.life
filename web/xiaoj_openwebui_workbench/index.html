@@ -165,6 +165,7 @@ let currentCard="none";
 function selectCard(c){currentCard=c;document.getElementById("out").textContent=JSON.stringify({selected_card:c,plan_only:true,odoo_write:false,raw_pii_to_cloud:false},null,2)}
 function makeAction(d){document.getElementById("out").textContent=JSON.stringify({source_card:currentCard,decision:d,plan_only:true,odoo_write:false,raw_pii_to_cloud:false,human_confirmation_required:true,created_at:new Date().toISOString()},null,2)}
 </script>
+<script src="../assets/xiaoj-shared-workcell.js"></script>
 <footer>
   SAFETY: SECRET_READ=FALSE · MEMBER_PLAINTEXT_READ=FALSE · RAW_AUDIO_READ=FALSE · PAYMENT_CAPTURE=FALSE · ODOO_WRITE=FALSE · SERVICE_RESTART=FALSE · LLM_AUTHORITY=FALSE · PRODUCTION_RELEASE=HOLD
 </footer>
