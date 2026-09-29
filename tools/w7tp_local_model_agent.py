@@ -28,6 +28,9 @@ MAX_SEARCH_HITS = 80
 MAX_WRITE_BYTES = 2 * 1024 * 1024
 MAX_TOOL_RESULT_CHARS = 6000
 MAX_TOOL_TRACE_ENTRIES = 12
+MAX_CONSECUTIVE_OBSERVATION_CALLS = 8
+OBSERVATION_TOOLS = {"list_files", "read_file", "search_text", "run_check"}
+MUTATION_TOOLS = {"stage_path", "replace_text", "write_file"}
 SOURCE_ROOTS = {
     "core", "services", "tools", "capabilities", "configs", "schemas",
     "scripts", "tests", "docs", "web", "products", "deploy", "legacy_core",
@@ -242,11 +245,20 @@ def _tool_trace_entry(name: str, result: dict[str, Any]) -> str:
         f"tool={name}",
         f"state={result.get('state')}",
     ]
-    for key in ("path", "rc", "file_count", "replacements"):
+    for key in ("path", "rc", "file_count", "replacements", "required_next"):
         value = result.get(key)
         if value is not None:
             fields.append(f"{key}={value}")
     return " ".join(fields)
+
+
+def _tool_budget(name: str, streak: int) -> tuple[bool, int]:
+    if name in MUTATION_TOOLS:
+        return False, streak
+    if name in OBSERVATION_TOOLS:
+        next_streak = streak + 1
+        return next_streak > MAX_CONSECUTIVE_OBSERVATION_CALLS, next_streak
+    return False, streak
 
 
 TOOL_DEFS = [
@@ -324,6 +336,7 @@ def main() -> int:
     ]
     messages = list(base_messages)
     tool_trace: list[str] = []
+    observation_streak = 0
     final = ""
     for _ in range(args.max_steps):
         response = ollama_chat(args.ollama_url, args.model, messages)
@@ -367,7 +380,25 @@ def main() -> int:
                     arguments = json.loads(arguments)
                 except json.JSONDecodeError:
                     arguments = {}
-            result = execute_tool(tools, name, arguments)
+            blocked, observation_streak = _tool_budget(
+                name, observation_streak
+            )
+            if blocked:
+                result = {
+                    "state": "HOLD_OBSERVATION_TOOL_BUDGET_EXHAUSTED",
+                    "tool": name,
+                    "required_next": (
+                        "stage_path_or_edit_or_explicit_blocker"
+                    ),
+                    "observation_streak": observation_streak,
+                }
+            else:
+                result = execute_tool(tools, name, arguments)
+                if (
+                    name in MUTATION_TOOLS
+                    and result.get("state") == "PASS"
+                ):
+                    observation_streak = 0
             tool_trace.append(_tool_trace_entry(name, result))
             tool_trace = tool_trace[-MAX_TOOL_TRACE_ENTRIES:]
             tool_messages.append({
