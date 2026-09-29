@@ -21,6 +21,7 @@ from tools.w7tp_task_state_minimum_packet import (
     build_task_model_visible_context,
     build_task_state_minimum_packet,
     select_task_state_support_refs,
+    _adi_payload_context_eligible,
 )
 
 
@@ -165,6 +166,18 @@ class TaskStateMinimumPacketTests(unittest.TestCase):
             "HOLD_MINIMUM_PACKET_SELF_HASH_MISMATCH",
         ):
             validate_minimum_packet(tampered)
+
+    def test_dynamic_context_rejects_superseded_historical_evidence(self) -> None:
+        self.assertFalse(_adi_payload_context_eligible({
+            "status": "SUPERSEDED_HISTORICAL_EVIDENCE_ONLY",
+            "CURRENT_CONTEXT_ELIGIBLE": False,
+        }))
+
+    def test_dynamic_context_accepts_current_capability_evidence(self) -> None:
+        self.assertTrue(_adi_payload_context_eligible({
+            "knowledge_type": "OBSERVED_IMPLEMENTED_CAPABILITY",
+            "state": "LANDED_LIVE_VERIFIED_CANDIDATE_REASONING_ORGAN",
+        }))
 
     def test_selector_uses_real_task_actions_and_existing_adi_refs(self) -> None:
         selected = select_task_state_support_refs(

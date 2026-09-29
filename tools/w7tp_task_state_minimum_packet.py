@@ -112,19 +112,53 @@ def _collect_adi_ref_candidates(value: Any, out: list[str]) -> None:
             _collect_adi_ref_candidates(nested, out)
 
 
-def _adi_record_exists(record_id: str) -> bool:
+FOUNDER_DRIFT_WARNING = "創辦人防漂移警告：AI 與狗不得靠近。"
+_INELIGIBLE_CONTEXT_MARKERS = (
+    "SUPERSEDED",
+    "STALE",
+    "REVOKED",
+    "HISTORICAL_EVIDENCE_ONLY",
+)
+
+
+def _adi_payload_context_eligible(payload: Mapping[str, Any]) -> bool:
+    """Reject records explicitly marked as non-current before model context selection."""
+    for key in (
+        "CURRENT_AUTHORITY",
+        "CURRENT_CONTEXT_ELIGIBLE",
+        "DYNAMIC_CONTEXT_ELIGIBLE",
+        "RUNTIME_DECISION_ELIGIBLE",
+    ):
+        if payload.get(key) is False:
+            return False
+    searchable = " ".join(
+        str(payload.get(key, "")).upper()
+        for key in ("status", "state", "knowledge_type", "evidence_class")
+    )
+    return not any(marker in searchable for marker in _INELIGIBLE_CONTEXT_MARKERS)
+
+
+def _adi_record_context_eligible(record_id: str) -> bool:
     try:
         value = _post_json("/v1/adi/packet", {"ids": [record_id]})
     except TaskStatePacketError:
         return False
     lookup = value.get("reference_lookup")
     entries = lookup.get("entries") if isinstance(lookup, Mapping) else None
-    return bool(
+    if not (
         isinstance(entries, list)
         and len(entries) == 1
         and isinstance(entries[0], Mapping)
         and entries[0].get("id") == record_id
-    )
+    ):
+        return False
+    delta = value.get("delta")
+    atoms = delta.get("state_atoms") if isinstance(delta, Mapping) else None
+    if not isinstance(atoms, list) or len(atoms) != 1:
+        return False
+    atom = atoms[0]
+    payload = atom.get("payload") if isinstance(atom, Mapping) else None
+    return isinstance(payload, Mapping) and _adi_payload_context_eligible(payload)
 
 
 def select_task_state_support_refs(
@@ -249,7 +283,7 @@ def select_task_state_support_refs(
     for candidate in ordered_candidates:
         if len(adi_record_ids) >= max_adi_refs:
             break
-        if _adi_record_exists(candidate):
+        if _adi_record_context_eligible(candidate):
             adi_record_ids.append(candidate)
     if not adi_record_ids:
         raise TaskStatePacketError(
