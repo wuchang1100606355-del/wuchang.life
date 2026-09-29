@@ -237,6 +237,54 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
             ],
         )
 
+    def test_source_evidence_cache_is_bounded_and_retains_recent_content(self) -> None:
+        cache: list[str] = []
+        for index in range(5):
+            entry = local_agent._source_evidence_text(
+                "read_file",
+                {"path": f"tools/example_{index}.py"},
+                {
+                    "state": "PASS",
+                    "path": f"tools/example_{index}.py",
+                    "start": 1,
+                    "end": 2,
+                    "content": f"line-{index}",
+                },
+            )
+            cache = local_agent._append_source_evidence(cache, entry)
+        self.assertEqual(
+            len(cache),
+            local_agent.MAX_SOURCE_EVIDENCE_ENTRIES,
+        )
+        joined = "\n".join(cache)
+        self.assertNotIn("example_0.py", joined)
+        self.assertIn("example_4.py", joined)
+        self.assertIn("line-4", joined)
+        self.assertLessEqual(
+            sum(len(item) for item in cache),
+            local_agent.MAX_SOURCE_EVIDENCE_TOTAL_CHARS,
+        )
+
+    def test_observation_budget_switches_to_progress_only_tools(self) -> None:
+        full = {
+            item["function"]["name"]
+            for item in local_agent._active_tool_defs(0)
+        }
+        self.assertIn("read_file", full)
+        progress = {
+            item["function"]["name"]
+            for item in local_agent._active_tool_defs(
+                local_agent.MAX_CONSECUTIVE_OBSERVATION_CALLS
+            )
+        }
+        self.assertEqual(
+            progress,
+            {"stage_path", "replace_text", "write_file"},
+        )
+        self.assertNotIn("read_file", progress)
+        self.assertNotIn("search_text", progress)
+        self.assertNotIn("run_check", progress)
+
     def test_local_agent_step_budget_is_adaptive(self) -> None:
         self.assertEqual(
             runner.local_agent_step_budget(

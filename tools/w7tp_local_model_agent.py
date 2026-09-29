@@ -29,6 +29,9 @@ MAX_SEARCH_HITS = 80
 MAX_WRITE_BYTES = 2 * 1024 * 1024
 MAX_TOOL_RESULT_CHARS = 6000
 MAX_TOOL_TRACE_ENTRIES = 12
+MAX_SOURCE_EVIDENCE_ENTRIES = 3
+MAX_SOURCE_EVIDENCE_ENTRY_CHARS = 5000
+MAX_SOURCE_EVIDENCE_TOTAL_CHARS = 12000
 MAX_CONSECUTIVE_OBSERVATION_CALLS = 8
 OBSERVATION_TOOLS = {
     "list_files",
@@ -288,8 +291,78 @@ TOOL_DEFS = [
     {"type":"function","function":{"name":"write_file","description":"Create or overwrite a staged shadow file.","parameters":{"type":"object","required":["path","content"],"properties":{"path":{"type":"string"},"content":{"type":"string"}}}}},
     {"type":"function","function":{"name":"run_check","description":"Run only allowed deterministic checks in the shadow.","parameters":{"type":"object","required":["kind","paths"],"properties":{"kind":{"type":"string","enum":["py_compile","pytest","unittest","node_check"]},"paths":{"type":"array","items":{"type":"string"}}}}}},
 ]
-def ollama_chat(url: str, model: str, messages: list[dict[str, Any]]) -> dict[str, Any]:
-    payload = {"model": model, "messages": messages, "tools": TOOL_DEFS, "stream": False, "options": {"temperature": 0.1}}
+PROGRESS_TOOL_NAMES = frozenset({"stage_path", "replace_text", "write_file"})
+PROGRESS_TOOL_DEFS = [
+    item for item in TOOL_DEFS
+    if item["function"]["name"] in PROGRESS_TOOL_NAMES
+]
+
+
+def _active_tool_defs(observation_streak: int) -> list[dict[str, Any]]:
+    if observation_streak >= MAX_CONSECUTIVE_OBSERVATION_CALLS:
+        return PROGRESS_TOOL_DEFS
+    return TOOL_DEFS
+
+
+def _source_evidence_text(
+    name: str,
+    arguments: dict[str, Any],
+    result: dict[str, Any],
+) -> str | None:
+    if result.get("state") != "PASS" or name not in {"read_file", "search_text"}:
+        return None
+    if name == "read_file":
+        payload = {
+            "tool": name,
+            "path": result.get("path") or arguments.get("path"),
+            "start": result.get("start"),
+            "end": result.get("end"),
+            "shadow": bool(arguments.get("shadow", False)),
+            "content": result.get("content", ""),
+        }
+    else:
+        payload = {
+            "tool": name,
+            "query": arguments.get("query"),
+            "path": arguments.get("path", ""),
+            "hits": result.get("hits", []),
+        }
+    text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    if len(text) <= MAX_SOURCE_EVIDENCE_ENTRY_CHARS:
+        return text
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    keep = max(0, MAX_SOURCE_EVIDENCE_ENTRY_CHARS - len(digest) - 40)
+    return text[:keep] + f"...<truncated sha256={digest}>"
+
+
+def _append_source_evidence(cache: list[str], entry: str | None) -> list[str]:
+    if not entry:
+        return cache
+    updated = [item for item in cache if item != entry]
+    updated.append(entry)
+    updated = updated[-MAX_SOURCE_EVIDENCE_ENTRIES:]
+    while (
+        len(updated) > 1
+        and sum(len(item) for item in updated) > MAX_SOURCE_EVIDENCE_TOTAL_CHARS
+    ):
+        updated.pop(0)
+    return updated
+
+
+def ollama_chat(
+    url: str,
+    model: str,
+    messages: list[dict[str, Any]],
+    *,
+    tool_defs: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    payload = {
+        "model": model,
+        "messages": messages,
+        "tools": tool_defs if tool_defs is not None else TOOL_DEFS,
+        "stream": False,
+        "options": {"temperature": 0.1},
+    }
     req = urllib.request.Request(
         url.rstrip("/") + "/api/chat",
         data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
@@ -354,10 +427,20 @@ def main() -> int:
     ]
     messages = list(base_messages)
     tool_trace: list[str] = []
+    source_evidence: list[str] = []
     observation_streak = 0
     final = ""
     for _ in range(args.max_steps):
-        response = ollama_chat(args.ollama_url, args.model, messages)
+        active_tool_defs = _active_tool_defs(observation_streak)
+        response = ollama_chat(
+            args.ollama_url,
+            args.model,
+            messages,
+            tool_defs=active_tool_defs,
+        )
+        active_tool_names = {
+            item["function"]["name"] for item in active_tool_defs
+        }
         message = response.get("message") or {}
         tool_calls = message.get("tool_calls") or []
         content = str(message.get("content") or "").strip()
@@ -376,7 +459,7 @@ def main() -> int:
             if (
                 isinstance(pseudo, dict)
                 and isinstance(pseudo.get("name"), str)
-                and pseudo.get("name") in {item["function"]["name"] for item in TOOL_DEFS}
+                and pseudo.get("name") in active_tool_names
             ):
                 tool_calls = [{
                     "function": {
@@ -417,6 +500,11 @@ def main() -> int:
                     and result.get("state") == "PASS"
                 ):
                     observation_streak = 0
+                    source_evidence = []
+            source_evidence = _append_source_evidence(
+                source_evidence,
+                _source_evidence_text(name, arguments, result),
+            )
             tool_trace.append(_tool_trace_entry(name, result))
             tool_trace = tool_trace[-MAX_TOOL_TRACE_ENTRIES:]
             tool_messages.append({
@@ -431,13 +519,33 @@ def main() -> int:
         trace_message = {
             "role": "system",
             "content": (
-                "Recent bounded tool trace; use it only for continuity, "
-                "and re-read exact source when needed:\n"
+                "Recent bounded tool trace; use it only for continuity:\n"
                 + "\n".join(tool_trace)
             ),
         }
+        evidence_messages: list[dict[str, Any]] = []
+        if source_evidence:
+            evidence_messages.append({
+                "role": "system",
+                "content": (
+                    "Recent bounded source evidence. Reuse this exact evidence "
+                    "instead of rereading the same source unless a write changed it:\n"
+                    + "\n---\n".join(source_evidence)
+                ),
+            })
+        if observation_streak >= MAX_CONSECUTIVE_OBSERVATION_CALLS:
+            evidence_messages.append({
+                "role": "system",
+                "content": (
+                    "Observation budget is exhausted. The next tool must make "
+                    "forward progress with stage_path, replace_text, or write_file. "
+                    "Observation tools are intentionally unavailable until a "
+                    "content mutation succeeds."
+                ),
+            })
         messages = [
             *base_messages,
+            *evidence_messages,
             trace_message,
             message,
             *tool_messages,
