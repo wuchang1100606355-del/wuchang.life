@@ -1,0 +1,56 @@
+{
+  "schema_version": "w7tp-causal-submission-receipt/1.0",
+  "observed_at": "2026-09-29T01:39:20.108773+00:00",
+  "node": "taiji01",
+  "task_id": "T-XIAOJ-LAUNCH",
+  "branch": "codex/current-live-state-consolidation-20260915",
+  "primary_payload": {
+    "commit": "3f4fa63ca5c804d6f8baaefe3c01abaeb8a12c45",
+    "remote_readback": "MATCH",
+    "submitted_paths": [
+      "evidence/development_log_continuity/20260928T040719Z/preimage/core/intent_continuity.py",
+      "evidence/development_log_continuity/20260928T040719Z/preimage/tools/w7tp_nl_goal_runner.py"
+    ],
+    "review": {
+      "state": "PASS_TOTAL_FIELD_SOURCE_DELTA_ADJUDICATION",
+      "decision": "ALLOW",
+      "candidate_sha256": "0fede9d7bd55490a5479f7eed92584570dfa48b736357c8332bd672d87ef7f7d",
+      "total_field_hash": "63526391f7048e2284aa1fa720d73d3b31c6092cbfea032251585ae2a9129c29"
+    }
+  },
+  "causal_exclusions": {
+    "restored_unproven_deletions": [
+      "Taiji_Odoo/addons/wuchang_google_member_login/controllers/main.py.orig",
+      "tools/total_field/w7tp_intent_field_suite/api.py.orig",
+      "tools/total_field/w7tp_intent_field_suite/identity_projection.py.orig",
+      "tools/total_field/wuchang_three_org_container_scene_bridge.py.orig"
+    ],
+    "reason": "NO_LEGAL_SUCCESSOR_EVIDENCE_FOR_DELETION; RESTORED_TO_HEAD_PREIMAGE"
+  },
+  "local_only_by_policy": [
+    "evidence/development_log_continuity/20260928T040719Z/preimage/state/WORK_LEDGER.json",
+    "evidence/development_log_continuity/20260928T040719Z/preimage/state/ACTION_LEDGER.json",
+    "evidence/development_log_continuity/20260928T040719Z/preimage/state/CURRENT_CONVERSATION_CHECKPOINT.json"
+  ],
+  "local_only_policy_ref": ".gitignore:76:state/",
+  "dynamic_context_ref": "context:task-state:T-XIAOJ-LAUNCH:4bf9fcefbf05e1d5",
+  "planned_action_ledger": {
+    "action_id": "A-CAUSAL-SUBMIT-20260929",
+    "idempotency_key": "8fbe075b9b1d8bbd1c7b96a847a3fc81cd0860e42ed9821ff0c65e2cc7aa2167",
+    "ledger_sha256_before": "cac77692f79362d142f9dea0cb2610e16cd0598ed854d35407909cdbf8f70a15"
+  },
+  "effect_scope": {
+    "git_evidence_submission": true,
+    "deployment": false,
+    "service_restart": false,
+    "product_effect": false,
+    "canonical_promotion": false
+  },
+  "classification": {
+    "submitted_source_preimages": "VERIFIED_EFFECT",
+    "remote_primary_commit": "VERIFIED_EFFECT",
+    "restored_orig_deletions": "VERIFIED_EFFECT",
+    "ignored_state_preimages": "RECORDED_LOCAL_ONLY",
+    "product_done": "NOT_CLAIMED"
+  }
+}
