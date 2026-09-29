@@ -29,8 +29,14 @@ MAX_WRITE_BYTES = 2 * 1024 * 1024
 MAX_TOOL_RESULT_CHARS = 6000
 MAX_TOOL_TRACE_ENTRIES = 12
 MAX_CONSECUTIVE_OBSERVATION_CALLS = 8
-OBSERVATION_TOOLS = {"list_files", "read_file", "search_text", "run_check"}
-MUTATION_TOOLS = {"stage_path", "replace_text", "write_file"}
+OBSERVATION_TOOLS = {
+    "list_files",
+    "read_file",
+    "search_text",
+    "run_check",
+    "stage_path",
+}
+MUTATION_TOOLS = {"replace_text", "write_file"}
 SOURCE_ROOTS = {
     "core", "services", "tools", "capabilities", "configs", "schemas",
     "scripts", "tests", "docs", "web", "products", "deploy", "legacy_core",
