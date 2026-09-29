@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -25,6 +26,8 @@ MAX_STEPS = int(os.getenv("TAIJI_LOCAL_AGENT_MAX_STEPS", "32"))
 MAX_READ_LINES = 400
 MAX_SEARCH_HITS = 80
 MAX_WRITE_BYTES = 2 * 1024 * 1024
+MAX_TOOL_RESULT_CHARS = 6000
+MAX_TOOL_TRACE_ENTRIES = 12
 SOURCE_ROOTS = {
     "core", "services", "tools", "capabilities", "configs", "schemas",
     "scripts", "tests", "docs", "web", "products", "deploy", "legacy_core",
@@ -215,6 +218,37 @@ class AgentTools:
             return {"state": "HOLD_CHECK_NOT_ALLOWED", "kind": kind}
         proc = subprocess.run(cmd, cwd=self.shadow, text=True, capture_output=True, timeout=300)
         return {"state": "PASS" if proc.returncode == 0 else "HOLD_CHECK_FAILED", "rc": proc.returncode, "stdout": proc.stdout[-4000:], "stderr": proc.stderr[-4000:]}
+
+
+def _compact_tool_result(name: str, result: dict[str, Any]) -> dict[str, Any]:
+    compact = dict(result)
+    for key in ("content", "stdout", "stderr"):
+        value = compact.get(key)
+        if isinstance(value, str) and len(value) > MAX_TOOL_RESULT_CHARS:
+            compact[key] = value[:MAX_TOOL_RESULT_CHARS]
+            compact[f"{key}_truncated"] = True
+            compact[f"{key}_sha256"] = hashlib.sha256(value.encode("utf-8")).hexdigest()
+    for key, limit in (("files", 80), ("hits", 24)):
+        value = compact.get(key)
+        if isinstance(value, list) and len(value) > limit:
+            compact[key] = value[:limit]
+            compact[f"{key}_truncated"] = True
+            compact[f"{key}_total"] = len(value)
+    return compact
+
+
+def _tool_trace_entry(name: str, result: dict[str, Any]) -> str:
+    fields = [
+        f"tool={name}",
+        f"state={result.get('state')}",
+    ]
+    for key in ("path", "rc", "file_count", "replacements"):
+        value = result.get(key)
+        if value is not None:
+            fields.append(f"{key}={value}")
+    return " ".join(fields)
+
+
 TOOL_DEFS = [
     {"type":"function","function":{"name":"list_files","description":"List live repository files under an optional path.","parameters":{"type":"object","properties":{"path":{"type":"string"},"limit":{"type":"integer"}}}}},
     {"type":"function","function":{"name":"read_file","description":"Read a bounded line range from live or shadow source.","parameters":{"type":"object","required":["path"],"properties":{"path":{"type":"string"},"start_line":{"type":"integer"},"end_line":{"type":"integer"},"shadow":{"type":"boolean"}}}}},
@@ -284,10 +318,12 @@ def main() -> int:
         "Do not ask the human to run commands. Continue until the requested source delta is implemented "
         "or a specific tool-evidenced blocker remains."
     )
-    messages: list[dict[str, Any]] = [
+    base_messages: list[dict[str, Any]] = [
         {"role": "system", "content": system},
         {"role": "user", "content": prompt},
     ]
+    messages = list(base_messages)
+    tool_trace: list[str] = []
     final = ""
     for _ in range(args.max_steps):
         response = ollama_chat(args.ollama_url, args.model, messages)
@@ -317,10 +353,11 @@ def main() -> int:
                         "arguments": pseudo.get("arguments") or {},
                     }
                 }]
-        messages.append(message)
         if not tool_calls:
             final = content
             break
+
+        tool_messages: list[dict[str, Any]] = []
         for call in tool_calls:
             fn = (call.get("function") or {})
             name = str(fn.get("name") or "")
@@ -331,7 +368,31 @@ def main() -> int:
                 except json.JSONDecodeError:
                     arguments = {}
             result = execute_tool(tools, name, arguments)
-            messages.append({"role": "tool", "tool_name": name, "content": json.dumps(result, ensure_ascii=False)})
+            tool_trace.append(_tool_trace_entry(name, result))
+            tool_trace = tool_trace[-MAX_TOOL_TRACE_ENTRIES:]
+            tool_messages.append({
+                "role": "tool",
+                "tool_name": name,
+                "content": json.dumps(
+                    _compact_tool_result(name, result),
+                    ensure_ascii=False,
+                ),
+            })
+
+        trace_message = {
+            "role": "system",
+            "content": (
+                "Recent bounded tool trace; use it only for continuity, "
+                "and re-read exact source when needed:\n"
+                + "\n".join(tool_trace)
+            ),
+        }
+        messages = [
+            *base_messages,
+            trace_message,
+            message,
+            *tool_messages,
+        ]
     else:
         raise RuntimeError("LOCAL_MODEL_STEP_LIMIT")
     print(final or "LOCAL_MODEL_COMPLETED")
