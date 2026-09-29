@@ -17,6 +17,13 @@ MSI_LAN_OLLAMA_URL = f"http://{MSI_LAN_IP}:11434"
 MSI_WINDOWS_TAILSCALE_OLLAMA_URL = f"http://{MSI_WINDOWS_TAILSCALE_IP}:11434"
 DEPRECATED_MSI_WSL_TAILSCALE_OLLAMA_URL = f"http://{DEPRECATED_MSI_WSL_TAILSCALE_IP}:11434"
 
+MODEL_BINDINGS = {
+    "xiaoj-local-dev:v2.3": {
+        "digest": "5f7563e28e7f8a55433a3978add47a08a08a684e2b2ba3cd0b23e4a1c88e4e9c",
+        "system_marker": "W7TP_XIAOJ_TOTAL_FIELD_MODEL_ORGAN_PREFIX_V2_3",
+    },
+}
+
 BASE_ENDPOINTS = (
     {
         "ref": "MSI_LAN_PRIMARY",
@@ -68,10 +75,42 @@ def endpoint_has_model(url: str, model: str, timeout: float = 2.0) -> bool:
     models = value.get("models") if isinstance(value, Mapping) else None
     if not isinstance(models, list):
         return False
-    return any(
-        isinstance(item, Mapping)
-        and (item.get("name") == model or item.get("model") == model)
-        for item in models
+    record = next(
+        (
+            item
+            for item in models
+            if isinstance(item, Mapping)
+            and (item.get("name") == model or item.get("model") == model)
+        ),
+        None,
+    )
+    if record is None:
+        return False
+    binding = MODEL_BINDINGS.get(model)
+    if binding is None:
+        return True
+    if record.get("digest") != binding["digest"]:
+        return False
+
+    show_request = urllib.request.Request(
+        url.rstrip("/") + "/api/show",
+        data=json.dumps({"model": model}).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(show_request, timeout=timeout) as response:
+            show = json.loads(response.read().decode("utf-8"))
+    except (
+        OSError,
+        TimeoutError,
+        urllib.error.URLError,
+        json.JSONDecodeError,
+    ):
+        return False
+    return (
+        isinstance(show, Mapping)
+        and binding["system_marker"] in str(show.get("system") or "")
     )
 
 

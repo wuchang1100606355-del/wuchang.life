@@ -46,8 +46,11 @@ from tools.w7tp_task_state_minimum_packet import (
 
 SKILL_ID = "w7tp-8d-adi-natural-language-control"
 LOCAL_AGENT = PROJECT_ROOT / "tools" / "w7tp_local_model_agent.py"
-LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "xiaoj:latest")
+LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "xiaoj-local-dev:v2.3")
 LOCAL_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
+LIVE_CLOUD_REASONING_ENABLED = os.getenv(
+    "TAIJI_CLOUD_REASONING_ENABLED", "0"
+) == "1"
 VERTEX_GATEWAY = PROJECT_ROOT / "tools" / "total_field" / "w7tp_vertex_candidate_gateway.py"
 GEMINI_PACKET = PROJECT_ROOT / "tools" / "xiaoj_gemini_no_plaintext_candidate_packet.py"
 STATE_ROOT = PROJECT_ROOT / "runtime" / "natural_language_control" / "runs"
@@ -649,18 +652,18 @@ def run_local_transform(
     intent: str,
     plan: dict[str, Any],
     timeout_seconds: int,
-    dynamic_context: dict[str, Any],
+    state_cell_transmission: dict[str, Any],
 ) -> str:
     local_ollama_url = current_local_ollama_url()
     prompt = (
         "你是 W7TP 8D ADI 的本地 GPU 語言／狀態轉換器。"
-        "系統上下文只能使用下方由 Total Field Dynamic Context 單次拉取形成的 model-visible context。"
-        "不得自行回退 static state cell、舊狀態、差分或未觀測歷史。"
+        "系統上下文只能使用下方由 Total Field 單次拉取並依本地規則重構的狀態原胞傳輸。"
+        "不得自行回退舊 static state cell、舊狀態、差分或未觀測歷史。"
         "Founder 本次自然語言意圖可作為 D1 輸入，但不是系統狀態證據。"
         "請用繁體中文精簡回報；若不需修改，明確寫 NO_SOURCE_CHANGE。\n\n"
         "FOUNDER_INTENT=" + intent + "\n"
-        "DYNAMIC_CONTEXT="
-        + json.dumps(dynamic_context, ensure_ascii=False, sort_keys=True)
+        "STATE_CELL_TRANSMISSION="
+        + json.dumps(state_cell_transmission, ensure_ascii=False, sort_keys=True)
     )
     body = {
         "model": LOCAL_MODEL,
@@ -668,7 +671,7 @@ def run_local_transform(
             {
                 "role": "system",
                 "content": (
-                    "Use only the governed Dynamic Context for system-state context. "
+                    "Use only the governed state-cell transmission reconstructed from the current Total Field pull. "
                     "No tools. No predecessor-state or differential fallback."
                 ),
             },
@@ -740,6 +743,9 @@ def gemini_task_state_reasoning_hint(
     timeout_seconds: int,
 ) -> dict[str, Any] | None:
     """Issue the current real task packet and obtain one governed Gemini hint."""
+
+    if not LIVE_CLOUD_REASONING_ENABLED:
+        return None
 
     execution = plan.get("D5_EXECUTION", {})
     if (
@@ -868,6 +874,24 @@ def pull_task_dynamic_context_for_model(
         provider_ref=provider_ref,
         model_ref=model_ref,
     )
+    state_cell_transmission = {
+        "schema_ref": "schema:w7tp:origin-state-minimum-packet:2.3-successor",
+        "format": "TASK_STATE_ORIGIN_CELL_TRANSMISSION",
+        "packet_ref": packet.get("packet_ref"),
+        "packet_sha256": packet.get("packet_sha256"),
+        "adi_coordinate_ref": packet.get("adi_coordinate_ref"),
+        "state_ref": packet.get("state_ref"),
+        "state_version_ref": packet.get("state_version_ref"),
+        "joint_state_field": packet.get("joint_state_field"),
+        "rule_binding": packet.get("rule_binding"),
+        "minimum_new_information": packet.get("minimum_new_information"),
+        "necessary_condition_refs": packet.get("necessary_condition_refs"),
+        "verification": packet.get("verification"),
+        "reconstruction_evidence": result.get("reconstruction_evidence"),
+        "context_ref": result["model_visible_context"]["context_ref"],
+        "authority": result.get("authority"),
+        "transmission_semantics": result.get("transmission_semantics"),
+    }
     return {
         "state": "PASS_MODEL_DYNAMIC_CONTEXT_PULL",
         "task_state_record_id": issued.get("task_state_record_id"),
@@ -875,23 +899,28 @@ def pull_task_dynamic_context_for_model(
         "packet_sha256": packet.get("packet_sha256"),
         "bootstrap_sha256": bootstrap.get("bootstrap_sha256"),
         "context_ref": result["model_visible_context"]["context_ref"],
-        "model_visible_context": result["model_visible_context"],
+        "state_cell_transmission": state_cell_transmission,
         "transmission_semantics": result.get("transmission_semantics"),
     }
 
 
 def legacy_google_fallback_allowed(plan: dict[str, Any]) -> bool:
-    """Legacy direct cloud hint path is forbidden under pointer-first context."""
+    """Legacy direct cloud hint path is forbidden unless explicitly enabled."""
 
+    if not LIVE_CLOUD_REASONING_ENABLED:
+        return False
     execution = plan.get("D5_EXECUTION", {})
-    return not (
-        isinstance(execution, dict)
-        and execution.get("context_delivery_mode")
-        == "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL"
-    )
+    if not isinstance(execution, dict):
+        return True
+    return execution.get("context_delivery_mode") not in {
+        "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+        "TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL",
+    }
 
 
 def google_candidate_hint(intent: str, plan: dict[str, Any], run_dir: Path) -> dict[str, Any] | None:
+    if not LIVE_CLOUD_REASONING_ENABLED:
+        return None
     if not (GEMINI_PACKET.is_file() and VERTEX_GATEWAY.is_file()):
         return None
     packet_proc = subprocess.run(
@@ -1015,9 +1044,10 @@ def _main_effect_scope(
             model_ref=f"model:{LOCAL_MODEL}",
         )
         prompt += (
-            "\n\nTOTAL_FIELD_DYNAMIC_CONTEXT (single-use, task-bound, non-differential):\n"
+            "\n\nTOTAL_FIELD_STATE_CELL_TRANSMISSION "
+            "(single-use, task-bound, non-differential, locally reconstructed):\n"
             + json.dumps(
-                local_dynamic_context["model_visible_context"],
+                local_dynamic_context["state_cell_transmission"],
                 ensure_ascii=False,
                 sort_keys=True,
             )
@@ -1115,7 +1145,10 @@ def _main_effect_scope(
                 RESUME_FROM="COMPLETE_READONLY_OBSERVATION",
             )
             last_message = run_local_transform(
-                intent, plan, timeout_seconds, local_dynamic_context["model_visible_context"]
+                intent,
+                plan,
+                timeout_seconds,
+                local_dynamic_context["state_cell_transmission"],
             )
         after = snapshot(shadow)
         changes = diff_snapshot(before, after)

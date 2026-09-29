@@ -292,7 +292,7 @@ def _legacy_payload_to_governed_request(
         auto_land=bool(payload.get("auto_land", True)),
         timeout_seconds=int(payload.get("timeout_seconds", 1200)),
         dry_run=bool(payload.get("dry_run", False)),
-        google_fallback=bool(payload.get("google_fallback", True)),
+        google_fallback=bool(payload.get("google_fallback", False)),
     )
 
 

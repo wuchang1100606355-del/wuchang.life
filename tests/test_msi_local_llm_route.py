@@ -3,10 +3,25 @@
 
 from __future__ import annotations
 
+import json
 import unittest
 from unittest.mock import patch
 
 from core import msi_local_llm_route as route
+
+
+class _FakeResponse:
+    def __init__(self, payload):
+        self.payload = payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def read(self):
+        return json.dumps(self.payload).encode("utf-8")
 
 
 class MSILocalLLMRouteTest(unittest.TestCase):
@@ -76,6 +91,72 @@ class MSILocalLLMRouteTest(unittest.TestCase):
         self.assertEqual(result["state"], "HOLD_MSI_LOCAL_LLM_UNREACHABLE")
         self.assertIsNone(result["selected_url"])
         self.assertFalse(result["deprecated_wsl_tailscale_selected"])
+
+    def test_bound_local_dev_model_requires_exact_digest_and_prefix(self):
+        binding = route.MODEL_BINDINGS["xiaoj-local-dev:v2.3"]
+        tags = {
+            "models": [
+                {
+                    "name": "xiaoj-local-dev:v2.3",
+                    "digest": binding["digest"],
+                }
+            ]
+        }
+        show = {"system": binding["system_marker"] + "\nlocked"}
+        with patch.object(
+            route.urllib.request,
+            "urlopen",
+            side_effect=[_FakeResponse(tags), _FakeResponse(show)],
+        ):
+            self.assertTrue(
+                route.endpoint_has_model(
+                    route.MSI_LAN_OLLAMA_URL,
+                    "xiaoj-local-dev:v2.3",
+                )
+            )
+
+    def test_bound_local_dev_model_rejects_digest_drift(self):
+        tags = {
+            "models": [
+                {
+                    "name": "xiaoj-local-dev:v2.3",
+                    "digest": "0" * 64,
+                }
+            ]
+        }
+        with patch.object(
+            route.urllib.request,
+            "urlopen",
+            return_value=_FakeResponse(tags),
+        ):
+            self.assertFalse(
+                route.endpoint_has_model(
+                    route.MSI_LAN_OLLAMA_URL,
+                    "xiaoj-local-dev:v2.3",
+                )
+            )
+
+    def test_bound_local_dev_model_rejects_prefix_drift(self):
+        binding = route.MODEL_BINDINGS["xiaoj-local-dev:v2.3"]
+        tags = {
+            "models": [
+                {
+                    "name": "xiaoj-local-dev:v2.3",
+                    "digest": binding["digest"],
+                }
+            ]
+        }
+        with patch.object(
+            route.urllib.request,
+            "urlopen",
+            side_effect=[_FakeResponse(tags), _FakeResponse({"system": "wrong"})],
+        ):
+            self.assertFalse(
+                route.endpoint_has_model(
+                    route.MSI_LAN_OLLAMA_URL,
+                    "xiaoj-local-dev:v2.3",
+                )
+            )
 
 
 if __name__ == "__main__":

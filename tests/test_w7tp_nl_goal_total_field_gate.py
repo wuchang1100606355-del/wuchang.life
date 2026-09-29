@@ -96,7 +96,7 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
         risk = plan["D7_RISK"]
         self.assertEqual(
             execution["context_delivery_mode"],
-            "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+            "TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL",
         )
         self.assertEqual(execution["context_target_scope"], "ALL_CONTEXT_REQUIRING_LLM")
         self.assertEqual(execution["unbound_context_requiring_llm"], "HOLD")
@@ -123,14 +123,14 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
             "STATIC_STATE_CELL": {"legacy": "must-not-reach-model"},
             "RESOURCE_DECISION": {"legacy": "must-not-reach-model"},
             "D3_COORDINATE": {"affected_closure": ["core"]},
-            "D5_EXECUTION": {"context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL"},
+            "D5_EXECUTION": {"context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL"},
             "D7_RISK": {"unbound_context_requiring_llm": "HOLD"},
         }
         prompt = runner.build_prompt("intent", runner.PROJECT_ROOT, plan)
         self.assertNotIn("STATIC_STATE_CELL", prompt)
         self.assertNotIn("must-not-reach-model", prompt)
         self.assertNotIn("RESOURCE_DECISION", prompt)
-        self.assertIn("TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL", prompt)
+        self.assertIn("TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL", prompt)
 
     def test_local_model_dynamic_context_pull_is_task_bound(self) -> None:
         bootstrap = {
@@ -179,6 +179,15 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
             )
         self.assertEqual(result["state"], "PASS_MODEL_DYNAMIC_CONTEXT_PULL")
         self.assertEqual(result["context_ref"], "context:test:local-model")
+        self.assertNotIn("model_visible_context", result)
+        self.assertNotIn(
+            "reconstructed_projection",
+            result["state_cell_transmission"],
+        )
+        self.assertEqual(
+            result["state_cell_transmission"]["context_ref"],
+            "context:test:local-model",
+        )
         broker.pull.assert_called_once_with(
             "pull:test:local-model",
             task_ref="task:NLDEV-005",
@@ -319,12 +328,17 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
             broker_type.return_value.register.return_value = {
                 "bootstrap_sha256": "d" * 64,
             }
-            result = runner.gemini_task_state_reasoning_hint(
-                intent="implement bounded change",
-                plan=plan,
-                action_id="A-CURRENT",
-                timeout_seconds=120,
-            )
+            with patch.object(
+                runner,
+                "LIVE_CLOUD_REASONING_ENABLED",
+                True,
+            ):
+                result = runner.gemini_task_state_reasoning_hint(
+                    intent="implement bounded change",
+                    plan=plan,
+                    action_id="A-CURRENT",
+                    timeout_seconds=120,
+                )
         self.assertEqual(
             result["state"],
             "PASS_REAL_TASK_GEMINI_REASONING",
@@ -355,17 +369,23 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
                 {
                     "D5_EXECUTION": {
                         "context_delivery_mode": (
-                            "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL"
+                            "TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL"
                         )
                     }
                 }
             )
         )
-        self.assertTrue(
+        self.assertFalse(
             runner.legacy_google_fallback_allowed(
                 {"D5_EXECUTION": {"context_delivery_mode": "LEGACY"}}
             )
         )
+        with patch.object(runner, "LIVE_CLOUD_REASONING_ENABLED", True):
+            self.assertTrue(
+                runner.legacy_google_fallback_allowed(
+                    {"D5_EXECUTION": {"context_delivery_mode": "LEGACY"}}
+                )
+            )
 
     def test_bound_gemini_is_reasoning_organ_not_source_writer(self) -> None:
         resource_decision = {
@@ -395,12 +415,15 @@ class NaturalLanguageTotalFieldGateTests(unittest.TestCase):
                 return_value={"state": "STATIC_TEST_CELL"},
             ),
             patch.object(nl_control, "_git", return_value="fixture"),
+            patch.object(nl_control, "LIVE_CLOUD_REASONING_ENABLED", True),
+            patch.object(nl_control, "GOOGLE_FALLBACK", True),
         ):
             plan = nl_control.build_plan(
                 nl_control.NaturalLanguageRequest(
                     intent="test bound gemini reasoning organ",
                     task_id="NLDEV-005",
                     dry_run=True,
+                    google_fallback=True,
                 )
             )
         execution = plan["D5_EXECUTION"]

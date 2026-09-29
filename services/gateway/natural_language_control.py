@@ -35,8 +35,11 @@ RUNNER_PATH = PROJECT_ROOT / "tools" / "w7tp_nl_goal_runner.py"
 LOCAL_AGENT_PATH = PROJECT_ROOT / "tools" / "w7tp_local_model_agent.py"
 CLEAN_EXEC_ROOT = Path("/tmp/w7tp-nl-control-exec")
 LOCAL_OLLAMA_URL_OVERRIDE = os.getenv("TAIJI_LOCAL_OLLAMA_URL", "").strip()
-LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "xiaoj:latest")
-GOOGLE_FALLBACK = os.getenv("TAIJI_GOOGLE_CANDIDATE_FALLBACK", "1") == "1"
+LOCAL_MODEL = os.getenv("TAIJI_LOCAL_MODEL", "xiaoj-local-dev:v2.3")
+GOOGLE_FALLBACK = os.getenv("TAIJI_GOOGLE_CANDIDATE_FALLBACK", "0") == "1"
+LIVE_CLOUD_REASONING_ENABLED = os.getenv(
+    "TAIJI_CLOUD_REASONING_ENABLED", "0"
+) == "1"
 AUTO_LAND_DEFAULT = True
 class NaturalLanguageRequest(BaseModel):
     intent: str = Field(min_length=1, max_length=8192)
@@ -45,7 +48,7 @@ class NaturalLanguageRequest(BaseModel):
     auto_land: bool = True
     timeout_seconds: int = Field(default=1200, ge=60, le=3600)
     dry_run: bool = False
-    google_fallback: bool = True
+    google_fallback: bool = False
 
 
 def _now() -> str:
@@ -158,7 +161,11 @@ def _affected_closure(intent: str) -> list[str]:
 def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
     task_id = _resolve_task_id(req.task_id)
     closure = _affected_closure(req.intent)
-    google_allowed = bool(req.google_fallback and GOOGLE_FALLBACK)
+    google_allowed = bool(
+        req.google_fallback
+        and GOOGLE_FALLBACK
+        and LIVE_CLOUD_REASONING_ENABLED
+    )
     local_model_route = _current_local_model_route()
     local_ollama_url = (
         local_model_route.get("selected_url")
@@ -193,8 +200,9 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
         ),
         {},
     )
-    gemini_pointer_bound = (
-        gemini_resource.get("CONTEXT_BINDING_STATE")
+    gemini_pointer_bound = bool(
+        google_allowed
+        and gemini_resource.get("CONTEXT_BINDING_STATE")
         == "POINTER_FIRST_TOTAL_FIELD_BOUND"
     )
     selected_candidate_builder = (
@@ -243,7 +251,9 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "google_candidate_fallback": google_allowed,
             "cloud_authority": "CANDIDATE_ONLY",
             "formal_land_gate": "TAIJI01_TOTAL_FIELD_SOLE_RECEIVER",
-            "context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+            "context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL",
+            "context_transport_format": "TASK_STATE_ORIGIN_CELL_TRANSMISSION",
+            "context_reconstruction_mode": "LOCAL_RULE_REF_MINIMUM_STATE",
             "context_target_scope": "ALL_CONTEXT_REQUIRING_LLM",
             "unbound_context_requiring_llm": "HOLD",
             "context_pull_owner": (
@@ -253,7 +263,7 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "context_bootstrap": "POINTER_AND_REFERENCES_ONLY",
             "dynamic_context_materialization": "LOCAL_VOLATILE_ON_PULL",
             "context_persistence": "EPHEMERAL_BODY_REFERENCES_ONLY",
-            "real_task_state_packet_auto_issue": gemini_pointer_bound,
+            "real_task_state_packet_auto_issue": True,
             "real_task_state_sources": [
                 "WORK_LEDGER",
                 "ACTION_LEDGER",
@@ -262,8 +272,13 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             ],
             "complex_code_reasoning_pipeline": (
                 "REAL_TASK_STATE_MINIMUM_PACKET"
-                "->GEMINI_A2A_POINTER_FIRST_CANDIDATE"
-                "->MSI_LOCAL_SOURCE_BUILDER"
+                "->LOCAL_RULE_STATE_CELL_RECONSTRUCTION"
+                + (
+                    "->GEMINI_A2A_POINTER_FIRST_CANDIDATE"
+                    if gemini_pointer_bound
+                    else ""
+                )
+                + "->MSI_LOCAL_SOURCE_BUILDER"
                 "->DETERMINISTIC_VALIDATION"
                 "->TOTAL_FIELD_SOURCE_DELTA_GATE"
                 "->LAND"
@@ -360,14 +375,26 @@ def status():
         "local_ollama_route": _current_local_model_route(),
         "local_model_health": _local_model_health(),
         "development_ui": "https://taiji01.tailea1eef.ts.net:8444/?folder=/home/taiji_admin/Taiji_Hub",
-        "google_fallback": GOOGLE_FALLBACK,
-        "google_cloud_role": "CANDIDATE_ONLY_AFTER_LOCAL_HOLD",
+        "google_fallback": bool(
+            GOOGLE_FALLBACK and LIVE_CLOUD_REASONING_ENABLED
+        ),
+        "live_cloud_reasoning_enabled": LIVE_CLOUD_REASONING_ENABLED,
+        "google_cloud_role": (
+            "CANDIDATE_ONLY_EXPLICIT_OPT_IN"
+            if LIVE_CLOUD_REASONING_ENABLED
+            else "DISABLED_BY_DEFAULT"
+        ),
         "dynamic_context_service": "ACTIVE_POLICY_BOUND",
         "dynamic_context_target_scope": "ALL_CONTEXT_REQUIRING_LLM",
-        "dynamic_context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_DYNAMIC_CONTEXT_PULL",
+        "dynamic_context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL",
+        "context_transport_format": "TASK_STATE_ORIGIN_CELL_TRANSMISSION",
+        "context_reconstruction_mode": "LOCAL_RULE_REF_MINIMUM_STATE",
         "unbound_context_requiring_llm": "HOLD",
         "auto_land_default": AUTO_LAND_DEFAULT,
-        "execution_architecture": "8D_ADI_LOCAL_MODEL_SHADOW_GOOGLE_CANDIDATE_AUTOLAND",
+        "execution_architecture": (
+            "8D_ADI_MSI_LOCAL_MODEL_DYNAMIC_CONTEXT_AUTOLAND_"
+            "CLOUD_DISABLED_BY_DEFAULT"
+        ),
         "runner_isolation": "SYSTEMD_TRANSIENT_SERVICE",
         "goal_runner_present": RUNNER_PATH.exists(),
         "project_root": str(PROJECT_ROOT),
