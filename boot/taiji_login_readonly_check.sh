@@ -80,7 +80,7 @@ check_url  "model_gateway"      "http://127.0.0.1:9002/health"
 check_url  "ollama"             "http://127.0.0.1:11434/api/tags"
 check_url  "native_claw"        "http://127.0.0.1:9004/openapi.json"
 check_url  "xiaoj_intent_field" "http://127.0.0.1:9107/healthz"
-check_port "ssh_tunnel"         "2222"
+check_port "ssh_tunnel"         "22"
 
 if command -v tailscale >/dev/null 2>&1; then
   echo "[vpn] self_ip: $(tailscale ip -4 2>/dev/null | head -n 1 || true)"
