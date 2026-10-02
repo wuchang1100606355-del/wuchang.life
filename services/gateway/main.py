@@ -7,11 +7,19 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException
 
+from services.gateway.authority_ingress import (
+    AUTHORITY_MODE,
+    CandidateIngressRuntime,
+    build_candidate_ingress_runtime,
+)
 from services.gateway.openai_compat import _complete_chat
 from services.gateway.openai_compat import router as openai_compat_router
 from services.gateway.shared_resources import router as shared_resources_router
 from services.gateway.topology_router import router as taiji_topology_router
-from tools.total_field_dynamic_context import build_dynamic_context
+from tools.total_field_dynamic_context import (
+    ACTIVE_TOTAL_FIELD_AUTHORITY_LOOKUP_REF,
+    build_dynamic_context,
+)
 
 
 PROJECT_ROOT = Path(
@@ -24,6 +32,32 @@ if CONTEXT_IDENTITY_CLASS not in {"founder", "general_member", "unknown"}:
     CONTEXT_IDENTITY_CLASS = "unknown"
 
 app = FastAPI(title="W7TP 8DADI Total Field Organ Gateway", version="2.3.0")
+app.state.candidate_ingress_runtime = None
+app.state.candidate_ingress_state = "NOT_BOUND"
+app.state.candidate_ingress_reason = None
+
+
+@app.on_event("startup")
+def bind_candidate_ingress() -> None:
+    try:
+        runtime = build_candidate_ingress_runtime(PROJECT_ROOT)
+    except Exception as exc:
+        app.state.candidate_ingress_runtime = None
+        app.state.candidate_ingress_state = "HOLD_CANDIDATE_INGRESS_NOT_BOUND"
+        app.state.candidate_ingress_reason = type(exc).__name__
+        return
+    app.state.candidate_ingress_runtime = runtime
+    app.state.candidate_ingress_state = "BOUND_FAIL_CLOSED"
+    app.state.candidate_ingress_reason = None
+
+
+@app.on_event("shutdown")
+def close_candidate_ingress() -> None:
+    runtime = getattr(app.state, "candidate_ingress_runtime", None)
+    if isinstance(runtime, CandidateIngressRuntime):
+        runtime.close()
+    app.state.candidate_ingress_runtime = None
+    app.state.candidate_ingress_state = "CLOSED"
 
 
 def _intent(payload: dict[str, Any]) -> str:
@@ -69,6 +103,12 @@ def _context_projection(intent: str) -> dict[str, Any]:
 @app.get("/health")
 @app.get("/healthz")
 def health() -> dict[str, Any]:
+    runtime = getattr(app.state, "candidate_ingress_runtime", None)
+    verifier_state = (
+        runtime.compatibility_signature_verifier_state
+        if isinstance(runtime, CandidateIngressRuntime)
+        else "NOT_BOUND"
+    )
     return {
         "state": "PASS_GATEWAY_PROCESS",
         "service": "w7tp-8dadi-total-field-organ-gateway",
@@ -78,6 +118,12 @@ def health() -> dict[str, Any]:
         "total_field_is_final_effect_authority": True,
         "lan_precedes_vpn": True,
         "context_identity_class": CONTEXT_IDENTITY_CLASS,
+        "candidate_ingress_state": getattr(
+            app.state, "candidate_ingress_state", "NOT_BOUND"
+        ),
+        "candidate_ingress_authority_mode": AUTHORITY_MODE,
+        "candidate_ingress_compatibility_verifier_state": verifier_state,
+        "candidate_ingress_execution_authorized": False,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
@@ -94,6 +140,50 @@ def plan_get() -> dict[str, Any]:
 @app.post("/api/taiji/plan")
 def plan(payload: dict[str, Any]) -> dict[str, Any]:
     return _context_projection(_intent(payload))
+
+
+@app.post("/api/taiji/candidate")
+def receive_candidate(payload: dict[str, Any]) -> dict[str, Any]:
+    forbidden_top_level = {
+        "authority_ref",
+        "authority_lookup_ref",
+        "verified_authority_ref",
+        "d8_decision_ref",
+    }
+    if forbidden_top_level.intersection(payload):
+        raise HTTPException(status_code=422, detail="caller_authority_fields_forbidden")
+
+    candidate = payload.get("candidate_packet")
+    context = payload.get("dynamic_context_packet")
+    if not isinstance(candidate, dict):
+        raise HTTPException(status_code=422, detail="candidate_packet_required")
+    if not isinstance(context, dict):
+        raise HTTPException(status_code=422, detail="dynamic_context_packet_required")
+
+    runtime = getattr(app.state, "candidate_ingress_runtime", None)
+    if not isinstance(runtime, CandidateIngressRuntime):
+        raise HTTPException(
+            status_code=503,
+            detail=getattr(
+                app.state,
+                "candidate_ingress_state",
+                "HOLD_CANDIDATE_INGRESS_NOT_BOUND",
+            ),
+        )
+
+    result = runtime.receiver(
+        candidate,
+        context,
+        ACTIVE_TOTAL_FIELD_AUTHORITY_LOOKUP_REF,
+    )
+    result["gateway_ingress"] = {
+        "state": "BOUND_FAIL_CLOSED",
+        "authority_mode": runtime.authority_mode,
+        "caller_authority_injection": False,
+        "execution_authorized": False,
+        "total_field_is_final_effect_authority": True,
+    }
+    return result
 
 
 @app.post("/api/taiji/execute")
