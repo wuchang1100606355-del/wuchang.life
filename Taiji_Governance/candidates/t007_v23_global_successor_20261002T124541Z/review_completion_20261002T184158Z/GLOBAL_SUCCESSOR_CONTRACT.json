@@ -1,0 +1,233 @@
+{
+  "authority_successor_receipt": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/AUTHORITY_SUCCESSOR_RECEIPT_CANDIDATE.json",
+    "sha256": "ed4da22bc61dcfff356e62f03ecc4e42e81e67414c130a132579068977a90ca0"
+  },
+  "closure": {
+    "G1": "CANDIDATE_REQUIRES_FORMAL_REVIEW",
+    "G2": "CANDIDATE_REQUIRES_CONSUMER_VALIDATION_AND_ACCEPTANCE",
+    "G3": "CANDIDATE_REQUIRES_APPEND_ONLY_FORMAL_ACCEPTANCE",
+    "G4": "NOT_RUN"
+  },
+  "dimension_contract": {
+    "D1": "Intent",
+    "D2": "State",
+    "D3": "Coordinate",
+    "D4": "Evidence",
+    "D5": "Execution/Policy",
+    "D6": "Generative State Transmission",
+    "D7": "Risk/Isolation",
+    "D8": "Envelope/Authority",
+    "mode": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+    "sequential_pipeline_definition_forbidden": true
+  },
+  "dynamic_context": {
+    "adi_record_id": "evidence:t007-v23-global-successor-bootstrap:20261003T170407Z",
+    "full_pull_completed": true,
+    "ledger_insert_performed": true,
+    "mechanism": "tools.w7tp_task_state_minimum_packet.select_task_state_support_refs",
+    "promotion_authorized_by_dynamic_context": false,
+    "reason": null,
+    "record_sha256": "0eca9d4f094cf89eb35c8fe1bdd89e93ea845295222759d1b90b7dd524e12f8c",
+    "required_before_formal_review": true,
+    "state": "PASS_T007_DYNAMIC_CONTEXT_RESTORED",
+    "task_id": "T-007"
+  },
+  "extends": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/01_V23_GLOBAL_SUCCESSOR_CONTRACT_CANDIDATE.json",
+    "sha256": "c9dea2416ba374e5072684566b479387dacec600eb6a9cfbcfb7c67da7e11507"
+  },
+  "field_successor": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/CURRENT_8D_FIELD_SUCCESSOR.json",
+    "sha256": "a0045e99162515f80396a5c3cd0ba63576b005ef43e4368fcc936828e1fbce71"
+  },
+  "github_base_commit": "f0da2c8053161a45ba90080c24f8fa20dbb2913f",
+  "gst_d8_original": {
+    "ref": "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/GST_V23_D8_FORMAL_CLOSURE_20260924/D8_FORMAL_CLOSURE_DECISION.json",
+    "sha256": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379"
+  },
+  "gst_scope": "CLOSED_FOR_EXACT_GST_V23_RUNTIME_CONSUMER_BINDING_ONLY",
+  "non_effects": {
+    "deployed": false,
+    "formal_decision_created": false,
+    "pointer_changed": false,
+    "runtime_changed": false
+  },
+  "observed_at": "2026-10-02T18:41:58.226055+00:00",
+  "predecessor_pointer": {
+    "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "sha256": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed"
+  },
+  "promotion_plan": {
+    "enabled": false,
+    "required": [
+      "fresh task-bound Dynamic Context",
+      "G1 G2 G3 exact formal receipts",
+      "Founder exact package authorization",
+      "existing owner supports global scope",
+      "V2.3 governing document and machine schema hash binding",
+      "consumer rebind and rollback evidence",
+      "CAS of all preimages",
+      "post-promotion independent re-observation"
+    ],
+    "rollback": {
+      "preimage_bindings": [
+        {
+          "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+          "sha256": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed"
+        },
+        {
+          "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+          "sha256": "4f15212984d06f7d39ad7727aa2006b493425da3f797ae3aa134b9f292091d90"
+        },
+        {
+          "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+          "sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9"
+        },
+        {
+          "ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+          "sha256": "fa8f355bcafa63e8b97a798a5b157f8b5ef3fd2e2d73e043947bb5c99c7587d4"
+        }
+      ],
+      "preserve_receipt_history": true,
+      "restore_requires_current_postimage_match": true
+    },
+    "satisfied_candidate_preconditions": [
+      "fresh task-bound Dynamic Context",
+      "existing owner supports global scope"
+    ]
+  },
+  "review_extension_validation": {
+    "formal": false,
+    "note": "candidate-only validation does not close G1-G3 or authorize G4",
+    "real_candidate_test": "PASS_TEST_GLOBAL_SUCCESSOR_VECTOR_ONLY",
+    "regression": {
+      "global_v2": "3/3 PASS",
+      "legacy_v1": "8/8 PASS"
+    },
+    "test_seal": "TEST_SEAL_ONLY"
+  },
+  "review_owner": {
+    "compatibility": "COMPATIBLE_GLOBAL_CANONICAL_SUCCESSOR_MODE",
+    "existing_ref": "tools/total_field/w7tp_successor_rebind_reviewer_v1.py",
+    "founder_passkey_verifier_ref": "tools/total_field/w7tp_founder_passkey_v1.py",
+    "global_schema_ref": "schemas/field/w7tp_total_field_successor_rebind_review_request_v2.schema.json",
+    "global_seal_schema_ref": "schemas/field/w7tp_total_field_successor_rebind_seal_v2.schema.json",
+    "implemented_by_this_package": false,
+    "legacy_source_specific_schema_ref": "schemas/field/w7tp_total_field_successor_rebind_review_request_v1.schema.json",
+    "new_authority_root": false,
+    "required_extension": "RESOLVED_BY_EXISTING_OWNER_EXTENSION",
+    "seal_ref": "tools/total_field/w7tp_successor_rebind_seal_v1.py"
+  },
+  "schema_id": "W7TP_V21_TO_V23_GLOBAL_SUCCESSOR_REVIEW_COMPLETION_V1",
+  "source_bindings": [
+    {
+      "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "sha256": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed"
+    },
+    {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9"
+    },
+    {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+      "sha256": "4f15212984d06f7d39ad7727aa2006b493425da3f797ae3aa134b9f292091d90"
+    },
+    {
+      "ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "sha256": "fa8f355bcafa63e8b97a798a5b157f8b5ef3fd2e2d73e043947bb5c99c7587d4"
+    },
+    {
+      "ref": "runtime/total_field/adaptive_network/W7TP_ADAPTIVE_NETWORK_RUNTIME_ACTIVATION_20260924/AUTHORITY_POINTER_PREIMAGE.json",
+      "sha256": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869"
+    },
+    {
+      "ref": "configs/total_field/w7tp_developer_intent_canonical_v1.json",
+      "sha256": "42020814d4ba652053ebd9957ca4d23f88b2ef0642bdad2c8cc4e2f7029be87e"
+    },
+    {
+      "ref": "configs/total_field/w7tp_founder_intent_lineage_v1.json",
+      "sha256": "a046bb9b862ffd7424056ca12484f553ad9ba30d01c3bfd5c72669734abd35c6"
+    },
+    {
+      "ref": "configs/total_field/w7tp_v23_authority_lineage_gap_v1.json",
+      "sha256": "5395e071a0f47ab9ec7cc85183b8e4b826cbd5ecfc9037783c7818a274a4540a"
+    },
+    {
+      "ref": "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/GST_V23_D8_FORMAL_CLOSURE_20260924/D8_FORMAL_CLOSURE_DECISION.json",
+      "sha256": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379"
+    },
+    {
+      "ref": "runtime/total_field/gst_v23_runtime_consumer/ACTIVE_BINDING.json",
+      "sha256": "4282a1f74bf1ae931c018ac76654b87030ff941e1cdf7015b82b350029b12c96"
+    },
+    {
+      "ref": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_candidate.py",
+      "sha256": "ee6001818c32fddd0e4942628b053ee40ec03c06cd82d2d049456503f0af6ee3"
+    },
+    {
+      "ref": "products/eight_dimensional_generative_memory/w7tp_gst_v23_runtime_consumer_contract.json",
+      "sha256": "553b3f9d635cce76b42360e8e2d353d954ee333d3bb0d42ee8eea527f4006cca"
+    },
+    {
+      "ref": "runtime/total_field/gst_v23_runtime_consumer/GST_V23_RUNTIME_ACTIVATION_20260924T093430Z/FOUNDER_RUNTIME_ACTIVATION.json",
+      "sha256": "1c0ed4a349c7f903fec461c7e209c2df8cf2543c6a5ffe01f59e34c70700d644"
+    },
+    {
+      "ref": "runtime/total_field/gst_v23_runtime_consumer/GST_V23_RUNTIME_ACTIVATION_20260924T093430Z/receipts/ACTIVATION_RESULT.json",
+      "sha256": "2147b3e37713d1f82dffc1548db443957586ce12765cb4f92a73f5bf101905dd"
+    },
+    {
+      "ref": "tools/total_field/w7tp_successor_rebind_reviewer_v1.py",
+      "sha256": "6dfba4ba542abdfbcb6af4f5e0f1f7c57ab71676cb10bc6bcdc8c029e30860e4"
+    },
+    {
+      "ref": "schemas/field/w7tp_total_field_successor_rebind_review_request_v1.schema.json",
+      "sha256": "5566b02cdd85ee3e945593e2375666e6c383953ec8b771a48fa0e59f353f23ff"
+    },
+    {
+      "ref": "tools/total_field/w7tp_successor_rebind_seal_v1.py",
+      "sha256": "e78d369914eed91a8b86c236e3c56a728d83099aca01e6eeac3119fb3f11c34a"
+    },
+    {
+      "ref": "tools/total_field/w7tp_founder_passkey_v1.py",
+      "sha256": "60ef7fedac06c47abace71cb2ee26af1b681f415f7554ae105d22586f30ef9b3"
+    },
+    {
+      "ref": "schemas/field/w7tp_total_field_successor_rebind_review_request_v2.schema.json",
+      "sha256": "b8c6d3e7920403f266fee26835be536e776edbcbc11638ac9ac50b570d90de08"
+    },
+    {
+      "ref": "schemas/field/w7tp_total_field_successor_rebind_decision_v2.schema.json",
+      "sha256": "6167d09a29786d3e4f5601fa2eb24884c0ed12599145aaf5cef5e027f4861527"
+    },
+    {
+      "ref": "schemas/field/w7tp_total_field_successor_rebind_receipt_v2.schema.json",
+      "sha256": "96b0c64f56bb6a1652c5b3afa3b13f14661dbe9679589a954eb51c1c2bae1a12"
+    },
+    {
+      "ref": "schemas/field/w7tp_total_field_successor_rebind_seal_v2.schema.json",
+      "sha256": "9228b023afb7cbdda02ea58424e4db98abe181f94ebaeabca486c910522d8baa"
+    },
+    {
+      "ref": "tests/test_w7tp_global_successor_rebind_v2.py",
+      "sha256": "be9efdc73939b78fab4103e7411555e50e1e311c2f751c02cdbbac35374f0347"
+    },
+    {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/REOBSERVATION_REVIEWER_EXTENSION_20261003.json",
+      "sha256": "692349b7db0f718c69da44713b4630c6179f806df608cfc411bd926c123e3838"
+    },
+    {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/SHA256_MANIFEST.json",
+      "sha256": "fd40b6448c1d7611f8b391a98ec2d509755b58937812bbd2e14e535e702718e5"
+    }
+  ],
+  "state": "CANDIDATE_ONLY",
+  "taiji01_observed_head": "c82fd92ab713da7aed86566fcd3fa70c1289ac8d",
+  "task_id": "T-007",
+  "version_transition": {
+    "from": "2.1",
+    "mode": "APPEND_ONLY_SUCCESSOR",
+    "to": "2.3"
+  }
+}

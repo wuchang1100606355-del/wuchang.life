@@ -1,0 +1,71 @@
+{
+  "created_at": "2026-10-02T12:45:41Z",
+  "migration_mode": "APPEND_ONLY_SUCCESSOR",
+  "non_effects": {
+    "canonical_pointer_changed": false,
+    "deployment": false,
+    "history_deleted": false,
+    "network_change": false,
+    "service_restart": false
+  },
+  "predecessor": {
+    "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1",
+    "canonical_path": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
+    "canonical_sha256": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d",
+    "pointer_ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "pointer_sha256": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed",
+    "version": "2.1"
+  },
+  "promotion_preconditions": [
+    "CURRENT_8D_FIELD_V23_SUCCESSOR_FORMALLY_ACCEPTED",
+    "TOTAL_FIELD_AUTHORITY_POINTER_SUCCESSOR_RECEIPT_FORMALLY_ACCEPTED",
+    "ACTIVE_CONSUMER_REBIND_VALIDATED",
+    "ROLLBACK_COORDINATE_HASH_BOUND",
+    "TOTAL_FIELD_SUCCESSOR_REVIEW_AND_SEAL_PASS",
+    "FOUNDER_EXPLICIT_APPEND_ONLY_CANONICAL_SUCCESSOR_AUTHORIZATION",
+    "COMPARE_AND_SWAP_POINTER_PREIMAGE_MATCH"
+  ],
+  "proposed_successor": {
+    "adi_contract": {
+      "definition": "ADI indexes the spatiotemporal coordinate/location of true state so AI can locate and understand reality.",
+      "identity_root_redefinition_forbidden": true,
+      "semantic_class": "SPATIOTEMPORAL_TRUE_STATE_COORDINATE_INDEX",
+      "single_absolute_distance_definition_forbidden": true
+    },
+    "canonical_id": "W7TP_8D_ADI_V2_3",
+    "d6_contract": {
+      "compression_required": false,
+      "delta_payload_required": false,
+      "difference_analysis_is_transmission": false,
+      "file_movement_definition_forbidden": true,
+      "generative_state_reconstruction_and_verification_required": true
+    },
+    "dimension_contract": {
+      "D1": "Intent",
+      "D2": "State",
+      "D3": "Coordinate",
+      "D4": "Evidence",
+      "D5": "Execution/Policy",
+      "D6": "Generative State Transmission",
+      "D7": "Risk/Isolation",
+      "D8": "Envelope/Authority",
+      "mode": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+      "sequential_pipeline_definition_forbidden": true
+    },
+    "founder_baseline": "W7TP/8D ADI V2.3",
+    "version": "2.3"
+  },
+  "run_id": "T007_V23_GLOBAL_SUCCESSOR_20261002T124541Z",
+  "schema_id": "W7TP_V21_TO_V23_GLOBAL_SUCCESSOR_CONTRACT_CANDIDATE_V1",
+  "source_authority_refs": [
+    "00_FOUNDER_DIRECTIVE.json",
+    "configs/total_field/w7tp_founder_intent_lineage_v1.json",
+    "configs/total_field/w7tp_developer_intent_canonical_v1.json"
+  ],
+  "source_hashes": {
+    "configs/total_field/w7tp_developer_intent_canonical_v1.json": "42020814d4ba652053ebd9957ca4d23f88b2ef0642bdad2c8cc4e2f7029be87e",
+    "configs/total_field/w7tp_founder_intent_lineage_v1.json": "a046bb9b862ffd7424056ca12484f553ad9ba30d01c3bfd5c72669734abd35c6"
+  },
+  "state": "CANDIDATE_FOR_FORMAL_TOTAL_FIELD_REVIEW",
+  "task_id": "T-007"
+}

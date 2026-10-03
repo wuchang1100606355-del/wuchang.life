@@ -21,8 +21,9 @@ from tools.total_field.w7tp_total_field_authority_binding_v1 import (
 )
 
 
-SEAL_TOOL_VERSION = "w7tp-successor-rebind-seal/1.0-candidate"
+SEAL_TOOL_VERSION = "w7tp-successor-rebind-seal/1.1-global-canonical-successor"
 SEAL_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-SEAL/1.0"
+GLOBAL_SEAL_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-SEAL/2.0"
 SEAL_SELF_HASH_ALGORITHM = "SHA256_CANONICAL_JSON_EXCLUDING_SEAL_SHA256/1.0"
 MAX_SEAL_TTL_SECONDS = 300
 
@@ -127,16 +128,39 @@ def create_seal(
     decision = _load(decision_path, "DECISION")
     receipt = _load(receipt_path, "RECEIPT")
     authority = _load(authority_pointer_path, "AUTHORITY_POINTER")
+    global_mode = decision.get("schema_version") == reviewer.GLOBAL_DECISION_SCHEMA_VERSION
+    decision_schema = (
+        "w7tp_total_field_successor_rebind_decision_v2.schema.json"
+        if global_mode
+        else "w7tp_total_field_successor_rebind_decision_v1.schema.json"
+    )
+    receipt_schema = (
+        "w7tp_total_field_successor_rebind_receipt_v2.schema.json"
+        if global_mode
+        else "w7tp_total_field_successor_rebind_receipt_v1.schema.json"
+    )
     reviewer.validate_schema(
         decision,
-        repo_root / "schemas/field/w7tp_total_field_successor_rebind_decision_v1.schema.json",
+        repo_root / "schemas/field" / decision_schema,
         "DECISION",
     )
     reviewer.validate_schema(
         receipt,
-        repo_root / "schemas/field/w7tp_total_field_successor_rebind_receipt_v1.schema.json",
+        repo_root / "schemas/field" / receipt_schema,
         "RECEIPT",
     )
+    if global_mode:
+        if receipt.get("schema_version") != reviewer.GLOBAL_RECEIPT_SCHEMA_VERSION:
+            raise SuccessorRebindSealError("REJECT_GLOBAL_RECEIPT_SCHEMA_BINDING", "$.receipt.schema_version")
+        if decision.get("review_scope") != reviewer.GLOBAL_REVIEW_SCOPE or receipt.get("review_scope") != reviewer.GLOBAL_REVIEW_SCOPE:
+            raise SuccessorRebindSealError("REJECT_GLOBAL_REVIEW_SCOPE_BINDING", "$.review_scope")
+        if decision.get("package_binding_sha256") != receipt.get("package_binding_sha256"):
+            raise SuccessorRebindSealError("REJECT_GLOBAL_PACKAGE_BINDING", "$.package_binding_sha256")
+        if (
+            decision.get("dynamic_context_record_id") != receipt.get("dynamic_context_record_id")
+            or decision.get("dynamic_context_record_sha256") != receipt.get("dynamic_context_record_sha256")
+        ):
+            raise SuccessorRebindSealError("REJECT_GLOBAL_DYNAMIC_CONTEXT_BINDING", "$.dynamic_context_record_id")
     _validate_self_hash(
         decision,
         "decision_sha256",
@@ -195,13 +219,23 @@ def create_seal(
 
     expires_at = min(request_expires_at, issued_at + timedelta(seconds=MAX_SEAL_TTL_SECONDS))
     seal = {
-        "schema_version": SEAL_SCHEMA_VERSION,
+        "schema_version": GLOBAL_SEAL_SCHEMA_VERSION if global_mode else SEAL_SCHEMA_VERSION,
         "packet_type": "TOTAL_FIELD_SUCCESSOR_REBIND_SEAL",
         "seal_id": f"seal:{decision['run_id']}:{receipt['receipt_sha256'][:16]}",
         "run_id": decision["run_id"],
         "issued_at": reviewer.utc_text(issued_at),
         "expires_at": reviewer.utc_text(expires_at),
         "source_manifest_sha256": manifest_sha256,
+        **(
+            {
+                "review_scope": reviewer.GLOBAL_REVIEW_SCOPE,
+                "package_binding_sha256": decision["package_binding_sha256"],
+                "dynamic_context_record_id": decision["dynamic_context_record_id"],
+                "dynamic_context_record_sha256": decision["dynamic_context_record_sha256"],
+            }
+            if global_mode
+            else {}
+        ),
         "decision_sha256": decision["decision_sha256"],
         "receipt_sha256": receipt["receipt_sha256"],
         "authority_pointer_ref": decision["authority_pointer_ref"],
@@ -217,7 +251,13 @@ def create_seal(
     seal["seal_sha256"] = reviewer.sha256_bytes(reviewer.canonical_json_bytes(seal))
     reviewer.validate_schema(
         seal,
-        repo_root / "schemas/field/w7tp_total_field_successor_rebind_seal_v1.schema.json",
+        repo_root
+        / "schemas/field"
+        / (
+            "w7tp_total_field_successor_rebind_seal_v2.schema.json"
+            if global_mode
+            else "w7tp_total_field_successor_rebind_seal_v1.schema.json"
+        ),
         "SEAL",
     )
     if output_path is not None:

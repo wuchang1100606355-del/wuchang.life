@@ -1,0 +1,33 @@
+{
+  "observed_at": "2026-10-02T18:41:58.226055+00:00",
+  "scope": "TAIJI01_FILE_BYTES_AND_GITHUB_COMMIT_NOT_PROCESS_LOAD",
+  "existing_candidate_found": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z",
+  "existing_candidate_manifest": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/SHA256_MANIFEST.json",
+    "sha256": "fd40b6448c1d7611f8b391a98ec2d509755b58937812bbd2e14e535e702718e5"
+  },
+  "current_pointer": {
+    "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "sha256": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed"
+  },
+  "version": "2.1",
+  "formal_closure": "NOT_EVIDENCED",
+  "first_divergence": "Founder V2.3 versus machine V2.1 / old Current Field semantics",
+  "additional_g2_gap": "Prior candidate only binds non-router field and drops router inventory/safety scope.",
+  "active_consumption": "SOURCE_REFERENCES_OBSERVED_PROCESS_USAGE_NOT_PROVEN",
+  "additional_source_consumers": [
+    "tools/promote_tfct_true8d_runtime_policy_canonical.py",
+    "tools/deploy_w7tp_small_agent_all_nodes.py",
+    "scripts/verify/verify_tfct_true8d_runtime_policy_canonical.py",
+    "scripts/verify/verify_tfct_true8d_w7tp_candidate_consolidation.py",
+    "scripts/verify/verify_w7tp_small_agent_runtime_entrypoint.py",
+    "scripts/verify/verify_w7tp_small_agent_node_authority.py",
+    "scripts/verify/verify_w7tp_small_agent_all_node_deployment.py"
+  ],
+  "test_semantics_conflicts": [
+    "tests/test_promote_tfct_true8d_runtime_policy_canonical.py",
+    "tests/test_tfct_true8d_runtime_candidate.py",
+    "tests/test_w7tp_v23_authority_lineage_gap_v1.py"
+  ],
+  "corrected_claim": "Original authority candidate describes endpoint hash lineage; formal causality/authority acceptance remains unevidenced."
+}

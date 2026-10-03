@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/w7tp_total_field_successor_rebind_decision_v2.schema.json",
+  "title": "W7TP Total Field Global Canonical Successor Rebind Decision V2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_type",
+    "review_scope",
+    "decision_id",
+    "request_id",
+    "run_id",
+    "reviewed_at",
+    "state",
+    "decision",
+    "reason_codes",
+    "request_sha256",
+    "manifest_sha256",
+    "predecessor_pointer_sha256",
+    "predecessor_version",
+    "successor_version",
+    "package_binding_sha256",
+    "dynamic_context_record_id",
+    "dynamic_context_record_sha256",
+    "authority_pointer_ref",
+    "authority_pointer_sha256",
+    "formal",
+    "seal_eligible",
+    "core_landing",
+    "decision_self_hash_algorithm",
+    "decision_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-DECISION/2.0"
+    },
+    "packet_type": {
+      "const": "TOTAL_FIELD_SUCCESSOR_REBIND_DECISION"
+    },
+    "review_scope": {
+      "const": "GLOBAL_CANONICAL_SUCCESSOR"
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state": {
+      "enum": [
+        "PASS_SUCCESSOR_REBIND_REVIEW",
+        "REJECT_SUCCESSOR_REBIND_REVIEW",
+        "HOLD_SUCCESSOR_REBIND_REVIEW"
+      ]
+    },
+    "decision": {
+      "enum": [
+        "SUCCESSOR_REBIND_APPROVED",
+        "SUCCESSOR_REBIND_REJECTED",
+        "HOLD_SUCCESSOR_REBIND_REVIEW"
+      ]
+    },
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "request_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "predecessor_pointer_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "predecessor_version": {
+      "const": "2.1"
+    },
+    "successor_version": {
+      "const": "2.3"
+    },
+    "package_binding_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "dynamic_context_record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dynamic_context_record_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "authority_pointer_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_pointer_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "formal": {
+      "type": "boolean"
+    },
+    "seal_eligible": {
+      "type": "boolean"
+    },
+    "core_landing": {
+      "const": "HOLD_PENDING_SEPARATE_AUTHORIZATION"
+    },
+    "decision_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_DECISION_SHA256/1.0"
+    },
+    "decision_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

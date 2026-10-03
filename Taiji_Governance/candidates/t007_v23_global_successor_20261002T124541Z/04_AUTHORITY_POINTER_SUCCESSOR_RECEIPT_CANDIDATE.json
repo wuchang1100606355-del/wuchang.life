@@ -1,0 +1,37 @@
+{
+  "additive_effects": [
+    "AUTHORIZE_ADAPTIVE_NETWORK_RUNTIME_OBSERVER"
+  ],
+  "checks": {
+    "formal_decision_authority_preserved": true,
+    "formal_seal_authority_preserved": true,
+    "gst_v23_formal_delivery_preserved": true,
+    "predecessor_effects_preserved": true,
+    "same_node": true
+  },
+  "formal": false,
+  "predecessor": {
+    "allowed_effects": [
+      "AUTHORIZE_FORMAL_SUCCESSOR_REBIND_REVIEW",
+      "AUTHORIZE_GST_V23_RUNTIME_CONSUMER_FORMAL_DELIVERY",
+      "AUTHORIZE_RECONSTRUCT_ISOLATED_REVIEW_ONLY"
+    ],
+    "ref": "runtime/total_field/adaptive_network/W7TP_ADAPTIVE_NETWORK_RUNTIME_ACTIVATION_20260924/AUTHORITY_POINTER_PREIMAGE.json",
+    "sha256": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869"
+  },
+  "removed_effects": [],
+  "run_id": "T007_V23_GLOBAL_SUCCESSOR_20261002T124541Z",
+  "schema_id": "W7TP_TOTAL_FIELD_AUTHORITY_POINTER_SUCCESSOR_RECEIPT_CANDIDATE_V1",
+  "scope_boundary": "This receipt proves exact observed hash lineage and effect preservation only; formal Total Field acceptance is still required.",
+  "state": "CANDIDATE_HASH_BOUND_SUCCESSOR_RECEIPT",
+  "successor": {
+    "allowed_effects": [
+      "AUTHORIZE_ADAPTIVE_NETWORK_RUNTIME_OBSERVER",
+      "AUTHORIZE_FORMAL_SUCCESSOR_REBIND_REVIEW",
+      "AUTHORIZE_GST_V23_RUNTIME_CONSUMER_FORMAL_DELIVERY",
+      "AUTHORIZE_RECONSTRUCT_ISOLATED_REVIEW_ONLY"
+    ],
+    "ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+    "sha256": "fa8f355bcafa63e8b97a798a5b157f8b5ef3fd2e2d73e043947bb5c99c7587d4"
+  }
+}

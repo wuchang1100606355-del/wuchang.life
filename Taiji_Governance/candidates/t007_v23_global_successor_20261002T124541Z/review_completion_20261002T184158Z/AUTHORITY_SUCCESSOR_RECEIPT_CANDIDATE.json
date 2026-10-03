@@ -1,0 +1,49 @@
+{
+  "schema_id": "W7TP_AUTHORITY_SUCCESSOR_EVIDENCE_CANDIDATE_V2",
+  "state": "CANDIDATE_NOT_FORMAL",
+  "formal": false,
+  "supersedes_candidate": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/04_AUTHORITY_POINTER_SUCCESSOR_RECEIPT_CANDIDATE.json",
+    "sha256": "804486f81059006efe5be4516e90dc7040d67c5b9be912a0381836357d9d99c4"
+  },
+  "observed_at": "2026-10-02T18:41:58.226055+00:00",
+  "predecessor": {
+    "ref": "runtime/total_field/adaptive_network/W7TP_ADAPTIVE_NETWORK_RUNTIME_ACTIVATION_20260924/AUTHORITY_POINTER_PREIMAGE.json",
+    "sha256": "fe9f6470f19e1070a067c70aae69b78d13fc5d0d84b560ee07e661691d023869"
+  },
+  "successor": {
+    "ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+    "sha256": "fa8f355bcafa63e8b97a798a5b157f8b5ef3fd2e2d73e043947bb5c99c7587d4"
+  },
+  "gst_d8_binding": {
+    "ref": "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/GST_V23_D8_FORMAL_CLOSURE_20260924/D8_FORMAL_CLOSURE_DECISION.json",
+    "sha256": "20935660a26e6186abcb8883263becc65f8810288abc49e0d629f1cf64ff4379"
+  },
+  "preserved_effects": [
+    "AUTHORIZE_FORMAL_SUCCESSOR_REBIND_REVIEW",
+    "AUTHORIZE_GST_V23_RUNTIME_CONSUMER_FORMAL_DELIVERY",
+    "AUTHORIZE_RECONSTRUCT_ISOLATED_REVIEW_ONLY"
+  ],
+  "added_effects": [
+    "AUTHORIZE_ADAPTIVE_NETWORK_RUNTIME_OBSERVER"
+  ],
+  "removed_effects": [],
+  "non_effect_fields_equal": {
+    "contract_state": true,
+    "formal_decision_authority": true,
+    "formal_seal_authority": true,
+    "node_id": true,
+    "prohibited_effects": true,
+    "state": true
+  },
+  "proof_boundary": "端點原件與效果保留已核對；這不自行證明歷史變更事件的授權、因果或正式接受。",
+  "original_transition_event_ref": null,
+  "formal_acceptance_ref": null,
+  "historical_backdating_forbidden": true,
+  "required_acceptance": "由既有總場審查者追加接受此精確後繼關係的正式收據；保留原始 GST D8 文件與舊權威原件。",
+  "append_only_policy": {
+    "overwrite_predecessor": false,
+    "rewrite_gst_d8": false,
+    "grant_added_effects_by_this_receipt": false
+  }
+}

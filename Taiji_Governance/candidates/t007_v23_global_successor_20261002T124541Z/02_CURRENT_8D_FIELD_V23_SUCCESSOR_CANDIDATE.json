@@ -1,0 +1,74 @@
+{
+  "ADI": {
+    "coupling": "ADI binds the eight simultaneous observations to the same real-state coordinate.",
+    "definition": "真實狀態的時空座標位置／索引能力",
+    "role": "SPATIOTEMPORAL_TRUE_STATE_COORDINATE_INDEX"
+  },
+  "activation": false,
+  "difference_analysis": {
+    "is_generative_transmission": false,
+    "role": "ANALYSIS_CAPABILITY"
+  },
+  "dimensions": [
+    {
+      "id": "D1",
+      "name": "Intent",
+      "zh": "意圖"
+    },
+    {
+      "id": "D2",
+      "name": "State",
+      "zh": "狀態"
+    },
+    {
+      "id": "D3",
+      "name": "Coordinate",
+      "zh": "座標"
+    },
+    {
+      "id": "D4",
+      "name": "Evidence",
+      "zh": "證據"
+    },
+    {
+      "id": "D5",
+      "name": "Execution/Policy",
+      "zh": "執行／政策"
+    },
+    {
+      "id": "D6",
+      "name": "Generative State Transmission",
+      "zh": "生成式狀態傳輸"
+    },
+    {
+      "id": "D7",
+      "name": "Risk/Isolation",
+      "zh": "風險／隔離"
+    },
+    {
+      "id": "D8",
+      "name": "Envelope/Authority",
+      "zh": "封套／權威"
+    }
+  ],
+  "predecessor_ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+  "predecessor_sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9",
+  "run_id": "T007_V23_GLOBAL_SUCCESSOR_20261002T124541Z",
+  "schema_id": "W7TP_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE_V1",
+  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+  "state": "CANDIDATE_NOT_ACTIVE",
+  "supersedes_semantics": [
+    {
+      "disposition": "SUPERSEDED_AS_DIMENSION_MAPPING; privacy remains governed concern, not D6 identity",
+      "from": "D6 Sovereign Privacy Field"
+    },
+    {
+      "disposition": "SUPERSEDED_AS_DIMENSION_MAPPING; GST moves to D6, routing remains capability/policy relation",
+      "from": "D7 Generative Transmission & Resource Routing Field"
+    },
+    {
+      "disposition": "SUPERSEDED_AS_DIMENSION_MAPPING; risk/isolation moves to D7, D8 is envelope/authority",
+      "from": "D8 Red-Team Detour Alert & Quarantine Field"
+    }
+  ]
+}

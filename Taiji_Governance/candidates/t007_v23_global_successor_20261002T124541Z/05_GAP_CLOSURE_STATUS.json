@@ -1,0 +1,33 @@
+{
+  "active_pointer_unchanged": true,
+  "current_active_pointer_sha256": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed",
+  "gaps": {
+    "G1": {
+      "ref": "01_V23_GLOBAL_SUCCESSOR_CONTRACT_CANDIDATE.json",
+      "state": "CANDIDATE_READY_FOR_FORMAL_REVIEW"
+    },
+    "G2": {
+      "ref": "02_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE.json",
+      "state": "CANDIDATE_READY_FOR_FORMAL_REVIEW"
+    },
+    "G3": {
+      "ref": "04_AUTHORITY_POINTER_SUCCESSOR_RECEIPT_CANDIDATE.json",
+      "state": "CANDIDATE_READY_FOR_FORMAL_REVIEW"
+    },
+    "G4": {
+      "required_existing_mechanism": [
+        "FOUNDER_EXPLICIT_APPEND_ONLY_CANONICAL_SUCCESSOR",
+        "TOTAL_FIELD_SUCCESSOR_REVIEW_AND_SEAL",
+        "COMPARE_AND_SWAP_POINTER_UPDATE",
+        "ROLLBACK_SNAPSHOT",
+        "POST_PROMOTION_REOBSERVATION"
+      ],
+      "state": "HOLD_UNTIL_G1_G3_FORMAL_REVIEW_AND_CAS_PREIMAGE_READY"
+    }
+  },
+  "observed_at": "2026-10-02T12:45:41Z",
+  "run_id": "T007_V23_GLOBAL_SUCCESSOR_20261002T124541Z",
+  "schema_id": "W7TP_T007_V23_GLOBAL_REPLACEMENT_GAP_STATUS_V1",
+  "state": "DOING",
+  "task_id": "T-007"
+}

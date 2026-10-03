@@ -1,0 +1,145 @@
+{
+  "schema_id": "W7TP_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE_V2",
+  "state": "CANDIDATE_NOT_ACTIVE",
+  "activation": false,
+  "predecessors": [
+    {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+      "sha256": "4f15212984d06f7d39ad7727aa2006b493425da3f797ae3aa134b9f292091d90"
+    },
+    {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9"
+    }
+  ],
+  "supersedes_candidate": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/02_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE.json",
+    "sha256": "21c9807dab4c51fe2e2c7eef1cc710e70183e7ec479658abb62c09a433e5f9fb"
+  },
+  "definition_source": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/00_FOUNDER_DIRECTIVE.json",
+    "sha256": "7b417541c79bb1ac5f5c44101fecb1cf9aa9ea5151a3dcf97ddeec5d6a8bbac0"
+  },
+  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+  "representation": "TASK_PROJECTION_NOT_EIGHT_FIXED_FIELDS_OR_EIGHT_STEPS",
+  "scope": {
+    "total_field": "ALL_NODES",
+    "dimensions": "TRUE_8D_ALL",
+    "router_boundary": "INCLUDED",
+    "scan_mode": "PATH_METADATA_ONLY"
+  },
+  "nodes": [
+    {
+      "node_id": "taiji01",
+      "kind": "linux",
+      "source": "tailscale_status_self"
+    },
+    {
+      "node_id": "MSI",
+      "kind": "windows",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "node_id": "penguin",
+      "kind": "linux",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "node_id": "localhost",
+      "kind": "iOS",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "node_id": "DESKTOP-OHE05SC",
+      "kind": "linux",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "node_id": "wuchang-us-free-node",
+      "kind": "linux",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "node_id": "V3_MIX_EDLA_GL",
+      "kind": "android",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "node_id": "RT-BE86U-7428",
+      "kind": "ASUSWRT-Merlin router",
+      "source": "router_ssh_confirmed",
+      "ip": "192.168.50.1",
+      "ssh_port": "22",
+      "role": "physical_network_boundary"
+    }
+  ],
+  "inherited_inventory_observation": {
+    "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+    "created_at": "2026-06-22T17:18:56",
+    "current_node_liveness": "NOT_REOBSERVED"
+  },
+  "safety_flags": {
+    "PATH_METADATA_ONLY": true,
+    "FILE_CONTENT_READ": false,
+    "CONFIG_READ": false,
+    "NVRAM_WRITE": false,
+    "FIREWALL_WRITE": false,
+    "ROUTER_REBOOT": false,
+    "SECRET_READ": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "DB_WRITE": false,
+    "SERVICE_RESTART": false,
+    "DEPLOY": false,
+    "PRODUCTION_RELEASE": false
+  },
+  "dimensions": [
+    {
+      "id": "D1",
+      "field_en": "Intent",
+      "field_zh": "意圖"
+    },
+    {
+      "id": "D2",
+      "field_en": "State",
+      "field_zh": "狀態"
+    },
+    {
+      "id": "D3",
+      "field_en": "Coordinate",
+      "field_zh": "座標"
+    },
+    {
+      "id": "D4",
+      "field_en": "Evidence",
+      "field_zh": "證據"
+    },
+    {
+      "id": "D5",
+      "field_en": "Execution/Policy",
+      "field_zh": "執行／政策"
+    },
+    {
+      "id": "D6",
+      "field_en": "Generative State Transmission",
+      "field_zh": "生成式狀態傳輸"
+    },
+    {
+      "id": "D7",
+      "field_en": "Risk/Isolation",
+      "field_zh": "風險／隔離"
+    },
+    {
+      "id": "D8",
+      "field_en": "Envelope/Authority",
+      "field_zh": "封套／權威"
+    }
+  ],
+  "coupled_constraints": {
+    "privacy": "跨 D1–D8 的目的、範圍、授權與合成治理仍保留；不是 D6 本體。",
+    "routing": "沿既有能力與執行政策定位；不是 D7 本體。",
+    "difference_analysis": "差異分析能力，不等於生成式狀態傳輸。",
+    "authority": "Founder 定義；總場執行、驗證、封存；模型僅候選。"
+  },
+  "downstream_validation": "NOT_RUN",
+  "formal_total_field_decision_ref": null
+}
