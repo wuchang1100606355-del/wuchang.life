@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_v2_3_candidate_source_contract_v1.schema.json",
+  "title": "W7TP V2.3 Candidate Source Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "version",
+    "state",
+    "source_observation",
+    "authority_boundary",
+    "formal_authority_baseline",
+    "invariants",
+    "consumer_preflight",
+    "forbidden_effects",
+    "contract_self_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "W7TP-V2.3-CANDIDATE-SOURCE-CONTRACT/1.0"},
+    "contract_id": {"const": "W7TP_8D_ADI_V2_3"},
+    "version": {"const": "2.3"},
+    "state": {"const": "CANDIDATE_FORMALIZATION_V0.1"},
+    "source_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "historical"],
+      "properties": {
+        "primary": {"$ref": "#/$defs/source"},
+        "historical": {"$ref": "#/$defs/source"}
+      }
+    },
+    "authority_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_only", "canonical", "d8_authorized", "implemented", "runtime_protected", "self_promotion_allowed"],
+      "properties": {
+        "candidate_only": {"const": true},
+        "canonical": {"const": false},
+        "d8_authorized": {"const": false},
+        "implemented": {"const": "UNKNOWN"},
+        "runtime_protected": {"const": "NOT_PROVEN"},
+        "self_promotion_allowed": {"const": false}
+      }
+    },
+    "formal_authority_baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_id", "version", "document_ref", "document_sha256", "unchanged"],
+      "properties": {
+        "canonical_id": {"const": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1"},
+        "version": {"const": "2.1"},
+        "document_ref": {"type": "string", "minLength": 1},
+        "document_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "unchanged": {"const": true}
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "consumer_preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "mode", "allowed_output", "dependency_hashes_required", "freshness_required_for_formal_reuse"],
+      "properties": {
+        "required": {"const": true},
+        "mode": {"const": "CANDIDATE_PREFLIGHT_ONLY"},
+        "allowed_output": {"const": "CANDIDATE_EVIDENCE_ONLY"},
+        "dependency_hashes_required": {"const": true},
+        "freshness_required_for_formal_reuse": {"const": true}
+      }
+    },
+    "forbidden_effects": {
+      "type": "object",
+      "additionalProperties": {"const": false},
+      "minProperties": 11,
+      "maxProperties": 11
+    },
+    "contract_self_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "role", "document_id", "document_url", "revision_id", "title", "modified_at", "paragraph_count", "normalization", "normalized_utf8_bytes", "normalized_paragraph_text_sha256"],
+      "properties": {
+        "kind": {"const": "GOOGLE_DOC_NATIVE_READ_ONLY_OBSERVATION"},
+        "role": {"type": "string", "minLength": 1},
+        "document_id": {"type": "string", "minLength": 1},
+        "document_url": {"type": "string", "pattern": "^https://docs\\.google\\.com/document/d/"},
+        "revision_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "modified_at": {"type": "string", "format": "date-time"},
+        "paragraph_count": {"type": "integer", "minimum": 1},
+        "normalization": {"const": "UTF8_JOIN_PARAGRAPH_TEXT_WITH_LF/1.0"},
+        "normalized_utf8_bytes": {"type": "integer", "minimum": 1},
+        "normalized_paragraph_text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

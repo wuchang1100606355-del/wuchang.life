@@ -1,0 +1,81 @@
+{
+  "schema_version": "W7TP-V2.3-CANDIDATE-SOURCE-CONTRACT/1.0",
+  "contract_id": "W7TP_8D_ADI_V2_3",
+  "version": "2.3",
+  "state": "CANDIDATE_FORMALIZATION_V0.1",
+  "source_observation": {
+    "primary": {
+      "kind": "GOOGLE_DOC_NATIVE_READ_ONLY_OBSERVATION",
+      "role": "CURRENT_CANDIDATE_TYPED_FORMAL_SPEC",
+      "document_id": "1Zk__7MMBvGxnnHNObeEjTev3SwKWB9rkCERw9tXnw84",
+      "document_url": "https://docs.google.com/document/d/1Zk__7MMBvGxnnHNObeEjTev3SwKWB9rkCERw9tXnw84",
+      "revision_id": "ANLCKQngZKaKNPqTJtoWJgOGEZDmDiIu_XcrBq24Ibuho1v7G0ZS3J7DFZaqOsi76DB_EhL_0V1LG2DZZyllQidUFAHBEco1ZvRhBWID38A",
+      "title": "W7TP 8D ADI V2.3 Typed Formal Specification v0.1",
+      "modified_at": "2026-08-28T06:24:17.373Z",
+      "paragraph_count": 126,
+      "normalization": "UTF8_JOIN_PARAGRAPH_TEXT_WITH_LF/1.0",
+      "normalized_utf8_bytes": 17080,
+      "normalized_paragraph_text_sha256": "dfd9147a5d053764025f318cd49213cdb3ce9df6fa017ec0ad62ad08821f9597"
+    },
+    "historical": {
+      "kind": "GOOGLE_DOC_NATIVE_READ_ONLY_OBSERVATION",
+      "role": "EARLIER_CANONICAL_DRAFT_HISTORICAL_ONLY",
+      "document_id": "17uXPMEgfmQvjalou0_ik9LnKLB2NcgRuPCbqJa7g_FI",
+      "document_url": "https://docs.google.com/document/d/17uXPMEgfmQvjalou0_ik9LnKLB2NcgRuPCbqJa7g_FI",
+      "revision_id": "ANLCKQkeOvl0OwwRO-MhommJ8y-HdY7DsJab2ySM5pOJoE8azr5wwBBrMxCsEa67QdioOHUJo0WtXfYCO6r1CGy-Q72f0-BtN8hQ4gsZ_2k",
+      "title": "W7TP 8D ADI Formal Specification V2.3",
+      "modified_at": "2026-08-28T06:14:40.604Z",
+      "paragraph_count": 44,
+      "normalization": "UTF8_JOIN_PARAGRAPH_TEXT_WITH_LF/1.0",
+      "normalized_utf8_bytes": 8625,
+      "normalized_paragraph_text_sha256": "426dc6a13ee63f61a6e9608dc812089fa7c4ec4dda21ccffe1cf030e7e8b23c7"
+    }
+  },
+  "authority_boundary": {
+    "candidate_only": true,
+    "canonical": false,
+    "d8_authorized": false,
+    "implemented": "UNKNOWN",
+    "runtime_protected": "NOT_PROVEN",
+    "self_promotion_allowed": false
+  },
+  "formal_authority_baseline": {
+    "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1",
+    "version": "2.1",
+    "document_ref": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
+    "document_sha256": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d",
+    "unchanged": true
+  },
+  "invariants": [
+    "CAUSAL_ADMISSIBILITY_NE_COMMIT_AUTHORIZATION",
+    "CANDIDATE_CANNOT_SELF_PROMOTE",
+    "D1_D8_INTERACTIVE_SINGLE_TASK_STATE_FIELD",
+    "DEPENDENCY_HASH_AND_FRESHNESS_REQUIRED",
+    "EXACT_NE_GENERATIVE_RECONSTRUCTION",
+    "F_DOMAIN_NON_AUTHORITATIVE",
+    "RECONSTRUCTION_NE_REPAIR",
+    "TEST_PASS_NE_CANONICAL",
+    "VALID_D8_NE_CANONICAL"
+  ],
+  "consumer_preflight": {
+    "required": true,
+    "mode": "CANDIDATE_PREFLIGHT_ONLY",
+    "allowed_output": "CANDIDATE_EVIDENCE_ONLY",
+    "dependency_hashes_required": true,
+    "freshness_required_for_formal_reuse": true
+  },
+  "forbidden_effects": {
+    "canonical_write": false,
+    "pointer_change": false,
+    "d8_issue": false,
+    "deploy": false,
+    "restart": false,
+    "network_change": false,
+    "credential_access": false,
+    "ledger_consume": false,
+    "git_commit": false,
+    "git_push": false,
+    "external_effect": false
+  },
+  "contract_self_sha256": "815ca3c13dce2ac140978cf7070ee09cc32a840dc1cae2a47da4aef54e0720fc"
+}

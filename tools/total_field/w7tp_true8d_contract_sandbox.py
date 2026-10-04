@@ -18,16 +18,26 @@ from typing import Any
 
 from jsonschema import Draft202012Validator
 
+from tools.total_field.w7tp_v2_3_candidate_source import active_canonical_binding
+
 
 ROOT = Path(__file__).resolve().parents[2]
 PLAN_PATH = ROOT / "runtime/total_field/inbox/W7TP_TRUE8D_EIGHT_FIELD_CONTAINERIZATION_PLAN_V2_20260717T140655Z.json"
 ROUTE_TABLE_PATH = ROOT / "runtime/total_field/secondary_cloud/scenario_route_table.json"
 CAPABILITY_REGISTRY_PATH = ROOT / "runtime/total_field/secondary_cloud/capability_registry.json"
-ACTIVE_CONTRACT_VERSION = "W7TP-TRUE8D-MACHINE-CONTRACT/2.1"
+_ACTIVE_BINDING = active_canonical_binding()
+ACTIVE_VERSION = _ACTIVE_BINDING["version"]
+ACTIVE_VERSION_TAG = ACTIVE_VERSION.replace(".", "_")
+if ACTIVE_VERSION not in {"2.1", "2.3"}:
+    raise ValueError("HOLD_UNSUPPORTED_ACTIVE_PROJECTION_VERSION")
+ACTIVE_CONTRACT_VERSION = f"W7TP-TRUE8D-MACHINE-CONTRACT/{ACTIVE_VERSION}"
+V21_COMPAT_CONTRACT_VERSION = "W7TP-TRUE8D-MACHINE-CONTRACT/2.1"
+V21_COMPAT_CANONICAL_SCHEMA_REF = "schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json"
 LEGACY_CONTRACT_VERSION = "W7TP-TRUE8D-MACHINE-CONTRACT/2.0"
-ACTIVE_CANONICAL_SCHEMA_REF = "schemas/w7tp_8d_multipurpose_packet_canonical_v2_1.schema.json"
+ACTIVE_CANONICAL_SCHEMA_REF = _ACTIVE_BINDING["machine_schema_path"]
 LEGACY_CANONICAL_SCHEMA_REF = "schemas/w7tp_8d_multipurpose_packet_canonical_v2.schema.json"
-ACTIVE_PROJECTION_SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2_1.schema.json"
+ACTIVE_PROJECTION_SCHEMA_PATH = ROOT / f"schemas/field/w7tp_true8d_projection_contract_v{ACTIVE_VERSION_TAG}.schema.json"
+V21_COMPAT_PROJECTION_SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2_1.schema.json"
 LEGACY_PROJECTION_SCHEMA_PATH = ROOT / "schemas/field/w7tp_true8d_projection_contract_v2.schema.json"
 
 COMMON_INPUT_FIELDS = (
@@ -144,6 +154,8 @@ def validate_common_input(value: Mapping[str, Any], field_id: str) -> dict[str, 
     contract_version = result["contract_version"]
     if contract_version == ACTIVE_CONTRACT_VERSION:
         expected_schema_ref = ACTIVE_CANONICAL_SCHEMA_REF
+    elif contract_version == V21_COMPAT_CONTRACT_VERSION:
+        expected_schema_ref = V21_COMPAT_CANONICAL_SCHEMA_REF
     elif contract_version == LEGACY_CONTRACT_VERSION:
         expected_schema_ref = LEGACY_CANONICAL_SCHEMA_REF
     else:
@@ -179,10 +191,12 @@ def validate_field_output(field_id: str, value: Mapping[str, Any]) -> dict[str, 
     return result
 
 
-@lru_cache(maxsize=2)
+@lru_cache(maxsize=3)
 def _projection_validator(contract_version: str) -> Draft202012Validator:
     if contract_version == ACTIVE_CONTRACT_VERSION:
         path = ACTIVE_PROJECTION_SCHEMA_PATH
+    elif contract_version == V21_COMPAT_CONTRACT_VERSION:
+        path = V21_COMPAT_PROJECTION_SCHEMA_PATH
     elif contract_version == LEGACY_CONTRACT_VERSION:
         path = LEGACY_PROJECTION_SCHEMA_PATH
     else:
@@ -199,7 +213,7 @@ def validate_projection_contract(
     common_input: Mapping[str, Any],
     output: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """Validate one active V2.1 or explicit legacy V2 projection."""
+    """Validate a task projection under the active pointer or explicit legacy contract."""
 
     field_id = common_input.get("field_id")
     if not isinstance(field_id, str):
@@ -285,7 +299,7 @@ def _d1_d7_outputs(profile: str, consumer: str, route: Mapping[str, Any], common
         "D3": {"branch": "sandbox", "actor_role": "READ_ONLY_SHADOW", "channel": consumer, "node_id": "taiji01-non-live", "lan_state": "NOT_USED", "wan_state": "NOT_USED", "vpn_state": "NOT_USED", "firewall_state": "UNCHANGED", "dns_state": "UNCHANGED", "hardware_channel": "CPU_BASELINE", "transition_hash": ""},
         "D4": {"verified_evidence_refs": [str(ROUTE_TABLE_PATH.relative_to(ROOT)), str(CAPABILITY_REGISTRY_PATH.relative_to(ROOT))], "verified_evidence_hashes": [file_sha256(ROUTE_TABLE_PATH), file_sha256(CAPABILITY_REGISTRY_PATH)], "completeness": "COMPLETE_REFERENCE_ONLY", "verification_summary_hash": semantic_hash},
         "D5": {"action_code": "READ_ONLY_SHADOW_COMPARE", "target_ref": f"consumer:{consumer}", "precondition_hash": semantic_hash, "side_effect_class": "NONE", "requires_explicit_gate": True, "commit_applied": False},
-        "D6": {"transport_protocol_ref": "W7TP_PROTOCOL_NATIVE_8D_STATE_FIELD_PACKET_V2_1", "lookup_refs": [route["capability_ref"], route["service_contract_ref"]], "reconstruction_condition_refs": ["condition:reference-resolves", "condition:effect-equivalent"], "verification_method_ref": "verifier:p2-shadow-hash-and-effect:v2_1", "equivalent_state_digest": semantic_hash, "model_required": False, "float_value_count": 0, "full_file_copy_present": False},
+        "D6": {"transport_protocol_ref": f"W7TP_PROTOCOL_NATIVE_8D_STATE_FIELD_PACKET_V{ACTIVE_VERSION_TAG}", "lookup_refs": [route["capability_ref"], route["service_contract_ref"]], "reconstruction_condition_refs": ["condition:reference-resolves", "condition:effect-equivalent"], "verification_method_ref": "verifier:p2-shadow-hash-and-effect:v2_1", "equivalent_state_digest": semantic_hash, "model_required": False, "float_value_count": 0, "full_file_copy_present": False},
         "D7": {"risk_codes": [], "risk_level": "NONE", "disposition": "PASS", "blocking_evidence_refs": []},
     }
     outputs["D3"]["transition_hash"] = canonical_sha256({key: value for key, value in outputs["D3"].items() if key != "transition_hash"})
@@ -329,7 +343,7 @@ def run_shadow_case(profile: str, consumer: str) -> dict[str, Any]:
     d8_output = {
         "packet_id": f"packet:{profile}:{consumer}:shadow:v2_1",
         "authority_ref": "TOTAL_FIELD_CORE_UNDER_FOUNDER_AUTHORITY",
-        "version": "2.1",
+        "version": ACTIVE_VERSION,
         "ttl_seconds": 300,
         "nonce": integrity_binding["nonce"],
         "sha256": canonical_sha256(integrity_binding),

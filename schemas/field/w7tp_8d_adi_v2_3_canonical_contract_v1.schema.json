@@ -1,0 +1,118 @@
+{
+  "$id": "https://wuchang.life/schemas/w7tp_8d_adi_v2_3_canonical_contract_v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activation_contract": {
+      "type": "object"
+    },
+    "canonical_id": {
+      "const": "W7TP_8D_ADI_V2_3"
+    },
+    "contract_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_CONTRACT_SELF_SHA256/1.0"
+    },
+    "contract_self_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "coupled_constraints": {
+      "additionalProperties": false,
+      "properties": {
+        "difference_analysis_is_transmission": {
+          "const": false
+        },
+        "fixed_eight_field_record_definition_forbidden": {
+          "const": true
+        },
+        "model_is_authority": {
+          "const": false
+        },
+        "sequential_pipeline_definition_forbidden": {
+          "const": true
+        }
+      },
+      "required": [
+        "sequential_pipeline_definition_forbidden",
+        "fixed_eight_field_record_definition_forbidden",
+        "difference_analysis_is_transmission",
+        "model_is_authority"
+      ],
+      "type": "object"
+    },
+    "definition_source": {
+      "type": "object"
+    },
+    "dimensions": {
+      "additionalProperties": false,
+      "properties": {
+        "D1": {
+          "const": "Intent"
+        },
+        "D2": {
+          "const": "State"
+        },
+        "D3": {
+          "const": "Coordinate"
+        },
+        "D4": {
+          "const": "Evidence"
+        },
+        "D5": {
+          "const": "Execution/Policy"
+        },
+        "D6": {
+          "const": "Generative State Transmission"
+        },
+        "D7": {
+          "const": "Risk/Isolation"
+        },
+        "D8": {
+          "const": "Envelope/Authority"
+        }
+      },
+      "required": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "type": "object"
+    },
+    "founder": {
+      "const": "江政隆"
+    },
+    "lineage": {
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "W7TP-8D-ADI-CANONICAL-CONTRACT/2.3"
+    },
+    "semantics": {
+      "const": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD"
+    },
+    "version": {
+      "const": "2.3"
+    }
+  },
+  "required": [
+    "schema_version",
+    "canonical_id",
+    "version",
+    "founder",
+    "semantics",
+    "dimensions",
+    "coupled_constraints",
+    "lineage",
+    "activation_contract",
+    "definition_source",
+    "contract_self_hash_algorithm",
+    "contract_self_sha256"
+  ],
+  "title": "W7TP 8D ADI V2.3 Canonical Contract",
+  "type": "object"
+}
