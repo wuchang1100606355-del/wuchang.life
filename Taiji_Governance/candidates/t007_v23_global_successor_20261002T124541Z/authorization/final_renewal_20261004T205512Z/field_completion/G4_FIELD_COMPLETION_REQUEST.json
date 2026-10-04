@@ -1,0 +1,136 @@
+{
+  "authorized_effect": "AUTHORIZE_W7TP_V23_GLOBAL_CANONICAL_ACTIVATION",
+  "bindings": {
+    "activation_tests": {
+      "ref": "tests/test_w7tp_t007_g4_activation_v1.py",
+      "sha256": "f67db5a30db5d02e08d6251d7aa0f209ca90f54871cc445dca41ead03d8b2d60"
+    },
+    "activation_tool": {
+      "ref": "tools/total_field/w7tp_t007_g4_activation_v1.py",
+      "sha256": "93b8b4e5d628648b4d14d7bbc47e216fdbfad8413f62f280ab5c668e78ad60de"
+    },
+    "authority_preimage": {
+      "ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "sha256": "990f06c9fc30c4a69b90106e64fd0bc42ce7654e045f714cd0d6bb2e22c49f0a"
+    },
+    "authority_successor": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/authority_preserved_successor.json",
+      "sha256": "990f06c9fc30c4a69b90106e64fd0bc42ce7654e045f714cd0d6bb2e22c49f0a"
+    },
+    "authority_successor_receipt": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/AUTHORITY_PRESERVATION_RECEIPT.json",
+      "sha256": "4f3614cd636e379b0649ef7d64cd413087c2227605a2da2ecc33b0b225e11f69"
+    },
+    "canonical_pointer_preimage": {
+      "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2"
+    },
+    "canonical_pointer_successor": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/canonical_pointer_preserved_successor.json",
+      "sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2"
+    },
+    "completion_input_0": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/AUTHORITY_SUCCESSOR_RECEIPT_CANDIDATE.json",
+      "sha256": "ed4da22bc61dcfff356e62f03ecc4e42e81e67414c130a132579068977a90ca0"
+    },
+    "completion_input_1": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/CURRENT_8D_FIELD_SUCCESSOR.json",
+      "sha256": "26ff223a1ce77ccf3430fa203cc8f694f36f4fbeb516e88e073ae023687fb6ce"
+    },
+    "completion_input_2": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/GLOBAL_SUCCESSOR_CONTRACT.json",
+      "sha256": "59d930f81c6dbe8c3f35e7d598b611fc500abf1502cc79e709556b465b9b4ba6"
+    },
+    "completion_input_3": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/REGRESSION_SPEC.md",
+      "sha256": "ca53bdf8d7002a120965b7280482a29c4fe7c6b4f07b3f08e3d01f0b2c833760"
+    },
+    "completion_input_4": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/REOBSERVATION.json",
+      "sha256": "0d67f6c28d87566b51e728f6e9cfb03b3dd2d00fa29f1ece235eee672583c4a6"
+    },
+    "completion_input_5": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/REOBSERVATION_REVIEWER_EXTENSION_20261003.json",
+      "sha256": "6edcdf013aa19631cb45394b64bcd36fa79edcd752330017046885b6a185e79e"
+    },
+    "completion_input_6": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/validate_candidate.py",
+      "sha256": "2331f5d65ed3316e640aeee5c921a5e0128208dd18bec1c28de764ce9b65ac95"
+    },
+    "completion_manifest": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/SHA256_MANIFEST.json",
+      "sha256": "00f43caa7704b39a9386e11439f041212a938391131b7791730cf20b7652ae17"
+    },
+    "consumer_0": {
+      "ref": "tools/d8_guard_eval.py",
+      "sha256": "d25ec846fccb3953975a71d893526a24ea368273b8056630fea4911fa4a0d4d3"
+    },
+    "consumer_1": {
+      "ref": "tools/total_field/w7tp_intent_field_suite/edge_queue.py",
+      "sha256": "c3ec172ada7003ed7ed2733f80616902addcfdd4564d21aed65f250cdd3c1a21"
+    },
+    "consumer_2": {
+      "ref": "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py",
+      "sha256": "fcbdc42d3d32c3004cbb8adc3684ec1dba1abfc32ab174b7308b34fd22c7cf11"
+    },
+    "consumer_3": {
+      "ref": "tools/total_field/w7tp_intent_field_suite/cli.py",
+      "sha256": "5bf0d36e715f1809ee690ab2f3f2f28353aa166345329ff9997655259357007d"
+    },
+    "consumer_4": {
+      "ref": "tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "sha256": "29d99626487f870cba8785250ccc6302fba23e8193d0f9491e6c89a39cb8104e"
+    },
+    "consumer_5": {
+      "ref": "tools/total_field/wuchang_three_org_container_scene_bridge.py",
+      "sha256": "a99936ebee03be971b396feee8637fdbac79e1c64a87fcf132e1e9a194ca15b2"
+    },
+    "consumer_6": {
+      "ref": "manifests/total_field/w7tp_skill_id_binding_matrix_v2_3/BINDING_MATRIX.json",
+      "sha256": "dd6ade5882c03accbbb92589cfb4e591c116a0dddfb544a943bc10c1bfe63230"
+    },
+    "consumer_7": {
+      "ref": "tools/total_field/w7tp_v2_3_candidate_source.py",
+      "sha256": "3a425bc00fb3aa8b3dd7aee3f58e24da7e65cfb57cf076b5808283005a1fb926"
+    },
+    "current_state_field_preimage": {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9"
+    },
+    "current_state_field_router_preimage": {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+      "sha256": "4f15212984d06f7d39ad7727aa2006b493425da3f797ae3aa134b9f292091d90"
+    },
+    "current_state_field_router_successor": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/current_state_field_router_successor.json",
+      "sha256": "3b3d64bd2df777d3a361074c5574c634a5fae056facd534c4624e8af89f5d349"
+    },
+    "current_state_field_successor": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/current_state_field_successor.json",
+      "sha256": "3faa27ef6833309cdddd96e484714d9f4b3300fb68f2d059de3baebfdde899b0"
+    },
+    "final_manifest": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/SHA256_MANIFEST.json",
+      "sha256": "5a375de4e5b1ff0a233ec506ab4d7e14ddd9fcfcc5b240d298abc19f55066c3d"
+    },
+    "g1_g3_formal_seal": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/FORMAL_G1_G3_SEAL.json",
+      "sha256": "28eaa6152c2c3ea703d19a0ac690ef106c247db2e764e3a6ae4bc84607d46a49"
+    },
+    "prior_activation_receipt": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/g4/G4_ACTIVATION_RECEIPT.json",
+      "sha256": "7587189948def66df5f5407909878f7ca1918e993a1f9ef8a1396815fa3cf302"
+    },
+    "prior_reobservation": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/PRIOR_ACTIVATION_REOBSERVATION.json",
+      "sha256": "a9e073d5274d5895b5a3f8b6c74e79036fb71206159a09828f4a32ca7ac44a28"
+    }
+  },
+  "completion_mode": "CURRENT_FIELD_AFTER_ACTIVATION",
+  "created_at": "2026-10-04T21:17:04.286947+00:00",
+  "expires_at": "2026-10-04T21:25:12+00:00",
+  "nonce": "g4:field-completion:20c0ff49a9a14ab08e1ead773d20a485a5f13985052ebd3b6d1a5f86c20e5f79",
+  "schema_version": "W7TP-T007-G4-ACTIVATION/1.0",
+  "single_use": true,
+  "task_id": "T-007"
+}
