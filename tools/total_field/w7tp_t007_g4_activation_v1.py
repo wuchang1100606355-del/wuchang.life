@@ -7,7 +7,7 @@ from pathlib import Path
 from tools.total_field.w7tp_founder_passkey_v1 import verify_authorization_passkey, PasskeyVerificationError
 
 EFFECT="AUTHORIZE_W7TP_V23_GLOBAL_CANONICAL_ACTIVATION"
-MAX_REQUEST_TTL_SECONDS=1800
+MAX_REQUEST_TTL_SECONDS=3600
 class G4Error(ValueError):
  def __init__(self,code,path="$"): self.code,self.path=code,path; super().__init__(f"{code}:{path}")
 def cj(v): return json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False).encode()
