@@ -46,6 +46,9 @@ class G4ActivationTests(unittest.TestCase):
    successor=base/(name+'-next.json');write(successor,{'version':'2.3','semantics':'8_IN_1_SINGLE_DYNAMIC_STATE_FIELD','dimensions':[{'id':k,'field_en':v} for k,v in dims.items()]})
    files[name+'_preimage']=target;files[name+'_successor']=successor
   files['prior_activation_receipt']=prior
+  reobs=base/'prior-reobservation.json'
+  write(reobs,{'state':'PASS_CURRENT_G4_ASSERTION_REVERIFIED','historical_receipt_modified':False,'prior_receipt_sha256':g4.sha(prior)})
+  files['prior_reobservation']=reobs
   write(files['authority_successor_receipt'],{'state':'PENDING_FOUNDER_PASSKEY_G4_ACCEPTANCE','formal':False,'acceptance_mode':'FOUNDER_PASSKEY_G4_ATOMIC','authorized_effect':g4.EFFECT,'predecessor_sha256':g4.sha(files['authority_preimage']),'successor_sha256':g4.sha(files['authority_successor'])})
   request['bindings']={k:{'ref':p.relative_to(ROOT).as_posix(),'sha256':g4.sha(p)} for k,p in files.items()}
   write(rp,request)

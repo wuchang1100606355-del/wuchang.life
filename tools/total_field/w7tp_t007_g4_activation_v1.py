@@ -54,7 +54,8 @@ def validate(root,request,authorization,now):
   paths[name]=p
  seal=load(paths["g1_g3_formal_seal"])
  if seal.get("formal") is not True or seal.get("seal_state")!="FORMAL_SEAL" or seal.get("contract_approved") is not True: raise G4Error("HOLD_G4_FORMAL_SEAL_INVALID")
- if now>=utc(seal["expires_at"]): raise G4Error("HOLD_G4_FORMAL_SEAL_EXPIRED")
+ completion_mode=request.get("completion_mode")=="CURRENT_FIELD_AFTER_ACTIVATION"
+ if now>=utc(seal["expires_at"]) and not completion_mode: raise G4Error("HOLD_G4_FORMAL_SEAL_EXPIRED")
  if seal.get("source_manifest_sha256")!=bindings["final_manifest"]["sha256"]: raise G4Error("HOLD_G4_SEAL_FINAL_BINDING")
  predecessor=load(paths["authority_preimage"]); successor=load(paths["authority_successor"]); receipt=load(paths["authority_successor_receipt"])
  old=set(predecessor.get("allowed_effects",[])); new=set(successor.get("allowed_effects",[]))
@@ -68,6 +69,8 @@ def validate(root,request,authorization,now):
   unsigned=dict(prior); supplied=unsigned.pop("receipt_sha256",None)
   if supplied!=hashlib.sha256(cj(unsigned)).hexdigest() or prior.get("state")!="ACTIVATED" or prior.get("authorized_effect")!=EFFECT: raise G4Error("HOLD_G4_PRIOR_RECEIPT_INVALID")
   if prior.get("pointer_postimage_sha256")!=bindings["canonical_pointer_preimage"]["sha256"] or prior.get("authority_postimage_sha256")!=bindings["authority_preimage"]["sha256"]: raise G4Error("HOLD_G4_PRIOR_POSTIMAGE_DRIFT")
+  reobs=load(paths["prior_reobservation"])
+  if reobs.get("state")!="PASS_CURRENT_G4_ASSERTION_REVERIFIED" or reobs.get("historical_receipt_modified") is not False or reobs.get("prior_receipt_sha256")!=bindings["prior_activation_receipt"]["sha256"]: raise G4Error("HOLD_G4_PRIOR_REOBSERVATION_INVALID")
   for name in ("current_state_field","current_state_field_router"):
    successor_field=load(paths[name+"_successor"])
    if successor_field.get("version")!="2.3" or successor_field.get("semantics")!="8_IN_1_SINGLE_DYNAMIC_STATE_FIELD": raise G4Error("HOLD_G4_FIELD_SUCCESSOR_INVALID",name)
