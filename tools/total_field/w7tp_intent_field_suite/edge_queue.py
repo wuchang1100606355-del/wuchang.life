@@ -21,6 +21,10 @@ from tools.total_field.w7tp_field_application_runtime import (
     SCENARIO_ROUTE_TABLE_PATH,
     FieldApplicationError,
 )
+from tools.total_field.w7tp_v2_3_candidate_source import (
+    active_canonical_binding,
+    candidate_source_binding,
+)
 
 from .canonical_hash import canonical_sha256, normalize_content
 
@@ -74,6 +78,8 @@ def build_sealed_snapshot(
     registry = _load_json_object(
         capability_registry_path, "CAPABILITY_REGISTRY_INVALID"
     )
+    successor_candidate = candidate_source_binding()
+    active_canonical = active_canonical_binding()
     canonical_hash = _file_sha256(canonical_v2_path)
     if canonical_hash != CANONICAL_V2_1_SHA256:
         raise FieldApplicationError("CANONICAL_V2_1_SHA256_MISMATCH")
@@ -86,10 +92,12 @@ def build_sealed_snapshot(
         if isinstance(profile, str) and isinstance(route, dict)
     }
     snapshot: dict[str, Any] = {
-        "schema_version": "W7TP-SEALED-EDGE-SNAPSHOT/1.1",
-        "authority": "READ_ONLY_CANDIDATE_ONLY",
+        "schema_version": "W7TP-SEALED-EDGE-SNAPSHOT/1.3",
+        "authority": "READ_ONLY_ACTIVE_POINTER_BOUND",
         "canonical_v2_1_sha256": canonical_hash,
         "canonical_parent_v2_sha256": LEGACY_CANONICAL_V2_SHA256,
+        "active_canonical_binding": active_canonical,
+        "successor_candidate_source": successor_candidate,
         "scenario_route_table_sha256": canonical_sha256(route_table),
         "capability_registry_sha256": canonical_sha256(registry),
         "profile_packet_types": profile_packet_types,
@@ -111,17 +119,29 @@ def validate_sealed_snapshot(snapshot: Mapping[str, Any]) -> dict[str, Any]:
     schema_version = candidate.get("schema_version")
     checks = {
         "schema": schema_version
-        in {"W7TP-SEALED-EDGE-SNAPSHOT/1.0", "W7TP-SEALED-EDGE-SNAPSHOT/1.1"},
+        in {
+            "W7TP-SEALED-EDGE-SNAPSHOT/1.0",
+            "W7TP-SEALED-EDGE-SNAPSHOT/1.1",
+            "W7TP-SEALED-EDGE-SNAPSHOT/1.2",
+            "W7TP-SEALED-EDGE-SNAPSHOT/1.3",
+        },
         "self_hash": isinstance(supplied, str)
         and supplied == canonical_sha256(candidate),
-        "authority": candidate.get("authority") == "READ_ONLY_CANDIDATE_ONLY",
+        "authority": candidate.get("authority") in {
+            "READ_ONLY_CANDIDATE_ONLY",
+            "READ_ONLY_ACTIVE_POINTER_BOUND",
+        },
         "offline_level": candidate.get("offline_output_level")
         == "L3_CANDIDATE_ONLY",
         "cloud_fallback": candidate.get("cloud_fallback") == "BLOCK",
         "founder_root_excluded": candidate.get("founder_root_included") is False,
         "immutable": candidate.get("mutable") is False,
     }
-    if schema_version == "W7TP-SEALED-EDGE-SNAPSHOT/1.1":
+    if schema_version in {
+        "W7TP-SEALED-EDGE-SNAPSHOT/1.1",
+        "W7TP-SEALED-EDGE-SNAPSHOT/1.2",
+        "W7TP-SEALED-EDGE-SNAPSHOT/1.3",
+    }:
         checks["canonical_v2_1"] = (
             candidate.get("canonical_v2_1_sha256") == CANONICAL_V2_1_SHA256
         )
@@ -130,6 +150,20 @@ def validate_sealed_snapshot(snapshot: Mapping[str, Any]) -> dict[str, Any]:
             == LEGACY_CANONICAL_V2_SHA256
         )
         canonical_version = "2.1"
+        if schema_version in {
+            "W7TP-SEALED-EDGE-SNAPSHOT/1.2",
+            "W7TP-SEALED-EDGE-SNAPSHOT/1.3",
+        }:
+            checks["successor_candidate_source"] = (
+                candidate.get("successor_candidate_source")
+                == candidate_source_binding()
+            )
+        if schema_version == "W7TP-SEALED-EDGE-SNAPSHOT/1.3":
+            checks["active_canonical_binding"] = (
+                candidate.get("active_canonical_binding")
+                == active_canonical_binding()
+            )
+            canonical_version = active_canonical_binding()["version"]
     else:
         checks["canonical_v2_legacy"] = (
             candidate.get("canonical_v2_sha256") == LEGACY_CANONICAL_V2_SHA256
@@ -137,12 +171,23 @@ def validate_sealed_snapshot(snapshot: Mapping[str, Any]) -> dict[str, Any]:
         canonical_version = "2.0"
     if not all(checks.values()):
         raise FieldApplicationError("EDGE_SNAPSHOT_INVALID")
-    return {
+    result = {
         "state": "PASS",
         "checks": checks,
         "content_sha256": supplied,
         "canonical_version": canonical_version,
     }
+    if schema_version in {
+        "W7TP-SEALED-EDGE-SNAPSHOT/1.2",
+        "W7TP-SEALED-EDGE-SNAPSHOT/1.3",
+    }:
+        result["successor_candidate_version"] = "2.3"
+    if schema_version == "W7TP-SEALED-EDGE-SNAPSHOT/1.2":
+        result["formal_authority_unchanged"] = True
+    if schema_version == "W7TP-SEALED-EDGE-SNAPSHOT/1.3":
+        result["active_authority_pointer_bound"] = True
+        result["legacy_packet_contract_version"] = "2.1"
+    return result
 
 
 def _validate_l3_packet(packet: Mapping[str, Any]) -> str:

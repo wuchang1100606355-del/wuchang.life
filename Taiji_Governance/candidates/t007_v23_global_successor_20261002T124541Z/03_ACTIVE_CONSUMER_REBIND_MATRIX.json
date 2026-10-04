@@ -1,64 +1,152 @@
 {
-  "classification_rule": "Only current runtime/release/authority consumers are rebound; historical evidence and explicit read-only legacy compatibility remain immutable history.",
   "consumers": [
     {
-      "action": "REBIND_TO_V23_SUCCESSOR",
-      "path": "tools/d8_guard_eval.py",
-      "state": "ACTIVE_CODE_HARDCODED_V21"
-    },
-    {
-      "action": "REBIND_SEALED_SNAPSHOT_TO_V23",
-      "path": "tools/total_field/w7tp_intent_field_suite/edge_queue.py",
-      "state": "ACTIVE_CODE_HARDCODED_V21"
-    },
-    {
-      "action": "REBIND_SOURCE_REF_TO_V23",
-      "path": "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py",
-      "state": "ACTIVE_POLICY_SOURCE_REF_V21"
-    },
-    {
-      "action": "REPLACE_ACTIVE_RELEASE_INPUTS_WITH_V23; retain legacy artifacts outside active set",
-      "path": "tools/total_field/w7tp_intent_field_suite/cli.py",
-      "state": "ACTIVE_RELEASE_SURFACE_INCLUDES_V21"
-    },
-    {
-      "action": "REBIND_CANONICAL_METADATA_TO_V23",
-      "path": "tools/total_field/wuchang_three_org_container_scene_bridge.py",
-      "state": "ACTIVE_CODE_HARDCODED_V21"
-    },
-    {
-      "action": "RETIRE_FROM_ACTIVE_PATH; retain historical compatibility only",
-      "path": "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
-      "state": "V23_TO_V21_ADAPTER"
-    },
-    {
-      "action": "RETAIN_READ_ONLY_NOT_CURRENT_AUTHORITY",
-      "path": "tools/total_field/w7tp_canonical_v2_1_legacy_adapter.py",
-      "state": "LEGACY_READ_ONLY_ADAPTER"
-    },
-    {
-      "action": "RETAIN_HISTORY_ONLY; remove from active release gate",
-      "path": "scripts/verify/verify_w7tp_canonical_v2_1.py",
-      "state": "LEGACY_VERIFIER"
-    },
-    {
       "action": "CREATE_V23_SUCCESSOR_MATRIX_AND_REBIND_ACTIVE_CONSUMERS",
+      "content_constraints": {
+        "forbidden_literals": [
+          "D6 Sovereign Privacy Field",
+          "D7 Generative Transmission & Resource Routing Field"
+        ],
+        "required_literals": [
+          "W7TP_8D_ADI_V2_3"
+        ]
+      },
+      "downstream_validation": "PASS",
       "path": "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json",
-      "state": "ACTIVE_IDENTITY_MAPPING_BOUND_TO_V21"
+      "postimage_ref": "manifests/total_field/w7tp_skill_id_binding_matrix_v2_3/BINDING_MATRIX.json",
+      "postimage_sha256": "dd6ade5882c03accbbb92589cfb4e591c116a0dddfb544a943bc10c1bfe63230",
+      "preimage_sha256": "f7009c496f6d96b73298457b5d5bf055d5e0d9fae20afe069042a89f9c39b130"
     },
     {
       "action": "SUPERSEDE_WITH_V23_CURRENT_FIELD_AFTER_FORMAL_REVIEW",
       "path": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
-      "state": "ACTIVE_FIELD_OLD_D6_D7_D8_MAPPING"
+      "postimage_sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9"
     },
     {
       "action": "G4_LAST_STEP_ONLY_AFTER_G1_G3_AND_PROMOTION_AUTHORITY",
       "path": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
-      "state": "ACTIVE_GLOBAL_POINTER_V21"
+      "postimage_sha256": "1c3c99631998a95d6909128a64bb68a40af00266b5bbb5cf5695938cf49a5aed"
+    },
+    {
+      "action": "REBIND_TO_V23_SUCCESSOR",
+      "content_constraints": {
+        "forbidden_literals": [
+          "D6 Sovereign Privacy Field",
+          "D7 Generative Transmission & Resource Routing Field"
+        ],
+        "required_literals": [
+          "active_canonical_binding"
+        ]
+      },
+      "downstream_validation": "PASS",
+      "path": "tools/d8_guard_eval.py",
+      "postimage_ref": "tools/d8_guard_eval.py",
+      "postimage_sha256": "d25ec846fccb3953975a71d893526a24ea368273b8056630fea4911fa4a0d4d3",
+      "preimage_sha256": "ba7fedc7cae1eb447fab2fd34d4018a01efb476a3b61017fb0ef30807c9e5b8b"
+    },
+    {
+      "action": "REBIND_TO_V23_SUCCESSOR",
+      "content_constraints": {
+        "forbidden_literals": [
+          "D6 Sovereign Privacy Field",
+          "D7 Generative Transmission & Resource Routing Field"
+        ],
+        "required_literals": [
+          "active_canonical_binding"
+        ]
+      },
+      "downstream_validation": "PASS",
+      "path": "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py",
+      "postimage_ref": "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py",
+      "postimage_sha256": "fcbdc42d3d32c3004cbb8adc3684ec1dba1abfc32ab174b7308b34fd22c7cf11",
+      "preimage_sha256": "ee65b21510eeec7bd523d4be35f005712b97baed603247fc4fd51994235c046e"
+    },
+    {
+      "action": "REBIND_TO_V23_SUCCESSOR",
+      "content_constraints": {
+        "forbidden_literals": [
+          "D6 Sovereign Privacy Field",
+          "D7 Generative Transmission & Resource Routing Field",
+          "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
+          "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json"
+        ],
+        "required_literals": [
+          "active_canonical_binding"
+        ]
+      },
+      "downstream_validation": "PASS",
+      "path": "tools/total_field/w7tp_intent_field_suite/cli.py",
+      "postimage_ref": "tools/total_field/w7tp_intent_field_suite/cli.py",
+      "postimage_sha256": "5bf0d36e715f1809ee690ab2f3f2f28353aa166345329ff9997655259357007d",
+      "preimage_sha256": "2ae1efc1106af00b1c7f15b55a70ae3c9341f64410ca45d272c848a0fdbd4177"
+    },
+    {
+      "action": "REBIND_TO_V23_SUCCESSOR",
+      "content_constraints": {
+        "forbidden_literals": [
+          "D6 Sovereign Privacy Field",
+          "D7 Generative Transmission & Resource Routing Field"
+        ],
+        "required_literals": [
+          "active_canonical_binding"
+        ]
+      },
+      "downstream_validation": "PASS",
+      "path": "tools/total_field/w7tp_intent_field_suite/edge_queue.py",
+      "postimage_ref": "tools/total_field/w7tp_intent_field_suite/edge_queue.py",
+      "postimage_sha256": "c3ec172ada7003ed7ed2733f80616902addcfdd4564d21aed65f250cdd3c1a21",
+      "preimage_sha256": "247ba4d139603c11091cd2abeb6fd737a5d09914fc9c1eda7d48e164569ec1a9"
+    },
+    {
+      "action": "RETIRE_FROM_ACTIVE_PATH; retain historical compatibility only",
+      "content_constraints": {
+        "forbidden_literals": [],
+        "required_literals": [
+          "Append-only V2.3 review-candidate to Canonical V2.1 adapter"
+        ]
+      },
+      "downstream_validation": "PASS",
+      "path": "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
+      "postimage_ref": "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
+      "postimage_sha256": "2aa249f39d452bbc6791db73c38001925eeeac695114a88edbcbbf66780fa9b5",
+      "preimage_sha256": "2aa249f39d452bbc6791db73c38001925eeeac695114a88edbcbbf66780fa9b5"
+    },
+    {
+      "action": "REBIND_TO_V23_SUCCESSOR",
+      "content_constraints": {
+        "forbidden_literals": [
+          "D6 Sovereign Privacy Field",
+          "D7 Generative Transmission & Resource Routing Field"
+        ],
+        "required_literals": [
+          "active_canonical_binding"
+        ]
+      },
+      "downstream_validation": "PASS",
+      "path": "tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "postimage_ref": "tools/total_field/w7tp_true8d_contract_sandbox.py",
+      "postimage_sha256": "29d99626487f870cba8785250ccc6302fba23e8193d0f9491e6c89a39cb8104e",
+      "preimage_sha256": "3d43d1a6815cee0f5a6cadfd660b4d319731028a1d88ea4ee175317c7829d20e"
+    },
+    {
+      "action": "REBIND_TO_V23_SUCCESSOR",
+      "content_constraints": {
+        "forbidden_literals": [
+          "D6 Sovereign Privacy Field",
+          "D7 Generative Transmission & Resource Routing Field"
+        ],
+        "required_literals": [
+          "active_canonical_binding"
+        ]
+      },
+      "downstream_validation": "PASS",
+      "path": "tools/total_field/wuchang_three_org_container_scene_bridge.py",
+      "postimage_ref": "tools/total_field/wuchang_three_org_container_scene_bridge.py",
+      "postimage_sha256": "a99936ebee03be971b396feee8637fdbac79e1c64a87fcf132e1e9a194ca15b2",
+      "preimage_sha256": "dbd44de14f3a072b898ee8b9588371bc1c32bd041487c09006e33999d949eec2"
     }
   ],
   "history_policy": "V2.1 strings in evidence, receipts, preimages, release archives, migration history, and legacy adapters are not rewritten merely to remove the version number.",
   "run_id": "T007_V23_GLOBAL_SUCCESSOR_20261002T124541Z",
-  "schema_id": "W7TP_V23_ACTIVE_CONSUMER_REBIND_MATRIX_CANDIDATE_V1",
-  "state": "CANDIDATE_REBIND_PLAN"
+  "state": "CANDIDATE_REBIND_EVIDENCE"
 }

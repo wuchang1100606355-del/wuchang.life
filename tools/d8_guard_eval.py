@@ -11,13 +11,20 @@ import sys
 import uuid
 from pathlib import Path
 
+from tools.total_field.w7tp_v2_3_candidate_source import (
+    CONTRACT_REF as V23_CANDIDATE_CONTRACT_REF,
+    active_canonical_binding,
+    candidate_source_binding,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 RANK = {"PASS": 0, "INFO": 1, "WARN": 2, "HOLD": 3, "BLOCK": 4}
 LEGACY_GTP_CANONICAL_V2 = "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"
 LEGACY_GTP_CANONICAL_V2_SHA256 = "a5281f229ced0943072cce373125be16f0d361b9352a71094ad5450a6022d5d0"
-ACTIVE_GTP_CANONICAL = "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md"
-ACTIVE_GTP_CANONICAL_SHA256 = "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d"
+_ACTIVE_GTP_BINDING = active_canonical_binding()
+ACTIVE_GTP_CANONICAL = _ACTIVE_GTP_BINDING["canonical_path"]
+ACTIVE_GTP_CANONICAL_SHA256 = _ACTIVE_GTP_BINDING["canonical_sha256"]
 GTP_TECHNICAL_DRIFT_ALERT_ID = "D8_WRITEBACK_ALERT_GTP_TECHNICAL_DEFINITION_DRIFT"
 GTP_TECHNICAL_DRIFT_RULES = {
     "GTP-TD-001": {
@@ -33,7 +40,7 @@ GTP_TECHNICAL_DRIFT_RULES = {
     "GTP-TD-003": {
         "severity": "BLOCK",
         "canonical_reference": f"{ACTIVE_GTP_CANONICAL}:54-71,362",
-        "correction": "Preserve D1-D8 as eight fixed governance dimensions of one packet instead of eight flat fields.",
+        "correction": "Preserve D1-D8 as eight simultaneously coupled views of one dynamic state field; do not reduce them to eight steps, fixed fields, or isolated modules.",
     },
     "GTP-TD-004": {
         "severity": "BLOCK",
@@ -785,6 +792,7 @@ def scan_technical_definition_drift(
         "evidence_sha256": evidence_sha256,
         "active_canonical": ACTIVE_GTP_CANONICAL,
         "active_canonical_sha256": ACTIVE_GTP_CANONICAL_SHA256,
+        "successor_candidate_source": candidate_source_binding(),
         "non_executable": True,
         "writeback": False,
     }
@@ -1022,6 +1030,8 @@ def _path_context_class(path: Path, text: str) -> str | None:
     name = path.name.lower()
     if relative == ACTIVE_GTP_CANONICAL:
         return "active_canonical_reference"
+    if relative == V23_CANDIDATE_CONTRACT_REF:
+        return "candidate_source_reference"
     if relative == LEGACY_GTP_CANONICAL_V2:
         return "legacy_canonical_parent"
     if "tests" in parts or "fixtures" in parts or name.startswith("test_") or name.endswith("_test.py"):
@@ -1350,6 +1360,7 @@ def run_full_deterministic_drift_scan(
             f"{ACTIVE_GTP_CANONICAL}@sha256:{ACTIVE_GTP_CANONICAL_SHA256}",
             f"{LEGACY_GTP_CANONICAL_V2}@sha256:{LEGACY_GTP_CANONICAL_V2_SHA256}",
         ],
+        "successor_candidate_source": candidate_source_binding(),
         "binding_checks": binding_checks,
         "manifest_binding": "UNBOUND_NO_DIRECT_FILE_REFERENCE",
         "matcher_sha256_before_report": _sha256_file(Path(__file__)),

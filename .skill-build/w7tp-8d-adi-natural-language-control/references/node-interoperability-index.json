@@ -1,0 +1,62 @@
+{
+  "schema": "w7tp-node-skill-interoperability/1",
+  "authority": "CANDIDATE_NAVIGATION_ONLY",
+  "design_version": "V2.3",
+  "semantics": "8_IN_1_SINGLE_STATE_FIELD",
+  "node": "taiji01",
+  "observed_at_utc": "2026-09-27T06:34:05.297009+00:00",
+  "skill_path": "/home/taiji_admin/.codex/skills/w7tp-8d-adi-natural-language-control",
+  "skill_sha256": "7c163acf289d6020952cacacd8a292d4eaa7334de87261d0bc34e6fb25c1208b",
+  "contract_sha256": "be916ceb0b8c2bbe4c89e813bfd024571adf59c8e3b46cf478d166f91c9f0317",
+  "previous_skill_sha256": "2177c5b8a5ba7b2aacf0cc555a2bb8680b5829c24aa4af5a34e4f396c4cf4996",
+  "previous_ref": "/home/taiji_admin/.codex/skill-backups/w7tp-8d-adi-natural-language-control-20260927T063405Z",
+  "runtime_effect_verified": false,
+  "peers": [
+    {
+      "node": "taiji01",
+      "device_id": "0a8cb96c-0944-459c-9af3-bc2aeb70aacf",
+      "skill_path": "/home/taiji_admin/.codex/skills/w7tp-8d-adi-natural-language-control",
+      "skill_sha256": "7c163acf289d6020952cacacd8a292d4eaa7334de87261d0bc34e6fb25c1208b",
+      "updated_at_utc": "2026-09-27T06:34:05.297009+00:00",
+      "role": "EXISTING_TOTAL_FIELD_CAPABILITY_OWNER_AND_AUTHORITY_ENTRY",
+      "evidence_class": "OBSERVED_AUTHORIZED_API",
+      "stage": "INSTALLED_SOURCE_VERIFIED",
+      "runtime_effect_verified": false
+    },
+    {
+      "node": "MSI",
+      "device_id": "7914d170-9245-4177-bb12-54aae2ab2631",
+      "skill_path": "/home/taiji_admin/.codex/skills/w7tp-8d-adi-natural-language-control",
+      "skill_sha256": "fff0f54bf6cd949dbdfe24a9690edf4985abcb6db5c8114e098d0f88313198fe",
+      "updated_at_utc": "2026-09-27T06:34:30.595574+00:00",
+      "role": "AUTHORIZED_DEVELOPER_PROBE_AND_CANDIDATE_PROVIDER",
+      "evidence_class": "PEER_AGENT_OBSERVED_AUTHORIZED_API",
+      "stage": "INSTALLED_SOURCE_VERIFIED",
+      "runtime_effect_verified": false
+    },
+    {
+      "node": "taiji03",
+      "device_id": "e07385cc-8861-4c68-a512-599e20dc58ba",
+      "skill_path": "/home/lenovo/.codex/skills/w7tp-8d-adi-natural-language-control",
+      "skill_sha256": "c8bba2a26faac0b46e4a4c7763e25842e60a2bf76f993b8c20048ea7bac954dc",
+      "updated_at_utc": "2026-09-27T06:34:06.859699+00:00",
+      "role": "BOUNDED_TARGET_NODE_NO_INDEPENDENT_TOTAL_FIELD",
+      "evidence_class": "OBSERVED_AUTHORIZED_API",
+      "stage": "INSTALLED_SOURCE_VERIFIED",
+      "runtime_effect_verified": false
+    }
+  ],
+  "invalidates": [
+    "prior current-readiness assertions depending on changed skill or contract"
+  ],
+  "not_modified": [
+    "production services",
+    "native ADI",
+    "Total Field pointers",
+    "T-014"
+  ],
+  "peer_binding_updated_at_utc": "2026-09-27T06:35:18.582908+00:00",
+  "source_reference_only": true,
+  "automatic_authority": false,
+  "previous_index_ref": "/home/taiji_admin/.codex/skills/w7tp-8d-adi-natural-language-control/references/node-interoperability-index.previous-20260927T063518Z.json"
+}

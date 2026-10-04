@@ -32,6 +32,10 @@ from tools.total_field.xiaoj_member_bound_session_candidate import (
     receive_cloud_fragment,
 )
 from tools.total_field_candidate_gateway import receive_candidate
+from tools.total_field.w7tp_v2_3_candidate_source import (
+    active_canonical_binding,
+    candidate_source_binding,
+)
 
 
 DEFAULT_MAP_PATH = Path("configs/total_field/wuchang_three_org_container_scene_map.json")
@@ -42,17 +46,12 @@ XIAOJ_DEVELOPER_CARD_REF = (
     "manifest_ref:xiaoj_member_bound_developer_seat_candidate_v0_1"
 )
 ROOKIE_MESSAGE = "這個我不懂，我只是個菜鳥，我幫你問店長或學長"
-CANONICAL_V2_1_ID = (
-    "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1"
-)
-CANONICAL_V2_1_VERSION = "2.1"
-CANONICAL_V2_1_PATH = (
-    "docs/total_field/"
-    "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md"
-)
-CANONICAL_V2_1_SHA256 = (
-    "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d"
-)
+_ACTIVE_CANONICAL_BINDING = active_canonical_binding()
+# Compatibility names retained for callers; values now come from the active pointer.
+CANONICAL_V2_1_ID = _ACTIVE_CANONICAL_BINDING["canonical_id"]
+CANONICAL_V2_1_VERSION = _ACTIVE_CANONICAL_BINDING["version"]
+CANONICAL_V2_1_PATH = _ACTIVE_CANONICAL_BINDING["canonical_path"]
+CANONICAL_V2_1_SHA256 = _ACTIVE_CANONICAL_BINDING["canonical_sha256"]
 PARENT_CANONICAL_V2_PATH = (
     "docs/total_field/"
     "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"
@@ -120,6 +119,12 @@ def _canonical_v2_1_binding() -> Dict[str, Any]:
         "parent_sha256": PARENT_CANONICAL_V2_SHA256,
         "migration_mode": "APPEND_ONLY_SUCCESSOR",
     }
+
+
+def _successor_candidate_binding() -> Dict[str, Any]:
+    """Bind V2.3 as candidate evidence while V2.1 remains formal authority."""
+
+    return candidate_source_binding()
 
 
 def _append_only_lineage(packet_id: str, packet_hash: str) -> Dict[str, Any]:
@@ -838,6 +843,7 @@ def build_eight_d_media_transport_packet(
     )
 
     return {
+        "successor_candidate_source": _successor_candidate_binding(),
         "canonical_id": CANONICAL_V2_1_ID,
         "version": CANONICAL_V2_1_VERSION,
         "canonical_binding": _canonical_v2_1_binding(),
@@ -1077,6 +1083,7 @@ def build_audiovisual_natural_language_service_candidate(
         "d8_envelope": envelope_verification
     }
     eight_d_packet = {
+        "successor_candidate_source": _successor_candidate_binding(),
         "canonical_id": CANONICAL_V2_1_ID,
         "version": CANONICAL_V2_1_VERSION,
         "canonical_binding": _canonical_v2_1_binding(),
@@ -1684,6 +1691,7 @@ def build_three_org_scene_candidate(
         "d8_envelope": envelope_verification
     }
     eight_d_packet = {
+        "successor_candidate_source": _successor_candidate_binding(),
         "canonical_id": CANONICAL_V2_1_ID,
         "version": CANONICAL_V2_1_VERSION,
         "canonical_binding": _canonical_v2_1_binding(),

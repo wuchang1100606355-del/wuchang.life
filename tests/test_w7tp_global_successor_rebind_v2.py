@@ -253,15 +253,10 @@ class GlobalSuccessorRebindV2Test(unittest.TestCase):
             native_adi_loader=lambda _: self.atom,
         )
 
-    def test_global_mode_passes_candidate_only_and_keeps_formal_false(self) -> None:
+    def test_global_mode_rejects_obsolete_root_only_g2_semantics(self) -> None:
         result = self._review()
-        self.assertEqual(result["decision"], reviewer.DECISION_APPROVED)
-        self.assertFalse(result["formal"])
-        self.assertEqual(
-            result["decision_document"]["review_scope"],
-            reviewer.GLOBAL_REVIEW_SCOPE,
-        )
-        self.assertTrue(all(v == "PASS" for v in result["receipt_document"]["checks"].values()))
+        self.assertEqual(result["decision"], reviewer.DECISION_REJECTED)
+        self.assertEqual(result["reason_codes"], ["REJECT_G2_COMPLETION_MANIFEST_MISSING"])
 
     def test_pointer_hash_drift_fails_closed(self) -> None:
         pointer = self.root / "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"
@@ -270,32 +265,11 @@ class GlobalSuccessorRebindV2Test(unittest.TestCase):
         self.assertEqual(result["decision"], reviewer.DECISION_HOLD)
         self.assertEqual(result["reason_codes"], ["HOLD_CANONICAL_PREIMAGE_HASH_OR_PATH"])
 
-    def test_global_test_seal_preserves_package_and_dynamic_context_binding(self) -> None:
+    def test_obsolete_root_only_g2_mode_is_not_seal_eligible(self) -> None:
         result = self._review()
-        decision_path = self.root / "decision.json"
-        receipt_path = self.root / "receipt.json"
-        write_json(decision_path, result["decision_document"])
-        write_json(receipt_path, result["receipt_document"])
-        request = json.loads(self.request_path.read_text(encoding="utf-8"))
-        seal = sealer.create_seal(
-            manifest_path=self.root / request["candidate_root"] / "SHA256_MANIFEST.json",
-            manifest_sha256=request["manifest_sha256"],
-            decision_path=decision_path,
-            receipt_path=receipt_path,
-            authority_pointer_path=self.root / request["authority_pointer_ref"],
-            authority_pointer_sha256=request["authority_pointer_sha256"],
-            repo_root=self.root,
-            now=self.now + timedelta(seconds=10),
-            test_mode=True,
-            tracked_checker=lambda _: True,
-        )
-        self.assertEqual(seal["schema_version"], sealer.GLOBAL_SEAL_SCHEMA_VERSION)
-        self.assertEqual(seal["seal_state"], "TEST_SEAL_ONLY")
-        self.assertFalse(seal["formal"])
-        self.assertEqual(
-            seal["package_binding_sha256"],
-            result["decision_document"]["package_binding_sha256"],
-        )
+        self.assertEqual(result["decision"], reviewer.DECISION_REJECTED)
+        self.assertIsNone(result["decision_document"])
+        self.assertIsNone(result["receipt_document"])
 
 
 if __name__ == "__main__":

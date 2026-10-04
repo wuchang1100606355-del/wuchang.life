@@ -1,0 +1,349 @@
+{
+  "schema_version": "W7TP-RDC-EQUIVALENT-CAPABILITY-ORGAN/1.0",
+  "status": "IMPLEMENTATION_CANDIDATE",
+  "canonical_promotion": false,
+  "generated_at": "2026-10-01T10:20:29.738803+00:00",
+  "source": {
+    "name": "Remote Desktop Commander（遠端桌面指揮官）",
+    "source_role": "EXTERNAL_CAPABILITY_REFERENCE",
+    "source_runtime_authority": "NONE",
+    "semantic_dependency_required": false,
+    "compatibility_transport_available": true
+  },
+  "target": {
+    "capability_id": "capability:w7tp:8d-adi-remote-desktop-organ:v1",
+    "native_runtime": "native_claw（原生作用執行器）",
+    "service_addressing": "SERVICE_REF_OR_DOMAIN_REF_ONLY",
+    "direct_ip_port_client_path": false,
+    "target_runtime_source_dependency": false
+  },
+  "pipeline": [
+    "Natural Language / Web / Odoo（自然語言／網頁／企業資源規劃系統）",
+    "Translation LLM（自然語言轉譯大型語言模型）",
+    "Persistent Command Set（常態指令集）",
+    "Local Command Cache（本地指令快取）",
+    "8D ADI Joint Field（8D ADI 聯合狀態場）",
+    "Origin Cell State Packet（原胞狀態封包）",
+    "Optional Cloud Candidate Completion（可選雲端候選補全）",
+    "Local 8D Revalidation（本地 8D 重驗證）",
+    "D8 Authority Gate（D8 權威閘門）",
+    "native_claw / compatibility transport（原生作用執行器／相容傳輸）",
+    "D4 Evidence Receipt（D4 證據收據）"
+  ],
+  "8d_mapping": {
+    "D1_INTENT": "自然語言／按鈕／Odoo 動作轉成 COMMAND_ID 與可觀測完成條件。",
+    "D2_STATE": "節點、程序、檔案、設定、搜尋工作階段與目標服務的目前／目標／未知狀態。",
+    "D3_COORDINATE": "DEVICE_REF、SERVICE_REF、PATH_REF、PID_REF、SESSION_REF、SEARCH_REF、CONFIG_REF；不以 IP:Port 作正式服務身份。",
+    "D4_EVIDENCE": "工具呼叫輸入摘要、輸出摘要、前後狀態、雜湊、程序碼、錯誤、收據鏈。",
+    "D5_EXECUTION_POLICY": "依工具與實際命令分類 READ_ONLY／TOOL_LOCAL_TRANSIENT／MUTATION／ACTIVATION／DESTRUCTIVE_CONTROL／EXTERNAL_MESSAGE。",
+    "D7_RISK_ISOLATION": "工具離線不等於節點離線；動態命令先分類；危險作用要求前像、回復座標與精確作用範圍。",
+    "D8_AUTHORITY": "外部工具、管理者、裝置可達性與工具 allow 均不創造權威；正式作用必須帶精確 AUTHORITY_REF。",
+    "D6_GENERATIVE_STATE_TRANSMISSION": "生成式狀態傳輸；跨節點可用任務最小狀態原胞、參照、版本與雜湊作為重構機制。差異分析不是傳輸技術；同節點本地讀取不強制走 D6。"
+  },
+  "tool_contracts": [
+    {
+      "source_tool": "list_devices",
+      "command_id": "rdc.device.list",
+      "class": "READ_ONLY",
+      "native_target": "node.registry.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "who_am_i",
+      "command_id": "rdc.identity.observe",
+      "class": "READ_ONLY",
+      "native_target": "capability.session.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "ping",
+      "command_id": "rdc.device.ping",
+      "class": "READ_ONLY",
+      "native_target": "node.reachability.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "get_config",
+      "command_id": "rdc.config.read",
+      "class": "READ_ONLY",
+      "native_target": "node.config.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "read_file",
+      "command_id": "rdc.file.read",
+      "class": "READ_ONLY",
+      "native_target": "node.file.read",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "read_multiple_files",
+      "command_id": "rdc.file.read_many",
+      "class": "READ_ONLY",
+      "native_target": "node.file.read_many",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "list_directory",
+      "command_id": "rdc.directory.list",
+      "class": "READ_ONLY",
+      "native_target": "node.directory.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "get_file_info",
+      "command_id": "rdc.file.stat",
+      "class": "READ_ONLY",
+      "native_target": "node.file.metadata.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "start_search",
+      "command_id": "rdc.search.start",
+      "class": "TOOL_LOCAL_TRANSIENT",
+      "native_target": "node.search.start",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "get_more_search_results",
+      "command_id": "rdc.search.more",
+      "class": "READ_ONLY",
+      "native_target": "node.search.read",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "stop_search",
+      "command_id": "rdc.search.stop",
+      "class": "TOOL_LOCAL_TRANSIENT",
+      "native_target": "node.search.stop",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "list_searches",
+      "command_id": "rdc.search.list",
+      "class": "READ_ONLY",
+      "native_target": "node.search.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "list_sessions",
+      "command_id": "rdc.process.sessions",
+      "class": "READ_ONLY",
+      "native_target": "node.process.session.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "list_processes",
+      "command_id": "rdc.process.list",
+      "class": "READ_ONLY",
+      "native_target": "node.process.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "get_usage_stats",
+      "command_id": "rdc.capability.usage",
+      "class": "READ_ONLY",
+      "native_target": "capability.usage.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "get_recent_tool_calls",
+      "command_id": "rdc.evidence.recent_calls",
+      "class": "READ_ONLY",
+      "native_target": "evidence.tool_call.observe",
+      "preimage_required": false,
+      "d8_required": false
+    },
+    {
+      "source_tool": "get_prompts",
+      "command_id": "rdc.helper.prompt",
+      "class": "CONTROLLED_HELPER",
+      "native_target": "capability.help.resolve",
+      "preimage_required": false,
+      "d8_required": "DYNAMIC_BY_EFFECT"
+    },
+    {
+      "source_tool": "set_config_value",
+      "command_id": "rdc.config.write",
+      "class": "MUTATION",
+      "native_target": "node.config.apply",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "write_file",
+      "command_id": "rdc.file.write",
+      "class": "MUTATION",
+      "native_target": "node.file.write",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "write_pdf",
+      "command_id": "rdc.file.write_pdf",
+      "class": "MUTATION",
+      "native_target": "node.file.write_pdf",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "create_directory",
+      "command_id": "rdc.directory.create",
+      "class": "MUTATION",
+      "native_target": "node.directory.create",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "move_file",
+      "command_id": "rdc.file.move",
+      "class": "MUTATION",
+      "native_target": "node.file.move",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "edit_block",
+      "command_id": "rdc.file.edit_block",
+      "class": "MUTATION",
+      "native_target": "node.file.patch",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "start_process",
+      "command_id": "rdc.process.start",
+      "class": "DYNAMIC_EFFECT",
+      "native_target": "node.process.execute",
+      "preimage_required": "DYNAMIC_BY_COMMAND",
+      "d8_required": "DYNAMIC_BY_COMMAND"
+    },
+    {
+      "source_tool": "interact_with_process",
+      "command_id": "rdc.process.interact",
+      "class": "DYNAMIC_EFFECT",
+      "native_target": "node.process.interact",
+      "preimage_required": "DYNAMIC_BY_INPUT",
+      "d8_required": "DYNAMIC_BY_INPUT"
+    },
+    {
+      "source_tool": "force_terminate",
+      "command_id": "rdc.process.force_terminate",
+      "class": "DESTRUCTIVE_CONTROL",
+      "native_target": "node.process.force_terminate",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "kill_process",
+      "command_id": "rdc.process.kill",
+      "class": "DESTRUCTIVE_CONTROL",
+      "native_target": "node.process.kill",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "shutdown",
+      "command_id": "rdc.device.shutdown",
+      "class": "DESTRUCTIVE_CONTROL",
+      "native_target": "node.device.shutdown",
+      "preimage_required": true,
+      "d8_required": true
+    },
+    {
+      "source_tool": "give_feedback_to_desktop_commander",
+      "command_id": "rdc.external.feedback",
+      "class": "EXTERNAL_MESSAGE",
+      "native_target": "external.feedback.submit",
+      "preimage_required": false,
+      "d8_required": true
+    }
+  ],
+  "dynamic_effect_rules": {
+    "start_process": "先解析命令的實際效果；純查詢可 READ_ONLY，寫檔／服務控制／安裝／設定變更必須重新分類並走相應 D8。",
+    "interact_with_process": "輸入可能觸發既有程序的寫入、部署、付款或其他效果，不得沿用程序啟動時的舊分類。",
+    "get_prompts": "若只取說明屬 helper；若提示執行導致工具效果，必須按最終效果重新分類。"
+  },
+  "cloud_completion": {
+    "allowed": "只補缺失關係、候選命令映射、非權威推理與候選風險。",
+    "forbidden": [
+      "創造 D8 授權",
+      "虛構檔案／程序／設備現況",
+      "補自然人或組織身份事實",
+      "自行將 UNKNOWN 變成 OBSERVED_FACT"
+    ],
+    "output_state": "HYPOTHESIS_OR_CANDIDATE_ONLY"
+  },
+  "command_cache": {
+    "source_of_truth": "PERSISTENT_COMMAND_SET",
+    "cache_is_authority": false,
+    "cache_key": [
+      "ORG_ID",
+      "ROLE",
+      "SEAT",
+      "TASK",
+      "COMMAND_ID",
+      "VERSION",
+      "DEVICE_REF"
+    ],
+    "store": [
+      "COMMAND_ID",
+      "EFFECT_CLASS",
+      "TARGET_CAPABILITY_REF",
+      "SERVICE_REF",
+      "INPUT_SCHEMA_REF",
+      "PRECONDITION_REFS",
+      "VERSION",
+      "CONTENT_HASH",
+      "INVALIDATION_EPOCH"
+    ],
+    "never_store": [
+      "D8_TOKEN",
+      "PASSWORD",
+      "API_KEY",
+      "RAW_CREDENTIAL",
+      "PERSONAL_PLAINTEXT",
+      "HOST_IP_AS_SERVICE_ID",
+      "PORT_AS_SERVICE_ID"
+    ]
+  },
+  "redteam_invariants": [
+    "TOOL_AVAILABLE != AUTHORIZED",
+    "DEVICE_ONLINE != SERVICE_HEALTHY",
+    "PLUGIN_OFFLINE != DEVICE_OFFLINE",
+    "COMMAND_SUCCESS != DESIRED_EFFECT_VERIFIED",
+    "READ_OUTPUT != CURRENT_TRUTH_UNLESS_COORDINATE_AND_TIME_MATCH",
+    "PROCESS_PID != STABLE_IDENTITY",
+    "IP_REACHABILITY != D8_AUTHORITY",
+    "COMPATIBILITY_TRANSPORT != CANONICAL_RUNTIME"
+  ],
+  "transport_reconstruction": {
+    "compatibility_rdc": {
+      "purpose": "保留現有 Remote Desktop Commander 相容能力",
+      "source_runtime_dependency": true,
+      "authority_inherited": false
+    },
+    "native_claw": {
+      "purpose": "W7TP 原生等價作用器",
+      "source_runtime_dependency": false,
+      "addressing": "SERVICE_REF_ONLY",
+      "authority_inherited": false
+    },
+    "equivalence_rule": "同一 COMMAND_ID／Effect Envelope 語意不因底層 transport 改變；不同 transport 只負責作用送達與 D4 收據。"
+  }
+}

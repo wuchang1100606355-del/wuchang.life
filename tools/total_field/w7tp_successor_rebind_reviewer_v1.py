@@ -30,7 +30,7 @@ from tools.total_field.w7tp_founder_passkey_v1 import (
 )
 
 
-REVIEWER_VERSION = "w7tp-successor-rebind-reviewer/1.1-global-canonical-successor"
+REVIEWER_VERSION = "w7tp-successor-rebind-reviewer/1.3-t007-task-state-d6-hardening"
 REQUEST_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-REVIEW-REQUEST/1.0"
 DECISION_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-DECISION/1.0"
 RECEIPT_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-RECEIPT/1.0"
@@ -48,24 +48,70 @@ GLOBAL_REQUEST_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-REVIEW-REQUES
 GLOBAL_DECISION_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-DECISION/2.0"
 GLOBAL_RECEIPT_SCHEMA_VERSION = "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-RECEIPT/2.0"
 GLOBAL_REVIEW_SCOPE = "GLOBAL_CANONICAL_SUCCESSOR"
+GLOBAL_REVIEW_COMPLETION_DIR = "review_completion_20261002T184158Z"
 GLOBAL_REQUIRED_PACKAGE_FILES = {
     "founder_directive": "00_FOUNDER_DIRECTIVE.json",
-    "successor_contract": "01_V23_GLOBAL_SUCCESSOR_CONTRACT_CANDIDATE.json",
-    "current_field_successor": "02_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE.json",
+    "successor_contract": f"{GLOBAL_REVIEW_COMPLETION_DIR}/GLOBAL_SUCCESSOR_CONTRACT.json",
+    "current_field_successor": f"{GLOBAL_REVIEW_COMPLETION_DIR}/CURRENT_8D_FIELD_SUCCESSOR.json",
     "consumer_rebind_matrix": "03_ACTIVE_CONSUMER_REBIND_MATRIX.json",
-    "authority_successor_receipt": "04_AUTHORITY_POINTER_SUCCESSOR_RECEIPT_CANDIDATE.json",
+    "authority_successor_receipt": f"{GLOBAL_REVIEW_COMPLETION_DIR}/AUTHORITY_SUCCESSOR_RECEIPT_CANDIDATE.json",
 }
+GLOBAL_COMPLETION_MANIFEST_FILES = frozenset(
+    {
+        "AUTHORITY_SUCCESSOR_RECEIPT_CANDIDATE.json",
+        "CURRENT_8D_FIELD_SUCCESSOR.json",
+        "GLOBAL_SUCCESSOR_CONTRACT.json",
+        "REGRESSION_SPEC.md",
+        "REOBSERVATION.json",
+        "REOBSERVATION_REVIEWER_EXTENSION_20261003.json",
+        "validate_candidate.py",
+    }
+)
 GLOBAL_REQUIRED_ACTIVE_CONSUMERS = frozenset(
     {
         "tools/d8_guard_eval.py",
         "tools/total_field/w7tp_intent_field_suite/edge_queue.py",
         "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py",
         "tools/total_field/w7tp_intent_field_suite/cli.py",
+        "tools/total_field/w7tp_true8d_contract_sandbox.py",
         "tools/total_field/wuchang_three_org_container_scene_bridge.py",
         "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
         "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json",
         "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
         "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    }
+)
+GLOBAL_POSTIMAGE_CONSUMER_PREIMAGES = {
+    "tools/d8_guard_eval.py": "ba7fedc7cae1eb447fab2fd34d4018a01efb476a3b61017fb0ef30807c9e5b8b",
+    "tools/total_field/w7tp_intent_field_suite/edge_queue.py": "247ba4d139603c11091cd2abeb6fd737a5d09914fc9c1eda7d48e164569ec1a9",
+    "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py": "ee65b21510eeec7bd523d4be35f005712b97baed603247fc4fd51994235c046e",
+    "tools/total_field/w7tp_intent_field_suite/cli.py": "2ae1efc1106af00b1c7f15b55a70ae3c9341f64410ca45d272c848a0fdbd4177",
+    "tools/total_field/w7tp_true8d_contract_sandbox.py": "3d43d1a6815cee0f5a6cadfd660b4d319731028a1d88ea4ee175317c7829d20e",
+    "tools/total_field/wuchang_three_org_container_scene_bridge.py": "dbd44de14f3a072b898ee8b9588371bc1c32bd041487c09006e33999d949eec2",
+    "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py": "2aa249f39d452bbc6791db73c38001925eeeac695114a88edbcbbf66780fa9b5",
+    "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json": "f7009c496f6d96b73298457b5d5bf055d5e0d9fae20afe069042a89f9c39b130",
+}
+GLOBAL_RETIRED_ADAPTER = "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py"
+GLOBAL_SKILL_MATRIX_PREDECESSOR = (
+    "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json"
+)
+GLOBAL_SUCCESSOR_ID = "W7TP_8D_ADI_V2_3"
+GLOBAL_ACTIVE_BINDING_LITERAL = "active_canonical_binding"
+GLOBAL_OLD_ACTIVE_DIMENSION_LITERALS = frozenset(
+    {
+        "D6 Sovereign Privacy Field",
+        "D7 Generative Transmission & Resource Routing Field",
+    }
+)
+GLOBAL_SKILL_SCOPE_SCHEMA = "W7TP-SKILL-BINDING-MATRIX/2.3/1.0"
+GLOBAL_SKILL_SCOPE_ROOTS = (".skill-build", "capabilities")
+GLOBAL_NATIVE_SKILL_INDEX_REF = "capabilities/W7TP_NATIVE_SKILLS_INDEX.json"
+GLOBAL_SKILL_BINDING_STATES = frozenset(
+    {
+        "ACTIVE_EXECUTABLE",
+        "REGISTERED_NATIVE",
+        "REFERENCED_BY_ACTIVE_RUNTIME",
+        "SOURCE_PRESENT",
     }
 )
 NON_EXECUTION_FIELDS = frozenset(
@@ -450,6 +496,8 @@ def _validate_global_dynamic_context(
     atom: dict[str, Any],
     reviewed_at: datetime,
 ) -> None:
+    """Validate either the existing task-state Dynamic Context atom or the legacy bootstrap atom."""
+
     binding = request["dynamic_context"]
     if atom.get("record_sha256") != binding["record_sha256"]:
         raise SuccessorRebindReviewError(
@@ -465,13 +513,42 @@ def _validate_global_dynamic_context(
             "REJECT_NATIVE_ADI_TIME_SLOT_INVALID",
             "$.dynamic_context",
         ) from exc
-    age = (reviewed_at - atom_time).total_seconds()
-    if age < -MAX_CLOCK_SKEW_SECONDS or age > binding["maximum_age_seconds"]:
-        raise SuccessorRebindReviewError(
-            DECISION_HOLD,
-            "HOLD_NATIVE_ADI_DYNAMIC_CONTEXT_NOT_FRESH",
-            "$.dynamic_context.maximum_age_seconds",
+    record_id = binding["adi_record_id"]
+    if record_id.startswith("task-state:T-007:"):
+        pulled_at = parse_utc(
+            binding.get("pulled_at"),
+            "$.dynamic_context.pulled_at",
         )
+        pull_age = (reviewed_at - pulled_at).total_seconds()
+        if (
+            pull_age < -MAX_CLOCK_SKEW_SECONDS
+            or pull_age > binding["maximum_age_seconds"]
+            or atom_time > pulled_at + timedelta(seconds=MAX_CLOCK_SKEW_SECONDS)
+        ):
+            raise SuccessorRebindReviewError(
+                DECISION_HOLD,
+                "HOLD_NATIVE_ADI_DYNAMIC_CONTEXT_NOT_FRESH",
+                "$.dynamic_context.pulled_at",
+            )
+        packet_sha = binding.get("packet_sha256")
+        context_ref = binding.get("context_ref")
+        if (
+            HEX64.fullmatch(str(packet_sha or "")) is None
+            or context_ref != f"context:task-state:T-007:{packet_sha[:16]}"
+        ):
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_NATIVE_ADI_DYNAMIC_CONTEXT_PULL_BINDING",
+                "$.dynamic_context.context_ref",
+            )
+    else:
+        age = (reviewed_at - atom_time).total_seconds()
+        if age < -MAX_CLOCK_SKEW_SECONDS or age > binding["maximum_age_seconds"]:
+            raise SuccessorRebindReviewError(
+                DECISION_HOLD,
+                "HOLD_NATIVE_ADI_DYNAMIC_CONTEXT_NOT_FRESH",
+                "$.dynamic_context.maximum_age_seconds",
+            )
 
     payload = atom.get("payload")
     if not isinstance(payload, dict):
@@ -480,42 +557,725 @@ def _validate_global_dynamic_context(
             "REJECT_NATIVE_ADI_PAYLOAD_INVALID",
             "$.dynamic_context",
         )
-    exact = {
-        ("CURRENT_CONTEXT_ELIGIBLE",): True,
-        ("DYNAMIC_CONTEXT_ELIGIBLE",): True,
-        ("RUNTIME_DECISION_ELIGIBLE",): True,
-        ("D1_INTENT", "task_ref"): "task:T-007",
-        ("D2_STATE", "active_machine_pointer_version"): "2.1",
-        ("D3_COORDINATE", "node"): "taiji01",
-        ("D3_COORDINATE", "candidate_root"): request["candidate_root"],
-        ("D3_COORDINATE", "canonical_pointer_ref"): request["canonical_ref"],
-        ("D4_EVIDENCE", "candidate_manifest_sha256"): request["manifest_sha256"],
-        ("D4_EVIDENCE", "canonical_pointer_sha256"): request["predecessor_pointer_sha256"],
-        ("D4_EVIDENCE", "current_field_sha256"): request["live_bindings"]["current_field"]["sha256"],
-        ("D4_EVIDENCE", "current_field_router_sha256"): request["live_bindings"]["current_field_router"]["sha256"],
-        ("D4_EVIDENCE", "total_field_authority_sha256"): request["authority_pointer_sha256"],
-        ("D5_EXECUTION", "canonical_pointer_change"): False,
-        ("D7_RISK", "fail_closed_on_source_hash_drift"): True,
-        ("D8_AUTHORITY", "candidate_only"): True,
-        ("D8_AUTHORITY", "canonical"): False,
-        ("D8_AUTHORITY", "promotion_authorized_by_this_record"): False,
-    }
-    for path, expected in exact.items():
-        current: Any = payload
-        for key in path:
-            if not isinstance(current, dict) or key not in current:
+
+    def require_exact(exact: dict[tuple[str, ...], Any]) -> None:
+        for path, expected in exact.items():
+            current: Any = payload
+            for key in path:
+                if not isinstance(current, dict) or key not in current:
+                    raise SuccessorRebindReviewError(
+                        DECISION_REJECTED,
+                        "REJECT_NATIVE_ADI_DYNAMIC_CONTEXT_SCOPE",
+                        "$.dynamic_context." + ".".join(path),
+                    )
+                current = current[key]
+            if current != expected:
                 raise SuccessorRebindReviewError(
                     DECISION_REJECTED,
                     "REJECT_NATIVE_ADI_DYNAMIC_CONTEXT_SCOPE",
                     "$.dynamic_context." + ".".join(path),
                 )
-            current = current[key]
-        if current != expected:
+
+    record_id = binding["adi_record_id"]
+    if record_id.startswith("task-state:T-007:"):
+        require_exact(
+            {
+                ("knowledge_type",): "OBSERVED_TASK_STATE_COORDINATE",
+                ("state",): "TASK_STATE_SNAPSHOT_INDEXED",
+                ("D1_INTENT", "task_ref"): "task:T-007",
+                ("D2_STATE", "current"): "DOING",
+                ("D3_COORDINATE", "git_branch"): "codex/current-live-state-consolidation-20260915",
+                ("D5_EXECUTION", "reconstruction_scope"): "LOCAL_TASK_STATE_ONLY",
+                ("D5_EXECUTION", "task_dirty_zero_required"): True,
+                ("D6_GST", "packet_contract"): "ORIGIN_STATE_MINIMUM_PACKET",
+                ("D6_GST", "reconstruction"): "LOCAL_VOLATILE_ON_PULL",
+                ("D6_GST", "rule_body_location"): "LOCAL_ONLY",
+                ("D6_GST", "rule_ref"): "local-rule:w7tp-task-state-ledger-reconstruction/v1",
+                ("D6_GST", "compression"): False,
+                ("D6_GST", "differential"): False,
+                ("D7_RISK", "source_hash_drift"): "FAIL_CLOSED",
+                ("D7_RISK", "missing_action_ref"): "FAIL_CLOSED",
+                ("D7_RISK", "missing_adi_record"): "FAIL_CLOSED",
+                ("D8_AUTHORITY", "candidate_only"): True,
+                ("D8_AUTHORITY", "canonical"): False,
+                ("D8_AUTHORITY", "formal_effect_authority"): "LOCAL_TOTAL_FIELD",
+                ("D8_AUTHORITY", "model_authority"): False,
+                ("D8_AUTHORITY", "provider_authority"): False,
+            }
+        )
+        for path in (
+            ("D2_STATE", "snapshot_sha256"),
+            ("D3_COORDINATE", "support_native_adi_packet_sha256"),
+            ("D4_EVIDENCE", "task_state_sha256"),
+            ("D4_EVIDENCE", "selected_actions_sha256"),
+            ("D4_EVIDENCE", "checkpoint_sha256"),
+        ):
+            current: Any = payload
+            for key in path:
+                current = current.get(key) if isinstance(current, dict) else None
+            if HEX64.fullmatch(str(current or "")) is None:
+                raise SuccessorRebindReviewError(
+                    DECISION_REJECTED,
+                    "REJECT_NATIVE_ADI_DYNAMIC_CONTEXT_SCOPE",
+                    "$.dynamic_context." + ".".join(path),
+                )
+        selected_actions = payload.get("D4_EVIDENCE", {}).get("selected_action_refs")
+        if (
+            not isinstance(selected_actions, list)
+            or not selected_actions
+            or any(not isinstance(value, str) or not value for value in selected_actions)
+        ):
             raise SuccessorRebindReviewError(
                 DECISION_REJECTED,
                 "REJECT_NATIVE_ADI_DYNAMIC_CONTEXT_SCOPE",
-                "$.dynamic_context." + ".".join(path),
+                "$.dynamic_context.D4_EVIDENCE.selected_action_refs",
             )
+        return
+
+    require_exact(
+        {
+            ("CURRENT_CONTEXT_ELIGIBLE",): True,
+            ("DYNAMIC_CONTEXT_ELIGIBLE",): True,
+            ("RUNTIME_DECISION_ELIGIBLE",): True,
+            ("D1_INTENT", "task_ref"): "task:T-007",
+            ("D2_STATE", "active_machine_pointer_version"): "2.1",
+            ("D3_COORDINATE", "node"): "taiji01",
+            ("D3_COORDINATE", "candidate_root"): request["candidate_root"],
+            ("D3_COORDINATE", "canonical_pointer_ref"): request["canonical_ref"],
+            ("D4_EVIDENCE", "candidate_manifest_sha256"): request["manifest_sha256"],
+            ("D4_EVIDENCE", "canonical_pointer_sha256"): request["predecessor_pointer_sha256"],
+            ("D4_EVIDENCE", "current_field_sha256"): request["live_bindings"]["current_field"]["sha256"],
+            ("D4_EVIDENCE", "current_field_router_sha256"): request["live_bindings"]["current_field_router"]["sha256"],
+            ("D4_EVIDENCE", "total_field_authority_sha256"): request["authority_pointer_sha256"],
+            ("D5_EXECUTION", "canonical_pointer_change"): False,
+            ("D6_GST", "compression_payload"): False,
+            ("D6_GST", "differential_payload"): False,
+            ("D6_GST", "dynamic_context_required"): True,
+            ("D6_GST", "task_state_origin_cell_required"): True,
+            ("D7_RISK", "fail_closed_on_source_hash_drift"): True,
+            ("D8_AUTHORITY", "candidate_only"): True,
+            ("D8_AUTHORITY", "canonical"): False,
+            ("D8_AUTHORITY", "promotion_authorized_by_this_record"): False,
+        }
+    )
+
+
+def _manifest_entry_sha256(files: dict[str, Any], name: str) -> str | None:
+    entry = files.get(name)
+    if isinstance(entry, str):
+        return entry
+    if isinstance(entry, dict):
+        value = entry.get("sha256")
+        return value if isinstance(value, str) else None
+    return None
+
+
+def _validate_completion_manifest(
+    *,
+    repo_root: Path,
+    candidate_root_ref: str,
+) -> tuple[Path, dict[str, Any], list[Path]]:
+    manifest_ref = (
+        Path(candidate_root_ref) / GLOBAL_REVIEW_COMPLETION_DIR / "SHA256_MANIFEST.json"
+    ).as_posix()
+    manifest_path = safe_repo_path(repo_root, manifest_ref, "$.completion_manifest")
+    if not manifest_path.is_file():
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_COMPLETION_MANIFEST_MISSING",
+            "$.completion_manifest",
+        )
+    manifest = load_object(manifest_path, "G2_COMPLETION_MANIFEST")
+    files = manifest.get("files")
+    if not isinstance(files, dict) or set(files) != set(GLOBAL_COMPLETION_MANIFEST_FILES):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_COMPLETION_MANIFEST_FILE_SET",
+            "$.completion_manifest.files",
+        )
+    paths = [manifest_path]
+    for name in sorted(GLOBAL_COMPLETION_MANIFEST_FILES):
+        leaf_ref = (
+            Path(candidate_root_ref) / GLOBAL_REVIEW_COMPLETION_DIR / name
+        ).as_posix()
+        leaf = safe_repo_path(repo_root, leaf_ref, f"$.completion_manifest.files.{name}")
+        expected = _manifest_entry_sha256(files, name)
+        if not leaf.is_file() or expected is None or sha256_file(leaf) != expected:
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_G2_COMPLETION_MANIFEST_HASH_DRIFT",
+                f"$.completion_manifest.files.{name}",
+            )
+        paths.append(leaf)
+    return manifest_path, manifest, paths
+
+
+def _validate_completion_contract(
+    contract: dict[str, Any],
+    *,
+    request: dict[str, Any],
+    root_contract_ref: str,
+    root_contract_sha256: str,
+    field_binding: dict[str, Any],
+    authority_binding: dict[str, Any],
+) -> None:
+    expected_dims = {
+        "D1": "Intent",
+        "D2": "State",
+        "D3": "Coordinate",
+        "D4": "Evidence",
+        "D5": "Execution/Policy",
+        "D6": "Generative State Transmission",
+        "D7": "Risk/Isolation",
+        "D8": "Envelope/Authority",
+    }
+    dims = contract.get("dimension_contract", {})
+    closure = contract.get("closure", {})
+    non_effects = contract.get("non_effects", {})
+    transition = contract.get("version_transition", {})
+    dynamic = contract.get("dynamic_context", {})
+    expected_source_bindings = {
+        request["canonical_ref"]: request["predecessor_pointer_sha256"],
+        request["live_bindings"]["current_field"]["ref"]: request["live_bindings"]["current_field"]["sha256"],
+        request["live_bindings"]["current_field_router"]["ref"]: request["live_bindings"]["current_field_router"]["sha256"],
+        request["authority_pointer_ref"]: request["authority_pointer_sha256"],
+        (Path(request["candidate_root"]) / "SHA256_MANIFEST.json").as_posix(): request["manifest_sha256"],
+    }
+    source_bindings = contract.get("source_bindings")
+    source_map = {
+        item.get("ref"): item.get("sha256")
+        for item in source_bindings
+        if isinstance(source_bindings, list) and isinstance(item, dict)
+    } if isinstance(source_bindings, list) else {}
+    if (
+        contract.get("schema_id") != "W7TP_V21_TO_V23_GLOBAL_SUCCESSOR_REVIEW_COMPLETION_V1"
+        or contract.get("state") != "CANDIDATE_ONLY"
+        or contract.get("task_id") != "T-007"
+        or transition != {"from": "2.1", "mode": "APPEND_ONLY_SUCCESSOR", "to": "2.3"}
+        or contract.get("extends") != {"ref": root_contract_ref, "sha256": root_contract_sha256}
+        or contract.get("field_successor") != field_binding
+        or contract.get("authority_successor_receipt") != authority_binding
+        or contract.get("predecessor_pointer")
+        != {"ref": request["canonical_ref"], "sha256": request["predecessor_pointer_sha256"]}
+        or any(dims.get(key) != value for key, value in expected_dims.items())
+        or dims.get("mode") != "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD"
+        or dims.get("sequential_pipeline_definition_forbidden") is not True
+        or closure.get("G1") != "CANDIDATE_REQUIRES_FORMAL_REVIEW"
+        or closure.get("G2") != "CANDIDATE_REQUIRES_CONSUMER_VALIDATION_AND_ACCEPTANCE"
+        or closure.get("G3") != "CANDIDATE_REQUIRES_APPEND_ONLY_FORMAL_ACCEPTANCE"
+        or closure.get("G4") != "NOT_RUN"
+        or any(non_effects.get(key) is not False for key in ("deployed", "formal_decision_created", "pointer_changed", "runtime_changed"))
+        or contract.get("promotion_plan", {}).get("enabled") is not False
+        or dynamic.get("adi_record_id") != request["dynamic_context"]["adi_record_id"]
+        or dynamic.get("record_sha256") != request["dynamic_context"]["record_sha256"]
+        or dynamic.get("promotion_authorized_by_dynamic_context") is not False
+        or any(source_map.get(ref) != digest for ref, digest in expected_source_bindings.items())
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_COMPLETION_CONTRACT_BINDING",
+            "$.package_bindings.successor_contract",
+        )
+
+
+def _validate_current_field_sidecar(
+    field_successor: dict[str, Any],
+    *,
+    request: dict[str, Any],
+    candidate_root_ref: str,
+    founder_sha256: str,
+    root_field_sha256: str,
+) -> dict[str, Any]:
+    expected_predecessors = {
+        (request["live_bindings"]["current_field"]["ref"], request["live_bindings"]["current_field"]["sha256"]),
+        (request["live_bindings"]["current_field_router"]["ref"], request["live_bindings"]["current_field_router"]["sha256"]),
+    }
+    predecessors = field_successor.get("predecessors")
+    observed_predecessors = {
+        (item.get("ref"), item.get("sha256"))
+        for item in predecessors
+        if isinstance(predecessors, list) and isinstance(item, dict)
+    } if isinstance(predecessors, list) else set()
+    expected_dims = {
+        "D1": "Intent",
+        "D2": "State",
+        "D3": "Coordinate",
+        "D4": "Evidence",
+        "D5": "Execution/Policy",
+        "D6": "Generative State Transmission",
+        "D7": "Risk/Isolation",
+        "D8": "Envelope/Authority",
+    }
+    dimensions = field_successor.get("dimensions")
+    dimension_map = {
+        item.get("id"): item.get("field_en")
+        for item in dimensions
+        if isinstance(dimensions, list) and isinstance(item, dict)
+    } if isinstance(dimensions, list) else {}
+    flags = field_successor.get("safety_flags", {})
+    required_false = (
+        "FILE_CONTENT_READ",
+        "CONFIG_READ",
+        "NVRAM_WRITE",
+        "FIREWALL_WRITE",
+        "ROUTER_REBOOT",
+        "SECRET_READ",
+        "MEMBER_PLAINTEXT_READ",
+        "DB_WRITE",
+        "SERVICE_RESTART",
+        "DEPLOY",
+        "PRODUCTION_RELEASE",
+    )
+    coupled = field_successor.get("coupled_constraints")
+    router_nodes = [
+        item
+        for item in field_successor.get("nodes", [])
+        if isinstance(item, dict) and item.get("role") == "physical_network_boundary"
+    ]
+    if (
+        field_successor.get("schema_id") != "W7TP_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE_V2"
+        or field_successor.get("state") != "CANDIDATE_NOT_ACTIVE"
+        or field_successor.get("activation") is not False
+        or field_successor.get("semantics") != "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD"
+        or field_successor.get("representation") != "TASK_PROJECTION_NOT_EIGHT_FIXED_FIELDS_OR_EIGHT_STEPS"
+        or observed_predecessors != expected_predecessors
+        or field_successor.get("supersedes_candidate")
+        != {
+            "ref": (Path(candidate_root_ref) / "02_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE.json").as_posix(),
+            "sha256": root_field_sha256,
+        }
+        or field_successor.get("definition_source")
+        != {
+            "ref": (Path(candidate_root_ref) / "00_FOUNDER_DIRECTIVE.json").as_posix(),
+            "sha256": founder_sha256,
+        }
+        or field_successor.get("scope", {}).get("router_boundary") != "INCLUDED"
+        or field_successor.get("scope", {}).get("dimensions") != "TRUE_8D_ALL"
+        or not router_nodes
+        or flags.get("PATH_METADATA_ONLY") is not True
+        or any(flags.get(key) is not False for key in required_false)
+        or dimension_map != expected_dims
+        or not isinstance(coupled, dict)
+        or coupled.get("difference_analysis") != "差異分析能力，不等於生成式狀態傳輸。"
+        or any(not isinstance(coupled.get(key), str) or not coupled.get(key) for key in ("privacy", "routing", "authority"))
+        or field_successor.get("formal_total_field_decision_ref") is not None
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_CURRENT_FIELD_SIDECAR_SEMANTICS",
+            "$.package_bindings.current_field_successor",
+        )
+    downstream = field_successor.get("downstream_validation")
+    expected_receipt_ref = (
+        Path(candidate_root_ref)
+        / GLOBAL_REVIEW_COMPLETION_DIR
+        / "REOBSERVATION_REVIEWER_EXTENSION_20261003.json"
+    ).as_posix()
+    if (
+        not isinstance(downstream, dict)
+        or downstream.get("state") != "PASS"
+        or downstream.get("scope") != GLOBAL_REVIEW_SCOPE
+        or downstream.get("receipt_ref") != expected_receipt_ref
+        or HEX64.fullmatch(str(downstream.get("receipt_sha256", ""))) is None
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_DOWNSTREAM_VALIDATION_MISSING",
+            "$.package_bindings.current_field_successor.downstream_validation",
+        )
+    return downstream
+
+
+def _validate_content_constraints(
+    item: dict[str, Any],
+    content: bytes,
+    *,
+    path: str,
+) -> None:
+    constraints = item.get("content_constraints")
+    if not isinstance(constraints, dict) or set(constraints) != {"required_literals", "forbidden_literals"}:
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_CONSUMER_CONTENT_CONSTRAINTS_MISSING",
+            path,
+        )
+    required = constraints.get("required_literals")
+    forbidden = constraints.get("forbidden_literals")
+    if (
+        not isinstance(required, list)
+        or not required
+        or len(required) != len(set(required))
+        or not isinstance(forbidden, list)
+        or len(forbidden) != len(set(forbidden))
+        or any(not isinstance(value, str) or not value for value in [*required, *forbidden])
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_CONSUMER_CONTENT_CONSTRAINTS_INVALID",
+            path,
+        )
+    if any(value.encode("utf-8") not in content for value in required):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_CONSUMER_REQUIRED_CONTENT_MISSING",
+            path,
+        )
+    if any(value.encode("utf-8") in content for value in forbidden):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_CONSUMER_FORBIDDEN_CONTENT_PRESENT",
+            path,
+        )
+
+
+def _skill_source_name(path: Path) -> str | None:
+    try:
+        head = path.read_text(encoding="utf-8")[:8192]
+    except (OSError, UnicodeError):
+        return None
+    match = re.search(r"(?m)^name:\s*['\"]?([A-Za-z0-9._-]+)['\"]?\s*$", head)
+    if match is None:
+        return None
+    name = match.group(1)
+    return name if name.startswith("w7tp-") else None
+
+
+def _discover_repo_w7tp_skill_sources(repo_root: Path) -> dict[str, Path]:
+    discovered: dict[str, Path] = {}
+    for root_ref in GLOBAL_SKILL_SCOPE_ROOTS:
+        base = repo_root / root_ref
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("SKILL.md")):
+            if not path.is_file():
+                continue
+            skill_id = _skill_source_name(path)
+            if skill_id is None:
+                continue
+            if skill_id in discovered and discovered[skill_id] != path:
+                raise SuccessorRebindReviewError(
+                    DECISION_REJECTED,
+                    "REJECT_G2_DUPLICATE_SKILL_ID",
+                    f"$.skill_bindings.{skill_id}",
+                )
+            discovered[skill_id] = path
+    return discovered
+
+
+def _validate_skill_successor_matrix(
+    matrix_path: Path,
+    *,
+    repo_root: Path,
+) -> list[Path]:
+    matrix = load_object(matrix_path, "G2_SKILL_SUCCESSOR_MATRIX")
+    bindings = matrix.get("bindings")
+    discovered = _discover_repo_w7tp_skill_sources(repo_root)
+    if (
+        matrix.get("schema_version") != GLOBAL_SKILL_SCOPE_SCHEMA
+        or matrix.get("canonical_target", {}).get("canonical_id") != GLOBAL_SUCCESSOR_ID
+        or matrix.get("canonical_target", {}).get("version") != "2.3"
+        or matrix.get("scope_roots") != list(GLOBAL_SKILL_SCOPE_ROOTS)
+        or not isinstance(bindings, dict)
+        or matrix.get("binding_count") != len(bindings)
+        or set(bindings) != set(discovered)
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_SKILL_SCOPE_MISMATCH",
+            "$.package_bindings.consumer_rebind_matrix",
+        )
+
+    native_binding = matrix.get("native_skill_index")
+    if (
+        not isinstance(native_binding, dict)
+        or native_binding.get("ref") != GLOBAL_NATIVE_SKILL_INDEX_REF
+        or HEX64.fullmatch(str(native_binding.get("sha256", ""))) is None
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_NATIVE_SKILL_INDEX_BINDING",
+            "$.skill_bindings.native_skill_index",
+        )
+    native_path = safe_repo_path(
+        repo_root,
+        GLOBAL_NATIVE_SKILL_INDEX_REF,
+        "$.skill_bindings.native_skill_index.ref",
+    )
+    if not native_path.is_file() or sha256_file(native_path) != native_binding["sha256"]:
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_NATIVE_SKILL_INDEX_HASH_DRIFT",
+            "$.skill_bindings.native_skill_index.sha256",
+        )
+    native_index = load_object(native_path, "W7TP_NATIVE_SKILLS_INDEX")
+    native_ids = native_index.get("skills")
+    if (
+        not isinstance(native_ids, list)
+        or len(native_ids) != len(set(native_ids))
+        or any(not isinstance(value, str) or value not in discovered for value in native_ids)
+        or matrix.get("registered_native_skill_ids") != native_ids
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_NATIVE_SKILL_SCOPE_MISMATCH",
+            "$.skill_bindings.registered_native_skill_ids",
+        )
+
+    active_ids = matrix.get("active_skill_ids")
+    if (
+        not isinstance(active_ids, list)
+        or len(active_ids) != len(set(active_ids))
+        or any(not isinstance(value, str) or value not in discovered for value in active_ids)
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_ACTIVE_SKILL_SCOPE_INVALID",
+            "$.skill_bindings.active_skill_ids",
+        )
+
+    tracked_paths: list[Path] = [native_path]
+    for skill_id, source_path in discovered.items():
+        rel = source_path.resolve().relative_to(repo_root.resolve()).as_posix()
+        binding = bindings.get(skill_id)
+        if (
+            not isinstance(binding, dict)
+            or binding.get("target_skill_id") != skill_id
+            or binding.get("skill_ref") != rel
+            or binding.get("skill_sha256") != sha256_file(source_path)
+            or binding.get("binding_state") not in GLOBAL_SKILL_BINDING_STATES
+        ):
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_G2_SKILL_BINDING_MISMATCH",
+                f"$.skill_bindings.{skill_id}",
+            )
+        state = binding["binding_state"]
+        if skill_id in active_ids and state != "ACTIVE_EXECUTABLE":
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_G2_ACTIVE_SKILL_STATE_MISMATCH",
+                f"$.skill_bindings.{skill_id}.binding_state",
+            )
+        if skill_id in native_ids and state not in {
+            "REGISTERED_NATIVE",
+            "ACTIVE_EXECUTABLE",
+        }:
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_G2_NATIVE_SKILL_STATE_MISMATCH",
+                f"$.skill_bindings.{skill_id}.binding_state",
+            )
+        tracked_paths.append(source_path)
+
+    legacy = matrix.get("legacy_v21_identity_lineage")
+    if (
+        not isinstance(legacy, dict)
+        or legacy.get("ref") != GLOBAL_SKILL_MATRIX_PREDECESSOR
+        or legacy.get("role") != "HISTORY_ONLY_NOT_CURRENT_SKILL_SCOPE"
+        or HEX64.fullmatch(str(legacy.get("sha256", ""))) is None
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_LEGACY_SKILL_LINEAGE_BINDING",
+            "$.skill_bindings.legacy_v21_identity_lineage",
+        )
+    legacy_path = safe_repo_path(
+        repo_root,
+        GLOBAL_SKILL_MATRIX_PREDECESSOR,
+        "$.skill_bindings.legacy_v21_identity_lineage.ref",
+    )
+    if not legacy_path.is_file() or sha256_file(legacy_path) != legacy["sha256"]:
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_LEGACY_SKILL_LINEAGE_HASH_DRIFT",
+            "$.skill_bindings.legacy_v21_identity_lineage.sha256",
+        )
+    tracked_paths.append(legacy_path)
+    return tracked_paths
+
+
+def _validate_consumer_postimages(
+    matrix: dict[str, Any],
+    *,
+    repo_root: Path,
+    request: dict[str, Any],
+    downstream: dict[str, Any],
+) -> list[Path]:
+    consumers = matrix.get("consumers")
+    if not isinstance(consumers, list):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_CONSUMER_REBIND_MATRIX_INVALID",
+            "$.package_bindings.consumer_rebind_matrix",
+        )
+    by_path = {item.get("path"): item for item in consumers if isinstance(item, dict)}
+    if len(by_path) != len(consumers) or not GLOBAL_REQUIRED_ACTIVE_CONSUMERS.issubset(set(by_path)):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_ACTIVE_CONSUMER_REBIND_COVERAGE",
+            "$.package_bindings.consumer_rebind_matrix",
+        )
+    if matrix.get("state") != "CANDIDATE_REBIND_EVIDENCE":
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_OLD_G2_PLAN_ONLY_SEMANTICS",
+            "$.package_bindings.consumer_rebind_matrix.state",
+        )
+    if (
+        by_path[GLOBAL_RETIRED_ADAPTER].get("action")
+        != "RETIRE_FROM_ACTIVE_PATH; retain historical compatibility only"
+        or by_path["runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"].get("action")
+        != "G4_LAST_STEP_ONLY_AFTER_G1_G3_AND_PROMOTION_AUTHORITY"
+        or matrix.get("history_policy")
+        != "V2.1 strings in evidence, receipts, preimages, release archives, migration history, and legacy adapters are not rewritten merely to remove the version number."
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_ACTIVE_CONSUMER_REBIND_POLICY",
+            "$.package_bindings.consumer_rebind_matrix",
+        )
+
+    postimage_paths: list[Path] = []
+    postimage_hashes: dict[str, str] = {}
+    skill_matrix_path: Path | None = None
+    for consumer_ref, expected_preimage in GLOBAL_POSTIMAGE_CONSUMER_PREIMAGES.items():
+        item = by_path[consumer_ref]
+        base_path = f"$.package_bindings.consumer_rebind_matrix.consumers[{consumer_ref}]"
+        if item.get("preimage_sha256") != expected_preimage:
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_CONSUMER_PREIMAGE_BINDING",
+                f"{base_path}.preimage_sha256",
+            )
+        postimage_ref = item.get("postimage_ref")
+        postimage_sha256 = item.get("postimage_sha256")
+        if not isinstance(postimage_ref, str) or HEX64.fullmatch(str(postimage_sha256 or "")) is None:
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_CONSUMER_POSTIMAGE_EVIDENCE_MISSING",
+                base_path,
+            )
+        if consumer_ref == GLOBAL_SKILL_MATRIX_PREDECESSOR:
+            if (
+                postimage_ref == consumer_ref
+                or not postimage_ref.startswith("manifests/total_field/")
+                or not postimage_ref.endswith("/BINDING_MATRIX.json")
+            ):
+                raise SuccessorRebindReviewError(
+                    DECISION_REJECTED,
+                    "REJECT_CONSUMER_POSTIMAGE_PATH_MISMATCH",
+                    f"{base_path}.postimage_ref",
+                )
+        elif postimage_ref != consumer_ref:
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_CONSUMER_POSTIMAGE_PATH_MISMATCH",
+                f"{base_path}.postimage_ref",
+            )
+        postimage = safe_repo_path(repo_root, postimage_ref, f"{base_path}.postimage_ref")
+        if not postimage.is_file() or sha256_file(postimage) != postimage_sha256:
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_CONSUMER_POSTIMAGE_HASH_DRIFT",
+                f"{base_path}.postimage_sha256",
+            )
+        if consumer_ref != GLOBAL_RETIRED_ADAPTER and postimage_sha256 == expected_preimage:
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_CONSUMER_POSTIMAGE_NOT_REBOUND",
+                f"{base_path}.postimage_sha256",
+            )
+        if item.get("downstream_validation") != "PASS":
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_CONSUMER_DOWNSTREAM_VALIDATION_MISSING",
+                f"{base_path}.downstream_validation",
+            )
+        _validate_content_constraints(item, postimage.read_bytes(), path=base_path)
+        required_literals = item["content_constraints"]["required_literals"]
+        if (
+            consumer_ref not in {GLOBAL_RETIRED_ADAPTER, GLOBAL_SKILL_MATRIX_PREDECESSOR}
+            and GLOBAL_ACTIVE_BINDING_LITERAL not in required_literals
+        ):
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_CONSUMER_ACTIVE_POINTER_BINDING_CONSTRAINT_MISSING",
+                f"{base_path}.content_constraints.required_literals",
+            )
+        if consumer_ref != GLOBAL_RETIRED_ADAPTER and not GLOBAL_OLD_ACTIVE_DIMENSION_LITERALS.issubset(
+            set(item["content_constraints"]["forbidden_literals"])
+        ):
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_OLD_ACTIVE_DIMENSION_CONSTRAINT_MISSING",
+                f"{base_path}.content_constraints.forbidden_literals",
+            )
+        if consumer_ref == "tools/total_field/w7tp_intent_field_suite/cli.py":
+            required_forbidden = {
+                GLOBAL_RETIRED_ADAPTER,
+                GLOBAL_SKILL_MATRIX_PREDECESSOR,
+            }
+            if not required_forbidden.issubset(set(item["content_constraints"]["forbidden_literals"])):
+                raise SuccessorRebindReviewError(
+                    DECISION_REJECTED,
+                    "REJECT_CLI_ACTIVE_RELEASE_RETIREMENT_CONSTRAINT_MISSING",
+                    f"{base_path}.content_constraints.forbidden_literals",
+                )
+        postimage_paths.append(postimage)
+        postimage_hashes[consumer_ref] = postimage_sha256
+        if consumer_ref == GLOBAL_SKILL_MATRIX_PREDECESSOR:
+            skill_matrix_path = postimage
+
+    if skill_matrix_path is None:
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_FIVE_SKILL_SUCCESSOR_MATRIX",
+            "$.package_bindings.consumer_rebind_matrix",
+        )
+    receipt_path = safe_repo_path(
+        repo_root,
+        downstream["receipt_ref"],
+        "$.package_bindings.current_field_successor.downstream_validation.receipt_ref",
+    )
+    if not receipt_path.is_file() or sha256_file(receipt_path) != downstream["receipt_sha256"]:
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_DOWNSTREAM_RECEIPT_HASH_DRIFT",
+            "$.package_bindings.current_field_successor.downstream_validation.receipt_sha256",
+        )
+    receipt = load_object(receipt_path, "G2_DOWNSTREAM_RECEIPT")
+    if (
+        receipt.get("schema_id") != "W7TP_T007_GLOBAL_SUCCESSOR_REVIEWER_EXTENSION_REOBSERVATION_V1"
+        or receipt.get("task_id") != "T-007"
+        or receipt.get("node") != "taiji01"
+        or receipt.get("scope") != GLOBAL_REVIEW_SCOPE
+        or receipt.get("state") != "GLOBAL_CANONICAL_SUCCESSOR_MODE_IMPLEMENTED"
+        or receipt.get("result") != "PASS"
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_GLOBAL_DOWNSTREAM_RECEIPT_SCOPE",
+            "$.package_bindings.current_field_successor.downstream_validation",
+        )
+    if (
+        receipt.get("consumer_postimages") != postimage_hashes
+        or receipt.get("current_field_preimages")
+        != {
+            "current_field": request["live_bindings"]["current_field"],
+            "current_field_router": request["live_bindings"]["current_field_router"],
+        }
+        or receipt.get("dynamic_context") != request["dynamic_context"]
+    ):
+        raise SuccessorRebindReviewError(
+            DECISION_REJECTED,
+            "REJECT_G2_DOWNSTREAM_ARTIFACT_BINDING_MISMATCH",
+            "$.package_bindings.current_field_successor.downstream_validation",
+        )
+    return [
+        *postimage_paths,
+        *_validate_skill_successor_matrix(skill_matrix_path, repo_root=repo_root),
+        receipt_path,
+    ]
 
 
 def _review_global_once(
@@ -537,10 +1297,13 @@ def _review_global_once(
         "freshness": "NOT_REACHED",
         "predecessor_pointer": "NOT_REACHED",
         "manifest": "NOT_REACHED",
+        "completion_manifest": "NOT_REACHED",
         "package_bindings": "NOT_REACHED",
         "successor_contract": "NOT_REACHED",
         "current_field_successor": "NOT_REACHED",
         "consumer_rebind_matrix": "NOT_REACHED",
+        "consumer_postimages": "NOT_REACHED",
+        "skill_scope_bindings": "NOT_REACHED",
         "authority_successor_receipt": "NOT_REACHED",
         "dynamic_context": "NOT_REACHED",
         "founder_authorization": "NOT_REACHED",
@@ -617,6 +1380,14 @@ def _review_global_once(
             )
         checks["manifest"] = "PASS"
 
+        completion_manifest_path, completion_manifest, completion_paths = _validate_completion_manifest(
+            repo_root=repo_root,
+            candidate_root_ref=request["candidate_root"],
+        )
+        completion_manifest_sha256 = sha256_file(completion_manifest_path)
+        completion_manifest_files = completion_manifest["files"]
+        checks["completion_manifest"] = "PASS"
+
         package_docs: dict[str, dict[str, Any]] = {}
         tracked_package_paths: list[Path] = []
         manifest_files = manifest.get("files")
@@ -642,8 +1413,14 @@ def _review_global_once(
                     "REJECT_GLOBAL_PACKAGE_HASH_DRIFT",
                     f"$.package_bindings.{key}.sha256",
                 )
-            entry = manifest_files.get(filename, {})
-            if not isinstance(entry, dict) or entry.get("sha256") != binding["sha256"]:
+            if filename.startswith(GLOBAL_REVIEW_COMPLETION_DIR + "/"):
+                manifest_binding = _manifest_entry_sha256(
+                    completion_manifest_files,
+                    Path(filename).name,
+                )
+            else:
+                manifest_binding = _manifest_entry_sha256(manifest_files, filename)
+            if manifest_binding != binding["sha256"]:
                 raise SuccessorRebindReviewError(
                     DECISION_REJECTED,
                     "REJECT_GLOBAL_MANIFEST_BINDING_MISMATCH",
@@ -669,7 +1446,21 @@ def _review_global_once(
                 "$.package_bindings.founder_directive",
             )
 
-        contract = package_docs["successor_contract"]
+        root_contract_name = "01_V23_GLOBAL_SUCCESSOR_CONTRACT_CANDIDATE.json"
+        root_contract_ref = (Path(request["candidate_root"]) / root_contract_name).as_posix()
+        root_contract_sha256 = _manifest_entry_sha256(manifest_files, root_contract_name)
+        root_contract_path = safe_repo_path(repo_root, root_contract_ref, "$.root_successor_contract")
+        if (
+            root_contract_sha256 is None
+            or not root_contract_path.is_file()
+            or sha256_file(root_contract_path) != root_contract_sha256
+        ):
+            raise SuccessorRebindReviewError(
+                DECISION_REJECTED,
+                "REJECT_ROOT_SUCCESSOR_CONTRACT_HASH_DRIFT",
+                "$.root_successor_contract",
+            )
+        contract = load_object(root_contract_path, "ROOT_SUCCESSOR_CONTRACT")
         predecessor = contract.get("predecessor", {})
         successor = contract.get("proposed_successor", {})
         dims = successor.get("dimension_contract", {})
@@ -691,7 +1482,7 @@ def _review_global_once(
             or predecessor.get("pointer_sha256") != request["predecessor_pointer_sha256"]
             or predecessor.get("version") != "2.1"
             or successor.get("version") != "2.3"
-            or successor.get("canonical_id") != "W7TP_8D_ADI_V2_3"
+            or successor.get("canonical_id") != GLOBAL_SUCCESSOR_ID
             or any(dims.get(k) != v for k, v in expected_dims.items())
             or dims.get("mode") != "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD"
             or dims.get("sequential_pipeline_definition_forbidden") is not True
@@ -702,6 +1493,15 @@ def _review_global_once(
                 "REJECT_GLOBAL_SUCCESSOR_CONTRACT_SEMANTICS",
                 "$.package_bindings.successor_contract",
             )
+        _validate_completion_contract(
+            package_docs["successor_contract"],
+            request=request,
+            root_contract_ref=root_contract_ref,
+            root_contract_sha256=root_contract_sha256,
+            field_binding=request["package_bindings"]["current_field_successor"],
+            authority_binding=request["package_bindings"]["authority_successor_receipt"],
+        )
+        tracked_package_paths.append(root_contract_path)
         checks["successor_contract"] = "PASS"
 
         live_paths: list[Path] = []
@@ -726,49 +1526,40 @@ def _review_global_once(
                 )
             live_paths.append(path)
 
-        field_successor = package_docs["current_field_successor"]
+        root_field_name = "02_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE.json"
+        root_field_ref = (Path(request["candidate_root"]) / root_field_name).as_posix()
+        root_field_sha256 = _manifest_entry_sha256(manifest_files, root_field_name)
+        root_field_path = safe_repo_path(repo_root, root_field_ref, "$.root_current_field_successor")
         if (
-            field_successor.get("state") != "CANDIDATE_NOT_ACTIVE"
-            or field_successor.get("activation") is not False
-            or field_successor.get("semantics") != "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD"
-            or field_successor.get("predecessor_ref") != request["live_bindings"]["current_field"]["ref"]
-            or field_successor.get("predecessor_sha256") != request["live_bindings"]["current_field"]["sha256"]
-            or field_successor.get("difference_analysis", {}).get("is_generative_transmission") is not False
+            root_field_sha256 is None
+            or not root_field_path.is_file()
+            or sha256_file(root_field_path) != root_field_sha256
         ):
             raise SuccessorRebindReviewError(
                 DECISION_REJECTED,
-                "REJECT_CURRENT_FIELD_SUCCESSOR_SCOPE",
-                "$.package_bindings.current_field_successor",
+                "REJECT_ROOT_CURRENT_FIELD_HASH_DRIFT",
+                "$.root_current_field_successor",
             )
+        downstream_validation = _validate_current_field_sidecar(
+            package_docs["current_field_successor"],
+            request=request,
+            candidate_root_ref=request["candidate_root"],
+            founder_sha256=request["package_bindings"]["founder_directive"]["sha256"],
+            root_field_sha256=root_field_sha256,
+        )
+        tracked_package_paths.append(root_field_path)
         checks["current_field_successor"] = "PASS"
 
         matrix = package_docs["consumer_rebind_matrix"]
-        consumers = matrix.get("consumers")
-        if not isinstance(consumers, list):
-            raise SuccessorRebindReviewError(
-                DECISION_REJECTED,
-                "REJECT_CONSUMER_REBIND_MATRIX_INVALID",
-                "$.package_bindings.consumer_rebind_matrix",
-            )
-        by_path = {item.get("path"): item for item in consumers if isinstance(item, dict)}
-        if not GLOBAL_REQUIRED_ACTIVE_CONSUMERS.issubset(set(by_path)):
-            raise SuccessorRebindReviewError(
-                DECISION_REJECTED,
-                "REJECT_ACTIVE_CONSUMER_REBIND_COVERAGE",
-                "$.package_bindings.consumer_rebind_matrix",
-            )
-        if (
-            by_path["tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py"].get("action")
-            != "RETIRE_FROM_ACTIVE_PATH; retain historical compatibility only"
-            or matrix.get("history_policy")
-            != "V2.1 strings in evidence, receipts, preimages, release archives, migration history, and legacy adapters are not rewritten merely to remove the version number."
-        ):
-            raise SuccessorRebindReviewError(
-                DECISION_REJECTED,
-                "REJECT_ACTIVE_CONSUMER_REBIND_POLICY",
-                "$.package_bindings.consumer_rebind_matrix",
-            )
+        consumer_evidence_paths = _validate_consumer_postimages(
+            matrix,
+            repo_root=repo_root,
+            request=request,
+            downstream=downstream_validation,
+        )
         checks["consumer_rebind_matrix"] = "PASS"
+        checks["consumer_postimages"] = "PASS"
+        checks["skill_scope_bindings"] = "PASS"
 
         authority_path = safe_repo_path(repo_root, request["authority_pointer_ref"], "$.authority_pointer_ref")
         if not authority_path.is_file() or sha256_file(authority_path) != request["authority_pointer_sha256"]:
@@ -797,13 +1588,31 @@ def _review_global_once(
         checks["authority_pointer"] = "PASS"
 
         authority_receipt = package_docs["authority_successor_receipt"]
+        equal_fields = authority_receipt.get("non_effect_fields_equal", {})
+        append_only = authority_receipt.get("append_only_policy", {})
         if (
-            authority_receipt.get("formal") is not False
+            authority_receipt.get("schema_id") != "W7TP_AUTHORITY_SUCCESSOR_EVIDENCE_CANDIDATE_V2"
+            or authority_receipt.get("state") != "CANDIDATE_NOT_FORMAL"
+            or authority_receipt.get("formal") is not False
             or authority_receipt.get("removed_effects") != []
             or authority_receipt.get("successor", {}).get("ref") != request["authority_pointer_ref"]
             or authority_receipt.get("successor", {}).get("sha256") != request["authority_pointer_sha256"]
-            or authority_receipt.get("checks", {}).get("predecessor_effects_preserved") is not True
-            or authority_receipt.get("checks", {}).get("gst_v23_formal_delivery_preserved") is not True
+            or any(
+                equal_fields.get(key) is not True
+                for key in (
+                    "contract_state",
+                    "formal_decision_authority",
+                    "formal_seal_authority",
+                    "node_id",
+                    "prohibited_effects",
+                    "state",
+                )
+            )
+            or append_only.get("overwrite_predecessor") is not False
+            or append_only.get("rewrite_gst_d8") is not False
+            or append_only.get("grant_added_effects_by_this_receipt") is not False
+            or authority_receipt.get("formal_acceptance_ref") is not None
+            or authority_receipt.get("original_transition_event_ref") is not None
         ):
             raise SuccessorRebindReviewError(
                 DECISION_REJECTED,
@@ -873,6 +1682,8 @@ def _review_global_once(
             founder_path,
             *founder_support_paths,
             *tracked_package_paths,
+            *completion_paths,
+            *consumer_evidence_paths,
             *live_paths,
         ]
         if not test_mode and not all(tracked_checker(path) for path in tracked_inputs):
@@ -884,7 +1695,17 @@ def _review_global_once(
         checks["tracked_inputs"] = "PASS"
 
         formal = bool(formal_authority and not test_mode)
-        package_binding_sha256 = sha256_bytes(canonical_json_bytes(request["package_bindings"]))
+        package_binding_sha256 = sha256_bytes(
+            canonical_json_bytes(
+                {
+                    "package_bindings": request["package_bindings"],
+                    "completion_manifest": {
+                        "ref": completion_manifest_path.resolve().relative_to(repo_root).as_posix(),
+                        "sha256": completion_manifest_sha256,
+                    },
+                }
+            )
+        )
         decision = {
             "schema_version": GLOBAL_DECISION_SCHEMA_VERSION,
             "packet_type": "TOTAL_FIELD_SUCCESSOR_REBIND_DECISION",

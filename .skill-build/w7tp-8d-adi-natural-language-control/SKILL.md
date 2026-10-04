@@ -162,3 +162,7 @@ description: 以自然語言直接驅動 W7TP／8D ADI 開發、除錯、控制�
 - `NEXT_EXACT_ACTION`
 
 如果使用者要求「直接做」，在已授權範圍內持續做到可觀測結果或一個真正不可替代的外部阻塞；不得以一般流程話術提早停止。
+
+## V2.3 三節點因果互通
+
+跨節點觀測、技能互通、版本或因果依賴變動時，先讀 [V2.3 三節點互通契約](references/v23-node-interoperability.md) 與 [候選節點索引](references/node-interoperability-index.json)。本節點重用既有總場能力，技能安裝不等於正式啟用；舊索引受影響依賴必須失效重核。

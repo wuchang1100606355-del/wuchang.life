@@ -1,7 +1,114 @@
 {
-  "schema_id": "W7TP_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE_V2",
-  "state": "CANDIDATE_NOT_ACTIVE",
   "activation": false,
+  "coupled_constraints": {
+    "authority": "Founder 定義；總場執行、驗證、封存；模型僅候選。",
+    "difference_analysis": "差異分析能力，不等於生成式狀態傳輸。",
+    "privacy": "跨 D1–D8 的目的、範圍、授權與合成治理仍保留；不是 D6 本體。",
+    "routing": "沿既有能力與執行政策定位；不是 D7 本體。"
+  },
+  "definition_source": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/00_FOUNDER_DIRECTIVE.json",
+    "sha256": "7b417541c79bb1ac5f5c44101fecb1cf9aa9ea5151a3dcf97ddeec5d6a8bbac0"
+  },
+  "dimensions": [
+    {
+      "field_en": "Intent",
+      "field_zh": "意圖",
+      "id": "D1"
+    },
+    {
+      "field_en": "State",
+      "field_zh": "狀態",
+      "id": "D2"
+    },
+    {
+      "field_en": "Coordinate",
+      "field_zh": "座標",
+      "id": "D3"
+    },
+    {
+      "field_en": "Evidence",
+      "field_zh": "證據",
+      "id": "D4"
+    },
+    {
+      "field_en": "Execution/Policy",
+      "field_zh": "執行／政策",
+      "id": "D5"
+    },
+    {
+      "field_en": "Generative State Transmission",
+      "field_zh": "生成式狀態傳輸",
+      "id": "D6"
+    },
+    {
+      "field_en": "Risk/Isolation",
+      "field_zh": "風險／隔離",
+      "id": "D7"
+    },
+    {
+      "field_en": "Envelope/Authority",
+      "field_zh": "封套／權威",
+      "id": "D8"
+    }
+  ],
+  "downstream_validation": {
+    "receipt_ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/REOBSERVATION_REVIEWER_EXTENSION_20261003.json",
+    "receipt_sha256": "0dcfb4bd6fa74d60b01ae9f17a7068e06f8fd183f5c3b668d3ba5d00be5e609f",
+    "scope": "GLOBAL_CANONICAL_SUCCESSOR",
+    "state": "PASS"
+  },
+  "formal_total_field_decision_ref": null,
+  "inherited_inventory_observation": {
+    "created_at": "2026-06-22T17:18:56",
+    "current_node_liveness": "NOT_REOBSERVED",
+    "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json"
+  },
+  "nodes": [
+    {
+      "kind": "linux",
+      "node_id": "taiji01",
+      "source": "tailscale_status_self"
+    },
+    {
+      "kind": "windows",
+      "node_id": "MSI",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "linux",
+      "node_id": "penguin",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "iOS",
+      "node_id": "localhost",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "linux",
+      "node_id": "DESKTOP-OHE05SC",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "linux",
+      "node_id": "wuchang-us-free-node",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "android",
+      "node_id": "V3_MIX_EDLA_GL",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "ip": "192.168.50.1",
+      "kind": "ASUSWRT-Merlin router",
+      "node_id": "RT-BE86U-7428",
+      "role": "physical_network_boundary",
+      "source": "router_ssh_confirmed",
+      "ssh_port": "22"
+    }
+  ],
   "predecessors": [
     {
       "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
@@ -12,134 +119,32 @@
       "sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9"
     }
   ],
+  "representation": "TASK_PROJECTION_NOT_EIGHT_FIXED_FIELDS_OR_EIGHT_STEPS",
+  "safety_flags": {
+    "CONFIG_READ": false,
+    "DB_WRITE": false,
+    "DEPLOY": false,
+    "FILE_CONTENT_READ": false,
+    "FIREWALL_WRITE": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "NVRAM_WRITE": false,
+    "PATH_METADATA_ONLY": true,
+    "PRODUCTION_RELEASE": false,
+    "ROUTER_REBOOT": false,
+    "SECRET_READ": false,
+    "SERVICE_RESTART": false
+  },
+  "schema_id": "W7TP_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE_V2",
+  "scope": {
+    "dimensions": "TRUE_8D_ALL",
+    "router_boundary": "INCLUDED",
+    "scan_mode": "PATH_METADATA_ONLY",
+    "total_field": "ALL_NODES"
+  },
+  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+  "state": "CANDIDATE_NOT_ACTIVE",
   "supersedes_candidate": {
     "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/02_CURRENT_8D_FIELD_V23_SUCCESSOR_CANDIDATE.json",
     "sha256": "21c9807dab4c51fe2e2c7eef1cc710e70183e7ec479658abb62c09a433e5f9fb"
-  },
-  "definition_source": {
-    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/00_FOUNDER_DIRECTIVE.json",
-    "sha256": "7b417541c79bb1ac5f5c44101fecb1cf9aa9ea5151a3dcf97ddeec5d6a8bbac0"
-  },
-  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
-  "representation": "TASK_PROJECTION_NOT_EIGHT_FIXED_FIELDS_OR_EIGHT_STEPS",
-  "scope": {
-    "total_field": "ALL_NODES",
-    "dimensions": "TRUE_8D_ALL",
-    "router_boundary": "INCLUDED",
-    "scan_mode": "PATH_METADATA_ONLY"
-  },
-  "nodes": [
-    {
-      "node_id": "taiji01",
-      "kind": "linux",
-      "source": "tailscale_status_self"
-    },
-    {
-      "node_id": "MSI",
-      "kind": "windows",
-      "source": "tailscale_status_peer"
-    },
-    {
-      "node_id": "penguin",
-      "kind": "linux",
-      "source": "tailscale_status_peer"
-    },
-    {
-      "node_id": "localhost",
-      "kind": "iOS",
-      "source": "tailscale_status_peer"
-    },
-    {
-      "node_id": "DESKTOP-OHE05SC",
-      "kind": "linux",
-      "source": "tailscale_status_peer"
-    },
-    {
-      "node_id": "wuchang-us-free-node",
-      "kind": "linux",
-      "source": "tailscale_status_peer"
-    },
-    {
-      "node_id": "V3_MIX_EDLA_GL",
-      "kind": "android",
-      "source": "tailscale_status_peer"
-    },
-    {
-      "node_id": "RT-BE86U-7428",
-      "kind": "ASUSWRT-Merlin router",
-      "source": "router_ssh_confirmed",
-      "ip": "192.168.50.1",
-      "ssh_port": "22",
-      "role": "physical_network_boundary"
-    }
-  ],
-  "inherited_inventory_observation": {
-    "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
-    "created_at": "2026-06-22T17:18:56",
-    "current_node_liveness": "NOT_REOBSERVED"
-  },
-  "safety_flags": {
-    "PATH_METADATA_ONLY": true,
-    "FILE_CONTENT_READ": false,
-    "CONFIG_READ": false,
-    "NVRAM_WRITE": false,
-    "FIREWALL_WRITE": false,
-    "ROUTER_REBOOT": false,
-    "SECRET_READ": false,
-    "MEMBER_PLAINTEXT_READ": false,
-    "DB_WRITE": false,
-    "SERVICE_RESTART": false,
-    "DEPLOY": false,
-    "PRODUCTION_RELEASE": false
-  },
-  "dimensions": [
-    {
-      "id": "D1",
-      "field_en": "Intent",
-      "field_zh": "意圖"
-    },
-    {
-      "id": "D2",
-      "field_en": "State",
-      "field_zh": "狀態"
-    },
-    {
-      "id": "D3",
-      "field_en": "Coordinate",
-      "field_zh": "座標"
-    },
-    {
-      "id": "D4",
-      "field_en": "Evidence",
-      "field_zh": "證據"
-    },
-    {
-      "id": "D5",
-      "field_en": "Execution/Policy",
-      "field_zh": "執行／政策"
-    },
-    {
-      "id": "D6",
-      "field_en": "Generative State Transmission",
-      "field_zh": "生成式狀態傳輸"
-    },
-    {
-      "id": "D7",
-      "field_en": "Risk/Isolation",
-      "field_zh": "風險／隔離"
-    },
-    {
-      "id": "D8",
-      "field_en": "Envelope/Authority",
-      "field_zh": "封套／權威"
-    }
-  ],
-  "coupled_constraints": {
-    "privacy": "跨 D1–D8 的目的、範圍、授權與合成治理仍保留；不是 D6 本體。",
-    "routing": "沿既有能力與執行政策定位；不是 D7 本體。",
-    "difference_analysis": "差異分析能力，不等於生成式狀態傳輸。",
-    "authority": "Founder 定義；總場執行、驗證、封存；模型僅候選。"
-  },
-  "downstream_validation": "NOT_RUN",
-  "formal_total_field_decision_ref": null
+  }
 }

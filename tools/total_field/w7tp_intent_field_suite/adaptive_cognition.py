@@ -8,6 +8,10 @@ from tools.total_field.w7tp_field_application_runtime import (
     FieldApplicationError,
     device_llm_execution_policy,
 )
+from tools.total_field.w7tp_v2_3_candidate_source import (
+    active_canonical_binding,
+    candidate_source_binding,
+)
 
 from .canonical_hash import canonical_sha256, normalize_content
 
@@ -40,10 +44,14 @@ ALLOWED_ADAPTIVE_KEYS = frozenset(
     }
 )
 DEFAULT_POLICY = {
-    "version": "1.1.0",
-    "source_refs": ["repo:docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md"],
-    "legacy_source_refs": ["repo:docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md"],
+    "version": "1.2.0",
+    "source_refs": [],
+    "legacy_source_refs": [
+        "repo:docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
+        "repo:docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2.md",
+    ],
     "migration_mode": "APPEND_ONLY_SUCCESSOR",
+    "successor_candidate_id": "W7TP_8D_ADI_V2_3",
     "question_order": "CONTRACT_ORDER",
     "safe_explanations": "PROFILE_SPECIFIC",
     "evidence_candidate_order": "SOURCE_THEN_PASS_THEN_USER",
@@ -57,6 +65,10 @@ DEFAULT_POLICY = {
 
 def active_policy() -> dict[str, Any]:
     policy = normalize_content(DEFAULT_POLICY)
+    active = active_canonical_binding()
+    policy["source_refs"] = [f"repo:{active['canonical_path']}"]
+    policy["active_canonical_binding"] = active
+    policy["successor_candidate_source"] = candidate_source_binding()
     policy["policy_hash"] = canonical_sha256(policy)
     return policy
 

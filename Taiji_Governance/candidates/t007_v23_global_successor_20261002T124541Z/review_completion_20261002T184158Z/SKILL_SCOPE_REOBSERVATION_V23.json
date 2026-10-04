@@ -1,0 +1,235 @@
+{
+  "schema_id": "W7TP_V23_SKILL_SCOPE_REOBSERVATION_V1",
+  "state": "OBSERVED_PARTITIONED_SCOPE_NO_IDENTITY_INVENTION",
+  "task_ref": "T-007",
+  "observed_at": "2026-10-04T17:25:43.231692+00:00",
+  "scope_boundaries": {
+    "repo_skill_source_roots": [
+      "capabilities/**/SKILL.md",
+      ".skill-build/**/SKILL.md"
+    ],
+    "codex_installed_custom_root": "/home/taiji_admin/.codex/skills/*/SKILL.md",
+    "codex_system_skills_excluded": true,
+    "legacy_vcp_contract_roots": [
+      "govern-total-field-skills",
+      "build-intent-field",
+      "reconstruct-private-media",
+      "wuchang.community-announcement-xiaoj",
+      "w7tp-generative-transmission"
+    ],
+    "claim": "Complete only for the explicitly enumerated current skill planes; no inference from names beyond declared frontmatter/manifests."
+  },
+  "native_skill_index": {
+    "ref": "capabilities/W7TP_NATIVE_SKILLS_INDEX.json",
+    "sha256": "4ee21d278ec7b956bdf48249d3dbf20e875118620da56e47340b448bd5726d69",
+    "state": "W7TP_NATIVE_SKILLS_FAST_LAND_BUNDLE",
+    "skills": [
+      "w7tp-external-capability-gateway",
+      "w7tp-deterministic-effect-gate",
+      "w7tp-bounded-delegation-chain",
+      "w7tp-stateful-information-flow",
+      "w7tp-execution-evidence-lifecycle"
+    ]
+  },
+  "repo_skill_sources": [
+    {
+      "skill_id": "w7tp-8d-adi-natural-language-control",
+      "skill_ref": ".skill-build/w7tp-8d-adi-natural-language-control/SKILL.md",
+      "sha256": "7c163acf289d6020952cacacd8a292d4eaa7334de87261d0bc34e6fb25c1208b",
+      "bytes": 18950,
+      "manifest_ref": null
+    },
+    {
+      "skill_id": "w7tp-8d-adi-adaptive-network",
+      "skill_ref": "capabilities/w7tp-8d-adi-adaptive-network/SKILL.md",
+      "sha256": "ad27f78fc0879ed2436b2e9c2f848f1b013864c07147dd1ae947a480ee4ef391",
+      "bytes": 8455,
+      "manifest_ref": "capabilities/w7tp-8d-adi-adaptive-network/manifest.json",
+      "manifest_sha256": "7c2843db98e91299ffa5d9a6cbae554487eb1b5eca0203633d35cb668318d905",
+      "manifest_skill_id": "w7tp-8d-adi-adaptive-network",
+      "manifest_state": "CANDIDATE_NOT_REGISTERED",
+      "runtime_state": "GATED_BY_LIVE_EVIDENCE",
+      "manifest_identity_matches_frontmatter": true
+    },
+    {
+      "skill_id": "w7tp-8d-adi-audio-field",
+      "skill_ref": "capabilities/w7tp-8d-adi-audio-field/SKILL.md",
+      "sha256": "b1091a231b2bafd248967c9e57f0838694c303226cf2abcbfa146dbb4bfe6df5",
+      "bytes": 4461,
+      "manifest_ref": "capabilities/w7tp-8d-adi-audio-field/manifest.json",
+      "manifest_sha256": "18c92ac4eac2d5210d9c2ea5531a512ea04996a4d399b6ea81339e8cc622a25f",
+      "manifest_skill_id": "w7tp-8d-adi-audio-field",
+      "manifest_state": "CANDIDATE_NOT_REGISTERED",
+      "runtime_state": "NOT_ACTIVATED",
+      "manifest_identity_matches_frontmatter": true
+    },
+    {
+      "skill_id": "w7tp-8d-adi-remote-desktop-organ",
+      "skill_ref": "capabilities/w7tp-8d-adi-remote-desktop-organ/SKILL.md",
+      "sha256": "6442cb3b905e589a1f4b72c9d26266f6ca2d83d63f6261be527dc449097b430d",
+      "bytes": 3419,
+      "manifest_ref": null
+    },
+    {
+      "skill_id": "w7tp-bounded-delegation-chain",
+      "skill_ref": "capabilities/w7tp-bounded-delegation-chain/SKILL.md",
+      "sha256": "4810bd2497dca71eed252f12b29cab3b9b16cd8856313b1fdb9a4e2b17d90abb",
+      "bytes": 1619,
+      "manifest_ref": null
+    },
+    {
+      "skill_id": "w7tp-capability-assimilator",
+      "skill_ref": "capabilities/w7tp-capability-assimilator/w7tp-capability-assimilator/SKILL.md",
+      "sha256": "11b97f8094c5f98e267fd7df407bcaf974b04925d4ca914b15878b5af35c7578",
+      "bytes": 11111,
+      "manifest_ref": null
+    },
+    {
+      "skill_id": "w7tp-deterministic-effect-gate",
+      "skill_ref": "capabilities/w7tp-deterministic-effect-gate/SKILL.md",
+      "sha256": "ebcb8c8490d8506b11b662e8763c050c21330e4dc41bb3223bc4875ca9657768",
+      "bytes": 1899,
+      "manifest_ref": null
+    },
+    {
+      "skill_id": "w7tp-execution-evidence-lifecycle",
+      "skill_ref": "capabilities/w7tp-execution-evidence-lifecycle/SKILL.md",
+      "sha256": "21f0e9b3543cb2e7e5af8fabfad0b74857072ccfe10c6b80121aef5d5af81935",
+      "bytes": 1557,
+      "manifest_ref": null
+    },
+    {
+      "skill_id": "w7tp-external-capability-gateway",
+      "skill_ref": "capabilities/w7tp-external-capability-gateway/SKILL.md",
+      "sha256": "3498114b6b5fbec0f04152b2114edc3bca32d1bd86e9fbde007b197df5d7d31b",
+      "bytes": 2457,
+      "manifest_ref": null
+    },
+    {
+      "skill_id": "w7tp-stateful-information-flow",
+      "skill_ref": "capabilities/w7tp-stateful-information-flow/SKILL.md",
+      "sha256": "66ad32e30bf45ea4c6516197a90ac8285fbbdb2a9ff2821a44007de467d83b12",
+      "bytes": 1783,
+      "manifest_ref": null
+    }
+  ],
+  "codex_installed_custom_skills": [
+    {
+      "skill_id": "account-ai-conversation-governance",
+      "installed_ref": "/home/taiji_admin/.codex/skills/account-ai-conversation-governance/SKILL.md",
+      "sha256": "de5b9ce6d8c3441247d506d672720c0c3f737b27f85b7883143efc3595570ad0",
+      "bytes": 6969,
+      "repo_source_refs": [],
+      "repo_source_sha256": [],
+      "matches_repo_source_bytes": null
+    },
+    {
+      "skill_id": "land-8d-worktree",
+      "installed_ref": "/home/taiji_admin/.codex/skills/land-8d-worktree/SKILL.md",
+      "sha256": "57ccb923971027e4b7a9584dc8955705dadc3b61cbd9250d0dbed8a404ced633",
+      "bytes": 7382,
+      "repo_source_refs": [],
+      "repo_source_sha256": [],
+      "matches_repo_source_bytes": null
+    },
+    {
+      "skill_id": "trace-file-8d-adi-causality",
+      "installed_ref": "/home/taiji_admin/.codex/skills/trace-file-8d-adi-causality/SKILL.md",
+      "sha256": "60a74d9be71991d235911d946c09dc768a3de4b682f659207ecf0320cd2698eb",
+      "bytes": 8925,
+      "repo_source_refs": [],
+      "repo_source_sha256": [],
+      "matches_repo_source_bytes": null
+    },
+    {
+      "skill_id": "w7tp-8d-adi-natural-language-control",
+      "installed_ref": "/home/taiji_admin/.codex/skills/w7tp-8d-adi-natural-language-control/SKILL.md",
+      "sha256": "7c163acf289d6020952cacacd8a292d4eaa7334de87261d0bc34e6fb25c1208b",
+      "bytes": 18950,
+      "repo_source_refs": [
+        ".skill-build/w7tp-8d-adi-natural-language-control/SKILL.md"
+      ],
+      "repo_source_sha256": [
+        "7c163acf289d6020952cacacd8a292d4eaa7334de87261d0bc34e6fb25c1208b"
+      ],
+      "matches_repo_source_bytes": true
+    }
+  ],
+  "legacy_five_vcp_candidate_identities": [
+    {
+      "target_skill_id": "w7tp.total-field.skill-governance",
+      "source_key": "govern-total-field-skills",
+      "contract_ref": "govern-total-field-skills/total-field-skill-candidate-contract.json",
+      "contract_sha256": "9b992fcc7c6dab417f35b7b1f366f0b327a5708d856a68e37010c132c00921d2",
+      "implementation_status": "SOURCE_LOCATED_IDENTITY_EQUIVALENCE_NOT_PROVEN",
+      "technical_identity": "INSUFFICIENT_EVIDENCE",
+      "manifest_status": "NOT_CREATED_IDENTITY_AND_PAYLOAD_LINEAGE_UNPROVEN",
+      "candidate_executable": false,
+      "activation": false,
+      "canonical": false,
+      "d8_authorized": false
+    },
+    {
+      "target_skill_id": "w7tp.intent-field-construction",
+      "source_key": "build-intent-field",
+      "contract_ref": "build-intent-field/total-field-skill-candidate-contract.json",
+      "contract_sha256": "b03f687a5e9def8f219f58505a92435ce109a74684d2bccfd0c9aa421b664cfe",
+      "implementation_status": "SOURCE_LOCATED_IDENTITY_EQUIVALENCE_NOT_PROVEN",
+      "technical_identity": "INSUFFICIENT_EVIDENCE",
+      "manifest_status": "NOT_CREATED_IDENTITY_AND_PAYLOAD_LINEAGE_UNPROVEN",
+      "candidate_executable": false,
+      "activation": false,
+      "canonical": false,
+      "d8_authorized": false
+    },
+    {
+      "target_skill_id": "w7tp.reconstruct-private-media",
+      "source_key": "reconstruct-private-media",
+      "contract_ref": "reconstruct-private-media/total-field-skill-candidate-contract.json",
+      "contract_sha256": "a0930a778502005c0d8ff96a358258ac16855335cd30750419604288caed7858",
+      "implementation_status": "IMPLEMENTATION_NOT_LOCATED_IN_BOUNDED_COORDINATES",
+      "technical_identity": "NOT_PROVEN",
+      "manifest_status": "NOT_CREATED_IMPLEMENTATION_AND_PAYLOAD_LINEAGE_UNRESOLVED",
+      "candidate_executable": false,
+      "activation": false,
+      "canonical": false,
+      "d8_authorized": false
+    },
+    {
+      "target_skill_id": "w7tp.wuchang.community-announcement-xiaoj",
+      "source_key": "wuchang.community-announcement-xiaoj",
+      "contract_ref": "wuchang.community-announcement-xiaoj/total-field-skill-candidate-contract.json",
+      "contract_sha256": "82fac3551a773ce4c555a9cd30d864f70acd5ed12a7073a955a438743b91fabe",
+      "implementation_status": "IMPLEMENTATION_NOT_LOCATED_IN_BOUNDED_COORDINATES",
+      "technical_identity": "NOT_PROVEN",
+      "manifest_status": "NOT_CREATED_IMPLEMENTATION_AND_PAYLOAD_LINEAGE_UNRESOLVED",
+      "candidate_executable": false,
+      "activation": false,
+      "canonical": false,
+      "d8_authorized": false
+    },
+    {
+      "target_skill_id": "w7tp.generative-transmission",
+      "source_key": "w7tp-generative-transmission",
+      "contract_ref": "w7tp-generative-transmission/total-field-skill-candidate-contract.json",
+      "contract_sha256": "5b6070790fdcde1e126e400387b3b35feaf7d795f740f698065662826aff494e",
+      "implementation_status": "IMPLEMENTATION_NOT_LOCATED_IN_BOUNDED_COORDINATES",
+      "technical_identity": "NOT_PROVEN",
+      "manifest_status": "NOT_CREATED_IMPLEMENTATION_AND_PAYLOAD_LINEAGE_UNRESOLVED",
+      "candidate_executable": false,
+      "activation": false,
+      "canonical": false,
+      "d8_authorized": false
+    }
+  ],
+  "conclusions": {
+    "legacy_five_vcp_is_complete_skill_scope": false,
+    "legacy_five_vcp_promoted_or_activated": false,
+    "missing_or_unproven_legacy_identity_is_not_invented": true,
+    "installed_skill_does_not_imply_total_field_authority": true,
+    "repo_file_exists_does_not_imply_installed_or_loaded": true,
+    "nlc_repo_source_matches_installed_bytes": true
+  },
+  "self_hash_algorithm": "SHA256_CANONICAL_JSON_EXCLUDING_SELF_SHA256_V1",
+  "self_sha256": "a3f58fa8f6b787acec32db86eb14da9f7540b099cf34fe50df26624953ca2c39"
+}

@@ -1,0 +1,110 @@
+{
+  "schema_version": "W7TP-FIVE-SKILL-ID-BINDING-MATRIX/2.3-CANDIDATE/1.0",
+  "matrix_id": "W7TP_FIVE_SKILL_ID_BINDING_MATRIX_V2_3_CANDIDATE",
+  "state": "CANDIDATE_EVIDENCE_ONLY_NOT_FORMAL",
+  "governing_candidate_source": {
+    "contract_id": "W7TP_8D_ADI_V2_3",
+    "version": "2.3",
+    "contract_ref": "manifests/total_field/w7tp_8d_adi_v2_3_candidate_source/CONTRACT.json",
+    "contract_self_sha256": "815ca3c13dce2ac140978cf7070ee09cc32a840dc1cae2a47da4aef54e0720fc",
+    "source_content_sha256": "dfd9147a5d053764025f318cd49213cdb3ce9df6fa017ec0ad62ad08821f9597",
+    "candidate_only": true,
+    "canonical": false,
+    "d8_authorized": false
+  },
+  "formal_authority_baseline": {
+    "canonical_id": "W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1",
+    "version": "2.1",
+    "document_ref": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
+    "document_sha256": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d",
+    "unchanged": true
+  },
+  "binding_count": 5,
+  "bindings": {
+    "w7tp.total-field.skill-governance": {
+      "target_skill_id": "w7tp.total-field.skill-governance",
+      "source_key": "govern-total-field-skills",
+      "package_id": "vcp:w7tp.total-field.skill-governance",
+      "intended_manifest_path": "govern-total-field-skills/total-field-skill-manifest.json",
+      "candidate_contract_ref": "govern-total-field-skills/total-field-skill-candidate-contract.json",
+      "candidate_contract_sha256": "9b992fcc7c6dab417f35b7b1f366f0b327a5708d856a68e37010c132c00921d2",
+      "implementation_status": "SOURCE_LOCATED_IDENTITY_EQUIVALENCE_NOT_PROVEN",
+      "manifest_status": "NOT_CREATED_IDENTITY_AND_PAYLOAD_LINEAGE_UNPROVEN",
+      "candidate_executable": false
+    },
+    "w7tp.intent-field-construction": {
+      "target_skill_id": "w7tp.intent-field-construction",
+      "source_key": "build-intent-field",
+      "package_id": "vcp:w7tp.intent-field-construction",
+      "intended_manifest_path": "build-intent-field/total-field-skill-manifest.json",
+      "candidate_contract_ref": "build-intent-field/total-field-skill-candidate-contract.json",
+      "candidate_contract_sha256": "b03f687a5e9def8f219f58505a92435ce109a74684d2bccfd0c9aa421b664cfe",
+      "implementation_status": "SOURCE_LOCATED_IDENTITY_EQUIVALENCE_NOT_PROVEN",
+      "manifest_status": "NOT_CREATED_IDENTITY_AND_PAYLOAD_LINEAGE_UNPROVEN",
+      "candidate_executable": false
+    },
+    "w7tp.reconstruct-private-media": {
+      "target_skill_id": "w7tp.reconstruct-private-media",
+      "source_key": "reconstruct-private-media",
+      "package_id": "vcp:w7tp.reconstruct-private-media",
+      "intended_manifest_path": "reconstruct-private-media/total-field-skill-manifest.json",
+      "candidate_contract_ref": "reconstruct-private-media/total-field-skill-candidate-contract.json",
+      "candidate_contract_sha256": "a0930a778502005c0d8ff96a358258ac16855335cd30750419604288caed7858",
+      "implementation_status": "IMPLEMENTATION_NOT_LOCATED_IN_BOUNDED_COORDINATES",
+      "manifest_status": "NOT_CREATED_IMPLEMENTATION_AND_PAYLOAD_LINEAGE_UNRESOLVED",
+      "candidate_executable": false
+    },
+    "w7tp.wuchang.community-announcement-xiaoj": {
+      "target_skill_id": "w7tp.wuchang.community-announcement-xiaoj",
+      "source_key": "wuchang.community-announcement-xiaoj",
+      "package_id": "vcp:w7tp.wuchang.community-announcement-xiaoj",
+      "intended_manifest_path": "wuchang.community-announcement-xiaoj/total-field-skill-manifest.json",
+      "candidate_contract_ref": "wuchang.community-announcement-xiaoj/total-field-skill-candidate-contract.json",
+      "candidate_contract_sha256": "82fac3551a773ce4c555a9cd30d864f70acd5ed12a7073a955a438743b91fabe",
+      "implementation_status": "IMPLEMENTATION_NOT_LOCATED_IN_BOUNDED_COORDINATES",
+      "manifest_status": "NOT_CREATED_IMPLEMENTATION_AND_PAYLOAD_LINEAGE_UNRESOLVED",
+      "candidate_executable": false
+    },
+    "w7tp.generative-transmission": {
+      "target_skill_id": "w7tp.generative-transmission",
+      "source_key": "w7tp-generative-transmission",
+      "package_id": "vcp:w7tp.generative-transmission",
+      "intended_manifest_path": "w7tp-generative-transmission/total-field-skill-manifest.json",
+      "candidate_contract_ref": "w7tp-generative-transmission/total-field-skill-candidate-contract.json",
+      "candidate_contract_sha256": "5b6070790fdcde1e126e400387b3b35feaf7d795f740f698065662826aff494e",
+      "implementation_status": "IMPLEMENTATION_NOT_LOCATED_IN_BOUNDED_COORDINATES",
+      "manifest_status": "NOT_CREATED_IMPLEMENTATION_AND_PAYLOAD_LINEAGE_UNRESOLVED",
+      "candidate_executable": false
+    }
+  },
+  "readiness": {
+    "source_located_count": 2,
+    "implementation_not_located_count": 3,
+    "formal_manifest_count": 0,
+    "exact_formal_manifest_count_required": 5,
+    "formal_review_eligible": false,
+    "native_skill_substitution_allowed": false
+  },
+  "authority_boundary": {
+    "candidate_only": true,
+    "candidate_executable": false,
+    "activation": false,
+    "canonical": false,
+    "d8_authorized": false,
+    "self_promotion_allowed": false
+  },
+  "forbidden_effects": {
+    "canonical_write": false,
+    "pointer_change": false,
+    "d8_issue": false,
+    "deploy": false,
+    "restart": false,
+    "network_change": false,
+    "credential_access": false,
+    "ledger_consume": false,
+    "git_commit": false,
+    "git_push": false,
+    "external_effect": false
+  },
+  "resolution_rule": "No candidate contract is a formal manifest. Each exact implementation, identity, payload hash, lineage, permissions, allowed nodes and owner attestation must be resolved before a five-of-five formal review can begin."
+}

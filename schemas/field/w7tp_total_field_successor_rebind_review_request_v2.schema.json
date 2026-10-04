@@ -1,8 +1,378 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wuchang.life/schemas/w7tp_total_field_successor_rebind_review_request_v2.schema.json",
-  "title": "W7TP Total Field Global Canonical Successor Rebind Review Request V2",
-  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_pointer_ref": {
+      "const": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
+    },
+    "authority_pointer_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "candidate_root": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "canonical_ref": {
+      "const": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"
+    },
+    "contract_mode": {
+      "enum": [
+        "CANDIDATE_CONTRACT_ONLY",
+        "FORMAL_REVIEW"
+      ]
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "dynamic_context": {
+      "additionalProperties": false,
+      "properties": {
+        "adi_record_id": {
+          "anyOf": [
+            {
+              "pattern": "^task-state:T-007:[0-9a-f]{16}$"
+            },
+            {
+              "pattern": "^evidence:t007-v23-global-successor-bootstrap:[0-9]{8}T[0-9]{6}Z$"
+            }
+          ],
+          "type": "string"
+        },
+        "context_ref": {
+          "pattern": "^context:task-state:T-007:[0-9a-f]{16}$",
+          "type": "string"
+        },
+        "maximum_age_seconds": {
+          "maximum": 3600,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "packet_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "pulled_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "record_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "adi_record_id",
+        "record_sha256",
+        "maximum_age_seconds"
+      ],
+      "type": "object"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "founder_authorization_ref": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "founder_authorization_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "live_bindings": {
+      "additionalProperties": false,
+      "properties": {
+        "current_field": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        "current_field_router": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        "total_field_authority": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "current_field",
+        "current_field_router",
+        "total_field_authority"
+      ],
+      "type": "object"
+    },
+    "manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "non_execution_assertions": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_change": {
+          "const": false
+        },
+        "core_write": {
+          "const": false
+        },
+        "db_write": {
+          "const": false
+        },
+        "deploy": {
+          "const": false
+        },
+        "formal_decision_creation": {
+          "const": false
+        },
+        "formal_seal_creation": {
+          "const": false
+        },
+        "git_write": {
+          "const": false
+        },
+        "network_change": {
+          "const": false
+        },
+        "pointer_change": {
+          "const": false
+        },
+        "restart": {
+          "const": false
+        }
+      },
+      "required": [
+        "core_write",
+        "canonical_change",
+        "pointer_change",
+        "git_write",
+        "db_write",
+        "deploy",
+        "restart",
+        "network_change",
+        "formal_decision_creation",
+        "formal_seal_creation"
+      ],
+      "type": "object"
+    },
+    "nonce": {
+      "pattern": "^nonce:sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "package_bindings": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_successor_receipt": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        "consumer_rebind_matrix": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        "current_field_successor": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        "founder_directive": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        "successor_contract": {
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "founder_directive",
+        "successor_contract",
+        "current_field_successor",
+        "consumer_rebind_matrix",
+        "authority_successor_receipt"
+      ],
+      "type": "object"
+    },
+    "packet_type": {
+      "const": "TOTAL_FIELD_SUCCESSOR_REBIND_REVIEW_REQUEST"
+    },
+    "predecessor_pointer_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "predecessor_version": {
+      "const": "2.1"
+    },
+    "replay_guard": {
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "ledger_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "on_replay": {
+          "const": "HOLD_SUCCESSOR_REBIND_REVIEW"
+        },
+        "single_use": {
+          "const": true
+        }
+      },
+      "required": [
+        "single_use",
+        "domain",
+        "ledger_ref",
+        "on_replay"
+      ],
+      "type": "object"
+    },
+    "request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "request_self_hash_algorithm": {
+      "const": "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
+    },
+    "request_self_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "requested_decision": {
+      "const": "SUCCESSOR_REBIND_APPROVED"
+    },
+    "review_scope": {
+      "const": "GLOBAL_CANONICAL_SUCCESSOR"
+    },
+    "run_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-REVIEW-REQUEST/2.0"
+    },
+    "successor_version": {
+      "const": "2.3"
+    },
+    "task_id": {
+      "const": "T-007"
+    }
+  },
   "required": [
     "schema_version",
     "packet_type",
@@ -33,357 +403,6 @@
     "request_self_sha256",
     "non_execution_assertions"
   ],
-  "properties": {
-    "schema_version": {
-      "const": "W7TP-TOTAL-FIELD-SUCCESSOR-REBIND-REVIEW-REQUEST/2.0"
-    },
-    "packet_type": {
-      "const": "TOTAL_FIELD_SUCCESSOR_REBIND_REVIEW_REQUEST"
-    },
-    "review_scope": {
-      "const": "GLOBAL_CANONICAL_SUCCESSOR"
-    },
-    "request_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "run_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "task_id": {
-      "const": "T-007"
-    },
-    "canonical_ref": {
-      "const": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"
-    },
-    "predecessor_pointer_sha256": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
-    },
-    "predecessor_version": {
-      "const": "2.1"
-    },
-    "successor_version": {
-      "const": "2.3"
-    },
-    "candidate_root": {
-      "type": "string",
-      "minLength": 1
-    },
-    "manifest_sha256": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
-    },
-    "package_bindings": {
-      "type": "object",
-      "required": [
-        "founder_directive",
-        "successor_contract",
-        "current_field_successor",
-        "consumer_rebind_matrix",
-        "authority_successor_receipt"
-      ],
-      "properties": {
-        "founder_directive": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        },
-        "successor_contract": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        },
-        "current_field_successor": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        },
-        "consumer_rebind_matrix": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        },
-        "authority_successor_receipt": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": false
-    },
-    "live_bindings": {
-      "type": "object",
-      "required": [
-        "current_field",
-        "current_field_router",
-        "total_field_authority"
-      ],
-      "properties": {
-        "current_field": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        },
-        "current_field_router": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        },
-        "total_field_authority": {
-          "type": "object",
-          "required": [
-            "ref",
-            "sha256"
-          ],
-          "properties": {
-            "ref": {
-              "type": "string",
-              "minLength": 1
-            },
-            "sha256": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          },
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": false
-    },
-    "dynamic_context": {
-      "type": "object",
-      "required": [
-        "adi_record_id",
-        "record_sha256",
-        "maximum_age_seconds"
-      ],
-      "properties": {
-        "adi_record_id": {
-          "type": "string",
-          "pattern": "^evidence:t007-v23-global-successor-bootstrap:[0-9]{8}T[0-9]{6}Z$"
-        },
-        "record_sha256": {
-          "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
-        },
-        "maximum_age_seconds": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 3600
-        }
-      },
-      "additionalProperties": false
-    },
-    "nonce": {
-      "type": "string",
-      "pattern": "^nonce:sha256:[0-9a-f]{64}$"
-    },
-    "created_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "expires_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "replay_guard": {
-      "type": "object",
-      "required": [
-        "single_use",
-        "domain",
-        "ledger_ref",
-        "on_replay"
-      ],
-      "properties": {
-        "single_use": {
-          "const": true
-        },
-        "domain": {
-          "type": "string",
-          "minLength": 1
-        },
-        "ledger_ref": {
-          "type": "string",
-          "minLength": 1
-        },
-        "on_replay": {
-          "const": "HOLD_SUCCESSOR_REBIND_REVIEW"
-        }
-      },
-      "additionalProperties": false
-    },
-    "authority_pointer_ref": {
-      "const": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
-    },
-    "authority_pointer_sha256": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
-    },
-    "founder_authorization_ref": {
-      "type": "string",
-      "minLength": 1
-    },
-    "founder_authorization_sha256": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
-    },
-    "requested_decision": {
-      "const": "SUCCESSOR_REBIND_APPROVED"
-    },
-    "contract_mode": {
-      "enum": [
-        "CANDIDATE_CONTRACT_ONLY",
-        "FORMAL_REVIEW"
-      ]
-    },
-    "request_self_hash_algorithm": {
-      "const": "SHA256_CANONICAL_JSON_EXCLUDING_REQUEST_SELF_SHA256/1.0"
-    },
-    "request_self_sha256": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
-    },
-    "non_execution_assertions": {
-      "type": "object",
-      "required": [
-        "core_write",
-        "canonical_change",
-        "pointer_change",
-        "git_write",
-        "db_write",
-        "deploy",
-        "restart",
-        "network_change",
-        "formal_decision_creation",
-        "formal_seal_creation"
-      ],
-      "properties": {
-        "core_write": {
-          "const": false
-        },
-        "canonical_change": {
-          "const": false
-        },
-        "pointer_change": {
-          "const": false
-        },
-        "git_write": {
-          "const": false
-        },
-        "db_write": {
-          "const": false
-        },
-        "deploy": {
-          "const": false
-        },
-        "restart": {
-          "const": false
-        },
-        "network_change": {
-          "const": false
-        },
-        "formal_decision_creation": {
-          "const": false
-        },
-        "formal_seal_creation": {
-          "const": false
-        }
-      },
-      "additionalProperties": false
-    }
-  },
-  "additionalProperties": false
+  "title": "W7TP Total Field Global Canonical Successor Rebind Review Request V2",
+  "type": "object"
 }

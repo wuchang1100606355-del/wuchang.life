@@ -1,0 +1,97 @@
+{
+  "active_skill_ids": [],
+  "binding_count": 10,
+  "bindings": {
+    "w7tp-8d-adi-adaptive-network": {
+      "binding_state": "SOURCE_PRESENT",
+      "skill_ref": "capabilities/w7tp-8d-adi-adaptive-network/SKILL.md",
+      "skill_sha256": "ad27f78fc0879ed2436b2e9c2f848f1b013864c07147dd1ae947a480ee4ef391",
+      "target_skill_id": "w7tp-8d-adi-adaptive-network"
+    },
+    "w7tp-8d-adi-audio-field": {
+      "binding_state": "SOURCE_PRESENT",
+      "skill_ref": "capabilities/w7tp-8d-adi-audio-field/SKILL.md",
+      "skill_sha256": "b1091a231b2bafd248967c9e57f0838694c303226cf2abcbfa146dbb4bfe6df5",
+      "target_skill_id": "w7tp-8d-adi-audio-field"
+    },
+    "w7tp-8d-adi-natural-language-control": {
+      "binding_state": "SOURCE_PRESENT",
+      "skill_ref": ".skill-build/w7tp-8d-adi-natural-language-control/SKILL.md",
+      "skill_sha256": "7c163acf289d6020952cacacd8a292d4eaa7334de87261d0bc34e6fb25c1208b",
+      "target_skill_id": "w7tp-8d-adi-natural-language-control"
+    },
+    "w7tp-8d-adi-remote-desktop-organ": {
+      "binding_state": "SOURCE_PRESENT",
+      "skill_ref": "capabilities/w7tp-8d-adi-remote-desktop-organ/SKILL.md",
+      "skill_sha256": "bb663044f69aa89a76398f8d5beb54596b8aa4e986278063ea3c257f21b5eacc",
+      "target_skill_id": "w7tp-8d-adi-remote-desktop-organ"
+    },
+    "w7tp-bounded-delegation-chain": {
+      "binding_state": "REGISTERED_NATIVE",
+      "skill_ref": "capabilities/w7tp-bounded-delegation-chain/SKILL.md",
+      "skill_sha256": "4810bd2497dca71eed252f12b29cab3b9b16cd8856313b1fdb9a4e2b17d90abb",
+      "target_skill_id": "w7tp-bounded-delegation-chain"
+    },
+    "w7tp-capability-assimilator": {
+      "binding_state": "SOURCE_PRESENT",
+      "skill_ref": "capabilities/w7tp-capability-assimilator/w7tp-capability-assimilator/SKILL.md",
+      "skill_sha256": "11b97f8094c5f98e267fd7df407bcaf974b04925d4ca914b15878b5af35c7578",
+      "target_skill_id": "w7tp-capability-assimilator"
+    },
+    "w7tp-deterministic-effect-gate": {
+      "binding_state": "REGISTERED_NATIVE",
+      "skill_ref": "capabilities/w7tp-deterministic-effect-gate/SKILL.md",
+      "skill_sha256": "ebcb8c8490d8506b11b662e8763c050c21330e4dc41bb3223bc4875ca9657768",
+      "target_skill_id": "w7tp-deterministic-effect-gate"
+    },
+    "w7tp-execution-evidence-lifecycle": {
+      "binding_state": "REGISTERED_NATIVE",
+      "skill_ref": "capabilities/w7tp-execution-evidence-lifecycle/SKILL.md",
+      "skill_sha256": "21f0e9b3543cb2e7e5af8fabfad0b74857072ccfe10c6b80121aef5d5af81935",
+      "target_skill_id": "w7tp-execution-evidence-lifecycle"
+    },
+    "w7tp-external-capability-gateway": {
+      "binding_state": "REGISTERED_NATIVE",
+      "skill_ref": "capabilities/w7tp-external-capability-gateway/SKILL.md",
+      "skill_sha256": "3498114b6b5fbec0f04152b2114edc3bca32d1bd86e9fbde007b197df5d7d31b",
+      "target_skill_id": "w7tp-external-capability-gateway"
+    },
+    "w7tp-stateful-information-flow": {
+      "binding_state": "REGISTERED_NATIVE",
+      "skill_ref": "capabilities/w7tp-stateful-information-flow/SKILL.md",
+      "skill_sha256": "66ad32e30bf45ea4c6516197a90ac8285fbbdb2a9ff2821a44007de467d83b12",
+      "target_skill_id": "w7tp-stateful-information-flow"
+    }
+  },
+  "canonical_target": {
+    "canonical_id": "W7TP_8D_ADI_V2_3",
+    "version": "2.3"
+  },
+  "evidence_boundary": {
+    "file_exists_is_loaded": false,
+    "missing_identity_invention_allowed": false,
+    "registered_is_available": false,
+    "runtime_effect_verified": false
+  },
+  "legacy_v21_identity_lineage": {
+    "ref": "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json",
+    "role": "HISTORY_ONLY_NOT_CURRENT_SKILL_SCOPE",
+    "sha256": "f7009c496f6d96b73298457b5d5bf055d5e0d9fae20afe069042a89f9c39b130"
+  },
+  "native_skill_index": {
+    "ref": "capabilities/W7TP_NATIVE_SKILLS_INDEX.json",
+    "sha256": "4ee21d278ec7b956bdf48249d3dbf20e875118620da56e47340b448bd5726d69"
+  },
+  "registered_native_skill_ids": [
+    "w7tp-external-capability-gateway",
+    "w7tp-deterministic-effect-gate",
+    "w7tp-bounded-delegation-chain",
+    "w7tp-stateful-information-flow",
+    "w7tp-execution-evidence-lifecycle"
+  ],
+  "schema_version": "W7TP-SKILL-BINDING-MATRIX/2.3/1.0",
+  "scope_roots": [
+    ".skill-build",
+    "capabilities"
+  ]
+}

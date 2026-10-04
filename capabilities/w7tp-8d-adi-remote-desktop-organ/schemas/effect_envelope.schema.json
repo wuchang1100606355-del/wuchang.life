@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schema:w7tp:rdc-effect-envelope:v1",
+  "title": "W7TP Remote Desktop Organ Effect Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "command_id",
+    "task_ref",
+    "device_ref",
+    "effect_class",
+    "target_ref",
+    "input",
+    "authority_ref",
+    "idempotency_key",
+    "return_coordinate"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "W7TP-RDC-EFFECT-ENVELOPE/1.0"
+    },
+    "command_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "device_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "service_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "effect_class": {
+      "enum": [
+        "READ_ONLY",
+        "TOOL_LOCAL_TRANSIENT",
+        "STATIC_ANALYSIS",
+        "MUTATION",
+        "ACTIVATION",
+        "DEPLOY",
+        "DESTRUCTIVE_CONTROL",
+        "EXTERNAL_MESSAGE",
+        "DYNAMIC_EFFECT"
+      ]
+    },
+    "target_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input": {
+      "type": "object"
+    },
+    "preimage_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rollback_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "authority_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "origin_cell_packet_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "return_coordinate": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
