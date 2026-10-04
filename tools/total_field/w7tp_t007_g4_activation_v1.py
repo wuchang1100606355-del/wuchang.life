@@ -7,6 +7,7 @@ from pathlib import Path
 from tools.total_field.w7tp_founder_passkey_v1 import verify_authorization_passkey, PasskeyVerificationError
 
 EFFECT="AUTHORIZE_W7TP_V23_GLOBAL_CANONICAL_ACTIVATION"
+MAX_REQUEST_TTL_SECONDS=1800
 class G4Error(ValueError):
  def __init__(self,code,path="$"): self.code,self.path=code,path; super().__init__(f"{code}:{path}")
 def cj(v): return json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False).encode()
@@ -42,7 +43,7 @@ def validate(root,request,authorization,now):
  if request.get("schema_version")!="W7TP-T007-G4-ACTIVATION/1.0" or request.get("authorized_effect")!=EFFECT: raise G4Error("HOLD_G4_REQUEST_SCHEMA")
  if request.get("single_use") is not True or request.get("task_id")!="T-007": raise G4Error("HOLD_G4_REPLAY_POLICY")
  created,expires=utc(request.get("created_at","")),utc(request.get("expires_at",""))
- if expires<=created or (expires-created).total_seconds()>300 or not(created<=now<expires): raise G4Error("HOLD_G4_REQUEST_EXPIRED")
+ if expires<=created or (expires-created).total_seconds()>MAX_REQUEST_TTL_SECONDS or not(created<=now<expires): raise G4Error("HOLD_G4_REQUEST_EXPIRED")
  bindings=request.get("bindings")
  if not isinstance(bindings,dict): raise G4Error("HOLD_G4_BINDINGS_REQUIRED")
  paths={}
