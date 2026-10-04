@@ -313,6 +313,20 @@ class Taiji04FounderSceneEntryBindingTests(unittest.TestCase):
             "formal_execution_authority": False,
             "command_ref_sha256": command_hash
         }
+        self.p4_binding = {
+            "state": "PASS_SCENE_BINDING_CANDIDATE",
+            "member_ref": "member_ref:founder",
+            "identity_root_ref": "identity_root_ref:fixture",
+            "root_generation": 1,
+            "revocation_epoch": 0,
+            "founder_role_seat_lease_required": True,
+            "founder_role_seat_lease_ref": "role_seat_lease_ref:sha256:" + "3" * 64,
+            "candidate_only": True,
+            "runtime_released": False,
+        }
+        self.p4_binding["binding_ref"] = "scene_binding_ref:sha256:" + hashlib.sha256(
+            json.dumps(self.p4_binding, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+        ).hexdigest()
 
     def bind(self, *, input_mode="audiovisual_event", intent_text="商家物業公益統覽"):
         return bind_taiji04_local_entry_to_founder_scene(
@@ -325,7 +339,8 @@ class Taiji04FounderSceneEntryBindingTests(unittest.TestCase):
             sealed_founder_root=self.root,
             total_field_preflight_receipt=self.preflight,
             lawful_scope_confirmed=True,
-            evidence_refs=["evidence_ref:taiji04-binding-fixture"]
+            evidence_refs=["evidence_ref:taiji04-binding-fixture"],
+            member_scene_binding_candidate=self.p4_binding,
         )
 
     def test_entry_calls_existing_founder_scene_and_priority_wins(self):

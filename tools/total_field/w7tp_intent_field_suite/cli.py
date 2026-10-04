@@ -10,6 +10,7 @@ from typing import Any
 
 from tools.total_field.w7tp_field_application_runtime import FieldApplicationError
 from tools.total_field.w7tp_core_encoding import build_encoding_registry, explain_code
+from tools.total_field.w7tp_v2_3_candidate_source import active_canonical_binding
 
 from .adaptive_cognition import active_policy
 from .cafe_pos_interop import (
@@ -44,6 +45,7 @@ SCHEMA_FILES = (
     "schemas/field/w7tp_true8d_projection_contract_v2_1.schema.json",
     "schemas/field/8d_gte_runtime_candidate_profile_v0_1.schema.json",
     "schemas/field/8d_governance_tensor_expression_candidate.schema.json",
+    "schemas/field/w7tp_v2_3_candidate_source_contract_v1.schema.json",
 )
 
 WORKTREE_REVIEW_QUEUE_PATH = (
@@ -87,7 +89,11 @@ def _collect_changed_file_paths(*, include_untracked: bool, repo_root: Path = RO
 
 def _release_files() -> list[Path]:
     suite = ROOT / "tools/total_field/w7tp_intent_field_suite"
+    active = active_canonical_binding()
     files = [
+        ROOT / "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+        ROOT / active["canonical_path"],
+        ROOT / active["machine_schema_path"],
         ROOT / "tools/deploy_w7tp_small_agent_all_nodes.py",
         ROOT / "tools/total_field/w7tp_field_application_runtime.py",
         ROOT / "tools/total_field/founder_variable_cognition_gate.py",
@@ -113,6 +119,7 @@ def _release_files() -> list[Path]:
         ROOT / "tests/test_medical_care_demo.py",
         ROOT / "tests/test_w7tp_field_application_runtime.py",
         ROOT / "tests/test_w7tp_intent_field_suite.py",
+        ROOT / "tests/test_t007_v23_candidate_consumers.py",
         ROOT / "tests/test_w7tp_natural_person_identity_prefix.py",
         ROOT / "tests/test_w7tp_identity_projection_landing.py",
         ROOT / "deploy/caddy/w7tp-odoo-identity-projection.caddy",
@@ -145,13 +152,12 @@ def _release_files() -> list[Path]:
         ROOT / "tools/total_field/w7tp_bundle_installer.py",
         ROOT / "tools/total_field/w7tp_core_encoding.py",
         ROOT / "tools/total_field/w7tp_canonical_v2_1_legacy_adapter.py",
-        ROOT / "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py",
+        ROOT / "tools/total_field/w7tp_v2_3_candidate_source.py",
         ROOT / "tools/total_field/w7tp_true8d_contract_sandbox.py",
         ROOT / "tools/total_field_candidate_gateway.py",
         ROOT / "tools/eightd_gte_parser_candidate.py",
         ROOT / "tools/tfct_true8d_runtime_candidate.py",
         ROOT / "tools/d3_coordinate_transition_candidate.py",
-        ROOT / "scripts/verify/verify_w7tp_canonical_v2_1.py",
         ROOT / "docs/operations/CAFE_POS_HUMAN_AI_DESIGN_BENCHMARK_20260716.md",
         ROOT / "docs/total_field/W7TP_CORE_FIELD_ENCODING_MANAGEMENT_V1.md",
         ROOT / "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
@@ -166,7 +172,14 @@ def _release_files() -> list[Path]:
         ROOT / "manifests/total_field/w7tp_canonical_v2_1/CANONICAL_MANIFEST.json",
         ROOT / "manifests/total_field/w7tp_canonical_v2_1/V2_CONSUMER_INVENTORY.json",
         ROOT / "manifests/total_field/w7tp_canonical_v2_1/SHA256_MANIFEST.json",
-        ROOT / "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_1/BINDING_MATRIX.json",
+        ROOT / "manifests/total_field/w7tp_skill_id_binding_matrix_v2_3/BINDING_MATRIX.json",
+        ROOT / "manifests/total_field/w7tp_8d_adi_v2_3_candidate_source/CONTRACT.json",
+        ROOT / "manifests/total_field/w7tp_five_skill_id_binding_matrix_v2_3_candidate/BINDING_MATRIX.json",
+        ROOT / "govern-total-field-skills/total-field-skill-candidate-contract.json",
+        ROOT / "build-intent-field/total-field-skill-candidate-contract.json",
+        ROOT / "reconstruct-private-media/total-field-skill-candidate-contract.json",
+        ROOT / "wuchang.community-announcement-xiaoj/total-field-skill-candidate-contract.json",
+        ROOT / "w7tp-generative-transmission/total-field-skill-candidate-contract.json",
         ROOT / "configs/w7tp_member_llm_prefix_policy.example.json",
         ROOT / "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/quickclick-menu-snapshot.json",
         ROOT / "runtime/total_field/shared_intent_field/W7TP_SHARED_8D_CAFE_POS_20260716T175836Z/cloud-menu-source/README.md",

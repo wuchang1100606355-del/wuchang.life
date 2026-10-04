@@ -795,6 +795,10 @@ class W7TPIntentFieldSuiteTest(unittest.TestCase):
     def test_release_includes_total_field_container_scope_manifest(self) -> None:
         release_paths = {path.relative_to(ROOT).as_posix() for path in _release_files()}
         self.assertIn(
+            "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+            release_paths,
+        )
+        self.assertIn(
             "runtime/total_field/node_container_scope/TOTAL_FIELD_NODE_CONTAINER_MANIFEST_20260624.json",
             release_paths,
         )
