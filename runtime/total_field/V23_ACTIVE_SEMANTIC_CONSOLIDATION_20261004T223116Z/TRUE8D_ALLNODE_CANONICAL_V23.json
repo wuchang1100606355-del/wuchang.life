@@ -1,0 +1,98 @@
+{
+  "activation_receipt_ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/G4_FIELD_COMPLETION_RECEIPT.json",
+  "canonical_id": "W7TP_8D_ADI_V2_3",
+  "coupled_constraints": {
+    "difference_analysis_is_transmission": false,
+    "fixed_eight_field_record_definition_forbidden": true,
+    "model_is_authority": false,
+    "sequential_pipeline_definition_forbidden": true
+  },
+  "dimensions": [
+    {
+      "field": "Intent",
+      "field_en": "Intent",
+      "field_zh": "意圖",
+      "id": "D1",
+      "zh": "意圖"
+    },
+    {
+      "field": "State",
+      "field_en": "State",
+      "field_zh": "狀態",
+      "id": "D2",
+      "zh": "狀態"
+    },
+    {
+      "field": "Coordinate",
+      "field_en": "Coordinate",
+      "field_zh": "座標",
+      "id": "D3",
+      "zh": "座標"
+    },
+    {
+      "field": "Evidence",
+      "field_en": "Evidence",
+      "field_zh": "證據",
+      "id": "D4",
+      "zh": "證據"
+    },
+    {
+      "field": "Execution/Policy",
+      "field_en": "Execution/Policy",
+      "field_zh": "執行／政策",
+      "id": "D5",
+      "zh": "執行／政策"
+    },
+    {
+      "field": "Generative State Transmission",
+      "field_en": "Generative State Transmission",
+      "field_zh": "生成式狀態傳輸",
+      "id": "D6",
+      "zh": "生成式狀態傳輸"
+    },
+    {
+      "field": "Risk/Isolation",
+      "field_en": "Risk/Isolation",
+      "field_zh": "風險／隔離",
+      "id": "D7",
+      "zh": "風險／隔離"
+    },
+    {
+      "field": "Envelope/Authority",
+      "field_en": "Envelope/Authority",
+      "field_zh": "封套／權威",
+      "id": "D8",
+      "zh": "封套／權威"
+    }
+  ],
+  "formal_architecture_name": "正8維治理架構",
+  "formal_field_successor": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/CURRENT_8D_FIELD_SUCCESSOR.json",
+    "sha256": "26ff223a1ce77ccf3430fa203cc8f694f36f4fbeb516e88e073ae023687fb6ce"
+  },
+  "inner_core": "五合一核心治理閉環",
+  "integration_expression": "八合一",
+  "predecessor": {
+    "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+    "sha256": "337aa719443d42dff6477c78a0a5a3e32e9c30a82231a651c6aeb608239260a9"
+  },
+  "representation": "TASK_PROJECTION_NOT_EIGHT_FIXED_FIELDS_OR_EIGHT_STEPS",
+  "safety_flags": {
+    "DB_WRITE": false,
+    "DEPLOY": false,
+    "FILE_CONTENT_READ": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "PATH_METADATA_ONLY": true,
+    "PRODUCTION_RELEASE": false,
+    "SECRET_READ": false,
+    "SERVICE_RESTART": false
+  },
+  "scope": {
+    "field_scope": "ALL_8_DIMENSIONS",
+    "node_policy": "macro-governed by path/ref/hash/report only; no direct OS authority assumption",
+    "total_field": "ALL_NODES"
+  },
+  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+  "state": "ACTIVE_TRUE8D_V23",
+  "version": "2.3"
+}

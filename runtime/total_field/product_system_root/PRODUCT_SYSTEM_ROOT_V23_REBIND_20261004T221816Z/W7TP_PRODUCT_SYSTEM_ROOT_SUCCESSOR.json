@@ -1,0 +1,467 @@
+{
+  "acceptance_gates": {
+    "acceptance": "ALL_GATES_REQUIRED_FAIL_CLOSED",
+    "order": [
+      "ROOT_PACKET_GATE",
+      "HUMAN_PRODUCT_QUALITY_GATE",
+      "DUAL_VALIDATION_GATE"
+    ]
+  },
+  "action_effect_policy": {
+    "ai_self_approval": "FORBIDDEN",
+    "allowed_without_effect_confirmation": [
+      "一般對話",
+      "導覽",
+      "唯讀查詢",
+      "內容候選"
+    ],
+    "confirmation_card": {
+      "exact_effect_required": true,
+      "language": "一般人看得懂的繁體中文",
+      "parameter_hash_binding_required": true,
+      "risk_required": true,
+      "rollback_required": true,
+      "same_member_session_required": true
+    },
+    "fail_closed": true,
+    "human_confirmation_required": [
+      "DB寫入",
+      "公告發布",
+      "付款",
+      "會員權限變更",
+      "刪除",
+      "設備控制",
+      "帳務變更",
+      "runtime變更"
+    ],
+    "llm_direct_execution": "FORBIDDEN"
+  },
+  "canonical_status": "ACTIVE_PRODUCT_SYSTEM_ROOT_SUCCESSOR",
+  "commercial_policy": {
+    "business_cloud": {
+      "in_district_subscription_fee": 0,
+      "out_of_district_subscription": "PAID"
+    },
+    "community_industry_facts": {
+      "donation": "婉謝捐款",
+      "equipment_and_network_provider": "上品聊國咖啡館重新總店",
+      "fundraising": "不募款",
+      "in_district_store_support": "Founder產業提供無償技術及原料成本價",
+      "primary_gap": "展店第一桶金",
+      "principle": "商業養公益",
+      "private_profit_sharing_model": "PROHIBITED",
+      "renyi_store": "尚未啟動",
+      "renyi_store_revenue_share_to_founder_or_head_store": 0,
+      "shortfall_bearer": "上品聊國咖啡館重新總店",
+      "support_method": "Founder與咖啡館同仁以自身商業努力支持公益",
+      "technology_provider": "Founder江政隆無償提供"
+    },
+    "property_cloud": {
+      "in_district_subscription_fee": 0,
+      "out_of_district_subscription": "PAID"
+    },
+    "subscription_cannot_purchase": [
+      "Founder權限",
+      "治理權",
+      "會員主權根",
+      "管委會決策權"
+    ],
+    "subscription_revenue": {
+      "allocation": "ALL",
+      "beneficiary": "社區數位發展基金",
+      "founder_share": 0,
+      "shangpin_liaoguo_cafe_reopened_head_store_share": 0
+    }
+  },
+  "d1_identity": {
+    "actor_role": "founder",
+    "authorization_record": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/FOUNDER_AUTHORIZATION_RECORD.json@sha256:47ccd549f96d351a09ab0244b95eb508eeca5042a3a9186e7e760e44b95f616c",
+    "founder": "江政隆（CHIANG Cheng-Lung）",
+    "identity_id": "identity:founder:chiang-cheng-lung",
+    "system_authority": "W7TP inventor, Founder, and accountable natural person",
+    "trust_domain": "wuchang-total-field"
+  },
+  "d2_intent": {
+    "intent_id": "intent:PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z",
+    "product_contract": [
+      "ROOT_PACKET_GATE先於任何產品來源生成",
+      "HUMAN_PRODUCT_QUALITY_GATE要求居民十秒內知道我在哪、能做什麼、下一步是什麼",
+      "DUAL_VALIDATION_GATE分開執行程式碼驗證與人類觀點驗證，兩者全部通過才能接受",
+      "產品必須是全新原創五常小J社區服務完成系統",
+      "Open WebUI只能作隔離候選對話能力",
+      "Odoo為會員、角色、組織、商家、物業、流程與帳務權威",
+      "所有具副作用操作必須由同一會員session的人類確認"
+    ],
+    "system_name": "五常小J社區服務完成系統產品根",
+    "target_equivalent_state": "建立唯一同lineage有效產品根，正式綁定原創產品邊界、來源位置、Founder修正、人類產品品質與雙層驗證，不生成產品原始碼"
+  },
+  "d3_state": {
+    "components": [
+      {
+        "authority": "ACTIVE",
+        "component_id": "total-field",
+        "role": "governance-verification"
+      },
+      {
+        "authority": "ROOT_BOUND_SOURCE_NOT_GENERATED",
+        "component_id": "wuchang-xiaoj-community-product",
+        "role": "original-community-service-product"
+      },
+      {
+        "authority": "DATA_AUTHORITY",
+        "component_id": "odoo",
+        "role": "authoritative-membership-organization-workflow-accounting"
+      },
+      {
+        "authority": "NO_FORMAL_EFFECT_AUTHORITY",
+        "component_id": "xiaoj-intent-field-9107",
+        "role": "candidate-intent-and-model-route"
+      },
+      {
+        "authority": "NO_PRODUCT_ARCHITECTURE_AUTHORITY",
+        "component_id": "openwebui",
+        "role": "optional-isolated-dialogue-capability"
+      },
+      {
+        "authority": "NO_MEMBER_ROOT_OR_ROLE_ISSUANCE",
+        "component_id": "google-line",
+        "role": "verification-channel"
+      }
+    ],
+    "lifecycle": "ACTIVE_PRODUCT_SYSTEM_ROOT_SUCCESSOR_SOURCE_NOT_GENERATED",
+    "state_id": "state:PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z:active"
+  },
+  "d4_topology": {
+    "coordinate_system": "W7TP-D3-identity-context-node-network-coordinate",
+    "nodes": [
+      {
+        "locator": "identity:founder:chiang-cheng-lung",
+        "node_id": "founder",
+        "role": "explicit-human-authority"
+      },
+      {
+        "locator": "logical://taiji01/total-field",
+        "node_id": "total-field",
+        "role": "root-governance-issuer-and-verifier"
+      },
+      {
+        "locator": "/home/taiji_admin/Taiji_Hub/products/wuchang_xiaoj_community",
+        "node_id": "product-source",
+        "role": "unique-future-product-source-output"
+      },
+      {
+        "locator": "logical://taiji01/odoo",
+        "node_id": "odoo",
+        "role": "authoritative-data-system"
+      },
+      {
+        "locator": "logical://taiji01/intent-field/9107",
+        "node_id": "intent-field-9107",
+        "role": "candidate-capability-only"
+      }
+    ],
+    "transitions": [
+      {
+        "condition": "EXPLICIT_CREATE_SAME_LINEAGE_PRODUCT_ROOT_SUCCESSOR",
+        "from": "founder",
+        "to": "total-field"
+      },
+      {
+        "condition": "FUTURE_SOURCE_GENERATION_ONLY_AFTER_ALL_ROOT_BINDINGS_VERIFY",
+        "from": "total-field",
+        "to": "product-source"
+      },
+      {
+        "condition": "CANDIDATE_INTERFACE_ONLY_NO_DB_WRITE_IN_THIS_RUN",
+        "from": "product-source",
+        "to": "odoo"
+      },
+      {
+        "condition": "CANDIDATE_CAPABILITY_NO_DIRECT_EFFECT",
+        "from": "product-source",
+        "to": "intent-field-9107"
+      }
+    ]
+  },
+  "d5_resource": {
+    "evidence": [
+      {
+        "evidence_id": "predecessor-root",
+        "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/ROOT_IMPL_20260722T211410Z/package/local-implementation/W7TP_PRODUCT_SYSTEM_ROOT_PACKET.json",
+        "sha256": "a073f824d77e89b024f8f43415af857272e8a59d6f6de8b518ee1aba90971a3d"
+      },
+      {
+        "evidence_id": "w7tp-v2-3-canonical",
+        "path": "/home/taiji_admin/Taiji_Hub/manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+        "sha256": "4744d1dc822f7113f87f08891d6a2bb1c8db78aa063756e461e387eddfd1d4cf"
+      },
+      {
+        "evidence_id": "founder-authorization",
+        "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/FOUNDER_AUTHORIZATION_RECORD.json",
+        "sha256": "47ccd549f96d351a09ab0244b95eb508eeca5042a3a9186e7e760e44b95f616c"
+      },
+      {
+        "evidence_id": "successor-schema",
+        "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z/PRODUCT_SYSTEM_ROOT_SUCCESSOR.schema.json",
+        "sha256": "0d89b1cbdef9bb95eab8aa232f1c0e80005988173fcadbca8e8bd5973721b18d"
+      },
+      {
+        "authority": "EVIDENCE_ONLY_NOT_PARENT_NOT_ACTIVE",
+        "evidence_id": "prior-unpromoted-design-candidate",
+        "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_SUCCESSOR_MULTI_SCENE_20260729T182040Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR_CANDIDATE.json",
+        "sha256": "9e3063281564fc51c53b8efc5bbaf78e15a01315d9e80bbe868b4e93169d495d"
+      }
+    ],
+    "operations_not_this_run": [
+      "GENERATE_PRODUCT_SOURCE",
+      "DATABASE_WRITE",
+      "DEPLOY",
+      "RESTART",
+      "DELETE",
+      "GIT_WRITE"
+    ],
+    "operations_this_run": [
+      "CREATE_SUCCESSOR_GOVERNANCE_ARTIFACTS",
+      "ISSUE_D8_RECEIPT",
+      "SWITCH_UNIQUE_PRODUCT_ROOT_POINTER"
+    ],
+    "receiver": {
+      "canonical_owner": "TOTAL_FIELD_SERVER_MASTER",
+      "issuer": "logical://taiji01/total-field",
+      "model_free": true
+    }
+  },
+  "d6_governance": {
+    "allow_actions": [
+      "bind_product_contract",
+      "bind_product_source_location",
+      "issue_d8_receipt",
+      "switch_unique_product_root_pointer",
+      "ordinary_dialogue",
+      "navigation",
+      "read_only_query",
+      "content_candidate"
+    ],
+    "authority": "Founder-authorized one-time same-lineage product root successor write under taiji01 Total Field",
+    "deny_actions": [
+      "parallel_root",
+      "parallel_member_system",
+      "parallel_xiaoj",
+      "open_source_product_architecture_reuse",
+      "openwebui_product_architecture_authority",
+      "raw_secret_access",
+      "plaintext_member_data",
+      "raw_audio_access",
+      "database_write_this_run",
+      "deploy_this_run",
+      "restart_this_run",
+      "delete_this_run",
+      "git_write_this_run",
+      "source_generation_this_run"
+    ],
+    "future_actions_requiring_separate_step": [
+      "generate_original_product_source_at_bound_location",
+      "code_validation",
+      "human_product_validation",
+      "candidate_build"
+    ],
+    "human_confirmation_required_before_effect": [
+      "database_write",
+      "announcement_publish",
+      "payment",
+      "member_permission_change",
+      "delete",
+      "device_control",
+      "accounting_change",
+      "runtime_change"
+    ]
+  },
+  "d7_verification": {
+    "acceptance_model": "ALL_GATES_FAIL_CLOSED",
+    "canonical_ref": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json@sha256:4744d1dc822f7113f87f08891d6a2bb1c8db78aa063756e461e387eddfd1d4cf",
+    "dual_validation_gate": {
+      "acceptance": "BOTH_PASS",
+      "code_validation": "SEPARATE_REQUIRED",
+      "human_perspective_validation": "SEPARATE_REQUIRED",
+      "single_layer_pass": "HOLD"
+    },
+    "human_product_quality_gate": {
+      "plain_language": true,
+      "professional_term_overload": "BLOCK",
+      "required_result": "ALL_THREE_ANSWERABLE_WITHIN_10_SECONDS",
+      "resident_ten_second_questions": [
+        "我在哪",
+        "能做什麼",
+        "下一步是什麼"
+      ]
+    },
+    "root_packet_gate": [
+      "same_lineage",
+      "predecessor_sha256",
+      "founder_authority",
+      "product_source_location",
+      "scene_boundaries",
+      "w7tp_v2_3_canonical_binding",
+      "single_active_pointer"
+    ],
+    "technical_drift_checks": [
+      "W7TP remains protocol-native 8D intent-field state packet",
+      "Open WebUI remains optional isolated capability only",
+      "Odoo remains data authority",
+      "Google and LINE remain verification channels only",
+      "9107 and cloud models remain candidate capability without formal effect authority"
+    ]
+  },
+  "d8_envelope": {
+    "created_at": "2026-10-04T22:28:24Z",
+    "expires_at": null,
+    "governance": {
+      "decision": "ALLOW_SAME_LINEAGE_SUCCESSOR",
+      "issuer": "logical://taiji01/total-field",
+      "status": "ACTIVE_PRODUCT_SYSTEM_ROOT_SUCCESSOR",
+      "total_field_receipt_ref": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/D8_FORMAL_RECEIPT.json"
+    },
+    "integrity": {
+      "algorithm": "sha256",
+      "method": "SHA256_CANONICAL_JSON_WITH_D8_PACKET_SHA256_EMPTY",
+      "packet_sha256": "ae73afe8d8bdc4fbd0596ff8d31afd2ab4cd70f9c7fb889a21d864daf5d576a2"
+    },
+    "nonce": "nonce-ref:sha256:6cf5192a6c08cb6d0d0968203333169a59ed8bf27be4629bf6e306ef3b5411ec",
+    "packet_id": "packet:PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z",
+    "parent_packet_id": "packet:PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z",
+    "protocol": {
+      "name": "W7TP-8D-GT",
+      "version": "product-root-successor-v2.3"
+    },
+    "verification": {
+      "required_checks": [
+        "schema",
+        "canonical_serialization",
+        "envelope_hash",
+        "lineage",
+        "founder_authority",
+        "canonical_binding",
+        "product_source_binding",
+        "human_product_gate",
+        "dual_validation_gate",
+        "parallel_root_absence",
+        "protected_state"
+      ]
+    }
+  },
+  "lineage": {
+    "logical_time": {
+      "clock_ref": "logical_time:product_system_root",
+      "predecessor_tick": 2,
+      "successor_tick": 3
+    },
+    "namespace": "product_system_root",
+    "policy": "SAME_LINEAGE_SUCCESSOR_ONLY",
+    "predecessor_packet_id": "packet:PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z",
+    "predecessor_path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json",
+    "predecessor_sha256": "336ec63144db4840c2cb716cd7e035a1e8c6441fc4d12b67779bd0da0627fafe",
+    "predecessor_version": "product-root-successor-v1.0",
+    "successor_version": "product-root-successor-v2.3"
+  },
+  "product_boundary": {
+    "authority": {
+      "cloud_model": "CANDIDATE_CAPABILITY_NO_FORMAL_EFFECT_AUTHORITY",
+      "founder": "江政隆",
+      "google": "VERIFICATION_CHANNEL_ONLY",
+      "intent_field_9107": "CANDIDATE_CAPABILITY_NO_FORMAL_EFFECT_AUTHORITY",
+      "line": "VERIFICATION_CHANNEL_ONLY",
+      "odoo": [
+        "member",
+        "role",
+        "organization",
+        "business",
+        "property",
+        "workflow",
+        "accounting"
+      ],
+      "total_field": "GOVERNANCE_VERIFICATION_AND_SAFETY"
+    },
+    "committee_membership": {
+      "governing_odoo_organizations": [
+        "PROPERTY_CLOUD_BRANCH",
+        "BUSINESS_CLOUD"
+      ],
+      "merchant_management_committee": "GROUP_MEMBER",
+      "property_decision_right": "PRESERVED_BY_LAWFUL_COMMITTEE_NOT_GRANTED_TO_PROPERTY_SYSTEM"
+    },
+    "product_architecture_sources": {
+      "existing_open_source_modules": "PROHIBITED_AS_PRODUCT_ARCHITECTURE",
+      "open_source_templates": "PROHIBITED_AS_PRODUCT_ARCHITECTURE",
+      "openwebui": "OPTIONAL_ISOLATED_CAPABILITY_ONLY",
+      "parallel_member_system": "PROHIBITED",
+      "parallel_product_root": "PROHIBITED",
+      "parallel_xiaoj": "PROHIBITED",
+      "reskinning": "PROHIBITED"
+    },
+    "product_name": "五常小J社區服務完成系統",
+    "product_type": "全新原創社區服務產品",
+    "public_homepage": {
+      "embed": false,
+      "entry_to_product": "ONE_EXISTING_COLUMN_LINK_ONLY",
+      "existing_association_homepage": "KEEP_ACTIVE_UNCHANGED",
+      "existing_public_first_cta": "UNCHANGED",
+      "modify": false,
+      "replace": false,
+      "resident_product_home_primary_cta": [
+        "找小J協助",
+        "查看居民服務"
+      ]
+    },
+    "scenes": [
+      "RESIDENT",
+      "COMMUNITY_WORKER",
+      "BUSINESS_CLOUD_IN_DISTRICT",
+      "BUSINESS_CLOUD_OUT_OF_DISTRICT",
+      "PROPERTY_CLOUD_IN_DISTRICT",
+      "PROPERTY_CLOUD_OUT_OF_DISTRICT",
+      "TECHNICAL_RESEARCH"
+    ],
+    "technical_terms": {
+      "allowed_location": "TECHNICAL_RESEARCH_AREA_ONLY",
+      "plain_language_explanation_required": true,
+      "resident_primary_navigation": "PROHIBITED",
+      "terms": [
+        "W7TP",
+        "8D",
+        "ADI",
+        "生成式傳輸"
+      ]
+    }
+  },
+  "product_source_location": "/home/taiji_admin/Taiji_Hub/products/wuchang_xiaoj_community",
+  "promotion_research_account_policy": {
+    "allowed_types": [
+      "PROMOTION_FREE_ACCOUNT",
+      "RESEARCH_FREE_ACCOUNT"
+    ],
+    "audit": "APPEND_ONLY",
+    "expiry_behavior": "AUTO_HOLD",
+    "fee": 0,
+    "formal_effect_default_permission": "NONE",
+    "founder_authority": "PROHIBITED",
+    "governance_authority": "PROHIBITED",
+    "member_plaintext_access": "PROHIBITED",
+    "permanent_validity": "PROHIBITED",
+    "promotion_material": "APPROVED_MATERIAL_ONLY",
+    "required_fields": [
+      "purpose",
+      "responsible_person_ref",
+      "scene_ref",
+      "capability_refs",
+      "data_scope_refs",
+      "starts_at",
+      "expires_at",
+      "revocation_ref",
+      "audit_ref"
+    ],
+    "research_data": "DEIDENTIFIED_ONLY",
+    "revocation": "SUPPORTED",
+    "subscription_eligibility_rules": "APPLY"
+  },
+  "schema": "w7tp://schemas/product-system-root/same-lineage-successor/v1"
+}

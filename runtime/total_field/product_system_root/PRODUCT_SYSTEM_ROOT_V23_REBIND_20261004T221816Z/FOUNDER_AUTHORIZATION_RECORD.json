@@ -1,0 +1,48 @@
+{
+  "authority_effect": {
+    "create_same_lineage_successor": true,
+    "create_valid_d8_receipt": true,
+    "database_write": false,
+    "delete": false,
+    "deploy": false,
+    "generate_product_source": false,
+    "git_write": true,
+    "replace_unique_active_product_root_pointer": true,
+    "restart": false
+  },
+  "canonical": {
+    "path": "/home/taiji_admin/Taiji_Hub/manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+    "pointer": "/home/taiji_admin/Taiji_Hub/runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "sha256": "4744d1dc822f7113f87f08891d6a2bb1c8db78aa063756e461e387eddfd1d4cf",
+    "version": "2.3"
+  },
+  "created_at_utc": "2026-10-04T22:28:24Z",
+  "founder": {
+    "authorization": "EXPLICIT_RETIRE_ALL_ACTIVE_W7TP_V2_1_BINDINGS_AND_REBIND_PRODUCT_ROOT_TO_W7TP_V2_3",
+    "identity_ref": "identity:founder:chiang-cheng-lung",
+    "name": "江政隆"
+  },
+  "lineage_policy": "SAME_LINEAGE_SUCCESSOR_ONLY",
+  "mode": "ONE_TIME_ROOT_SUCCESSOR_WRITE",
+  "node": "taiji01",
+  "parallel_root": "PROHIBITED",
+  "predecessor": {
+    "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json",
+    "sha256": "336ec63144db4840c2cb716cd7e035a1e8c6441fc4d12b67779bd0da0627fafe"
+  },
+  "product_source_location": "/home/taiji_admin/Taiji_Hub/products/wuchang_xiaoj_community",
+  "required_bindings": [
+    "ROOT_PACKET_GATE",
+    "HUMAN_PRODUCT_QUALITY_GATE",
+    "DUAL_VALIDATION_GATE"
+  ],
+  "run_id": "PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z",
+  "schema": "w7tp.total_field.founder_same_lineage_root_successor_authorization.v1",
+  "single_use": {
+    "consumed_by_run_id": "PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z",
+    "replay": "FORBIDDEN",
+    "scope_expansion": "FORBIDDEN"
+  },
+  "source_generation": "NOT_IN_THIS_STEP",
+  "state": "EXPLICIT_SINGLE_USE_AUTHORIZATION_CONSUMED_BY_RUN"
+}

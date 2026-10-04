@@ -1,0 +1,132 @@
+{
+  "activation_receipt_ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/field_completion/G4_FIELD_COMPLETION_RECEIPT.json",
+  "canonical_id": "W7TP_8D_ADI_V2_3",
+  "coupled_constraints": {
+    "difference_analysis_is_transmission": false,
+    "fixed_eight_field_record_definition_forbidden": true,
+    "model_is_authority": false,
+    "sequential_pipeline_definition_forbidden": true
+  },
+  "created_at": "2026-06-22T17:18:56",
+  "dimensions": [
+    {
+      "field_en": "Intent",
+      "field_zh": "意圖",
+      "id": "D1"
+    },
+    {
+      "field_en": "State",
+      "field_zh": "狀態",
+      "id": "D2"
+    },
+    {
+      "field_en": "Coordinate",
+      "field_zh": "座標",
+      "id": "D3"
+    },
+    {
+      "field_en": "Evidence",
+      "field_zh": "證據",
+      "id": "D4"
+    },
+    {
+      "field_en": "Execution/Policy",
+      "field_zh": "執行／政策",
+      "id": "D5"
+    },
+    {
+      "field_en": "Generative State Transmission",
+      "field_zh": "生成式狀態傳輸",
+      "id": "D6"
+    },
+    {
+      "field_en": "Risk/Isolation",
+      "field_zh": "風險／隔離",
+      "id": "D7"
+    },
+    {
+      "field_en": "Envelope/Authority",
+      "field_zh": "封套／權威",
+      "id": "D8"
+    }
+  ],
+  "formal_field_successor": {
+    "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/review_completion_20261002T184158Z/CURRENT_8D_FIELD_SUCCESSOR.json",
+    "sha256": "26ff223a1ce77ccf3430fa203cc8f694f36f4fbeb516e88e073ae023687fb6ce"
+  },
+  "nodes": [
+    {
+      "kind": "linux",
+      "node_id": "taiji01",
+      "source": "tailscale_status_self"
+    },
+    {
+      "kind": "windows",
+      "node_id": "MSI",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "linux",
+      "node_id": "penguin",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "iOS",
+      "node_id": "localhost",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "linux",
+      "node_id": "DESKTOP-OHE05SC",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "linux",
+      "node_id": "wuchang-us-free-node",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "kind": "android",
+      "node_id": "V3_MIX_EDLA_GL",
+      "source": "tailscale_status_peer"
+    },
+    {
+      "ip": "192.168.50.1",
+      "kind": "ASUSWRT-Merlin router",
+      "node_id": "RT-BE86U-7428",
+      "role": "physical_network_boundary",
+      "source": "router_ssh_confirmed",
+      "ssh_port": "22"
+    }
+  ],
+  "predecessor": {
+    "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+    "sha256": "4f15212984d06f7d39ad7727aa2006b493425da3f797ae3aa134b9f292091d90"
+  },
+  "representation": "TASK_PROJECTION_NOT_EIGHT_FIXED_FIELDS_OR_EIGHT_STEPS",
+  "run_id": "TRUE8D_ALLNODE_WITH_ROUTER_SUCCESSOR_20260730T000000Z",
+  "safety_flags": {
+    "CONFIG_READ": false,
+    "DB_WRITE": false,
+    "DEPLOY": false,
+    "FILE_CONTENT_READ": false,
+    "FIREWALL_WRITE": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "NVRAM_WRITE": false,
+    "PATH_METADATA_ONLY": true,
+    "PRODUCTION_RELEASE": false,
+    "ROUTER_REBOOT": false,
+    "SECRET_READ": false,
+    "SERVICE_RESTART": false
+  },
+  "scope": {
+    "dimensions": "TRUE_8D_ALL",
+    "router_boundary": "INCLUDED",
+    "scan_mode": "PATH_METADATA_ONLY",
+    "total_field": "ALL_NODES"
+  },
+  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+  "state": "ACTIVE_TRUE8D_V23",
+  "tailscale_state": "PASS",
+  "version": "2.3"
+}

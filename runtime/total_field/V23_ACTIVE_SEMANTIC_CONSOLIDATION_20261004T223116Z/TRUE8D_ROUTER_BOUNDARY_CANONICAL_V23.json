@@ -1,0 +1,105 @@
+{
+  "canonical_binding": {
+    "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+    "version": "2.3"
+  },
+  "canonical_id": "W7TP_8D_ADI_V2_3",
+  "dimensions": [
+    {
+      "field_en": "Intent",
+      "field_zh": "意圖",
+      "id": "D1"
+    },
+    {
+      "field_en": "State",
+      "field_zh": "狀態",
+      "id": "D2"
+    },
+    {
+      "field_en": "Coordinate",
+      "field_zh": "座標",
+      "id": "D3"
+    },
+    {
+      "field_en": "Evidence",
+      "field_zh": "證據",
+      "id": "D4"
+    },
+    {
+      "field_en": "Execution/Policy",
+      "field_zh": "執行／政策",
+      "id": "D5"
+    },
+    {
+      "field_en": "Generative State Transmission",
+      "field_zh": "生成式狀態傳輸",
+      "id": "D6"
+    },
+    {
+      "field_en": "Risk/Isolation",
+      "field_zh": "風險／隔離",
+      "id": "D7"
+    },
+    {
+      "field_en": "Envelope/Authority",
+      "field_zh": "封套／權威",
+      "id": "D8"
+    }
+  ],
+  "legacy_semantic_mapping": "SUPERSEDED_READ_ONLY",
+  "next_action": "MERGE_ROUTER_BOUNDARY_INTO_TRUE8D_ALLNODE_TOTAL_FIELD",
+  "red_team_rule": {
+    "does_not_manage": [
+      "IP",
+      "patent",
+      "finance",
+      "resource",
+      "performance_data",
+      "skill_management",
+      "router_config"
+    ],
+    "primary_job": "check detour",
+    "quarantine_only_for": [
+      "detour",
+      "unsafe_action",
+      "unauthorized_config_change",
+      "secret_read",
+      "member_plaintext_read"
+    ]
+  },
+  "router": {
+    "firmware": "ASUSWRT-Merlin RT-BE86U 3006.102.7_0",
+    "hostname": "RT-BE86U-7428",
+    "ip": "192.168.50.1",
+    "kernel": "Linux 4.19.294 aarch64 ASUSWRT-Merlin",
+    "model": "ASUS RT-BE86U",
+    "shell_pwd": "/tmp/home/root",
+    "ssh_port": 22,
+    "ssh_user": "coffeeboss"
+  },
+  "router_projection": {
+    "D3": "router/network/hardware boundary is coordinate context",
+    "D4": "SSH/hostname/kernel/receipt material is evidence",
+    "D5": "network configuration or routing action belongs to Execution/Policy and requires authority",
+    "D6": "carrier or router transport is not D6 by itself; D6 is Generative State Transmission",
+    "D7": "network detour, unsafe change and isolation/quarantine belong to Risk/Isolation",
+    "D8": "router has no independent authority; authorization remains Envelope/Authority"
+  },
+  "safety_flags": {
+    "CONFIG_READ": false,
+    "DB_WRITE": false,
+    "DEPLOY": false,
+    "FIREWALL_WRITE": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "NVRAM_WRITE": false,
+    "PRODUCTION_RELEASE": false,
+    "ROUTER_REBOOT": false,
+    "SECRET_READ": false,
+    "SERVICE_RESTART": false
+  },
+  "scope": "TOTAL_FIELD_ROUTER_BOUNDARY_EVIDENCE_ONLY",
+  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+  "state": "PASS_ROUTER_SSH_LOGIN_CONFIRMED",
+  "version": "2.3"
+}

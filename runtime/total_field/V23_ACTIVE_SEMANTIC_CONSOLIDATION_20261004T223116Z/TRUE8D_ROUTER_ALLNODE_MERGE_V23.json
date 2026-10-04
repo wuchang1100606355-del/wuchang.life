@@ -1,0 +1,88 @@
+{
+  "canonical_id": "W7TP_8D_ADI_V2_3",
+  "dimensions": [
+    {
+      "field_en": "Intent",
+      "field_zh": "意圖",
+      "id": "D1"
+    },
+    {
+      "field_en": "State",
+      "field_zh": "狀態",
+      "id": "D2"
+    },
+    {
+      "field_en": "Coordinate",
+      "field_zh": "座標",
+      "id": "D3"
+    },
+    {
+      "field_en": "Evidence",
+      "field_zh": "證據",
+      "id": "D4"
+    },
+    {
+      "field_en": "Execution/Policy",
+      "field_zh": "執行／政策",
+      "id": "D5"
+    },
+    {
+      "field_en": "Generative State Transmission",
+      "field_zh": "生成式狀態傳輸",
+      "id": "D6"
+    },
+    {
+      "field_en": "Risk/Isolation",
+      "field_zh": "風險／隔離",
+      "id": "D7"
+    },
+    {
+      "field_en": "Envelope/Authority",
+      "field_zh": "封套／權威",
+      "id": "D8"
+    }
+  ],
+  "legacy_semantic_mapping": "SUPERSEDED_READ_ONLY",
+  "next_action": "RUN_TRUE8D_ALLNODE_REINVENTORY_WITH_ROUTER_BOUNDARY_INCLUDED",
+  "router_node": {
+    "firmware": "ASUSWRT-Merlin RT-BE86U 3006.102.7_0",
+    "hostname": "RT-BE86U-7428",
+    "ip": "192.168.50.1",
+    "kernel": "Linux 4.19.294 aarch64 ASUSWRT-Merlin",
+    "model": "ASUS RT-BE86U",
+    "role": "physical_network_boundary",
+    "ssh_port": 22,
+    "ssh_user": "coffeeboss"
+  },
+  "router_projection": {
+    "D3": "router/network/hardware boundary is coordinate context",
+    "D4": "SSH/hostname/kernel/receipt material is evidence",
+    "D5": "network configuration or routing action belongs to Execution/Policy and requires authority",
+    "D6": "carrier or router transport is not D6 by itself; D6 is Generative State Transmission",
+    "D7": "network detour, unsafe change and isolation/quarantine belong to Risk/Isolation",
+    "D8": "router has no independent authority; authorization remains Envelope/Authority"
+  },
+  "run_id": "TRUE8D_MERGE_ROUTER_INTO_ALLNODE_SUCCESSOR_20260730T000000Z",
+  "safety_flags": {
+    "CONFIG_READ": false,
+    "DB_WRITE": false,
+    "DEPLOY": false,
+    "FIREWALL_WRITE": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "NVRAM_WRITE": false,
+    "PATH_METADATA_ONLY": true,
+    "PRODUCTION_RELEASE": false,
+    "ROUTER_REBOOT": false,
+    "SECRET_READ": false,
+    "SERVICE_RESTART": false
+  },
+  "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD",
+  "source_pointers": {
+    "allnode_canonical": "runtime/total_field/V23_ACTIVE_SEMANTIC_CONSOLIDATION_20261004T223116Z/TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL_V23.json",
+    "allnode_pointer": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_POINTER.txt",
+    "router_canonical": "runtime/total_field/V23_ACTIVE_SEMANTIC_CONSOLIDATION_20261004T223116Z/TRUE8D_ROUTER_BOUNDARY_CANONICAL_V23.json",
+    "router_pointer": "runtime/total_field/active/ACTIVE_TRUE8D_ROUTER_BOUNDARY_POINTER.txt"
+  },
+  "state": "PASS_ROUTER_BOUNDARY_MERGED_INTO_TRUE8D_ALLNODE",
+  "version": "2.3"
+}

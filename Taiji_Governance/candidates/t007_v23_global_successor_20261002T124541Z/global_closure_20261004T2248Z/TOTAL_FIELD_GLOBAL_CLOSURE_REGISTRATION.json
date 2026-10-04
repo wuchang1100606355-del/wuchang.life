@@ -1,0 +1,178 @@
+{
+  "active_bindings": {
+    "active_cleanup": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/product_root_v23_cleanup_20261004T221816Z/FINAL_ACTIVE_V23_CONSOLIDATION_REPORT.json",
+      "sha256": "370c2a9c0af8a497a4048327a8923f416318fa31b32a85c7197afed45c834632"
+    },
+    "authority": {
+      "ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "sha256": "990f06c9fc30c4a69b90106e64fd0bc42ce7654e045f714cd0d6bb2e22c49f0a"
+    },
+    "canonical_pointer": {
+      "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2"
+    },
+    "current_field": {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "sha256": "3faa27ef6833309cdddd96e484714d9f4b3300fb68f2d059de3baebfdde899b0"
+    },
+    "current_field_router": {
+      "ref": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+      "sha256": "3b3d64bd2df777d3a361074c5574c634a5fae056facd534c4624e8af89f5d349"
+    },
+    "product_root": {
+      "ref": "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json",
+      "sha256": "53411d0e02c6077c2692223ace6ecea1372f2d9cf3550c925f51c3827a35c03d"
+    }
+  },
+  "checks": {
+    "active_v21_zero": true,
+    "canonical_v23": true,
+    "checkpoint_done": true,
+    "current_field_router_v23": true,
+    "current_field_v23": true,
+    "old_active_semantics_zero": true,
+    "product_root_v23": true,
+    "task_done": true
+  },
+  "closure_semantics": {
+    "V2_1": "HISTORICAL_OR_EXPLICIT_NON_AUTHORITY_ONLY",
+    "V2_3": "GLOBAL_ACTIVE",
+    "next_action": "NONE"
+  },
+  "dynamic_context": {
+    "checkpoint": {
+      "current_goal": "T-007 V2.1 -> V2.3 全域後繼取代",
+      "current_state": "DONE",
+      "d8": "PASS",
+      "hold_reason": "",
+      "last_decision": "T-007 已依正式 successor review、G4 field-completion receipt、post-reobservation、ACTIVE V2.3 canonical/current fields、Total Field authority 與 active-V2.1 cleanup 證據閉合；V2.1 僅保留歷史或明示無權威相容用途。",
+      "next_action": "NONE"
+    },
+    "context_ref": "context:task-state:T-007:cadee77ae5861e69",
+    "persistence_policy": {
+      "core_rule_persistence_allowed": false,
+      "credential_persistence_allowed": false,
+      "dynamic_context_persistence_allowed": false,
+      "full_state_persistence_allowed": false,
+      "local_rule_ref_persistence_allowed": false,
+      "mode": "EPHEMERAL_CONTEXT_REFERENCES_ONLY",
+      "persistent_reference_classes": [
+        "CONTEXT_REF",
+        "PACKET_REF",
+        "ADI_COORDINATE_REF",
+        "EVIDENCE_REF",
+        "CAPABILITY_REF",
+        "SCHEMA_REF",
+        "INTERFACE_REF",
+        "NON_CORE_RULE_CAPSULE_REF"
+      ],
+      "personal_plaintext_persistence_allowed": false
+    },
+    "task": {
+      "blockers": [],
+      "completion_criteria": [
+        "G1_V21_TO_V23_FORMAL_SUCCESSOR_CLOSED",
+        "G2_CURRENT_8D_FIELD_V23_SEMANTICS_ACTIVE",
+        "G3_TOTAL_FIELD_AUTHORITY_SUCCESSOR_RECEIPT_CLOSED",
+        "ACTIVE_RUNTIME_AND_SKILL_CONSUMERS_REBOUND_FROM_V21",
+        "G4_GLOBAL_ACTIVE_CANONICAL_POINTER_V23",
+        "V21_REMAINS_HISTORY_OR_EXPLICIT_LEGACY_READ_ONLY_ONLY",
+        "ROLLBACK_AND_POST_PROMOTION_REOBSERVATION_PASS"
+      ],
+      "coordinate": "taiji01/runtime/total_field/master_index + V2.3 governing contract/current field/total field",
+      "dependencies": [
+        "T-001"
+      ],
+      "description": "全面取代仍具現行作用的 W7TP V2.1：保留歷史證據與必要 legacy read-only compatibility，建立 Founder-defined V2.3 正式 successor、Current 8D Field、authority lineage、active consumer rebind 與 rollback，最後才切換全域 ACTIVE pointer。",
+      "next_action": "NONE",
+      "priority": "P0",
+      "state": "DONE",
+      "task_ref": "task:T-007",
+      "title": "V2.3 Authority Lineage Gap"
+    }
+  },
+  "native_adi_registration": {
+    "packet_ref": "packet:task-state:T-007:891a79c7efbf79f5",
+    "packet_sha256": "cadee77ae5861e69954d6e890fd0c94eb49ef9f2775e7484428097693ac03928",
+    "record": {
+      "collision_index": 0,
+      "id": "task-state:T-007:f3f11365e01f76ee",
+      "payload": {
+        "D1_INTENT": {
+          "parent_intent_ref": "閉合 Founder V2.3 主線與現行機器權威狀態",
+          "task_ref": "task:T-007",
+          "title": "V2.3 Authority Lineage Gap"
+        },
+        "D2_STATE": {
+          "current": "DONE",
+          "priority": "P0",
+          "snapshot_sha256": "f3f11365e01f76ee68cb2eaa2c17dfceb332ddc30b655315bb43002e80f6a8cb"
+        },
+        "D3_COORDINATE": {
+          "git_branch": "codex/current-live-state-consolidation-20260915",
+          "git_head": "ea8098e916c6299cd792305da3ef7cda74a2a60f",
+          "support_native_adi_packet_sha256": "9e9cf128a694bc871c212623b32e3efbfeb01601dcc034aa6f955f9eb9f2354f",
+          "task_coordinate": "taiji01/runtime/total_field/master_index + V2.3 governing contract/current field/total field",
+          "worktree_clean": false
+        },
+        "D4_EVIDENCE": {
+          "checkpoint_sha256": "18d6be4f845436f8c6b4a580be3efb9e76fc071db17e82dbf73b0ebb41cfae0f",
+          "selected_action_refs": [
+            "A-T007-V23-AUTHORITY-LINEAGE-GAP-20260926"
+          ],
+          "selected_actions_sha256": "9ba81fac3bf5513b240924aa989bbb55553ca75f2b371c7ec165d5edc17a1bfe",
+          "task_state_sha256": "73147a53c1417fdb3a06d4bbea2cb561e39e3e3bf7aa8840cb4243a8f23bcf9d"
+        },
+        "D5_EXECUTION": {
+          "next_action": "NONE",
+          "reconstruction_scope": "LOCAL_TASK_STATE_ONLY",
+          "task_dirty_zero_required": true
+        },
+        "D6_GST": {
+          "compression": false,
+          "differential": false,
+          "packet_contract": "ORIGIN_STATE_MINIMUM_PACKET",
+          "reconstruction": "LOCAL_VOLATILE_ON_PULL",
+          "rule_body_location": "LOCAL_ONLY",
+          "rule_ref": "local-rule:w7tp-task-state-ledger-reconstruction/v1"
+        },
+        "D7_RISK": {
+          "blockers": [],
+          "missing_action_ref": "FAIL_CLOSED",
+          "missing_adi_record": "FAIL_CLOSED",
+          "source_hash_drift": "FAIL_CLOSED"
+        },
+        "D8_AUTHORITY": {
+          "candidate_only": true,
+          "canonical": false,
+          "formal_effect_authority": "LOCAL_TOTAL_FIELD",
+          "model_authority": false,
+          "provider_authority": false
+        },
+        "knowledge_type": "OBSERVED_TASK_STATE_COORDINATE",
+        "relations": [
+          {
+            "ref": "evidence:t007-v23-global-successor-bootstrap:20261003T170407Z",
+            "type": "TASK_STATE_SUPPORT"
+          }
+        ],
+        "state": "TASK_STATE_SNAPSHOT_INDEXED",
+        "title": "Task state snapshot T-007"
+      },
+      "record_sha256": "a8d2c13167e7f5b0e9714d75104b972b346c87c76a3c29a482eccedeb0b70a5a",
+      "spiral_position": {
+        "x": 0,
+        "y": 0
+      },
+      "time_slot": 1791153950
+    },
+    "record_id": "task-state:T-007:f3f11365e01f76ee",
+    "support_snapshot_sha256": "f3f11365e01f76ee68cb2eaa2c17dfceb332ddc30b655315bb43002e80f6a8cb"
+  },
+  "observed_at": "2026-10-04T22:48:59.530276+00:00",
+  "pre_land_git_head": "ea8098e916c6299cd792305da3ef7cda74a2a60f",
+  "schema_id": "W7TP_T007_TOTAL_FIELD_GLOBAL_CLOSURE_REGISTRATION_V1",
+  "state": "PASS_TOTAL_FIELD_GLOBAL_CLOSURE_REGISTERED",
+  "task_id": "T-007"
+}

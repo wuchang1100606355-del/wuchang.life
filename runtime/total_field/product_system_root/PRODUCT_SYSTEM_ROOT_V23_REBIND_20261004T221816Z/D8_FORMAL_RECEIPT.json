@@ -1,0 +1,111 @@
+{
+  "canonical_binding": {
+    "canonical_path": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+    "canonical_sha256": "4744d1dc822f7113f87f08891d6a2bb1c8db78aa063756e461e387eddfd1d4cf",
+    "pointer_path": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "pointer_sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+    "state": "PASS",
+    "version": "2.3"
+  },
+  "decision": "ALLOW_SAME_LINEAGE_SUCCESSOR",
+  "decision_authority": {
+    "authorization": "EXPLICIT_RETIRE_ALL_ACTIVE_W7TP_V2_1_BINDINGS_AND_REBIND_PRODUCT_ROOT_TO_W7TP_V2_3",
+    "authorization_record_path": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/FOUNDER_AUTHORIZATION_RECORD.json",
+    "authorization_record_sha256": "47ccd549f96d351a09ab0244b95eb508eeca5042a3a9186e7e760e44b95f616c",
+    "founder": "江政隆",
+    "identity_ref": "identity:founder:chiang-cheng-lung",
+    "replay": "FORBIDDEN",
+    "single_use_consumed": true
+  },
+  "founder_corrections_bound": {
+    "business_property_in_district_subscription_fee": 0,
+    "community_industry_principle": "商業養公益",
+    "google_line": "VERIFICATION_CHANNEL_ONLY",
+    "human_confirmation_before_effect": "BOUND",
+    "odoo": "AUTHORITATIVE",
+    "openwebui": "OPTIONAL_ISOLATED_CAPABILITY_ONLY",
+    "original_product_only": true,
+    "out_of_district_subscription": "PAID_TO_COMMUNITY_DIGITAL_DEVELOPMENT_FUND",
+    "private_profit_share": 0,
+    "product_source_location": "/home/taiji_admin/Taiji_Hub/products/wuchang_xiaoj_community",
+    "promotion_research_account_limits": "BOUND",
+    "resident_primary_cta": [
+      "找小J協助",
+      "查看居民服務"
+    ]
+  },
+  "gate_bindings": {
+    "DUAL_VALIDATION_GATE": "BOUND_REQUIRED_NOT_EXECUTED_SOURCE_NOT_GENERATED",
+    "HUMAN_PRODUCT_QUALITY_GATE": "BOUND_REQUIRED_NOT_EXECUTED_SOURCE_NOT_GENERATED",
+    "ROOT_PACKET_GATE": "PASS",
+    "acceptance_order": [
+      "ROOT_PACKET_GATE",
+      "HUMAN_PRODUCT_QUALITY_GATE",
+      "DUAL_VALIDATION_GATE"
+    ]
+  },
+  "issued_at_utc": "2026-10-04T22:28:24Z",
+  "issuer": {
+    "canonical_owner": "TOTAL_FIELD_SERVER_MASTER",
+    "locator": "logical://taiji01/total-field",
+    "node": "taiji01"
+  },
+  "lineage": {
+    "logical_time": {
+      "clock_ref": "logical_time:product_system_root",
+      "predecessor_tick": 2,
+      "successor_tick": 3
+    },
+    "namespace": "product_system_root",
+    "packet_integrity_sha256": "ae73afe8d8bdc4fbd0596ff8d31afd2ab4cd70f9c7fb889a21d864daf5d576a2",
+    "parallel_root": "PROHIBITED",
+    "policy": "SAME_LINEAGE_SUCCESSOR_ONLY",
+    "predecessor_packet_id": "packet:PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z",
+    "predecessor_path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json",
+    "predecessor_sha256": "336ec63144db4840c2cb716cd7e035a1e8c6441fc4d12b67779bd0da0627fafe",
+    "successor_packet_id": "packet:PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z",
+    "successor_path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json",
+    "successor_sha256": "cbaefd22659134429bc59c3595d7f421004ef1370a4fe5cd24e03550d0782511"
+  },
+  "pointer_transition": {
+    "authorization": "ALLOW_REPLACE_UNIQUE_POINTER_ONLY",
+    "compare_and_swap_required": true,
+    "path": "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json",
+    "previous_sha256": "7f549057d958802f67628f25e98c6a5159f06ff661114bd1949388626b0f4119",
+    "rollback_ref": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/PRODUCT_ROOT_POINTER_ROLLBACK.json"
+  },
+  "receipt_validity": {
+    "authorization_lifetime": "SINGLE_USE_CONSUMED",
+    "evidence_lifetime": "APPEND_ONLY_NONEXPIRING",
+    "revocation_mode": "APPEND_COMPENSATING_SUCCESSOR_NEVER_REWRITE_HISTORY"
+  },
+  "run_id": "PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z",
+  "schema": "w7tp.total_field.product_system_root_successor_d8_receipt.v1",
+  "schema_binding": {
+    "path": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z/PRODUCT_SYSTEM_ROOT_SUCCESSOR.schema.json",
+    "sha256": "0d89b1cbdef9bb95eab8aa232f1c0e80005988173fcadbca8e8bd5973721b18d",
+    "validation": "PASS_DRAFT_2020_12"
+  },
+  "side_effects": {
+    "database_write": false,
+    "delete": false,
+    "deploy": false,
+    "git_write": true,
+    "restart": false,
+    "runtime_service_change": false,
+    "source_generation": false
+  },
+  "state": "PASS_ACTIVE_PRODUCT_SYSTEM_ROOT_SUCCESSOR",
+  "validation": {
+    "active_v2_1_binding_retirement": "PASS_PENDING_POINTER_CAS",
+    "founder_identity": "PASS",
+    "lineage": "PASS",
+    "packet_integrity": "PASS",
+    "parallel_root": "PASS_PROHIBITED",
+    "predecessor_sha256": "PASS",
+    "product_source_location_unchanged": "PASS",
+    "protected_data": "PASS_NOT_READ",
+    "schema": "PASS_DRAFT_2020_12",
+    "w7tp_v2_3_sha256": "PASS"
+  }
+}
