@@ -1,0 +1,40 @@
+{
+  "fixture_role": "DERIVED_MINIMAL_TEST_FIXTURE",
+  "source_evidence_path": "evidence/total_field/origin_state_minimum_us_20261003T0632Z/FINAL_CROSS_NODE_EVIDENCE.json",
+  "source_evidence_file_sha256": "ee66adf4f10555cdffcd869f829304538172ff9a2494eb95e83702f43dc57f52",
+  "schema": "W7TP_ORIGIN_STATE_CROSS_NODE_EVIDENCE/1.0-candidate",
+  "evidence_refs": [
+    "evidence:sha256:ee66adf4f10555cdffcd869f829304538172ff9a2494eb95e83702f43dc57f52",
+    "receipt:sha256:8f90fff90c400a263b94755ae0a78af2e92255e6b0f737e753d49ad9083889f5"
+  ],
+  "experiment_id": "ORIGIN_STATE_MINIMUM_TAIJI01_TO_US_20261003T064602Z",
+  "state": "PASS_CROSS_NODE_EXACT_RECONSTRUCTION_WITH_EXPLICIT_RECEIVER_RUNTIME_BOOTSTRAP",
+  "source": {
+    "target_bytes": 269590528,
+    "target_files": 1046,
+    "target_manifest_sha256": "bd68559ff8a492f7db3b472560378f370d7fe99af236705e3cc412e51f901ef2"
+  },
+  "receiver": {
+    "successful_runtime": {
+      "python": "3.12.3",
+      "sqlite": "3.45.1"
+    }
+  },
+  "result": {
+    "rule_ref": "local-rule:w7tp-origin-cell-fixture-recipe/v2",
+    "rule_impl_sha256": "5cde10544819f3783c083a229b04569fd054a0cacc5bb981d99708b0e132ce19",
+    "minimum_packet_impl_sha256": "238e1a05280feb9f19318d5453e21d90d19a3eaa3c0d4d1468d20bd226e68a7e",
+    "registry_sha256": "85007b6bce5ad40c1c6ff5985a765a3e015e94867ab3f6be246c2bedc6518eaf"
+  },
+  "failed_attempt_and_correction": {
+    "initial_receiver_runtime": {
+      "python": "3.11.2",
+      "sqlite": "3.40.1",
+      "state": "HOLD_FINAL_MANIFEST_MISMATCH"
+    },
+    "diagnosis": {
+      "logical_rows_sha256_source": "ebffb39eddb71c6575f7dc15507e1331374e37e85106518d431c14fb3dabbe2c",
+      "logical_rows_sha256_receiver": "ebffb39eddb71c6575f7dc15507e1331374e37e85106518d431c14fb3dabbe2c"
+    }
+  }
+}

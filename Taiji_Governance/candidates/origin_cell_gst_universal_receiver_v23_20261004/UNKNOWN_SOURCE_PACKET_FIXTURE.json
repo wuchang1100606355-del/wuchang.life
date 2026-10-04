@@ -1,0 +1,219 @@
+{
+  "executor_contract": "w7tp-origin-cell-universal-executor/1",
+  "file_cells": [
+    {
+      "base_id": "ASCII26_SYMBOLS_V1",
+      "formation_evidence": {
+        "difference_analysis_transmitted": false,
+        "raw_material_u_bytes": 6,
+        "rule_formed_bytes": 4,
+        "source_perspective_sha256": "da1a84f0a234d904340e91834178c62ffe3fb599374351dbcff5560414c7bf9b"
+      },
+      "material_u": [
+        {
+          "base64": "AAECA/+A",
+          "bytes": 6,
+          "segment_id": "u000000",
+          "sha256": "b4f9b7810bb2a4355b4b8445f708bf14dd6f6d0db29a8c6be2b955e3cb73ad98"
+        }
+      ],
+      "path": "nested/opaque.bin",
+      "program": [
+        {
+          "op": "U_SEGMENT",
+          "segment_id": "u000000"
+        },
+        {
+          "indices": [
+            1,
+            36,
+            37,
+            38
+          ],
+          "op": "BASE_INDICES"
+        }
+      ],
+      "target_bytes": 10,
+      "target_sha256": "da1a84f0a234d904340e91834178c62ffe3fb599374351dbcff5560414c7bf9b"
+    },
+    {
+      "base_id": "ASCII26_SYMBOLS_V1",
+      "formation_evidence": {
+        "difference_analysis_transmitted": false,
+        "raw_material_u_bytes": 33,
+        "rule_formed_bytes": 1,
+        "source_perspective_sha256": "cc79ec5287d969e402b70c809ac5806b97f9c480c49406d5692c02e195f79b62"
+      },
+      "material_u": [
+        {
+          "base64": "5Y6f6IOe54uA5oWL5YKz6Ly477ya5pyq55+l5L6G5rqQ",
+          "bytes": 33,
+          "segment_id": "u000000",
+          "sha256": "8594f039a22db4502732cbd795ca3012af64d8bff263da6f058ff9ecf5182083"
+        }
+      ],
+      "path": "nested/unicode.txt",
+      "program": [
+        {
+          "op": "U_SEGMENT",
+          "segment_id": "u000000"
+        },
+        {
+          "indices": [
+            1
+          ],
+          "op": "BASE_INDICES"
+        }
+      ],
+      "target_bytes": 34,
+      "target_sha256": "cc79ec5287d969e402b70c809ac5806b97f9c480c49406d5692c02e195f79b62"
+    },
+    {
+      "base_id": "ASCII26_SYMBOLS_V1",
+      "formation_evidence": {
+        "difference_analysis_transmitted": false,
+        "raw_material_u_bytes": 0,
+        "rule_formed_bytes": 54,
+        "source_perspective_sha256": "91fe0b72547e094317446de8342ff7eeac3a761eab81c9ecac77cd7132fa9350"
+      },
+      "material_u": [],
+      "path": "plain.txt",
+      "program": [
+        {
+          "indices": [
+            43,
+            40,
+            47,
+            47,
+            50,
+            3,
+            58,
+            26,
+            55,
+            51,
+            3,
+            27,
+            39,
+            3,
+            36,
+            39,
+            44,
+            1,
+            43,
+            40,
+            47,
+            47,
+            50,
+            3,
+            58,
+            26,
+            55,
+            51,
+            3,
+            27,
+            39,
+            3,
+            36,
+            39,
+            44,
+            1,
+            43,
+            40,
+            47,
+            47,
+            50,
+            3,
+            58,
+            26,
+            55,
+            51,
+            3,
+            27,
+            39,
+            3,
+            36,
+            39,
+            44,
+            1
+          ],
+          "op": "BASE_INDICES"
+        }
+      ],
+      "target_bytes": 54,
+      "target_sha256": "91fe0b72547e094317446de8342ff7eeac3a761eab81c9ecac77cd7132fa9350"
+    }
+  ],
+  "founder_definition": "W7TP/8D ADI V2.3",
+  "joint_state_field": {
+    "D1": {
+      "effect": "RECONSTRUCT_FACT_STATE",
+      "intent_ref": "FOUNDER_DEFINED_ORIGIN_CELL_RECONSTRUCTION"
+    },
+    "D2": {
+      "file_count": 3,
+      "source_state": "OBSERVED",
+      "target_state": "RECONSTRUCTED_EXACT_BYTES"
+    },
+    "D3": {
+      "coordinate_type": "RELATIVE_STATE_TREE",
+      "paths": [
+        "nested/opaque.bin",
+        "nested/unicode.txt",
+        "plain.txt"
+      ]
+    },
+    "D4": {
+      "packet_self_hash": true,
+      "verification": "PER_FILE_SHA256_AND_SIZE"
+    },
+    "D5": {
+      "arbitrary_code_execution": false,
+      "canonical_pointer_write": false,
+      "execution_policy": "DETERMINISTIC_ALLOWLISTED_REFERENCE_EXECUTOR",
+      "service_restart": false
+    },
+    "D6": {
+      "difference_analysis_role": "UNDERSTANDING_ONLY_NOT_TRANSMISSION",
+      "difference_analysis_transmitted": false,
+      "differential_payload_bytes": 0,
+      "full_target_bytes_transmitted": 0,
+      "mode": "GENERATIVE_STATE_FROM_RULE_BASE_PLUS_U",
+      "raw_material_u_bytes": 39,
+      "target_fact_bytes": 98,
+      "wire_bytes_metric": "CANONICAL_SERIALIZED_PACKET_BYTES"
+    },
+    "D7": {
+      "fail_closed_on_output_hash_mismatch": true,
+      "fail_closed_on_packet_self_hash_mismatch": true,
+      "fail_closed_on_path_escape": true,
+      "fail_closed_on_rule_base_drift": true,
+      "max_reconstructed_bytes": 8589934592
+    },
+    "D8": {
+      "authority": "EXTERNAL_TOTAL_FIELD_REQUIRED",
+      "canonical_runtime_effect": false,
+      "model_authority": false
+    },
+    "coupling_rule": "D1_D8_BIND_ONE_STATE_RECONSTRUCTION_FACT"
+  },
+  "material_base_contracts": [
+    {
+      "atom_count": 98,
+      "atom_table_sha256": "4d0146d9717f056b320a74305ec6c1fce9f0f4f2a74e4a8ac8098d0abc1628fa",
+      "base_id": "ASCII26_SYMBOLS_V1",
+      "derivation": "bytes:[0x09,0x0a,0x0d]+range(0x20,0x7f)"
+    }
+  ],
+  "metrics": {
+    "difference_analysis_payload_bytes": 0,
+    "differential_payload_bytes": 0,
+    "full_target_bytes_transmitted": 0,
+    "raw_material_u_bytes": 39,
+    "target_fact_bytes": 98
+  },
+  "packet_sha256": "f7225ffcf5c27cb1c0cf3df4e0e1c8b3f8017d268512153c51ea662af7ce6c44",
+  "packet_type": "ORIGIN_CELL_GENERATIVE_STATE_PACKET",
+  "protocol_descriptor_sha256": "55f6addf3a01519a8081229b6cf6f494b6ba989f31abcf7eae21fd33fc309ad4",
+  "protocol_version": "2.3",
+  "schema_version": "w7tp-8dadi-origin-cell-gst-universal/2.3-founder-successor-candidate"
+}

@@ -1,0 +1,85 @@
+{
+  "binding_id": "W7TP_ORIGIN_CELL_GST_UNIVERSAL_V23_RECEIVER_GATED_CANDIDATE_20261004",
+  "effects": {
+    "canonical_pointer_changed": false,
+    "d8_promoted": false,
+    "deployment_performed": false,
+    "service_restarted": false
+  },
+  "formal_candidate_pipeline": [
+    "VALIDATE_PACKET",
+    "MATCH_RECEIVER_CAPABILITY",
+    "BUILD_RECEIVER_BOUND_ENVELOPE",
+    "MATERIALIZE",
+    "VERIFY_RECONSTRUCTION_RECEIPT"
+  ],
+  "founder_baseline": "W7TP_8D_ADI_V2.3",
+  "governance": {
+    "canonical": false,
+    "deployed": false,
+    "direct_raw_materialization_formal_allowed": false,
+    "runtime_activated": false,
+    "service_installed": false,
+    "total_field_decision": "NOT_RUN"
+  },
+  "intent": "Reuse the existing universal Origin Cell successor and require exact Receiver Capability matching before candidate materialization.",
+  "receiver_capability_binding": {
+    "source_path": "products/eight_dimensional_generative_memory/w7tp_receiver_capability_contract_v1.py",
+    "source_sha256": "0e09ac05a173a7e1fac61e4fa7c6c86a8abf9687105a5a1517bb68bb2669dca6"
+  },
+  "receiver_capability_contract": {
+    "authority": {
+      "canonical": false,
+      "formal_authority": false,
+      "global_canonical_promotion": false
+    },
+    "contract_ref": "receiver-capability:universal-origin-cell:55f6addf3a01519a",
+    "contract_sha256": "7ba4e6dd2ad5208e9eccf8b86e8a9ede9a6e52a8b391ee4e6c865df27a2334d3",
+    "contract_type": "RECEIVER_CAPABILITY_CONTRACT",
+    "contract_version": "1.0-candidate",
+    "evidence_refs": [],
+    "lifecycle": "CANDIDATE",
+    "materialization_contract": {
+      "equivalence_level": "BYTE_EXACT",
+      "fail_closed_on_mismatch": true,
+      "verification_method": "PER_FILE_SHA256_AND_SIZE"
+    },
+    "receiver_requirement": {
+      "compatibility_mode": "PROTOCOL_DESCRIPTOR_AND_EXECUTOR_BINDING",
+      "primitive_binding": {
+        "executor_contract": "w7tp-origin-cell-universal-executor/1",
+        "implementation_sha256": "c0a14f7b286e2b812880264ee1e6c23ef5a8b1c0bb78c0c7178a516898ec3631",
+        "material_base_contracts": [
+          {
+            "atom_count": 98,
+            "atom_table_sha256": "4d0146d9717f056b320a74305ec6c1fce9f0f4f2a74e4a8ac8098d0abc1628fa",
+            "base_id": "ASCII26_SYMBOLS_V1",
+            "derivation": "bytes:[0x09,0x0a,0x0d]+range(0x20,0x7f)"
+          },
+          {
+            "atom_count": 256,
+            "atom_table_sha256": "7f18ce6098285fe6220d2c820aeb63dbb36884e66b931c088cbb5f23828db59a",
+            "base_id": "OCTET256_V1",
+            "derivation": "bytes:range(0x00,0x100)"
+          }
+        ],
+        "max_reconstructed_bytes": 8589934592,
+        "protocol_descriptor_sha256": "55f6addf3a01519a8081229b6cf6f494b6ba989f31abcf7eae21fd33fc309ad4"
+      },
+      "runtime": {}
+    },
+    "schema_version": "w7tp-receiver-capability-contract/1.0-candidate"
+  },
+  "schema_version": "w7tp-origin-cell-gst-universal-receiver-binding/1-candidate",
+  "state": "CANDIDATE_DISABLED",
+  "universal_successor_binding": {
+    "executor_contract": "w7tp-origin-cell-universal-executor/1",
+    "lineage_source_path": "runtime/candidates/origin_cell_canonical_v23/w7tp_origin_cell_gst_canonical_v23_successor.py",
+    "lineage_source_sha256": "c0a14f7b286e2b812880264ee1e6c23ef5a8b1c0bb78c0c7178a516898ec3631",
+    "packet_schema": "w7tp-8dadi-origin-cell-gst-universal/2.3-founder-successor-candidate",
+    "protocol_descriptor_sha256": "55f6addf3a01519a8081229b6cf6f494b6ba989f31abcf7eae21fd33fc309ad4",
+    "source_path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_gst_universal_v23_candidate.py",
+    "source_recipe_required": false,
+    "source_sha256": "c0a14f7b286e2b812880264ee1e6c23ef5a8b1c0bb78c0c7178a516898ec3631"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "authority": {
+    "candidate_only": true,
+    "founder_definition_preserved": "W7TP_8D_ADI_V2.3",
+    "total_field_decision": "NOT_RUN"
+  },
+  "bindings": {
+    "binding_contract": {
+      "path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_gst_universal_receiver_contract.json",
+      "receiver_contract_sha256": "7ba4e6dd2ad5208e9eccf8b86e8a9ede9a6e52a8b391ee4e6c865df27a2334d3",
+      "sha256": "4bcae9b7aeac0767dffb15d1d60c71d4f3684c258b0d3814b651529454938b5a"
+    },
+    "receiver_capability_source": {
+      "path": "products/eight_dimensional_generative_memory/w7tp_receiver_capability_contract_v1.py",
+      "sha256": "0e09ac05a173a7e1fac61e4fa7c6c86a8abf9687105a5a1517bb68bb2669dca6"
+    },
+    "receiver_gated_consumer": {
+      "path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_gst_universal_receiver_candidate.py",
+      "sha256": "234c43c85d36dd55b1a926762c41459b08990cda4202ed1f5ba27feb49a961e0"
+    }
+  },
+  "candidate_id": "W7TP_ORIGIN_CELL_GST_UNIVERSAL_RECEIVER_V23_20261004",
+  "created_at_utc": "2026-10-04T09:25:28.600625+00:00",
+  "formal_candidate_pipeline": [
+    "VALIDATE_PACKET",
+    "MATCH_RECEIVER_CAPABILITY",
+    "BUILD_RECEIVER_BOUND_ENVELOPE",
+    "MATERIALIZE",
+    "VERIFY_RECONSTRUCTION_RECEIPT"
+  ],
+  "lineage": {
+    "exact_byte_copy": true,
+    "ignored_runtime_source": "runtime/candidates/origin_cell_canonical_v23/w7tp_origin_cell_gst_canonical_v23_successor.py",
+    "ignored_runtime_source_sha256": "c0a14f7b286e2b812880264ee1e6c23ef5a8b1c0bb78c0c7178a516898ec3631",
+    "tracked_candidate_source": "products/eight_dimensional_generative_memory/w7tp_origin_cell_gst_universal_v23_candidate.py",
+    "tracked_candidate_source_sha256": "c0a14f7b286e2b812880264ee1e6c23ef5a8b1c0bb78c0c7178a516898ec3631"
+  },
+  "next": "SEPARATE_TOTAL_FIELD_REVIEW_FOR_ANY_FORMAL_DELIVERY; NO_CANONICAL_PROMOTION, D8 PROMOTION, DEPLOYMENT OR PUSH IS IMPLIED.",
+  "observed_coordinate": {
+    "branch": "codex/current-live-state-consolidation-20260915",
+    "head": "9d7d8a3bbd65b80e6fd8690d6e026d67a361934f",
+    "node": "taiji01"
+  },
+  "purpose": "Promote the existing ignored universal V2.3 successor into a Git-trackable product candidate and require Receiver Capability matching plus receiver-bound envelope formation before candidate materialization.",
+  "schema_version": "w7tp-origin-cell-gst-universal-receiver-governed-candidate/1.0",
+  "scope_boundary": {
+    "active_pointer_write": false,
+    "d8_promotion": false,
+    "database_write": false,
+    "deployment": false,
+    "git_commit": "EXACT_CANDIDATE_FILES_ONLY",
+    "git_push": false,
+    "global_canonical_promotion": false,
+    "router_write": false,
+    "service_restart": false
+  },
+  "state": "CANDIDATE_VALIDATED_NOT_CANONICAL",
+  "validation": {
+    "byte_exact_all_files": true,
+    "gated_smoke_ref": "Taiji_Governance/candidates/origin_cell_gst_universal_receiver_v23_20261004/GATED_RECONSTRUCTION_EVIDENCE.json",
+    "gated_smoke_state": "PASS_GOVERNED_UNKNOWN_SOURCE_RECEIVER_GATED_EXACT_RECONSTRUCTION",
+    "python_test_count": 32,
+    "python_tests_state": "PASS_32_OF_32",
+    "receiver_mismatch_before_workspace": "PASS_TESTED",
+    "successor_hash_drift_before_workspace": "PASS_TESTED",
+    "unknown_source_recipe_required": false
+  }
+}
