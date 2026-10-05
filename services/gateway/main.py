@@ -1,5 +1,6 @@
 from services.gateway.openai_compat import router as openai_compat_router
 from services.gateway.topology_router import router as taiji_topology_router
+from services.gateway.nvr_control import router as nvr_control_router
 from services.gateway.natural_language_control import (
     NaturalLanguageRequest,
     build_plan as governed_build_plan,
@@ -324,6 +325,7 @@ app.include_router(taiji_topology_router)
 app.include_router(openai_compat_router)
 app.include_router(w7tp_ui_router)
 app.include_router(natural_language_control_router)
+app.include_router(nvr_control_router)
 
 W7TP_WEB_ROOT = Path(__file__).resolve().parents[2] / "web"
 app.mount(

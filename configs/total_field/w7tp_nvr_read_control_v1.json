@@ -1,0 +1,62 @@
+{
+  "schema_version": "W7TP-NVR-READ-CONTROL/1.0",
+  "state": "IMPLEMENTED_SOURCE_NOT_NATIVE_TRANSPORT_BOUND",
+  "task_ref": "task:T-024",
+  "device_ref": "device:nvr:ah55b08:wuchang",
+  "adapter_service_ref": "service:msi:nvr-read-adapter",
+  "adapter_node_ref": "node:MSI",
+  "physical_coordinate": {
+    "nvr_lan_ip": "192.168.50.34",
+    "http_port": 30080,
+    "rtsp_port": 554,
+    "rtsp_path": "/rtspstream?channel=0&stream=0"
+  },
+  "camera_map": {
+    "CAM01": {
+      "channel_index": 0,
+      "mapping_state": "CANDIDATE_UNTIL_REAL_JPEG_RECEIPT"
+    },
+    "CAM02": {
+      "channel_index": 1,
+      "mapping_state": "CANDIDATE_UNTIL_REAL_JPEG_RECEIPT"
+    },
+    "CAM03": {
+      "channel_index": 2,
+      "mapping_state": "CANDIDATE_UNTIL_REAL_JPEG_RECEIPT"
+    },
+    "CAM04": {
+      "channel_index": 3,
+      "mapping_state": "CANDIDATE_UNTIL_REAL_JPEG_RECEIPT"
+    }
+  },
+  "read_operations": [
+    "STATUS",
+    "SNAPSHOT"
+  ],
+  "credential_policy": {
+    "location": "MSI_LOCAL_ENV_ONLY",
+    "username_env": "PROPERTY_RTSP_USERNAME",
+    "password_env": "PROPERTY_RTSP_PASSWORD",
+    "http_auth_scheme_env": "W7TP_NVR_HTTP_AUTH_SCHEME",
+    "credential_body_to_model": false,
+    "credential_body_to_total_field": false
+  },
+  "transport": {
+    "current": "COMPATIBILITY_RDC",
+    "native_target": "native_claw_or_equivalent_node_executor",
+    "service_identity_uses_ip_port": false,
+    "direct_taiji01_to_msi_runtime_channel": "NOT_BOUND"
+  },
+  "d7": {
+    "fail_closed": true,
+    "snapshot_requires_bound_local_credentials": true,
+    "mutation_forbidden": true,
+    "public_ddns_not_required_for_lan_adapter": true
+  },
+  "d8": {
+    "authority": "LOCAL_TOTAL_FIELD",
+    "provider_authority": false,
+    "read_does_not_create_effect_authority": true,
+    "mutation_allowed": false
+  }
+}

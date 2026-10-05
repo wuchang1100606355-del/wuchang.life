@@ -1,0 +1,24 @@
+{
+  "state": "PASS_POST_EFFECT_DYNAMIC_CONTEXT_PULL",
+  "task_id": "T-024",
+  "task_state_record_id": "task-state:T-024:ff0352922fee54dd",
+  "packet_ref": "packet:task-state:T-024:a397dbac53db9e6a",
+  "packet_sha256": "e18b0cda069673157b36a24b5c46cb1274c442eb6eb06ba05a22913aa5904cd8",
+  "context_ref": "context:task-state:T-024:e18b0cda06967315",
+  "pull_result_sha256": "db13f4843c717eb07f2f3c7274f742460f9bcd9c029efacc04492169612ef442",
+  "task_state": "DOING",
+  "blockers": [
+    "MSI_LOCAL_NVR_CREDENTIAL_BINDING_UNBOUND"
+  ],
+  "action_ref": "A-T024-NVR-TOTAL-FIELD-READ-002",
+  "action_state": "WAITING",
+  "confirmed_effect_state": "PASS_PARTIAL_READ_CONTROL_CLOSURE_CREDENTIAL_BOUND_FRAME_PENDING",
+  "resume_from": "MSI_LOCAL_CREDENTIAL_BINDING",
+  "git_head": "3562226d3e1564fe77b1e5707b1253d230d46ea9",
+  "worktree_clean": false,
+  "authority": {
+    "provider_authority": false,
+    "model_authority": false,
+    "formal_effect_authority": "LOCAL_TOTAL_FIELD"
+  }
+}

@@ -248,6 +248,52 @@
         "canonical": false,
         "requires_total_field_verify": true
       }
+    },
+    {
+      "capability_id": "CAP_INTERNAL_NVR_READ_V1",
+      "capability_class": "NVR_READ",
+      "status": "IMPLEMENTED_SOURCE_COMPATIBILITY_TRANSPORT",
+      "source_refs": [
+        "services/gateway/nvr_control.py",
+        "tools/msi_nvr_read_adapter.py",
+        "tools/property_rtsp_probe.py",
+        "capabilities/w7tp-deterministic-effect-gate/scripts/effect_gate.py",
+        "configs/total_field/w7tp_nvr_read_control_v1.json"
+      ],
+      "resource_refs": ["TAIJI01_TOTAL_FIELD", "MSI_NODE", "WUCHANG_NVR_AH55B08"],
+      "selection_tags": [
+        "NVR",
+        "CAMERA",
+        "READ_ONLY",
+        "SNAPSHOT",
+        "RTSP",
+        "COMPATIBILITY_RDC"
+      ],
+      "d3_coordinate": {
+        "node_scope": ["taiji01", "MSI"],
+        "owner_ref": "services/gateway/nvr_control.py",
+        "coordinate_ref": "service:msi:nvr-read-adapter"
+      },
+      "d5_execution": {
+        "mode": "READ_ONLY",
+        "direct_effect": false,
+        "side_effect_boundary": "NVR_OBSERVATION_ONLY_NO_CONFIGURATION_MUTATION"
+      },
+      "d7_risk": {
+        "fail_closed": true,
+        "risk_tags": [
+          "NVR_CREDENTIAL_EXPOSURE",
+          "CAMERA_COORDINATE_MISMATCH",
+          "STALE_FRAME",
+          "NATIVE_TRANSPORT_NOT_BOUND"
+        ]
+      },
+      "d8_authority": {
+        "provider_authority": false,
+        "final_decision": false,
+        "canonical": false,
+        "requires_total_field_verify": true
+      }
     }
   ]
 }

@@ -1,0 +1,91 @@
+{
+  "schema_version": "W7TP-T024-NVR-TOTAL-FIELD-READ-EVIDENCE/1.0",
+  "state": "PASS_PARTIAL_READ_CONTROL_CLOSURE_CREDENTIAL_BOUND_FRAME_PENDING",
+  "observed_at": "2026-10-05T18:27:26.347310+00:00",
+  "task_id": "T-024",
+  "dynamic_context": {
+    "state": "PASS_MODEL_DYNAMIC_CONTEXT_PULL",
+    "task_state_record_id": "task-state:T-024:6f741f71960ca2a9",
+    "packet_ref": "packet:task-state:T-024:005791c41795f9b9",
+    "packet_sha256": "9fa4ed0acf31160201b60a1d5cb1c163988eeaf2bb283ca24c838d02aeed5b26",
+    "context_ref": "context:task-state:T-024:9fa4ed0acf311602",
+    "pull_result_sha256": "9c8463537898efe674c6e17a55a0afe45e10cd19fc5560c686300124826b32b1",
+    "git_head_at_pull": "20ddf75c7ba3af2feb9b69779994d82d3d50e972"
+  },
+  "source_state": {
+    "current_git_head": "3562226d3e1564fe77b1e5707b1253d230d46ea9",
+    "remote_head": "3562226d3e1564fe77b1e5707b1253d230d46ea9",
+    "concurrent_head_advance_observed": true,
+    "files": {
+      "tools/msi_nvr_read_adapter.py": "a54cf12d05d31abb26809c4ac508bba81cf57658b5c1767a9c8fa9ebb0a03dc9",
+      "services/gateway/nvr_control.py": "87f38a068729a104270c65dc41aadd90efee0bf3313e253a12528a549d62505b",
+      "services/gateway/main.py": "c1a993ea759eceb4eb6b706c593f3916099d0bec23181087b7069109230ea2a7",
+      "configs/total_field/w7tp_nvr_read_control_v1.json": "62ebe3956a1f389beb9df3b5f95c9a290ad99924229bec7eb5a96c170f72ab1a",
+      "configs/total_field/w7tp_capability_internalization_registry_v1.json": "94e5747b0e19331d9210f30985da9ce25ec2f0505a3477b86f716061e8e33d53"
+    }
+  },
+  "msi_runtime": {
+    "adapter_path": "/home/taiji_admin/Taiji_Hub_current/tools/msi_nvr_read_adapter.py",
+    "adapter_sha256": "a54cf12d05d31abb26809c4ac508bba81cf57658b5c1767a9c8fa9ebb0a03dc9",
+    "status_receipt": {
+      "state": "PASS_NVR_READ_ADAPTER_REACHABLE",
+      "observed_at": "2026-10-05T18:23:42.378888+00:00",
+      "device_ref": "device:nvr:ah55b08:wuchang",
+      "service_ref": "service:msi:nvr-read-adapter",
+      "node_ref": "node:MSI",
+      "credential_binding": "UNBOUND",
+      "rtsp": {
+        "target": "192.168.50.34:554",
+        "reachable": true,
+        "status": 401,
+        "auth_required": true,
+        "auth_scheme": "digest",
+        "raw_media_saved": false,
+        "credentials_output": false
+      },
+      "mutation_performed": false
+    },
+    "snapshot_attempt": {
+      "state": "HOLD",
+      "reason": "HOLD_NVR_CREDENTIAL_BINDING_REQUIRED",
+      "frame_file_created": false,
+      "credentials_output": false,
+      "mutation_performed": false
+    }
+  },
+  "total_field": {
+    "isolated_runtime_port": 8181,
+    "plan_state": "READY_NVR_READ_COMPATIBILITY_TRANSPORT",
+    "status_receipt_acceptance": "PASS_CURRENT_NVR_REACHABILITY_RECEIPT_ACCEPTED",
+    "effect_gate_ref": "capability:w7tp:deterministic-effect-gate",
+    "effect_class": "READ_ONLY",
+    "effect_authority_created": false,
+    "mutation_accepted": false,
+    "native_transport_bound": false
+  },
+  "validation": {
+    "targeted_tests": "16/16 PASS",
+    "python_compile": "PASS",
+    "json_validation": "PASS"
+  },
+  "activation": {
+    "live_gateway_8081_restarted": false,
+    "reason": "UNRELATED_DIRTY_GATEWAY_SOURCE_AND_CONCURRENT_UNPUSHED_HEAD; DO_NOT_LOAD_UNRELATED_WORK BY RESTART",
+    "source_commit_created": false,
+    "push_performed": false
+  },
+  "d7": {
+    "localized_holds": [
+      "MSI_LOCAL_NVR_CREDENTIAL_BINDING_UNBOUND",
+      "NATIVE_TAIJI01_TO_MSI_RUNTIME_TRANSPORT_NOT_BOUND"
+    ],
+    "unrelated_dirty_state_preserved": true,
+    "public_ddns_not_used_for_adapter": true
+  },
+  "d8": {
+    "provider_authority": false,
+    "model_authority": false,
+    "read_only": true,
+    "mutation_authority": false
+  }
+}
