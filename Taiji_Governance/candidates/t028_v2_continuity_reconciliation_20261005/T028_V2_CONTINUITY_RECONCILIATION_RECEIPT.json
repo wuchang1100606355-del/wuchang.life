@@ -1,0 +1,66 @@
+{
+  "schema_id": "W7TP_T028_V2_CONTINUITY_RECONCILIATION_RECEIPT_V1",
+  "state": "PASS_T028_V2_CONTINUITY_RECONCILED_EFFECTS_HELD",
+  "task_id": "T-028",
+  "action_id": "A-T028-V2-CONTINUITY-RECONCILE-20261005",
+  "observed_at_utc": "2026-10-05T15:36:19.390861+00:00",
+  "preimage_sha256": {
+    "state/WORK_LEDGER.json": "c853b045ddda994ea9432e63d581b2b2a82138e360d6fdca61506b3e0af8c763",
+    "state/ACTION_LEDGER.json": "520ef05e37c6ca8ee4e29ee6ee4e82975781dd7c575754c65f78377c3062d0a5",
+    "state/CURRENT_CONVERSATION_CHECKPOINT.json": "3749845bf8014f398ed811b32f17f1ef26c1d5602510d4802841024bb1039709"
+  },
+  "postimage_sha256": {
+    "state/WORK_LEDGER.json": "0ca80de19036ddc1e1a347608ac3cfa44c9ae19d31ebe213246c7bd4cc3ff52a",
+    "state/ACTION_LEDGER.json": "b118c307de28284ea383e43189846d96a9502dcd827b5ba83eab166036fbddbc",
+    "state/CURRENT_CONVERSATION_CHECKPOINT.json": "990b56d5969e3dea1bd0e94b32c77c9f71cf581bd0fbad27b0c45215cccdf37b"
+  },
+  "source_evidence": {
+    "observation_ref": "MSI:C:/Users/o0930/Downloads/W7TP_T028_Readonly_Reconciliation_20261005_2209.json",
+    "observation_sha256": "e24ebbd127b7a3bac4cb17ba689e59b85906a435fc0afffaed8bfabc0cce9bf1",
+    "prep_receipt_v2_sha256": "9a930b0c37a9a0f06abc4e4e2b8aeca36623dac74e51e261cd5a8ab02c7075c9",
+    "authority_path_correction_sha256": "a8b9910e8e829efe1d5b5fcb7f023ada79bf0f50f5e35ff66bf6d274948d5d9b"
+  },
+  "package": {
+    "manifest_sha256": "9e581ace1b4b9953beeba4311b0a349ce53e6c39eca41690b04cf75ae8a4d278",
+    "payload_sha256": "7bb824ff2813944836e469a9a6b81d6e3fcc4f757ef8d69a3185aaa60d02a44d",
+    "install_candidate_nodes": [
+      "MSI",
+      "taiji01"
+    ],
+    "install_executed": false,
+    "enable_executed": false
+  },
+  "native_adi": {
+    "evidence_ref": "evidence:t028-v2-continuity-reconciliation:20261005",
+    "record_sha256": "5155dacbae29cba9419ef1261b300cdc50de08248f0fc67f4323c871d0b0bd66",
+    "automatic_selector_pass": true
+  },
+  "dynamic_context": {
+    "context_ref": "context:task-state:T-028:cefef12b8b0b1ccc",
+    "packet_sha256": "cefef12b8b0b1cccb585c4c47b6c46999062e6bc2752fa25f9281aab1df91d26",
+    "pull_result_sha256": "721dba2abd3c552a233cfce766f91a6f5f242f8bc1be91eef52fdfece9b01312",
+    "workset_destroyed": true,
+    "task_state": "DOING",
+    "checkpoint_d8": "HOLD",
+    "checkpoint_hold_reason": "HOLD_PENDING_EXISTING_GATE_FOUNDER_DUAL_ROOT_AND_D8_ALLOW"
+  },
+  "tests": {
+    "tests/test_execution_continuity.py": 9,
+    "tests/test_intent_continuity.py": 18,
+    "tests/test_total_field_dynamic_context_pull.py": 11,
+    "tests/test_w7tp_task_state_minimum_packet.py": 8,
+    "passed_total": 46,
+    "failed_total": 0
+  },
+  "authority_boundary": {
+    "t007_reopened": false,
+    "new_authority_successor_created": false,
+    "canonical_changed": false,
+    "active_total_field_authority_changed": false,
+    "install_executed": false,
+    "enable_executed": false,
+    "service_restart": false,
+    "credential_or_security_change": false
+  },
+  "next_exact_action": "Use existing Founder package lifecycle gate for exact install ALLOW on MSI and taiji01; verify installed bytes; then perform a separate enable transition."
+}
