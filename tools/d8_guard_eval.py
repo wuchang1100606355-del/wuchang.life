@@ -225,12 +225,12 @@ _REQUIRED_COMPLETION_OPERANDS = {
 _QUOTE_PREFIXES = (">", "引用：", "引用:", "quoted:", "quote:")
 _PROTECTED_PATH_PARTS = {"credentials", "secrets", "private", "member_plaintext", "resident_plaintext"}
 ACTIVE_PRODUCT_POINTER = "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json"
-ACTIVE_PRODUCT_POINTER_SHA256 = "512adeb0c3700b2a3a7c8849ad94d66affe4aec3a0b27307e12d80f6a66fdc19"
+ACTIVE_PRODUCT_POINTER_SHA256 = "53411d0e02c6077c2692223ace6ecea1372f2d9cf3550c925f51c3827a35c03d"
 ACTIVE_PRODUCT_ROOT = (
-    "runtime/total_field/product_system_root/ROOT_IMPL_20260722T211410Z/"
-    "package/local-implementation/W7TP_PRODUCT_SYSTEM_ROOT_PACKET.json"
+    "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/"
+    "W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json"
 )
-ACTIVE_PRODUCT_ROOT_SHA256 = "a073f824d77e89b024f8f43415af857272e8a59d6f6de8b518ee1aba90971a3d"
+ACTIVE_PRODUCT_ROOT_SHA256 = "cbaefd22659134429bc59c3595d7f421004ef1370a4fe5cd24e03550d0782511"
 ADI_CANONICAL_GLOB = "W7TP_ADI_絕對距離螺旋路徑索引資料庫_正典規格*V3.0*回復版.md"
 FULL_SCAN_ROOTS = (
     "docs",
@@ -905,7 +905,10 @@ def _relative_path(path: Path) -> str:
 
 
 def _is_protected_full_scan_path(path: Path) -> bool:
-    relative = _relative_path(path)
+    try:
+        relative = _relative_path(path)
+    except ValueError:
+        return True
     parts = tuple(part.lower() for part in Path(relative).parts)
     name = path.name.lower()
     if name.startswith(".env"):

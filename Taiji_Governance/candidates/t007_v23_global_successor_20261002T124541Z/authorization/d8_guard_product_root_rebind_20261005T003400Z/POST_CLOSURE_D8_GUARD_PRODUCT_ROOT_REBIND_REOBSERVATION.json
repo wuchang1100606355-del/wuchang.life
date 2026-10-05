@@ -1,0 +1,110 @@
+{
+  "schema_id": "W7TP_T007_POST_CLOSURE_D8_GUARD_PRODUCT_ROOT_REBIND_REOBSERVATION_V1",
+  "state": "PASS_D8_GUARD_PRODUCT_ROOT_REBIND_REOBSERVED",
+  "task_id": "T-007",
+  "node": "taiji01",
+  "observed_at_utc": "2026-10-05T00:34:00Z",
+  "scope": "POST_CLOSURE_CONSUMER_BINDING_ONLY",
+  "authority_boundary": {
+    "founder_instruction": "CURRENT_SESSION_EXPLICIT_REPAIR_INSTRUCTION",
+    "prior_formal_receipt_ref": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/D8_FORMAL_RECEIPT.json",
+    "prior_formal_receipt_sha256": "92b2357b22c5cf75305a16a7a6285685f0e9bf0d7ea1aa8fd93296f1a3146029",
+    "prior_formal_receipt_use": "EVIDENCE_ONLY_SINGLE_USE_ALREADY_CONSUMED",
+    "formal_new_authority_created": false,
+    "historical_receipts_rewritten": false
+  },
+  "dynamic_context": {
+    "state": "PASS_MODEL_DYNAMIC_CONTEXT_PULL",
+    "context_ref": "context:task-state:T-007:67a4b24ab9990c3b",
+    "packet_ref": "packet:task-state:T-007:092a36f3676dbb34",
+    "packet_sha256": "67a4b24ab9990c3bb1ce59c3819fe8035cc7f327c18b90bf0eeef93a50118f1a",
+    "task_state_record_id": "task-state:T-007:27a9f6ce5436e9bc",
+    "task_state": "DONE",
+    "git_head": "ac20fe3cba1699deabbcb62e43fb0714b4ccd338"
+  },
+  "preimage": {
+    "guard_ref": "tools/d8_guard_eval.py",
+    "guard_sha256": "d25ec846fccb3953975a71d893526a24ea368273b8056630fea4911fa4a0d4d3",
+    "active_product_pointer_ref": "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json",
+    "active_product_pointer_expected_sha256": "512adeb0c3700b2a3a7c8849ad94d66affe4aec3a0b27307e12d80f6a66fdc19",
+    "active_product_root_ref": "runtime/total_field/product_system_root/ROOT_IMPL_20260722T211410Z/package/local-implementation/W7TP_PRODUCT_SYSTEM_ROOT_PACKET.json",
+    "active_product_root_expected_sha256": "a073f824d77e89b024f8f43415af857272e8a59d6f6de8b518ee1aba90971a3d"
+  },
+  "postimage": {
+    "guard_ref": "tools/d8_guard_eval.py",
+    "guard_sha256": "7dbb376bdcd144729394d432e95f4a2af61ff8255e3ff19c162270e44b57c9c5",
+    "active_product_pointer_ref": "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json",
+    "active_product_pointer_sha256": "53411d0e02c6077c2692223ace6ecea1372f2d9cf3550c925f51c3827a35c03d",
+    "active_product_root_ref": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json",
+    "active_product_root_sha256": "cbaefd22659134429bc59c3595d7f421004ef1370a4fe5cd24e03550d0782511",
+    "active_w7tp_pointer_sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+    "current_field_sha256": "3faa27ef6833309cdddd96e484714d9f4b3300fb68f2d059de3baebfdde899b0",
+    "current_field_router_sha256": "3b3d64bd2df777d3a361074c5574c634a5fae056facd534c4624e8af89f5d349",
+    "total_field_authority_sha256": "990f06c9fc30c4a69b90106e64fd0bc42ce7654e045f714cd0d6bb2e22c49f0a"
+  },
+  "consumer_reobservation": {
+    "changed_consumer_only": [
+      "tools/d8_guard_eval.py"
+    ],
+    "unchanged_consumer_hashes": {
+      "manifests/total_field/w7tp_skill_id_binding_matrix_v2_3/BINDING_MATRIX.json": "dd6ade5882c03accbbb92589cfb4e591c116a0dddfb544a943bc10c1bfe63230",
+      "tools/total_field/w7tp_intent_field_suite/adaptive_cognition.py": "fcbdc42d3d32c3004cbb8adc3684ec1dba1abfc32ab174b7308b34fd22c7cf11",
+      "tools/total_field/w7tp_intent_field_suite/cli.py": "5bf0d36e715f1809ee690ab2f3f2f28353aa166345329ff9997655259357007d",
+      "tools/total_field/w7tp_intent_field_suite/edge_queue.py": "c3ec172ada7003ed7ed2733f80616902addcfdd4564d21aed65f250cdd3c1a21",
+      "tools/total_field/w7tp_review_candidate_v2_3_adapter_v2_1.py": "2aa249f39d452bbc6791db73c38001925eeeac695114a88edbcbbf66780fa9b5",
+      "tools/total_field/w7tp_true8d_contract_sandbox.py": "29d99626487f870cba8785250ccc6302fba23e8193d0f9491e6c89a39cb8104e",
+      "tools/total_field/wuchang_three_org_container_scene_bridge.py": "a99936ebee03be971b396feee8637fdbac79e1c64a87fcf132e1e9a194ca15b2"
+    }
+  },
+  "verification": {
+    "unit_tests": {
+      "command": "PYTHONPATH=. python3 tests/test_d8_guard_eval_technical_drift.py",
+      "passed": 19,
+      "failed": 0,
+      "state": "PASS"
+    },
+    "full_scan": {
+      "run_id": "D8_GUARD_POST_REBIND_20261005",
+      "report_ref": "runtime/d8_db/reports/D8_GUARD_POST_REBIND_20261005.json",
+      "report_sha256": "3ac94ecfbd02f6a0229c213892af2ce84677e3f0621e66a5e6fe9af12355d655",
+      "state": "HOLD_HUMAN_REVIEW_REQUIRED",
+      "binding_checks_all_true": true,
+      "files_scanned": 8252,
+      "block_count": 312,
+      "hold_count": 346,
+      "unbound_rule_domains": [
+        "ADI",
+        "IDENTITY_SOVEREIGNTY",
+        "MANIFEST"
+      ]
+    },
+    "tamper_probe": {
+      "method": "ONE_BYTE_MUTATION_ON_TEMPORARY_COPIES_ONLY",
+      "active_files_modified": false,
+      "pointer_binding_after_tamper": false,
+      "root_binding_after_tamper": false,
+      "guard_effect_when_any_binding_false": "HOLD_SOURCE_BINDING_DRIFT"
+    },
+    "consumer_load": {
+      "consumer_ref": "tools/d8_codex_preflight_gate.py",
+      "mode": "FRESH_PROCESS_IMPORT",
+      "loaded_guard_ref": "/home/taiji_admin/Taiji_Hub/tools/d8_guard_eval.py",
+      "loaded_guard_sha256": "7dbb376bdcd144729394d432e95f4a2af61ff8255e3ff19c162270e44b57c9c5",
+      "resident_consumer_detected": false,
+      "fresh_process_load_verified": true
+    }
+  },
+  "evidence_boundary": {
+    "binding_consistency": "PASS",
+    "full_scan_binding_gate": "PASS",
+    "full_scan_overall": "HOLD_HUMAN_REVIEW_REQUIRED",
+    "full_scan_overall_hold_is_not_source_binding_drift": true,
+    "runtime_resident_guard_failure_proven_before_repair": false,
+    "runtime_resident_guard_load_verified_after_repair": false,
+    "fresh_process_consumer_load_verified_after_repair": true,
+    "deploy": false,
+    "service_restart": false,
+    "git_commit": false,
+    "git_push": false
+  }
+}

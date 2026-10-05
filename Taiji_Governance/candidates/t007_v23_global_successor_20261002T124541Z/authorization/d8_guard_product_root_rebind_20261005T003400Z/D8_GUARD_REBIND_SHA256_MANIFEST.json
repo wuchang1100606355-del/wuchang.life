@@ -1,0 +1,40 @@
+{
+  "schema_id": "W7TP_T007_POST_CLOSURE_D8_GUARD_REBIND_MANIFEST_V1",
+  "state": "PASS_POST_CLOSURE_REBIND_EVIDENCE_MANIFEST",
+  "observed_at_utc": "2026-10-05T00:34:00Z",
+  "files": {
+    "reobservation": {
+      "ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/d8_guard_product_root_rebind_20261005T003400Z/POST_CLOSURE_D8_GUARD_PRODUCT_ROOT_REBIND_REOBSERVATION.json",
+      "sha256": "a19b4e6c194afb247eed79e2e4ab6d4b69c61a79a3e42f254697754895ba0bc1"
+    },
+    "guard": {
+      "ref": "tools/d8_guard_eval.py",
+      "sha256": "7dbb376bdcd144729394d432e95f4a2af61ff8255e3ff19c162270e44b57c9c5"
+    },
+    "full_scan_report": {
+      "ref": "runtime/d8_db/reports/D8_GUARD_POST_REBIND_20261005.json",
+      "sha256": "3ac94ecfbd02f6a0229c213892af2ce84677e3f0621e66a5e6fe9af12355d655"
+    },
+    "active_product_pointer": {
+      "ref": "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json",
+      "sha256": "53411d0e02c6077c2692223ace6ecea1372f2d9cf3550c925f51c3827a35c03d"
+    },
+    "active_product_root": {
+      "ref": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json",
+      "sha256": "cbaefd22659134429bc59c3595d7f421004ef1370a4fe5cd24e03550d0782511"
+    },
+    "d8_formal_receipt": {
+      "ref": "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_V23_REBIND_20261004T221816Z/D8_FORMAL_RECEIPT.json",
+      "sha256": "92b2357b22c5cf75305a16a7a6285685f0e9bf0d7ea1aa8fd93296f1a3146029"
+    }
+  },
+  "authority_boundary": {
+    "formal_new_authority_created": false,
+    "old_single_use_receipt_replayed": false,
+    "historical_evidence_rewritten": false,
+    "git_commit": false,
+    "git_push": false,
+    "deploy": false,
+    "service_restart": false
+  }
+}
