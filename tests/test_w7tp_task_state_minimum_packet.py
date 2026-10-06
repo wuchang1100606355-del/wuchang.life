@@ -22,6 +22,7 @@ from tools.w7tp_task_state_minimum_packet import (
     build_task_state_minimum_packet,
     select_task_state_support_refs,
     _adi_payload_context_eligible,
+    _checkpoint_model_projection,
 )
 
 
@@ -142,6 +143,62 @@ class TaskStateMinimumPacketTests(unittest.TestCase):
             )
         assert workset_parent is not None
         self.assertFalse(workset_parent.exists())
+
+
+    def test_checkpoint_projection_excludes_other_task_text(self) -> None:
+        checkpoint = {
+            "current_goal": "T-028 unrelated current work",
+            "current_state": "DOING",
+            "last_decision": "PRIVATE_OTHER_TASK_DECISION",
+            "next_action": "PRIVATE_OTHER_TASK_NEXT",
+            "d8": "HOLD",
+            "hold_reason": "PRIVATE_OTHER_TASK_HOLD",
+        }
+        projected = _checkpoint_model_projection(
+            checkpoint,
+            "T-EXP-8D-COUPLING-20261006",
+        )
+        self.assertEqual(
+            projected["scope"],
+            "EXCLUDED_TASK_MISMATCH",
+        )
+        self.assertEqual(
+            projected["bound_task_ref"],
+            "task:T-EXP-8D-COUPLING-20261006",
+        )
+        self.assertEqual(len(projected["source_checkpoint_sha256"]), 64)
+        self.assertIsNone(projected["current_goal"])
+        self.assertIsNone(projected["last_decision"])
+        self.assertNotIn(
+            "PRIVATE_OTHER_TASK",
+            json.dumps(projected, ensure_ascii=False),
+        )
+
+    def test_checkpoint_projection_preserves_same_task_text(self) -> None:
+        checkpoint = {
+            "current_goal": "繼續 T-028 現行工作",
+            "current_state": "DOING",
+            "last_decision": "same task decision",
+            "next_action": "same task next",
+            "d8": "PASS",
+            "hold_reason": None,
+        }
+        projected = _checkpoint_model_projection(
+            checkpoint,
+            "T-028",
+        )
+        self.assertEqual(
+            projected["scope"],
+            "MATCHED_BOUND_TASK",
+        )
+        self.assertEqual(
+            projected["last_decision"],
+            "same task decision",
+        )
+        self.assertEqual(
+            projected["next_action"],
+            "same task next",
+        )
 
     def test_unknown_action_ref_fails_closed_at_local_rule(self) -> None:
         tampered = copy.deepcopy(self.packet)

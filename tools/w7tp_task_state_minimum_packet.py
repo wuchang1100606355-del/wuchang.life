@@ -632,6 +632,66 @@ def issue_task_state_minimum_packet(
     }
 
 
+
+def _checkpoint_model_projection(
+    checkpoint: Mapping[str, Any],
+    task_id: str,
+) -> dict[str, Any]:
+    """Expose checkpoint text only when it is bound to the same task."""
+
+    task = str(task_id or "").strip()
+    if not task:
+        raise TaskStatePacketError(
+            "HOLD_TASK_CONTEXT_TASK_ID_INVALID"
+        )
+    current_goal = checkpoint.get("current_goal")
+    explicit_ids = (
+        checkpoint.get("task_id"),
+        checkpoint.get("current_task_id"),
+    )
+    exact_id_match = any(
+        isinstance(value, str) and value.strip().upper() == task.upper()
+        for value in explicit_ids
+    )
+    goal_match = False
+    if isinstance(current_goal, str) and current_goal.strip():
+        pattern = (
+            r"(?<![A-Z0-9-])"
+            + re.escape(task.upper())
+            + r"(?![A-Z0-9-])"
+        )
+        goal_match = re.search(
+            pattern,
+            current_goal.upper(),
+        ) is not None
+
+    common = {
+        "bound_task_ref": f"task:{task}",
+        "source_checkpoint_sha256": canonical_sha256(checkpoint),
+    }
+    if not (exact_id_match or goal_match):
+        return {
+            **common,
+            "scope": "EXCLUDED_TASK_MISMATCH",
+            "current_goal": None,
+            "current_state": None,
+            "last_decision": None,
+            "next_action": None,
+            "d8": None,
+            "hold_reason": None,
+        }
+    return {
+        **common,
+        "scope": "MATCHED_BOUND_TASK",
+        "current_goal": checkpoint.get("current_goal"),
+        "current_state": checkpoint.get("current_state"),
+        "last_decision": checkpoint.get("last_decision"),
+        "next_action": checkpoint.get("next_action"),
+        "d8": checkpoint.get("d8"),
+        "hold_reason": checkpoint.get("hold_reason"),
+    }
+
+
 def build_task_model_visible_context(
     workset_path: Path,
     packet: Mapping[str, Any],
@@ -725,14 +785,10 @@ def build_task_model_visible_context(
                 ),
                 "next_action": task.get("NEXT_ACTION"),
             },
-            "checkpoint": {
-                "current_goal": checkpoint.get("current_goal"),
-                "current_state": checkpoint.get("current_state"),
-                "last_decision": checkpoint.get("last_decision"),
-                "next_action": checkpoint.get("next_action"),
-                "d8": checkpoint.get("d8"),
-                "hold_reason": checkpoint.get("hold_reason"),
-            },
+            "checkpoint": _checkpoint_model_projection(
+                checkpoint,
+                task_ref,
+            ),
             "actions": action_projection,
             "native_adi": {
                 "packet_sha256": adi_packet.get("packet_sha256"),
