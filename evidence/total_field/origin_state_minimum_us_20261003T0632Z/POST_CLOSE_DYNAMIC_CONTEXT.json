@@ -1,0 +1,131 @@
+{
+  "state": "PASS_MODEL_DYNAMIC_CONTEXT_PULL",
+  "task_state_record_id": "task-state:T-ORIGIN-US-20261003:132972752d0c5bed",
+  "packet_ref": "packet:task-state:T-ORIGIN-US-20261003:3ea2a6045c9b119f",
+  "packet_sha256": "1800096f5e610cabdeccbd3d7ee62e0c1cece63d47d1a847962afdd6bb1eebaa",
+  "bootstrap_sha256": "5c4aa6ba6296cd218897569c15de92207e164b30edd38d33f42b0030537c57a3",
+  "context_ref": "context:task-state:T-ORIGIN-US-20261003:1800096f5e610cab",
+  "state_cell_transmission": {
+    "schema_ref": "schema:w7tp:origin-state-minimum-packet:2.3-successor",
+    "format": "TASK_STATE_ORIGIN_CELL_TRANSMISSION",
+    "packet_ref": "packet:task-state:T-ORIGIN-US-20261003:3ea2a6045c9b119f",
+    "packet_sha256": "1800096f5e610cabdeccbd3d7ee62e0c1cece63d47d1a847962afdd6bb1eebaa",
+    "adi_coordinate_ref": "native-adi-packet:sha256:76ccb31cc8242b3e7cab1708f0d5533c99d1ba8ca98c49e03b6a727eb76ef679",
+    "state_ref": "task:T-ORIGIN-US-20261003",
+    "state_version_ref": "task-state-snapshot:sha256:3ea2a6045c9b119f692611acef73bdeb40f2acb6ac6a7573399e4b151ed25973",
+    "joint_state_field": {
+      "D1": {
+        "intent_ref": "Founder 2026-10-03: complete the latest non-differential Origin State/State Cell experiment using taiji01 server and wuchang-us-free-node US VM.",
+        "task_ref": "task:T-ORIGIN-US-20261003"
+      },
+      "D2": {
+        "task_state": "DONE",
+        "priority": "P1",
+        "snapshot_sha256": "3ea2a6045c9b119f692611acef73bdeb40f2acb6ac6a7573399e4b151ed25973"
+      },
+      "D3": {
+        "task_coordinate": "taiji01 source -> minimum Origin State packet -> wuchang-us-free-node local-rule volatile reconstruction -> exact manifest receipt",
+        "native_adi_packet_sha256": "76ccb31cc8242b3e7cab1708f0d5533c99d1ba8ca98c49e03b6a727eb76ef679",
+        "git_head": "c82fd92ab713da7aed86566fcd3fa70c1289ac8d"
+      },
+      "D4": {
+        "task_state_sha256": "83d94e91df52209c7a46d0da3e2d79c7ba7680f68ca21bc006c5afc1fb3bc365",
+        "selected_actions_sha256": "9eb486f70cb8f53729181aa7556a9eabe6901bac55a17cc5ba89784ccae48870",
+        "checkpoint_sha256": "bc98e7abcf560beed8a73cea1da3d4e5b4c7a16fe703070b666f1a2f03cc964d",
+        "native_adi_packet_sha256": "76ccb31cc8242b3e7cab1708f0d5533c99d1ba8ca98c49e03b6a727eb76ef679"
+      },
+      "D5": {
+        "execution_policy": "LOCAL_VOLATILE_TASK_STATE_RECONSTRUCTION_ONLY",
+        "persistent_materialization_default": false,
+        "canonical_write": false,
+        "service_restart": false
+      },
+      "D6": {
+        "mode": "LOCAL_RULE_REF_MINIMUM_STATE",
+        "rule_body_transmitted": false,
+        "target_bytes_transmitted": 0,
+        "differential_payload_bytes": 0,
+        "compression_payload_bytes": 0,
+        "persistent_materialization_default": false
+      },
+      "D7": {
+        "fail_closed_on_task_hash_mismatch": true,
+        "fail_closed_on_action_hash_mismatch": true,
+        "fail_closed_on_checkpoint_hash_mismatch": true,
+        "fail_closed_on_adi_packet_mismatch": true,
+        "fail_closed_on_rule_hash_mismatch": true,
+        "fail_closed_on_final_manifest_mismatch": true
+      },
+      "D8": {
+        "authority": "CANDIDATE_ONLY",
+        "canonical": false,
+        "formal_effect_authority": "LOCAL_TOTAL_FIELD"
+      },
+      "coupling_rule": "TASK_LEDGER_ACTION_CHECKPOINT_ADI_BIND_ONE_STATE_SNAPSHOT"
+    },
+    "rule_binding": {
+      "rule_ref": "local-rule:w7tp-task-state-ledger-reconstruction/v1",
+      "implementation_ref": "tools/w7tp_task_state_local_rule.py",
+      "implementation_sha256": "970d39d61d77c55b0a2a7a8cb4a8edb781f783f69f2adc83848322dd2fb8e69b",
+      "minimum_information_keys": [
+        "task_id",
+        "action_refs",
+        "adi_record_ids"
+      ]
+    },
+    "minimum_new_information": {
+      "task_id": "T-ORIGIN-US-20261003",
+      "action_refs": [
+        "A-ORIGIN-US-MIN-20261003T0630Z"
+      ],
+      "adi_record_ids": [
+        "evidence:w7tp-cell-out-full-return-contract:20260929T1650270800",
+        "task-state:T-ORIGIN-US-20261003:132972752d0c5bed"
+      ]
+    },
+    "necessary_condition_refs": [
+      "condition:task-state-records-exist",
+      "condition:selected-actions-bind-task",
+      "condition:native-adi-id-set-match",
+      "condition:local-rule-registry-match",
+      "condition:volatile-reconstruction",
+      "condition:final-manifest-match"
+    ],
+    "verification": {
+      "expected_target_manifest_sha256": "d05c4aab095b919e1fd2f14dd69f05ff61df0a25079271f3df3b3991f96a8524",
+      "expected_target_bytes": 12751
+    },
+    "reconstruction_evidence": {
+      "packet_sha256": "1800096f5e610cabdeccbd3d7ee62e0c1cece63d47d1a847962afdd6bb1eebaa",
+      "target_manifest_sha256": "d05c4aab095b919e1fd2f14dd69f05ff61df0a25079271f3df3b3991f96a8524",
+      "target_bytes": 12751,
+      "target_files": 4,
+      "workset_backend": "TMPFS_VOLATILE_FS",
+      "persistent_materialization": false,
+      "workset_destroyed": true
+    },
+    "context_ref": "context:task-state:T-ORIGIN-US-20261003:1800096f5e610cab",
+    "authority": {
+      "provider_authority": false,
+      "model_authority": false,
+      "candidate_only": true,
+      "formal_effect_authority": "LOCAL_TOTAL_FIELD"
+    },
+    "transmission_semantics": {
+      "predecessor_state_required": false,
+      "differential_payload_bytes": 0,
+      "target_bytes_transmitted": 0,
+      "rule_body_transmitted": false,
+      "local_rule_capability_required": true,
+      "semantic_class": "NON_DIFFERENTIAL_POINTER_FIRST_STATE_RECONSTRUCTION"
+    }
+  },
+  "transmission_semantics": {
+    "predecessor_state_required": false,
+    "differential_payload_bytes": 0,
+    "target_bytes_transmitted": 0,
+    "rule_body_transmitted": false,
+    "local_rule_capability_required": true,
+    "semantic_class": "NON_DIFFERENTIAL_POINTER_FIRST_STATE_RECONSTRUCTION"
+  }
+}

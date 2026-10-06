@@ -1,0 +1,144 @@
+{
+  "schema": "W7TP_ORIGIN_STATE_CROSS_NODE_EVIDENCE/1.0-candidate",
+  "experiment_id": "ORIGIN_STATE_MINIMUM_TAIJI01_TO_US_20261003T064602Z",
+  "state": "PASS_CROSS_NODE_EXACT_RECONSTRUCTION_WITH_EXPLICIT_RECEIVER_RUNTIME_BOOTSTRAP",
+  "scope": "256_MIB_BOUNDED_BY_US_VM_TMPFS_CAPACITY",
+  "authority": {
+    "candidate_only": true,
+    "canonical": false,
+    "global_canonical_promotion": false,
+    "service_restart": false,
+    "production_deployment": false
+  },
+  "dynamic_context": {
+    "task_id": "T-ORIGIN-US-20261003",
+    "action_id": "A-ORIGIN-US-MIN-20261003T0630Z",
+    "state": "PASS_MODEL_DYNAMIC_CONTEXT_PULL",
+    "task_state_record_id": "task-state:T-ORIGIN-US-20261003:b9c9b979073e59f7",
+    "context_ref": "context:task-state:T-ORIGIN-US-20261003:337071a574f4ae28",
+    "context_packet_sha256": "337071a574f4ae282e021b46c02a0339c3ad0dbde52ea1a4a83da3480d04d64d"
+  },
+  "source": {
+    "node": "taiji01",
+    "git_branch": "codex/current-live-state-consolidation-20260915",
+    "git_head": "c82fd92ab713da7aed86566fcd3fa70c1289ac8d",
+    "target_bytes": 269590528,
+    "target_files": 1046,
+    "target_manifest_sha256": "bd68559ff8a492f7db3b472560378f370d7fe99af236705e3cc412e51f901ef2"
+  },
+  "receiver": {
+    "node": "wuchang-us-free-node",
+    "gcp_zone": "us-central1-a",
+    "os_login_user": "sa_109314238726198894269",
+    "tailscale_ipv4": "100.99.148.1",
+    "tailscale_ipv6": "fd7a:115c:a1e0::b93a:9402",
+    "observed_public_ipv6": "2600:1900:4001:b37::",
+    "tmpfs_available_observed_bytes": 508534784,
+    "successful_runtime": {
+      "python": "3.12.3",
+      "sqlite": "3.45.1",
+      "runtime_tar_bytes": 22777954,
+      "runtime_tar_sha256": "659e9f46f8c456c46a9257958fb8dabe27fb23136a785037a12c6d33e0fecea7",
+      "runtime_logical_file_bytes": 71745431
+    }
+  },
+  "packet": {
+    "schema_version": "w7tp-8dadi-origin-state-minimum-packet/2.3-successor",
+    "packet_type": "ORIGIN_STATE_MINIMUM_PACKET",
+    "canonical_bytes": 2382,
+    "file_bytes": 2383,
+    "packet_sha256": "b70daca07be01c1a84219616a200cea445ca97f173ee7908c4035b246b95f429",
+    "packet_file_sha256": "778d9148904e2dfdb64d2c5419ebc771ee94c59078dd273d82421b1e4f42d415",
+    "minimum_new_information": {
+      "dataset_mib": 256,
+      "variant": 3
+    },
+    "rule_ref": "local-rule:w7tp-origin-cell-fixture-recipe/v2",
+    "rule_body_transmitted": false,
+    "target_bytes_transmitted": 0,
+    "differential_payload_bytes": 0,
+    "compression_payload_bytes": 0
+  },
+  "receiver_capability_bootstrap": {
+    "capability_logical_bytes": 68800,
+    "capability_tar_bytes": 16281,
+    "capability_tar_sha256": "4f92c279aa7dee8d6ac35ff5108858594bc5469c3e90192856eaed53388d2321",
+    "runtime_tar_bytes": 22777954,
+    "runtime_tar_sha256": "659e9f46f8c456c46a9257958fb8dabe27fb23136a785037a12c6d33e0fecea7",
+    "accounted_bootstrap_carrier_bytes": 22794235,
+    "experiment_harness_bytes": 2110,
+    "experiment_harness_sha256": "fac16d706b2925d905ff8e76e2648c21432f7217e9255ec2ef817ccde1cee7bd",
+    "note": "Bootstrap/runtime/harness are not per-run State Cell packet bytes. Network protocol, SSH/TLS and cloud control overhead are not included in these application-layer byte counts."
+  },
+  "result": {
+    "state": "PASS_VOLATILE_LOCAL_RULE_RECONSTRUCTION",
+    "packet_sha256": "b70daca07be01c1a84219616a200cea445ca97f173ee7908c4035b246b95f429",
+    "rule_ref": "local-rule:w7tp-origin-cell-fixture-recipe/v2",
+    "rule_body_transmitted": false,
+    "target_manifest_sha256": "bd68559ff8a492f7db3b472560378f370d7fe99af236705e3cc412e51f901ef2",
+    "target_bytes": 269590528,
+    "target_files": 1046,
+    "workset_backend": "TMPFS_VOLATILE_FS",
+    "persistent_materialization": false,
+    "cleanup_on_exit": true,
+    "strict_no_swap_guarantee": false,
+    "candidate_authority": false,
+    "execution_authorized": false,
+    "workset_observed_during_context": true,
+    "experiment_id": "20261003T0632Z",
+    "source_node": "taiji01",
+    "destination_node": "wuchang-us-free-node",
+    "observed_at_utc": "2026-10-03T06:48:45.538313+00:00",
+    "packet_file_bytes": 2383,
+    "packet_file_sha256": "778d9148904e2dfdb64d2c5419ebc771ee94c59078dd273d82421b1e4f42d415",
+    "packet_canonical_sha256": "b70daca07be01c1a84219616a200cea445ca97f173ee7908c4035b246b95f429",
+    "reconstruction_elapsed_sec": 4.115451605990529,
+    "maxrss_kb": 25224,
+    "workset_destroyed_after_context": true,
+    "rule_impl_sha256": "5cde10544819f3783c083a229b04569fd054a0cacc5bb981d99708b0e132ce19",
+    "minimum_packet_impl_sha256": "238e1a05280feb9f19318d5453e21d90d19a3eaa3c0d4d1468d20bd226e68a7e",
+    "registry_sha256": "85007b6bce5ad40c1c6ff5985a765a3e015e94867ab3f6be246c2bedc6518eaf"
+  },
+  "ratios": {
+    "packet_to_target_ratio": 8.835621999301104e-06,
+    "packet_payload_reduction_pct": 99.99911643780007,
+    "first_use_accounted_carrier_bytes_including_bootstrap_and_harness": 22798728,
+    "first_use_accounted_vs_target_reduction_pct": 91.54320139912335
+  },
+  "failed_attempt_and_correction": {
+    "initial_receiver_runtime": {
+      "python": "3.11.2",
+      "sqlite": "3.40.1",
+      "state": "HOLD_FINAL_MANIFEST_MISMATCH"
+    },
+    "diagnosis": {
+      "mismatch_count": 1,
+      "mismatched_path": "database/data.db",
+      "same_file_size_bytes": 67641344,
+      "source_file_sha256": "633e542070210c1be314ffea5e13da52adaf8623dd166ca7bb81ce917e8e9f40",
+      "receiver_file_sha256": "a454efdc4b07380459e65d97b9ccede6e75ba68ac3b290689141a4885cc83476",
+      "source_sqlite": "3.45.1",
+      "receiver_sqlite": "3.40.1",
+      "logical_rows_sha256_source": "ebffb39eddb71c6575f7dc15507e1331374e37e85106518d431c14fb3dabbe2c",
+      "logical_rows_sha256_receiver": "ebffb39eddb71c6575f7dc15507e1331374e37e85106518d431c14fb3dabbe2c",
+      "logical_row_count": 1024
+    },
+    "correction": "Re-run from a clean receiver root with a reusable portable Python 3.12.3 / SQLite 3.45.1 runtime capsule; no target data, differential payload, compression payload, rule body, or diagnostic target manifest was present in the final clean receiver root.",
+    "design_gap": "Receiver runtime/canonical byte-materialization environment is an external prerequisite in this run and is not yet explicitly bound as a minimum-packet field."
+  },
+  "verification": {
+    "clean_receiver_precheck": true,
+    "exact_manifest_match": true,
+    "exact_target_bytes_match": true,
+    "exact_target_files_match": true,
+    "volatile_workset_destroyed": true,
+    "forbidden_payloads_absent_by_packet_contract": true
+  },
+  "limitations": [
+    "This validates the specified synthetic 256 MiB fixture and receiver capability contract only; it does not prove arbitrary data universality.",
+    "The US VM /dev/shm was approximately 485 MiB, so the current volatile reconstruction path could not responsibly run the 1 GiB fixture without changing resources or semantics.",
+    "Application-layer packet/bootstrap byte counts exclude SSH/TLS/IP/cloud-control overhead.",
+    "The portable runtime is a receiver prerequisite/bootstrapped capability and must be counted separately from per-run packet bytes.",
+    "No global canonical promotion is implied."
+  ]
+}
