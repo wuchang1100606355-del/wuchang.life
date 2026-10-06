@@ -1,0 +1,115 @@
+{
+  "schema_id": "W7TP_LOCAL_MODEL_RULE_BASE_LANDING_ACCEPTANCE/1.0",
+  "observed_at": "2026-10-06T14:46:49+00:00",
+  "founder_definition": "W7TP/8D ADI V2.3",
+  "scope": "MSI local model landing through endpoint rule-base transport and guarded Total Field Dynamic Context",
+  "source_commits": {
+    "endpoint_rule_handshake_and_selector": "5873edd5526aa0ea4e4bd8ea87ebd932a9cc5ea5",
+    "bridge_dynamic_context_transport_adapter": "85be6df6cdc4d404a7999f1dcef2f77ce7fb95f0",
+    "checkpoint_task_scope_isolation": "4c1966a8fd8e2f8fadd0efa2f975a33d7037d7f0",
+    "remote_head_verified": "4c1966a8fd8e2f8fadd0efa2f975a33d7037d7f0"
+  },
+  "d8_effect_gate": {
+    "decision": "ALLOW_EXECUTE",
+    "authorization_ref": "founder-direct-chat:074622b18a063ae2551be4ae",
+    "instruction_text_sha256": "074622b18a063ae2551be4aec967b9b6cebabe343d3a12d987790806324fdd4e",
+    "target": "MSI:/home/taiji_admin/continue_founder_total_field_ollama_bridge.py",
+    "canonical_pointer_change": false,
+    "authority_promotion": false
+  },
+  "msi_live": {
+    "bridge_path": "/home/taiji_admin/continue_founder_total_field_ollama_bridge.py",
+    "preimage_sha256": "b06510511801532031ab82b7a4ff38394ac872cc321ba2f8acf80f3e106a29b2",
+    "deployed_sha256": "6a43136c2747632c9f936261d7e7ff385ed3840eb8918b6307b811d99ba3ed0a",
+    "bridge_pid": 415477,
+    "bridge_port_11435": "LISTEN",
+    "ollama_port_11434": "LISTEN",
+    "endpoint_transport_adapter_sha256": "379e7f61ff5a21184e5aea485e4ebe9ba0e7ff07b9ae37a61e6df646eefedb58",
+    "startup_cmd_sha256": "a49098c2014b2ef426acd1b948d6ca473f6c7fc132988bffe267387c53953b83",
+    "continue_model": "xiaoj:latest",
+    "continue_api_base": "http://127.0.0.1:11435",
+    "bridge_log_tail_empty_at_observation": true
+  },
+  "regression": {
+    "context_guard": {
+      "passed": 39,
+      "failed": 0
+    },
+    "dynamic_context_and_rule_transport": {
+      "passed": 50,
+      "failed": 0
+    },
+    "py_compile": "PASS"
+  },
+  "cross_node_acceptance": [
+    {
+      "case": "synthetic_highly_reconstructable_context",
+      "source": "taiji01",
+      "receiver": "MSI",
+      "target_fact_bytes": 200192,
+      "wire_bytes_received": 4405,
+      "selected_mode": "SHARED_RULE_ORIGIN_CELL",
+      "reconstruction": "BYTE_EXACT_JSON_EQUIVALENT",
+      "authority_effect": "NONE",
+      "interpretation_limit": "single measured sample; not a universal compression ratio claim"
+    },
+    {
+      "case": "real_total_field_dynamic_context",
+      "task_id": "T-EXP-8D-COUPLING-20261006",
+      "source": "taiji01",
+      "receiver": "MSI",
+      "wire_bytes_received": 5361,
+      "selected_mode": "FULL_TRANSFER",
+      "context_state": "PASS_TOTAL_FIELD_DYNAMIC_CONTEXT",
+      "reason": "complete serialized full-transfer wire cost was lower for this small context"
+    }
+  ],
+  "checkpoint_scope_correction": {
+    "observed_problem": "explicit task projection was DONE but unrelated T-028 CURRENT_CONVERSATION_CHECKPOINT text was also model-visible",
+    "incorrect_model_answer_before_fix": "此任務目前處於暫停狀態，因F3/F4/F5尚未閉合，工程證據顯示需繼續既有套件前置收斂。",
+    "direct_task_state_before_fix": {
+      "state": "DONE",
+      "next_action": "NONE",
+      "blockers": []
+    },
+    "root_cause": "cross-task checkpoint coordinate contamination",
+    "fix": "checkpoint text is model-visible only when explicitly bound to the same task_id; mismatched checkpoint keeps only audit hash and EXCLUDED_TASK_MISMATCH scope",
+    "post_fix_checkpoint_scope": "EXCLUDED_TASK_MISMATCH",
+    "post_fix_task_state": {
+      "state": "DONE",
+      "next_action": "NONE",
+      "blockers": []
+    },
+    "model_answer_after_fix": "此任務目前狀態為完成。",
+    "effect_acceptance": "PASS_SAME_QUERY_NOW_ALIGNS_WITH_TASK_PROJECTION"
+  },
+  "live_http_acceptance": {
+    "route": "/api/chat",
+    "http_status": 200,
+    "header_context_guard": "required-context-v1",
+    "model": "xiaoj:latest",
+    "done": true,
+    "post_fix_eval_count": 265,
+    "post_fix_total_duration_ns": 9939671259
+  },
+  "governance": {
+    "rule_presence_not_equal_readiness": true,
+    "rule_base_does_not_add_authority": true,
+    "full_transfer_remains_valid_when_lower_total_wire_cost": true,
+    "packet_or_handshake_drift_fail_closed": true,
+    "T007_reopened": false,
+    "canonical_pointer_modified": false
+  },
+  "known_limits": {
+    "taiji04_python_runtime_acceptance": "UNKNOWN; byte-exact rule-base files verified only",
+    "wuchang_us_free_node": "OFFLINE_UNTOUCHED",
+    "model_answer_acceptance_scope": "same bounded task/status query only; does not prove all future answers factual"
+  },
+  "artifacts": {
+    "bridge_patch_sha256": "9dfbd4e4472cf077f1c8e0cfa0e97b43eabc99adb3ec03c6dd4897c2652d083f",
+    "bridge_patch_lines": 245,
+    "effect_request": "evidence/total_field/bridge_origin_context_transport_20261006/effect_request.json",
+    "effect_gate_result": "evidence/total_field/bridge_origin_context_transport_20261006/effect_gate_result.txt",
+    "authorization_receipt": "evidence/total_field/bridge_origin_context_transport_20261006/FOUNDER_DIRECT_EFFECT_AUTHORIZATION.json"
+  }
+}

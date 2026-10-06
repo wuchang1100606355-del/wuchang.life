@@ -1,0 +1,245 @@
+--- /home/taiji_admin/.local/state/w7tp/bridge-origin-context-transport/bridge_preimage_b065105.py	2026-10-06 22:26:59.067518251 +0800
++++ /home/taiji_admin/continue_founder_total_field_ollama_bridge.py	2026-10-06 22:38:02.271615057 +0800
+@@ -9,6 +9,7 @@
+ import time
+ import urllib.request
+ from datetime import datetime, timezone
++from pathlib import Path
+ from urllib.parse import urlsplit
+ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+ 
+@@ -115,139 +116,113 @@
+ def total_field_dynamic_context(intent, model):
+     if not intent:
+         return {"state":"HOLD_DYNAMIC_CONTEXT_INTENT_MISSING"}
+-    encoded_intent = base64.b64encode(intent.encode("utf-8")).decode("ascii")
+-    encoded_model = base64.b64encode(str(model or "xiaoj-local-dev:v2.3").encode("utf-8")).decode("ascii")
+-    remote_code = f"""
+-import base64, json, re, sys
+-from datetime import datetime, timedelta, timezone
+-from pathlib import Path
+-sys.path.insert(0, {TAIJI_ROOT!r})
+-from services.gateway.natural_language_control import NaturalLanguageRequest, build_plan
+-from tools.total_field_dynamic_context_pull import TotalFieldDynamicContextPullBroker
+-from tools.w7tp_task_state_minimum_packet import (
+-    build_task_model_visible_context,
+-    issue_task_state_minimum_packet,
+-    select_task_state_support_refs,
+-)
+-root = Path({TAIJI_ROOT!r})
+-intent = base64.b64decode({encoded_intent!r}).decode("utf-8")
+-model = base64.b64decode({encoded_model!r}).decode("utf-8")
+-plan = build_plan(NaturalLanguageRequest(
+-    intent=intent,
+-    goal_mode=True,
+-    auto_land=True,
+-    dry_run=True,
+-    google_fallback=False,
+-))
+-work = json.loads((root / "state/WORK_LEDGER.json").read_text(encoding="utf-8"))
+-valid_tasks = {{
+-    item.get("TASK_ID")
+-    for item in work.get("TASKS", [])
+-    if isinstance(item, dict) and isinstance(item.get("TASK_ID"), str)
+-}}
+-task_id = None
+-binding_source = None
+-for candidate in re.findall(r"(?<![A-Z0-9])(?:T-[A-Z0-9-]+|XJ-[0-9]+)(?![A-Z0-9-])", intent.upper()):
+-    if candidate in valid_tasks:
+-        task_id = candidate
+-        binding_source = "EXPLICIT_INTENT_TASK"
+-        break
+-if task_id is None:
++    endpoint_root = Path(
++        "/home/taiji_admin/.local/share/w7tp/endpoint_rule_base_v23"
++    )
++
++    def load_local(relative, module_name):
++        import importlib.util
++        source = endpoint_root / relative
++        if not source.is_file():
++            raise RuntimeError("endpoint component missing")
++        spec = importlib.util.spec_from_file_location(module_name, source)
++        if spec is None or spec.loader is None:
++            raise RuntimeError("endpoint component import failed")
++        module = importlib.util.module_from_spec(spec)
++        spec.loader.exec_module(module)
++        return module
++
+     try:
+-        checkpoint = json.loads((root / "state/CURRENT_CONVERSATION_CHECKPOINT.json").read_text(encoding="utf-8"))
++        handshake_module = load_local(
++            "products/eight_dimensional_generative_memory/"
++            "w7tp_endpoint_rule_handshake_v1.py",
++            "w7tp_bridge_endpoint_handshake",
++        )
++        transport_module = load_local(
++            "tools/w7tp_origin_context_transport_v1.py",
++            "w7tp_bridge_context_transport",
++        )
++        receiver_handshake = (
++            handshake_module.observe_endpoint_rule_capability(
++                root=endpoint_root,
++                node_ref="MSI",
++                state_root=None,
++            )
++        )
+     except Exception:
+-        checkpoint = {{}}
+-    current_goal = str(checkpoint.get("current_goal") or "")
+-    match = re.search(r"(?<![A-Z0-9])(?:T-[A-Z0-9-]+|XJ-[0-9]+)(?![A-Z0-9-])", current_goal.upper())
+-    if match and match.group(0) in valid_tasks:
+-        task_id = match.group(0)
+-        binding_source = "CURRENT_CONVERSATION_CHECKPOINT"
+-if task_id is None:
+-    candidate = plan.get("TASK_ID")
+-    if isinstance(candidate, str) and candidate in valid_tasks:
+-        task_id = candidate
+-        binding_source = "PLAN_FALLBACK"
+-if task_id is None:
+-    print(json.dumps({{
+-        "state":"HOLD_DYNAMIC_CONTEXT_TASK_BINDING_UNKNOWN",
+-        "plan_state":plan.get("state"),
+-    }}, ensure_ascii=False, sort_keys=True))
+-    raise SystemExit(0)
+-selected = select_task_state_support_refs(
+-    task_id=task_id,
+-    max_actions=8,
+-    max_adi_refs=16,
+-)
+-issued = issue_task_state_minimum_packet(
+-    task_id=task_id,
+-    action_refs=selected["action_refs"],
+-    support_adi_record_ids=selected["adi_record_ids"],
+-)
+-packet = issued["packet"]
+-broker = TotalFieldDynamicContextPullBroker()
+-provider_ref = "provider:CODEX_LOCAL_OLLAMA"
+-model_ref = "model:" + model
+-bootstrap = broker.register(
+-    packet=packet,
+-    task_ref="task:" + task_id,
+-    provider_ref=provider_ref,
+-    model_ref=model_ref,
+-    expires_at=(datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
+-    return_coordinate="codex:local-model:response",
+-    context_builder=build_task_model_visible_context,
+-)
+-result = broker.pull(
+-    bootstrap["pull_coordinate"],
+-    task_ref="task:" + task_id,
+-    provider_ref=provider_ref,
+-    model_ref=model_ref,
+-)
+-visible = result["model_visible_context"]
+-print(json.dumps({{
+-    "state":"PASS_TOTAL_FIELD_DYNAMIC_CONTEXT",
+-    "task_id":task_id,
+-    "task_binding_source":binding_source,
+-    "provider_ref":provider_ref,
+-    "model_ref":model_ref,
+-    "pulled_at":datetime.now(timezone.utc).isoformat(),
+-    "expires_at":bootstrap["expires_at"],
+-    "pull_result_sha256":result["pull_result_sha256"],
+-    "task_profile":plan.get("RESOURCE_DECISION", {{}}).get("TASK_PROFILE", {{}}),
+-    "context_ref":visible["context_ref"],
+-    "state_projection":visible["state_projection"],
+-    "evidence_refs":visible["evidence_refs"],
+-    "capability_refs":visible["capability_refs"],
+-    "acceptance_conditions":visible["acceptance_conditions"],
+-    "schema_refs":visible["schema_refs"],
+-    "interface_refs":visible["interface_refs"],
+-    "non_core_rule_capsule_refs":visible["non_core_rule_capsule_refs"],
+-    "packet_ref":packet.get("packet_ref"),
+-    "packet_sha256":packet.get("packet_sha256"),
+-    "adi_coordinate_ref":packet.get("adi_coordinate_ref"),
+-    "authority":result.get("authority"),
+-    "persistence_policy":result.get("persistence_policy"),
+-    "transmission_semantics":result.get("transmission_semantics"),
+-}}, ensure_ascii=False, sort_keys=True))
+-"""
+-    command = "cd " + shlex.quote(TAIJI_ROOT) + " && python3 -c " + shlex.quote(remote_code)
+-    q = subprocess.run(
+-        ["ssh","-o","BatchMode=yes","-o","ConnectTimeout=5",TAIJI_HOST,command],
+-        text=True,
+-        capture_output=True,
+-        timeout=30,
++        return {
++            "state":"HOLD_LOCAL_ENDPOINT_RULE_BASE_UNAVAILABLE",
++            "error_class":"LOCAL_RULE_BASE_OR_HANDSHAKE_FAILED",
++        }
++
++    request = {
++        "intent": intent,
++        "model": str(model or "xiaoj-local-dev:v2.3"),
++        "receiver_handshake": receiver_handshake,
++    }
++    command = (
++        "cd "
++        + shlex.quote(TAIJI_ROOT)
++        + " && python3 tools/w7tp_bridge_dynamic_context_transport_v1.py"
+     )
++    try:
++        q = subprocess.run(
++            [
++                "ssh",
++                "-o",
++                "BatchMode=yes",
++                "-o",
++                "ConnectTimeout=5",
++                TAIJI_HOST,
++                command,
++            ],
++            input=json.dumps(
++                request,
++                ensure_ascii=False,
++                separators=(",", ":"),
++            ),
++            text=True,
++            capture_output=True,
++            timeout=45,
++        )
++    except Exception:
++        return {
++            "state":"HOLD_TAIJI01_DYNAMIC_CONTEXT_UNAVAILABLE",
++            "error_class":"SSH_OR_RULE_BASE_TRANSPORT_FAILED",
++        }
+     if q.returncode != 0:
+         return {
+             "state":"HOLD_TAIJI01_DYNAMIC_CONTEXT_UNAVAILABLE",
+-            "error_class":"SSH_OR_DYNAMIC_CONTEXT_PULL_FAILED",
++            "error_class":"REMOTE_CONTEXT_TRANSPORT_FAILED",
+         }
+     try:
+-        return json.loads(q.stdout)
++        delivery = json.loads(q.stdout)
+     except Exception:
+         return {
+             "state":"HOLD_TAIJI01_DYNAMIC_CONTEXT_PARSE_FAILED",
+-            "error_class":"REMOTE_JSON_INVALID",
++            "error_class":"REMOTE_TRANSPORT_JSON_INVALID",
++        }
++    if not isinstance(delivery, dict):
++        return {
++            "state":"HOLD_TAIJI01_DYNAMIC_CONTEXT_PARSE_FAILED",
++            "error_class":"REMOTE_TRANSPORT_OBJECT_REQUIRED",
++        }
++    try:
++        context = transport_module.reconstruct_transport(
++            delivery,
++            root=endpoint_root,
++        )
++    except Exception:
++        return {
++            "state":"HOLD_LOCAL_DYNAMIC_CONTEXT_RECONSTRUCTION_FAILED",
++            "error_class":"RULE_BASE_RECONSTRUCTION_OR_BINDING_FAILED",
++        }
++    if not isinstance(context, dict):
++        return {
++            "state":"HOLD_LOCAL_DYNAMIC_CONTEXT_RECONSTRUCTION_FAILED",
++            "error_class":"RECONSTRUCTED_CONTEXT_OBJECT_REQUIRED",
+         }
++    return context
+ 
+ def _static_supplement_required(dynamic_context):
+     profile = dynamic_context.get("task_profile")
