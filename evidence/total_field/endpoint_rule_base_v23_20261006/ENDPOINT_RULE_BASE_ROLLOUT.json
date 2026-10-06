@@ -1,0 +1,108 @@
+{
+  "schema_id": "W7TP_ENDPOINT_RULE_BASE_ROLLOUT_EVIDENCE/1.0",
+  "observed_at_utc": "2026-10-06T13:17:04+00:00",
+  "source_node": "taiji01",
+  "source_head_before_commit": "781a5358fb237d54268fbb10ab72302a0dd90a14",
+  "founder_definition": "W7TP/8D ADI V2.3",
+  "authority": {
+    "canonical_change": false,
+    "d8_promotion": false,
+    "authority_effect": "NONE"
+  },
+  "delivered_source_files": {
+    "products/eight_dimensional_generative_memory/w7tp_endpoint_rule_handshake_v1.py": "716b978b9db53afcec41af60ce34ef8873d06f4e758ab3e1bc3e73b515a0c292",
+    "tools/w7tp_origin_context_transport_v1.py": "379e7f61ff5a21184e5aea485e4ebe9ba0e7ff07b9ae37a61e6df646eefedb58",
+    "tests/test_w7tp_endpoint_rule_handshake_v1.py": "0af417d8de3b91251d4ef143f256ca8509ed4bd6d2dfda572a1018806287c015",
+    "tests/test_w7tp_origin_context_transport_v1.py": "fe919e4590defd3d59a9103295e6cc90964cc72af467595d72c3f15430086a11"
+  },
+  "regression": {
+    "state": "PASS",
+    "tests": 26,
+    "suites": [
+      "tests.test_w7tp_origin_context_transport_v1",
+      "tests.test_w7tp_endpoint_rule_handshake_v1",
+      "tests.test_w7tp_receiver_capability_contract_v1",
+      "tests.test_w7tp_receiver_bound_auto_cellizer_v1"
+    ],
+    "proves": [
+      "large reconstructable context selects shared-rule Origin Cell and byte-exact rebuilds",
+      "small context may select full transfer when complete wire cost is lower",
+      "receiver handshake drift fails closed",
+      "packet tamper fails before model-visible context"
+    ],
+    "does_not_prove": [
+      "MSI live bridge integration",
+      "taiji04 Python runtime execution",
+      "all model answers factual",
+      "canonical or D8 promotion"
+    ]
+  },
+  "nodes": {
+    "taiji01": {
+      "endpoint_handshake": "PASS_ENDPOINT_RULE_BASE_PRESENT",
+      "universal_executor_ready": true,
+      "task_state_rule_ready": true
+    },
+    "MSI": {
+      "endpoint_handshake_last_observed": "PASS_ENDPOINT_RULE_BASE_PRESENT",
+      "universal_executor_ready_last_observed": true,
+      "task_state_rule_ready": false,
+      "task_state_rule_presence": true,
+      "endpoint_transport_adapter_copy": "VERIFY_PENDING_AFTER_MSI_CONTROL_PLANE_LOSS",
+      "live_bridge_last_direct_observation": {
+        "file_sha256": "b06510511801532031ab82b7a4ff38394ac872cc321ba2f8acf80f3e106a29b2",
+        "file_mtime_tpe": "2026-10-06T20:08:26+08:00",
+        "listener_11435": true,
+        "process_observed": true,
+        "attribution": "EXTERNAL_TO_THIS_ROLLOUT; NOT CLAIMED AS THIS WORK'S DEPLOYMENT"
+      },
+      "current_connectivity": {
+        "windows_icmp": "PASS",
+        "windows_smb_445": "OPEN",
+        "ssh_22": "CLOSED_OR_FILTERED",
+        "ollama_11434": "CLOSED_OR_FILTERED",
+        "bridge_11435": "CLOSED_OR_FILTERED",
+        "tailscale_online": false,
+        "wake_on_lan_sent_once": true,
+        "wake_on_lan_restored_ssh_within_20s": false
+      }
+    },
+    "taiji03": {
+      "endpoint_handshake": "PASS_ENDPOINT_RULE_BASE_PRESENT",
+      "universal_executor_ready": true,
+      "task_state_rule_ready": false,
+      "transport_adapter_sha256": "379e7f61ff5a21184e5aea485e4ebe9ba0e7ff07b9ae37a61e6df646eefedb58"
+    },
+    "penguin": {
+      "endpoint_handshake": "PASS_ENDPOINT_RULE_BASE_PRESENT",
+      "universal_executor_ready": true,
+      "task_state_rule_ready": false,
+      "transport_adapter_sha256": "379e7f61ff5a21184e5aea485e4ebe9ba0e7ff07b9ae37a61e6df646eefedb58"
+    },
+    "taiji04": {
+      "byte_exact_rule_base_copy": true,
+      "transport_adapter_sha256": "379e7f61ff5a21184e5aea485e4ebe9ba0e7ff07b9ae37a61e6df646eefedb58",
+      "python_runtime_acceptance": "UNKNOWN_REMOTE_SHELL_EXECUTION_LIMIT"
+    },
+    "wuchang-us-free-node": {
+      "state": "OFFLINE_UNTOUCHED"
+    }
+  },
+  "transport_policy": {
+    "rule_presence_not_equal_readiness": true,
+    "shared_rule_requires_exact_executor_and_receiver_ready": true,
+    "cost_metric": "complete serialized wire bytes including required preconditions",
+    "modes": [
+      "SHARED_RULE_ORIGIN_CELL",
+      "GENERATIVE_RULE_ORIGIN_CELL",
+      "FULL_TRANSFER",
+      "HOLD"
+    ],
+    "d8_authority_inherited_from_rule_base": false
+  },
+  "current_blocker": {
+    "scope": "MSI live bridge integration only",
+    "state": "HOLD_MSI_WSL_CONTROL_PLANE_UNAVAILABLE",
+    "next_action": "When MSI WSL/Remote Commander or existing SSH returns, verify adapter hash, build bridge candidate from live b065105 preimage, run isolated and live end-to-end acceptance, then reload only bridge."
+  }
+}
