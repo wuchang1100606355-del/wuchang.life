@@ -23,7 +23,7 @@
         <field name="name">wuchang.cafe.menu.product.kanban</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <kanban class="o_kanban_small_column" records_draggable="0" sample="0">
+            <kanban create="0" class="o_kanban_small_column" records_draggable="0" sample="0">
                 <field name="name"/>
                 <field name="list_price"/>
                 <field name="image_128"/>
