@@ -1,79 +1,82 @@
 <odoo>
-  <template id="wuchang_auth_login_layout" inherit_id="web.login_layout" name="Wuchang Branded Login Layout" priority="90">
+  <template id="wuchang_auth_login_layout" inherit_id="web.login_layout" name="Wuchang Simple Member Login" priority="90">
     <xpath expr="t" position="replace">
       <t t-call="web.layout">
         <style>
-          body { margin: 0; background: #102139; }
-          .wuchang-auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(420px, .95fr); gap: 40px; padding: 56px clamp(24px,5vw,72px); background: linear-gradient(135deg, rgba(19,41,75,.96), rgba(35,68,60,.94)); color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-          .wuchang-auth-hero, .wuchang-auth-panel { display: flex; align-items: center; }
-          .wuchang-auth-hero { flex-direction: column; justify-content: center; align-items: flex-start; max-width: 720px; }
-          .wuchang-auth-kicker { margin: 0 0 12px; color: #e8c36a; font-size: .9rem; font-weight: 700; letter-spacing: 0; }
-          .wuchang-auth-brand h1 { margin: 0; font-size: clamp(2.1rem, 4.6vw, 4.5rem); line-height: 1.05; letter-spacing: 0; }
-          .wuchang-auth-lead { margin: 22px 0 0; color: #dbeafe; font-size: 1.18rem; line-height: 1.7; }
-          .wuchang-auth-mission { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: 100%; margin: 36px 0 0; }
-          .wuchang-auth-mission div { min-height: 112px; padding: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.08); }
-          .wuchang-auth-mission strong { display: block; color: #fff; font-size: 1.05rem; }
-          .wuchang-auth-mission span { display: block; margin-top: 10px; color: #cbd5e1; line-height: 1.55; }
-          .wuchang-auth-note { max-width: 680px; margin: 28px 0 0; color: #cbd5e1; line-height: 1.75; }
-          .wuchang-auth-panel { justify-content: center; }
-          .wuchang-auth-card { width: min(100%, 520px); padding: 30px; border-radius: 8px; background: #fff; color: #172033; box-shadow: 0 24px 80px rgba(2,8,23,.28); }
-          .wuchang-auth-card-header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; }
-          .wuchang-auth-card h2 { margin: 0; color: #111827; font-size: 1.45rem; letter-spacing: 0; }
-          .wuchang-auth-lang { flex: 0 0 auto; color: #64748b; font-size: .82rem; white-space: nowrap; }
-          .wuchang-auth-card form { margin: 0; }
-          .wuchang-auth-card .mb-3 { display: block; margin-bottom: 14px !important; }
-          .wuchang-auth-card label { display: block; margin-bottom: 7px; color: #0f172a; font-weight: 700; }
-          .wuchang-auth-card .form-control { display: block; width: 100%; min-height: 46px; border-radius: 6px; font-size: 1rem; }
-          .wuchang-auth-card .oe_login_buttons, .wuchang-auth-card .oe_signup_form .oe_login_buttons { display: grid !important; gap: 8px; margin-top: 16px; }
-          .wuchang-auth-card .oe_login_buttons .btn, .wuchang-auth-card .oe_signup_form .oe_login_buttons .btn { width: 100%; min-height: 44px; }
-          .wuchang-auth-card .oe_login_form > p.mt-2.text-center { display: none !important; }
-          .wuchang-auth-card .btn-link { color: #17466f; font-weight: 700; text-decoration: none; }
-          .wuchang-auth-card .btn-primary, .wuchang-auth-action.primary { border-color: #17466f; background: #17466f; color: #fff; }
-          .wuchang-auth-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
-          .wuchang-auth-action { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 14px; border: 1px solid #d8dee8; border-radius: 6px; color: #172033; background: #f8fafc; font-weight: 700; text-align: center; text-decoration: none; }
-          .wuchang-auth-guide { margin-top: 22px; padding: 16px; border: 1px solid #dbe7f4; background: #f8fafc; color: #334155; line-height: 1.65; }
-          .wuchang-auth-guide strong { display: block; color: #172033; margin-bottom: 6px; }
-          .wuchang-auth-action.line { border-color: #04b900; color: #027a11; }
-          .wuchang-auth-action.google { border-color: #d7b15b; color: #8a5a00; }
-          .wuchang-auth-card .o_login_auth { display: none !important; }
-          @media (max-width: 980px) { .wuchang-auth-page { grid-template-columns: 1fr; padding: 28px 18px; } .wuchang-auth-mission { grid-template-columns: 1fr; } }
-          @media (max-width: 560px) { .wuchang-auth-card { padding: 22px; } .wuchang-auth-actions, .wuchang-auth-card-header { display: grid; grid-template-columns: 1fr; } }
+          body { margin: 0; background: #f4f7fb; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+          .xiaoj-login-page { min-height: 100vh; display: grid; grid-template-columns: minmax(0, .9fr) minmax(420px, .7fr); gap: 56px; align-items: center; padding: 48px clamp(24px, 6vw, 88px); background: linear-gradient(135deg, #eef4fb 0%, #f8fafc 55%, #eef7f2 100%); }
+          .xiaoj-brand { max-width: 680px; }
+          .xiaoj-eyebrow { margin: 0 0 14px; color: #8a5a00; font-size: .95rem; font-weight: 800; letter-spacing: .02em; }
+          .xiaoj-brand h1 { margin: 0; color: #102139; font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.02; letter-spacing: -.03em; }
+          .xiaoj-lead { margin: 24px 0 0; max-width: 620px; color: #435268; font-size: clamp(1.08rem, 1.8vw, 1.28rem); line-height: 1.8; }
+          .xiaoj-rule { margin-top: 34px; display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 999px; background: #ffffff; border: 1px solid #dbe4ef; color: #27415c; font-weight: 700; box-shadow: 0 8px 24px rgba(15, 35, 60, .06); }
+          .xiaoj-rule::before { content: "✓"; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #eaf6ef; color: #17623a; font-weight: 900; }
+          .xiaoj-panel { display: flex; justify-content: center; }
+          .xiaoj-card { width: min(100%, 500px); padding: 34px; border-radius: 18px; background: #fff; box-shadow: 0 24px 70px rgba(15, 35, 60, .12); border: 1px solid rgba(214, 224, 235, .95); }
+          .xiaoj-card h2 { margin: 0; color: #102139; font-size: 1.7rem; letter-spacing: -.02em; }
+          .xiaoj-sub { margin: 10px 0 24px; color: #66758a; line-height: 1.65; }
+          .xiaoj-card form { margin: 0; }
+          .xiaoj-card .mb-3 { display: block; margin-bottom: 16px !important; }
+          .xiaoj-card label { display: block; margin-bottom: 8px; color: #172033; font-weight: 750; }
+          .xiaoj-card label.d-flex { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+          .xiaoj-card .form-control { display: block; width: 100%; min-height: 48px; border-radius: 10px; border-color: #cfd8e3; font-size: 1rem; }
+          .xiaoj-card .form-control:focus { border-color: #17466f; box-shadow: 0 0 0 .2rem rgba(23, 70, 111, .12); }
+          .xiaoj-card .oe_login_buttons, .xiaoj-card .oe_signup_form .oe_login_buttons { display: grid !important; gap: 10px; margin-top: 18px; }
+          .xiaoj-card .oe_login_buttons .btn, .xiaoj-card .oe_signup_form .oe_login_buttons .btn { width: 100%; min-height: 48px; border-radius: 10px; font-weight: 750; }
+          .xiaoj-card .btn-primary { border-color: #17466f; background: #17466f; color: #fff; }
+          .xiaoj-card .btn-primary:hover { border-color: #123a5d; background: #123a5d; }
+          .xiaoj-card .oe_login_form > p.mt-2.text-center { display: none !important; }
+          .xiaoj-card .btn-link { color: #17466f; font-weight: 700; text-decoration: none; }
+          .xiaoj-card .o_login_auth { display: none !important; }
+          .xiaoj-provider-actions { display: grid; gap: 10px; margin: 18px 0 16px; }
+          .xiaoj-provider { display: flex; min-height: 50px; align-items: center; justify-content: center; gap: 10px; padding: 0 16px; border: 1px solid #d5dee9; border-radius: 10px; background: #fff; color: #172033; font-weight: 800; text-decoration: none; transition: transform .12s ease, box-shadow .12s ease, background .12s ease; }
+          .xiaoj-provider:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(15,35,60,.08); color: #102139; text-decoration: none; }
+          .xiaoj-provider.google::before { content: "G"; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 1px solid #d7dde5; color: #315efb; font-weight: 900; }
+          .xiaoj-provider.line { background: #06c755; border-color: #06c755; color: #fff; }
+          .xiaoj-provider.line:hover { background: #05b84e; color: #fff; }
+          .xiaoj-provider.line::before { content: "LINE"; font-size: .72rem; font-weight: 900; }
+          .xiaoj-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: #8a96a6; font-size: .86rem; }
+          .xiaoj-divider::before, .xiaoj-divider::after { content: ""; height: 1px; background: #e3e8ee; flex: 1; }
+          .xiaoj-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+          .xiaoj-action { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; padding: 10px 14px; border: 1px solid #d5dee9; border-radius: 10px; color: #172033; background: #f8fafc; font-weight: 750; text-align: center; text-decoration: none; }
+          .xiaoj-action:hover { background: #eef3f8; color: #102139; text-decoration: none; }
+          .xiaoj-note { margin-top: 22px; padding-top: 18px; border-top: 1px solid #e6ebf1; color: #66758a; font-size: .94rem; line-height: 1.7; }
+          .xiaoj-note strong { color: #34455a; }
+          @media (max-width: 960px) {
+            .xiaoj-login-page { grid-template-columns: 1fr; gap: 28px; padding: 34px 18px; }
+            .xiaoj-brand { text-align: center; margin: 0 auto; }
+            .xiaoj-lead { margin-left: auto; margin-right: auto; }
+            .xiaoj-rule { margin-left: auto; margin-right: auto; }
+          }
+          @media (max-width: 560px) {
+            .xiaoj-card { padding: 24px 20px; border-radius: 14px; }
+            .xiaoj-actions { grid-template-columns: 1fr; }
+          }
         </style>
-        <main class="wuchang-auth-page" role="main">
-          <section class="wuchang-auth-hero" aria-label="Wuchang community digital entry">
-            <div class="wuchang-auth-brand">
-              <p class="wuchang-auth-kicker">五常社區發展協會 × 聊國咖啡館重新總店</p>
-              <h1>主權 AI 會員系統</h1>
-              <p class="wuchang-auth-lead">Sovereign AI Member System — 以會員本地主權為核心，整合身分、意圖、雲端候選、本地總場裁決與可追溯證據。</p>
-            </div>
-            <div class="wuchang-auth-mission">
-              <div><strong>會員主權</strong><span>會員保留授權權；系統只驗證身分、範圍、意圖與證據。</span></div>
-              <div><strong>雲端候選</strong><span>雲端模型只產生 Candidate Result，不取得正式執行權。</span></div>
-              <div><strong>本地總場</strong><span>本地依權限、硬風險與證據裁決 PASS、HOLD 或人工確認。</span></div>
-            </div>
-            <p class="wuchang-auth-note"><strong>狀態可見：</strong>PASS／HOLD／人工確認／錯誤。會員資料留在本地；雲端只接收去識別化引用封包，正式操作須通過本地 execution gate 並留下 accountable evidence chain。</p>
+
+        <main class="xiaoj-login-page" role="main">
+          <section class="xiaoj-brand" aria-label="小J會員服務">
+            <p class="xiaoj-eyebrow">五常社區發展協會 × 聊國咖啡</p>
+            <h1>小J會員服務</h1>
+            <p class="xiaoj-lead">確認你是誰，小J會依目前狀態與授權，直接帶你到可以使用的服務。</p>
+            <div class="xiaoj-rule">只要確認本人，其他交給小J。</div>
           </section>
 
-          <section class="wuchang-auth-panel" aria-label="Account access">
-            <div class="wuchang-auth-card">
-              <div class="wuchang-auth-card-header">
-                <div>
-                  <p class="wuchang-auth-kicker">會員入口</p>
-                  <h2>登入、註冊與身分驗證</h2>
-                </div>
-                <div class="wuchang-auth-lang">中文 / Tiếng Việt / English</div>
-              </div>
+          <section class="xiaoj-panel" aria-label="登入">
+            <div class="xiaoj-card">
+              <h2>確認本人</h2>
+              <p class="xiaoj-sub">輸入帳號或 Email；忘記密碼也可以直接重新設定。</p>
+
               <t t-out="0"/>
-              <div class="wuchang-auth-actions" aria-label="Quick access">
-                <a class="wuchang-auth-action primary" href="/web/login">店員 / 店長登入</a>
-                <a class="wuchang-auth-action" href="/web/signup">會員註冊</a>
-                <a class="wuchang-auth-action" href="/wuchang/business/onboarding">團體會員申請</a>
-                <a class="wuchang-auth-action" href="/forum">社區會員討論版</a>
-                <span class="wuchang-auth-guide">Google／LINE 僅供登入後的 verified channel 綁定；目前公開會員入口統一使用 Odoo 會員註冊。</span>
+
+              <div class="xiaoj-actions" aria-label="其他申請方式">
+                <a class="xiaoj-action" href="/web/signup">建立會員帳號</a>
+                <a class="xiaoj-action" href="/wuchang/business/onboarding">團體申請</a>
               </div>
-              <div class="wuchang-auth-guide" role="note">
-                <strong>操作說明</strong>
-                登入或完成會員註冊後，服務意圖會先由小J建立本地候選；雲端只回傳候選結果，正式操作仍由本地總場裁決。若顯示 HOLD、人工確認或錯誤，請保留參考代碼並由現場人員協助。
+
+              <div class="xiaoj-note" role="note">
+                <strong>確認完成後直接進入服務。</strong>
+                小J會依你的身分封包與目前授權，自動顯示正確的服務。
               </div>
             </div>
           </section>
@@ -82,21 +85,24 @@
     </xpath>
   </template>
 
-  <template id="wuchang_auth_login_form" inherit_id="web.login" name="Wuchang Login Form Copy">
+  <template id="wuchang_auth_login_form" inherit_id="web.login" name="Wuchang Simple Login Form">
     <xpath expr="//label[@for='login']" position="replace">
-      <label for="login" class="form-label d-flex justify-content-between">帳號 / Email</label>
+      <label for="login" class="form-label d-flex justify-content-between">帳號或 Email</label>
     </xpath>
     <xpath expr="//input[@id='login']" position="attributes">
-      <attribute name="placeholder">請輸入店員、店長或管理員帳號</attribute>
+      <attribute name="placeholder">輸入你的帳號或 Email</attribute>
     </xpath>
     <xpath expr="//label[@for='password']" position="replace">
-      <label for="password" class="form-label d-flex justify-content-between">密碼</label>
+      <label for="password" class="form-label d-flex justify-content-between">
+        <span>密碼</span>
+        <a href="/web/reset_password" class="btn-link">忘記密碼？</a>
+      </label>
     </xpath>
     <xpath expr="//input[@id='password']" position="attributes">
-      <attribute name="placeholder">請輸入密碼</attribute>
+      <attribute name="placeholder">輸入密碼</attribute>
     </xpath>
     <xpath expr="//button[@type='submit' and contains(@class, 'btn-primary')]" position="replace">
-      <button type="submit" class="btn btn-primary">進入店務系統</button>
+      <button type="submit" class="btn btn-primary">確認並繼續</button>
     </xpath>
     <xpath expr="//div[contains(@class, 'o_login_auth')]" position="replace">
       <div class="o_login_auth d-none"/>

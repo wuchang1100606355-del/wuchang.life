@@ -6,7 +6,7 @@ import hashlib
 import json
 
 
-CANONICAL_CALLBACK_URL = "https://member.wuchang.life/line/callback"
+CANONICAL_CALLBACK_URL = "https://wuchang.life/line/callback"
 PUBLIC_HOME_RETURN = "https://wuchang.life/"
 ALLOWED_LINK_FIELDS = {
     "provider_name",

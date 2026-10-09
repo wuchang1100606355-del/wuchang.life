@@ -1,11 +1,21 @@
+import os
 import secrets
+import stat
 import time
+from pathlib import Path
+
 import requests
 from datetime import datetime, timezone
 from urllib.parse import urlencode
 
 from odoo import http
+from odoo.exceptions import AccessDenied, UserError
 from odoo.http import request
+from odoo.addons.wuchang_member_registration.services.external_signup import (
+    begin_verified_external_session,
+    build_provider_callback_evidence_ref,
+    ensure_verified_external_applicant,
+)
 
 from ..services.profile_minimization import (
     CANONICAL_CALLBACK_URL,
@@ -16,6 +26,8 @@ from ..services.profile_minimization import (
 
 
 LINE_ID_TOKEN_VERIFY_URL = 'https://api.line.me/oauth2/v2.1/verify'
+LINE_CLIENT_SECRET_FILE_ENV = "WUCHANG_LINE_CLIENT_SECRET_FILE"
+LINE_CLIENT_SECRET_FILE = Path("/run/secrets/line_login_channel_secret")
 
 class WuchangLineLogin(http.Controller):
     def _landing_enabled(self):
@@ -79,7 +91,22 @@ class WuchangLineLogin(http.Controller):
     def _success_page(self, title, message):
         return request.make_response(self._html_page(title, message, "LINE_LOGIN_COMPLETE"))
 
-    @http.route('/line/login', type='http', auth='user', website=False, csrf=False)
+    def _client_secret(self):
+        configured_path = Path(os.environ.get(LINE_CLIENT_SECRET_FILE_ENV, ""))
+        if configured_path != LINE_CLIENT_SECRET_FILE:
+            return None
+        try:
+            file_status = configured_path.lstat()
+            if not stat.S_ISREG(file_status.st_mode):
+                return None
+            if stat.S_IMODE(file_status.st_mode) != 0o600:
+                return None
+            secret_value = configured_path.read_text(encoding="utf-8").strip()
+        except (OSError, UnicodeError):
+            return None
+        return secret_value or None
+
+    @http.route('/line/login', type='http', auth='public', website=False, csrf=False)
     def line_login(self, **kw):
         if not self._landing_enabled():
             return self._landing_hold()
@@ -125,13 +152,6 @@ class WuchangLineLogin(http.Controller):
     def line_callback(self, **kw):
         if not self._landing_enabled():
             return self._landing_hold()
-        if not request.session.uid:
-            return self._status_page(
-                "LINE 登入安全檢查未通過",
-                "必須先由唯一 Odoo 會員入口登入，再進行 LINE channel 綁定。",
-                "AUTHENTICATED_MEMBER_SESSION_REQUIRED",
-                status=401,
-            )
         code = kw.get('code')
         state = kw.get('state')
         saved_state = request.session.pop('wuchang_line_state', None)
@@ -158,7 +178,7 @@ class WuchangLineLogin(http.Controller):
             )
 
         channel_id = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.channel_id')
-        channel_secret = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.channel_secret')
+        channel_secret = self._client_secret()
         redirect_uri = request.env['ir.config_parameter'].sudo().get_param('wuchang_line_login.redirect_uri')
         if not channel_id or not channel_secret or redirect_uri != CANONICAL_CALLBACK_URL:
             return self._status_page(
@@ -255,16 +275,45 @@ class WuchangLineLogin(http.Controller):
                 status=400,
             )
 
+        try:
+            callback_ref = build_provider_callback_evidence_ref(
+                "line",
+                subject=str(line_user_id or ""),
+                state=saved_state,
+                issued_at_epoch=issued_at_epoch,
+            )
+            result = ensure_verified_external_applicant(
+                request.env,
+                provider="line",
+                subject=str(line_user_id or ""),
+                display_name=str(profile.get("displayName") or ""),
+                callback_evidence_ref=callback_ref,
+            )
+            target = (
+                "/wuchang/member/account"
+                if result["membership_active"]
+                else "/wuchang/member/finish"
+            )
+            redirect_target = begin_verified_external_session(
+                request, result["user"], redirect_path=target
+            )
+        except (AccessDenied, UserError, ValueError):
+            return self._status_page(
+                "LINE 會員登入暫時無法完成",
+                "LINE 身分已驗證，但本地會員帳號目前需要人工確認。既有資料不會被覆寫，請稍後再試或洽服務人員。",
+                "LINE_LOCAL_ACCOUNT_HOLD",
+                status=409,
+            )
+
+        if not request.session.uid:
+            return request.redirect(redirect_target)
+
         authority = request.env['wuchang.member.external.auth']
         resolution = authority.resolve_provider_subject_for_session(
-            'line',
-            line_user_id,
-            request.env.user,
+            'line', line_user_id, request.env.user
         )
         link_context = minimized_link_record(
-            profile,
-            resolution,
-            datetime.now(timezone.utc).isoformat(),
+            profile, resolution, datetime.now(timezone.utc).isoformat()
         )
         link_context.update({
             'verified_channel_binding_ref': resolution.get(
@@ -273,25 +322,13 @@ class WuchangLineLogin(http.Controller):
             'member_ref': resolution.get('member_ref'),
         })
         request.session['wuchang_line_link_context'] = link_context
-        if authorization_decision(link_context['link_state']) != 'ALLOW':
-            return self._status_page(
-                "LINE 帳戶需要本地確認",
-                "LINE 身分已驗證，但尚未取得本地會員綁定授權。請重新驗證既有帳戶或由授權人員審閱。",
-                link_context['link_state'],
-                status=202,
-            )
-
         group_packet_ref = request.session.get('wuchang_group_packet_ref')
-        if group_packet_ref:
+        if group_packet_ref and result["membership_active"]:
             request.session['wuchang_group_auth_ref'] = {
                 'provider': 'line',
-                'provider_user_ref': link_context['provider_subject_reference'],
+                'provider_user_ref': link_context.get('provider_subject_reference'),
                 'display_ref': 'line_member_masked',
                 'hash_subject': authority.hash_subject('line', line_user_id),
             }
             return request.redirect('/wuchang/member/register/group/%s' % group_packet_ref)
-
-        return self._success_page(
-            "LINE 會員入口已完成",
-            "LINE 身分驗證與本地綁定引用已確認，請依現場指示繼續。",
-        )
+        return request.redirect(redirect_target)

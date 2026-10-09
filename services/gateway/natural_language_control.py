@@ -251,6 +251,8 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "google_candidate_fallback": google_allowed,
             "cloud_authority": "CANDIDATE_ONLY",
             "formal_land_gate": "TAIJI01_TOTAL_FIELD_SOLE_RECEIVER",
+            "external_effect_gate": "FAIL_CLOSED_EXACT_PERMIT_REQUIRED_FOR_MUTATION",
+            "external_effect_gate_module": "core.external_effect_gate",
             "context_delivery_mode": "TOTAL_FIELD_POINTER_FIRST_STATE_CELL_PULL",
             "context_transport_format": "TASK_STATE_ORIGIN_CELL_TRANSMISSION",
             "context_reconstruction_mode": "LOCAL_RULE_REF_MINIMUM_STATE",
@@ -319,11 +321,14 @@ def build_plan(req: NaturalLanguageRequest) -> dict[str, Any]:
             "local_rule_ref_cloud_visible": False,
             "gemini_reasoning_failure_local_fallback": True,
             "gemini_candidate_never_becomes_source_truth": True,
+            "external_tool_without_effect_permit": "READ_ONLY_ONLY",
+            "mutation_without_exact_preimage_rollback_ttl_authority": "HOLD",
         },
         "D8_AUTHORITY": {
             "source": "CURRENT_FOUNDER_INTENT_ENVELOPE",
             "provider_authority": "NONE",
             "formal_effect_boundary": "TAIJI01_TOTAL_FIELD",
+            "external_tool_effect_authority": "NONE_WITHOUT_EXACT_TOTAL_FIELD_PERMIT",
         },
     }
 def _local_agent_prompt(intent: str, plan: dict[str, Any]) -> str:

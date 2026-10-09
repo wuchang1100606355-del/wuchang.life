@@ -84,6 +84,7 @@ _HASH_BOUND_REF = re.compile(r"^[a-z][a-z0-9_.-]*:sha256:[0-9a-f]{64}$")
 _SCOPE_REF = re.compile(r"^scope_ref:sha256:[0-9a-f]{64}$")
 _LEDGER_APPEND_TOKEN = object()
 _SOVEREIGN_CAS_TOKEN = object()
+_VOUCHER_REDEEM_WRITE_TOKEN = object()
 
 
 def _canonical_sha256(payload):
@@ -2367,6 +2368,12 @@ class WuchangMemberVoucher(models.Model):
         return records
 
     def write(self, vals):
+        if (
+            vals.get("state") == "redeemed"
+            and self.env.context.get("_wuchang_voucher_redeem_token")
+            is not _VOUCHER_REDEEM_WRITE_TOKEN
+        ):
+            raise UserError(_("HOLD_MEMBER_OWNER_CONFIRMATION_REQUIRED"))
         result = super().write(vals)
         if vals.keys() & {"state", "expires_at", "redeemed_order_ref", "reward_product_id"}:
             self._refresh_voucher_hash()
@@ -2436,16 +2443,46 @@ class WuchangMemberVoucher(models.Model):
         }
 
     def action_redeem_with_authority(self, order_ref):
-        for rec in self:
-            candidate = rec.build_redeem_candidate(order_ref)
-            if not candidate["state"].startswith("PASS_"):
-                raise UserError(_(candidate["state"]))
-            rec.write({
-                "state": "redeemed",
-                "redeemed_at": fields.Datetime.now(),
-                "redeemed_order_ref": order_ref,
-                "redeemed_by_id": self.env.user.id,
-            })
+        raise UserError(_("HOLD_MEMBER_OWNER_CONFIRMATION_REQUIRED"))
+
+    def _redeem_from_verified_sovereign_checkout(
+        self,
+        *,
+        order_ref,
+        expected_voucher_hash,
+        authorization_ref,
+    ):
+        self.ensure_one()
+        _assert_hash_ref(authorization_ref, "authorization_ref")
+        _assert_sha256(expected_voucher_hash, "expected_voucher_hash")
+
+        self.env.cr.execute(
+            "SELECT id FROM wuchang_member_voucher WHERE id = %s FOR UPDATE",
+            [self.id],
+        )
+        self.invalidate_recordset()
+        if self.voucher_hash != expected_voucher_hash:
+            raise UserError(_("HOLD_VOUCHER_PREIMAGE_HASH_MISMATCH"))
+
+        candidate = self.build_redeem_candidate(order_ref)
+        if not candidate["state"].startswith("PASS_"):
+            raise UserError(_(candidate["state"]))
+        before_hash = self.voucher_hash
+        self.with_context(
+            _wuchang_voucher_redeem_token=_VOUCHER_REDEEM_WRITE_TOKEN
+        ).write({
+            "state": "redeemed",
+            "redeemed_at": fields.Datetime.now(),
+            "redeemed_order_ref": order_ref,
+            "redeemed_by_id": self.env.user.id,
+        })
+        return {
+            "authorization_ref": authorization_ref,
+            "voucher_ref": self.voucher_ref,
+            "voucher_hash_before": before_hash,
+            "voucher_hash_after": self.voucher_hash,
+            "state": self.state,
+        }
 
 
 class WuchangCommunityFeatureGate(models.Model):
@@ -2490,6 +2527,10 @@ class WuchangCommunityFeatureGate(models.Model):
 
     @api.model
     def set_gate(self, feature_key, enabled, reason_ref="", name=None):
+        if not self.env.user.has_group(
+            "wuchang_member_registration.group_wuchang_member_admin"
+        ):
+            raise UserError(_("HOLD_COMMUNITY_FEATURE_GATE_ADMIN_REQUIRED"))
         if not feature_key:
             raise UserError(_("Feature key is required."))
         gate = self.sudo().search([("feature_key", "=", feature_key)], limit=1)

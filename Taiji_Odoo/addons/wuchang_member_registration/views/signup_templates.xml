@@ -30,7 +30,7 @@
         <p><a href="/wuchang/business/onboarding">代表團體申請會員，請改走團體申請入口。</a></p>
       </div>
     </xpath>
-    <xpath expr="//div[contains(@class, 'field-name')]" position="after">
+    <xpath expr="//t[@t-call='auth_signup.fields']" position="after">
       <input type="hidden" name="member_type" value="individual"/>
       <div class="mb-3 field-organization-name">
         <label for="organization_name">所屬團體</label>

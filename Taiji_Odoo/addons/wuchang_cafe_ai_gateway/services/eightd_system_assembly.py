@@ -18,46 +18,47 @@ from .p1_intent_engine import SAFETY_FLAGS, candidate_action, merchant_capabilit
 
 EIGHTD_DIMENSIONS = [
     {
-        "id": "D1_identity",
-        "zh": "身分",
-        "purpose": "actor_ref, member_ref, resident_ref, staff_ref, role_ref; plaintext identity forbidden",
-    },
-    {
-        "id": "D2_intent",
+        "id": "D1_INTENT",
         "zh": "意圖",
-        "purpose": "natural-language intent classified as candidate-only before local authority",
+        "purpose": "the current human or organization intent without treating model output as authority",
     },
     {
-        "id": "D3_state",
+        "id": "D2_STATE",
         "zh": "狀態",
-        "purpose": "session, task, order, member, resident, property, and reality-layer state refs",
+        "purpose": "the current effective task, service, member, order, voucher, and runtime state",
     },
     {
-        "id": "D4_topology",
-        "zh": "拓撲",
-        "purpose": "merchant, association, building, unit, device, channel, and origin-scope refs",
+        "id": "D3_COORDINATE",
+        "zh": "座標",
+        "purpose": "natural person, organization, seat, node, scene, time, and service coordinates",
     },
     {
-        "id": "D5_resource",
-        "zh": "資源",
-        "purpose": "Odoo/POS/LINE/LINE WORKS/Gemini/key/api/model refs without raw values",
+        "id": "D4_EVIDENCE",
+        "zh": "證據",
+        "purpose": "receipts, hashes, preimages, postimages, observations, and audit references",
     },
     {
-        "id": "D6_governance",
-        "zh": "治理",
-        "purpose": "allowed actions, forbidden actions, consent, approval, and no-plaintext rules",
+        "id": "D5_EXECUTION_POLICY",
+        "zh": "執行／政策",
+        "purpose": "allowed effects, policy gates, capability seats, and execution boundaries",
     },
     {
-        "id": "D7_verification",
-        "zh": "驗證",
-        "purpose": "redaction, leak check, local reconstruction, role check, and action allowlist",
+        "id": "D6_GENERATIVE_STATE_TRANSMISSION",
+        "zh": "生成式狀態傳輸",
+        "purpose": "non-differential pointer-first minimum-state transmission and local reconstruction",
     },
     {
-        "id": "D8_envelope",
-        "zh": "封包",
-        "purpose": "packet_ref, nonce, ttl, hash, seal, signature_ref, and replay protection",
+        "id": "D7_RISK_ISOLATION",
+        "zh": "風險／隔離",
+        "purpose": "masked-data boundaries, cross-member and cross-organization isolation, fail-closed risk controls",
+    },
+    {
+        "id": "D8_ENVELOPE_AUTHORITY",
+        "zh": "封套／權威",
+        "purpose": "authority envelope, owner consent, organization scope, replay protection, seal and authorization refs",
     },
 ]
+EIGHTD_COUPLING_RULE = "ONE_COUPLED_DYNAMIC_STATE_FIELD_NOT_PIPELINE"
 
 SYSTEMS = {
     "merchant_management": {
@@ -148,6 +149,7 @@ def build_eightd_system_assembly_status() -> dict:
         "title_zh": "8維度意圖場封包自然語言控制系統總成",
         "title_en": "8D Intent-Field Packet Natural-Language Control System Assembly",
         "eightd_dimensions": EIGHTD_DIMENSIONS,
+        "eightd_coupling_rule": EIGHTD_COUPLING_RULE,
         "core_chain": [
             "natural_language_input",
             "total_field_subfield_query",
