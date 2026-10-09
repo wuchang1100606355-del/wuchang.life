@@ -4,3 +4,6 @@ from . import line_official_account_config
 from . import total_product_handoff
 from . import business_backend_optimization
 from . import member_ticket_payment_gate
+from . import capability_seat
+from . import member_low_risk_lookup
+from . import sovereign_voucher_checkout

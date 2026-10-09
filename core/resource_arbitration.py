@@ -438,8 +438,9 @@ def probe_gemini_code_assist() -> dict[str, Any]:
         )
         ports = []
         for line in proc.stdout.splitlines():
-            if "node" not in line:
-                continue
+            # code-server updates can hide process names from ss -p even when
+            # the Gemini A2A node process is live. Discover by loopback
+            # listener and verify identity with the agent card instead.
             match = re.search(r"127\.0\.0\.1:(\d+)", line)
             if match:
                 ports.append(int(match.group(1)))

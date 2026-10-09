@@ -130,7 +130,7 @@ def run_checks() -> tuple[dict[str, str], list[str]]:
 
     login = read(MEMBER / "views/login_templates.xml")
     errors = read(MEMBER / "views/error_templates.xml")
-    require(login, ("主權 AI 會員系統", "操作說明", "HOLD", "人工確認"), "member_portal", failures)
+    require(login, ("小J會員服務", "登入一次", "不用先選會員、店員、店長或管理員身分", "登入後不需要再選角色"), "member_portal", failures)
     require(errors, ("現場協助", "安全邊界", "參考代碼"), "error_ui", failures)
 
     intent = read(CAFE / "services/p1_intent_engine.py")

@@ -86,25 +86,40 @@ async def enforce_client_whitelist(request: Request, call_next):
             status_code=403,
             content={"detail": "Forbidden: client is outside ALLOWED_CLIENT_CIDRS"},
         )
+
+    # P0 containment: network location is not execution authority.  Until an
+    # exact D8-bound effect permit is wired into this legacy gateway, all POST
+    # routes fail closed by default.  A future explicitly authorized rollout
+    # may set W7TP_EDGE_EFFECTS_ENABLED=1 after its own preimage/permit checks.
+    if request.method.upper() == "POST" and os.environ.get("W7TP_EDGE_EFFECTS_ENABLED") != "1":
+        return JSONResponse(
+            status_code=403,
+            content={
+                "detail": "HOLD_EDGE_EFFECT_AUTHORITY_REQUIRED",
+                "effect_authority": False,
+            },
+        )
     return await call_next(request)
 
 # =============================================================================
 # 👑 [總司令核心技術] WSL 跨網域雷達：自動抓取 Windows 宿主機 IP
 # =============================================================================
 def get_windows_host_ip() -> str:
-    try:
-        with open('/etc/resolv.conf', 'r') as f:
-            for line in f:
-                if line.startswith('nameserver'):
-                    ip = line.split()[1]
-                    logging.info(f"📡 [WSL Bridge] 成功鎖定 Windows 宿主機 IP: {ip}")
-                    return ip
-    except Exception as e:
-        logging.warning(f"⚠️ [WSL Bridge] 無法解析宿主機 IP，回退至 localhost ({e})")
+    # D3 coordinate must be explicit.  /etc/resolv.conf identifies a DNS
+    # resolver, not a Windows/Ollama service endpoint; treating it as the host
+    # previously misidentified the ASUS gateway (192.168.50.1) as MSI.
+    configured = os.environ.get("WUCHANG_CORE_IP", "").strip()
+    if configured:
+        logging.info("📡 [D3 Coordinate] 使用明確 WUCHANG_CORE_IP 作為 Ollama 候選座標。")
+        return configured
+    logging.warning("⚠️ [D3 Coordinate] 缺少 WUCHANG_CORE_IP；不猜測 Windows/Ollama 位址。")
     return "127.0.0.1"
 
 WINDOWS_OLLAMA_IP = get_windows_host_ip()
-WINDOWS_OLLAMA_URL = f"http://{WINDOWS_OLLAMA_IP}:11434/api/chat"
+WINDOWS_OLLAMA_URL = os.environ.get(
+    "WUCHANG_OLLAMA_URL",
+    f"http://{WINDOWS_OLLAMA_IP}:11434/api/chat",
+).strip()
 
 SOVEREIGN_OWNER_ID = "F124771717"
 XOR_SECRET_KEY = b"WUCHANG_TAIJI_V10_ABSOLUTE_SHIELD"

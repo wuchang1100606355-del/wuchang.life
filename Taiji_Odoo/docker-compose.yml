@@ -20,6 +20,7 @@ services:
       - ./addons:/mnt/extra-addons
       - ./odoo_data:/var/lib/odoo
       - /mnt/c/Taiji_Runtime:/mnt/taiji_runtime:ro
+      - wuchang_odoo_member_secrets:/run/secrets:ro
       - ./config/odoo.conf:/etc/odoo/odoo.conf:ro
 
     environment:
@@ -27,6 +28,8 @@ services:
       USER: odoo
       PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
       PM3_IDENTITY_HMAC_SECRET: ${PM3_IDENTITY_HMAC_SECRET:?PM3_IDENTITY_HMAC_SECRET is required}
+      WUCHANG_GOOGLE_CLIENT_SECRET_FILE: /run/secrets/google_member_client_secret
+      WUCHANG_LINE_CLIENT_SECRET_FILE: /run/secrets/line_login_channel_secret
 
   wuchang_os_pg:
     image: postgres:15
@@ -40,3 +43,7 @@ services:
 
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+
+volumes:
+  wuchang_odoo_member_secrets:
+    external: true

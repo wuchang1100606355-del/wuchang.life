@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for MSI local-LLM LAN-first endpoint routing."""
+"""Tests for MSI local-LLM LAN-first endpoint routing with reverse-SSH fallback."""
 
 from __future__ import annotations
 
@@ -59,6 +59,25 @@ class MSILocalLLMRouteTest(unittest.TestCase):
         )
 
 
+    def test_reverse_ssh_is_fallback_after_network_endpoints_fail(self):
+        with patch.object(
+            route,
+            "endpoint_has_model",
+            side_effect=lambda url, model, timeout=2.0: (
+                url == route.MSI_WSL_REVERSE_SSH_OLLAMA_URL
+            ),
+        ):
+            result = route.resolve_msi_ollama_url("model:test")
+        self.assertEqual(
+            result["selected_url"],
+            route.MSI_WSL_REVERSE_SSH_OLLAMA_URL,
+        )
+        self.assertEqual(result["selected_transport"], "SSH_REVERSE_TUNNEL")
+        self.assertEqual(
+            [item["transport"] for item in result["attempts"]],
+            ["LAN", "TAILSCALE_WINDOWS", "SSH_REVERSE_TUNNEL"],
+        )
+
     def test_deprecated_wsl_tailscale_override_is_never_admitted(self):
         candidates = route.endpoint_candidates(
             route.DEPRECATED_MSI_WSL_TAILSCALE_OLLAMA_URL
@@ -73,6 +92,7 @@ class MSILocalLLMRouteTest(unittest.TestCase):
             [
                 route.MSI_LAN_OLLAMA_URL,
                 route.MSI_WINDOWS_TAILSCALE_OLLAMA_URL,
+                route.MSI_WSL_REVERSE_SSH_OLLAMA_URL,
             ],
         )
 
@@ -80,7 +100,8 @@ class MSILocalLLMRouteTest(unittest.TestCase):
         candidates = route.endpoint_candidates("http://10.0.0.9:11434")
         self.assertEqual(candidates[0]["transport"], "LAN")
         self.assertEqual(candidates[1]["transport"], "TAILSCALE_WINDOWS")
-        self.assertEqual(candidates[2]["transport"], "OPERATOR_OVERRIDE")
+        self.assertEqual(candidates[2]["transport"], "SSH_REVERSE_TUNNEL")
+        self.assertEqual(candidates[3]["transport"], "OPERATOR_OVERRIDE")
 
     def test_no_live_endpoint_returns_hold_without_deprecated_selection(self):
         with patch.object(route, "endpoint_has_model", return_value=False):

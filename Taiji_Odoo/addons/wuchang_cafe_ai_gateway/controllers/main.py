@@ -1,9 +1,10 @@
 """HTTP route shells for XiaoJ cafe auth and transaction flows.
 
-These routes intentionally avoid OAuth secret reads, member plaintext access,
-POS order creation, payment capture, and Odoo DB writes. They provide controlled
-non-404 entrypoints that can be wired to real services after a separate runtime
-release.
+These routes avoid OAuth secret reads, member plaintext access, direct payment
+capture, and autonomous POS effects. Most routes remain candidate-only. The
+feature-gated Liaoguo red-tea sandbox may write only its bounded lookup,
+member-consent, voucher-state, and D4 evidence records after the natural person
+confirms through their bound member channel.
 """
 
 from __future__ import annotations
@@ -807,6 +808,85 @@ class WuchangCafeAiGatewayController(http.Controller):
         candidate["dry_run"] = True
         candidate["formal_redeem_executed"] = False
         return candidate
+
+    @http.route("/wuchang/xiaoj/sovereign-concierge", type="http", auth="user", website=False)
+    def xiaoj_sovereign_concierge(self, **_kwargs):
+        return http.request.redirect(
+            "/wuchang_cafe_ai_gateway/static/src/sovereign_concierge/index.html"
+        )
+
+    @http.route("/wuchang/xiaoj/api/sovereign-demo-bootstrap", type="json", auth="user", csrf=False)
+    def xiaoj_api_sovereign_demo_bootstrap(self, **_kwargs):
+        params = http.request.env["ir.config_parameter"].sudo()
+        organization_ref = params.get_param(
+            "wuchang.sandbox.liaoguo_red_tea.organization_ref", ""
+        )
+        seat = http.request.env["wuchang.organization.capability.seat"].search(
+            [("organization_ref", "=", organization_ref), ("state", "=", "active")],
+            limit=1,
+        )
+        return {
+            "state": "READY" if seat else "HOLD_CAPABILITY_SEAT_NOT_FOUND",
+            "seat_ref": seat.seat_ref if seat else "",
+            "organization_ref": organization_ref,
+            "feature_enabled": http.request.env[
+                "wuchang.community.feature.gate"
+            ].is_enabled("sandbox.liaoguo_red_tea_voucher_redeem", default=False),
+            "member_plaintext": False,
+            "model_authority": False,
+            "long_term_memory_write": False,
+            "cloud_ai_required": False,
+        }
+
+    @http.route("/wuchang/xiaoj/api/capability-seat", type="json", auth="user", csrf=False)
+    def xiaoj_api_capability_seat(self, **kwargs):
+        if not http.request.env.user.has_group(
+            "wuchang_member_registration.group_wuchang_member_staff"
+        ):
+            return _error_candidate("HOLD_CAPABILITY_SEAT_STAFF_REQUIRED")
+        params = _request_params()
+        params.update(kwargs)
+        seat = http.request.env["wuchang.organization.capability.seat"].search(
+            [("seat_ref", "=", params.get("seat_ref") or "")],
+            limit=1,
+        )
+        if not seat:
+            return _error_candidate("HOLD_CAPABILITY_SEAT_NOT_FOUND")
+        return seat.build_ai_projection()
+
+    @http.route("/wuchang/xiaoj/api/staff-red-tea-voucher-preview", type="json", auth="user", csrf=False)
+    def xiaoj_api_staff_red_tea_voucher_preview(self, **kwargs):
+        params = _request_params()
+        params.update(kwargs)
+        return http.request.env["wuchang.sovereign.voucher.checkout"].preview_red_tea_entitlement(
+            seat_ref=params.get("seat_ref") or "",
+            last_three=params.get("last_three") or "",
+        )
+
+    @http.route("/wuchang/xiaoj/api/staff-red-tea-voucher-request", type="json", auth="user", csrf=False)
+    def xiaoj_api_staff_red_tea_voucher_request(self, **kwargs):
+        params = _request_params()
+        params.update(kwargs)
+        return http.request.env["wuchang.sovereign.voucher.checkout"].request_red_tea_redeem(
+            checkout_ref=params.get("checkout_ref") or "",
+            order_ref=params.get("order_ref") or "",
+        )
+
+    @http.route("/wuchang/xiaoj/api/member-pending-red-tea-voucher", type="json", auth="user", csrf=False)
+    def xiaoj_api_member_pending_red_tea_voucher(self, **_kwargs):
+        return http.request.env["wuchang.sovereign.voucher.checkout"].pending_for_current_member()
+
+    @http.route("/wuchang/xiaoj/api/member-red-tea-voucher-confirm", type="json", auth="user", csrf=False)
+    def xiaoj_api_member_red_tea_voucher_confirm(self, **kwargs):
+        params = _request_params()
+        params.update(kwargs)
+        approve = params.get("approve") is True or str(params.get("approve")).lower() in {
+            "1", "true", "yes", "on",
+        }
+        return http.request.env["wuchang.sovereign.voucher.checkout"].confirm_for_current_member(
+            params.get("checkout_ref") or "",
+            approve=approve,
+        )
 
     @http.route("/wuchang/xiaoj/api/community-feature-gate", type="json", auth="user", csrf=False)
     def xiaoj_api_community_feature_gate(self, **kwargs):
