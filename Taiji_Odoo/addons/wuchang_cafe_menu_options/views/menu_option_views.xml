@@ -60,7 +60,8 @@
         <field name="name">wuchang.cafe.menu.product.list</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <list string="咖啡館菜單" create="1" delete="0" duplicate="0" multi_edit="0">
+            <list string="咖啡館菜單" create="0" delete="0" duplicate="0" multi_edit="0">
+                <header><button name="action_wuchang_menu_batch_preview" type="object" string="批次修改預覽" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/></header>
                 <field name="active" column_invisible="True"/>
                 <field name="image_128" widget="image" string="圖片"/>
                 <field name="name" string="商品名稱"/>
@@ -77,11 +78,12 @@
         <field name="name">wuchang.cafe.menu.product.safe.form</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <form string="單項菜單維護" create="1" delete="0" duplicate="0">
+            <form string="單項菜單維護" create="0" edit="0" delete="0" duplicate="0">
                 <header>
+                    <button name="action_wuchang_menu_request_edit" type="object" string="提出修改並預覽" class="btn-primary" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
                     <button name="action_wuchang_submit_cafe_pos_candidate" type="object" string="送交總場候選" class="btn-primary" invisible="not available_in_pos" confirm="只會送出商品與商家不透明引用，建立 CAFE_POS 候選及總場回執；不建立訂單、付款、發票、會員資料或社區幣交易。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
-                    <button name="action_wuchang_menu_archive" type="object" string="封存商品" class="btn-secondary" invisible="not active" confirm="封存後商品會停止 POS 販售，但編碼與歷史證據會保留。確定封存嗎？"/>
-                    <button name="action_wuchang_menu_reactivate" type="object" string="重新上架" class="btn-primary" invisible="active and available_in_pos" confirm="確定要重新啟用並上架這個商品嗎？"/>
+                    <button name="action_wuchang_menu_archive" type="object" string="封存商品" class="btn-secondary" invisible="not active" confirm="將建立封存申請供你檢視，尚不修改商品。"/>
+                    <button name="action_wuchang_menu_reactivate" type="object" string="重新上架" class="btn-primary" invisible="active and available_in_pos" confirm="將建立重新上架申請供你檢視，尚不修改商品。"/>
                 </header>
                 <sheet>
                     <field name="active" invisible="1"/>
@@ -89,7 +91,7 @@
                     <field name="currency_id" invisible="1"/>
                     <field name="type" invisible="1"/>
                     <div class="alert alert-info" role="status">
-                        一張卡就是一個商品。修改名稱或價格不會更換底層編碼；不再販售請用「封存商品」，不要刪除。
+                        一張卡就是一個商品。修改先按「提出修改並預覽」；不再販售請建立封存申請。確認套用前不會改動商品。
                     </div>
                     <div class="d-flex flex-column flex-lg-row gap-4 align-items-start">
                         <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128', 'convert_to_webp': True}"/>
@@ -130,7 +132,7 @@
             (0, 0, {'view_mode': 'form', 'view_id': ref('view_wuchang_cafe_menu_product_form')})]"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">新增第一個菜單商品</p>
-            <p>每個商品只建立一張卡；名稱、售價、分類、圖片與客製化都在同一頁完成。</p>
+            <p>請由「菜單變更審核」新增真實商品候選，檢視差異後確認套用。</p>
         </field>
     </record>
 
@@ -139,7 +141,7 @@
         <field name="name">wuchang.cafe.menu.change.request.list</field>
         <field name="model">wuchang.cafe.menu.change.request</field>
         <field name="arch" type="xml">
-            <list string="遠端修正審核" create="1" delete="0" duplicate="0" decoration-warning="state == 'pending_responsible_review'" decoration-info="state == 'approved'" decoration-success="state == 'applied'" decoration-muted="state in ['rejected', 'dead_letter']">
+            <list string="菜單變更審核" create="1" delete="0" duplicate="0" decoration-warning="state == 'pending_responsible_review'" decoration-info="state == 'approved'" decoration-success="state == 'applied'" decoration-muted="state in ['rejected', 'dead_letter']">
                 <field name="name" string="修正單"/>
                 <field name="state" string="狀態"/>
                 <field name="origin" string="事件情境"/>
@@ -178,6 +180,7 @@
                     <button name="action_submit_for_responsible_review" type="object" string="送負責人審核" class="btn-primary" invisible="state != 'draft'" groups="wuchang_cafe_menu_options.group_wuchang_cafe_remote_support,wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
                     <button name="action_responsible_approve" type="object" string="核准候選（尚不套用）" class="btn-primary" invisible="state != 'pending_responsible_review'" confirm="請確認已逐項比較修改前與修改後內容。本次只核准候選，不會改動正式菜單；套用仍需同一帳號再次明確確認。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
                     <button name="action_responsible_apply" type="object" string="再次確認並套用" class="btn-primary" invisible="state != 'approved'" confirm="這是第二次明確確認。系統將重新比對正式商品，僅在基準狀態未變時套用；不會建立訂單或收款。" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
+                    <button name="action_prepare_reversal" type="object" string="建立回復申請" invisible="state != 'applied'" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
                     <button name="action_responsible_reject" type="object" string="拒絕修正" class="btn-secondary" invisible="state not in ['pending_responsible_review', 'approved']" groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"/>
                     <button name="action_dead_letter" type="object" string="封存異常單" class="btn-secondary" invisible="state == 'dead_letter'" groups="wuchang_member_registration.group_wuchang_member_admin"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending_responsible_review,approved,applied,rejected,dead_letter"/>
@@ -218,6 +221,10 @@
                         <group>
                             <field name="change_pos_categories" readonly="state != 'draft'" invisible="change_type == 'create'"/>
                             <field name="proposed_pos_category_ids" widget="many2many_tags" readonly="state != 'draft'" invisible="change_type != 'create' and not change_pos_categories" options="{'no_create': True}"/>
+                            <field name="change_active" string="修改啟用狀態" readonly="state != 'draft'"/>
+                            <field name="proposed_active" string="商品啟用" readonly="state != 'draft'" invisible="not change_active"/>
+                            <field name="change_availability" string="修改販售狀態" readonly="state != 'draft'"/>
+                            <field name="proposed_available_in_pos" string="在收銀台販售" readonly="state != 'draft'" invisible="not change_availability"/>
                             <field name="change_option_group" readonly="state != 'draft'" invisible="change_type == 'create'"/>
                             <field name="proposed_option_group_id" readonly="state != 'draft'" invisible="change_type != 'create' and not change_option_group" options="{'no_create_edit': True}"/>
                         </group>
@@ -372,7 +379,7 @@
               sequence="10"/>
 
     <menuitem id="menu_wuchang_cafe_menu_change_request"
-              name="遠端修正審核"
+              name="菜單變更審核"
               parent="wuchang_cafe_ai_gateway.menu_wuchang_cafe_root"
               action="action_wuchang_cafe_menu_change_request"
               groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible,wuchang_cafe_menu_options.group_wuchang_cafe_remote_support,wuchang_member_registration.group_wuchang_member_admin"
@@ -384,4 +391,29 @@
               action="action_wuchang_cafe_option_group"
               groups="wuchang_cafe_menu_options.group_wuchang_cafe_menu_responsible"
               sequence="30"/>
+    <record id="view_wuchang_cafe_menu_batch_wizard" model="ir.ui.view">
+        <field name="name">wuchang.cafe.menu.batch.wizard.form</field>
+        <field name="model">wuchang.cafe.menu.batch.wizard</field>
+        <field name="arch" type="xml">
+            <form string="批次修改預覽">
+                <div class="alert alert-info">先比較逐項差異，再送審。送審不會修改菜單；核准後才可再次確認套用。</div>
+                <group>
+                    <field name="submitted" invisible="1"/>
+                    <field name="product_ids" widget="many2many_tags" readonly="submitted" options="{'no_create': True}"/>
+                    <field name="operation" readonly="submitted"/>
+                    <field name="price" invisible="operation != 'set_price'" readonly="submitted"/>
+                    <field name="category_ids" widget="many2many_tags" invisible="operation != 'set_categories'" readonly="submitted" options="{'no_create': True}"/>
+                    <field name="changed_count"/>
+                    <field name="preview_sha256" invisible="1"/>
+                </group>
+                <field name="preview_html" nolabel="1"/>
+                <field name="preview_json" invisible="1"/>
+                <footer>
+                    <button name="action_preview" type="object" string="預覽逐項差異" class="btn-primary" invisible="submitted"/>
+                    <button name="action_submit" type="object" string="確認差異並送審" class="btn-primary" invisible="submitted or not preview_sha256 or not changed_count"/>
+                    <button string="關閉" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 </odoo>

@@ -1,0 +1,126 @@
+{
+  "checks": {
+    "canonical_or_pointer_write": "NO",
+    "db_write": "NO",
+    "deploy": "NO",
+    "entrypoint_independent": "PASS",
+    "image_build": "NO",
+    "manifest_and_source_files": "PASS_14_OF_14",
+    "owner_seal": "PASS",
+    "replay": "PASS",
+    "request_schema_and_self_hash": "PASS",
+    "request_ttl": "PASS",
+    "runtime_activation": "NO",
+    "self_review": "PASS_NOT_SELF_REVIEW"
+  },
+  "entrypoint_version": "w7tp-total-field-static-review-entrypoint/1.0",
+  "fixed_authority_boundary": {
+    "canonical_change": false,
+    "container_start": false,
+    "db_write": false,
+    "deploy": false,
+    "git_commit": false,
+    "git_push": false,
+    "image_build": false,
+    "image_pull": false,
+    "image_tag": false,
+    "pointer_change": false,
+    "restart": false,
+    "runtime_activation": false
+  },
+  "manifest": {
+    "files_verified": 14,
+    "sha256": "8f6548ec7a6d7b737250ab9648a0c0ee839f86ef53b63ad0cb85b4016d047857",
+    "verified_sources": [
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/__manifest__.py",
+        "sha256": "969ab6e242abc881f4839ad6186d433d8ac8cd3106c270cd34cdb43f1be371c3",
+        "size_bytes": 642
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/__init__.py",
+        "sha256": "05e61073ed869c77699ee8d10ffdd83db3f6e936fb8c9604bad2be97b011d5be",
+        "size_bytes": 121
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_batch_wizard.py",
+        "sha256": "2b3313173f8faced947080586c32b5b24603f7396d86cdb056484ad02ed66c29",
+        "size_bytes": 8384
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_change_request.py",
+        "sha256": "3b0b3e55d9e1c35f77a18f8974a886bbba877f44b704fcebc9a8c34c109b88be",
+        "size_bytes": 39168
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/models/menu_manager.py",
+        "sha256": "290b1e3a64f1920410b9c4ec2e64a6ea7e0bec77e5bdf2252d49453489e6d0db",
+        "size_bytes": 29013
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/security/ir.model.access.csv",
+        "sha256": "45db347872ef9c1c92b7b3c694bf8ffa47646dd32f647051f65cce7fd3e7f422",
+        "size_bytes": 3634
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/services/menu_batch_governance.py",
+        "sha256": "2eac6d8b579376a62fd0db12e947e9acffaac830d6bc8edca469b905992c5af4",
+        "size_bytes": 2487
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/tests/__init__.py",
+        "sha256": "bf8deae1d66fae338e4f42e78a39198d6f560c821c95c1a40202ab74c0f591f2",
+        "size_bytes": 30
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/tests/test_menu_batch.py",
+        "sha256": "95a4b559a32a58f6d830578022578de1c7ba107203e9c2e8b4ad86cbab31b801",
+        "size_bytes": 8670
+      },
+      {
+        "path": "Taiji_Odoo/addons/wuchang_cafe_menu_options/views/menu_option_views.xml",
+        "sha256": "3adcb797826b7416471ee70bcbf57e20ca6b854947ac35f25c2d27d761659fd4",
+        "size_bytes": 29338
+      },
+      {
+        "path": "docs/operations/QUICKCLICK_MENU_BATCH_ACCEPTANCE_20261009.json",
+        "sha256": "073b5654cfd2a1b21bc37f4e5a1dcc35ed041d4d9a740b57d62ff714bb778dec",
+        "size_bytes": 12953
+      },
+      {
+        "path": "docs/operations/QUICKCLICK_MENU_EQUIVALENCE_GAP_20261009.md",
+        "sha256": "53d1ea381f72c2ddffaef90b3d5619ad412d59074aa79bf95f973b4b479cc6bf",
+        "size_bytes": 6345
+      },
+      {
+        "path": "scripts/verify/verify_cafe_menu_batch_isolated.py",
+        "sha256": "6f3db378c853a895dcfaecedd51ed3b1279d11cb211d88561aff0d46771387d2",
+        "size_bytes": 5200
+      },
+      {
+        "path": "tests/test_wuchang_cafe_menu_batch.py",
+        "sha256": "a8d1d7e374cefaf451f7bcd356410ad9a481118f204398b5e8fddc658e6be868",
+        "size_bytes": 3427
+      }
+    ]
+  },
+  "owner_seal": {
+    "expires_at": "2026-10-09T00:05:00Z",
+    "seal_id": "owner-seal:QUICKCLICK_MENU_STATIC_REVIEW_20261009_233500",
+    "sha256": "d8278c8172609567fb53ee7cf437c96a42706d9d5c108c03ffad7a0229f6a326",
+    "single_use_id": "single-use:QUICKCLICK_MENU_STATIC_REVIEW_20261009_233500"
+  },
+  "packet_type": "REVIEW_EVIDENCE",
+  "reason_codes": [
+    "PASS_EXACT_HASH_BOUND_STATIC_IMPLEMENTATION_CANDIDATE_ONLY"
+  ],
+  "request": {
+    "purpose": "QUICKCLICK_MENU_BATCH_STATIC_CANDIDATE_ONLY",
+    "requested_decision": "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY",
+    "run_id": "QUICKCLICK_MENU_STATIC_REVIEW_20261009_233500",
+    "sha256": "e2fd06aebe409f6f6ba5b1fa2fe3d48276b238a2f594131c5d35ed0cf2ab5d4c"
+  },
+  "reviewed_at": "2026-10-08T23:35:00Z",
+  "run_id": "QUICKCLICK_MENU_STATIC_REVIEW_20261009_233500_TOTAL_FIELD_STATIC_REVIEW",
+  "schema_version": "W7TP-TOTAL-FIELD-STATIC-REVIEW-EVIDENCE/1.0"
+}
