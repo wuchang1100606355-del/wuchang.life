@@ -1,0 +1,397 @@
+{
+  "schema": "T029-acceptance-matrix/1.0",
+  "task_id": "T-029",
+  "created_at": "2026-10-13T10:01:07.220382+00:00",
+  "contract_sha256": "be7c5a7744e66c8ad753300fa494db7310acb0d0b388bb6966eb9102cf83751d",
+  "context": {
+    "context_ref": "context:task-state:T-029:8c904cfc505d6b84",
+    "packet_ref": "packet:task-state:T-029:5d919fc164c28393",
+    "pull_result_sha256": "fa1b49155ca106a5eb6cb1dd00393701dad1a677562ba617e685de2986cb1e6a",
+    "expires_at": "2026-10-13T10:07:23.702687+00:00",
+    "provider_ref": "provider:OPENAI_CHATGPT",
+    "model_ref": "model:GPT-6-Astra-Pro",
+    "authority_effect": false
+  },
+  "requirements": {
+    "R01": "8D ADI 是八維耦合的單一動態狀態場：D1 意圖、D2 狀態、D3 座標、D4 證據、D5 執行／政策、D6 生成式狀態傳輸、D7 風險／隔離、D8 封套／權威。不是八步、八欄位或八個孤立核心。",
+    "R02": "主權在自然人；模型沒有主權。總場承接江政隆的技術定義及授權意圖，不自行創設權威。MSI、Google、Codex、Git、測試與多模型共識均不是 D8。",
+    "R03": "開發者以外的使用者，依已驗證自然人身分封包、角色／組織／物件／用途／時間／撤銷狀態與當次意圖執行。已授權日常業務不必逐筆再請 Founder 核准；越權、權限擴張與不屬原授權的動作不得執行。不能把所有輸入硬標成 FOUNDER_NATURAL_LANGUAGE。",
+    "R04": "小J是易懂自然語言介面，呈現候選差異、證據、成本及限制；可按有效委任自動選模及完成授權工作。模型排名或文字承諾不得代替使用者授權，不能要求使用者理解內部機器碼才能操作。",
+    "R05": "是多設備、雲地多模型，不是雙模型。Google 也有多模型，依任務採用不同模型；不得用單一固定 Google 型號或不受約束的逐型號重試迴圈替代能力調度。",
+    "R06": "taiji01 是無頭、無 GPU 伺服器；只計已觀測 CPU、RAM、儲存及相關服務能力。不安裝 GPU 驅動，不安排 GPU 工作。MSI 的 RTX 4070 Laptop GPU 約 8 GiB；實際可用量、既有小J表情及推論占用須當次觀測，不可直接吃滿。",
+    "R07": "taiji01 工程入口 /home/taiji_admin/Taiji_Hub；MSI 為開發及算力來源，不因有舊同名權威檔或 Exact-V3 服務取得第二總場。其他節點是可授權能力供給，不是新權威根。",
+    "R08": "統一能力登記／授權不等於所有資料須經伺服器轉送。對每個任務綁定其來源、目的、介面、區域、協定、服務及效果；區網正常時節點用合格 LAN 路徑，不自動改走 VPN。既有反向 SSH 是獨立載體，不能不查路徑便稱外網或 VPN。",
+    "R09": "不改 wuchang.life、路由器、防火牆、DNS、IPv6 全域設定；不開放 WAN ADB、Ollama、資料庫或核心管理埠。使用者有固定 IP／DDNS 是可用資源，不等於本次已授權公開核心。RDC 雲端管理通道不可宣稱為全本地區網通道。",
+    "R10": "分散式算力須有任務／物件／依賴／能力／負載／取消／結果歸屬的真實協作。多台在線或多模型登錄不等於分散式計算通過；不能把 45 標籤、41 雜湊或顯存容量相加當成已聚合算力。跨機權重／張量切分不是本次預設新增目標。",
+    "R11": "先重用 core/resource_arbitration.py 及現有能力索引；規則閘道器先檢查硬條件，再按使用者指定策略選擇。LLM 可提出任務解讀候選，但不得以自由生成的分數更改授權。相同已固定輸入、策略及來源版本應輸出相同合格集合與排序；同分以固定 resource_id 排序。",
+    "R12": "已登錄、已配置、端點健康、模型存在、已載入、能力實測、任務合格、已選擇、已執行、效果通過要分開。缺測值是 UNKNOWN，不能當零、不能當可用；單次健康 GET 200 不代表推論、工具或業務效果成功。",
+    "R13": "所有需上下文的模型經既有當次 Dynamic Context（動態上下文），綁定唯一 TASK_ID、provider/model/version、授權及有效時間。先沿 taiji01 與 MSI 實際索引和呼叫鏈定位；不能只查伺服器就宣告 MSI 缺能力。",
+    "R14": "Google 靜態封包拉取重用 tools/total_field_cloud_fill_packet.py、既有上下文 Broker 與 receive_candidate。由受控 adapter／worker 拉取，不聲稱模型自行具備網路權限。packet_id 精確拉取，綁定不可由雲端修改的欄位、允許填寫部分、nonce、期限、provider/model/version、輸出與回傳座標。",
+    "R15": "Google 型號改選須在當次合格集合及預算內；不同模型的工作各有獨立子封包／嘗試識別，父任務總次數與總費用仍封頂。每封包 single-use 與 max_cloud_calls=1 不得靠重試或拆單偷渡。模型退役、配額、地區、專案權限及工具能力須查官方和已授權專案；不能把 Workspace／Code Assist 訂閱等同 Vertex API 額度。",
+    "R16": "雲端只收完成任務所需的去識別資料及非核心規則引用，不收完整總場、會員明文、憑證、受保護 ADI／碼本、私鑰或無關歷史。雲端結果只回候選，當地驗證器檢查來源、任務、時效、模型版本、權限及結果；哈希一致不證明內容真實。",
+    "R17": "D6 是生成式狀態傳輸，不是普通 JSON、API 呼叫、壓縮、差分或檔案複製。需接收端相容規則、重構條件、狀態關係、可驗證結果。重新查詢、遠端呼叫、原胞重構分別記錄；不以「零原始位元組」隱藏規則前置成本。",
+    "R18": "總效果成本包括完整傳輸、前置規則、狀態取得、SSH 及額外查詢、重構、驗證、授權、CPU/GPU 時間、記憶體、能源、持久／暫存空間及失敗恢復。不同單位不得無政策混成一個分數；首次、穩態、冷啟動與暖機分開。T-025 成本候選只作其範圍的證據，不擅自擴充或部署。",
+    "R19": "靜態封包 Broker 的記憶體 single-use 不等於跨程序／重啟防重放。重用既有持久化與可信發行能力；需證明並行、逾期、撤銷、重啟、重複回傳、傳送逾時及收據遺失情況。不另造簽章根。",
+    "R20": "必要依賴失效，僅停止相關動作；已確認獨立且仍獲授權者可繼續。不能因總場暫失聯自行授權，也不能因可選雲端模型故障令所有本地服務停擺。重試不可造成重複訂單／核銷／付款。",
+    "R21": "不重開 T-007、T-005、T-008、T-026、T-027 等已完成工作；不恢復 T-014、T-018、XJ-018 等暫停工作。T-028 F3/F4/F5 只限制真正依賴它的正式作用；保留其他可獨立候選／測試。仁義分店不動作。",
+    "R22": "不把主線、MSI 舊樹、已安裝規則基座、運行程序、D6 待審來源或 PR 混成同一版本。先證明哪個程序載入哪個實體來源；檔案不存在於 MSI 舊 Git 樹不表示 MSI 實際橋接缺失。",
+    "R23": "source/query/verification hashes、檔名與狀態字不是授權證明。Owner Seal（所有者授權封套）只能走既有可信機制；不得生成測試 seal 給正式接件。所有簽核前檢查完成後，需真人簽署時才提出一次精確申請，不索取私鑰／密碼到對話。",
+    "R24": "調度單一動態場，不另造核心、自然人根、總場、模型權威、平行登錄主冊或預設新服務。必要薄接點必有既有呼叫位置、依賴與測試；沒有現況證據不得宣稱已落地。"
+  },
+  "cases": [
+    {
+      "id": "A01",
+      "requirement_ids": [
+        "R01",
+        "R11"
+      ],
+      "acceptance": "同一固定輸入及來源版本重跑10次，資格集合、固定排序及拒絕碼一致；不是比較模型自由文字逐字一致。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A02",
+      "requirement_ids": [
+        "R02",
+        "R03"
+      ],
+      "acceptance": "一般會員查自己資料，身分、用途、物件及時效符合即完成，不升為 Founder，也不再逐次求 Founder。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A03",
+      "requirement_ids": [
+        "R02",
+        "R03",
+        "R23"
+      ],
+      "acceptance": "同角色跨會員／跨組織／跨物件、撤銷、過期、偽造 envelope_verified=true 全部拒絕相關作用。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A04",
+      "requirement_ids": [
+        "R04",
+        "R11",
+        "R15"
+      ],
+      "acceptance": "已合法委任自動選模可執行；需要超額成本或擴權時停止相關動作，不暗選別模型。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A05",
+      "requirement_ids": [
+        "R05",
+        "R15"
+      ],
+      "acceptance": "Google 至少兩種「已驗證合格模型」對兩類任務有不同選擇結果；無實際專案證據時標 NOT_RUN，不用 mock 冒充。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A06",
+      "requirement_ids": [
+        "R05",
+        "R12"
+      ],
+      "acceptance": "已配置但不可用、未載入、過期型號、不符地區／模態／工具／品質要求的模型不進該任務可執行集合。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A07",
+      "requirement_ids": [
+        "R05",
+        "R14",
+        "R15"
+      ],
+      "acceptance": "切換模型需另綁定允許的模型版本和封包；父任務次數及費用封頂，未授權 fallback 不得嘗試。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A08",
+      "requirement_ids": [
+        "R13",
+        "R14",
+        "R16",
+        "R19"
+      ],
+      "acceptance": "錯 packet_id、來源、任務、模型、期限、nonce、回傳座標、封包／規則版本皆拒絕；不擴大為全系統停機。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A09",
+      "requirement_ids": [
+        "R19",
+        "R20"
+      ],
+      "acceptance": "並行拉取、重啟後重放、回覆重傳、逾時不確定、收據遺失均有可驗證狀態；不重複產生效果。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A10",
+      "requirement_ids": [
+        "R01",
+        "R17"
+      ],
+      "acceptance": "重構前後在同任務／觀測範圍／驗收條件內驗證等價；資料缺失不能靠再次查詢卻宣稱純重構。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A11",
+      "requirement_ids": [
+        "R18"
+      ],
+      "acceptance": "所有必要前置及追加傳輸/SSH/重構/驗證/授權成本入帳；UNKNOWN 不當0，首次與穩態分列。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A12",
+      "requirement_ids": [
+        "R07",
+        "R10"
+      ],
+      "acceptance": "至少兩設備的真實受限工作協作，證明分派與回傳物件一致；不要求或宣稱權重顯存自動聚合。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A13",
+      "requirement_ids": [
+        "R06",
+        "R10"
+      ],
+      "acceptance": "taiji01 不存在 GPU 排程、驅動安裝或伺服器 GPU 修復；MSI 記憶體壓力時依既定策略排隊而不擠垮現有服務。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A14",
+      "requirement_ids": [
+        "R08",
+        "R09"
+      ],
+      "acceptance": "LAN 合格時內部任務不選 VPN；外網只供有需要且獲授權的雲端載體，維持網域及管理入口。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A15",
+      "requirement_ids": [
+        "R13",
+        "R16",
+        "R20"
+      ],
+      "acceptance": "可選 Google 失效不影響已驗證獨立本地工作；必要總場上下文失效不得繞過或沿用過期授權。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A16",
+      "requirement_ids": [
+        "R07",
+        "R12",
+        "R22"
+      ],
+      "acceptance": "區分主機、WSL、容器、已安裝路徑與程序實際載入版本；跨版本相容須測試不能只比hash。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A17",
+      "requirement_ids": [
+        "R02",
+        "R03",
+        "R23",
+        "R24"
+      ],
+      "acceptance": "正式動作必經真實身分→總場規則→可信許可→執行器→效果收據；單元測試未被入口調用不算整鏈通過。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A18",
+      "requirement_ids": [
+        "R21",
+        "R22",
+        "R24"
+      ],
+      "acceptance": "Git 差異只含該次允許清單；原工作樹、原索引、其他任務與正典未被本工作修改。",
+      "test_kind": "INTEGRATION",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A19",
+      "requirement_ids": [
+        "R13",
+        "R22",
+        "R23"
+      ],
+      "acceptance": "Git 遠端 SHA、核准來源清單、已載入版本與效果收據同範圍；審查收據不自動授權部署。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    },
+    {
+      "id": "A20",
+      "requirement_ids": [
+        "R06",
+        "R09",
+        "R19",
+        "R20",
+        "R21"
+      ],
+      "acceptance": "原有服務回歸、灰度驗收、單點失效及已授權回復均通過才標該階段完成；72小時持續驗收必有真實期間資料，不預寫通過。",
+      "test_kind": "LIVE",
+      "command": null,
+      "source_sha256": null,
+      "started_at": null,
+      "finished_at": null,
+      "exit_code": null,
+      "result": "NOT_RUN",
+      "evidence_ref": null,
+      "scope_limit": "本次僅固定驗收契約；執行前綁定既有測試入口、精確來源、授權及觀測範圍；歷史PASS不轉為本次PASS。"
+    }
+  ],
+  "production_effect": false
+}

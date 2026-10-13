@@ -1,0 +1,743 @@
+{
+  "task_id": "T-029",
+  "phase": "DESIGN_REVIEW_PREPARATION",
+  "baseline_refs": [
+    "SOURCE_BASELINE.json",
+    "MSI_BASELINE.json",
+    "TASK_BINDING.json"
+  ],
+  "context": {
+    "context_ref": "context:task-state:T-029:8c904cfc505d6b84",
+    "packet_ref": "packet:task-state:T-029:5d919fc164c28393",
+    "pull_result_sha256": "fa1b49155ca106a5eb6cb1dd00393701dad1a677562ba617e685de2986cb1e6a",
+    "expires_at": "2026-10-13T10:07:23.702687+00:00",
+    "provider_ref": "provider:OPENAI_CHATGPT",
+    "model_ref": "model:GPT-6-Astra-Pro",
+    "authority_effect": false
+  },
+  "read_sources": [
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/AGENTS.md",
+      "sha256": "640014e169c7c245e4c073c272b08a051c2e5d7508646adc2ff334d30158e87c",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/active/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "sha256": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": false
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "sha256": "3faa27ef6833309cdddd96e484714d9f4b3300fb68f2d059de3baebfdde899b0",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_WITH_ROUTER_CANONICAL.json",
+      "sha256": "3b3d64bd2df777d3a361074c5574c634a5fae056facd534c4624e8af89f5d349",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "sha256": "990f06c9fc30c4a69b90106e64fd0bc42ce7654e045f714cd0d6bb2e22c49f0a",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/core/resource_arbitration.py",
+      "sha256": "de97051b9b5bf87fa8e680488b80c9e2ba7be637e64b72f40142ae7b0a0a6219",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/core/msi_local_llm_route.py",
+      "sha256": "a510e2e66dfafe7c1835c516f47c068b7d5d71757d69ad0eb46233a42cad8871",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/core/external_effect_gate.py",
+      "sha256": "564361835f5df7153fe4eb889c37279860245d7e2297e982009c927f522997e4",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/total_field_dynamic_context_pull.py",
+      "sha256": "c5c7d3a1180a53d3562b4cb3873d3998a1cff51263ed737f5f6defe2a053577a",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/total_field_cloud_fill_packet.py",
+      "sha256": "44c8ca234590698dcbb39283718c27deca909f7ca50e5988ef15164fb2951979",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/w7tp_bridge_dynamic_context_transport_v1.py",
+      "sha256": "e1dce533bd1ed3a3b930ab7a0e9bac85fb0bf1505fc466d6dc1b6d62ae7ea72a",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/total_field/msi_llm_candidate_adapter.py",
+      "sha256": "121865ecef1472e06c6f476f01f277b0af9a229e9e76324f1dfa65b7758400fe",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/services/gateway/natural_language_control.py",
+      "sha256": "6b09f69e3ac8b75a56574d6cd340c1e71becb22a67d359211177a952f45a63cb",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/total_field/w7tp_vertex_candidate_gateway.py",
+      "sha256": "afcd79e436ab5c4f25f064165c32fe627798453113a5d27c95535a95f43f2ec2",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/schemas/w7tp_identity_authority_packet.schema.json",
+      "sha256": "b1ec08318cdcec256606f6f049fc10af837ce20c395d4d7676f3eccd36ff9758",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/total_field/member_sovereign_context_adapter.py",
+      "sha256": "f03b7f28bbb17e8f763cef90ef9cc29f0eadcb09e46adc05db1609cc8cc3cad5",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/products/eight_dimensional_generative_memory/w7tp_endpoint_rule_handshake_v1.py",
+      "sha256": "7b3099d2d61d5355e4066fa8ff3a4deb287b47f7a3f0234cda9ab55e29b701e5",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/total_field/w7tp_static_review_entrypoint.py",
+      "sha256": "c5758f42fa0f87b06fdfde448d00ae437525c918bb4af90b3db12c3294f53b06",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/tools/w7tp_commit_envelope_gate.py",
+      "sha256": "95d2e97f5e74c681a1aa1e6b5c2c9655495f7a864dd882e141e7592dad0dbdf5",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json",
+      "sha256": "53411d0e02c6077c2692223ace6ecea1372f2d9cf3550c925f51c3827a35c03d",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    },
+    {
+      "node": "taiji01",
+      "path": "/home/taiji_admin/Taiji_Hub/services/gateway/openai_compat.py",
+      "sha256": "8eca754fbb8312e8fba86976882c06bba27bbb0b47f552a949f78371b125f4ac",
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "evidence_class": "DIRECT_OBSERVATION",
+      "present": true
+    }
+  ],
+  "proposed_exact_write_paths": [
+    "core/resource_arbitration.py",
+    "services/gateway/natural_language_control.py",
+    "tools/total_field/w7tp_vertex_candidate_gateway.py",
+    "tools/total_field_cloud_fill_packet.py"
+  ],
+  "proposal_scope": "Future changes require exact caller binding and existing review; this delivery changes only the three authorized design files.",
+  "dependency_edges": [
+    {
+      "from": "G01",
+      "to": "A02",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G01",
+      "to": "A03",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G01",
+      "to": "A04",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G01",
+      "to": "A17",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G02",
+      "to": "A03",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G02",
+      "to": "A17",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G02",
+      "to": "A19",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G03",
+      "to": "A01",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G03",
+      "to": "A04",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G03",
+      "to": "A05",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G03",
+      "to": "A06",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G03",
+      "to": "A12",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G03",
+      "to": "A13",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G04",
+      "to": "A05",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G04",
+      "to": "A06",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G04",
+      "to": "A07",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G04",
+      "to": "A08",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G04",
+      "to": "A15",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G05",
+      "to": "A07",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G05",
+      "to": "A08",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G05",
+      "to": "A09",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G05",
+      "to": "A20",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G06",
+      "to": "A07",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G06",
+      "to": "A08",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G06",
+      "to": "A15",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G06",
+      "to": "A16",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G07",
+      "to": "A06",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G07",
+      "to": "A14",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G07",
+      "to": "A16",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G07",
+      "to": "A20",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G08",
+      "to": "A10",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G08",
+      "to": "A11",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G08",
+      "to": "A16",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G09",
+      "to": "A16",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G09",
+      "to": "A18",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G09",
+      "to": "A19",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G10",
+      "to": "A08",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G10",
+      "to": "A15",
+      "kind": "VERIFICATION_DEPENDENCY"
+    },
+    {
+      "from": "G10",
+      "to": "A17",
+      "kind": "VERIFICATION_DEPENDENCY"
+    }
+  ],
+  "independent_work": [
+    "既有來源與限定反證測試",
+    "不接觸正式權威的文件交付",
+    "各節點唯讀來源/運行核對"
+  ],
+  "review_entrypoint": "tools.w7tp_nl_goal_runner._total_field_source_delta_gate; formal effect review separately uses applicable existing D8 entrypoint",
+  "review_status": "NOT_SUBMITTED_AT_DOCUMENT_CREATION",
+  "d8_request_id": null,
+  "required_authorization": [
+    "既有可信Owner Seal及來源/作用範圍綁定；文件不代簽",
+    "正式部署前核對精確作用許可和前像/回復"
+  ],
+  "git_stage": "UNCOMMITTED_AT_DOCUMENT_CREATION",
+  "deploy_stage": "NOT_EXECUTED",
+  "rollback_requirements": [
+    "原來源及Git索引前像與雜湊",
+    "明確執行器、服務、節點和兼容順序",
+    "獨立效果重驗及只回復本批授權範圍"
+  ],
+  "next_action": "Submit these exact three files and actual validation evidence to existing source reviewer; record receipt separately; then publish exact review branch under current user instruction.",
+  "differences": [
+    {
+      "id": "G01",
+      "requirement_ids": [
+        "R02",
+        "R03",
+        "R04"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/services/gateway/natural_language_control.py:227",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R02,R03,R04",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/services/gateway/natural_language_control.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "6b09f69e3ac8b75a56574d6cd340c1e71becb22a67d359211177a952f45a63cb",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "D1_INTENT.source固定為FOUNDER_NATURAL_LANGUAGE；本次只證實來源表示，尚未證實一般會員經此入口或實際越權。",
+      "first_unverified_edge": "一般身分封包到此入口的真實呼叫與驗簽",
+      "minimal_change": "沿既有member_sovereign_context_adapter綁定經驗證的來源、委任、組織及效果；保留開發者入口，避免推定所有呼叫都是Founder。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A02",
+        "A03",
+        "A04",
+        "A17"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "GAP"
+    },
+    {
+      "id": "G02",
+      "requirement_ids": [
+        "R02",
+        "R03",
+        "R20",
+        "R23",
+        "R24"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/core/external_effect_gate.py:44-104",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R02,R03,R20,R23,R24",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/core/external_effect_gate.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "564361835f5df7153fe4eb889c37279860245d7e2297e982009c927f522997e4",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "函式存在；限定core/services/tools/tests搜尋只發現測試直接呼叫，入口亦含模組名稱文字，尚未證明正式執行器接線。",
+      "first_unverified_edge": "正式身分→可信許可→實際執行器→效果收據",
+      "minimal_change": "沿現有執行器定位接點，重用可信驗簽及既有許可種類；不得自行合成許可或放寬權威清單。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A03",
+        "A17",
+        "A19"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "GAP"
+    },
+    {
+      "id": "G03",
+      "requirement_ids": [
+        "R04",
+        "R05",
+        "R10",
+        "R11",
+        "R12"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/core/resource_arbitration.py:620-816",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R04,R05,R10,R11,R12",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/core/resource_arbitration.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "de97051b9b5bf87fa8e680488b80c9e2ba7be637e64b72f40142ae7b0a0a6219",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "已分登錄、可用、合格、偏好及並行集合；雲端選擇主要為供應商級固定ID，尚未見同供應商逐型號、負載、成本及任務版本的完整合格集合。",
+      "first_unverified_edge": "使用者委任策略→模型級合格集合與固定排序",
+      "minimal_change": "在既有仲裁函式和能力索引擴充有證據的模型級條件，固定同分resource_id排序，UNKNOWN不得轉0或可用。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A01",
+        "A04",
+        "A05",
+        "A06",
+        "A12",
+        "A13"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "GAP"
+    },
+    {
+      "id": "G04",
+      "requirement_ids": [
+        "R05",
+        "R14",
+        "R15",
+        "R16",
+        "R20"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/tools/total_field/w7tp_vertex_candidate_gateway.py:325-389",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R05,R14,R15,R16,R20",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/tools/total_field/w7tp_vertex_candidate_gateway.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "afcd79e436ab5c4f25f064165c32fe627798453113a5d27c95535a95f43f2ec2",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "來源附加固定模型列表並逐型號嘗試；本次未呼叫任何Google模型，無模型現行可用性或父任務預算覆蓋證明。",
+      "first_unverified_edge": "合格模型及父任務預算→逐次呼叫封套",
+      "minimal_change": "重用CloudFillPacketBroker；每次嘗試綁定允許模型版本與子封包，父任務次數和費用共同封頂。需官方/專案實測才可列模型合格。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A15"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "GAP"
+    },
+    {
+      "id": "G05",
+      "requirement_ids": [
+        "R14",
+        "R15",
+        "R19",
+        "R20"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/tools/total_field_cloud_fill_packet.py:626-816",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R14,R15,R19,R20",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/tools/total_field_cloud_fill_packet.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "44c8ca234590698dcbb39283718c27deca909f7ca50e5988ef15164fb2951979",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "Broker使用程序內_requests與_consumed_nonces；本次尚未觀測跨程序/重啟持久防重放接點，不擴大為全系統無防重放。",
+      "first_unverified_edge": "重啟/並行之後的唯一消耗與結果交付",
+      "minimal_change": "定位並重用既有持久nonce帳本和可信發行機制，補足並行、逾期、重啟、收據遺失的限定反證。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A07",
+        "A08",
+        "A09",
+        "A20"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "GAP"
+    },
+    {
+      "id": "G06",
+      "requirement_ids": [
+        "R07",
+        "R13",
+        "R15",
+        "R16",
+        "R22"
+      ],
+      "node": "MSI",
+      "object_ref": "/home/taiji_admin/continue_founder_total_field_ollama_bridge.py:116-543",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R07,R13,R15,R16,R22",
+      "installed_ref": "/home/taiji_admin/continue_founder_total_field_ollama_bridge.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T17:58:50+08:00",
+      "source_sha256": "efb9ddd5b56f81baad892e8dd032cb13685ab21424269188c4accab7fb3f1036",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "MSI實際橋接來源位於Git舊樹外，包含動態上下文及可選Gemini靜態補充；本次沒有推論或雲端呼叫，父任務預算接線未知。",
+      "first_unverified_edge": "實際橋接載入來源→可選補充的委任與預算",
+      "minimal_change": "只沿實際橋接及既有規則基座定位，不以舊Git樹缺檔判斷能力不存在，不另造橋接核心。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A07",
+        "A08",
+        "A15",
+        "A16"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "GAP"
+    },
+    {
+      "id": "G07",
+      "requirement_ids": [
+        "R08",
+        "R09",
+        "R12",
+        "R22"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/core/msi_local_llm_route.py:125-189",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R08,R09,R12,R22",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/core/msi_local_llm_route.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "a510e2e66dfafe7c1835c516f47c068b7d5d71757d69ad0eb46233a42cad8871",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "已有LAN主機可達與模型健康分離，並阻擋LAN可達時的替代路徑；本次尚未進行完整呼叫/重啟驗收。",
+      "first_unverified_edge": "來源條件→當次實際路由及執行效果",
+      "minimal_change": "保留既有LAN優先條件，針對精確節點/物件做觀測；不更動VPN、防火牆、DNS、路由器或遠端管理通路。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A06",
+        "A14",
+        "A16",
+        "A20"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "UNKNOWN"
+    },
+    {
+      "id": "G08",
+      "requirement_ids": [
+        "R17",
+        "R18",
+        "R22"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/products/eight_dimensional_generative_memory/w7tp_endpoint_rule_handshake_v1.py:SOURCE_BASELINE",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R17,R18,R22",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/products/eight_dimensional_generative_memory/w7tp_endpoint_rule_handshake_v1.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "7b3099d2d61d5355e4066fa8ff3a4deb287b47f7a3f0234cda9ab55e29b701e5",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "正式工作樹與D6隔離待審來源不同；差異不能單獨證明通訊不相容。成本候選維持獨立任務。",
+      "first_unverified_edge": "相同任務和規則版本→完整成本與效果等價驗收",
+      "minimal_change": "不擴充或部署D6候選；本任務只引用既有成本契約，記錄全部前置及額外查詢。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A10",
+        "A11",
+        "A16"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "UNKNOWN"
+    },
+    {
+      "id": "G09",
+      "requirement_ids": [
+        "R01",
+        "R07",
+        "R21",
+        "R22"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json:1-34",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R01,R07,R21,R22",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "SOURCE_BASELINE另列active目錄下不存在的同名指標；本次沿master_index讀到V2.3正典。此為座標修正，不是正典缺失。",
+      "first_unverified_edge": "正確索引→所有必要消費者本次綁定",
+      "minimal_change": "引用實際master_index指標；保留原始錯誤座標作更正脈絡，不重開已完成正典任務。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A16",
+        "A18",
+        "A19"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "ALIGNED"
+    },
+    {
+      "id": "G10",
+      "requirement_ids": [
+        "R13",
+        "R20",
+        "R24"
+      ],
+      "node": "taiji01",
+      "object_ref": "/home/taiji_admin/Taiji_Hub/services/gateway/openai_compat.py:60-73",
+      "design_ref": "CODEX_EXECUTION_CONTRACT_zhTW.md#R13,R20,R24",
+      "installed_ref": "/home/taiji_admin/Taiji_Hub/services/gateway/openai_compat.py",
+      "live_ref": null,
+      "observed_at": "2026-10-13T10:01:07.220382+00:00",
+      "source_sha256": "8eca754fbb8312e8fba86976882c06bba27bbb0b47f552a949f78371b125f4ac",
+      "evidence_class": "SOURCE_IMPLEMENTATION",
+      "difference": "相容chat入口的來源先回409導向受治理路徑；後方舊fallback程式不可據此當成執行中的繞行。",
+      "first_unverified_edge": "實際HTTP入口是否載入此來源",
+      "minimal_change": "保留受治理入口，限定重驗409與正式路由，不以不可達舊碼推定當前能力。",
+      "dependencies": [
+        "Existing task-bound context",
+        "Applicable existing authorization and caller binding"
+      ],
+      "acceptance_ids": [
+        "A08",
+        "A15",
+        "A17"
+      ],
+      "authorization_needed": "Exact source review; separate trusted effect authorization for runtime changes",
+      "state": "UNKNOWN"
+    }
+  ],
+  "runtime_authority_granted": false
+}
