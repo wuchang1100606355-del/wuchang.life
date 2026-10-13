@@ -1,0 +1,160 @@
+{
+  "action_id": "A-T012-MSI-LEGACYVPN9002-DISABLE-20261013-001",
+  "completed_at": "2026-10-13T09:17:03.658494+00:00",
+  "node": "MSI",
+  "effect": "STOP_AND_DISABLE_EXACT_OBSOLETE_VPN9002_PROXY",
+  "execution_state": "APPLIED_VERIFIED",
+  "authorization_basis": "LATEST_EXPLICIT_OWNER_INSTRUCTION_IN_CURRENT_CONVERSATION_FOR_EXACT_STOP_DISABLE_AND_PUSH",
+  "formal_D8_permit_issued": false,
+  "formal_total_field_pass_claimed": false,
+  "target": "/home/taiji_admin/.config/systemd/user/w7tp-xiaoj-root-9002-tailscale.service",
+  "unit_sha256": "453059b39bfc5040c8d9a2cd5131ac738f891ca69087aff477fa4226538ecc53",
+  "preimage_ref": "/home/taiji_admin/.local/state/w7tp/A-T012-MSI-LEGACYVPN9002-DISABLE-20261013-001/PREIMAGE.json",
+  "rollback_ref": "/home/taiji_admin/.local/state/w7tp/A-T012-MSI-LEGACYVPN9002-DISABLE-20261013-001/ROLLBACK.json",
+  "command_results": [
+    {
+      "args": [
+        "systemctl",
+        "--user",
+        "disable",
+        "--now",
+        "w7tp-xiaoj-root-9002-tailscale.service"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Removed \"/home/taiji_admin/.config/systemd/user/default.target.wants/w7tp-xiaoj-root-9002-tailscale.service\".\n"
+    }
+  ],
+  "post_samples": [
+    {
+      "at": "2026-10-13T09:16:52.156118+00:00",
+      "state": {
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "PartOf": "",
+        "RequiredBy": "",
+        "BoundBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "FragmentPath": "/home/taiji_admin/.config/systemd/user/w7tp-xiaoj-root-9002-tailscale.service",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      }
+    },
+    {
+      "at": "2026-10-13T09:16:57.638240+00:00",
+      "state": {
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "PartOf": "",
+        "RequiredBy": "",
+        "BoundBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "FragmentPath": "/home/taiji_admin/.config/systemd/user/w7tp-xiaoj-root-9002-tailscale.service",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      }
+    },
+    {
+      "at": "2026-10-13T09:17:03.645362+00:00",
+      "state": {
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "PartOf": "",
+        "RequiredBy": "",
+        "BoundBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "FragmentPath": "/home/taiji_admin/.config/systemd/user/w7tp-xiaoj-root-9002-tailscale.service",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      }
+    }
+  ],
+  "post_preservation": {
+    "local_gateway": {
+      "MainPID": "361",
+      "NRestarts": "0",
+      "ExecMainStatus": "0",
+      "PartOf": "",
+      "RequiredBy": "",
+      "BoundBy": "",
+      "TriggeredBy": "",
+      "ActiveState": "active",
+      "SubState": "running",
+      "FragmentPath": "/etc/systemd/system/openclaw_gateway.service",
+      "DropInPaths": "",
+      "UnitFileState": "disabled"
+    },
+    "lan_model": {
+      "MainPID": "513",
+      "NRestarts": "0",
+      "ExecMainStatus": "0",
+      "PartOf": "",
+      "RequiredBy": "",
+      "BoundBy": "",
+      "TriggeredBy": "",
+      "ActiveState": "active",
+      "SubState": "running",
+      "FragmentPath": "/home/taiji_admin/.config/systemd/user/w7tp-msi-ollama-lan-reverse.service",
+      "DropInPaths": "",
+      "UnitFileState": "enabled"
+    },
+    "health_timer": {
+      "PartOf": "",
+      "RequiredBy": "",
+      "BoundBy": "",
+      "TriggeredBy": "",
+      "ActiveState": "active",
+      "SubState": "waiting",
+      "FragmentPath": "/home/taiji_admin/.config/systemd/user/taiji-healthcheck.timer",
+      "DropInPaths": "",
+      "UnitFileState": "enabled"
+    },
+    "probes": [
+      {
+        "url": "http://127.0.0.1:9002/health",
+        "http": 200,
+        "state": "PASS_GATEWAY_PROCESS",
+        "version": "2.3.0",
+        "response_sha256": "965af186f0f56391c1c8db3e2714169b68838139bd311edc6d91807ab555dabb"
+      },
+      {
+        "url": "http://127.0.0.1:11435/api/version",
+        "http": 200,
+        "state": null,
+        "version": "0.30.11",
+        "response_sha256": "0f22b72ddbaeffb791946a81d6b35f4a2650083769db980638af3fc9d17cb873"
+      }
+    ]
+  },
+  "checks": {
+    "only_target_stopped": true,
+    "target_disabled": true,
+    "restart_counter_stable": true,
+    "enablement_removed": true,
+    "unit_file_preserved": true,
+    "local_gateway_pid_unchanged": true,
+    "lan_model_pid_unchanged": true,
+    "local_gateway_active": true,
+    "lan_model_active": true,
+    "probes_200": true,
+    "health_timer_active": true
+  },
+  "not_changed": [
+    "local 9002 service",
+    "LAN 11435 bridge",
+    "adapter/DNS/router/VPN settings",
+    "Bluetooth/Apple Music/HomePod",
+    "canonical/authority pointers",
+    "source repositories"
+  ],
+  "homepod_or_chatgpt_fix_claimed": false
+}
