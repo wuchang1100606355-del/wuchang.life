@@ -1,0 +1,86 @@
+{
+  "schema": "T012_POST_DEPLOYMENT_EVIDENCE_SOURCE_REVIEW_V1",
+  "observed_at_utc": "2026-10-13T09:30:44.834064+00:00",
+  "task_id": "T-012",
+  "action_id": "A-T012-LEGACY9002-POSTDEPLOY-CLOSURE-20261013T092727Z",
+  "run_id": "T012-MSI-LEGACY9002-REOBSERVE-20261013T092727Z",
+  "entry": "tools.w7tp_nl_goal_runner._total_field_source_delta_gate -> tools.total_field_candidate_gateway.llm_push",
+  "review_scope": "Exact post-deployment evidence source files. Not a permit for stopping services.",
+  "arguments": {
+    "run_id": "T012-MSI-LEGACY9002-REOBSERVE-20261013T092727Z",
+    "intent_hash": "0a9aafe979080f11abf64812e4b51aec8e62a42e0eb649a88c24e3eba45e04ac",
+    "before": {},
+    "after": {
+      "docs/evidence/t012_legacy9002_retirement_20261013/MSI_POSTCONDITION.json": {
+        "sha256": "d300b3161820e54dd806b1159f643649be1ea3f0e896089e29415c0022d29f3e",
+        "size": 6321
+      },
+      "docs/evidence/t012_legacy9002_retirement_20261013/TAIJI01_POSTCONDITION.json": {
+        "sha256": "26bc658dd95705c5bb4364660dff07ffb19becc22cf797a40ccf3b81efd260fa",
+        "size": 546
+      },
+      "docs/evidence/t012_legacy9002_retirement_20261013/README.md": {
+        "sha256": "1f6e66fb49dd70af79eb30387e43c3585c62f89b08d92fcdf829919c8fe10996",
+        "size": 2049
+      }
+    },
+    "changes": {
+      "created": [
+        "docs/evidence/t012_legacy9002_retirement_20261013/MSI_POSTCONDITION.json",
+        "docs/evidence/t012_legacy9002_retirement_20261013/TAIJI01_POSTCONDITION.json",
+        "docs/evidence/t012_legacy9002_retirement_20261013/README.md"
+      ],
+      "modified": [],
+      "deleted": []
+    },
+    "deterministic_validation": {
+      "state": "PASS_EXACT_POSTDEPLOYMENT_EVIDENCE_VALIDATION",
+      "msi_acceptance": {
+        "unit_fingerprint_unchanged": true,
+        "inactive_disabled_no_pid_all_samples": true,
+        "retry_counter_stable": true,
+        "local9002_healthy_all_samples": true,
+        "lan11435_healthy_all_samples": true,
+        "preserved_gateway_process": true,
+        "preserved_lan_forward_process": true,
+        "post_start_periodic_health_observed": true
+      },
+      "server_reverse11435": true,
+      "authority_unchanged": true,
+      "scope": "Evidence files only; no operational permission inferred.",
+      "service_operation_repeated": false,
+      "files": {
+        "docs/evidence/t012_legacy9002_retirement_20261013/MSI_POSTCONDITION.json": {
+          "sha256": "d300b3161820e54dd806b1159f643649be1ea3f0e896089e29415c0022d29f3e",
+          "size": 6321
+        },
+        "docs/evidence/t012_legacy9002_retirement_20261013/TAIJI01_POSTCONDITION.json": {
+          "sha256": "26bc658dd95705c5bb4364660dff07ffb19becc22cf797a40ccf3b81efd260fa",
+          "size": 546
+        },
+        "docs/evidence/t012_legacy9002_retirement_20261013/README.md": {
+          "sha256": "1f6e66fb49dd70af79eb30387e43c3585c62f89b08d92fcdf829919c8fe10996",
+          "size": 2049
+        }
+      }
+    }
+  },
+  "result": {
+    "state": "PASS_TOTAL_FIELD_SOURCE_DELTA_ADJUDICATION",
+    "candidate_sha256": "f9aa85fd3736b3720362f0aa5483cf6463085b3746d106799c5f07a49bf7fc64",
+    "previous_state_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "verification_sha256": "6270e161f491f0c749908fb77cfe4fdd45991b429c6126f8244ae7068782480f",
+    "final_decision": "ALLOW",
+    "fixed_point_status": "REACHED",
+    "commit_applied": true,
+    "decision_reason_codes": [
+      "FIXED_POINT_REACHED"
+    ],
+    "state_ref": "tfs-state:candidate:v0.1:7f9bce0e528eae1b2cd5622924f0db4455f00ef57f8b3a63de27def8ba4e3454",
+    "tfid": "tfid:candidate:v0.1:7f9bce0e528eae1b2cd5622924f0db4455f00ef57f8b3a63de27def8ba4e3454",
+    "total_field_hash": "aff79e60256864a907ef081872dfeca32355016d52ddf3f06447ce125379f39b",
+    "raw_source_body_submitted": false
+  },
+  "original_service_effect_permit_issued": false,
+  "existing_authority_modified": false
+}
