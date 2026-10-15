@@ -12,7 +12,9 @@
   "source_registry_refs": [
     "core/resource_arbitration.py",
     "runtime/total_field/secondary_cloud/capability_registry.json",
-    "capabilities/W7TP_NATIVE_SKILLS_INDEX.json"
+    "capabilities/W7TP_NATIVE_SKILLS_INDEX.json",
+    "packets/product_av_ordering_ai/merchant_invention_capability_map.json",
+    "docs/adi_native/NATIVE_ADI_SOURCE_RULE_MATRIX.md"
   ],
   "capabilities": [
     {
@@ -23,10 +25,18 @@
         "Taiji_Claw_Safe",
         "configs/taiji_topology.json"
       ],
-      "resource_refs": ["ROUTER_SERVICE_CLAW"],
-      "selection_tags": ["AUTOMATION", "PHYSICAL_SCAN", "TOOL_EXECUTION"],
+      "resource_refs": [
+        "ROUTER_SERVICE_CLAW"
+      ],
+      "selection_tags": [
+        "AUTOMATION",
+        "PHYSICAL_SCAN",
+        "TOOL_EXECUTION"
+      ],
       "d3_coordinate": {
-        "node_scope": ["taiji01"],
+        "node_scope": [
+          "taiji01"
+        ],
         "owner_ref": "core/runtime/runtime_orchestrator.py",
         "coordinate_ref": "service:claw:9004"
       },
@@ -37,7 +47,11 @@
       },
       "d7_risk": {
         "fail_closed": true,
-        "risk_tags": ["LEGACY_SERVICE", "TOOL_SIDE_EFFECT", "NETWORK_BOUNDARY"]
+        "risk_tags": [
+          "LEGACY_SERVICE",
+          "TOOL_SIDE_EFFECT",
+          "NETWORK_BOUNDARY"
+        ]
       },
       "d8_authority": {
         "provider_authority": false,
@@ -69,7 +83,11 @@
         "CANDIDATE_GENERATION"
       ],
       "d3_coordinate": {
-        "node_scope": ["MSI", "taiji01-code-server", "cloud-candidate"],
+        "node_scope": [
+          "MSI",
+          "taiji01-code-server",
+          "cloud-candidate"
+        ],
         "owner_ref": "core/resource_arbitration.py",
         "coordinate_ref": "resource-router:model-compute"
       },
@@ -80,7 +98,11 @@
       },
       "d7_risk": {
         "fail_closed": true,
-        "risk_tags": ["MODEL_HALLUCINATION", "PROVIDER_BLACK_BOX", "CONTEXT_LEAK"]
+        "risk_tags": [
+          "MODEL_HALLUCINATION",
+          "PROVIDER_BLACK_BOX",
+          "CONTEXT_LEAK"
+        ]
       },
       "d8_authority": {
         "provider_authority": false,
@@ -97,10 +119,18 @@
         "core/resource_arbitration.py#build_static_state_cell_envelope",
         "services/gateway/natural_language_control.py"
       ],
-      "resource_refs": ["TAIJI01_TOTAL_FIELD"],
-      "selection_tags": ["STATIC_STATE_CELL", "CONTEXT_MINIMIZATION", "MODEL_BOUNDARY"],
+      "resource_refs": [
+        "TAIJI01_TOTAL_FIELD"
+      ],
+      "selection_tags": [
+        "STATIC_STATE_CELL",
+        "CONTEXT_MINIMIZATION",
+        "MODEL_BOUNDARY"
+      ],
       "d3_coordinate": {
-        "node_scope": ["taiji01"],
+        "node_scope": [
+          "taiji01"
+        ],
         "owner_ref": "core/resource_arbitration.py",
         "coordinate_ref": "taiji01:static-state-cell"
       },
@@ -111,7 +141,10 @@
       },
       "d7_risk": {
         "fail_closed": true,
-        "risk_tags": ["STALE_STATE", "OVERBROAD_CONTEXT"]
+        "risk_tags": [
+          "STALE_STATE",
+          "OVERBROAD_CONTEXT"
+        ]
       },
       "d8_authority": {
         "provider_authority": false,
@@ -128,10 +161,24 @@
         "tools/total_field_dynamic_context_pull.py",
         "tools/w7tp_task_state_minimum_packet.py"
       ],
-      "resource_refs": ["TAIJI01_TOTAL_FIELD", "MSI_OLLAMA_LOCAL", "GEMINI_CODE_ASSIST", "GOOGLE_VERTEX_GEMINI", "OLLAMA_CLOUD"],
-      "selection_tags": ["POINTER_FIRST", "DYNAMIC_CONTEXT", "SINGLE_USE_PULL", "ALL_CONTEXT_REQUIRING_LLM", "NON_DIFFERENTIAL_CONTEXT"],
+      "resource_refs": [
+        "TAIJI01_TOTAL_FIELD",
+        "MSI_OLLAMA_LOCAL",
+        "GEMINI_CODE_ASSIST",
+        "GOOGLE_VERTEX_GEMINI",
+        "OLLAMA_CLOUD"
+      ],
+      "selection_tags": [
+        "POINTER_FIRST",
+        "DYNAMIC_CONTEXT",
+        "SINGLE_USE_PULL",
+        "ALL_CONTEXT_REQUIRING_LLM",
+        "NON_DIFFERENTIAL_CONTEXT"
+      ],
       "d3_coordinate": {
-        "node_scope": ["taiji01"],
+        "node_scope": [
+          "taiji01"
+        ],
         "owner_ref": "tools/total_field_dynamic_context_pull.py",
         "coordinate_ref": "taiji01:total-field:pointer-first-pull"
       },
@@ -142,14 +189,21 @@
       },
       "d7_risk": {
         "fail_closed": true,
-        "risk_tags": ["REPLAY", "STALE_CONTEXT", "PROVIDER_CONTEXT_EXPOSURE"]
+        "risk_tags": [
+          "REPLAY",
+          "STALE_CONTEXT",
+          "PROVIDER_CONTEXT_EXPOSURE"
+        ]
       },
       "d8_authority": {
         "provider_authority": false,
         "final_decision": false,
         "canonical": false,
         "requires_total_field_verify": true
-      }
+      },
+      "requires_capability_ids": [
+        "CAP_INTERNAL_ORIGIN_CELL_V1"
+      ]
     },
     {
       "capability_id": "CAP_INTERNAL_NODE_COMPUTE_V1",
@@ -159,10 +213,22 @@
         "core/resource_arbitration.py",
         "configs/taiji_topology.json"
       ],
-      "resource_refs": ["TAIJI01_NODE", "MSI_NODE"],
-      "selection_tags": ["CPU", "RAM", "GPU_VRAM", "DISTRIBUTED_COMPUTE"],
+      "resource_refs": [
+        "TAIJI01_NODE",
+        "MSI_NODE"
+      ],
+      "selection_tags": [
+        "CPU",
+        "RAM",
+        "GPU_VRAM",
+        "DISTRIBUTED_COMPUTE"
+      ],
       "d3_coordinate": {
-        "node_scope": ["taiji01", "MSI", "tailnet-node"],
+        "node_scope": [
+          "taiji01",
+          "MSI",
+          "tailnet-node"
+        ],
         "owner_ref": "core/resource_arbitration.py",
         "coordinate_ref": "resource-router:node-compute"
       },
@@ -173,7 +239,11 @@
       },
       "d7_risk": {
         "fail_closed": true,
-        "risk_tags": ["NODE_DRIFT", "NETWORK_UNREACHABLE", "WRONG_COORDINATE"]
+        "risk_tags": [
+          "NODE_DRIFT",
+          "NETWORK_UNREACHABLE",
+          "WRONG_COORDINATE"
+        ]
       },
       "d8_authority": {
         "provider_authority": false,
@@ -191,14 +261,19 @@
         "tools/w7tp_task_state_minimum_packet.py",
         "configs/total_field/w7tp_local_origin_state_rule_registry_v1.json"
       ],
-      "resource_refs": ["TAIJI01_NATIVE_ADI", "TAIJI01_TOTAL_FIELD"],
+      "resource_refs": [
+        "TAIJI01_NATIVE_ADI",
+        "TAIJI01_TOTAL_FIELD"
+      ],
       "selection_tags": [
         "ORIGIN_STATE_MINIMUM_PACKET",
         "LOCAL_RULE_BINDING",
         "STATE_CELL"
       ],
       "d3_coordinate": {
-        "node_scope": ["taiji01"],
+        "node_scope": [
+          "taiji01"
+        ],
         "owner_ref": "products/eight_dimensional_generative_memory/w7tp_origin_state_minimum_packet_v1.py",
         "coordinate_ref": "taiji01:origin-state-minimum-packet"
       },
@@ -209,7 +284,11 @@
       },
       "d7_risk": {
         "fail_closed": true,
-        "risk_tags": ["RULE_REF_MISMATCH", "MANIFEST_MISMATCH", "SEMANTIC_PURITY"]
+        "risk_tags": [
+          "RULE_REF_MISMATCH",
+          "MANIFEST_MISMATCH",
+          "SEMANTIC_PURITY"
+        ]
       },
       "d8_authority": {
         "provider_authority": false,
@@ -226,10 +305,18 @@
         "services/w7tp_gst_v23_runtime.py",
         "tests/test_w7tp_gst_v23_runtime_delivery.py"
       ],
-      "resource_refs": ["TAIJI01_TOTAL_FIELD"],
-      "selection_tags": ["GST_V23", "ORIGIN_CELL_RECONSTRUCTION", "USER_DELIVERY"],
+      "resource_refs": [
+        "TAIJI01_TOTAL_FIELD"
+      ],
+      "selection_tags": [
+        "GST_V23",
+        "ORIGIN_CELL_RECONSTRUCTION",
+        "USER_DELIVERY"
+      ],
       "d3_coordinate": {
-        "node_scope": ["taiji01"],
+        "node_scope": [
+          "taiji01"
+        ],
         "owner_ref": "services/w7tp_gst_v23_runtime.py",
         "coordinate_ref": "taiji01:GST-V23-runtime"
       },
@@ -240,7 +327,11 @@
       },
       "d7_risk": {
         "fail_closed": true,
-        "risk_tags": ["SEMANTIC_PURITY", "PACKET_VALIDATION", "RUNTIME_BINDING"]
+        "risk_tags": [
+          "SEMANTIC_PURITY",
+          "PACKET_VALIDATION",
+          "RUNTIME_BINDING"
+        ]
       },
       "d8_authority": {
         "provider_authority": false,
@@ -260,7 +351,11 @@
         "capabilities/w7tp-deterministic-effect-gate/scripts/effect_gate.py",
         "configs/total_field/w7tp_nvr_read_control_v1.json"
       ],
-      "resource_refs": ["TAIJI01_TOTAL_FIELD", "MSI_NODE", "WUCHANG_NVR_AH55B08"],
+      "resource_refs": [
+        "TAIJI01_TOTAL_FIELD",
+        "MSI_NODE",
+        "WUCHANG_NVR_AH55B08"
+      ],
       "selection_tags": [
         "NVR",
         "CAMERA",
@@ -270,7 +365,10 @@
         "COMPATIBILITY_RDC"
       ],
       "d3_coordinate": {
-        "node_scope": ["taiji01", "MSI"],
+        "node_scope": [
+          "taiji01",
+          "MSI"
+        ],
         "owner_ref": "services/gateway/nvr_control.py",
         "coordinate_ref": "service:msi:nvr-read-adapter"
       },

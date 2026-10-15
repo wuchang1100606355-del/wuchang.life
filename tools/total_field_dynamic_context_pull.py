@@ -210,6 +210,24 @@ def validate_model_visible_context(value: Mapping[str, Any]) -> dict[str, Any]:
             copied.get(field),
             f"HOLD_{field.upper()}_INVALID",
         )
+    projection = copied["state_projection"]
+    capability_context = projection.get("capability_context")
+    if isinstance(projection.get("task"), Mapping) and capability_context is None:
+        raise DynamicContextPullHold("HOLD_CONTEXT_CAPABILITY_INVENTORY_MISSING")
+    if capability_context is not None:
+        from core.capability_internalization import (
+            CapabilityInternalizationError, validate_capability_context_projection,
+        )
+        try:
+            checked = validate_capability_context_projection(
+                capability_context,
+                task_ref=str(projection.get("task", {}).get("task_ref", "")),
+                capability_refs=copied["capability_refs"],
+            )
+        except CapabilityInternalizationError as exc:
+            raise DynamicContextPullHold("HOLD_CONTEXT_" + exc.reason_code) from exc
+        if checked["missing_required_capability_ids"]:
+            raise DynamicContextPullHold("HOLD_CONTEXT_REQUIRED_CAPABILITY_MISSING")
     _validate_no_forbidden_context(copied)
     if len(canonical_json_bytes(copied)) > MAX_MODEL_VISIBLE_CONTEXT_BYTES:
         raise DynamicContextPullHold("HOLD_MODEL_VISIBLE_CONTEXT_TOO_LARGE")
@@ -248,6 +266,9 @@ class TotalFieldDynamicContextPullBroker:
         validated_packet = validate_minimum_packet(packet)
         packet_copy = copy.deepcopy(dict(packet))
         task = _require_ref(task_ref, "HOLD_CONTEXT_PULL_TASK_REF_INVALID")
+        task_id = packet_copy.get("minimum_new_information", {}).get("task_id")
+        if task_id is not None and (task != "task:" + str(task_id) or packet_copy.get("state_ref") != task):
+            raise DynamicContextPullHold("HOLD_CONTEXT_PULL_PACKET_TASK_MISMATCH")
         provider = _require_ref(
             provider_ref,
             "HOLD_CONTEXT_PULL_PROVIDER_REF_INVALID",
@@ -354,6 +375,14 @@ class TotalFieldDynamicContextPullBroker:
                     "HOLD_MODEL_VISIBLE_CONTEXT_MAPPING_REQUIRED"
                 )
             model_context = validate_model_visible_context(context)
+            expected_capability_hash = packet.get("joint_state_field", {}).get("D4", {}).get("capability_context_sha256")
+            if packet.get("minimum_new_information", {}).get("task_id") is not None:
+                actual = model_context["state_projection"].get("capability_context", {})
+                actual_task = model_context["state_projection"].get("task", {}).get("task_ref")
+                if (not isinstance(expected_capability_hash, str) or
+                    actual.get("projection_sha256") != expected_capability_hash or
+                    actual_task != record["task_ref"]):
+                    raise DynamicContextPullHold("HOLD_CONTEXT_PULL_CAPABILITY_BINDING_MISMATCH")
         if workset_path is None or workset_path.exists():
             raise DynamicContextPullHold("HOLD_CONTEXT_WORKSET_CLEANUP_FAILED")
 
@@ -408,6 +437,9 @@ class TotalFieldDynamicContextPullBroker:
             },
             "reconstruction_evidence": {
                 "packet_sha256": local_receipt["packet_sha256"],
+                "capability_context_sha256": model_context["state_projection"].get(
+                    "capability_context", {}
+                ).get("projection_sha256"),
                 "target_manifest_sha256": local_receipt[
                     "target_manifest_sha256"
                 ],

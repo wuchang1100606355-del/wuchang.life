@@ -17,7 +17,8 @@ from pathlib import Path
 from typing import Any, Mapping
 
 ROOT = Path("/home/taiji_admin/Taiji_Hub")
-sys.path.insert(0, str(ROOT))
+if __package__ in (None, "") and str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from services.gateway.natural_language_control import (  # noqa: E402
     NaturalLanguageRequest,
@@ -82,6 +83,16 @@ def _bind_task(
         for item in work.get("TASKS", [])
         if isinstance(item, dict) and isinstance(item.get("TASK_ID"), str)
     }
+    # Resolve every registered task namespace before the legacy T-/XJ- pattern.
+    # This is exact target selection, not permission to execute that task.
+    registered_refs = [
+        ref for ref in sorted(valid_tasks)
+        if re.search(r"(?<![A-Za-z0-9_-])" + re.escape(ref) + r"(?![A-Za-z0-9_-])", intent)
+    ]
+    if len(registered_refs) > 1:
+        raise BridgeDynamicContextHold("HOLD_DYNAMIC_CONTEXT_MULTIPLE_TASK_REFERENCES")
+    if registered_refs:
+        return registered_refs[0], "EXPLICIT_INTENT_TASK"
     for candidate in re.findall(
         r"(?<![A-Z0-9])(?:T-[A-Z0-9-]+|XJ-[0-9]+)(?![A-Z0-9-])",
         intent.upper(),
