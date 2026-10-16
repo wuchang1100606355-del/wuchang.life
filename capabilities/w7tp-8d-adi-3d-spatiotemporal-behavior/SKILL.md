@@ -51,6 +51,18 @@ description: 以既有 W7TP／8D ADI V2.3 單一動態狀態場治理真實 glTF
 - 只在模型與重構能力就緒且幾何等價經驗證後，才能量測傳輸和 Token 實際節省；封包長度不能單獨宣稱節省百分比。
 - Gemini／本地小J都是總場受管制的候選器官，不增設第二個總場或 D8。
 
+## 跨模型微笑來源適配｜獨立驗證新增項目（2026-10-16）
+
+- 本技能支援以已知 GLB 來源 SHA-256 精確選用不同模型的真實三維表情控制器，不跨模型重用頂點 ID。兩份來源均由 MSI 實機重讀確認。
+- `J.vrm`：170 關節；VRM1 `happy`（node 170 / morph target 3），`FaceMouth` 代表幾何頂點候選。檔案 SHA-256：`615f5ab25daab0fa326bfcf1c0e49d09c8f23dc8c9217d3876962937455cc205`。
+- R1 專屬 3D 模型：57 關節、7 段既有動畫；面部來源標籤 `mouthSmileLeft` / `mouthSmileRight`（target 43 / 44）可測得真實三維位移。GLB SHA-256：`98986d8e96a9822494172043c463cda35268289fb3e0b97b7656bb94076c7ca2`。
+- `scripts/r1_named_morph_behavior.py`：在隔離暫存解讀既有 ZIP 中的 R1 GLB，取得創作者命名的兩種微笑形變及五時間點三維軌跡。代表位移點並**非**經外部解剖學確認的嘴角。
+- `scripts/gltf_spatiotemporal_field.py::accessor` 已增加有界 glTF Sparse Accessor 解碼；稀疏索引不嚴格遞增、索引越界、資料截斷與非有限數值均採 HOLD。
+- `scripts/resolve_3d_behavior.py::resolve(source_sha256, behavior)`：透過 `references/CROSS_MODEL_BEHAVIOR_MAPPING.json` 取得同一人類「微笑」語意在兩模型不同來源上的受限候選，來源雜湊不合、未知語意及要求正式解剖學嘴角時拒絕。
+- 驗收：MSI 載入兩份真實資產後 **47/47 PASS**；taiji01 無原始模型，純數學與路由 **26/26 PASS**，21 項實機測試明確 SKIPPED。R1 三視角 XYZ 反投影誤差最大約 `9.99e-16` 模型單位。
+- 原始 J.vrm／R1 GLB 不提交 GitHub；D4 收據只含 SHA、控制座標、數值及驗證結果。用量／成本／正式渲染／自然人認可外觀均不宣告 PASS。
+- 繼續遵循 W7TP V2.3 的唯一權威脊柱；本技能的八項應用索引是 8D／ADI 下的投影，不是替代 D1～D8 的正典規則。
+
 ## 技能生效門檻
 1. 保存 MSI 來源 SHA、骨架座標、三視角與時間軌跡 D4 證據，從 taiji01 重新讀回受影響證據。
 2. 純數學反證及實機等價測試通過，留存測試來源 SHA／執行時間／效果分類。

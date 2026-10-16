@@ -1,0 +1,70 @@
+{
+  "schema": "W7TP_CROSS_MODEL_HUMAN_SEMANTIC_3D_BEHAVIOR_MAPPING/1.0-CANDIDATE",
+  "authority": "CANDIDATE_ONLY",
+  "task_ref": "task:T-XIAOJ-LAUNCH",
+  "human_semantic": "微笑",
+  "behavior_key": "smile",
+  "timeline_default_ms": 650,
+  "interpolation_ref": "smoothstep",
+  "positions": "GLTF_WORLD_XYZ_POST_SKINNING",
+  "distance_metric": "ABSOLUTE_EUCLIDEAN_3D",
+  "units": "SOURCE_ASSET_MODEL_COORDINATE_UNITS_NOT_PHYSICALLY_CALIBRATED",
+  "model_selection_by": "EXACT_SOURCE_ASSET_SHA256",
+  "semantic_control_is_not_anatomical_landmark": true,
+  "runtime_authority": false,
+  "d8_authority": false,
+  "model_variants": [
+    {
+      "model_id": "msi/J.vrm",
+      "model_sha256": "615f5ab25daab0fa326bfcf1c0e49d09c8f23dc8c9217d3876962937455cc205",
+      "bone_count": 170,
+      "semantics": {
+        "smile": {
+          "source": "VRMC_vrm.expressions.preset.happy",
+          "control_targets": [
+            {
+              "node": 170,
+              "morph_index": 3,
+              "weight": 1
+            }
+          ],
+          "face_region_material": "FaceMouth",
+          "semantic_channel_provenance": "VRM1_DECLARED_PRESET",
+          "control_point_provenance": "FACE_MATERIAL_X_EXTREMA_NOT_ANATOMICAL",
+          "effective_geometry_engine": "GLTF_MORPH_PLUS_SKINNING",
+          "test_state": "PASS_SOURCE_SPATIAL_22_22"
+        }
+      }
+    },
+    {
+      "model_id": "msi/XiaoJ_AV_R1/xiaoj_chatavatar_uniform_r1.glb",
+      "model_sha256": "98986d8e96a9822494172043c463cda35268289fb3e0b97b7656bb94076c7ca2",
+      "delivery_zip_sha256": "12a84759315263f1d39c6dec0fb1e0debf0ee34cb90277fdd21090aadc0b70b9",
+      "bone_count": 57,
+      "semantics": {
+        "smile": {
+          "source": "glTF_mesh.extras.targetNames",
+          "control_targets": [
+            {
+              "name": "mouthSmileLeft",
+              "mesh_index": 0,
+              "morph_index": 43,
+              "weight": 1
+            },
+            {
+              "name": "mouthSmileRight",
+              "mesh_index": 0,
+              "morph_index": 44,
+              "weight": 1
+            }
+          ],
+          "face_region_material": "M_Face",
+          "semantic_channel_provenance": "SOURCE_ASSET_MORPH_NAMES",
+          "control_point_provenance": "DOMINANT_SOURCE_MORPH_RESPONSE_NOT_ANATOMICAL",
+          "effective_geometry_engine": "GLTF_MORPH_PLUS_SKINNING",
+          "test_state": "PASS_R1_SPATIAL_16_16"
+        }
+      }
+    }
+  ]
+}

@@ -86,24 +86,69 @@ def load_glb(path):
     return doc,blob,hashlib.sha256(data).hexdigest()
 
 def accessor(doc, blob, idx):
+    """Read bounded glTF 2.0 accessors, including sparse morph target values.
+
+    The sparse path is necessary for the existing R1 model. Never silently use
+    another mesh when the declared buffer, stride or sparse indices are invalid.
+    """
     a=doc["accessors"][idx]
-    if "sparse" in a or "bufferView" not in a: raise Hold("HOLD_SPARSE_ACCESSOR_REQUIRES_EXPLICIT_DECODER")
-    v=doc["bufferViews"][a["bufferView"]]
-    if v.get("buffer",0)!=0: raise Hold("HOLD_EXTERNAL_BUFFER_NOT_LOADED")
     fmt={5126:"f",5125:"I",5123:"H",5121:"B",5122:"h",5120:"b"}.get(a["componentType"])
     n={"SCALAR":1,"VEC2":2,"VEC3":3,"VEC4":4,"MAT4":16}.get(a["type"])
     if fmt is None or n is None: raise Hold("HOLD_UNSUPPORTED_ACCESSOR")
+    count=a.get("count")
+    if not isinstance(count,int) or isinstance(count,bool) or count<0 or count>5000000:
+        raise Hold("HOLD_ACCESSOR_COUNT_INVALID")
     frmt="<"+fmt*n; size=struct.calcsize(frmt)
-    stride=v.get("byteStride",size); off=v.get("byteOffset",0)+a.get("byteOffset",0)
-    if stride<size: raise Hold("HOLD_ACCESSOR_STRIDE")
-    if a["count"] and off+(a["count"]-1)*stride+size>len(blob):
-        raise Hold("HOLD_ACCESSOR_BOUNDS")
-    arr=[struct.unpack_from(frmt,blob,off+i*stride) for i in range(a["count"])]
+
+    def extract(view_id, relative_offset, item_count, item_fmt, item_size, stride=None):
+        try:
+            view=doc["bufferViews"][view_id]
+            vstart=view.get("byteOffset",0); vsize=view["byteLength"]
+            if view.get("buffer",0)!=0: raise Hold("HOLD_EXTERNAL_BUFFER_NOT_LOADED")
+            if not all(isinstance(x,int) and x>=0 for x in (vstart,vsize,relative_offset,item_count)):
+                raise Hold("HOLD_ACCESSOR_BOUNDS")
+            if stride is None:stride=item_size
+            if not isinstance(stride,int) or stride<item_size:raise Hold("HOLD_ACCESSOR_STRIDE")
+            off=vstart+relative_offset
+            end=off+(item_count-1)*stride+item_size if item_count else off
+            if off<vstart or end>vstart+vsize or end>len(blob):
+                raise Hold("HOLD_ACCESSOR_BOUNDS")
+            return [struct.unpack_from(item_fmt,blob,off+i*stride) for i in range(item_count)]
+        except (KeyError,IndexError,TypeError,struct.error) as exc:
+            raise Hold("HOLD_ACCESSOR_MALFORMED") from exc
+
+    if "bufferView" in a:
+        v=doc["bufferViews"][a["bufferView"]]
+        arr=extract(a["bufferView"],a.get("byteOffset",0),count,frmt,size,v.get("byteStride",size))
+    elif "sparse" in a:
+        if a.get("byteOffset",0)!=0:raise Hold("HOLD_SPARSE_BASE_OFFSET_INVALID")
+        arr=[tuple(0 for _ in range(n)) for _ in range(count)]
+    else:
+        raise Hold("HOLD_ACCESSOR_BUFFER_MISSING")
+
+    sparse=a.get("sparse")
+    if sparse is not None:
+        sc=sparse.get("count")
+        if not isinstance(sc,int) or isinstance(sc,bool) or sc<0 or sc>count:
+            raise Hold("HOLD_SPARSE_COUNT_INVALID")
+        i=sparse.get("indices",{});v=sparse.get("values",{})
+        code={5121:"B",5123:"H",5125:"I"}.get(i.get("componentType"))
+        if code is None:raise Hold("HOLD_SPARSE_INDEX_COMPONENT_INVALID")
+        index_fmt="<"+code
+        ids=[r[0] for r in extract(i["bufferView"],i.get("byteOffset",0),sc,index_fmt,struct.calcsize(index_fmt))]
+        if any(k<0 or k>=count for k in ids) or any(x>=y for x,y in zip(ids,ids[1:])):
+            raise Hold("HOLD_SPARSE_INDICES_UNSORTED_OR_INVALID")
+        values=extract(v["bufferView"],v.get("byteOffset",0),sc,frmt,size)
+        for k,value in zip(ids,values):
+            arr[k]=value
+
     if a.get("normalized") and a["componentType"]!=5126:
         bits={5125:32,5123:16,5121:8,5122:16,5120:8}[a["componentType"]]
         signed=a["componentType"] in (5122,5120)
         maximum=(2**(bits-1)-1) if signed else (2**bits-1)
         arr=[tuple(max(-1.0,t/maximum) if signed else t/maximum for t in row) for row in arr]
+    if a["componentType"]==5126 and any(not math.isfinite(c) for row in arr for c in row):
+        raise Hold("HOLD_NONFINITE_GEOMETRY")
     return arr
 
 def skeleton_pose(doc, *, joint_name=None, yaw_deg=0):
