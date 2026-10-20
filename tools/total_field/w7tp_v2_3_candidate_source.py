@@ -486,6 +486,13 @@ def active_canonical_binding(
         "promotion_receipt_path": pointer.get("promotion_receipt_path"),
         "promotion_receipt_sha256": pointer.get("promotion_receipt_sha256"),
         "founder_authority": pointer.get("founder_authority"),
+        "founder_trust_anchor_policy_id": contract.get("activation_contract", {}).get("founder_trust_anchor_policy_id") if version == "2.3" else None,
+        "admitted_sovereign_root_key_id": pointer.get("admitted_sovereign_root_key_id"),
+        "admitted_sovereign_root_fingerprint": pointer.get("admitted_sovereign_root_fingerprint"),
+        "trust_anchor_admission_receipt_path": pointer.get("trust_anchor_admission_receipt_path"),
+        "trust_anchor_admission_receipt_sha256": pointer.get("trust_anchor_admission_receipt_sha256"),
+        "trust_policy_promotion_receipt_path": pointer.get("trust_policy_promotion_receipt_path"),
+        "trust_policy_promotion_receipt_sha256": pointer.get("trust_policy_promotion_receipt_sha256"),
     }
 
 
