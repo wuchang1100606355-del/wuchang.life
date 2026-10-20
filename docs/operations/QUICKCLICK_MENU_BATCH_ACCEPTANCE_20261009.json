@@ -1,0 +1,196 @@
+{
+  "receipts": {
+    "acceptance": {
+      "started_at": "2026-10-08T22:06:26.529719+00:00",
+      "source_path": "/home/taiji_admin/Taiji_Hub/Taiji_Governance/candidates/quickclick_menu_batch_20261009T0615/source/Taiji_Odoo/addons",
+      "base_commit": "3c2e5884bc149ffbb02d81fdf288506918fae79e",
+      "empty_database": true,
+      "production_data_copied": false,
+      "host_ports_published": false,
+      "candidate_only": true,
+      "total_field_release": "NOT_RUN",
+      "pass": false,
+      "production_before": {
+        "wuchang_os_odoo_18": "2026-10-08T03:40:41.883378996Z|0|running",
+        "wuchang_os_pg": "2026-10-08T03:40:41.900738715Z|0|running"
+      },
+      "exit_code": 255,
+      "test_summary": [],
+      "cleanup": [
+        {
+          "kind": "container",
+          "name": "w7tp_menu_batch_20261008220626_odoo",
+          "removed": true
+        },
+        {
+          "kind": "container",
+          "name": "w7tp_menu_batch_20261008220626_pg",
+          "removed": true
+        },
+        {
+          "kind": "network",
+          "name": "w7tp_menu_batch_20261008220626_net",
+          "removed": true
+        }
+      ],
+      "production_after": {
+        "wuchang_os_odoo_18": "2026-10-08T03:40:41.883378996Z|0|running",
+        "wuchang_os_pg": "2026-10-08T03:40:41.900738715Z|0|running"
+      },
+      "production_runtime_unchanged": true,
+      "finished_at": "2026-10-08T22:07:20.614963+00:00"
+    },
+    "acceptance_signup_dependency_reuse": {
+      "started_at": "2026-10-08T22:08:28.856670+00:00",
+      "source_path": "/home/taiji_admin/Taiji_Hub/Taiji_Governance/candidates/quickclick_menu_batch_20261009T0615/source/Taiji_Odoo/addons",
+      "base_commit": "3c2e5884bc149ffbb02d81fdf288506918fae79e",
+      "empty_database": true,
+      "production_data_copied": false,
+      "host_ports_published": false,
+      "candidate_only": true,
+      "total_field_release": "NOT_RUN",
+      "pass": false,
+      "production_before": {
+        "wuchang_os_odoo_18": "2026-10-08T03:40:41.883378996Z|0|running",
+        "wuchang_os_pg": "2026-10-08T03:40:41.900738715Z|0|running"
+      },
+      "exit_code": 1,
+      "test_summary": [
+        "2026-10-08 22:09:24,936 1 ERROR menu_batch_test odoo.tests.result: 0 failed, 1 error(s) of 0 tests when loading database 'menu_batch_test' "
+      ],
+      "cleanup": [
+        {
+          "kind": "container",
+          "name": "w7tp_menu_batch_20261008220828_odoo",
+          "removed": true
+        },
+        {
+          "kind": "container",
+          "name": "w7tp_menu_batch_20261008220828_pg",
+          "removed": true
+        },
+        {
+          "kind": "network",
+          "name": "w7tp_menu_batch_20261008220828_net",
+          "removed": true
+        }
+      ],
+      "production_after": {
+        "wuchang_os_odoo_18": "2026-10-08T03:40:41.883378996Z|0|running",
+        "wuchang_os_pg": "2026-10-08T03:40:41.900738715Z|0|running"
+      },
+      "production_runtime_unchanged": true,
+      "finished_at": "2026-10-08T22:09:25.951753+00:00"
+    },
+    "acceptance_v3": {
+      "started_at": "2026-10-08T22:10:45.496012+00:00",
+      "source_path": "/home/taiji_admin/Taiji_Hub/Taiji_Governance/candidates/quickclick_menu_batch_20261009T0615/source/Taiji_Odoo/addons",
+      "base_commit": "3c2e5884bc149ffbb02d81fdf288506918fae79e",
+      "empty_database": true,
+      "production_data_copied": false,
+      "host_ports_published": false,
+      "candidate_only": true,
+      "total_field_release": "NOT_RUN",
+      "pass": true,
+      "production_before": {
+        "wuchang_os_odoo_18": "2026-10-08T03:40:41.883378996Z|0|running",
+        "wuchang_os_pg": "2026-10-08T03:40:41.900738715Z|0|running"
+      },
+      "exit_code": 0,
+      "test_summary": [
+        "2026-10-08 22:11:42,389 1 INFO menu_batch_test odoo.tests.result: 0 failed, 0 error(s) of 10 tests when loading database 'menu_batch_test' "
+      ],
+      "cleanup": [
+        {
+          "kind": "container",
+          "name": "w7tp_menu_batch_20261008221045_odoo",
+          "removed": true
+        },
+        {
+          "kind": "container",
+          "name": "w7tp_menu_batch_20261008221045_pg",
+          "removed": true
+        },
+        {
+          "kind": "network",
+          "name": "w7tp_menu_batch_20261008221045_net",
+          "removed": true
+        }
+      ],
+      "production_after": {
+        "wuchang_os_odoo_18": "2026-10-08T03:40:41.883378996Z|0|running",
+        "wuchang_os_pg": "2026-10-08T03:40:41.900738715Z|0|running"
+      },
+      "production_runtime_unchanged": true,
+      "finished_at": "2026-10-08T22:11:43.688986+00:00"
+    }
+  },
+  "source_hashes": {
+    "__manifest__.py": "969ab6e242abc881f4839ad6186d433d8ac8cd3106c270cd34cdb43f1be371c3",
+    "__init__.py": "5fd10918e1361ad65b4b41bcd8fb525e659267f47c8c4334ae52530e58908e9e",
+    "views/menu_option_views.xml": "3adcb797826b7416471ee70bcbf57e20ca6b854947ac35f25c2d27d761659fd4",
+    "security/menu_change_security.xml": "40f385d8329d04e9347a9bd2838980caaa986bd4c48baa82006c16637c07f715",
+    "security/ir.model.access.csv": "45db347872ef9c1c92b7b3c694bf8ffa47646dd32f647051f65cce7fd3e7f422",
+    "tests/test_menu_batch.py": "95a4b559a32a58f6d830578022578de1c7ba107203e9c2e8b4ad86cbab31b801",
+    "tests/__init__.py": "bf8deae1d66fae338e4f42e78a39198d6f560c821c95c1a40202ab74c0f591f2",
+    "services/menu_change_governance.py": "d9abd4c82c3fa4a582dde3e1c489fd27b51418e631065b50748f2d3fad67a566",
+    "services/menu_batch_governance.py": "2eac6d8b579376a62fd0db12e947e9acffaac830d6bc8edca469b905992c5af4",
+    "services/__init__.py": "93ace332a098fd4ff456c328b6f69dfd62c2d53c82f166ae17ad7d772c3857b7",
+    "models/menu_options.py": "caa7ce478d6dc5a1750ba49bbfb59e3fe02c6ec8b50fdad24d832adec6ac2363",
+    "models/menu_manager.py": "290b1e3a64f1920410b9c4ec2e64a6ea7e0bec77e5bdf2252d49453489e6d0db",
+    "models/menu_change_request.py": "3b0b3e55d9e1c35f77a18f8974a886bbba877f44b704fcebc9a8c34c109b88be",
+    "models/__init__.py": "05e61073ed869c77699ee8d10ffdd83db3f6e936fb8c9604bad2be97b011d5be",
+    "models/menu_batch_wizard.py": "2b3313173f8faced947080586c32b5b24603f7396d86cdb056484ad02ed66c29"
+  },
+  "final_log_tail": [
+    "2026-10-08 22:11:38,856 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_ai_gateway/views/lineworks_notification_views.xml ",
+    "2026-10-08 22:11:38,876 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_ai_gateway/views/line_official_account_config_views.xml ",
+    "2026-10-08 22:11:38,893 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_ai_gateway/views/total_product_handoff_views.xml ",
+    "2026-10-08 22:11:38,911 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_ai_gateway/views/business_backend_optimization_views.xml ",
+    "2026-10-08 22:11:38,958 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_ai_gateway/views/member_ticket_payment_gate_views.xml ",
+    "2026-10-08 22:11:38,975 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_ai_gateway/views/sovereign_ai_member_system_views.xml ",
+    "2026-10-08 22:11:39,005 1 WARNING menu_batch_test odoo.modules.loading: The models ['wuchang.business.backend.checkout.preflight'] have no access rules in module wuchang_cafe_ai_gateway, consider adding some, like:",
+    "id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink",
+    "wuchang_cafe_ai_gateway.access_wuchang_business_backend_checkout_preflight,access_wuchang_business_backend_checkout_preflight,wuchang_cafe_ai_gateway.model_wuchang_business_backend_checkout_preflight,base.group_user,1,0,0,0 ",
+    "2026-10-08 22:11:39,015 1 INFO menu_batch_test odoo.modules.loading: Module wuchang_cafe_ai_gateway loaded in 0.82s, 912 queries (+912 other) ",
+    "2026-10-08 22:11:39,015 1 INFO menu_batch_test odoo.modules.loading: Loading module wuchang_cafe_menu_options (70/70) ",
+    "2026-10-08 22:11:39,155 1 INFO menu_batch_test odoo.modules.registry: module wuchang_cafe_menu_options: creating or updating database tables ",
+    "2026-10-08 22:11:39,206 1 WARNING menu_batch_test odoo.addons.base.models.ir_model: Two fields (preview_html, preview_json) of wuchang.cafe.menu.batch.wizard() have the same label: 逐項修改前後差異. [Modules: wuchang_cafe_menu_options and wuchang_cafe_menu_options] ",
+    "2026-10-08 22:11:39,448 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_menu_options/security/menu_change_security.xml ",
+    "2026-10-08 22:11:39,505 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_menu_options/security/ir.model.access.csv ",
+    "2026-10-08 22:11:39,530 1 INFO menu_batch_test odoo.modules.loading: loading wuchang_cafe_menu_options/views/menu_option_views.xml ",
+    "2026-10-08 22:11:39,616 1 WARNING menu_batch_test odoo.addons.base.models.ir_ui_view: An alert (class alert-*) must have an alert, alertdialog or status role or an alert-link class. Please use alert and alertdialog only for what expects to stop any activity to be read immediately.",
+    "View error context:",
+    "{'file': '/mnt/extra-addons/wuchang_cafe_menu_options/views/menu_option_views.xml',",
+    " 'line': 2,",
+    " 'name': 'wuchang.cafe.menu.batch.wizard.form',",
+    " 'view': ir.ui.view(2144,),",
+    " 'view.model': 'wuchang.cafe.menu.batch.wizard',",
+    " 'view.parent': ir.ui.view(),",
+    " 'xmlid': 'view_wuchang_cafe_menu_batch_wizard'} ",
+    "2026-10-08 22:11:39,634 1 INFO menu_batch_test odoo.modules.loading: Module wuchang_cafe_menu_options loaded in 0.62s, 786 queries (+786 other) ",
+    "2026-10-08 22:11:39,634 1 INFO menu_batch_test odoo.modules.loading: 70 modules loaded in 44.67s, 54854 queries (+54855 extra) ",
+    "2026-10-08 22:11:40,530 1 INFO menu_batch_test odoo.modules.loading: Modules loaded. ",
+    "2026-10-08 22:11:41,361 1 INFO menu_batch_test odoo.modules.registry: Registry changed, signaling through the database ",
+    "2026-10-08 22:11:41,362 1 INFO menu_batch_test odoo.modules.registry: Registry loaded in 53.360s ",
+    "2026-10-08 22:11:41,363 1 INFO menu_batch_test odoo.service.server: Starting post tests ",
+    "2026-10-08 22:11:41,512 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_client_context_cannot_forge_preview_or_candidate_evidence ... ",
+    "2026-10-08 22:11:41,559 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_context_defaults_cannot_preset_review_state ... ",
+    "2026-10-08 22:11:41,575 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_cross_company_product_is_blocked ... ",
+    "2026-10-08 22:11:41,884 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_noop_and_stale_approved_candidate ... ",
+    "2026-10-08 22:11:41,959 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_pause_archive_reversal_preserves_paused_state ... ",
+    "2026-10-08 22:11:42,091 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_preview_submit_approval_and_reversal ... ",
+    "2026-10-08 22:11:42,169 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_reversal_refuses_newer_product_and_keeps_evidence ... ",
+    "2026-10-08 22:11:42,231 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_single_item_archive_only_creates_review_candidate ... ",
+    "2026-10-08 22:11:42,257 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_stale_preview_and_modified_input ... ",
+    "2026-10-08 22:11:42,296 1 INFO menu_batch_test odoo.addons.wuchang_cafe_menu_options.tests.test_menu_batch: Starting TestMenuBatch.test_zero_price_repeated_submission_and_apply ... ",
+    "2026-10-08 22:11:42,388 1 INFO menu_batch_test odoo.addons.base.models.ir_attachment: filestore gc 437 checked, 0 removed ",
+    "2026-10-08 22:11:42,389 1 INFO menu_batch_test odoo.service.server: 10 post-tests in 1.03s, 1517 queries ",
+    "2026-10-08 22:11:42,389 1 INFO menu_batch_test odoo.tests.stats: wuchang_cafe_menu_options: 12 tests 0.99s 1517 queries ",
+    "2026-10-08 22:11:42,389 1 INFO menu_batch_test odoo.tests.result: 0 failed, 0 error(s) of 10 tests when loading database 'menu_batch_test' ",
+    "2026-10-08 22:11:42,389 1 INFO menu_batch_test odoo.service.server: Initiating shutdown ",
+    "2026-10-08 22:11:42,389 1 INFO menu_batch_test odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. ",
+    "2026-10-08 22:11:42,700 1 INFO menu_batch_test odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  "
+  ],
+  "main_menu_status": ""
+}

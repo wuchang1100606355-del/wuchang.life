@@ -13,6 +13,7 @@ from ..services.menu_change_governance import (
     build_menu_change_candidate,
     build_responsible_authorization_event,
 )
+from ..services.menu_batch_governance import build_reversal_values
 from .menu_manager import (
     GOVERNANCE_ADMIN_GROUP,
     REMOTE_SUPPORT_GROUP,
@@ -20,6 +21,9 @@ from .menu_manager import (
     build_human_menu_event_values,
     schedule_rejected_menu_event,
 )
+
+
+_MENU_WORKFLOW_TOKEN = object()
 
 
 class WuchangCafeMenuChangeRequest(models.Model):
@@ -129,6 +133,10 @@ class WuchangCafeMenuChangeRequest(models.Model):
     )
     change_image = fields.Boolean(default=False)
     proposed_image_1920 = fields.Binary(string="Proposed Product Image")
+    change_availability = fields.Boolean(default=False)
+    proposed_available_in_pos = fields.Boolean(default=True)
+    change_active = fields.Boolean(default=False)
+    proposed_active = fields.Boolean(default=True)
     support_reason = fields.Text(
         help="Describe the observed problem and intended correction. Do not paste credentials, payment data, or member plaintext."
     )
@@ -171,6 +179,10 @@ class WuchangCafeMenuChangeRequest(models.Model):
         "change_image",
         "proposed_image_1920",
         "support_reason",
+        "change_availability",
+        "proposed_available_in_pos",
+        "change_active",
+        "proposed_active",
     }
     _PROTECTED_FIELDS = {
         "state",
@@ -242,10 +254,12 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 }
             )
             safe_list.append(values)
-        return super().create(safe_list)
+        clean_context = {key: value for key, value in self.env.context.items()
+                         if key not in {"default_" + field for field in self._PROTECTED_FIELDS}}
+        return super(WuchangCafeMenuChangeRequest, self.with_context(clean_context)).create(safe_list)
 
     def write(self, values):
-        if self.env.context.get("wuchang_menu_request_internal_write"):
+        if self.env.context.get("wuchang_menu_request_internal_write") is _MENU_WORKFLOW_TOKEN:
             return super().write(values)
         unknown = set(values) - self._INPUT_FIELDS - {"responsible_review_note"}
         if unknown:
@@ -283,7 +297,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 batch = request.group_batch_id
                 super(
                     WuchangCafeMenuChangeRequest,
-                    request.with_context(wuchang_menu_request_internal_write=True),
+                    request.with_context(wuchang_menu_request_internal_write=_MENU_WORKFLOW_TOKEN),
                 ).write(
                     {
                         "responsible_reviewer_user_id": batch.responsible_menu_reviewer_user_id.id,
@@ -408,6 +422,10 @@ class WuchangCafeMenuChangeRequest(models.Model):
             values["image_sha256"] = self._image_sha256(
                 self.proposed_image_1920
             )
+        if self.change_availability:
+            values["available_in_pos"] = self.proposed_available_in_pos
+        if self.change_active:
+            values["active"] = self.proposed_active
         return values
 
     def _current_values(self):
@@ -462,7 +480,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 raise UserError(_("Menu change candidate blocked: %s") % exc) from exc
             super(
                 WuchangCafeMenuChangeRequest,
-                request.with_context(wuchang_menu_request_internal_write=True),
+                request.with_context(wuchang_menu_request_internal_write=_MENU_WORKFLOW_TOKEN),
             ).write(
                 {
                     "name": f"MENU-{request.change_type.upper()}-{packet['candidate_sha256'][:12]}",
@@ -618,7 +636,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 raise UserError(_("Approval authorization blocked: %s") % exc) from exc
             super(
                 WuchangCafeMenuChangeRequest,
-                request.with_context(wuchang_menu_request_internal_write=True),
+                request.with_context(wuchang_menu_request_internal_write=_MENU_WORKFLOW_TOKEN),
             ).write(
                 {
                     "state": "approved",
@@ -644,6 +662,13 @@ class WuchangCafeMenuChangeRequest(models.Model):
         return True
 
     def action_responsible_apply(self):
+        # Serialize confirmation and baseline checks, including concurrent RPCs.
+        self.env.cr.execute("SELECT id FROM wuchang_cafe_menu_change_request WHERE id IN %s ORDER BY id FOR UPDATE", (tuple(self.ids) or (0,),))
+        self.invalidate_recordset()
+        products = self.mapped("product_template_id")
+        if products:
+            self.env.cr.execute("SELECT id FROM product_template WHERE id IN %s ORDER BY id FOR UPDATE", (tuple(products.ids),))
+            products.invalidate_recordset()
         for request in self:
             if request.state != "approved":
                 before = request._current_values() if request.change_type != "create" else {}
@@ -708,7 +733,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
             applied_at = fields.Datetime.now()
             super(
                 WuchangCafeMenuChangeRequest,
-                request.with_context(wuchang_menu_request_internal_write=True),
+                request.with_context(wuchang_menu_request_internal_write=_MENU_WORKFLOW_TOKEN),
             ).write(
                 {
                     "state": "applied",
@@ -736,6 +761,49 @@ class WuchangCafeMenuChangeRequest(models.Model):
 
         return self.action_responsible_approve()
 
+    def action_prepare_reversal(self):
+        """Create a new reviewed correction; never overwrite historical evidence."""
+        self.ensure_one()
+        self._assert_responsible_reviewer()
+        if self.state != "applied":
+            raise UserError(_("只能為已套用的變更建立回復申請。"))
+        if self.change_type == "create":
+            raise UserError(_("新增商品請另建封存申請，保留商品與交易歷史。"))
+        try:
+            proposed = build_reversal_values(
+                json.loads(self.current_snapshot_json),
+                json.loads(self.proposed_values_json),
+                self._current_values(),
+            )
+        except MenuChangeGovernanceError as exc:
+            raise UserError(_("無法回復：商品已變更，或缺少圖片前像；請重新核對。%s") % exc) from exc
+        values = self._request_values_for_proposal(proposed)
+        values.update({"origin": "merchant_manager", "change_type": "update",
+                       "group_batch_id": self.group_batch_id.id,
+                       "product_template_id": self.product_template_id.id,
+                       "support_reason": "回復申請 menu-change-request:%s；原候選 %s" % (self.id, self.candidate_sha256)})
+        correction = self.create(values)
+        correction.action_submit_for_responsible_review()
+        return {"type": "ir.actions.act_window", "res_model": self._name,
+                "res_id": correction.id, "view_mode": "form", "target": "current"}
+
+    @api.model
+    def _request_values_for_proposal(self, proposed):
+        values = {}
+        mappings = {
+            "name": ("change_name", "proposed_name"),
+            "list_price": ("change_price", "proposed_list_price"),
+            "pos_category_ids": ("change_pos_categories", "proposed_pos_category_ids"),
+            "option_group_id": ("change_option_group", "proposed_option_group_id"),
+            "available_in_pos": ("change_availability", "proposed_available_in_pos"),
+            "active": ("change_active", "proposed_active"),
+        }
+        for key, value in proposed.items():
+            flag, field = mappings[key]
+            values[flag] = True
+            values[field] = [(6, 0, value)] if key == "pos_category_ids" else (value or False if key == "option_group_id" else value)
+        return values
+
     def action_responsible_reject(self):
         for request in self:
             if request.state not in {"pending_responsible_review", "approved"}:
@@ -745,7 +813,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
                 raise UserError(_("Enter a review reason before rejecting the request."))
             super(
                 WuchangCafeMenuChangeRequest,
-                request.with_context(wuchang_menu_request_internal_write=True),
+                request.with_context(wuchang_menu_request_internal_write=_MENU_WORKFLOW_TOKEN),
             ).write(
                 {
                     "state": "rejected",
@@ -772,7 +840,7 @@ class WuchangCafeMenuChangeRequest(models.Model):
         event_time = fields.Datetime.now()
         result = super(
             WuchangCafeMenuChangeRequest,
-            self.with_context(wuchang_menu_request_internal_write=True),
+            self.with_context(wuchang_menu_request_internal_write=_MENU_WORKFLOW_TOKEN),
         ).write({"state": "dead_letter"})
         for request in self:
             request._log_eventbook_event(

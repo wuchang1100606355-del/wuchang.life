@@ -510,17 +510,29 @@ class ProductTemplateMenuGovernance(models.Model):
                     record.with_context(wuchang_menu_internal_write=True),
                 ).write(values)
 
-    def action_wuchang_menu_archive(self):
+    def _wuchang_open_menu_request(self, change_type):
         self.ensure_one()
         if not self._wuchang_menu_is_responsible():
-            raise UserError(_("Only the bound cafe menu responsible person can archive an item."))
-        return self.write({"active": False, "available_in_pos": False})
+            raise UserError(_("請使用已有菜單維護授權的同一帳號。"))
+        batch = self._wuchang_responsible_batch(self.company_id or self.env.company)
+        correction = self.env["wuchang.cafe.menu.change.request"].create({
+            "origin": "merchant_manager", "change_type": change_type,
+            "group_batch_id": batch.id, "product_template_id": self.id,
+            "proposed_name": self.name, "proposed_list_price": self.list_price,
+        })
+        if change_type in {"archive", "reactivate"}:
+            correction.action_submit_for_responsible_review()
+        return {"type": "ir.actions.act_window", "res_model": correction._name,
+                "res_id": correction.id, "view_mode": "form", "target": "current"}
+
+    def action_wuchang_menu_request_edit(self):
+        return self._wuchang_open_menu_request("update")
+
+    def action_wuchang_menu_archive(self):
+        return self._wuchang_open_menu_request("archive")
 
     def action_wuchang_menu_reactivate(self):
-        self.ensure_one()
-        if not self._wuchang_menu_is_responsible():
-            raise UserError(_("Only the bound cafe menu responsible person can reactivate an item."))
-        return self.write({"active": True, "available_in_pos": True})
+        return self._wuchang_open_menu_request("reactivate")
 
     @api.model
     def _wuchang_total_field_endpoint(self):
