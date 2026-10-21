@@ -42,7 +42,11 @@ class WuchangMemberSignupController(AuthSignupHome):
 
         values = self._prepare_signup_values(qcontext)
         self._signup_with_values(qcontext.get("token"), values)
-        registration = request.env["wuchang.member.registration"].sudo().create({
+        registration = (
+            request.env["wuchang.member.registration"]
+            .with_user(request.env.user)
+            .sudo()
+            .create({
             "registration_channel": "odoo",
             "review_status": "draft",
             "consent_version": "individual_member_v1",
@@ -56,7 +60,8 @@ class WuchangMemberSignupController(AuthSignupHome):
             "membership_category": membership_category,
             "role_scope": "member",
             "service_scope": "community_member_service",
-        })
+            })
+        )
         registration.action_submit_review()
         request.env.cr.commit()
 

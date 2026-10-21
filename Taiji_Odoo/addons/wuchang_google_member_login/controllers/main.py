@@ -9,7 +9,13 @@ from urllib.parse import urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 from odoo import http
+from odoo.exceptions import AccessDenied, UserError
 from odoo.http import request
+from odoo.addons.wuchang_member_registration.services.external_signup import (
+    begin_verified_external_session,
+    build_provider_callback_evidence_ref,
+    ensure_verified_external_applicant,
+)
 
 from ..services.account_linking import (
     CANONICAL_CALLBACK_URL,
@@ -185,13 +191,6 @@ class WuchangGoogleMemberLogin(http.Controller):
     def google_member_callback(self, **kw):
         if not self._landing_enabled("google_login"):
             return self._landing_hold("google_login")
-        if not request.session.uid:
-            return self._status_page(
-                "Google 登入安全檢查未通過",
-                "必須先由唯一 Odoo 會員入口登入，再進行 Google channel 綁定。",
-                "AUTHENTICATED_MEMBER_SESSION_REQUIRED",
-                status=401,
-            )
         error = kw.get("error")
         if error:
             return self._status_page(
@@ -305,33 +304,57 @@ class WuchangGoogleMemberLogin(http.Controller):
                 status=400,
             )
 
+        try:
+            callback_ref = build_provider_callback_evidence_ref(
+                "google",
+                subject=str(userinfo.get("sub") or ""),
+                state=expected_state,
+                issued_at_epoch=issued_at_epoch,
+            )
+            result = ensure_verified_external_applicant(
+                request.env,
+                provider="google",
+                subject=str(userinfo.get("sub") or ""),
+                display_name=str(userinfo.get("name") or ""),
+                email=str(userinfo.get("email") or ""),
+                email_verified=userinfo.get("email_verified"),
+                callback_evidence_ref=callback_ref,
+            )
+            target = (
+                "/wuchang/member/account"
+                if result["membership_active"]
+                else "/wuchang/member/finish"
+            )
+            redirect_target = begin_verified_external_session(
+                request, result["user"], redirect_path=target
+            )
+        except (AccessDenied, UserError, ValueError):
+            return self._status_page(
+                "Google 會員登入暫時無法完成",
+                "Google 身分已驗證，但本地會員帳號目前需要人工確認。既有資料不會被覆寫，請稍後再試或洽服務人員。",
+                "GOOGLE_LOCAL_ACCOUNT_HOLD",
+                status=409,
+            )
+
+        if not request.session.uid:
+            return request.redirect(redirect_target)
+
         authority = request.env["wuchang.member.external.auth"]
         resolution = authority.resolve_provider_subject_for_session(
-            "google",
-            userinfo.get("sub"),
-            request.env.user,
+            "google", userinfo.get("sub"), request.env.user
         )
         link_context = transient_link_context(userinfo, resolution)
         request.session["wuchang_google_link_context"] = link_context
-        # Legacy _wuchang_get_or_create_google_member is intentionally not used:
-        # the callback never creates or email-merges a partner.
-        if link_context["link_state"] not in {"PROVIDER_LINK_FOUND", "LINK_CONFIRMED"}:
-            return self._status_page(
-                "Google 帳戶需要本地確認",
-                "Google 身分已驗證，但尚未取得本地會員綁定授權。請重新驗證既有帳戶或由授權人員審閱。",
-                link_context["link_state"],
-                status=202,
-            )
         group_packet_ref = request.session.get("wuchang_group_packet_ref")
-        if group_packet_ref:
+        if group_packet_ref and result["membership_active"]:
             request.session["wuchang_group_auth_ref"] = {
                 "provider": "google",
-                "provider_user_ref": link_context["provider_subject_reference"],
+                "provider_user_ref": link_context.get("provider_subject_reference"),
                 "display_ref": "google_member_masked",
                 "hash_subject": authority.hash_subject("google", userinfo.get("sub")),
             }
             return request.redirect(f"/wuchang/member/register/group/{group_packet_ref}")
-        return request.redirect("/google/member/welcome")
+        return request.redirect(redirect_target)
 
     @http.route("/google/member/welcome", type="http", auth="user", csrf=False)
     def google_member_welcome(self, **kw):

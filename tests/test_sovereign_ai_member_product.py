@@ -24,12 +24,16 @@ def test_sovereign_ai_member_product_source_contract() -> None:
     assert set(checks.values()) == {"PASS"}
 
 
-def test_public_member_entry_keeps_external_channels_behind_local_login() -> None:
+def test_public_member_entry_is_simple_and_role_neutral() -> None:
     login = LOGIN_PATH.read_text(encoding="utf-8")
-    assert 'href="/web/login"' in login
+    assert "小J會員服務" in login
+    assert "不用先選會員、店員、店長或管理員身分" in login
+    assert "登入後不需要再選角色" in login
     assert 'href="/web/signup"' in login
     assert 'href="/wuchang/business/onboarding"' in login
-    assert 'href="/forum"' in login
-    assert "Google／LINE 僅供登入後的 verified channel 綁定" in login
+    assert "店員 / 店長登入" not in login
+    assert "進入店務系統" not in login
+    assert "Google／LINE 僅供登入後的 verified channel 綁定" not in login
+    assert 'href="/forum"' not in login
     assert 'href="/google/member/login"' not in login
     assert 'href="/line/login"' not in login

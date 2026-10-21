@@ -99,17 +99,13 @@ def run_checks() -> tuple[dict[str, str], list[str]]:
     require(
         login,
         (
-            "主權 AI 會員系統",
-            "Sovereign AI Member System",
-            "會員主權",
-            "雲端候選",
-            "本地總場",
-            "PASS／HOLD／人工確認／錯誤",
-            'href="/web/login"',
+            "小J會員服務",
+            "登入一次，系統會依你的身分、目前狀態與授權",
+            "不用先選會員、店員、店長或管理員身分",
+            "先確認是你本人，其他交給系統判斷",
+            "登入後不需要再選角色",
             'href="/web/signup"',
             'href="/wuchang/business/onboarding"',
-            'href="/forum"',
-            "Google／LINE 僅供登入後的 verified channel 綁定",
         ),
         "member_portal",
         failures,
@@ -120,6 +116,14 @@ def run_checks() -> tuple[dict[str, str], list[str]]:
     ):
         if public_channel_entry in login:
             failures.append(f"member_portal:public_channel_entry_forbidden:{public_channel_entry}")
+    for forbidden_login_copy in (
+        "店員 / 店長登入",
+        "進入店務系統",
+        "Google／LINE 僅供登入後的 verified channel 綁定",
+        'href="/forum"',
+    ):
+        if forbidden_login_copy in login:
+            failures.append(f"member_portal:legacy_or_role_copy_present:{forbidden_login_copy}")
 
     product_views = read(PRODUCT_VIEWS)
     require(

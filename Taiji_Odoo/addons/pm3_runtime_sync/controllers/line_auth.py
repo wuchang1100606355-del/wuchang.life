@@ -3,6 +3,8 @@
 import logging
 import os
 import secrets
+import stat
+from pathlib import Path
 from urllib.parse import urlencode
 
 import requests
@@ -40,9 +42,28 @@ class PM3LineAuthController(http.Controller):
 
 
     def _line_oauth_config(self):
+        secret_path = Path(os.environ.get(
+            "WUCHANG_LINE_CLIENT_SECRET_FILE", ""
+        ))
+        canonical_secret_path = Path(
+            "/run/secrets/line_login_channel_secret"
+        )
+        if secret_path != canonical_secret_path:
+            return None
+        try:
+            file_status = secret_path.lstat()
+            if not stat.S_ISREG(file_status.st_mode):
+                return None
+            if stat.S_IMODE(file_status.st_mode) != 0o600:
+                return None
+            client_secret = secret_path.read_text(encoding="utf-8").strip()
+        except (OSError, UnicodeError):
+            return None
+        if not client_secret:
+            return None
         return {
-            "client_id": "2008646241",
-            "client_secret": "54a74765c5949738528d8adfafe5eadf",
+            "client_id": os.environ.get("WUCHANG_LINE_CLIENT_ID", "2008646241"),
+            "client_secret": client_secret,
             "redirect_uri": "http://127.0.0.1:8069/auth/line/callback",
         }
 

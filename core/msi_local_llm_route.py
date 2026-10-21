@@ -15,6 +15,7 @@ MSI_WINDOWS_TAILSCALE_IP = "100.105.82.28"
 DEPRECATED_MSI_WSL_TAILSCALE_IP = "100.84.204.114"
 MSI_LAN_OLLAMA_URL = f"http://{MSI_LAN_IP}:11434"
 MSI_WINDOWS_TAILSCALE_OLLAMA_URL = f"http://{MSI_WINDOWS_TAILSCALE_IP}:11434"
+MSI_WSL_REVERSE_SSH_OLLAMA_URL = "http://127.0.0.1:11435"
 DEPRECATED_MSI_WSL_TAILSCALE_OLLAMA_URL = f"http://{DEPRECATED_MSI_WSL_TAILSCALE_IP}:11434"
 
 MODEL_BINDINGS = {
@@ -37,6 +38,12 @@ BASE_ENDPOINTS = (
         "transport": "TAILSCALE_WINDOWS",
         "priority": 20,
     },
+    {
+        "ref": "MSI_WSL_REVERSE_SSH_FALLBACK",
+        "url": MSI_WSL_REVERSE_SSH_OLLAMA_URL,
+        "transport": "SSH_REVERSE_TUNNEL",
+        "priority": 30,
+    },
 )
 
 
@@ -54,7 +61,7 @@ def endpoint_candidates(override_url: str | None = None) -> list[dict[str, Any]]
                 "ref": "MSI_OPERATOR_OVERRIDE_FALLBACK",
                 "url": override,
                 "transport": "OPERATOR_OVERRIDE",
-                "priority": 30,
+                "priority": 40,
             }
         )
     return sorted(candidates, key=lambda item: int(item["priority"]))
@@ -162,6 +169,7 @@ __all__ = [
     "MSI_LAN_OLLAMA_URL",
     "MSI_WINDOWS_TAILSCALE_IP",
     "MSI_WINDOWS_TAILSCALE_OLLAMA_URL",
+    "MSI_WSL_REVERSE_SSH_OLLAMA_URL",
     "endpoint_candidates",
     "endpoint_has_model",
     "resolve_msi_ollama_url",

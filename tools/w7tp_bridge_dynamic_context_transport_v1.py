@@ -19,10 +19,6 @@ from typing import Any, Mapping
 ROOT = Path("/home/taiji_admin/Taiji_Hub")
 sys.path.insert(0, str(ROOT))
 
-from services.gateway.natural_language_control import (  # noqa: E402
-    NaturalLanguageRequest,
-    build_plan,
-)
 from tools.total_field_dynamic_context_pull import (  # noqa: E402
     TotalFieldDynamicContextPullBroker,
 )
@@ -73,7 +69,6 @@ def _load_work_ledger(root: Path) -> dict[str, Any]:
 def _bind_task(
     *,
     intent: str,
-    plan: Mapping[str, Any],
     root: Path,
 ) -> tuple[str, str]:
     work = _load_work_ledger(root)
@@ -82,12 +77,21 @@ def _bind_task(
         for item in work.get("TASKS", [])
         if isinstance(item, dict) and isinstance(item.get("TASK_ID"), str)
     }
-    for candidate in re.findall(
+    explicit_refs = list(dict.fromkeys(re.findall(
         r"(?<![A-Z0-9])(?:T-[A-Z0-9-]+|XJ-[0-9]+)(?![A-Z0-9-])",
         intent.upper(),
-    ):
+    )))
+    if len(explicit_refs) > 1:
+        raise BridgeDynamicContextHold(
+            "HOLD_DYNAMIC_CONTEXT_MULTIPLE_TASK_REFERENCES"
+        )
+    if explicit_refs:
+        candidate = explicit_refs[0]
         if candidate in valid_tasks:
             return candidate, "EXPLICIT_INTENT_TASK"
+        raise BridgeDynamicContextHold(
+            "HOLD_DYNAMIC_CONTEXT_TASK_BINDING_UNKNOWN"
+        )
 
     try:
         checkpoint = json.loads(
@@ -105,9 +109,6 @@ def _bind_task(
     if match and match.group(0) in valid_tasks:
         return match.group(0), "CURRENT_CONVERSATION_CHECKPOINT"
 
-    candidate = plan.get("TASK_ID")
-    if isinstance(candidate, str) and candidate in valid_tasks:
-        return candidate, "PLAN_FALLBACK"
     raise BridgeDynamicContextHold(
         "HOLD_DYNAMIC_CONTEXT_TASK_BINDING_UNKNOWN"
     )
@@ -128,18 +129,9 @@ def build_dynamic_context_payload(
             "HOLD_DYNAMIC_CONTEXT_MODEL_MISSING"
         )
 
-    plan = build_plan(
-        NaturalLanguageRequest(
-            intent=intent,
-            goal_mode=True,
-            auto_land=True,
-            dry_run=True,
-            google_fallback=False,
-        )
-    )
+    # Route context by exact task references, not model/resource planning.
     task_id, binding_source = _bind_task(
         intent=intent,
-        plan=plan,
         root=root,
     )
     selected = select_task_state_support_refs(
@@ -184,10 +176,10 @@ def build_dynamic_context_payload(
         "pulled_at": datetime.now(timezone.utc).isoformat(),
         "expires_at": bootstrap["expires_at"],
         "pull_result_sha256": result["pull_result_sha256"],
-        "task_profile": plan.get("RESOURCE_DECISION", {}).get(
-            "TASK_PROFILE",
-            {},
-        ),
+        "task_profile": {
+            "routing_mode": "DETERMINISTIC_RULE_GATEWAY",
+            "model_inference_for_transport": False,
+        },
         "context_ref": visible["context_ref"],
         "state_projection": visible["state_projection"],
         "evidence_refs": visible["evidence_refs"],

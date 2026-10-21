@@ -143,7 +143,7 @@ MERCHANT_INVENTION_CAPABILITY_MAP = {
             "id": "generative_transmission",
             "surface": ["cloud_humanoid", "cloud_ordering", "member_personalization"],
             "cloud_role": "minimized_candidate_context",
-            "local_authority": "reconstruct_from_indexes_deltas_hashes_state_codes_route_keys",
+            "local_authority": "reconstruct_from_minimum_state_refs_hashes_state_codes_route_keys_without_required_predecessor_delta",
         },
         {
             "id": "llm_reality_layer_governance",
