@@ -1,0 +1,206 @@
+{
+  "receipt_id": "UNIVERSAL_8D_DETERMINISTIC_ENGINE_V2",
+  "timestamp_utc": "2026-10-22T11:57:15Z",
+  "axiom": "標的物的辨識 -> 求同存異 -> 記述資訊量化差異(單量/總量/變化量/速度) -> 理解座標",
+  "verified_families": {
+    "FAMILY_1_VISUAL_RASTER": {
+      "raw_bytes": 9000000,
+      "wire_bytes": 68,
+      "byte_exact": true
+    },
+    "FAMILY_2_AUDIO_WAVEFORM": {
+      "raw_bytes": 8000,
+      "wire_bytes": 36,
+      "byte_exact": true,
+      "sha256_prefix": "122f9f839d93c5b1"
+    },
+    "FAMILY_3_3D_BONES_V2": {
+      "raw_bytes": 37440,
+      "wire_bytes": 101,
+      "byte_exact": true,
+      "sha256_prefix": "de6c74b5c25db917"
+    },
+    "FAMILY_4_STRUCTURED_JSON": {
+      "raw_bytes": 17293,
+      "wire_bytes": 109,
+      "byte_exact": true,
+      "sha256_prefix": "06c75fe572933d31"
+    },
+    "FAMILY_5_6_CANONICAL_DOC": {
+      "raw_bytes": 12047,
+      "wire_bytes": 295,
+      "byte_exact": true,
+      "sha256_prefix": "0f3693a62ddaeb86"
+    },
+    "HIGH_ENTROPY_MUTATION": {
+      "raw_bytes": 100000,
+      "wire_bytes": 536,
+      "byte_exact": true,
+      "sha256_prefix": "1f2d8b806cd7fab0"
+    },
+    "HIGH_ENTROPY_SHIFT_INSERT": {
+      "raw_bytes": 100017,
+      "wire_bytes": 37,
+      "byte_exact": true,
+      "sha256_prefix": "60cc3e845e43d02c"
+    },
+    "HIGH_ENTROPY_COLD_RESIDUAL": {
+      "raw_bytes": 10240,
+      "wire_bytes": 10568,
+      "byte_exact": true,
+      "sha256_prefix": "4941d8760e98c87f"
+    }
+  },
+  "real_file_bidirectional_tests": {
+    "/tmp/LIAOGUO_GEMINI_COMMERCIAL_PACK_20261021.md": {
+      "raw_bytes": 100173,
+      "wire_bytes": 125,
+      "reduction_percent": 99.8752,
+      "mode": "MODE_1_SHIFT_ANCHOR_CELL",
+      "prefix_static_bytes": 50068,
+      "suffix_shifted_bytes": 50069,
+      "verifier_status": "LOCAL_RECONSTRUCTION_VERIFIED",
+      "byte_exact": true,
+      "roundtrip_ms": 16.67,
+      "sha256": "9ec8e17d6e7f70be565d3554d6526fa83d8665bf468842f307c79a6f35a04a4f"
+    },
+    "/home/taiji_admin/Taiji_Hub/runtime/patent_delivery/W7TP_URGENT_LAND_AND_PATENT_PACKET_20260621_221210/patent/SPECIFICATION.md": {
+      "raw_bytes": 3413,
+      "wire_bytes": 125,
+      "reduction_percent": 96.3375,
+      "mode": "MODE_1_SHIFT_ANCHOR_CELL",
+      "prefix_static_bytes": 1688,
+      "suffix_shifted_bytes": 1689,
+      "verifier_status": "LOCAL_RECONSTRUCTION_VERIFIED",
+      "byte_exact": true,
+      "roundtrip_ms": 1.08,
+      "sha256": "56654dfde4cf7522640f4ab1be656b138fda19f7d6de8478160182fb664890db"
+    }
+  },
+  "trans_pacific_bidirectional_verified": {
+    "tw_to_us": {
+      "node": "wuchang-us-free-node (100.99.148.1)",
+      "cpu": "AMD EPYC 7B12",
+      "raw_bytes": 100185,
+      "wire_bytes": 137,
+      "us_decode_ms": 0.72,
+      "sha256": "96838eb2935f3e5214e1428d62f9d34e6115afe3e4c7ff47b28d0f0fedecd8b1",
+      "byte_exact": true
+    },
+    "us_to_tw": {
+      "raw_bytes": 100224,
+      "wire_bytes": 128,
+      "us_encode_ms": 38.86,
+      "tw_decode_ms": 2.53,
+      "sha256": "a9c78510ffad003212659b459cd845ef77c53d9c526c476bef2e9b8f4c912146",
+      "byte_exact": true
+    }
+  },
+  "us_to_tw_full_movie_return_verified": {
+    "direction": "US Iowa (100.99.148.1) -> Taiwan (taiji01)",
+    "reconstructed_playable_file": "/home/taiji_admin/Taiji_Hub/US_RETURNED_RECONSTRUCTED_MOVIE.mp4",
+    "duration": "09:56 (596 seconds)",
+    "raw_bytes": 61878609,
+    "traditional_us_to_tw_scp_seconds": 116.88,
+    "wire_bytes": 139,
+    "cell_us_to_tw_seconds": 2.8,
+    "reduction_percent": 99.999775,
+    "us_encode_ms": 7794.73,
+    "tw_decode_ms": 307.82,
+    "verifier_status": "LOCAL_RECONSTRUCTION_VERIFIED",
+    "byte_exact": true,
+    "sha256": "545005808587b73e8072bced6cda7d9e61495629fcabc0150062ee46ebc47d0e"
+  },
+  "trans_pacific_pure_delta_isolated": {
+    "raw_bytes": 61878641,
+    "wire_bytes": 574,
+    "reduction_percent": 99.999072,
+    "us_encode_ms": 2230.84,
+    "tw_decode_ms": 368.78,
+    "original_h264_intact": true,
+    "sha256": "1753e4170848dc2c7fdb0bf57c9231a3d071419c25a9ae076c3e410af38d489a"
+  },
+  "company3_menu_benchmark_isolated": {
+    "target_scope": "Company 3 POS 3 Menu (71 -> 72 items)",
+    "baseline_bytes": 7276,
+    "target_bytes": 7381,
+    "group_a_full_push": {
+      "wire_bytes": 7381,
+      "time_sec": 0.0001
+    },
+    "group_b_rest_delta": {
+      "wire_bytes": 170,
+      "time_sec": 0.0001
+    },
+    "group_c_8d_cell": {
+      "wire_bytes": 7375,
+      "time_sec": 0.0004,
+      "sha256": "0f86fbf6593aee9adac0aa0eef2eaa6cbd33ba82d63c4b26616a2289a4b7cb4e"
+    },
+    "bytes_reduction_vs_full": 0.08,
+    "bytes_reduction_vs_rest_delta": -4238.24
+  },
+  "company3_menu_benchmark_aligned": {
+    "group_a_bytes": 4910,
+    "group_b_bytes": 166,
+    "group_c_bytes": 4935,
+    "reduction_vs_full": -0.51,
+    "sha256": "a1efbb54dc8dc0ad085993f783a889e97b32ca80b22582804ca5a8abcfa955a7",
+    "deepcopy_verified": true
+  },
+  "final_engine_benchmark_20261022": {
+    "group_a_full_json_bytes": 4910,
+    "group_b_structured_patch_bytes": 199,
+    "group_c_binary_cell_bytes": 4935,
+    "target_sha256": "a1efbb54dc8dc0ad085993f783a889e97b32ca80b22582804ca5a8abcfa955a7",
+    "selected_optimal_route": "Path B (Structured Patch)",
+    "dynamic_deserialization_verified": true,
+    "method_b_note": "Fallback structured patch used; create_structured_delta not present on class",
+    "verification_scope": "Local Synthetic Menu Reconstruction",
+    "odoo_pos_db_applied": false
+  },
+  "ingress_pipeline_bridge_20261023": {
+    "d8_token_validated": true,
+    "bridged_payload_bytes": 199,
+    "bridged_payload_sha256": "c438fcee0f8600208b5ca5f36e1741af80b29aebdb6d2feb6d3da6a5f63c9be2",
+    "bridged_route": "Path B (Structured Patch)",
+    "target_nodes": [
+      "POS_STORE_001",
+      "POS_STORE_002"
+    ],
+    "bridge_processing_time_ms": 0.026,
+    "delivery_bridge_status": "BRIDGED_READY_FOR_DISPATCH",
+    "verification_scope": "Pipeline Ingress Interface Bridging",
+    "odoo_pos_db_applied": false
+  },
+  "mock_network_dispatch_20261023": {
+    "dispatched_nodes_count": 2,
+    "all_nodes_ack_success": true,
+    "ack_details": [
+      {
+        "node_id": "POS_STORE_001",
+        "status": "ACK_SUCCESS",
+        "items_count": 72,
+        "reconstructed_sha256": "a1efbb54dc8dc0ad085993f783a889e97b32ca80b22582804ca5a8abcfa955a7",
+        "processing_time_ms": 0.11
+      },
+      {
+        "node_id": "POS_STORE_002",
+        "status": "ACK_SUCCESS",
+        "items_count": 72,
+        "reconstructed_sha256": "a1efbb54dc8dc0ad085993f783a889e97b32ca80b22582804ca5a8abcfa955a7",
+        "processing_time_ms": 0.085
+      }
+    ],
+    "verification_scope": "Mock Cross-Node Dispatch and Edge Reconstruction",
+    "odoo_pos_db_applied": false
+  },
+  "odoo_event_dispatch_20261023": {
+    "event_dispatch_status": "DISPATCH_TRIGGERED",
+    "patch_size_bytes": 199,
+    "patch_sha256": "c438fcee0f8600208b5ca5f36e1741af80b29aebdb6d2feb6d3da6a5f63c9be2",
+    "pipeline_latency_ms": 0.038,
+    "verification_scope": "Odoo Event Pipeline Dispatch Integration",
+    "odoo_pos_db_applied": false
+  }
+}
