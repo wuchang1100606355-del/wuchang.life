@@ -1,0 +1,48 @@
+{
+  "application_8_index": [
+    "y_up_down",
+    "x_left_right",
+    "z_front_back",
+    "center_absolute_distance_3d",
+    "group_relative_distance_3d",
+    "velocity_3d_model_units_per_s",
+    "time_ms",
+    "human_semantic_ref"
+  ],
+  "behavior": {
+    "curve": "smoothstep",
+    "head_joint_name": "J_Bip_C_Head",
+    "head_yaw_end_deg": 12,
+    "head_yaw_start_deg": 0,
+    "landmark_status": "MATERIAL_X_EXTREMA_ANATOMY_UNVERIFIED",
+    "mouth_region_material": "FaceMouth",
+    "pair_vertex_ids": [
+      490,
+      379
+    ],
+    "semantic": "VRM1:happy",
+    "time_axis_ms": [
+      0,
+      163,
+      325,
+      487,
+      650
+    ]
+  },
+  "bone_scan_ref": "SKELETON_SCAN_REAL_MODEL.json",
+  "context_ref": "context:task-state:T-XIAOJ-LAUNCH:57f7908e453b2c50",
+  "d8_effect_authority": false,
+  "raw_model_bytes_in_packet": false,
+  "reconstruction_rule_ref": "w7tp-3d-absolute-spatial-field:gltf2-skin-morph-camera/v1",
+  "runtime_activation": false,
+  "schema": "W7TP_XIAOJ_3D_BEHAVIOR_ORIGIN_CELL_CANDIDATE/1.0",
+  "skeleton_bind_hashes": [
+    "b1b027ff890bb6d4f76e95d4a7e1fa00cb59b4ffe4a8cb2daa24f8811abad4a6",
+    "b1b027ff890bb6d4f76e95d4a7e1fa00cb59b4ffe4a8cb2daa24f8811abad4a6",
+    "b1b027ff890bb6d4f76e95d4a7e1fa00cb59b4ffe4a8cb2daa24f8811abad4a6"
+  ],
+  "source_asset_must_exist_at_receiver": true,
+  "source_sha256": "615f5ab25daab0fa326bfcf1c0e49d09c8f23dc8c9217d3876962937455cc205",
+  "state": "CANDIDATE_ONLY_NOT_CANONICAL",
+  "task_ref": "task:T-XIAOJ-LAUNCH"
+}
