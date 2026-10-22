@@ -1,0 +1,185 @@
+{
+  "observed_at": "2026-10-21T19:32:20.249457+00:00",
+  "method": "core.capability_internalization.build_capability_context_projection + validate_capability_context_projection",
+  "task_descriptor_source": "LATEST_EXPLICIT_USER_INTENT_NOT_A_REGISTERED_NATIVE_TASK",
+  "task_ref": "task:GST_V21_FORMAL_PROMOTION_CONTRACT_20261022",
+  "state": "BOUND_REGISTERED_CAPABILITY_CONTEXT",
+  "projection_sha256": "3f9953df551a189d53bafedc5d148d1191517b5a736c1de91df2da574b712188",
+  "source_bindings": [
+    {
+      "ref": "configs/total_field/w7tp_capability_internalization_registry_v1.json",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0"
+    },
+    {
+      "ref": "schemas/field/w7tp_capability_internalization_registry.schema.json",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "2e8691df6fd651e3836fa694b570f696fbe31f5e80180cc10a9cc9ee6d712e2a"
+    },
+    {
+      "ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812"
+    },
+    {
+      "ref": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c"
+    },
+    {
+      "ref": "AGENTS.md",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "e9eab295d331334a5911a52ce3f269958fea2fc5e3d363d7107b950adf1e92fd"
+    },
+    {
+      "ref": "core/capability_internalization.py",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "c98d8e6189fcf5fe6fad494816d576a1d234ec68ccef8b96aa53dd614413d6ce"
+    },
+    {
+      "ref": "tools/w7tp_task_state_local_rule.py",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "5189df0c773e8229408c1db499809e674602e26332b01ae08731fb4963a64b35"
+    },
+    {
+      "ref": "tools/w7tp_task_state_minimum_packet.py",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "b2d2e44b556d6c9c9223f8b9b6fde3767247ff18351286339f3d1fe61eb08152"
+    },
+    {
+      "ref": "tools/total_field_dynamic_context_pull.py",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "c85f38d849be23e7e00fd655c8951a2cff6ab5e156eaaaa6096f12292e0ebb7f"
+    },
+    {
+      "ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "state": "FILE_HASH_OBSERVED",
+      "sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3"
+    }
+  ],
+  "required_capability_ids": [
+    "CAP_INTERNAL_DYNAMIC_CONTEXT_V1",
+    "CAP_INTERNAL_ORIGIN_CELL_V1"
+  ],
+  "missing_required_capability_ids": [],
+  "catalogue_count": 8,
+  "selected_catalogue": [
+    {
+      "capability_id": "CAP_INTERNAL_DYNAMIC_CONTEXT_V1",
+      "capability_ref": "capability:CAP_INTERNAL_DYNAMIC_CONTEXT_V1",
+      "capability_class": "DYNAMIC_CONTEXT",
+      "registered_status": "IMPLEMENTED",
+      "runtime_readiness": "NOT_REOBSERVED",
+      "node_scope": [
+        "taiji01"
+      ],
+      "owner_ref": "tools/total_field_dynamic_context_pull.py",
+      "coordinate_ref": "taiji01:total-field:pointer-first-pull",
+      "source_bindings": [
+        {
+          "ref": "tools/total_field_dynamic_context_pull.py",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "c85f38d849be23e7e00fd655c8951a2cff6ab5e156eaaaa6096f12292e0ebb7f"
+        },
+        {
+          "ref": "tools/w7tp_task_state_minimum_packet.py",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "b2d2e44b556d6c9c9223f8b9b6fde3767247ff18351286339f3d1fe61eb08152"
+        }
+      ],
+      "resource_refs": [
+        "TAIJI01_TOTAL_FIELD",
+        "MSI_OLLAMA_LOCAL",
+        "GEMINI_CODE_ASSIST",
+        "GOOGLE_VERTEX_GEMINI",
+        "OLLAMA_CLOUD"
+      ],
+      "requires_capability_ids": [
+        "CAP_INTERNAL_ORIGIN_CELL_V1"
+      ],
+      "selection_reason": "REQUIRED_BY_TASK_OR_CONTEXT_DEPENDENCY",
+      "effect_policy": "CANDIDATE_ONLY",
+      "risk_tags": [
+        "REPLAY",
+        "STALE_CONTEXT",
+        "PROVIDER_CONTEXT_EXPOSURE"
+      ],
+      "effect_authorization": "NOT_GRANTED_BY_CONTEXT"
+    },
+    {
+      "capability_id": "CAP_INTERNAL_ORIGIN_CELL_V1",
+      "capability_ref": "capability:CAP_INTERNAL_ORIGIN_CELL_V1",
+      "capability_class": "ORIGIN_CELL",
+      "registered_status": "IMPLEMENTED",
+      "runtime_readiness": "NOT_REOBSERVED",
+      "node_scope": [
+        "taiji01"
+      ],
+      "owner_ref": "products/eight_dimensional_generative_memory/w7tp_origin_state_minimum_packet_v1.py",
+      "coordinate_ref": "taiji01:origin-state-minimum-packet",
+      "source_bindings": [
+        {
+          "ref": "products/eight_dimensional_generative_memory/w7tp_origin_state_minimum_packet_v1.py",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "75eeb5887725385d13e21cccecf995cd808f03794e1bda12766224014e27d2dc"
+        },
+        {
+          "ref": "tools/w7tp_task_state_minimum_packet.py",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "b2d2e44b556d6c9c9223f8b9b6fde3767247ff18351286339f3d1fe61eb08152"
+        },
+        {
+          "ref": "configs/total_field/w7tp_local_origin_state_rule_registry_v1.json",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "07448e1d4d7bd8739784db427afb9c7cefef322d4de5b987dd2443e0a0086249"
+        },
+        {
+          "ref": "runtime/total_field/conversation_intake/universal_origin_cell_codec_v2.py",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b"
+        },
+        {
+          "ref": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/ORIGIN_CELL_GST_V21_CANONICAL_SPEC.md",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855"
+        },
+        {
+          "ref": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/CONTENT_MANIFEST.json",
+          "state": "FILE_HASH_OBSERVED",
+          "sha256": "8c44a5704cabec721024f5ca1455b954b3ea8158dbafd03194f3305d1f4f3148"
+        }
+      ],
+      "resource_refs": [
+        "TAIJI01_NATIVE_ADI",
+        "TAIJI01_TOTAL_FIELD"
+      ],
+      "requires_capability_ids": [],
+      "selection_reason": "REQUIRED_BY_TASK_OR_CONTEXT_DEPENDENCY",
+      "effect_policy": "CANDIDATE_ONLY",
+      "risk_tags": [
+        "RULE_REF_MISMATCH",
+        "MANIFEST_MISMATCH",
+        "SEMANTIC_PURITY"
+      ],
+      "effect_authorization": "NOT_GRANTED_BY_CONTEXT"
+    }
+  ],
+  "coverage": {
+    "scope": "EXACT_BOUND_INTERNALIZATION_REGISTRY",
+    "registry_entries_complete": true,
+    "all_technologies_complete": false,
+    "external_index_contents": "DECLARED_IDENTIFIERS_ONLY_NO_RULE_BODY_OR_AUTHORITY",
+    "unexpanded_index_refs": [
+      "core/resource_arbitration.py"
+    ],
+    "task_evidence_scope": "SELECTED_RECORDS_NOT_ENTIRE_HISTORY",
+    "runtime_effect_scope": "NOT_TESTED_BY_INDEX",
+    "dependency_scope": "EXPLICIT_DECLARED_CAPABILITY_DEPENDENCIES_ONLY"
+  },
+  "effect_authorization": "NOT_GRANTED_BY_CONTEXT",
+  "minimum_packet_issued": false,
+  "full_dynamic_context_pull_performed": false,
+  "reconstruction_performed": false,
+  "native_task_registration": "NOT_FOUND",
+  "persisted_projection": "SANITIZED_REFS_AND_STATUS_ONLY"
+}

@@ -1,0 +1,114 @@
+--- /home/taiji_admin/Taiji_Hub/tools/total_field/w7tp_d8_reviewer_entrypoint.py
++++ /home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/v11-verification-restart-20261019T0556Z/candidate/w7tp_d8_reviewer_entrypoint_evidence_intake.py
+@@ -998,6 +998,89 @@
+         time.sleep(args.poll_seconds)
+ 
+ 
++def receive_v11_evidence(*, repo_root: Path, output_dir: Path) -> dict[str, Any]:
++    """Receive verified historical V11 evidence only; never a formal D8 request."""
++    import subprocess
++    import tempfile
++
++    root = repo_root.resolve(strict=True)
++    if root != Path("/home/taiji_admin/Taiji_Hub"):
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_ROOT_COORDINATE")
++    base = root / "artifacts/8d-adi-workloop/v11-verification-restart-20261019T0556Z"
++    runner = base / "resume_existing_v11.py"
++    expected_runner = "d0079c82ec093c29dbb0512144d7c5cbcdc814c0c763c0f9caa66853a9841bb8"
++    if runner.is_symlink() or not runner.is_file() or sha256_file(runner) != expected_runner:
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_EXISTING_RUNNER_DRIFT")
++    requested_destination = output_dir.absolute()
++    destination = requested_destination.resolve(strict=False)
++    if not destination.is_relative_to(base) or any(p.is_symlink() for p in (requested_destination, *requested_destination.parents)):
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_EVIDENCE_OUTPUT_BOUNDARY")
++    python = Path("/home/taiji_admin/.local/share/w7tp-passkey-d8/venv/bin/python")
++    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
++    proc = subprocess.run([str(python), "-B", str(runner)], cwd=root, env=env,
++                          capture_output=True, text=True, timeout=30, check=False)
++    if proc.returncode != 0:
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_EXISTING_VERIFICATION")
++    try:
++        result = json.loads(proc.stdout)
++    except (ValueError, TypeError) as exc:
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_HANDOFF_RESPONSE") from exc
++    if (not isinstance(result, dict)
++        or result.get("state") != "ORIGINAL_V11_EVIDENCE_HANDOFF_READY_NOT_FORMALLY_ACCEPTED"
++        or result.get("original_signature_crypto_verified_now") is not True
++        or any(result.get(k) is not False for k in
++               ("new_scope", "new_challenge", "D8_EFFECT_AUTHORIZED", "D4_ISSUED"))):
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_FALSE_AUTHORITY_OR_UNVERIFIED_EVIDENCE")
++    path = Path(str(result.get("handoff_path", "")))
++    if (not path.is_absolute() or not path.is_relative_to(base / "evidence")
++        or not path.is_file() or any(p.is_symlink() for p in (path, *path.parents))
++        or sha256_file(path) != result.get("handoff_sha256")):
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_HANDOFF_PATH_OR_HASH")
++    evidence = json.loads(path.read_text(encoding="utf-8"))
++    if (evidence.get("task_ref") != "task:D4_BROKER_ISSUANCE_TRUST_BINDING"
++        or evidence.get("formal_D8_received") is not False
++        or evidence.get("new_signature") is not False
++        or evidence.get("maximum_total_D4_receipts") != 1):
++        raise D8ReviewError(DECISION_HOLD, "HOLD_V11_HANDOFF_CONTRACT")
++    receipt = {
++        "schema_version": "W7TP-V11-EVIDENCE-INTAKE/1.0",
++        "state": "RECEIVED_AS_EVIDENCE_ONLY",
++        "evidence_intake_id": "evidence:v11-intake:" + result["handoff_sha256"],
++        "task_ref": evidence["task_ref"],
++        "source_handoff_ref": str(path),
++        "source_handoff_sha256": result["handoff_sha256"],
++        "original_signature_crypto_verified": True,
++        "formal_d8_request_received": False,
++        "formal_d8_request_id": None,
++        "D8_EFFECT_AUTHORIZED": False,
++        "D4_ISSUED": False,
++        "effect_execution_authorized": False,
++        "new_scope": False,
++        "new_challenge": False,
++        "unresolved": evidence["unresolved"],
++        "next_required_boundary": "EXISTING_TRUSTED_TOTAL_FIELD_ISSUER_DECISION",
++    }
++    destination.mkdir(parents=True, exist_ok=True, mode=0o700)
++    receipt_path = destination / "V11_EVIDENCE_INTAKE_RECEIPT.json"
++    raw = canonical_json_bytes(receipt) + b"\n"
++    # An exclusive hard-link publishes only a fully written receipt.
++    fd, temp_name = tempfile.mkstemp(prefix=".v11-intake-", dir=destination)
++    temp = Path(temp_name)
++    try:
++        with os.fdopen(fd, "wb") as handle:
++            handle.write(raw)
++            handle.flush()
++            os.fsync(handle.fileno())
++        try:
++            os.link(temp, receipt_path)
++        except FileExistsError:
++            if receipt_path.is_symlink() or receipt_path.read_bytes() != raw:
++                raise D8ReviewError(DECISION_HOLD, "HOLD_V11_INTAKE_REPLAY_CONTENT_DRIFT")
++    finally:
++        temp.unlink(missing_ok=True)
++    return receipt
++
++
+ def build_parser() -> argparse.ArgumentParser:
+     parser = argparse.ArgumentParser(description=__doc__)
+     subparsers = parser.add_subparsers(dest="command", required=True)
+@@ -1017,6 +1100,10 @@
+     once.add_argument("--repo-root", type=Path, default=Path("/formal"))
+     once.add_argument("--replay-root", type=Path)
+ 
++    evidence = subparsers.add_parser("receive-v11-evidence", help="receive original V11 evidence; never formal D8 admission")
++    evidence.add_argument("--repo-root", type=Path, required=True)
++    evidence.add_argument("--output-dir", type=Path, required=True)
++
+     status = subparsers.add_parser("status", help="read-only reviewer and intake status")
+     status.add_argument("--intake-dir", type=Path, required=True)
+     status.add_argument("--output-root", type=Path, required=True)
+@@ -1027,6 +1114,10 @@
+ def main(argv: list[str] | None = None) -> int:
+     args = build_parser().parse_args(argv)
+     try:
++        if args.command == "receive-v11-evidence":
++            receipt = receive_v11_evidence(repo_root=args.repo_root, output_dir=args.output_dir)
++            print(json.dumps(receipt, ensure_ascii=False, sort_keys=True))
++            return 0  # Evidence reception only; no ALLOW decision.
+         if args.command == "serve":
+             return run_serve(args)
+         if args.command == "review-once":

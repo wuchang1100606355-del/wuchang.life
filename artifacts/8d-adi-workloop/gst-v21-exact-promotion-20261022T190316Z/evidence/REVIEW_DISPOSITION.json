@@ -1,0 +1,56 @@
+{
+  "schema": "GST_NATIVE_REVIEW_DISPOSITION_CANDIDATE/1.0",
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "native_review_sha256": "1cf0307ea9a88e5b1e6a50c4b6407e8d8629b8dcc422e447fa56ed96f3b382cc",
+  "record_kind": "APPENDED_CANDIDATE_INTERPRETATION_NOT_A_NATIVE_REDECISION",
+  "original_request_and_spec_immutable": true,
+  "formal_effect_authorized": false,
+  "native_held_flag_overridden": false,
+  "corrections": [
+    {
+      "unit_ids": [
+        "W7TP-DC3C09BE2C0DB006",
+        "W7TP-18F7E7FD58A0B23C",
+        "W7TP-9195E92A2C515F5E"
+      ],
+      "native_rule": "LOCAL_AUTHORITY_BOUNDARY",
+      "candidate_clarification": "模型產物維持 IMAGINED_CANDIDATE。正式執行、正典升格與放行，只由 Founder 定義下的本地總場及其適用權威閘門核定；重構 C1 不產生執行效果。",
+      "existing_controls": [
+        "PROMOTION_REQUEST.json#authority_boundary",
+        "PROMOTION_REQUEST.json#requested_scope.c1_reconstruction_state"
+      ],
+      "disposition": "CLARIFICATION_RECORDED_FOR_FUTURE_REVIEW; NO_SOURCE_REWRITE"
+    },
+    {
+      "unit_ids": [
+        "W7TP-A58DB0D757845110"
+      ],
+      "native_rule": "SIX_BIT_TRUST_BOUNDARY",
+      "candidate_clarification": "6-bit 狀態碼僅作可信路由索引；發送端不得自行宣告 PASS。秘密類別、名稱與權重不在本次請求內容中。",
+      "disposition": "CLARIFICATION_RECORDED_FOR_FUTURE_REVIEW; NO_SOURCE_REWRITE"
+    }
+  ],
+  "held": [
+    {
+      "unit_id": "W7TP-B6CCF437DB268133",
+      "native_rule": "PERFORMANCE_MEASUREMENT",
+      "source_claim": "Tier 2 歷史報告之 15.1 ms",
+      "disposition": "REMAINS_HOLD_FOR_EVIDENCE",
+      "required": "將對應32-bit擴展原碼、封包／原件與原始執行紀錄作精確來源綁定。",
+      "current_allowed_treatment": "保留 Founder／歷史報告歸屬與來源待綁定註記，不列為本次新實測。",
+      "scope_of_hold": "Only an independently verified endorsement of this performance claim; it does not invalidate the recorded Founder definition."
+    }
+  ],
+  "formal_promotion_gap": {
+    "disposition": "NO_FORMAL_D8_EFFECT_DECISION",
+    "reason": "在已查入口中未確認本 GST 子規格正式身分的升格執行器與穩定落點。",
+    "candidate_review_is_not_formal_admission": true,
+    "signature_request_now": false,
+    "next": "沿既有總場建立本規格專用、綁定精確物件與前後像的升格受理與執行契約，再按實際原生入口取得當次裁決。"
+  },
+  "reporting_limits": [
+    "原規格內『本輪』文字指原登錄時的歷史觀測；本次只承接和核對其來源。",
+    "細粒度審查為確定性文字規則分類，不會獨立驗證引用證據的內容與效能，也不核發D8。",
+    "ACCEPT 數量不是技術正確率、準確率、升格完成度或運行效果。"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "findings": [
+    {
+      "evidence_ref": "evidence/NATIVE_EXACT_EFFECT_PROBE.json",
+      "id": "RT-AUTH",
+      "result": "Missing exact fresh Founder signature; no promotion or nonce consumption occurred.",
+      "severity": "HIGH",
+      "state": "CONTAINED_BY_NATIVE_HOLD"
+    },
+    {
+      "evidence_ref": "evidence/INDEPENDENT_VERIFICATION.json",
+      "id": "RT-PARTIAL",
+      "result": "Receipt-last, durable attempt/journal, finite operational paths and owned-only rollback tested; noncooperating writer and power-loss guarantees are not claimed.",
+      "severity": "HIGH",
+      "state": "ISOLATED_FUNCTIONALLY_VERIFIED"
+    },
+    {
+      "evidence_ref": "evidence/INITIAL_REMOTE_DELIVERY.json",
+      "id": "RT-SOURCE",
+      "result": "44 protected paths and all outside-candidate worktree statuses unchanged.",
+      "severity": "HIGH",
+      "state": "VERIFIED_UNCHANGED"
+    },
+    {
+      "evidence_ref": "evidence/HISTORICAL_RECEIPT_SCOPE.json",
+      "id": "RT-HISTORY",
+      "result": "Historical receipt postimage mismatch and Tier 2 evidence hold remain scoped; no replacement receipt fabricated.",
+      "severity": "MEDIUM",
+      "state": "PRESERVED"
+    }
+  ],
+  "formal_effect_authorized": false,
+  "observed_at": "2026-10-21T19:54:07.437854+00:00",
+  "open_high_findings_for_candidate_delivery": 0,
+  "schema": "GST_V21_RED_TEAM_POST_OPERATION/1.0",
+  "scope": "CANDIDATE_DELIVERY_ONLY",
+  "state": "PASS_WITH_EXPLICIT_FORMAL_AUTHORITY_HOLD"
+}

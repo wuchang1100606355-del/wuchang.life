@@ -1,0 +1,181 @@
+{
+  "checks": {
+    "candidate_lifecycle_only": true,
+    "embedded_spec_byte_exact": true,
+    "evidence_merits_limitation_declared": true,
+    "fine_grain_review_is_candidate_only": true,
+    "formal_effect_not_granted": true,
+    "formal_executor_target_not_invented": true,
+    "formal_write_set_empty": true,
+    "frozen_order_event_matches": true,
+    "manifest_files_all_valid": true,
+    "manifest_nonempty": true,
+    "parent_contract_binding_valid": true,
+    "request_bindings_match_observed_sources": true,
+    "request_hash_in_frozen_order": true,
+    "runtime_excluded": true,
+    "source_snapshot_head_consistent": true
+  },
+  "files_written_by_this_reviewer": [
+    "evidence/INDEPENDENT_PRE_DELIVERY_REVIEW.json"
+  ],
+  "findings": [
+    {
+      "finding": "Full specification contains historical wording 本輪; current evidence_scope explicitly limits those statements to the earlier observation. Native textual classifications must retain that temporal attribution.",
+      "id": "IR-1",
+      "severity": "LOW",
+      "status": "CONDITION_FOR_REPORTING"
+    },
+    {
+      "finding": "Formal executor and persistence target are unresolved. This review permits only bounded candidate delivery and native candidate review, not a formal promotion or a signature request.",
+      "id": "IR-2",
+      "scope": "FORMAL_PROMOTION_ONLY",
+      "severity": "MEDIUM",
+      "status": "ALREADY_ISOLATED"
+    },
+    {
+      "finding": "Before remote create, independently recheck exact source hashes, root/branch/HEAD, destination absence and symlink safety; only listed candidate files may be created. This review has not yet observed remote delivery.",
+      "id": "IR-3",
+      "severity": "LOW",
+      "status": "REQUIRES_DELIVERY_GUARD"
+    }
+  ],
+  "formal_d8_effect_authorization": false,
+  "input_manifest_sha256": "bcb1ca18b2c95b2eb26ec630a0b1090e77e3a6f3c7df31ff2df2a563e073ace0",
+  "manifest_checks": [
+    {
+      "exists": true,
+      "path": "PROMOTION_REQUEST.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/CURRENT_ANCHORS.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/GOVERNOR_PREFLIGHT.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/LIVE_SNAPSHOT.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/NATIVE_ROUTE_REVIEW.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/RED_TEAM_PRE_ACTIVATION.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/RED_TEAM_PRE_DEFINITION.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/REGISTRATION_SPEC_READBACK.txt",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/TASK_CONTEXT_GATE.txt",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "evidence/USER_INTENT.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "intent-envelope.json",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "exists": true,
+      "path": "order.md",
+      "sha256_match": true,
+      "size_match": true,
+      "symlink": false,
+      "within_run": true
+    }
+  ],
+  "manifest_file_count": 12,
+  "native_review_executed_by_this_reviewer": false,
+  "object_binding_checks": [
+    {
+      "hash_match": true,
+      "object": "codec",
+      "reference_in_observed_anchors": true,
+      "size_match": true
+    },
+    {
+      "hash_match": true,
+      "object": "registration_manifest",
+      "reference_in_observed_anchors": true,
+      "size_match": true
+    },
+    {
+      "hash_match": true,
+      "object": "registration_receipt",
+      "reference_in_observed_anchors": true,
+      "size_match": true
+    },
+    {
+      "hash_match": true,
+      "object": "specification",
+      "reference_in_observed_anchors": true,
+      "size_match": true
+    }
+  ],
+  "open_high_or_critical_for_candidate_delivery": 0,
+  "order_sha256": "63d64f2c54b5de8c5eea4d0dce596b89d053f5e7725dddfbe3964102eea9d4cc",
+  "remote_mutation_count": 0,
+  "remote_observation_in_this_phase": false,
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "reviewed_at": "2026-10-21T19:13:31.773160+00:00",
+  "reviewer": "/root/gst_request_verifier",
+  "schema": "INDEPENDENT_CANDIDATE_PRE_DELIVERY_REVIEW/1.0",
+  "scope": "LOCAL_EXACT_REQUEST_AND_FROZEN_INPUTS_ONLY",
+  "status": "PASS_BOUNDED_CANDIDATE_DELIVERY"
+}

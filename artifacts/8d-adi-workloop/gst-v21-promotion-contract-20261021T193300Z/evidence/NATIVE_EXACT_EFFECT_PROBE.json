@@ -1,0 +1,63 @@
+{
+  "schema": "GST_V21_EXACT_NATIVE_UNSIGNED_PROBE/1.0",
+  "observed_at": "2026-10-21T19:52:36.204524+00:00",
+  "contract_sha256": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "effect": "GST_V21_SPEC_PROMOTE:7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "preflight": {
+    "state": "PASS_CANDIDATE_PRECONDITIONS",
+    "phase": "PRE",
+    "contract_sha256": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+    "source_count": 43,
+    "target_checks": [
+      {
+        "path": "manifests/total_field/origin_cell_gst_v21_specification/SPECIFICATION.md",
+        "sha256": null,
+        "state": "MATCH"
+      },
+      {
+        "path": "manifests/total_field/origin_cell_gst_v21_specification/CANONICAL_RECORD.json",
+        "sha256": null,
+        "state": "MATCH"
+      },
+      {
+        "path": "configs/total_field/w7tp_capability_internalization_registry_v1.json",
+        "sha256": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0",
+        "state": "MATCH"
+      }
+    ],
+    "expected_coordinates": {
+      "node": "taiji01",
+      "root": "/home/taiji_admin/Taiji_Hub",
+      "branch": "codex/current-live-state-consolidation-20260915",
+      "head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5"
+    },
+    "actual_root": "/home/taiji_admin/Taiji_Hub",
+    "coordinate_authority_verified": false,
+    "receipt_exists": false,
+    "receipt_validated": false,
+    "effect_authorized": false,
+    "writes_performed": false,
+    "coordinates": {
+      "node": "taiji01",
+      "root": "/home/taiji_admin/Taiji_Hub",
+      "head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5",
+      "branch": "codex/current-live-state-consolidation-20260915",
+      "git_status_sha256": "538f464eb2cf1519e7fdb931d7955b2a828efe69f3cc1da455798423e2be00f0",
+      "authority_preimage_sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3"
+    },
+    "effect": "GST_V21_SPEC_PROMOTE:7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+    "formal_effect_authorized": false,
+    "simulation": false,
+    "exclusive_change_window_required_for_apply": true
+  },
+  "native_result": {
+    "state": "HOLD_FOUNDER_FRESH_SIGNATURE_REQUIRED",
+    "authority_verified": false,
+    "effect_authorized": false,
+    "receipt_sha256": null
+  },
+  "nonce_consumed": false,
+  "audit_directories_created": false,
+  "formal_effect_authorized": false,
+  "writes_performed": false
+}

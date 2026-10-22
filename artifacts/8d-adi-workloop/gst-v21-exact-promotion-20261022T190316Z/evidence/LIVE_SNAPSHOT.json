@@ -1,0 +1,98 @@
+{
+  "canonical": {
+    "authority": {
+      "allowed_effects": [
+        "AUTHORIZE_ADAPTIVE_NETWORK_RUNTIME_OBSERVER",
+        "AUTHORIZE_FORMAL_SUCCESSOR_REBIND_REVIEW",
+        "AUTHORIZE_GST_V23_RUNTIME_CONSUMER_FORMAL_DELIVERY",
+        "AUTHORIZE_RECONSTRUCT_ISOLATED_REVIEW_ONLY",
+        "AUTHORIZE_SINGLE_USE_D4_BROKER_TRUSTED_ISSUER_AND_RECEIPT_FOR_PINNED_STATIC_REVIEW",
+        "AUTHORIZE_W7TP_V23_GLOBAL_CANONICAL_ACTIVATION",
+        "BIND_EXISTING_IPHONE_WEBAUTHN_CREDENTIAL_TO_FOUNDER_IDENTITY_FOR_D4_ONCE"
+      ],
+      "contract_state": "ACTIVE_FORMAL",
+      "exists": true,
+      "formal_decision_authority": true,
+      "formal_seal_authority": true,
+      "git_status": "M runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "path": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "prohibited_effects": [],
+      "sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+      "state": "ACTIVE_TOTAL_FIELD_AUTHORITY",
+      "tracked": true
+    },
+    "contract": {
+      "canonical_id": "W7TP_8D_ADI_V2_3",
+      "exists": true,
+      "git_status": "CLEAN",
+      "path": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+      "sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+      "tracked": true,
+      "version": "2.3"
+    },
+    "field": {
+      "activation_receipt_ref": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/field_completion_recovery_20261004T220131Z/G4_FIELD_COMPLETION_RECEIPT.json",
+      "canonical_id": "W7TP_8D_ADI_V2_3",
+      "dimensions": [
+        "Intent",
+        "State",
+        "Coordinate",
+        "Evidence",
+        "Execution/Policy",
+        "Generative State Transmission",
+        "Risk/Isolation",
+        "Envelope/Authority"
+      ],
+      "exists": true,
+      "git_status": "M runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "path": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "sha256": "0bfae0787c2c85e5e7397d841ae4c3ec7c14a5ccfeed13661f6280d5114bed27",
+      "state": "ACTIVE_TRUE8D_V23",
+      "tracked": true,
+      "version": "2.3"
+    },
+    "pointer": {
+      "canonical_id": "W7TP_8D_ADI_V2_3",
+      "canonical_path": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+      "canonical_sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+      "exists": true,
+      "git_status": "CLEAN",
+      "path": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+      "state": "ACTIVE_CANONICAL",
+      "tracked": true,
+      "version": "2.3"
+    },
+    "receipt": {
+      "authority_postimage_sha256": "990f06c9fc30c4a69b90106e64fd0bc42ce7654e045f714cd0d6bb2e22c49f0a",
+      "completion_mode": "CURRENT_FIELD_AFTER_ACTIVATION",
+      "exists": true,
+      "field_postimage_sha256": "3faa27ef6833309cdddd96e484714d9f4b3300fb68f2d059de3baebfdde899b0",
+      "git_status": "CLEAN",
+      "loaded_canonical_id": "W7TP_8D_ADI_V2_3",
+      "loaded_version": "2.3",
+      "path": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/field_completion_recovery_20261004T220131Z/G4_FIELD_COMPLETION_RECEIPT.json",
+      "pointer_postimage_sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+      "reference_exists": true,
+      "referenced_by_active_field": true,
+      "sha256": "88e3fae6887bd750d2a0f2ab140ffc5bb3dc683749ad1ad382d102f2f73ec6e6",
+      "state": "ACTIVATED",
+      "tracked": true
+    }
+  },
+  "observation": {
+    "branch": "codex/current-live-state-consolidation-20260915",
+    "core_paths_clean": false,
+    "dirty_count": 324,
+    "head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5",
+    "live_verified": true,
+    "observed_at": "2026-10-21T19:04:46.777644Z",
+    "root": "/home/taiji_admin/Taiji_Hub",
+    "source_node": "taiji01"
+  },
+  "request": {
+    "effect": "PREPARE_EXACT_GST_V21_PROMOTION_REQUEST",
+    "mode": "CANDIDATE_BUILD"
+  },
+  "schema_version": "w7tp-8d-adi-v23-verification/1.0"
+}

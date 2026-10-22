@@ -1,0 +1,115 @@
+{
+  "schema": "GST_CANDIDATE_CLOSEOUT_DELIVERY_RECEIPT/1.0",
+  "observed_at": "2026-10-21T19:22:59.553097+00:00",
+  "run_id": "gst-v21-exact-promotion-20261022T190316Z",
+  "node": "taiji01",
+  "root": "/home/taiji_admin/Taiji_Hub",
+  "run_path": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z",
+  "status": "PASS_CANDIDATE_CLOSEOUT_WRITTEN_AND_READ_BACK",
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "final_manifest_sha256": "011a176bd681a84b8de092a052660eedaba43b0251d826a9c32ec1b253d08879",
+  "updated_or_created": [
+    {
+      "path": "closeout.md",
+      "mode": "update_progress",
+      "sha256": "220f5e0329cb41f4021d79b84f53593c034d5649220153e2cd4ae06e35668786",
+      "bytes": 4407
+    },
+    {
+      "path": "handoff.json",
+      "mode": "update_progress",
+      "sha256": "c73bd8892d8c7ac6ea66b472adfa5b09447857afd4873370d74bc6fbe3caf082",
+      "bytes": 1996
+    },
+    {
+      "path": "decisions.jsonl",
+      "mode": "append",
+      "sha256": "f96456dab24e6b71c8918b50dc5e9855e684a6103ce6c3a8b88ee6d0448a5175",
+      "bytes": 4499
+    },
+    {
+      "path": "budget.jsonl",
+      "mode": "append",
+      "sha256": "4b320967aa37844c79eaf23c2d6b574fda5f13a939a8eee0a03d78437bd19945",
+      "bytes": 493
+    },
+    {
+      "path": "README.txt",
+      "mode": "create",
+      "sha256": "aa8437a1636352d17e4942c71de522dbe3221ab8a596d180099bde4c0e120da8",
+      "bytes": 1997
+    },
+    {
+      "path": "FINAL_MANIFEST.json",
+      "mode": "create",
+      "sha256": "011a176bd681a84b8de092a052660eedaba43b0251d826a9c32ec1b253d08879",
+      "bytes": 5224
+    },
+    {
+      "path": "evidence/WORKLOOP_PROGRESS_PREIMAGES.json",
+      "mode": "create",
+      "sha256": "8326b5bdb6e87159c682224fb7947ac0ad29d2c215946e8d65a23c81d15ba415",
+      "bytes": 5532
+    },
+    {
+      "path": "evidence/WORKLOOP_VALIDATION.json",
+      "mode": "create",
+      "sha256": "9fbb800da9abfe6b54d288d6a543677f162198c7c6a0dab9d0cd171858728cb8",
+      "bytes": 437
+    },
+    {
+      "path": "evidence/REVIEW_DISPOSITION.json",
+      "mode": "create",
+      "sha256": "4bbcb8603e232f69c6caa942bd373d56b2c437564f569776890309c79cc694aa",
+      "bytes": 2916
+    },
+    {
+      "path": "evidence/INDEPENDENT_VERIFICATION.json",
+      "mode": "create",
+      "sha256": "23494c3d7b81f962873adb4a99ad4487b923130327464f2c32942609ac4387bf",
+      "bytes": 25101
+    }
+  ],
+  "all_delivered_file_sha256": {
+    "FINAL_MANIFEST.json": "011a176bd681a84b8de092a052660eedaba43b0251d826a9c32ec1b253d08879",
+    "INPUT_MANIFEST.json": "bcb1ca18b2c95b2eb26ec630a0b1090e77e3a6f3c7df31ff2df2a563e073ace0",
+    "PROMOTION_REQUEST.json": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+    "README.txt": "aa8437a1636352d17e4942c71de522dbe3221ab8a596d180099bde4c0e120da8",
+    "budget.jsonl": "4b320967aa37844c79eaf23c2d6b574fda5f13a939a8eee0a03d78437bd19945",
+    "closeout.md": "220f5e0329cb41f4021d79b84f53593c034d5649220153e2cd4ae06e35668786",
+    "decisions.jsonl": "f96456dab24e6b71c8918b50dc5e9855e684a6103ce6c3a8b88ee6d0448a5175",
+    "evidence/CANDIDATE_DELIVERY_RECEIPT.json": "259c65f0a62a7571b0af5bab0240b77cced16f76de1c54ccd3d6873b0c74d059",
+    "evidence/CURRENT_ANCHORS.json": "70a45e70b75c318d619441b2fb2758936cd6d8cc78c86350353269cd163ee3d3",
+    "evidence/GOVERNOR_PREFLIGHT.json": "59e5cf1720501cf15ec20939637481495f2cf37af656d0a5855766e8eeb4cf89",
+    "evidence/INDEPENDENT_PRE_DELIVERY_REVIEW.json": "caf726edb7010cb6b8a23dd6b3615c887a4bf06d258dc621cc2c065f26bfc6a4",
+    "evidence/INDEPENDENT_VERIFICATION.json": "23494c3d7b81f962873adb4a99ad4487b923130327464f2c32942609ac4387bf",
+    "evidence/LIVE_SNAPSHOT.json": "f07fafed173872d7154e5200aad9c67045a47c126ba3cce654fba51964962bb3",
+    "evidence/NATIVE_CANDIDATE_REVIEW.json": "1cf0307ea9a88e5b1e6a50c4b6407e8d8629b8dcc422e447fa56ed96f3b382cc",
+    "evidence/NATIVE_REVIEW_NON_ACCEPTED_UNITS.json": "cd474ab2032d20f305cc2d1bf1d9f7177b17c937354aac5969ba42c31e98cca4",
+    "evidence/NATIVE_REVIEW_UNITS.json": "b4d68bb8bff508e5a12a8f76a8f9fa8e623c9fd0365cffd352963efbc0d07953",
+    "evidence/NATIVE_ROUTE_REVIEW.json": "6808b91b5714e0d37a949627b72b1b72bef178acca62bdce0e7231c8e17b3cdb",
+    "evidence/POST_OPERATION_VERIFICATION.json": "e335bb1dd0946222483c83acc630840330933f3df3c05089cdf9a041bbc31c07",
+    "evidence/RED_TEAM_POST_OPERATION.json": "45b953ad3ce8ce7382276162cef7be08b6a523d1be42c54d0edc543e3a68ee2a",
+    "evidence/RED_TEAM_PRE_ACTIVATION.json": "53744b6cd8b8fb388ca167eaa8b0fb7bb348b95cb545e6c9de10c931a5fc3042",
+    "evidence/RED_TEAM_PRE_DEFINITION.json": "74ac159abb14e02f2f8b639882b1e25b3da8568d52d40fe146600f8fbecc271f",
+    "evidence/REGISTRATION_SPEC_READBACK.txt": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+    "evidence/REVIEW_DISPOSITION.json": "4bbcb8603e232f69c6caa942bd373d56b2c437564f569776890309c79cc694aa",
+    "evidence/TASK_CONTEXT_GATE.txt": "31769842fde5b7fe3ec695f243a084f2d9dd46369e157353b2bcedd900e1c436",
+    "evidence/USER_INTENT.json": "9c7f68a7e6f93bf7aa767525fbaa59b39716982bbbfd77e3b3f281863ce3fb7d",
+    "evidence/WORKLOOP_PROGRESS_PREIMAGES.json": "8326b5bdb6e87159c682224fb7947ac0ad29d2c215946e8d65a23c81d15ba415",
+    "evidence/WORKLOOP_VALIDATION.json": "9fbb800da9abfe6b54d288d6a543677f162198c7c6a0dab9d0cd171858728cb8",
+    "handoff.json": "c73bd8892d8c7ac6ea66b472adfa5b09447857afd4873370d74bc6fbe3caf082",
+    "intent-envelope.json": "88f16600aef84a9c96095f2de3a2a4b1d181852276b4544b34d9681d4b60532e",
+    "order.md": "63d64f2c54b5de8c5eea4d0dce596b89d053f5e7725dddfbe3964102eea9d4cc"
+  },
+  "protected_source_count": 35,
+  "protected_source_hashes_unchanged": true,
+  "head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5",
+  "branch": "codex/current-live-state-consolidation-20260915",
+  "frozen_request_changed": false,
+  "native_review_reexecuted": false,
+  "formal_effect_authorized": false,
+  "canonical_promotion_performed": false,
+  "runtime_activation_performed": false,
+  "scope_limit": "Only this run finalization files and bounded file/source readbacks; no universal external-service assertion."
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+  "run_id": "v11-verification-restart-20261019T0556Z",
+  "lifecycle_state": "DRAFT_LOCAL",
+  "created_at": "2026-10-19T05:54:34+00:00",
+  "maximum_effect_class": "E2",
+  "identity_and_seat": {
+    "natural_person_ref": "UNKNOWN_UNVERIFIED",
+    "member_ref": "UNKNOWN_UNVERIFIED",
+    "xiaoj_identity_ref": "UNKNOWN_UNVERIFIED",
+    "role_id": "UNKNOWN_UNVERIFIED",
+    "seat_id": "UNKNOWN_UNVERIFIED",
+    "access_profile_ref": "UNKNOWN_UNVERIFIED",
+    "member_boundary": "UNKNOWN_UNVERIFIED"
+  },
+  "product_output_contract": {
+    "title": "V11驗證程序重啟",
+    "one_sentence": "依目前使用者明示，重用既有9122與iPhone公鑰開啟新驗證請求，保留原V11證據；不授予D8或D4",
+    "acceptance_ids": [
+      "AC-1"
+    ],
+    "non_goals": [],
+    "budget_fuse": {
+      "limit": 2,
+      "unit": "attempt"
+    }
+  },
+  "d1_d8": {
+    "D1": {
+      "name": "INTENT",
+      "state": "KNOWN",
+      "value": "依目前使用者明示，重用既有9122與iPhone公鑰開啟新驗證請求，保留原V11證據；不授予D8或D4",
+      "evidence_label": "DEFINITION",
+      "observation_status": "DECLARED_ONLY"
+    },
+    "D2": {
+      "name": "STATE",
+      "state": "UNKNOWN",
+      "value": "CURRENT_AND_TARGET_STATE_REQUIRE_EVIDENCE"
+    },
+    "D3": {
+      "name": "COORDINATE",
+      "state": "KNOWN",
+      "value": {
+        "run_path": "artifacts/8d-adi-workloop/v11-verification-restart-20261019T0556Z",
+        "logical_time": "2026-10-19T05:54:34+00:00",
+        "adi_resolution": "RANGE_UNRESOLVED"
+      }
+    },
+    "D4": {
+      "name": "EVIDENCE",
+      "state": "UNKNOWN",
+      "value": "EVIDENCE_NOT_YET_ATTACHED"
+    },
+    "D5": {
+      "name": "EXECUTION_POLICY",
+      "state": "KNOWN",
+      "value": {
+        "effect_class": "E2",
+        "action": "CANDIDATE_ARTIFACTS_ONLY",
+        "rollback": "REMOVE_ONLY_THIS_UNPROMOTED_RUN_DIRECTORY",
+        "forbidden": [
+          "ADI_WRITE",
+          "CANONICAL_MUTATION",
+          "DB_WRITE",
+          "DEPLOY",
+          "POINTER_MUTATION",
+          "ROLE_OR_SEAT_CHANGE"
+        ]
+      }
+    },
+    "D6": {
+      "name": "GENERATIVE_TRANSMISSION",
+      "state": "NOT_REQUIRED",
+      "value": {
+        "claimed": false,
+        "carrier_is_not_w7tp": true,
+        "technical_definition": "NOT_CLAIMED"
+      }
+    },
+    "D7": {
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "state": "KNOWN",
+      "value": {
+        "open_findings": [],
+        "stop_on_high_or_critical": true
+      }
+    },
+    "D8": {
+      "name": "ENVELOPE_AUTHORITY",
+      "state": "KNOWN",
+      "value": {
+        "candidate_only": true,
+        "total_field_receiver": "TOTAL_FIELD_WORKLOOP_RECEIVER",
+        "total_field_decision": "NOT_REVIEWED",
+        "canonical_mutation": false
+      }
+    }
+  },
+  "red_team": {
+    "RED_TEAM_PRE_DEFINITION": "NOT_RUN",
+    "RED_TEAM_PRE_ACTIVATION": "NOT_RUN",
+    "RED_TEAM_POST_OPERATION": "NOT_RUN"
+  },
+  "source_hashes": {}
+}

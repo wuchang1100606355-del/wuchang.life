@@ -1,0 +1,539 @@
+{
+  "artifact_sha256": {
+    "PROMOTION_REQUEST.json": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+    "evidence/NATIVE_CANDIDATE_REVIEW.json": "1cf0307ea9a88e5b1e6a50c4b6407e8d8629b8dcc422e447fa56ed96f3b382cc",
+    "evidence/NATIVE_REVIEW_UNITS.json": "b4d68bb8bff508e5a12a8f76a8f9fa8e623c9fd0365cffd352963efbc0d07953",
+    "evidence/POST_OPERATION_VERIFICATION.json": "e335bb1dd0946222483c83acc630840330933f3df3c05089cdf9a041bbc31c07"
+  },
+  "branch": "codex/current-live-state-consolidation-20260915",
+  "checks": {
+    "all_frozen_input_files_match": true,
+    "all_protected_source_hashes_still_match": true,
+    "candidate_only_authority_boundary": true,
+    "candidate_parent_chain_not_symlink": true,
+    "embedded_spec_matches_current_original": true,
+    "expected_delivery_hashes_match": true,
+    "formal_target_and_executor_not_invented": true,
+    "frozen_order_event_matches": true,
+    "git_status_outside_run_matches_observed_baseline": true,
+    "held_flag_matches_units": true,
+    "native_callee_source_still_bound": true,
+    "native_entrypoint_source_still_bound": true,
+    "native_review_bound_to_exact_request": true,
+    "no_hidden_reject_or_quarantine": true,
+    "review_units_nonzero": true,
+    "runtime_excluded_in_request": true,
+    "target_coordinate_matches": true,
+    "unit_counts_recompute_matches": true
+  },
+  "codec_reconstruction_executed": false,
+  "evidence_label": "FACT",
+  "evidence_limits": [
+    "This independent check establishes delivered bytes, referenced source bindings, counts and explicit candidate-only fields.",
+    "Unchanged 35 protected hashes and unchanged Git status outside the run constrain observed side effects; this is not a proof of absence of every possible external database or service event.",
+    "The native text reviewer does not adjudicate the merit of the referenced performance evidence."
+  ],
+  "existing_runtime_status_from_producer_evidence": {
+    "binding_id": "W7TP_GST_V23_RUNTIME_CONSUMER_BINDING_CANDIDATE_V1",
+    "d8_closure": "CLOSED_FOR_EXACT_GST_V23_RUNTIME_CONSUMER_BINDING",
+    "formal_delivery": true,
+    "founder_baseline": "W7TP_8D_ADI_V2.3",
+    "origin_cell_semantics": "SOURCE_GENERATED_RULE_BODY_CLEAN_RECEIVER",
+    "runtime_activated": true,
+    "semantic_purity_guard": "ACTIVE_NO_DIFF_NO_COMPRESSION_NO_PATCH",
+    "service_ready": true,
+    "state": "ACTIVE_GST_V23_USER_DELIVERY",
+    "total_field_decision": "PASS"
+  },
+  "existing_runtime_status_reexecuted_by_this_reviewer": false,
+  "formal_effect_authority_granted": false,
+  "formal_resolver_called": false,
+  "frozen_input_manifest_checks": [
+    {
+      "matches": true,
+      "path": "PROMOTION_REQUEST.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/CURRENT_ANCHORS.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/GOVERNOR_PREFLIGHT.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/LIVE_SNAPSHOT.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/NATIVE_ROUTE_REVIEW.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/RED_TEAM_PRE_ACTIVATION.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/RED_TEAM_PRE_DEFINITION.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/REGISTRATION_SPEC_READBACK.txt",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/TASK_CONTEXT_GATE.txt",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "evidence/USER_INTENT.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "intent-envelope.json",
+      "symlink": false,
+      "within_run": true
+    },
+    {
+      "matches": true,
+      "path": "order.md",
+      "symlink": false,
+      "within_run": true
+    }
+  ],
+  "head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5",
+  "next_action_for_parent": "Preserve this verification with the candidate package; report the one held historical claim and unresolved formal promotion contract without granting authority.",
+  "node": "taiji01",
+  "non_accepted_units": [
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "雲端輸出僅具 Candidate Authority；正式執行、正典升格與放行只由本地總場裁決。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "LOCAL_AUTHORITY_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "CANDIDATE_ONLY",
+      "parent_context": "requested_scope > c1_reconstruction_state",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "CANDIDATE_ONLY",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.requested_scope.c1_reconstruction_state",
+      "source_section": "requested_scope",
+      "unit_id": "W7TP-DC3C09BE2C0DB006"
+    },
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "",
+      "decision": "HOLD_FOR_EVIDENCE",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [
+        "Reproducible primary evidence for PERFORMANCE_MEASUREMENT."
+      ],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [],
+        "evidence": [
+          "PERFORMANCE_MEASUREMENT"
+        ],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "| Tier 2 | 25,165,072 | 590／99 | 保留 Founder 報告的 hash 與 15.1 ms；32-bit 原碼、美國原件與原始執行紀錄仍待綁定，未自行標為 OBSERVED_VERIFIED |",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "| Tier 2 | 25,165,072 | 590／99 | 保留 Founder 報告的 hash 與 15.1 ms；32-bit 原碼、美國原件與原始執行紀錄仍待綁定，未自行標為 OBSERVED_VERIFIED |",
+      "reason": "The unit contains a performance, compliance, legal-effect, or patentability claim that needs evidence.",
+      "semantic_topic": "general_technical_candidate",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "三級距實證與證據成熟度",
+      "unit_id": "W7TP-B6CCF437DB268133"
+    },
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "雲端輸出僅具 Candidate Authority；正式執行、正典升格與放行只由本地總場裁決。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "LOCAL_AUTHORITY_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "**C1 = CANDIDATE_ONLY；Reconstructed != Executed。** 測例文字中即使含 `PASS_EFFECT_VERIFIED`，也只是資料內容，不能證明實際 Odoo 交易、核銷或部署已獲權威。",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "**C1 = CANDIDATE_ONLY；Reconstructed != Executed。** 測例文字中即使含 `PASS_EFFECT_VERIFIED`，也只是資料內容，不能證明實際 Odoo 交易、核銷或部署已獲權威。",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "既有總場登錄、回執與執行紅線",
+      "unit_id": "W7TP-18F7E7FD58A0B23C"
+    },
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "雲端輸出僅具 Candidate Authority；正式執行、正典升格與放行只由本地總場裁決。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "LOCAL_AUTHORITY_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "| D5 執行 | 本輪僅規格、引用及證據登錄；重構 C1 保持 CANDIDATE_ONLY |",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "| D5 執行 | 本輪僅規格、引用及證據登錄；重構 C1 保持 CANDIDATE_ONLY |",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "登錄目的與母技術關係",
+      "unit_id": "W7TP-9195E92A2C515F5E"
+    },
+    {
+      "claimed_status": "CANDIDATE_PROPOSAL",
+      "correction_text": "6-bit 狀態碼僅作可信路由索引，發送端不得自行宣告 PASS。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "SIX_BIT_TRUST_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "本地 LLM（大型語言模型）、雲端 Gemini／GCP、分散式算力節點可產生或處理候選。能力與算力分散不移交本地正式放行權威。Merchant OS 的 POS、影音、動作與營運應用可使用這個 D6 子能力；重構資料仍須經本地 D8 與既有證據／業務閘門。`Reconstructed != Executed`。本文件不公開 6 位元路由之 64 類秘密命名／權重矩陣；該狀態分類與 64-bit 串流計數是不同的技術欄位。",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "本地 LLM（大型語言模型）、雲端 Gemini／GCP、分散式算力節點可產生或處理候選。能力與算力分散不移交本地正式放行權威。Merchant OS 的 POS、影音、動作與營運應用可使用這個 D6 子能力；重構資料仍須經本地 D8 與既有證據／業務閘門。`Reconstructed != Executed`。本文件不公開 6 位元路由之 64 類秘密命名／權重矩陣；該狀態分類與 64-bit 串流計數是不同的技術欄位。",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "登錄目的與母技術關係",
+      "unit_id": "W7TP-A58DB0D757845110"
+    }
+  ],
+  "observation_status": "OBSERVED_AUTHORIZED_API",
+  "observed_at": "2026-10-21T19:16:29.914106+00:00",
+  "order_sha256": "63d64f2c54b5de8c5eea4d0dce596b89d053f5e7725dddfbe3964102eea9d4cc",
+  "protected_sources": [
+    {
+      "expected_sha256": "e9eab295d331334a5911a52ce3f269958fea2fc5e3d363d7107b950adf1e92fd",
+      "matches": true,
+      "path": "AGENTS.md",
+      "sha256": "e9eab295d331334a5911a52ce3f269958fea2fc5e3d363d7107b950adf1e92fd",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "88e3fae6887bd750d2a0f2ab140ffc5bb3dc683749ad1ad382d102f2f73ec6e6",
+      "matches": true,
+      "path": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/field_completion_recovery_20261004T220131Z/G4_FIELD_COMPLETION_RECEIPT.json",
+      "sha256": "88e3fae6887bd750d2a0f2ab140ffc5bb3dc683749ad1ad382d102f2f73ec6e6",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0",
+      "matches": true,
+      "path": "configs/total_field/w7tp_capability_internalization_registry_v1.json",
+      "sha256": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+      "matches": true,
+      "path": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+      "sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+      "matches": true,
+      "path": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+      "sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "0bfae0787c2c85e5e7397d841ae4c3ec7c14a5ccfeed13661f6280d5114bed27",
+      "matches": true,
+      "path": "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json",
+      "sha256": "0bfae0787c2c85e5e7397d841ae4c3ec7c14a5ccfeed13661f6280d5114bed27",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "bc31c96d218fa3994abeba8de02be57eeeb7c91a0955a9a09fe9b11fff86dde1",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/CANONICAL_PROMOTION_RECEIPT.json",
+      "sha256": "bc31c96d218fa3994abeba8de02be57eeeb7c91a0955a9a09fe9b11fff86dde1",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "8c44a5704cabec721024f5ca1455b954b3ea8158dbafd03194f3305d1f4f3148",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/CONTENT_MANIFEST.json",
+      "sha256": "8c44a5704cabec721024f5ca1455b954b3ea8158dbafd03194f3305d1f4f3148",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/ORIGIN_CELL_GST_V21_CANONICAL_SPEC.md",
+      "sha256": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "9405f33ce0c225b4465d0daf83cbc0748d38ab0b883d8a2d63c2ec9d3b514521",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/BRAZIL_HISTORICAL_SCOPE_RESOLUTION.json",
+      "sha256": "9405f33ce0c225b4465d0daf83cbc0748d38ab0b883d8a2d63c2ec9d3b514521",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "99cb0c50729b98694c85480a0cfbfba43d07da466c659f146a96b84062621e16",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/CANONICAL_REGISTRATION_ROUTE_REVIEW.json",
+      "sha256": "99cb0c50729b98694c85480a0cfbfba43d07da466c659f146a96b84062621e16",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "2773afcfe5df0910927269f632e144b3900b2278883f7bf83b0cbd05f5f7a3dd",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/FOUNDER_REQUEST_STRUCTURED.json",
+      "sha256": "2773afcfe5df0910927269f632e144b3900b2278883f7bf83b0cbd05f5f7a3dd",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "bec66b5b550fc36dfa86507cb3250dbec90cad0f3eb234fc2d3df9fb8c2cb8a6",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/GEMINI_RELEVANT_HISTORY_EXCERPTS.json",
+      "sha256": "bec66b5b550fc36dfa86507cb3250dbec90cad0f3eb234fc2d3df9fb8c2cb8a6",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "5a5712518bb19ed9c6006eda1cc1c97f098836a893d2ff0a44a4e83686938e0c",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/MSI_US_RETRIEVAL_STATUS.json",
+      "sha256": "5a5712518bb19ed9c6006eda1cc1c97f098836a893d2ff0a44a4e83686938e0c",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "9aeabdd8252d7d04ffb3ce6a40edd51350e6758f61d1522d54913af9c08290d9",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/OPCODE_VERSION_RECONCILIATION.md",
+      "sha256": "9aeabdd8252d7d04ffb3ce6a40edd51350e6758f61d1522d54913af9c08290d9",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "2298f4b3aeffdc13b98688659ca09c90075ce3684a060b05acb9c7306df9eeb8",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/PRE_ACTIVATION_REVIEW.json",
+      "sha256": "2298f4b3aeffdc13b98688659ca09c90075ce3684a060b05acb9c7306df9eeb8",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "e9cb6f1c7bebee47a2d15a4fe10ff657f4038b46abc86aa2cdc89d04d8858768",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/SCOPE_RESOLUTION.json",
+      "sha256": "e9cb6f1c7bebee47a2d15a4fe10ff657f4038b46abc86aa2cdc89d04d8858768",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "721818d48f6586ee47063b6d890835e08b6cb34b34a3a73925a31f146dfe195d",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/SCREENSHOT_ATTACHMENT_REFERENCE.json",
+      "sha256": "721818d48f6586ee47063b6d890835e08b6cb34b34a3a73925a31f146dfe195d",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "774f2d94178f4496b157bb59fc5da5b461581d7ce925e4dafbc3b005aa58aebe",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/THREE_TIER_EVIDENCE_MATRIX.json",
+      "sha256": "774f2d94178f4496b157bb59fc5da5b461581d7ce925e4dafbc3b005aa58aebe",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "540677d4536e374bb7c36afdb771ea050178bb7bdf2bd67c4866f11f4276ea44",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/TIER1_ANCHOR_VERIFICATION.json",
+      "sha256": "540677d4536e374bb7c36afdb771ea050178bb7bdf2bd67c4866f11f4276ea44",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "3e5a62b0fd07efb18e11f7ab5d718ae9cd5a1610f633ac2f698e1f3d763c34dd",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_FRESH_NATIVE_HASH_OBSERVATION.json",
+      "sha256": "3e5a62b0fd07efb18e11f7ab5d718ae9cd5a1610f633ac2f698e1f3d763c34dd",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "a05c27219e33aef9856579d481c246a3293b4f0e11e692ce7804dc5270d4a85f",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_SOURCE_CAPTURE_LIMIT.json",
+      "sha256": "a05c27219e33aef9856579d481c246a3293b4f0e11e692ce7804dc5270d4a85f",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "f07e91954e24288523854e87c9275f254ab66d9efc0c3c8be7f929c91b446a83",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_SOURCE_RETRY_BLOCKED.json",
+      "sha256": "f07e91954e24288523854e87c9275f254ab66d9efc0c3c8be7f929c91b446a83",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "520b17e83c3f469aaf9135585a42dbf1cdea71d679c5ba055ac48534d7dbd316",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/canonical_exact_references.json",
+      "sha256": "520b17e83c3f469aaf9135585a42dbf1cdea71d679c5ba055ac48534d7dbd316",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "00868a2f22d5d5365ca382bd518c4e9955584c203819691d9cc93de96e355f6c",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/taiji01_anchor_observation.json",
+      "sha256": "00868a2f22d5d5365ca382bd518c4e9955584c203819691d9cc93de96e355f6c",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "81db9b802f56d9a3500083963f66f09c66f1c02121ea33d6dc5d7f6248251772",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/task_context_gate.json",
+      "sha256": "81db9b802f56d9a3500083963f66f09c66f1c02121ea33d6dc5d7f6248251772",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+      "matches": true,
+      "path": "runtime/total_field/conversation_intake/universal_origin_cell_codec_v2.py",
+      "sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "4282a1f74bf1ae931c018ac76654b87030ff941e1cdf7015b82b350029b12c96",
+      "matches": true,
+      "path": "runtime/total_field/gst_v23_runtime_consumer/ACTIVE_BINDING.json",
+      "sha256": "4282a1f74bf1ae931c018ac76654b87030ff941e1cdf7015b82b350029b12c96",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+      "matches": true,
+      "path": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+      "sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "275af0daba257ba278324e64c18551af7051ebc5e1a7da98c3bf8779d8cbc571",
+      "matches": true,
+      "path": "services/w7tp_d4_adi_v2_bridge.py",
+      "sha256": "275af0daba257ba278324e64c18551af7051ebc5e1a7da98c3bf8779d8cbc571",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "adaeb8300d731afef803d766c51c4c7881ac9b343386820e32320c95bf6bc385",
+      "matches": true,
+      "path": "services/w7tp_evidence_ledger.py",
+      "sha256": "adaeb8300d731afef803d766c51c4c7881ac9b343386820e32320c95bf6bc385",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "78f08af6f658c61a41adc1238ec1700062b5a902d08db575f46fb5f76d787367",
+      "matches": true,
+      "path": "services/w7tp_gst_v23_runtime.py",
+      "sha256": "78f08af6f658c61a41adc1238ec1700062b5a902d08db575f46fb5f76d787367",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "e01a31d99dfeff9809de1e9324fc2aa42ad22499d824217231d8647db30fa0bb",
+      "matches": true,
+      "path": "tools/total_field/w7tp_candidate_fine_grain_reviewer.py",
+      "sha256": "e01a31d99dfeff9809de1e9324fc2aa42ad22499d824217231d8647db30fa0bb",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "31252bf7560817858bb3ea086b253615c278b04dfeb1bcabe2a53ac18a8a8b89",
+      "matches": true,
+      "path": "tools/total_field/w7tp_d8_reviewer_entrypoint.py",
+      "sha256": "31252bf7560817858bb3ea086b253615c278b04dfeb1bcabe2a53ac18a8a8b89",
+      "symlink": false
+    },
+    {
+      "expected_sha256": "8ff3b1a37ce2f2ffa9f79b70faa8fbd60de014858346f9f7dbddcf6419404555",
+      "matches": true,
+      "path": "tools/total_field_authority_resolver.py",
+      "sha256": "8ff3b1a37ce2f2ffa9f79b70faa8fbd60de014858346f9f7dbddcf6419404555",
+      "symlink": false
+    }
+  ],
+  "recomputed_counts": {
+    "ACCEPT": 235,
+    "ACCEPT_WITH_CORRECTION": 4,
+    "HOLD_FOR_EVIDENCE": 1,
+    "REJECT_OVERCLAIM": 0,
+    "REJECT_TECHNICAL_DRIFT": 0,
+    "TRADE_SECRET_QUARANTINE": 0
+  },
+  "remote_mutation_count": 0,
+  "remote_run": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z",
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "review_function_reexecuted": false,
+  "review_unit_count": 240,
+  "reviewer": "/root/gst_request_verifier",
+  "root": "/home/taiji_admin/Taiji_Hub",
+  "schema": "INDEPENDENT_GST_CANDIDATE_DELIVERY_VERIFICATION/1.0",
+  "status": "PASS_INDEPENDENT_CANDIDATE_DELIVERY_VERIFIED"
+}

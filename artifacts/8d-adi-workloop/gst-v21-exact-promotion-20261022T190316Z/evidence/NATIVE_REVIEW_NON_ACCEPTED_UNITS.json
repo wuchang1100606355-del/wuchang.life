@@ -1,0 +1,149 @@
+{
+  "interpretation": "These native textual classifications do not independently verify linked evidence and do not grant D8 effects.",
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "schema": "GST_NATIVE_REVIEW_NON_ACCEPTED_UNITS/1.0",
+  "units": [
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "雲端輸出僅具 Candidate Authority；正式執行、正典升格與放行只由本地總場裁決。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "LOCAL_AUTHORITY_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "CANDIDATE_ONLY",
+      "parent_context": "requested_scope > c1_reconstruction_state",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "CANDIDATE_ONLY",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.requested_scope.c1_reconstruction_state",
+      "source_section": "requested_scope",
+      "unit_id": "W7TP-DC3C09BE2C0DB006"
+    },
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "",
+      "decision": "HOLD_FOR_EVIDENCE",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [
+        "Reproducible primary evidence for PERFORMANCE_MEASUREMENT."
+      ],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [],
+        "evidence": [
+          "PERFORMANCE_MEASUREMENT"
+        ],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "| Tier 2 | 25,165,072 | 590／99 | 保留 Founder 報告的 hash 與 15.1 ms；32-bit 原碼、美國原件與原始執行紀錄仍待綁定，未自行標為 OBSERVED_VERIFIED |",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "| Tier 2 | 25,165,072 | 590／99 | 保留 Founder 報告的 hash 與 15.1 ms；32-bit 原碼、美國原件與原始執行紀錄仍待綁定，未自行標為 OBSERVED_VERIFIED |",
+      "reason": "The unit contains a performance, compliance, legal-effect, or patentability claim that needs evidence.",
+      "semantic_topic": "general_technical_candidate",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "三級距實證與證據成熟度",
+      "unit_id": "W7TP-B6CCF437DB268133"
+    },
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "雲端輸出僅具 Candidate Authority；正式執行、正典升格與放行只由本地總場裁決。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "LOCAL_AUTHORITY_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "**C1 = CANDIDATE_ONLY；Reconstructed != Executed。** 測例文字中即使含 `PASS_EFFECT_VERIFIED`，也只是資料內容，不能證明實際 Odoo 交易、核銷或部署已獲權威。",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "**C1 = CANDIDATE_ONLY；Reconstructed != Executed。** 測例文字中即使含 `PASS_EFFECT_VERIFIED`，也只是資料內容，不能證明實際 Odoo 交易、核銷或部署已獲權威。",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "既有總場登錄、回執與執行紅線",
+      "unit_id": "W7TP-18F7E7FD58A0B23C"
+    },
+    {
+      "claimed_status": "TECHNICAL_STATEMENT",
+      "correction_text": "雲端輸出僅具 Candidate Authority；正式執行、正典升格與放行只由本地總場裁決。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "LOCAL_AUTHORITY_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "| D5 執行 | 本輪僅規格、引用及證據登錄；重構 C1 保持 CANDIDATE_ONLY |",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "| D5 執行 | 本輪僅規格、引用及證據登錄；重構 C1 保持 CANDIDATE_ONLY |",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "登錄目的與母技術關係",
+      "unit_id": "W7TP-9195E92A2C515F5E"
+    },
+    {
+      "claimed_status": "CANDIDATE_PROPOSAL",
+      "correction_text": "6-bit 狀態碼僅作可信路由索引，發送端不得自行宣告 PASS。",
+      "decision": "ACCEPT_WITH_CORRECTION",
+      "dependency_refs": [],
+      "evidence_refs": [],
+      "evidence_required": [],
+      "exposure_part": "PUBLIC_SAFE_PART",
+      "matched_rules": {
+        "correction": [
+          "SIX_BIT_TRUST_BOUNDARY"
+        ],
+        "evidence": [],
+        "hard_risk": [],
+        "overclaim": [],
+        "technical_drift": [],
+        "trade_secret": []
+      },
+      "normalized_text": "本地 LLM（大型語言模型）、雲端 Gemini／GCP、分散式算力節點可產生或處理候選。能力與算力分散不移交本地正式放行權威。Merchant OS 的 POS、影音、動作與營運應用可使用這個 D6 子能力；重構資料仍須經本地 D8 與既有證據／業務閘門。`Reconstructed != Executed`。本文件不公開 6 位元路由之 64 類秘密命名／權重矩陣；該狀態分類與 64-bit 串流計數是不同的技術欄位。",
+      "parent_context": "review_material > text",
+      "public_exposure_level": "PUBLIC_SAFE",
+      "raw_text": "本地 LLM（大型語言模型）、雲端 Gemini／GCP、分散式算力節點可產生或處理候選。能力與算力分散不移交本地正式放行權威。Merchant OS 的 POS、影音、動作與營運應用可使用這個 D6 子能力；重構資料仍須經本地 D8 與既有證據／業務閘門。`Reconstructed != Executed`。本文件不公開 6 位元路由之 64 類秘密命名／權重矩陣；該狀態分類與 64-bit 串流計數是不同的技術欄位。",
+      "reason": "The unit is directionally compatible but must state the applicable local gate or implementation boundary.",
+      "semantic_topic": "reconstruction_verification",
+      "source_path": "$.review_request.review_material.text",
+      "source_section": "登錄目的與母技術關係",
+      "unit_id": "W7TP-A58DB0D757845110"
+    }
+  ]
+}

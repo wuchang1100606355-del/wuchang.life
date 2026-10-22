@@ -1,0 +1,51 @@
+{
+  "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+  "run_id": "gst-v21-exact-promotion-20261022T190316Z",
+  "destination_ref": "taiji01:/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z",
+  "authority_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "candidate_delivery_state": "DONE",
+  "formal_promotion_state": "HOLD_PENDING_APPLICABLE_CONTRACT",
+  "formal_effect_authorized": false,
+  "running_work": [],
+  "spent_assets": [
+    {
+      "unit": "candidate_delivery_attempt",
+      "amount": 2,
+      "limit": 2,
+      "scope": "Initial delivery and finalization evidence delivery"
+    },
+    {
+      "unit": "native_candidate_review_attempt",
+      "amount": 1,
+      "limit": 2
+    }
+  ],
+  "dependencies": [
+    "evidence/NATIVE_ROUTE_REVIEW.json",
+    "evidence/CURRENT_ANCHORS.json",
+    "evidence/GOVERNOR_PREFLIGHT.json"
+  ],
+  "open_debt": [
+    "Formal promotion executor, admission contract and persistence target unresolved within bounded route review.",
+    "Historical Tier 2 15.1 ms source/code/run bindings remain HOLD_FOR_EVIDENCE.",
+    "Four clarification sidecars are candidate interpretation, not a replacement native decision."
+  ],
+  "evidence_refs": [
+    "PROMOTION_REQUEST.json",
+    "INPUT_MANIFEST.json",
+    "order.md",
+    "evidence/NATIVE_CANDIDATE_REVIEW.json",
+    "evidence/NATIVE_REVIEW_UNITS.json",
+    "evidence/REVIEW_DISPOSITION.json",
+    "evidence/INDEPENDENT_VERIFICATION.json",
+    "evidence/POST_OPERATION_VERIFICATION.json",
+    "closeout.md"
+  ],
+  "holds": [
+    "FORMAL_EFFECT_NOT_GRANTED",
+    "APPLICABLE_FORMAL_EXECUTOR_AND_TARGET_UNRESOLVED",
+    "HISTORICAL_TIER2_PERFORMANCE_CLAIM_EVIDENCE_PENDING"
+  ],
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "next_action": "沿既有總場建立本精確 GST V2.1 規格的正式升格受理與執行契約，綁定執行器、落點、前後像、回復及驗收，再交適用原生入口裁決。"
+}

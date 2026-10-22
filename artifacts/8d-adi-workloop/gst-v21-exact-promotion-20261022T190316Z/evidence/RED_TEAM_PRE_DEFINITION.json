@@ -1,0 +1,35 @@
+{
+  "findings": [
+    {
+      "evidence": "evidence/NATIVE_ROUTE_REVIEW.json",
+      "finding": "正式落點與執行器未閉合；候選審查不授予正典身分。",
+      "id": "R-1",
+      "scope": "FORMAL_PROMOTION",
+      "severity": "MEDIUM",
+      "status": "HELD_OUTSIDE_CURRENT_ACTION"
+    },
+    {
+      "evidence": "PROMOTION_REQUEST.json#evidence_scope",
+      "finding": "Tier 2/3 證據成熟度與歷史觀測分欄；不自動升為新驗證。",
+      "id": "R-2",
+      "scope": "EVIDENCE_CLAIMS",
+      "severity": "MEDIUM",
+      "status": "BOUNDED_IN_REQUEST"
+    },
+    {
+      "evidence": "evidence/GOVERNOR_PREFLIGHT.json",
+      "finding": "舊 G4 後像失配保留原觀測，不用於此請求授權，也不推成既有 GST 全域失效。",
+      "id": "R-3",
+      "scope": "HISTORICAL_RECEIPT",
+      "severity": "LOW",
+      "status": "ISOLATED_TO_RELEVANT_DECISION"
+    }
+  ],
+  "high_or_critical_open_for_current_action": 0,
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "reviewer": "root with independent route reviewer",
+  "schema": "CANDIDATE_RED_TEAM_REVIEW/1.0",
+  "scope": "REQUEST_PREPARATION_ONLY",
+  "stage": "RED_TEAM_PRE_DEFINITION",
+  "status": "PASS_BOUNDED_CANDIDATE_PREPARATION"
+}

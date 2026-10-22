@@ -1,0 +1,33 @@
+..............E..........F..
+======================================================================
+ERROR: test_exact_offline_build_enum_is_schema_valid_and_allowed (tests.test_w7tp_d8_reviewer_entrypoint.D8ReviewerEntrypointTests.test_exact_offline_build_enum_is_schema_valid_and_allowed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taiji_admin/Taiji_Hub/tests/test_w7tp_d8_reviewer_entrypoint.py", line 238, in test_exact_offline_build_enum_is_schema_valid_and_allowed
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1029, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/schemas/field/w7tp_total_field_d8_review_request_v1.schema.json'
+
+======================================================================
+FAIL: test_status_health_is_functional_and_read_only (tests.test_w7tp_d8_reviewer_entrypoint.D8ReviewerEntrypointTests.test_status_health_is_functional_and_read_only)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taiji_admin/Taiji_Hub/tests/test_w7tp_d8_reviewer_entrypoint.py", line 384, in test_status_health_is_functional_and_read_only
+    self.assertEqual("PASS_D8_REVIEWER_FUNCTIONAL_HEALTH", payload["state"])
+AssertionError: 'PASS_D8_REVIEWER_FUNCTIONAL_HEALTH' != 'HOLD_D8_REVIEWER_FUNCTIONAL_HEALTH'
+- PASS_D8_REVIEWER_FUNCTIONAL_HEALTH
+? ^^^^
++ HOLD_D8_REVIEWER_FUNCTIONAL_HEALTH
+? ^^^^
+
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.172s
+
+FAILED (failures=1, errors=1)

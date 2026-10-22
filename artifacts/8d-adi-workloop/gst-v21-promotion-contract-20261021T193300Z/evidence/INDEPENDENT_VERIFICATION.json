@@ -1,0 +1,62 @@
+{
+  "batch_2_fixture_corrections": [
+    {
+      "batch_2_observation": "The missing parent directory caused HOLD_ROOT_UNAVAILABLE before the receipt-file check; fail-closed behavior was correct.",
+      "product_code_fix_for_this_finding": false,
+      "test": "test_caller_pass_with_absent_native_receipt_is_rejected",
+      "test_fixture_correction": "Create only the disposable authority parent directory so the case tests an absent receipt itself."
+    },
+    {
+      "batch_2_observation": "The synthetic replay directory defaulted to 0755 and was correctly refused by HOLD_REPLAY_STORAGE_PERMISSIONS.",
+      "product_code_fix_for_this_finding": false,
+      "test": "test_persistent_replay_rejected_across_instances_and_after_ttl",
+      "test_fixture_correction": "Create the disposable replay directory with mode 0700."
+    }
+  ],
+  "code_sha256": {
+    "candidate/build_contract.py": "26ad48a1aab100384502706de4ef86f7d6bd8ab5cf5c5617c9793fbf45d5934c",
+    "candidate/gst_v21_specification_contract.py": "227345f91f62c260215e7c5450ee662c1a746c7b7183ce0e93a37931febb8f8b",
+    "candidate/promote_origin_cell_gst_v21_specification.py": "167a707a03ff8a704f8c0352923230e9cbfa50403287d7e3ea280c61a1ef6ab4",
+    "candidate/test_promotion_independent.py": "7d7ddb25c15757c892bd3c279352fcc6b3d3bdfd31b27acb38536674cca7307a"
+  },
+  "error_count": 0,
+  "failure_count": 0,
+  "findings": [],
+  "limits": [
+    "No real signed authorization, native cryptographic trust chain or production apply was exercised.",
+    "These tests do not certify formal D8 acceptance or canonical promotion, and a fixture PASS never establishes effect authority.",
+    "Crash fault injections use documented hook boundaries and ordinary exceptions; no power-loss guarantee or proof against all hostile concurrent writers.",
+    "Actual delivery/source bindings and native unsigned rejection require separate taiji01 readback evidence.",
+    "The budget contains a preserved batch 2 with two test-fixture failures; this final batch applies only their fixture corrections plus the stated source-cache/direct-path cases."
+  ],
+  "non_authority_boundary": {
+    "codec_reconstruction_executed": false,
+    "formal_effect_authorized": false,
+    "native_resolver_called": false,
+    "native_signature_or_real_grant_tested": false,
+    "real_nonce_consumed": false,
+    "remote_mutations": 0
+  },
+  "observed_at": "2026-10-21T19:49:39.051676+00:00",
+  "prior_batch_evidence_sha256": {
+    "evidence/INDEPENDENT_VERIFICATION_BATCH_2.json": "43a5ea339146c3452cc8df718a835bcef09baf8f4b9974b1de1b83986f266210",
+    "evidence/REGRESSION_RESULTS_BATCH_2.json": "e4fa25f417a7291a1e51217b2fdf9843bf629fe6fb8ea5f07d9534ef8a9c5950"
+  },
+  "regression_evidence": "evidence/REGRESSION_RESULTS.json",
+  "regression_evidence_sha256": "f0958c606c3c4ceb263dc189c4ee527e1e7fe3e4a07628c2207d1a28d2eaa15d",
+  "reviewer": "gst_request_verifier",
+  "schema": "GST_V21_INDEPENDENT_FUNCTIONAL_VERIFICATION/1.0",
+  "scope": [
+    "Independent synthetic source tree and contract assembled without the production builder.",
+    "Helper PRE/POST non-authority; forged receipts, exact inputs, source/preimage drift, symlink/hardlink, schema scope and write collisions.",
+    "Candidate simulation, persistent replay rejection across instances and after TTL, grant shape/expiry, negative native responses, concurrent lock and bounded partial failure/rollback.",
+    "Foreign registry/stage/file contents and a foreign same-bytes/different-inode replacement remain preserved; unknown stage is not automatically published during rollback.",
+    "Cold subprocess status readback is read-only and simulation-only; failed attempts cannot be blindly retried.",
+    "Poisoned timestamp bytecode and preloaded modules are ignored for the colocated helper and five bound native source paths; the native-loader test executes synthetic stub source only, never an actual native resolver.",
+    "Direct transaction call with an unbound audit/attempt path is rejected before writing."
+  ],
+  "skip_count": 0,
+  "source_stability": true,
+  "status": "PASS_BOUNDED_ISOLATED_FUNCTIONAL_VERIFICATION",
+  "test_count": 43
+}

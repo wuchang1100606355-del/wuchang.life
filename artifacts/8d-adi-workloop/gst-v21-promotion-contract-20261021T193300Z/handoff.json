@@ -1,0 +1,60 @@
+{
+  "authority_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "candidate_delivery_state": "DONE",
+  "dependencies": [
+    "evidence/CURRENT_BINDINGS.json",
+    "evidence/NATIVE_CAPABILITY_CONTEXT.json",
+    "evidence/NATIVE_ROLE_PRECONDITION.json"
+  ],
+  "destination_ref": "taiji01:/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-promotion-contract-20261021T193300Z",
+  "evidence_refs": [
+    "PROMOTION_CONTRACT.json",
+    "ADMISSION_DESCRIPTOR.json",
+    "ARTIFACT_MANIFEST.json",
+    "evidence/CONTRACT_VALIDATION.json",
+    "evidence/INDEPENDENT_VERIFICATION.json",
+    "evidence/REMOTE_DELIVERY_AND_NATIVE_GATE.json",
+    "evidence/NATIVE_EXACT_EFFECT_PROBE.json",
+    "evidence/RED_TEAM_POST_OPERATION.json",
+    "evidence/FINAL_REMOTE_DELIVERY.json",
+    "closeout.md"
+  ],
+  "exact_effect": "GST_V21_SPEC_PROMOTE:7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "formal_effect_authorized": false,
+  "formal_promotion_state": "HOLD_FOUNDER_FRESH_SIGNATURE_REQUIRED",
+  "holds": [
+    "HOLD_FOUNDER_FRESH_SIGNATURE_REQUIRED",
+    "HISTORICAL_TIER2_PERFORMANCE_CLAIM_EVIDENCE_PENDING"
+  ],
+  "next_action": "由 Founder 在 taiji01 既有本地權威路徑，對 ADMISSION_DESCRIPTOR.json 所綁定的精確契約完成一次新鮮單次簽署。",
+  "open_debt": [
+    "Fresh exact local Founder signature remains absent; no signing implemented or inferred.",
+    "Historical Tier 2 15.1 ms source/run bindings remain HOLD_FOR_EVIDENCE.",
+    "Production signed-apply success, power-loss and arbitrary noncooperating writers were not exercised."
+  ],
+  "run_id": "gst-v21-promotion-contract-20261021T193300Z",
+  "running_work": [],
+  "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+  "source_hashes": {
+    "ARTIFACT_MANIFEST.json": "954d208a18e62b89024fa0ce67610f4f6cb867da2cddc791927bff4fb2b34e4f",
+    "PROMOTION_CONTRACT.json": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+    "order.md": "4bf3b76accb1c67d6d890b1114d2213890af56cf26ebf3e473885ea7bd6dcba7"
+  },
+  "spent_assets": [
+    {
+      "amount": 2,
+      "limit": 2,
+      "unit": "candidate_delivery"
+    },
+    {
+      "amount": 2,
+      "limit": 2,
+      "unit": "native_gate_probe"
+    },
+    {
+      "amount": 3,
+      "limit": 3,
+      "unit": "regression_batch"
+    }
+  ]
+}

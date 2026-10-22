@@ -1,0 +1,30 @@
+{
+  "comparisons": [
+    {
+      "current_sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+      "historical_receipt_postimage_sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+      "matches": false,
+      "surface": "pointer"
+    },
+    {
+      "current_sha256": "0bfae0787c2c85e5e7397d841ae4c3ec7c14a5ccfeed13661f6280d5114bed27",
+      "historical_receipt_postimage_sha256": "3faa27ef6833309cdddd96e484714d9f4b3300fb68f2d059de3baebfdde899b0",
+      "matches": false,
+      "surface": "field"
+    },
+    {
+      "current_sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+      "historical_receipt_postimage_sha256": "990f06c9fc30c4a69b90106e64fd0bc42ce7654e045f714cd0d6bb2e22c49f0a",
+      "matches": false,
+      "surface": "authority"
+    }
+  ],
+  "derived_at": "2026-10-21T19:51:16.605318+00:00",
+  "disposition": "Historical G4 completion receipt does not prove the current three postimages. Scope is limited to that receipt; this does not revoke the independently verified current canonical contract or grant new authority.",
+  "evidence_class": "CONFLICT",
+  "formal_effect_authorized": false,
+  "observation_status": "DERIVED_FROM_OBSERVED",
+  "schema": "GST_V21_HISTORICAL_RECEIPT_SCOPE/1.0",
+  "source_ref": "evidence/GOVERNOR_SNAPSHOT.json",
+  "source_sha256": "e8f6cd3ce9fd4935a24e68324176eb5c932ee235dc363151702f49d87de9c338"
+}

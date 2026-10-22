@@ -1,0 +1,207 @@
+{
+  "exit_code": 1,
+  "finished_at": "2026-10-21T19:47:01.195822+00:00",
+  "formal_effect_authorized": false,
+  "native_resolver_called": false,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "real_nonce_consumed": false,
+  "regression_batch": 2,
+  "regression_batch_limit": 3,
+  "remote_mutations": 0,
+  "result": {
+    "codec_executed": false,
+    "error_count": 1,
+    "failure_count": 1,
+    "formal_effect_authorized": false,
+    "native_resolver_called": false,
+    "real_nonce_consumed": false,
+    "remote_mutations": 0,
+    "results": [
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_contract_cannot_start_authorized"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_duplicate_json_key_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_executor_source_drift_rejected_without_import"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_existing_create_target_is_collision_even_when_bytes_match"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_forged_receipt_presence_does_not_turn_static_pass_into_authority"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_frozen_order_drift_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_hardlinked_source_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_path_escape_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_postimages_without_native_receipt_still_cannot_authorize"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_preconditions_are_read_only_and_never_authority"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_registry_authority_expansion_rejected_with_valid_payload_hash"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_registry_preimage_drift_is_not_overwritten"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_runtime_activation_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_self_authorizing_record_rejected_even_with_rebound_payload_hash"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_source_drift_rejects_before_writes"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentHelperTests.test_symlink_write_target_preserves_outside_file"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_absent_grant_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_busy_operation_lock_prevents_publication"
+      },
+      {
+        "detail": "'HOLD_ROOT_UNAVAILABLE' != 'HOLD_FILE_READ'\n- HOLD_ROOT_UNAVAILABLE\n+ HOLD_FILE_READ\n",
+        "exception": "AssertionError",
+        "status": "FAIL",
+        "test": "__main__.IndependentExecutorTests.test_caller_pass_with_absent_native_receipt_is_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_dry_run_makes_no_writes_and_no_authority"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_effect_preimage_and_human_scope_mismatch_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_existing_stage_is_collision_not_overwritten"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_expiry_future_issue_and_excessive_ttl_rejected"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_failed_attempt_cannot_be_blindly_replayed"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_failure_after_creates_restores_preimages_and_records_recovery"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_failure_after_exchange_restores_exact_original_registry"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_foreign_created_target_is_not_deleted_during_rollback"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_foreign_registry_after_exchange_is_never_overwritten"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_foreign_registry_before_exchange_survives_rollback"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_foreign_same_bytes_different_inode_is_not_deleted"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_grant_shape_is_not_signature_or_authority"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_live_apply_refuses_synthetic_root_before_effect"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_native_false_result_rejected_even_with_consistent_synthetic_receipt_data"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_native_founder_false_is_rejected_without_signature_mock_pass"
+      },
+      {
+        "detail": "HOLD_REPLAY_STORAGE_PERMISSIONS:$",
+        "exception": "ContractError",
+        "status": "ERROR",
+        "test": "__main__.IndependentExecutorTests.test_persistent_replay_rejected_across_instances_and_after_ttl"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_simulation_receipt_cannot_be_relabelled_formal"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_source_drift_during_transaction_rolls_back"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_success_is_simulation_only_and_cold_status_is_read_only"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_synthetic_marker_required"
+      },
+      {
+        "status": "PASS",
+        "test": "__main__.IndependentExecutorTests.test_unknown_stage_is_preserved_and_not_published_during_rollback"
+      }
+    ],
+    "schema": "GST_V21_INDEPENDENT_FUNCTIONAL_TEST/1.0",
+    "scope": "HELPER_AND_EXECUTOR_SYNTHETIC",
+    "skip_count": 0,
+    "state": "FAIL_ISOLATED_FUNCTIONAL_TESTS",
+    "test_count": 40
+  },
+  "reviewer": "gst_request_verifier",
+  "schema": "GST_V21_REGRESSION_BATCH_RECORD/1.0",
+  "source_sha256_after": {
+    "candidate/gst_v21_specification_contract.py": "7ea54ba4bc362e133c067b952675998008b16657f87ab31999053059522150cd",
+    "candidate/promote_origin_cell_gst_v21_specification.py": "4e43f54d43ef3f046d47ca0db0011db40fcb4ebcf9f6e822f8de227bcdc67c79",
+    "candidate/test_promotion_independent.py": "43f4b0c66fc0554320871e426b82a9230f8ee39949488ff804a503b77a2d3db6"
+  },
+  "source_sha256_before": {
+    "candidate/gst_v21_specification_contract.py": "7ea54ba4bc362e133c067b952675998008b16657f87ab31999053059522150cd",
+    "candidate/promote_origin_cell_gst_v21_specification.py": "4e43f54d43ef3f046d47ca0db0011db40fcb4ebcf9f6e822f8de227bcdc67c79",
+    "candidate/test_promotion_independent.py": "43f4b0c66fc0554320871e426b82a9230f8ee39949488ff804a503b77a2d3db6"
+  },
+  "sources_stable_during_run": true,
+  "started_at": "2026-10-21T19:47:00.192025+00:00",
+  "stderr": "test_contract_cannot_start_authorized (__main__.IndependentHelperTests.test_contract_cannot_start_authorized) ... ok\ntest_duplicate_json_key_rejected (__main__.IndependentHelperTests.test_duplicate_json_key_rejected) ... ok\ntest_executor_source_drift_rejected_without_import (__main__.IndependentHelperTests.test_executor_source_drift_rejected_without_import) ... ok\ntest_existing_create_target_is_collision_even_when_bytes_match (__main__.IndependentHelperTests.test_existing_create_target_is_collision_even_when_bytes_match) ... ok\ntest_forged_receipt_presence_does_not_turn_static_pass_into_authority (__main__.IndependentHelperTests.test_forged_receipt_presence_does_not_turn_static_pass_into_authority) ... ok\ntest_frozen_order_drift_rejected (__main__.IndependentHelperTests.test_frozen_order_drift_rejected) ... ok\ntest_hardlinked_source_rejected (__main__.IndependentHelperTests.test_hardlinked_source_rejected) ... ok\ntest_path_escape_rejected (__main__.IndependentHelperTests.test_path_escape_rejected) ... ok\ntest_postimages_without_native_receipt_still_cannot_authorize (__main__.IndependentHelperTests.test_postimages_without_native_receipt_still_cannot_authorize) ... ok\ntest_preconditions_are_read_only_and_never_authority (__main__.IndependentHelperTests.test_preconditions_are_read_only_and_never_authority) ... ok\ntest_registry_authority_expansion_rejected_with_valid_payload_hash (__main__.IndependentHelperTests.test_registry_authority_expansion_rejected_with_valid_payload_hash) ... ok\ntest_registry_preimage_drift_is_not_overwritten (__main__.IndependentHelperTests.test_registry_preimage_drift_is_not_overwritten) ... ok\ntest_runtime_activation_rejected (__main__.IndependentHelperTests.test_runtime_activation_rejected) ... ok\ntest_self_authorizing_record_rejected_even_with_rebound_payload_hash (__main__.IndependentHelperTests.test_self_authorizing_record_rejected_even_with_rebound_payload_hash) ... ok\ntest_source_drift_rejects_before_writes (__main__.IndependentHelperTests.test_source_drift_rejects_before_writes) ... ok\ntest_symlink_write_target_preserves_outside_file (__main__.IndependentHelperTests.test_symlink_write_target_preserves_outside_file) ... ok\ntest_absent_grant_rejected (__main__.IndependentExecutorTests.test_absent_grant_rejected) ... ok\ntest_busy_operation_lock_prevents_publication (__main__.IndependentExecutorTests.test_busy_operation_lock_prevents_publication) ... ok\ntest_caller_pass_with_absent_native_receipt_is_rejected (__main__.IndependentExecutorTests.test_caller_pass_with_absent_native_receipt_is_rejected) ... FAIL\ntest_dry_run_makes_no_writes_and_no_authority (__main__.IndependentExecutorTests.test_dry_run_makes_no_writes_and_no_authority) ... ok\ntest_effect_preimage_and_human_scope_mismatch_rejected (__main__.IndependentExecutorTests.test_effect_preimage_and_human_scope_mismatch_rejected) ... ok\ntest_existing_stage_is_collision_not_overwritten (__main__.IndependentExecutorTests.test_existing_stage_is_collision_not_overwritten) ... ok\ntest_expiry_future_issue_and_excessive_ttl_rejected (__main__.IndependentExecutorTests.test_expiry_future_issue_and_excessive_ttl_rejected) ... ok\ntest_failed_attempt_cannot_be_blindly_replayed (__main__.IndependentExecutorTests.test_failed_attempt_cannot_be_blindly_replayed) ... ok\ntest_failure_after_creates_restores_preimages_and_records_recovery (__main__.IndependentExecutorTests.test_failure_after_creates_restores_preimages_and_records_recovery) ... ok\ntest_failure_after_exchange_restores_exact_original_registry (__main__.IndependentExecutorTests.test_failure_after_exchange_restores_exact_original_registry) ... ok\ntest_foreign_created_target_is_not_deleted_during_rollback (__main__.IndependentExecutorTests.test_foreign_created_target_is_not_deleted_during_rollback) ... ok\ntest_foreign_registry_after_exchange_is_never_overwritten (__main__.IndependentExecutorTests.test_foreign_registry_after_exchange_is_never_overwritten) ... ok\ntest_foreign_registry_before_exchange_survives_rollback (__main__.IndependentExecutorTests.test_foreign_registry_before_exchange_survives_rollback) ... ok\ntest_foreign_same_bytes_different_inode_is_not_deleted (__main__.IndependentExecutorTests.test_foreign_same_bytes_different_inode_is_not_deleted) ... ok\ntest_grant_shape_is_not_signature_or_authority (__main__.IndependentExecutorTests.test_grant_shape_is_not_signature_or_authority) ... ok\ntest_live_apply_refuses_synthetic_root_before_effect (__main__.IndependentExecutorTests.test_live_apply_refuses_synthetic_root_before_effect) ... ok\ntest_native_false_result_rejected_even_with_consistent_synthetic_receipt_data (__main__.IndependentExecutorTests.test_native_false_result_rejected_even_with_consistent_synthetic_receipt_data) ... ok\ntest_native_founder_false_is_rejected_without_signature_mock_pass (__main__.IndependentExecutorTests.test_native_founder_false_is_rejected_without_signature_mock_pass) ... ok\ntest_persistent_replay_rejected_across_instances_and_after_ttl (__main__.IndependentExecutorTests.test_persistent_replay_rejected_across_instances_and_after_ttl) ... ERROR\ntest_simulation_receipt_cannot_be_relabelled_formal (__main__.IndependentExecutorTests.test_simulation_receipt_cannot_be_relabelled_formal) ... ok\ntest_source_drift_during_transaction_rolls_back (__main__.IndependentExecutorTests.test_source_drift_during_transaction_rolls_back) ... ok\ntest_success_is_simulation_only_and_cold_status_is_read_only (__main__.IndependentExecutorTests.test_success_is_simulation_only_and_cold_status_is_read_only) ... ok\ntest_synthetic_marker_required (__main__.IndependentExecutorTests.test_synthetic_marker_required) ... ok\ntest_unknown_stage_is_preserved_and_not_published_during_rollback (__main__.IndependentExecutorTests.test_unknown_stage_is_preserved_and_not_published_during_rollback) ... ok\n\n======================================================================\nERROR: test_persistent_replay_rejected_across_instances_and_after_ttl (__main__.IndependentExecutorTests.test_persistent_replay_rejected_across_instances_and_after_ttl)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/352192e1cec5/gst_v21_contract_20261022/artifacts/8d-adi-workloop/gst-v21-promotion-contract-20261021T193300Z/candidate/test_promotion_independent.py\", line 688, in test_persistent_replay_rejected_across_instances_and_after_ttl\n    first = self.executor.PersistentReplayLedger(directory)\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/352192e1cec5/gst_v21_contract_20261022/artifacts/8d-adi-workloop/gst-v21-promotion-contract-20261021T193300Z/candidate/promote_origin_cell_gst_v21_specification.py\", line 198, in __init__\n    require(info.st_uid == os.geteuid() and stat.S_IMODE(info.st_mode) & 0o077 == 0,\n  File \"/workspace/scratch/352192e1cec5/gst_v21_contract_20261022/artifacts/8d-adi-workloop/gst-v21-promotion-contract-20261021T193300Z/candidate/promote_origin_cell_gst_v21_specification.py\", line 60, in require\n    raise ContractError(code, path)\ngst_v21_specification_contract.ContractError: HOLD_REPLAY_STORAGE_PERMISSIONS:$\n\n======================================================================\nFAIL: test_caller_pass_with_absent_native_receipt_is_rejected (__main__.IndependentExecutorTests.test_caller_pass_with_absent_native_receipt_is_rejected)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/352192e1cec5/gst_v21_contract_20261022/artifacts/8d-adi-workloop/gst-v21-promotion-contract-20261021T193300Z/candidate/test_promotion_independent.py\", line 500, in test_caller_pass_with_absent_native_receipt_is_rejected\n    self.assert_hold(lambda: self.executor.verify_native_receipt(\n  File \"/workspace/scratch/352192e1cec5/gst_v21_contract_20261022/artifacts/8d-adi-workloop/gst-v21-promotion-contract-20261021T193300Z/candidate/test_promotion_independent.py\", line 359, in assert_hold\n    self.assertEqual(context.exception.code, code)\nAssertionError: 'HOLD_ROOT_UNAVAILABLE' != 'HOLD_FILE_READ'\n- HOLD_ROOT_UNAVAILABLE\n+ HOLD_FILE_READ\n\n\n----------------------------------------------------------------------\nRan 40 tests in 0.940s\n\nFAILED (failures=1, errors=1)\n",
+  "stdout": "{\"codec_executed\": false, \"error_count\": 1, \"failure_count\": 1, \"formal_effect_authorized\": false, \"native_resolver_called\": false, \"real_nonce_consumed\": false, \"remote_mutations\": 0, \"results\": [{\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_contract_cannot_start_authorized\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_duplicate_json_key_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_executor_source_drift_rejected_without_import\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_existing_create_target_is_collision_even_when_bytes_match\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_forged_receipt_presence_does_not_turn_static_pass_into_authority\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_frozen_order_drift_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_hardlinked_source_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_path_escape_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_postimages_without_native_receipt_still_cannot_authorize\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_preconditions_are_read_only_and_never_authority\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_registry_authority_expansion_rejected_with_valid_payload_hash\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_registry_preimage_drift_is_not_overwritten\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_runtime_activation_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_self_authorizing_record_rejected_even_with_rebound_payload_hash\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_source_drift_rejects_before_writes\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentHelperTests.test_symlink_write_target_preserves_outside_file\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_absent_grant_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_busy_operation_lock_prevents_publication\"}, {\"detail\": \"'HOLD_ROOT_UNAVAILABLE' != 'HOLD_FILE_READ'\\n- HOLD_ROOT_UNAVAILABLE\\n+ HOLD_FILE_READ\\n\", \"exception\": \"AssertionError\", \"status\": \"FAIL\", \"test\": \"__main__.IndependentExecutorTests.test_caller_pass_with_absent_native_receipt_is_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_dry_run_makes_no_writes_and_no_authority\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_effect_preimage_and_human_scope_mismatch_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_existing_stage_is_collision_not_overwritten\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_expiry_future_issue_and_excessive_ttl_rejected\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_failed_attempt_cannot_be_blindly_replayed\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_failure_after_creates_restores_preimages_and_records_recovery\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_failure_after_exchange_restores_exact_original_registry\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_foreign_created_target_is_not_deleted_during_rollback\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_foreign_registry_after_exchange_is_never_overwritten\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_foreign_registry_before_exchange_survives_rollback\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_foreign_same_bytes_different_inode_is_not_deleted\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_grant_shape_is_not_signature_or_authority\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_live_apply_refuses_synthetic_root_before_effect\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_native_false_result_rejected_even_with_consistent_synthetic_receipt_data\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_native_founder_false_is_rejected_without_signature_mock_pass\"}, {\"detail\": \"HOLD_REPLAY_STORAGE_PERMISSIONS:$\", \"exception\": \"ContractError\", \"status\": \"ERROR\", \"test\": \"__main__.IndependentExecutorTests.test_persistent_replay_rejected_across_instances_and_after_ttl\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_simulation_receipt_cannot_be_relabelled_formal\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_source_drift_during_transaction_rolls_back\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_success_is_simulation_only_and_cold_status_is_read_only\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_synthetic_marker_required\"}, {\"status\": \"PASS\", \"test\": \"__main__.IndependentExecutorTests.test_unknown_stage_is_preserved_and_not_published_during_rollback\"}], \"schema\": \"GST_V21_INDEPENDENT_FUNCTIONAL_TEST/1.0\", \"scope\": \"HELPER_AND_EXECUTOR_SYNTHETIC\", \"skip_count\": 0, \"state\": \"FAIL_ISOLATED_FUNCTIONAL_TESTS\", \"test_count\": 40}\n"
+}

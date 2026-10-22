@@ -1,0 +1,136 @@
+{
+  "observed_at": "2026-10-21T19:26:35.083027+00:00",
+  "node": "taiji01",
+  "root": "/home/taiji_admin/Taiji_Hub",
+  "branch": "codex/current-live-state-consolidation-20260915",
+  "head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5",
+  "git_status_sha256": "5812ab375cebf89b80e74a594e38951691993a48aa8249e80962c48d4aae392a",
+  "git_status_count": 355,
+  "files": {
+    "AGENTS.md": {
+      "exists": true,
+      "symlink": false,
+      "sha256": "e9eab295d331334a5911a52ce3f269958fea2fc5e3d363d7107b950adf1e92fd",
+      "bytes": 35647
+    },
+    "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json": {
+      "exists": true,
+      "symlink": false,
+      "sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+      "bytes": 2233,
+      "content": {
+        "admitted_sovereign_root_fingerprint": "7e32872072060c90c7954629c68eb31fa6c0532e64d454d189e2c55f1bcb3b0a",
+        "admitted_sovereign_root_key_id": "wuchang-node",
+        "admitted_sovereign_root_openssh_fingerprint": "SHA256:r2JW3GHzRO6i8+gwCQsuMsx61xm5xuoyR/j3e//qF3E",
+        "canonical_id": "W7TP_8D_ADI_V2_3",
+        "canonical_path": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+        "canonical_sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+        "effective_at_utc": "2026-10-04T20:58:46Z",
+        "founder_authority": "江政隆_PASSKEY_G4",
+        "founder_trust_anchor_policy_id": "W7TP_FOUNDER_SINGLE_IDENTITY_ROOT_MULTI_ROLE_TRUST_ANCHOR_POLICY_V1",
+        "legacy_v2_readable": true,
+        "machine_schema_path": "schemas/field/w7tp_8d_adi_v2_3_canonical_contract_v1.schema.json",
+        "machine_schema_sha256": "66d4c8f9bc91b34d4621d422d1d3bed6976db69adbdc2c7e41b96438ef314928",
+        "migration_mode": "APPEND_ONLY_SUCCESSOR",
+        "namespace": "w7tp_canonical",
+        "parent": {
+          "path": "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1_FOUNDER_LOCKED_SUCCESSOR_20260728.md",
+          "sha256": "383aba5b7a9f5d0e948d9b43b83e7dd6b6ec9c27f025fb9069e83810f0ae870d",
+          "status": "SUPERSEDED_BY_V2_3",
+          "version": "2.1"
+        },
+        "pointer_preimage_sha256": "74752efc39ab9cf035a91b9e3886450d24e7bbf6ca2464d367e94cffd157f1f2",
+        "promotion_receipt_path": "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/final_renewal_20261004T205512Z/g4/G4_ACTIVATION_RECEIPT.json",
+        "promotion_receipt_state": "WRITTEN_AFTER_ATOMIC_POSTLOAD",
+        "schema": "w7tp.total_field.active_w7tp_canonical_pointer.v1",
+        "state": "ACTIVE_CANONICAL",
+        "trust_anchor_admission_receipt_path": "runtime/total_field/founder_identity/FOUNDER_SOVEREIGN_ROOT_D8_TRUST_ANCHOR_ADMISSION_RECEIPT_20261020.json",
+        "trust_anchor_admission_receipt_sha256": "c3aacf94c8911e0d23d9cc5287d16b6160d96320a70fdef60cfaddd3ef4bb1f3",
+        "trust_policy_promotion_receipt_path": "runtime/total_field/founder_identity/CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_20261020.json",
+        "trust_policy_promotion_receipt_sha256": "adacd9da86c8eef67c36334998019ec701655357d7adeacd5632de9610e9c4d3",
+        "version": "2.3"
+      }
+    },
+    "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json": {
+      "exists": true,
+      "symlink": false,
+      "sha256": "0bfae0787c2c85e5e7397d841ae4c3ec7c14a5ccfeed13661f6280d5114bed27",
+      "bytes": 2965
+    },
+    "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json": {
+      "exists": true,
+      "symlink": false,
+      "sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+      "bytes": 663
+    },
+    "artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z/PROMOTION_REQUEST.json": {
+      "exists": true,
+      "symlink": false,
+      "sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+      "bytes": 26891
+    },
+    "artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z/handoff.json": {
+      "exists": true,
+      "symlink": false,
+      "sha256": "c73bd8892d8c7ac6ea66b472adfa5b09447857afd4873370d74bc6fbe3caf082",
+      "bytes": 1996,
+      "content": {
+        "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+        "run_id": "gst-v21-exact-promotion-20261022T190316Z",
+        "destination_ref": "taiji01:/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z",
+        "authority_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+        "candidate_delivery_state": "DONE",
+        "formal_promotion_state": "HOLD_PENDING_APPLICABLE_CONTRACT",
+        "formal_effect_authorized": false,
+        "running_work": [],
+        "spent_assets": [
+          {
+            "unit": "candidate_delivery_attempt",
+            "amount": 2,
+            "limit": 2,
+            "scope": "Initial delivery and finalization evidence delivery"
+          },
+          {
+            "unit": "native_candidate_review_attempt",
+            "amount": 1,
+            "limit": 2
+          }
+        ],
+        "dependencies": [
+          "evidence/NATIVE_ROUTE_REVIEW.json",
+          "evidence/CURRENT_ANCHORS.json",
+          "evidence/GOVERNOR_PREFLIGHT.json"
+        ],
+        "open_debt": [
+          "Formal promotion executor, admission contract and persistence target unresolved within bounded route review.",
+          "Historical Tier 2 15.1 ms source/code/run bindings remain HOLD_FOR_EVIDENCE.",
+          "Four clarification sidecars are candidate interpretation, not a replacement native decision."
+        ],
+        "evidence_refs": [
+          "PROMOTION_REQUEST.json",
+          "INPUT_MANIFEST.json",
+          "order.md",
+          "evidence/NATIVE_CANDIDATE_REVIEW.json",
+          "evidence/NATIVE_REVIEW_UNITS.json",
+          "evidence/REVIEW_DISPOSITION.json",
+          "evidence/INDEPENDENT_VERIFICATION.json",
+          "evidence/POST_OPERATION_VERIFICATION.json",
+          "closeout.md"
+        ],
+        "holds": [
+          "FORMAL_EFFECT_NOT_GRANTED",
+          "APPLICABLE_FORMAL_EXECUTOR_AND_TARGET_UNRESOLVED",
+          "HISTORICAL_TIER2_PERFORMANCE_CLAIM_EVIDENCE_PENDING"
+        ],
+        "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+        "next_action": "沿既有總場建立本精確 GST V2.1 規格的正式升格受理與執行契約，綁定執行器、落點、前後像、回復及驗收，再交適用原生入口裁決。"
+      }
+    },
+    "artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z/evidence/CLOSEOUT_DELIVERY_RECEIPT.json": {
+      "exists": true,
+      "symlink": false,
+      "sha256": "324682c37689acbf64408c9c34925fa5c19c16e57a8130b706de5128e323869b",
+      "bytes": 6141
+    }
+  }
+}

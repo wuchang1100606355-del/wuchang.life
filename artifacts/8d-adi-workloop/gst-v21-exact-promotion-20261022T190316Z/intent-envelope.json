@@ -1,0 +1,247 @@
+{
+  "created_at": "2026-10-21T12:07:53-07:00",
+  "d1_d8": {
+    "D1": {
+      "evidence_label": "DEFINITION",
+      "name": "INTENT",
+      "observation_status": "DECLARED_ONLY",
+      "state": "KNOWN",
+      "value": {
+        "definition_authority": "江政隆",
+        "latest_instruction": "執行下一步",
+        "natural_person_authentication": "NOT_EVALUATED_FOR_FORMAL_SIGNATURE",
+        "requested_product": "將既有 GST V2.1 規格與實作錨點形成精確正典身分升格請求，交由適用的原生候選審查；正式核定仍由本地總場處理。",
+        "source": "evidence/USER_INTENT.json"
+      }
+    },
+    "D2": {
+      "name": "STATE",
+      "state": "KNOWN",
+      "value": {
+        "current": "SPEC_INDEX_AND_DUAL_LEDGER_WRITE_VERIFIED",
+        "formal_promotion": "HOLD_PENDING_APPLICABLE_CONTRACT",
+        "target": "EXACT_REQUEST_AND_NATIVE_CANDIDATE_REVIEW"
+      }
+    },
+    "D3": {
+      "name": "COORDINATE",
+      "state": "KNOWN",
+      "value": {
+        "branch": "codex/current-live-state-consolidation-20260915",
+        "head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5",
+        "native_dynamic_context_pull": "NOT_RUN",
+        "native_task_state": "NOT_REGISTERED",
+        "node": "taiji01",
+        "observed_at": "2026-10-21T19:08:48.617366+00:00",
+        "observed_git_status_sha256": "0c9fe0bb2d59a68861bdbb9cfe50756b2eed6f8136d82767e85aa28ee9c1bbf6",
+        "request_path": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z/PROMOTION_REQUEST.json",
+        "root": "/home/taiji_admin/Taiji_Hub",
+        "task_context_gate": "PASS_CURRENT_TASK_CONTEXT"
+      }
+    },
+    "D4": {
+      "name": "EVIDENCE",
+      "state": "KNOWN",
+      "value": {
+        "historical_g4_conflict": "evidence/GOVERNOR_PREFLIGHT.json",
+        "manifest": "evidence/CURRENT_ANCHORS.json",
+        "original_spec_sha256": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+        "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4"
+      }
+    },
+    "D5": {
+      "name": "EXECUTION_POLICY",
+      "state": "KNOWN",
+      "value": {
+        "canonical_pointer_edit": false,
+        "current_allowed_action": "CREATE_BOUNDED_CANDIDATE_REQUEST_AND_REVIEW_EVIDENCE",
+        "current_create_only_directory": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z",
+        "current_protected_sha256": {
+          "AGENTS.md": "e9eab295d331334a5911a52ce3f269958fea2fc5e3d363d7107b950adf1e92fd",
+          "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/field_completion_recovery_20261004T220131Z/G4_FIELD_COMPLETION_RECEIPT.json": "88e3fae6887bd750d2a0f2ab140ffc5bb3dc683749ad1ad382d102f2f73ec6e6",
+          "configs/total_field/w7tp_capability_internalization_registry_v1.json": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0",
+          "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+          "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+          "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json": "0bfae0787c2c85e5e7397d841ae4c3ec7c14a5ccfeed13661f6280d5114bed27",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/CANONICAL_PROMOTION_RECEIPT.json": "bc31c96d218fa3994abeba8de02be57eeeb7c91a0955a9a09fe9b11fff86dde1",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/CONTENT_MANIFEST.json": "8c44a5704cabec721024f5ca1455b954b3ea8158dbafd03194f3305d1f4f3148",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/ORIGIN_CELL_GST_V21_CANONICAL_SPEC.md": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/BRAZIL_HISTORICAL_SCOPE_RESOLUTION.json": "9405f33ce0c225b4465d0daf83cbc0748d38ab0b883d8a2d63c2ec9d3b514521",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/CANONICAL_REGISTRATION_ROUTE_REVIEW.json": "99cb0c50729b98694c85480a0cfbfba43d07da466c659f146a96b84062621e16",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/FOUNDER_REQUEST_STRUCTURED.json": "2773afcfe5df0910927269f632e144b3900b2278883f7bf83b0cbd05f5f7a3dd",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/GEMINI_RELEVANT_HISTORY_EXCERPTS.json": "bec66b5b550fc36dfa86507cb3250dbec90cad0f3eb234fc2d3df9fb8c2cb8a6",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/MSI_US_RETRIEVAL_STATUS.json": "5a5712518bb19ed9c6006eda1cc1c97f098836a893d2ff0a44a4e83686938e0c",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/OPCODE_VERSION_RECONCILIATION.md": "9aeabdd8252d7d04ffb3ce6a40edd51350e6758f61d1522d54913af9c08290d9",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/PRE_ACTIVATION_REVIEW.json": "2298f4b3aeffdc13b98688659ca09c90075ce3684a060b05acb9c7306df9eeb8",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/SCOPE_RESOLUTION.json": "e9cb6f1c7bebee47a2d15a4fe10ff657f4038b46abc86aa2cdc89d04d8858768",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/SCREENSHOT_ATTACHMENT_REFERENCE.json": "721818d48f6586ee47063b6d890835e08b6cb34b34a3a73925a31f146dfe195d",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/THREE_TIER_EVIDENCE_MATRIX.json": "774f2d94178f4496b157bb59fc5da5b461581d7ce925e4dafbc3b005aa58aebe",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/TIER1_ANCHOR_VERIFICATION.json": "540677d4536e374bb7c36afdb771ea050178bb7bdf2bd67c4866f11f4276ea44",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_FRESH_NATIVE_HASH_OBSERVATION.json": "3e5a62b0fd07efb18e11f7ab5d718ae9cd5a1610f633ac2f698e1f3d763c34dd",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_SOURCE_CAPTURE_LIMIT.json": "a05c27219e33aef9856579d481c246a3293b4f0e11e692ce7804dc5270d4a85f",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_SOURCE_RETRY_BLOCKED.json": "f07e91954e24288523854e87c9275f254ab66d9efc0c3c8be7f929c91b446a83",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/canonical_exact_references.json": "520b17e83c3f469aaf9135585a42dbf1cdea71d679c5ba055ac48534d7dbd316",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/taiji01_anchor_observation.json": "00868a2f22d5d5365ca382bd518c4e9955584c203819691d9cc93de96e355f6c",
+          "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/task_context_gate.json": "81db9b802f56d9a3500083963f66f09c66f1c02121ea33d6dc5d7f6248251772",
+          "runtime/total_field/conversation_intake/universal_origin_cell_codec_v2.py": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+          "runtime/total_field/gst_v23_runtime_consumer/ACTIVE_BINDING.json": "4282a1f74bf1ae931c018ac76654b87030ff941e1cdf7015b82b350029b12c96",
+          "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+          "services/w7tp_d4_adi_v2_bridge.py": "275af0daba257ba278324e64c18551af7051ebc5e1a7da98c3bf8779d8cbc571",
+          "services/w7tp_evidence_ledger.py": "adaeb8300d731afef803d766c51c4c7881ac9b343386820e32320c95bf6bc385",
+          "services/w7tp_gst_v23_runtime.py": "78f08af6f658c61a41adc1238ec1700062b5a902d08db575f46fb5f76d787367",
+          "tools/total_field/w7tp_candidate_fine_grain_reviewer.py": "e01a31d99dfeff9809de1e9324fc2aa42ad22499d824217231d8647db30fa0bb",
+          "tools/total_field/w7tp_d8_reviewer_entrypoint.py": "31252bf7560817858bb3ea086b253615c278b04dfeb1bcabe2a53ac18a8a8b89",
+          "tools/total_field_authority_resolver.py": "8ff3b1a37ce2f2ffa9f79b70faa8fbd60de014858346f9f7dbddcf6419404555"
+        },
+        "database_write": false,
+        "future_formal_promotion": {
+          "approved_write_set": [],
+          "effect_execution_ready": false,
+          "exact_subject": {
+            "bytes": 10480,
+            "node": "taiji01",
+            "path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/ORIGIN_CELL_GST_V21_CANONICAL_SPEC.md",
+            "sha256": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855"
+          },
+          "formal_executor": null,
+          "formal_persistence_target": null,
+          "formal_target_resolution": "UNRESOLVED_WITHIN_BOUNDED_ROUTE_REVIEW",
+          "gap_evidence": "evidence/NATIVE_ROUTE_REVIEW.json",
+          "missing_contract_requirements": [
+            "沿既有總場指定本規格正式身分的可驗證落點與受理程序。",
+            "執行器核對精確規格、碼源、前像、後像及原生授權。",
+            "將正式狀態查詢、失敗回復與最終效果驗收綁到同一份請求。"
+          ],
+          "status": "REQUIRES_BOUNDED_NATIVE_PROMOTION_CONTRACT"
+        },
+        "git_commit": false,
+        "git_push": false,
+        "overlay_registry_edit": false,
+        "rollback": {
+          "current_candidate": "停止引用本次新增候選目錄；保留封存證據。沒有既有檔案需要覆寫還原。",
+          "future_formal": "待正式執行器與目標確定後，需先固定精確回復前像與驗收。"
+        },
+        "service_restart": false,
+        "source_documents_edit": false,
+        "stop_conditions": [
+          "Any source hash, root, branch or HEAD drift",
+          "Existing destination or symlink in candidate destination",
+          "Any attempted write outside current create-only directory",
+          "Raw credentials or protected member data in candidate content",
+          "Treating candidate review as formal effect authorization"
+        ]
+      }
+    },
+    "D6": {
+      "name": "GENERATIVE_TRANSMISSION",
+      "state": "NOT_REQUIRED",
+      "value": {
+        "carrier_is_not_w7tp": true,
+        "claimed": false,
+        "technical_definition": "GST_SOURCE_SPEC_PRESERVED; CURRENT_TRANSFER_IS_RDC"
+      }
+    },
+    "D7": {
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "state": "KNOWN",
+      "value": {
+        "formal_risk_isolated": true,
+        "pre_definition": "evidence/RED_TEAM_PRE_DEFINITION.json"
+      }
+    },
+    "D8": {
+      "name": "ENVELOPE_AUTHORITY",
+      "state": "KNOWN",
+      "value": {
+        "candidate_only": true,
+        "canonical_mutation": false,
+        "native_candidate_review_evidence": "evidence/NATIVE_CANDIDATE_REVIEW.json",
+        "total_field_decision": "NOT_REVIEWED",
+        "total_field_receiver": "tools.total_field.w7tp_d8_reviewer_entrypoint.fine_grain_check"
+      }
+    }
+  },
+  "identity_and_seat": {
+    "access_profile_ref": "UNKNOWN_UNVERIFIED",
+    "member_boundary": "UNKNOWN_UNVERIFIED",
+    "member_ref": "UNKNOWN_UNVERIFIED",
+    "natural_person_ref": "UNKNOWN_UNVERIFIED",
+    "role_id": "UNKNOWN_UNVERIFIED",
+    "seat_id": "UNKNOWN_UNVERIFIED",
+    "xiaoj_identity_ref": "UNKNOWN_UNVERIFIED"
+  },
+  "lifecycle_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "maximum_effect_class": "E5",
+  "product_output_contract": {
+    "acceptance_ids": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4",
+      "AC-5"
+    ],
+    "budget_fuse": {
+      "candidate_delivery_attempt": 2,
+      "native_candidate_review_attempt": 2
+    },
+    "non_goals": {
+      "authority_expansion_requested": false,
+      "business_execution_requested": false,
+      "c1_reconstruction_state": "CANDIDATE_ONLY",
+      "evidence_maturity_promotion_requested": false,
+      "parent_canonical_switch_requested": false,
+      "recognition": "Founder 定義之 Origin-Cell GST V2.1 規格作為現行 W7TP 8D ADI V2.3 的 D6 衍生子能力，申請取得正式正典身分。",
+      "runtime_activation_requested": false,
+      "runtime_consumer_replacement_requested": false,
+      "source_document_change_requested": false,
+      "specification_canonical_identity_requested": true,
+      "technical_definition_source": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/ORIGIN_CELL_GST_V21_CANONICAL_SPEC.md"
+    },
+    "one_sentence": "承接既有登錄成果，形成精確規格正典升格請求，核對原生受理與授權條件，保存真實回覆。",
+    "title": "GST V2.1 精確升格請求與原生受理檢查"
+  },
+  "red_team": {
+    "RED_TEAM_POST_OPERATION": "evidence/RED_TEAM_POST_OPERATION.json",
+    "RED_TEAM_PRE_ACTIVATION": "evidence/RED_TEAM_PRE_ACTIVATION.json",
+    "RED_TEAM_PRE_DEFINITION": "evidence/RED_TEAM_PRE_DEFINITION.json"
+  },
+  "run_id": "gst-v21-exact-promotion-20261022T190316Z",
+  "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+  "source_hashes": {
+    "AGENTS.md": "e9eab295d331334a5911a52ce3f269958fea2fc5e3d363d7107b950adf1e92fd",
+    "Taiji_Governance/candidates/t007_v23_global_successor_20261002T124541Z/authorization/field_completion_recovery_20261004T220131Z/G4_FIELD_COMPLETION_RECEIPT.json": "88e3fae6887bd750d2a0f2ab140ffc5bb3dc683749ad1ad382d102f2f73ec6e6",
+    "configs/total_field/w7tp_capability_internalization_registry_v1.json": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0",
+    "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+    "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+    "runtime/total_field/active/ACTIVE_TRUE8D_ALLNODE_CANONICAL.json": "0bfae0787c2c85e5e7397d841ae4c3ec7c14a5ccfeed13661f6280d5114bed27",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/CANONICAL_PROMOTION_RECEIPT.json": "bc31c96d218fa3994abeba8de02be57eeeb7c91a0955a9a09fe9b11fff86dde1",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/CONTENT_MANIFEST.json": "8c44a5704cabec721024f5ca1455b954b3ea8158dbafd03194f3305d1f4f3148",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/ORIGIN_CELL_GST_V21_CANONICAL_SPEC.md": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/BRAZIL_HISTORICAL_SCOPE_RESOLUTION.json": "9405f33ce0c225b4465d0daf83cbc0748d38ab0b883d8a2d63c2ec9d3b514521",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/CANONICAL_REGISTRATION_ROUTE_REVIEW.json": "99cb0c50729b98694c85480a0cfbfba43d07da466c659f146a96b84062621e16",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/FOUNDER_REQUEST_STRUCTURED.json": "2773afcfe5df0910927269f632e144b3900b2278883f7bf83b0cbd05f5f7a3dd",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/GEMINI_RELEVANT_HISTORY_EXCERPTS.json": "bec66b5b550fc36dfa86507cb3250dbec90cad0f3eb234fc2d3df9fb8c2cb8a6",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/MSI_US_RETRIEVAL_STATUS.json": "5a5712518bb19ed9c6006eda1cc1c97f098836a893d2ff0a44a4e83686938e0c",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/OPCODE_VERSION_RECONCILIATION.md": "9aeabdd8252d7d04ffb3ce6a40edd51350e6758f61d1522d54913af9c08290d9",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/PRE_ACTIVATION_REVIEW.json": "2298f4b3aeffdc13b98688659ca09c90075ce3684a060b05acb9c7306df9eeb8",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/SCOPE_RESOLUTION.json": "e9cb6f1c7bebee47a2d15a4fe10ff657f4038b46abc86aa2cdc89d04d8858768",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/SCREENSHOT_ATTACHMENT_REFERENCE.json": "721818d48f6586ee47063b6d890835e08b6cb34b34a3a73925a31f146dfe195d",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/THREE_TIER_EVIDENCE_MATRIX.json": "774f2d94178f4496b157bb59fc5da5b461581d7ce925e4dafbc3b005aa58aebe",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/TIER1_ANCHOR_VERIFICATION.json": "540677d4536e374bb7c36afdb771ea050178bb7bdf2bd67c4866f11f4276ea44",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_FRESH_NATIVE_HASH_OBSERVATION.json": "3e5a62b0fd07efb18e11f7ab5d718ae9cd5a1610f633ac2f698e1f3d763c34dd",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_SOURCE_CAPTURE_LIMIT.json": "a05c27219e33aef9856579d481c246a3293b4f0e11e692ce7804dc5270d4a85f",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_SOURCE_RETRY_BLOCKED.json": "f07e91954e24288523854e87c9275f254ab66d9efc0c3c8be7f929c91b446a83",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/canonical_exact_references.json": "520b17e83c3f469aaf9135585a42dbf1cdea71d679c5ba055ac48534d7dbd316",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/taiji01_anchor_observation.json": "00868a2f22d5d5365ca382bd518c4e9955584c203819691d9cc93de96e355f6c",
+    "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/task_context_gate.json": "81db9b802f56d9a3500083963f66f09c66f1c02121ea33d6dc5d7f6248251772",
+    "runtime/total_field/conversation_intake/universal_origin_cell_codec_v2.py": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+    "runtime/total_field/gst_v23_runtime_consumer/ACTIVE_BINDING.json": "4282a1f74bf1ae931c018ac76654b87030ff941e1cdf7015b82b350029b12c96",
+    "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+    "services/w7tp_d4_adi_v2_bridge.py": "275af0daba257ba278324e64c18551af7051ebc5e1a7da98c3bf8779d8cbc571",
+    "services/w7tp_evidence_ledger.py": "adaeb8300d731afef803d766c51c4c7881ac9b343386820e32320c95bf6bc385",
+    "services/w7tp_gst_v23_runtime.py": "78f08af6f658c61a41adc1238ec1700062b5a902d08db575f46fb5f76d787367",
+    "tools/total_field/w7tp_candidate_fine_grain_reviewer.py": "e01a31d99dfeff9809de1e9324fc2aa42ad22499d824217231d8647db30fa0bb",
+    "tools/total_field/w7tp_d8_reviewer_entrypoint.py": "31252bf7560817858bb3ea086b253615c278b04dfeb1bcabe2a53ac18a8a8b89",
+    "tools/total_field_authority_resolver.py": "8ff3b1a37ce2f2ffa9f79b70faa8fbd60de014858346f9f7dbddcf6419404555"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "audit_base_created": false,
+  "candidate_delivery": {
+    "file_count": 33,
+    "outside_candidate_git_status_unchanged": true,
+    "protected_count": 44,
+    "protected_unchanged": true,
+    "receipt_ref": "evidence/INITIAL_REMOTE_DELIVERY.json",
+    "state": "PASS_CANDIDATE_DELIVERED_AND_READ_BACK"
+  },
+  "contract_sha256": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "effect": "GST_V21_SPEC_PROMOTE:7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "exact_effect_native_reply": {
+    "effect_authorized": false,
+    "receipt_ref": "evidence/NATIVE_EXACT_EFFECT_PROBE.json",
+    "state": "HOLD_FOUNDER_FRESH_SIGNATURE_REQUIRED"
+  },
+  "final_metadata_receipt_ref": "evidence/FINAL_REMOTE_DELIVERY.json",
+  "formal_effect_authorized": false,
+  "formal_leaf_created": false,
+  "native_role_precondition": {
+    "new_effect_authorized": false,
+    "receipt_ref": "evidence/NATIVE_ROLE_PRECONDITION.json",
+    "state": "PASS_FOUNDER_SOVEREIGN_ROOT_D8_ROLE_PROMOTION_AUTHORITY_RESOLVED",
+    "verified": true
+  },
+  "observed_at": "2026-10-21T19:54:07.437854+00:00",
+  "real_nonce_consumed": false,
+  "runtime_activated": false,
+  "schema": "GST_V21_REMOTE_DELIVERY_AND_NATIVE_GATE/1.0",
+  "state": "PASS_BOUNDED_CANDIDATE_DELIVERY_AND_NATIVE_REPLY_CAPTURED"
+}

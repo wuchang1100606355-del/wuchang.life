@@ -1,0 +1,86 @@
+{
+  "authority_preimage_sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+  "branch": "codex/current-live-state-consolidation-20260915",
+  "contract_raw_sha256": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "derived_operational_paths": {
+    "formal_audit_paths_created_in_candidate_run": false,
+    "journal_creation_rule": "FINITE_EXCLUSIVE_CREATE_AND_FSYNC",
+    "journal_files": [
+      "operation_dir/journal/01_LEAF_CREATE_INTENT.json",
+      "operation_dir/journal/02_LEAF_CREATED.json",
+      "operation_dir/journal/03_SPEC_CREATE_INTENT.json",
+      "operation_dir/journal/04_SPEC_CREATED.json",
+      "operation_dir/journal/05_RECORD_CREATE_INTENT.json",
+      "operation_dir/journal/06_RECORD_CREATED.json",
+      "operation_dir/journal/07_REGISTRY_STAGE_INTENT.json",
+      "operation_dir/journal/08_REGISTRY_STAGED.json",
+      "operation_dir/journal/09_REGISTRY_EXCHANGE_INTENT.json",
+      "operation_dir/journal/10_REGISTRY_EXCHANGED.json",
+      "operation_dir/journal/11_RECEIPT_CREATE_INTENT.json",
+      "operation_dir/journal/12_RECEIPT_CREATED.json"
+    ],
+    "native_receipt": "operation_dir/authority/<sha256_raw_nonce>.json",
+    "native_receipt_dir": "operation_dir/authority",
+    "nonce_marker": "audit_base/replay/<sha256_raw_nonce>.json",
+    "operation_dir": "audit_base/<contract_raw_sha256>",
+    "operation_lock": "audit_base/operation.lock",
+    "private_grant": "operation_dir/private-grant.json",
+    "private_grant_rule": "PRIVATE_LOCAL_ONLY_MODE_0600",
+    "raw_nonce_or_signature_in_output": false,
+    "recovery": "operation_dir/RECOVERY.json",
+    "registry_stage": "configs/total_field/.gst-v21-<contract_raw_sha256>.registry-stage",
+    "registry_stage_lifecycle": "RETAIN_EXCHANGED_PREIMAGE_ON_SUCCESS_OR_UNKNOWN_BYTES_ON_FAILURE",
+    "transaction_attempt": "operation_dir/TRANSACTION_ATTEMPT.json"
+  },
+  "dynamic_receipt": "manifests/total_field/origin_cell_gst_v21_specification/PROMOTION_RECEIPT.json",
+  "exact_effect": "GST_V21_SPEC_PROMOTE:7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "exact_target": "/home/taiji_admin/Taiji_Hub",
+  "formal_effect_authorized": false,
+  "git_head": "4aa306deba4834c68ca2f0abae23ed57eaed1df5",
+  "grant_fields_generated_at_local_signing_time": [
+    "git_status_sha256 (git status --porcelain=v1 -z -uall immediately before signature)",
+    "nonce (64 lowercase hex; never send to cloud/chat)",
+    "issued_at",
+    "expires_at (maximum 300 seconds after issued_at)",
+    "stage_b_signature_hex"
+  ],
+  "human_direct": true,
+  "native_resolver": "tools/total_field_authority_resolver.py#resolve_founder_signed_break_glass_effect",
+  "node": "taiji01",
+  "operational_precondition": "EXCLUSIVE_LOCAL_CHANGE_WINDOW_REQUIRED",
+  "review_instruction": "Use the already established local Founder authority route to review and sign this exact contract-bound effect. No private key, raw nonce or signature belongs in the delivered package or chat.",
+  "runtime_activation": false,
+  "schema": "GST_V21_REVIEWABLE_ADMISSION_DESCRIPTOR_CANDIDATE/1.0",
+  "scope": "SPECIFICATION_CANONICAL_IDENTITY_ONLY",
+  "signed_envelope_schema": "W7TP_FOUNDER_SOVEREIGN_BREAK_GLASS/1.0",
+  "signing_implemented_by_candidate": false,
+  "single_use": true,
+  "state": "IMAGINED_CANDIDATE",
+  "static_writes": [
+    {
+      "operation": "CREATE",
+      "path": "manifests/total_field/origin_cell_gst_v21_specification/SPECIFICATION.md",
+      "payload_ref": "postimages/SPECIFICATION.md",
+      "postimage_bytes": 10480,
+      "postimage_sha256": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+      "preimage_sha256": null
+    },
+    {
+      "operation": "CREATE",
+      "path": "manifests/total_field/origin_cell_gst_v21_specification/CANONICAL_RECORD.json",
+      "payload_ref": "postimages/CANONICAL_RECORD.json",
+      "postimage_bytes": 2981,
+      "postimage_sha256": "da238cde240dd2dfb77176db274180ca7e47f684046b7f4e306080b82e550d6f",
+      "preimage_sha256": null
+    },
+    {
+      "operation": "CAS_REPLACE",
+      "path": "configs/total_field/w7tp_capability_internalization_registry_v1.json",
+      "payload_ref": "postimages/REGISTRY.json",
+      "postimage_bytes": 8193,
+      "postimage_sha256": "604fd4d1cc9f186f634dc9629aecd5a7c3d8fda9965660ea37ceef59a2ee1bb2",
+      "preimage_sha256": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0"
+    }
+  ],
+  "this_descriptor_is_a_grant": false
+}

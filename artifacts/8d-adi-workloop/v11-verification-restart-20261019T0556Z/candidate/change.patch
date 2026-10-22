@@ -1,0 +1,86 @@
+--- /tmp/w7tp_d4_redteam_8CYJzxxe/v11_existing_phone_exact_scope_extension.py
++++ candidate/helper.py
+@@ -19,11 +19,11 @@
+ from fido2.webauthn import PublicKeyCredentialRpEntity
+ 
+ ROOT=Path("/home/taiji_admin/Taiji_Hub")
+-DIR=ROOT/"runtime/total_field/pending_signature_archive/W7TP_D4_MOBILE_TO_SIGN_20261018T091837Z/successor_v11_d4_real_task_waiting_effect"
++DIR=Path('/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/v11-verification-restart-20261019T0556Z/request')
+ V11=DIR/"D8_D4_REAL_TASK_EFFECT_TO_SIGN_V11.json"
+-V11_SHA256="c716e5d9996e1a5457f43d1f3e984d1c9577e3cba5d1f9bd497cd375dd61eb13"
++V11_SHA256="4cb2c9c7b5c2ee6a45d925d812bc070759c2cb58272e5b9aad13467758ed773b"
+ BOUND_PENDING=DIR/"PENDING_EXISTING_FOUNDER_AND_D4_ISSUER_ROLE_BINDING.json"
+-BOUND_PENDING_SHA256="ec792f2173b0b43ef555aa9791d3d09c49664e9861cc988ba40bbc9b19b9675e"
++BOUND_PENDING_SHA256="def57f6d8537596a9444bf42cbb4030526f170709539b52d3bacb92999266006"
+ CRED=Path("/tmp/w7tp_d4_redteam_8CYJzxxe/V7_MOBILE_DEVICE_SIGNATURE_CANDIDATE/mobile_candidate_public_credential.json")
+ CRED_SHA256="dc3e0c3b3a8d2abce785157f57f7581c378e5fda960e086666b624f2ff393de5"
+ PREVIOUS=Path("/tmp/w7tp_d4_redteam_8CYJzxxe/V7_MOBILE_DEVICE_SIGNATURE_CANDIDATE/signature_receipts/38260e44b5159f0529edc388720bb629_assertion.json")
+@@ -341,6 +341,23 @@
+     current=current_verified_sources()
+     require(d["request_scope_challenge"]==current["scope_challenge"],"HOLD_EVIDENCE_CHALLENGE")
+     signed=d["signed_payload"]
++    require(isinstance(signed, dict) and isinstance(d.get("webauthn_state"), dict),
++            "HOLD_SIGNED_PAYLOAD_OR_FIDO2_STATE_INVALID")
++    challenge=d["webauthn_state"].get("challenge")
++    expected=b64(hashlib.sha256(canon(signed)).digest())
++    require(isinstance(challenge, str) and hmac.compare_digest(challenge, expected),
++            "HOLD_SIGNED_PAYLOAD_CHALLENGE_BINDING_MISMATCH")
++    scope=current["scope"]
++    require(
++        signed.get("exact_scope_file_sha256")==V11_SHA256
++        and signed.get("exact_scope_challenge")==current["scope_challenge"]
++        and signed.get("task_ref")=="task:"+TASK
++        and signed.get("ten_source_manifest_sha256")==scope["ten_file_manifest_sha256"]
++        and signed.get("issuer_candidate_public_key_fingerprint_sha256")==scope["existing_authority_public_key_source_candidate"]["public_key_fingerprint_sha256"]
++        and signed.get("current_task_packet_sha256")==scope["current_task_context_binding"]["exact_task_native_minimum_packet_sha256"]
++        and signed.get("current_adi_record_sha256")==scope["current_task_context_binding"]["adi_record_sha256"]
++        and signed.get("prior_real_phone_public_credential_sha256")==scope["existing_mobile_credential_sha256"],
++        "HOLD_V11_SIGNED_PAYLOAD_SEMANTIC_BINDING_MISMATCH")
+     require(signed["requested_effects"]==list(EFFECTS) and signed["scope_one_time_nonce"]==current["scope"]["one_time_nonce"],"HOLD_EVIDENCE_SCOPE_BINDING")
+     existing_credential_must_match(credential)
+     assert_data=AuthenticationResponse.from_dict(d["webauthn_assertion"])
+--- /tmp/w7tp_d4_redteam_8CYJzxxe/v7_mobile_webauthn_signer_isolated_candidate.py
++++ candidate/server.py
+@@ -371,7 +371,7 @@
+ </script></article></main></body></html>"""
+ 
+ 
+-D4_EXISTING_HELPER_SOURCE_SHA256="0c2aa836e647be3c3b7144740fe1db7e129ded0a6e7579ee5b083970bf162328"
++D4_EXISTING_HELPER_SOURCE_SHA256="ca365f8d1dab16380dcfc0f8d7eeec1cb5c8fe1c485db0d440e9238318ea1abd"
+ sys.path.insert(0,str(BASE))
+ import v11_existing_phone_exact_scope_extension as _d4
+ 
+@@ -400,8 +400,8 @@
+ .tag{color:#aeeac9}
+ a{color:#a2dfff}
+ </style></head><body><main><article>
+-<h1>小J｜本次 D4 精確簽署</h1>
+-<p class="tag">已重用既有 iPhone Face ID 通行密鑰，無須重新註冊。</p>
++<h1>小J｜V11 重新驗證</h1>
++<p class="tag">已重用既有 iPhone 通行密鑰；這是過期 V11 的新驗證請求，原簽章與使用紀錄均保留。</p>
+ <p class="caution"><strong>正式 D8 效果仍待總場裁決。</strong>這次 Face ID 是簽署限定意圖及授權請求；即使簽署成功，也不會直接部署、修改正典或發行 D4。</p>
+ <h2>這次唯一的兩項作用</h2>
+ <p>① 將現有手機通行密鑰可信綁定到本次 D4 創辦人身分。</p>
+@@ -415,8 +415,8 @@
+ 封包期限：__END_LOCAL__（台灣時間）
+ 效力：待簽署、待總場正式 D8 裁決</pre>
+ <p id="result">__CURRENT_STATE__</p>
+-<button id="sign" disabled>等待本人通知可以簽（尚未啟動五分鐘挑戰）</button>
+-<p><small>未經本人表達「可以簽」，後端會拒絕啟動新挑戰。既有 VS Code 與 V6 頁面不受影響。</small></p>
++<button id="sign" disabled>等待本次重新驗證就緒</button>
++<p><small>請本人按下簽署按鈕後使用 Face ID；每次挑戰最長五分鐘，舊簽章不會被重用。</small></p>
+ <p><a id="receipt" href="#" hidden>核對這次手機簽章收據</a></p>
+ <script>
+ const sign=document.getElementById('sign'),result=document.getElementById('result'),receipt=document.getElementById('receipt');
+@@ -474,9 +474,9 @@
+       receipt.href=endpoint('/receipt');receipt.hidden=false;
+     }else if(s.operator_ready_to_start){
+       sign.textContent='用 iPhone Face ID 簽署本次兩項限定效果';
+-      result.textContent='已收到本人「可以簽」，現在可以啟動一次五分鐘挑戰。';
++      result.textContent='已收到本人重啟驗證指示，現在可以啟動一次五分鐘挑戰。';
+     }else{
+-      sign.textContent='等待本人通知可以簽（尚未啟動五分鐘挑戰）';
++      sign.textContent='等待本次重新驗證就緒';
+       result.textContent='入口已接合，尚未開啟短效簽章窗口。';
+     }
+   }catch(e){sign.disabled=true;result.textContent='查詢總場失敗：'+e.message}

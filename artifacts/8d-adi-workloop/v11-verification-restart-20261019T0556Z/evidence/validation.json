@@ -1,0 +1,92 @@
+{
+  "state": "PASS_ISOLATED_VERIFICATION_RESTART_CANDIDATE",
+  "observed_at_utc": "2026-10-19T05:57:38.385354+00:00",
+  "passed": 20,
+  "checks": [
+    {
+      "name": "sealed_original_sources_unchanged",
+      "result": "PASS"
+    },
+    {
+      "name": "new_scope_current_native_context_and_ten_sources_match",
+      "result": "PASS"
+    },
+    {
+      "name": "same_two_effects",
+      "result": "PASS"
+    },
+    {
+      "name": "same_enrolled_public_key",
+      "result": "PASS"
+    },
+    {
+      "name": "same_total_receipt_quota",
+      "result": "PASS"
+    },
+    {
+      "name": "fresh_scope_nonce_old_scope_not_modified",
+      "result": "PASS"
+    },
+    {
+      "name": "new_signature_not_fabricated",
+      "result": "PASS"
+    },
+    {
+      "name": "new_expiry_still_enforced",
+      "result": "PASS"
+    },
+    {
+      "name": "original_signed_payload_crypto_challenge_bound",
+      "result": "PASS"
+    },
+    {
+      "name": "historical_signature_independently_reverified_at_current_time",
+      "result": "PASS"
+    },
+    {
+      "name": "old_consumed_marker_binds_old_signature",
+      "result": "PASS"
+    },
+    {
+      "name": "old_signature_rejected_as_new_scope",
+      "result": "PASS"
+    },
+    {
+      "name": "isolated_existing_handler_page",
+      "result": "PASS"
+    },
+    {
+      "name": "isolated_status_pending_no_formal_authority",
+      "result": "PASS"
+    },
+    {
+      "name": "no_short_challenge_before_readiness",
+      "result": "PASS"
+    },
+    {
+      "name": "wrong_origin_rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "no_fake_new_receipt",
+      "result": "PASS"
+    },
+    {
+      "name": "existing_root_page_retained",
+      "result": "PASS"
+    },
+    {
+      "name": "unissued_completion_rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "isolated_testing_no_original_mutation_or_real_challenge",
+      "result": "PASS"
+    }
+  ],
+  "historical_signature_current_scope_approval": false,
+  "real_fido_challenge_started": false,
+  "D8_EFFECT_AUTHORIZED": false,
+  "D4_ISSUED": false,
+  "original_sources_preserved": true
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "W7TP_GST_V21_NATIVE_ROUTE_REVIEW_CANDIDATE/1.0",
+  "reviewer": "/root/gst_promotion_route",
+  "independent_observed_at": "2026-10-21T19:04:49.356264+00:00",
+  "root": "/home/taiji_admin/Taiji_Hub",
+  "task_context": "PASS_CURRENT_TASK_CONTEXT",
+  "bound_task": "GST_V21_EXACT_PROMOTION_REQUEST_20261022",
+  "allowed_current_entry": {
+    "path": "tools/total_field/w7tp_d8_reviewer_entrypoint.py",
+    "sha256": "31252bf7560817858bb3ea086b253615c278b04dfeb1bcabe2a53ac18a8a8b89",
+    "callable": "fine_grain_check(request: dict)",
+    "kind": "NATIVE_CANDIDATE_CONTENT_REVIEW",
+    "effect_authority": false,
+    "root_callee_read_complete": true,
+    "callee": {
+      "path": "tools/total_field/w7tp_candidate_fine_grain_reviewer.py",
+      "sha256": "e01a31d99dfeff9809de1e9324fc2aa42ad22499d824217231d8647db30fa0bb",
+      "callable": "analyze_candidate"
+    }
+  },
+  "excluded_routes": [
+    {
+      "path": "tools/total_field_candidate_gateway.py",
+      "sha256": "96e0cb0418d0872a4bd04924eb7f1803fcea6d191722767c5e108ec782f33c7c",
+      "reason": "RUNTIME_REQUEST/8D-GTE requires actual previous_state and observation_domains; no verified mapping for spec promotion"
+    },
+    {
+      "path": "tools/total_field/w7tp_review_candidate_v2_3_adapter.py",
+      "sha256": "22800556518fd7f027ce85559c4251a74cca3d084b03450c8c8c95fa71d395ee",
+      "reason": "Fixed five-skill binding and candidate builder only"
+    },
+    {
+      "path": "tools/total_field/w7tp_d8_reviewer_entrypoint.py",
+      "callable": "review_once",
+      "reason": "Supported formal decisions restricted to two canary/offline-build scopes"
+    },
+    {
+      "path": "tools/total_field_authority_resolver.py",
+      "callable": "PROMOTION_SCOPE_CONSTRAINTS",
+      "reason": "Another exact candidate, other_candidate_promotion=false"
+    },
+    {
+      "path": "tools/total_field_authority_resolver.py",
+      "callable": "resolve_founder_signed_break_glass_effect",
+      "reason": "Authority parser exists but no matching GST-spec promotion executor/persistence binding confirmed; not called"
+    }
+  ],
+  "formal_promotion": {
+    "state": "UNRESOLVED_WITHIN_BOUNDED_SEARCH",
+    "target_executor": null,
+    "canonical_persistence_path": null,
+    "not_a_global_absence_claim": true,
+    "formal_submission_performed": false,
+    "new_signature_requested": false
+  },
+  "scope_pivots": 8,
+  "skill_reference_gaps": {
+    "files": [
+      "references/current-design-contract.json",
+      "references/version-observation-causality.md",
+      "references/capability-interoperability.md"
+    ],
+    "observation": "Missing from installed govern-total-field-skills package; the active taiji01 V2.3 pointer/contract is the directly observed parent source. No fallback to an old design."
+  },
+  "remote_mutations_by_reviewer": 0
+}

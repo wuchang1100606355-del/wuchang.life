@@ -1,0 +1,52 @@
+{
+  "code_sha256": {
+    "candidate/gst_v21_specification_contract.py": "7ea54ba4bc362e133c067b952675998008b16657f87ab31999053059522150cd",
+    "candidate/promote_origin_cell_gst_v21_specification.py": "4e43f54d43ef3f046d47ca0db0011db40fcb4ebcf9f6e822f8de227bcdc67c79",
+    "candidate/test_promotion_independent.py": "43f4b0c66fc0554320871e426b82a9230f8ee39949488ff804a503b77a2d3db6"
+  },
+  "error_count": 1,
+  "failure_count": 1,
+  "findings": [
+    {
+      "detail": "'HOLD_ROOT_UNAVAILABLE' != 'HOLD_FILE_READ'\n- HOLD_ROOT_UNAVAILABLE\n+ HOLD_FILE_READ\n",
+      "exception": "AssertionError",
+      "status": "FAIL",
+      "test": "__main__.IndependentExecutorTests.test_caller_pass_with_absent_native_receipt_is_rejected"
+    },
+    {
+      "detail": "HOLD_REPLAY_STORAGE_PERMISSIONS:$",
+      "exception": "ContractError",
+      "status": "ERROR",
+      "test": "__main__.IndependentExecutorTests.test_persistent_replay_rejected_across_instances_and_after_ttl"
+    }
+  ],
+  "limits": [
+    "No real signed authorization, native cryptographic trust chain or production apply was exercised.",
+    "These tests do not certify formal D8 acceptance or canonical promotion.",
+    "Crash fault injections use documented hook boundaries and ordinary exceptions; no power-loss guarantee or proof against all hostile concurrent writers.",
+    "Actual delivery/source bindings and native unsigned rejection require the separate taiji01 readback evidence."
+  ],
+  "non_authority_boundary": {
+    "codec_reconstruction_executed": false,
+    "formal_effect_authorized": false,
+    "native_resolver_called": false,
+    "native_signature_or_real_grant_tested": false,
+    "real_nonce_consumed": false,
+    "remote_mutations": 0
+  },
+  "observed_at": "2026-10-21T19:47:01.195822+00:00",
+  "regression_evidence": "evidence/REGRESSION_RESULTS.json",
+  "regression_evidence_sha256": "e4fa25f417a7291a1e51217b2fdf9843bf629fe6fb8ea5f07d9534ef8a9c5950",
+  "reviewer": "gst_request_verifier",
+  "schema": "GST_V21_INDEPENDENT_FUNCTIONAL_VERIFICATION/1.0",
+  "scope": [
+    "Independent synthetic source tree and contract assembled without the production builder.",
+    "Helper PRE/POST non-authority; forged receipts, exact inputs, drift, symlink/hardlink, schema scope and write collisions.",
+    "Candidate executor simulation, durable replay adapter, grant shape/expiry, negative native responses, source drift, partial failure and foreign-content preservation.",
+    "Fresh subprocess status readback; only synthetic simulation receipts are successful."
+  ],
+  "skip_count": 0,
+  "source_stability": true,
+  "status": "HOLD_FUNCTIONAL_REVIEW_FINDINGS",
+  "test_count": 40
+}

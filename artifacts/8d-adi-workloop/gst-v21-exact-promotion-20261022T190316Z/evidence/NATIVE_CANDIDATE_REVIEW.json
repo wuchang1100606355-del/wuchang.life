@@ -1,0 +1,33 @@
+{
+  "actual_call_result": {
+    "blocked_decisions": [],
+    "counts": {
+      "ACCEPT": 235,
+      "ACCEPT_WITH_CORRECTION": 4,
+      "HOLD_FOR_EVIDENCE": 1,
+      "REJECT_OVERCLAIM": 0,
+      "REJECT_TECHNICAL_DRIFT": 0,
+      "TRADE_SECRET_QUARANTINE": 0
+    },
+    "held": true,
+    "review_unit_count": 240
+  },
+  "callee_sha256": "e01a31d99dfeff9809de1e9324fc2aa42ad22499d824217231d8647db30fa0bb",
+  "canonical_promotion_performed": false,
+  "classification_scope": "NATIVE_CANDIDATE_CONTENT_REVIEW_ONLY",
+  "entrypoint": "tools.total_field.w7tp_d8_reviewer_entrypoint.fine_grain_check",
+  "entrypoint_sha256": "31252bf7560817858bb3ea086b253615c278b04dfeb1bcabe2a53ac18a8a8b89",
+  "formal_d8_decision_issued": false,
+  "formal_effect_authorized": false,
+  "input_was_complete_request_including_byte_exact_specification": true,
+  "node": "taiji01",
+  "nonce_consumed": false,
+  "observed_at": "2026-10-21T19:15:08.570971+00:00",
+  "referenced_evidence_hash_check": "SEPARATELY_VERIFIED_35_PROTECTED_FILES",
+  "referenced_evidence_merit_verification": "NOT_PERFORMED_BY_THIS_TEXT_REVIEWER",
+  "request_path": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/gst-v21-exact-promotion-20261022T190316Z/PROMOTION_REQUEST.json",
+  "request_sha256": "cc5d289bd94689c5e35649b541c5c523687ee87a402a0c6ba8e0ec5ec6df4ef4",
+  "root": "/home/taiji_admin/Taiji_Hub",
+  "schema": "GST_EXACT_REQUEST_NATIVE_CANDIDATE_REVIEW/1.0",
+  "signature_requested": false
+}

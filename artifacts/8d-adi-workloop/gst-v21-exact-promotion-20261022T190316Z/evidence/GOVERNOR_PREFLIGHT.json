@@ -1,0 +1,15 @@
+{
+  "schema_version": "w7tp-8d-adi-v23-verification-result/1.0",
+  "contract_validation": "HOLD",
+  "decision": "HOLD_CONTRACT_OR_EVIDENCE_INVALID",
+  "authority": "NOT_GRANTED",
+  "issues": [
+    "BINDING:authority_postimage_sha256",
+    "BINDING:field_postimage_sha256",
+    "BINDING:pointer_postimage_sha256",
+    "MISMATCH:canonical.authority.git_status",
+    "MISMATCH:canonical.field.git_status",
+    "MISMATCH:observation.core_paths_clean"
+  ],
+  "plugin_can_self_authorize": false
+}

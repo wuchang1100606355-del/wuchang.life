@@ -1,0 +1,18 @@
+{
+  "coordinate": "RED_TEAM_PRE_ACTIVATION",
+  "observed_at": "2026-10-21T19:35:51.874635+00:00",
+  "scope": "CANDIDATE_CONTRACT_BUILD_ONLY",
+  "formal_activation_performed": false,
+  "open_high_findings": [],
+  "formal_blockers": [
+    "FRESH_EXACT_NATIVE_AUTHORITY_NOT_GRANTED"
+  ],
+  "controls": [
+    "Immutable source/request bindings",
+    "Existing native resolver only",
+    "No live source writes this turn",
+    "No private keys or nonce exposure",
+    "Fixture success never grants authority"
+  ],
+  "not_applicable_reason": "本輪不執行正式啟用；此座標記錄預先拒絕未授權效果。"
+}
