@@ -75,14 +75,17 @@ def verify() -> list[str]:
             failures.append(f"gateway:duplicate_or_orphan_google_route:{route}")
 
     for marker in (
-        'href="/web/login"',
+        "小J會員服務",
+        "登入後不需要再選角色",
         'href="/web/signup"',
-        "Google／LINE 僅供登入後的 verified channel 綁定",
     ):
         if marker not in login_template:
             failures.append(f"member_flow:local_entry_missing:{marker}")
     if "/google/member/login" in member or 'href="/google/member/login"' in login_template:
-        failures.append("member_flow:public_google_entry_forbidden")
+        failures.append("member_flow:public_google_entry_forbidden_until_runtime_ready")
+    for forbidden_copy in ("店員 / 店長登入", "進入店務系統", "Google／LINE 僅供登入後的 verified channel 綁定"):
+        if forbidden_copy in login_template:
+            failures.append(f"member_flow:legacy_login_copy_present:{forbidden_copy}")
 
     forbidden_literals = ("client_secret = \"", "client_secret = '", "access_token = \"", "access_token = '")
     for marker in forbidden_literals:

@@ -716,6 +716,17 @@ def build_task_model_visible_context(
     checkpoint = load("checkpoint.json")
     adi_packet = load("native_adi_packet.json")
     task = task_state["task"]
+    from core.capability_internalization import validate_capability_context_projection
+    capability_context = task_state.get("capability_context")
+    if not isinstance(capability_context, Mapping):
+        raise TaskStatePacketError("HOLD_TASK_CAPABILITY_CONTEXT_MISSING")
+    capability_context = validate_capability_context_projection(
+        capability_context, task_ref="task:" + str(task.get("TASK_ID")),
+    )
+    bound_hash = packet.get("joint_state_field", {}).get("D4", {}).get("capability_context_sha256")
+    if (bound_hash != capability_context["projection_sha256"] or
+        task_state.get("source_hashes", {}).get("capability_context_sha256") != bound_hash):
+        raise TaskStatePacketError("HOLD_TASK_CAPABILITY_CONTEXT_BINDING_MISMATCH")
     actions = action_state.get("actions", [])
     action_projection = []
     for item in actions:
@@ -802,6 +813,7 @@ def build_task_model_visible_context(
                 ),
             },
             "git": task_state.get("git"),
+            "capability_context": capability_context,
             "reconstruction_receipt": {
                 "target_manifest_sha256": receipt.get(
                     "target_manifest_sha256"
@@ -814,12 +826,16 @@ def build_task_model_visible_context(
         "capability_refs": [
             "capability:total-field-pointer-first-context-pull:20260926:v1",
             "capability:gemini-code-assist-a2a-pointer-first:20260926:v1",
+            *[row["capability_ref"] for row in capability_context["catalogue"]],
         ],
         "acceptance_conditions": [
             "condition:task-state-hashes-match",
             "condition:native-adi-packet-match",
             "condition:candidate-only",
             "condition:return-to-total-field",
+            "condition:bound-capability-inventory-complete",
+            "condition:task-required-capabilities-not-omitted",
+            "condition:catalogue-is-not-runtime-authorization",
         ],
         "schema_refs": [
             "schema:w7tp:origin-state-minimum-packet:2.3-successor",

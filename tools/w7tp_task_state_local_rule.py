@@ -179,6 +179,8 @@ def _task_snapshot(
         if item.get("TASK_ID") != task_id:
             raise TaskStateRuleError("HOLD_TASK_STATE_ACTION_TASK_MISMATCH")
         selected_actions.append(item)
+    from core.capability_internalization import build_capability_context_projection
+    capability_context = build_capability_context_projection(task, root=root)
     native_adi_packet = _native_adi_packet(adi_record_ids)
     snapshot = {
         "schema_id": "W7TP_TASK_STATE_LOCAL_SNAPSHOT_V1",
@@ -186,8 +188,10 @@ def _task_snapshot(
         "selected_actions": selected_actions,
         "checkpoint": checkpoint,
         "native_adi_packet": native_adi_packet,
+        "capability_context": capability_context,
         "source_hashes": {
             "task_state_sha256": canonical_sha256(task),
+            "capability_context_sha256": capability_context["projection_sha256"],
             "selected_actions_sha256": canonical_sha256(selected_actions),
             "checkpoint_sha256": canonical_sha256(checkpoint),
             "native_adi_packet_sha256": native_adi_packet["packet_sha256"],
@@ -245,6 +249,7 @@ def build_task_state_recipe(
             "schema_id": snapshot["schema_id"],
             "task": snapshot["task"],
             "source_hashes": snapshot["source_hashes"],
+            "capability_context": snapshot["capability_context"],
             "git": snapshot["git"],
             "snapshot_sha256": snapshot["snapshot_sha256"],
         },

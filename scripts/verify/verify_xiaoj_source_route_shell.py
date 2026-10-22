@@ -137,15 +137,22 @@ def main() -> int:
             fail(f"gateway_duplicate_or_orphan_route:{duplicate}")
 
     for required in [
-        'href="/web/login"',
+        "小J會員服務",
+        "登入後不需要再選角色",
         'href="/web/signup"',
-        "Google／LINE 僅供登入後的 verified channel 綁定",
     ]:
         if required not in member_login_template:
             fail(f"member_entry_product_copy_missing:{required}")
-    for forbidden in ['href="/google/member/login"', 'href="/line/login"']:
+    for forbidden in [
+        'href="/google/member/login"',
+        'href="/line/login"',
+        "店員 / 店長登入",
+        "進入店務系統",
+        "Google／LINE 僅供登入後的 verified channel 綁定",
+        'href="/forum"',
+    ]:
         if forbidden in member_login_template:
-            fail(f"member_entry_public_channel_forbidden:{forbidden}")
+            fail(f"member_entry_legacy_or_unready_surface_forbidden:{forbidden}")
 
     for flag in [
         '"SECRET_READ": False',
