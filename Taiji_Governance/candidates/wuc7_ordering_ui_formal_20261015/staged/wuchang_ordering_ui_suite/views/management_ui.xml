@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="management_ui" name="聊國咖啡重新總店管理中心">
+    <t t-call="website.layout">
+      <t t-set="additional_title">聊國管理中心 · <t t-esc="suite_name"/></t>
+      <main id="wuchang-management-app" class="wc-manager" t-att-data-suite="suite">
+        <aside class="wc-side">
+          <div class="wc-brand"><span class="wc-mark">聊</span><div><b>重新總店</b><small>MANAGER / 03</small></div></div>
+          <nav aria-label="管理功能">
+            <button class="is-active" data-panel="overview">營運總覽</button>
+            <button data-panel="orders">訂單與通路</button>
+            <button data-panel="menu">菜單與價格</button>
+            <button data-panel="inventory">庫存</button>
+            <button data-panel="eightd">小J・8D 資源判讀</button>
+            <button data-panel="community">Google 商家／社群協作</button>
+            <button data-panel="devices">音樂／監視資源</button>
+          </nav>
+          <div class="wc-theme-links">
+            <small>管理介面風格</small>
+            <a href="/wuchang/ordering/management/a">靛藍科技</a>
+            <a href="/wuchang/ordering/management/b">暖米咖啡</a>
+            <a href="/wuchang/ordering/management/c">墨韻典藏</a>
+          </div>
+        </aside>
+        <section class="wc-workspace">
+          <header class="wc-head"><div><p class="wc-kicker">LOGECOFFEE / ODOO 18</p><h1><t t-esc="suite_name"/>・店家管理</h1></div><div id="wc-sync" class="wc-state is-warn">正在讀取真實狀態</div></header>
+          <div class="wc-scope">固定商業歸屬：重新總店／上品食品行（Company 3）；精確 POS 尚未核定，因此正式讀取與寫入均阻塞。外部發佈、播放、音量、錄影下載與權限變更均未授權。</div>
+          <section id="wc-panel" aria-live="polite"><div class="wc-loading">連接 Odoo 唯讀資料…</div></section>
+        </section>
+      </main>
+      <script type="text/javascript" src="/wuchang_ordering_ui_suite/static/src/js/management_ui.js"></script>
+    </t>
+  </template>
+</odoo>

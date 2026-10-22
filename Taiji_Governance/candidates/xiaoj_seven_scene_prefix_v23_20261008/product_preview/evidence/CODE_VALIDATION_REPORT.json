@@ -1,0 +1,91 @@
+{
+  "schema": "wuchang.xiaoj.code_validation_report.v1",
+  "state": "PASS_CODE_VALIDATION",
+  "run_id": "WUCHANG_XIAOJ_COMMUNITY_PRODUCT_CANDIDATE_20260730T192244Z",
+  "candidate_mode": "ISOLATED_CANDIDATE_NO_LIVE_EFFECT",
+  "validations": [
+    {
+      "name": "PYTHON_SYNTAX",
+      "command": "python3 -m py_compile tests/validate_candidate.py",
+      "result": "PASS"
+    },
+    {
+      "name": "STATIC_PRODUCT_CONTRACT",
+      "command": "python3 tests/validate_candidate.py",
+      "result": "PASS_39_OF_39"
+    },
+    {
+      "name": "BROWSER_ACTION_REVIEW_HARNESS",
+      "command": "chromium --headless --dump-dom http://127.0.0.1:19090/tests/browser-harness.html",
+      "result": "PASS_19_OF_19"
+    },
+    {
+      "name": "BROWSER_APPLICATION_DOM",
+      "command": "chromium --headless --dump-dom http://127.0.0.1:19090/",
+      "result": "PASS_ASSOCIATION_BRAND_MATURE_SERVICE_CONSOLE_AND_PRIOR_CODEX_WHITE_HAIRED_SERVICE_WORKER"
+    },
+    {
+      "name": "DESKTOP_BROWSER_RENDER",
+      "result": "PASS_1440x1000_ASSOCIATION_BRAND_AND_MATURE_SERVICE_CONSOLE",
+      "sha256": "d005964e1700b197d330ec114494f43879a6c9ac50a0cb337357c27e0fbf9fc0"
+    },
+    {
+      "name": "MOBILE_BROWSER_RENDER",
+      "result": "PASS_430x932_ASSOCIATION_BRAND_PRIMARY_ACTIONS_AND_CONSOLE_ENTRY",
+      "sha256": "a244860f3981683da4041ec71a45ac58b720f2a9d21a17fd5a24adf3167e1b04"
+    },
+    {
+      "name": "PERSONAL_XIAOJ_DESKTOP_RENDER",
+      "result": "PASS_1440x1000",
+      "sha256": "7f4092968cf21584c87315ac475669346c25e6555ba05e31ea2c6db2715b12dd"
+    },
+    {
+      "name": "PERSONAL_XIAOJ_MOBILE_RENDER",
+      "result": "PASS_430x932_FIRST_ACTION_VISIBLE",
+      "sha256": "bbe42bdefbc57e76d4c6b7dec0a3b532f5d2de256f0cc251f5dcd04beca9adc8"
+    },
+    {
+      "name": "XIAOJ_CHARACTER_PROVENANCE",
+      "result": "PASS_PRIOR_VRM_EXACT_THUMBNAIL",
+      "source_sha256": "3a6d395139a5b3207f8ff5ff6686c9340009777e3f87587b04c4cf9841640f0f",
+      "asset_sha256": "691b23d874688f351f6729388e6250ee6de974ce75d3ed34e2136d2bfda61140"
+    }
+  ],
+  "negative_acceptance": {
+    "llm_direct_execution": "BLOCKED",
+    "live_odoo_effect": "BLOCKED",
+    "parameter_substitution_after_review": "BLOCKED",
+    "action_hash_mismatch": "BLOCKED",
+    "approval_replay": "BLOCKED",
+    "expired_approval": "BLOCKED",
+    "cross_member_approval": "BLOCKED",
+    "cross_scene_approval": "BLOCKED",
+    "personal_image_cross_member_change": "BLOCKED",
+    "personal_image_adjustment_substitution": "BLOCKED",
+    "personal_image_automatic_upload": "BLOCKED",
+    "personal_image_persistent_write": "BLOCKED",
+    "rejection_side_effect": "ZERO",
+    "database_write": "FALSE",
+    "external_send": "FALSE",
+    "runtime_change": "FALSE"
+  },
+  "authority_validation": {
+    "odoo": "AUTHORITATIVE_UNBOUND_ADAPTER_FAIL_CLOSED",
+    "total_field": "GOVERNANCE_REFERENCE_BOUND",
+    "intent_field_9107": "NOT_CALLED_CANDIDATE_ONLY",
+    "openwebui": "NOT_USED_AS_PRODUCT_ARCHITECTURE",
+    "google_line": "NO_MEMBER_ROOT_OR_ROLE_AUTHORITY"
+  },
+  "accessibility_validation": {
+    "semantic_main": "PASS",
+    "skip_link": "PASS",
+    "unique_ids": "PASS_52",
+    "focus_visible": "PASS",
+    "reduced_motion": "PASS",
+    "increased_contrast": "PASS",
+    "minimum_touch_target": "PASS_48_CSS_PX",
+    "primary_contrast": "PASS_10_02_TO_1",
+    "body_contrast": "PASS_12_71_TO_1"
+  },
+  "gate_decision": "PASS_CODE_VALIDATION_FOR_ISOLATED_CANDIDATE"
+}

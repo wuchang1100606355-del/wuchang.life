@@ -1,0 +1,131 @@
+{
+  "checks": {
+    "canonical_or_pointer_write": "NO",
+    "db_write": "NO",
+    "deploy": "NO",
+    "entrypoint_independent": "PASS",
+    "image_build": "NO",
+    "manifest_and_source_files": "PASS_15_OF_15",
+    "owner_seal": "PASS",
+    "replay": "PASS",
+    "request_schema_and_self_hash": "PASS",
+    "request_ttl": "PASS",
+    "runtime_activation": "NO",
+    "self_review": "PASS_NOT_SELF_REVIEW"
+  },
+  "entrypoint_version": "w7tp-total-field-static-review-entrypoint/1.0",
+  "fixed_authority_boundary": {
+    "canonical_change": false,
+    "container_start": false,
+    "db_write": false,
+    "deploy": false,
+    "git_commit": false,
+    "git_push": false,
+    "image_build": false,
+    "image_pull": false,
+    "image_tag": false,
+    "pointer_change": false,
+    "restart": false,
+    "runtime_activation": false
+  },
+  "manifest": {
+    "files_verified": 15,
+    "sha256": "424763c3037ef9cf54d80be87469976e2f02fe8d69f5535dd8e8468f7304b945",
+    "verified_sources": [
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/SKILL.md",
+        "sha256": "cc4da82539d67d773e89d26ebd7440d7b30a060cc633a74940f94bf87dc32542",
+        "size_bytes": 7554
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/BEHAVIOR_CELL_CANDIDATE.json",
+        "sha256": "9f549b004a1093a474de18813afda97deacaf1b634232d41da63fe083f65e6f9",
+        "size_bytes": 1491
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/CROSS_MODEL_BEHAVIOR_MAPPING.json",
+        "sha256": "2d179e73f056f9571ba87d5e2246cc8a0dcaffa1a262e876ac1cbf900e1259e0",
+        "size_bytes": 2458
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/D4_RECEIPT.json",
+        "sha256": "7995c668b20406039d14ba658b4cba8d62e77972bd51d12439a4d6d63a0e7ed3",
+        "size_bytes": 1583
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/R1_CROSS_MODEL_3D_ACCEPTANCE_RECEIPT.json",
+        "sha256": "f2fa953d91819c567122645d3d6455940464d707ba5c863f3f1babc3f676ec08",
+        "size_bytes": 1863
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/R1_SEMANTIC_MORPH_D4_EVIDENCE.json",
+        "sha256": "d2d886a3db93480be12cad38936e9873ae2b403aa92c3b8ae2026eec101c2f8e",
+        "size_bytes": 6704
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/R1_SPARSE_CROSSMODEL_47_TEST_RECEIPT.json",
+        "sha256": "c5937c9de16ed971161b61e88603acf0d100324d3ee57bc4f22896965b5d66a8",
+        "size_bytes": 2016
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/SOURCE_MANIFEST.json",
+        "sha256": "d279754d24d6cc5d15b4378358b653d8d05be3bc7950611d71d3d705aed55863",
+        "size_bytes": 3706
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/references/TECHNICAL_ASSESSMENT.json",
+        "sha256": "53aaf7fa41beaa825b4e5f9829fceb243e2a052289192d5c81a27da56e0639ed",
+        "size_bytes": 1672
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/scripts/gltf_spatiotemporal_field.py",
+        "sha256": "f81b807f18667f44f01a677a222ed2cbe5bcfbc6b03bff38fbd7f0e1df547993",
+        "size_bytes": 17377
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/scripts/r1_named_morph_behavior.py",
+        "sha256": "a513204f1ee7aa833b9e1ab2e60129e4330b7ceab753b50475e4fdb581e03a23",
+        "size_bytes": 7305
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/scripts/resolve_3d_behavior.py",
+        "sha256": "2a5fb0cfb5b651047d0d3822bfbd3f62f2c4cbce83b634ff081711bed3c76828",
+        "size_bytes": 2754
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/scripts/test_gltf_spatiotemporal_field.py",
+        "sha256": "e5bbaccd4e1a8d7d6069512ac0db1f5d99511c510fcaf4a935e3417ad6b05063",
+        "size_bytes": 6948
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/scripts/test_r1_named_morph_behavior.py",
+        "sha256": "e3ab28b244fa6dc93c48bc222e8b6844faf1b01426852966db961918a827a714",
+        "size_bytes": 6772
+      },
+      {
+        "path": "Taiji_Governance/candidates/xiaoj_3d_absolute_spatial_behavior_20261016/PR29_D4_D8_RECONCILIATION_20261017T112349Z/source_snapshot/scripts/test_resolve_3d_behavior.py",
+        "sha256": "4a6185a98929bdaf5b343b66faf2170788a4427529ef2dffa50ea56780370aae",
+        "size_bytes": 3140
+      }
+    ]
+  },
+  "owner_seal": {
+    "expires_at": "2026-10-17T12:00:15Z",
+    "seal_id": "owner-seal:PR29_D4_D8_RECONCILIATION_20261017T112349Z:founder-direct-20261017T114431",
+    "sha256": "88be80f345eef0c9ab804250af92b6b0ac6461a3facfc37bb5e029b8de1afc33",
+    "single_use_id": "PR29_D4_D8_RECONCILIATION_20261017T112349Z:SINGLE_USE"
+  },
+  "packet_type": "REVIEW_EVIDENCE",
+  "reason_codes": [
+    "PASS_EXACT_HASH_BOUND_STATIC_IMPLEMENTATION_CANDIDATE_ONLY"
+  ],
+  "request": {
+    "purpose": "REVIEW_XIAOJ_3D_SPATIOTEMPORAL_SKILL_PR29",
+    "requested_decision": "ACCEPT_STATIC_IMPLEMENTATION_CANDIDATE_ONLY",
+    "run_id": "PR29_D4_D8_RECONCILIATION_20261017T112349Z",
+    "sha256": "d528c218a896d4acf34e6503d55a3ac0a62ed055d199b00ac402fa98071df87f"
+  },
+  "reviewed_at": "2026-10-17T11:45:15Z",
+  "run_id": "PR29_D4_D8_RECONCILIATION_20261017T112349Z_TOTAL_FIELD_STATIC_REVIEW",
+  "schema_version": "W7TP-TOTAL-FIELD-STATIC-REVIEW-EVIDENCE/1.0"
+}

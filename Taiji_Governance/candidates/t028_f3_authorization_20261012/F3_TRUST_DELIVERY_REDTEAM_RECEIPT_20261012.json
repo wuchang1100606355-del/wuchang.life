@@ -1,0 +1,91 @@
+{
+  "action_id": "A-T028-F3-AUTHDELIVERY-TAIJI01-20261012-001",
+  "authority_effect": "NONE",
+  "causal_boundary": "Existing generic Founder gate has no independently verified OS-sealed issuer provenance delivered to this receipt verifier; D8 authority not proven by JSON shape.",
+  "d8_unchanged": "HOLD",
+  "effect_flags": {
+    "canonical_change": false,
+    "enable": false,
+    "git_commit": false,
+    "git_push": false,
+    "install": false,
+    "service_restart": false
+  },
+  "f4_f5_hold_preserved": true,
+  "first_divergence": "LEGACY_RECEIPT_VERIFIER_ACCEPTS_SELF_DECLARED_JSON_ALLOW_WITHOUT_TRUSTED_ISSUER_PROVENANCE",
+  "observations": {
+    "MSI": {
+      "bridge_node": "MSI",
+      "isolated_audit_source_sha256": "328076f626fd380ef9d220f552debfc6d7b35a65e82c6d5c4354195899d6a192",
+      "legacy_verifier_sha256": "2bff9ac766b3cdfe7131b251d9421b39047f7c4a6228a67b6743c39c12419abe",
+      "manifest_sha256": "13cff51abfc4ac2028529f1979d02dd7150a837f4a7bcb2be108e7dc14396fab",
+      "observed_at_utc": "2026-10-12T10:16:09+00:00",
+      "package_version": "2.3.1+t028.semantic-source-repair",
+      "payload_sha256": "30b26e4f9e15ee622a53b7d9a6c04dae0afef58f6b85e32e618768df00f96f01",
+      "same_synthetic_receipt_accepted_MSI": true,
+      "stale_timestamp_not_enforced": true,
+      "synthetic_untrusted_receipt_accepted_taiji01": true,
+      "test_only_no_actual_authorization": true
+    },
+    "taiji01": {
+      "candidate_contract_sha256": "682b20a0f436562ad630ca1609e2c209f1a8cebce77066d3fbe6face0e817d65",
+      "candidate_evaluation": {
+        "ACTION_ID": "A-T028-F3-AUTHDELIVERY-TAIJI01-20261012-001",
+        "authority_effect": "NONE",
+        "decision": "HOLD",
+        "effects": {
+          "d8_decision": "UNCHANGED",
+          "deploy": false,
+          "enable": false,
+          "install": false
+        },
+        "legacy_receipt_is_authority": false,
+        "reasons": [
+          "HOLD_F3_ISSUER_TRUST_PROVENANCE_UNVERIFIED",
+          "HOLD_F3_SIGNATURE_AND_NONCE_NOT_VERIFIED",
+          "HOLD_F3_RECEIVER_LOCAL_DELIVERY_NOT_VERIFIED",
+          "HOLD_F4_F5_SEPARATE_GATES_STILL_OPEN"
+        ],
+        "required_trust_proofs": [
+          "trusted_issuer_identity_proven_by_existing_D8",
+          "founder_sealed_root_and_dual_factor_verified",
+          "signed_exact_ACTION_ID_and_payload_and_receiver",
+          "issuer_signature_verified_against_independently_trusted_key",
+          "fresh_single_use_nonce_and_expiry_enforced",
+          "receiver_local_identity_and_delivery_acknowledged",
+          "F4_F5_acceptance_separately_recorded"
+        ],
+        "schema_version": "W7TP_T028_F3_RECEIPT_EVIDENCE_GATE_CANDIDATE/1.0",
+        "signable_release": false,
+        "structural_candidate_pass": true,
+        "verified_F3_closure": false
+      },
+      "candidate_guard_sha256": "861acab3d2ccdf0fdaf8385b9297813428fc4ce36897d612942b30241b5f76e5",
+      "candidate_test_sha256": "da03a1d7dc082636866d49232b1da81c6851f287fdfcded109a16a1e1c361f87",
+      "candidate_tests_failed": 0,
+      "candidate_tests_passed": 12,
+      "existing_ed25519_verifier_sha256": "574957bc22f993aca06f08a8f5a80a32a8f47e046d158f8fc8e546201ae40e87",
+      "existing_founder_gate_sha256": "54e21e92d5a2371b4c33d907da31a58e2c2d0fcb1c44707b02b71f94f37ad66e",
+      "host": "taiji01"
+    }
+  },
+  "observed_at_utc": "2026-10-12T10:17:45.840391+00:00",
+  "preimage": "runtime/repair_preimages/t028_f3_audit_20261012T101745Z",
+  "preimage_sha256": {
+    "ACTION_LEDGER.json": "87b6de9cf1596b4e3f4c2f9e109281443692d1dd34741b093e10ddb6b0795e8b",
+    "CURRENT_CONVERSATION_CHECKPOINT.json": "a78f3d9c6ced31b34b8a7f592cd1d90a3e4a5bfe6fe77eecff43c9b0dad3e602",
+    "WORK_LEDGER.json": "34a8574cf6caca969a7ac237d4505c01c86998e29baf2f7562e19be4e7f0f597"
+  },
+  "required_remaining_f3": [
+    "independent_trusted_issuer_and_sealed_root_proof",
+    "exact_ACTION_ID_receiver_and_package_signed_binding",
+    "short_lived_single_use_nonce_and_replay_store",
+    "receiver_identity_bound_delivery_ack_and_signature_validation",
+    "installer_side_enforcement_of_verified_delivery"
+  ],
+  "schema_version": "W7TP_T028_F3_NEGATIVE_TRUST_PROVENANCE_EVIDENCE/1.0",
+  "source_context_ref": "context:task-state:T-028:3e1d1a74e861bb7f",
+  "state": "PASS_SCOPED_F3_GAP_CONFIRMED_GUARD_CANDIDATE_TESTED",
+  "task_id": "T-028",
+  "test_scope": "NEGATIVE_GUARD_AND_STRUCTURE_ONLY_NOT_TRUSTED_DELIVERY_OR_PRODUCTION_LOAD"
+}

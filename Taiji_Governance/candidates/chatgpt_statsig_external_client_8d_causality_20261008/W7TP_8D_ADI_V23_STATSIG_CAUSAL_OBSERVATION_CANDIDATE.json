@@ -1,0 +1,118 @@
+{
+  "schema": "W7TP_8D_ADI_V2_3_CHATGPT_STATSIG_BROWSER_CAUSAL_OBSERVATION_V1",
+  "observed_taipei": "2026-10-08T23:26:13.965653+08:00",
+  "observation_type": "EXTERNAL_PROVIDER_CLIENT_ERROR",
+  "truth_boundary": "CAUSAL_CANDIDATE_UNTIL_AUTHENTICATED_BROWSER_NETWORK_FAILURE_REASON_OBSERVED",
+  "D1_intent": {
+    "goal": "Resolve StatsigTransportError based on first causal divergence without Odoo/network/identity changes",
+    "user_service_priority": "ChatGPT conversation, files and work function, not console event counter"
+  },
+  "D2_dynamic_state": {
+    "screen_20261008_user": "Repeated StatsigTransportError Failed to fetch on chatgpt.com/ces/v1/rgstr; devtools console accumulated ~2718 errors",
+    "screen_20261008_new": "Similar errors still shown; console also reports scheduled max_time flush failed after 8 attempts, 10 events dropped; accumulated ~3229 errors",
+    "site_content_was_rendering": true,
+    "chat_messages_were_exchanged": true,
+    "this_is_not_proof_of_global_chatgpt_outage": true
+  },
+  "D3_coordinates": {
+    "device": "MSI Windows 11 Chrome",
+    "profile": "Profile 2, displayed as 政隆",
+    "requested_origin": "https://chatgpt.com",
+    "failing_path": "/ces/v1/rgstr",
+    "request_method": "POST",
+    "remote_other_nodes": [
+      "taiji01",
+      "penguin"
+    ],
+    "cloudflare_edge_seen_on_command_line_only": true
+  },
+  "D4_evidence": {
+    "user_screenshot": "Browser console failing Statsig POST; no browser Network status/blocked reason shown",
+    "msi_chrome_live_console": "Repeated failures and drop after 8 attempts, 10 events dropped",
+    "msi_wsl_http_403": "cf-mitigated: challenge; Cloudflare unauthenticated request",
+    "penguin_http_403": "Unauthenticated command line similarly challenged",
+    "taiji01_http_403": "Unauthenticated command line similarly challenged",
+    "tls_verification": "PASS for command-line HTTPS",
+    "msi_windows_proxy_enabled": false,
+    "msi_windows_proxy_pac_configured": false,
+    "chrome_policy_machine_or_user": "not configured",
+    "msi_chrome_extension_presence": [
+      "uBlock (network request modification capability, ~81744 DNR rules allocated)",
+      "沉浸式翻譯 (network modification capability)",
+      "ChatGPT extension (network modification capability)"
+    ],
+    "actual_failed_chrome_post_http_status": "UNKNOWN",
+    "actual_failed_chrome_post_blocking_reason": "UNKNOWN",
+    "no_evidence_of_dropped_chat_message_content": true
+  },
+  "D5_policy_and_execution": {
+    "diagnostics": "Read-only except temporary local observation scripts; no browser settings/extension/DNS/VPN/router/Odoo source changes",
+    "decision": "Do not change security settings without matching Chrome request evidence",
+    "first_action": "On the affected ChatGPT Chrome tab inspect DevTools Network /ces/v1/rgstr failure status and blocked reason, without exposing credentials",
+    "disallowed": "No global extension disable, no deleting cookies, no VPN switches, no Odoo/Caddy tweaks as workaround"
+  },
+  "D6_transport": {
+    "subsystem": "ChatGPT webpage Statsig telemetry/config transport",
+    "not_equivalent_to": "W7TP Origin Cell state transmission, Total Field D6 GST or ChatGPT response delivery",
+    "lost_records": "Statsig internal events per console, not proved lost chat messages"
+  },
+  "D7_risk_isolation": {
+    "do_not_assume_extension_is_cause": true,
+    "do_not_assume_cloudflare_cli_challenge_is_browser_cause": true,
+    "do_not_share_unredacted_har_or_cookie": true,
+    "test_only_chatgpt_site_extension_rules_if_client_block_proven": true,
+    "if_core_chat_features_work": "log and defer telemetry-only issue"
+  },
+  "D8_authority_envelope": {
+    "formal_total_field_action_receipt": null,
+    "canonical_state_change": false,
+    "external_provider_interference_authorized": false,
+    "interpretation": "evidence-supported cause graph with unresolved browser first divergence"
+  },
+  "causal_graph": [
+    {
+      "from": "Statsig browser client",
+      "to": "POST /ces/v1/rgstr",
+      "edge": "Observed browser console"
+    },
+    {
+      "from": "Browser POST",
+      "to": "Rejected fetch or interrupted transport",
+      "edge": "Observed, exact lower layer unknown"
+    },
+    {
+      "from": "Repeated failure",
+      "to": "Retry 8 attempts",
+      "edge": "Observed Statsig warning, per-request association not independently traced"
+    },
+    {
+      "from": "Retry exhaustion",
+      "to": "Event flush dropped 10 entries",
+      "edge": "Observed warning"
+    },
+    {
+      "from": "uBlock/extension DNR",
+      "to": "Browser request blocked",
+      "edge": "Unverified hypothesis"
+    },
+    {
+      "from": "Cloudflare challenge",
+      "to": "Browser response blocked",
+      "edge": "Unverified hypothesis; only command-line confirmed"
+    },
+    {
+      "from": "Transient provider errors",
+      "to": "Browser request failed",
+      "edge": "Unverified hypothesis"
+    }
+  ],
+  "minimal_verified_next_step": {
+    "browser_network_status": "Check failed /ces/v1/rgstr request status, failure reason and URL path (no headers/cookies).",
+    "ERR_BLOCKED_BY_CLIENT": "Temporarily pause only site-specific uBlock rule, retry, re-enable if ineffective.",
+    "HTTP_403_cf_mitigated": "Do not bypass; check Chrome challenge/cookies/JS, compare incognito; then provide CF ray/time to support if browser also blocked.",
+    "ERR_CONNECTION_RESET_or_TIMED_OUT": "Check Windows proxy/firewall/security locally only; compare another browser same connection.",
+    "HTTP_429_or_5xx": "Check official status and retry, collect sanitized diagnostics for support.",
+    "NO_NEW_ERROR_AND_CHAT_WORKS": "Ignore historical Keep Log console accumulator; no broad system changes."
+  },
+  "support_reference": "https://help.openai.com/zh-hant/articles/7996703-troubleshooting-chatgpt-error-messages"
+}

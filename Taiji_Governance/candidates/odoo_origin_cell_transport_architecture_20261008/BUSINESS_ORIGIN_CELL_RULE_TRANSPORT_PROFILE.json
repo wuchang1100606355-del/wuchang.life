@@ -1,0 +1,169 @@
+{
+  "schema": "W7TP_8D_ADI_ODDO_ORIGIN_CELL_BUSINESS_ARCHITECTURE_CANDIDATE_V1",
+  "created_at_utc": "2026-10-08T10:04:33.149613+00:00",
+  "git_commit_from_taiji01": "3c2e5884bc149ffbb02d81fdf288506918fae79e",
+  "canonical_version_target": "W7TP/8D ADI V2.3",
+  "product_canonical_activated": false,
+  "formal_d8_action_receipt": null,
+  "candidate_only": true,
+  "single_natural_person_identity_root": true,
+  "single_xiaoj_distributed_ai_service_state": true,
+  "scene_prefix_grants_are_not_authority": true,
+  "same_base_precondition": "EXACT_SENDER_RECEIVER_RULE_HASH_AND_RUNTIME_CAPABILITY_CHECK",
+  "mode_selection": [
+    "SHARED_RULE_ORIGIN_CELL_ONLY_IF_EXACT_READY_AND_ECONOMIC",
+    "GENERATIVE_RULE_ORIGIN_CELL_IF_EXECUTOR_READY_AND_ECONOMIC",
+    "SECURE_DIRECT_TRANSFER_IF_POLICY_ALLOWS_AND_CHEAPER",
+    "HOLD_IF_SENSITIVE_AND_UNVERIFIABLE"
+  ],
+  "wire_cost_estimate_only": true,
+  "original_node_readiness": {
+    "taiji01": "PASS_LOCAL_RULE_BASE_PRESENT_BUT_UNIVERSAL_RECEIVER_RUNTIME_ACTIVATED_FALSE",
+    "MSI": "HOLD_LOCAL_REPO_MISSING_THIS_V23_RULE_AND_REGISTRY_SET",
+    "penguin": "HOLD_RULE_REGISTRY_NOT_LOCATED_IN_EXPECTED_ROOT",
+    "taiji03": "OFFLINE_NOT_CHECKED"
+  },
+  "baseline_architecture": {
+    "odoo_instances": 1,
+    "business_domains": 3,
+    "installed_modules": 141,
+    "sample_odoo_plus_db_mib": 590,
+    "cross_domain_network_sync_mandatory": false
+  },
+  "split_architecture": {
+    "target_odoo_instances": 3,
+    "business_domains": 3,
+    "selected_dependency_module_copies": 116,
+    "selected_unique_modules": 49,
+    "duplicated_install_positions": 67,
+    "single_host_failure_isolation": false,
+    "per_business_container_failure_scope_target": 1,
+    "uses_one_identity_root": true,
+    "actual_live_deployment": false
+  },
+  "domain_profiles": {
+    "business_coffee": {
+      "service": "商圈服務小J",
+      "business_data_owner": "Odoo POS/merchant organ",
+      "execution_node_now": "taiji01",
+      "future_ui_node": "penguin",
+      "sync_out": [
+        "authorized_order_status_ref",
+        "member_ticket_result_ref",
+        "auditable_effect_ref"
+      ],
+      "forbid": [
+        "full_order_customer_plaintext",
+        "merchant_all_customers_dump"
+      ]
+    },
+    "association": {
+      "service": "協會服務小J",
+      "business_data_owner": "association Odoo organ",
+      "execution_node_now": "taiji01",
+      "sync_out": [
+        "volunteer_action_ref",
+        "member_consent_receipt_ref",
+        "event_state_ref"
+      ],
+      "forbid": [
+        "association_all_members_export"
+      ]
+    },
+    "housing": {
+      "service": "住宅服務小J",
+      "business_data_owner": "HOA-approved delegated organ",
+      "execution_node_now": "NOT_READY",
+      "planned_node": "taiji03_offline",
+      "sync_out": [
+        "deidentified_facility_event_ref",
+        "authorized_building_maintenance_ref"
+      ],
+      "forbid": [
+        "raw_resident_list",
+        "unmasked_id_number"
+      ]
+    },
+    "xiaoj_inference": {
+      "service": "同一個小J",
+      "execution_node_now": "MSI-local-Ollama/OpenWebUI",
+      "reception_authority": "none independent",
+      "sync_in": [
+        "authorized_minimum_member_context_ref",
+        "task-scoped_dynamic_context_ref"
+      ],
+      "forbid": [
+        "raw_secret",
+        "unverified_action_grant"
+      ]
+    }
+  },
+  "hard_d8_and_d7_gates": [
+    "Identity and consent current evidence must be verified by existing Total Field; never by new scene prefix.",
+    "Per-business owner receives only authorized state/receipt refs, not entire private Odoo tables.",
+    "Exact sender and receiver material base/version/implementation hashes must match.",
+    "Source-side rule formation and receiving exact reconstruction need effect attestations; packet self-hash is not D8.",
+    "If rule base missing, choose permitted secure direct transfer for small non-sensitive messages or HOLD when the policy forbids fallback.",
+    "No raw PII, raw credentials, ticket balance writes, transaction execution or cross-business privilege expansion without action receipt.",
+    "Measure full wire bytes including required rules, indices, residual U, envelope, prerequisite exchanges and verification, not raw-U alone.",
+    "Compare CPU/reconstruction/verification time plus link RTT and bandwidth; existing selector currently compares WIRE BYTES, not full wall-clock cost."
+  ],
+  "native_rule_engine_reference": "products/eight_dimensional_generative_memory/w7tp_origin_cell_gst_universal_v23_candidate.py",
+  "native_selector_reference": "products/eight_dimensional_generative_memory/w7tp_endpoint_rule_handshake_v1.py",
+  "benchmarks": [
+    {
+      "fixture": "tiny_identity_action",
+      "source_is_synthetic": true,
+      "source_bytes": 112,
+      "native_candidate_wire_bytes": 2802,
+      "candidate_wire_ratio": 25.017857,
+      "candidate_wire_saved_bytes": -2690,
+      "raw_material_u_bytes": 0,
+      "native_candidate_encode_ms": 1.229,
+      "native_candidate_decode_ms": 0.656,
+      "sha256_exact_reconstruction": true,
+      "selected_by_existing_wire_selector": "FULL_TRANSFER"
+    },
+    {
+      "fixture": "business_structured",
+      "source_is_synthetic": true,
+      "source_bytes": 6491,
+      "native_candidate_wire_bytes": 20363,
+      "candidate_wire_ratio": 3.137113,
+      "candidate_wire_saved_bytes": -13872,
+      "raw_material_u_bytes": 0,
+      "native_candidate_encode_ms": 13.451,
+      "native_candidate_decode_ms": 7.951,
+      "sha256_exact_reconstruction": true,
+      "selected_by_existing_wire_selector": "FULL_TRANSFER"
+    },
+    {
+      "fixture": "repeated_64k",
+      "source_is_synthetic": true,
+      "source_bytes": 65536,
+      "native_candidate_wire_bytes": 2503,
+      "candidate_wire_ratio": 0.038193,
+      "candidate_wire_saved_bytes": 63033,
+      "raw_material_u_bytes": 0,
+      "native_candidate_encode_ms": 28.03,
+      "native_candidate_decode_ms": 0.651,
+      "sha256_exact_reconstruction": true,
+      "selected_by_existing_wire_selector": "GENERATIVE_RULE_ORIGIN_CELL"
+    },
+    {
+      "fixture": "high_entropy_16k",
+      "source_is_synthetic": true,
+      "source_bytes": 16384,
+      "native_candidate_wire_bytes": 60921,
+      "candidate_wire_ratio": 3.718323,
+      "candidate_wire_saved_bytes": -44537,
+      "raw_material_u_bytes": 0,
+      "native_candidate_encode_ms": 32.04,
+      "native_candidate_decode_ms": 20.139,
+      "sha256_exact_reconstruction": true,
+      "selected_by_existing_wire_selector": "FULL_TRANSFER"
+    }
+  ],
+  "benchmark_truth_boundary": "Synthetic local pure-code byte-exact tests; no cross-host packet delivery, live rule negotiation, business transaction or formal D8 execution.",
+  "first_safe_next_step": "Read-only sender/receiver rule-contract handshake across taiji01 and MSI then permitted isolated synthetic-origin-cell roundtrip; stop on mismatched canonical/D8."
+}

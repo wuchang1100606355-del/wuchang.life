@@ -1,0 +1,79 @@
+{
+  "state": "CANONICAL_TRUE8D_ALLNODE_EXPANDED",
+  "formal_architecture_name": "正8維治理架構",
+  "integration_expression": "八合一",
+  "inner_core": "五合一核心治理閉環",
+  "scope": {
+    "total_field": "ALL_NODES",
+    "field_scope": "ALL_8_DIMENSIONS",
+    "node_policy": "macro-governed by path/ref/hash/report only; no direct OS authority assumption"
+  },
+  "dimensions": [
+    {
+      "id": "D1",
+      "field": "Intent Field",
+      "zh": "意圖場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "誰要做什麼、目標是什麼、任務邊界是什麼"
+    },
+    {
+      "id": "D2",
+      "field": "State Field",
+      "zh": "狀態場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "現在真實狀態、進度、阻塞點、是否通過"
+    },
+    {
+      "id": "D3",
+      "field": "Coordinate Field",
+      "zh": "座標場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "人、事、時、地、權限、資源位置；智財、專利、效能數據、技能管理之索引位置可歸此場定位"
+    },
+    {
+      "id": "D4",
+      "field": "Evidence Field",
+      "zh": "證據場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "hash、manifest、ledger、報告路徑、驗證紀錄；智財、專利、效能數據、技能管理之證據鏈可歸此場存證"
+    },
+    {
+      "id": "D5",
+      "field": "Execution Field",
+      "zh": "執行場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "實際執行了什麼、是否寫入、是否部署、是否重啟、是否發布"
+    },
+    {
+      "id": "D6",
+      "field": "Sovereign Privacy Field",
+      "zh": "主權隱私場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "無明文會員系統、member_ref、key_ref、去識別、敏感資訊輸出邊界"
+    },
+    {
+      "id": "D7",
+      "field": "Generative Transmission & Resource Routing Field",
+      "zh": "生成式傳輸與資源路由場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "制式通道場；封包生成、分段、參照、差分、傳輸、本地重構、硬體通道、運算資源、模型節點與邊緣/雲端/本地路由"
+    },
+    {
+      "id": "D8",
+      "field": "Red-Team Detour Alert & Quarantine Field",
+      "zh": "紅隊防繞告警禁錮場",
+      "expanded_scope": "ALL_NODES",
+      "definition": "檢查有沒有繞；偵測重新定義、重複研究、離題擴張、非必要教學、市場討論、未推進交付物；必要時暫停、隔離、沙盒、人審、dead_letter 或禁止進入執行場"
+    }
+  ],
+  "safety_flags": {
+    "PATH_METADATA_ONLY": true,
+    "FILE_CONTENT_READ": false,
+    "SECRET_READ": false,
+    "MEMBER_PLAINTEXT_READ": false,
+    "DB_WRITE": false,
+    "SERVICE_RESTART": false,
+    "DEPLOY": false,
+    "PRODUCTION_RELEASE": false
+  }
+}

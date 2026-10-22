@@ -1,0 +1,23 @@
+{
+  "schema": "W7TP_T012_CONTEXT_GUARD_CANDIDATE_EVIDENCE_V1",
+  "observed_at_utc": "2026-10-01T16:34:41Z",
+  "target_node": "taiji01",
+  "source_root": "/home/taiji_admin/Taiji_Hub",
+  "source_branch": "codex/current-live-state-consolidation-20260915",
+  "source_head": "c82fd92ab713da7aed86566fcd3fa70c1289ac8d",
+  "authority": "CANDIDATE_ONLY_NO_LIVE_LAND",
+  "live_target_files_changed": false,
+  "root_cause": "T-012 task/action state was coupled with CURRENT_CONVERSATION_CHECKPOINT.current_task_id=XJ-002",
+  "guards": [
+    "checkpoint.current_task_id must equal requested task_id",
+    "broker pull result.task_ref must equal caller task_ref",
+    "MSI adapter pull result.task_ref must equal adapter task_ref",
+    "receiver must recompute candidate_text SHA256 and candidate_ref"
+  ],
+  "preimage_root": "/tmp/w7tp-t012-context-guard.LyWg0q/preimage",
+  "rollback": "Discard candidate root; live source was not modified. Exact preimages are retained below preimage_root.",
+  "preimage_sha256": {"tools/w7tp_task_state_local_rule.py":"970d39d61d77c55b0a2a7a8cb4a8edb781f783f69f2adc83848322dd2fb8e69b","tools/w7tp_nl_goal_runner.py":"c1f8b4f1c9fd07584282f3e3ffcbf3c21619ecd419f88a5c458619c8f4590863","tools/total_field/msi_llm_candidate_adapter.py":"121865ecef1472e06c6f476f01f277b0af9a229e9e76324f1dfa65b7758400fe","configs/total_field/w7tp_local_origin_state_rule_registry_v1.json":"85007b6bce5ad40c1c6ff5985a765a3e015e94867ab3f6be246c2bedc6518eaf"},
+  "candidate_sha256": {"tools/w7tp_task_state_local_rule.py":"886e4aeb2009c154618fed60a6cf89eb246339265ce0872aae136d2b0960a1bf","tools/w7tp_nl_goal_runner.py":"d705321e317510fdc2e097a6201bac051ee82450bc9e52919da0a60f5477562d","tools/total_field/msi_llm_candidate_adapter.py":"58a5672665a3ab0ddf5edbac0451766af07170807f94678c3c0dec1c93edb84c","configs/total_field/w7tp_local_origin_state_rule_registry_v1.json":"572a054a8d221c98654789a552a9414d6b1cb6632d9ff46a67db7180120035f2"},
+  "validation": {"preimage_new_guards":"0/5 PASS (expected reproduction: all five guards absent)","adapter":"14/14 PASS","task_packet_suite":"9/9 PASS","runner_suite":"18/19 PASS; one identical preimage failure HOLD_LOCAL_MODEL_UNREACHABLE","broker_wrong_expired_replay":"3/3 PASS","existing_member_gate_negative":"9/9 PASS","session_expiry_probe":"HOLD_SESSION_TTL_INVALID","live_T012_replay":"HOLD_TASK_STATE_CHECKPOINT_TASK_MISMATCH"},
+  "formal_connection_blockers": ["no current task-bound P1 identity candidate","no current role/Seat lease snapshot","no current dual receipts and durable nonce binding","MSI adapter does not submit ACTION_REQUEST inputs to existing gate","current MSI local-model route readback is HOLD_LOCAL_MODEL_UNREACHABLE"]
+}

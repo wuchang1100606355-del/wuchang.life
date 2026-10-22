@@ -1,0 +1,46 @@
+{
+  "D4_R1_EVIDENCE_sha256": "d2d886a3db93480be12cad38936e9873ae2b403aa92c3b8ae2026eec101c2f8e",
+  "R1_spatial_metrics": {
+    "candidate_vertex_ids": {
+      "mouthSmileLeft": 6185,
+      "mouthSmileRight": 5708
+    },
+    "max_reprojection_error": 9.992067454898888e-16,
+    "rig_joints": 57,
+    "smile_channels": {
+      "mouthSmileLeft": 43,
+      "mouthSmileRight": 44
+    },
+    "true_3d_final_distance": 0.060104077150516244,
+    "true_3d_initial_distance": 0.0433509804805494
+  },
+  "anatomical_landmark_state": "NOT_INDEPENDENTLY_VERIFIED",
+  "context_provenance": "context:task-state:T-XIAOJ-LAUNCH:57f7908e453b2c50",
+  "cost": {
+    "cloud_llm_calls": 0,
+    "external_gpu_calls": 0
+  },
+  "formal_d8_effect_authority": false,
+  "formal_d8_request_id": null,
+  "model_source_modified": false,
+  "observed_at": "2026-10-16T14:13:19.601823+00:00",
+  "runtime_3d_animation_effect_verified": false,
+  "schema": "W7TP_3D_SPATIAL_SEMANTIC_R1_ACCEPTANCE/1.0",
+  "scope": "PR29 isolated cross-model extension",
+  "source_models": {
+    "J.vrm": "615f5ab25daab0fa326bfcf1c0e49d09c8f23dc8c9217d3876962937455cc205",
+    "R1.glb": "98986d8e96a9822494172043c463cda35268289fb3e0b97b7656bb94076c7ca2",
+    "R1.zip": "12a84759315263f1d39c6dec0fb1e0debf0ee34cb90277fdd21090aadc0b70b9"
+  },
+  "source_sha256": {
+    "cross_model_mapping.json": "2d179e73f056f9571ba87d5e2246cc8a0dcaffa1a262e876ac1cbf900e1259e0",
+    "gltf_spatiotemporal_field.py": "f81b807f18667f44f01a677a222ed2cbe5bcfbc6b03bff38fbd7f0e1df547993",
+    "r1_named_morph_behavior.py": "a513204f1ee7aa833b9e1ab2e60129e4330b7ceab753b50475e4fdb581e03a23",
+    "resolve_3d_behavior.py": "2a5fb0cfb5b651047d0d3822bfbd3f62f2c4cbce83b634ff081711bed3c76828"
+  },
+  "task": "T-XIAOJ-LAUNCH",
+  "test_suite": {
+    "msi_real_assets": "46/46 PASS",
+    "taiji_math_only": "26/26 PASS, 20 asset-bound SKIPPED"
+  }
+}

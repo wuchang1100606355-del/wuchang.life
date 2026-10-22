@@ -1,0 +1,80 @@
+{
+  "schema_version": "W7TP_T028_F3_ACTION_CONTRACT_CANDIDATE/1.0",
+  "ACTION_ID": "A-T028-F3-AUTHDELIVERY-TAIJI01-20261012-001",
+  "TASK_ID": "T-028",
+  "candidate_only": true,
+  "signable_release": false,
+  "state": "HOLD_F3_F4_F5_NO_EXECUTION",
+  "created_at_utc": "2026-10-12T10:01:10.314712+00:00",
+  "review_expires_at_utc": "2026-10-13T10:01:10.314712+00:00",
+  "review_expiry_not_authorization": true,
+  "dynamic_context_ref": "context:task-state:T-028:c591f0b8a4aa521d",
+  "source": {
+    "package_node": "MSI",
+    "package_id": "vcp:w7tp-v23-native-skills-msi-taiji01",
+    "version": "2.3.1+t028.semantic-source-repair",
+    "manifest_sha256": "13cff51abfc4ac2028529f1979d02dd7150a837f4a7bcb2be108e7dc14396fab",
+    "payload_sha256": "30b26e4f9e15ee622a53b7d9a6c04dae0afef58f6b85e32e618768df00f96f01",
+    "msi_receipt_ref": "MSI:C:/Users/o0930/Documents/Codex/2026-10-05/task/workloops/w7tp-v23-all-node-load-20261005/evidence/t028_v23_semantic_repair_20261006/T028_V23_SEMANTIC_SOURCE_REPAIR_RECEIPT.json",
+    "msi_observed_sha256_at": "2026-10-12T09:56:37Z",
+    "gate_ref": "tools/total_field/founder_variable_cognition_gate.py",
+    "gate_sha256": "54e21e92d5a2371b4c33d907da31a58e2c2d0fcb1c44707b02b71f94f37ad66e"
+  },
+  "target": {
+    "authority_node": "taiji01",
+    "receiver_node": "taiji01",
+    "receiver_device_ref": "RemoteDesktop:0a8cb96c-0944-459c-9af3-bc2aeb70aacf",
+    "receiver_hostname_observed": "taiji01",
+    "identity_scope": "HOSTNAME_AND_REMOTE_TOOL_ONLY_NOT_SEALED_FOUNDER_IDENTITY",
+    "receiver_local_rule_verified": false,
+    "authorization_delivery_verified": false
+  },
+  "proposed_effect": {
+    "type": "F3_TRUSTED_AUTHORIZATION_ISSUANCE_AND_DELIVERY_PREFLIGHT",
+    "allowed_now": [
+      "read_exact_public_package_hashes",
+      "prepare_nonsecret_candidate",
+      "review_existing_gate_contract"
+    ],
+    "forbidden_now": [
+      "install",
+      "enable",
+      "deploy",
+      "push",
+      "write_credentials",
+      "issue_founder_signature",
+      "change_canonical",
+      "restart_service"
+    ],
+    "future_install_scope": "ONE_EXACT_RECEIVER_AND_PACKAGE_ONLY_AFTER_F3_F4_F5_D8_ALLOW"
+  },
+  "authority": {
+    "decision": "HOLD",
+    "founder_approval_received": false,
+    "sealed_founder_root_verified": false,
+    "dual_root_binding_verified": false,
+    "trusted_delivery_channel_verified": false,
+    "valid_signing_challenge_verified": false,
+    "existing_gate_required": true,
+    "authority_effect": "NONE"
+  },
+  "stop_conditions": {
+    "F3": "trusted_source_identity_or_delivery_or_exact_packet_binding_unverified",
+    "F4": "receiver_enable_and_consumer_read_isolation_unverified",
+    "F5": "failed_install_receipt_or_rollback_not_verified",
+    "other": [
+      "stale_context",
+      "receiver_identity_mismatch",
+      "package_hash_mismatch",
+      "missing_explicit_D8_ALLOW"
+    ]
+  },
+  "rollback": {
+    "candidate_only": "remove_this_candidate_only_after_explicit_review",
+    "no_installation_performed": true,
+    "preimage_required_for_any_later_effect": true,
+    "receiver_runtime_rollback_verified": false
+  },
+  "non_equivalence_note": "ACTION_ID and candidate receipt alone do not close F3, issue D8 authority, or prove GST delivery.",
+  "candidate_sha256": "75597ba52592cf2031a4f5dce2ab65e15b2f95984e6082b4c67aa8da1eb58f1c"
+}

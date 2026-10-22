@@ -1,0 +1,82 @@
+--- a/products/wuchang_xiaoj_community/index.html
++++ b/products/wuchang_xiaoj_community/index.html
+@@ -9,8 +9,9 @@
+       content="五常小J社區服務完成系統，讓居民、商家與物業人員用看得懂的方式找到服務、確認操作並掌握結果。"
+     >
+     <title>五常小J｜社區服務完成系統</title>
+     <link rel="stylesheet" href="./assets/styles.css">
++    <link rel="stylesheet" href="./scene-pages/scene-prefix.css">
+     <script type="module" src="./src/app.js"></script>
+   </head>
+   <body>
+     <a class="skip-link" href="#main-content">跳到主要內容</a>
+@@ -45,8 +46,59 @@
+     </header>
+ 
+     <main id="main-content" tabindex="-1">
+       <section class="app-view is-active" id="view-home" data-view="home" aria-labelledby="home-title">
++        <section class="section seven-prefix-section" id="xiaoj-seven-scenes" aria-labelledby="seven-prefix-title">
++          <p class="section-kicker">一個小J・七個場景</p>
++          <h2 id="seven-prefix-title">小J想幫你完成什麼？</h2>
++          <p>同一自然人身分原胞封包、同一小J核心。每個場景都有介紹與管理總頁面；可用技能、可讀資料、可修改範圍及限制，正式以當前總場驗證封包為準。</p>
++          <p class="prefix-tag warn">隔離候選：目前不會因切換場景而取得權限或修改資料。</p>
++          <div class="seven-prefix-grid" aria-label="七種小J場景">
++            <a class="seven-prefix-card" href="./scene-pages/work.html">
++              <span class="seven-prefix-letter" aria-hidden="true">工</span>
++              <strong>工作秘書小J</strong>
++              <small>把工作安排得清楚、省力</small>
++              <span>介紹與管理 →</span>
++            </a>
++            <a class="seven-prefix-card" href="./scene-pages/business.html">
++              <span class="seven-prefix-letter" aria-hidden="true">商</span>
++              <strong>商圈服務小J</strong>
++              <small>咖啡、票券、點餐與商圈服務</small>
++              <span>介紹與管理 →</span>
++            </a>
++            <a class="seven-prefix-card" href="./scene-pages/developer.html">
++              <span class="seven-prefix-letter" aria-hidden="true">開</span>
++              <strong>開發者小J</strong>
++              <small>以真實狀態與證據協作工程</small>
++              <span>介紹與管理 →</span>
++            </a>
++            <a class="seven-prefix-card" href="./scene-pages/housing.html">
++              <span class="seven-prefix-letter" aria-hidden="true">宅</span>
++              <strong>住宅服務小J</strong>
++              <small>住宅、報修與住戶服務</small>
++              <span>介紹與管理 →</span>
++            </a>
++            <a class="seven-prefix-card" href="./scene-pages/association.html">
++              <span class="seven-prefix-letter" aria-hidden="true">協</span>
++              <strong>協會服務小J</strong>
++              <small>會員、志工、活動與社區公益</small>
++              <span>介紹與管理 →</span>
++            </a>
++            <a class="seven-prefix-card" href="./scene-pages/life.html">
++              <span class="seven-prefix-letter" aria-hidden="true">生</span>
++              <strong>生活秘書小J</strong>
++              <small>日常提醒與更懂自己的建議</small>
++              <span>介紹與管理 →</span>
++            </a>
++            <a class="seven-prefix-card" href="./scene-pages/my-community.html">
++              <span class="seven-prefix-letter" aria-hidden="true">社</span>
++              <strong>我的社區小J</strong>
++              <small>找到與自己有關的社區資源</small>
++              <span>介紹與管理 →</span>
++            </a>
++          </div>
++        </section>
++
+         <div class="hero-shell">
+           <div class="hero-content">
+             <p class="eyebrow"><span aria-hidden="true">●</span> 五常社區專屬服務</p>
+             <h1 id="home-title">社區大小事，<br><span>從這裡開始。</span></h1>
+@@ -126,8 +178,9 @@
+               </footer>
+             </section>
+           </div>
+         </div>
++
+ 
+         <section class="section quick-section" aria-labelledby="quick-title">
+           <div class="section-heading">
+             <div>

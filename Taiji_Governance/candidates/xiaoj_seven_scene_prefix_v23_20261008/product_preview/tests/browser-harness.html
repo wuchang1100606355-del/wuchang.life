@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <title>Action Review Browser Harness</title>
+  </head>
+  <body>
+    <h1>Action Review Browser Harness</h1>
+    <pre id="result" data-state="RUNNING">RUNNING</pre>
+    <script type="module">
+      import {
+        ACTION_REVIEW_FIELDS,
+        approveActionReview,
+        createActionReviewPacket,
+        rejectActionReview,
+        resetReplayLedgerForTests,
+      } from "../src/action-review.js";
+
+      const result = document.querySelector("#result");
+      const checks = [];
+      const session = {
+        memberRefHash: "synthetic:member:test",
+        rootRef: "synthetic:root:test",
+        rootGeneration: 1,
+        sessionRef: "synthetic:session:test",
+      };
+      const parameters = { submit: false, service: "resident" };
+      const base = {
+        session,
+        sceneRef: "RESIDENT",
+        capabilityRef: "candidate://test",
+        actionType: "ODOO_WORKFLOW_WRITE_CANDIDATE",
+        targetRefs: ["logical://taiji01/odoo"],
+        parameters,
+        purposeRef: "purpose://test",
+        scopeRefs: ["scope://resident"],
+        resourceRefs: ["authority://odoo"],
+        effectClass: "STATE_EFFECT_CANDIDATE",
+        expectedResult: "candidate only",
+        maximumEffect: "one candidate record",
+        riskSummary: "no live effect",
+        rollbackRef: "candidate://rollback/zero-effect",
+        now: new Date("2026-07-30T19:30:00Z"),
+      };
+
+      function check(name, condition) {
+        checks.push({ name, pass: Boolean(condition) });
+        if (!condition) throw new Error(name);
+      }
+
+      async function expectBlock(name, expectedCode, callback) {
+        try {
+          await callback();
+          check(name, false);
+        } catch (error) {
+          check(name, String(error.message).includes(expectedCode));
+        }
+      }
+
+      try {
+        resetReplayLedgerForTests();
+        const packet = await createActionReviewPacket(base);
+        check("required_fields", ACTION_REVIEW_FIELDS.every((field) => field in packet));
+        check("parameters_hash", /^[0-9a-f]{64}$/.test(packet.parameters_sha256));
+        check("action_hash", /^[0-9a-f]{64}$/.test(packet.action_hash));
+        check("pending_human_review", packet.review_state === "PENDING_HUMAN_REVIEW");
+
+        const approval = await approveActionReview({
+          packet,
+          parameters,
+          currentSession: session,
+          currentSceneRef: "RESIDENT",
+          now: new Date("2026-07-30T19:31:00Z"),
+        });
+        check("approval_receipt", /^[0-9a-f]{64}$/.test(approval.reviewer_receipt_sha256));
+        check("candidate_effect_blocked", approval.effect_executed === false);
+        check("candidate_db_write_blocked", approval.database_write === false);
+        check("total_field_hold", approval.total_field_decision === "HOLD_CANDIDATE_NO_LIVE_EFFECT");
+        await expectBlock("replay_blocked", "HOLD_REVIEW_RECEIPT_REPLAY", () =>
+          approveActionReview({
+            packet,
+            parameters,
+            currentSession: session,
+            currentSceneRef: "RESIDENT",
+            now: new Date("2026-07-30T19:31:30Z"),
+          }),
+        );
+
+        resetReplayLedgerForTests();
+        const tamperPacket = await createActionReviewPacket(base);
+        await expectBlock("parameter_tamper_blocked", "HOLD_PARAMETERS_CHANGED_AFTER_REVIEW", () =>
+          approveActionReview({
+            packet: tamperPacket,
+            parameters: { submit: true, service: "resident" },
+            currentSession: session,
+            currentSceneRef: "RESIDENT",
+            now: new Date("2026-07-30T19:31:00Z"),
+          }),
+        );
+
+        resetReplayLedgerForTests();
+        const crossMemberPacket = await createActionReviewPacket(base);
+        await expectBlock("cross_member_blocked", "HOLD_CROSS_MEMBER_APPROVAL", () =>
+          approveActionReview({
+            packet: crossMemberPacket,
+            parameters,
+            currentSession: { ...session, memberRefHash: "synthetic:member:other" },
+            currentSceneRef: "RESIDENT",
+            now: new Date("2026-07-30T19:31:00Z"),
+          }),
+        );
+
+        resetReplayLedgerForTests();
+        const crossScenePacket = await createActionReviewPacket(base);
+        await expectBlock("cross_scene_blocked", "HOLD_CROSS_SCENE_APPROVAL", () =>
+          approveActionReview({
+            packet: crossScenePacket,
+            parameters,
+            currentSession: session,
+            currentSceneRef: "BUSINESS_CLOUD",
+            now: new Date("2026-07-30T19:31:00Z"),
+          }),
+        );
+
+        resetReplayLedgerForTests();
+        const expiredPacket = await createActionReviewPacket({ ...base, ttlSeconds: 30 });
+        await expectBlock("expired_approval_blocked", "HOLD_APPROVAL_EXPIRED", () =>
+          approveActionReview({
+            packet: expiredPacket,
+            parameters,
+            currentSession: session,
+            currentSceneRef: "RESIDENT",
+            now: new Date("2026-07-30T19:31:00Z"),
+          }),
+        );
+
+        resetReplayLedgerForTests();
+        const rejectionPacket = await createActionReviewPacket(base);
+        const rejection = await rejectActionReview({
+          packet: rejectionPacket,
+          currentSession: session,
+          now: new Date("2026-07-30T19:31:00Z"),
+        });
+        check("rejection_state", rejection.review_state === "REJECTED");
+        check("rejection_zero_side_effect", rejection.side_effect_count === 0);
+        check("rejection_effect_blocked", rejection.effect_executed === false);
+
+        const imageParameters = {
+          owner_scope: "CURRENT_MEMBER_ROOT_ONLY",
+          candidate_image_sha256: "a".repeat(64),
+          display_zoom_percent: 125,
+          display_position_y_percent: 42,
+          external_upload: false,
+          persistent_write: false,
+        };
+        const imageBase = {
+          ...base,
+          capabilityRef: "candidate://wuchang-xiaoj/member-self/image-personalization",
+          actionType: "MEMBER_PERSONAL_XIAOJ_IMAGE_WRITE_CANDIDATE",
+          targetRefs: ["member-ui://current-member/xiaoj/image"],
+          parameters: imageParameters,
+          scopeRefs: [
+            "scope://member-self/same-root-only",
+            "scope://member-self/same-session-only",
+          ],
+          purposeRef: "purpose://wuchang-xiaoj/member-personal-xiaoj-image",
+        };
+
+        resetReplayLedgerForTests();
+        const imagePacket = await createActionReviewPacket(imageBase);
+        check(
+          "personal_image_owner_packet_bound",
+          imagePacket.member_ref_hash === session.memberRefHash
+            && imagePacket.session_ref === session.sessionRef
+            && imagePacket.action_type === "MEMBER_PERSONAL_XIAOJ_IMAGE_WRITE_CANDIDATE"
+            && imagePacket.scope_refs.includes("scope://member-self/same-root-only"),
+        );
+        const imageApproval = await approveActionReview({
+          packet: imagePacket,
+          parameters: imageParameters,
+          currentSession: session,
+          currentSceneRef: "RESIDENT",
+          now: new Date("2026-07-30T19:31:00Z"),
+        });
+        check(
+          "personal_image_approval_has_zero_live_effect",
+          imageApproval.effect_executed === false
+            && imageApproval.database_write === false
+            && imageApproval.external_send === false,
+        );
+
+        resetReplayLedgerForTests();
+        const imageTamperPacket = await createActionReviewPacket(imageBase);
+        await expectBlock(
+          "personal_image_adjustment_tamper_blocked",
+          "HOLD_PARAMETERS_CHANGED_AFTER_REVIEW",
+          () =>
+            approveActionReview({
+              packet: imageTamperPacket,
+              parameters: { ...imageParameters, display_zoom_percent: 126 },
+              currentSession: session,
+              currentSceneRef: "RESIDENT",
+              now: new Date("2026-07-30T19:31:00Z"),
+            }),
+        );
+
+        result.dataset.state = "PASS";
+        result.textContent = JSON.stringify(
+          { state: "PASS", passed: checks.length, failed: 0, checks },
+          null,
+          2,
+        );
+      } catch (error) {
+        result.dataset.state = "FAIL";
+        result.textContent = JSON.stringify(
+          {
+            state: "FAIL",
+            error: error.message,
+            passed: checks.filter((item) => item.pass).length,
+            failed: checks.filter((item) => !item.pass).length || 1,
+            checks,
+          },
+          null,
+          2,
+        );
+      }
+    </script>
+  </body>
+</html>

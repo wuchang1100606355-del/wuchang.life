@@ -1,0 +1,58 @@
+{
+  "base_run_id": "PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z",
+  "base_context_sha256": "336ec63144db4840c2cb716cd7e035a1e8c6441fc4d12b67779bd0da0627fafe",
+  "known_state": {
+    "root_packet_gate": "PASS",
+    "active_product_root_pointer_sha256": "7f549057d958802f67628f25e98c6a5159f06ff661114bd1949388626b0f4119",
+    "w7tp_v2_1_canonical_sha256": "e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba",
+    "source_location_bound": true,
+    "source_generated": false
+  },
+  "changed_state": {
+    "requested_next": "BUILD_ORIGINAL_THREE_SCENE_PRODUCT_CANDIDATE",
+    "target_product": "五常小J社區服務完成系統",
+    "human_product_quality_gate": "REQUIRED",
+    "dual_validation_gate": "REQUIRED"
+  },
+  "coordinates": {
+    "node": "taiji01",
+    "repository": "/home/taiji_admin/Taiji_Hub",
+    "product_source": "/home/taiji_admin/Taiji_Hub/products/wuchang_xiaoj_community",
+    "scenes": [
+      "RESIDENT",
+      "BUSINESS_CLOUD",
+      "PROPERTY_CLOUD"
+    ]
+  },
+  "evidence_refs": [
+    "runtime/total_field/master_index/ACTIVE_PRODUCT_SYSTEM_ROOT_POINTER.json@sha256:7f549057d958802f67628f25e98c6a5159f06ff661114bd1949388626b0f4119",
+    "runtime/total_field/product_system_root/PRODUCT_SYSTEM_ROOT_SUCCESSOR_WUCHANG_XIAOJ_20260730T190929Z/W7TP_PRODUCT_SYSTEM_ROOT_SUCCESSOR.json@sha256:336ec63144db4840c2cb716cd7e035a1e8c6441fc4d12b67779bd0da0627fafe",
+    "docs/total_field/W7TP_8D_MULTIPURPOSE_GENERATIVE_TRANSMISSION_PACKET_CANONICAL_V2_1.md@sha256:e960d14254df083ffed711e2c44b76fc2075541716881bc3d1034cb26cffbaba"
+  ],
+  "requested_actions": [
+    "create original local product candidate source",
+    "create three scene human interface",
+    "create fail-closed human review center",
+    "run focused code validation",
+    "run human product quality review"
+  ],
+  "protected_scopes": [
+    "no database write",
+    "no deploy",
+    "no restart",
+    "no runtime pointer change",
+    "no existing public website change",
+    "no secrets or member plaintext",
+    "no Open WebUI product architecture reuse"
+  ],
+  "hard_risks": [
+    "hidden side effect",
+    "technical jargon displacing resident service",
+    "parallel membership authority",
+    "candidate capability presented as live runtime"
+  ],
+  "unresolved_context": [
+    "formal Odoo API route intentionally unbound in isolated candidate",
+    "formal 9107 model route intentionally unbound in isolated candidate"
+  ]
+}

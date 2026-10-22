@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wuchang.life/schemas/field/w7tp_msi_llm_model_selection_contract_v1.schema.json",
+  "title": "W7TP T-011B MSI LLM Model Selection Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_coordinate",
+    "state",
+    "provider_ref",
+    "model_ref",
+    "endpoint_env",
+    "endpoint_candidates",
+    "internalized_capability_id",
+    "required_resource_state",
+    "required_capabilities",
+    "required_context_interfaces",
+    "selection_policy",
+    "candidate_return",
+    "authority_boundary",
+    "data_boundary",
+    "fallback_policy"
+  ],
+  "properties": {
+    "schema_version": {"const": "w7tp.msi-llm-model-selection-contract.v1"},
+    "task_coordinate": {"const": "T-011B"},
+    "state": {"const": "CANDIDATE_ONLY_MODEL_SELECTION_CONTRACT"},
+    "provider_ref": {"const": "MSI_OLLAMA_LOCAL"},
+    "model_ref": {"type": "string", "minLength": 1},
+    "endpoint_env": {"const": "TAIJI_LOCAL_OLLAMA_URL"},
+    "endpoint_candidates": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref", "url", "priority", "transport"],
+        "properties": {
+          "ref": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "pattern": "^http://"},
+          "priority": {"type": "integer", "minimum": 1},
+          "transport": {"enum": ["LAN", "TAILSCALE_WINDOWS"]}
+        }
+      }
+    },
+    "internalized_capability_id": {"const": "CAP_INTERNAL_LLM_V1"},
+    "required_resource_state": {"const": "AVAILABLE"},
+    "required_capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "required_context_interfaces": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "selection_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preferred_provider_required",
+        "qualified_provider_required",
+        "d3_node",
+        "d5_mode",
+        "d7_fail_closed"
+      ],
+      "properties": {
+        "preferred_provider_required": {"const": false},
+        "qualified_provider_required": {"const": true},
+        "d3_node": {"const": "MSI"},
+        "d5_mode": {"const": "CANDIDATE_ONLY"},
+        "d7_fail_closed": {"const": true}
+      }
+    },
+    "candidate_return": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "candidate_only",
+        "must_not_execute",
+        "requires_total_field_verify",
+        "return_coordinate",
+        "max_candidate_chars"
+      ],
+      "properties": {
+        "schema_version": {"const": "w7tp.local-llm-candidate-return.v1"},
+        "candidate_only": {"const": true},
+        "must_not_execute": {"const": true},
+        "requires_total_field_verify": {"const": true},
+        "return_coordinate": {"type": "string", "minLength": 1},
+        "max_candidate_chars": {"type": "integer", "minimum": 1, "maximum": 65536}
+      }
+    },
+    "authority_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_authority",
+        "model_authority",
+        "codex_authority",
+        "browser_authority",
+        "canonical",
+        "runtime_effect",
+        "formal_effect_boundary"
+      ],
+      "properties": {
+        "provider_authority": {"const": false},
+        "model_authority": {"const": false},
+        "codex_authority": {"const": false},
+        "browser_authority": {"const": false},
+        "canonical": {"const": false},
+        "runtime_effect": {"const": false},
+        "formal_effect_boundary": {"const": "TAIJI01_TOTAL_FIELD"}
+      }
+    },
+    "data_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_plaintext_to_model",
+        "secret_to_model",
+        "credential_to_model",
+        "raw_browser_page_to_model",
+        "member_context_mode",
+        "dynamic_context_persistence"
+      ],
+      "properties": {
+        "member_plaintext_to_model": {"const": false},
+        "secret_to_model": {"const": false},
+        "credential_to_model": {"const": false},
+        "raw_browser_page_to_model": {"const": false},
+        "member_context_mode": {"const": "OPAQUE_REFERENCES_ONLY"},
+        "dynamic_context_persistence": {"const": false}
+      }
+    },
+    "fallback_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_failure", "model_missing", "authority_drift"],
+      "properties": {
+        "provider_failure": {"const": "RETURN_HOLD_TO_TOTAL_FIELD_RESOURCE_ARBITRATION"},
+        "model_missing": {"const": "RETURN_HOLD_TO_TOTAL_FIELD_RESOURCE_ARBITRATION"},
+        "authority_drift": {"const": "BLOCK"}
+      }
+    }
+  }
+}
