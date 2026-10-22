@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for MSI local-LLM LAN-first endpoint routing."""
+"""Tests for MSI local-LLM LAN-first endpoint routing with reverse-SSH fallback."""
 
 from __future__ import annotations
 
@@ -25,6 +25,20 @@ class _FakeResponse:
 
 
 class MSILocalLLMRouteTest(unittest.TestCase):
+    def test_lan_endpoint_is_existing_11435_bridge(self):
+        self.assertEqual(route.MSI_LAN_OLLAMA_URL, "http://192.168.50.82:11435")
+
+    def test_lan_alive_model_unready_cannot_use_vpn_or_reverse_tunnel(self):
+        with patch.object(route, "lan_host_reachable", return_value=True), patch.object(
+            route, "endpoint_has_model", return_value=False,
+        ) as check:
+            result = route.resolve_msi_ollama_url("xiaoj-local-dev:v2.3")
+        self.assertEqual(result["state"], "HOLD_MSI_LAN_MODEL_NOT_READY_NO_FALLBACK")
+        self.assertIsNone(result["selected_url"])
+        self.assertTrue(result["fallback_blocked_while_lan_reachable"])
+        self.assertEqual(check.call_count, 1)
+        self.assertEqual(result["attempts"][0]["transport"], "LAN")
+
     def test_lan_is_selected_first_when_available(self):
         with patch.object(
             route,
@@ -40,7 +54,7 @@ class MSILocalLLMRouteTest(unittest.TestCase):
         self.assertTrue(result["lan_first"])
 
     def test_windows_tailscale_is_fallback_after_lan_failure(self):
-        with patch.object(
+        with patch.object(route, "lan_host_reachable", return_value=False), patch.object(
             route,
             "endpoint_has_model",
             side_effect=lambda url, model, timeout=2.0: (
@@ -59,6 +73,25 @@ class MSILocalLLMRouteTest(unittest.TestCase):
         )
 
 
+    def test_reverse_ssh_is_fallback_after_network_endpoints_fail(self):
+        with patch.object(route, "lan_host_reachable", return_value=False), patch.object(
+            route,
+            "endpoint_has_model",
+            side_effect=lambda url, model, timeout=2.0: (
+                url == route.MSI_WSL_REVERSE_SSH_OLLAMA_URL
+            ),
+        ):
+            result = route.resolve_msi_ollama_url("model:test")
+        self.assertEqual(
+            result["selected_url"],
+            route.MSI_WSL_REVERSE_SSH_OLLAMA_URL,
+        )
+        self.assertEqual(result["selected_transport"], "SSH_REVERSE_TUNNEL")
+        self.assertEqual(
+            [item["transport"] for item in result["attempts"]],
+            ["LAN", "TAILSCALE_WINDOWS", "SSH_REVERSE_TUNNEL"],
+        )
+
     def test_deprecated_wsl_tailscale_override_is_never_admitted(self):
         candidates = route.endpoint_candidates(
             route.DEPRECATED_MSI_WSL_TAILSCALE_OLLAMA_URL
@@ -73,6 +106,7 @@ class MSILocalLLMRouteTest(unittest.TestCase):
             [
                 route.MSI_LAN_OLLAMA_URL,
                 route.MSI_WINDOWS_TAILSCALE_OLLAMA_URL,
+                route.MSI_WSL_REVERSE_SSH_OLLAMA_URL,
             ],
         )
 
@@ -80,10 +114,13 @@ class MSILocalLLMRouteTest(unittest.TestCase):
         candidates = route.endpoint_candidates("http://10.0.0.9:11434")
         self.assertEqual(candidates[0]["transport"], "LAN")
         self.assertEqual(candidates[1]["transport"], "TAILSCALE_WINDOWS")
-        self.assertEqual(candidates[2]["transport"], "OPERATOR_OVERRIDE")
+        self.assertEqual(candidates[2]["transport"], "SSH_REVERSE_TUNNEL")
+        self.assertEqual(candidates[3]["transport"], "OPERATOR_OVERRIDE")
 
     def test_no_live_endpoint_returns_hold_without_deprecated_selection(self):
-        with patch.object(route, "endpoint_has_model", return_value=False):
+        with patch.object(route, "lan_host_reachable", return_value=False), patch.object(
+            route, "endpoint_has_model", return_value=False,
+        ):
             result = route.resolve_msi_ollama_url(
                 "model:test",
                 override_url=route.DEPRECATED_MSI_WSL_TAILSCALE_OLLAMA_URL,

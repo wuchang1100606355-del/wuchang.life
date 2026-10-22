@@ -116,7 +116,7 @@ class CapabilityInternalizationTest(unittest.TestCase):
 
     def test_all_source_refs_resolve_in_current_repo(self) -> None:
         registry = load_internalization_registry()
-        self.assertEqual(len(registry["capabilities"]), 7)
+        self.assertEqual(len(registry["capabilities"]), 8)
 
 
 if __name__ == "__main__":

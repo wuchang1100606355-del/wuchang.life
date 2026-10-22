@@ -67,6 +67,132 @@ class EndpointRuleHandshakeTests(unittest.TestCase):
                 rule_ref=TASK_RULE,
             )
 
+    def test_cost_vector_keeps_unknown_distinct_from_zero(self) -> None:
+        vector = handshake.build_cost_vector(total_wire_bytes=120)
+        self.assertEqual(vector["transport"]["bootstrap_bytes"], "UNKNOWN")
+        self.assertEqual(vector["transport"]["first_use_transport_bytes"], "UNKNOWN")
+        self.assertEqual(vector["transport"]["steady_state_transport_bytes"], 120)
+        self.assertIn("reconstruction_time_ms", vector["unknown_material_dimensions"])
+        self.assertFalse(vector["total_effect_complete"])
+        self.assertTrue(vector["accounting_semantics"]["unknown_never_zero"])
+
+    def test_cost_vector_separates_first_use_from_steady_state(self) -> None:
+        vector = handshake.build_cost_vector(
+            total_wire_bytes=120,
+            bootstrap_bytes=880,
+            state_acquisition_bytes=10,
+            state_acquisition_time_ms=1.0,
+            reconstruction_time_ms=2.0,
+            verification_time_ms=1.0,
+            verification_bytes=20,
+            authority_time_ms=0.0,
+            human_review_required=False,
+            cpu_time_ms=2.0,
+            gpu_time_ms=0.0,
+            memory_peak_bytes=1024,
+            energy_joules=0.5,
+            failure_probability=0.0,
+            failure_fallback_bytes=0,
+            persistent_storage_bytes=0,
+            temporary_storage_peak_bytes=2048,
+            amortization_runs=10,
+        )
+        self.assertEqual(vector["transport"]["first_use_transport_bytes"], 1000)
+        self.assertEqual(vector["transport"]["steady_state_transport_bytes"], 120)
+        self.assertEqual(vector["transport"]["amortized_transport_bytes"], 208.0)
+        self.assertTrue(vector["total_effect_complete"])
+
+    def test_selector_reports_wire_scope_not_total_effect_optimum(self) -> None:
+        exact_ready = {
+            "state": "PASS_SHARED_RULE_EXACT_MATCH",
+            "receiver_ready": True,
+        }
+        result = handshake.select_transport(
+            full_transfer_wire_bytes=1000,
+            shared_rule_origin_cell_wire_bytes=120,
+            shared_rule_match_state=exact_ready,
+        )
+        self.assertEqual(result["selected_mode"], "SHARED_RULE_ORIGIN_CELL")
+        self.assertEqual(result["cost_model"]["decision_scope"], "TRANSPORT_WIRE_COST_ONLY")
+        self.assertFalse(result["cost_model"]["total_effect_cost_complete"])
+        self.assertTrue(result["cost_model"]["unknown_never_zero"])
+        self.assertFalse(result["cost_model"]["cross_unit_scalarization"])
+
+    def test_selector_can_fail_closed_on_incomplete_total_effect_cost(self) -> None:
+        exact_ready = {
+            "state": "PASS_SHARED_RULE_EXACT_MATCH",
+            "receiver_ready": True,
+        }
+        with self.assertRaisesRegex(
+            handshake.EndpointRuleHandshakeHold,
+            "HOLD_TOTAL_EFFECT_COST_INCOMPLETE",
+        ):
+            handshake.select_transport(
+                full_transfer_wire_bytes=1000,
+                shared_rule_origin_cell_wire_bytes=120,
+                shared_rule_match_state=exact_ready,
+                require_total_effect_complete=True,
+            )
+
+    def test_cost_vector_rejects_invalid_failure_probability(self) -> None:
+        with self.assertRaisesRegex(
+            handshake.EndpointRuleHandshakeHold,
+            "HOLD_COST_FAILURE_PROBABILITY_INVALID",
+        ):
+            handshake.build_cost_vector(
+                total_wire_bytes=100,
+                failure_probability=1.1,
+            )
+
+    def test_selector_reports_transport_break_even_when_inputs_are_known(self) -> None:
+        exact_ready = {
+            "state": "PASS_SHARED_RULE_EXACT_MATCH",
+            "receiver_ready": True,
+        }
+        common = dict(
+            state_acquisition_bytes=0,
+            state_acquisition_time_ms=0.0,
+            reconstruction_time_ms=1.0,
+            verification_time_ms=1.0,
+            verification_bytes=0,
+            authority_time_ms=0.0,
+            human_review_required=False,
+            cpu_time_ms=1.0,
+            gpu_time_ms=0.0,
+            memory_peak_bytes=1024,
+            energy_joules=0.1,
+            failure_probability=0.0,
+            failure_fallback_bytes=0,
+            persistent_storage_bytes=0,
+            temporary_storage_peak_bytes=1024,
+        )
+        full = handshake.build_cost_vector(
+            total_wire_bytes=1000,
+            bootstrap_bytes=0,
+            **common,
+        )
+        shared = handshake.build_cost_vector(
+            total_wire_bytes=100,
+            bootstrap_bytes=1800,
+            **common,
+        )
+        result = handshake.select_transport(
+            full_transfer_wire_bytes=1000,
+            shared_rule_origin_cell_wire_bytes=100,
+            shared_rule_match_state=exact_ready,
+            cost_vectors={
+                "FULL_TRANSFER": full,
+                "SHARED_RULE_ORIGIN_CELL": shared,
+            },
+            require_total_effect_complete=True,
+        )
+        row = next(
+            x for x in result["candidates"]
+            if x["mode"] == "SHARED_RULE_ORIGIN_CELL"
+        )
+        self.assertEqual(row["break_even_runs_vs_full"], 2)
+        self.assertTrue(result["cost_model"]["total_effect_cost_complete"])
+
     def test_selector_uses_complete_wire_cost_and_full_transfer_can_win(self) -> None:
         exact_ready = {
             "state": "PASS_SHARED_RULE_EXACT_MATCH",
