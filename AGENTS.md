@@ -1579,33 +1579,42 @@ Total Field executes, validates, seals, and reports Founder Canonical.
 或尚未檢查現場狀態，必須停止並輸出 `STATE=HOLD_TASK_CONTEXT_ROLLBACK（狀態＝暫停，任務脈絡倒退）`。
 不得建立分支、重新啟動歷史任務，或把舊證據重新解釋為目前權威。
 
+## 37.1 Dynamic Context／動態上下文使用規則（操作投影）
+
+- 在既有任務座標、最新意圖與當前 D8 封套下，優先核對 `runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json` 與有效 8D 場；不得將 `contexts/current` 的舊 MTL 狀態摘要冒充 V2.3 動態上下文。
+- 沿既有 `tools/w7tp_task_state_minimum_packet.py` 與 `tools/total_field_dynamic_context_pull.py` 所提供的原生契約定位，不另建平行上下文核心。任務尚未登錄或無有效入口時標示 UNKNOWN，不以歷史任務或其他任務的封包代替。
+- 拉取前核對 TASK_ID、ACTION_ID（適用時）、狀態座標、來源雜湊、依賴、證據、政策、隔離條件、授權、有效期及能力參照。只在必要條件變動、期限失效或高風險操作前目標化更新；有效且未變的證據予以重用。
+- 單次拉取綁定任務、提供者、模型及短效座標。過期、重放、跨任務、跨模型、雜湊失配或授權不明時，只 HOLD 受影響操作；其他已確認獨立且獲授權的工作可繼續。
+- 模型只能獲取必要的狀態投影及參照；完整動態上下文、原始規則、會員明文、憑證與暫存重構工作集不得持久化於模型側。證據回存僅保留既有機制允許的參照、雜湊、結果與回執，並明確區分拉取、重構、執行、效果驗收及正式裁決。
+- 上下文取得成功不自帶執行權限；本節不創設正典、工作帳本或 D8 授權。
+
 ---
 
 # 38. Direct Shortest Path Rule
 # 38. 直接最短路徑規則
 
 任何 W7TP／小J／Five-in-One（五合一）／8D Packet（8D 封包）工作，
-必須保留狀態編碼、座標、雜湊、封包、生成式傳輸、驗證、重構、證據，
-最後才執行動作；不得降格成一般聊天機器人、同步、檔案複製或瀏覽器自動化。
+皆依完整八維耦合狀態場核對意圖、狀態、座標、證據、政策、依賴、風險與權威，
+再依任務選用必要操作投影與既有能力；不得降格成一般檔案同步或聊天流程，
+亦不得要求所有任務都生成封包、呼叫模型或執行 D6。
 
 ## Generative Transfer Priority Gate
 ## 生成式傳輸優先閘門
 
-當工作涉及小J會員系統、8D 封包、會員所有側邊欄小J、Cloud Blind Compute（雲端盲算）、
-No-Plaintext Context（無明文上下文）、BYOK（自帶金鑰）或 Five-in-One（五合一）部署，
-若 `W3_GENERATIVE_TRANSFER_DEPLOY` 尚未存在或尚未納入 Master Deploy Index（主部署索引），
-下一步固定為 `W3_GENERATIVE_TRANSFER_DEPLOY`。
+只有當最新意圖涉及可重構等價狀態，且 D6 為本次任務的實際必要能力，
+才優先沿既有生成式傳輸能力與授權檢查；`W3_GENERATIVE_TRANSFER_DEPLOY`
+僅在被實證為當前任務的必要依賴並符合 D8 封套時列為下一動作。
+不得以某個索引或部署項缺失，自動覆蓋最新意圖、重啟舊任務或阻擋獨立工作。
 
 ## Main Chain Rule
-## 主鏈規則
+## 8D 主場一致性條件（非固定流水線）
 
-所有下一步必須遵守：
-
-State（狀態）→ Coordinate（座標）→ Hash（雜湊）→ Packet（封包）→
-Generative Transfer（生成式傳輸）→ Verify（驗證）→ Reconstruct（重構）→
-Evidence（證據）→ Action（動作）。
-
-偏離主鏈時輸出 `STATE=HOLD_MAIN_CHAIN_DEVIATION（狀態＝暫停，偏離主鏈）`。
+依同一任務的完整八維場同時檢核必要狀態、座標、證據、授權、依賴與驗收條件；
+查表、模型、封包與重構均按實際任務需求選用，非強制順序。
+啟用 D6 時須取得來源狀態、足夠重構條件與目標能力，完成目標重構、
+同範圍效果驗證及允許的證據封存；查詢、傳輸、重構、執行與驗收不得混淆。
+局部依賴或授權失配時只 HOLD 受影響動作，不得擴大為全系統阻斷。
+禁止將操作檢查表反向升格為 8D 正典或固定序列。
 
 ## Redteam Rule
 ## 紅隊規則
@@ -1615,5 +1624,7 @@ Evidence（證據）→ Action（動作）。
 ## No Detour Rule
 ## 禁止繞路規則
 
-若 8D Schema SDK（8D 結構描述開發套件）已完成而生成式傳輸尚未完成，
-不得先跳到 UI（使用者介面）、Action Bus（動作匯流排）或 Broker（中介服務）。
+只有當 UI（使用者介面）、Action Bus（動作匯流排）或 Broker（中介服務）
+對本次任務的正式效果確實依賴尚未閉合的生成式傳輸時，才暫停該依賴動作；
+已確認獨立且獲授權的開發、唯讀驗證及工作可繼續。
+8D Schema SDK（8D 結構描述開發套件）完成，不自動證明 D6 已部署或任何效果已驗收。
