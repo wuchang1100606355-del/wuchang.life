@@ -29,7 +29,7 @@
     {
       "rule_ref": "local-rule:w7tp-task-state-ledger-reconstruction/v1",
       "implementation_ref": "tools/w7tp_task_state_local_rule.py",
-      "implementation_sha256": "970d39d61d77c55b0a2a7a8cb4a8edb781f783f69f2adc83848322dd2fb8e69b",
+      "implementation_sha256": "5189df0c773e8229408c1db499809e674602e26332b01ae08731fb4963a64b35",
       "builder_symbol": "build_task_state_recipe",
       "executor_symbol": "execute_task_state_rules",
       "manifest_symbol": "task_state_manifest",
@@ -42,5 +42,6 @@
       "packet_rule_body_allowed": false,
       "formal_authority": false
     }
-  ]
+  ],
+  "schema_version": "2.3"
 }
