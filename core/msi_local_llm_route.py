@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import socket
 import urllib.error
 import urllib.request
 from collections.abc import Mapping
@@ -13,8 +14,9 @@ from typing import Any
 MSI_LAN_IP = "192.168.50.82"
 MSI_WINDOWS_TAILSCALE_IP = "100.105.82.28"
 DEPRECATED_MSI_WSL_TAILSCALE_IP = "100.84.204.114"
-MSI_LAN_OLLAMA_URL = f"http://{MSI_LAN_IP}:11434"
+MSI_LAN_OLLAMA_URL = f"http://{MSI_LAN_IP}:11435"  # existing LAN bridge, verified /api/tags and /api/show
 MSI_WINDOWS_TAILSCALE_OLLAMA_URL = f"http://{MSI_WINDOWS_TAILSCALE_IP}:11434"
+MSI_WSL_REVERSE_SSH_OLLAMA_URL = "http://127.0.0.1:11435"
 DEPRECATED_MSI_WSL_TAILSCALE_OLLAMA_URL = f"http://{DEPRECATED_MSI_WSL_TAILSCALE_IP}:11434"
 
 MODEL_BINDINGS = {
@@ -37,6 +39,12 @@ BASE_ENDPOINTS = (
         "transport": "TAILSCALE_WINDOWS",
         "priority": 20,
     },
+    {
+        "ref": "MSI_WSL_REVERSE_SSH_FALLBACK",
+        "url": MSI_WSL_REVERSE_SSH_OLLAMA_URL,
+        "transport": "SSH_REVERSE_TUNNEL",
+        "priority": 30,
+    },
 )
 
 
@@ -54,7 +62,7 @@ def endpoint_candidates(override_url: str | None = None) -> list[dict[str, Any]]
                 "ref": "MSI_OPERATOR_OVERRIDE_FALLBACK",
                 "url": override,
                 "transport": "OPERATOR_OVERRIDE",
-                "priority": 30,
+                "priority": 40,
             }
         )
     return sorted(candidates, key=lambda item: int(item["priority"]))
@@ -114,6 +122,21 @@ def endpoint_has_model(url: str, model: str, timeout: float = 2.0) -> bool:
     )
 
 
+def lan_host_reachable(*, timeout: float = 1.0) -> bool:
+    """Verify existing MSI LAN host access, independent of model health.
+
+    A model mismatch or unavailable API is not a physical LAN outage.
+    No VPN or reverse tunnel may be selected while a LAN service responds.
+    """
+    for port in (11435, 22):
+        try:
+            with socket.create_connection((MSI_LAN_IP, port), timeout=timeout):
+                return True
+        except OSError:
+            continue
+    return False
+
+
 def resolve_msi_ollama_url(
     model: str,
     *,
@@ -132,6 +155,21 @@ def resolve_msi_ollama_url(
                 "available": ok,
             }
         )
+        if not ok and item["transport"] == "LAN" and lan_host_reachable(
+            timeout=min(timeout, 1.0),
+        ):
+            return {
+                "state": "HOLD_MSI_LAN_MODEL_NOT_READY_NO_FALLBACK",
+                "selected_url": None,
+                "selected_ref": None,
+                "selected_transport": None,
+                "model": model,
+                "lan_first": True,
+                "lan_reachable": True,
+                "fallback_blocked_while_lan_reachable": True,
+                "deprecated_wsl_tailscale_selected": False,
+                "attempts": attempts,
+            }
         if ok:
             return {
                 "state": "PASS_MSI_LOCAL_LLM_ROUTE",
@@ -162,7 +200,9 @@ __all__ = [
     "MSI_LAN_OLLAMA_URL",
     "MSI_WINDOWS_TAILSCALE_IP",
     "MSI_WINDOWS_TAILSCALE_OLLAMA_URL",
+    "MSI_WSL_REVERSE_SSH_OLLAMA_URL",
     "endpoint_candidates",
     "endpoint_has_model",
+    "lan_host_reachable",
     "resolve_msi_ollama_url",
 ]

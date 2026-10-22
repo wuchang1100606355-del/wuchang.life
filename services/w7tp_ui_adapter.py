@@ -6,7 +6,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 
 from services.w7tp_d6_linter import lint_w7tp_request
-from services.w7tp_evidence_ledger import commit_evidence
+from services.w7tp_d4_adi_v2_bridge import commit_evidence
 from services.w7tp_state_hash import canonical_hash, state_seal
 from services.w7tp_gst_v23_runtime import GstRuntimeHold, deliver_packet, runtime_status
 from services.w7tp_ui_models import (

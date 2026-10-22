@@ -14,14 +14,25 @@
     "capabilities"
   ],
   "properties": {
-    "schema_version": {"const": "W7TP-CAPABILITY-INTERNALIZATION-REGISTRY/1.0"},
-    "state": {"const": "ACTIVE_INTERNALIZATION_INDEX"},
-    "registry_role": {"const": "OVERLAY_ONLY_DOES_NOT_REPLACE_EXISTING_OWNERS"},
-    "canonical": {"const": false},
+    "schema_version": {
+      "const": "W7TP-CAPABILITY-INTERNALIZATION-REGISTRY/1.0"
+    },
+    "state": {
+      "const": "ACTIVE_INTERNALIZATION_INDEX"
+    },
+    "registry_role": {
+      "const": "OVERLAY_ONLY_DOES_NOT_REPLACE_EXISTING_OWNERS"
+    },
+    "canonical": {
+      "const": false
+    },
     "source_registry_refs": {
       "type": "array",
       "minItems": 1,
-      "items": {"type": "string", "minLength": 1}
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "authority_boundary": {
       "type": "object",
@@ -33,16 +44,26 @@
         "total_field_verify_required"
       ],
       "properties": {
-        "formal_effect_boundary": {"const": "TAIJI01_TOTAL_FIELD"},
-        "provider_authority": {"const": false},
-        "external_authority_inherited": {"const": false},
-        "total_field_verify_required": {"const": true}
+        "formal_effect_boundary": {
+          "const": "TAIJI01_TOTAL_FIELD"
+        },
+        "provider_authority": {
+          "const": false
+        },
+        "external_authority_inherited": {
+          "const": false
+        },
+        "total_field_verify_required": {
+          "const": true
+        }
       }
     },
     "capabilities": {
       "type": "array",
-      "minItems": 7,
-      "items": {"$ref": "#/$defs/capability"}
+      "minItems": 8,
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
     }
   },
   "$defs": {
@@ -74,7 +95,8 @@
             "DYNAMIC_CONTEXT",
             "NODE_COMPUTE",
             "ORIGIN_CELL",
-            "GST"
+            "GST",
+            "NVR_READ"
           ]
         },
         "status": {
@@ -82,60 +104,104 @@
             "REGISTERED_CAPABILITY",
             "IMPLEMENTED",
             "ACTIVE_RUNTIME",
-            "EVIDENCE_ONLY"
+            "EVIDENCE_ONLY",
+            "IMPLEMENTED_SOURCE_COMPATIBILITY_TRANSPORT"
           ]
         },
         "source_refs": {
           "type": "array",
           "minItems": 1,
-          "items": {"type": "string", "minLength": 1}
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "resource_refs": {
           "type": "array",
-          "items": {"type": "string", "minLength": 1}
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "selection_tags": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {"type": "string", "minLength": 1}
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "d3_coordinate": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["node_scope", "owner_ref", "coordinate_ref"],
+          "required": [
+            "node_scope",
+            "owner_ref",
+            "coordinate_ref"
+          ],
           "properties": {
             "node_scope": {
               "type": "array",
               "minItems": 1,
-              "items": {"type": "string", "minLength": 1}
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
             },
-            "owner_ref": {"type": "string", "minLength": 1},
-            "coordinate_ref": {"type": "string", "minLength": 1}
+            "owner_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "coordinate_ref": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "d5_execution": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["mode", "direct_effect", "side_effect_boundary"],
+          "required": [
+            "mode",
+            "direct_effect",
+            "side_effect_boundary"
+          ],
           "properties": {
             "mode": {
-              "enum": ["READ_ONLY", "CANDIDATE_ONLY", "BOUNDED_EFFECT"]
+              "enum": [
+                "READ_ONLY",
+                "CANDIDATE_ONLY",
+                "BOUNDED_EFFECT"
+              ]
             },
-            "direct_effect": {"type": "boolean"},
-            "side_effect_boundary": {"type": "string", "minLength": 1}
+            "direct_effect": {
+              "type": "boolean"
+            },
+            "side_effect_boundary": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "d7_risk": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["fail_closed", "risk_tags"],
+          "required": [
+            "fail_closed",
+            "risk_tags"
+          ],
           "properties": {
-            "fail_closed": {"const": true},
+            "fail_closed": {
+              "const": true
+            },
             "risk_tags": {
               "type": "array",
               "uniqueItems": true,
-              "items": {"type": "string", "minLength": 1}
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           }
         },
@@ -149,13 +215,47 @@
             "requires_total_field_verify"
           ],
           "properties": {
-            "provider_authority": {"const": false},
-            "final_decision": {"const": false},
-            "canonical": {"const": false},
-            "requires_total_field_verify": {"const": true}
+            "provider_authority": {
+              "const": false
+            },
+            "final_decision": {
+              "const": false
+            },
+            "canonical": {
+              "const": false
+            },
+            "requires_total_field_verify": {
+              "const": true
+            }
+          }
+        },
+        "requires_capability_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^CAP_INTERNAL_[A-Z0-9_]+_V1$"
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "IMPLEMENTED_SOURCE_COMPATIBILITY_TRANSPORT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "capability_class": {
+                "const": "NVR_READ"
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

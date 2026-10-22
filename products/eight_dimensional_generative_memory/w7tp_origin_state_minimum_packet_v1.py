@@ -408,9 +408,47 @@ def build_fixture_minimum_packet(
 
 
 def _tmpfs_available(path: Path) -> bool:
+    """Require a stable directory on a kernel-observed tmpfs mount.
+
+    A writable directory alone does not establish volatile storage. Bind the
+    filesystem check to an opened directory's mount ID, not a path prefix or
+    a caller-supplied backend label. No mount or swap configuration is changed.
+    """
     try:
-        return path.is_dir() and os.access(path, os.W_OK | os.X_OK)
-    except OSError:
+        if (not path.is_absolute() or path.resolve(strict=True) != path
+                or not os.access(path, os.W_OK | os.X_OK)):
+            return False
+        descriptor = os.open(
+            path, os.O_PATH | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC
+        )
+        try:
+            opened = os.fstat(descriptor)
+            fdinfo = Path(f"/proc/self/fdinfo/{descriptor}").read_text()
+            mount_ids = [
+                parts[1] for line in fdinfo.splitlines()
+                if len(parts := line.split()) == 2 and parts[0] == "mnt_id:"
+            ]
+            if len(mount_ids) != 1 or not mount_ids[0].isdecimal():
+                return False
+            filesystem_types = []
+            for line in Path("/proc/self/mountinfo").read_text().splitlines():
+                left, separator, right = line.partition(" - ")
+                fields = left.split()
+                if separator and fields and fields[0] == mount_ids[0]:
+                    filesystem = right.split()
+                    if not filesystem:
+                        return False
+                    filesystem_types.append(filesystem[0])
+            if filesystem_types != ["tmpfs"]:
+                return False
+            # Reject a symlink, rename or mount/path replacement during probing.
+            if path.resolve(strict=True) != path:
+                return False
+            current = os.stat(path, follow_symlinks=False)
+            return (opened.st_dev, opened.st_ino) == (current.st_dev, current.st_ino)
+        finally:
+            os.close(descriptor)
+    except (OSError, ValueError, AttributeError, RuntimeError):
         return False
 
 

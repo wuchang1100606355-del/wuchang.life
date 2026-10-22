@@ -18,6 +18,25 @@ from typing import Any, Mapping
 
 SCHEMA = "W7TP_ENDPOINT_RULE_CAPABILITY_HANDSHAKE/1.0"
 SELECTOR_SCHEMA = "W7TP_RULE_BASE_TRANSPORT_SELECTOR/1.0"
+UNKNOWN_COST = "UNKNOWN"
+TOTAL_EFFECT_COST_SCHEMA = "W7TP_D6_TOTAL_EFFECT_COST_VECTOR/1.0"
+COST_MATERIAL_DIMENSIONS = (
+    "bootstrap_bytes",
+    "state_acquisition_bytes",
+    "state_acquisition_time_ms",
+    "reconstruction_time_ms",
+    "verification_time_ms",
+    "verification_bytes",
+    "authority_time_ms",
+    "cpu_time_ms",
+    "gpu_time_ms",
+    "memory_peak_bytes",
+    "energy_joules",
+    "failure_probability",
+    "failure_fallback_bytes",
+    "persistent_storage_bytes",
+    "temporary_storage_peak_bytes",
+)
 
 
 class EndpointRuleHandshakeHold(RuntimeError):
@@ -34,6 +53,162 @@ def canonical_json_bytes(value: Any) -> bytes:
         separators=(",", ":"),
         allow_nan=False,
     ).encode("utf-8")
+
+
+def _cost_value(value: Any, *, integer: bool = False) -> Any:
+    if value == UNKNOWN_COST:
+        return UNKNOWN_COST
+    if isinstance(value, bool):
+        raise EndpointRuleHandshakeHold("HOLD_COST_VALUE_INVALID")
+    if integer:
+        if not isinstance(value, int) or value < 0:
+            raise EndpointRuleHandshakeHold("HOLD_COST_VALUE_INVALID")
+    else:
+        if not isinstance(value, (int, float)) or value < 0:
+            raise EndpointRuleHandshakeHold("HOLD_COST_VALUE_INVALID")
+    return value
+
+
+def build_cost_vector(
+    *,
+    total_wire_bytes: int,
+    raw_u_bytes: int | str = UNKNOWN_COST,
+    packet_bytes: int | str = UNKNOWN_COST,
+    control_wire_bytes: int | str = UNKNOWN_COST,
+    bootstrap_bytes: int | str = UNKNOWN_COST,
+    state_acquisition_bytes: int | str = UNKNOWN_COST,
+    state_acquisition_time_ms: float | str = UNKNOWN_COST,
+    reconstruction_time_ms: float | str = UNKNOWN_COST,
+    verification_time_ms: float | str = UNKNOWN_COST,
+    verification_bytes: int | str = UNKNOWN_COST,
+    authority_time_ms: float | str = UNKNOWN_COST,
+    human_review_required: bool | str = UNKNOWN_COST,
+    cpu_time_ms: float | str = UNKNOWN_COST,
+    gpu_time_ms: float | str = UNKNOWN_COST,
+    memory_peak_bytes: int | str = UNKNOWN_COST,
+    energy_joules: float | str = UNKNOWN_COST,
+    failure_probability: float | str = UNKNOWN_COST,
+    failure_fallback_bytes: int | str = UNKNOWN_COST,
+    persistent_storage_bytes: int | str = UNKNOWN_COST,
+    temporary_storage_peak_bytes: int | str = UNKNOWN_COST,
+    amortization_runs: int | str = UNKNOWN_COST,
+) -> dict[str, Any]:
+    """Build a non-scalar D6 cost vector; UNKNOWN is never coerced to zero."""
+
+    total_wire = _cost_value(total_wire_bytes, integer=True)
+    values = {
+        "raw_u_bytes": _cost_value(raw_u_bytes, integer=True),
+        "packet_bytes": _cost_value(packet_bytes, integer=True),
+        "control_wire_bytes": _cost_value(control_wire_bytes, integer=True),
+        "bootstrap_bytes": _cost_value(bootstrap_bytes, integer=True),
+        "total_wire_bytes": total_wire,
+        "state_acquisition_bytes": _cost_value(state_acquisition_bytes, integer=True),
+        "state_acquisition_time_ms": _cost_value(state_acquisition_time_ms),
+        "reconstruction_time_ms": _cost_value(reconstruction_time_ms),
+        "verification_time_ms": _cost_value(verification_time_ms),
+        "verification_bytes": _cost_value(verification_bytes, integer=True),
+        "authority_time_ms": _cost_value(authority_time_ms),
+        "cpu_time_ms": _cost_value(cpu_time_ms),
+        "gpu_time_ms": _cost_value(gpu_time_ms),
+        "memory_peak_bytes": _cost_value(memory_peak_bytes, integer=True),
+        "energy_joules": _cost_value(energy_joules),
+        "failure_probability": _cost_value(failure_probability),
+        "failure_fallback_bytes": _cost_value(failure_fallback_bytes, integer=True),
+        "persistent_storage_bytes": _cost_value(persistent_storage_bytes, integer=True),
+        "temporary_storage_peak_bytes": _cost_value(temporary_storage_peak_bytes, integer=True),
+    }
+    if human_review_required != UNKNOWN_COST and not isinstance(human_review_required, bool):
+        raise EndpointRuleHandshakeHold("HOLD_COST_HUMAN_REVIEW_INVALID")
+    if (
+        values["failure_probability"] != UNKNOWN_COST
+        and values["failure_probability"] > 1
+    ):
+        raise EndpointRuleHandshakeHold("HOLD_COST_FAILURE_PROBABILITY_INVALID")
+    if amortization_runs != UNKNOWN_COST:
+        amortization_runs = _cost_value(amortization_runs, integer=True)
+        if amortization_runs == 0:
+            raise EndpointRuleHandshakeHold("HOLD_COST_AMORTIZATION_RUNS_INVALID")
+
+    bootstrap = values["bootstrap_bytes"]
+    first_use = total_wire + bootstrap if isinstance(bootstrap, int) else UNKNOWN_COST
+    amortized_transport = UNKNOWN_COST
+    if isinstance(bootstrap, int) and isinstance(amortization_runs, int):
+        amortized_transport = total_wire + (bootstrap / amortization_runs)
+
+    unknown_material = [
+        key for key in COST_MATERIAL_DIMENSIONS if values[key] == UNKNOWN_COST
+    ]
+    if human_review_required == UNKNOWN_COST:
+        unknown_material.append("human_review_required")
+    return {
+        "schema_id": TOTAL_EFFECT_COST_SCHEMA,
+        "accounting_semantics": {
+            "unknown_never_zero": True,
+            "component_bytes_not_implicitly_additive": True,
+            "total_wire_bytes_authoritative": True,
+            "mixed_units_not_scalarized_without_policy": True,
+            "first_use_and_steady_state_separate": True,
+        },
+        "transport": {
+            "raw_u_bytes": values["raw_u_bytes"],
+            "packet_bytes": values["packet_bytes"],
+            "control_wire_bytes": values["control_wire_bytes"],
+            "bootstrap_bytes": bootstrap,
+            "total_wire_bytes": total_wire,
+            "first_use_transport_bytes": first_use,
+            "steady_state_transport_bytes": total_wire,
+            "amortization_runs": amortization_runs,
+            "amortized_transport_bytes": amortized_transport,
+        },
+        "state_acquisition": {
+            "bytes": values["state_acquisition_bytes"],
+            "time_ms": values["state_acquisition_time_ms"],
+        },
+        "reconstruction": {
+            "time_ms": values["reconstruction_time_ms"],
+            "cpu_time_ms": values["cpu_time_ms"],
+            "gpu_time_ms": values["gpu_time_ms"],
+            "memory_peak_bytes": values["memory_peak_bytes"],
+            "energy_joules": values["energy_joules"],
+        },
+        "verification": {
+            "time_ms": values["verification_time_ms"],
+            "bytes": values["verification_bytes"],
+        },
+        "authority": {
+            "time_ms": values["authority_time_ms"],
+            "human_review_required": human_review_required,
+        },
+        "failure": {
+            "probability": values["failure_probability"],
+            "fallback_bytes": values["failure_fallback_bytes"],
+        },
+        "persistence": {
+            "persistent_storage_bytes": values["persistent_storage_bytes"],
+            "temporary_storage_peak_bytes": values["temporary_storage_peak_bytes"],
+        },
+        "unknown_material_dimensions": unknown_material,
+        "total_effect_complete": not unknown_material,
+    }
+
+
+def _break_even_runs(full: Mapping[str, Any], alternative: Mapping[str, Any]) -> int | str:
+    try:
+        f = full["transport"]
+        a = alternative["transport"]
+        f_boot, a_boot = f["bootstrap_bytes"], a["bootstrap_bytes"]
+        f_steady, a_steady = f["steady_state_transport_bytes"], a["steady_state_transport_bytes"]
+    except Exception:
+        return UNKNOWN_COST
+    if not all(isinstance(v, int) for v in (f_boot, a_boot, f_steady, a_steady)):
+        return UNKNOWN_COST
+    saving = f_steady - a_steady
+    if saving <= 0:
+        return UNKNOWN_COST
+    extra_bootstrap = a_boot - f_boot
+    if extra_bootstrap <= 0:
+        return 1
+    return (extra_bootstrap + saving - 1) // saving
 
 
 def sha256_file(path: Path) -> str:
@@ -334,7 +509,12 @@ def select_transport(
     shared_rule_origin_cell_wire_bytes: int | None,
     shared_rule_match_state: Mapping[str, Any] | None,
     generative_origin_cell_wire_bytes: int | None = None,
+    cost_vectors: Mapping[str, Mapping[str, Any]] | None = None,
+    objective: str = "MINIMIZE_TOTAL_WIRE_BYTES",
+    require_total_effect_complete: bool = False,
 ) -> dict[str, Any]:
+    if objective != "MINIMIZE_TOTAL_WIRE_BYTES":
+        raise EndpointRuleHandshakeHold("HOLD_COST_OBJECTIVE_UNSUPPORTED")
     if not isinstance(full_transfer_wire_bytes, int) or full_transfer_wire_bytes < 0:
         raise EndpointRuleHandshakeHold("HOLD_FULL_TRANSFER_WIRE_BYTES_INVALID")
     candidates: list[tuple[str, int, str]] = [
@@ -357,10 +537,7 @@ def select_transport(
                 "EXACT_SHARED_RULE_AND_RECEIVER_READY",
             )
         )
-    if (
-        isinstance(generative_origin_cell_wire_bytes, int)
-        and generative_origin_cell_wire_bytes >= 0
-    ):
+    if isinstance(generative_origin_cell_wire_bytes, int) and generative_origin_cell_wire_bytes >= 0:
         candidates.append(
             (
                 "GENERATIVE_RULE_ORIGIN_CELL",
@@ -368,7 +545,51 @@ def select_transport(
                 "GENERATIVE_PACKET_WIRE_BYTES_MEASURED",
             )
         )
+
+    supplied = cost_vectors if isinstance(cost_vectors, Mapping) else {}
+    normalized_costs: dict[str, dict[str, Any]] = {}
+    for mode, wire_bytes, _ in candidates:
+        raw = supplied.get(mode)
+        if raw is None:
+            vector = build_cost_vector(total_wire_bytes=wire_bytes)
+        else:
+            if not isinstance(raw, Mapping):
+                raise EndpointRuleHandshakeHold("HOLD_COST_VECTOR_INVALID")
+            vector = dict(raw)
+            if vector.get("schema_id") != TOTAL_EFFECT_COST_SCHEMA:
+                raise EndpointRuleHandshakeHold("HOLD_COST_VECTOR_SCHEMA_MISMATCH")
+            transport = vector.get("transport")
+            if not isinstance(transport, Mapping) or transport.get("total_wire_bytes") != wire_bytes:
+                raise EndpointRuleHandshakeHold("HOLD_COST_VECTOR_WIRE_MISMATCH")
+        normalized_costs[mode] = vector
+
+    if require_total_effect_complete:
+        incomplete = sorted(
+            mode for mode, vector in normalized_costs.items()
+            if vector.get("total_effect_complete") is not True
+        )
+        if incomplete:
+            raise EndpointRuleHandshakeHold(
+                "HOLD_TOTAL_EFFECT_COST_INCOMPLETE:" + ",".join(incomplete)
+            )
+
     selected = min(candidates, key=lambda item: (item[1], item[0]))
+    full_cost = normalized_costs["FULL_TRANSFER"]
+    rows = []
+    for mode, size, reason in candidates:
+        vector = normalized_costs[mode]
+        rows.append(
+            {
+                "mode": mode,
+                "wire_bytes": size,
+                "eligibility": reason,
+                "cost_vector": vector,
+                "break_even_runs_vs_full": (
+                    0 if mode == "FULL_TRANSFER" else _break_even_runs(full_cost, vector)
+                ),
+            }
+        )
+
     return {
         "schema_id": SELECTOR_SCHEMA,
         "state": "PASS_TRANSPORT_SELECTED",
@@ -376,14 +597,27 @@ def select_transport(
         "selected_wire_bytes": selected[1],
         "reason": selected[2],
         "full_transfer_wire_bytes": full_transfer_wire_bytes,
-        "candidates": [
-            {"mode": mode, "wire_bytes": size, "eligibility": reason}
-            for mode, size, reason in candidates
-        ],
+        "candidates": rows,
         "metric_rule": (
             "COMPARE_COMPLETE_SERIALIZED_WIRE_BYTES_INCLUDING_RULE_INDEX_U_ENVELOPE_"
             "HASH_AUTHORITY_AND_REQUIRED_PRECONDITIONS"
         ),
+        "cost_model": {
+            "schema_id": TOTAL_EFFECT_COST_SCHEMA,
+            "objective": objective,
+            "decision_scope": "TRANSPORT_WIRE_COST_ONLY",
+            "total_effect_cost_complete": all(
+                v.get("total_effect_complete") is True for v in normalized_costs.values()
+            ),
+            "unknown_never_zero": True,
+            "cross_unit_scalarization": False,
+            "first_use_and_steady_state_separate": True,
+            "require_total_effect_complete": require_total_effect_complete,
+            "rule": (
+                "TOTAL_EFFECT_COST_IS_A_VECTOR; UNKNOWN_MATERIAL_DIMENSIONS_MUST_NOT_"
+                "BE_COERCED_TO_ZERO; D1_D5_POLICY_MUST_DEFINE_ANY_CROSS_UNIT_OBJECTIVE"
+            ),
+        },
         "authority_effect": "NONE",
     }
 
@@ -392,6 +626,9 @@ __all__ = [
     "EndpointRuleHandshakeHold",
     "SCHEMA",
     "SELECTOR_SCHEMA",
+    "TOTAL_EFFECT_COST_SCHEMA",
+    "UNKNOWN_COST",
+    "build_cost_vector",
     "observe_endpoint_rule_capability",
     "select_transport",
     "shared_rule_match",
