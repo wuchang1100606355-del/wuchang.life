@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="res_config_settings_view_form_liaoguo_ui_suite" model="ir.ui.view">
+    <field name="name">res.config.settings.view.form.liaoguo.ui.suite</field>
+    <field name="model">res.config.settings</field>
+    <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//app[@name='point_of_sale']" position="inside">
+        <block title="重新總店三套介面" name="liaoguo_ui_suite">
+          <setting string="三套整組切換" help="靛藍科技、暖米咖啡、墨韻典藏共用同一個 Odoo 商品與權限資料契約。">
+            <field name="liaoguo_ui_selected_suite"/>
+          </setting>
+        </block>
+      </xpath>
+    </field>
+  </record>
+</odoo>

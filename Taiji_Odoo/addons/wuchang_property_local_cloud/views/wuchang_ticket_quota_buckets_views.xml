@@ -19,7 +19,7 @@
         <field name="model">wuchang.ticket.opening</field>
         <field name="inherit_id" ref="wuchang_property_local_cloud.view_wuchang_ticket_opening_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@string='票券額度']" position="inside">
+            <xpath expr="//field[@name='total_face_value']" position="after">
                 <field name="quota_account_type"/>
                 <field name="is_quota_limited"/>
                 <field name="quota_bucket_note"/>

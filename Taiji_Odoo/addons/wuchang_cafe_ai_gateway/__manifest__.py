@@ -14,6 +14,7 @@
         "wuchang_google_member_login",
     ],
     "data": [
+        "security/sovereign_checkout_security.xml",
         "security/ir.model.access.csv",
         "views/wuchang_cafe_ai_eventbook_views.xml",
         "views/lineworks_notification_views.xml",
