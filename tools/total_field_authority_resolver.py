@@ -892,17 +892,186 @@ def resolve_active_total_field_authority(
         return _result(exc.state, exc.reason)
 
 
-__all__ = [
-    "ACTIVE_POINTER_REL",
-    "ARTIFACT_ROOT_REL",
-    "PersistentNonceLedger",
-    "TrustedSignatureVerifier",
-    "POINTER_BOOTSTRAP_SCOPE",
-    "POINTER_BOOTSTRAP_SCOPE_CONSTRAINTS",
-    "PROMOTION_SCOPE",
-    "PROMOTION_SCOPE_CONSTRAINTS",
-    "GIT_PUSH_SCOPE",
-    "GIT_PUSH_CONSTRAINT_FIELDS",
-    "canonical_sha256",
-    "resolve_active_total_field_authority",
-]
+# === FOUNDER_SOVEREIGN_ROOT_D8_TRUST_ANCHOR_POLICY_V1 ===
+FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_SCOPE = "AUTHORIZE_G4_V11_D4_FORMAL_EFFECT_SIGNER_ROLE_PROMOTION"
+SCOPE_OWNER_AUTHORIZATIONS[FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_SCOPE] = (
+    "FOUNDER_APPROVED_G4_V11_D4_FORMAL_EFFECT_SIGNING_AUTHORITY"
+)
+
+FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1 = {
+    "policy_id": "W7TP_FOUNDER_SINGLE_IDENTITY_ROOT_MULTI_ROLE_TRUST_ANCHOR_POLICY_V1",
+    "founder_sovereign_authority_w7tp_sha256": "92e67208c60bf7c8a447b22b4444a8cb87973e93e21059055eaae3bba3257990",
+    "founder_dual_root_file_ref": "runtime/total_field/founder_identity/ACTIVE_FOUNDER_DUAL_ROOT_V1.json",
+    "founder_dual_root_file_sha256": "53959616671df28940b91453d867633a5a5ef8cc974f01736f0422d21060a681",
+    "founder_dual_root_content_sha256": "7d50f05169e55e822dbe7dd952a7499cf9442e88cd7334d2f638103c0a76a851",
+    "founder_webauthn_cose_public_key_sha256": "7f1760bbec2cc2eb9c2c65d06677cda7faa9a86cc8f0ce0fbe1055e4f2d87e53",
+    "founder_webauthn_ecdsa_receipt_sha256": "cfb1ed2037f5497543190e2e10d5ce267409a4e512ccdb532aa4474df0e53935",
+    "authorized_sovereign_node_root_key": {
+        "key_id": "wuchang-node",
+        "authorizer_role": "FOUNDER_SOVEREIGN_NODE_ROOT_AUTHORIZER",
+        "verifier_ref": "verifier_ref:founder_sovereign_root_v1",
+        "public_key_pem_ref": "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800/founder_sovereign_root_public.pem",
+        "public_key_pem_sha256": "22846bf4b13addf961b5251ee764398ff59aefaffd5ac4392c4b456447b3defa",
+        "ed25519_raw_public_key_fingerprint_sha256": "7e32872072060c90c7954629c68eb31fa6c0532e64d454d189e2c55f1bcb3b0a",
+        "openssh_public_key_fingerprint": "SHA256:r2JW3GHzRO6i8+gwCQsuMsx61xm5xuoyR/j3e//qF3E",
+        "authorized_to_promote_d8_key_fingerprint": "09adae73f29258eadb9f0eee007a05b2e03ef6bb331ab0ab4c0cf58d57d01570",
+        "authorized_effect_domains": [
+            "G4_DUAL_ACTIVE_FIELD_RECOVERY_AND_ROUTER_ALIGNMENT",
+            "FOUNDER_DUAL_ROOT_ROUTINE_DELEGATION_V11",
+            "TOTAL_FIELD_V11_TWO_EFFECT_WHITELIST",
+            "D4_SINGLE_USE_FORMAL_BROKER_RECEIPT_ISSUANCE",
+        ],
+    },
+}
+
+
+def resolve_founder_sovereign_root_role_promotion_authority(
+    *,
+    repo_root: Path,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    from cryptography.hazmat.primitives import serialization
+    from tools.total_field.w7tp_ed25519_verifier import validate_stage_b_signature
+    from tools.total_field_ed25519_backend import Ed25519DetachedSignatureBackend
+
+    root = Path(repo_root).resolve()
+    check_now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    policy = FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1
+    anchor = policy["authorized_sovereign_node_root_key"]
+
+    dual_root_path = (root / policy["founder_dual_root_file_ref"]).resolve()
+    _verify_sha256(
+        dual_root_path,
+        policy["founder_dual_root_file_sha256"],
+        "BLOCK_FOUNDER_IDENTITY_ROOT_MISMATCH",
+        "founder_dual_root_file_sha256",
+    )
+    dual_root_obj = _load_json(
+        dual_root_path,
+        "HOLD_FOUNDER_IDENTITY_ROOT_MISSING",
+        "ACTIVE_FOUNDER_DUAL_ROOT_V1",
+    )
+    expected_dev_fp = "sha256:" + policy["founder_webauthn_cose_public_key_sha256"]
+    if (
+        dual_root_obj.get("enabled") is not True
+        or dual_root_obj.get("root_sha256") != policy["founder_dual_root_content_sha256"]
+        or dual_root_obj.get("device_principal_fingerprint") != expected_dev_fp
+    ):
+        raise ResolverError(
+            "BLOCK_FOUNDER_IDENTITY_ROOT_MISMATCH",
+            "ACTIVE_FOUNDER_DUAL_ROOT_V1 content or passkey fingerprint mismatch",
+        )
+
+    fpub_path = (root / anchor["public_key_pem_ref"]).resolve()
+    _verify_sha256(
+        fpub_path,
+        anchor["public_key_pem_sha256"],
+        "BLOCK_FOUNDER_SOVEREIGN_KEY_MISMATCH",
+        "public_key_pem_sha256",
+    )
+    f_raw = serialization.load_pem_public_key(fpub_path.read_bytes()).public_bytes(
+        serialization.Encoding.Raw, serialization.PublicFormat.Raw
+    )
+    actual_fp = hashlib.sha256(f_raw).hexdigest()
+    if actual_fp != anchor["ed25519_raw_public_key_fingerprint_sha256"]:
+        raise ResolverError(
+            "BLOCK_FOUNDER_SOVEREIGN_KEY_MISMATCH",
+            "wuchang-node raw Ed25519 fingerprint mismatch",
+        )
+
+    ddir = root / "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800"
+    grant_path = ddir / "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_20261020.json"
+    grant = _load_json(
+        grant_path,
+        "HOLD_ROLE_PROMOTION_GRANT_MISSING",
+        "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_20261020",
+    )
+    grant_sha256 = hashlib.sha256(grant_path.read_bytes()).hexdigest()
+
+    body = grant.get("stage_b_object_without_signature") or {}
+    issued_at = _parse_utc(body.get("issued_at"), "grant.issued_at")
+    expires_at = _parse_utc(body.get("expires_at"), "grant.expires_at")
+    if issued_at > check_now or check_now >= expires_at:
+        raise ResolverError("HOLD_AUTHORITY_EXPIRED", "role promotion grant is not currently valid")
+
+    psa = body.get("promoted_subject_authority") or {}
+    ifs = body.get("independent_founder_sovereign_issuer") or {}
+    aae = body.get("approved_artifacts_and_effects") or {}
+    if (
+        body.get("self_authorization") is not False
+        or body.get("issuer_is_subject_key") is not False
+        or body.get("grant_state") != "PASS_INDEPENDENT_FOUNDER_ROLE_PROMOTION_GRANTED"
+        or ifs.get("raw_public_key_fingerprint") != anchor["ed25519_raw_public_key_fingerprint_sha256"]
+        or psa.get("final_authority_granted") is not True
+        or psa.get("formal_d8_effect_signer_role_granted") is not True
+        or psa.get("subject_raw_public_key_fingerprint") != anchor["authorized_to_promote_d8_key_fingerprint"]
+        or len(aae) != 16 or any(not isinstance(v, str) or len(v) != 64 for v in aae.values())
+    ):
+        raise ResolverError(
+            "BLOCK_AUTHORITY_SCOPE_ESCALATION",
+            "role promotion grant subject or effect domains mismatch",
+        )
+
+    stage_b_res = validate_stage_b_signature(
+        domain_separator=grant["domain_separator"],
+        packet_canonical_id=grant["packet_canonical_id"],
+        stage_b_object_without_signature=body,
+        public_key_ref=anchor["public_key_pem_ref"],
+        public_key_resolver=lambda _ref: f_raw,
+        expected_public_key_fingerprint=actual_fp,
+        signature_hex=grant["stage_b_signature_hex"],
+    )
+    if not stage_b_res.valid:
+        raise ResolverError("BLOCK_AUTHORITY_SIGNATURE_INVALID", stage_b_res.reason_code)
+
+    f_backend = Ed25519DetachedSignatureBackend(
+        fpub_path,
+        trusted_verifier_refs=[anchor["verifier_ref"]],
+    )
+    for label, sig_field in (
+        ("detached_signature_artifact", "detached_signature_artifact"),
+        ("independent_owner_seal_signature", "independent_owner_seal_signature"),
+        ("independent_d8_decision_signature", "independent_d8_decision_signature"),
+    ):
+        sig_obj = grant.get(sig_field) or {}
+        if not f_backend.verify_detached(
+            verifier_ref=sig_obj.get("verifier_ref", ""),
+            payload_sha256=sig_obj.get("signed_payload_sha256", ""),
+            signature=sig_obj.get("signature", ""),
+        ):
+            raise ResolverError("BLOCK_AUTHORITY_SIGNATURE_INVALID", f"{label} failed verification")
+
+    rpub_path = ddir / "authority_signing_public.pem"
+    r_backend = Ed25519DetachedSignatureBackend(
+        rpub_path,
+        trusted_verifier_refs=["verifier_ref:total_field_runtime_v1"],
+    )
+    rev_path = ddir / "revocation_list.json"
+    rev_obj = _load_json(rev_path, "BLOCK_AUTHORITY_REVOKED", "revocation_list")
+    _verify_revocation_list(
+        rev_obj,
+        authority_id=str(psa.get("authority_id")),
+        verifier_ref="verifier_ref:total_field_runtime_v1",
+        verifier=r_backend,
+    )
+    # revocation_list already verified via _verify_revocation_list above
+
+    return {
+        "state": "PASS_FOUNDER_SOVEREIGN_ROOT_D8_ROLE_PROMOTION_AUTHORITY_RESOLVED",
+        "reason": "wuchang-node admitted under single Founder Identity Root and verified for G4/V11/D4 D8 role promotion",
+        "authority_verified": True,
+        "policy_id": policy["policy_id"],
+        "founder_identity_root_sha256": policy["founder_dual_root_content_sha256"],
+        "founder_dual_root_file_sha256": policy["founder_dual_root_file_sha256"],
+        "founder_webauthn_ecdsa_receipt_sha256": policy["founder_webauthn_ecdsa_receipt_sha256"],
+        "admitted_sovereign_root_key_id": anchor["key_id"],
+        "admitted_sovereign_root_role": anchor["authorizer_role"],
+        "admitted_sovereign_root_fingerprint": actual_fp,
+        "promoted_d8_signer_fingerprint": anchor["authorized_to_promote_d8_key_fingerprint"],
+        "promoted_role": psa.get("to_promoted_profile"),
+        "authorized_effect_domains": list(anchor["authorized_effect_domains"]),
+        "role_promotion_grant_sha256": grant_sha256,
+        "revocation_list_sha256": hashlib.sha256(rev_path.read_bytes()).hexdigest(),
+        "stage_b_verification": stage_b_res.reason_code,
+        "detached_signatures_verified": True,
+    }

@@ -882,6 +882,8 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
     def do_GET(self) -> None:
+        if self.app.gst_confirmation.handle_get(self):
+            return
         if self.path.split("?", 1)[0] == "/":
             payload = HTML.encode("utf-8")
             self.send_response(HTTPStatus.OK)
@@ -906,7 +908,10 @@ class Handler(BaseHTTPRequestHandler):
             token = self.headers.get("X-W7TP-Bootstrap", "")
             user_agent = self.headers.get("User-Agent", "")
             route = self.path.split("?", 1)[0]
-            if route == "/v1/passkey/register/options":
+            if route.startswith("/v1/passkey/gst-v21/"):
+                result = self.app.gst_confirmation.post(
+                    route, body, user_agent, self.headers.get("Origin", ""))
+            elif route == "/v1/passkey/register/options":
                 result = self.app.register_options(token, user_agent)
             elif route == "/v1/passkey/register/complete":
                 result = self.app.register_complete(token, user_agent, body)
@@ -941,6 +946,10 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=9120)
     args = parser.parse_args()
     app = PasskeyApplication(Path(args.repo_root))
+    from gst_v21_human_confirmation import GSTHumanConfirmation
+    sys.path.insert(0, "/home/taiji_admin/.local/share/w7tp-gst-v21-root-adapter")
+    from gst_v21_readback import refresh_readback, consume_approval
+    app.gst_confirmation = GSTHumanConfirmation(app, refresh_readback=refresh_readback, consume_approval=consume_approval)
     Handler.app = app
     print(json.dumps({"state": "READY", "url": f"{app.passkey['expected_origin']}/?bootstrap={app.bootstrap_token()}"}, ensure_ascii=False), flush=True)
     ThreadingHTTPServer((args.host, args.port), Handler).serve_forever()

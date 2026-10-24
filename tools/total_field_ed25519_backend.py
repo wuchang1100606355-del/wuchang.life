@@ -48,3 +48,5 @@ class Ed25519DetachedSignatureBackend:
 
 
 __all__ = ["Ed25519DetachedSignatureBackend"]
+Ed25519DetachedSignatureBackend.verify = Ed25519DetachedSignatureBackend.verify_detached
+Ed25519DetachedSignatureBackend.trusted_runtime_verifier = True
