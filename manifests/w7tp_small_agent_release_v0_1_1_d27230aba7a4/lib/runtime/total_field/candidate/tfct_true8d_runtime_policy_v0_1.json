@@ -1,0 +1,249 @@
+{
+  "schema_version": "tfct.true8d.runtime-policy.candidate/0.1",
+  "policy_version": "TFCT_TRUE8D_RUNTIME_POLICY_V0_1",
+  "status": "CANDIDATE",
+  "max_iterations": 8,
+  "allowed_source_modes": [
+    "TOTAL_FIELD_PULL",
+    "LLM_PUSH"
+  ],
+  "stable_decisions": [
+    "ALLOW",
+    "HOLD",
+    "BLOCK",
+    "QUARANTINE"
+  ],
+  "decision_priority": [
+    "QUARANTINE",
+    "BLOCK",
+    "HOLD",
+    "ALLOW"
+  ],
+  "hard_risk_codes": [
+    "CANONICAL_WRITE_REQUESTED",
+    "DB_WRITE_REQUESTED",
+    "DEPLOY_REQUESTED",
+    "FORMAL_SUBMISSION_REQUESTED",
+    "MEMBER_PLAINTEXT_PRESENT",
+    "RAW_SECRET_PRESENT",
+    "RESTART_REQUESTED",
+    "ROUTER_WRITE_REQUESTED"
+  ],
+  "sensitive_key_names": [
+    "api_key",
+    "credential",
+    "member_plaintext",
+    "password",
+    "private_key",
+    "raw_credentials",
+    "raw_key",
+    "raw_secret",
+    "raw_token",
+    "resident_plaintext",
+    "secret",
+    "token"
+  ],
+  "candidate_only_sources": [
+    "LLM_PUSH",
+    "SMALL_TRANSPORT_AGENT",
+    "TOTAL_FIELD_PULL",
+    "XIAOJ_CANDIDATE"
+  ],
+  "commit_rule": {
+    "status": "CANDIDATE",
+    "fixed_point_status": "REACHED",
+    "final_decision": "ALLOW",
+    "action": "COMMIT_PROPOSED_ONLY"
+  },
+  "cycle_policy": {
+    "status": "CANDIDATE",
+    "fixed_point_status": "CYCLE_DETECTED",
+    "decision": "HOLD",
+    "reason_code": "CONVERGENCE_CYCLE_DETECTED"
+  },
+  "timeout_policy": {
+    "status": "CANDIDATE",
+    "fixed_point_status": "MAX_ITERATIONS_REACHED",
+    "decision": "HOLD",
+    "reason_code": "CONVERGENCE_TIMEOUT"
+  },
+  "consensus_mode": "LOCAL_EQUIVALENCE_ONLY",
+  "distributed_consensus_status": "OPEN_PROBLEM",
+  "adi_mode": "DISABLED_UNLESS_EXPLICIT_TEST_FIXTURE",
+  "rule_refs": {
+    "identity": {
+      "ref": "rules/tfct/identity_v0_1",
+      "status": "CANDIDATE",
+      "operation": "IDENTITY",
+      "test_only": false
+    },
+    "normalize": {
+      "ref": "rules/tfct/normalize_v0_1",
+      "status": "CANDIDATE",
+      "operation": "NORMALIZE_JSON",
+      "test_only": false
+    },
+    "test_cycle": {
+      "ref": "rules/tfct/test_cycle_v0_1",
+      "status": "CANDIDATE",
+      "operation": "TEST_CYCLE_D5_MARKER",
+      "test_only": true
+    },
+    "test_timeout": {
+      "ref": "rules/tfct/test_timeout_v0_1",
+      "status": "CANDIDATE",
+      "operation": "TEST_TIMEOUT_D5_COUNTER",
+      "test_only": true
+    }
+  },
+  "priority_policy_ref": "priority/tfct/candidate/v0_1",
+  "constraint_hypergraph_ref": "constraints/tfct/runtime-hypergraph/v0_1",
+  "convergence_operator_ref": "convergence/tfct/finite-fixed-point/v0_1",
+  "dimension_refs": {
+    "D1_ref": "field/tfct/D1/v0_1",
+    "D2_ref": "field/tfct/D2/v0_1",
+    "D3_ref": "field/tfct/D3/v0_1",
+    "D4_ref": "field/tfct/D4/v0_1",
+    "D5_ref": "field/tfct/D5/v0_1",
+    "D6_ref": "field/tfct/D6/v0_1",
+    "D7_ref": "field/tfct/D7/v0_1",
+    "D8_ref": "field/tfct/D8/v0_1"
+  },
+  "constraint_refs": [
+    {
+      "ref": "constraints/tfct/required_fields_v0_1",
+      "status": "CANDIDATE",
+      "order": 10,
+      "evaluator": "REQUIRED_FIELDS",
+      "affected_fields": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ]
+    },
+    {
+      "ref": "constraints/tfct/authority_guard_v0_1",
+      "status": "CANDIDATE",
+      "order": 20,
+      "evaluator": "AUTHORITY_GUARD",
+      "affected_fields": [
+        "D4",
+        "D8"
+      ]
+    },
+    {
+      "ref": "constraints/tfct/d6_sovereign_privacy_v0_1",
+      "status": "CANDIDATE",
+      "order": 30,
+      "evaluator": "D6_SOVEREIGN_PRIVACY",
+      "affected_fields": [
+        "D6"
+      ]
+    },
+    {
+      "ref": "constraints/tfct/d7_reference_only_v0_1",
+      "status": "CANDIDATE",
+      "order": 40,
+      "evaluator": "D7_REFERENCE_ONLY",
+      "affected_fields": [
+        "D7"
+      ]
+    },
+    {
+      "ref": "constraints/tfct/open_problem_gate_v0_1",
+      "status": "CANDIDATE",
+      "order": 50,
+      "evaluator": "OPEN_PROBLEM_GATE",
+      "affected_fields": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ]
+    }
+  ],
+  "d7_allowed_reference_keys": [
+    "asset_ref",
+    "capability_ref",
+    "equivalence_ref",
+    "reconstruction_condition",
+    "reconstructor_ref",
+    "routing_ref",
+    "rule_ref",
+    "state_field_packet_ref",
+    "table_ref",
+    "template_ref"
+  ],
+  "d7_raw_channel_keys": [
+    "binary_payload",
+    "payload",
+    "raw_bytes",
+    "raw_channel_payload",
+    "raw_payload"
+  ],
+  "authority_forbidden_keys": [
+    "commit_applied",
+    "committed",
+    "tfid",
+    "total_field_hash"
+  ],
+  "open_problem_gates": [
+    {
+      "status": "CANDIDATE",
+      "condition": "OBSERVATION_DOMAIN_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_OBSERVATION_DOMAIN_NOT_CONFIGURED"
+    },
+    {
+      "status": "CANDIDATE",
+      "condition": "RULE_SET_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_RULE_SET_NOT_CONFIGURED"
+    },
+    {
+      "status": "CANDIDATE",
+      "condition": "PRIORITY_POLICY_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_PRIORITY_POLICY_NOT_CONFIGURED"
+    },
+    {
+      "status": "CANDIDATE",
+      "condition": "DISTRIBUTED_CONSENSUS_REQUESTED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_DISTRIBUTED_CONSENSUS_OPEN_PROBLEM"
+    },
+    {
+      "status": "CANDIDATE",
+      "condition": "ADI_REQUESTED_WITHOUT_RESULT",
+      "decision": "HOLD",
+      "reason_code": "HOLD_ADI_NOT_CONFIGURED"
+    },
+    {
+      "status": "CANDIDATE",
+      "condition": "DIMENSION_PROJECTION_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_DIMENSION_PROJECTION_NOT_CONFIGURED"
+    },
+    {
+      "status": "CANDIDATE",
+      "condition": "CONSTRAINT_HYPERGRAPH_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_CONSTRAINT_HYPERGRAPH_NOT_CONFIGURED"
+    },
+    {
+      "status": "CANDIDATE",
+      "condition": "CONVERGENCE_OPERATOR_NOT_CONFIGURED",
+      "decision": "HOLD",
+      "reason_code": "HOLD_CONVERGENCE_OPERATOR_NOT_CONFIGURED"
+    }
+  ]
+}

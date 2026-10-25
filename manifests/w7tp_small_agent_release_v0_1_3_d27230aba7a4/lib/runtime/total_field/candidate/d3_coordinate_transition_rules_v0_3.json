@@ -1,0 +1,30 @@
+{
+  "schema_version": "w7tp.d3-coordinate-transition-rules.v0.3-candidate",
+  "status": "CANDIDATE_NON_CANONICAL",
+  "canonical_promotion": false,
+  "coordinate_model": "ABSTRACT_COORDINATE_OBJECT",
+  "merge_rule": "RECURSIVE_DICT_MERGE_REPLACE_NON_DICT",
+  "delta_source": "context.coordinate_delta",
+  "events": {
+    "NODE_JOIN": {
+      "base_delta": {},
+      "d7_reference_required": false,
+      "status": "CANDIDATE_RULE"
+    },
+    "ROUTER_BOUNDARY_PASS": {
+      "base_delta": {},
+      "d7_reference_required": false,
+      "status": "CANDIDATE_RULE"
+    },
+    "GENERATIVE_TRANSMISSION": {
+      "base_delta": {},
+      "d7_reference_required": true,
+      "status": "CANDIDATE_RULE"
+    },
+    "STATE_UPDATE": {
+      "base_delta": {},
+      "d7_reference_required": false,
+      "status": "CANDIDATE_RULE"
+    }
+  }
+}
