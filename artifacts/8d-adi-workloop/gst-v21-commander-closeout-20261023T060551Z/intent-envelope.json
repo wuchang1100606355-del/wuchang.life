@@ -1,0 +1,135 @@
+{
+  "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+  "run_id": "gst-v21-commander-closeout-20261023T060551Z",
+  "lifecycle_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "created_at": "2026-10-23T06:12:53.733723+00:00",
+  "maximum_effect_class": "E5",
+  "identity_and_seat": {
+    "natural_person_ref": "UNKNOWN_UNVERIFIED",
+    "member_ref": "UNKNOWN_UNVERIFIED",
+    "xiaoj_identity_ref": "UNKNOWN_UNVERIFIED",
+    "role_id": "UNKNOWN_UNVERIFIED",
+    "seat_id": "UNKNOWN_UNVERIFIED",
+    "access_profile_ref": "UNKNOWN_UNVERIFIED",
+    "member_boundary": "UNKNOWN_UNVERIFIED"
+  },
+  "product_output_contract": {
+    "title": "GST V2.1 簽章回執與自動退場收斂",
+    "one_sentence": "依既有真人WebAuthn證據對帳，保存真實工作紀錄，修復單次手機簽章工具並釋放9122且保護8444",
+    "acceptance_ids": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4",
+      "AC-5",
+      "AC-6"
+    ],
+    "non_goals": [
+      "No private-key signing",
+      "No new identity root or role",
+      "No Git commit/push",
+      "No change to GST specification or codec",
+      "No restart of 8444 or other permanent services"
+    ],
+    "budget_fuse": {
+      "limit": 6,
+      "unit": "integrated_validation_attempt"
+    }
+  },
+  "d1_d8": {
+    "D1": {
+      "name": "INTENT",
+      "state": "KNOWN",
+      "value": "依既有真人WebAuthn證據對帳，保存真實工作紀錄，修復單次手機簽章工具並釋放9122且保護8444",
+      "evidence_label": "DEFINITION",
+      "observation_status": "DECLARED_ONLY"
+    },
+    "D2": {
+      "name": "STATE",
+      "state": "KNOWN",
+      "value": "D5 engineering closeout and dual-ledger evidence verified; original human proof/spec/codec unchanged; formal native authority remains pending."
+    },
+    "D3": {
+      "name": "COORDINATE",
+      "state": "KNOWN",
+      "value": {
+        "run_path": "artifacts/8d-adi-workloop/gst-v21-commander-closeout-20261023T060551Z",
+        "logical_time": "2026-10-23T06:12:53.733723+00:00",
+        "adi_resolution": "LOCAL_HOLD_EXISTING_IMMUTABLE_TERMINAL_ACTION_SCHEMA",
+        "node": "taiji01",
+        "root": "/home/taiji_admin/Taiji_Hub",
+        "branch": "codex/current-live-state-consolidation-20260915",
+        "head_observation": "3594b4e8292d537ff8d111e44c70c4fc6f177b39",
+        "head_is_not_authority": true
+      }
+    },
+    "D4": {
+      "name": "EVIDENCE",
+      "state": "KNOWN",
+      "value": {
+        "proof_sha256_expected": "89fee7f0ef51c11d6da0f173c876af1f773c2013b949fcec74086c2698afc32e",
+        "spec_sha256_expected": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+        "raw_proof_retained_on_target_only": true,
+        "readback_evidence_ref": "evidence/dual-ledger-readback.json"
+      }
+    },
+    "D5": {
+      "name": "EXECUTION_POLICY",
+      "state": "KNOWN",
+      "value": {
+        "effect_class": "E5",
+        "action": "Authorized engineering corrections, exact temporary 9122 cleanup, factual evidence publication via existing ledgers",
+        "rollback": "Hash-bound preimages; append-only correction history; restore source files only if postimage matches",
+        "forbidden": [
+          "RAW_PRIVATE_KEY_USE",
+          "NEW_IDENTITY_ROOT",
+          "D8_ROLE_EXPANSION",
+          "FALSE_FORMAL_EFFECT_CLAIM",
+          "UNRELATED_SERVICE_CHANGE",
+          "GIT_COMMIT",
+          "GIT_PUSH"
+        ]
+      }
+    },
+    "D6": {
+      "name": "GENERATIVE_TRANSMISSION",
+      "state": "NOT_REQUIRED",
+      "value": {
+        "claimed": false,
+        "carrier_is_not_w7tp": true,
+        "technical_definition": "NOT_CLAIMED"
+      }
+    },
+    "D7": {
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "state": "KNOWN",
+      "value": {
+        "open_findings": [],
+        "stop_on_high_or_critical": true,
+        "residual_boundaries_ref": "evidence/red-team-review.json"
+      }
+    },
+    "D8": {
+      "name": "ENVELOPE_AUTHORITY",
+      "state": "KNOWN",
+      "value": {
+        "candidate_only": true,
+        "total_field_receiver": "TOTAL_FIELD_WORKLOOP_RECEIVER",
+        "total_field_decision": "HOLD",
+        "canonical_mutation": false,
+        "engineering_authorization_ref": "CURRENT_EXPLICIT_FOUNDER_REQUEST_20261023",
+        "formal_authority_state": "HUMAN_SIGNATURE_VERIFIED_NATIVE_AUTHORITY_PENDING"
+      }
+    }
+  },
+  "red_team": {
+    "RED_TEAM_PRE_DEFINITION": "RECORDED: evidence/red-team-review.json",
+    "RED_TEAM_PRE_ACTIVATION": "RECORDED: evidence/red-team-review.json",
+    "RED_TEAM_POST_OPERATION": "RECORDED: evidence/red-team-review.json"
+  },
+  "source_hashes": {
+    "tools/w7tp_founder_sign.py": "73038d6fd1f6d49bde4ddad7ca4d00668a62341fcfc32302b00572565080f892",
+    "tools/gst_mobile_approval_first.py": "1854d8a938f6e396bd7beafd1a7f62439de88e92888dab7f3f7da1a02f5b3678",
+    "tools/gst_mobile_approval_server.py": "b61a13d0f9afb0a1e69367f58c47d7d44d1938ea9a27a2f1a8e76fa4ffa0c42c"
+  }
+}

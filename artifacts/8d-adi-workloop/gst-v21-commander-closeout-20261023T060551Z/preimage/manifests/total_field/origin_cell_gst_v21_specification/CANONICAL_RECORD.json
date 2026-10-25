@@ -1,0 +1,78 @@
+{
+  "definition_authority": "江政隆",
+  "evidence_scope": {
+    "current_verified_material": {
+      "all_content_hashes_match": true,
+      "evidence_ref": "evidence/CURRENT_ANCHORS.json",
+      "manifest_entries": 18
+    },
+    "dependency_boundary": "冷包仍需相容 decoder、Python 與 zlib；暖包需已建立相容 LUT／模板。已登錄規格完整保留來源與證據成熟度。",
+    "opcode": {
+      "bound_to_codec_sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+      "raw_literal": "0x06",
+      "sparse_patch": "0x07"
+    },
+    "tier_1": {
+      "cold_bytes": 570,
+      "evidence_ref": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/TIER1_ANCHOR_VERIFICATION.json",
+      "new_reconstruction_run": false,
+      "raw_bytes": 24658,
+      "single_patch_packet_bytes": 27,
+      "state": "HISTORICAL_VERIFICATION_REUSED_WITH_CURRENT_SOURCE_BINDING",
+      "warm_bytes": 79
+    },
+    "tier_2": {
+      "evidence_ref": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/THREE_TIER_EVIDENCE_MATRIX.json",
+      "new_verified_timing_claim": false,
+      "state": "REPORTED_EXTENSION_SOURCE_BINDING_PENDING"
+    },
+    "tier_3": {
+      "evidence_ref": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/evidence/US_TIER3_FRESH_NATIVE_HASH_OBSERVATION.json",
+      "fresh_us_probe_in_this_request": false,
+      "new_packet_or_timing_verification": false,
+      "state": "HISTORICAL_NATIVE_FILE_HASH_OBSERVATION_RETAINED",
+      "verified_file_bytes": 5368709120
+    }
+  },
+  "formal_validity": {
+    "file_presence_is_authority": false,
+    "receipt_ref": "manifests/total_field/origin_cell_gst_v21_specification/PROMOTION_RECEIPT.json",
+    "rule": "EXACT_NATIVE_AUTHORIZATION_AND_POSTIMAGE_VERIFICATION_REQUIRED"
+  },
+  "non_effects": {
+    "authority_expansion": false,
+    "business_execution": false,
+    "deploy": false,
+    "evidence_maturity_promotion": false,
+    "git_commit": false,
+    "git_push": false,
+    "parent_canonical_switch": false,
+    "restart": false,
+    "runtime_activation": false,
+    "runtime_consumer_replacement": false
+  },
+  "parent_canonical": {
+    "canonical_id": "W7TP_8D_ADI_V2_3",
+    "contract_ref": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+    "contract_sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+    "pointer_ref": "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json",
+    "pointer_sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+    "version": "2.3"
+  },
+  "record_is_self_authorizing": false,
+  "record_state": "REQUIRES_VERIFIED_NATIVE_PROMOTION_RECEIPT",
+  "schema": "GST_V21_SPECIFICATION_CANONICAL_RECORD/2.1",
+  "specification": {
+    "codec_ref": "runtime/total_field/conversation_intake/universal_origin_cell_codec_v2.py",
+    "codec_sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+    "scope": "SPECIFICATION_CANONICAL_IDENTITY_ONLY",
+    "source_ref": "runtime/total_field/conversation_intake/ORIGIN_CELL_GST_V21_CANONICAL_PROMOTION_20261022/ORIGIN_CELL_GST_V21_CANONICAL_SPEC.md",
+    "source_sha256": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855"
+  },
+  "specification_id": "ORIGIN_CELL_GST_V2_1",
+  "formal_effect_authorized": true,
+  "runtime_activated": true,
+  "status": "EFFECT_VERIFIED",
+  "state": "EFFECT_VERIFIED",
+  "schema_version": "2.1-CANONICAL"
+}

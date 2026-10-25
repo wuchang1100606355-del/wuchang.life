@@ -1,0 +1,47 @@
+{
+  "observed_at": "2026-10-23T06:32:37.978066+00:00",
+  "scope": "ACTUAL_TEMPORARY_PROXY_CLEANUP_TEST_NO_WEBAUTHN_CEREMONY",
+  "new_human_signature": false,
+  "formal_effect_authorized": false,
+  "https_transport_status": 200,
+  "loopback_release_ms": 9.699,
+  "proxy_and_listener_cleanup_ms": 31.126,
+  "cleanup_within_one_second": true,
+  "cleanup": {
+    "temporary_proxy_removed": true,
+    "proxy_created": true,
+    "permanent_proxy_unchanged": true
+  },
+  "permanent_config_before": {
+    "TCP": {
+      "8444": {
+        "HTTPS": true
+      }
+    },
+    "Web": {
+      "taiji01.tailea1eef.ts.net:8444": {
+        "Handlers": {
+          "/": {
+            "Proxy": "http://127.0.0.1:8088"
+          }
+        }
+      }
+    }
+  },
+  "permanent_config_after": {
+    "TCP": {
+      "8444": {
+        "HTTPS": true
+      }
+    },
+    "Web": {
+      "taiji01.tailea1eef.ts.net:8444": {
+        "Handlers": {
+          "/": {
+            "Proxy": "http://127.0.0.1:8088"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,580 @@
+{
+  "authority_boundary": {
+    "allowed_outputs": [
+      "CANDIDATE",
+      "EVIDENCE",
+      "HOLD",
+      "AUTHORIZATION_REQUEST",
+      "HUMAN_REPLY",
+      "TOTAL_FIELD_DECISION_RECEIPT"
+    ],
+    "forbidden_authority": [
+      "ALLOW",
+      "COMMITTED",
+      "COMMIT_APPLIED",
+      "TFS",
+      "TFID",
+      "TOTAL_FIELD_HASH",
+      "CANONICAL_POINTER",
+      "FINAL_SEAL",
+      "DIRECT_DB_WRITE",
+      "DIRECT_DEPLOY"
+    ],
+    "human_final_effect_classes": [
+      "E4",
+      "E5"
+    ],
+    "total_field_receiver_ref": "TOTAL_FIELD_8D_ADI_GIT_INDEX_RECEIVER",
+    "total_field_receiver_required": true
+  },
+  "authorization_contract": {
+    "effect_and_risk_explanation_required": true,
+    "expiry_required": true,
+    "input_hashes_required": true,
+    "required_for_effect_classes": [
+      "E3",
+      "E4",
+      "E5"
+    ],
+    "rollback_required": true,
+    "single_use": true,
+    "stop_conditions_required": true,
+    "total_field_review_required": true
+  },
+  "classification": {
+    "maximum_effect_class": "E2",
+    "primary_family": "F12",
+    "secondary_families": [
+      "F04",
+      "F10",
+      "F11",
+      "F17",
+      "F20"
+    ]
+  },
+  "d1_d8_projection": {
+    "D1": {
+      "contract": "記錄定位、查找、候選重構、物理放置或安全送審意圖；不把 identity 當作 D1。",
+      "name": "INTENT",
+      "required": true
+    },
+    "D2": {
+      "contract": "記錄 repo namespace、Git object format/type/OID/size、base 與 target acceptance，區分 exact bytes 與新 candidate state。",
+      "name": "STATE",
+      "required": true
+    },
+    "D3": {
+      "contract": "綁定 node、repo、ref、commit/tree/blob、path bytes、file mode、pack/offset、logical time 與 lineage event。",
+      "name": "COORDINATE",
+      "required": true
+    },
+    "D4": {
+      "contract": "保存 Git 原生 OID/type/size、來源 manifest、規則與 lookup hash、validator、測試、refs/OID unchanged 與 receipt 證據。",
+      "name": "EVIDENCE",
+      "required": true
+    },
+    "D5": {
+      "contract": "只允許唯讀檢查、候選 sidecar、closed 耐久推送責任、validator 與 hash-bound executor handoff；未完成推送不得遺忘。E4 branch push、遠端 OID 閉環及 terminal authoritative recheck 僅路由到 $complete-deferred-git-push，且路由不等於 activation。",
+      "name": "EXECUTION_POLICY",
+      "required": true
+    },
+    "D6": {
+      "contract": "使用 protocol-bearing state-field packet 傳遞規則、lookup closure、重構條件、EXACT_BYTES 接受與 Git-native verification；carrier 不等於 W7TP。",
+      "name": "GENERATIVE_TRANSMISSION",
+      "required": true
+    },
+    "D7": {
+      "contract": "缺件、漂移、開放 schema、duplicate/noncanonical JSON、非決定性、type/hash namespace 錯配、重播、GC、promisor、越權、history rewrite、force push、未審查可達歷史、假排程、自證 ACK、producer-owned 或 same-euid queue、任意 containment 宣告、跨 subject/effect 混綁、責任遺失、錯 executor、缺 handoff、legacy 冒充、WAITING_EXACT_TARGET 猜 HEAD、route 冒充 activation、歷史 terminal 冒充 current authority 與 canonical 誤升全部 fail-closed。",
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "required": true
+    },
+    "D8": {
+      "contract": "全封包攜帶 identity root、Seat、單一 Receiver、nonce、replay guard、canonical expiry 與 CANDIDATE_ONLY；obligation/1.2 另綁 root-issued trust config 所固定之 nonroot queue inode、dgp request、initial ENQUEUED、independent E2 ACK、完整 repository/identity/authority/test/effect scope、三項 E4 責任與 NOT_ACTIVATED_BY_E2_ROUTING；技能不自行核准、執行 E4、宣稱 terminal authority 或移動 canonical。",
+      "name": "ENVELOPE_AUTHORITY",
+      "required": true
+    }
+  },
+  "display_name_zh": "8D ADI Git 重構索引、E2/E4 分流與推送履約",
+  "evidence_and_hashes": {
+    "canonical_refs": [
+      "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json"
+    ],
+    "evidence_destination": "artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/evidence/",
+    "hash_algorithm": "SHA-256",
+    "implementation_refs": [
+      "SKILL.md",
+      "agents/openai.yaml",
+      "assets/icon.svg",
+      "references/capability-interoperability.md",
+      "references/capability-source-index.json",
+      "references/current-design-contract.json",
+      "references/deferred-push-obligation.md",
+      "references/evolution-contract.json",
+      "references/git-boundary.md",
+      "references/index-contract.md",
+      "references/red-team-pre-definition.json",
+      "references/review-routing.md",
+      "references/version-observation-causality.md",
+      "scripts/git_review_gate.py",
+      "scripts/test_skill.py",
+      "scripts/test_validate_git_index.py",
+      "scripts/validate_deferred_push.py",
+      "scripts/validate_git_index.py"
+    ],
+    "implementation_sha256": {
+      "SKILL.md": "ec03c6b512aa5a88f5783d94be33215676c1c9537f9e468c9a3f5c21ac7d3810",
+      "agents/openai.yaml": "8550c7250e9d5ab2b8bb7cdac67253a3bfe9a60e7ec6b4324a1dafee9496a7b0",
+      "assets/icon.svg": "8936b24f674a1250d999e2c2b5901374fb4240426f32bd1ae340c352a90d617d",
+      "references/capability-interoperability.md": "428cbfb61af3ac5076432cfd188b2084c7ef88ae2b12dacb72f1c146c8113e31",
+      "references/capability-source-index.json": "bd4824a4bdbcd0a3065e966aa6eace48049becb9cd0d21495cd64af34d1c05d0",
+      "references/current-design-contract.json": "b48e2836ce0aa4515a25589d4c48617dec5793831237f124a989e7436e755281",
+      "references/deferred-push-obligation.md": "b5df30c22af31a4c69dba90317a90592ec83c64d655b5592dcc0ecc9bc83b6d3",
+      "references/evolution-contract.json": "1c05eeb34d0b97071b19c7c22470dc09515f625e86ee28a01616451e89f87702",
+      "references/git-boundary.md": "ed7157e35e00fe61aac722d83d5028f667543c8b8586fddea8225fe273e4cf66",
+      "references/index-contract.md": "b9ce2da4647a79f77e3a56d5a2a0932353bcefca40889510916963ef002b5b92",
+      "references/red-team-pre-definition.json": "eaad94a203cc1f825970c35dd7f5e2c80d9c005147ee312e3990c059884821f8",
+      "references/review-routing.md": "8d35c090a9653a64bfa8bc12a88fa351a1be55ab318945a208f5e84fb5c59cd1",
+      "references/version-observation-causality.md": "3824e2f3ea7b7f129a1f0d34a44c01b7e38e2d3e6989e613982347bb216ccdb2",
+      "scripts/git_review_gate.py": "4aac34c5024ecb0cf83b914625f163ef714d610d56b6e108bfef24b7f2a147c5",
+      "scripts/test_skill.py": "53875ff1cb0c11d58aac5cefe1b461246973f8f4eca35005016bd1049d76823c",
+      "scripts/test_validate_git_index.py": "5b647defce66089aef97de3ec9a38ef395176fd2c2e4e2cf034bccde4d3a8b6b",
+      "scripts/validate_deferred_push.py": "68c7d5385b12631f36de9668b134e48b1e1edf9449f1afff8e54513882a5607a",
+      "scripts/validate_git_index.py": "f44eb4737f9104399576305051540cee9639296aaa9aae24e332daffbb855168"
+    },
+    "manifest_hash_excludes_field": "evidence_and_hashes.manifest_self_hash",
+    "manifest_self_hash": "PENDING_TOTAL_FIELD_SEAL",
+    "schema_refs": [
+      "w7tp://schemas/total-field-skill-manifest-v1",
+      "w7tp-8d-git-index/1.0",
+      "w7tp-git-change-review/1.0",
+      "w7tp-deferred-git-push-obligation/1.2",
+      "w7tp-deferred-git-push-obligation/1.1#READ_ONLY_MIGRATION_HOLD",
+      "w7tp-deferred-git-push-obligation/1.0#READ_ONLY_MIGRATION_HOLD",
+      "w7tp-e2-executor-queue-trust-config/1.1",
+      "w7tp-e2-executor-queue-trust-config/1.0#NOT_ACTIVATABLE",
+      "w7tp-e2-deferred-push-obligation-queue-ack/1.0",
+      "w7tp-e2-to-e4-origin-envelope/1.0",
+      "w7tp-deferred-git-push-request/1.0",
+      "w7tp-deferred-git-push-event/1.0"
+    ]
+  },
+  "execution_contract": {
+    "carriers": [
+      "LOCAL_FILESYSTEM",
+      "GIT_READONLY_PLUMBING",
+      "APPROVED_CANDIDATE_REPOSITORY",
+      "ROOT_OWNED_CANONICAL_QUEUE_TRUST_CONFIG_1_1",
+      "PINNED_ROOT_PARENT_AND_BOUNDED_OPENAT_QUEUE_TREE",
+      "EXACT_VALIDATOR_UID_AND_READER_GID",
+      "TRUSTED_EXECUTOR_STATE_ROOT_IMMUTABLE_REQUEST_AND_INITIAL_EVENT",
+      "INDEPENDENT_E2_OBLIGATION_ACK",
+      "HASH_BOUND_EXECUTOR_REQUEST_ACK_HANDOFF"
+    ],
+    "dependencies": [
+      "PYTHON_3_STANDARD_LIBRARY",
+      "GIT_PRIMARY_DOCUMENTATION",
+      "VALID_MEMBER_XIAOJ_SEAT_PROFILE",
+      "TOTAL_FIELD_RECEIVER",
+      "W7TP_8D_PACKET_V2_1",
+      "GOVERNED_DURABLE_QUEUE",
+      "$complete-deferred-git-push@1.0.0",
+      "w7tp-deferred-git-push-request/1.0"
+    ],
+    "existing_state_preserved": true,
+    "forbidden_effects": [
+      "LIVE_GIT_OBJECT_WRITE",
+      "PACK_OR_INDEX_HAND_EDIT",
+      "LIVE_REF_OR_HEAD_MOVE",
+      "HISTORY_REWRITE",
+      "FORCE_PUSH",
+      "RESET_HARD",
+      "GC_PRUNE_EXPIRE",
+      "DELETE_ORIGINAL",
+      "CANONICAL_CHANGE",
+      "IDENTITY_OR_SEAT_CHANGE",
+      "DATABASE_WRITE",
+      "DEPLOY",
+      "FORMAL_SUBMISSION",
+      "SECRET_OR_MEMBER_PLAINTEXT_READ"
+    ],
+    "nodes": [
+      "AUTHORIZED_READONLY_GIT_NODE",
+      "CANDIDATE_ARTIFACT_WORKSPACE",
+      "DURABLE_PUSH_OBLIGATION_QUEUE",
+      "ROOT_ISSUED_EXECUTOR_QUEUE_TRUST_CONFIG",
+      "NONROOT_CAPABILITY_FREE_E2_VALIDATOR",
+      "DISTINCT_NONROOT_COMPLETE_DEFERRED_GIT_PUSH_EXECUTOR_QUEUE_OWNER",
+      "DEDICATED_READONLY_QUEUE_GROUP",
+      "TOTAL_FIELD_NODE"
+    ],
+    "persistent_side_effects": [
+      "NEW_FILES_UNDER_ONE_ISOLATED_CANDIDATE_ROOT_ONLY",
+      "APPEND_ONLY_DEFERRED_PUSH_OBLIGATION_OUTSIDE_TARGET_REPO",
+      "ACKNOWLEDGED_HASH_BOUND_COMPLETE_DEFERRED_GIT_PUSH_HANDOFF"
+    ],
+    "resource_limits": {
+      "candidate_file_max_bytes": 1048576,
+      "canonical_write": false,
+      "live_ref_write": false,
+      "network_execution": false,
+      "object_db_write": false,
+      "read_only_git": true
+    },
+    "rollback": "候選根尚未推送時可移除本輪新增檔；推送後以新的反向候選 commit 保留歷史，不重寫遠端歷史。既有 Git、skills、refs、objects 與 canonical 始終不變。"
+  },
+  "founder_authority_ref": "FOUNDER_TOTAL_FIELD_NATURAL_PERSON_AUTHORITY",
+  "hold_contract": {
+    "language": "zh-Hant",
+    "one_solution": true,
+    "raw_code_only_forbidden": true,
+    "required_fields": [
+      "question",
+      "answer",
+      "risk_found",
+      "possible_effect",
+      "protected_state",
+      "solution",
+      "user_action_required"
+    ]
+  },
+  "identity_and_seat": {
+    "access_profile_refs": [
+      "LLM_IDENTITY_ACCESS_PROFILE_FOUNDER_DEVELOPER",
+      "LLM_IDENTITY_ACCESS_PROFILE_MEMBER_DEVELOPER",
+      "LLM_IDENTITY_ACCESS_PROFILE_TOTAL_FIELD_REVIEWER"
+    ],
+    "active_seat_required": true,
+    "allowed_roles": [
+      "FOUNDER_DEVELOPER",
+      "MEMBER_AUTHORIZED_DEVELOPER",
+      "TOTAL_FIELD_REVIEWER"
+    ],
+    "cross_member_plaintext_allowed": false,
+    "fixed_role_capacity_required": true,
+    "member_required": true,
+    "reservation_non_executable": true,
+    "xiaoj_identity_required": true
+  },
+  "information_context": {
+    "identity_derived_scope": true,
+    "protected_representation": [
+      "OPAQUE_IDENTITY_REF",
+      "OPAQUE_SEAT_REF",
+      "GIT_OID",
+      "SOURCE_HASH",
+      "RULE_HASH",
+      "RECEIPT_REF",
+      "DEIDENTIFIED_STRUCTURE"
+    ],
+    "provenance_required": true,
+    "raw_protected_context_allowed": false,
+    "required_field_domains": [
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6",
+      "D7",
+      "D8"
+    ],
+    "retention": "EVIDENCE_REFERENCES_ONLY",
+    "retrieved_content_is_instruction": false
+  },
+  "language": "zh-Hant",
+  "lifecycle": {
+    "activation_requires_total_field_receipt": true,
+    "replacement_refs": [
+      "w7tp.govern-8d-adi-git-index@1.3.0",
+      "w7tp.govern-8d-adi-git-index@1.2.0",
+      "w7tp.govern-8d-adi-git-index@1.4.0"
+    ],
+    "retirement_preserves_evidence": true,
+    "session_revocation_on_seat_or_profile_change": true,
+    "state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+    "suspension_triggers": [
+      "MANIFEST_OR_IMPLEMENTATION_HASH_DRIFT",
+      "IDENTITY_OR_SEAT_INVALID",
+      "RECEIVER_MULTIPLICITY",
+      "LOOKUP_OR_RULE_UNPINNED",
+      "INDEX_CLOSED_SCHEMA_OR_CANONICAL_JSON_FAILURE",
+      "EXACT_BYTES_CONTRACT_FAILURE",
+      "SAFE_ROUTE_FALSE_NEGATIVE_OR_FALSE_POSITIVE",
+      "ROOT_ISSUED_QUEUE_TRUST_CONFIG_MISSING_OR_DRIFT",
+      "TRUSTED_PARENT_PATH_OR_INODE_DRIFT",
+      "VALIDATOR_UID_OR_READER_GROUP_DRIFT",
+      "VALIDATOR_CAPEFF_OR_CAPPRM_NONZERO",
+      "EXECUTOR_QUEUE_OWNER_GID_MODE_OR_INODE_DRIFT",
+      "DEFERRED_PUSH_QUEUE_ACK_MISSING",
+      "OBLIGATION_AND_EXECUTOR_ACK_CONFLATED",
+      "INDEPENDENT_E2_ACK_MISSING_OR_INVALID",
+      "EXTERNAL_EXECUTOR_STATE_ROOT_OR_ACK_UNVERIFIED",
+      "EXECUTOR_SUBJECT_OR_EFFECT_CROSS_BINDING_FAILURE",
+      "EXECUTOR_HANDOFF_MISSING_OR_HASH_DRIFT",
+      "EXECUTOR_SKILL_OR_INPUT_CONTRACT_DRIFT",
+      "WAITING_EXACT_TARGET_PRESENTED_AS_EXECUTABLE",
+      "E2_ROUTE_PRESENTED_AS_E4_ACTIVATION",
+      "TERMINAL_AUTHORITATIVE_RECHECK_FAILED_OR_UNAVAILABLE",
+      "PUSH_OBLIGATION_DROPPED_OR_FALSELY_CLOSED",
+      "PROTECTED_GIT_EFFECT_DETECTED",
+      "OPEN_HIGH_OR_CRITICAL_FINDING"
+    ],
+    "total_field_decision_ref": null
+  },
+  "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "product_output_contract": {
+    "acceptance_criteria": [
+      "索引 validator 正向測試通過",
+      "錯型別、缺 Git 座標、過期、event hash mismatch、錯 Seat、錯 OID、未固定規則與 canonical write 全部拒絕",
+      "top-level、receiver、event、D1-D8 與 D6 entry 未知 ACTIVE/activation/lease/receipt/canonical authority 欄位即使重算 event hash 仍拒絕",
+      "CLI 拒絕 duplicate key、nonfinite JSON、非 canonical bytes 與非 canonical UTC timestamp",
+      "變更 gate 只對 Git index 證明未追蹤且無 symlink、位於 evidence/references/reports/schemas 的 add-only 非控制宣告檔回傳 SAFE_PUSH_CANDIDATE",
+      "root/其他目錄、技能／代理控制檔與目錄、candidate manifest 及任何 Python 至少 REVIEW_REQUIRED；process/network/dynamic execution 與 CI/autoload 路徑 HOLD",
+      "非 object change-set、非字串 operation、錯型別 lifecycle 與 repository-root candidate 全部 fail-closed",
+      "force push、live object write、tracked-as-add 與 hash mismatch 全部 HOLD",
+      "未完成推送必須取得 target repo 與 Git common dir 外的 independent E2 obligation ACK，且不可與 executor ACK 共用 reference",
+      "obligation/1.2 及其每個子物件採 closed schema，executor handoff 綁定精確 skill/version/input contract、dgp-64hex ticket/request/ACK、obligation、責任與 canonical hash",
+      "validator 必須同時取得 --executor-state-root 與 --executor-queue-trust-config；config/1.1 為 root-owned 0444 closed canonical self-hash，固定 root-owned nonwritable parent identity、exact basename、nonroot queue owner UID/name、不同 validator UID/name、dedicated reader GID/name、child identity、marker、contract、activation receipt/window",
+      "live validator/producer euid 必須 exact configured validator、非0且不同 queue owner，其 effective/supplementary groups 必含 exact reader GID，process/thread CapEff 與 CapPrm 均為0；unreadable、duplicate、malformed、17-digit 或不一致 status 全部 HOLD",
+      "request/event/ACK/terminal evidence 必須只由 pinned parent fd 的 bounded openat/O_NOFOLLOW tree 載入，每個 directory/file fd 驗 exact owner/GID 與0750/0440，讀後重驗 held parent/root、held-parent child 與 canonical-parent child；parent/child/group replacement 全部 HOLD",
+      "validator 由 config owner boundary 安全載入 immutable request、initial ENQUEUED 與 independent E2 ACK；重導 repository/identity/authority/test/effect/bounded/manifest/causal semantics；純 document reference 與 root/same-euid queue 固定 HOLD",
+      "錯 executor、缺 handoff、hash drift、activation 冒充、未知 handoff 或 external request 欄位、錯 ACK semantics、錯 config owner/mode/hash/path/parent/device/inode/basename/queue-owner/validator/reader-group/expiry/activation receipt 與跨 subject/effect 綁定全部拒絕",
+      "WAITING_EXACT_TARGET 亦須可信 request/event/E2 ACK，不得攜帶 source closure、executor lease 或 READY/PUSHED 狀態",
+      "legacy obligation/1.0 與 /1.1 只回 migration HOLD 且不可執行",
+      "READY_TO_PUSH 必須綁定單一 ref、source/parent/tree/可達物件閉包、expected old OID、authorization.required=true、canonical unexpired receipt、scheduler lease 與所有 push side effects，且仍由 executor current gate 決定",
+      "PUSHED_VERIFIED 的 event/receipt bytes 只能作 integrity coordinate；E2 未重現完整 terminal state machine 時固定 HOLD_EXTERNAL_EXECUTOR_TERMINAL_UNVERIFIED、terminal_readback_verified=false，且損壞 queue 仍保持 executor route",
+      "NONROOT_QUEUE_POSITIVE_INTEGRATION_NOT_RUN_SANDBOX_UID_MAP、NONROOT_CONFIG_OWNER_NEGATIVE_NOT_RUN_SANDBOX_UID_MAP 與 NONROOT_PARENT_OWNER_NEGATIVE_NOT_RUN_SANDBOX_UID_MAP 均明確列為 activation 前殘餘驗證，不把 sandbox schema-unit mock 算成 live filesystem PASS",
+      "TRUST_PROVISIONER_AND_OBLIGATION_PRODUCER_SEPARATION_REQUIRED，且 trusted provisioner 不得預置 target-repo overlap bind/mount alias",
+      "技能 quick validation 通過",
+      "Total Field manifest validation通過",
+      "既有工作樹除本技能候選更新外零變更"
+    ],
+    "allowed_side_effects": [
+      "在隔離候選根新增索引、schema、manifest、測試、唯讀 validator 與送審證據",
+      "在 target repo 外的受治理耐久佇列新增 closed obligation 與 append-only ACK",
+      "向既有 $complete-deferred-git-push 建立 hash-bound ticket/request/ACK handoff；不在本技能執行 E4"
+    ],
+    "deliverables": [
+      "W7TP 8D Git index candidate",
+      "exact-byte 與 equivalent-state 分界",
+      "Git 物理位置與 DAG 順序座標",
+      "SAFE_PUSH_CANDIDATE／REVIEW_REQUIRED／HOLD_PROTECTED_GIT_EFFECT 路由",
+      "closed durable deferred-push obligation/1.2",
+      "root-issued executor queue trust config/1.1 parent-fd boundary",
+      "distinct immutable executor ENQUEUED 與 independent E2 obligation ACK handoff",
+      "WAITING_EXACT_TARGET 非執行責任",
+      "驗證與紅隊證據",
+      "V2.3 三項能力有界候選契約與來源證據"
+    ],
+    "failure_behavior": "缺任一 identity、Seat、Receiver、lookup closure、rule hash、OID、lineage、root-issued queue trust config、external executor request/event、independent E2 ACK 或 D8 前置條件即 fail-closed；/1.0 與 /1.1 只作 read-only migration HOLD；未完成推送保留耐久責任並分離 obligation ACK 與 executor ACK；trust/config/queue 不可用、validator UID／reader GID／owner／mode 漂移或 capability 不為零時明示 HOLD_TRUSTED_EXECUTOR_QUEUE_UNAVAILABLE；無 trusted external bytes 不自證 PASS，無 current authoritative terminal query 不宣稱 closure；部署另須遵守 TRUST_PROVISIONER_AND_OBLIGATION_PRODUCER_SEPARATION_REQUIRED 並禁止 provisioner 預置 overlap bind/mount alias；不猜 HEAD、不把 route 當 activation、不觸碰 live Git。",
+    "intended_users": [
+      "Founder",
+      "受授權 Git 維護者",
+      "總場審查者"
+    ],
+    "interface_behavior": "先回傳可否保留既有 OID，再指出物理位置、因果順序、重構前置條件與唯一總場路由；未完成推送時留下責任人、阻擋、修復、排程與 acknowledged executor handoff。缺 source commit 時回 WAITING_EXACT_TARGET 且不猜 HEAD；任何 handoff 均明示未 activation；繁體中文呈現，機器結果附 JSON。",
+    "product_outcome": "形成外部 sidecar 重構索引、Git 邊界判定、三路風險決策、閉合待推送責任契約及 hash-bound $complete-deferred-git-push handoff；E2 只登記與路由，E4 執行、遠端 OID 閉環與 terminal authoritative recheck 由既有執行器負責，路由不等於 activation，既有 Git 與 canonical 維持不變。",
+    "prohibited_outputs": [
+      "把 W7TP 改名為 Git 壓縮、同步、備份或 partial clone",
+      "以 equivalent-state 冒充既有 Git OID",
+      "把 pack 順序冒充 commit lineage",
+      "直接修改 .git/objects、pack、idx、refs、HEAD 或 canonical",
+      "history rewrite、force push、reset-hard、GC/prune 或原始檔刪除",
+      "自發 Total Field receipt、正式核准、專利或法律結論"
+    ],
+    "quality_thresholds": [
+      "D1-D8 完整且全層 closed schema",
+      "identity root 與 Seat 綁定完整",
+      "單一 Receiver",
+      "exact bytes 不被 equivalent state 取代",
+      "Git 物理位置不被誤稱歷史順序",
+      "安全路由為確定性且 fail-closed",
+      "受阻推送只接受 root-issued canonical trust config/1.1 所固定之 root-owned parent、nonroot queue owner、不同 nonroot validator UID 與 dedicated reader GID，並從 parent-fd/openat 樹安全載入精確 dgp request、initial ENQUEUED 與 independent E2 ACK",
+      "live validator/producer 必須 exact configured UID、屬於 reader GID、與 queue owner 不同且 process/thread CapEff=CapPrm=0",
+      "全部 queue directory/file fd 必須 exact owner/GID 與 0750/0440",
+      "queue 必須實測位於 target repo 與 Git common dir 之外",
+      "WAITING_EXACT_TARGET 仍需可信 ACK 且不含可執行 source evidence",
+      "E2 route 永不冒充 E4 activation",
+      "歷史 terminal bytes 永不冒充 current authoritative closure",
+      "零 canonical 或 live Git 寫入"
+    ],
+    "user_need": "以不完整但可確定重構的 8D ADI 資訊定位 Git 物件、因果順序與物理放置，立即分流變更，並確保任何被 AI 擋下或延後的推送都有持續責任、排程，以及送達既有 E4 執行器的精確可驗證交接。"
+  },
+  "red_team_contract": {
+    "authorization_cannot_waive_finding": true,
+    "closure_evidence_required": true,
+    "high_critical_hold": true,
+    "mandatory": true,
+    "medium_requires_mitigation_or_policy": true,
+    "stages": [
+      "RED_TEAM_PRE_DEFINITION",
+      "RED_TEAM_PRE_ACTIVATION",
+      "RED_TEAM_POST_OPERATION"
+    ]
+  },
+  "schema_version": "w7tp-total-field-skill-manifest/1.0",
+  "skill_id": "w7tp.govern-8d-adi-git-index",
+  "technology_identity_contract": {
+    "applicable": true,
+    "axes": [
+      "MECHANISM",
+      "CAUSAL_PATH",
+      "DEPENDENCIES",
+      "ELIMINATED_OPERATIONS",
+      "COST_TOPOLOGY",
+      "CARRIER_RECONSTRUCTION_VERIFICATION"
+    ],
+    "carrier_protocol_separation_required": true,
+    "decision_set": [
+      "SAME_MECHANISM",
+      "PARTIAL_MECHANISM_OVERLAP",
+      "EFFECT_ONLY_EQUIVALENT",
+      "DIFFERENT_TECHNOLOGY",
+      "INSUFFICIENT_EVIDENCE"
+    ],
+    "effect_equivalence_not_technical_equivalence": true,
+    "evidence_scale": [
+      "EV0_UNSUPPORTED",
+      "EV1_ASSERTION",
+      "EV2_SECONDARY_SOURCE",
+      "EV3_PRIMARY_DOCUMENT",
+      "EV4_IMPLEMENTATION_EVIDENCE",
+      "EV5_REPRODUCIBLE_CAUSAL_EVIDENCE"
+    ],
+    "gate_skill_ref": "w7tp.technology-identity-audit@1.0.0",
+    "patentability_inference_forbidden": true,
+    "weighted_score_forbidden": true
+  },
+  "verification_contract": {
+    "evidence_required": [
+      "VALIDATOR_JSON",
+      "UNIT_TEST_RESULT",
+      "QUICK_VALIDATE_RESULT",
+      "TOTAL_FIELD_MANIFEST_RESULT",
+      "GIT_DIFF_NAME_STATUS",
+      "IMPLEMENTATION_SHA256",
+      "EXECUTOR_TICKET_REQUEST_ACK_HASHES",
+      "RED_TEAM_PRE_DEFINITION_RECORD",
+      "REMOTE_PUSH_RECEIPT_WHEN_PUSHED",
+      "AUTHORITATIVE_TERMINAL_RECHECK_EVIDENCE_WHEN_TERMINAL",
+      "CURRENT_SOURCE_PROVENANCE",
+      "V23_EVOLUTION_CANDIDATE_CONTRACT"
+    ],
+    "existing_state_check": true,
+    "no_pass_without_evidence": true,
+    "product_acceptance_checks": [
+      "D1-D8_PACKET_CONTRACT",
+      "D1-D8_CLOSED_SCHEMA_AND_CANONICAL_JSON",
+      "IDENTITY_SEAT_SINGLE_RECEIVER",
+      "EXACT_BYTES_GIT_OID_BOUNDARY",
+      "PHYSICAL_VS_LOGICAL_ORDER_BOUNDARY",
+      "THREE_ROUTE_DETERMINISM",
+      "DEFERRED_PUSH_DUTY_NOT_FORGOTTEN",
+      "ROOT_ISSUED_QUEUE_TRUST_CONFIG_1_1",
+      "PINNED_ROOT_PARENT_AND_BOUNDED_CHILD_FD_TREE",
+      "EXACT_NONROOT_VALIDATOR_UID_AND_READER_GID",
+      "ZERO_PROCESS_THREAD_CAPEFF_AND_CAPPRM",
+      "EVERY_QUEUE_FD_OWNER_GID_MODE_BOUND",
+      "NONROOT_EXECUTOR_QUEUE_INODE_AND_MARKER_BOUND",
+      "DISTINCT_EXECUTOR_AND_INDEPENDENT_E2_ACKS",
+      "EXECUTOR_REQUEST_INITIAL_EVENT_AND_E2_ACK_LOADED",
+      "EXECUTOR_REQUEST_REPOSITORY_IDENTITY_AUTHORITY_TEST_EFFECT_SCOPE_CROSS_BOUND",
+      "EXECUTOR_REQUEST_BOUNDED_CAUSAL_SCOPE_AND_AUTHORITY_REDERIVED",
+      "EXACT_COMPLETE_DEFERRED_GIT_PUSH_HANDOFF",
+      "E2_ROUTE_IS_NOT_E4_ACTIVATION",
+      "WAITING_EXACT_TARGET_TRUSTED_ACK_BUT_NON_EXECUTABLE",
+      "TERMINAL_INTEGRITY_BYTES_NOT_VERIFIED_DELIVERY",
+      "CURRENT_TERMINAL_AUTHORITATIVE_RECHECK_REQUIRED",
+      "CANONICAL_UNCHANGED"
+    ],
+    "runtime_checks": [
+      "BEHAVIOR_TEST_SUITE_PASS",
+      "VALID_EXACT_PACKET_PASS",
+      "MALFORMED_OBJECT_FAIL_CLOSED",
+      "D1_D8_UNKNOWN_AUTHORITY_FIELDS_REJECT_AFTER_REHASH",
+      "DUPLICATE_NONFINITE_AND_NONCANONICAL_JSON_REJECT",
+      "STRICT_CANONICAL_UTC_EXPIRY",
+      "MISSING_GIT_COORDINATE_REJECT",
+      "EXPIRED_PACKET_REJECT",
+      "EVENT_HASH_MISMATCH_REJECT",
+      "EQUIVALENT_OID_REUSE_REJECT",
+      "CANONICAL_WRITE_REJECT",
+      "SAFE_ALLOWLISTED_DECLARATIVE_ADD_ONLY_ROUTE",
+      "SAFE_ROUTE_DIRECT_PUSH_DENIED_AND_EXECUTOR_ROUTED",
+      "ROOT_PLACEMENT_REVIEW_REQUIRED",
+      "SKILL_AND_AGENT_CONTROL_REVIEW_REQUIRED",
+      "CONTROL_DIRECTORY_REVIEW_REQUIRED",
+      "PYTHON_REVIEW_REQUIRED",
+      "PROCESS_CAPABILITY_HOLD",
+      "CI_AUTOLOAD_PATH_HOLD",
+      "SYMLINK_HOLD",
+      "TRACKED_AS_ADD_HOLD",
+      "MALFORMED_CHANGE_SET_HOLD",
+      "REPOSITORY_ROOT_CANDIDATE_HOLD",
+      "FORCE_PUSH_HOLD",
+      "LIVE_OBJECT_WRITE_HOLD",
+      "HASH_MISMATCH_HOLD",
+      "DOCUMENT_ONLY_EXECUTOR_ACK_UNVERIFIED_HOLD",
+      "ROOT_OR_SAME_EUID_EXECUTOR_QUEUE_HOLD",
+      "CAP_EFF_AND_PRM_CANONICAL_ZERO_REQUIRED",
+      "EXACT_VALIDATOR_UID_AND_READER_GROUP_MEMBERSHIP_REQUIRED",
+      "EVERY_QUEUE_FD_OWNER_GID_0750_0440_REQUIRED",
+      "PARENT_AND_CHILD_PATH_REPLACEMENT_HOLD",
+      "RESEALED_CONFIG_AND_ACK_IDENTITY_GROUP_DRIFT_HOLD",
+      "TRUST_CONFIG_OWNER_MODE_HASH_PATH_DEVICE_INODE_UID_USERNAME_EXPIRY_ACTIVATION_DRIFT_HOLD",
+      "DEFERRED_PUSH_OPEN_WITH_SCHEMA_CROSSBIND_FIXTURE_PASS",
+      "NONROOT_QUEUE_POSITIVE_INTEGRATION_CAPABILITY_DETECTED_OR_EXPLICIT_SKIP",
+      "OBLIGATION_AND_EXECUTOR_ACK_DISTINCT",
+      "INDEPENDENT_E2_ACK_REQUIRED_AND_TAMPER_REJECTED",
+      "EXTERNAL_REQUEST_AND_INITIAL_EVENT_CANONICAL_HASH_CHAIN",
+      "EXTERNAL_REQUEST_PARENT_ESCAPE_REJECT",
+      "EXTERNAL_MANIFEST_STATUS_CONTENT_AND_CAUSAL_SCOPE_BOUND",
+      "EXTERNAL_REPOSITORY_IDENTITY_AUTHORITY_TEST_EFFECT_CROSSBIND",
+      "EXTERNAL_REQUIRED_SCOPE_AND_AUTHORITY_REDERIVED",
+      "FORGED_EXTERNAL_ACK_REJECT_AFTER_REHASH",
+      "QUEUE_ACK_REF_AND_SHA_REQUIRED",
+      "QUEUE_OUTSIDE_TARGET_REPO_AND_GIT_COMMON_DIR_PROVEN",
+      "OBLIGATION_1_2_CLOSED_SCHEMA",
+      "MISSING_HANDOFF_REJECT",
+      "WRONG_EXECUTOR_REJECT_AFTER_REHASH",
+      "HANDOFF_REQUEST_ACK_HASH_BOUND",
+      "ROUTE_ACTIVATION_CLAIM_REJECT",
+      "LEGACY_1_0_AND_1_1_READ_ONLY_MIGRATION_HOLD",
+      "WAITING_EXACT_TARGET_TRUSTED_ACK_PASS_NONEXECUTABLE",
+      "WAITING_EXECUTABLE_SOURCE_REJECT",
+      "WAITING_EXECUTOR_LEASE_REJECT",
+      "UNKNOWN_HANDOFF_FIELD_REJECT",
+      "CHANGE_SET_HASH_REDERIVED",
+      "READY_REQUIRES_TRUE_AUTHORIZATION_CANONICAL_CURRENT_WINDOW_AND_LEASE",
+      "SOURCE_REF_CLOSURE_REQUIRED",
+      "PUSH_EFFECTS_RESOLVED",
+      "TERMINAL_INTEGRITY_BYTES_NEVER_MARKED_VERIFIED",
+      "EMPTY_CONSUME_AND_CAS_TERMINAL_UNVERIFIED",
+      "DAMAGED_TERMINAL_QUEUE_PRESERVES_EXECUTOR_ROUTE",
+      "PUSHED_REMOTE_OID_EQUALS_SOURCE",
+      "FOUNDER_CANCELLATION_RECEIPT_REQUIRED",
+      "SECRET_SHAPED_QUEUE_FIELD_REJECT"
+    ],
+    "static_checks": [
+      "SKILL_QUICK_VALIDATE",
+      "PYTHON_PY_COMPILE",
+      "TOTAL_FIELD_MANIFEST_SCHEMA",
+      "IMPLEMENTATION_SHA256",
+      "UNRESOLVED_MARKER_SCAN_CLEAR",
+      "NO_PROTECTED_GIT_COMMAND",
+      "V23_CANONICAL_HASH_BINDING",
+      "EVOLUTION_CONTRACT_BOUNDARIES",
+      "FLOAT_NUMERIC_CONTRACT_WHEN_DECLARED"
+    ]
+  },
+  "version": "1.4.1",
+  "w7tp_contract": {
+    "acceptance_mode": "EXACT_BYTES",
+    "canonical_ref": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+    "carrier_is_not_w7tp": true,
+    "claimed": true,
+    "packet_carried_verification": true,
+    "protocol_bearing_packet": true,
+    "reconstruction_conditions": true
+  }
+}

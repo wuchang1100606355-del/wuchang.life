@@ -1,0 +1,13 @@
+interface:
+  display_name: 8D 技術身分閘門
+  short_description: 以六軸因果證據辨識技術同一性並阻擋效果類比、加權分數及專利誤判
+  default_prompt: 使用 $audit-technology-identity 依機制、因果、依賴、消除程序、成本拓撲與傳輸語義比較兩項技術。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

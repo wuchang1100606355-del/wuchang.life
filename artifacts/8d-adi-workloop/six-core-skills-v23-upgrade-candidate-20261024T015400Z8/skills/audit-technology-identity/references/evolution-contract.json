@@ -1,0 +1,90 @@
+{
+  "design": {
+    "authority_binding_role": "OBSERVATION_NOT_AUTHORIZATION",
+    "canonical_ref": "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json",
+    "canonical_sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c",
+    "observed_authority_sha256": "3e13ab045925a08ff6c58277b7cf206e413a26580717516f7cfaf4ce7bdad871",
+    "semantics": "8_IN_1_SINGLE_DYNAMIC_STATE_FIELD"
+  },
+  "forbidden_promotions": [
+    "TRUST_SEAL_TO_D8",
+    "FILE_EXISTS_TO_LOADED",
+    "CANDIDATE_TO_ACTIVE",
+    "REGISTERED_TO_RUNNING",
+    "HISTORICAL_TEST_TO_CURRENT_EFFECT",
+    "HASH_MATCH_TO_AUTHORITY",
+    "CACHE_TO_ALL_VERIFICATION_ELIMINATION"
+  ],
+  "node_roles": {
+    "02": {
+      "observation_status": "DECLARED_ONLY",
+      "resolved_device_ref": "UNKNOWN_UNVERIFIED",
+      "role": "AI_AUDIOVISUAL_RAM_RECONSTRUCTION_AND_PROJECTION_CANDIDATE"
+    },
+    "stacking_cells_does_not_increase_authority": true,
+    "taiji01": {
+      "d8_allow_required": true,
+      "device_ref": "HOME_POD_LAN_AUDIO_NODE_OFFICE_01",
+      "endpoint": "192.168.50.101:7000",
+      "endpoint_status": "FOUNDER_DECLARED_CURRENT_REACHABILITY_NOT_TESTED",
+      "playback": "NOT_RUN",
+      "role": "EXISTING_TOTAL_FIELD_HOMEPOD_ROUTER",
+      "route_ref": "runtime/total_field/device_registry/hom_epod/ACTIVE_HOMEPOD_PLAYBACK_ROUTE.json"
+    },
+    "taiji03": {
+      "authority": "REQUIRES_MEMBER_SEAT_PROFILE_AND_CURRENT_D8",
+      "observation_status": "DECLARED_ONLY",
+      "role": "ORGANIZATION_CONTROL_AND_CELL_ISSUANCE_CANDIDATE"
+    }
+  },
+  "provenance": {
+    "audio_records": "OBSERVED_CURRENT_FILE_CONTAINING_HISTORICAL_MSI_RESULT",
+    "cloud_resources": "NOT_RETRIEVED_EXECUTOR_RESOURCE_BASELINE_EXPLICIT",
+    "formal_authority": "NOT_REVIEWED"
+  },
+  "ram_audio": {
+    "buffer": "io.BytesIO",
+    "code_and_lut_file_reads": true,
+    "cross_platform_byte_exact": "UNKNOWN_UNVERIFIED",
+    "effect_authorization": false,
+    "generated_wav_disk_writes_allowed": false,
+    "mapping": "VERSIONED_DETERMINISTIC_LUT",
+    "model_output": [
+      "semantic_slots",
+      "emotion_code"
+    ],
+    "model_zero_acoustic_guessing_is": "DESIGN_BOUNDARY_NOT_END_TO_END_MEASURED_CLAIM",
+    "numeric_contract_required_for_float_dsp": true,
+    "preexisting_voice_file_reads": true,
+    "runtime_dependency_versions_in_key": "REQUIRED_BEFORE_CROSS_RUNTIME_REUSE",
+    "scene_cell_example_bytes": 575,
+    "scene_cell_size_is_global_invariant": false,
+    "zero_disk_scope": "GENERATED_AUDIO_OUTPUT_ONLY_NOT_TOTAL_DISK_IO"
+  },
+  "schema_version": "w7tp-six-skills-v23-evolution-candidate/1.0",
+  "state": "CANDIDATE_ONLY",
+  "trust_seal": {
+    "current_d8_required_for_effect": true,
+    "effect_authorization": false,
+    "evidence_ref": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/audio_scene_lab/TRUST_BRIDGE_RUN.json",
+    "first_issue_requires": "BYTE_EXACT_RECONSTRUCTION_EVIDENCE",
+    "retained_checks": [
+      "integrity",
+      "identity",
+      "envelope",
+      "current_authority_for_effect",
+      "target_digest"
+    ],
+    "reuse_requires": [
+      "same_reconstruction_key",
+      "packet_hash",
+      "rule_and_renderer_hash",
+      "lut_hash",
+      "base_material_hashes",
+      "current_target_digest_match"
+    ],
+    "seal_authenticity": "CANDIDATE_HASH_RECORD_NOT_INDEPENDENT_SIGNATURE",
+    "skipped_operation": "REPEATED_MODEL_INFERENCE_ONLY_WHEN_NOT_REQUIRED_BY_PINNED_RULE",
+    "untrusted_evidence_cannot_issue_trusted_seal": true
+  }
+}

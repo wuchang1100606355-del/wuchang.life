@@ -1,0 +1,102 @@
+{
+  "observed_at": "2026-10-23T06:34:51.140591+00:00",
+  "attachment_filename": "貼上的文字 (1)(20261023-063024).txt",
+  "attachment_sha256": "852872dfc26e08dfb2b8908b7efae8f5fcb6e400731d4cf238741eb0d0635493",
+  "files": {
+    "UNIVERSAL_8D_ENGINE_RECEIPT.json": {
+      "sha256": "3e8b518d5ca7729c8f24478830e59326e87071a34e37bba97264fffb3795cfcb",
+      "size": 7085,
+      "current_file_observed": true,
+      "runtime_loading_claimed": false,
+      "receipt_keys": [
+        "receipt_id",
+        "timestamp_utc",
+        "axiom",
+        "verified_families",
+        "real_file_bidirectional_tests",
+        "trans_pacific_bidirectional_verified",
+        "us_to_tw_full_movie_return_verified",
+        "trans_pacific_pure_delta_isolated",
+        "company3_menu_benchmark_isolated",
+        "company3_menu_benchmark_aligned",
+        "final_engine_benchmark_20261022",
+        "ingress_pipeline_bridge_20261023",
+        "mock_network_dispatch_20261023",
+        "odoo_event_dispatch_20261023"
+      ],
+      "recorded_pipeline_claims": {
+        "final_engine_benchmark_20261022": {
+          "group_a_full_json_bytes": 4910,
+          "group_b_structured_patch_bytes": 199,
+          "group_c_binary_cell_bytes": 4935,
+          "target_sha256": "a1efbb54dc8dc0ad085993f783a889e97b32ca80b22582804ca5a8abcfa955a7",
+          "selected_optimal_route": "Path B (Structured Patch)",
+          "dynamic_deserialization_verified": true,
+          "method_b_note": "Fallback structured patch used; create_structured_delta not present on class",
+          "verification_scope": "Local Synthetic Menu Reconstruction",
+          "odoo_pos_db_applied": false
+        },
+        "ingress_pipeline_bridge_20261023": {
+          "d8_token_validated": true,
+          "bridged_payload_bytes": 199,
+          "bridged_payload_sha256": "c438fcee0f8600208b5ca5f36e1741af80b29aebdb6d2feb6d3da6a5f63c9be2",
+          "bridged_route": "Path B (Structured Patch)",
+          "target_nodes": [
+            "POS_STORE_001",
+            "POS_STORE_002"
+          ],
+          "bridge_processing_time_ms": 0.026,
+          "delivery_bridge_status": "BRIDGED_READY_FOR_DISPATCH",
+          "verification_scope": "Pipeline Ingress Interface Bridging",
+          "odoo_pos_db_applied": false
+        },
+        "mock_network_dispatch_20261023": {
+          "dispatched_nodes_count": 2,
+          "all_nodes_ack_success": true,
+          "ack_details": [
+            {
+              "node_id": "POS_STORE_001",
+              "status": "ACK_SUCCESS",
+              "items_count": 72,
+              "reconstructed_sha256": "a1efbb54dc8dc0ad085993f783a889e97b32ca80b22582804ca5a8abcfa955a7",
+              "processing_time_ms": 0.11
+            },
+            {
+              "node_id": "POS_STORE_002",
+              "status": "ACK_SUCCESS",
+              "items_count": 72,
+              "reconstructed_sha256": "a1efbb54dc8dc0ad085993f783a889e97b32ca80b22582804ca5a8abcfa955a7",
+              "processing_time_ms": 0.085
+            }
+          ],
+          "verification_scope": "Mock Cross-Node Dispatch and Edge Reconstruction",
+          "odoo_pos_db_applied": false
+        },
+        "odoo_event_dispatch_20261023": {
+          "event_dispatch_status": "DISPATCH_TRIGGERED",
+          "patch_size_bytes": 199,
+          "patch_sha256": "c438fcee0f8600208b5ca5f36e1741af80b29aebdb6d2feb6d3da6a5f63c9be2",
+          "pipeline_latency_ms": 0.038,
+          "verification_scope": "Odoo Event Pipeline Dispatch Integration",
+          "odoo_pos_db_applied": false
+        }
+      }
+    },
+    "universal_8d_file_engine.py": {
+      "sha256": "3cef224bf5adb929f7f40c6f9a362bca543fcc66c0aedb5b14c6ed4008113fec",
+      "size": 15392,
+      "current_file_observed": true,
+      "runtime_loading_claimed": false
+    },
+    "gst_transceiver.py": {
+      "sha256": "a27110275810088a4f1c105394a33aec13a4b2c8e49938b66dd7128ac243fdf2",
+      "size": 14164,
+      "current_file_observed": true,
+      "runtime_loading_claimed": false
+    }
+  },
+  "engineering_changes_to_these_files": false,
+  "new_cross_ocean_test_performed": false,
+  "new_odoo_database_effect_performed": false,
+  "head_is_context_not_authority": true
+}

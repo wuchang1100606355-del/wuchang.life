@@ -1,0 +1,55 @@
+{
+  "observed_at": "2026-10-23T06:34:51.140591+00:00",
+  "listeners": {
+    "exit_code": 0,
+    "output": "State  Recv-Q Send-Q              Local Address:Port Peer Address:PortProcess                                  \nLISTEN 0      511                     127.0.0.1:8088      0.0.0.0:*    users:((\"MainThread\",pid=3551726,fd=22))\nLISTEN 0      1024                100.71.224.18:8444      0.0.0.0:*                                            \nLISTEN 0      1024   [fd7a:115c:a1e0::b3a:e012]:8444         [::]:*",
+    "stderr_present": false
+  },
+  "tailscale_config": {
+    "TCP": {
+      "8444": {
+        "HTTPS": true
+      }
+    },
+    "Web": {
+      "taiji01.tailea1eef.ts.net:8444": {
+        "Handlers": {
+          "/": {
+            "Proxy": "http://127.0.0.1:8088"
+          }
+        }
+      }
+    }
+  },
+  "temporary_9122_proxy_present": false,
+  "listener_9122_present": false,
+  "related_signing_python_processes": [],
+  "python_zombies": [],
+  "permanent_8444_https_status": 200,
+  "permanent_8444_proxy_preserved": true,
+  "proof_sha256": "89fee7f0ef51c11d6da0f173c876af1f773c2013b949fcec74086c2698afc32e",
+  "anchors": {
+    "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812",
+    "manifests/total_field/origin_cell_gst_v21_specification/SPECIFICATION.md": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855",
+    "runtime/total_field/conversation_intake/universal_origin_cell_codec_v2.py": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+    "state/ACTION_LEDGER.json": "a5b9c428ef39ecb7b35f1e7b42bc066dc934159fcdedc05fc3c73f8e89de26c3"
+  },
+  "git_status": {
+    "exit_code": 0,
+    "output": "M manifests/total_field/origin_cell_gst_v21_specification/CANONICAL_RECORD.json\n M manifests/total_field/origin_cell_gst_v21_specification/PROMOTION_GOVERNANCE_CORRECTION.json\n M manifests/total_field/origin_cell_gst_v21_specification/PROMOTION_RECEIPT.json\n M tools/gst_mobile_approval_first.py\n M tools/gst_mobile_approval_server.py\n?? artifacts/8d-adi-workloop/gst-v21-commander-closeout-20261023T060551Z/\n?? manifests/total_field/origin_cell_gst_v21_specification/FOUNDER_RATIFICATION_RECEIPT.json\n?? tools/w7tp_founder_sign.py",
+    "stderr_present": false
+  },
+  "git_head": {
+    "exit_code": 0,
+    "output": "3594b4e8292d537ff8d111e44c70c4fc6f177b39",
+    "stderr_present": false
+  },
+  "remote_branch": {
+    "exit_code": 0,
+    "output": "3594b4e8292d537ff8d111e44c70c4fc6f177b39\trefs/heads/codex/current-live-state-consolidation-20260915",
+    "stderr_present": false
+  },
+  "git_commit_executed": false,
+  "git_push_executed": false,
+  "formal_effect_authorized": false
+}

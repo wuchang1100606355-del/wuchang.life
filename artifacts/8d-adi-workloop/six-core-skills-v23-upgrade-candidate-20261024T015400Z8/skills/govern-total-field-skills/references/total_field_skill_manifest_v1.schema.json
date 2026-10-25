@@ -1,0 +1,466 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "w7tp://schemas/total-field-skill-manifest-v1",
+  "title": "W7TP Total Field Skill Manifest V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_state",
+    "skill_id",
+    "display_name_zh",
+    "version",
+    "language",
+    "founder_authority_ref",
+    "identity_and_seat",
+    "product_output_contract",
+    "classification",
+    "information_context",
+    "d1_d8_projection",
+    "authority_boundary",
+    "execution_contract",
+    "w7tp_contract",
+    "red_team_contract",
+    "hold_contract",
+    "authorization_contract",
+    "verification_contract",
+    "lifecycle",
+    "evidence_and_hashes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "w7tp-total-field-skill-manifest/1.0"
+    },
+    "manifest_state": {
+      "enum": [
+        "DRAFT_LOCAL",
+        "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+        "ALLOW_ISOLATED_CANARY_ONLY",
+        "ACTIVE",
+        "SUSPENDED",
+        "DEPRECATED",
+        "RETIRED",
+        "BLOCKED"
+      ]
+    },
+    "skill_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+    },
+    "display_name_zh": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "language": {
+      "const": "zh-Hant"
+    },
+    "founder_authority_ref": {
+      "$ref": "#/$defs/nonempty"
+    },
+    "identity_and_seat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_required",
+        "xiaoj_identity_required",
+        "allowed_roles",
+        "fixed_role_capacity_required",
+        "active_seat_required",
+        "reservation_non_executable",
+        "access_profile_refs",
+        "cross_member_plaintext_allowed"
+      ],
+      "properties": {
+        "member_required": {"const": true},
+        "xiaoj_identity_required": {"const": true},
+        "allowed_roles": {"$ref": "#/$defs/nonemptyStringArray"},
+        "fixed_role_capacity_required": {"const": true},
+        "active_seat_required": {"const": true},
+        "reservation_non_executable": {"const": true},
+        "access_profile_refs": {"$ref": "#/$defs/nonemptyStringArray"},
+        "cross_member_plaintext_allowed": {"const": false}
+      }
+    },
+    "product_output_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intended_users",
+        "user_need",
+        "product_outcome",
+        "deliverables",
+        "interface_behavior",
+        "quality_thresholds",
+        "acceptance_criteria",
+        "failure_behavior",
+        "prohibited_outputs",
+        "allowed_side_effects"
+      ],
+      "properties": {
+        "intended_users": {"$ref": "#/$defs/nonemptyStringArray"},
+        "user_need": {"$ref": "#/$defs/nonempty"},
+        "product_outcome": {"$ref": "#/$defs/nonempty"},
+        "deliverables": {"$ref": "#/$defs/nonemptyStringArray"},
+        "interface_behavior": {"$ref": "#/$defs/nonempty"},
+        "quality_thresholds": {"$ref": "#/$defs/nonemptyStringArray"},
+        "acceptance_criteria": {"$ref": "#/$defs/nonemptyStringArray"},
+        "failure_behavior": {"$ref": "#/$defs/nonempty"},
+        "prohibited_outputs": {"$ref": "#/$defs/nonemptyStringArray"},
+        "allowed_side_effects": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "technology_identity_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable",
+        "gate_skill_ref",
+        "axes",
+        "decision_set",
+        "evidence_scale",
+        "effect_equivalence_not_technical_equivalence",
+        "weighted_score_forbidden",
+        "carrier_protocol_separation_required",
+        "patentability_inference_forbidden"
+      ],
+      "properties": {
+        "applicable": {"const": true},
+        "gate_skill_ref": {"const": "w7tp.technology-identity-audit@1.0.0"},
+        "axes": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {"enum": ["MECHANISM", "CAUSAL_PATH", "DEPENDENCIES", "ELIMINATED_OPERATIONS", "COST_TOPOLOGY", "CARRIER_RECONSTRUCTION_VERIFICATION"]}
+        },
+        "decision_set": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {"enum": ["SAME_MECHANISM", "PARTIAL_MECHANISM_OVERLAP", "EFFECT_ONLY_EQUIVALENT", "DIFFERENT_TECHNOLOGY", "INSUFFICIENT_EVIDENCE"]}
+        },
+        "evidence_scale": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {"enum": ["EV0_UNSUPPORTED", "EV1_ASSERTION", "EV2_SECONDARY_SOURCE", "EV3_PRIMARY_DOCUMENT", "EV4_IMPLEMENTATION_EVIDENCE", "EV5_REPRODUCIBLE_CAUSAL_EVIDENCE"]}
+        },
+        "effect_equivalence_not_technical_equivalence": {"const": true},
+        "weighted_score_forbidden": {"const": true},
+        "carrier_protocol_separation_required": {"const": true},
+        "patentability_inference_forbidden": {"const": true}
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_family", "secondary_families", "maximum_effect_class"],
+      "properties": {
+        "primary_family": {"$ref": "#/$defs/family"},
+        "secondary_families": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/family"}
+        },
+        "maximum_effect_class": {"enum": ["E0", "E1", "E2", "E3", "E4", "E5"]}
+      }
+    },
+    "information_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_derived_scope",
+        "required_field_domains",
+        "provenance_required",
+        "retrieved_content_is_instruction",
+        "raw_protected_context_allowed",
+        "protected_representation",
+        "retention"
+      ],
+      "properties": {
+        "identity_derived_scope": {"const": true},
+        "required_field_domains": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"]}
+        },
+        "provenance_required": {"const": true},
+        "retrieved_content_is_instruction": {"const": false},
+        "raw_protected_context_allowed": {"const": false},
+        "protected_representation": {"$ref": "#/$defs/nonemptyStringArray"},
+        "retention": {"enum": ["REQUEST_ONLY", "RUN_BOUNDED", "SESSION_BOUNDED", "EVIDENCE_REFERENCES_ONLY"]}
+      }
+    },
+    "d1_d8_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+      "properties": {
+        "D1": {"$ref": "#/$defs/fieldProjection"},
+        "D2": {"$ref": "#/$defs/fieldProjection"},
+        "D3": {"$ref": "#/$defs/fieldProjection"},
+        "D4": {"$ref": "#/$defs/fieldProjection"},
+        "D5": {"$ref": "#/$defs/fieldProjection"},
+        "D6": {"$ref": "#/$defs/fieldProjection"},
+        "D7": {"$ref": "#/$defs/fieldProjection"},
+        "D8": {"$ref": "#/$defs/fieldProjection"}
+      }
+    },
+    "authority_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed_outputs",
+        "forbidden_authority",
+        "total_field_receiver_required",
+        "total_field_receiver_ref",
+        "human_final_effect_classes"
+      ],
+      "properties": {
+        "allowed_outputs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["CANDIDATE", "EVIDENCE", "HOLD", "AUTHORIZATION_REQUEST", "HUMAN_REPLY", "TOTAL_FIELD_DECISION_RECEIPT"]}
+        },
+        "forbidden_authority": {"$ref": "#/$defs/nonemptyStringArray"},
+        "total_field_receiver_required": {"const": true},
+        "total_field_receiver_ref": {"$ref": "#/$defs/nonempty"},
+        "human_final_effect_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "contains": {"const": "E5"},
+          "items": {"enum": ["E4", "E5"]}
+        }
+      }
+    },
+    "execution_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodes",
+        "carriers",
+        "dependencies",
+        "resource_limits",
+        "persistent_side_effects",
+        "forbidden_effects",
+        "rollback",
+        "existing_state_preserved"
+      ],
+      "properties": {
+        "nodes": {"$ref": "#/$defs/nonemptyStringArray"},
+        "carriers": {"$ref": "#/$defs/stringArray"},
+        "dependencies": {"$ref": "#/$defs/stringArray"},
+        "resource_limits": {"type": "object"},
+        "persistent_side_effects": {"$ref": "#/$defs/stringArray"},
+        "forbidden_effects": {"$ref": "#/$defs/nonemptyStringArray"},
+        "rollback": {"$ref": "#/$defs/nonempty"},
+        "existing_state_preserved": {"type": "boolean"}
+      }
+    },
+    "w7tp_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claimed",
+        "canonical_ref",
+        "protocol_bearing_packet",
+        "reconstruction_conditions",
+        "packet_carried_verification",
+        "acceptance_mode",
+        "carrier_is_not_w7tp"
+      ],
+      "properties": {
+        "claimed": {"type": "boolean"},
+        "canonical_ref": {"type": ["string", "null"]},
+        "protocol_bearing_packet": {"type": "boolean"},
+        "reconstruction_conditions": {"type": "boolean"},
+        "packet_carried_verification": {"type": "boolean"},
+        "acceptance_mode": {"enum": ["NOT_APPLICABLE", "EXACT_BYTES", "EQUIVALENT_STATE"]},
+        "carrier_is_not_w7tp": {"const": true}
+      }
+    },
+    "red_team_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mandatory",
+        "stages",
+        "high_critical_hold",
+        "medium_requires_mitigation_or_policy",
+        "closure_evidence_required",
+        "authorization_cannot_waive_finding"
+      ],
+      "properties": {
+        "mandatory": {"const": true},
+        "stages": {
+          "type": "array",
+          "uniqueItems": true,
+          "allOf": [
+            {"contains": {"const": "RED_TEAM_PRE_DEFINITION"}},
+            {"contains": {"const": "RED_TEAM_PRE_ACTIVATION"}},
+            {"contains": {"const": "RED_TEAM_POST_OPERATION"}}
+          ],
+          "items": {"enum": ["RED_TEAM_PRE_DEFINITION", "RED_TEAM_PRE_ACTIVATION", "RED_TEAM_POST_OPERATION"]}
+        },
+        "high_critical_hold": {"const": true},
+        "medium_requires_mitigation_or_policy": {"const": true},
+        "closure_evidence_required": {"const": true},
+        "authorization_cannot_waive_finding": {"const": true}
+      }
+    },
+    "hold_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "required_fields", "one_solution", "raw_code_only_forbidden"],
+      "properties": {
+        "language": {"const": "zh-Hant"},
+        "required_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "allOf": [
+            {"contains": {"const": "question"}},
+            {"contains": {"const": "answer"}},
+            {"contains": {"const": "risk_found"}},
+            {"contains": {"const": "possible_effect"}},
+            {"contains": {"const": "protected_state"}},
+            {"contains": {"const": "solution"}},
+            {"contains": {"const": "user_action_required"}}
+          ],
+          "items": {"type": "string"}
+        },
+        "one_solution": {"const": true},
+        "raw_code_only_forbidden": {"const": true}
+      }
+    },
+    "authorization_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_for_effect_classes",
+        "single_use",
+        "expiry_required",
+        "input_hashes_required",
+        "effect_and_risk_explanation_required",
+        "rollback_required",
+        "stop_conditions_required",
+        "total_field_review_required"
+      ],
+      "properties": {
+        "required_for_effect_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "allOf": [
+            {"contains": {"const": "E3"}},
+            {"contains": {"const": "E4"}},
+            {"contains": {"const": "E5"}}
+          ],
+          "items": {"enum": ["E3", "E4", "E5"]}
+        },
+        "single_use": {"const": true},
+        "expiry_required": {"const": true},
+        "input_hashes_required": {"const": true},
+        "effect_and_risk_explanation_required": {"const": true},
+        "rollback_required": {"const": true},
+        "stop_conditions_required": {"const": true},
+        "total_field_review_required": {"const": true}
+      }
+    },
+    "verification_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_acceptance_checks",
+        "static_checks",
+        "runtime_checks",
+        "evidence_required",
+        "existing_state_check",
+        "no_pass_without_evidence"
+      ],
+      "properties": {
+        "product_acceptance_checks": {"$ref": "#/$defs/nonemptyStringArray"},
+        "static_checks": {"$ref": "#/$defs/stringArray"},
+        "runtime_checks": {"$ref": "#/$defs/stringArray"},
+        "evidence_required": {"$ref": "#/$defs/nonemptyStringArray"},
+        "existing_state_check": {"const": true},
+        "no_pass_without_evidence": {"const": true}
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "activation_requires_total_field_receipt",
+        "total_field_decision_ref",
+        "suspension_triggers",
+        "replacement_refs",
+        "retirement_preserves_evidence",
+        "session_revocation_on_seat_or_profile_change"
+      ],
+      "properties": {
+        "state": {"enum": ["DRAFT_LOCAL", "CANDIDATE_FOR_TOTAL_FIELD_REVIEW", "ALLOW_ISOLATED_CANARY_ONLY", "ACTIVE", "SUSPENDED", "DEPRECATED", "RETIRED", "BLOCKED"]},
+        "activation_requires_total_field_receipt": {"const": true},
+        "total_field_decision_ref": {"type": ["string", "null"]},
+        "suspension_triggers": {"$ref": "#/$defs/nonemptyStringArray"},
+        "replacement_refs": {"$ref": "#/$defs/stringArray"},
+        "retirement_preserves_evidence": {"const": true},
+        "session_revocation_on_seat_or_profile_change": {"const": true}
+      }
+    },
+    "evidence_and_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hash_algorithm",
+        "manifest_self_hash",
+        "manifest_hash_excludes_field",
+        "canonical_refs",
+        "schema_refs",
+        "implementation_refs",
+        "implementation_sha256",
+        "evidence_destination"
+      ],
+      "properties": {
+        "hash_algorithm": {"const": "SHA-256"},
+        "manifest_self_hash": {
+          "oneOf": [
+            {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            {"const": "PENDING_TOTAL_FIELD_SEAL"}
+          ]
+        },
+        "manifest_hash_excludes_field": {"const": "evidence_and_hashes.manifest_self_hash"},
+        "canonical_refs": {"$ref": "#/$defs/nonemptyStringArray"},
+        "schema_refs": {"$ref": "#/$defs/nonemptyStringArray"},
+        "implementation_refs": {"$ref": "#/$defs/nonemptyStringArray"},
+        "implementation_sha256": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "evidence_destination": {"$ref": "#/$defs/nonempty"}
+      }
+    }
+  },
+  "$defs": {
+    "nonempty": {"type": "string", "minLength": 1},
+    "stringArray": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "nonemptyStringArray": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "family": {"type": "string", "pattern": "^F(0[1-9]|1[0-9]|20)$"},
+    "fieldProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "required", "contract"],
+      "properties": {
+        "name": {"enum": ["INTENT", "STATE", "COORDINATE", "EVIDENCE", "EXECUTION_POLICY", "GENERATIVE_TRANSMISSION", "RED_TEAM_RISK_CONFINEMENT", "ENVELOPE_AUTHORITY"]},
+        "required": {"const": true},
+        "contract": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

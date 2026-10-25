@@ -1,39 +1,56 @@
 {
-  "concurrency_boundary": "COOPERATIVE_LOCK_AND_EXCLUSIVE_LOCAL_CHANGE_WINDOW",
-  "contract_raw_sha256": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
-  "evidence_maturity_promoted": true,
-  "exact_effect": "GST_V21_SPEC_PROMOTE:7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
-  "formal_effect_authorized": true,
-  "immutable_source_count": 43,
-  "immutable_source_verification": "PASS_CURRENT_READBACK",
-  "nat
-  ive_authorization": {
-    "file_sha256": "eb04756b64dc386bd922a4dc21149ccd54b9096c6227062480258ce7c6f033a4",
-    "nonce_sha256": "d61ac6aa6c00c82f3fd44d53036f45e79cff92a26d9c63724100dbd2eb19590d",
-    "path": "/home/taiji_admin/w7tp_gst_v21_specification_audit/7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49/authority/d61ac6aa6c00c82f3fd44d53036f45e79cff92a26d9c63724100dbd2eb19590d.json",
-    "sha256": "eb04756b64dc386bd922a4dc21149ccd54b9096c6227062480258ce7c6f033a4",
-    "validated_at": "2026-10-21T20:46:52.898134+00:00"
+  "all_signed_static_postimages_current": false,
+  "canonical_promotion_executed": false,
+  "contract_sha256": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "correction_authorization": "CURRENT_EXPLICIT_FOUNDER_D5_TASK_INSTRUCTION_20261023",
+  "current_static_readback": {
+    "configs/total_field/w7tp_capability_internalization_registry_v1.json": "64d522c5b068d934106809198fe71b6034054b9c3c9919d3b959f1eedec48c28",
+    "manifests/total_field/origin_cell_gst_v21_specification/CANONICAL_RECORD.json": "da238cde240dd2dfb77176db274180ca7e47f684046b7f4e306080b82e550d6f",
+    "manifests/total_field/origin_cell_gst_v21_specification/SPECIFICATION.md": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855"
   },
-  "published_at": "2026-10-21T20:46:53.075503+00:00",
-  "runtime_activated": true,
-  "schema": "GST_V21_SPECIFICATION_PROMOTION_RECEIPT/1.0",
-  "simulation": false,
-  "state": "EFFECT_VERIFIED",
-  "static_postimages": {
+  "evidence_file_path": "/home/taiji_admin/.local/share/w7tp-passkey-d8/gst-v21/mobile-approval-first/SIGNED_APPROVAL.json",
+  "evidence_maturity_promoted": false,
+  "evidence_sha256": "89fee7f0ef51c11d6da0f173c876af1f773c2013b949fcec74086c2698afc32e",
+  "exact_effect": "GST_V21_SPEC_PROMOTE:7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49",
+  "execution_authorized": false,
+  "formal_effect_authorized": false,
+  "founder_binding_verified": false,
+  "governance_correction_ref": "manifests/total_field/origin_cell_gst_v21_specification/PROMOTION_GOVERNANCE_CORRECTION.json",
+  "historical_machine_authorization": {
+    "current_file_sha256": "eb04756b64dc386bd922a4dc21149ccd54b9096c6227062480258ce7c6f033a4",
+    "current_human_approval_authority": false,
+    "path": "/home/taiji_admin/w7tp_gst_v21_specification_audit/7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49/authority/d61ac6aa6c00c82f3fd44d53036f45e79cff92a26d9c63724100dbd2eb19590d.json",
+    "recorded_file_sha256": "eb04756b64dc386bd922a4dc21149ccd54b9096c6227062480258ce7c6f033a4",
+    "recorded_validated_at": "2026-10-21T20:46:52.898134+00:00"
+  },
+  "historical_receipt_raw_sha256": "1924f944212c36225afc1207f99029432cb482f429fca34a4cbc389a38b1b19b",
+  "historical_receipt_ref": "artifacts/8d-adi-workloop/gst-v21-commander-closeout-20261023T060551Z/preimage/manifests/total_field/origin_cell_gst_v21_specification/PROMOTION_RECEIPT.json",
+  "historical_receipt_was_valid_json": false,
+  "immutable_sources_reverified_as_a_whole": false,
+  "machine_private_key_used_for_this_correction": false,
+  "new_native_promotion_executed": false,
+  "pending_native_conditions": [
+    "EXACT_MOBILE_CREDENTIAL_TO_FOUNDER_D8_BINDING_NOT_VERIFIED",
+    "ORIGINAL_CONTRACT_RESOLVER_ENTRYPOINT_NOT_PRESENT",
+    "ORIGINAL_REGISTRY_POSTIMAGE_DIFFERS_FROM_CURRENT_CONTENT"
+  ],
+  "ratification_receipt_ref": "manifests/total_field/origin_cell_gst_v21_specification/FOUNDER_RATIFICATION_RECEIPT.json",
+  "ratification_receipt_sha256": "a78cea3b36bf567a61554adcc976ed4d8086f15a5c6488c6bf8d3d3c99ee8962",
+  "receipt_repair_authorized_by_captured_signature": false,
+  "recorded_at": "2026-10-23T06:31:35.481535+00:00",
+  "reverification_ref": "artifacts/8d-adi-workloop/gst-v21-commander-closeout-20261023T060551Z/evidence/signature-audit.json",
+  "reverification_sha256": "d75510f947760adefee99bec1524a9c3e7dd6bf264209bd52d9cf2be95888508",
+  "runtime_activated": false,
+  "runtime_activation_authorized": false,
+  "schema": "GST_V21_PROMOTION_RECEIPT_GOVERNANCE_CORRECTED_EVIDENCE/2.0",
+  "signature_verified": true,
+  "signed_intended_static_postimages": {
     "configs/total_field/w7tp_capability_internalization_registry_v1.json": "604fd4d1cc9f186f634dc9629aecd5a7c3d8fda9965660ea37ceef59a2ee1bb2",
     "manifests/total_field/origin_cell_gst_v21_specification/CANONICAL_RECORD.json": "da238cde240dd2dfb77176db274180ca7e47f684046b7f4e306080b82e550d6f",
     "manifests/total_field/origin_cell_gst_v21_specification/SPECIFICATION.md": "0cf1d5f6f0c55bf1193cfd1227404b1999e61f1472d66eb8fd6087f2cd038855"
   },
-  "static_preimages": {
-    "configs/total_field/w7tp_capability_internalization_registry_v1.json": "bac1c3d09f8c05131791812d368312b69e982a4f4d47ebcef6095e3bbf68a7a0",
-    "manifests/total_field/origin_cell_gst_v21_specification/CANONICAL_RECORD.json": null,
-    "manifests/total_field/origin_cell_gst_v21_specification/SPECIFICATION.md": null
-  },
-  "target": "/home/taiji_admin/Taiji_Hub",
-  "verification_result": "PASS_STATIC_POSTIMAGES",
-  "status": "EFFECT_VERIFIED",
-  "execution_authorized": true,
-  "resolved_by": "FOUNDER_SOVEREIGN_ROOT_D8",
-  "receipt_sha256": "1aa653f6b5527926c8f3e1cf9ae8617d1a91c02f4c8f6e9c9630ccffa712ec2b",
-  "receipt_body_sha256": "1aa653f6b5527926c8f3e1cf9ae8617d1a91c02f4c8f6e9c9630ccffa712ec2b"
+  "simulation": false,
+  "state": "NATIVE_PROMOTION_PENDING",
+  "status": "HUMAN_SIGNATURE_VERIFIED_FORMAL_EFFECT_NOT_AUTHORIZED",
+  "target": "/home/taiji_admin/Taiji_Hub"
 }

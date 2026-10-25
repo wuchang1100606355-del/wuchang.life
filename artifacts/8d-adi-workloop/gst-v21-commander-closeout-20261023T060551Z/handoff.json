@@ -1,0 +1,96 @@
+{
+  "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+  "run_id": "gst-v21-commander-closeout-20261023T060551Z",
+  "updated_at": "2026-10-23T06:38:18.625499+00:00",
+  "running_work": [],
+  "spent_assets": [
+    {
+      "kind": "IRREPLACEABLE_HUMAN_PROOF_PRESERVED",
+      "sha256": "89fee7f0ef51c11d6da0f173c876af1f773c2013b949fcec74086c2698afc32e",
+      "ref": "/home/taiji_admin/.local/share/w7tp-passkey-d8/gst-v21/mobile-approval-first/SIGNED_APPROVAL.json"
+    },
+    {
+      "kind": "INTEGRATED_VALIDATION_ATTEMPTS",
+      "used": 2,
+      "limit": 6
+    }
+  ],
+  "dependencies": [
+    {
+      "kind": "FIXED_NATIVE_CONTRACT",
+      "sha256": "7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49"
+    }
+  ],
+  "open_debt": [
+    {
+      "scope": "FORMAL_AUTHORITY_ONLY",
+      "state": "HOLD_NATIVE_AUTHORITY_PENDING",
+      "conditions": [
+        "Exact mobile credential to Founder D8 binding not verified",
+        "Original contract authority resolver entrypoint is absent",
+        "Current registry content differs from original exact signed postimage"
+      ]
+    },
+    {
+      "scope": "NATIVE_TASK_CONTEXT_ONLY",
+      "state": "LOCAL_HOLD_EXISTING_TERMINAL_ACTION_SCHEMA",
+      "ref": "evidence/local-action-ledger-hold.json"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "path": "evidence/signature-audit.json",
+      "sha256": "d75510f947760adefee99bec1524a9c3e7dd6bf264209bd52d9cf2be95888508"
+    },
+    {
+      "path": "evidence/manifest-reconciliation.json",
+      "sha256": "ea05641ec3408f25a01295c3052ad4f73d6aca3bb4bd8ca1f810deae63844f96"
+    },
+    {
+      "path": "evidence/final-runtime-and-git-readback.json",
+      "sha256": "d8197170fb98ec76280457542c77adf94dc6e236b573c1776a1f5af5f7d0aa0c"
+    },
+    {
+      "path": "evidence/integration-test-2.json",
+      "sha256": "6f3787d100b0c79c3f1c81fe3dd9f8bd2b3ad449a3f8c811f8227746510c0612"
+    },
+    {
+      "path": "evidence/final-tool-readback.json",
+      "sha256": "777ec7868da7725f80f1191426cba224cb2f7899aa99b32043d65937c067fa0f"
+    },
+    {
+      "path": "evidence/actual-proxy-cleanup-test.json",
+      "sha256": "5848900fee21e855e15eb9a8aaada36e8e99831b65bcef5a0bfc6a135ba9b181"
+    },
+    {
+      "path": "evidence/dual-ledger-readback.json",
+      "sha256": "8b86e59067b3d01c2a1f1c84eae94b147a599bf5563d57e45d8624b2feba3007"
+    },
+    {
+      "path": "evidence/work-ledger-closeout.json",
+      "sha256": "0af305d2dc25caa45758615d9fe65c60876223a68e7c214972dfcce1c9f44b10"
+    },
+    {
+      "path": "evidence/followup-engine-readback.json",
+      "sha256": "8d3cd59c9f47c119fc0012c2a1585ddf318c56be6d02009de5ca8d4fe29db81b"
+    },
+    {
+      "path": "evidence/local-action-ledger-hold.json",
+      "sha256": "8d1b4e1a8e9d4c0f810187c4ce2e02205cf327978aecc7aeaf5c5f8cf0abb875"
+    },
+    {
+      "path": "evidence/red-team-review.json",
+      "sha256": "ddffd4a91171372ca90fe1e45fd6a02d6dcd27e3df946e0562fb3e4156a66579"
+    }
+  ],
+  "holds": [
+    "FORMAL_CANONICAL_EFFECT_NOT_AUTHORIZED",
+    "NATIVE_TASK_CONTEXT_REGISTRATION_LOCAL_HOLD"
+  ],
+  "next_action": "Use the existing native Total Field authority path to adjudicate the saved human proof and exact Founder binding before formal promotion; do not request a duplicate signature for the already valid fixed contract.",
+  "engineering_closeout": "DONE",
+  "formal_effect_authorized": false,
+  "operator_entrypoint": "python3 /home/taiji_admin/Taiji_Hub/tools/w7tp_founder_sign.py",
+  "operator_is_assistant_user_only_performs_needed_phone_authentication": true,
+  "rollback": "Restore each source or metadata preimage only after current postimage hash matches; ledger history is append-only and must be corrected by a later event, never truncated."
+}

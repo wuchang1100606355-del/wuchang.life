@@ -1,0 +1,44 @@
+{
+  "observed_at": "2026-10-23T06:36:42.486181+00:00",
+  "scope": "CODE_AND_EVIDENCE_REVIEW_NOT_FORMAL_D8_PROMOTION",
+  "reviewers": [
+    "root",
+    "toolchain_review",
+    "signature_audit",
+    "runtime_git_audit"
+  ],
+  "delegated_remote_calls_returned_no_evidence": true,
+  "delegated_review_source": "SHARED_LOCAL_CANDIDATE_FILES",
+  "independent_live_evidence_collected_by": "root via authorized RDC",
+  "resolved_findings": [
+    {
+      "finding": "QUICK_SIGNER_NO_PUBLIC_KEY_VERIFICATION",
+      "result": "Reused native authenticate_complete; actual human proof and tampered signature tests pass"
+    },
+    {
+      "finding": "ORIGIN_HOST_LIFETIME_CHECKS_DISABLED",
+      "result": "Exact origin/Host, lifetime <=900 and timezone required; negative tests pass"
+    },
+    {
+      "finding": "UNPROVEN_FORMAL_AUTHORITY_FLAGS",
+      "result": "Preimages preserved; factual receipts set formal_effect_authorized false"
+    },
+    {
+      "finding": "UNEXPECTED_PROXY_COULD_BE_REMOVED",
+      "result": "Cleanup only accepts expected owned endpoint; wrong-shape test passes"
+    },
+    {
+      "finding": "COMPLETION_TIMEOUT_RACE",
+      "result": "Completion lock and bounded drain preserve original proof; regression passes"
+    }
+  ],
+  "remaining_high_or_critical_implementation_findings": [],
+  "residual_boundaries": [
+    "No new phone biometric ceremony measured",
+    "Generic unrelated signing contracts are rejected by fixed native scope",
+    "Tailscale delays may exceed one second; timing exposed and nonzero exit reports failure",
+    "Existing immutable terminal ACTION_LEDGER record blocks native task-context registration only",
+    "Exact native Founder binding and formal promotion remain unverified"
+  ],
+  "formal_authority_issued": false
+}

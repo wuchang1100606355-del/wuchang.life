@@ -1,0 +1,58 @@
+{
+  "fast_path": {
+    "current_d8_required_for_effect": true,
+    "effect_authorization": false,
+    "fast_path_basis": "SAME_RECONSTRUCTION_KEY_PLUS_SECOND_RAM_RENDER_DIGEST_MATCH",
+    "origin_cell_packet_bytes": 575,
+    "reconstruction_key": "f6c3ccbbdb1f945a85e1fa380b4f0a97913ae2dc56c452e607be93492c365eeb",
+    "state": "PASS_TRUST_SEAL_FAST_RECONSTRUCTION",
+    "target_sha256": "f9105876d0efd8e985df3d9f76f0b4035e913f937a12062a4a64ba002a2a8bbd",
+    "trust_seal_sha256": "18deaea0d7abc58cf3a07dd3982c61fb6547afa0bd8d77e66defdff020bd74b3"
+  },
+  "seal": {
+    "binding": {
+      "base_cache_sha256": "b96ca3ba6dab240a68fea82bf7276ff1bff708edfc8255965d294564318eb96c",
+      "current_d8_authority_in_identity": false,
+      "dynamic_observation_envelope_in_identity": false,
+      "executor_ref": "audio_scene_lab/run_emotion_lut.py",
+      "executor_sha256": "06c07aa52633d7aa09a4ffcdde09bbbd49aeea05e2d240f21b0392a0b2b5cad2",
+      "lut_sha256": "015000c50c1582564f21b3923cb037b9bd99aa22ac13136f303bf867c88443a7",
+      "namespace": "w7tp:audio-scene:v2.3-candidate",
+      "packet_bytes": 575,
+      "packet_sha256": "2ac5ddaf761de623979a475427161487f2def8992d69c36ac776c93d8ff89148",
+      "reconstruction_contract": "ZERO_DISK_RAM_BYTE_EXACT_AUDIO_SCENE_V1",
+      "reconstruction_key": "f6c3ccbbdb1f945a85e1fa380b4f0a97913ae2dc56c452e607be93492c365eeb",
+      "route_ref": "route_ref:audio-scene-origin-cell",
+      "schema": "W7TP_AUDIO_SCENE_DETERMINISTIC_RECONSTRUCTION_BINDING_CANDIDATE_V1",
+      "source_size_bytes": 575,
+      "source_state_sha256": "2ac5ddaf761de623979a475427161487f2def8992d69c36ac776c93d8ff89148",
+      "target_output_bytes": 240044
+    },
+    "channel_digests": {
+      "1": "f9105876d0efd8e985df3d9f76f0b4035e913f937a12062a4a64ba002a2a8bbd"
+    },
+    "current_d8_required_for_effect": true,
+    "effect_authorization": false,
+    "executed_equals_effect_verified": false,
+    "reconstructed_equals_executed": false,
+    "reconstruction_key": "f6c3ccbbdb1f945a85e1fa380b4f0a97913ae2dc56c452e607be93492c365eeb",
+    "schema": "W7TP_ORIGIN_CELL_VERIFIED_RECONSTRUCTION_TRUST_SEAL_CANDIDATE_V1",
+    "seal_role": "D4_REUSABLE_EVIDENCE_CANDIDATE_NOT_D8_AUTHORITY",
+    "state": "CANDIDATE_RECONSTRUCTION_TRUST_SEAL_VERIFIED",
+    "target_state_digest": "4f2da4de7f6b8ce4e3fbfc33f4006664046764d118352a85e42caa7939d9e05c",
+    "trust_seal_sha256": "18deaea0d7abc58cf3a07dd3982c61fb6547afa0bd8d77e66defdff020bd74b3",
+    "verification": {
+      "evidence_ref": "audio_scene_lab/MSI_ZERO_DISK_EVIDENCE.json",
+      "method": "MSI_ZERO_DISK_TWO_RENDER_BYTE_EXACT_SHA256",
+      "output_wav_written": false,
+      "result": "PASS",
+      "two_render_byte_exact": true
+    },
+    "verified_reconstruction_identity": "f3f36dbb9fd32ef40e198c9dd09d033e770888dc6fc6a024ba14bcc05fd9a2cc",
+    "wire_measurement": {
+      "origin_cell_packet_bytes": 575,
+      "seal_bytes_are_control_evidence_not_origin_cell_payload": true,
+      "zlib_reference_bytes": 327
+    }
+  }
+}

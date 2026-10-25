@@ -1,0 +1,74 @@
+{
+  "BOUNDARIES": {
+    "executed_equals_effect_verified": false,
+    "file_exists_equals_loaded": false,
+    "historical_success_equals_current_effect": false,
+    "reconstructed_equals_executed": false,
+    "registered_equals_running": false
+  },
+  "D1_INTENT": {
+    "intent": "將本對話已討論之確定性原胞重構、D4可重用信任標章、已知狀態快路徑與模型資訊整合候選形成隔離式程式碼",
+    "new_core_created": false,
+    "reuse_existing_first": true
+  },
+  "D2_STATE": {
+    "canonical_promotion": false,
+    "execution": "UNIT_TEST_EXECUTED",
+    "implementation": "IMPLEMENTED_IN_ISOLATED_CANDIDATE",
+    "runtime_activation": false,
+    "verification": "11_OF_11_PASS"
+  },
+  "D3_COORDINATE": {
+    "branch": "codex/current-live-state-consolidation-20260915",
+    "candidate_root": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8",
+    "head": "3594b4e8292d537ff8d111e44c70c4fc6f177b39",
+    "node": "taiji01",
+    "repo_root": "/home/taiji_admin/Taiji_Hub"
+  },
+  "D4_EVIDENCE": {
+    "candidate_code_sha256": "af5dd620e0c5297e2c2a847d09dd6583488b182f017a3d32a482c0f50e980cd4",
+    "candidate_test_sha256": "ac8213c85c31e91451430264f2b5c6ad4250e74c51c945e98600939b6477de17",
+    "codec_anchor_match": true,
+    "codec_ref": "runtime/total_field/conversation_intake/universal_origin_cell_codec_v2.py",
+    "codec_sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+    "readme_sha256": "2d21b24603074f9bd0e990fb63a90fbcd00d041e9c9ab244f7a4087e8b46a31f",
+    "state_hash_ref": "services/w7tp_state_hash.py",
+    "state_hash_sha256": "1b189ee25e0a8968f73380bbfe09317bdafc738b0847d074d0d8698ed7463a66",
+    "test_result": "11_OF_11_PASS",
+    "test_result_ref": "TEST_RESULT.txt"
+  },
+  "D5_EXECUTION_POLICY": {
+    "candidate_only": true,
+    "deploy": false,
+    "git_commit": false,
+    "git_push": false,
+    "modified_existing_codec": false,
+    "modified_existing_total_field_authority": false,
+    "restart": false
+  },
+  "D6_GENERATIVE_STATE_TRANSMISSION": {
+    "new_transport_protocol_created": false,
+    "reuse_codec": "universal_origin_cell_codec_v2.py",
+    "trust_fast_path": "reconstruction_key -> trust seal lookup -> deterministic decode -> target digest compare",
+    "unknown_state_path": "HOLD_FULL_VERIFICATION_OR_MODEL_CANDIDATE",
+    "wire_measurement": "origin_cell_packet_bytes measured separately from control evidence"
+  },
+  "D7_RISK_ISOLATION": {
+    "arbitrary_model_code_execution": false,
+    "fail_closed_on_codec_hash_drift": true,
+    "fail_closed_on_packet_or_source_identity_drift": true,
+    "fail_closed_on_unknown_model_relation": true,
+    "model_generated_effect_or_authority_fields_blocked": true
+  },
+  "D8_ENVELOPE_AUTHORITY": {
+    "active_total_field_authority_observed_sha256": "3e13ab045925a08ff6c58277b7cf206e413a26580717516f7cfaf4ce7bdad871",
+    "active_total_field_authority_ref": "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+    "current_d8_required_for_external_effect": true,
+    "formal_runtime_effect_authorization_used": false,
+    "trust_seal_effect_authorization": false,
+    "trust_seal_is_d8_authority": false
+  },
+  "observed_at": "2026-10-23T23:35:35+08:00",
+  "schema": "W7TP_8DADI_ORIGIN_CELL_VERIFIED_RECONSTRUCTION_CANDIDATE_EVIDENCE_V1",
+  "state": "CANDIDATE_NOT_CANONICAL"
+}

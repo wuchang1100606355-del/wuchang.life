@@ -1,0 +1,14 @@
+interface:
+  display_name: 總場技能治理
+  short_description: 正式治理技能內容、權限、生命週期與六軸技術身分契約
+  default_prompt: 使用 $govern-total-field-skills 依總場正典定義或審查技能，形成產品輸出契約、D1-D8 投影、身分
+    Seat、六軸技術身分、紅隊與授權證據。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

@@ -17,9 +17,11 @@ from pathlib import Path
 from fido2 import cbor
 from fido2.server import Fido2Server
 from fido2.webauthn import AuthenticationResponse, AttestedCredentialData, UserVerificationRequirement
+from fido2.features import webauthn_json_mapping
+webauthn_json_mapping.enabled = True
 
 RP_ID = 'taiji01.tailea1eef.ts.net'
-ORIGIN = 'https://taiji01.tailea1eef.ts.net:8444'
+ORIGIN = 'https://taiji01.tailea1eef.ts.net:9122'
 ROOT = Path('/home/taiji_admin/Taiji_Hub')
 BUNDLE = 'artifacts/8d-adi-workloop/gst-v21-promotion-contract-20261021T193300Z'
 LEAF = 'manifests/total_field/origin_cell_gst_v21_specification'
@@ -165,7 +167,8 @@ def check_pending(pending):
     require(set(payload) == {'bindings', 'ceremony_id', 'nonce', 'issued_at', 'expires_at', 'public_credential_sha256', 'single_use', 'transport_delay_requires_new_signature'}, 'PAYLOAD_FIELDS')
     require(re.fullmatch(r'[0-9a-f]{32}', payload['ceremony_id']) and pending['ceremony_id'] == payload['ceremony_id'], 'CEREMONY_ID')
     require(len(unb64(payload['nonce'])) == 32 and payload['single_use'] is True and payload['transport_delay_requires_new_signature'] is False, 'CHALLENGE_POLICY')
-    require(0 < (instant(payload['expires_at']) - instant(payload['issued_at'])).total_seconds() <= 300, 'CHALLENGE_TTL')
+    lifetime = (instant(payload['expires_at']) - instant(payload['issued_at'])).total_seconds()
+    require(0 < lifetime <= 900, 'CEREMONY_LIFETIME_INVALID')
     require(sha(unb64(pending['public_credential_b64url'])) == payload['public_credential_sha256'], 'PUBLIC_CREDENTIAL_BINDING')
     challenge = hashlib.sha256(canon([DOMAIN, payload])).digest()
     require(pending['webauthn_state'].get('challenge') == b64(challenge) and pending['webauthn_state'].get('user_verification') == 'required', 'CHALLENGE_STATE')
@@ -179,7 +182,8 @@ def verify_proof(fido, proof):
     client = json.loads(bytes(parsed.response.client_data))
     require(client.get('origin') == ORIGIN and client.get('crossOrigin', False) is False, 'EXACT_ORIGIN_REQUIRED')
     key = key_from_public(pending['public_credential_b64url'])
-    verified = fido.authenticate_complete(pending['webauthn_state'], [key], parsed)
+    ws = dict(pending['webauthn_state'])
+    verified = fido.authenticate_complete(ws, [key], parsed)
     auth = parsed.response.authenticator_data
     require(verified.credential_id == key.credential_id and auth.rp_id_hash == hashlib.sha256(RP_ID.encode()).digest(), 'EXACT_MOBILE_CREDENTIAL_AND_RP_REQUIRED')
     require(auth.is_user_present() and auth.is_user_verified(), 'USER_PRESENCE_AND_VERIFICATION_REQUIRED')
@@ -214,7 +218,7 @@ def public_entry(function):
         except Exception:
             # Never return assertion bytes, credential IDs, or library exception
             # contents through the HTTP wrapper.
-            raise PermissionError('MOBILE_SIGNATURE_INPUT_OR_STATE_REJECTED') from None
+            raise PermissionError('REQUEST_OR_PROOF_INVALID') from None
     return guarded
 
 @public_entry
@@ -249,27 +253,38 @@ def begin(fido):
         initialize_state()
         ceremony_id = secrets.token_hex(16)
         payload = {'bindings': bindings(), 'ceremony_id': ceremony_id, 'nonce': b64(secrets.token_bytes(32)),
-                   'issued_at': now.isoformat(), 'expires_at': (now + timedelta(seconds=300)).isoformat(),
+                   'issued_at': now.isoformat(), 'expires_at': (now + timedelta(seconds=900)).isoformat(),
                    'public_credential_sha256': sha(unb64(encoded)), 'single_use': True,
                    'transport_delay_requires_new_signature': False}
         challenge = hashlib.sha256(canon([DOMAIN, payload])).digest()
         options, state = fido.authenticate_begin([key], user_verification=UserVerificationRequirement.REQUIRED, challenge=challenge)
         options = dict(options)
-        for allowed in options.get('publicKey', {}).get('allowCredentials', []):
+        pk = options.get('publicKey', {})
+        if isinstance(pk.get('challenge'), bytes):
+            pk['challenge'] = b64(pk['challenge'])
+        for allowed in pk.get('allowCredentials', []):
             allowed.pop('transports', None)
+            if isinstance(allowed.get('id'), bytes):
+                allowed['id'] = b64(allowed['id'])
+        state = dict(state)
+        if isinstance(state.get('challenge'), bytes):
+            state['challenge'] = b64(state['challenge'])
         pending = {'schema': DOMAIN + '/PENDING', 'ceremony_id': ceremony_id, 'signed_payload': payload,
                    'webauthn_state': state, 'public_credential_b64url': encoded, 'options': options}
         persist_new(STATE / 'ceremonies' / ceremony_id / 'PENDING.json', pending)
         return {'state': 'SIGNING_IN_PROGRESS', 'ceremony_id': ceremony_id, 'options': options,
-                'expires_at': payload['expires_at'], 'remaining_ms': 300000, 'pending_reused': False}
+                'expires_at': payload['expires_at'], 'remaining_ms': 900000, 'pending_reused': False}
 
 @public_entry
 def complete(fido, body):
     with LOCK:
         require(isinstance(body, dict) and set(body) == {'ceremony_id', 'response'} and len(canon(body)) <= MAX_BYTES, 'COMPLETION_SHAPE_OR_SIZE_INVALID')
         if EVIDENCE.exists():
-            return verify_proof(fido, read(EVIDENCE))
+            saved = read(EVIDENCE)
+            require(body['ceremony_id'] == saved['pending']['ceremony_id'] and body['response'] == saved['assertion'], 'DIFFERENT_COMPLETION_REPLAY_REJECTED')
+            return verify_proof(fido, saved)
         require(isinstance(body['ceremony_id'], str) and re.fullmatch(r'[0-9a-f]{32}', body['ceremony_id']), 'CEREMONY_ID_INVALID')
+        check_signing_inputs()
         pending = read(STATE / 'ceremonies' / body['ceremony_id'] / 'PENDING.json')
         payload = check_pending(pending)
         now = datetime.now(timezone.utc)
@@ -287,14 +302,14 @@ def complete(fido, body):
 PAGE = r'''<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GST V2.1 手機授權</title><style>
 *{box-sizing:border-box}body{margin:0;background:#101a27;color:#f0f5ff;font:17px/1.65 system-ui,sans-serif}main{max-width:720px;margin:4vh auto;padding:24px}section{background:#1a2a3d;border-radius:18px;padding:24px}h1{font-size:28px;line-height:1.3}button,a.phone{display:block;width:100%;box-sizing:border-box;padding:17px;margin:14px 0;border:0;border-radius:11px;font:700 18px system-ui;text-align:center;background:#98edc6;color:#102c20;text-decoration:none;cursor:pointer}button:disabled{opacity:.5;cursor:default}button#cancel{background:#e4eaf3}code{font-size:12px;overflow-wrap:anywhere}#result{white-space:pre-wrap}small{color:#c2cfe0}#phoneqr{max-width:190px;width:100%;background:white;border-radius:8px}summary{cursor:pointer}</style></head><body><main><section>
 <h1>先完成手機授權</h1><p>請優先在 <strong>iPhone 的 Safari</strong> 開啟此頁，使用先前已登錄的手機通行金鑰。電腦上的 Windows 通行金鑰與這把手機金鑰不同。</p>
-<a class="phone" href="https://taiji01.tailea1eef.ts.net:8444/proxy/9122/gst-v21/">在手機開啟</a><img id="phoneqr" alt="在手機開啟此授權頁的 QR 碼" hidden>
+<a class="phone" href="https://taiji01.tailea1eef.ts.net:9122/gst-v21/">在手機開啟</a><img id="phoneqr" alt="在手機開啟此授權頁的 QR 碼" hidden>
 <p><strong>本次授權內容：</strong>核准固定契約指定的 GST V2.1 靜態規格升格；簽章先保存，後續回執修復與身分綁定另行處理。</p>
 <p>本次簽章只核准這份固定契約，不宣稱目前的規格檔案或回執已符合契約。此頁不授權回執修復、不直接修改回執，也不會將手機金鑰自行升為 Founder 權限。</p>
 <button id="sign" disabled>使用手機通行金鑰授權</button><button id="cancel" hidden disabled>取消等待，恢復按鈕</button><button id="retrysave" hidden disabled>重試保存同一份簽章，不需重簽</button><p id="result" role="status" aria-live="polite">正在讀取既有狀態…</p>
 <details><summary>核對固定範圍</summary><p>契約：<code>7a8e405e5edde1a03a3a086742caf132bda3d7e464e6293936d2bc9057f66e49</code></p><p>固定授權描述：<code>6c245b22d17da0dff2237d919616c0ee398d00b8002f0ca7e44fcddc70f17a7f</code></p><small>不倒填舊的本人簽署、不啟用執行階段。重新開啟頁面不產生挑戰；同一個未到期的驗證窗口會沿用。已保存的簽章不因後續傳輸或修復延遲而要求重簽。</small></details>
 </section></main><script>
 'use strict';
-const $=id=>document.getElementById(id),base=location.pathname.includes('/proxy/9122/')?'/proxy/9122/gst-v21':'/gst-v21';
+const $=id=>document.getElementById(id),base='/gst-v21';
 let active=null,sequence=0,current=null,pendingSubmission=null;
 const decode=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-s.length%4)%4)),c=>c.charCodeAt(0));
 const encode=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
@@ -327,3 +342,4 @@ $('sign').onclick=async()=>{if(active||pendingSubmission||!current?.can_request_
 const qr=$('phoneqr');qr.onload=()=>{qr.hidden=false};qr.onerror=()=>{qr.hidden=true};qr.src=base+'/phone-link.svg';
 api('/status').then(show).catch(e=>{$('result').textContent='暫時無法讀取簽署狀態：'+e.message;});
 </script></body></html>'''
+

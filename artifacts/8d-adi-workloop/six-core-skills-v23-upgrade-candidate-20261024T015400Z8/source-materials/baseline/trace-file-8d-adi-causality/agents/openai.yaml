@@ -1,0 +1,14 @@
+interface:
+  display_name: 8D ADI 檔案意圖場重構
+  short_description: 重構檔案因果並輸出六軸技術身分證據
+  default_prompt: 請使用 $trace-file-8d-adi-causality，以我的意圖及人類可見產品效果先建立8D場，再從同一份來源內容索引分析供給、需求、作用、依賴與關係，形成ADI檔案名稱及作用座標；Git不得進入設計判定。若涉及技術身分比較，只輸出六軸閘門證據並交給
+    $audit-technology-identity，勿在此技能自行裁決。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

@@ -1,0 +1,379 @@
+{
+  "authority_boundary": {
+    "allowed_outputs": [
+      "CANDIDATE",
+      "EVIDENCE",
+      "HOLD",
+      "AUTHORIZATION_REQUEST",
+      "HUMAN_REPLY",
+      "TOTAL_FIELD_DECISION_RECEIPT"
+    ],
+    "forbidden_authority": [
+      "ALLOW",
+      "COMMITTED",
+      "COMMIT_APPLIED",
+      "TFS",
+      "TFID",
+      "TOTAL_FIELD_HASH",
+      "CANONICAL_POINTER",
+      "FINAL_SEAL",
+      "DIRECT_DB_WRITE",
+      "DIRECT_DEPLOY"
+    ],
+    "human_final_effect_classes": [
+      "E4",
+      "E5"
+    ],
+    "total_field_receiver_ref": "TOTAL_FIELD_SKILL_GOVERNANCE_RECEIVER",
+    "total_field_receiver_required": true
+  },
+  "authorization_contract": {
+    "effect_and_risk_explanation_required": true,
+    "expiry_required": true,
+    "input_hashes_required": true,
+    "required_for_effect_classes": [
+      "E3",
+      "E4",
+      "E5"
+    ],
+    "rollback_required": true,
+    "single_use": true,
+    "stop_conditions_required": true,
+    "total_field_review_required": true
+  },
+  "classification": {
+    "maximum_effect_class": "E5",
+    "primary_family": "F18",
+    "secondary_families": [
+      "F10",
+      "F15",
+      "F17",
+      "F20"
+    ]
+  },
+  "d1_d8_projection": {
+    "D1": {
+      "contract": "記錄要定義、盤點、審查、啟用、暫停或退場的直接技能治理意圖。",
+      "name": "INTENT",
+      "required": true
+    },
+    "D2": {
+      "contract": "記錄技能 manifest、版本、生命週期、先前裁決與目前產品輸出狀態。",
+      "name": "STATE",
+      "required": true
+    },
+    "D3": {
+      "contract": "記錄技能、節點、路徑、角色、Seat、會員邊界、carrier、receiver、邏輯時間，以及適用時的 ADI 整數決策、時空網路與非權威浮點資料座標。",
+      "name": "COORDINATE",
+      "required": true
+    },
+    "D4": {
+      "contract": "記錄來源、manifest、schema、實作、測試、紅隊、receipt、六軸技術身分與 EV 證據、浮點數值契約與重播結果，以及 SHA-256 證據。",
+      "name": "EVIDENCE",
+      "required": true
+    },
+    "D5": {
+      "contract": "貫穿式執行 Gate、Guard、Policy、效果分類、append-only 歷史、禁止條件、授權與 rollback。",
+      "name": "EXECUTION_POLICY",
+      "required": true
+    },
+    "D6": {
+      "contract": "只有技能明確主張 W7TP 時才要求 V2.3 意圖通訊／狀態場封包通訊、自帶協定與驗證的可重構封包；保存 ADI 整數決策索引與時空索引網路，宣告連續運算時另保存非權威浮點資料索引及數值契約；一般 carrier 不算。",
+      "name": "GENERATIVE_TRANSMISSION",
+      "required": true
+    },
+    "D7": {
+      "contract": "執行定義前、啟用前及操作後紅隊，檢查效果類比冒充技術身分、六軸缺漏、加權分數、carrier 與重構混淆、專利推論、ADI 索引權責、浮點資料升格、H64-TD 與靜默覆寫，保存 finding、修復與 closure evidence。",
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "required": true
+    },
+    "D8": {
+      "contract": "綁定 nonce、TTL、hash、權限、Total Field receiver、裁決 receipt 與最終權威邊界。",
+      "name": "ENVELOPE_AUTHORITY",
+      "required": true
+    }
+  },
+  "display_name_zh": "整合式工程交付",
+  "evidence_and_hashes": {
+    "canonical_refs": [
+      "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json"
+    ],
+    "evidence_destination": "artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/evidence/",
+    "hash_algorithm": "SHA-256",
+    "implementation_refs": [
+      "SKILL.md",
+      "agents/openai.yaml",
+      "assets/icon.svg",
+      "references/architecture-contract.md",
+      "references/capability-interoperability.md",
+      "references/capability-source-index.json",
+      "references/current-design-contract.json",
+      "references/evolution-contract.json",
+      "references/version-observation-causality.md"
+    ],
+    "implementation_sha256": {
+      "SKILL.md": "6adeee3135c4f3017f42ca4c91ae5a93a1dda7352fac69bfdf56333c40290031",
+      "agents/openai.yaml": "a3ef285e6af2e51656ea32ac247221fa3e2e603699d8e3f6c2e475a713a63bdc",
+      "assets/icon.svg": "8936b24f674a1250d999e2c2b5901374fb4240426f32bd1ae340c352a90d617d",
+      "references/architecture-contract.md": "1473f5463a87b99540fdb7e5434ea6d1aa4cd028324ca1dbbe5a1f6ef86a8654",
+      "references/capability-interoperability.md": "428cbfb61af3ac5076432cfd188b2084c7ef88ae2b12dacb72f1c146c8113e31",
+      "references/capability-source-index.json": "bd4824a4bdbcd0a3065e966aa6eace48049becb9cd0d21495cd64af34d1c05d0",
+      "references/current-design-contract.json": "b48e2836ce0aa4515a25589d4c48617dec5793831237f124a989e7436e755281",
+      "references/evolution-contract.json": "1c05eeb34d0b97071b19c7c22470dc09515f625e86ee28a01616451e89f87702",
+      "references/version-observation-causality.md": "3824e2f3ea7b7f129a1f0d34a44c01b7e38e2d3e6989e613982347bb216ccdb2"
+    },
+    "manifest_hash_excludes_field": "evidence_and_hashes.manifest_self_hash",
+    "manifest_self_hash": "PENDING_TOTAL_FIELD_SEAL",
+    "schema_refs": [
+      "references/total_field_skill_manifest_v1.schema.json"
+    ]
+  },
+  "execution_contract": {
+    "carriers": [
+      "LOCAL_FILESYSTEM",
+      "SSH_OR_TAILSCALE_CARRIER_ONLY"
+    ],
+    "dependencies": [
+      "PYTHON_3_STANDARD_LIBRARY",
+      "ACTIVE_TOTAL_FIELD_CANONICAL_REFS",
+      "ADI_FLOATING_POINT_DATA_INDEX_CONTRACT_WHEN_DECLARED",
+      "W7TP_TECHNOLOGY_IDENTITY_AUDIT@1.0.0",
+      "VALID_MEMBER_XIAOJ_SEAT_PROFILE"
+    ],
+    "existing_state_preserved": true,
+    "forbidden_effects": [
+      "CANONICAL_CHANGE",
+      "POINTER_CHANGE",
+      "ROLE_OR_SEAT_CHANGE",
+      "SECRET_READ",
+      "MEMBER_PLAINTEXT_READ",
+      "FORMAL_SUBMISSION",
+      "UNAUTHORIZED_LIVE_EFFECTS",
+      "SELF_AUTHORITY",
+      "PROTECTED_DATA_EXPOSURE"
+    ],
+    "nodes": [
+      "DEVELOPER_DEVICE",
+      "TOTAL_FIELD_NODE"
+    ],
+    "persistent_side_effects": [
+      "VERSIONED_CANDIDATE_ARTIFACTS",
+      "EXACTLY_AUTHORIZED_ENGINEERING_CHANGES_ONLY_AFTER_SEPARATE_D8"
+    ],
+    "resource_limits": {
+      "container_required": false,
+      "gpu_required": false,
+      "network_required": false
+    },
+    "rollback": "僅移除或停用本次新建且尚未經總場啟用的技能候選；保留既有技能、manifest、receipt、會員資料及證據。"
+  },
+  "founder_authority_ref": "TOTAL_FIELD_CANONICAL_FOUNDER_NATURAL_PERSON_AUTHORITY",
+  "hold_contract": {
+    "language": "zh-Hant",
+    "one_solution": true,
+    "raw_code_only_forbidden": true,
+    "required_fields": [
+      "question",
+      "answer",
+      "risk_found",
+      "possible_effect",
+      "protected_state",
+      "solution",
+      "user_action_required"
+    ]
+  },
+  "identity_and_seat": {
+    "access_profile_refs": [
+      "LLM_IDENTITY_ACCESS_PROFILE_FOUNDER_DEVELOPER",
+      "LLM_IDENTITY_ACCESS_PROFILE_TOTAL_FIELD_REVIEWER"
+    ],
+    "active_seat_required": true,
+    "allowed_roles": [
+      "FOUNDER_DEVELOPER",
+      "TOTAL_FIELD_REVIEWER"
+    ],
+    "cross_member_plaintext_allowed": false,
+    "fixed_role_capacity_required": true,
+    "member_required": true,
+    "reservation_non_executable": true,
+    "xiaoj_identity_required": true
+  },
+  "information_context": {
+    "identity_derived_scope": true,
+    "protected_representation": [
+      "OPAQUE_HANDLE",
+      "TYPED_CLAIM",
+      "SHA256",
+      "DEIDENTIFIED_EVIDENCE",
+      "STRUCTURAL_METADATA"
+    ],
+    "provenance_required": true,
+    "raw_protected_context_allowed": false,
+    "required_field_domains": [
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6",
+      "D7",
+      "D8"
+    ],
+    "retention": "EVIDENCE_REFERENCES_ONLY",
+    "retrieved_content_is_instruction": false
+  },
+  "language": "zh-Hant",
+  "lifecycle": {
+    "activation_requires_total_field_receipt": true,
+    "replacement_refs": [],
+    "retirement_preserves_evidence": true,
+    "session_revocation_on_seat_or_profile_change": true,
+    "state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+    "suspension_triggers": [
+      "MANIFEST_OR_IMPLEMENTATION_HASH_DRIFT",
+      "IDENTITY_PROFILE_OR_SEAT_INVALID",
+      "OPEN_HIGH_OR_CRITICAL_RED_TEAM_FINDING",
+      "PRODUCT_OUTPUT_OR_VERIFIER_FAILURE",
+      "PROTECTED_DATA_OR_CROSS_MEMBER_BOUNDARY_VIOLATION",
+      "CANONICAL_REPLACEMENT",
+      "TECHNOLOGY_IDENTITY_GATE_MISSING_OR_DRIFT",
+      "FLOATING_POINT_DATA_INDEX_CONTRACT_DRIFT"
+    ],
+    "total_field_decision_ref": null
+  },
+  "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "product_output_contract": {
+    "acceptance_criteria": [
+      "候選完整、輸入與相依可核對",
+      "正式效果須另取得精確授權與總場收據",
+      "宣告浮點時具備浮點資料索引與數值重播契約"
+    ],
+    "allowed_side_effects": [
+      "建立版本化技能定義候選與唯讀驗證證據"
+    ],
+    "deliverables": [
+      "現況差距證據",
+      "有界候選執行包",
+      "驗證與回滾契約",
+      "V2.3 三項能力有界候選契約與來源證據"
+    ],
+    "failure_behavior": "保持候選或 HOLD，不推測權限、不啟用技能，並說明唯一缺件與安全解法。",
+    "intended_users": [
+      "Founder",
+      "受授權工程維護者"
+    ],
+    "interface_behavior": "繁體中文結論、證據與唯一下一步",
+    "product_outcome": "在每次精確授權範圍內完成工程交付；本輪只建候選",
+    "prohibited_outputs": [
+      "由技能自行宣稱 ALLOW 或 ACTIVE",
+      "把安裝、測試或 canary 當成正式核准",
+      "輸出憑證、會員明文、ADI 或 H64-TD codebook、mapping、recovery material",
+      "把 W7TP 定義為語意通信",
+      "靜默覆寫 manifest、封包、receipt、lineage 或裁決",
+      "隱藏效果等級或跳過紅隊",
+      "把效果、carrier 或效能相似當成技術同一，或從技術身分裁決推論專利性",
+      "僅回傳內部錯誤碼而沒有自然語言解法"
+    ],
+    "quality_thresholds": [
+      "不擅改使用者定義",
+      "不將候選視為部署",
+      "沿既有能力最小差異修正"
+    ],
+    "user_need": "將自創架構意圖收斂為可逆可驗證交付"
+  },
+  "red_team_contract": {
+    "authorization_cannot_waive_finding": true,
+    "closure_evidence_required": true,
+    "high_critical_hold": true,
+    "mandatory": true,
+    "medium_requires_mitigation_or_policy": true,
+    "stages": [
+      "RED_TEAM_PRE_DEFINITION",
+      "RED_TEAM_PRE_ACTIVATION",
+      "RED_TEAM_POST_OPERATION"
+    ]
+  },
+  "schema_version": "w7tp-total-field-skill-manifest/1.0",
+  "skill_id": "w7tp.integrated-engineering-delivery",
+  "technology_identity_contract": {
+    "applicable": true,
+    "axes": [
+      "MECHANISM",
+      "CAUSAL_PATH",
+      "DEPENDENCIES",
+      "ELIMINATED_OPERATIONS",
+      "COST_TOPOLOGY",
+      "CARRIER_RECONSTRUCTION_VERIFICATION"
+    ],
+    "carrier_protocol_separation_required": true,
+    "decision_set": [
+      "SAME_MECHANISM",
+      "PARTIAL_MECHANISM_OVERLAP",
+      "EFFECT_ONLY_EQUIVALENT",
+      "DIFFERENT_TECHNOLOGY",
+      "INSUFFICIENT_EVIDENCE"
+    ],
+    "effect_equivalence_not_technical_equivalence": true,
+    "evidence_scale": [
+      "EV0_UNSUPPORTED",
+      "EV1_ASSERTION",
+      "EV2_SECONDARY_SOURCE",
+      "EV3_PRIMARY_DOCUMENT",
+      "EV4_IMPLEMENTATION_EVIDENCE",
+      "EV5_REPRODUCIBLE_CAUSAL_EVIDENCE"
+    ],
+    "gate_skill_ref": "w7tp.technology-identity-audit@1.0.0",
+    "patentability_inference_forbidden": true,
+    "weighted_score_forbidden": true
+  },
+  "verification_contract": {
+    "evidence_required": [
+      "MANIFEST_VALIDATION_RESULT",
+      "RED_TEAM_CONVERGENCE_RESULT",
+      "SKILL_INVENTORY_RESULT",
+      "SHA256_EVIDENCE",
+      "TECHNOLOGY_IDENTITY_GATE_AND_EV_EVIDENCE",
+      "FLOAT_NUMERIC_CONTRACT_AND_REPLAY_EVIDENCE_WHEN_DECLARED",
+      "CURRENT_SOURCE_PROVENANCE",
+      "V23_EVOLUTION_CANDIDATE_CONTRACT"
+    ],
+    "existing_state_check": true,
+    "no_pass_without_evidence": true,
+    "product_acceptance_checks": [
+      "每項技能可產生完整 manifest",
+      "盤點可辨識未登錄、重名與無效 manifest",
+      "繁體中文 HOLD 包含唯一解法",
+      "技能不會自行宣稱正式啟用",
+      "技術比較使用六軸離散裁決且不以效果等同、加權分數或專利推論取代證據",
+      "宣告浮點運算的技能具備完整數值契約、重播證據與非權威邊界"
+    ],
+    "runtime_checks": [
+      "READ_ONLY_INVENTORY",
+      "ADVERSARIAL_MANIFEST_REJECTION",
+      "TECHNOLOGY_IDENTITY_ADVERSARIAL_REJECTION",
+      "FLOAT_DETERMINISTIC_REPLAY_AND_AUTHORITY_BOUNDARY_WHEN_DECLARED"
+    ],
+    "static_checks": [
+      "JSON_PARSE",
+      "JSON_SCHEMA",
+      "MANIFEST_SEMANTIC_VALIDATION",
+      "IMPLEMENTATION_SHA256",
+      "D1_D8_DEFINITION_LOCK",
+      "TECHNOLOGY_IDENTITY_CONTRACT",
+      "FLOATING_POINT_DATA_INDEX_CONTRACT_WHEN_DECLARED",
+      "V23_CANONICAL_HASH_BINDING",
+      "EVOLUTION_CONTRACT_BOUNDARIES",
+      "FLOAT_NUMERIC_CONTRACT_WHEN_DECLARED"
+    ]
+  },
+  "version": "1.0.0",
+  "w7tp_contract": {
+    "acceptance_mode": "NOT_APPLICABLE",
+    "canonical_ref": null,
+    "carrier_is_not_w7tp": true,
+    "claimed": false,
+    "packet_carried_verification": false,
+    "protocol_bearing_packet": false,
+    "reconstruction_conditions": false
+  }
+}
