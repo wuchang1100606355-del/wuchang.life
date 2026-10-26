@@ -1,0 +1,68 @@
+{
+  "schema_id": "W7TP_8D_ADI_V23_MINIMAL_CORE_CAPSULE_MANIFEST_V1",
+  "state": "PASS_MINIMAL_CORE_CAPSULE_SEALED",
+  "architecture": "RAM_SHM_HOT_WORKSPACE_PLUS_SINGLE_FILE_CLOUD_MICROBATCH",
+  "authority_included": false,
+  "plaintext_pii_included": false,
+  "benchmark_proof": {
+    "rounds": 1000,
+    "raw_bytes": 1073372,
+    "batch_pack_bytes": 1620,
+    "bandwidth_reduction_pct": 99.8491,
+    "ram_per_round_us": 79.1,
+    "cloud_flush_ms": 0.91,
+    "cloud_io_ops": 1
+  },
+  "file_count": 12,
+  "total_bytes": 57119,
+  "files": {
+    "ACTIVE_6_ENGINE_CAPABILITY_REGISTRY.json": {
+      "bytes": 3034,
+      "sha256": "4f7c47c17547bf423977e1efc706ac4f83e8fa1f82f4873d33ea37a6e561b9c6"
+    },
+    "ACTIVE_W7TP_CANONICAL_POINTER.json": {
+      "bytes": 2233,
+      "sha256": "ff8ca7f50ced8866534f79ccb41f5c64b2b8512e81b9776c7488c6110c578812"
+    },
+    "CONTRACT.json": {
+      "bytes": 3622,
+      "sha256": "e3c5439657bb4cb97f466ea096d20f8e68ca60307286f01f9c66da0eb120dd2c"
+    },
+    "FIXED_NODE_CHANNEL_COORDINATE_REGISTRY_V23.json": {
+      "bytes": 3297,
+      "sha256": "deedb7862bc7d2c3ad440500fc54cef8fa409c3fc70b115512d6338c73200e0c"
+    },
+    "LIVE_DYNAMIC_CONTEXT.json": {
+      "bytes": 9130,
+      "sha256": "993c3fbd129b721a6fd8d6afe6d10af87ad1c0bef6530fdca3b75981d772277e"
+    },
+    "REAL_VOICE_ORIGIN_CELL_NONZERO_RECEIPT.json": {
+      "bytes": 1036,
+      "sha256": "aa1939bdb1d8bb6aabc706674dd5017848251c5202eb00c67856a285e6df871a"
+    },
+    "cloud_sync_batch_1000_cells.w7pack": {
+      "bytes": 1620,
+      "sha256": "e2d6ad8392e094e20064cdd9eb28db1f85d8d035e060573dbcbe3e501b8ed8d8"
+    },
+    "semantic_adapters.py": {
+      "bytes": 15502,
+      "sha256": "bfcd6e74c6f64a47ec0daeec68719f54d481e500fba7bf97391befb59a7db53f"
+    },
+    "six_engine_capability_hub.py": {
+      "bytes": 1535,
+      "sha256": "f51b9f5e3deb4353ed10fcd05d982f9b77e90d5197785c2fd776a0e8ce9f7c27"
+    },
+    "six_engine_mcp_server.py": {
+      "bytes": 9125,
+      "sha256": "82844dec4c60a3bc0735f10d2a7c186b4f2eaa3e601138c4f9092f8b703064e3"
+    },
+    "universal_file_context_adapter.py": {
+      "bytes": 5722,
+      "sha256": "5b6a7f9acebcade9960b55de536e9181a372e233faa5e3e4167d68b291518dc5"
+    },
+    "bootstrap_node_ram_capsule.py": {
+      "bytes": 1263,
+      "sha256": "ecb9c49ece05ffcf9c5e55ff8d27abee0540f273296a63c6ce74d7cb5f4bc5db"
+    }
+  }
+}
