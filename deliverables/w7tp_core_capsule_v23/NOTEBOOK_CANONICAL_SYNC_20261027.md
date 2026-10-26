@@ -1,0 +1,14 @@
+# W7TP / 8D ADI V2.3 正典回血基線 (2026-10-27)
+
+{
+  "schema_id": "W7TP_20261027_DISK_PERSIST_RAM_CLEAN_AND_PUSH_RECEIPT_V1",
+  "state": "PASS_DISK_PERSISTED_RAM_CLEANED_AND_SUBMITTED",
+  "disk_folder": "/home/taiji_admin/Taiji_Hub/deliverables/w7tp_core_capsule_v23",
+  "persisted_file_count": 19,
+  "total_disk_bytes": 467482,
+  "taiji01_and_msi_shm_ram_cleaned": true,
+  "git_head_commit": "2bc415c266615c610df59ac77b7184a5f3080653",
+  "git_commit_output": "[codex/current-live-state-consolidation-20260915 2bc415c] feat(8d-adi-v23): seal w7tp_core_capsule_v23 (57.96KB), fixed LAN/Tailscale node coordinates, 10K stress receipt & cloud Gemini worker sandbox\n 18 files changed, 1630 insertions(+)\n create mode 100644 deliverables/w7tp_core_capsule_v23/ACTIVE_6_ENGINE_CAPABILITY_REGISTRY.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/ACTIVE_W7TP_CANONICAL_POINTER.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/CAPSULE_MANIFEST.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/CLOUD_GEMINI_WORKER_SANDBOX_RECEIPT.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/CONTRACT.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/FIXED_NODE_CHANNEL_COORDINATE_REGISTRY_V23.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/REAL_VOICE_ORIGIN_CELL_NONZERO_RECEIPT.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/STRESS_TEST_10K_RAM_CAPSULE_RECEIPT.json\n create mode 100644 deliverables/w7tp_core_capsule_v23/bootstrap_node_ram_capsule.py\n create mode 100644 deliverables/w7tp_core_capsule_v23/cloud_sync_batch_1000_cells.w7pack\n create mode 100644 deliverables/w7tp_core_capsule_v23/gst_transceiver.py\n create mode 100644 deliverables/w7tp_core_capsule_v23/msi_verify_10k.py\n create mode 100644 deliverables/w7tp_core_capsule_v23/semantic_adapters.py\n create mode 100644 deliverables/w7tp_core_capsule_v23/six_engine_capability_hub.py\n create mode 100644 deliverables/w7tp_core_capsule_v23/six_engine_mcp_server.py\n create mode 100644 deliverables/w7tp_core_capsule_v23/stress_10000_cells.w7pack\n create mode 100644 deliverables/w7tp_core_capsule_v23/universal_8d_file_engine.py\n create mode 100644 deliverables/w7tp_core_capsule_v23/universal_file_context_adapter.py",
+  "git_push_rc": 0,
+  "git_push_output": "To https://github.com/wuchang1100606355-del/wuchang.life.git\n   a66b28c..2bc415c  codex/current-live-state-consolidation-20260915 -> codex/current-live-state-consolidation-20260915"
+}
