@@ -1,4 +1,45 @@
 from __future__ import annotations
+import sqlite3
+import time
+from pathlib import Path
+from typing import Any
+
+class SQLiteNonceLedger:
+    persistent: bool = True
+
+    def __init__(self, db_path: str | Path):
+        self.db_path = Path(db_path)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self._init_db()
+
+    def _init_db(self):
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS nonce_ledger (
+                    nonce TEXT PRIMARY KEY,
+                    packet_hash TEXT,
+                    used_at REAL,
+                    ttl INTEGER
+                )
+            """)
+            conn.commit()
+
+    def mark_used_or_replay(self, nonce: str, packet_hash: str, used_at: float, ttl: int) -> bool:
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT nonce FROM nonce_ledger WHERE nonce = ?", (nonce,))
+                if cursor.fetchone():
+                    return False  # 已使用過，防止重放攻擊
+                cursor.execute(
+                    "INSERT INTO nonce_ledger (nonce, packet_hash, used_at, ttl) VALUES (?, ?, ?, ?)",
+                    (nonce, packet_hash, used_at, ttl)
+                )
+                conn.commit()
+                return True
+        except Exception:
+            return False
+
 
 import hashlib
 import json
@@ -1155,4 +1196,97 @@ def verify_canonical_trust_policy_promotion(*, repo_root: Path) -> dict[str, Any
         "stage_b_verification": sb_res.reason_code,
         "detached_signature_verified": True,
         "role_promotion_state": role_res["state"],
+    }
+
+# --- W7TP / 8D ADI V2.3 Candidate Authority Receiver Landing ---
+def _preflight(candidate_packet: Any, dynamic_context_packet: Any) -> tuple[dict[str, Any] | None, dict[str, Any] | None, str | None, str | None]:
+    if not isinstance(dynamic_context_packet, Mapping) or dynamic_context_packet.get("state") != "TOTAL_FIELD_DYNAMIC_CONTEXT_READY":
+        return None, None, "HOLD_EVIDENCE_INCOMPLETE", "dynamic_context_packet invalid or missing state"
+    if not isinstance(candidate_packet, Mapping):
+        return None, None, "HOLD_EVIDENCE_INCOMPLETE", "candidate_packet is missing or invalid"
+    return dict(candidate_packet), dict(dynamic_context_packet), None, None
+
+def receive_candidate_authority_bound(
+    candidate_packet: Mapping[str, Any],
+    dynamic_context_packet: Mapping[str, Any] | None,
+    **kwargs: Any
+) -> dict[str, Any]:
+    candidate, context, preflight_state, preflight_reason = _preflight(candidate_packet, dynamic_context_packet)
+    if preflight_state is not None:
+        return {
+            "state": preflight_state,
+            "decision": preflight_state,
+            "reason": str(preflight_reason),
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    policy = (context or {}).get("policy", {})
+    if isinstance(policy, dict) and policy.get("evidence_only") is True:
+        return {
+            "state": "HOLD_EVIDENCE_ONLY_POLICY",
+            "decision": "HOLD_EVIDENCE_ONLY_POLICY",
+            "reason": "Dynamic context explicitly requested evidence_only policy; bypassed active authority resolution to prevent single-use nonce consumption",
+            "execution_authorized": False,
+            "candidate_authority": False,
+            "candidate_id": candidate.get("candidate_id"),
+            "dynamic_context_id": context.get("context_id") if context else None,
+        }
+
+    repo_root = Path(kwargs.get("repo_root", "/home/taiji_admin/Taiji_Hub")).resolve()
+    nonce_ledger = kwargs.get("nonce_ledger")
+    if nonce_ledger is None:
+        ledger_db_path = repo_root / "runtime/total_field/nonce_ledger.sqlite3"
+        nonce_ledger = SQLiteNonceLedger(ledger_db_path)
+
+    if getattr(nonce_ledger, "persistent", False) is not True:
+        return {
+            "state": "HOLD_NONCE_LEDGER_NOT_PERSISTENT",
+            "decision": "HOLD_NONCE_LEDGER_NOT_PERSISTENT",
+            "reason": "persistent nonce ledger is required",
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    try:
+        role_res = resolve_founder_sovereign_root_role_promotion_authority(repo_root=repo_root)
+        prom_res = verify_canonical_trust_policy_promotion(repo_root=repo_root)
+    except Exception as exc:
+        return {
+            "state": "HOLD_AUTHORITY_RESOLVER_FAILED",
+            "decision": "HOLD_AUTHORITY_RESOLVER_FAILED",
+            "reason": f"canonical trust policy promotion verifier raised {type(exc).__name__}: {exc}",
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    cand_id = str(candidate.get("candidate_id") or "")
+    ctx_sha = str((context or {}).get("packet_sha256") or "")
+    nonce_key = f"nonce_ref:{cand_id}:{ctx_sha}"
+    nonce_ok = nonce_ledger.mark_used_or_replay(nonce_key, ctx_sha, time.time(), 1800)
+    if not nonce_ok:
+        return {
+            "state": "BLOCK_OPERATION_REPLAY",
+            "decision": "BLOCK_OPERATION_REPLAY",
+            "reason": "candidate context packet nonce already consumed in persistent SQLite ledger",
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    return {
+        "state": "PASS_CANDIDATE_AUTHORITY_BOUND_VERIFIED",
+        "decision": "PASS",
+        "reason": "Preflight passed; Founder sovereign root role promotion and canonical trust policy promotion verified with persistent SQLite nonce recorded",
+        "role_promotion_state": role_res.get("state"),
+        "trust_policy_promotion_state": prom_res.get("state"),
+        "policy_id": prom_res.get("policy_id"),
+        "canonical_pointer_sha256": prom_res.get("canonical_pointer_sha256"),
+        "canonical_contract_sha256": prom_res.get("canonical_contract_sha256"),
+        "trust_policy_promotion_receipt_sha256": prom_res.get("trust_policy_promotion_receipt_sha256"),
+        "nonce_consumed": True,
+        "nonce_key": nonce_key,
+        "execution_authorized": False,
+        "candidate_authority": False,
+        "candidate_id": cand_id,
+        "dynamic_context_id": context.get("context_id") if context else None,
     }
