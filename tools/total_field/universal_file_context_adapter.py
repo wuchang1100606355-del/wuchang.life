@@ -72,11 +72,14 @@ def bind_file_to_dynamic_context(
     ctx_path = root / "runtime/total_field/CURRENT_LIVE_DYNAMIC_CONTEXT.json"
     ctx = json.loads(ctx_path.read_text(encoding="utf-8"))
     ctx.pop("packet_sha256", None)
+    ctx["state"] = "TOTAL_FIELD_DYNAMIC_CONTEXT_READY"
     ctx["historical_archive_isolation_enforced"] = True
+    ctx["policy"] = {"evidence_only": True, "candidate_only": True, "formal_authority_granted": False}
     ctx.setdefault("universal_file_context_items", [])
     ctx["universal_file_context_items"] = [
         item for item in ctx["universal_file_context_items"] if item.get("path") != rel_path
     ] + [descriptor]
+    ctx["context_items"] = list(ctx["universal_file_context_items"])
     ctx["context_id"] = f"ctx:universal-6engine-bound:{now_compact}"
 
     canonical_bytes = json.dumps(ctx, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
