@@ -1,0 +1,199 @@
+{
+  "schema": "T012_EXISTING_DEPLOYMENT_REOBSERVATION_V1",
+  "run_id": "T012-MSI-LEGACY9002-REOBSERVE-20261013T092727Z",
+  "task_id": "T-012",
+  "node": "MSI",
+  "started_at_utc": "2026-10-13T09:27:27.902946+00:00",
+  "unit_name": "w7tp-xiaoj-root-9002-tailscale.service",
+  "unit_path": "/home/taiji_admin/.config/systemd/user/w7tp-xiaoj-root-9002-tailscale.service",
+  "unit_sha256": "453059b39bfc5040c8d9a2cd5131ac738f891ca69087aff477fa4226538ecc53",
+  "original_audit_unit_sha256": "453059b39bfc5040c8d9a2cd5131ac738f891ca69087aff477fa4226538ecc53",
+  "stop_observed_in_previous_journal_taipei": "2026-10-13T17:16:52+08:00",
+  "mutation_actor_attribution": "Not established by this verifier; stop predates this run. Do not claim this run stopped the service.",
+  "samples": [
+    {
+      "observed_at_utc": "2026-10-13T09:27:27.903114+00:00",
+      "elapsed_seconds": 0.0,
+      "target": {
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      },
+      "enablement_link_exists": false,
+      "local9002": {
+        "MainPID": "361",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "active",
+        "SubState": "running",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      },
+      "lan11435": {
+        "MainPID": "513",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "active",
+        "SubState": "running",
+        "DropInPaths": "",
+        "UnitFileState": "enabled"
+      },
+      "health": [
+        {
+          "url": "http://127.0.0.1:9002/health",
+          "http": 200,
+          "state": "PASS_GATEWAY_PROCESS",
+          "version": "2.3.0",
+          "body_sha256": "a26e9ececc400eb38e9ad7d1ac0487e64d349085c0c6fbb877f3500c39fe9407"
+        },
+        {
+          "url": "http://127.0.0.1:11435/api/version",
+          "http": 200,
+          "state": null,
+          "version": "0.30.11",
+          "body_sha256": "0f22b72ddbaeffb791946a81d6b35f4a2650083769db980638af3fc9d17cb873"
+        }
+      ]
+    },
+    {
+      "observed_at_utc": "2026-10-13T09:27:42.320944+00:00",
+      "elapsed_seconds": 15.0,
+      "target": {
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      },
+      "enablement_link_exists": false,
+      "local9002": {
+        "MainPID": "361",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "active",
+        "SubState": "running",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      },
+      "lan11435": {
+        "MainPID": "513",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "active",
+        "SubState": "running",
+        "DropInPaths": "",
+        "UnitFileState": "enabled"
+      },
+      "health": [
+        {
+          "url": "http://127.0.0.1:9002/health",
+          "http": 200,
+          "state": "PASS_GATEWAY_PROCESS",
+          "version": "2.3.0",
+          "body_sha256": "bc68547d9f30179cdd8beb32e2e377d24f04f902ca5a7a3a2a998987b6ad59c5"
+        },
+        {
+          "url": "http://127.0.0.1:11435/api/version",
+          "http": 200,
+          "state": null,
+          "version": "0.30.11",
+          "body_sha256": "0f22b72ddbaeffb791946a81d6b35f4a2650083769db980638af3fc9d17cb873"
+        }
+      ]
+    },
+    {
+      "observed_at_utc": "2026-10-13T09:28:31.754914+00:00",
+      "elapsed_seconds": 65.001,
+      "target": {
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      },
+      "enablement_link_exists": false,
+      "local9002": {
+        "MainPID": "361",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "active",
+        "SubState": "running",
+        "DropInPaths": "",
+        "UnitFileState": "disabled"
+      },
+      "lan11435": {
+        "MainPID": "513",
+        "NRestarts": "0",
+        "ExecMainStatus": "0",
+        "ActiveState": "active",
+        "SubState": "running",
+        "DropInPaths": "",
+        "UnitFileState": "enabled"
+      },
+      "health": [
+        {
+          "url": "http://127.0.0.1:9002/health",
+          "http": 200,
+          "state": "PASS_GATEWAY_PROCESS",
+          "version": "2.3.0",
+          "body_sha256": "571aed9ae225740033183ec876520c98c7882203921995e008bfa184bd9a5539"
+        },
+        {
+          "url": "http://127.0.0.1:11435/api/version",
+          "http": 200,
+          "state": null,
+          "version": "0.30.11",
+          "body_sha256": "0f22b72ddbaeffb791946a81d6b35f4a2650083769db980638af3fc9d17cb873"
+        }
+      ]
+    }
+  ],
+  "verification_mutated_services": false,
+  "network_or_audio_mutation": false,
+  "formal_effect_permit_created": false,
+  "latest_periodic_health_events": [
+    {
+      "ts": "2026-10-13T17:25:36+08:00",
+      "service": "model_gateway",
+      "url": "http://127.0.0.1:9002/health",
+      "status": "ok"
+    },
+    {
+      "ts": "2026-10-13T17:26:37+08:00",
+      "service": "model_gateway",
+      "url": "http://127.0.0.1:9002/health",
+      "status": "ok"
+    },
+    {
+      "ts": "2026-10-13T17:27:39+08:00",
+      "service": "model_gateway",
+      "url": "http://127.0.0.1:9002/health",
+      "status": "ok"
+    }
+  ],
+  "checks": {
+    "unit_fingerprint_unchanged": true,
+    "inactive_disabled_no_pid_all_samples": true,
+    "retry_counter_stable": true,
+    "local9002_healthy_all_samples": true,
+    "lan11435_healthy_all_samples": true,
+    "preserved_gateway_process": true,
+    "preserved_lan_forward_process": true,
+    "post_start_periodic_health_observed": true
+  },
+  "result": "PASS_POST_DEPLOYMENT_SCOPED_ACCEPTANCE",
+  "completed_at_utc": "2026-10-13T09:28:31.792723+00:00",
+  "limits": [
+    "Does not establish who stopped/disabled the unit or retrospectively issue authorization.",
+    "No claim of HomePod audible recovery, Chrome IPv4 enforcement, or model-generation acceptance.",
+    "Counter stability is limited to this observation window."
+  ]
+}
