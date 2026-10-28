@@ -1,0 +1,45 @@
+{
+  "schema": "w7tp.t029.pre_d8_exact_repair_candidate/1.0",
+  "task_id": "T-029",
+  "requested_effect": "T029_PRE_D8_EXACT_CLASSIFIER_AND_MANIFEST_REPAIR",
+  "authority_observation": {
+    "absolute_path": "/home/taiji_admin/Taiji_Hub/runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+    "preimage_sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+    "proposed_single_effect_successor_sha256": "7a527bea3b25334593f292bded31051746d530e8314180b8b9828a726d32370c"
+  },
+  "git_coordinates": {
+    "main_root": "/home/taiji_admin/Taiji_Hub",
+    "main_head": "2b0b232a8bcacb79d63677cf12d68abb7bd614fe",
+    "review_branch": "review/sovereign-multimodel-20261013",
+    "review_root": "/home/taiji_admin/Taiji_Hub_worktrees/T029_20261013/review",
+    "review_head": "fb10c107afb73787cfcdae08dbe6dacf3440df1d"
+  },
+  "exact_targets": [
+    {
+      "path": "/home/taiji_admin/Taiji_Hub_worktrees/T029_20261013/review/tools/w7tp_staged_packet_classifier.py",
+      "preimage_sha256": "714b270528d430ee8c79807710c01ebc88e9cdf8e74f5954bd0e5c49f82db1eb",
+      "candidate_postimage_sha256": "26fa11a8ae0cae56a50c07be556f745940ea61587719a9b7109f5ac02ebb4b43"
+    },
+    {
+      "path": "/home/taiji_admin/Taiji_Hub_worktrees/T029_20261013/DESIGN_DELIVERY_20261013_R3.json",
+      "preimage_sha256": "164f042c67631f4ac226b6b2c0091847f9b4ba5a0ca148359b419884625875b7",
+      "candidate_postimage_sha256": "90c8088553015a8e328552636e3c3270eb3d588aabff95feb34023e9d2b122fd"
+    }
+  ],
+  "source_review_receipt_sha256": "d374661ddbfc17ecc43a596aee121f4e2fe0bfac09ffb6004950f44748bd4f02",
+  "formal_total_field_review_required": true,
+  "founder_passkey_required": true,
+  "single_use": true,
+  "max_ttl_seconds": 300,
+  "prohibited_effects": [
+    "GIT_PUSH",
+    "MERGE",
+    "DEPLOY",
+    "SERVICE_RESTART",
+    "CANONICAL_CHANGE",
+    "HISTORICAL_RECEIPT_REWRITE",
+    "OTHER_TASK_WRITE",
+    "UNSCOPED_PATH_WRITE"
+  ],
+  "status": "CANDIDATE_ONLY_UNSIGNED"
+}
