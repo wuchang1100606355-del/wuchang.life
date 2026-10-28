@@ -1,0 +1,38 @@
+{
+  "task_id": "T-029",
+  "observed_at": "2026-10-13T10:01:07.220382+00:00",
+  "state": "THREE_DESIGN_DELIVERABLES_WRITTEN",
+  "requirements": 24,
+  "acceptance_cases": 20,
+  "source_baseline_matches": 19,
+  "root_index_preserved": true,
+  "source_review": "NEXT_ACTION",
+  "files": [
+    {
+      "path": "docs/architecture/T029_ARCHITECTURE_DIFF_20261013.md",
+      "sha256": "54a74995ae345c723d6e7c305cb2d026043d216b6a051c93a37a31873dec68d1",
+      "size": 15797
+    },
+    {
+      "path": "docs/architecture/T029_ACCEPTANCE_MATRIX_20261013.json",
+      "sha256": "692da83f7b83660c71ed51a679e77bc5691f63c6839b7de3f8b1983536f9853b",
+      "size": 20383
+    },
+    {
+      "path": "docs/architecture/T029_PHASE_PLAN_20261013.json",
+      "sha256": "4f1a5465a988067aeae935c2c3a4db2730defe55b2d5008ae0c9fb54877a5109",
+      "size": 27368
+    }
+  ],
+  "production_tests_run": 0,
+  "local_classifier_repair": {
+    "state": "PASS_EXACT_T029_PATH_CLASSIFICATION",
+    "verified_paths": 3,
+    "candidate_category": "t029_design_delivery",
+    "runtime_artifact_guard_preserved": true,
+    "unknown_path_guard_preserved": true,
+    "classifier_postimage_sha256": "49dfd689012806234b0de5661220cd8bd3758274572be327002aebdd84a8e553",
+    "formal_d8_admitted": false
+  },
+  "deployed": false
+}
