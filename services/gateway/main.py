@@ -1,3 +1,4 @@
+from services.gateway.xiaoj_video_chat_route import router as xiaoj_chat_router
 from services.gateway.openai_compat import router as openai_compat_router
 from services.gateway.topology_router import router as taiji_topology_router
 from services.gateway.nvr_control import router as nvr_control_router
@@ -347,3 +348,5 @@ from services.gateway.pos_and_xiaoj_router import router as pos_and_xiaoj_router
 app.include_router(pos_and_xiaoj_router)
 
 app.mount("/wuchang_ordering_ui_suite/static", StaticFiles(directory="/home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/wuchang_ordering_ui_suite/static"), name="wc-static")
+
+app.include_router(xiaoj_chat_router)
