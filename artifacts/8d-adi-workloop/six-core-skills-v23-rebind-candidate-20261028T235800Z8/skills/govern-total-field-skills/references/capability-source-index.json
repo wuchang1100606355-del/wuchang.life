@@ -1,0 +1,75 @@
+{
+  "routes": {
+    "ACTIVE_HOMEPOD_BINDING.json": {
+      "bridge_node_ref": null,
+      "current_playback_test": "NOT_RUN",
+      "d8_required": true,
+      "declared_state": "ACTIVE_REGISTERED",
+      "device_ref": "HOME_POD_LAN_AUDIO_NODE_OFFICE_01",
+      "port": null,
+      "ref": "runtime/total_field/device_registry/hom_epod/ACTIVE_HOMEPOD_BINDING.json",
+      "sha256": "454b86e1656deb9b5289dd8b89e1620823dcf867463a7495b1bb9d55d5c15659",
+      "tested_at": null
+    },
+    "ACTIVE_HOMEPOD_PLAYBACK_ROUTE.json": {
+      "bridge_node_ref": "taiji01",
+      "current_playback_test": "NOT_RUN",
+      "d8_required": true,
+      "declared_state": "ACTIVE_CALLABLE_TESTED",
+      "device_ref": "HOME_POD_LAN_AUDIO_NODE_OFFICE_01",
+      "port": 7000,
+      "ref": "runtime/total_field/device_registry/hom_epod/ACTIVE_HOMEPOD_PLAYBACK_ROUTE.json",
+      "sha256": "fcd1d9d88ffeacc2f32da8dbe41e7fb08d5ced4a7e96a2a7a0f03532b7ff2124",
+      "tested_at": "2026-08-06T04:10:35.118820+00:00"
+    }
+  },
+  "sources": {
+    "EVIDENCE.json": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/EVIDENCE.json",
+      "sha256": "9565325a145db3eb9e089fb3f28435f920c204d288362fbb2d37eab2d9d24b2b"
+    },
+    "audio_scene_lab/AUDIO_SCENE_FAST_PATH_RESULT.json": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/audio_scene_lab/AUDIO_SCENE_FAST_PATH_RESULT.json",
+      "sha256": "d8575ac3c39a8d1fc64b7ef83422b18c8fe2ca3bbea51fdaf5553dfb44194ce1"
+    },
+    "audio_scene_lab/EMOTION_LUT_V23_CANDIDATE.json": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/audio_scene_lab/EMOTION_LUT_V23_CANDIDATE.json",
+      "sha256": "f7213a6eb79c8ca38b39bd0aa03e45e14e1eef10966136334976ae9781887ea0"
+    },
+    "audio_scene_lab/MSI_ZERO_DISK_EVIDENCE.json": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/audio_scene_lab/MSI_ZERO_DISK_EVIDENCE.json",
+      "sha256": "59587f8409e571b224b81024fea3a3b026c3ba1099381861197678bd48ec9f80"
+    },
+    "audio_scene_lab/TRUST_BRIDGE_RUN.json": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/audio_scene_lab/TRUST_BRIDGE_RUN.json",
+      "sha256": "108071c80e50448cfc2d4e4abe8a0cc8f3299111051dd87e10fa8de0cf1b0cd0"
+    },
+    "audio_scene_lab/audio_scene_trust_bridge.py": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/audio_scene_lab/audio_scene_trust_bridge.py",
+      "sha256": "a569b4d84d31e96fba0bfcdf30ec9b4e60d570b8824824c2d83b91c40de1720e"
+    },
+    "audio_scene_lab/run_emotion_lut.py": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/audio_scene_lab/run_emotion_lut.py",
+      "sha256": "06c07aa52633d7aa09a4ffcdde09bbbd49aeea05e2d240f21b0392a0b2b5cad2"
+    },
+    "candidate/origin_cell_verified_reconstruction.py": {
+      "evidence_class": "OBSERVED_CURRENT_ARTIFACT_HISTORICAL_EXECUTION_NOT_RERUN",
+      "path": "artifacts/8d-adi-workloop/origin-cell-verified-reconstruction-candidate-20261023T233100Z8/candidate/origin_cell_verified_reconstruction.py",
+      "sha256": "af5dd620e0c5297e2c2a847d09dd6583488b182f017a3d32a482c0f50e980cd4"
+    }
+  },
+  "state": "CANDIDATE_ONLY",
+  "unresolved": [
+    "02 device identity",
+    "active Seat/profile",
+    "current exact D8 receipt",
+    "cross-platform audio replay"
+  ]
+}

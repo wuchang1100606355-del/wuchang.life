@@ -1,0 +1,28 @@
+{
+  "RED_TEAM_POST_OPERATION": {
+    "independent_ref": "evidence/independent-forward-test.json",
+    "manifest_result_ref": "evidence/manifest-validation-round2.json",
+    "negative_tests_ref": "evidence/v23-validation-round2.json",
+    "result": "PASS_CANDIDATE_BOUNDARIES",
+    "unchanged_ref": "evidence/protected-postimage.json"
+  },
+  "RED_TEAM_PRE_ACTIVATION": {
+    "reason": "本輪僅候選定義；無安裝、啟用、播放或正式變更",
+    "result": "NOT_APPLICABLE_WITH_EVIDENCE"
+  },
+  "RED_TEAM_PRE_DEFINITION": {
+    "event": "evt-0003",
+    "mitigations": [
+      "source versions explicitly separated",
+      "formal effects excluded"
+    ],
+    "result": "CANDIDATE_SCOPE_SAFE"
+  },
+  "open_high_findings_for_candidate_construction": [],
+  "runtime_promotion_debt": [
+    "valid Seat/profile and exact D8 review",
+    "02 actual device identity",
+    "numeric/runtime dependency contract before cross-platform audio reuse",
+    "cloud resource baseline alignment before installation"
+  ]
+}

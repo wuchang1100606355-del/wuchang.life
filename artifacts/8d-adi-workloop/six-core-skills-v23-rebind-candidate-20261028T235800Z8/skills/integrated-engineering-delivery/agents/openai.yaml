@@ -1,0 +1,13 @@
+interface:
+  display_name: 整合式工程交付
+  short_description: 將自創架構技術意圖收斂成安全一鍵執行、驗證與證據化完整成果
+  default_prompt: 使用 $integrated-engineering-delivery 盤點這項技術工作，安全地一鍵完成並附上驗證證據。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

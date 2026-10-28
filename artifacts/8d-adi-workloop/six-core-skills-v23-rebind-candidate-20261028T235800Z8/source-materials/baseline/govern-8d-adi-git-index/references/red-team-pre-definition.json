@@ -1,0 +1,137 @@
+{
+  "schema_version": "w7tp-red-team-record/1.0",
+  "stage": "RED_TEAM_PRE_DEFINITION",
+  "skill_id": "w7tp.govern-8d-adi-git-index",
+  "skill_version": "1.4.0",
+  "reviewed_on": "2026-08-27",
+  "decision": "PASS_WITH_ENFORCED_E2_TO_E4_EXECUTOR_HANDOFF_BOUNDARY",
+  "open_critical": [],
+  "open_high": [],
+  "findings": [
+    {
+      "id": "RT-GIT-001",
+      "severity": "CRITICAL",
+      "risk": "An equivalent reconstruction could be presented under an existing Git OID.",
+      "closure": "The packet validator requires EXACT_BYTES for an expected OID and rejects EQUIVALENT_STATE with an expected OID.",
+      "evidence": ["scripts/validate_git_index.py", "scripts/test_skill.py", "scripts/test_validate_git_index.py"]
+    },
+    {
+      "id": "RT-GIT-002",
+      "severity": "CRITICAL",
+      "risk": "A sidecar index could rewrite live objects, refs, history, or canonical authority.",
+      "closure": "The skill is limited to E2 candidate files; protected operations and paths route to HOLD, and no execution capability is supplied.",
+      "evidence": ["SKILL.md", "scripts/git_review_gate.py", "total-field-skill-manifest.json"]
+    },
+    {
+      "id": "RT-GIT-003",
+      "severity": "HIGH",
+      "risk": "Missing bases, generator drift, nondeterminism, or partial lookup closure could make incomplete state non-reconstructable.",
+      "closure": "Rule and lookup references require SHA-256 binding; missing prerequisites quarantine; output depth and size are bounded.",
+      "evidence": ["references/index-contract.md", "scripts/validate_git_index.py", "scripts/test_validate_git_index.py"]
+    },
+    {
+      "id": "RT-GIT-004",
+      "severity": "HIGH",
+      "risk": "Physical pack order could be confused with commit-parent causal order.",
+      "closure": "The skill explicitly separates pack/MIDX placement from Git DAG lineage and treats changed parent or tree data as new history.",
+      "evidence": ["references/git-boundary.md", "SKILL.md"]
+    },
+    {
+      "id": "RT-GIT-005",
+      "severity": "HIGH",
+      "risk": "Multiple receivers or identity/Seat drift could bypass the authority boundary.",
+      "closure": "The packet requires one versioned Receiver, identity root, Seat binding, nonce, expiry, append-only event linkage, and CANDIDATE_ONLY D8.",
+      "evidence": ["references/index-contract.md", "scripts/validate_git_index.py", "total-field-skill-manifest.json"]
+    },
+    {
+      "id": "RT-GIT-006",
+      "severity": "CRITICAL",
+      "risk": "Untrusted change metadata, symlinks, tracked files declared as additions, skill or agent control files/directories, executable Python, or CI autoload paths could receive a false-safe route.",
+      "closure": "The gate validates typed inputs, rejects repository-root candidates, checks symlinks before resolution, proves additions against a checksum-valid Git index, limits SAFE placement to evidence/references/reports/schemas, routes root/other placements plus skill/agent controls and every Python file to review, and holds process/network/dynamic-execution capability plus CI/autoload paths.",
+      "evidence": ["scripts/git_review_gate.py", "scripts/test_skill.py", "references/review-routing.md"]
+    },
+    {
+      "id": "RT-GIT-007",
+      "severity": "CRITICAL",
+      "risk": "An AI could treat HOLD, permission failure, timeout, or session termination as permission to forget a requested push.",
+      "closure": "Every incomplete push must produce one durable deferred-push obligation with an accountable agent, exact next attempt, a distinct independently loaded E2 queue ACK, and a hash-bound acknowledged $complete-deferred-git-push ticket; terminal evidence remains limited to executor remote-OID verification, Founder cancellation, or a live successor.",
+      "evidence": ["SKILL.md", "references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    },
+    {
+      "id": "RT-GIT-008",
+      "severity": "HIGH",
+      "risk": "A timestamp or a queue record stored only inside the unpushed target repository could be falsely described as durable scheduling.",
+      "closure": "The obligation validator derives repository and Git-common-dir containment from the closed executor request and requires an append-only ACK from a governed queue outside both; it distinguishes active durable scheduling from handoff-only resumption.",
+      "evidence": ["references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    },
+    {
+      "id": "RT-GIT-009",
+      "severity": "CRITICAL",
+      "risk": "Reviewed file hashes could be pushed from a commit whose parent, tree, reachable history, hooks, LFS, CI, tags, or other side effects were not reviewed.",
+      "closure": "A ready obligation must bind one source commit, parent, tree, reachable-object and reviewed-history hashes, exact old remote OID and refspec, plus resolved hook/LFS/CI effects; force, deletion, tags, submodule recursion, multiple refs, and unrelated dirty files are denied.",
+      "evidence": ["references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    },
+    {
+      "id": "RT-GIT-010",
+      "severity": "CRITICAL",
+      "risk": "A missing or forged executor handoff, guessed HEAD, legacy record, or routing ACK could be presented as E4 activation or executable completion.",
+      "closure": "The /1.2 validator closes every E2 object, binds the exact $complete-deferred-git-push skill/version/input contract, dgp-64hex ticket/request/ACK hashes, obligation back-reference, three fixed E4 responsibilities, explicit non-activation state and full-record handoff SHA-256. It safely loads canonical immutable request, first ENQUEUED event, and independent E2 ACK bytes only through a root-issued queue trust config; caller-filled references alone return HOLD. WAITING_EXACT_TARGET still requires that trusted acknowledged ticket while rejecting source closure, executable lease, READY/PUSHED claims, and guessed commit substitution. Legacy /1.0 and /1.1 are read-only migration HOLD.",
+      "evidence": ["SKILL.md", "references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    },
+    {
+      "id": "RT-GIT-011",
+      "severity": "CRITICAL",
+      "risk": "One self-authored obligation could reuse or fabricate an executor queue ACK, or confuse the E2 obligation ACK with the independent E4 executor ACK.",
+      "closure": "The two ACK references are distinct. The executor ACK path is derived from dgp-64hex; canonical request, initial event, and independent E2 ACK bytes are read through O_NOFOLLOW same-inode checks. Exact schemas, ticket identity, hash chain, ENQUEUED semantics, request hash, obligation core, handoff payload, trust-config hash and full subject/effect bindings are independently verified. Document-only validation cannot PASS.",
+      "evidence": ["references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    },
+    {
+      "id": "RT-GIT-012",
+      "severity": "HIGH",
+      "risk": "Unknown ACTIVE, activation, lease, receipt, or canonical-authority fields could be smuggled into a packet after recomputing its event hash.",
+      "closure": "The index validator uses exact key equality at the top level, receiver, event, every D1-D8 object and every D6 rule/lookup entry. Candidate reconstruction receipts remain null; duplicate keys, nonfinite JSON, noncanonical bytes and timestamps fail closed.",
+      "evidence": ["references/index-contract.md", "scripts/validate_git_index.py", "scripts/test_validate_git_index.py"]
+    },
+    {
+      "id": "RT-GIT-013",
+      "severity": "CRITICAL",
+      "risk": "A caller-controlled receipt reference or historical executor terminal could be presented as current remote and Receiver closure.",
+      "closure": "The validator loads event/receipt bytes only as integrity coordinates and never calls them a verified terminal. Because it does not reproduce reservation, final-validation, consume-ACK/revocation continuity, CAS, protected-state and live Receiver/remote semantics, it sets terminal_readback_verified=false and returns HOLD_EXTERNAL_EXECUTOR_TERMINAL_UNVERIFIED (or HOLD_TERMINAL_AUTHORITATIVE_RECHECK_REQUIRED without an external root), while preserving routing to $complete-deferred-git-push even when the external queue is unreadable.",
+      "evidence": ["SKILL.md", "references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    },
+    {
+      "id": "RT-GIT-014",
+      "severity": "CRITICAL",
+      "risk": "The obligation producer or another same-euid process could create a lookalike executor queue, self-issue ACK bytes, assert containment, or mix a valid ticket across repository, identity, authority, test, or effect scope.",
+      "closure": "The /1.2 CLI requires canonical self-hashed root-owned mode-0444 trust config/1.1. It pins a root-owned non-writable parent realpath/device/inode/mode, exact child basename, non-root queue-owner UID/username, distinct validator UID/username, dedicated reader GID/name, state-root identity, marker, executor contracts, activation window, and receipt. Every state-root/subdirectory fd must be owner/GID 0750 and every evidence fd owner/GID 0440. The live validator is rejected unless its euid exactly matches the configured validator, differs from root/queue owner, belongs to the reader GID, and both process/thread CapEff and CapPrm are zero and canonical. Thus another reader-group member, a resealed identity/group config, group drift, and mixed subject/effect evidence HOLD.",
+      "evidence": ["SKILL.md", "references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    },
+    {
+      "id": "RT-GIT-015",
+      "severity": "HIGH",
+      "risk": "A queue or its trusted parent could be renamed into the target repository and replaced at the configured pathname between request, event, ACK, or terminal evidence reads.",
+      "closure": "Trust config/1.1 pins the parent and child identities plus the queue owner and reader GID. The validator opens the parent then bounded child with openat/O_NOFOLLOW, validates owner/GID/mode on every directory and evidence file, reads every external artifact from that fd tree, and finally revalidates the held descriptors, the child through the held parent, and the canonical parent path plus child. Child and true parent-path replacement barriers at request/ACK boundaries deterministically HOLD.",
+      "evidence": ["references/deferred-push-obligation.md", "scripts/validate_deferred_push.py", "scripts/test_skill.py"]
+    }
+  ],
+  "residual_limits": [
+    "No live object, ref, pack, GC, promisor, history, deployment, or canonical operation is authorized.",
+    "This E2 skill produces and validates the durable obligation; only $complete-deferred-git-push may perform the separately governed E4 execution, remote-OID closure, or authoritative terminal recheck under exact current authorization.",
+    "A valid route, handoff hash, executor ticket, queue ACK, local test, or manifest PASS is not activation.",
+    "Formal ACTIVE state still requires a separate Total Field D8 receipt.",
+    "The index is not a complete backup until an empty-store exact reconstruction test passes.",
+    "NONROOT_QUEUE_POSITIVE_INTEGRATION_NOT_RUN_SANDBOX_UID_MAP: this sandbox cannot materialize the three-party mapping of root provisioner, configured non-root validator UID, different non-root queue owner, and dedicated reader GID with 0750/0440 evidence; live code remains fail-closed and that positive filesystem integration remains required before activation.",
+    "NONROOT_CONFIG_OWNER_NEGATIVE_NOT_RUN_SANDBOX_UID_MAP: this sandbox cannot chown a dedicated trust-config fixture to a mapped non-root UID; the live reader's root-owner equality check remains fail-closed and the wrong-owner filesystem negative must be rerun on the same activation host.",
+    "NONROOT_PARENT_OWNER_NEGATIVE_NOT_RUN_SANDBOX_UID_MAP: this sandbox cannot chown the root anchor to a mapped non-root UID; the live reader requires root ownership and the filesystem negative must be rerun on the activation host.",
+    "TRUST_PROVISIONER_AND_OBLIGATION_PRODUCER_SEPARATION_REQUIRED: current euid/CapEff/CapPrm checks cannot prove that no root-capable producer acted earlier; activation requires a separate root provisioner, a capability-free non-root validator/producer, and a different non-root executor queue owner.",
+    "TRUST_PROVISIONER_PREINSTALLED_BIND_MOUNT_ALIAS_FORBIDDEN: a root/CAP_SYS_ADMIN provisioner could preinstall an overlapping bind or mount alias before validation; activation provisioning must prohibit such aliases because the capability-free live validator cannot prove their historical absence."
+  ],
+  "primary_git_sources": [
+    "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects",
+    "https://git-scm.com/docs/gitformat-pack",
+    "https://git-scm.com/docs/multi-pack-index",
+    "https://git-scm.com/docs/commit-graph",
+    "https://git-scm.com/docs/partial-clone",
+    "https://git-scm.com/docs/git-fsck"
+  ]
+}

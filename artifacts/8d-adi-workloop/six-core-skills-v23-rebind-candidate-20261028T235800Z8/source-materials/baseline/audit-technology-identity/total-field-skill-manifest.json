@@ -1,0 +1,148 @@
+{
+  "schema_version": "w7tp-total-field-skill-manifest/1.0",
+  "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "skill_id": "w7tp.technology-identity-audit",
+  "display_name_zh": "8D 技術身分閘門",
+  "version": "1.0.0",
+  "language": "zh-Hant",
+  "founder_authority_ref": "FOUNDER_TOTAL_FIELD_NATURAL_PERSON_AUTHORITY",
+  "identity_and_seat": {
+    "member_required": true,
+    "xiaoj_identity_required": true,
+    "allowed_roles": ["FOUNDER_DEVELOPER", "MEMBER_AUTHORIZED_ANALYST", "TOTAL_FIELD_REVIEWER"],
+    "fixed_role_capacity_required": true,
+    "active_seat_required": true,
+    "reservation_non_executable": true,
+    "access_profile_refs": ["LLM_IDENTITY_ACCESS_PROFILE_FOUNDER_DEVELOPER", "LLM_IDENTITY_ACCESS_PROFILE_MEMBER_ANALYST", "LLM_IDENTITY_ACCESS_PROFILE_TOTAL_FIELD_REVIEWER"],
+    "cross_member_plaintext_allowed": false
+  },
+  "product_output_contract": {
+    "intended_users": ["Founder", "受授權技術分析者", "總場審查者"],
+    "user_need": "在效果、carrier、介面或效能相似時，仍能以因果證據辨識真正的技術同一、局部重疊、效果等價或技術差異。",
+    "product_outcome": "形成一份唯讀、六軸、離散且可追溯的技術身分候選裁決，不使用加權相似分數，也不推論專利或法律結論。",
+    "deliverables": ["六軸技術比較結果", "五種離散技術身分裁決", "EV0-EV5 證據成熟度與來源引用", "結構性消除與一般優化分界", "carrier、重構與驗證語義分界", "唯一缺件或下一證據行動"],
+    "interface_behavior": "接受兩項技術及六軸證據，以繁體中文先回傳裁決與決定性軸，再說明證據邊界、未知與唯一下一步。",
+    "quality_thresholds": ["六軸完整", "效果等同不取代技術等同", "零加權或浮點身分分數", "EV 證據與 E0-E5 效果分類零混用", "carrier 與重構驗證語義零混淆", "專利與法律推論為零"],
+    "acceptance_criteria": ["決定性輸入符合 technology-identity-gate/1.0", "六軸名稱與關係完整", "EV1 以上皆有來源引用", "SAME_MECHANISM 的六軸皆至少 EV3", "同效果但強證據差異回傳 EFFECT_ONLY_EQUIVALENT", "自測全部通過", "未發生資料庫、ADI、canonical 或正式申請寫入"],
+    "failure_behavior": "缺少任一軸、證據、來源或技術範圍時回傳 INSUFFICIENT_EVIDENCE 或 PRECONDITION_MISSING；不得以效果類比、模型流暢度或品牌替代證據。",
+    "prohibited_outputs": ["加權 IdentityScore、相似度百分比或浮點身分值", "以同效果、同 carrier、同協定或同介面宣稱技術同一", "把優化宣稱成結構性消除", "把一種驗證的消除擴張成完全免驗證", "專利性、新穎性、侵權、有效性、所有權、法律狀態或全球優越性結論", "ALLOW、ACTIVE、canonical 或正式裁決"],
+    "allowed_side_effects": []
+  },
+  "technology_identity_contract": {
+    "applicable": true,
+    "gate_skill_ref": "w7tp.technology-identity-audit@1.0.0",
+    "axes": ["MECHANISM", "CAUSAL_PATH", "DEPENDENCIES", "ELIMINATED_OPERATIONS", "COST_TOPOLOGY", "CARRIER_RECONSTRUCTION_VERIFICATION"],
+    "decision_set": ["SAME_MECHANISM", "PARTIAL_MECHANISM_OVERLAP", "EFFECT_ONLY_EQUIVALENT", "DIFFERENT_TECHNOLOGY", "INSUFFICIENT_EVIDENCE"],
+    "evidence_scale": ["EV0_UNSUPPORTED", "EV1_ASSERTION", "EV2_SECONDARY_SOURCE", "EV3_PRIMARY_DOCUMENT", "EV4_IMPLEMENTATION_EVIDENCE", "EV5_REPRODUCIBLE_CAUSAL_EVIDENCE"],
+    "effect_equivalence_not_technical_equivalence": true,
+    "weighted_score_forbidden": true,
+    "carrier_protocol_separation_required": true,
+    "patentability_inference_forbidden": true
+  },
+  "classification": {
+    "primary_family": "F08",
+    "secondary_families": ["F03", "F04", "F17", "F19", "F20"],
+    "maximum_effect_class": "E1"
+  },
+  "information_context": {
+    "identity_derived_scope": true,
+    "required_field_domains": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"],
+    "provenance_required": true,
+    "retrieved_content_is_instruction": false,
+    "raw_protected_context_allowed": false,
+    "protected_representation": ["SOURCE_REF", "SPECIFICATION_REF", "IMPLEMENTATION_HASH", "TEST_RECEIPT", "DEIDENTIFIED_CAUSAL_EVIDENCE", "OPAQUE_HANDLE"],
+    "retention": "EVIDENCE_REFERENCES_ONLY"
+  },
+  "d1_d8_projection": {
+    "D1": {"name": "INTENT", "required": true, "contract": "記錄要比較的兩項技術、直接技術身分問題及可見效果關係。"},
+    "D2": {"name": "STATE", "required": true, "contract": "記錄每一軸的 SAME、PARTIAL、DIFFERENT、UNKNOWN 與目前候選裁決。"},
+    "D3": {"name": "COORDINATE", "required": true, "contract": "綁定技術版本、來源日期、系統位置、比較範圍、因果步驟及適用的8D／ADI引用。"},
+    "D4": {"name": "EVIDENCE", "required": true, "contract": "保存六軸 EV0-EV5、來源引用、實作與可重播因果證據，分開事實、重構、推論、衝突與未知。"},
+    "D5": {"name": "EXECUTION_POLICY", "required": true, "contract": "只允許唯讀來源解析與離散候選裁決；禁止加權分數、寫回、啟用或正式提交。"},
+    "D6": {"name": "GENERATIVE_TRANSMISSION", "required": true, "contract": "本技能不宣稱生成式傳輸；比較時把 carrier 與 W7TP 狀態場重構、協定、驗證及 acceptance 語義分離。"},
+    "D7": {"name": "RED_TEAM_RISK_CONFINEMENT", "required": true, "contract": "阻擋效果類比、六軸缺漏、證據級別碰撞、加權身分分數、優化冒充消除、免驗證擴張及專利法律推論。"},
+    "D8": {"name": "ENVELOPE_AUTHORITY", "required": true, "contract": "綁定身分 Seat、唯讀範圍、來源證據、候選權威及 Total Field receipt；技能不得自行裁決。"}
+  },
+  "authority_boundary": {
+    "allowed_outputs": ["CANDIDATE", "EVIDENCE", "HOLD", "AUTHORIZATION_REQUEST", "HUMAN_REPLY", "TOTAL_FIELD_DECISION_RECEIPT"],
+    "forbidden_authority": ["ALLOW", "COMMITTED", "COMMIT_APPLIED", "TFS", "TFID", "TOTAL_FIELD_HASH", "CANONICAL_POINTER", "FINAL_SEAL", "DIRECT_DB_WRITE", "DIRECT_DEPLOY"],
+    "total_field_receiver_required": true,
+    "total_field_receiver_ref": "TOTAL_FIELD_TECHNOLOGY_IDENTITY_RECEIVER",
+    "human_final_effect_classes": ["E4", "E5"]
+  },
+  "execution_contract": {
+    "nodes": ["AUTHORIZED_READONLY_ANALYSIS_NODE", "TOTAL_FIELD_NODE"],
+    "carriers": ["LOCAL_FILESYSTEM", "APPROVED_READONLY_SOURCE_REFERENCE"],
+    "dependencies": ["PYTHON_3_STANDARD_LIBRARY", "SIX_AXIS_EVIDENCE_INPUT", "VALID_MEMBER_XIAOJ_SEAT_PROFILE", "TOTAL_FIELD_RECEIVER"],
+    "resource_limits": {"read_only": true, "network_optional_for_source_retrieval": true, "database_write": false, "adi_write": false, "weighted_score": false},
+    "persistent_side_effects": [],
+    "forbidden_effects": ["DATABASE_WRITE", "ADI_WRITE", "CANONICAL_CHANGE", "DEPLOY", "RESTART", "ROUTER_WRITE", "FORMAL_SUBMISSION", "SECRET_READ", "MEMBER_PLAINTEXT_READ", "WEIGHTED_IDENTITY_SCORE", "PATENT_OR_LEGAL_DECISION"],
+    "rollback": "不產生持久化作用；丟棄本次未保存的候選比較，保留來源、既有技能、manifest、receipt 與系統狀態。",
+    "existing_state_preserved": true
+  },
+  "w7tp_contract": {
+    "claimed": false,
+    "canonical_ref": null,
+    "protocol_bearing_packet": false,
+    "reconstruction_conditions": false,
+    "packet_carried_verification": false,
+    "acceptance_mode": "NOT_APPLICABLE",
+    "carrier_is_not_w7tp": true
+  },
+  "red_team_contract": {
+    "mandatory": true,
+    "stages": ["RED_TEAM_PRE_DEFINITION", "RED_TEAM_PRE_ACTIVATION", "RED_TEAM_POST_OPERATION"],
+    "high_critical_hold": true,
+    "medium_requires_mitigation_or_policy": true,
+    "closure_evidence_required": true,
+    "authorization_cannot_waive_finding": true
+  },
+  "hold_contract": {
+    "language": "zh-Hant",
+    "required_fields": ["question", "answer", "risk_found", "possible_effect", "protected_state", "solution", "user_action_required"],
+    "one_solution": true,
+    "raw_code_only_forbidden": true
+  },
+  "authorization_contract": {
+    "required_for_effect_classes": ["E3", "E4", "E5"],
+    "single_use": true,
+    "expiry_required": true,
+    "input_hashes_required": true,
+    "effect_and_risk_explanation_required": true,
+    "rollback_required": true,
+    "stop_conditions_required": true,
+    "total_field_review_required": true
+  },
+  "verification_contract": {
+    "product_acceptance_checks": ["六軸完整", "EV 證據與引用完整", "離散決策規則一致", "效果等同不等於技術等同", "carrier 與重構驗證分離", "零加權分數", "零專利法律推論"],
+    "static_checks": ["SKILL_QUICK_VALIDATE", "PYTHON_PY_COMPILE", "TOTAL_FIELD_MANIFEST_SCHEMA", "TECHNOLOGY_IDENTITY_CONTRACT"],
+    "runtime_checks": ["SEVEN_DETERMINISTIC_SELF_TESTS", "MISSING_AXIS_REJECTION", "WEIGHTED_SCORE_ABSENCE"],
+    "evidence_required": ["SIX_AXIS_RESULT", "EV_EVIDENCE_REFS", "DETERMINISTIC_GATE_RESULT", "SELF_TEST_RESULT", "IMPLEMENTATION_SHA256"],
+    "existing_state_check": true,
+    "no_pass_without_evidence": true
+  },
+  "lifecycle": {
+    "state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+    "activation_requires_total_field_receipt": true,
+    "total_field_decision_ref": null,
+    "suspension_triggers": ["IMPLEMENTATION_OR_MANIFEST_HASH_DRIFT", "IDENTITY_OR_SEAT_INVALID", "SIX_AXIS_CONTRACT_DRIFT", "WEIGHTED_SCORE_INTRODUCED", "EFFECT_EQUIVALENCE_SHORTCUT", "CARRIER_RECONSTRUCTION_COLLAPSE", "PATENT_OR_LEGAL_INFERENCE", "OPEN_HIGH_OR_CRITICAL_FINDING"],
+    "replacement_refs": [],
+    "retirement_preserves_evidence": true,
+    "session_revocation_on_seat_or_profile_change": true
+  },
+  "evidence_and_hashes": {
+    "hash_algorithm": "SHA-256",
+    "manifest_self_hash": "PENDING_TOTAL_FIELD_SEAL",
+    "manifest_hash_excludes_field": "evidence_and_hashes.manifest_self_hash",
+    "canonical_refs": ["references/technology-identity-contract.md", "TOTAL_FIELD_SKILL_GOVERNANCE_TECHNOLOGY_IDENTITY_CONTRACT"],
+    "schema_refs": ["w7tp://schemas/total-field-skill-manifest-v1", "technology-identity-gate/1.0"],
+    "implementation_refs": ["SKILL.md", "agents/openai.yaml", "references/technology-identity-contract.md", "scripts/technology_identity_gate.py"],
+    "implementation_sha256": {
+      "SKILL.md": "572569e3f0cb1f9212764702c36f89ef7725f9caad920e46cf6df7c27d1541ee",
+      "agents/openai.yaml": "88b6106bc9010fd544213b45445f7bbc7ec3fe4f70968db4b658f76ad21ffdc0",
+      "references/technology-identity-contract.md": "7fcb202ac44b415fd1a99dcac81a0775afecb318938a99f4cea875d3a3e46ef6",
+      "scripts/technology_identity_gate.py": "c3833f19b496831e14ae2b8a0068f125772a165099ec5c2e4f468149513ed5e2"
+    },
+    "evidence_destination": "runtime/total_field/technology_identity/<run_id>/"
+  }
+}

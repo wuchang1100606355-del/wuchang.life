@@ -1,0 +1,125 @@
+{
+  "created_at": "2026-10-24T01:54:45+08:00",
+  "d1_d8": {
+    "D1": {
+      "evidence_label": "DEFINITION",
+      "name": "INTENT",
+      "observation_status": "DECLARED_ONLY",
+      "state": "KNOWN",
+      "value": "建立六大技能 V2.3 定義、三項能力候選契約與驗證證據；不部署、不改正典"
+    },
+    "D2": {
+      "name": "STATE",
+      "state": "KNOWN",
+      "value": "SIX_CANDIDATE_DEFINITIONS_VALID_NOT_INSTALLED"
+    },
+    "D3": {
+      "name": "COORDINATE",
+      "state": "KNOWN",
+      "value": {
+        "adi_resolution": "RANGE_UNRESOLVED",
+        "branch": "codex/current-live-state-consolidation-20260915",
+        "head": "3594b4e8292d537ff8d111e44c70c4fc6f177b39",
+        "logical_time": "2026-10-24T01:54:45+08:00",
+        "node": "taiji01",
+        "run_path": "artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8"
+      }
+    },
+    "D4": {
+      "name": "EVIDENCE",
+      "state": "KNOWN",
+      "value": "evidence/acceptance.json; current file observations separate from historical audio runs"
+    },
+    "D5": {
+      "name": "EXECUTION_POLICY",
+      "state": "KNOWN",
+      "value": {
+        "action": "CANDIDATE_ARTIFACTS_ONLY",
+        "effect_class": "E2",
+        "forbidden": [
+          "ADI_WRITE",
+          "CANONICAL_MUTATION",
+          "DB_WRITE",
+          "DEPLOY",
+          "POINTER_MUTATION",
+          "ROLE_OR_SEAT_CHANGE"
+        ],
+        "rollback": "REMOVE_ONLY_THIS_UNPROMOTED_RUN_DIRECTORY"
+      }
+    },
+    "D6": {
+      "name": "GENERATIVE_TRANSMISSION",
+      "state": "NOT_REQUIRED",
+      "value": {
+        "carrier_is_not_w7tp": true,
+        "claimed": false,
+        "technical_definition": "NOT_CLAIMED"
+      }
+    },
+    "D7": {
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "state": "KNOWN",
+      "value": {
+        "open_findings": [],
+        "stop_on_high_or_critical": true
+      }
+    },
+    "D8": {
+      "name": "ENVELOPE_AUTHORITY",
+      "state": "KNOWN",
+      "value": {
+        "candidate_only": true,
+        "canonical_mutation": false,
+        "total_field_decision": "NOT_REVIEWED",
+        "total_field_receiver": "TOTAL_FIELD_WORKLOOP_RECEIVER"
+      }
+    }
+  },
+  "identity_and_seat": {
+    "access_profile_ref": "UNKNOWN_UNVERIFIED",
+    "member_boundary": "UNKNOWN_UNVERIFIED",
+    "member_ref": "UNKNOWN_UNVERIFIED",
+    "natural_person_ref": "UNKNOWN_UNVERIFIED",
+    "role_id": "UNKNOWN_UNVERIFIED",
+    "seat_id": "UNKNOWN_UNVERIFIED",
+    "xiaoj_identity_ref": "UNKNOWN_UNVERIFIED"
+  },
+  "lifecycle_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "maximum_effect_class": "E2",
+  "product_output_contract": {
+    "acceptance_ids": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4",
+      "AC-5"
+    ],
+    "budget_fuse": {
+      "limit": 2,
+      "unit": "attempt"
+    },
+    "non_goals": [
+      "deploy",
+      "activate",
+      "canonical mutation",
+      "cloud skill update",
+      "audio playback"
+    ],
+    "one_sentence": "建立六大技能 V2.3 定義、三項能力候選契約與驗證證據；不部署、不改正典",
+    "title": "六大技能 V2.3 隔離升級候選"
+  },
+  "red_team": {
+    "RED_TEAM_POST_OPERATION": "evt-0007",
+    "RED_TEAM_PRE_ACTIVATION": "evt-0006",
+    "RED_TEAM_PRE_DEFINITION": "evt-0003"
+  },
+  "run_id": "six-core-skills-v23-upgrade-candidate-20261024T015400Z8",
+  "schema_version": "w7tp-8d-adi-evidence-workloop/1.0",
+  "source_hashes": {
+    "audio-source-bindings.json": "cdf3bf40b46e58380a95ccc8c5724c1c78c38c812dbbfb0eb5b21e8c9c6b47af",
+    "coordinate.json": "2d4fda7e6a3a59787d9ff1a6e6eec426dd435c71e2dd3c873b8b7036c2dbd715",
+    "independent-forward-test.json": "340825eba3a17d6025631bc8b247e7d200e7ceda266b027466e8ba507c6c94e4",
+    "manifest-validation-round2.json": "44d5cb93faa3bfa8573fbabef95d92704735e20df60cb80e641b3100d02ca546",
+    "origins.json": "4afa446e5ccfaf33bffafbd05bdc23263c6b84193b9f696dbb00233494c72dc2"
+  }
+}

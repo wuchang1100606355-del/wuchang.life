@@ -1,0 +1,71 @@
+{
+  "failed": 1,
+  "forbidden_actions_performed": [],
+  "manifest_count": 6,
+  "passed": 5,
+  "results": [
+    {
+      "calculated_manifest_self_hash": "e799088e99a70025c38021d69db24ef56b77bf029d79b8bf68d1700a7322eb81",
+      "errors": [],
+      "forbidden_actions_performed": [],
+      "manifest": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/audit-technology-identity/total-field-skill-manifest.json",
+      "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+      "maximum_effect_class": "E1",
+      "skill_id": "w7tp.technology-identity-audit",
+      "state": "PASS_SKILL_MANIFEST_VALID"
+    },
+    {
+      "calculated_manifest_self_hash": "99c0bda0cd2e1ad2ae8d2657c4ce00d36a0da92219f93dbde309abbd8b27d844",
+      "errors": [
+        "SCHEMA:information_context.retention:'RUN_BOUNDED_CANDIDATE_EVIDENCE' is not one of ['REQUEST_ONLY', 'RUN_BOUNDED', 'SESSION_BOUNDED', 'EVIDENCE_REFERENCES_ONLY']"
+      ],
+      "forbidden_actions_performed": [],
+      "manifest": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/govern-8d-adi-evidence-workloop/total-field-skill-manifest.json",
+      "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+      "maximum_effect_class": "E2",
+      "skill_id": "w7tp.8d-adi.evidence-workloop",
+      "state": "HOLD_SKILL_MANIFEST_INVALID"
+    },
+    {
+      "calculated_manifest_self_hash": "a7bcbd0a0c08382a13cbd035398c62da6052153092e73fd4987755c602a1577b",
+      "errors": [],
+      "forbidden_actions_performed": [],
+      "manifest": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/govern-8d-adi-git-index/total-field-skill-manifest.json",
+      "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+      "maximum_effect_class": "E2",
+      "skill_id": "w7tp.govern-8d-adi-git-index",
+      "state": "PASS_SKILL_MANIFEST_VALID"
+    },
+    {
+      "calculated_manifest_self_hash": "8bf69c7a48bcf6bc6b38fd9ad0b23265a752a921fbaed0d1efd17026041ae909",
+      "errors": [],
+      "forbidden_actions_performed": [],
+      "manifest": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/govern-total-field-skills/total-field-skill-manifest.json",
+      "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+      "maximum_effect_class": "E2",
+      "skill_id": "w7tp.total-field.skill-governance",
+      "state": "PASS_SKILL_MANIFEST_VALID"
+    },
+    {
+      "calculated_manifest_self_hash": "019bceec2fd53d07833420894589ec1759368e93040d52334128f7535bdb6ecf",
+      "errors": [],
+      "forbidden_actions_performed": [],
+      "manifest": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/integrated-engineering-delivery/total-field-skill-manifest.json",
+      "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+      "maximum_effect_class": "E5",
+      "skill_id": "w7tp.integrated-engineering-delivery",
+      "state": "PASS_SKILL_MANIFEST_VALID"
+    },
+    {
+      "calculated_manifest_self_hash": "a3b364a0941a98b99d13f9e80c1f3734f3208a6c7fb8040bd2cee048c000fe99",
+      "errors": [],
+      "forbidden_actions_performed": [],
+      "manifest": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/trace-file-8d-adi-causality/total-field-skill-manifest.json",
+      "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+      "maximum_effect_class": "E2",
+      "skill_id": "trace-file-8d-adi-causality",
+      "state": "PASS_SKILL_MANIFEST_VALID"
+    }
+  ],
+  "state": "HOLD_SKILL_MANIFESTS_INVALID"
+}

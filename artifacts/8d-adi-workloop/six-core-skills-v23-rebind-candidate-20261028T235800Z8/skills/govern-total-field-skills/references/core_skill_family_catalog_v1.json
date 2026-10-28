@@ -1,0 +1,56 @@
+{
+  "schema_version": "w7tp-total-field-skill-family-catalog/1.0",
+  "eight_state_fields": {
+    "D1": "INTENT",
+    "D2": "STATE",
+    "D3": "COORDINATE",
+    "D4": "EVIDENCE",
+    "D5": "EXECUTION_POLICY",
+    "D6": "GENERATIVE_TRANSMISSION",
+    "D7": "RED_TEAM_RISK_CONFINEMENT",
+    "D8": "ENVELOPE_AUTHORITY"
+  },
+  "families": [
+    {"code": "F01", "name": "MEMBER_CONVERSATION"},
+    {"code": "F02", "name": "IDENTITY_SEAT_CONSENT"},
+    {"code": "F03", "name": "INTENT_PRODUCT_OUTPUT"},
+    {"code": "F04", "name": "INFORMATION_CONTEXT"},
+    {"code": "F05", "name": "LOCAL_CANDIDATE"},
+    {"code": "F06", "name": "CLOUD_CANDIDATE"},
+    {"code": "F07", "name": "CANDIDATE_CONVERGENCE"},
+    {"code": "F08", "name": "RESEARCH_ANALYSIS"},
+    {"code": "F09", "name": "CONTENT_DOCUMENT"},
+    {"code": "F10", "name": "SOFTWARE_DEVELOPMENT"},
+    {"code": "F11", "name": "SANDBOX_CANARY"},
+    {"code": "F12", "name": "GENERATIVE_TRANSMISSION"},
+    {"code": "F13", "name": "REMOTE_RECONSTRUCTION"},
+    {"code": "F14", "name": "PRIVATE_MEDIA"},
+    {"code": "F15", "name": "BUSINESS_WORKFLOW"},
+    {"code": "F16", "name": "PUBLIC_EXPERIENCE"},
+    {"code": "F17", "name": "OBSERVABILITY"},
+    {"code": "F18", "name": "LIVE_CHANGE_ROLLBACK"},
+    {"code": "F19", "name": "IP_EVIDENCE_SEAL"},
+    {"code": "F20", "name": "META_GOVERNANCE"}
+  ],
+  "effect_classes": {
+    "E0": "CHAT_PRESENTATION_ONLY",
+    "E1": "READ_ONLY_EVIDENCE",
+    "E2": "REVERSIBLE_CANDIDATE_ARTIFACT",
+    "E3": "ISOLATED_TRANSIENT_EXECUTION",
+    "E4": "PERSISTENT_NON_PROTECTED_CHANGE",
+    "E5": "PROTECTED_LIVE_FORMAL_OR_AUTHORITY_CHANGE"
+  },
+  "authority_outputs": [
+    "CANDIDATE",
+    "EVIDENCE",
+    "HOLD",
+    "AUTHORIZATION_REQUEST",
+    "HUMAN_REPLY",
+    "TOTAL_FIELD_DECISION_RECEIPT"
+  ],
+  "red_team_stages": [
+    "RED_TEAM_PRE_DEFINITION",
+    "RED_TEAM_PRE_ACTIVATION",
+    "RED_TEAM_POST_OPERATION"
+  ]
+}
