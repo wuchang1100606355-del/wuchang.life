@@ -334,7 +334,7 @@ def decompose_all(
             if fast_mode:
                 final_im.save(staging_dir / fn, "WEBP", quality=92)
             else:
-                final_im.save(staging_dir / fn, "WEBP", quality=95, method=0)
+                final_im.save(staging_dir / fn, "WEBP", lossless=True, quality=100, method=1)
             manifest["cells"][nm] = f"/xiaoj-rig/{fn}"
             manifest["sha256_receipts"][fn] = hashlib.sha256((staging_dir / fn).read_bytes()).hexdigest()
 
@@ -349,7 +349,7 @@ def decompose_all(
                 if fast_mode:
                     t_im.save(staging_dir / t_fn, "WEBP", quality=90)
                 else:
-                    t_im.save(staging_dir / t_fn, "WEBP", quality=95, method=0)
+                    t_im.save(staging_dir / t_fn, "WEBP", lossless=True, quality=100, method=1)
                 manifest["sha256_receipts"][t_fn] = hashlib.sha256((staging_dir / t_fn).read_bytes()).hexdigest()
                 tw_imgs.append(t_im)
                 tw_urls.append(f"/xiaoj-rig/{t_fn}")
@@ -404,7 +404,7 @@ def decompose_all(
                         if fast_mode:
                             c_im.save(staging_dir / c_fn, "WEBP", quality=90)
                         else:
-                            c_im.save(staging_dir / c_fn, "WEBP", quality=95, method=0)
+                            c_im.save(staging_dir / c_fn, "WEBP", lossless=True, quality=100, method=1)
                         manifest["sha256_receipts"][c_fn] = hashlib.sha256((staging_dir / c_fn).read_bytes()).hexdigest()
                         manifest["cross_tweens"][pair_key].append(f"/xiaoj-rig/{c_fn}")
 
