@@ -270,7 +270,7 @@ class TestP103XiaojRigDecomposer(unittest.TestCase):
             self.assertEqual(len(manifest["cells"]), 24)
             self.assertEqual(len(manifest["tweens"]), 24)
             for nm in manifest["cells"]:
-                self.assertEqual(len(manifest["tweens"][nm]), 3)
+                self.assertEqual(len(manifest["tweens"][nm]), 7)
                 with Image.open(out / f"cell_{nm}.webp") as im_c:
                     self.assertEqual(im_c.size, (400, 400))
 

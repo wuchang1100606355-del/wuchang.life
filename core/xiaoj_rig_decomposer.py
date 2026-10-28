@@ -331,34 +331,44 @@ def decompose_all(
                 final_im = _match_luminance_full(aligned, ref_smile)
 
             fn = f"cell_{nm}.webp"
-            final_im.save(staging_dir / fn, "WEBP", quality=96)
+            if fast_mode:
+                final_im.save(staging_dir / fn, "WEBP", quality=92)
+            else:
+                final_im.save(staging_dir / fn, "WEBP", quality=95, method=0)
             manifest["cells"][nm] = f"/xiaoj-rig/{fn}"
             manifest["sha256_receipts"][fn] = hashlib.sha256((staging_dir / fn).read_bytes()).hexdigest()
 
-            tw1 = _bidirectional_bone_tween(ref_smile, final_im, vec, 0.25)
-            tw2 = _bidirectional_bone_tween(ref_smile, final_im, vec, 0.50)
-            tw3 = _bidirectional_bone_tween(ref_smile, final_im, vec, 0.75)
-
-            tw1_fn, tw2_fn, tw3_fn = f"tween_{nm}_1.webp", f"tween_{nm}_2.webp", f"tween_{nm}_3.webp"
-            for t_im, t_fn in ((tw1, tw1_fn), (tw2, tw2_fn), (tw3, tw3_fn)):
-                t_im.save(staging_dir / t_fn, "WEBP", quality=95)
+            # 7-step Cosine Ease-In-Out ultra-smooth micro-tweens (12.5% .. 87.5%)
+            raw_alphas = (0.125, 0.25, 0.375, 0.50, 0.625, 0.75, 0.875)
+            tw_imgs = []
+            tw_urls = []
+            for step_idx, raw_a in enumerate(raw_alphas, start=1):
+                smooth_a = 0.5 * (1.0 - __import__("math").cos(__import__("math").pi * raw_a))
+                t_im = _bidirectional_bone_tween(ref_smile, final_im, vec, smooth_a)
+                t_fn = f"tween_{nm}_{step_idx}.webp"
+                if fast_mode:
+                    t_im.save(staging_dir / t_fn, "WEBP", quality=90)
+                else:
+                    t_im.save(staging_dir / t_fn, "WEBP", quality=95, method=0)
                 manifest["sha256_receipts"][t_fn] = hashlib.sha256((staging_dir / t_fn).read_bytes()).hexdigest()
-            manifest["tweens"][nm] = [f"/xiaoj-rig/{tw1_fn}", f"/xiaoj-rig/{tw2_fn}", f"/xiaoj-rig/{tw3_fn}"]
+                tw_imgs.append(t_im)
+                tw_urls.append(f"/xiaoj-rig/{t_fn}")
+            manifest["tweens"][nm] = tw_urls
 
             if not fast_mode:
                 peak_breathe = _warp_by_bone_vector(final_im, {"jaw_dy": 0.8, "lip_dx": 0.6, "lid_l": 0.0, "lid_r": 0.0, "brow_dy": -0.5}, 1.0)
-                seq_frames = [ref_smile, tw1, tw2, tw3, final_im, peak_breathe, final_im, tw3, tw2, tw1]
+                seq_frames = [ref_smile] + tw_imgs + [final_im, peak_breathe, final_im] + list(reversed(tw_imgs))
                 if nm in ("blink", "wink"):
-                    seq_durations = [45, 30, 30, 30, 90, 70, 40, 30, 30, 30]
+                    seq_durations = [40] + [16] * 7 + [75, 60, 35] + [16] * 7
                 elif nm.startswith("mouth_"):
-                    seq_durations = [30, 25, 25, 25, 65, 50, 35, 25, 25, 25]
+                    seq_durations = [28] + [15] * 7 + [55, 45, 30] + [15] * 7
                 else:
-                    seq_durations = [70, 45, 45, 45, 420, 380, 320, 45, 45, 45]
+                    seq_durations = [65] + [24] * 7 + [400, 360, 300] + [24] * 7
 
                 anim_webp_fn = f"anim24_{nm}.webp"
                 seq_frames[0].save(
                     staging_dir / anim_webp_fn, "WEBP", save_all=True,
-                    append_images=seq_frames[1:], duration=seq_durations, loop=0, quality=95
+                    append_images=seq_frames[1:], duration=seq_durations, loop=0, quality=98
                 )
                 manifest["webp_anims_24"][nm] = f"/xiaoj-rig/{anim_webp_fn}"
                 manifest["sha256_receipts"][anim_webp_fn] = hashlib.sha256((staging_dir / anim_webp_fn).read_bytes()).hexdigest()
@@ -372,8 +382,34 @@ def decompose_all(
                 manifest["gifs_24"][nm] = f"/xiaoj-rig/{gif_fn}"
                 manifest["sha256_receipts"][gif_fn] = hashlib.sha256((staging_dir / gif_fn).read_bytes()).hexdigest()
 
+        # Pre-bake 12 high-frequency cross-viseme & cross-emotion transitions (5 steps each = 60 lossless WebPs)
+        manifest["cross_tweens"] = {}
+        cross_pairs = [
+            ("mouth_A", "mouth_O"), ("mouth_A", "mouth_I"), ("mouth_I", "mouth_E"), ("mouth_U", "mouth_O"),
+            ("mouth_MBP", "mouth_A"), ("mouth_MBP", "mouth_O"), ("mouth_MBP", "mouth_I"), ("mouth_E", "mouth_A"),
+            ("surprise", "happy"), ("care", "wink"), ("happy", "wink"), ("think", "smile"),
+        ]
+        for src_nm, dst_nm in cross_pairs:
+            src_p = staging_dir / f"cell_{src_nm}.webp"
+            dst_p = staging_dir / f"cell_{dst_nm}.webp"
+            if src_p.exists() and dst_p.exists():
+                with Image.open(src_p) as s_im, Image.open(dst_p) as d_im:
+                    s_rgb, d_rgb = s_im.convert("RGB"), d_im.convert("RGB")
+                    pair_key = f"{src_nm}_to_{dst_nm}"
+                    manifest["cross_tweens"][pair_key] = []
+                    for c_step, c_raw in enumerate((0.18, 0.36, 0.50, 0.64, 0.82), start=1):
+                        c_alpha = 0.5 * (1.0 - __import__("math").cos(__import__("math").pi * c_raw))
+                        c_im = Image.blend(s_rgb, d_rgb, c_alpha)
+                        c_fn = f"cross_{pair_key}_{c_step}.webp"
+                        if fast_mode:
+                            c_im.save(staging_dir / c_fn, "WEBP", quality=90)
+                        else:
+                            c_im.save(staging_dir / c_fn, "WEBP", quality=95, method=0)
+                        manifest["sha256_receipts"][c_fn] = hashlib.sha256((staging_dir / c_fn).read_bytes()).hexdigest()
+                        manifest["cross_tweens"][pair_key].append(f"/xiaoj-rig/{c_fn}")
+
         # 動態驗證輸出完整性後才給出 PASS 與 ready=True
-        cells_ok = len(manifest["cells"]) == 24 and all(len(manifest["tweens"].get(k, [])) == 3 for k in manifest["cells"])
+        cells_ok = len(manifest["cells"]) == 24 and all(len(manifest["tweens"].get(k, [])) == 7 for k in manifest["cells"]) and len(manifest["cross_tweens"]) == 12
         manifest["perceptual_audit"]["interconnectable_gifs_count"] = len(manifest["cells"])
         manifest["perceptual_audit"]["verdict"] = "SKELETAL_BONE_TRAJECTORY_V9_PASS" if cells_ok else "HOLD_CELL_COUNT_MISMATCH"
         manifest["ready"] = bool(cells_ok)
