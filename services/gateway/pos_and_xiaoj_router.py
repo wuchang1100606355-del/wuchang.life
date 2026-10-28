@@ -5,25 +5,6 @@ from pathlib import Path
 import json, time
 
 router = APIRouter()
-
-ALLOWED_BUS_SYNC_KEYS = frozenset({
-    "active_theme", "cart_items", "cart_total", "xiaoj_mode",
-    "xiaoj_expression", "xiaoj_viseme", "xiaoj_posture", "xiaoj_subtitle",
-    "last_writer", "dom_snapshot_time",
-})
-CANONICAL_SEATS = frozenset({"taiji01", "MSI", "taiji02", "taiji03", "taiji04"})
-
-def _verify_d8_gateway_mutation_gate(req: Request, required_effect: str) -> dict:
-    """Fail-Closed D8 gate for any Gateway disk write or state mutation."""
-    seat = (req.headers.get("X-W7TP-Seat") or "").strip()
-    effect = (req.headers.get("X-W7TP-D8-Effect") or "").strip()
-    receipt = (req.headers.get("X-W7TP-D8-Receipt-SHA256") or "").strip()
-    if seat not in CANONICAL_SEATS:
-        return {"ok": False, "state": "HOLD_INVALID_OR_MISSING_SEAT", "required_effect": required_effect}
-    if effect != required_effect or len(receipt) != 64:
-        return {"ok": False, "state": "HOLD_D8_WRITE_AUTHORITY_REQUIRED", "required_effect": required_effect}
-    return {"ok": True, "state": "PASS_D8_GATE_HEADERS_PRESENT", "seat": seat, "effect": effect, "receipt_sha256": receipt}
-
 SUITE_DIR = Path("/home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/wuchang_ordering_ui_suite/static/src")
 ORIG_UI = SUITE_DIR / "original_ui"
 DATA_DIR = SUITE_DIR / "data"
@@ -41,6 +22,39 @@ SHARED_BUS = {
     "last_status": "PASS_READY",
     "updated_at": time.time()
 }
+
+
+ALLOWED_BUS_SYNC_KEYS = frozenset({
+    "active_theme", "cart_items", "cart_total", "xiaoj_mode",
+    "xiaoj_expression", "xiaoj_viseme", "xiaoj_posture", "xiaoj_subtitle",
+    "last_writer", "dom_snapshot_time",
+})
+CANONICAL_SEATS = frozenset({"taiji01", "MSI", "taiji02", "taiji03", "taiji04"})
+
+def _verify_d8_gateway_mutation_gate(req: Request, required_effect: str) -> dict:
+    """Fail-Closed D8 gate: header-only or forged 64-hex receipts are strictly rejected."""
+    seat = (req.headers.get("X-W7TP-Seat") or "").strip()
+    effect = (req.headers.get("X-W7TP-D8-Effect") or "").strip()
+    receipt = (req.headers.get("X-W7TP-D8-Receipt-SHA256") or "").strip()
+    if seat not in CANONICAL_SEATS:
+        return {"ok": False, "state": "HOLD_INVALID_OR_MISSING_SEAT", "required_effect": required_effect}
+    if effect != required_effect or len(receipt) != 64:
+        return {"ok": False, "state": "HOLD_D8_WRITE_AUTHORITY_REQUIRED", "required_effect": required_effect}
+    # 核對 ACTIVE_TOTAL_FIELD_AUTHORITY.json 是否已正式開啟該精確寫入作用且收據真實存在未消耗
+    auth_path = Path("/home/taiji_admin/Taiji_Hub/runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json")
+    try:
+        auth_doc = json.loads(auth_path.read_text(encoding="utf-8"))
+        allowed_effects = auth_doc.get("allowed_effects") or []
+        active_receipt_sha = auth_doc.get("active_gateway_mutation_receipt_sha256")
+        if required_effect not in allowed_effects or receipt != active_receipt_sha:
+            return {
+                "ok": False,
+                "state": "HOLD_UNVERIFIED_OR_FORGED_D8_RECEIPT_REJECTED",
+                "required_effect": required_effect,
+            }
+    except Exception:
+        return {"ok": False, "state": "HOLD_D8_AUTHORITY_UNAVAILABLE", "required_effect": required_effect}
+    return {"ok": True, "state": "PASS_D8_VERIFIED_RECEIPT", "seat": seat, "effect": effect, "receipt_sha256": receipt}
 
 def render_locked_role(target_hash: str, role_title: str, hide_nav: bool = True) -> HTMLResponse:
     raw = (ORIG_UI / "pos_standalone.html").read_text(encoding="utf-8")
@@ -122,7 +136,7 @@ def render_locked_role(target_hash: str, role_title: str, hide_nav: bool = True)
               const items = Array.from(document.querySelectorAll("[class*=cart] li, [class*=order] li, article")).map(e => e.innerText.trim()).filter(Boolean).slice(0, 10);
               fetch(syncUrl, {
                 method: "POST", headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({last_writer: LOCKED_HASH, dom_snapshot_time: Date.now(), storage_dump: JSON.stringify(localStorage)})
+                body: JSON.stringify({last_writer: LOCKED_HASH, dom_snapshot_time: Date.now(), cart_items: items})
               }).catch(()=>{});
             }, 150);
           });
@@ -308,9 +322,7 @@ def hit_origin_cell(key: str):
         return {"hit": True, "source": "LOCAL_ORIGIN_CELL_CACHE", "cost_twd": 0.0, "latency_ms": 0.4, "cell": atlas["hold_guard_cell"]}
     for pid, c in cells.items():
         if key == pid or key in c.get("name", ""):
-            SHARED_BUS["xiaoj_subtitle"] = c["spoken_line"]
-            SHARED_BUS["xiaoj_expression"] = c["xiaoj_expression"]
-            SHARED_BUS["xiaoj_posture"] = c["xiaoj_posture"]
+            # Read-only GET: does not mutate SHARED_BUS
             return {"hit": True, "source": "LOCAL_ORIGIN_CELL_CACHE", "cost_twd": 0.0, "latency_ms": 0.4, "cell": c}
     return {"hit": False, "source": "BATCH_HARVEST_QUEUE", "cost_twd": 0.0, "note": "Queued for single-query multi-cell distillation"}
 

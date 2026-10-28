@@ -390,6 +390,27 @@ class TestP205GatewaySecurityGates(unittest.TestCase):
                 self.assertFalse(st["cloud_brain_google_credit_31404"]["network_called"])
                 m_open.assert_not_called()
 
+    def test_G08_forged_valid_format_receipt_rejected(self):
+        forged_headers = {
+            "X-W7TP-Seat": "taiji01",
+            "X-W7TP-D8-Effect": "AUTHORIZE_GATEWAY_BUS_SYNC",
+            "X-W7TP-D8-Receipt-SHA256": "a" * 64,
+        }
+        req_bus = _FakeReq(headers=forged_headers, json_body={"active_theme": "b"})
+        code, data = self._decode_resp(self.asyncio.run(self.gw.bus_post(req_bus)))
+        self.assertEqual(code, 403)
+        self.assertEqual(data["state"], "HOLD_UNVERIFIED_OR_FORGED_D8_RECEIPT_REJECTED")
+
+        forged_upload = {
+            "X-W7TP-Seat": "taiji01",
+            "X-W7TP-D8-Effect": "AUTHORIZE_XIAOJ_MASTER_ASSET_WRITE",
+            "X-W7TP-D8-Receipt-SHA256": "b" * 64,
+        }
+        req_up = _FakeReq(headers=forged_upload, raw_body=b"forged_image")
+        code2, data2 = self._decode_resp(self.asyncio.run(self.gw.upload_canonical_xiaoj("closeup.webp", req_up)))
+        self.assertEqual(code2, 403)
+        self.assertEqual(data2["state"], "HOLD_UNVERIFIED_OR_FORGED_D8_RECEIPT_REJECTED")
+
 
 if __name__ == "__main__":
     unittest.main()
