@@ -49,6 +49,12 @@ CATEGORIES = {
     "synthetic_fixture_tooling": [
         "tools/w7tp_synthetic_seed_fixture_generator.py",
     ],
+    # Exact T-029 design packet paths. Keep this lane distinct from sealed governance.
+    "t029_design_delivery": [
+        "docs/architecture/T029_ACCEPTANCE_MATRIX_20261013.json",
+        "docs/architecture/T029_ARCHITECTURE_DIFF_20261013.md",
+        "docs/architecture/T029_PHASE_PLAN_20261013.json",
+    ],
     # Repo gate tooling lane. Commit gates must be able to land independently.
     "repo_gate_tooling": [
         "tools/w7tp_staged_packet_classifier.py",
