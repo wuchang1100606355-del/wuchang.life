@@ -117,6 +117,9 @@ def _align_full_bleed(ref_crop: Image.Image, cell_raw: Image.Image, cw_target: i
 
 
 def _warp_by_bone_vector(im: Image.Image, vec: dict, scale_t: float) -> Image.Image:
+    return im.copy()
+
+def _legacy_disabled_warp(im: Image.Image, vec: dict, scale_t: float) -> Image.Image:
     w, h = im.size
     gx, gy = 8, 8
     cw, ch = w / float(gx), h / float(gy)
@@ -319,10 +322,10 @@ def decompose_all(
                 final_im = _match_luminance_full(big_s.crop((PAD, PAD, PAD + CW, PAD + CH)), ref_smile)
             elif nm.startswith("mouth_"):
                 aligned = _align_full_bleed(ref_smile, rcrop, CW, CH)
-                final_im = _seamless_lower_half_replace(ref_smile, aligned)
+                final_im = _match_luminance_full(aligned, ref_smile)
             elif nm in ("blink", "wink"):
                 aligned = _align_full_bleed(ref_smile, rcrop, CW, CH)
-                final_im = _seamless_upper_eye_replace(ref_smile, aligned)
+                final_im = _match_luminance_full(aligned, ref_smile)
             else:
                 aligned = _align_full_bleed(ref_smile, rcrop, CW, CH)
                 final_im = _match_luminance_full(aligned, ref_smile)

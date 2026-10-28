@@ -308,5 +308,88 @@ class TestP103XiaojRigDecomposer(unittest.TestCase):
                 rig_mod.decompose_all(source_dir=src, output_dir=Path("/etc/forbidden_rig_out"), fast_mode=True)
 
 
+
+class _FakeReq:
+    def __init__(self, headers=None, json_body=None, raw_body=b""):
+        self.headers = headers or {}
+        self._json = json_body
+        self._raw = raw_body
+
+    async def json(self):
+        return self._json
+
+    async def body(self):
+        return self._raw
+
+
+class TestP205GatewaySecurityGates(unittest.TestCase):
+    def setUp(self):
+        import asyncio
+        from services.gateway import pos_and_xiaoj_router as gw
+        self.asyncio = asyncio
+        self.gw = gw
+
+    def _decode_resp(self, resp):
+        if isinstance(resp, dict):
+            return 200, resp
+        return resp.status_code, json.loads(resp.body.decode("utf-8"))
+
+    def test_G01_rig_manifest_get_never_writes_disk(self):
+        with mock.patch("services.gateway.pos_and_xiaoj_router.decompose_all") as m_dec:
+            with mock.patch("pathlib.Path.exists", return_value=False):
+                code, data = self._decode_resp(self.gw.get_rig_manifest())
+                self.assertEqual(code, 200)
+                self.assertEqual(data["state"], "HOLD_MANIFEST_NOT_GENERATED_READONLY")
+                m_dec.assert_not_called()
+
+    def test_G02_bus_sync_post_requires_d8_gate(self):
+        req = _FakeReq(headers={}, json_body={"active_theme": "b"})
+        code, data = self._decode_resp(self.asyncio.run(self.gw.bus_post(req)))
+        self.assertEqual(code, 403)
+        self.assertEqual(data["state"], "HOLD_INVALID_OR_MISSING_SEAT")
+
+    def test_G03_bus_sync_rejects_non_canonical_seat(self):
+        req = _FakeReq(
+            headers={
+                "X-W7TP-Seat": "w7tp-msi",
+                "X-W7TP-D8-Effect": "AUTHORIZE_GATEWAY_BUS_SYNC",
+                "X-W7TP-D8-Receipt-SHA256": "a" * 64,
+            },
+            json_body={"active_theme": "b"},
+        )
+        code, data = self._decode_resp(self.asyncio.run(self.gw.bus_post(req)))
+        self.assertEqual(code, 403)
+        self.assertEqual(data["state"], "HOLD_INVALID_OR_MISSING_SEAT")
+
+    def test_G04_upload_master_and_save_canonical_blocked_without_d8(self):
+        req = _FakeReq(headers={"X-W7TP-Seat": "taiji01"}, raw_body=b"fake_bytes")
+        for fn in (self.gw.upload_canonical_xiaoj, self.gw.save_canonical_xiaoj):
+            code, data = self._decode_resp(self.asyncio.run(fn("closeup.webp", req)))
+            self.assertEqual(code, 403)
+            self.assertEqual(data["state"], "HOLD_D8_WRITE_AUTHORITY_REQUIRED")
+
+    def test_G05_upload_and_decompose_blocked_without_d8(self):
+        req = _FakeReq(headers={"X-W7TP-Seat": "taiji01"}, raw_body=b"fake_bytes")
+        code, data = self._decode_resp(self.asyncio.run(self.gw.upload_and_decompose("closeup.webp", req)))
+        self.assertEqual(code, 403)
+        self.assertEqual(data["state"], "HOLD_D8_WRITE_AUTHORITY_REQUIRED")
+
+    def test_G06_rig_part_path_traversal_rejected(self):
+        code, data = self._decode_resp(self.gw.get_rig_part("../secret.txt"))
+        self.assertEqual(code, 400)
+        self.assertEqual(data["state"], "HOLD_PATH_TRAVERSAL_REJECTED")
+
+    def test_G07_mgmt_state_and_brain_status_readonly_truthfulness(self):
+        req = _FakeReq(headers={}, json_body={})
+        _, mgmt_data = self._decode_resp(self.asyncio.run(self.gw.mgmt_state(req)))
+        raw_text = json.dumps(mgmt_data, ensure_ascii=False)
+        self.assertNotIn('"effect_verified": true', raw_text)
+        with mock.patch("services.gateway.pos_and_xiaoj_router.resolve_msi_ollama_url", return_value={"state": "HOLD_OFFLINE"}):
+            with mock.patch("urllib.request.urlopen") as m_open:
+                st = self.gw.xiaoj_brain_status()
+                self.assertFalse(st["cloud_brain_google_credit_31404"]["network_called"])
+                m_open.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()

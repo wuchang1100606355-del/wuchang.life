@@ -342,3 +342,8 @@ def w7tp_8d_control_panel():
 def w7tp_8d_shortcut():
     return FileResponse(W7TP_WEB_ROOT / "w7tp_8d_control_panel.html")
 
+
+from services.gateway.pos_and_xiaoj_router import router as pos_and_xiaoj_router
+app.include_router(pos_and_xiaoj_router)
+
+app.mount("/wuchang_ordering_ui_suite/static", StaticFiles(directory="/home/taiji_admin/Taiji_Hub/Taiji_Odoo/addons/wuchang_ordering_ui_suite/static"), name="wc-static")
