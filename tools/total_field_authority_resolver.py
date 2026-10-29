@@ -1319,6 +1319,13 @@ def resolve_total_field_authority_dual_schema(
 
     act_path = root / "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
     act_obj = json.loads(act_path.read_text(encoding="utf-8")) if act_path.is_file() else {}
+    founder_master_schema = "w7tp.total_field.active_authority/2.0"
+    # A mutable ACTIVE file is not itself cryptographic authority.
+    # For Founder Master V2, even the no-packet path must verify the exact signed envelope.
+    if packet is None and act_obj.get("schema") == founder_master_schema:
+        return resolve_total_field_authority_dual_schema(
+            packet=act_obj, repo_root=root, required_effect=required_effect
+        )
     approved_effects = set(FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1["authorized_sovereign_node_root_key"]["authorized_effect_domains"])
     for k in ("allowed_effects", "effects", "authorized_effects", "approved_effects"):
         vals = act_obj.get(k)
@@ -1375,6 +1382,7 @@ def resolve_total_field_authority_dual_schema(
         "W7TP_INDEPENDENT_FOUNDER_SOVEREIGN_ROLE_PROMOTION_GRANT_V1",
         "W7TP_CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_V1",
         "W7TP_TOTAL_FIELD_AUTHORITY_STAGE_B_V2_3",
+        founder_master_schema,
     }
 
     if schema not in (valid_v1_schemas | valid_v2_schemas):
@@ -1399,7 +1407,10 @@ def resolve_total_field_authority_dual_schema(
             "authority_verified": False,
         }
 
-    if any(not isinstance(e, str) or e not in approved_effects for e in pkt_effects):
+    founder_master_direct = schema == founder_master_schema
+    # A correctly root-signed Founder directive outranks the lower effect allowlist.
+    # Other schemas retain the original exact effect whitelist.
+    if not founder_master_direct and any(not isinstance(e, str) or e not in approved_effects for e in pkt_effects):
         return {
             "state": "HOLD_UNAPPROVED_AUTHORITY_EFFECT",
             "reason": "packet contains unapproved effect outside verified Founder/D8 whitelist",
@@ -1407,7 +1418,7 @@ def resolve_total_field_authority_dual_schema(
             "authority_verified": False,
         }
 
-    if required_effect and required_effect not in (set(pkt_effects) if pkt_effects else approved_effects):
+    if required_effect and required_effect not in (set(pkt_effects) if (pkt_effects or founder_master_direct) else approved_effects):
         return {
             "state": "HOLD_REQUIRED_EFFECT_NOT_GRANTED",
             "reason": f"required_effect {required_effect!r} not granted by packet",
@@ -1416,6 +1427,27 @@ def resolve_total_field_authority_dual_schema(
         }
 
     if schema in valid_v2_schemas:
+        if founder_master_direct:
+            # Signature must cover every operative V2 field; no sidecar or bypass flag
+            # may silently enlarge the scope outside the signed Stage-B body.
+            excluded = {
+                "stage_b_signature_hex", "stage_b_object_without_signature",
+                "domain_separator", "packet_canonical_id",
+                "detached_signature_artifact",
+            }
+            operative = {k: v for k, v in packet.items() if k not in excluded}
+            if (
+                packet.get("stage_b_object_without_signature") != operative
+                or packet.get("status") != "PASS_AUTHORITY_ACTIVE"
+                or not pkt_effects
+                or any(not isinstance(e, str) or not e for e in pkt_effects)
+            ):
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_SIGNED_BODY_MISMATCH",
+                    "reason": "V2 Founder Master operative fields must exactly match the signed body",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
         sig_hex = packet.get("stage_b_signature_hex")
         body = packet.get("stage_b_object_without_signature")
         dom_sep = packet.get("domain_separator")
@@ -1479,7 +1511,30 @@ def resolve_total_field_authority_dual_schema(
             hashlib.sha256(json.dumps(active_grant_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest(),
             hashlib.sha256(json.dumps(active_prom_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest(),
         }
-        if canon_pkt_sha not in allowed_v2_shas:
+        if founder_master_direct:
+            # The signed ACTIVE envelope is the new Founder directive; unlike
+            # historical V2 receipts it is not restricted to their fixed hashes.
+            if packet != act_obj:
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_ACTIVE_BINDING_MISMATCH",
+                    "reason": "signed Founder Master envelope is not the current ACTIVE preimage",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+            from tools.total_field.w7tp_ed25519_verifier import build_stage_b_signed_bytes
+            signed_sha = hashlib.sha256(build_stage_b_signed_bytes(
+                domain_separator=dom_sep,
+                packet_canonical_id=canon_id,
+                stage_b_object_without_signature=dict(body),
+            )).hexdigest()
+            if dsig.get("signed_payload_sha256") != signed_sha:
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_DETACHED_BINDING_MISMATCH",
+                    "reason": "detached evidence does not bind the same Founder-signed Stage-B bytes",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+        elif canon_pkt_sha not in allowed_v2_shas:
             return {
                 "state": "HOLD_UNPINNED_STAGE_B_RECEIPT",
                 "reason": "Stage-B packet does not match pinned ACTIVE Founder grant or promotion receipt",
@@ -1511,6 +1566,7 @@ def resolve_total_field_authority_dual_schema(
         "state": "PASS_DUAL_SCHEMA_AUTHORITY_RESOLVED",
         "schema_detected": schema,
         "authority_verified": True,
+        "authority_precedence": "FOUNDER_SOVEREIGN_ROOT_HIGHEST" if founder_master_direct else "EXISTING_CANONICAL_POLICY",
         "role_promotion_state": role_res["state"],
         "trust_policy_promotion_state": prom_res["state"],
     }
