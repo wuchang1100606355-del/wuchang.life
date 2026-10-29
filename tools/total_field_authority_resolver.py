@@ -1021,7 +1021,7 @@ def resolve_founder_sovereign_root_role_promotion_authority(
         )
 
     ddir = root / "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800"
-    grant_path = ddir / "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_20261020.json"
+    grant_path = ddir / "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_ACTIVE.json"
     grant = _load_json(
         grant_path,
         "HOLD_ROLE_PROMOTION_GRANT_MISSING",
@@ -1289,4 +1289,298 @@ def receive_candidate_authority_bound(
         "candidate_authority": False,
         "candidate_id": cand_id,
         "dynamic_context_id": context.get("context_id") if context else None,
+    }
+
+
+# === DUAL_SCHEMA_COMPATIBILITY_RESOLVER_V1 ===
+def resolve_total_field_authority_dual_schema(
+    packet: Mapping[str, Any] | None = None,
+    *,
+    repo_root: Path = Path("/home/taiji_admin/Taiji_Hub"),
+    required_effect: str | None = None,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Fail-closed dual-schema authority resolver with exact V1 7-field/SHA-256 and V2 Stage-B Ed25519 verification."""
+    from cryptography.hazmat.primitives import serialization
+    from tools.total_field.w7tp_ed25519_verifier import validate_stage_b_signature
+    from tools.total_field_ed25519_backend import Ed25519DetachedSignatureBackend
+
+    root = Path(repo_root).resolve()
+    try:
+        role_res = resolve_founder_sovereign_root_role_promotion_authority(repo_root=root)
+        prom_res = verify_canonical_trust_policy_promotion(repo_root=root)
+    except Exception as exc:
+        return {
+            "state": "HOLD_AUTHORITY_RESOLVER_FAILED",
+            "reason": str(exc),
+            "schema_detected": None,
+            "authority_verified": False,
+        }
+
+    act_path = root / "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
+    act_obj = json.loads(act_path.read_text(encoding="utf-8")) if act_path.is_file() else {}
+    founder_master_schema = "w7tp.total_field.active_authority/2.0"
+    # A mutable ACTIVE file is not itself cryptographic authority.
+    # For Founder Master V2, even the no-packet path must verify the exact signed envelope.
+    if packet is None and act_obj.get("schema") == founder_master_schema:
+        return resolve_total_field_authority_dual_schema(
+            packet=act_obj, repo_root=root, required_effect=required_effect
+        )
+    approved_effects = set(FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1["authorized_sovereign_node_root_key"]["authorized_effect_domains"])
+    for k in ("allowed_effects", "effects", "authorized_effects", "approved_effects"):
+        vals = act_obj.get(k)
+        if isinstance(vals, list):
+            approved_effects.update(str(x) for x in vals if isinstance(x, str))
+
+    if packet is None:
+        if required_effect and required_effect not in approved_effects:
+            return {
+                "state": "HOLD_UNAPPROVED_AUTHORITY_EFFECT",
+                "reason": f"required_effect {required_effect!r} not in approved_effects",
+                "schema_detected": "W7TP_CANONICAL_ACTIVE_V2_3",
+                "authority_verified": False,
+            }
+        return {
+            "state": "PASS_DUAL_SCHEMA_AUTHORITY_RESOLVED",
+            "schema_detected": "W7TP_CANONICAL_ACTIVE_V2_3",
+            "authority_verified": True,
+            "role_promotion_state": role_res["state"],
+            "trust_policy_promotion_state": prom_res["state"],
+            "approved_effects": sorted(approved_effects),
+        }
+
+    if not isinstance(packet, Mapping):
+        return {
+            "state": "HOLD_INVALID_AUTHORITY_PACKET",
+            "reason": "packet must be a Mapping",
+            "schema_detected": None,
+            "authority_verified": False,
+        }
+
+    raw_schema = packet.get("schema") or packet.get("schema_id")
+    v1_required_keys = {
+        "allowed_effects",
+        "contract_state",
+        "formal_decision_authority",
+        "formal_seal_authority",
+        "node_id",
+        "prohibited_effects",
+        "state",
+    }
+    if raw_schema is not None:
+        schema = str(raw_schema).strip()
+    elif v1_required_keys.issubset(set(packet.keys())):
+        schema = "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_V1"
+    else:
+        schema = ""
+
+    valid_v1_schemas = {
+        "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_V1",
+        "w7tp.total_field.active_authority/1.0",
+    }
+    valid_v2_schemas = {
+        "W7TP_INDEPENDENT_FOUNDER_SOVEREIGN_ROLE_PROMOTION_GRANT_V1",
+        "W7TP_CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_V1",
+        "W7TP_TOTAL_FIELD_AUTHORITY_STAGE_B_V2_3",
+        founder_master_schema,
+    }
+
+    if schema not in (valid_v1_schemas | valid_v2_schemas):
+        return {
+            "state": "HOLD_UNKNOWN_AUTHORITY_SCHEMA",
+            "reason": f"unverified or unknown schema: {schema!r}",
+            "schema_detected": schema or None,
+            "authority_verified": False,
+        }
+
+    pkt_effects = []
+    for k in ("allowed_effects", "effects", "authorized_effects", "authorized_effect_domains"):
+        v = packet.get(k)
+        if isinstance(v, list):
+            pkt_effects.extend(v)
+
+    if schema in valid_v1_schemas and not pkt_effects:
+        return {
+            "state": "HOLD_INCOMPLETE_AUTHORITY_PACKET",
+            "reason": "V1 authority packet missing effects/allowed_effects list",
+            "schema_detected": schema,
+            "authority_verified": False,
+        }
+
+    founder_master_direct = schema == founder_master_schema
+    # A correctly root-signed Founder directive outranks the lower effect allowlist.
+    # Other schemas retain the original exact effect whitelist.
+    if not founder_master_direct and any(not isinstance(e, str) or e not in approved_effects for e in pkt_effects):
+        return {
+            "state": "HOLD_UNAPPROVED_AUTHORITY_EFFECT",
+            "reason": "packet contains unapproved effect outside verified Founder/D8 whitelist",
+            "schema_detected": schema,
+            "authority_verified": False,
+        }
+
+    if required_effect and required_effect not in (set(pkt_effects) if (pkt_effects or founder_master_direct) else approved_effects):
+        return {
+            "state": "HOLD_REQUIRED_EFFECT_NOT_GRANTED",
+            "reason": f"required_effect {required_effect!r} not granted by packet",
+            "schema_detected": schema,
+            "authority_verified": False,
+        }
+
+    if founder_master_direct:
+        from datetime import datetime as _FounderDatetime, timezone as _FounderTZ, timedelta as _FounderDelta
+        try:
+            _issued = _FounderDatetime.fromisoformat(str(packet.get("issued_at", "")).replace("Z", "+00:00"))
+            _expires = _FounderDatetime.fromisoformat(str(packet.get("expires_at", "")).replace("Z", "+00:00"))
+            _now = _FounderDatetime.now(_FounderTZ.utc)
+            _valid_time = (_issued.tzinfo is not None and _expires.tzinfo is not None
+                           and _issued <= _now <= _expires
+                           and _FounderDelta(0) < _expires - _issued <= _FounderDelta(days=150))
+        except (ValueError, TypeError, OverflowError):
+            _valid_time = False
+        if not _valid_time:
+            return {"state": "HOLD_FOUNDER_MASTER_EXPIRED", "authority_verified": False,
+                    "reason": "signed Founder directive expired or exceeds 150 days"}
+    if schema in valid_v2_schemas:
+        if founder_master_direct:
+            # Signature must cover every operative V2 field; no sidecar or bypass flag
+            # may silently enlarge the scope outside the signed Stage-B body.
+            excluded = {
+                "stage_b_signature_hex", "stage_b_object_without_signature",
+                "domain_separator", "packet_canonical_id",
+                "detached_signature_artifact",
+            }
+            operative = {k: v for k, v in packet.items() if k not in excluded}
+            if (
+                packet.get("stage_b_object_without_signature") != operative
+                or packet.get("status") != "PASS_AUTHORITY_ACTIVE"
+                or not pkt_effects
+                or any(not isinstance(e, str) or not e for e in pkt_effects)
+            ):
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_SIGNED_BODY_MISMATCH",
+                    "reason": "V2 Founder Master operative fields must exactly match the signed body",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+        sig_hex = packet.get("stage_b_signature_hex")
+        body = packet.get("stage_b_object_without_signature")
+        dom_sep = packet.get("domain_separator")
+        canon_id = packet.get("packet_canonical_id")
+        if (
+            not isinstance(sig_hex, str)
+            or len(sig_hex) != 128
+            or not isinstance(body, Mapping)
+            or not body
+            or not isinstance(dom_sep, str)
+            or not isinstance(canon_id, str)
+        ):
+            return {
+                "state": "HOLD_STAGE_B_SIGNATURE_INVALID",
+                "reason": "Stage-B packet missing valid 64-byte signature, domain_separator, packet_canonical_id, or non-empty body",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+        anchor = FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1["authorized_sovereign_node_root_key"]
+        fpub_path = (root / anchor["public_key_pem_ref"]).resolve()
+        f_raw = serialization.load_pem_public_key(fpub_path.read_bytes()).public_bytes(
+            serialization.Encoding.Raw, serialization.PublicFormat.Raw
+        )
+        sb_res = validate_stage_b_signature(
+            domain_separator=dom_sep,
+            packet_canonical_id=canon_id,
+            stage_b_object_without_signature=dict(body),
+            public_key_ref=anchor["public_key_pem_ref"],
+            public_key_resolver=lambda _ref: f_raw,
+            expected_public_key_fingerprint=anchor["ed25519_raw_public_key_fingerprint_sha256"],
+            signature_hex=sig_hex,
+        )
+        if not sb_res.valid:
+            return {
+                "state": "HOLD_STAGE_B_SIGNATURE_INVALID",
+                "reason": sb_res.reason_code,
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+        f_backend = Ed25519DetachedSignatureBackend(fpub_path, trusted_verifier_refs=[anchor["verifier_ref"]])
+        dsig = packet.get("detached_signature_artifact") or {}
+        if not isinstance(dsig, Mapping) or not f_backend.verify_detached(
+            verifier_ref=str(dsig.get("verifier_ref") or ""),
+            payload_sha256=str(dsig.get("signed_payload_sha256") or ""),
+            signature=str(dsig.get("signature") or ""),
+        ):
+            return {
+                "state": "HOLD_STAGE_B_DETACHED_SIGNATURE_INVALID",
+                "reason": "detached_signature_artifact failed Ed25519 verification",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+        ddir = root / "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800"
+        active_grant_obj = json.loads((ddir / "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_ACTIVE.json").read_text(encoding="utf-8"))
+        active_prom_obj = json.loads((ddir / "CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_20261020.json").read_text(encoding="utf-8"))
+        canon_pkt_sha = hashlib.sha256(json.dumps(dict(packet), ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+        allowed_v2_shas = {
+            hashlib.sha256(json.dumps(active_grant_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest(),
+            hashlib.sha256(json.dumps(active_prom_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest(),
+        }
+        if founder_master_direct:
+            # The signed ACTIVE envelope is the new Founder directive; unlike
+            # historical V2 receipts it is not restricted to their fixed hashes.
+            if packet != act_obj:
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_ACTIVE_BINDING_MISMATCH",
+                    "reason": "signed Founder Master envelope is not the current ACTIVE preimage",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+            from tools.total_field.w7tp_ed25519_verifier import build_stage_b_signed_bytes
+            signed_sha = hashlib.sha256(build_stage_b_signed_bytes(
+                domain_separator=dom_sep,
+                packet_canonical_id=canon_id,
+                stage_b_object_without_signature=dict(body),
+            )).hexdigest()
+            if dsig.get("signed_payload_sha256") != signed_sha:
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_DETACHED_BINDING_MISMATCH",
+                    "reason": "detached evidence does not bind the same Founder-signed Stage-B bytes",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+        elif canon_pkt_sha not in allowed_v2_shas:
+            return {
+                "state": "HOLD_UNPINNED_STAGE_B_RECEIPT",
+                "reason": "Stage-B packet does not match pinned ACTIVE Founder grant or promotion receipt",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+    else:
+        # V1 完整七欄與規範化 SHA-256 精確綁定（含 node_id, prohibited_effects 等全部欄位）
+        for req_k in sorted(act_obj.keys()):
+            if packet.get(req_k) != act_obj.get(req_k):
+                return {
+                    "state": "HOLD_UNVERIFIED_AUTHORITY_PACKET_FIELDS",
+                    "reason": f"field {req_k!r} does not match active verified authority",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+        pkt_v1_clean = {k: v for k, v in dict(packet).items() if k not in ("schema", "schema_id")}
+        act_canon_sha = hashlib.sha256(json.dumps(act_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+        pkt_canon_sha = hashlib.sha256(json.dumps(pkt_v1_clean, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+        if pkt_canon_sha != act_canon_sha:
+            return {
+                "state": "HOLD_UNPINNED_V1_AUTHORITY_PACKET",
+                "reason": "V1 packet canonical SHA-256 does not match ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+    return {
+        "state": "PASS_DUAL_SCHEMA_AUTHORITY_RESOLVED",
+        "schema_detected": schema,
+        "authority_verified": True,
+        "authority_precedence": "FOUNDER_SOVEREIGN_ROOT_HIGHEST" if founder_master_direct else "EXISTING_CANONICAL_POLICY",
+        "role_promotion_state": role_res["state"],
+        "trust_policy_promotion_state": prom_res["state"],
     }
