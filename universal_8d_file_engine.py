@@ -1,3 +1,10 @@
+
+def _sha(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+def _canonical(value) -> bytes:
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode()
+
 import copy
 import hashlib
 import json
@@ -16,47 +23,43 @@ class Universal8DFileEngine:
     # --------------------------------------------------------------------------
     # 家族 2：音訊與時序波形分析器 (辨識靜音段與斜率波段 -> 單量、總量、變化量、速度)
     # --------------------------------------------------------------------------
-    @classmethod
-    def analyze_audio_pcm(cls, samples: List[int]) -> Dict[str, Any]:
-        raw_bytes = struct.pack(f">{len(samples)}h", *samples)
-        src_hash = hashlib.sha256(raw_bytes).hexdigest()
-
+    @staticmethod
+    def analyze_audio_pcm(samples):
+        samples = list(samples)
+        raw = struct.pack(f'>{len(samples)}h', *samples)
         packets = []
-        n = len(samples)
-        i = 0
+        i, n = 0, len(samples)
         while i < n:
-            v0 = samples[i]
-            dt_static = 1
-            while (i + dt_static) < n and samples[i + dt_static] == v0:
-                dt_static += 1
+            if i + 2 < n and samples[i] == samples[i+1] == samples[i+2]:
+                j = i + 3
+                while j < n and samples[j] == samples[i]:
+                    j += 1
+                packets.append(struct.pack('>BIh', 0, j-i, samples[i]))
+            elif i + 2 < n and samples[i+1] - samples[i] == samples[i+2] - samples[i+1]:
+                step = samples[i+1] - samples[i]
+                j = i + 3
+                while j < n and samples[j] - samples[j-1] == step:
+                    j += 1
+                # signed 32-bit step accommodates legal int16 extreme jumps
+                packets.append(struct.pack('>BIhi', 1, j-i, samples[i], step))
+            else:
+                j = i + 1
+                while j < n:
+                    if j+2 < n and (samples[j] == samples[j+1] == samples[j+2] or
+                                      samples[j+1]-samples[j] == samples[j+2]-samples[j+1]):
+                        break
+                    j += 1
+                segment = samples[i:j]
+                packets.append(struct.pack('>BI', 2, len(segment)) +
+                               struct.pack(f'>{len(segment)}h', *segment))
+            i = j
+        cell = b'8DPCM2' + struct.pack('>II', n, len(packets)) + b''.join(packets)
+        return {'family': 'FAMILY_2_AUDIO_WAVEFORM', 'format_version': 2, 'packets': [cell], 'total_samples': n, 'target_cells': len(packets), 'cell': cell, 'source_sha256': _sha(raw),
+                'raw_bytes': len(raw), 'wire_bytes': len(cell), 'cells': len(packets)}
 
-            rem_start = i + dt_static
-            dt_active = 0
-            velocity = 0
-            if rem_start < n:
-                velocity = samples[rem_start] - v0
-                cur = v0
-                while (rem_start + dt_active) < n and (samples[rem_start + dt_active] - cur) == velocity:
-                    cur = samples[rem_start + dt_active]
-                    dt_active += 1
-            net_delta = velocity * dt_active
-
-            pkt = struct.pack(">IIIhhh", i, dt_static, dt_active, v0, net_delta, velocity)
-            packets.append(pkt)
-            i += dt_static + dt_active
-
-        return {
-            "family": "FAMILY_2_AUDIO_WAVEFORM",
-            "raw_bytes": len(raw_bytes),
-            "wire_bytes": sum(len(p) for p in packets),
-            "target_cells": len(packets),
-            "packets": packets,
-            "source_sha256": src_hash,
-            "total_samples": n
-        }
 
     @classmethod
-    def reconstruct_audio_pcm(cls, bundle: Dict[str, Any]) -> Dict[str, Any]:
+    def _legacy_reconstruct_audio_pcm(cls, bundle: Dict[str, Any]) -> Dict[str, Any]:
         recon = [0] * bundle["total_samples"]
         for pkt in bundle["packets"]:
             coord_i, dt_static, dt_active, v0, net_delta, velocity = struct.unpack(">IIIhhh", pkt)
@@ -68,42 +71,66 @@ class Universal8DFileEngine:
         r_hash = hashlib.sha256(recon_bytes).hexdigest()
         return {"byte_exact": r_hash == bundle["source_sha256"], "sha256": r_hash}
 
+    @staticmethod
+    def reconstruct_audio_pcm(bundle, *, return_values=False):
+        if 'cell' not in bundle: return Universal8DFileEngine._legacy_reconstruct_audio_pcm(bundle)
+        cell = bundle['cell']
+        if not cell.startswith(b'8DPCM2') or len(cell) < 14:
+            raise ValueError('INVALID_PCM_HEADER')
+        n, count = struct.unpack('>II', cell[6:14]); off = 14
+        if n > 100_000_000 or count > n+1:
+            raise ValueError('PCM_LIMIT')
+        values = []
+        for _ in range(count):
+            if off+5 > len(cell):
+                raise ValueError('TRUNCATED_PCM')
+            mode, length = struct.unpack('>BI', cell[off:off+5]); off += 5
+            if length < 1 or len(values)+length > n:
+                raise ValueError('INVALID_PCM_CELL_LENGTH')
+            if mode == 0:
+                if off+2 > len(cell): raise ValueError('TRUNCATED_STATIC')
+                (v,) = struct.unpack('>h', cell[off:off+2]); off += 2
+                values.extend([v]*length)
+            elif mode == 1:
+                if off+6 > len(cell): raise ValueError('TRUNCATED_RAMP')
+                start, step = struct.unpack('>hi', cell[off:off+6]); off += 6
+                values.extend(start + step*j for j in range(length))
+            elif mode == 2:
+                if off+2*length > len(cell): raise ValueError('TRUNCATED_LITERAL')
+                values.extend(struct.unpack(f'>{length}h', cell[off:off+2*length]))
+                off += 2*length
+            else:
+                raise ValueError('UNKNOWN_PCM_MODE')
+        if len(values) != n or off != len(cell):
+            raise ValueError('PCM_FRAMING_MISMATCH')
+        raw = struct.pack(f'>{n}h', *values)
+        result = {'byte_exact': _sha(raw) == bundle['source_sha256'],
+                  'sha256': _sha(raw), 'reconstructed_bytes': len(raw)}
+        if return_values:
+            result['values'] = values
+        return result
+
+
     # --------------------------------------------------------------------------
     # 家族 3：3D 幾何與骨骼關節動作分析器 (固定網格拓撲 + 關節角度單量/變化量/速度)
     # --------------------------------------------------------------------------
     @classmethod
-    def analyze_3d_bone_tracks(cls, bone_frames: List[List[Tuple[int, int, int]]]) -> Dict[str, Any]:
-        total_frames = len(bone_frames)
-        num_bones = len(bone_frames[0]) if total_frames else 0
-        raw_bytes = struct.pack(f">{total_frames * num_bones * 3}h", *[c for f in bone_frames for b in f for c in b])
-        src_hash = hashlib.sha256(raw_bytes).hexdigest()
+    def analyze_3d_bone_tracks(cls, frames):
+        n = len(frames); bones = len(frames[0]) if n else 0
+        if any(len(frame) != bones for frame in frames):
+            raise ValueError('UNEQUAL_BONE_COUNT')
+        coords = [v for frame in frames for bone in frame for v in bone]
+        raw = struct.pack(f'>{len(coords)}h', *coords)
+        tracks = [[cls.analyze_audio_pcm([frames[t][j][axis] for t in range(n)])
+                   for axis in range(3)] for j in range(bones)]
+        return {'family': 'FAMILY_3_3D_SPATIAL_BONES', 'format_version': 2, 'bone_cells': bones, 'packets': [item['cell'] for group in tracks for item in group], 'total_frames': n,
+                'num_bones': bones, 'tracks': tracks, 'source_sha256': _sha(raw),
+                'raw_bytes': len(raw),
+                'wire_bytes': 8+sum(cell['wire_bytes'] for group in tracks for cell in group)}
 
-        packets = []
-        for bone_id in range(num_bones):
-            track = [bone_frames[t][bone_id] for t in range(total_frames)]
-            v0 = track[0]
-            dt_static = 1
-            while dt_static < total_frames and track[dt_static] == v0:
-                dt_static += 1
-            dt_active = total_frames - dt_static
-            v_end = track[-1]
-            dx, dy, dz = v_end[0] - v0[0], v_end[1] - v0[1], v_end[2] - v0[2]
-            pkt = struct.pack(">HII3h3h", bone_id, dt_static, dt_active, *v0, dx, dy, dz)
-            packets.append(pkt)
-
-        return {
-            "family": "FAMILY_3_3D_SPATIAL_BONES",
-            "raw_bytes": len(raw_bytes),
-            "wire_bytes": sum(len(p) for p in packets),
-            "bone_cells": len(packets),
-            "packets": packets,
-            "total_frames": total_frames,
-            "num_bones": num_bones,
-            "source_sha256": src_hash
-        }
 
     @classmethod
-    def reconstruct_3d_bone_tracks(cls, bundle: Dict[str, Any]) -> Dict[str, Any]:
+    def _legacy_reconstruct_3d_bone_tracks(cls, bundle: Dict[str, Any]) -> Dict[str, Any]:
         tf, nb = bundle["total_frames"], bundle["num_bones"]
         recon = [[(0, 0, 0)] * nb for _ in range(tf)]
         for pkt in bundle["packets"]:
@@ -120,47 +147,42 @@ class Universal8DFileEngine:
         r_hash = hashlib.sha256(recon_bytes).hexdigest()
         return {"byte_exact": r_hash == bundle["source_sha256"], "sha256": r_hash}
 
+    @classmethod
+    def reconstruct_3d_bone_tracks(cls, bundle):
+        if 'tracks' not in bundle: return cls._legacy_reconstruct_3d_bone_tracks(bundle)
+        n, bones = bundle['total_frames'], bundle['num_bones']
+        frames = [[(0, 0, 0) for _ in range(bones)] for _ in range(n)]
+        for j, group in enumerate(bundle['tracks']):
+            axes = [cls.reconstruct_audio_pcm(t, return_values=True)['values'] for t in group]
+            for t in range(n):
+                frames[t][j] = tuple(axis[t] for axis in axes)
+        coords = [v for frame in frames for bone in frame for v in bone]
+        raw = struct.pack(f'>{len(coords)}h', *coords)
+        return {'byte_exact': _sha(raw) == bundle['source_sha256'],
+                'sha256': _sha(raw), 'frames': frames}
+
+
     # --------------------------------------------------------------------------
     # 家族 4：結構化資料與帳本分析器 (JSON / POS 菜單 / 資料庫列)
     # --------------------------------------------------------------------------
-    @classmethod
-    def analyze_structured_records(cls, base_records: List[Dict[str, Any]], target_records: List[Dict[str, Any]]) -> Dict[str, Any]:
-        target_raw = json.dumps(target_records, sort_keys=True, separators=(",", ":")).encode("utf-8")
-        src_hash = hashlib.sha256(target_raw).hexdigest()
+    @staticmethod
+    def analyze_structured_records(base, target):
+        for records in (base, target):
+            ids = [r['id'] for r in records]
+            if len(ids) != len(set(ids)):
+                raise ValueError('DUPLICATE_RECORD_ID')
+        known = {r['id']: r for r in base}
+        changed = [r for r in target if r['id'] not in known or known[r['id']] != r]
+        delta = _canonical({'order': [r['id'] for r in target], 'upserts': changed})
+        target_bytes = _canonical(target)
+        return {'family': 'FAMILY_4_STRUCTURED_DATA', 'format_version': 2, 'static_records_skipped': len(target)-len(changed), 'base_sha256': _sha(_canonical(base)),
+                'source_sha256': _sha(target_bytes), 'wire_payload': delta,
+                'wire_bytes': len(delta), 'raw_bytes': len(target_bytes),
+                'active_cells': len(changed)}
 
-        base_map = {r["id"]: r for r in base_records}
-        cell_deltas = []
-        static_count = 0
-
-        for rec in target_records:
-            rid = rec["id"]
-            if rid in base_map and base_map[rid] == rec:
-                static_count += 1
-                continue
-            base_rec = base_map.get(rid, {})
-            field_changes = {}
-            for k, v in rec.items():
-                if k == "id" or base_rec.get(k) == v:
-                    continue
-                if isinstance(v, int) and isinstance(base_rec.get(k), int):
-                    field_changes[k] = {"mode": "DELTA", "d": v - base_rec[k]}
-                else:
-                    field_changes[k] = {"mode": "SET", "v": v}
-            cell_deltas.append({"id": rid, "changes": field_changes})
-
-        wire_payload = json.dumps(cell_deltas, separators=(",", ":")).encode("utf-8")
-        return {
-            "family": "FAMILY_4_STRUCTURED_DATA",
-            "raw_bytes": len(target_raw),
-            "wire_bytes": len(wire_payload),
-            "static_records_skipped": static_count,
-            "active_cells": len(cell_deltas),
-            "wire_payload": wire_payload,
-            "source_sha256": src_hash
-        }
 
     @classmethod
-    def reconstruct_structured_records(cls, base_records: List[Dict[str, Any]], bundle: Dict[str, Any]) -> Dict[str, Any]:
+    def _legacy_reconstruct_structured_records(cls, base_records: List[Dict[str, Any]], bundle: Dict[str, Any]) -> Dict[str, Any]:
         recon = copy.deepcopy(base_records)
         rec_map = {r["id"]: r for r in recon}
         deltas = json.loads(bundle["wire_payload"].decode("utf-8"))
@@ -174,6 +196,21 @@ class Universal8DFileEngine:
         recon_raw = json.dumps(recon, sort_keys=True, separators=(",", ":")).encode("utf-8")
         r_hash = hashlib.sha256(recon_raw).hexdigest()
         return {"byte_exact": r_hash == bundle["source_sha256"], "sha256": r_hash}
+
+    @staticmethod
+    def reconstruct_structured_records(base, bundle):
+        if 'base_sha256' not in bundle: return Universal8DFileEngine._legacy_reconstruct_structured_records(base, bundle)
+        if _sha(_canonical(base)) != bundle['base_sha256']:
+            return {'byte_exact': False, 'status': 'HOLD_BASE_HASH_MISMATCH'}
+        delta = json.loads(bundle['wire_payload'])
+        by_id = {r['id']: copy.deepcopy(r) for r in base}
+        for r in delta['upserts']:
+            by_id[r['id']] = r
+        reconstructed = [by_id[i] for i in delta['order']]
+        raw = _canonical(reconstructed)
+        return {'byte_exact': _sha(raw) == bundle['source_sha256'],
+                'sha256': _sha(raw), 'records': reconstructed}
+
 
     # --------------------------------------------------------------------------
     # 家族 5 & 6：程式碼/文件與通用二進位/亂數區塊分析器 (求同未變區塊 + 存異增量原胞)

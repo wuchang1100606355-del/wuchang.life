@@ -1426,6 +1426,20 @@ def resolve_total_field_authority_dual_schema(
             "authority_verified": False,
         }
 
+    if founder_master_direct:
+        from datetime import datetime as _FounderDatetime, timezone as _FounderTZ, timedelta as _FounderDelta
+        try:
+            _issued = _FounderDatetime.fromisoformat(str(packet.get("issued_at", "")).replace("Z", "+00:00"))
+            _expires = _FounderDatetime.fromisoformat(str(packet.get("expires_at", "")).replace("Z", "+00:00"))
+            _now = _FounderDatetime.now(_FounderTZ.utc)
+            _valid_time = (_issued.tzinfo is not None and _expires.tzinfo is not None
+                           and _issued <= _now <= _expires
+                           and _FounderDelta(0) < _expires - _issued <= _FounderDelta(days=150))
+        except (ValueError, TypeError, OverflowError):
+            _valid_time = False
+        if not _valid_time:
+            return {"state": "HOLD_FOUNDER_MASTER_EXPIRED", "authority_verified": False,
+                    "reason": "signed Founder directive expired or exceeds 150 days"}
     if schema in valid_v2_schemas:
         if founder_master_direct:
             # Signature must cover every operative V2 field; no sidecar or bypass flag
