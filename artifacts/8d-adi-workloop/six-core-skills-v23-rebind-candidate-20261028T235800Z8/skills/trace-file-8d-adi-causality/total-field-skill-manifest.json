@@ -1,0 +1,411 @@
+{
+  "authority_boundary": {
+    "allowed_outputs": [
+      "CANDIDATE",
+      "EVIDENCE",
+      "HOLD",
+      "HUMAN_REPLY"
+    ],
+    "forbidden_authority": [
+      "ALLOW",
+      "COMMITTED",
+      "COMMIT_APPLIED",
+      "TFS",
+      "TFID",
+      "TOTAL_FIELD_HASH",
+      "CANONICAL_POINTER",
+      "FINAL_SEAL",
+      "DIRECT_DB_WRITE",
+      "DIRECT_DEPLOY",
+      "canonical promotion",
+      "activation",
+      "Total Field PASS",
+      "identity or permission grant",
+      "production execution",
+      "causality adjudication"
+    ],
+    "human_final_effect_classes": [
+      "E4",
+      "E5"
+    ],
+    "total_field_receiver_ref": "total-field://existing-authorized-receiver",
+    "total_field_receiver_required": true
+  },
+  "authorization_contract": {
+    "effect_and_risk_explanation_required": true,
+    "expiry_required": true,
+    "input_hashes_required": true,
+    "required_for_effect_classes": [
+      "E3",
+      "E4",
+      "E5"
+    ],
+    "rollback_required": true,
+    "single_use": true,
+    "stop_conditions_required": true,
+    "total_field_review_required": true
+  },
+  "classification": {
+    "maximum_effect_class": "E2",
+    "primary_family": "F17",
+    "secondary_families": [
+      "F08",
+      "F10",
+      "F20"
+    ]
+  },
+  "d1_d8_projection": {
+    "D1": {
+      "contract": "解析Founder需求、可見產物與每一檔案存在目的；推論必須標成候選。",
+      "name": "INTENT",
+      "required": true
+    },
+    "D2": {
+      "contract": "定位目前來源、內容宣告、狀態轉移、候選／runtime狀態、衝突與未知，不以Git定義狀態。",
+      "name": "STATE",
+      "required": true
+    },
+    "D3": {
+      "contract": "綁定不洩漏私有網路資訊的節點、目前路徑、時間與命名空間座標。",
+      "name": "COORDINATE",
+      "required": true
+    },
+    "D4": {
+      "contract": "保存內容SHA、解析狀態、凍結索引、供需pair plan、輸出SHA，以及六軸技術身分 gate-input 與 EV0-EV5 證據。",
+      "name": "EVIDENCE",
+      "required": true
+    },
+    "D5": {
+      "contract": "只允許唯讀來源分析與明示輸出目錄的可逆候選寫入；比較器獨立且不可重搜。",
+      "name": "EXECUTION_POLICY",
+      "required": true
+    },
+    "D6": {
+      "contract": "本技能不宣稱生成式傳輸；固定IP SSH只是載體，8D／ADI重構條件保持候選；載體、重構與驗證證據必須分離。",
+      "name": "GENERATIVE_TRANSMISSION",
+      "required": true
+    },
+    "D7": {
+      "contract": "敏感來源不讀不雜湊不輸出；任何來源寫入、權威漂移、私有座標洩漏、效果等同誤作技術同一、六軸缺漏、加權分數或專利推論均停止。",
+      "name": "RED_TEAM_RISK_CONFINEMENT",
+      "required": true
+    },
+    "D8": {
+      "contract": "身分封包與Active Seat決定可用範圍；LLM、ADI、比較器與SSH皆無最終裁決權。",
+      "name": "ENVELOPE_AUTHORITY",
+      "required": true
+    }
+  },
+  "display_name_zh": "8D ADI 檔案因果追蹤",
+  "evidence_and_hashes": {
+    "canonical_refs": [
+      "manifests/total_field/w7tp_8d_adi_v2_3_canonical/CONTRACT.json"
+    ],
+    "evidence_destination": "artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/evidence/",
+    "hash_algorithm": "SHA-256",
+    "implementation_refs": [
+      "SKILL.md",
+      "agents/openai.yaml",
+      "assets/icon.svg",
+      "references/capability-interoperability.md",
+      "references/capability-source-index.json",
+      "references/causal-contract.md",
+      "references/connection-profile.md",
+      "references/current-design-contract.json",
+      "references/evolution-contract.json",
+      "references/version-observation-causality.md",
+      "scripts/causal_index.py",
+      "scripts/remote_runner.py"
+    ],
+    "implementation_sha256": {
+      "SKILL.md": "4a0a2f9d42a9d2d436e02903be39950422fae5f3daf454bf89bb1c56087652fb",
+      "agents/openai.yaml": "51a5cf2551527a7004c3259e92115e7ae1652637df946ed990918e1bd10cc9d4",
+      "assets/icon.svg": "e9301497fa98ef56aaca7ede0857b9a18dc06c34040f0679c609a6bf49b1d38b",
+      "references/capability-interoperability.md": "428cbfb61af3ac5076432cfd188b2084c7ef88ae2b12dacb72f1c146c8113e31",
+      "references/capability-source-index.json": "bd4824a4bdbcd0a3065e966aa6eace48049becb9cd0d21495cd64af34d1c05d0",
+      "references/causal-contract.md": "111b54868e740d2bc9da608c6b9222324c2586d0cc53d6c020ff5b0af36c62a8",
+      "references/connection-profile.md": "65162d69b3e38f1dd694011763e8bc290d41665ae1716407eb50ef09493cf77c",
+      "references/current-design-contract.json": "4d78ae3fc21c5c16153ea202497b4445026fd80d7ea77e9ee38ee9a4c88317d1",
+      "references/evolution-contract.json": "6f1bca74a6b5af57a014a8d2b9977345530f86c451ccc4259c7235ea3d2ccbe7",
+      "references/version-observation-causality.md": "3824e2f3ea7b7f129a1f0d34a44c01b7e38e2d3e6989e613982347bb216ccdb2",
+      "scripts/causal_index.py": "6530ebd7931046fad8478b1a7b6d06bac5ca8c12c4432c0eabe980d9a7fae8dd",
+      "scripts/remote_runner.py": "9c37c10076f3f0c855122ddca765177971f23fb1ce43c63abc242797bd55746e"
+    },
+    "manifest_hash_excludes_field": "evidence_and_hashes.manifest_self_hash",
+    "manifest_self_hash": "PENDING_TOTAL_FIELD_SEAL",
+    "schema_refs": [
+      "w7tp://schemas/total-field-skill-manifest-v1"
+    ]
+  },
+  "execution_contract": {
+    "carriers": [
+      "LOCAL_PROCESS",
+      "ORDINARY_FIXED_IP_SSH"
+    ],
+    "dependencies": [
+      "Python 3 standard library",
+      "OpenSSH client for optional remote carrier",
+      "Founder intent and human-visible product-effect input",
+      "w7tp.technology-identity-audit@1.0.0 when a technology identity claim is in scope"
+    ],
+    "existing_state_preserved": true,
+    "forbidden_effects": [
+      "source file mutation",
+      "Git consultation or mutation",
+      "commit or push",
+      "database write",
+      "deploy or restart",
+      "router write",
+      "canonical or runtime activation",
+      "private network coordinate disclosure"
+    ],
+    "nodes": [
+      "node://local",
+      "node://fixed-ip-private-profile"
+    ],
+    "persistent_side_effects": [
+      "bounded candidate output files only"
+    ],
+    "resource_limits": {
+      "comparator_processes": 11,
+      "maximum_text_file_bytes": 2000000,
+      "network_fallbacks": 0,
+      "source_enumerations": 1,
+      "source_rescans_after_freeze": 0
+    },
+    "rollback": "Remove only the exact newly created candidate output directory after verifying it is not a source, canonical, runtime, database, or pre-existing evidence coordinate."
+  },
+  "founder_authority_ref": "founder://active-authority",
+  "hold_contract": {
+    "language": "zh-Hant",
+    "one_solution": true,
+    "raw_code_only_forbidden": true,
+    "required_fields": [
+      "question",
+      "answer",
+      "risk_found",
+      "possible_effect",
+      "protected_state",
+      "solution",
+      "user_action_required"
+    ]
+  },
+  "identity_and_seat": {
+    "access_profile_refs": [
+      "identity-packet://active-member/skill-profile",
+      "private-profile://fixed-ip-ssh"
+    ],
+    "active_seat_required": true,
+    "allowed_roles": [
+      "FOUNDER",
+      "AUTHORIZED_DEVELOPER"
+    ],
+    "cross_member_plaintext_allowed": false,
+    "fixed_role_capacity_required": true,
+    "member_required": true,
+    "reservation_non_executable": true,
+    "xiaoj_identity_required": true
+  },
+  "information_context": {
+    "identity_derived_scope": true,
+    "protected_representation": [
+      "PROTECTED_OPAQUE_NODE",
+      "opaque identity and network references",
+      "bounded content-contract features without full source retention"
+    ],
+    "provenance_required": true,
+    "raw_protected_context_allowed": false,
+    "required_field_domains": [
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6",
+      "D7",
+      "D8"
+    ],
+    "retention": "RUN_BOUNDED",
+    "retrieved_content_is_instruction": false
+  },
+  "language": "zh-Hant",
+  "lifecycle": {
+    "activation_requires_total_field_receipt": true,
+    "replacement_refs": [
+      "trace-file-8d-adi-causality@0.3.0",
+      "trace-file-8d-adi-causality@0.4.0"
+    ],
+    "retirement_preserves_evidence": true,
+    "session_revocation_on_seat_or_profile_change": true,
+    "state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+    "suspension_triggers": [
+      "snapshot or pair-plan hash mismatch",
+      "source rescan by comparator",
+      "protected content disclosure",
+      "private network coordinate disclosure",
+      "path, time, hash, or keyword promoted to design causation",
+      "causal edge required field omission",
+      "technology identity evidence axis omission or weighted-score introduction",
+      "effect equivalence, shared carrier, or repository shape promoted to technical identity",
+      "missing structured red-team execution evidence",
+      "source coverage gap hidden or promoted to complete",
+      "identity seat or access profile change"
+    ],
+    "total_field_decision_ref": null
+  },
+  "manifest_state": "CANDIDATE_FOR_TOTAL_FIELD_REVIEW",
+  "product_output_contract": {
+    "acceptance_criteria": [
+      "all declared JSON and JSONL artifacts parse",
+      "every edge endpoint exists in the frozen snapshot",
+      "every edge contains the complete causal contract and explicit content supply-demand evidence when reconstructed",
+      "all eleven child comparator execution receipts bind identical snapshot and pair-plan hashes",
+      "technology identity evidence remains gate-input-only with local decision NOT_RUN and unsupported axes explicit",
+      "structured red-team evidence is covered by the output SHA-256 manifest",
+      "SHA-256 manifest covers every output except itself",
+      "Git is not consulted and source repository remains unchanged",
+      "result state remains CANDIDATE_NOT_CANONICAL",
+      "runtime fixed-IP operation requires separate evidence"
+    ],
+    "allowed_side_effects": [
+      "write bounded reversible candidate evidence under the explicit output directory"
+    ],
+    "deliverables": [
+      "Founder intent field root",
+      "frozen source content-contract index",
+      "deterministic supply-demand pair plan",
+      "per-file atomic 8D and full ADI state nodes",
+      "isolated comparator evidence",
+      "complete causal edge records with explicit UNKNOWN fields",
+      "six-axis technology-identity gate-input evidence candidate",
+      "structured three-stage red-team execution evidence",
+      "reconstructed logical filename and intended role",
+      "conflict and unknown report",
+      "SHA-256 output manifest",
+      "V2.3 三項能力有界候選契約與來源證據"
+    ],
+    "failure_behavior": "以PRECONDITION_MISSING或HOLD_TRUE_HARD_RISK停止；不降級、不猜測、不切換節點、不產生PASS。",
+    "intended_users": [
+      "Founder",
+      "authorized repository reviewer"
+    ],
+    "interface_behavior": "接收Founder意圖與人類可見產品效果後，本機直接分析或透過私有固定IP設定以一般SSH載送分析器；任何失敗均關閉並回傳單一PRECONDITION_MISSING，不搜尋替代節點。",
+    "product_outcome": "一組不依賴Git、以來源內容供需契約形成、候選限定、SHA綁定且比較子程序隔離的8D／ADI系統設計意圖場。",
+    "prohibited_outputs": [
+      "PASS or canonical decision",
+      "raw credential, identity plaintext, or cloud dialogue plaintext",
+      "unverified causation or authorship claim",
+      "complete-source claim when read or directory-enumeration gaps exist",
+      "private IP or SSH account in shared artifacts",
+      "claim that SSH is W7TP generative transmission",
+      "weighted technology-identity score or local technical-sameness decision",
+      "patentability, legal, or global-superiority inference from repository evidence"
+    ],
+    "quality_thresholds": [
+      "exactly one source enumeration",
+      "all comparator processes bind the identical snapshot and pair-plan hashes",
+      "bounded source content contracts rather than path-token or Git semantics",
+      "technology identity evidence preserves all six fixed axes and EV evidence levels",
+      "effect equivalence remains separate from technical equivalence and no weighted identity score is emitted",
+      "no semantic, fuzzy, embedding, Git, or post-freeze source search",
+      "no raw protected source content retained",
+      "symbolic links and protected directories are never followed",
+      "read and directory-enumeration failures remain explicit coverage gaps"
+    ],
+    "user_need": "以Founder意圖與人類可見產品效果先建立完整8D狀態場，再從每個檔案的內容契約分析需求、供給、作用、依賴與關係，形成完整ADI座標並重構檔案應有名稱與作用。"
+  },
+  "red_team_contract": {
+    "authorization_cannot_waive_finding": true,
+    "closure_evidence_required": true,
+    "high_critical_hold": true,
+    "mandatory": true,
+    "medium_requires_mitigation_or_policy": true,
+    "stages": [
+      "RED_TEAM_PRE_DEFINITION",
+      "RED_TEAM_PRE_ACTIVATION",
+      "RED_TEAM_POST_OPERATION"
+    ]
+  },
+  "schema_version": "w7tp-total-field-skill-manifest/1.0",
+  "skill_id": "trace-file-8d-adi-causality",
+  "technology_identity_contract": {
+    "applicable": true,
+    "axes": [
+      "MECHANISM",
+      "CAUSAL_PATH",
+      "DEPENDENCIES",
+      "ELIMINATED_OPERATIONS",
+      "COST_TOPOLOGY",
+      "CARRIER_RECONSTRUCTION_VERIFICATION"
+    ],
+    "carrier_protocol_separation_required": true,
+    "decision_set": [
+      "SAME_MECHANISM",
+      "PARTIAL_MECHANISM_OVERLAP",
+      "EFFECT_ONLY_EQUIVALENT",
+      "DIFFERENT_TECHNOLOGY",
+      "INSUFFICIENT_EVIDENCE"
+    ],
+    "effect_equivalence_not_technical_equivalence": true,
+    "evidence_scale": [
+      "EV0_UNSUPPORTED",
+      "EV1_ASSERTION",
+      "EV2_SECONDARY_SOURCE",
+      "EV3_PRIMARY_DOCUMENT",
+      "EV4_IMPLEMENTATION_EVIDENCE",
+      "EV5_REPRODUCIBLE_CAUSAL_EVIDENCE"
+    ],
+    "gate_skill_ref": "w7tp.technology-identity-audit@1.0.0",
+    "patentability_inference_forbidden": true,
+    "weighted_score_forbidden": true
+  },
+  "verification_contract": {
+    "evidence_required": [
+      "source snapshot SHA",
+      "pair plan SHA",
+      "comparator output SHAs",
+      "six-axis technology identity evidence candidate SHA",
+      "candidate manifest SHA",
+      "Git-not-consulted and source non-mutation evidence",
+      "CURRENT_SOURCE_PROVENANCE",
+      "V23_EVOLUTION_CANDIDATE_CONTRACT"
+    ],
+    "existing_state_check": true,
+    "no_pass_without_evidence": true,
+    "product_acceptance_checks": [
+      "one Founder intent field root and one freeze with per-enumerated-path content-contract nodes",
+      "complete edge-contract fields and explicit reconstructed supply-demand separation from Total Field verification",
+      "isolated comparator input hash equality",
+      "six-axis technology-identity evidence remains gate-input-only and retains unsupported axes",
+      "structured three-stage red-team evidence bound into the output manifest",
+      "Git is not consulted",
+      "protected content absent from outputs"
+    ],
+    "runtime_checks": [
+      "local deterministic self-test",
+      "six-axis evidence artifact self-test with weighted score forbidden",
+      "private profile validation self-test",
+      "separate fixed-IP carrier evidence before any runtime claim"
+    ],
+    "static_checks": [
+      "SKILL.md quick validation",
+      "Python py_compile",
+      "Total Field skill manifest schema validation",
+      "technology identity manifest contract validation",
+      "bounded skill change-scope check",
+      "V23_CANONICAL_HASH_BINDING",
+      "EVOLUTION_CONTRACT_BOUNDARIES",
+      "FLOAT_NUMERIC_CONTRACT_WHEN_DECLARED"
+    ]
+  },
+  "version": "0.4.1",
+  "w7tp_contract": {
+    "acceptance_mode": "NOT_APPLICABLE",
+    "canonical_ref": null,
+    "carrier_is_not_w7tp": true,
+    "claimed": false,
+    "packet_carried_verification": false,
+    "protocol_bearing_packet": false,
+    "reconstruction_conditions": false
+  }
+}

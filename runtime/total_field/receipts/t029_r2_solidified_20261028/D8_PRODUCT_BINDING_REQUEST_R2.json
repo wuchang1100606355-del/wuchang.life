@@ -1,0 +1,38 @@
+{
+  "schema": "w7tp.t029.r2_historical_repair_attestation_candidate/1.0",
+  "task_id": "T-029",
+  "revision": "R2",
+  "founder_intent": "江政隆要求保留 V1 歷史並為已完成的本機修復建立新簽署候選",
+  "requested_effect": "T029_R2_ATTEST_VERIFIED_LOCAL_REPAIR",
+  "state": "CANDIDATE_ONLY_UNSIGNED",
+  "historical_v1_request_ref": "/tmp/t029_signer/D8_PRODUCT_BINDING_REQUEST.json",
+  "historical_v1_request_sha256": "b1a37b86171c44e4c2d75d6267c01c88f75c5386bdafbe1152cfdd5adde4cc84",
+  "historical_v1_binding_ref": "/tmp/t029_signer/PROMOTION_BINDING.json",
+  "historical_v1_binding_sha256": "3cf246c56aa1381a49c39691feb2aa43b748e4c6afcf4d9adf27dd8a1ef0a8f2",
+  "exact_targets": [
+    {
+      "path": "/home/taiji_admin/Taiji_Hub_worktrees/T029_20261013/review/tools/w7tp_staged_packet_classifier.py",
+      "original_preimage_sha256": "714b270528d430ee8c79807710c01ebc88e9cdf8e74f5954bd0e5c49f82db1eb",
+      "superseded_v1_candidate_sha256": "26fa11a8ae0cae56a50c07be556f745940ea61587719a9b7109f5ac02ebb4b43",
+      "verified_current_state_sha256": "49dfd689012806234b0de5661220cd8bd3758274572be327002aebdd84a8e553"
+    },
+    {
+      "path": "/home/taiji_admin/Taiji_Hub_worktrees/T029_20261013/DESIGN_DELIVERY_20261013_R3.json",
+      "original_preimage_sha256": "164f042c67631f4ac226b6b2c0091847f9b4ba5a0ca148359b419884625875b7",
+      "superseded_v1_candidate_sha256": "90c8088553015a8e328552636e3c3270eb3d588aabff95feb34023e9d2b122fd",
+      "verified_current_state_sha256": "3065ca4739d6bdb9b0c3846bf0fd945ddd00c6b3a7ab0ba504b696547622b770"
+    }
+  ],
+  "authority_observation": {
+    "active_authority_preimage_sha256": "f878d606688556e3e8ad1225e7ee7b4a13ac0b77c964cdecb765197f6a9dbcc3",
+    "proposed_successor_sha256": "7a527bea3b25334593f292bded31051746d530e8314180b8b9828a726d32370c",
+    "formal_authority_changed_by_r2": false
+  },
+  "formal_total_field_review_required": true,
+  "founder_passkey_required": true,
+  "single_use": true,
+  "max_ttl_seconds": 300,
+  "passkey_challenge_created": false,
+  "formal_d8_admitted": true,
+  "production_write_executed": false
+}

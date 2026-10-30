@@ -1,0 +1,13 @@
+interface:
+  display_name: 8D ADI 證據工作迴圈
+  short_description: 以八維狀態場凍結工作、保存決策、交接狀態並以證據誠實收尾
+  default_prompt: 使用 $govern-8d-adi-evidence-workloop，把這項工作收斂為候選限定的 8D ADI 證據迴圈，凍結意圖、保留決策與交接，最後用可重現證據收尾。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

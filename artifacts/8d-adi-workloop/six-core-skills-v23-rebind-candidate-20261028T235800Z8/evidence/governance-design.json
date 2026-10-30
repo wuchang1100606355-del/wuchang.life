@@ -1,0 +1,204 @@
+{
+  "checks": [
+    {
+      "check": "schema_identity",
+      "evidence": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/govern-total-field-skills/references/total_field_skill_manifest_v1.schema.json",
+      "pass": true
+    },
+    {
+      "check": "family_catalog_complete",
+      "evidence": "/home/taiji_admin/Taiji_Hub/artifacts/8d-adi-workloop/six-core-skills-v23-upgrade-candidate-20261024T015400Z8/skills/govern-total-field-skills/references/core_skill_family_catalog_v1.json",
+      "pass": true
+    },
+    {
+      "check": "eight_fields_locked",
+      "evidence": "D1 intent through D8 envelope authority",
+      "pass": true
+    },
+    {
+      "check": "technology_identity_schema_present",
+      "evidence": "references/total_field_skill_manifest_v1.schema.json",
+      "pass": true
+    },
+    {
+      "check": "technology_identity_reference_complete",
+      "evidence": "references/technology-identity-manifest-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:Intent Communication / State-Field Packet Communication",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:packet-level irreversible local decision index",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:system-level lineage/logical-time/state-transition/namespace/evidence spatial-temporal index network",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:5D_INTEGER_METRIC",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:floating-point data index",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:deterministic replay evidence",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:H64-TD",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:current 10 claims",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:V04’s 21-claim draft",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:append-only",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:Never silently overwrite",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:effect equivalence is not technical equivalence",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:ELIMINATED_OPERATIONS",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:EFFECT_ONLY_EQUIVALENT",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:EV5_REPRODUCIBLE_CAUSAL_EVIDENCE",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "v2_1_lock:weighted identity scores",
+      "evidence": "references/skill-definition-contract.md",
+      "pass": true
+    },
+    {
+      "check": "lifecycle_append_only",
+      "evidence": "references/lifecycle-and-total-field.md",
+      "pass": true
+    },
+    {
+      "check": "governance_manifest_valid",
+      "evidence": "no errors",
+      "pass": true
+    },
+    {
+      "check": "inventory_finds_governance_skill",
+      "evidence": "govern-total-field-skills",
+      "pass": true
+    },
+    {
+      "check": "authority_injection_blocked",
+      "evidence": "SCHEMA:authority_boundary.allowed_outputs.6:'ALLOW' is not one of ['CANDIDATE', 'EVIDENCE', 'HOLD', 'AUTHORIZATION_REQUEST', 'HUMAN_REPLY', 'TOTAL_FIELD_DECISION_RECEIPT'],UNAUTHORIZED_OUTPUT_DECLARED",
+      "pass": true
+    },
+    {
+      "check": "seat_bypass_blocked",
+      "evidence": "IDENTITY_SEAT_ACTIVE_SEAT_REQUIRED_REQUIRED,SCHEMA:identity_and_seat.active_seat_required:True was expected",
+      "pass": true
+    },
+    {
+      "check": "cross_member_plaintext_blocked",
+      "evidence": "CROSS_MEMBER_PLAINTEXT_MUST_BE_FALSE,SCHEMA:identity_and_seat.cross_member_plaintext_allowed:False was expected",
+      "pass": true
+    },
+    {
+      "check": "d1_identity_or_state_drift_blocked",
+      "evidence": "D1_NAME_INVALID",
+      "pass": true
+    },
+    {
+      "check": "red_team_waiver_blocked",
+      "evidence": "RED_TEAM_STAGES_INCOMPLETE,SCHEMA:red_team_contract.stages:['RED_TEAM_PRE_DEFINITION', 'RED_TEAM_POST_OPERATION'] does not contain items matching the given schema",
+      "pass": true
+    },
+    {
+      "check": "fake_w7tp_claim_blocked",
+      "evidence": "W7TP_ACCEPTANCE_MODE_INVALID,W7TP_CANONICAL_REF_MISSING,W7TP_PACKET_CARRIED_VERIFICATION_MISSING,W7TP_PROTOCOL_BEARING_PACKET_MISSING,W7TP_RECONSTRUCTION_CONDITIONS_MISSING",
+      "pass": true
+    },
+    {
+      "check": "e5_without_human_final_blocked",
+      "evidence": "E5_HUMAN_FINAL_MISSING,SCHEMA:authority_boundary.human_final_effect_classes:['E4'] does not contain items matching the given schema",
+      "pass": true
+    },
+    {
+      "check": "raw_protected_context_blocked",
+      "evidence": "RAW_PROTECTED_CONTEXT_ALLOWED,SCHEMA:information_context.raw_protected_context_allowed:False was expected",
+      "pass": true
+    },
+    {
+      "check": "legacy_canonical_v2_blocked",
+      "evidence": "LEGACY_W7TP_CANONICAL_V2_REF",
+      "pass": true
+    },
+    {
+      "check": "floating_point_replay_omission_blocked",
+      "evidence": "FLOATING_POINT_DATA_INDEX_REPLAY_CHECK_MISSING",
+      "pass": true
+    },
+    {
+      "check": "technology_identity_axis_omission_blocked",
+      "evidence": "SCHEMA:technology_identity_contract.axes:['MECHANISM', 'CAUSAL_PATH', 'DEPENDENCIES', 'ELIMINATED_OPERATIONS', 'CARRIER_RECONSTRUCTION_VERIFICATION'] is too short,TECHNOLOGY_IDENTITY_AXES_INCOMPLETE",
+      "pass": true
+    },
+    {
+      "check": "technology_identity_weighted_score_blocked",
+      "evidence": "SCHEMA:technology_identity_contract.weighted_score_forbidden:True was expected,TECHNOLOGY_IDENTITY_WEIGHTED_SCORE_FORBIDDEN_REQUIRED",
+      "pass": true
+    },
+    {
+      "check": "effect_equivalence_shortcut_blocked",
+      "evidence": "SCHEMA:technology_identity_contract.effect_equivalence_not_technical_equivalence:True was expected,TECHNOLOGY_IDENTITY_EFFECT_EQUIVALENCE_NOT_TECHNICAL_EQUIVALENCE_REQUIRED",
+      "pass": true
+    },
+    {
+      "check": "effect_class_evidence_collision_blocked",
+      "evidence": "SCHEMA:technology_identity_contract.evidence_scale.0:'E0' is not one of ['EV0_UNSUPPORTED', 'EV1_ASSERTION', 'EV2_SECONDARY_SOURCE', 'EV3_PRIMARY_DOCUMENT', 'EV4_IMPLEMENTATION_EVIDENCE', 'EV5_REPRODUCIBLE_CAUSAL_EVIDENCE'],SCHEMA:technology_identity_contract.evidence_scale.1:'E1' is not one of ['EV0_UNSUPPORTED', 'EV1_ASSERTION', 'EV2_SECONDARY_SOURCE', 'EV3_PRIMARY_DOCUMENT', 'EV4_IMPLEMENTATION_EVIDENCE', 'EV5_REPRODUCIBLE_CAUSAL_EVIDENCE'],SCHEMA:technology_identity_contract.evidence_scale.2:'E2' is not one of ['EV0_UNSUPPORTED', 'EV1_ASSERTION', 'EV2_SECONDARY_SOURCE', 'EV3_PRIMARY_DOCUMENT', 'EV4_IMPLEMENTATION_EVIDENCE', 'EV5_REPRODUCIBLE_CAUSAL_EVIDENCE'],SCHEMA:technology_identity_contract.evidence_scale.3:'E3' is not one of ['EV0_UNSUPPORTED', 'EV1_ASSERTION', 'EV2_SECONDARY_SOURCE', 'EV3_PRIMARY_DOCUMENT', 'EV4_IMPLEMENTATION_EVIDENCE', 'EV5_REPRODUCIBLE_CAUSAL_EVIDENCE'],SCHEMA:technology_identity_contract.evidence_scale.4:'E4' is not one of ['EV0_UNSUPPORTED', 'EV1_ASSERTION', 'EV2_SECONDARY_SOURCE', 'EV3_PRIMARY_DOCUMENT', 'EV4_IMPLEMENTATION_EVIDENCE', 'EV5_REPRODUCIBLE_CAUSAL_EVIDENCE'],SCHEMA:technology_identity_contract.evidence_scale.5:'E5' is not one of ['EV0_UNSUPPORTED', 'EV1_ASSERTION', 'EV2_SECONDARY_SOURCE', 'EV3_PRIMARY_DOCUMENT', 'EV4_IMPLEMENTATION_EVIDENCE', 'EV5_REPRODUCIBLE_CAUSAL_EVIDENCE'],TECHNOLOGY_IDENTITY_EVIDENCE_SCALE_INVALID",
+      "pass": true
+    },
+    {
+      "check": "technology_identity_patent_inference_blocked",
+      "evidence": "SCHEMA:technology_identity_contract.patentability_inference_forbidden:True was expected,TECHNOLOGY_IDENTITY_PATENTABILITY_INFERENCE_FORBIDDEN_REQUIRED",
+      "pass": true
+    }
+  ],
+  "checks_passed": 39,
+  "checks_total": 39,
+  "forbidden_actions_performed": [],
+  "open_findings": [],
+  "state": "PASS_TOTAL_FIELD_SKILL_GOVERNANCE_RED_TEAM_CONVERGED"
+}

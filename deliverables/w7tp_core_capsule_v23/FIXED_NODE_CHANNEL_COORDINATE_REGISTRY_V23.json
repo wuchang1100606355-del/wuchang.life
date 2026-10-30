@@ -1,0 +1,98 @@
+{
+  "schema_id": "W7TP_8D_ADI_V23_FIXED_NODE_CHANNEL_COORDINATES_V1",
+  "state": "PASS_ALL_NODE_COORDINATES_AND_CAPABILITIES_FIXED",
+  "router_anchor": {
+    "model": "ASUS_RT-BE86U",
+    "firmware": "3006.102.7",
+    "serial": "SCIG7D202656CS6",
+    "lan_ip": "192.168.50.1",
+    "wan_ip": "220.135.21.74",
+    "ddns": "wuchang.asuscomm.com",
+    "tailscale_ip": "100.67.68.114",
+    "lan_mac": "60:CF:84:37:74:28"
+  },
+  "nodes": {
+    "01_taiji01": {
+      "role": "TOTAL_FIELD_SOVEREIGN_CORE_AND_AUDIO_BROKER",
+      "os": "Linux 6.8.0-142-generic",
+      "lan_ip": "192.168.50.249",
+      "tailscale_ip": "100.71.224.18",
+      "ipv6_ula": "fd7a:115c:a1e0::b3a:e012",
+      "fixed_channels": [
+        "ssh:22",
+        "mcp:W7TP_8D_ADI_MCP_01",
+        "raop_homepod:192.168.50.101:7000"
+      ]
+    },
+    "MSI_workstation": {
+      "role": "FOUNDER_WORKSTATION_3D_RENDER_AND_PASSKEY_GATE",
+      "os": "Windows 11 26H2 + WSL2 Linux",
+      "lan_ip": "192.168.50.82",
+      "tailscale_ip": "100.105.82.28",
+      "fixed_channels": [
+        "reverse_ssh:127.0.0.1:2222",
+        "tailscale_ssh:100.105.82.28:22",
+        "passkey_gate:127.0.0.1:9120"
+      ]
+    },
+    "02_taiji02": {
+      "role": "CUSTOMER_SELF_ORDERING_AND_HDMI_3D_XIAOJ_DISPLAY",
+      "os": "ChromeOS (drallion) + Crostini Linux (penguin)",
+      "tailscale_ip_arc": "100.64.68.101",
+      "tailscale_ip_linux": "100.111.139.7",
+      "fixed_channels": [
+        "adb_tcp:100.64.68.101:5555",
+        "crostini_ssh:100.111.139.7:22"
+      ],
+      "capabilities": [
+        "SELF_SERVICE_ORDERING_TOUCH_UI",
+        "HDMI_INDEPENDENT_3D_XIAOJ_AVATAR_60FPS",
+        "GST_80B_MOTION_CELL_RECEIVER",
+        "NVR_CAMERA_DISPLAY_STRICTLY_FORBIDDEN"
+      ]
+    },
+    "03_taiji03": {
+      "role": "COMPANY3_MAIN_STORE_POS_ADMIN_AND_STORE_COMPUTE",
+      "os": "Windows 11 26H2 (taiji03) + WSL2 Linux (DESKTOP-OHE05SC)",
+      "lan_ip": "192.168.50.148",
+      "tailscale_ip": "100.113.86.32",
+      "wsl_node_id": "DESKTOP-OHE05SC",
+      "fixed_channels": [
+        "tailscale_mesh:100.113.86.32",
+        "lan_direct:192.168.50.148"
+      ],
+      "capabilities": [
+        "COMPANY_3_POS_AND_BACKOFFICE",
+        "COMPANY_1_DB_ISOLATED",
+        "WINDOWS_3_ROLE_AUDIO_ALIGNED",
+        "WSL2_LINUX_SMALL_AGENT_HOST"
+      ]
+    },
+    "04_taiji04": {
+      "role": "SUNMI_CARD_TERMINAL_POS_AND_GEMINI_COMMERCIAL_VOICE_ENDPOINT",
+      "hardware_model": "SUNMI_V3_MIX_EDLA_GL",
+      "os": "Android 13 (Google EDLA Commercial Certified)",
+      "tailscale_ip": "100.98.69.115",
+      "ipv6_ula": "fd7a:115c:a1e0::703a:4573",
+      "fixed_channels": [
+        "tailscale_mesh:100.98.69.115",
+        "ipv6_direct:[2001:b011:300a:d4c3:1c2d:8c34:890:127a]:48581"
+      ],
+      "capabilities": [
+        "STAFF_POS_AND_CARD_PAYMENT_TERMINAL",
+        "GOOGLE_EDLA_COMMERCIAL_VOICE_HARDWARE_LICENSED",
+        "GEMINI_CONTROLLED_VOICE_ASSISTANT_ENDPOINT",
+        "F1_AUDIO_PCM_VOICE_CELL_CAPTURE_TO_TOTAL_FIELD",
+        "XJ021_VOUCHER_VERIFICATION_TERMINAL"
+      ]
+    },
+    "us_witness_node": {
+      "role": "CROSS_OCEAN_GST_RECONSTRUCTION_WITNESS",
+      "os": "Linux 6.1.0-53-cloud-amd64",
+      "tailscale_ip": "100.99.148.1",
+      "fixed_channels": [
+        "tailscale_ssh:100.99.148.1:22"
+      ]
+    }
+  }
+}

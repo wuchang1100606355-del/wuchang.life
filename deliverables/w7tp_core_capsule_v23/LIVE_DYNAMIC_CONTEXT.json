@@ -1,0 +1,186 @@
+{
+  "state": "TOTAL_FIELD_DYNAMIC_CONTEXT_READY",
+  "context_id": "ctx:universal-6engine-bound:20261026T193928Z",
+  "coordinate": {
+    "node": "taiji01",
+    "git_head": "48e7840e82c50bfac4caca8ca5d8fa4e56ba3d3b",
+    "msi_target": "7914d170-9245-4177-bb12-54aae2ab2631"
+  },
+  "receiver_entrypoint": {
+    "module_path": "tools/total_field_authority_resolver.py",
+    "function_name": "receive_candidate_authority_bound"
+  },
+  "candidate_packet_path": "w7tp_runs/F1_TO_F6_RECEIVE_CANDIDATE_PACKET.json",
+  "candidate_packet": {
+    "schema_id": "W7TP_CANDIDATE_RECEIVE_PACKET_V1",
+    "candidate_id": "candidate_ref:msi_f1_to_f6_native_cli_wiring_20261025",
+    "state": "CANDIDATE_ONLY",
+    "execution_authorized": false,
+    "candidate_authority": false,
+    "source_node": "MSI",
+    "target_node": "taiji01",
+    "candidate_packet_sha256": "9de63de01eea959eb4328968c51315ebf4abec05d8ef2f6cf4f917cb7e54a6e6",
+    "skill_index_sha256": "df07dfa01d0f39fcd03db9aa857a4193e4772b33be4408e995ad65e17916a9c3",
+    "skill_source_manifest_sha256": "e46bdc78c9af07d9e07fe0cfe4d67b37c5750176f470742778b39bb719e8c375"
+  },
+  "context_items": [
+    {
+      "item_id": "ctx_item:f4_structured_record:3f8fa80b612b6a9f",
+      "path": "w7tp_runs/CANONICAL_PROMOTION_RECEIPT.json",
+      "size_bytes": 1732,
+      "file_sha256": "3f8fa80b612b6a9f646297fc5e08d140a5ee63aa5dcbd00d24396b5e81612f2d",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T155639Z"
+    },
+    {
+      "item_id": "ctx_item:f5_document_container:f51b9f5e3deb4353",
+      "path": "tools/total_field/six_engine_capability_hub.py",
+      "size_bytes": 1535,
+      "file_sha256": "f51b9f5e3deb4353ed10fcd05d982f9b77e90d5197785c2fd776a0e8ce9f7c27",
+      "routed_engine_family": "F5_DOCUMENT_CONTAINER",
+      "routed_capability": "reconstruct_document_and_docx_container",
+      "engine_verified_anchor_sha256": "c24d704c4037199dd74bb7e998077c8418333bc1c084e0fe579690bc522d8daa",
+      "bound_at_utc": "20261026T160104Z"
+    },
+    {
+      "item_id": "ctx_item:f5_document_container:94681e39e93f0951",
+      "path": "tools/total_field/universal_file_context_adapter.py",
+      "size_bytes": 5495,
+      "file_sha256": "94681e39e93f09512d0e24e9ffc6019c78078202df52123c22f77880aad72295",
+      "routed_engine_family": "F5_DOCUMENT_CONTAINER",
+      "routed_capability": "reconstruct_document_and_docx_container",
+      "engine_verified_anchor_sha256": "c24d704c4037199dd74bb7e998077c8418333bc1c084e0fe579690bc522d8daa",
+      "bound_at_utc": "20261026T161232Z"
+    },
+    {
+      "item_id": "ctx_item:f4_structured_record:4f7c47c17547bf42",
+      "path": "runtime/total_field/active/ACTIVE_6_ENGINE_CAPABILITY_REGISTRY.json",
+      "size_bytes": 3034,
+      "file_sha256": "4f7c47c17547bf423977e1efc706ac4f83e8fa1f82f4873d33ea37a6e561b9c6",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T170611Z"
+    },
+    {
+      "item_id": "ctx_item:f4_structured_record:aa1939bdb1d8bb6a",
+      "path": "runtime/total_field/active/REAL_VOICE_ORIGIN_CELL_NONZERO_RECEIPT.json",
+      "size_bytes": 1036,
+      "file_sha256": "aa1939bdb1d8bb6aabc706674dd5017848251c5202eb00c67856a285e6df871a",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T182131Z"
+    },
+    {
+      "item_id": "ctx_item:f4_structured_record:deedb7862bc7d2c3",
+      "path": "runtime/total_field/active/FIXED_NODE_CHANNEL_COORDINATE_REGISTRY_V23.json",
+      "size_bytes": 3297,
+      "file_sha256": "deedb7862bc7d2c3ad440500fc54cef8fa409c3fc70b115512d6338c73200e0c",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T193928Z"
+    }
+  ],
+  "policy": {
+    "evidence_only": true,
+    "candidate_only": true,
+    "formal_authority_granted": false
+  },
+  "six_engine_capability_binding": {
+    "capability_state": "ACTIVE_SIX_ENGINE_CAPABILITY_LANDED",
+    "registry_ref": "runtime/total_field/active/ACTIVE_6_ENGINE_CAPABILITY_REGISTRY.json",
+    "registry_sha256": "3b7cecc4d0d69fad55eb26e51c369f3b3ae819a1e58a301b9036d1ce479c45a1",
+    "active_families": [
+      "F1_AUDIO_PCM",
+      "F2_VISUAL_TEMPORAL",
+      "F3_BONE_COORDINATE",
+      "F4_STRUCTURED_RECORD",
+      "F5_DOCUMENT_CONTAINER",
+      "F6_BINARY_ARCHIVE"
+    ],
+    "zero_engine_modification_verified": true,
+    "generic_rle_fallback_used": false
+  },
+  "derivative_designs_wired": {
+    "dynamic_context_bus": "runtime/total_field/CURRENT_LIVE_DYNAMIC_CONTEXT.json",
+    "root_live_context_mirror": "LIVE_DYNAMIC_CONTEXT.json",
+    "d4_adi_v2_record_wiring": "tools/total_field/d4_adi_v2_record_wiring.py",
+    "six_engine_capability_hub": "tools/total_field/six_engine_capability_hub.py",
+    "authority_resolver": "tools/total_field_authority_resolver.py"
+  },
+  "source_bindings": [
+    {
+      "source_id": "six_engine_capability_registry",
+      "path": "runtime/total_field/active/ACTIVE_6_ENGINE_CAPABILITY_REGISTRY.json",
+      "sha256": "3b7cecc4d0d69fad55eb26e51c369f3b3ae819a1e58a301b9036d1ce479c45a1"
+    }
+  ],
+  "universal_file_context_items": [
+    {
+      "item_id": "ctx_item:f4_structured_record:3f8fa80b612b6a9f",
+      "path": "w7tp_runs/CANONICAL_PROMOTION_RECEIPT.json",
+      "size_bytes": 1732,
+      "file_sha256": "3f8fa80b612b6a9f646297fc5e08d140a5ee63aa5dcbd00d24396b5e81612f2d",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T155639Z"
+    },
+    {
+      "item_id": "ctx_item:f5_document_container:f51b9f5e3deb4353",
+      "path": "tools/total_field/six_engine_capability_hub.py",
+      "size_bytes": 1535,
+      "file_sha256": "f51b9f5e3deb4353ed10fcd05d982f9b77e90d5197785c2fd776a0e8ce9f7c27",
+      "routed_engine_family": "F5_DOCUMENT_CONTAINER",
+      "routed_capability": "reconstruct_document_and_docx_container",
+      "engine_verified_anchor_sha256": "c24d704c4037199dd74bb7e998077c8418333bc1c084e0fe579690bc522d8daa",
+      "bound_at_utc": "20261026T160104Z"
+    },
+    {
+      "item_id": "ctx_item:f5_document_container:94681e39e93f0951",
+      "path": "tools/total_field/universal_file_context_adapter.py",
+      "size_bytes": 5495,
+      "file_sha256": "94681e39e93f09512d0e24e9ffc6019c78078202df52123c22f77880aad72295",
+      "routed_engine_family": "F5_DOCUMENT_CONTAINER",
+      "routed_capability": "reconstruct_document_and_docx_container",
+      "engine_verified_anchor_sha256": "c24d704c4037199dd74bb7e998077c8418333bc1c084e0fe579690bc522d8daa",
+      "bound_at_utc": "20261026T161232Z"
+    },
+    {
+      "item_id": "ctx_item:f4_structured_record:4f7c47c17547bf42",
+      "path": "runtime/total_field/active/ACTIVE_6_ENGINE_CAPABILITY_REGISTRY.json",
+      "size_bytes": 3034,
+      "file_sha256": "4f7c47c17547bf423977e1efc706ac4f83e8fa1f82f4873d33ea37a6e561b9c6",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T170611Z"
+    },
+    {
+      "item_id": "ctx_item:f4_structured_record:aa1939bdb1d8bb6a",
+      "path": "runtime/total_field/active/REAL_VOICE_ORIGIN_CELL_NONZERO_RECEIPT.json",
+      "size_bytes": 1036,
+      "file_sha256": "aa1939bdb1d8bb6aabc706674dd5017848251c5202eb00c67856a285e6df871a",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T182131Z"
+    },
+    {
+      "item_id": "ctx_item:f4_structured_record:deedb7862bc7d2c3",
+      "path": "runtime/total_field/active/FIXED_NODE_CHANNEL_COORDINATE_REGISTRY_V23.json",
+      "size_bytes": 3297,
+      "file_sha256": "deedb7862bc7d2c3ad440500fc54cef8fa409c3fc70b115512d6338c73200e0c",
+      "routed_engine_family": "F4_STRUCTURED_RECORD",
+      "routed_capability": "reconstruct_structured_records",
+      "engine_verified_anchor_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "bound_at_utc": "20261026T193928Z"
+    }
+  ],
+  "historical_archive_isolation_enforced": true,
+  "packet_sha256": "19a340ec6e7b6f7a81abd1d35fb20a150dc9f7882e18e563d4b1a245fc3a4e6d"
+}

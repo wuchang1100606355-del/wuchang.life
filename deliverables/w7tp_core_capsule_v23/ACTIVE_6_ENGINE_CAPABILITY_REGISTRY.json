@@ -1,0 +1,69 @@
+{
+  "schema_id": "W7TP_8D_ADI_V23_SIX_ENGINE_CAPABILITY_REGISTRY_V1",
+  "state": "ACTIVE_SIX_ENGINE_CAPABILITY_LANDED",
+  "landed_at_utc": "2026-10-26T14:46:08Z",
+  "node_id": "taiji01",
+  "git_head": "48e7840e82c50bfac4caca8ca5d8fa4e56ba3d3b",
+  "zero_engine_modification_verified": true,
+  "generic_rle_fallback_used": false,
+  "canonical_mother_engines": {
+    "universal_8d_file_engine.py": "3cef224bf5adb929f7f40c6f9a362bca543fcc66c0aedb5b14c6ed4008113fec",
+    "gst_transceiver.py": "a27110275810088a4f1c105394a33aec13a4b2c8e49938b66dd7128ac243fdf2"
+  },
+  "bridge_and_adapter_modules": {
+    "native_family_bridge.py": "acb70e5c2ee3342a1df790a9e4f95d32cfed457089821e1885769ecf8b5a6d9c",
+    "native_engine_output_adapter.py": "28870fe02411c94b8090e32dba81cfb68eecd5844f55f6410ae31c93122eb77c",
+    "w7tp_safe_selftest.py": "351c9d2443153ce3a975ddfdd2d38b426b5d8f2ac029d34d80c9c1c488b3a6f6",
+    "w7tp_cli_candidate.py": "24f8f579b4d1f26fee9023745e5c6870cf3d5846af7c4daba623420ae74a251f"
+  },
+  "engines": {
+    "F1_AUDIO_PCM": {
+      "family_id": "F1",
+      "capability": "reconstruct_audio_pcm",
+      "verified_bytes": 121040896,
+      "verified_sha256": "50af2665986ad99d6409c41653a6b722d94a35b092ef4cce9be45c9c2b40351c",
+      "status": "LANDED_AND_VERIFIED"
+    },
+    "F2_VISUAL_TEMPORAL": {
+      "family_id": "F2",
+      "capability": "decode_temporal_series",
+      "verified_bytes": 272160,
+      "verified_sha256": "6709a0723311bde76756d822171695a28307ae783b23d6656529f195e6550174",
+      "status": "LANDED_AND_VERIFIED"
+    },
+    "F3_BONE_COORDINATE": {
+      "family_id": "F3",
+      "capability": "reconstruct_3d_bone_tracks",
+      "verified_bytes": 708,
+      "verified_joints": 118,
+      "verified_sha256": "0daf2a90586b1a6e67f35a635fbd18fb18f0f8418d9a0eca611211751263ab10",
+      "status": "LANDED_AND_VERIFIED"
+    },
+    "F4_STRUCTURED_RECORD": {
+      "family_id": "F4",
+      "capability": "reconstruct_structured_records",
+      "verified_bytes": 14238,
+      "verified_records": 445,
+      "verified_sha256": "c21b5285be8a788f5a757a19c946a1e4db1074407630da6ccd7b95ccbc7363b1",
+      "status": "LANDED_AND_VERIFIED"
+    },
+    "F5_DOCUMENT_CONTAINER": {
+      "family_id": "F5",
+      "capability": "reconstruct_document_and_docx_container",
+      "verified_markdown_bytes": 2251,
+      "verified_markdown_sha256": "e95c734f2ed3b2064a7d31e2c20bd6ae2ea93e6a37a98c54ae984252babbf7c4",
+      "verified_docx_bytes": 148621,
+      "verified_docx_sha256": "c24d704c4037199dd74bb7e998077c8418333bc1c084e0fe579690bc522d8daa",
+      "status": "LANDED_AND_VERIFIED"
+    },
+    "F6_BINARY_ARCHIVE": {
+      "family_id": "F6",
+      "capability": "reconstruct_binary_archive",
+      "verified_bytes": 12085,
+      "verified_sha256": "51586565bff966a656d6616f873ff0b039106fc8d8b5986f29c132f876ed6638",
+      "status": "LANDED_AND_VERIFIED"
+    }
+  },
+  "promotion_receipt_ref": "w7tp_runs/CANONICAL_PROMOTION_RECEIPT.json",
+  "registry_sha256": "3b7cecc4d0d69fad55eb26e51c369f3b3ae819a1e58a301b9036d1ce479c45a1"
+}

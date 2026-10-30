@@ -1,0 +1,141 @@
+{
+  "state": "PASS_V23_CANDIDATE_BUNDLE",
+  "manifest_count": 6,
+  "passed": 6,
+  "failed": 0,
+  "schema_status": "JSONSCHEMA_EXECUTED",
+  "adversarial_cases": [
+    {
+      "case": "trust_authorization",
+      "rejected": true,
+      "errors": [
+        "TRUST_SEAL_NOT_D8"
+      ]
+    },
+    {
+      "case": "skip_integrity",
+      "rejected": true,
+      "errors": [
+        "VERIFICATION_ELIMINATION_FORBIDDEN"
+      ]
+    },
+    {
+      "case": "wav_write",
+      "rejected": true,
+      "errors": [
+        "GENERATED_WAV_RAM_ONLY"
+      ]
+    },
+    {
+      "case": "zero_total_io",
+      "rejected": true,
+      "errors": [
+        "ZERO_TOTAL_DISK_IO_UNPROVEN"
+      ]
+    },
+    {
+      "case": "fixed_575",
+      "rejected": true,
+      "errors": [
+        "SCENE_SIZE_SCOPE"
+      ]
+    },
+    {
+      "case": "invent_02",
+      "rejected": true,
+      "errors": [
+        "02_IDENTITY_MUST_NOT_BE_INVENTED"
+      ]
+    },
+    {
+      "case": "unproven_cross_platform",
+      "rejected": true,
+      "errors": [
+        "CROSS_PLATFORM_NOT_PROVEN"
+      ]
+    },
+    {
+      "case": "authority_hash_grants",
+      "rejected": true,
+      "errors": [
+        "HASH_IS_NOT_AUTHORIZATION"
+      ]
+    },
+    {
+      "case": "no_base_hash",
+      "rejected": true,
+      "errors": [
+        "RECONSTRUCTION_KEY_DEPENDENCY_CLOSURE"
+      ]
+    },
+    {
+      "case": "canonical_drift",
+      "rejected": true,
+      "errors": [
+        "CANONICAL_BINDING_DRIFT"
+      ]
+    },
+    {
+      "case": "legacy_v21_current_ref",
+      "rejected": true,
+      "errors": [
+        "CANONICAL_V23_REQUIRED"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "skill_id": "w7tp.technology-identity-audit",
+      "version": "1.0.1",
+      "maximum_effect_class": "E1",
+      "manifest_sha256": "caaea28f1bb45f0459c202c922409207093ae8a3b918db342f87c1a35ac032dd",
+      "errors": [],
+      "static_definition_only": true
+    },
+    {
+      "skill_id": "w7tp.8d-adi.evidence-workloop",
+      "version": "1.0.1",
+      "maximum_effect_class": "E2",
+      "manifest_sha256": "bfd7f8e213bf3fb6651225aa6aa63d0abe20fcd5558d7ad6ab320fb33c6bc544",
+      "errors": [],
+      "static_definition_only": true
+    },
+    {
+      "skill_id": "w7tp.govern-8d-adi-git-index",
+      "version": "1.4.1",
+      "maximum_effect_class": "E2",
+      "manifest_sha256": "909ef216838147f951ccb026234865f39dbfafbaa3a4e2fe35aa8b42d11133fa",
+      "errors": [],
+      "static_definition_only": true
+    },
+    {
+      "skill_id": "w7tp.total-field.skill-governance",
+      "version": "2.3.1",
+      "maximum_effect_class": "E2",
+      "manifest_sha256": "9ee3bfaf6f32a0a87e012791cfdbb78888c2304464f05ae8f2027076875e9dca",
+      "errors": [],
+      "static_definition_only": true
+    },
+    {
+      "skill_id": "w7tp.integrated-engineering-delivery",
+      "version": "1.0.0",
+      "maximum_effect_class": "E5",
+      "manifest_sha256": "9f23ba5e7aa9385fabab59e345707e5f4e386698c9703a7230e13246e16373ae",
+      "errors": [],
+      "static_definition_only": true
+    },
+    {
+      "skill_id": "trace-file-8d-adi-causality",
+      "version": "0.4.1",
+      "maximum_effect_class": "E2",
+      "manifest_sha256": "77f5c1f21de38021a3b707e47db334f84d7b553aa22f6a3266058359739cfd60",
+      "errors": [],
+      "static_definition_only": true
+    }
+  ],
+  "errors": [],
+  "runtime_audio_test": "NOT_RUN_REUSES_REFERENCED_HISTORICAL_EVIDENCE",
+  "authority_decision": "NOT_REVIEWED",
+  "effect_authorization": false,
+  "cloud_sync": "NOT_PERFORMED"
+}

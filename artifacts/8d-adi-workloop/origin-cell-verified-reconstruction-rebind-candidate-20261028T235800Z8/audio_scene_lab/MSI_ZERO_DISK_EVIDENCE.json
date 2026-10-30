@@ -1,0 +1,55 @@
+{
+  "base_cache_sha256": "b96ca3ba6dab240a68fea82bf7276ff1bff708edfc8255965d294564318eb96c",
+  "base_descriptor": {
+    "lut_sha256": "015000c50c1582564f21b3923cb037b9bd99aa22ac13136f303bf867c88443a7",
+    "renderer_sha256": "06c07aa52633d7aa09a4ffcdde09bbbd49aeea05e2d240f21b0392a0b2b5cad2",
+    "sr": 24000,
+    "voice_material_sha256": {
+      "F1": "2dbf1c9fb211b305218876cb4ad7dd1189fe38207e8d13d178c5fe79b1f9e951",
+      "F2": "8abd93a11bedfeca27fa84db0a00b2f233a441ea762670846e64ee56e4c041ac",
+      "M1": "71aad29407288457efed586fd5bc7f9ecc5af51ffeb9ba5edee8ef4fbcce6cbf"
+    }
+  },
+  "boundaries": {
+    "deployment": false,
+    "effect_authorization": false,
+    "output_audio_zero_disk": true,
+    "voice_base_material_is_preexisting_file_input": true
+  },
+  "emotion_outputs": {
+    "cinema_blend": {"bytes": 359724, "sha256": "8c03a3f1a09f23af87c0b78acc1740573ac1aaae8b29c897f9b021c1839c8d2b"},
+    "excited_joy": {"bytes": 289072, "sha256": "f37958134d8db81c4073433420ed78f37e9429982f73e848b81538c639698477"},
+    "urgent_attentive": {"bytes": 305432, "sha256": "9e019941b19ef1415eaabfcda988ec52b1b61bf0b0759ae79259f4313ac93bc1"},
+    "warm_care": {"bytes": 344418, "sha256": "7bb7874f6a46ddfd926a60c76eb4d27190fd84ff5afa6544a4574116e08a1f24"}
+  },
+  "lut": {
+    "sha256": "015000c50c1582564f21b3923cb037b9bd99aa22ac13136f303bf867c88443a7",
+    "version": "w7tp.8dadi.audio-emotion-lut/2.3-candidate"
+  },
+  "reconstruction": {
+    "byte_exact_same_cell": true,
+    "drift_sha256": "ade52cf01174b98a2928479901dcdc8302b5192d4ab369c7f9255b58c4304c45",
+    "emotion_code_drift_changes_output": true,
+    "output_bytes": 240044,
+    "r1_sha256": "f9105876d0efd8e985df3d9f76f0b4035e913f937a12062a4a64ba002a2a8bbd",
+    "r2_sha256": "f9105876d0efd8e985df3d9f76f0b4035e913f937a12062a4a64ba002a2a8bbd"
+  },
+  "scene_cell": {
+    "serialized_bytes": 575,
+    "sha256": "2ac5ddaf761de623979a475427161487f2def8992d69c36ac776c93d8ff89148",
+    "zlib_bytes": 327
+  },
+  "schema": "W7TP_AUDIO_ZERO_DISK_ORIGIN_CELL_EVIDENCE_V1",
+  "state": "PASS_CANDIDATE",
+  "voice_material": {
+    "F1": {"bytes": 323756, "sha256": "2dbf1c9fb211b305218876cb4ad7dd1189fe38207e8d13d178c5fe79b1f9e951"},
+    "F2": {"bytes": 336428, "sha256": "8abd93a11bedfeca27fa84db0a00b2f233a441ea762670846e64ee56e4c041ac"},
+    "M1": {"bytes": 247724, "sha256": "71aad29407288457efed586fd5bc7f9ecc5af51ffeb9ba5edee8ef4fbcce6cbf"}
+  },
+  "zero_disk_io": {
+    "hash_computed_from_ram": true,
+    "output_wav_paths": [],
+    "playback_from_ram_supported": true,
+    "wav_outputs_written": 0
+  }
+}

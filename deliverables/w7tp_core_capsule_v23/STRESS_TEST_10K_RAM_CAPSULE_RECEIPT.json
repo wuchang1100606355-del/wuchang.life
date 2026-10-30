@@ -1,0 +1,42 @@
+{
+  "schema_id": "W7TP_8D_ADI_V23_10K_EXTREME_STRESS_RECEIPT_V1",
+  "state": "PASS_8D_ADI_GST_AND_LOCAL_LLM_10K_STRESS",
+  "skills_invoked": [
+    "8D_ADI_V2_3_STATE_FIELD",
+    "D6_ORIGIN_CELL_GST_TRANSCEIVER",
+    "LOCAL_LLM_CANDIDATE_ORGAN"
+  ],
+  "local_llm_organ": {
+    "mode": "SIMULATED_CANDIDATE_ORGAN",
+    "candidate_only": true,
+    "authority_created": false,
+    "sample_candidate": "{\"op\":\"order.candidate.create.v1\",\"sku\":\"XJ-021\",\"qty\":1,\"candidate_only\":true,\""
+  },
+  "gst_10k_stress": {
+    "rounds": 10000,
+    "raw_state_bytes": 11178890,
+    "packed_wire_bytes": 375459,
+    "bandwidth_reduction_pct": 96.6414,
+    "total_compute_ms": 928.05,
+    "throughput_ops_per_sec": 10775.3,
+    "avg_latency_us": 92.2,
+    "p50_latency_us": 78.8,
+    "p99_latency_us": 258.99,
+    "local_flush_io_ops": 1,
+    "local_flush_ms": 14.79
+  },
+  "audio_1m_samples_stress": {
+    "total_pcm_samples_reconstructed": 1024000,
+    "total_ms": 579.99,
+    "samples_per_sec": 1765538.5,
+    "byte_exact": true
+  },
+  "cross_node_msi_shm_stress": {
+    "msi_verified_cells": 10000,
+    "msi_all_byte_exact": true,
+    "msi_effect_state": "PASS_EFFECT_VERIFIED",
+    "msi_unpack_and_reconstruct_ms": 31.39,
+    "total_network_plus_msi_reconstruct_ms": 1278.07,
+    "pack_sha256": "210dc7200c3c04437d3c27e7c57f985b81a84b725b72b54617d287f9eb15c9d3"
+  }
+}
