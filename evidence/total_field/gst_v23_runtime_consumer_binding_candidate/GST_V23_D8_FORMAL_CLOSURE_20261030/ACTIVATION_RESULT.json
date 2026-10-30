@@ -1,0 +1,35 @@
+{
+  "schema_version": "w7tp-gst-v23-d4-activation-result/2",
+  "state": "PASS_CROSS_NODE_GENERATIVE_SESSION_RECONSTRUCTION",
+  "observed_at_utc": "2026-10-30T01:17:18Z",
+  "test_fixture_classification": "AUTO_GENERATED_FOUR_CHANNEL_SELFTEST_DATA_NOT_ARBITRARY_REAL_WORLD_FILE",
+  "codecs": {
+    "discrete_core_sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+    "v23_generator_sha256": "5cde10544819f3783c083a229b04569fd054a0cacc5bb981d99708b0e132ce19"
+  },
+  "wire_packets": {
+    "cold_8e_bytes": 570,
+    "cold_sha256": "269c30081074ac2d7f660315c742d912b257c40bc15e093f2f3134cf6ba889d4",
+    "warm_8d_bytes": 79,
+    "warm_sha256": "c4c43e2583c4044caa852bd2dd126d960e02bbdb333e9d899e7462fad809a87e"
+  },
+  "verified_directions": [
+    "taiji01_to_MSI_over_existing_SSH_carrier",
+    "MSI_to_taiji01_over_existing_SSH_carrier"
+  ],
+  "byte_exact_on_both_nodes": true,
+  "target_bytes": 24658,
+  "channels": 4,
+  "channel_manifest": {
+    "1": {"bytes": 6480, "sha256": "c094b73a00c8d5b68fc84c7721352bb18d83984c743bd2b53b8eaad216f72b08"},
+    "2": {"bytes": 12288, "sha256": "1b25641be1ec8621081f3d19184ec050c03895c8e012402a4ed3fecd346c651f"},
+    "3": {"bytes": 3120, "sha256": "fffa8c6c108022c54b04e33f326f35032e8bb5941f2ebe3af06f4f3a9047c628"},
+    "4": {"bytes": 2770, "sha256": "5208340f2a617247d143a3048230f4c61430e1481f5baf2644c35ea040e48c07"}
+  },
+  "target_manifest_sha256": "6ac1526fb1c815de4a06729ac5df526179300ffb0f66280ae90b790fd573d854",
+  "regression": {
+    "taiji01": "PASS_11_OF_11_ISOLATED",
+    "MSI": "PASS_11_OF_11_ISOLATED"
+  },
+  "authority_source": "EXISTING_SIGNED_150_DAY_BASELINE_NO_NEW_SCOPE_NO_NEW_SIGNATURE"
+}

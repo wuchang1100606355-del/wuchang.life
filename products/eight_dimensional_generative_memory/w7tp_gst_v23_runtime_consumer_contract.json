@@ -1,23 +1,35 @@
 {
-  "schema_version": "w7tp-gst-v23-runtime-consumer-binding/1-candidate",
-  "binding_id": "W7TP_GST_V23_RUNTIME_CONSUMER_BINDING_CANDIDATE_V1",
-  "state": "CANDIDATE_DISABLED",
+  "schema_version": "w7tp-gst-v23-runtime-consumer-binding/2-active",
+  "binding_id": "W7TP_GST_V23_RUNTIME_CONSUMER_BINDING_V2_20261030",
+  "state": "ACTIVE_FOUNDER_AUTHORIZED_RUNTIME_BINDING",
   "authority_resolution": {
     "founder_current_baseline": "W7TP_8D_ADI_V2.3",
     "founder_baseline_role": "DESIGN_AND_VERSION_AUTHORITY",
     "legacy_v2_1_master_pointer_role": "STALE_HISTORICAL_COORDINATE_NOT_CURRENT_VERSION_AUTHORITY",
     "true8d_allnode_router_canonical_role": "TOPOLOGY_AND_OBSERVATION_SCOPE_NOT_W7TP_VERSION_AUTHORITY",
     "v2_3_structure_evidence_role": "STRUCTURE_EVIDENCE_NOT_RUNTIME_ACTIVATION",
-    "runtime_activation_evidence_role": "SEPARATE_REQUIRED_FORMAL_RECEIPT"
+    "runtime_activation_evidence_role": "EXACT_VERSIONED_D4_RECEIPT_PLUS_EXISTING_SIGNED_FOUNDER_AUTHORITY"
   },
   "existing_implementation_binding": {
     "source_path": "products/eight_dimensional_generative_memory/w7tp_origin_cell_generative_v2.py",
-    "source_sha256": "5902d92fd5132bc916df9296696ee79f07b1c7ec2f7f8645f85ebc8ad296a254",
+    "source_sha256": "5cde10544819f3783c083a229b04569fd054a0cacc5bb981d99708b0e132ce19",
     "packet_schema": "w7tp-8dadi-origin-cell-generative-rule-packet/2.3-candidate",
     "receive_entrypoint": "validate_rule_packet",
     "origin_cell_entrypoint": "execute_reconstruction_rules",
     "reconstruction_entrypoint": "reconstruct_from_rule_packet",
     "result_delivery": "RETURN_VERIFIED_RECONSTRUCTION_RECEIPT"
+  },
+  "binary_origin_cell_binding": {
+    "source_path": "products/eight_dimensional_generative_memory/universal_origin_cell_codec_v2.py",
+    "source_sha256": "345af4963feb2fd88c684a96c505aafae63ad46c2c16e5c4dd13722eb3c7a23b",
+    "cold_magic": 142,
+    "warm_magic": 141,
+    "max_packet_bytes": 16777216,
+    "max_bundle_bytes": 65536,
+    "max_reconstructed_bytes": 67108864,
+    "requires_session_substrate_for_warm": true,
+    "float_parameters_allowed": false,
+    "legacy_diff_as_d6_allowed": false
   },
   "consumer_relation": {
     "cardinality": "ONE_EXPLICIT_BINDING_MANY_ALLOWED_RUNTIME_NODES_AND_CARRIERS",
@@ -64,7 +76,7 @@
     "active_by_default": false,
     "candidate_execution_requires_explicit_isolated_mode": true,
     "founder_direct_runtime_activation": "ALLOWED_BY_EXPLICIT_CURRENT_GOVERNANCE_COMMAND",
-    "formal_total_field_activation_adapter_status": "NOT_BOUND_SEPARATE_FROM_FOUNDER_DIRECT_ACTIVATION",
+    "formal_total_field_activation_adapter_status": "BOUND_EXISTING_SIGNED_150_DAY_AUTHORITY",
     "formal_activation_requires": [
       "FOUNDER_CONFIRMATION_FOR_THIS_BINDING_HASH",
       "TOTAL_FIELD_ALLOW_RECEIPT",
@@ -87,9 +99,9 @@
   },
   "governance": {
     "canonical": false,
-    "runtime_activated": false,
+    "runtime_activated": true,
     "service_installed": false,
-    "deployed": false,
-    "total_field_decision": "NOT_RUN"
+    "deployed": true,
+    "total_field_decision": "PASS"
   }
 }
