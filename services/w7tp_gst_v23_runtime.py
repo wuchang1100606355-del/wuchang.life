@@ -15,7 +15,7 @@ ACTIVE_BINDING_PATH = ROOT / "runtime/total_field/gst_v23_runtime_consumer/ACTIV
 AUTHORITY_PATH = ROOT / "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
 D8_DECISION_PATH = ROOT / (
     "evidence/total_field/gst_v23_runtime_consumer_binding_candidate/"
-    "GST_V23_D8_FORMAL_CLOSURE_20260924/D8_FORMAL_CLOSURE_DECISION.json"
+    "GST_V23_D8_FORMAL_CLOSURE_20261030/D8_FORMAL_CLOSURE_DECISION.json"
 )
 DELIVERY_ROOT = ROOT / "runtime/total_field/gst_v23_runtime_consumer/deliveries"
 REQUIRED_EFFECT = "AUTHORIZE_GST_V23_RUNTIME_CONSUMER_FORMAL_DELIVERY"
@@ -32,6 +32,11 @@ _FORBIDDEN_SEMANTIC_KEYS = frozenset({
     "target_data", "target_bytes", "previous_state", "prior_state",
     "base_payload", "compressed_payload", "compressed_blob",
 })
+_DIFF_MASQUERADE_KEYS = frozenset({
+    "diff", "delta", "deltas", "upserts", "base_copy", "set_fixed",
+    "byte_patch", "changed_bytes", "file_fragment", "literal_bytes",
+})
+_DIFF_MASQUERADE_OPCODES = frozenset({"BASE_COPY", "SET_FIXED", "INSERT", "DELETE", "LITERAL"})
 _FORBIDDEN_KEY_MARKERS = (
     "compress", "gzip", "zlib", "bz2", "lzma", "archive",
     "xdelta", "bsdiff", "rsync", "delta", "patch",
@@ -71,10 +76,25 @@ def _normalized_key(value: Any) -> str:
     return str(value).strip().lower().replace("-", "_")
 
 
+def _reject_float_parameters(value: Any) -> None:
+    if type(value) is float:
+        raise GstRuntimeHold("HOLD_FLOAT_PARAMETER_FORBIDDEN")
+    if isinstance(value, dict):
+        for nested in value.values():
+            _reject_float_parameters(nested)
+    elif isinstance(value, (list, tuple)):
+        for nested in value:
+            _reject_float_parameters(nested)
+
+
 def _reject_polluting_keys(value: Any, path: str = "$") -> None:
     if isinstance(value, dict):
         for key, nested in value.items():
             normalized = _normalized_key(key)
+            if normalized in _DIFF_MASQUERADE_KEYS or normalized.endswith(
+                ("_delta", "_diff", "_upserts")
+            ):
+                raise GstRuntimeHold("HOLD_DIFF_MASQUERADING_AS_D6_REJECTED")
             if normalized == "differential_input_allowed":
                 pass
             elif (
@@ -88,6 +108,8 @@ def _reject_polluting_keys(value: Any, path: str = "$") -> None:
     elif isinstance(value, list):
         for index, nested in enumerate(value):
             _reject_polluting_keys(nested, f"{path}[{index}]")
+    elif isinstance(value, str) and value.strip().upper() in _DIFF_MASQUERADE_OPCODES:
+        raise GstRuntimeHold("HOLD_DIFF_MASQUERADING_AS_D6_REJECTED")
 
 
 def _validate_rule_body_purity(packet: dict[str, Any]) -> None:
@@ -143,10 +165,10 @@ def _validate_state_cell_purity(packet: dict[str, Any]) -> None:
 def verify_origin_cell_semantic_purity(packet: dict[str, Any]) -> None:
     if not isinstance(packet, dict):
         raise GstRuntimeHold("HOLD_GST_RUNTIME_PACKET_OBJECT_REQUIRED")
+    _reject_float_parameters(packet)
+    _reject_polluting_keys(packet)
     if packet.get("packet_type") != "ORIGIN_CELL_GENERATIVE_RULE_PACKET":
         raise GstRuntimeHold("HOLD_GST_RUNTIME_ORIGIN_CELL_PACKET_REQUIRED")
-
-    _reject_polluting_keys(packet)
 
     field = packet.get("joint_state_field")
     if not isinstance(field, dict):
@@ -256,6 +278,26 @@ def verify_active_binding(
         raise GstRuntimeHold("HOLD_GST_RUNTIME_FORMAL_DECISION_AUTHORITY_MISSING")
     if REQUIRED_EFFECT not in authority.get("allowed_effects", []):
         raise GstRuntimeHold("HOLD_GST_RUNTIME_REQUIRED_EFFECT_NOT_ALLOWED")
+    # The active JSON allowlist is insufficient authority on its own: verify
+    # the live Founder master signature and both EXISTING granted effects.
+    try:
+        import sys
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from tools.total_field_authority_resolver import (
+            resolve_total_field_authority_dual_schema,
+        )
+        for effect in ("EXACT_MINIMAL_REPAIR_ONLY", REQUIRED_EFFECT):
+            verification = resolve_total_field_authority_dual_schema(
+                repo_root=root, required_effect=effect,
+            )
+            if (verification.get("state") != "PASS_DUAL_SCHEMA_AUTHORITY_RESOLVED"
+                    or verification.get("authority_verified") is not True):
+                raise GstRuntimeHold("HOLD_GST_RUNTIME_FOUNDER_AUTHORITY_UNVERIFIED")
+    except GstRuntimeHold:
+        raise
+    except Exception as exc:
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_FOUNDER_AUTHORITY_UNVERIFIED") from exc
     if decision.get("state") != "PASS_D8_FORMAL_CLOSURE":
         raise GstRuntimeHold("HOLD_GST_RUNTIME_D8_NOT_CLOSED")
     if decision.get("required_effect") != REQUIRED_EFFECT:
@@ -274,6 +316,9 @@ def verify_active_binding(
     historical_authority_hash = decision.get("authority_pointer_sha256")
     if not isinstance(historical_authority_hash, str) or len(historical_authority_hash) != 64:
         raise GstRuntimeHold("HOLD_GST_RUNTIME_D8_AUTHORITY_COORDINATE_INVALID")
+    if (decision.get("schema_version") == "w7tp-gst-v23-d8-formal-closure-decision/2"
+            and historical_authority_hash != sha256_file(authority_path)):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_D8_AUTHORITY_HASH_MISMATCH")
 
     consumer_path = resolve_repo_ref(root, binding.get("consumer_path"))
     contract_path = resolve_repo_ref(root, binding.get("contract_path"))
@@ -320,6 +365,17 @@ def verify_active_binding(
 
 def runtime_status(**paths: Any) -> dict[str, Any]:
     context = verify_active_binding(**paths)
+    consumer = _load_consumer(context["consumer_path"])
+    if not callable(getattr(consumer, "inspect_binding", None)):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSUMER_INSPECT_MISSING")
+    try:
+        inspected = consumer.inspect_binding(context["contract_path"])
+    except Exception as exc:
+        if hasattr(exc, "code"):
+            raise GstRuntimeHold(exc.code) from exc
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSUMER_INSPECT_FAILED") from exc
+    if not str(inspected.get("state", "")).startswith("PASS_"):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSUMER_BINDING_FAILED")
     binding = context["binding"]
     decision = context["decision"]
     return {
@@ -333,6 +389,7 @@ def runtime_status(**paths: Any) -> dict[str, Any]:
         "semantic_purity_guard": "ACTIVE_NO_DIFF_NO_COMPRESSION_NO_PATCH",
         "origin_cell_semantics": "SOURCE_GENERATED_RULE_BODY_CLEAN_RECEIVER",
         "service_ready": True,
+        "binary_origin_cell_sha256": inspected["binary_origin_cell_sha256"],
     }
 
 
@@ -345,6 +402,78 @@ def _load_consumer(path: Path) -> Any:
     if not callable(getattr(module, "activate_once", None)):
         raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSUMER_ENTRYPOINT_MISSING")
     return module
+
+
+def deliver_binary_cell_session(
+    packets: list[bytes],
+    *,
+    root: Path = ROOT,
+    active_binding_path: Path = ACTIVE_BINDING_PATH,
+    authority_path: Path = AUTHORITY_PATH,
+    d8_decision_path: Path = D8_DECISION_PATH,
+    delivery_root: Path = DELIVERY_ROOT,
+) -> dict[str, Any]:
+    """Require exact formal binding before cold→warm binary reconstruction.
+
+    The packet sequence shares one decoder substrate. No network, model or
+    external recipe query is permitted by this entrypoint.
+    """
+    if not isinstance(packets, list) or not packets or any(
+        type(packet) is not bytes or not packet for packet in packets
+    ):
+        raise GstRuntimeHold("HOLD_ORIGIN_CELL_BINARY_PACKET_REQUIRED")
+    if len(packets) > 256 or sum(len(packet) for packet in packets) > MAX_PACKET_BYTES:
+        raise GstRuntimeHold("HOLD_D7_PACKET_RESOURCE_LIMIT")
+    if packets[0][0] != 0x8E or any(packet[0] != 0x8D for packet in packets[1:]):
+        raise GstRuntimeHold("HOLD_WARM_SESSION_SUBSTRATE_REQUIRED")
+    try:
+        delivery_root.resolve().relative_to(root.resolve())
+    except ValueError as exc:
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_DELIVERY_ROOT_OUTSIDE_REPOSITORY") from exc
+
+    context = verify_active_binding(
+        root=root, active_binding_path=active_binding_path,
+        authority_path=authority_path, d8_decision_path=d8_decision_path,
+    )
+    if not _DELIVERY_LOCK.acquire(blocking=False):
+        raise GstRuntimeHold("HOLD_GST_RUNTIME_DELIVERY_BUSY")
+    try:
+        consumer = _load_consumer(context["consumer_path"])
+        try:
+            inspected = consumer.inspect_binding(context["contract_path"])
+            if not str(inspected.get("state", "")).startswith("PASS_"):
+                raise GstRuntimeHold("HOLD_GST_RUNTIME_CONSUMER_BINDING_FAILED")
+            result = consumer.reconstruct_binary_session(
+                packets, contract_path=context["contract_path"],
+            )
+        except Exception as exc:
+            if hasattr(exc, "code"):
+                raise GstRuntimeHold(exc.code) from exc
+            raise GstRuntimeHold("HOLD_GST_RUNTIME_BINARY_RECONSTRUCTION_FAILED") from exc
+
+        delivery_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "_" + uuid4().hex[:12]
+        run_root = delivery_root / delivery_id
+        run_root.mkdir(parents=True, exist_ok=False)
+        formal_receipt = {
+            "state": "PASS_D8_AUTHORIZED_BINARY_ORIGIN_CELL_SESSION",
+            "delivery_id": delivery_id,
+            "binding_id": context["binding"]["binding_id"],
+            "binding_sha256": sha256_file(active_binding_path),
+            "d8_decision_sha256": sha256_file(d8_decision_path),
+            "codec_sha256": result["codec_sha256"],
+            "packet_sha256": [hashlib.sha256(packet).hexdigest() for packet in packets],
+            "packet_bytes": [len(packet) for packet in packets],
+            "outputs": result["binary_session_outputs"],
+            "runtime_activated": True,
+            "formal_delivery": True,
+            "total_field_decision": "PASS",
+        }
+        (run_root / "BINARY_DELIVERY_RESULT.json").write_bytes(
+            canonical_json_bytes(formal_receipt) + b"\n"
+        )
+        return formal_receipt
+    finally:
+        _DELIVERY_LOCK.release()
 
 
 def deliver_packet(
