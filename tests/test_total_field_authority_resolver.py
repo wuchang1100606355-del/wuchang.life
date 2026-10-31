@@ -297,14 +297,15 @@ class ActiveAuthorityResolverCandidateTests(unittest.TestCase):
         result = self._resolve()
         self.assertEqual(result["state"], "BLOCK_AUTHORITY_REFERENCE_INVALID")
 
-    def test_10_d8_not_pass_holds(self) -> None:
+    def test_10_d8_hold_is_audit_only(self) -> None:
         d8 = self._read(self.d8_path)
         d8["decision"] = "HOLD"
         pointer = self._read(self.pointer_path)
         pointer["d8_decision_sha256"] = self._write(self.d8_path, d8)
         self._resign_pointer(pointer)
         result = self._resolve()
-        self.assertEqual(result["state"], "HOLD_D8_AUTHORITY_NOT_APPROVED")
+        self.assertEqual(result["state"], "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED")
+        self.assertTrue(result["authority_verified"])
 
     def test_11_owner_seal_invalid_blocks(self) -> None:
         owner = self._read(self.owner_path)
@@ -336,12 +337,13 @@ class ActiveAuthorityResolverCandidateTests(unittest.TestCase):
         self.assertEqual(first["state"], "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED")
         self.assertEqual(second["state"], "BLOCK_AUTHORITY_REPLAY")
 
-    def test_15_d8_file_hash_mismatch_blocks(self) -> None:
+    def test_15_d8_file_hash_mismatch_is_audit_only(self) -> None:
         d8 = self._read(self.d8_path)
         d8["decision"] = "PASS "
         self._write(self.d8_path, d8)
         result = self._resolve()
-        self.assertEqual(result["state"], "BLOCK_AUTHORITY_BINDING_INVALID")
+        self.assertEqual(result["state"], "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED")
+        self.assertTrue(result["authority_verified"])
 
 
     def test_16_pointer_bootstrap_scope_exact_contract_passes(self) -> None:

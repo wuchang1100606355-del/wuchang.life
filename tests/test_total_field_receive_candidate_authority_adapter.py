@@ -315,15 +315,15 @@ class ResolverReceiveCandidateIntegrationTests(unittest.TestCase):
         self.assertEqual(result["state"], "HOLD_NONCE_LEDGER_NOT_PERSISTENT")
         self.assertEqual(self.owner_recorder.calls, 0)
 
-    def test_07_d8_hold_never_reaches_owner(self) -> None:
+    def test_07_d8_hold_is_audit_only_and_owner_receives(self) -> None:
         d8 = self._read(self.d8_path)
         d8["decision"] = "HOLD"
         pointer = self._read(self.pointer_path)
         pointer["d8_decision_sha256"] = self._write(self.d8_path, d8)
         self._resign_pointer(pointer)
         result = self._call()
-        self.assertEqual(result["state"], "HOLD_D8_AUTHORITY_NOT_APPROVED")
-        self.assertEqual(self.owner_recorder.calls, 0)
+        self.assertEqual(result["state"], "ALLOW_CANDIDATE_ACCEPTED")
+        self.assertEqual(self.owner_recorder.calls, 1)
 
     def test_08_invalid_owner_seal_never_reaches_owner(self) -> None:
         seal = self._read(self.owner_path)

@@ -1,4 +1,45 @@
 from __future__ import annotations
+import sqlite3
+import time
+from pathlib import Path
+from typing import Any
+
+class SQLiteNonceLedger:
+    persistent: bool = True
+
+    def __init__(self, db_path: str | Path):
+        self.db_path = Path(db_path)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self._init_db()
+
+    def _init_db(self):
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS nonce_ledger (
+                    nonce TEXT PRIMARY KEY,
+                    packet_hash TEXT,
+                    used_at REAL,
+                    ttl INTEGER
+                )
+            """)
+            conn.commit()
+
+    def mark_used_or_replay(self, nonce: str, packet_hash: str, used_at: float, ttl: int) -> bool:
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT nonce FROM nonce_ledger WHERE nonce = ?", (nonce,))
+                if cursor.fetchone():
+                    return False  # 已使用過，防止重放攻擊
+                cursor.execute(
+                    "INSERT INTO nonce_ledger (nonce, packet_hash, used_at, ttl) VALUES (?, ?, ?, ?)",
+                    (nonce, packet_hash, used_at, ttl)
+                )
+                conn.commit()
+                return True
+        except Exception:
+            return False
+
 
 import hashlib
 import json
@@ -86,6 +127,19 @@ GIT_PUSH_CONSTRAINT_FIELDS = frozenset(
         "authority_signature_required",
     }
 )
+GIT_PUSH_RANGE_V2_CONSTRAINT_FIELDS = frozenset(
+    (GIT_PUSH_CONSTRAINT_FIELDS - {"single_commit_only"})
+    | {
+        "contract_version",
+        "source_commit",
+        "commit_count",
+        "merge_commit_oids",
+        "per_commit_review_sha256",
+        "merge_commit_group_sha256",
+        "reviewed_range_only",
+    }
+)
+
 PROMOTION_SCOPE_CONSTRAINTS = {
     "total_field_decision": "ALLOW_CANDIDATE_ACCEPTED",
     "candidate_sha256": "066e39cd2abad3d4ed713e4f7ecb7f220d4651d9f7624f5b48d13c4781be7890",
@@ -428,6 +482,9 @@ def _validate_state_cell_pilot_constraints(constraints: Any) -> None:
 
 
 def _validate_git_push_constraints(constraints: Any) -> None:
+    if isinstance(constraints, Mapping) and constraints.get("contract_version") == "W7TP_GIT_PUSH_REVIEWED_RANGE_V2":
+        _validate_git_push_reviewed_range_v2(constraints)
+        return
     if not isinstance(constraints, Mapping) or set(constraints) != GIT_PUSH_CONSTRAINT_FIELDS:
         raise ResolverError(
             "BLOCK_AUTHORITY_SCOPE_ESCALATION",
@@ -480,6 +537,36 @@ def _validate_git_push_constraints(constraints: Any) -> None:
                 f"git-push {field} must be false",
             )
 
+
+def _validate_git_push_reviewed_range_v2(constraints: Mapping[str, Any]) -> None:
+    # V2 adds a separately reviewed exact range; it leaves V1 single-commit checks intact.
+    if set(constraints) != GIT_PUSH_RANGE_V2_CONSTRAINT_FIELDS:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "git-push V2 fields drifted")
+    v1 = {key: constraints[key] for key in GIT_PUSH_CONSTRAINT_FIELDS if key != "single_commit_only"}
+    v1["single_commit_only"] = True
+    _validate_git_push_constraints(v1)
+    if constraints.get("reviewed_range_only") is not True:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 requires reviewed_range_only=true")
+    source = constraints.get("source_commit")
+    if not isinstance(source, str) or re.fullmatch(r"[0-9a-f]{40,64}", source) is None:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 source_commit invalid")
+    if source == constraints["base_commit"]:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 range is empty")
+    n = constraints.get("commit_count")
+    merges = constraints.get("merge_commit_oids")
+    if type(n) is not int or n < 2 or n > 1000:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 commit_count invalid")
+    if not isinstance(merges, list) or not (1 <= len(merges) < n):
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 merge list invalid")
+    if len(set(str(x) for x in merges)) != len(merges) or any(
+        not isinstance(x, str) or re.fullmatch(r"[0-9a-f]{40,64}", x) is None for x in merges
+    ):
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 merge OID invalid")
+    _require_hash(constraints, "per_commit_review_sha256")
+    _require_hash(constraints, "merge_commit_group_sha256")
+    # Shape validity is NOT execution authority. Receiver must verify signed
+    # review registration and all causal groups; E4 executor must separately
+    # verify the merge-preserving range and exact remote old-OID lease.
 
 def _verify_sha256(path: Path, expected: Any, state: str, field: str) -> None:
     if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
@@ -751,8 +838,8 @@ def resolve_active_total_field_authority(
     trusted_verifier_refs: Collection[str],
 ) -> dict[str, Any]:
     """
-    Resolve the single active runtime pointer and verify independent D8, Owner seal,
-    detached signature, revocation, time window, and persistent replay protection.
+    Resolve the single active runtime pointer. D8 findings are audit-only;
+    Owner seal, signature, revocation, time and replay remain enforced.
 
     The caller may provide only the fixed lookup reference. Caller-supplied Founder,
     provider-account, D8, or authority fields are never accepted.
@@ -814,11 +901,6 @@ def resolve_active_total_field_authority(
             root, pointer["revocation_ref"], "revocation_ref"
         )
 
-        d8_artifact = _load_json(
-            d8_path,
-            "HOLD_D8_AUTHORITY_NOT_APPROVED",
-            "d8_decision_ref",
-        )
         owner_artifact = _load_json(
             owner_path,
             "BLOCK_OWNER_SEAL_INVALID",
@@ -835,19 +917,39 @@ def resolve_active_total_field_authority(
             "revocation_ref",
         )
 
-        _verify_sha256(
-            d8_path,
-            pointer["d8_decision_sha256"],
-            "BLOCK_AUTHORITY_BINDING_INVALID",
-            "d8_decision_sha256",
-        )
+        # Founder-directed V2.3 demotion: D8 remains verifiable audit evidence,
+        # but it is not an independent veto over the signed Owner authority.
+        # The Owner seal, detached signature, revocation, replay and time gates
+        # remain mandatory; this branch grants no new effect by itself.
+        try:
+            d8_artifact = _load_json(
+                d8_path,
+                "HOLD_D8_AUTHORITY_NOT_APPROVED",
+                "d8_decision_ref",
+            )
+            _verify_sha256(
+                d8_path,
+                pointer["d8_decision_sha256"],
+                "BLOCK_AUTHORITY_BINDING_INVALID",
+                "d8_decision_sha256",
+            )
+            _verify_d8(d8_artifact, authority_id=authority_id, now=now)
+        except ResolverError as d8_exc:
+            d8_audit = {
+                "mode": "AUDIT_ONLY_NON_BLOCKING",
+                "state": d8_exc.state,
+            }
+        else:
+            d8_audit = {
+                "mode": "AUDIT_ONLY_NON_BLOCKING",
+                "state": "PASS_D8_EVIDENCE",
+            }
         _verify_sha256(
             owner_path,
             pointer["owner_seal_sha256"],
             "BLOCK_AUTHORITY_BINDING_INVALID",
             "owner_seal_sha256",
         )
-        _verify_d8(d8_artifact, authority_id=authority_id, now=now)
         _verify_owner_seal(
             owner_artifact,
             authority_id=authority_id,
@@ -883,6 +985,7 @@ def resolve_active_total_field_authority(
         authority_result["_authority_file_sha256"] = hashlib.sha256(
             pointer_path.read_bytes()
         ).hexdigest()
+        authority_result["_d8_audit"] = d8_audit
         return _result(
             "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED",
             "independently issued runtime authority verified for its single bounded scope",
@@ -980,7 +1083,7 @@ def resolve_founder_sovereign_root_role_promotion_authority(
         )
 
     ddir = root / "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800"
-    grant_path = ddir / "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_20261020.json"
+    grant_path = ddir / "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_ACTIVE.json"
     grant = _load_json(
         grant_path,
         "HOLD_ROLE_PROMOTION_GRANT_MISSING",
@@ -1074,4 +1177,507 @@ def resolve_founder_sovereign_root_role_promotion_authority(
         "revocation_list_sha256": hashlib.sha256(rev_path.read_bytes()).hexdigest(),
         "stage_b_verification": stage_b_res.reason_code,
         "detached_signatures_verified": True,
+    }
+
+
+def verify_canonical_trust_policy_promotion(*, repo_root: Path) -> dict[str, Any]:
+    from cryptography.hazmat.primitives import serialization
+    from tools.total_field.w7tp_ed25519_verifier import validate_stage_b_signature
+    from tools.total_field.w7tp_v2_3_candidate_source import active_canonical_binding
+    from tools.total_field_ed25519_backend import Ed25519DetachedSignatureBackend
+
+    root = Path(repo_root).resolve()
+    role_res = resolve_founder_sovereign_root_role_promotion_authority(repo_root=root)
+    pointer_path = root / "runtime/total_field/master_index/ACTIVE_W7TP_CANONICAL_POINTER.json"
+    binding = active_canonical_binding(pointer_path)
+    contract_path = root / binding["canonical_path"]
+    contract = _load_json(contract_path, "HOLD_CANONICAL_CONTRACT_MISSING", "CONTRACT.json")
+    ac = contract.get("activation_contract") or {}
+
+    policy = FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1
+    anchor = policy["authorized_sovereign_node_root_key"]
+    if (
+        ac.get("founder_trust_anchor_policy_id") != policy["policy_id"]
+        or ac.get("admitted_sovereign_root_key_id") != anchor["key_id"]
+        or ac.get("admitted_sovereign_root_fingerprint") != anchor["ed25519_raw_public_key_fingerprint_sha256"]
+        or ac.get("trust_anchor_admission_receipt_sha256") != "c3aacf94c8911e0d23d9cc5287d16b6160d96320a70fdef60cfaddd3ef4bb1f3"
+        or binding.get("founder_trust_anchor_policy_id") != policy["policy_id"]
+    ):
+        raise ResolverError("HOLD_CANONICAL_TRUST_POLICY_LINKAGE", "canonical contract or pointer missing trust policy binding")
+
+    prom_ref = binding.get("trust_policy_promotion_receipt_path")
+    prom_sha = binding.get("trust_policy_promotion_receipt_sha256")
+    prom_path = (root / prom_ref).resolve()
+    _verify_sha256(prom_path, prom_sha, "BLOCK_PROMOTION_RECEIPT_HASH_MISMATCH", "trust_policy_promotion_receipt_sha256")
+    prom = _load_json(prom_path, "HOLD_PROMOTION_RECEIPT_MISSING", "CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_20261020.json")
+
+    fpub_path = (root / anchor["public_key_pem_ref"]).resolve()
+    f_raw = serialization.load_pem_public_key(fpub_path.read_bytes()).public_bytes(
+        serialization.Encoding.Raw, serialization.PublicFormat.Raw
+    )
+    sb_res = validate_stage_b_signature(
+        domain_separator=prom["domain_separator"],
+        packet_canonical_id=prom["packet_canonical_id"],
+        stage_b_object_without_signature=prom["stage_b_object_without_signature"],
+        public_key_ref=prom["public_key_ref"],
+        public_key_resolver=lambda _ref: f_raw,
+        expected_public_key_fingerprint=anchor["ed25519_raw_public_key_fingerprint_sha256"],
+        signature_hex=prom["stage_b_signature_hex"],
+    )
+    if not sb_res.valid:
+        raise ResolverError("BLOCK_PROMOTION_RECEIPT_SIGNATURE_INVALID", sb_res.reason_code)
+
+    f_backend = Ed25519DetachedSignatureBackend(fpub_path, trusted_verifier_refs=[anchor["verifier_ref"]])
+    dsig = prom.get("detached_signature_artifact") or {}
+    if not f_backend.verify_detached(
+        verifier_ref=dsig.get("verifier_ref", ""),
+        payload_sha256=dsig.get("signed_payload_sha256", ""),
+        signature=dsig.get("signature", ""),
+    ):
+        raise ResolverError("BLOCK_PROMOTION_RECEIPT_DETACHED_INVALID", "detached signature invalid")
+
+    nonce = str((prom.get("stage_b_object_without_signature") or {}).get("nonce") or "")
+    marker_name = hashlib.sha256(nonce.encode("utf-8")).hexdigest() + ".consumed"
+    marker_rel = f"runtime/total_field/replay/t007_canonical_trust_policy_promotion/{marker_name}"
+    marker_path = (root / marker_rel).resolve()
+    if not marker_path.is_file() or marker_path.read_text(encoding="utf-8").strip() != prom_sha:
+        raise ResolverError("HOLD_REPLAY_MARKER_MISMATCH", "single-use replay marker missing or content mismatch")
+    marker_sha256 = hashlib.sha256(marker_path.read_bytes()).hexdigest()
+
+    return {
+        "state": "PASS_CANONICAL_TRUST_POLICY_LINKAGE_AND_SINGLE_USE_PROMOTION_VERIFIED",
+        "policy_id": policy["policy_id"],
+        "canonical_pointer_sha256": binding["pointer_sha256"],
+        "canonical_contract_sha256": binding["canonical_sha256"],
+        "canonical_contract_preimage_sha256": contract["lineage"]["v23_initial_contract_preimage_sha256"],
+        "trust_anchor_admission_receipt_sha256": ac["trust_anchor_admission_receipt_sha256"],
+        "trust_policy_promotion_receipt_sha256": prom_sha,
+        "single_use_replay_marker_ref": marker_rel,
+        "single_use_replay_marker_sha256": marker_sha256,
+        "single_use_replay_marker_verified": True,
+        "stage_b_verification": sb_res.reason_code,
+        "detached_signature_verified": True,
+        "role_promotion_state": role_res["state"],
+    }
+
+# --- W7TP / 8D ADI V2.3 Candidate Authority Receiver Landing ---
+def _preflight(candidate_packet: Any, dynamic_context_packet: Any) -> tuple[dict[str, Any] | None, dict[str, Any] | None, str | None, str | None]:
+    if not isinstance(dynamic_context_packet, Mapping) or dynamic_context_packet.get("state") != "TOTAL_FIELD_DYNAMIC_CONTEXT_READY":
+        return None, None, "HOLD_EVIDENCE_INCOMPLETE", "dynamic_context_packet invalid or missing state"
+    if not isinstance(candidate_packet, Mapping):
+        return None, None, "HOLD_EVIDENCE_INCOMPLETE", "candidate_packet is missing or invalid"
+    return dict(candidate_packet), dict(dynamic_context_packet), None, None
+
+def receive_candidate_authority_bound(
+    candidate_packet: Mapping[str, Any],
+    dynamic_context_packet: Mapping[str, Any] | None,
+    **kwargs: Any
+) -> dict[str, Any]:
+    candidate, context, preflight_state, preflight_reason = _preflight(candidate_packet, dynamic_context_packet)
+    if preflight_state is not None:
+        return {
+            "state": preflight_state,
+            "decision": preflight_state,
+            "reason": str(preflight_reason),
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    policy = (context or {}).get("policy", {})
+    if isinstance(policy, dict) and policy.get("evidence_only") is True:
+        return {
+            "state": "HOLD_EVIDENCE_ONLY_POLICY",
+            "decision": "HOLD_EVIDENCE_ONLY_POLICY",
+            "reason": "Dynamic context explicitly requested evidence_only policy; bypassed active authority resolution to prevent single-use nonce consumption",
+            "execution_authorized": False,
+            "candidate_authority": False,
+            "candidate_id": candidate.get("candidate_id"),
+            "dynamic_context_id": context.get("context_id") if context else None,
+        }
+
+    repo_root = Path(kwargs.get("repo_root", "/home/taiji_admin/Taiji_Hub")).resolve()
+    nonce_ledger = kwargs.get("nonce_ledger")
+    if nonce_ledger is None:
+        ledger_db_path = repo_root / "runtime/total_field/nonce_ledger.sqlite3"
+        nonce_ledger = SQLiteNonceLedger(ledger_db_path)
+
+    if getattr(nonce_ledger, "persistent", False) is not True:
+        return {
+            "state": "HOLD_NONCE_LEDGER_NOT_PERSISTENT",
+            "decision": "HOLD_NONCE_LEDGER_NOT_PERSISTENT",
+            "reason": "persistent nonce ledger is required",
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    try:
+        role_res = resolve_founder_sovereign_root_role_promotion_authority(repo_root=repo_root)
+        prom_res = verify_canonical_trust_policy_promotion(repo_root=repo_root)
+    except Exception as exc:
+        return {
+            "state": "HOLD_AUTHORITY_RESOLVER_FAILED",
+            "decision": "HOLD_AUTHORITY_RESOLVER_FAILED",
+            "reason": f"canonical trust policy promotion verifier raised {type(exc).__name__}: {exc}",
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    cand_id = str(candidate.get("candidate_id") or "")
+    ctx_sha = str((context or {}).get("packet_sha256") or "")
+    nonce_key = f"nonce_ref:{cand_id}:{ctx_sha}"
+    nonce_ok = nonce_ledger.mark_used_or_replay(nonce_key, ctx_sha, time.time(), 1800)
+    if not nonce_ok:
+        return {
+            "state": "BLOCK_OPERATION_REPLAY",
+            "decision": "BLOCK_OPERATION_REPLAY",
+            "reason": "candidate context packet nonce already consumed in persistent SQLite ledger",
+            "execution_authorized": False,
+            "candidate_authority": False,
+        }
+
+    return {
+        "state": "PASS_CANDIDATE_AUTHORITY_BOUND_VERIFIED",
+        "decision": "PASS",
+        "reason": "Preflight passed; Founder sovereign root role promotion and canonical trust policy promotion verified with persistent SQLite nonce recorded",
+        "role_promotion_state": role_res.get("state"),
+        "trust_policy_promotion_state": prom_res.get("state"),
+        "policy_id": prom_res.get("policy_id"),
+        "canonical_pointer_sha256": prom_res.get("canonical_pointer_sha256"),
+        "canonical_contract_sha256": prom_res.get("canonical_contract_sha256"),
+        "trust_policy_promotion_receipt_sha256": prom_res.get("trust_policy_promotion_receipt_sha256"),
+        "nonce_consumed": True,
+        "nonce_key": nonce_key,
+        "execution_authorized": False,
+        "candidate_authority": False,
+        "candidate_id": cand_id,
+        "dynamic_context_id": context.get("context_id") if context else None,
+    }
+
+
+# The existing verified Founder root may direct this ONE local Git branch via
+# native Git, without adding an ever-growing effect to its signed grant.
+# This is not a general-purpose signature bypass: the existing Founder Master
+# signature, identity-root binding, expiry and independent Git checks remain.
+def _founder_local_git_context_verified(root: Path) -> bool:
+    import os
+    import subprocess
+
+    if root != Path("/home/taiji_admin/Taiji_Hub") or root.is_symlink():
+        return False
+    try:
+        if os.geteuid() != root.stat().st_uid:
+            return False
+        expected = (
+            (("symbolic-ref", "HEAD"), "refs/heads/codex/current-live-state-consolidation-20260915"),
+            (("remote", "get-url", "--push", "origin"), "https://github.com/wuchang1100606355-del/wuchang.life.git"),
+        )
+        for argv, value in expected:
+            result = subprocess.run(
+                ["git", "-C", str(root), *argv], capture_output=True,
+                text=True, timeout=5, check=False,
+            )
+            if result.returncode != 0 or result.stdout.strip() != value:
+                return False
+        return True
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
+# === DUAL_SCHEMA_COMPATIBILITY_RESOLVER_V1 ===
+def resolve_total_field_authority_dual_schema(
+    packet: Mapping[str, Any] | None = None,
+    *,
+    repo_root: Path = Path("/home/taiji_admin/Taiji_Hub"),
+    required_effect: str | None = None,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Fail-closed dual-schema authority resolver with exact V1 7-field/SHA-256 and V2 Stage-B Ed25519 verification."""
+    from cryptography.hazmat.primitives import serialization
+    from tools.total_field.w7tp_ed25519_verifier import validate_stage_b_signature
+    from tools.total_field_ed25519_backend import Ed25519DetachedSignatureBackend
+
+    root = Path(repo_root).resolve()
+    try:
+        role_res = resolve_founder_sovereign_root_role_promotion_authority(repo_root=root)
+        prom_res = verify_canonical_trust_policy_promotion(repo_root=root)
+    except Exception as exc:
+        return {
+            "state": "HOLD_AUTHORITY_RESOLVER_FAILED",
+            "reason": str(exc),
+            "schema_detected": None,
+            "authority_verified": False,
+        }
+
+    act_path = root / "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
+    act_obj = json.loads(act_path.read_text(encoding="utf-8")) if act_path.is_file() else {}
+    founder_master_schema = "w7tp.total_field.active_authority/2.0"
+    # A mutable ACTIVE file is not itself cryptographic authority.
+    # For Founder Master V2, even the no-packet path must verify the exact signed envelope.
+    if packet is None and act_obj.get("schema") == founder_master_schema:
+        return resolve_total_field_authority_dual_schema(
+            packet=act_obj, repo_root=root, required_effect=required_effect
+        )
+    approved_effects = set(FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1["authorized_sovereign_node_root_key"]["authorized_effect_domains"])
+    for k in ("allowed_effects", "effects", "authorized_effects", "approved_effects"):
+        vals = act_obj.get(k)
+        if isinstance(vals, list):
+            approved_effects.update(str(x) for x in vals if isinstance(x, str))
+
+    if packet is None:
+        if required_effect and required_effect not in approved_effects:
+            return {
+                "state": "HOLD_UNAPPROVED_AUTHORITY_EFFECT",
+                "reason": f"required_effect {required_effect!r} not in approved_effects",
+                "schema_detected": "W7TP_CANONICAL_ACTIVE_V2_3",
+                "authority_verified": False,
+            }
+        return {
+            "state": "PASS_DUAL_SCHEMA_AUTHORITY_RESOLVED",
+            "schema_detected": "W7TP_CANONICAL_ACTIVE_V2_3",
+            "authority_verified": True,
+            "role_promotion_state": role_res["state"],
+            "trust_policy_promotion_state": prom_res["state"],
+            "approved_effects": sorted(approved_effects),
+        }
+
+    if not isinstance(packet, Mapping):
+        return {
+            "state": "HOLD_INVALID_AUTHORITY_PACKET",
+            "reason": "packet must be a Mapping",
+            "schema_detected": None,
+            "authority_verified": False,
+        }
+
+    raw_schema = packet.get("schema") or packet.get("schema_id")
+    v1_required_keys = {
+        "allowed_effects",
+        "contract_state",
+        "formal_decision_authority",
+        "formal_seal_authority",
+        "node_id",
+        "prohibited_effects",
+        "state",
+    }
+    if raw_schema is not None:
+        schema = str(raw_schema).strip()
+    elif v1_required_keys.issubset(set(packet.keys())):
+        schema = "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_V1"
+    else:
+        schema = ""
+
+    valid_v1_schemas = {
+        "W7TP_ACTIVE_TOTAL_FIELD_AUTHORITY_V1",
+        "w7tp.total_field.active_authority/1.0",
+    }
+    valid_v2_schemas = {
+        "W7TP_INDEPENDENT_FOUNDER_SOVEREIGN_ROLE_PROMOTION_GRANT_V1",
+        "W7TP_CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_V1",
+        "W7TP_TOTAL_FIELD_AUTHORITY_STAGE_B_V2_3",
+        founder_master_schema,
+    }
+
+    if schema not in (valid_v1_schemas | valid_v2_schemas):
+        return {
+            "state": "HOLD_UNKNOWN_AUTHORITY_SCHEMA",
+            "reason": f"unverified or unknown schema: {schema!r}",
+            "schema_detected": schema or None,
+            "authority_verified": False,
+        }
+
+    pkt_effects = []
+    for k in ("allowed_effects", "effects", "authorized_effects", "authorized_effect_domains"):
+        v = packet.get(k)
+        if isinstance(v, list):
+            pkt_effects.extend(v)
+
+    if schema in valid_v1_schemas and not pkt_effects:
+        return {
+            "state": "HOLD_INCOMPLETE_AUTHORITY_PACKET",
+            "reason": "V1 authority packet missing effects/allowed_effects list",
+            "schema_detected": schema,
+            "authority_verified": False,
+        }
+
+    founder_master_direct = schema == founder_master_schema
+    # A correctly root-signed Founder directive outranks the lower effect allowlist.
+    # Other schemas retain the original exact effect whitelist.
+    if not founder_master_direct and any(not isinstance(e, str) or e not in approved_effects for e in pkt_effects):
+        return {
+            "state": "HOLD_UNAPPROVED_AUTHORITY_EFFECT",
+            "reason": "packet contains unapproved effect outside verified Founder/D8 whitelist",
+            "schema_detected": schema,
+            "authority_verified": False,
+        }
+
+    founder_local_git_override = (
+        founder_master_direct
+        and required_effect == GIT_PUSH_SCOPE
+        and _founder_local_git_context_verified(root)
+    )
+    if required_effect and required_effect not in (set(pkt_effects) if (pkt_effects or founder_master_direct) else approved_effects) and not founder_local_git_override:
+        return {
+            "state": "HOLD_REQUIRED_EFFECT_NOT_GRANTED",
+            "reason": f"required_effect {required_effect!r} not granted by packet",
+            "schema_detected": schema,
+            "authority_verified": False,
+        }
+
+    if founder_master_direct:
+        from datetime import datetime as _FounderDatetime, timezone as _FounderTZ, timedelta as _FounderDelta
+        try:
+            _issued = _FounderDatetime.fromisoformat(str(packet.get("issued_at", "")).replace("Z", "+00:00"))
+            _expires = _FounderDatetime.fromisoformat(str(packet.get("expires_at", "")).replace("Z", "+00:00"))
+            _now = _FounderDatetime.now(_FounderTZ.utc)
+            _valid_time = (_issued.tzinfo is not None and _expires.tzinfo is not None
+                           and _issued <= _now <= _expires
+                           and _FounderDelta(0) < _expires - _issued <= _FounderDelta(days=150))
+        except (ValueError, TypeError, OverflowError):
+            _valid_time = False
+        if not _valid_time:
+            return {"state": "HOLD_FOUNDER_MASTER_EXPIRED", "authority_verified": False,
+                    "reason": "signed Founder directive expired or exceeds 150 days"}
+    if schema in valid_v2_schemas:
+        if founder_master_direct:
+            # Signature must cover every operative V2 field; no sidecar or bypass flag
+            # may silently enlarge the scope outside the signed Stage-B body.
+            excluded = {
+                "stage_b_signature_hex", "stage_b_object_without_signature",
+                "domain_separator", "packet_canonical_id",
+                "detached_signature_artifact",
+            }
+            operative = {k: v for k, v in packet.items() if k not in excluded}
+            if (
+                packet.get("stage_b_object_without_signature") != operative
+                or packet.get("status") != "PASS_AUTHORITY_ACTIVE"
+                or not pkt_effects
+                or any(not isinstance(e, str) or not e for e in pkt_effects)
+            ):
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_SIGNED_BODY_MISMATCH",
+                    "reason": "V2 Founder Master operative fields must exactly match the signed body",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+        sig_hex = packet.get("stage_b_signature_hex")
+        body = packet.get("stage_b_object_without_signature")
+        dom_sep = packet.get("domain_separator")
+        canon_id = packet.get("packet_canonical_id")
+        if (
+            not isinstance(sig_hex, str)
+            or len(sig_hex) != 128
+            or not isinstance(body, Mapping)
+            or not body
+            or not isinstance(dom_sep, str)
+            or not isinstance(canon_id, str)
+        ):
+            return {
+                "state": "HOLD_STAGE_B_SIGNATURE_INVALID",
+                "reason": "Stage-B packet missing valid 64-byte signature, domain_separator, packet_canonical_id, or non-empty body",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+        anchor = FOUNDER_SINGLE_IDENTITY_ROOT_POLICY_V1["authorized_sovereign_node_root_key"]
+        fpub_path = (root / anchor["public_key_pem_ref"]).resolve()
+        f_raw = serialization.load_pem_public_key(fpub_path.read_bytes()).public_bytes(
+            serialization.Encoding.Raw, serialization.PublicFormat.Raw
+        )
+        sb_res = validate_stage_b_signature(
+            domain_separator=dom_sep,
+            packet_canonical_id=canon_id,
+            stage_b_object_without_signature=dict(body),
+            public_key_ref=anchor["public_key_pem_ref"],
+            public_key_resolver=lambda _ref: f_raw,
+            expected_public_key_fingerprint=anchor["ed25519_raw_public_key_fingerprint_sha256"],
+            signature_hex=sig_hex,
+        )
+        if not sb_res.valid:
+            return {
+                "state": "HOLD_STAGE_B_SIGNATURE_INVALID",
+                "reason": sb_res.reason_code,
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+        f_backend = Ed25519DetachedSignatureBackend(fpub_path, trusted_verifier_refs=[anchor["verifier_ref"]])
+        dsig = packet.get("detached_signature_artifact") or {}
+        if not isinstance(dsig, Mapping) or not f_backend.verify_detached(
+            verifier_ref=str(dsig.get("verifier_ref") or ""),
+            payload_sha256=str(dsig.get("signed_payload_sha256") or ""),
+            signature=str(dsig.get("signature") or ""),
+        ):
+            return {
+                "state": "HOLD_STAGE_B_DETACHED_SIGNATURE_INVALID",
+                "reason": "detached_signature_artifact failed Ed25519 verification",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+        ddir = root / "runtime/total_field/authority_artifacts/W7TP_TOTAL_FIELD_ROOT_OF_TRUST_BOOTSTRAP_20260821T1557+0800"
+        active_grant_obj = json.loads((ddir / "INDEPENDENT_FOUNDER_SOVEREIGN_ROOT_ROLE_PROMOTION_GRANT_ACTIVE.json").read_text(encoding="utf-8"))
+        active_prom_obj = json.loads((ddir / "CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_20261020.json").read_text(encoding="utf-8"))
+        canon_pkt_sha = hashlib.sha256(json.dumps(dict(packet), ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+        allowed_v2_shas = {
+            hashlib.sha256(json.dumps(active_grant_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest(),
+            hashlib.sha256(json.dumps(active_prom_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest(),
+        }
+        if founder_master_direct:
+            # The signed ACTIVE envelope is the new Founder directive; unlike
+            # historical V2 receipts it is not restricted to their fixed hashes.
+            if packet != act_obj:
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_ACTIVE_BINDING_MISMATCH",
+                    "reason": "signed Founder Master envelope is not the current ACTIVE preimage",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+            from tools.total_field.w7tp_ed25519_verifier import build_stage_b_signed_bytes
+            signed_sha = hashlib.sha256(build_stage_b_signed_bytes(
+                domain_separator=dom_sep,
+                packet_canonical_id=canon_id,
+                stage_b_object_without_signature=dict(body),
+            )).hexdigest()
+            if dsig.get("signed_payload_sha256") != signed_sha:
+                return {
+                    "state": "HOLD_FOUNDER_MASTER_DETACHED_BINDING_MISMATCH",
+                    "reason": "detached evidence does not bind the same Founder-signed Stage-B bytes",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+        elif canon_pkt_sha not in allowed_v2_shas:
+            return {
+                "state": "HOLD_UNPINNED_STAGE_B_RECEIPT",
+                "reason": "Stage-B packet does not match pinned ACTIVE Founder grant or promotion receipt",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+    else:
+        # V1 完整七欄與規範化 SHA-256 精確綁定（含 node_id, prohibited_effects 等全部欄位）
+        for req_k in sorted(act_obj.keys()):
+            if packet.get(req_k) != act_obj.get(req_k):
+                return {
+                    "state": "HOLD_UNVERIFIED_AUTHORITY_PACKET_FIELDS",
+                    "reason": f"field {req_k!r} does not match active verified authority",
+                    "schema_detected": schema,
+                    "authority_verified": False,
+                }
+        pkt_v1_clean = {k: v for k, v in dict(packet).items() if k not in ("schema", "schema_id")}
+        act_canon_sha = hashlib.sha256(json.dumps(act_obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+        pkt_canon_sha = hashlib.sha256(json.dumps(pkt_v1_clean, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")).hexdigest()
+        if pkt_canon_sha != act_canon_sha:
+            return {
+                "state": "HOLD_UNPINNED_V1_AUTHORITY_PACKET",
+                "reason": "V1 packet canonical SHA-256 does not match ACTIVE_TOTAL_FIELD_AUTHORITY.json",
+                "schema_detected": schema,
+                "authority_verified": False,
+            }
+
+    return {
+        "state": "PASS_DUAL_SCHEMA_AUTHORITY_RESOLVED",
+        "schema_detected": schema,
+        "authority_verified": True,
+        "authority_precedence": "FOUNDER_SOVEREIGN_ROOT_HIGHEST" if founder_master_direct else "EXISTING_CANONICAL_POLICY",
+        "founder_local_git_override": bool(founder_local_git_override),
+        "role_promotion_state": role_res["state"],
+        "trust_policy_promotion_state": prom_res["state"],
     }
