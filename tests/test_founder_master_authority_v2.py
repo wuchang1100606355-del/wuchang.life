@@ -5,6 +5,7 @@ import hashlib
 import json
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -41,7 +42,12 @@ class FounderMasterAuthorityV2Tests(unittest.TestCase):
         (receipt_dir / "CANONICAL_TRUST_POLICY_PROMOTION_RECEIPT_20261020.json").write_text("{}")
         self.active = self.root / "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
         self.active.parent.mkdir(parents=True, exist_ok=True)
+        # Keep fixture validity current; signature integrity tests must reach
+        # the verifier instead of failing at an obsolete date first.
+        now = datetime.now(timezone.utc).replace(microsecond=0)
         self.body = {
+            "issued_at": (now - timedelta(days=1)).isoformat(),
+            "expires_at": (now + timedelta(days=148)).isoformat(),
             "schema": "w7tp.total_field.active_authority/2.0",
             "authority_issuer": "FOUNDER_SOVEREIGN_ROOT",
             "status": "PASS_AUTHORITY_ACTIVE",

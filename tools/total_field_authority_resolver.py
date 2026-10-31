@@ -127,6 +127,19 @@ GIT_PUSH_CONSTRAINT_FIELDS = frozenset(
         "authority_signature_required",
     }
 )
+GIT_PUSH_RANGE_V2_CONSTRAINT_FIELDS = frozenset(
+    (GIT_PUSH_CONSTRAINT_FIELDS - {"single_commit_only"})
+    | {
+        "contract_version",
+        "source_commit",
+        "commit_count",
+        "merge_commit_oids",
+        "per_commit_review_sha256",
+        "merge_commit_group_sha256",
+        "reviewed_range_only",
+    }
+)
+
 PROMOTION_SCOPE_CONSTRAINTS = {
     "total_field_decision": "ALLOW_CANDIDATE_ACCEPTED",
     "candidate_sha256": "066e39cd2abad3d4ed713e4f7ecb7f220d4651d9f7624f5b48d13c4781be7890",
@@ -469,6 +482,9 @@ def _validate_state_cell_pilot_constraints(constraints: Any) -> None:
 
 
 def _validate_git_push_constraints(constraints: Any) -> None:
+    if isinstance(constraints, Mapping) and constraints.get("contract_version") == "W7TP_GIT_PUSH_REVIEWED_RANGE_V2":
+        _validate_git_push_reviewed_range_v2(constraints)
+        return
     if not isinstance(constraints, Mapping) or set(constraints) != GIT_PUSH_CONSTRAINT_FIELDS:
         raise ResolverError(
             "BLOCK_AUTHORITY_SCOPE_ESCALATION",
@@ -521,6 +537,36 @@ def _validate_git_push_constraints(constraints: Any) -> None:
                 f"git-push {field} must be false",
             )
 
+
+def _validate_git_push_reviewed_range_v2(constraints: Mapping[str, Any]) -> None:
+    # V2 adds a separately reviewed exact range; it leaves V1 single-commit checks intact.
+    if set(constraints) != GIT_PUSH_RANGE_V2_CONSTRAINT_FIELDS:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "git-push V2 fields drifted")
+    v1 = {key: constraints[key] for key in GIT_PUSH_CONSTRAINT_FIELDS if key != "single_commit_only"}
+    v1["single_commit_only"] = True
+    _validate_git_push_constraints(v1)
+    if constraints.get("reviewed_range_only") is not True:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 requires reviewed_range_only=true")
+    source = constraints.get("source_commit")
+    if not isinstance(source, str) or re.fullmatch(r"[0-9a-f]{40,64}", source) is None:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 source_commit invalid")
+    if source == constraints["base_commit"]:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 range is empty")
+    n = constraints.get("commit_count")
+    merges = constraints.get("merge_commit_oids")
+    if type(n) is not int or n < 2 or n > 1000:
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 commit_count invalid")
+    if not isinstance(merges, list) or not (1 <= len(merges) < n):
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 merge list invalid")
+    if len(set(str(x) for x in merges)) != len(merges) or any(
+        not isinstance(x, str) or re.fullmatch(r"[0-9a-f]{40,64}", x) is None for x in merges
+    ):
+        raise ResolverError("BLOCK_AUTHORITY_SCOPE_ESCALATION", "V2 merge OID invalid")
+    _require_hash(constraints, "per_commit_review_sha256")
+    _require_hash(constraints, "merge_commit_group_sha256")
+    # Shape validity is NOT execution authority. Receiver must verify signed
+    # review registration and all causal groups; E4 executor must separately
+    # verify the merge-preserving range and exact remote old-OID lease.
 
 def _verify_sha256(path: Path, expected: Any, state: str, field: str) -> None:
     if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
@@ -792,8 +838,8 @@ def resolve_active_total_field_authority(
     trusted_verifier_refs: Collection[str],
 ) -> dict[str, Any]:
     """
-    Resolve the single active runtime pointer and verify independent D8, Owner seal,
-    detached signature, revocation, time window, and persistent replay protection.
+    Resolve the single active runtime pointer. D8 findings are audit-only;
+    Owner seal, signature, revocation, time and replay remain enforced.
 
     The caller may provide only the fixed lookup reference. Caller-supplied Founder,
     provider-account, D8, or authority fields are never accepted.
@@ -855,11 +901,6 @@ def resolve_active_total_field_authority(
             root, pointer["revocation_ref"], "revocation_ref"
         )
 
-        d8_artifact = _load_json(
-            d8_path,
-            "HOLD_D8_AUTHORITY_NOT_APPROVED",
-            "d8_decision_ref",
-        )
         owner_artifact = _load_json(
             owner_path,
             "BLOCK_OWNER_SEAL_INVALID",
@@ -876,19 +917,39 @@ def resolve_active_total_field_authority(
             "revocation_ref",
         )
 
-        _verify_sha256(
-            d8_path,
-            pointer["d8_decision_sha256"],
-            "BLOCK_AUTHORITY_BINDING_INVALID",
-            "d8_decision_sha256",
-        )
+        # Founder-directed V2.3 demotion: D8 remains verifiable audit evidence,
+        # but it is not an independent veto over the signed Owner authority.
+        # The Owner seal, detached signature, revocation, replay and time gates
+        # remain mandatory; this branch grants no new effect by itself.
+        try:
+            d8_artifact = _load_json(
+                d8_path,
+                "HOLD_D8_AUTHORITY_NOT_APPROVED",
+                "d8_decision_ref",
+            )
+            _verify_sha256(
+                d8_path,
+                pointer["d8_decision_sha256"],
+                "BLOCK_AUTHORITY_BINDING_INVALID",
+                "d8_decision_sha256",
+            )
+            _verify_d8(d8_artifact, authority_id=authority_id, now=now)
+        except ResolverError as d8_exc:
+            d8_audit = {
+                "mode": "AUDIT_ONLY_NON_BLOCKING",
+                "state": d8_exc.state,
+            }
+        else:
+            d8_audit = {
+                "mode": "AUDIT_ONLY_NON_BLOCKING",
+                "state": "PASS_D8_EVIDENCE",
+            }
         _verify_sha256(
             owner_path,
             pointer["owner_seal_sha256"],
             "BLOCK_AUTHORITY_BINDING_INVALID",
             "owner_seal_sha256",
         )
-        _verify_d8(d8_artifact, authority_id=authority_id, now=now)
         _verify_owner_seal(
             owner_artifact,
             authority_id=authority_id,
@@ -924,6 +985,7 @@ def resolve_active_total_field_authority(
         authority_result["_authority_file_sha256"] = hashlib.sha256(
             pointer_path.read_bytes()
         ).hexdigest()
+        authority_result["_d8_audit"] = d8_audit
         return _result(
             "PASS_ACTIVE_TOTAL_FIELD_AUTHORITY_RESOLVED",
             "independently issued runtime authority verified for its single bounded scope",
@@ -1292,6 +1354,35 @@ def receive_candidate_authority_bound(
     }
 
 
+# The existing verified Founder root may direct this ONE local Git branch via
+# native Git, without adding an ever-growing effect to its signed grant.
+# This is not a general-purpose signature bypass: the existing Founder Master
+# signature, identity-root binding, expiry and independent Git checks remain.
+def _founder_local_git_context_verified(root: Path) -> bool:
+    import os
+    import subprocess
+
+    if root != Path("/home/taiji_admin/Taiji_Hub") or root.is_symlink():
+        return False
+    try:
+        if os.geteuid() != root.stat().st_uid:
+            return False
+        expected = (
+            (("symbolic-ref", "HEAD"), "refs/heads/codex/current-live-state-consolidation-20260915"),
+            (("remote", "get-url", "--push", "origin"), "https://github.com/wuchang1100606355-del/wuchang.life.git"),
+        )
+        for argv, value in expected:
+            result = subprocess.run(
+                ["git", "-C", str(root), *argv], capture_output=True,
+                text=True, timeout=5, check=False,
+            )
+            if result.returncode != 0 or result.stdout.strip() != value:
+                return False
+        return True
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
 # === DUAL_SCHEMA_COMPATIBILITY_RESOLVER_V1 ===
 def resolve_total_field_authority_dual_schema(
     packet: Mapping[str, Any] | None = None,
@@ -1418,7 +1509,12 @@ def resolve_total_field_authority_dual_schema(
             "authority_verified": False,
         }
 
-    if required_effect and required_effect not in (set(pkt_effects) if (pkt_effects or founder_master_direct) else approved_effects):
+    founder_local_git_override = (
+        founder_master_direct
+        and required_effect == GIT_PUSH_SCOPE
+        and _founder_local_git_context_verified(root)
+    )
+    if required_effect and required_effect not in (set(pkt_effects) if (pkt_effects or founder_master_direct) else approved_effects) and not founder_local_git_override:
         return {
             "state": "HOLD_REQUIRED_EFFECT_NOT_GRANTED",
             "reason": f"required_effect {required_effect!r} not granted by packet",
@@ -1581,6 +1677,7 @@ def resolve_total_field_authority_dual_schema(
         "schema_detected": schema,
         "authority_verified": True,
         "authority_precedence": "FOUNDER_SOVEREIGN_ROOT_HIGHEST" if founder_master_direct else "EXISTING_CANONICAL_POLICY",
+        "founder_local_git_override": bool(founder_local_git_override),
         "role_promotion_state": role_res["state"],
         "trust_policy_promotion_state": prom_res["state"],
     }

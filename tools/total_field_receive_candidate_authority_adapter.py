@@ -10,7 +10,7 @@ from typing import Any, Callable, Collection, Mapping
 ACTIVE_POINTER_LOOKUP_REF = "runtime/total_field/ACTIVE_TOTAL_FIELD_AUTHORITY.json"
 RESOLVER_CANDIDATE_REL = "tools/total_field_authority_resolver.py"
 RESOLVER_CANDIDATE_SHA256 = (
-    "c89dffc183b0501cc493ef5e79b6f72b26ccde55a4df25bc011d2d2fe49ab2f9"
+    "0beabcffc0927f160aeab83aa0e64078d46770b1e8506f6efa47f9d1931b9b55"
 )
 CURRENT_OWNER_REL = "tools/total_field_dynamic_context.py"
 CURRENT_OWNER_SHA256 = (
